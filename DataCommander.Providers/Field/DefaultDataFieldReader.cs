@@ -1,0 +1,39 @@
+namespace DataCommander.Providers
+{
+	using System;
+	using System.Data;
+
+	public sealed class DefaultDataFieldReader : IDataFieldReader
+	{
+		private IDataRecord dataRecord;
+		private int columnOrdinal;
+
+		public DefaultDataFieldReader( IDataRecord dataRecord, int columnOrdinal )
+		{
+			this.dataRecord = dataRecord;
+			this.columnOrdinal = columnOrdinal;
+		}
+
+		object IDataFieldReader.Value
+		{
+			get
+            {
+				object value;
+
+				try
+				{
+					value = this.dataRecord.GetValue(columnOrdinal);					
+				}
+				catch (Exception e)
+				{
+					string name = this.dataRecord.GetName(this.columnOrdinal);
+					string dataTypeName = this.dataRecord.GetDataTypeName( this.columnOrdinal );
+					string message = string.Format( "dataRecord.GetValue(columnordinal) failed. Column name: {0}, column dataTypeName: {1}", name, dataTypeName );
+					throw new Exception(message, e);
+				}
+
+				return value;
+            }
+		}
+	}
+}

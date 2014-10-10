@@ -1,0 +1,365 @@
+namespace DataCommander.Foundation.Data
+{
+    using System;
+    using System.Data;
+    using System.Data.OleDb;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class OleDBHelper
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandText"></param>
+        /// <param name="connection"></param>
+        /// <returns></returns>
+        public static int ExecuteNonQuery(
+            string commandText,
+            OleDbConnection connection )
+        {
+            OleDbCommand command = connection.CreateCommand();
+            command.CommandText = commandText;
+            return command.ExecuteNonQuery();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ADODBRecordset"></param>
+        /// <returns></returns>
+        public static DataTable Convert( object ADODBRecordset )
+        {
+            OleDbDataAdapter adapter = new OleDbDataAdapter();
+            DataTable dataTable = new DataTable();
+            adapter.Fill( dataTable, ADODBRecordset );
+            return dataTable;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rs"></param>
+        /// <param name="columns"></param>
+        /// <returns></returns>
+        [CLSCompliant( false )]
+        public static DataTable Convert(
+            ADODB._Recordset rs,
+            out OleDbParameter[] columns )
+        {
+            OleDbDataAdapter adapter = new OleDbDataAdapter();
+            DataTable dataTable = new DataTable();
+            adapter.Fill( dataTable, rs );
+            columns = new OleDbParameter[ rs.Fields.Count ];
+            int index = 0;
+
+            foreach (ADODB.Field field in rs.Fields)
+            {
+                OleDbParameter param = new OleDbParameter();
+                param.SourceColumn = field.Name;
+                param.OleDbType = (OleDbType) field.Type;
+
+                int size = field.DefinedSize;
+                byte precision = field.Precision;
+
+                if (size == 0)
+                {
+                    size = precision;
+                }
+
+                param.Size = size;
+                param.Precision = precision;
+                param.Scale = field.NumericScale;
+                param.IsNullable = (field.Attributes & (int) ADODB.FieldAttributeEnum.adFldIsNullable) != 0;
+
+                columns[ index ] = param;
+
+                index++;
+            }
+
+            return dataTable;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="connection"></param>
+        public static void DropTable(
+            string tableName,
+            OleDbConnection connection )
+        {
+            OleDbCommand command = connection.CreateCommand();
+            command.CommandText = "drop table " + tableName;
+
+            try
+            {
+                command.ExecuteNonQuery();
+            }
+            catch
+            {
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="columns"></param>
+        /// <param name="connection"></param>
+        private static void CreateTableSql(
+            string tableName,
+            OleDbParameter[] columns,
+            OleDbConnection connection )
+        {
+            string cmdText = "create table " + tableName + "(";
+            int i = 0;
+            int count = columns.Length;
+
+            foreach (OleDbParameter column in columns)
+            {
+                string sqlType;
+
+                switch (column.OleDbType)
+                {
+                    case OleDbType.Char:
+                        sqlType = "char(" + column.Size + ")";
+                        break;
+
+                    case OleDbType.DBDate:
+                        sqlType = "datetime";
+                        break;
+
+                    case OleDbType.DBTimeStamp:
+                        //sqlType = "timestamp";
+                        sqlType = "datetime";
+                        break;
+
+                    case OleDbType.UnsignedTinyInt:
+                        sqlType = "tinyint";
+                        break;
+
+                    case OleDbType.Integer:
+                        sqlType = "int";
+                        break;
+
+                    case OleDbType.Numeric:
+                        sqlType = "numeric(" + column.Precision + "," + column.Scale + ")";
+                        break;
+
+                    case OleDbType.Decimal:
+                        sqlType = "decimal(" + column.Precision + "," + column.Scale + ")";
+                        break;
+
+                    case OleDbType.VarChar:
+                        sqlType = "varchar(" + column.Size + ")";
+                        break;
+
+                    default:
+                        sqlType = "varchar(255)";
+                        break;
+                }
+
+                cmdText += column.SourceColumn + " " + sqlType;
+
+                if (column.IsNullable)
+                {
+                    cmdText += " NULL";
+                }
+                else
+                {
+                    cmdText += " NOT NULL";
+                }
+
+                if (i < count - 1)
+                {
+                    cmdText += ",";
+                }
+
+                cmdText += Environment.NewLine;
+
+                i++;
+            }
+
+            cmdText += ")";
+
+            OleDbCommand command = connection.CreateCommand();
+            command.CommandText = cmdText;
+            command.ExecuteNonQuery();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="columns"></param>
+        /// <param name="connection"></param>
+        private static void CreateTableJet(
+            string tableName,
+            OleDbParameter[] columns,
+            OleDbConnection connection )
+        {
+            string cmdText = "create table " + tableName + "(";
+            int i = 0;
+            int count = columns.Length;
+
+            foreach (OleDbParameter column in columns)
+            {
+                string sqlType;
+
+                switch (column.OleDbType)
+                {
+                    case OleDbType.Char:
+                        sqlType = "char(" + column.Size + ")";
+                        break;
+
+                    case OleDbType.DBDate:
+                        sqlType = "datetime";
+                        break;
+
+                    case OleDbType.DBTimeStamp:
+                        //sqlType = "timestamp";
+                        sqlType = "datetime";
+                        break;
+
+                    case OleDbType.UnsignedTinyInt:
+                        sqlType = "tinyint";
+                        break;
+
+                    case OleDbType.Integer:
+                        sqlType = "int";
+                        break;
+
+                    case OleDbType.Numeric:
+                        //sqlType = "numeric(" + column.Precision + "," + column.Scale + ")";
+                        sqlType = "numeric";
+                        break;
+
+                    case OleDbType.Decimal:
+                        //sqlType = "decimal(" + column.Precision + "," + column.Scale + ")";
+                        sqlType = "numeric";
+                        break;
+
+                    case OleDbType.VarChar:
+                        sqlType = "varchar(" + column.Size + ")";
+                        break;
+
+                    default:
+                        sqlType = "varchar(255)";
+                        break;
+                }
+
+                cmdText += "[" + column.SourceColumn + "] " + sqlType;
+
+                if (column.IsNullable)
+                {
+                    cmdText += " NULL";
+                }
+                else
+                {
+                    cmdText += " NOT NULL";
+                }
+
+                if (i < count - 1)
+                {
+                    cmdText += ",";
+                }
+
+                cmdText += Environment.NewLine;
+
+                i++;
+            }
+
+            cmdText += ")";
+
+            OleDbCommand command = connection.CreateCommand();
+            command.CommandText = cmdText;
+            command.ExecuteNonQuery();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="columns"></param>
+        /// <param name="connection"></param>
+        private static void CreateTable(
+            string tableName,
+            OleDbParameter[] columns,
+            OleDbConnection connection )
+        {
+            switch (connection.Provider)
+            {
+                case "SQLOLEDB.1":
+                    CreateTableSql( tableName, columns, connection );
+                    break;
+
+                case "Microsoft.Jet.OLEDB.4.0":
+                    CreateTableJet( tableName, columns, connection );
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourceTable"></param>
+        /// <param name="connection"></param>
+        public static void CopyTable(
+            DataTable sourceTable,
+            OleDbConnection connection )
+        {
+            var adapter = new OleDbDataAdapter( "select * from " + sourceTable.TableName + " where 0=1", connection );
+            var destTable = new DataTable();
+            adapter.Fill( destTable );
+
+            foreach (DataRow sourceRow in sourceTable.Rows)
+            {
+                destTable.Rows.Add( sourceRow.ItemArray );
+            }
+
+            var builder = new OleDbCommandBuilder( adapter );
+            adapter.Update( destTable );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="adodbRecordset"></param>
+        /// <param name="tableName"></param>
+        /// <param name="connection"></param>
+        public static void CopyTable(
+            object adodbRecordset,
+            string tableName,
+            OleDbConnection connection )
+        {
+            var rs = (ADODB.Recordset) adodbRecordset;
+            OleDbParameter[] columns;
+            DataTable sourceTable = Convert( rs, out columns );
+            sourceTable.TableName = tableName;
+            DropTable( tableName, connection );
+            CreateTable( tableName, columns, connection );
+            CopyTable( sourceTable, connection );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="adodbStreamXml"></param>
+        /// <param name="tableName"></param>
+        /// <param name="connection"></param>
+        public static void CopyTable(
+            string adodbStreamXml,
+            string tableName,
+            OleDbConnection connection )
+        {
+            var rs = AdoDB.XmlToRecordset( adodbStreamXml );
+            object oRs = rs;
+            CopyTable( oRs, tableName, connection );
+        }
+    }
+}

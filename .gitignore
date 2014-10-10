@@ -1,0 +1,33 @@
+# git ignore file
+
+#Visual Studio files
+*.bak
+*.cache
+*.CodeAnalysisLog.xml
+*.dll
+*.exe
+*.exe.config
+*.exe.manifest
+*.FileListAbsolute.txt
+*.idb
+*.ilk
+*.ipch
+*.lastcodeanalysissucceeded
+*.log
+*.nupkg
+*.obj
+*.pch
+*.png
+*.pdb
+*.res
+*.resources
+*.sdf
+*.suo
+*.tlog
+*.vshost.exe.config
+*.vsp
+*.xml
+bin
+build.force
+obj
+packages

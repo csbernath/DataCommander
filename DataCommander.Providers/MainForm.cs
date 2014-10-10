@@ -1,0 +1,988 @@
+namespace DataCommander
+{
+    using System;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Data.Common;
+    using System.Data.SqlServerCe;
+    using System.Diagnostics;
+    using System.Diagnostics.Contracts;
+    using System.Drawing;
+    using System.IO;
+    using System.Reflection;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using System.Security.Principal;
+    using System.Text;
+    using System.Windows.Forms;
+    using DataCommander.Foundation;
+    using DataCommander.Foundation.Configuration;
+    using DataCommander.Foundation.Diagnostics;
+    using DataCommander.Foundation.Linq;
+    using DataCommander.Foundation.Threading;
+    using DataCommander.Foundation.Windows.Forms;
+    using DataCommander.Providers;
+
+    /// <summary>
+    /// Summary description for MainForm.
+    /// </summary>
+    public class MainForm : Form
+    {
+        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private Font font;
+        private StringCollection recentFileList = new StringCollection();
+
+        private MenuStrip mainMenu;
+        private ToolStripMenuItem menuItem1;
+        private ToolStripMenuItem mnuConnect;
+        private ImageList imageList;
+        private StatusStrip statusBar;
+        private ToolStrip toolStrip;
+        private ToolStripMenuItem mnuExit;
+        private ToolStripMenuItem mnuHelp;
+        private ToolStripMenuItem mnuAbout;
+        private ToolStripMenuItem mnuOpen;
+        private ToolStripButton btnConnect;
+        private ToolStripMenuItem mnuWindow;
+        private ToolStripMenuItem mnuCollectGarbage;
+        private ToolStripMenuItem mnuRecentFileList;
+        private ToolStripMenuItem mnuFont;
+        private ToolStripButton openButton;
+        private ToolStripButton saveButton;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripButton helpButton;
+        private ToolStripMenuItem NewToolStripMenuItem;
+        private ToolStripMenuItem contentsToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripPanel toolStripPanel;
+        private ToolStripMenuItem closeAllDocumentsMenuItem;
+        private IContainer components;
+        private ToolStripStatusLabel toolStripStatusLabel;
+        private ToolStripMenuItem saveAllToolStripMenuItem;
+        private ToolStripTextBox activeMdiChildToolStripTextBox;
+        private ToolStripMenuItem recentConnectionsToolStripMenuItem;
+        private ToolStrip queryFormToolStrip;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public MainForm()
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            this.InitializeComponent();
+
+            this.helpButton.Click += this.helpButton_Click;
+            this.mnuAbout.Click += this.mnuAbout_Click;
+
+            //
+            // TODO: Add any constructor code after InitializeComponent call
+            //
+            this.LoadLayout();
+
+            //Assembly assembly = Assembly.GetExecutingAssembly();
+            //this.Text = this.Text + " (" + Environment.Version + ' ' + assembly.GetName().ProcessorArchitecture + ')';
+
+            this.toolStripStatusLabel.Text = WindowsIdentity.GetCurrent().Name;
+        }
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+
+            base.Dispose( disposing );
+        }
+
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager( typeof( MainForm ) );
+            this.mainMenu = new System.Windows.Forms.MenuStrip();
+            this.menuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.NewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuConnect = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuRecentFileList = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuCollectGarbage = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuFont = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuWindow = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeAllDocumentsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
+            this.contentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.imageList = new System.Windows.Forms.ImageList( this.components );
+            this.btnConnect = new System.Windows.Forms.ToolStripButton();
+            this.openButton = new System.Windows.Forms.ToolStripButton();
+            this.saveButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.helpButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.activeMdiChildToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
+            this.statusBar = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.recentConnectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mainMenu.SuspendLayout();
+            this.toolStrip.SuspendLayout();
+            this.statusBar.SuspendLayout();
+            this.toolStripPanel.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // mainMenu
+            // 
+            this.mainMenu.Dock = System.Windows.Forms.DockStyle.None;
+            this.mainMenu.Items.AddRange( new System.Windows.Forms.ToolStripItem[] {
+            this.menuItem1,
+            this.mnuFont,
+            this.mnuWindow,
+            this.mnuHelp} );
+            this.mainMenu.Location = new System.Drawing.Point( 0, 0 );
+            this.mainMenu.MdiWindowListItem = this.mnuWindow;
+            this.mainMenu.Name = "mainMenu";
+            this.mainMenu.Size = new System.Drawing.Size( 792, 24 );
+            this.mainMenu.TabIndex = 1;
+            // 
+            // menuItem1
+            // 
+            this.menuItem1.DropDownItems.AddRange( new System.Windows.Forms.ToolStripItem[] {
+            this.NewToolStripMenuItem,
+            this.mnuConnect,
+            this.mnuOpen,
+            this.recentConnectionsToolStripMenuItem,
+            this.saveAllToolStripMenuItem,
+            this.mnuRecentFileList,
+            this.mnuCollectGarbage,
+            this.mnuExit} );
+            this.menuItem1.MergeIndex = 1;
+            this.menuItem1.Name = "menuItem1";
+            this.menuItem1.Size = new System.Drawing.Size( 67, 20 );
+            this.menuItem1.Text = "&Database";
+            // 
+            // NewToolStripMenuItem
+            // 
+            this.NewToolStripMenuItem.Name = "NewToolStripMenuItem";
+            this.NewToolStripMenuItem.Size = new System.Drawing.Size( 187, 22 );
+            this.NewToolStripMenuItem.Text = "&New";
+            this.NewToolStripMenuItem.Click += new System.EventHandler( this.NewToolStripMenuItem_Click );
+            // 
+            // mnuConnect
+            // 
+            this.mnuConnect.Image = ((System.Drawing.Image) (resources.GetObject( "mnuConnect.Image" )));
+            this.mnuConnect.MergeIndex = 0;
+            this.mnuConnect.Name = "mnuConnect";
+            this.mnuConnect.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.mnuConnect.Size = new System.Drawing.Size( 187, 22 );
+            this.mnuConnect.Text = "&Connect";
+            this.mnuConnect.Click += new System.EventHandler( this.mnuConnect_Click );
+            // 
+            // mnuOpen
+            // 
+            this.mnuOpen.Image = ((System.Drawing.Image) (resources.GetObject( "mnuOpen.Image" )));
+            this.mnuOpen.MergeIndex = 1;
+            this.mnuOpen.Name = "mnuOpen";
+            this.mnuOpen.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.mnuOpen.Size = new System.Drawing.Size( 187, 22 );
+            this.mnuOpen.Text = "&Open";
+            this.mnuOpen.Click += new System.EventHandler( this.mnuOpen_Click );
+            // 
+            // saveAllToolStripMenuItem
+            // 
+            this.saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
+            this.saveAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys) (((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+            | System.Windows.Forms.Keys.S)));
+            this.saveAllToolStripMenuItem.Size = new System.Drawing.Size( 187, 22 );
+            this.saveAllToolStripMenuItem.Text = "Save All";
+            this.saveAllToolStripMenuItem.Click += new System.EventHandler( this.saveAllToolStripMenuItem_Click );
+            // 
+            // mnuRecentFileList
+            // 
+            this.mnuRecentFileList.MergeIndex = 2;
+            this.mnuRecentFileList.Name = "mnuRecentFileList";
+            this.mnuRecentFileList.Size = new System.Drawing.Size( 187, 22 );
+            this.mnuRecentFileList.Text = "Recent &File List";
+            // 
+            // mnuCollectGarbage
+            // 
+            this.mnuCollectGarbage.MergeIndex = 3;
+            this.mnuCollectGarbage.Name = "mnuCollectGarbage";
+            this.mnuCollectGarbage.Size = new System.Drawing.Size( 187, 22 );
+            this.mnuCollectGarbage.Text = "Collect &Garbage";
+            this.mnuCollectGarbage.Click += new System.EventHandler( this.mnuCollectGarbage_Click );
+            // 
+            // mnuExit
+            // 
+            this.mnuExit.Name = "mnuExit";
+            this.mnuExit.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
+            this.mnuExit.Size = new System.Drawing.Size( 187, 22 );
+            this.mnuExit.Text = "Exit";
+            this.mnuExit.Click += new System.EventHandler( this.mnuExit_Click );
+            // 
+            // mnuFont
+            // 
+            this.mnuFont.MergeIndex = 2;
+            this.mnuFont.Name = "mnuFont";
+            this.mnuFont.Size = new System.Drawing.Size( 43, 20 );
+            this.mnuFont.Text = "Font";
+            this.mnuFont.Click += new System.EventHandler( this.mnuFont_Click );
+            // 
+            // mnuWindow
+            // 
+            this.mnuWindow.DropDownItems.AddRange( new System.Windows.Forms.ToolStripItem[] {
+            this.closeAllDocumentsMenuItem} );
+            this.mnuWindow.MergeIndex = 6;
+            this.mnuWindow.Name = "mnuWindow";
+            this.mnuWindow.Size = new System.Drawing.Size( 63, 20 );
+            this.mnuWindow.Text = "&Window";
+            // 
+            // closeAllDocumentsMenuItem
+            // 
+            this.closeAllDocumentsMenuItem.Name = "closeAllDocumentsMenuItem";
+            this.closeAllDocumentsMenuItem.Size = new System.Drawing.Size( 184, 22 );
+            this.closeAllDocumentsMenuItem.Text = "Close All Documents";
+            this.closeAllDocumentsMenuItem.Click += new System.EventHandler( this.closeAllDocumentsMenuItem_Click );
+            // 
+            // mnuHelp
+            // 
+            this.mnuHelp.DropDownItems.AddRange( new System.Windows.Forms.ToolStripItem[] {
+            this.contentsToolStripMenuItem,
+            this.mnuAbout} );
+            this.mnuHelp.MergeIndex = 7;
+            this.mnuHelp.Name = "mnuHelp";
+            this.mnuHelp.Size = new System.Drawing.Size( 44, 20 );
+            this.mnuHelp.Text = "&Help";
+            // 
+            // contentsToolStripMenuItem
+            // 
+            this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
+            this.contentsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
+            this.contentsToolStripMenuItem.Size = new System.Drawing.Size( 204, 22 );
+            this.contentsToolStripMenuItem.Text = "Contents";
+            this.contentsToolStripMenuItem.Click += new System.EventHandler( this.contentsToolStripMenuItem_Click );
+            // 
+            // mnuAbout
+            // 
+            this.mnuAbout.MergeIndex = 0;
+            this.mnuAbout.Name = "mnuAbout";
+            this.mnuAbout.Size = new System.Drawing.Size( 204, 22 );
+            this.mnuAbout.Text = "About Data Commander";
+            // 
+            // toolStrip
+            // 
+            this.toolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip.ImageList = this.imageList;
+            this.toolStrip.Items.AddRange( new System.Windows.Forms.ToolStripItem[] {
+            this.btnConnect,
+            this.openButton,
+            this.saveButton,
+            this.toolStripSeparator1,
+            this.helpButton,
+            this.toolStripSeparator2,
+            this.activeMdiChildToolStripTextBox} );
+            this.toolStrip.Location = new System.Drawing.Point( 3, 24 );
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size( 518, 25 );
+            this.toolStrip.TabIndex = 2;
+            // 
+            // imageList
+            // 
+            this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer) (resources.GetObject( "imageList.ImageStream" )));
+            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList.Images.SetKeyName( 0, "" );
+            this.imageList.Images.SetKeyName( 1, "" );
+            this.imageList.Images.SetKeyName( 2, "" );
+            this.imageList.Images.SetKeyName( 3, "" );
+            // 
+            // btnConnect
+            // 
+            this.btnConnect.Image = ((System.Drawing.Image) (resources.GetObject( "btnConnect.Image" )));
+            this.btnConnect.Name = "btnConnect";
+            this.btnConnect.Size = new System.Drawing.Size( 23, 22 );
+            this.btnConnect.ToolTipText = "Connect to Database";
+            this.btnConnect.Click += new System.EventHandler( this.btnConnect_Click );
+            // 
+            // openButton
+            // 
+            this.openButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.openButton.Image = ((System.Drawing.Image) (resources.GetObject( "openButton.Image" )));
+            this.openButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.openButton.Name = "openButton";
+            this.openButton.Size = new System.Drawing.Size( 23, 22 );
+            this.openButton.Text = "toolStripButton1";
+            this.openButton.ToolTipText = "Open database";
+            // 
+            // saveButton
+            // 
+            this.saveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.saveButton.Enabled = false;
+            this.saveButton.Image = ((System.Drawing.Image) (resources.GetObject( "saveButton.Image" )));
+            this.saveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size( 23, 22 );
+            this.saveButton.ToolTipText = "Save Query";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size( 6, 25 );
+            // 
+            // helpButton
+            // 
+            this.helpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.helpButton.Image = ((System.Drawing.Image) (resources.GetObject( "helpButton.Image" )));
+            this.helpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.helpButton.Name = "helpButton";
+            this.helpButton.Size = new System.Drawing.Size( 23, 22 );
+            this.helpButton.Text = "Help";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size( 6, 25 );
+            // 
+            // activeMdiChildToolStripTextBox
+            // 
+            this.activeMdiChildToolStripTextBox.Name = "activeMdiChildToolStripTextBox";
+            this.activeMdiChildToolStripTextBox.ReadOnly = true;
+            this.activeMdiChildToolStripTextBox.Size = new System.Drawing.Size( 400, 25 );
+            // 
+            // statusBar
+            // 
+            this.statusBar.Items.AddRange( new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel} );
+            this.statusBar.Location = new System.Drawing.Point( 0, 531 );
+            this.statusBar.Name = "statusBar";
+            this.statusBar.Size = new System.Drawing.Size( 792, 22 );
+            this.statusBar.TabIndex = 3;
+            // 
+            // toolStripStatusLabel
+            // 
+            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
+            this.toolStripStatusLabel.Size = new System.Drawing.Size( 0, 17 );
+            // 
+            // toolStripPanel
+            // 
+            this.toolStripPanel.Controls.Add( this.mainMenu );
+            this.toolStripPanel.Controls.Add( this.toolStrip );
+            this.toolStripPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.toolStripPanel.Location = new System.Drawing.Point( 0, 0 );
+            this.toolStripPanel.Name = "toolStripPanel";
+            this.toolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.toolStripPanel.RowMargin = new System.Windows.Forms.Padding( 3, 0, 0, 0 );
+            this.toolStripPanel.Size = new System.Drawing.Size( 792, 49 );
+            // 
+            // recentConnectionsToolStripMenuItem
+            // 
+            this.recentConnectionsToolStripMenuItem.Name = "recentConnectionsToolStripMenuItem";
+            this.recentConnectionsToolStripMenuItem.Size = new System.Drawing.Size( 187, 22 );
+            this.recentConnectionsToolStripMenuItem.Text = "Recent connections";
+            // 
+            // MainForm
+            // 
+            this.AutoScaleBaseSize = new System.Drawing.Size( 5, 14 );
+            this.ClientSize = new System.Drawing.Size( 792, 553 );
+            this.Controls.Add( this.toolStripPanel );
+            this.Controls.Add( this.statusBar );
+            this.Font = new System.Drawing.Font( "Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)) );
+            this.Icon = ((System.Drawing.Icon) (resources.GetObject( "$this.Icon" )));
+            this.IsMdiContainer = true;
+            this.MainMenuStrip = this.mainMenu;
+            this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+            this.Text = "Data Commander";
+            this.mainMenu.ResumeLayout( false );
+            this.mainMenu.PerformLayout();
+            this.toolStrip.ResumeLayout( false );
+            this.toolStrip.PerformLayout();
+            this.statusBar.ResumeLayout( false );
+            this.statusBar.PerformLayout();
+            this.toolStripPanel.ResumeLayout( false );
+            this.toolStripPanel.PerformLayout();
+            this.ResumeLayout( false );
+            this.PerformLayout();
+
+        }
+        #endregion
+
+        private void Connect()
+        {
+            ConnectionForm connectionForm = new ConnectionForm( statusBar );
+
+            if (connectionForm.ShowDialog() == DialogResult.OK)
+            {
+                ConnectionProperties connectionProperties = connectionForm.ConnectionProperties;
+
+                var queryForm = new QueryForm(
+                    MdiChildren.Length,
+                    connectionProperties.provider,
+                    connectionProperties.connectionString,
+                    connectionProperties.connection,
+                    statusBar );
+
+                queryForm.MdiParent = this;
+                queryForm.Font = font;
+                queryForm.FormClosing += new FormClosingEventHandler( queryForm_FormClosing );
+
+                switch (WindowState)
+                {
+                    case FormWindowState.Normal:
+                        int width = Math.Max( ClientSize.Width - 20, 100 );
+                        int height = Math.Max( ClientSize.Height - 90, 50 );
+                        queryForm.ClientSize = new Size( width, height );
+                        break;
+
+                    case FormWindowState.Maximized:
+                        //queryForm.WindowState = FormWindowState.Maximized;
+                        break;
+
+                    default:
+                        break;
+                }
+
+                string message = string.Format(
+                    "Connection opened in {0} seconds.\r\nServerVersion: {1}",
+                    StopwatchTimeSpan.ToString( connectionForm.Duration, 3 ),
+                    connectionProperties.connection.ServerVersion );
+                var infoMessage = new InfoMessage( OptimizedDateTime.Now, InfoMessageSeverity.Verbose, message );
+                queryForm.AddInfoMessage( infoMessage );
+
+                queryForm.Show();
+
+                if (WindowState == FormWindowState.Maximized)
+                {
+                    queryForm.WindowState = FormWindowState.Maximized;
+                }
+            }
+        }
+
+        void queryForm_FormClosing( object sender, FormClosingEventArgs e )
+        {
+            if (!e.Cancel)
+            {
+                var form = (Form) sender;
+                form.MdiParent = null;
+
+                if (this.queryFormToolStrip != null)
+                {
+                    this.toolStripPanel.Controls.Remove( this.queryFormToolStrip );
+                    this.queryFormToolStrip = null;
+                }
+            }
+        }
+
+        private void mnuConnect_Click( object sender, System.EventArgs e )
+        {
+            this.Connect();
+        }
+
+        private void mnuExit_Click( object sender, System.EventArgs e )
+        {
+            this.Close();
+        }
+
+        private void mnuAbout_Click( object sender, System.EventArgs e )
+        {
+            var assembly = Assembly.GetEntryAssembly();
+            string path = assembly.Location;
+            DateTime lastWriteTime = File.GetLastWriteTime( path );
+            string text = string.Format( @"Data Commander
+Environment.Version: {0}
+Processor architecture: {1}
+Build date: {2}
+
+Copyright © 2002-2014 Csaba Bernáth
+e-mail: csaba.bernath@gmail.com
+
+Application Data file:
+{3}
+
+Environment.WorkingSet: {4} MB",
+                Environment.Version,
+                assembly.GetName().ProcessorArchitecture,
+                lastWriteTime.ToString( "yyyy-MM-dd HH:mm:ss.fff" ),
+                DataCommander.Providers.Application.Instance.FileName,
+                ((double) Environment.WorkingSet / (1024 * 1024)).ToString( "N0" ) );
+            string caption = "About Data Commander";
+            MessageBox.Show( this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information );
+        }
+
+        private void SaveLayout()
+        {
+            ApplicationData applicationData = DataCommander.Providers.Application.Instance.ApplicationData;
+            FormPosition.Save( this, applicationData );
+            ConfigurationNode folder = applicationData.CurrentType;
+            string[] array = new string[ recentFileList.Count ];
+            recentFileList.CopyTo( array, 0 );
+            folder.Attributes.SetAttributeValue( "RecentFileList", array );
+        }
+
+        private void mnuRecentFile_Click( object sender, EventArgs e )
+        {
+            ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
+            int index = mnuRecentFileList.DropDownItems.IndexOf( menuItem );
+            int count = recentFileList.Count;
+            string path = recentFileList[ count - index - 1 ];
+            LoadFiles( new string[] { path } );
+        }
+
+        private void CreateRecentFileListMenu()
+        {
+            ToolStripItemCollection menuItems = mnuRecentFileList.DropDownItems;
+            menuItems.Clear();
+
+            int count = recentFileList.Count;
+
+            for (int i = 0; i < count; i++)
+            {
+                string path = recentFileList[ count - i - 1 ];
+                string text = string.Format( "{0} {1}", i + 1, path );
+                ToolStripMenuItem menuItem = new ToolStripMenuItem( text, null, mnuRecentFile_Click );
+                menuItems.Add( menuItem );
+            }
+        }
+
+        private void LoadLayout()
+        {
+            ApplicationData applicationData = DataCommander.Providers.Application.Instance.ApplicationData;
+            FormPosition.Load( applicationData, this );
+            ConfigurationNode folder = applicationData.CurrentType;
+            string[] array;
+            bool contains = folder.Attributes.TryGetAttributeValue<string[]>( "RecentFileList", out array );
+
+            if (contains && array != null)
+            {
+                int i;
+
+                for (i = 0; i < array.Length; i++)
+                {
+                    recentFileList.Add( array[ i ] );
+                }
+            }
+
+            string base64;
+            contains = folder.Attributes.TryGetAttributeValue( "Font", out base64 );
+
+            if (contains)
+            {
+                font = DeserializeFont( base64 );
+            }
+        }
+
+        protected override void OnClosing( CancelEventArgs e )
+        {
+            this.SaveLayout();
+            base.OnClosing( e );
+        }
+
+        private void Open()
+        {
+            try
+            {
+                var fileDialog = new OpenFileDialog();
+                fileDialog.Filter = "Access Files(*.mdb)|*.mdb|Access 2007 Files(*.accdb)|*.accdb|Excel files (*.xls;*.xlsx)|*.xls;*.xlsx|MSI files (*.msi)|*.msi|SQLite files (*.*)|*.*|SQL Server Compact files (*.sdf)|*.sdf|SQL Server Compact 4.0 files (*.sdf)|*.sdf";
+                fileDialog.RestoreDirectory = true;
+                string currentDirectory = Environment.CurrentDirectory;
+
+                if (fileDialog.ShowDialog( this ) == DialogResult.OK)
+                {
+                    if (Environment.CurrentDirectory != currentDirectory)
+                    {
+                        Environment.CurrentDirectory = currentDirectory;
+                    }
+
+                    string fileName = fileDialog.FileName;
+                    string extension = Path.GetExtension( fileName ).ToLower();
+                    string connectionString;
+                    IProvider provider;
+
+                    switch (fileDialog.FilterIndex)
+                    {
+                        case 1:
+                            connectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + fileName;
+                            provider = ProviderFactory.CreateProvider( ProviderName.OleDb );
+                            break;
+
+                        case 2:
+                            connectionString = string.Format( "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Persist Security Info=False", fileName );
+                            provider = ProviderFactory.CreateProvider( ProviderName.OleDb );
+                            break;
+
+                        case 3:
+                            if (extension == ".xls")
+                            {
+                                if (Environment.Is64BitProcess)
+                                {
+                                    connectionString = string.Format( "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=Excel 8.0", fileName );
+                                }
+                                else
+                                {
+                                    connectionString = string.Format( "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=Excel 8.0", fileName );
+                                }
+                            }
+                            else
+                            {
+                                connectionString = string.Format( "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=Excel 12.0", fileName );
+                            }
+
+                            provider = ProviderFactory.CreateProvider( ProviderName.OleDb );
+                            break;
+
+                        case 4:
+                            connectionString = string.Format( "Data Source={0}", fileName );
+                            provider = ProviderFactory.CreateProvider( "Msi" );
+                            break;
+
+                        case 5:
+                            connectionString = string.Format( "Data Source={0}", fileName );
+                            provider = ProviderFactory.CreateProvider( ProviderName.SQLite );
+                            break;
+
+                        case 6:
+                            connectionString = string.Format( "Data Source={0}", fileName );
+                            provider = ProviderFactory.CreateProvider( "SqlServerCe" );
+                            break;
+
+                        case 7:
+                            connectionString = string.Format( "Data Source={0}", fileName );
+                            provider = ProviderFactory.CreateProvider( "SqlServerCe40" );
+                            break;
+
+                        default:
+                            throw new NotSupportedException();
+                    }
+
+                    ConnectionBase connection = provider.CreateConnection( connectionString );
+                    connection.Open();
+
+                    var connectionProperties = new ConnectionProperties();
+                    connectionProperties.connectionName = null;
+                    connectionProperties.providerName = provider.Name;
+                    connectionProperties.connectionString = connectionString;
+                    var node = DataCommander.Providers.Application.Instance.ConnectionsConfigurationNode;
+                    var subNode = new ConfigurationNode( null );
+                    node.AddChildNode( subNode );
+                    connectionProperties.Save( subNode );
+
+                    var queryForm = new QueryForm(
+                        MdiChildren.Length,
+                        provider,
+                        connectionString,
+                        connection,
+                        statusBar );
+
+                    queryForm.MdiParent = this;
+                    queryForm.Font = this.font;
+                    queryForm.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Write( LogLevel.Error, ex.ToLogString() );
+                MessageBox.Show( this, ex.ToString() );
+            }
+        }
+
+        private void mnuOpen_Click( object sender, System.EventArgs e )
+        {
+            this.Open();
+        }
+
+        private void mnuCollectGarbage_Click(object sender, System.EventArgs e)
+        {
+            GC.Collect();
+
+            var sb = new StringBuilder();
+            sb.AppendLine();
+            sb.Append(GarbageMonitor.State);
+            sb.AppendLine();
+            sb.Append(ThreadMonitor.ToStringTable().ToString());
+            sb.AppendLine();
+            sb.Append(AppDomainMonitor.CurrentDomainState);
+            log.Trace(sb.ToString());
+
+            ThreadMonitor.Join(0);
+        }
+
+        public void LoadFiles( string[] fileNames )
+        {
+            int i = fileNames.Length - 1;
+            string path = fileNames[ i ];
+            QueryForm queryForm = (QueryForm) ActiveMdiChild;
+            queryForm.LoadFile( path );
+
+            int index = recentFileList.IndexOf( path );
+
+            if (index >= 0)
+            {
+                recentFileList.RemoveAt( index );
+            }
+
+            recentFileList.Add( path );
+            CreateRecentFileListMenu();
+        }
+
+        public StatusStrip StatusBar
+        {
+            get
+            {
+                return this.statusBar;
+            }
+        }
+
+        private static string Serialize( Font font )
+        {
+            var binaryFormatter = new BinaryFormatter();
+            var memoryStream = new MemoryStream();
+            binaryFormatter.Serialize( memoryStream, font );
+            byte[] bytes = memoryStream.ToArray();
+            string base64 = Convert.ToBase64String( bytes );
+            return base64;
+        }
+
+        private static Font DeserializeFont( string base64 )
+        {
+            byte[] bytes = Convert.FromBase64String( base64 );
+            var memoryStream = new MemoryStream( bytes );
+            var binaryFormatter = new BinaryFormatter();
+            object obj = binaryFormatter.Deserialize( memoryStream );
+            var font = (Font) obj;
+            return font;
+        }
+
+        private void mnuFont_Click( object sender, EventArgs e )
+        {
+            var fontDialog = new FontDialog();
+            fontDialog.Font = font;
+            var dialogResult = fontDialog.ShowDialog();
+
+            if (dialogResult == DialogResult.OK)
+            {
+                font = fontDialog.Font;
+                ApplicationData applicationData = DataCommander.Providers.Application.Instance.ApplicationData;
+                ConfigurationNode propertyFolder = applicationData.CurrentType;
+                propertyFolder.Attributes.SetAttributeValue( "Font", Serialize( font ) );
+            }
+        }
+
+        public Font SelectedFont
+        {
+            get
+            {
+                return font;
+            }
+        }
+
+        private void btnConnect_Click( object sender, EventArgs e )
+        {
+            this.Connect();
+        }
+
+        private void openButton_Click( object sender, EventArgs e )
+        {
+            this.Open();
+        }
+
+        private void saveButton_Click( object sender, EventArgs e )
+        {
+            var queryForm = (QueryForm) this.ActiveMdiChild;
+
+            if (queryForm != null)
+            {
+                queryForm.Save();
+            }
+        }
+
+        private void helpButton_Click( object sender, EventArgs e )
+        {
+            this.ShowContents();
+        }
+
+        private void sQLServerToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+        }
+
+        private void NewToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            var dialog = new SaveFileDialog();
+            dialog.Filter = "SQL Server Compact 4.0 files (*.sdf)|*.sdf|SQLite files (*.sqlite)|*.sqlite";
+
+            var result = dialog.ShowDialog();
+
+            var sb = new DbConnectionStringBuilder();
+            string connectionString;
+            string providerName;
+
+            if (result == DialogResult.OK)
+            {
+                sb.Add( ConnectionStringProperty.DataSource, dialog.FileName );
+
+                switch (dialog.FilterIndex)
+                {
+                    case 1:
+                        providerName = "SqlServerCe40";
+                        connectionString = sb.ConnectionString;
+                        var engine = new SqlCeEngine( connectionString );
+                        engine.CreateDatabase();
+                        break;
+
+                    case 2:
+                        providerName = ProviderName.SQLite;
+                        connectionString = sb.ConnectionString;
+                        break;
+
+                    default:
+                        throw new Exception();
+                }
+
+                var provider = ProviderFactory.CreateProvider( providerName );
+                Contract.Assert( provider != null );
+                var connection = provider.CreateConnection( connectionString );
+                connection.Open();
+
+                var queryForm = new QueryForm(
+                    this.MdiChildren.Length,
+                    provider,
+                    connectionString,
+                    connection,
+                    statusBar );
+
+                queryForm.MdiParent = this;
+                queryForm.Font = this.font;
+                queryForm.Show();
+            }
+        }
+
+        private void ShowContents()
+        {
+            string fileName = "DataCommander.docx";
+            Process.Start( fileName );
+        }
+
+        private void contentsToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            this.ShowContents();
+        }
+
+        protected override void OnMdiChildActivate(EventArgs e)
+        {
+            base.OnMdiChildActivate(e);
+
+            this.activeMdiChildToolStripTextBox.Text = this.ActiveMdiChild != null ? this.ActiveMdiChild.Text : null;
+            this.saveButton.Enabled = this.ActiveMdiChild != null;
+
+            if (this.ActiveMdiChild != null)
+            {
+                this.toolStripPanel.ResumeLayout(false);
+                if (this.queryFormToolStrip != null)
+                {
+                    this.toolStripPanel.Controls.Remove(this.queryFormToolStrip);
+                }
+
+                var queryForm = (QueryForm)this.ActiveMdiChild;
+                var toolStrip = queryForm.ToolStrip;
+                if (toolStrip != null)
+                {
+                    toolStrip.Visible = true;
+                    Point location = new Point(this.toolStrip.Right, this.toolStrip.Top);
+                    this.toolStripPanel.Join(toolStrip, location);
+                    this.toolStripPanel.PerformLayout();
+
+                    this.queryFormToolStrip = toolStrip;
+                }
+                this.CreateRecentFileListMenu();
+            }
+            else
+            {
+                this.mnuRecentFileList.DropDownItems.Clear();
+            }
+        }
+
+        private void closeAllDocumentsMenuItem_Click( object sender, EventArgs e )
+        {
+            while (true)
+            {
+                var mdiChildren = this.MdiChildren;
+                int length = mdiChildren.Length;
+                if (length == 0)
+                {
+                    break;
+                }
+                var mdiChild = mdiChildren[ length - 1 ];
+                mdiChild.Close();
+
+                if (this.MdiChildren.Length == length)
+                {
+                    break;
+                }
+            }
+        }
+
+        protected override void OnDeactivate( EventArgs e )
+        {
+            base.OnDeactivate( e );
+
+            var queryForm = (QueryForm) this.ActiveMdiChild;
+
+            if (queryForm != null)
+            {
+                queryForm.OnDeactivate();
+            }
+        }
+
+        internal void SaveAll()
+        {
+            this.Cursor = Cursors.WaitCursor;
+            this.toolStripStatusLabel.Text = "Saving all items...";
+            log.Write( LogLevel.Trace,  "Saving all items..." );
+
+            string fileNamePrefix = Path.GetTempPath() + "DataCommander.SaveAll." + '[' + DateTime.Now.ToString( "yyyyMMddHHmmss.fff" ) + ']';
+            int index = 1;
+            foreach (Form mdiChild in this.MdiChildren)
+            {
+                var queryForm = mdiChild as QueryForm;
+                if (queryForm != null)
+                {
+                    string text = queryForm.QueryTextBox.Text;
+                    if (!string.IsNullOrEmpty( text ))
+                    {
+                        string fileName = fileNamePrefix + '[' + index.ToString().PadLeft( 3, '0' ) + "].sql";
+                        text = text.Replace( "\n", "\r\n" );
+                        File.WriteAllText( fileName, text, Encoding.UTF8 );
+                        index++;
+                    }
+                }
+            }
+            this.toolStripStatusLabel.Text = string.Format( "All items saved to {0}.", fileNamePrefix );
+            this.Cursor = Cursors.Default;
+        }
+
+        private void saveAllToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            this.SaveAll();
+        }
+
+        public ToolStripTextBox ActiveMdiChildToolStripTextBox
+        {
+            get
+            {
+                return this.activeMdiChildToolStripTextBox;
+            }
+        }
+    }
+}

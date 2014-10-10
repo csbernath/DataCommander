@@ -1,0 +1,244 @@
+﻿#if FOUNDATION_3_5
+
+namespace DataCommander.Foundation.Caching
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Threading;
+    using DataCommander.Foundation.Collections;
+    using DataCommander.Foundation.Diagnostics;
+    using DataCommander.Foundation.Linq;
+    using DataCommander.Foundation.Threading;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class MemoryCache : ICache
+    {
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly IndexableCollection<CacheEntry> entries;
+        private readonly UniqueIndex<String, CacheEntry> keyIndex;
+        private readonly NonUniqueIndex<DateTime, CacheEntry> absoluteExpirationIndex;
+        private readonly LimitedConcurrencyLevelTaskScheduler scheduler;
+        private readonly Timer timer;
+        private Boolean disposed;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="maximumConcurrencyLevel"></param>
+        /// <param name="timerPeriod"></param>
+        public MemoryCache( Int32 maximumConcurrencyLevel, TimeSpan timerPeriod )
+        {
+            this.keyIndex = new UniqueIndex<String, CacheEntry>(
+                "key",
+                entry => GetKeyResponse.Create( true, entry.CacheItem.Key ),
+                SortOrder.None );
+
+            this.absoluteExpirationIndex = new NonUniqueIndex<DateTime, CacheEntry>(
+                "absoluteExpiration",
+                entry => GetKeyResponse.Create( true, entry.AbsoluteExpiration ),
+                SortOrder.Ascending );
+
+            this.entries = new IndexableCollection<CacheEntry>( this.keyIndex );
+            this.entries.Indexes.Add( this.absoluteExpirationIndex );
+
+            this.scheduler = new LimitedConcurrencyLevelTaskScheduler( "MemoryCache", maximumConcurrencyLevel, new ConcurrentQueue<Action>() );
+
+            this.timer = new Timer( this.TimerCallback, null, timerPeriod, timerPeriod );
+        }
+
+        #region ICache Members
+
+        void ICache.Add( ICacheItem item )
+        {
+            Contract.Assert( item != null );
+            Contract.Assert( item.Key != null );
+            Contract.Assert( item.SlidingExpiration > TimeSpan.Zero );
+            Contract.Assert( !this.keyIndex.ContainsKey( item.Key ) );
+
+            CacheEntry entry;
+
+            lock (this.entries)
+            {
+                Contract.Assert( !this.keyIndex.ContainsKey( item.Key ) );
+
+                entry = new CacheEntry
+                        {
+                            CacheItem = item,
+                            AbsoluteExpiration = OptimizedDateTime.Now + item.SlidingExpiration
+                        };
+
+                this.entries.Add( entry );
+            }
+
+            Object value = item.GetValue();
+            entry.Value = value;
+            entry.Initialized = true;
+        }
+
+        void ICache.AddOrGetExisiting( ICacheItem item )
+        {
+            Contract.Assert( item != null );
+            Contract.Assert( item.Key != null );
+            Contract.Assert( item.SlidingExpiration > TimeSpan.Zero );
+
+            CacheEntry entry;
+
+            if (!this.keyIndex.TryGetValue( item.Key, out entry ))
+            {
+                lock (this.entries)
+                {
+                    if (!this.keyIndex.TryGetValue( item.Key, out entry ))
+                    {
+                        entry = new CacheEntry
+                                {
+                                    CacheItem = item,
+                                    AbsoluteExpiration = OptimizedDateTime.Now + item.SlidingExpiration
+                                };
+
+                        this.entries.Add( entry );
+                    }
+                }
+            }
+
+            if (!entry.Initialized)
+            {
+                log.Trace( "Initialize, lock.Locked: {0}, lock.ThreadId: {1}", entry.Lock.Locked, entry.Lock.ThreadId );
+
+                using (entry.Lock.Enter())
+                {
+                    if (!entry.Initialized)
+                    {
+                        var stopwatch = Stopwatch.StartNew();
+                        Object value = item.GetValue();
+                        stopwatch.Stop();
+                        entry.Value = value;
+                        entry.Initialized = true;
+                        log.Trace( "Initialize, item.GetValue(), key: {0}, elapsed: {1}", item.Key, stopwatch.Elapsed );
+                    }
+                }
+            }
+        }
+
+        Boolean ICache.TryGetValue( String key, out Object value )
+        {
+            CacheEntry entry;
+            Boolean contains = this.keyIndex.TryGetValue( key, out entry );
+
+            if (contains)
+            {
+                value = entry.Value;
+            }
+            else
+            {
+                value = null;
+            }
+
+            return contains;
+        }
+
+        void ICache.Remove( String key )
+        {
+            lock (this.entries)
+            {
+                CacheEntry entry;
+                if (this.keyIndex.TryGetValue( key, out entry ))
+                {
+                    this.entries.Remove( entry );
+                }
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Dispose()
+        {
+            this.disposed = true;
+            this.timer.Dispose();
+
+            this.scheduler.MaximumConcurrencyLevel = 0;
+            this.scheduler.Clear();
+
+            var doneEvent = new EventWaitHandle( false, EventResetMode.AutoReset );
+
+            this.scheduler.Done += ( sender, e ) => doneEvent.Set();
+
+            while (true)
+            {
+                if (this.scheduler.QueuedItemCount == 0 && this.scheduler.ThreadCount == 0)
+                {
+                    break;
+                }
+
+                log.Trace( "scheduler.QueuedItemCount: {0}, scheduler.ThreadCount: {1}", this.scheduler.QueuedItemCount, this.scheduler.ThreadCount );
+                doneEvent.WaitOne( 500, true );
+            }
+        }
+
+        private void TimerCallback( Object state )
+        {
+            if (this.entries.Count > 0 && !disposed)
+            {
+                var enumerable = (ICollection<CacheEntry>)this.absoluteExpirationIndex;
+                DateTime now = OptimizedDateTime.Now;
+                ICollection<CacheEntry> expiredEntries;
+
+                lock (this.entries)
+                {
+                    log.Trace( "enumerable.Count(): {0}, this.entries.Count: {1}", enumerable.Count(), this.entries.Count );
+                    expiredEntries = enumerable.TakeWhile( e => e.AbsoluteExpiration < now && e.Initialized && !e.Lock.Locked ).ToDynamicArray( 0, this.entries.Count );
+                }
+
+                if (expiredEntries.Count > 0)
+                {
+                    foreach (var entry in expiredEntries)
+                    {
+                        var tmpEntry = entry;
+                        this.scheduler.Enqueue( () => Update( tmpEntry ) );
+                    }
+                }
+            }
+        }
+
+        private void Update( CacheEntry entry )
+        {
+            if (!this.disposed && !entry.Lock.Locked && entry.Lock.TryEnter())
+            {
+                try
+                {
+                    var item = entry.CacheItem;
+                    var stopwatch = Stopwatch.StartNew();
+                    Object value = item.GetValue();
+                    stopwatch.Stop();
+                    log.Trace( "Update, item.GetValue(), key: {0}, elapsed: {1}", item.Key, stopwatch.Elapsed );
+
+                    var collection = (ICollection<CacheEntry>)this.absoluteExpirationIndex;
+
+                    lock (this.entries)
+                    {
+                        Boolean succeeded = collection.Remove( entry );
+                        Contract.Assert( succeeded, "collection.Remove( entry )" );
+
+                        entry.Value = value;
+                        entry.AbsoluteExpiration = OptimizedDateTime.Now + item.SlidingExpiration;
+
+                        collection.Add( entry );
+                    }
+                }
+                finally
+                {
+                    entry.Lock.Exit();
+                }
+            }
+        }
+    }
+}
+
+#endif

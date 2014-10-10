@@ -1,0 +1,69 @@
+namespace DataCommander.Foundation.Threading
+{
+    using System;
+    using System.Diagnostics;
+    using System.Threading;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class WorkerThreadPoolDequeuer
+    {
+        private WorkerThreadPool pool;
+        private WorkerThread thread;
+        private WaitCallback callback;
+        private Int64 lastActivityTimestamp;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="callback"></param>
+        public WorkerThreadPoolDequeuer(WaitCallback callback)
+        {
+            this.callback = callback;
+            this.thread = new WorkerThread(this.Start);
+        }
+
+        private void Start()
+        {
+            WaitHandle[] waitHandles = { this.thread.StopRequest, this.pool.EnqueueEvent };
+
+            while (!this.thread.IsStopRequested)
+            {
+                Boolean dequeued = this.pool.Dequeue(this.callback, waitHandles);
+
+                if (dequeued)
+                {
+                    this.lastActivityTimestamp = Stopwatch.GetTimestamp();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public WorkerThread Thread
+        {
+            get
+            {
+                return this.thread;
+            }
+        }
+
+        internal WorkerThreadPool Pool
+        {
+            set
+            {
+                this.pool = value;
+            }
+        }
+
+        internal Int64 LastActivityTimestamp
+        {
+            get
+            {
+                return this.lastActivityTimestamp;
+            }
+        }
+    }
+}

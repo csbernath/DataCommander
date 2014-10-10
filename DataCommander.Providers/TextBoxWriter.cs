@@ -1,0 +1,62 @@
+namespace DataCommander
+{
+    using System;
+    using System.IO;
+    using System.Text;
+    using System.Windows.Forms;
+
+    internal delegate void AppendTextDelegate(string text);
+
+    /// <summary>
+    /// Summary description for TextBoxWriter.
+    /// </summary>
+    public class TextBoxWriter : TextWriter
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="textBox"></param>
+        public TextBoxWriter(TextBoxBase textBox)
+        {
+            this.textBox = textBox;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public override Encoding Encoding
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        private void AppendText(string text)
+        {
+            this.textBox.AppendText(text);
+			this.textBox.ScrollToCaret();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="str"></param>
+        public override void Write(string str)
+        {
+            this.textBox.Invoke(new AppendTextDelegate(AppendText), str);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        public override void WriteLine(string value)
+        {
+            string line = value + Environment.NewLine;
+            this.textBox.Invoke(new AppendTextDelegate(AppendText), line);
+        }
+
+        private TextBoxBase textBox;
+    }
+}

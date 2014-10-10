@@ -1,0 +1,170 @@
+﻿namespace DataCommander.Foundation.Diagnostics
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using DataCommander.Foundation.Configuration;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class ApplicationLogConfigurationReader
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public static void Read()
+        {
+            var node = Settings.SelectCurrentType();
+            IApplicationLog applicationLog;
+            if (node != null)
+            {
+                DefaultLog.Write( LogLevel.Verbose, "Initializing LogWriters..." );
+                var logWriters = new List<LogWriter>();
+                var logWritersNode = node.ChildNodes[ "LogWriters" ];
+
+                foreach (ConfigurationNode childNode in logWritersNode.ChildNodes)
+                {
+                    ConfigurationAttributeCollection attributes = childNode.Attributes;
+                    Boolean enabled = attributes[ "Enabled" ].GetValue<Boolean>();
+
+                    if (enabled)
+                    {
+                        LogWriter logWriter = ReadLogWriter( childNode );
+                        if (logWriter != null)
+                        {
+                            LogLevel logLevel = attributes[ "LogLevel" ].GetValue<LogLevel>();
+                            logWriter.logLevel = (Int32) logLevel;
+                            logWriters.Add( logWriter );
+                            logWriter.logWriter.Open();
+                        }
+                    }
+                }
+
+                if (logWriters.Count > 0)
+                {
+                    var log = new MultipleLog( logWriters, true );
+                    applicationLog = new ApplicationLog( log, true );
+                }
+                else
+                {
+                    applicationLog = null;
+                }
+            }
+            else
+            {
+                applicationLog = null;
+            }
+
+            if (applicationLog != null)
+            {
+                ApplicationLog.Instance = applicationLog;
+            }
+
+            DefaultLog.Write( LogLevel.Verbose, "LogWriters initialized successfully." );
+        }
+
+        private static LogWriter ReadLogWriter( ConfigurationNode node )
+        {
+            LogWriter logWriter = null;
+            var attributes = node.Attributes;
+            String type = attributes[ "Type" ].GetValue<String>();
+
+            switch (type)
+            {
+                case "EventLogWriter":
+                    {
+                        String logName = attributes[ "LogName" ].GetValue<String>();
+                        String machineName = attributes[ "MachineName" ].GetValue<String>();
+                        String source = attributes[ "Source" ].GetValue<String>();
+                        var eventLogWriter = new EventLogWriter( logName, machineName, source );
+                        logWriter = new LogWriter
+                        {
+                            logWriter = eventLogWriter
+                        };
+                    }
+
+                    break;
+
+                case "FileLogWriter":
+                    {
+                        String path = attributes[ "Path" ].GetValue<String>();
+                        path = Environment.ExpandEnvironmentVariables( path );
+                        Boolean async;
+                        node.Attributes.TryGetAttributeValue<Boolean>( "Async", true, out async );
+                        Int32 bufferSize = async ? 262144 : 1024;// 262144 = 256 KB
+                        node.Attributes.TryGetAttributeValue<Int32>( "BufferSize", bufferSize, out bufferSize );
+                        Boolean autoFlush;
+                        node.Attributes.TryGetAttributeValue<Boolean>( "AutoFlush", true, out autoFlush );
+                        FileLogWriter fileLogWriter = new FileLogWriter( path, Encoding.UTF8, async, bufferSize, autoFlush );
+                        logWriter = new LogWriter
+                        {
+                            logWriter = fileLogWriter
+                        };
+                    }
+
+                    break;
+
+                default:
+                    break;
+            }
+
+            return logWriter;
+        }
+
+        private sealed class LogWriter
+        {
+            public ILogWriter logWriter;
+            public Int32 logLevel;
+        }
+
+        private sealed class MultipleLog : ILog
+        {
+            private IEnumerable<LogWriter> logWriters;
+            private bool enabled;
+
+            public MultipleLog( IEnumerable<LogWriter> logWriters, bool enabled )
+            {
+                this.logWriters = logWriters;
+                this.enabled = enabled;
+            }
+
+            #region ILog Members
+
+            bool ILog.Enabled
+            {
+                get
+                {
+                    return this.enabled;
+                }
+            }
+
+            void ILog.Write( LogEntry logEntry )
+            {
+                if (this.enabled)
+                {
+                    Int32 logLevel = (Int32) logEntry.LogLevel;
+                    foreach (var logWriter in this.logWriters.Where( w => w.logLevel >= logLevel ))
+                    {
+                        logWriter.logWriter.Write( logEntry );
+                    }
+                }
+            }
+
+            #endregion
+
+            #region IDisposable Members
+
+            void IDisposable.Dispose()
+            {
+                foreach (var logWriter in this.logWriters)
+                {
+                    logWriter.logWriter.Dispose();
+                }
+            }
+
+            #endregion
+        }
+    }
+}

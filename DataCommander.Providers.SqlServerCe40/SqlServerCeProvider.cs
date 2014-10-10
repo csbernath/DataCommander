@@ -1,0 +1,538 @@
+﻿namespace DataCommander.Providers.SqlServerCe
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.Common;
+    using System.Data.SqlServerCe;
+    using System.Text;
+    using DataCommander.Foundation.Data;
+    using DataCommander.Providers;
+
+    public sealed class SqlServerCeProvider : IProvider
+    {
+        #region IProvider Members
+
+        string IProvider.Name
+        {
+            get
+            {
+                return "SqlServerCe40";
+            }
+        }
+
+        System.Data.Common.DbProviderFactory IProvider.DbProviderFactory
+        {
+            get
+            {
+                object o = SqlCeProviderFactory.Instance.CreateCommandBuilder();
+                return SqlCeProviderFactory.Instance;
+            }
+        }
+
+        ConnectionBase IProvider.CreateConnection( string connectionString )
+        {
+            return new Connection( connectionString );
+        }
+
+        string[] IProvider.KeyWords
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        bool IProvider.IsCommandCancelable
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        void IProvider.DeriveParameters( System.Data.IDbCommand command )
+        {
+            throw new NotImplementedException();
+        }
+
+        DataParameterBase IProvider.GetDataParameter( System.Data.IDataParameter parameter )
+        {
+            throw new NotImplementedException();
+        }
+
+        System.Data.DataTable IProvider.GetParameterTable( System.Data.IDataParameterCollection parameters )
+        {
+            throw new NotImplementedException();
+        }
+
+        System.Xml.XmlReader IProvider.ExecuteXmlReader( System.Data.IDbCommand command )
+        {
+            throw new NotImplementedException();
+        }
+
+        System.Data.DataTable IProvider.GetSchemaTable( System.Data.IDataReader dataReader )
+        {
+            return dataReader.GetSchemaTable();
+        }
+
+        System.Data.DataSet IProvider.GetTableSchema( System.Data.IDbConnection connection, string tableName )
+        {
+            throw new NotImplementedException();
+        }
+
+        Type IProvider.GetColumnType( System.Data.DataRow schemaRow )
+        {
+            DataColumnSchema sr = new DataColumnSchema( schemaRow );
+            SqlCeType sqlCeType = (SqlCeType) schemaRow[ SchemaTableColumn.ProviderType ];
+            SqlDbType sqlDbType = sqlCeType.SqlDbType;
+            Type dataType;
+
+            switch (sqlDbType)
+            {
+                case SqlDbType.Decimal:
+                    dataType = typeof( DecimalField );
+                    break;
+
+                default:
+                    dataType = sr.DataType;
+                    break;
+            }
+
+            return dataType;
+        }
+
+        IDataReaderHelper IProvider.CreateDataReaderHelper( System.Data.IDataReader dataReader )
+        {
+            SqlCeDataReader sqlCeDataReader = (SqlCeDataReader) dataReader;
+            return new SqlCeDataReaderHelper( sqlCeDataReader );
+        }
+
+        System.Data.Common.DbDataAdapter IProvider.CreateDataAdapter( string selectCommandText, System.Data.IDbConnection connection )
+        {
+            throw new NotImplementedException();
+        }
+
+        IObjectExplorer IProvider.ObjectExplorer
+        {
+            get
+            {
+                return new SqlCeObjectExplorer();
+            }
+        }
+
+        GetCompletionResponse IProvider.GetCompletion( ConnectionBase connection, IDbTransaction transaction, string text, int position )
+        {
+            var response = new GetCompletionResponse();
+            string[] array = null;
+            SqlStatement sqlStatement = new SqlStatement( text );
+            Token[] tokens = sqlStatement.Tokens;
+            int index = sqlStatement.FindToken( position );
+
+            if (index >= 0 && index < tokens.Length)
+            {
+                Token token = sqlStatement.Tokens[ index ];
+                string value = token.Value;
+
+                //if (value[0] == '@')
+                //{
+                //    if (value.IndexOf("@@") == 0)
+                //    {
+                //        array = keyWords.Where(k => k.StartsWith(value)).ToArray();
+                //    }
+                //    else
+                //    {
+                //        SortedList<string, object> list = new SortedList<string, object>();
+
+                //        for (int i = 0; i < tokens.Length; i++)
+                //        {
+                //            token = tokens[i];
+                //            string keyWord = token.Value;
+
+                //            if (keyWord != null && keyWord.Length >= 2 && keyWord.IndexOf(value) == 0 && keyWord != value)
+                //            {
+                //                if (!list.ContainsKey(token.Value))
+                //                    list.Add(token.Value, null);
+                //            }
+                //        }
+
+                //        array = new string[list.Count];
+                //        list.Keys.CopyTo(array, 0);
+                //    }
+                //}
+            }
+
+            if (array == null)
+            {
+                SqlObject sqlObject = sqlStatement.FindSqlObject( index );
+                string commandText = null;
+
+                if (sqlObject != null)
+                {
+                    string name;
+                    switch (sqlObject.Type)
+                    {
+                        case SqlObjectTypes.Table | SqlObjectTypes.View:
+                            commandText = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES ORDER BY TABLE_NAME";
+                            break;
+
+                        case SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function:
+                            commandText = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES ORDER BY TABLE_NAME";
+                            break;
+
+                        case SqlObjectTypes.Table:
+                            commandText = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES ORDER BY TABLE_NAME";
+                            break;
+
+                        case SqlObjectTypes.Column:
+                            name = sqlObject.ParentName;
+                            commandText = string.Format( @"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = '{0}'
+ORDER BY ORDINAL_POSITION", name );
+                            break;
+
+                        case SqlObjectTypes.Value:
+                            string[] items = sqlObject.ParentName.Split( '.' );
+                            int i = items.Length - 1;
+                            string columnName = items[ i ];
+                            string tableNameOrAlias = null;
+                            if (i > 0)
+                            {
+                                i--;
+                                tableNameOrAlias = items[ i ];
+                            }
+                            if (tableNameOrAlias != null)
+                            {
+                                string tableName;
+                                bool contains = sqlStatement.Tables.TryGetValue( tableNameOrAlias, out tableName );
+                                if (contains)
+                                {
+                                    commandText = string.Format( "select distinct top 10 {0} from {1} (nolock) order by 1", columnName, tableName );
+                                }
+                            }
+                            break;
+                    }
+                }
+
+                if (commandText != null)
+                {
+                    System.Diagnostics.Trace.WriteLine( commandText );
+                    List<string> list = new List<string>();
+
+                    try
+                    {
+                        using (IDataReader dataReader = connection.Connection.ExecuteReader( transaction, commandText ))
+                        {
+                            while (dataReader.Read())
+                            {
+                                string stringValue = dataReader[ 0 ].ToString();
+                                list.Add( stringValue );
+                            }
+                        }
+                    }
+                    catch
+                    {
+                    }
+
+                    array = new string[ list.Count ];
+                    list.CopyTo( array );
+                }
+            }
+
+            response.Items = array;
+            return response;
+        }
+
+        void IProvider.ClearCompletionCache()
+        {
+        }
+
+        InfoMessage[] IProvider.ToInfoMessages( Exception e )
+        {
+            throw new NotImplementedException();
+        }
+
+        string IProvider.GetExceptionMessage( Exception e )
+        {
+            return e.ToString();
+        }
+
+        string IProvider.GetColumnTypeName( IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName )
+        {
+            var schemaRow = new DataColumnSchema( sourceSchemaRow );
+            int columnSize = schemaRow.ColumnSize;
+            bool? allowDBNull = schemaRow.AllowDBNull;
+            Type dataType = schemaRow.DataType;
+            TypeCode typeCode = Type.GetTypeCode( dataType );
+            string typeName;
+
+            switch (typeCode)
+            {
+                case TypeCode.Boolean:
+                    typeName = SqlDataTypeName.Bit;
+                    break;
+
+                case TypeCode.Byte:
+                    typeName = SqlDataTypeName.TinyInt;
+                    break;
+
+                case TypeCode.DateTime:
+                    typeName = "datetime";
+                    break;
+
+                case TypeCode.Decimal:
+                    short precision = schemaRow.NumericPrecision.Value;
+                    short scale = schemaRow.NumericScale.Value;
+
+                    if (precision > 38)
+                    {
+                        precision = 38;
+                    }
+
+                    if (scale > 38)
+                    {
+                        scale = 38;
+                    }
+
+                    if (precision < scale)
+                    {
+                        precision = scale;
+                    }
+
+                    if (scale == 0)
+                    {
+                        typeName = string.Format( "decimal({0})", precision );
+                    }
+                    else
+                    {
+                        typeName = string.Format( "decimal({0},{1})", precision, scale );
+                    }
+
+                    break;
+
+                case TypeCode.Double:
+                    typeName = "float";
+                    break;
+
+                case TypeCode.Int16:
+                    typeName = "smallint";
+                    break;
+
+                case TypeCode.Int32:
+                    typeName = "int";
+                    break;
+
+                case TypeCode.Int64:
+                    typeName = "bigint";
+                    break;
+
+                case TypeCode.Object:
+                    if (sourceDataTypeName.ToLower() == SqlDataTypeName.Timestamp)
+                    {
+                        typeName = SqlDataTypeName.Timestamp;
+                    }
+                    else if (dataType == typeof( Guid ))
+                    {
+                        typeName = "uniqueidentifier";
+                    }
+                    else if (dataType == typeof( byte[] ))
+                    {
+                        if (columnSize <= 8000)
+                        {
+                            typeName = string.Format( "varbinary({0})", columnSize );
+                        }
+                        else
+                        {
+                            typeName = "image";
+                        }
+                    }
+                    else
+                    {
+                        throw new NotImplementedException();
+                    }
+                    break;
+
+                case TypeCode.Single:
+                    typeName = "real";
+                    break;
+
+                case TypeCode.String:
+                    bool isFixedLength;
+                    string dataTypeNameUpper = sourceDataTypeName.ToUpper();
+
+                    switch (sourceDataTypeName)
+                    {
+                        case "CHAR":
+                        case "NCHAR":
+                            isFixedLength = true;
+                            break;
+
+                        case "VARCHAR":
+                        case "NVARCHAR":
+                        case "VARCHAR2":
+                        default:
+                            isFixedLength = false;
+                            break;
+                    }
+
+                    if (sourceProvider.Name == "System.Data.OracleClient")
+                    {
+                        columnSize /= 4;
+                    }
+
+                    if (columnSize <= 4000)
+                    {
+                        if (isFixedLength)
+                        {
+                            typeName = string.Format( "nchar({0})", columnSize );
+                        }
+                        else
+                        {
+                            typeName = string.Format( "nvarchar({0})", columnSize );
+                        }
+                    }
+                    else
+                    {
+                        typeName = "ntext";
+                    }
+
+                    break;
+
+                default:
+                    throw new NotImplementedException();
+            }
+
+            return typeName;
+        }
+
+        private static object ConvertToString( object source )
+        {
+            object target;
+            if (source == null || source == DBNull.Value)
+            {
+                target = DBNull.Value;
+            }
+            else
+            {
+                IConvertible convertible = (IConvertible) source;
+                target = convertible.ToString( null );
+            }
+            return target;
+        }
+
+        private static object ConvertToByteArray( object source )
+        {
+            object target;
+            if (source == null || source == DBNull.Value)
+            {
+                target = DBNull.Value;
+            }
+            else
+            {
+                BinaryField binaryField = (BinaryField) source;
+                target = binaryField.Value;
+            }
+            return target;
+        }
+
+        void IProvider.CreateInsertCommand(
+            DataTable sourceSchemaTable,
+            string[] sourceDataTypeNames,
+            IDbConnection destinationconnection,
+            string destinationTableName,
+            out IDbCommand insertCommand,
+            out Converter<object, object>[] converters )
+        {
+            DataTable schemaTable;
+            string[] dataTypeNames;
+            int count;
+
+            using (IDbCommand command = destinationconnection.CreateCommand())
+            {
+                command.CommandText = destinationTableName;
+                command.CommandType = CommandType.TableDirect;
+
+                using (IDataReader dataReader = command.ExecuteReader( CommandBehavior.SchemaOnly ))
+                {
+                    schemaTable = dataReader.GetSchemaTable();
+                    count = dataReader.FieldCount;
+                    dataTypeNames = new string[ count ];
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        dataTypeNames[ i ] = dataReader.GetDataTypeName( i );
+                    }
+                }
+            }
+
+            StringBuilder insertInto = new StringBuilder();
+            insertInto.AppendFormat( "insert into [{0}](", destinationTableName );
+            StringBuilder values = new StringBuilder();
+            values.Append( "values(" );
+            DataRowCollection schemaRows = schemaTable.Rows;
+            count = schemaRows.Count;
+            converters = new Converter<object, object>[ count ];
+            insertCommand = destinationconnection.CreateCommand();
+
+            for (int i = 0; i < count; i++)
+            {
+                if (i > 0)
+                {
+                    insertInto.Append( ',' );
+                    values.Append( ',' );
+                }
+
+                DataColumnSchema columnSchema = new DataColumnSchema( schemaRows[ i ] );
+                insertInto.AppendFormat( "[{0}]", columnSchema.ColumnName );
+                values.Append( '?' );
+
+                int columnSize = columnSchema.ColumnSize;
+                SqlCeType sqlCeType = (SqlCeType) schemaRows[ i ][ "ProviderType" ];
+                SqlCeParameter parameter = new SqlCeParameter( null, sqlCeType.SqlDbType );
+                insertCommand.Parameters.Add( parameter );
+
+                switch (dataTypeNames[ i ].ToLower())
+                {
+                    case SqlDataTypeName.NText:
+                        converters[ i ] = ConvertToString;
+                        break;
+                    case SqlDataTypeName.RowVersion:
+                        converters[ i ] = ConvertToByteArray;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            insertInto.Append( ") " );
+            values.Append( ')' );
+            insertInto.Append( values );
+            insertCommand.CommandText = insertInto.ToString();
+        }
+
+        string[] IProvider.GetStatements( string commandText )
+        {
+            return new string[] { commandText };
+        }
+
+        #endregion
+
+        #region IProvider Members
+
+
+        bool IProvider.CanConvertCommandToString
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        string IProvider.CommandToString( IDbCommand command )
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+}

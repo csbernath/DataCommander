@@ -1,0 +1,229 @@
+namespace DataCommander.Foundation.Configuration
+{
+    using System;
+    using System.Diagnostics;
+    using System.Diagnostics.Contracts;
+    using System.IO;
+    using System.Reflection;
+    using System.Runtime.CompilerServices;
+
+    /// <summary>
+    /// This class is a singleton which holds a <see cref="ConfigurationSection"/> instance.
+    /// </summary>
+    public static class Settings
+    {
+        /// <summary>
+        /// The config file name.
+        /// </summary>
+        private static String configFileName;
+
+        private static String sectionName;
+
+        /// <summary>
+        /// The ConfigurationSection instance.
+        /// </summary>
+        private static ConfigurationSection section;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static event EventHandler Changed
+        {
+            add
+            {
+                Section.Changed += value;
+            }
+
+            remove
+            {
+                Section.Changed -= value;
+            }
+        }
+
+        /// <summary>
+        /// Uses <see cref="AppSettings"/> to retrieve "ConfigFileName" from the app.config file.
+        /// </summary>
+        public static String ConfigFileName
+        {
+            get
+            {
+                if (configFileName == null)
+                {
+                    AppDomainSetup setup = AppDomain.CurrentDomain.SetupInformation;
+                    Boolean contains;
+
+                    try
+                    {
+                        contains = AppSettings.CurrentType.TryGetString( "ConfigFileName", out configFileName );
+                    }
+                    catch
+                    {
+                        contains = false;
+                    }
+
+                    if (contains && !String.IsNullOrEmpty( configFileName ))
+                    {
+                        configFileName = Path.Combine( setup.ApplicationBase, configFileName );
+                    }
+                    else
+                    {
+                        configFileName = setup.ConfigurationFile;
+                    }
+                }
+
+                return configFileName;
+            }
+
+            set
+            {
+                configFileName = value;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static ConfigurationNode RootNode
+        {
+            get
+            {
+                return Section.RootNode;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ConfigurationSection" /> instance.
+        /// Initializes the instance at first call.
+        /// </summary>
+        public static ConfigurationSection Section
+        {
+            get
+            {
+                if (section == null)
+                {
+                    String configFileName = ConfigFileName;
+                    String sectionName = SectionName;
+                    section = new ConfigurationSection( configFileName, sectionName );
+                }
+
+                return section;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static String SectionName
+        {
+            get
+            {
+                if (sectionName == null)
+                {
+                    sectionName = ConfigurationSection.DefaultSectionName;
+                }
+
+                return sectionName;
+            }
+
+            set
+            {
+                sectionName = value;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static ConfigurationNode CurrentMethod
+        {
+            [MethodImpl( MethodImplOptions.NoInlining )]
+            get
+            {
+                var trace = new StackTrace( 1 );
+                String nodeName = ConfigurationNodeName.FromMethod( trace, 0 );
+                ConfigurationNode node = Section.SelectNode( nodeName, true );
+                return node;
+            }
+        }
+
+        /// <summary>
+        /// Gets the config node of the calling method's type.
+        /// </summary>
+        public static ConfigurationNode CurrentType
+        {
+            [MethodImpl( MethodImplOptions.NoInlining )]
+            get
+            {
+                var trace = new StackTrace( 1 );
+                String nodeName = ConfigurationNodeName.FromType( trace, 0 );
+                ConfigurationNode node = Section.SelectNode( nodeName, true );
+                return node;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static ConfigurationNode CurrentNamespace
+        {
+            [MethodImpl( MethodImplOptions.NoInlining )]
+            get
+            {
+                var trace = new StackTrace( 1 );
+                String nodeName = ConfigurationNodeName.FromNamespace( trace, 0 );
+                ConfigurationNode node = Section.SelectNode( nodeName, true );
+                return node;
+            }
+        }
+
+        /// <summary>
+        /// Computes the config file name from the given assembly's CodeBase.
+        /// </summary>
+        /// <param name="assembly"></param>
+        /// <returns></returns>
+        public static String GetAssemblyConfigFileName( Assembly assembly )
+        {
+            Contract.Requires( assembly != null );
+
+            String codeBase = assembly.CodeBase;
+            Uri uri = new Uri( codeBase );
+            String fileName = uri.LocalPath;
+            FileInfo fileInfo = new FileInfo( fileName );
+            fileName = fileInfo.FullName;
+            String configFilename = fileName + ".config";
+            return configFilename;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nodeName"></param>
+        /// <param name="throwOnError"></param>
+        /// <returns></returns>
+        public static ConfigurationNode SelectNode( String nodeName, Boolean throwOnError )
+        {
+            return Section.SelectNode( nodeName, throwOnError );
+        }
+
+        internal static ConfigurationNode SelectNode( Type type, Boolean throwOnError )
+        {
+            String nodeName = ConfigurationNodeName.FromType( type );
+            ConfigurationNode node = Section.SelectNode( nodeName, throwOnError );
+            return node;
+        }
+
+        /// <summary>
+        /// Finds the config node of the calling method's type.
+        /// </summary>
+        /// <returns>null, if not found and no exception is thrown.</returns>
+        [MethodImpl( MethodImplOptions.NoInlining )]
+        public static ConfigurationNode SelectCurrentType()
+        {
+            var trace = new StackTrace( 1 );
+            String nodeName = ConfigurationNodeName.FromType( trace, 0 );
+            //log.Trace( "SelectCurrentType, nodeName={0}", nodeName );
+            ConfigurationNode node = Section.SelectNode( nodeName, false );
+            return node;
+        }
+    }
+}

@@ -1,0 +1,46 @@
+﻿namespace DataCommander.Foundation
+{
+    using System;
+    using DataCommander.Foundation.Threading;
+
+    internal sealed class CacheEntry
+    {
+        public String Key
+        {
+            get;
+            set;
+        }
+
+        public Func<Object> GetValue
+        {
+            get;
+            set;
+        }
+
+        public TimeSpan SlidingExpiration
+        {
+            get;
+            set;
+        }
+
+        public DateTime AbsoluteExpiration
+        {
+            get;
+            set;
+        }
+
+        public Object Value
+        {
+            get;
+            set;
+        }
+
+        public Boolean Initialized
+        {
+            get;
+            set;
+        }
+
+        public Lock Lock = new Lock();
+    }
+}

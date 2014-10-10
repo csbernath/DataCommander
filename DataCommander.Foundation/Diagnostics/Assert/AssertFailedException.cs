@@ -1,0 +1,77 @@
+﻿#if FOUNDATION_3_5
+
+namespace DataCommander.Foundation.Diagnostics
+{
+    using System;
+    using System.Text;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class AssertFailedException : Exception
+    {
+        private readonly AssertMessage message;
+
+        internal AssertFailedException( AssertMessage message )
+        {
+            this.message = message;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public AssertMessage AssertMessage
+        {
+            get
+            {
+                return this.message;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public override String Message
+        {
+            get
+            {
+                var sb = new StringBuilder();
+                sb.AppendFormat( "AssertFailedException({0}))", this.message.Name );
+                sb.AppendLine();
+
+                AssertMessageParameterCollection parameters = this.message.Parameters;
+
+                if (parameters != null)
+                {
+                    foreach (AssertMessageParameter parameter in parameters)
+                    {
+                        String valueString = ToString( parameter.Value );
+                        sb.AppendFormat( "{0} = {1}", parameter.Name, valueString );
+                        sb.AppendLine();
+                    }
+                }
+
+                String message = sb.ToString();
+                return message;
+            }
+        }
+
+        private static String ToString( object value )
+        {
+            String s;
+
+            if (value != null)
+            {
+                s = value.ToString();
+            }
+            else
+            {
+                s = "null";
+            }
+
+            return s;
+        }
+    }
+}
+
+#endif

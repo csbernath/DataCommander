@@ -1,0 +1,356 @@
+namespace DataCommander.Foundation.Configuration
+{
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.IO;
+    using System.Text;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class ConfigurationNode
+    {
+        /// <summary>
+        /// The path delimiter in the nodeName. E.g.: Node1/Node2/Node3.
+        /// </summary>
+        public const Char Delimiter = '/';
+
+        private String name;
+        private Boolean hasName;
+        private String description;
+        private ConfigurationNode parent;
+        private ConfigurationNodeCollection childNodes = new ConfigurationNodeCollection();
+        private ConfigurationAttributeCollection attributes = new ConfigurationAttributeCollection();
+        private Int32 index;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        public ConfigurationNode( String name )
+        {
+            this.name = name;
+            this.hasName = name != null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Boolean HasName
+        {
+            get
+            {
+                return this.hasName;
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the node.
+        /// </summary>
+        public String Name
+        {
+            get
+            {
+                return this.name;
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the description of the node.
+        /// </summary>
+        public String Description
+        {
+            get
+            {
+                return this.description;
+            }
+
+            set
+            {
+                this.description = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the parent node.
+        /// </summary>
+        public ConfigurationNode Parent
+        {
+            get
+            {
+                return this.parent;
+            }
+        }
+
+        /// <summary>
+        /// Gets the full path of the node.
+        /// </summary>
+        public String FullName
+        {
+            get
+            {
+                String fullName;
+
+                if (this.parent != null)
+                {
+                    fullName = this.parent.FullName;
+
+                    if (fullName != null)
+                    {
+                        fullName += Delimiter;
+                    }
+
+                    fullName += this.name;
+                }
+                else
+                {
+                    fullName = null;
+                }
+
+                return fullName;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="childNode"></param>
+        public void AddChildNode( ConfigurationNode childNode )
+        {
+            Contract.Requires( childNode.Parent == null );
+
+            if (childNode.name == null)
+            {
+                childNode.name = ConfigurationElementName.Node + "[" + this.index + ']';
+                this.index++;
+            }
+
+            this.childNodes.Add( childNode );
+            childNode.parent = this;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="childNode"></param>
+        public void InsertChildNode( Int32 index, ConfigurationNode childNode )
+        {
+            Contract.Requires( childNode.Parent == null );
+
+            if (childNode.name == null)
+            {
+                childNode.name = ConfigurationElementName.Node + "[" + index + ']';
+                index++;
+            }
+
+            this.childNodes.Insert( index, childNode );
+            childNode.parent = this;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="childNode"></param>
+        public void RemoveChildNode( ConfigurationNode childNode )
+        {
+            Contract.Requires( childNode != null );
+            Contract.Requires( this == childNode.Parent );
+
+            this.childNodes.Remove( childNode );
+            childNode.parent = null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public ConfigurationNode Clone()
+        {
+            ConfigurationNode clone = new ConfigurationNode( this.name );
+
+            foreach (ConfigurationAttribute attribute in this.attributes)
+            {
+                ConfigurationAttribute attributeClone = attribute.Clone();
+                clone.Attributes.Add( attributeClone );
+            }
+
+            foreach (ConfigurationNode childNode in this.childNodes)
+            {
+                ConfigurationNode childNodeClone = childNode.Clone();
+                clone.AddChildNode( childNodeClone );
+            }
+
+            return clone;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nodeName"></param>
+        /// <returns></returns>
+        public ConfigurationNode CreateNode( String nodeName )
+        {
+            Contract.Requires( nodeName != null );
+            ConfigurationNode node = this;
+            String[] nodeNames = nodeName.Split( Delimiter );
+
+            for (Int32 i = 0; i < nodeNames.Length; i++)
+            {
+                ConfigurationNode childNode;
+                Boolean contains = node.ChildNodes.TryGetValue( nodeNames[ i ], out childNode );
+
+                if (!contains)
+                {
+                    childNode = new ConfigurationNode( nodeNames[ i ] );
+                    node.AddChildNode( childNode );
+                }
+
+                node = childNode;
+            }
+
+            return node;
+        }
+
+        /// <summary>
+        /// Finds recursively a node under the node.
+        /// </summary>
+        /// <param name="path">Name of the child node.
+        /// The name can contains path delimiters.</param>
+        /// <returns>Return the child node is found.
+        /// Returns null if no child node found.</returns>
+        public ConfigurationNode SelectNode( String path )
+        {
+            ConfigurationNode node = this;
+
+            if (path != null)
+            {
+                String[] childNodeNames = path.Split( Delimiter );
+                Int32 depth = 0;
+
+                foreach (String childNodeName in childNodeNames)
+                {
+                    ConfigurationNode childNode;
+                    Boolean contains = node.childNodes.TryGetValue( childNodeName, out childNode );
+
+                    if (contains)
+                    {
+                        node = childNode;
+                        depth++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                if (depth != childNodeNames.Length)
+                {
+                    node = null;
+                }
+            }
+
+            return node;
+        }
+
+        /// <summary>
+        /// Gets the attributes stored in this node.
+        /// </summary>
+        public ConfigurationAttributeCollection Attributes
+        {
+            get
+            {
+                return this.attributes;
+            }
+        }
+
+        /// <summary>
+        /// Gets the child nodes of this node.
+        /// </summary>
+        public ConfigurationNodeCollection ChildNodes
+        {
+            get
+            {
+                return this.childNodes;
+            }
+        }
+
+        /// <summary>
+        /// Writes the content of this node (attributes and child nodes)
+        /// of this node to the specified <paramref name="textWriter"/>.
+        /// </summary>
+        /// <param name="textWriter"></param>
+        public void Write( TextWriter textWriter )
+        {
+            textWriter.WriteLine( "[" + this.FullName + "]" );
+
+            foreach (ConfigurationAttribute attribute in this.attributes)
+            {
+                attribute.Write( textWriter );
+            }
+
+            textWriter.WriteLine();
+
+            foreach (ConfigurationNode childNode in this.childNodes)
+            {
+                childNode.Write( textWriter );
+            }
+        }
+
+        /// <summary>
+        /// Writes the documentation of this node to the specified <paramref name="textWriter" />.
+        /// </summary>
+        /// <param name="textWriter"></param>
+        /// <param name="level">Recursion level</param>
+        public void WriteDocumentation( TextWriter textWriter, Int32 level )
+        {
+            Contract.Requires( textWriter != null );
+
+            StringBuilder sb = new StringBuilder();
+            String indent = new String( ' ', level * 2 );
+            sb.Append( indent );
+            sb.Append( this.name );
+            sb.Append( "\t\t" );
+            sb.AppendLine( this.description );
+
+            if (this.attributes.Count > 0)
+            {
+                foreach (ConfigurationAttribute attribute in this.attributes)
+                {
+                    sb.Append( '\t' );
+                    sb.Append( attribute.Name );
+
+                    sb.Append( '\t' );
+                    sb.Append( attribute.Description );
+                    sb.Append( '\t' );
+
+                    Object value = attribute.Value;
+                    String valueString = value != null ? value.ToString() : null;
+                    Boolean multiline = valueString.IndexOf( '\n' ) >= 0;
+
+                    if (multiline)
+                    {
+                        value = valueString.Replace( "\r", String.Empty );
+                        sb.Append( '"' );
+                    }
+
+                    sb.Append( value );
+
+                    if (multiline)
+                    {
+                        sb.Append( '"' );
+                    }
+
+                    sb.Append( Environment.NewLine );
+                }
+            }
+
+            textWriter.Write( sb );
+
+            foreach (ConfigurationNode childNode in this.childNodes)
+            {
+                childNode.WriteDocumentation( textWriter, level + 1 );
+            }
+        }
+    }
+}
