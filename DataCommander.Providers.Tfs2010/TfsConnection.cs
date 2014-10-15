@@ -9,23 +9,23 @@
 
     internal sealed class TfsConnection : ConnectionBase
     {
-        private TeamFoundationServer teamFoundationServer;
+        private TfsTeamProjectCollection tfsTeamProjectCollection;
         private VersionControlServer versionControlServer;
         private string connectionName;
         private ConnectionState state;
 
-        public TfsConnection(string teamFoundationServerUrl)
+        public TfsConnection(Uri uri)
         {
-            this.teamFoundationServer = new TeamFoundationServer(teamFoundationServerUrl);
-            this.versionControlServer = (VersionControlServer)teamFoundationServer.GetService(typeof(VersionControlServer));
+            this.tfsTeamProjectCollection = new TfsTeamProjectCollection(uri);
+            this.versionControlServer = (VersionControlServer)this.tfsTeamProjectCollection.GetService(typeof (VersionControlServer));
             this.Connection = new TfsDbConnection(this);
         }
 
-        internal TeamFoundationServer TeamFoundationServer
+        internal TfsTeamProjectCollection TfsTeamProjectCollection
         {
             get
             {
-                return this.teamFoundationServer;
+                return this.tfsTeamProjectCollection;
             }
         }
 
@@ -39,7 +39,7 @@
 
         public override void Open()
         {
-            teamFoundationServer.Authenticate();
+            this.tfsTeamProjectCollection.Authenticate();
             this.state = ConnectionState.Open;
         }
 

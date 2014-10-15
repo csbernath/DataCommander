@@ -10,12 +10,12 @@
     internal sealed class AsyncConnector
     {
         private ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private ConnectionProperties connectionProperties;
+        private readonly ConnectionProperties connectionProperties;
         private WorkerThread thread;
         private EndConnectionOpen endConnectionOpen;
         private long duration;
 
-        public AsyncConnector( ConnectionProperties connectionProperties )
+        public AsyncConnector(ConnectionProperties connectionProperties)
         {
             this.connectionProperties = connectionProperties;
         }
@@ -34,10 +34,10 @@
 
             try
             {
-                IProvider provider = ProviderFactory.CreateProvider( connectionProperties.providerName );
+                IProvider provider = ProviderFactory.CreateProvider(connectionProperties.providerName);
                 connectionProperties.provider = provider;
-                ConnectionBase connection = provider.CreateConnection( connectionProperties.connectionString );
-                Contract.Assert( connection != null );
+                ConnectionBase connection = provider.CreateConnection(connectionProperties.connectionString);
+                Contract.Assert(connection != null);
                 connection.ConnectionName = connectionProperties.connectionName;
                 this.duration = Stopwatch.GetTimestamp();
                 connection.Open();
@@ -50,14 +50,14 @@
                 exception = e;
             }
 
-            endConnectionOpen( exception );
+            endConnectionOpen(exception);
         }
 
-        public void BeginOpen( EndConnectionOpen endConnectionOpen )
+        public void BeginOpen(EndConnectionOpen endConnectionOpen)
         {
-            Contract.Assert( this.thread == null );
+            Contract.Assert(this.thread == null);
             this.endConnectionOpen = endConnectionOpen;
-            this.thread = new WorkerThread( this.Start );
+            this.thread = new WorkerThread(this.Start);
             this.thread.Name = "DataCommander.Providers.AsyncConnector.BeginOpen";
             this.thread.IsBackground = true;
             this.thread.Start();
@@ -65,10 +65,10 @@
 
         public void Cancel()
         {
-            ThreadPool.QueueUserWorkItem( CancelWaitCallback );
+            ThreadPool.QueueUserWorkItem(CancelWaitCallback);
         }
 
-        private void CancelWaitCallback( object state )
+        private void CancelWaitCallback(object state)
         {
             using (LogFactory.Instance.GetCurrentMethodLog())
             {

@@ -1,3 +1,5 @@
+using System;
+
 namespace DataCommander.Providers
 {
     using System.Collections.Generic;
@@ -12,7 +14,7 @@ namespace DataCommander.Providers
         {
             get
             {
-                List<string> providers = new List<string>();
+                var providers = new List<string>();
                 ConfigurationNode node = Settings.CurrentNamespace;
 
                 foreach (var childNode in node.ChildNodes)
@@ -28,18 +30,17 @@ namespace DataCommander.Providers
         {
             Contract.Requires( name != null );
             Contract.Ensures(Contract.Result<IProvider>() != null);
+
             ConfigurationNode folder = Settings.CurrentNamespace;
             folder = folder.ChildNodes[name];
             var attributes = folder.Attributes;
-            string assemblyNameString = attributes["AssemblyName"].GetValue<string>();
-            var assemblyName = new AssemblyName();
-            assemblyName.Name = assemblyNameString;
-            var assembly = Assembly.Load(assemblyName);
             string typeName = attributes["TypeName"].GetValue<string>();
-            object instance = assembly.CreateInstance(typeName);
+            Type type = Type.GetType(typeName, true);
+            object instance = Activator.CreateInstance(type);
             Contract.Assert(instance != null);
             Contract.Assert(instance is IProvider);
             var provider = (IProvider)instance;
+
             return provider;
         }
 

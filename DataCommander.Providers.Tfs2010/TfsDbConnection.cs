@@ -45,7 +45,7 @@
         {
             get
             {
-                return string.Format("Data Source={0}", this.connection.TeamFoundationServer.Uri);
+                return string.Format("Data Source={0}", this.connection.TfsTeamProjectCollection.Uri);
             }
 
             set

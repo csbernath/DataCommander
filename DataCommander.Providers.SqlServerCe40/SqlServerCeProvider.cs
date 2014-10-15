@@ -217,16 +217,17 @@ ORDER BY ORDINAL_POSITION", name );
                 if (commandText != null)
                 {
                     System.Diagnostics.Trace.WriteLine( commandText );
-                    List<string> list = new List<string>();
+                    var list = new List<string>();
 
                     try
                     {
-                        using (IDataReader dataReader = connection.Connection.ExecuteReader( transaction, commandText ))
+                        using (var context = connection.Connection.ExecuteReader(transaction, commandText, CommandType.Text, 0, CommandBehavior.Default))
                         {
+                            var dataReader = context.DataReader;
                             while (dataReader.Read())
                             {
-                                string stringValue = dataReader[ 0 ].ToString();
-                                list.Add( stringValue );
+                                string stringValue = dataReader[0].ToString();
+                                list.Add(stringValue);
                             }
                         }
                     }

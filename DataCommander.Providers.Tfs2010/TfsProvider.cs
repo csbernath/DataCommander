@@ -109,19 +109,20 @@ namespace DataCommander.Providers.Tfs
             }
         }
 
-        ConnectionBase IProvider.CreateConnection( string connectionString )
+        ConnectionBase IProvider.CreateConnection(string connectionString)
         {
-            DbConnectionStringBuilder dbConnectionStringBuilder = new DbConnectionStringBuilder();
+            var dbConnectionStringBuilder = new DbConnectionStringBuilder();
             dbConnectionStringBuilder.ConnectionString = connectionString;
-            string teamFoundationServerName = (string) dbConnectionStringBuilder[ "Data Source" ];
-            return new TfsConnection( teamFoundationServerName );
+            string uriString = (string)dbConnectionStringBuilder["Data Source"];
+            var uri = new Uri(uriString);
+            return new TfsConnection(uri);
         }
 
         string[] IProvider.KeyWords
         {
             get
             {
-                List<string> names = new List<string>();
+                var names = new List<string>();
 
                 foreach (string name in TfsDataReaderFactory.Dictionary.Keys)
                 {

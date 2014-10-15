@@ -6,67 +6,49 @@
     using System.Diagnostics.Contracts;
     using System.Xml;
 
-    [ContractClass( typeof( IProviderContract ) )]
+    [ContractClass(typeof (IProviderContract))]
     public interface IProvider
     {
-        string Name
-        {
-            get;
-        }
+        string Name { get; }
 
-        DbProviderFactory DbProviderFactory
-        {
-            get;
-        }
+        DbProviderFactory DbProviderFactory { get; }
 
-        ConnectionBase CreateConnection( string connectionString );
+        ConnectionBase CreateConnection(string connectionString);
 
-        string[] KeyWords
-        {
-            get;
-        }
+        string[] KeyWords { get; }
 
-        bool CanConvertCommandToString
-        {
-            get;
-        }
+        bool CanConvertCommandToString { get; }
 
-        bool IsCommandCancelable
-        {
-            get;
-        }
+        bool IsCommandCancelable { get; }
 
-        void DeriveParameters( IDbCommand command );
+        void DeriveParameters(IDbCommand command);
 
-        DataParameterBase GetDataParameter( IDataParameter parameter );
+        DataParameterBase GetDataParameter(IDataParameter parameter);
 
-        DataTable GetParameterTable( IDataParameterCollection parameters );
+        DataTable GetParameterTable(IDataParameterCollection parameters);
 
-        XmlReader ExecuteXmlReader( IDbCommand command );
+        XmlReader ExecuteXmlReader(IDbCommand command);
 
-        DataTable GetSchemaTable( IDataReader dataReader );
+        DataTable GetSchemaTable(IDataReader dataReader);
 
-        DataSet GetTableSchema( IDbConnection connection, string tableName );
+        DataSet GetTableSchema(IDbConnection connection, string tableName);
 
-        Type GetColumnType( DataRow schemaRow );
+        Type GetColumnType(DataRow schemaRow);
 
-        IDataReaderHelper CreateDataReaderHelper( IDataReader dataReader );
+        IDataReaderHelper CreateDataReaderHelper(IDataReader dataReader);
 
-        DbDataAdapter CreateDataAdapter( string selectCommandText, IDbConnection connection );
+        DbDataAdapter CreateDataAdapter(string selectCommandText, IDbConnection connection);
 
-        IObjectExplorer ObjectExplorer
-        {
-            get;
-        }
+        IObjectExplorer ObjectExplorer { get; }
 
-        GetCompletionResponse GetCompletion( ConnectionBase connection, IDbTransaction transaction, string text, int position );
+        GetCompletionResponse GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position);
 
         void ClearCompletionCache();
 
-        string GetExceptionMessage( Exception e );
-        InfoMessage[] ToInfoMessages( Exception e );
+        string GetExceptionMessage(Exception e);
+        InfoMessage[] ToInfoMessages(Exception e);
 
-        string GetColumnTypeName( IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName );
+        string GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName);
 
         void CreateInsertCommand(
             DataTable sourceSchemaTable,
@@ -74,10 +56,10 @@
             IDbConnection destinationconnection,
             string destinationTableName,
             out IDbCommand insertCommand,
-            out Converter<object, object>[] converters );
+            out Converter<object, object>[] converters);
 
-        string CommandToString( IDbCommand command );
+        string CommandToString(IDbCommand command);
 
-        string[] GetStatements( string commandText );
+        string[] GetStatements(string commandText);
     }
 }

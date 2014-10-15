@@ -28,8 +28,8 @@
         {
             TfsDbConnection tfsDbConnection = (TfsDbConnection)connection;
             this.connection = tfsDbConnection.Connection;
-            TeamFoundationServer teamFoundationServer = this.connection.TeamFoundationServer;
-            this.versionControlServer = (VersionControlServer)teamFoundationServer.GetService(typeof(VersionControlServer));
+            var tfsTeamProjectCollection = this.connection.TfsTeamProjectCollection;
+            this.versionControlServer = (VersionControlServer)tfsTeamProjectCollection.GetService(typeof(VersionControlServer));
         }
 
         #endregion

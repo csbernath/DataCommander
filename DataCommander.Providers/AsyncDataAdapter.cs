@@ -1,3 +1,5 @@
+using System.Diagnostics.Contracts;
+
 namespace DataCommander.Providers
 {
     using System;
@@ -61,8 +63,15 @@ namespace DataCommander.Providers
             int rowBlockSize,
             IResultWriter resultWriter,
             Action<IAsyncDataAdapter, Exception> endFill,
-            Action<IAsyncDataAdapter> writeEnd )
+            Action<IAsyncDataAdapter> writeEnd)
         {
+            Contract.Requires(provider != null);
+            Contract.Requires(maxRecords >= 0);
+            Contract.Requires(rowBlockSize >= 0);
+            Contract.Requires(resultWriter != null);
+            Contract.Requires(endFill != null);
+            Contract.Requires(writeEnd != null);
+
             this.provider = provider;
             this.commands = commands;
             this.maxRecords = maxRecords;
@@ -73,13 +82,16 @@ namespace DataCommander.Providers
 
             if (commands != null)
             {
-                this.thread = new WorkerThread( this.Fill );
-                this.thread.Name = "AsyncDataAdapter.Fill";
+                this.thread = new WorkerThread(this.Fill)
+                {
+                    Name = "AsyncDataAdapter.Fill"
+                };
+
                 this.thread.Start();
             }
             else
             {
-                writeEnd( this );
+                writeEnd(this);
             }
         }
 
@@ -93,11 +105,11 @@ namespace DataCommander.Providers
                     this.thread.Stop();
                     if (this.provider.IsCommandCancelable)
                     {
-                        ThreadPool.QueueUserWorkItem( this.CancelWaitCallback );
+                        ThreadPool.QueueUserWorkItem(this.CancelWaitCallback);
                     }
                     else
                     {
-                        bool joined = thread.Join( 5000 );
+                        bool joined = thread.Join(5000);
 
                         if (!joined)
                         {
@@ -110,30 +122,28 @@ namespace DataCommander.Providers
 
         #endregion
 
-        public delegate void EndFill( AsyncDataAdapter dataAdapter, Exception e );
-
         #region Private Methods
 
         private void ReadTable(
             IDataReader dataReader,
             DataTable schemaTable,
-            int tableIndex )
+            int tableIndex)
         {
             using (LogFactory.Instance.GetCurrentMethodLog())
             {
                 Exception exception = null;
-                IDataReaderHelper dataReaderHelper = provider.CreateDataReaderHelper( dataReader );
+                IDataReaderHelper dataReaderHelper = provider.CreateDataReaderHelper(dataReader);
                 DataRowCollection schemaRows = schemaTable.Rows;
                 int count = schemaRows.Count;
-                string[] dataTypeNames = new string[ count ];
+                string[] dataTypeNames = new string[count];
 
                 int i;
                 for (i = 0; i < count; i++)
                 {
-                    dataTypeNames[ i ] = dataReader.GetDataTypeName( i );
+                    dataTypeNames[i] = dataReader.GetDataTypeName(i);
                 }
 
-                this.resultWriter.WriteTableBegin( schemaTable, dataTypeNames );
+                this.resultWriter.WriteTableBegin(schemaTable, dataTypeNames);
 
                 int fieldCount = dataReader.FieldCount;
 
@@ -142,11 +152,11 @@ namespace DataCommander.Providers
                     fieldCount = 0;
                 }
 
-                object[][] rows = new object[ rowBlockSize ][];
+                var rows = new object[rowBlockSize][];
 
                 for (i = 0; i < rowBlockSize; i++)
                 {
-                    rows[ i ] = new object[ fieldCount ];
+                    rows[i] = new object[fieldCount];
                 }
 
                 this.rowCount = 0;
@@ -182,19 +192,19 @@ namespace DataCommander.Providers
                     if (read)
                     {
                         this.rowCount++;
-                        dataReaderHelper.GetValues( rows[ i ] );
+                        dataReaderHelper.GetValues(rows[i]);
                         i++;
 
                         if (i == rowBlockSize || stopwatch.ElapsedMilliseconds >= 5000)
                         {
-                            resultWriter.WriteRows( rows, i );
+                            resultWriter.WriteRows(rows, i);
                             i = 0;
                             stopwatch.Restart();
                         }
 
                         if (this.rowCount == maxRecords)
                         {
-                            CancelWaitCallback( null );
+                            CancelWaitCallback(null);
                             break;
                         }
                     }
@@ -206,11 +216,11 @@ namespace DataCommander.Providers
 
                 if (i != rowBlockSize)
                 {
-                    log.Write( LogLevel.Trace,  "resultWriter.WriteRows(rows,i);" );
-                    resultWriter.WriteRows( rows, i );
+                    log.Write(LogLevel.Trace, "resultWriter.WriteRows(rows,i);");
+                    resultWriter.WriteRows(rows, i);
                 }
 
-                log.Write( LogLevel.Trace,  "resultWriter.WriteTableEnd(rowCount);" );
+                log.Write(LogLevel.Trace, "resultWriter.WriteTableEnd(rowCount);");
                 this.resultWriter.WriteTableEnd();
 
                 if (this.rowCount > 0)
@@ -225,13 +235,15 @@ namespace DataCommander.Providers
             }
         }
 
-        private void Fill( IDbCommand command )
+        private void Fill(IDbCommand command)
         {
+            Contract.Requires(command != null);
+
             Exception exception = null;
 
             try
             {
-                this.resultWriter.BeforeExecuteReader( provider, command );
+                this.resultWriter.BeforeExecuteReader(provider, command);
                 IDataReader dataReader = null;
                 try
                 {
@@ -244,7 +256,7 @@ namespace DataCommander.Providers
                         DataTable schemaTable = dataReader.GetSchemaTable();
                         if (schemaTable != null)
                         {
-                            this.ReadTable( dataReader, schemaTable, tableIndex );
+                            this.ReadTable(dataReader, schemaTable, tableIndex);
                         }
 
                         if (this.rowCount >= maxRecords || !dataReader.NextResult())
@@ -261,7 +273,7 @@ namespace DataCommander.Providers
                     {
                         dataReader.Close();
                         int recordsAffected = dataReader.RecordsAffected;
-                        this.resultWriter.AfterCloseReader( recordsAffected );
+                        this.resultWriter.AfterCloseReader(recordsAffected);
                     }
                 }
             }
@@ -288,12 +300,12 @@ namespace DataCommander.Providers
             {
                 if (command != null && command.Parameters != null)
                 {
-                    resultWriter.WriteParameters( command.Parameters );
+                    resultWriter.WriteParameters(command.Parameters);
                 }
                 long ticks = Stopwatch.GetTimestamp();
-                this.endFill( this, exception );
+                this.endFill(this, exception);
                 ticks = Stopwatch.GetTimestamp() - ticks;
-                log.Write( LogLevel.Trace,  "this.endFill( this, exception ); completed in {0} seconds.", StopwatchTimeSpan.ToString( ticks, 3 ) );
+                log.Write(LogLevel.Trace, "this.endFill( this, exception ); completed in {0} seconds.", StopwatchTimeSpan.ToString(ticks, 3));
             }
         }
 
@@ -305,17 +317,18 @@ namespace DataCommander.Providers
                 foreach (var command in this.commands)
                 {
                     this.command = command;
-                    this.Fill( command );
+                    this.Fill(command);
+                    command.Dispose();
                 }
             }
             finally
             {
                 this.resultWriter.End();
-                this.writeEnd( this );
+                this.writeEnd(this);
             }
         }
 
-        private void CancelWaitCallback( object state )
+        private void CancelWaitCallback(object state)
         {
             using (LogFactory.Instance.GetCurrentMethodLog())
             {

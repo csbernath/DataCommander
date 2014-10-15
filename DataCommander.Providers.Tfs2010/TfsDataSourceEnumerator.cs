@@ -10,14 +10,14 @@
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("ServerName", typeof(string));
-            dataTable.Columns.Add("InstanceName", typeof(string));            
-            string[] serverNames = RegisteredServers.GetServerNames();
+            dataTable.Columns.Add("InstanceName", typeof(string));
+            var projectCollections = RegisteredTfsConnections.GetProjectCollections();
 
-            for (int i = 0; i < serverNames.Length; i++)
+            foreach(var projectCollection in projectCollections)
             {
                 dataTable.Rows.Add(new object[]
                 {
-                    serverNames[i],
+                    projectCollection.Uri,
                     null
                 });
             }

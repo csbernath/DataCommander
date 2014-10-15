@@ -90,7 +90,7 @@
 
             set
             {
-                TfsDbConnection tfsDbConnection = (TfsDbConnection)value;
+                var tfsDbConnection = (TfsDbConnection)value;
                 this.connection = tfsDbConnection.Connection;
             }
         }
@@ -161,7 +161,7 @@
             }
 
             set
-            {                
+            {
             }
         }
 
@@ -184,7 +184,6 @@
 
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
 
         #endregion
