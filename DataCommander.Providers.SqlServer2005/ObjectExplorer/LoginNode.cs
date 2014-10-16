@@ -7,7 +7,7 @@
 
     internal sealed class LoginNode : ITreeNode
     {
-        private string name;
+        private readonly string name;
 
         public LoginNode( string name )
         {

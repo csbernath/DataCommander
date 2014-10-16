@@ -5,61 +5,6 @@ namespace DataCommander.Providers
     using System.Data;
     using System.Diagnostics.Contracts;
 
-    public enum InfoMessageSeverity
-    {
-        Error,
-        Information,
-        Verbose
-    }
-
-    public class DatabaseChangedEventArgs : EventArgs
-    {
-        public string database;
-    }
-
-    public sealed class InfoMessage
-    {
-        private DateTime creationTime;
-        private InfoMessageSeverity severity;
-        private String message;
-
-        public InfoMessage( 
-            DateTime creationTime,
-            InfoMessageSeverity severity,
-            string message )
-        {
-            this.creationTime = creationTime;
-            this.severity = severity;
-            this.message = message;
-        }
-
-        public DateTime CreationTime
-        {
-            get
-            {
-                return this.creationTime;
-            }
-        }
-
-        public InfoMessageSeverity Severity
-        {
-            get
-            {
-                return this.severity;
-            }
-        }
-
-        public String Message
-        {
-            get
-            {
-                return this.message;
-            }
-        }
-    }
-
-    public delegate void InfoMessageEventHandler( IEnumerable<InfoMessage> messages );
-
     public abstract class ConnectionBase
     {
 		private IDbConnection connection;

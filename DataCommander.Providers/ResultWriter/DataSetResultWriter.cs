@@ -158,7 +158,7 @@ namespace DataCommander.Providers
                 var dataColumnSchema = new DataColumnSchema(schemaRow);
                 string columnName = dataColumnSchema.ColumnName;
                 int columnSize = dataColumnSchema.ColumnSize;
-                Type dataType = this.provider.GetColumnType(schemaRow);
+                Type dataType = this.provider.GetColumnType(dataColumnSchema);
 
                 DataColumn dataColumn;
                 int n = 2;

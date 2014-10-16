@@ -217,6 +217,10 @@
     <Compile Include="Application.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Connection\DatabaseChangedEventArgs.cs" />
+    <Compile Include="Connection\InfoMessage.cs" />
+    <Compile Include="Connection\InfoMessageEventHandler.cs" />
+    <Compile Include="Connection\InfoMessageSeverity.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GetCompletionResponse.cs" />
     <Compile Include="IAsyncDataAdapter.cs" />

@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers
+﻿using DataCommander.Foundation.Data;
+
+namespace DataCommander.Providers
 {
     using System;
     using System.Data;
@@ -6,7 +8,7 @@
     using System.Diagnostics.Contracts;
     using System.Xml;
 
-    [ContractClassFor( typeof( IProvider ) )]
+    [ContractClassFor(typeof (IProvider))]
     internal abstract class IProviderContract : IProvider
     {
         #region IProvider Members
@@ -27,7 +29,7 @@
             }
         }
 
-        ConnectionBase IProvider.CreateConnection( string connectionString )
+        ConnectionBase IProvider.CreateConnection(string connectionString)
         {
             throw new NotImplementedException();
         }
@@ -56,53 +58,53 @@
             }
         }
 
-        void IProvider.DeriveParameters( IDbCommand command )
+        void IProvider.DeriveParameters(IDbCommand command)
         {
             Contract.Requires(command != null);
         }
 
-        DataParameterBase IProvider.GetDataParameter( IDataParameter parameter )
+        DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
         {
             Contract.Requires(parameter != null);
             return null;
         }
 
-        DataTable IProvider.GetParameterTable( IDataParameterCollection parameters )
+        DataTable IProvider.GetParameterTable(IDataParameterCollection parameters)
         {
             Contract.Requires(parameters != null);
             return null;
         }
 
-        XmlReader IProvider.ExecuteXmlReader( IDbCommand command )
+        XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
         {
             Contract.Requires(command != null);
             return null;
         }
 
-        DataTable IProvider.GetSchemaTable( IDataReader dataReader )
+        DataTable IProvider.GetSchemaTable(IDataReader dataReader)
         {
             Contract.Requires(dataReader != null);
             return null;
         }
 
-        DataSet IProvider.GetTableSchema( IDbConnection connection, string tableName )
+        DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName)
         {
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType( DataRow schemaRow )
+        Type IProvider.GetColumnType(DataColumnSchema dataColumnSchema)
         {
-            Contract.Requires(schemaRow != null);
+            Contract.Requires(dataColumnSchema != null);
             return null;
         }
 
-        IDataReaderHelper IProvider.CreateDataReaderHelper( IDataReader dataReader )
+        IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
         {
             Contract.Requires(dataReader != null);
             return null;
         }
 
-        DbDataAdapter IProvider.CreateDataAdapter( string selectCommandText, IDbConnection connection )
+        DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection)
         {
             throw new NotImplementedException();
         }
@@ -115,7 +117,7 @@
             }
         }
 
-        GetCompletionResponse IProvider.GetCompletion( ConnectionBase connection, IDbTransaction transaction, string text, int position )
+        GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {
             Contract.Requires(connection != null);
 
@@ -133,29 +135,30 @@
             return null;
         }
 
-        InfoMessage[] IProvider.ToInfoMessages( Exception e )
+        InfoMessage[] IProvider.ToInfoMessages(Exception e)
         {
             throw new NotImplementedException();
         }
 
-        string IProvider.GetColumnTypeName( IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName )
+        string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
         {
             throw new NotImplementedException();
         }
 
-        void IProvider.CreateInsertCommand( DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationconnection, string destinationTableName, out IDbCommand insertCommand, out Converter<object, object>[] converters )
+        void IProvider.CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationconnection, string destinationTableName,
+            out IDbCommand insertCommand, out Converter<object, object>[] converters)
         {
             Contract.Ensures(Contract.ValueAtReturn(out insertCommand) != null);
             insertCommand = null;
             converters = null;
         }
 
-        string IProvider.CommandToString( IDbCommand command )
+        string IProvider.CommandToString(IDbCommand command)
         {
             throw new NotImplementedException();
         }
 
-        string[] IProvider.GetStatements( string commandText )
+        string[] IProvider.GetStatements(string commandText)
         {
             throw new NotImplementedException();
         }

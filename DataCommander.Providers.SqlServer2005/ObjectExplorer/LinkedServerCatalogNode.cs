@@ -7,13 +7,11 @@
 
     internal sealed class LinkedServerCatalogNode : ITreeNode
     {
-        private LinkedServerNode linkedServer;
-        private string name;
+        private readonly string name;
 
         public LinkedServerCatalogNode(LinkedServerNode linkedServer, string name)
         {
-            Contract.Requires( linkedServer != null );
-            this.linkedServer = linkedServer;
+            Contract.Requires(linkedServer != null);
             this.name = name;
         }
 
@@ -35,7 +33,7 @@
             }
         }
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             throw new NotImplementedException();
         }

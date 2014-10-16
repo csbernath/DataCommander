@@ -80,7 +80,8 @@ namespace DataCommander.Foundation.Configuration
         /// <returns></returns>
         public T GetValue<T>()
         {
-            Contract.Requires( this.Value is T );
+            Contract.Requires((this.Value == null && typeof (T).IsClass) || this.Value is T);
+
             T value = (T)this.value;
             return value;
         }

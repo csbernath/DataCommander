@@ -10,7 +10,7 @@
 
     internal sealed class LinkedServerCollectionNode : ITreeNode
     {
-        private ServerNode server;
+        private readonly ServerNode server;
 
         public LinkedServerCollectionNode( ServerNode serverNode )
         {

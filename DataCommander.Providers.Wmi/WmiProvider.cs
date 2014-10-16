@@ -186,10 +186,9 @@ namespace DataCommander.Providers.Wmi
             return e.ToString();
         }
 
-        Type IProvider.GetColumnType(DataRow schemaRow)
+        Type IProvider.GetColumnType(DataColumnSchema dataColumnSchema)
         {
-            var sr = new DataColumnSchema(schemaRow);
-            return sr.DataType;
+            return dataColumnSchema.DataType;
         }
 
         string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)

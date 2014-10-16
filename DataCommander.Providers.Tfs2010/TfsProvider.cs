@@ -18,77 +18,77 @@ namespace DataCommander.Providers.Tfs
         static TfsProvider()
         {
             TfsParameterCollection parameters = new TfsParameterCollection();
-            parameters.AddStringInput( "serverPath", false, null );
-            parameters.AddStringInput( "localPath", true, null );
+            parameters.AddStringInput("serverPath", false, null);
+            parameters.AddStringInput("localPath", true, null);
 
-            TfsDataReaderFactory.Add( "get", parameters, delegate( TfsCommand command )
+            TfsDataReaderFactory.Add("get", parameters, delegate(TfsCommand command)
             {
-                return new TfsDownloadDataReader( command );
-            } );
+                return new TfsDownloadDataReader(command);
+            });
 
             parameters = new TfsParameterCollection();
-            parameters.AddStringInput( "path", false, null );
-            parameters.AddValueTypeInput<RecursionType>( "recursion", RecursionType.OneLevel );
+            parameters.AddStringInput("path", false, null);
+            parameters.AddValueTypeInput<RecursionType>("recursion", RecursionType.OneLevel);
 
-            TfsDataReaderFactory.Add( "dir", parameters, delegate( TfsCommand command )
+            TfsDataReaderFactory.Add("dir", parameters, delegate(TfsCommand command)
             {
-                return new TfsGetItemsDataReader( command );
-            } );
+                return new TfsGetItemsDataReader(command);
+            });
 
             parameters = new TfsParameterCollection();
-            parameters.AddStringInput( "path", false, null );
-            parameters.AddValueTypeInput<RecursionType>( "recursion", RecursionType.OneLevel );
+            parameters.AddStringInput("path", false, null);
+            parameters.AddValueTypeInput<RecursionType>("recursion", RecursionType.OneLevel);
 
-            TfsDataReaderFactory.Add( "extendeddir", parameters, delegate( TfsCommand command )
+            TfsDataReaderFactory.Add("extendeddir", parameters, delegate(TfsCommand command)
             {
-                return new TfsGetExtendedItemsDataReader( command );
-            } );
+                return new TfsGetExtendedItemsDataReader(command);
+            });
 
             parameters = new TfsParameterCollection();
-            parameters.AddStringInput( "path", false, null );
-            parameters.AddValueTypeInput<RecursionType>( "recursion", RecursionType.Full );
-            parameters.AddStringInput( "user", true, null );
-            parameters.AddInt32Input( "maxCount", true, int.MaxValue );
-            parameters.AddBooleanInput( "includeChanges", true, false );
-            parameters.AddBooleanInput( "slotMode", true, false );
+            parameters.AddStringInput("path", false, null);
+            parameters.AddValueTypeInput<RecursionType>("recursion", RecursionType.Full);
+            parameters.AddStringInput("user", true, null);
+            parameters.AddInt32Input("maxCount", true, int.MaxValue);
+            parameters.AddBooleanInput("includeChanges", true, false);
+            parameters.AddBooleanInput("slotMode", true, false);
 
-            TfsDataReaderFactory.Add( "history", parameters, delegate( TfsCommand command )
+            TfsDataReaderFactory.Add("history", parameters, delegate(TfsCommand command)
             {
-                return new TfsQueryHistoryDataReader( command );
-            } );
+                return new TfsQueryHistoryDataReader(command);
+            });
 
             parameters = new TfsParameterCollection();
-            parameters.AddStringInput( "path", false, null );
-            parameters.AddValueTypeInput<RecursionType>( "recursion", RecursionType.Full );
-            parameters.AddStringInput( "workspace", true, null );
-            parameters.AddStringInput( "user", true, null );
+            parameters.AddStringInput("path", false, null);
+            parameters.AddValueTypeInput<RecursionType>("recursion", RecursionType.Full);
+            parameters.AddStringInput("workspace", true, null);
+            parameters.AddStringInput("user", true, null);
 
-            TfsDataReaderFactory.Add( "status", parameters, delegate( TfsCommand command )
+            TfsDataReaderFactory.Add("status", parameters, delegate(TfsCommand command)
             {
-                return new TfsQueryPendingSetsDataReader( command );
-            } );
+                return new TfsQueryPendingSetsDataReader(command);
+            });
 
             parameters = new TfsParameterCollection();
-            parameters.AddStringInput( "workspace", true, null );
-            parameters.AddStringInput( "owner", true, null );
-            parameters.AddStringInput( "computer", true, null );
+            parameters.AddStringInput("workspace", true, null);
+            parameters.AddStringInput("owner", true, null);
+            parameters.AddStringInput("computer", true, null);
 
-            TfsDataReaderFactory.Add( "workspaces", parameters, delegate( TfsCommand command )
+            TfsDataReaderFactory.Add("workspaces", parameters, delegate(TfsCommand command)
             {
-                return new TfsQueryWorkspacesDataReader( command );
-            } );
+                return new TfsQueryWorkspacesDataReader(command);
+            });
 
             parameters = new TfsParameterCollection();
-            parameters.AddStringInput( "path", false, null );
-            parameters.AddStringInput( "user", true, null );
-            parameters.AddInt32Input( "maxCount", true, int.MaxValue );
-            parameters.AddBooleanInput( "slotMode", true, false );
-            parameters.AddStringInput( "localPath", true, null );
+            parameters.AddStringInput("path", false, null);
+            parameters.AddStringInput("user", true, null);
+            parameters.AddInt32Input("maxCount", true, int.MaxValue);
+            parameters.AddBooleanInput("slotMode", true, false);
+            parameters.AddStringInput("localPath", true, null);
 
-            TfsDataReaderFactory.Add( "getversions", parameters, delegate( TfsCommand command )
+            TfsDataReaderFactory.Add("getversions", parameters, delegate(TfsCommand command)
             {
-                return new TfsDownloadItemVersionsDataReader( command );
-            } );
+                return new TfsDownloadItemVersionsDataReader(command);
+            });
         }
 
         #region IProvider Members
@@ -126,7 +126,7 @@ namespace DataCommander.Providers.Tfs
 
                 foreach (string name in TfsDataReaderFactory.Dictionary.Keys)
                 {
-                    names.Add( name );
+                    names.Add(name);
                 }
 
                 return names.ToArray();
@@ -149,45 +149,46 @@ namespace DataCommander.Providers.Tfs
             }
         }
 
-        void IProvider.DeriveParameters( System.Data.IDbCommand command )
+        void IProvider.DeriveParameters(System.Data.IDbCommand command)
         {
-            TfsCommand tfsCommand = (TfsCommand) command;
+            TfsCommand tfsCommand = (TfsCommand)command;
 
             TfsDataReaderFactory.DataReaderInfo info;
-            bool contains = TfsDataReaderFactory.Dictionary.TryGetValue( tfsCommand.CommandText, out info );
+            bool contains = TfsDataReaderFactory.Dictionary.TryGetValue(tfsCommand.CommandText, out info);
 
             if (contains)
             {
                 foreach (TfsParameter parameter in info.Parameters)
                 {
-                    TfsParameter clone = new TfsParameter( parameter.ParameterName, parameter.Type, parameter.DbType, parameter.Direction, parameter.IsNullable, parameter.DefaultValue );
-                    tfsCommand.Parameters.Add( clone );
+                    TfsParameter clone = new TfsParameter(parameter.ParameterName, parameter.Type, parameter.DbType, parameter.Direction, parameter.IsNullable,
+                        parameter.DefaultValue);
+                    tfsCommand.Parameters.Add(clone);
                 }
             }
         }
 
-        DataParameterBase IProvider.GetDataParameter( System.Data.IDataParameter parameter )
+        DataParameterBase IProvider.GetDataParameter(System.Data.IDataParameter parameter)
         {
-            TfsParameter tfsParameter = (TfsParameter) parameter;
-            return new TfsDataParameter( tfsParameter );
+            TfsParameter tfsParameter = (TfsParameter)parameter;
+            return new TfsDataParameter(tfsParameter);
         }
 
-        System.Data.DataTable IProvider.GetParameterTable( System.Data.IDataParameterCollection parameters )
+        System.Data.DataTable IProvider.GetParameterTable(System.Data.IDataParameterCollection parameters)
         {
-            TfsParameterCollection tfsParameters = (TfsParameterCollection) parameters;
+            TfsParameterCollection tfsParameters = (TfsParameterCollection)parameters;
             DataTable table = new DataTable();
             DataColumnCollection columns = table.Columns;
-            columns.Add( "ParameterName", typeof( string ) );
-            columns.Add( "DbType", typeof( DbType ) );
-            columns.Add( "Direction", typeof( ParameterDirection ) );
-            columns.Add( "IsNullable", typeof( bool ) );
-            columns.Add( "DefaultValue" );
-            columns.Add( "Value" );
+            columns.Add("ParameterName", typeof (string));
+            columns.Add("DbType", typeof (DbType));
+            columns.Add("Direction", typeof (ParameterDirection));
+            columns.Add("IsNullable", typeof (bool));
+            columns.Add("DefaultValue");
+            columns.Add("Value");
             DataRowCollection rows = table.Rows;
 
             foreach (TfsParameter tfsParameter in tfsParameters)
             {
-                rows.Add( new object[]
+                rows.Add(new object[]
                 {
                     tfsParameter.ParameterName,
                     tfsParameter.DbType,
@@ -195,62 +196,61 @@ namespace DataCommander.Providers.Tfs
                     tfsParameter.IsNullable,
                     tfsParameter.DefaultValue,
                     tfsParameter.Value
-                } );
+                });
             }
 
             return table;
         }
 
-        System.Xml.XmlReader IProvider.ExecuteXmlReader( System.Data.IDbCommand command )
+        System.Xml.XmlReader IProvider.ExecuteXmlReader(System.Data.IDbCommand command)
         {
             throw new NotImplementedException();
         }
 
-        System.Data.DataTable IProvider.GetSchemaTable( System.Data.IDataReader dataReader )
+        System.Data.DataTable IProvider.GetSchemaTable(System.Data.IDataReader dataReader)
         {
             return new DataTable();
         }
 
-        System.Data.DataSet IProvider.GetTableSchema( System.Data.IDbConnection connection, string tableName )
+        System.Data.DataSet IProvider.GetTableSchema(System.Data.IDbConnection connection, string tableName)
         {
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType( DataRow schemaRow )
+        Type IProvider.GetColumnType(DataColumnSchema dataColumnSchema)
         {
-            DataColumnSchema sr = new DataColumnSchema( schemaRow );
-            DbType dbType = (DbType) sr.ProviderType;
+            DbType dbType = (DbType)dataColumnSchema.ProviderType;
             Type type;
 
             switch (dbType)
             {
                 case DbType.DateTime:
-                    type = typeof( DateTime );
+                    type = typeof (DateTime);
                     break;
 
                 case DbType.String:
-                    type = typeof( string );
+                    type = typeof (string);
                     break;
 
                 case DbType.Int32:
-                    type = typeof( int );
+                    type = typeof (int);
                     break;
 
                 default:
-                    type = typeof( object );
+                    type = typeof (object);
                     break;
             }
 
             return type;
         }
 
-        IDataReaderHelper IProvider.CreateDataReaderHelper( System.Data.IDataReader dataReader )
+        IDataReaderHelper IProvider.CreateDataReaderHelper(System.Data.IDataReader dataReader)
         {
-            TfsDataReader tfsDataReader = (TfsDataReader) dataReader;
-            return new TfsDataReaderHelper( tfsDataReader );
+            TfsDataReader tfsDataReader = (TfsDataReader)dataReader;
+            return new TfsDataReaderHelper(tfsDataReader);
         }
 
-        System.Data.Common.DbDataAdapter IProvider.CreateDataAdapter( string selectCommandText, System.Data.IDbConnection connection )
+        System.Data.Common.DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, System.Data.IDbConnection connection)
         {
             throw new NotImplementedException();
         }
@@ -268,17 +268,17 @@ namespace DataCommander.Providers.Tfs
             }
         }
 
-        GetCompletionResponse IProvider.GetCompletion( ConnectionBase connection, IDbTransaction transaction, string text, int position )
+        GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {
             var response = new GetCompletionResponse();
             string[] values = null;
-            SqlStatement sqlStatement = new SqlStatement( text );
+            SqlStatement sqlStatement = new SqlStatement(text);
             Token[] tokens = sqlStatement.Tokens;
 
             if (tokens.Length > 0)
             {
                 Token previousToken, currentToken;
-                sqlStatement.FindToken( position, out previousToken, out currentToken );
+                sqlStatement.FindToken(position, out previousToken, out currentToken);
                 if (currentToken != null)
                 {
                     response.StartPosition = currentToken.StartPosition;
@@ -294,22 +294,22 @@ namespace DataCommander.Providers.Tfs
                 {
                     Token token = previousToken;
 
-                    if (token.Type == TokenType.KeyWord && string.Compare( token.Value, "exec", StringComparison.InvariantCultureIgnoreCase ) == 0)
+                    if (token.Type == TokenType.KeyWord && string.Compare(token.Value, "exec", StringComparison.InvariantCultureIgnoreCase) == 0)
                     {
                         List<string> names = new List<string>();
 
                         foreach (string name in TfsDataReaderFactory.Dictionary.Keys)
                         {
-                            names.Add( name );
+                            names.Add(name);
                         }
 
                         values = names.ToArray();
                     }
                     else if (tokens.Length > 1)
                     {
-                        token = tokens[ 0 ];
+                        token = tokens[0];
 
-                        if (token.Type == TokenType.KeyWord && string.Compare( token.Value, "exec", StringComparison.InvariantCultureIgnoreCase ) == 0)
+                        if (token.Type == TokenType.KeyWord && string.Compare(token.Value, "exec", StringComparison.InvariantCultureIgnoreCase) == 0)
                         {
                             //token = tokens[1];
                             //TfsDataReaderFactory.DataReaderInfo info;
@@ -327,20 +327,20 @@ namespace DataCommander.Providers.Tfs
                             //        values = names;
                             //    }
                             //}
-                            var command = sqlStatement.CreateCommand( this, connection, CommandType.StoredProcedure, 0 );
+                            var command = sqlStatement.CreateCommand(this, connection, CommandType.StoredProcedure, 0);
                             TfsDataReaderFactory.DataReaderInfo info;
-                            bool contains = TfsDataReaderFactory.Dictionary.TryGetValue( command.CommandText, out info );
+                            bool contains = TfsDataReaderFactory.Dictionary.TryGetValue(command.CommandText, out info);
                             if (contains)
                             {
                                 TfsParameterCollection parameters = info.Parameters;
-                                int parameterIndex = previousToken.Index / 2;
+                                int parameterIndex = previousToken.Index/2;
                                 if (parameterIndex < parameters.Count)
                                 {
-                                    TfsParameter parameter = parameters[ parameterIndex ];
+                                    TfsParameter parameter = parameters[parameterIndex];
                                     Type type = parameter.Type;
                                     if (type.IsEnum)
                                     {
-                                        string[] names = Enum.GetNames( type );
+                                        string[] names = Enum.GetNames(type);
                                         values = names;
                                     }
                                 }
@@ -359,17 +359,17 @@ namespace DataCommander.Providers.Tfs
             throw new NotImplementedException();
         }
 
-        InfoMessage[] IProvider.ToInfoMessages( Exception e )
+        InfoMessage[] IProvider.ToInfoMessages(Exception e)
         {
             throw new NotImplementedException();
         }
 
-        string IProvider.GetExceptionMessage( Exception e )
+        string IProvider.GetExceptionMessage(Exception e)
         {
             return e.ToString();
         }
 
-        string IProvider.GetColumnTypeName( IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName )
+        string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
         {
             throw new NotImplementedException();
         }
@@ -380,17 +380,17 @@ namespace DataCommander.Providers.Tfs
             IDbConnection destinationconnection,
             string destinationTableName,
             out IDbCommand insertCommand,
-            out Converter<object, object>[] converters )
+            out Converter<object, object>[] converters)
         {
             throw new NotImplementedException();
         }
 
-        string IProvider.CommandToString( IDbCommand command )
+        string IProvider.CommandToString(IDbCommand command)
         {
             throw new NotImplementedException();
         }
 
-        string[] IProvider.GetStatements( string commandText )
+        string[] IProvider.GetStatements(string commandText)
         {
             return commandText.ItemToArray();
         }

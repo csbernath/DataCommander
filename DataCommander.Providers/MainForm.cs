@@ -110,12 +110,13 @@ namespace DataCommander
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager( typeof( MainForm ) );
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.menuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.NewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuConnect = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
+            this.recentConnectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuRecentFileList = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuCollectGarbage = new System.Windows.Forms.ToolStripMenuItem();
@@ -127,7 +128,7 @@ namespace DataCommander
             this.contentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.imageList = new System.Windows.Forms.ImageList( this.components );
+            this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.btnConnect = new System.Windows.Forms.ToolStripButton();
             this.openButton = new System.Windows.Forms.ToolStripButton();
             this.saveButton = new System.Windows.Forms.ToolStripButton();
@@ -138,7 +139,6 @@ namespace DataCommander
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripPanel = new System.Windows.Forms.ToolStripPanel();
-            this.recentConnectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusBar.SuspendLayout();
@@ -148,20 +148,20 @@ namespace DataCommander
             // mainMenu
             // 
             this.mainMenu.Dock = System.Windows.Forms.DockStyle.None;
-            this.mainMenu.Items.AddRange( new System.Windows.Forms.ToolStripItem[] {
+            this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItem1,
             this.mnuFont,
             this.mnuWindow,
-            this.mnuHelp} );
-            this.mainMenu.Location = new System.Drawing.Point( 0, 0 );
+            this.mnuHelp});
+            this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.MdiWindowListItem = this.mnuWindow;
             this.mainMenu.Name = "mainMenu";
-            this.mainMenu.Size = new System.Drawing.Size( 792, 24 );
+            this.mainMenu.Size = new System.Drawing.Size(792, 24);
             this.mainMenu.TabIndex = 1;
             // 
             // menuItem1
             // 
-            this.menuItem1.DropDownItems.AddRange( new System.Windows.Forms.ToolStripItem[] {
+            this.menuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.NewToolStripMenuItem,
             this.mnuConnect,
             this.mnuOpen,
@@ -169,252 +169,253 @@ namespace DataCommander
             this.saveAllToolStripMenuItem,
             this.mnuRecentFileList,
             this.mnuCollectGarbage,
-            this.mnuExit} );
+            this.mnuExit});
             this.menuItem1.MergeIndex = 1;
             this.menuItem1.Name = "menuItem1";
-            this.menuItem1.Size = new System.Drawing.Size( 67, 20 );
+            this.menuItem1.Size = new System.Drawing.Size(67, 20);
             this.menuItem1.Text = "&Database";
             // 
             // NewToolStripMenuItem
             // 
             this.NewToolStripMenuItem.Name = "NewToolStripMenuItem";
-            this.NewToolStripMenuItem.Size = new System.Drawing.Size( 187, 22 );
+            this.NewToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.NewToolStripMenuItem.Text = "&New";
-            this.NewToolStripMenuItem.Click += new System.EventHandler( this.NewToolStripMenuItem_Click );
+            this.NewToolStripMenuItem.Click += new System.EventHandler(this.NewToolStripMenuItem_Click);
             // 
             // mnuConnect
             // 
-            this.mnuConnect.Image = ((System.Drawing.Image) (resources.GetObject( "mnuConnect.Image" )));
+            this.mnuConnect.Image = ((System.Drawing.Image)(resources.GetObject("mnuConnect.Image")));
             this.mnuConnect.MergeIndex = 0;
             this.mnuConnect.Name = "mnuConnect";
-            this.mnuConnect.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.mnuConnect.Size = new System.Drawing.Size( 187, 22 );
+            this.mnuConnect.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.mnuConnect.Size = new System.Drawing.Size(187, 22);
             this.mnuConnect.Text = "&Connect";
-            this.mnuConnect.Click += new System.EventHandler( this.mnuConnect_Click );
+            this.mnuConnect.Click += new System.EventHandler(this.mnuConnect_Click);
             // 
             // mnuOpen
             // 
-            this.mnuOpen.Image = ((System.Drawing.Image) (resources.GetObject( "mnuOpen.Image" )));
+            this.mnuOpen.Image = ((System.Drawing.Image)(resources.GetObject("mnuOpen.Image")));
             this.mnuOpen.MergeIndex = 1;
             this.mnuOpen.Name = "mnuOpen";
-            this.mnuOpen.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.mnuOpen.Size = new System.Drawing.Size( 187, 22 );
+            this.mnuOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.mnuOpen.Size = new System.Drawing.Size(187, 22);
             this.mnuOpen.Text = "&Open";
-            this.mnuOpen.Click += new System.EventHandler( this.mnuOpen_Click );
+            this.mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
+            // 
+            // recentConnectionsToolStripMenuItem
+            // 
+            this.recentConnectionsToolStripMenuItem.Name = "recentConnectionsToolStripMenuItem";
+            this.recentConnectionsToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.recentConnectionsToolStripMenuItem.Text = "Recent connections";
             // 
             // saveAllToolStripMenuItem
             // 
             this.saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
-            this.saveAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys) (((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+            this.saveAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.S)));
-            this.saveAllToolStripMenuItem.Size = new System.Drawing.Size( 187, 22 );
+            this.saveAllToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.saveAllToolStripMenuItem.Text = "Save All";
-            this.saveAllToolStripMenuItem.Click += new System.EventHandler( this.saveAllToolStripMenuItem_Click );
+            this.saveAllToolStripMenuItem.Click += new System.EventHandler(this.saveAllToolStripMenuItem_Click);
             // 
             // mnuRecentFileList
             // 
             this.mnuRecentFileList.MergeIndex = 2;
             this.mnuRecentFileList.Name = "mnuRecentFileList";
-            this.mnuRecentFileList.Size = new System.Drawing.Size( 187, 22 );
+            this.mnuRecentFileList.Size = new System.Drawing.Size(187, 22);
             this.mnuRecentFileList.Text = "Recent &File List";
             // 
             // mnuCollectGarbage
             // 
             this.mnuCollectGarbage.MergeIndex = 3;
             this.mnuCollectGarbage.Name = "mnuCollectGarbage";
-            this.mnuCollectGarbage.Size = new System.Drawing.Size( 187, 22 );
+            this.mnuCollectGarbage.Size = new System.Drawing.Size(187, 22);
             this.mnuCollectGarbage.Text = "Collect &Garbage";
-            this.mnuCollectGarbage.Click += new System.EventHandler( this.mnuCollectGarbage_Click );
+            this.mnuCollectGarbage.Click += new System.EventHandler(this.mnuCollectGarbage_Click);
             // 
             // mnuExit
             // 
             this.mnuExit.Name = "mnuExit";
-            this.mnuExit.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.mnuExit.Size = new System.Drawing.Size( 187, 22 );
+            this.mnuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
+            this.mnuExit.Size = new System.Drawing.Size(187, 22);
             this.mnuExit.Text = "Exit";
-            this.mnuExit.Click += new System.EventHandler( this.mnuExit_Click );
+            this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
             // 
             // mnuFont
             // 
             this.mnuFont.MergeIndex = 2;
             this.mnuFont.Name = "mnuFont";
-            this.mnuFont.Size = new System.Drawing.Size( 43, 20 );
+            this.mnuFont.Size = new System.Drawing.Size(43, 20);
             this.mnuFont.Text = "Font";
-            this.mnuFont.Click += new System.EventHandler( this.mnuFont_Click );
+            this.mnuFont.Click += new System.EventHandler(this.mnuFont_Click);
             // 
             // mnuWindow
             // 
-            this.mnuWindow.DropDownItems.AddRange( new System.Windows.Forms.ToolStripItem[] {
-            this.closeAllDocumentsMenuItem} );
+            this.mnuWindow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.closeAllDocumentsMenuItem});
             this.mnuWindow.MergeIndex = 6;
             this.mnuWindow.Name = "mnuWindow";
-            this.mnuWindow.Size = new System.Drawing.Size( 63, 20 );
+            this.mnuWindow.Size = new System.Drawing.Size(63, 20);
             this.mnuWindow.Text = "&Window";
             // 
             // closeAllDocumentsMenuItem
             // 
             this.closeAllDocumentsMenuItem.Name = "closeAllDocumentsMenuItem";
-            this.closeAllDocumentsMenuItem.Size = new System.Drawing.Size( 184, 22 );
+            this.closeAllDocumentsMenuItem.Size = new System.Drawing.Size(184, 22);
             this.closeAllDocumentsMenuItem.Text = "Close All Documents";
-            this.closeAllDocumentsMenuItem.Click += new System.EventHandler( this.closeAllDocumentsMenuItem_Click );
+            this.closeAllDocumentsMenuItem.Click += new System.EventHandler(this.closeAllDocumentsMenuItem_Click);
             // 
             // mnuHelp
             // 
-            this.mnuHelp.DropDownItems.AddRange( new System.Windows.Forms.ToolStripItem[] {
+            this.mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.contentsToolStripMenuItem,
-            this.mnuAbout} );
+            this.mnuAbout});
             this.mnuHelp.MergeIndex = 7;
             this.mnuHelp.Name = "mnuHelp";
-            this.mnuHelp.Size = new System.Drawing.Size( 44, 20 );
+            this.mnuHelp.Size = new System.Drawing.Size(44, 20);
             this.mnuHelp.Text = "&Help";
             // 
             // contentsToolStripMenuItem
             // 
             this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
             this.contentsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.contentsToolStripMenuItem.Size = new System.Drawing.Size( 204, 22 );
+            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.contentsToolStripMenuItem.Text = "Contents";
-            this.contentsToolStripMenuItem.Click += new System.EventHandler( this.contentsToolStripMenuItem_Click );
+            this.contentsToolStripMenuItem.Click += new System.EventHandler(this.contentsToolStripMenuItem_Click);
             // 
             // mnuAbout
             // 
             this.mnuAbout.MergeIndex = 0;
             this.mnuAbout.Name = "mnuAbout";
-            this.mnuAbout.Size = new System.Drawing.Size( 204, 22 );
+            this.mnuAbout.Size = new System.Drawing.Size(204, 22);
             this.mnuAbout.Text = "About Data Commander";
             // 
             // toolStrip
             // 
             this.toolStrip.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip.ImageList = this.imageList;
-            this.toolStrip.Items.AddRange( new System.Windows.Forms.ToolStripItem[] {
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnConnect,
             this.openButton,
             this.saveButton,
             this.toolStripSeparator1,
             this.helpButton,
             this.toolStripSeparator2,
-            this.activeMdiChildToolStripTextBox} );
-            this.toolStrip.Location = new System.Drawing.Point( 3, 24 );
+            this.activeMdiChildToolStripTextBox});
+            this.toolStrip.Location = new System.Drawing.Point(3, 24);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size( 518, 25 );
+            this.toolStrip.Size = new System.Drawing.Size(549, 25);
             this.toolStrip.TabIndex = 2;
             // 
             // imageList
             // 
-            this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer) (resources.GetObject( "imageList.ImageStream" )));
+            this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
             this.imageList.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList.Images.SetKeyName( 0, "" );
-            this.imageList.Images.SetKeyName( 1, "" );
-            this.imageList.Images.SetKeyName( 2, "" );
-            this.imageList.Images.SetKeyName( 3, "" );
+            this.imageList.Images.SetKeyName(0, "");
+            this.imageList.Images.SetKeyName(1, "");
+            this.imageList.Images.SetKeyName(2, "");
+            this.imageList.Images.SetKeyName(3, "");
             // 
             // btnConnect
             // 
-            this.btnConnect.Image = ((System.Drawing.Image) (resources.GetObject( "btnConnect.Image" )));
+            this.btnConnect.Image = ((System.Drawing.Image)(resources.GetObject("btnConnect.Image")));
             this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size( 23, 22 );
+            this.btnConnect.Size = new System.Drawing.Size(23, 22);
             this.btnConnect.ToolTipText = "Connect to Database";
-            this.btnConnect.Click += new System.EventHandler( this.btnConnect_Click );
+            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
             // openButton
             // 
             this.openButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.openButton.Image = ((System.Drawing.Image) (resources.GetObject( "openButton.Image" )));
+            this.openButton.Image = ((System.Drawing.Image)(resources.GetObject("openButton.Image")));
             this.openButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.openButton.Name = "openButton";
-            this.openButton.Size = new System.Drawing.Size( 23, 22 );
+            this.openButton.Size = new System.Drawing.Size(23, 22);
             this.openButton.Text = "toolStripButton1";
             this.openButton.ToolTipText = "Open database";
+            this.openButton.Click += new System.EventHandler(this.openButton_Click);
             // 
             // saveButton
             // 
             this.saveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.saveButton.Enabled = false;
-            this.saveButton.Image = ((System.Drawing.Image) (resources.GetObject( "saveButton.Image" )));
+            this.saveButton.Image = ((System.Drawing.Image)(resources.GetObject("saveButton.Image")));
             this.saveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size( 23, 22 );
+            this.saveButton.Size = new System.Drawing.Size(23, 22);
             this.saveButton.ToolTipText = "Save Query";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size( 6, 25 );
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // helpButton
             // 
             this.helpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.helpButton.Image = ((System.Drawing.Image) (resources.GetObject( "helpButton.Image" )));
+            this.helpButton.Image = ((System.Drawing.Image)(resources.GetObject("helpButton.Image")));
             this.helpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.helpButton.Name = "helpButton";
-            this.helpButton.Size = new System.Drawing.Size( 23, 22 );
+            this.helpButton.Size = new System.Drawing.Size(23, 22);
             this.helpButton.Text = "Help";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size( 6, 25 );
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // activeMdiChildToolStripTextBox
             // 
             this.activeMdiChildToolStripTextBox.Name = "activeMdiChildToolStripTextBox";
             this.activeMdiChildToolStripTextBox.ReadOnly = true;
-            this.activeMdiChildToolStripTextBox.Size = new System.Drawing.Size( 400, 25 );
+            this.activeMdiChildToolStripTextBox.Size = new System.Drawing.Size(400, 25);
             // 
             // statusBar
             // 
-            this.statusBar.Items.AddRange( new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel} );
-            this.statusBar.Location = new System.Drawing.Point( 0, 531 );
+            this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel});
+            this.statusBar.Location = new System.Drawing.Point(0, 531);
             this.statusBar.Name = "statusBar";
-            this.statusBar.Size = new System.Drawing.Size( 792, 22 );
+            this.statusBar.Size = new System.Drawing.Size(792, 22);
             this.statusBar.TabIndex = 3;
             // 
             // toolStripStatusLabel
             // 
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size( 0, 17 );
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(0, 17);
             // 
             // toolStripPanel
             // 
-            this.toolStripPanel.Controls.Add( this.mainMenu );
-            this.toolStripPanel.Controls.Add( this.toolStrip );
+            this.toolStripPanel.Controls.Add(this.mainMenu);
+            this.toolStripPanel.Controls.Add(this.toolStrip);
             this.toolStripPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.toolStripPanel.Location = new System.Drawing.Point( 0, 0 );
+            this.toolStripPanel.Location = new System.Drawing.Point(0, 0);
             this.toolStripPanel.Name = "toolStripPanel";
             this.toolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.toolStripPanel.RowMargin = new System.Windows.Forms.Padding( 3, 0, 0, 0 );
-            this.toolStripPanel.Size = new System.Drawing.Size( 792, 49 );
-            // 
-            // recentConnectionsToolStripMenuItem
-            // 
-            this.recentConnectionsToolStripMenuItem.Name = "recentConnectionsToolStripMenuItem";
-            this.recentConnectionsToolStripMenuItem.Size = new System.Drawing.Size( 187, 22 );
-            this.recentConnectionsToolStripMenuItem.Text = "Recent connections";
+            this.toolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.toolStripPanel.Size = new System.Drawing.Size(792, 49);
             // 
             // MainForm
             // 
-            this.AutoScaleBaseSize = new System.Drawing.Size( 5, 14 );
-            this.ClientSize = new System.Drawing.Size( 792, 553 );
-            this.Controls.Add( this.toolStripPanel );
-            this.Controls.Add( this.statusBar );
-            this.Font = new System.Drawing.Font( "Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)) );
-            this.Icon = ((System.Drawing.Icon) (resources.GetObject( "$this.Icon" )));
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+            this.ClientSize = new System.Drawing.Size(792, 553);
+            this.Controls.Add(this.toolStripPanel);
+            this.Controls.Add(this.statusBar);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.mainMenu;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Data Commander";
-            this.mainMenu.ResumeLayout( false );
+            this.mainMenu.ResumeLayout(false);
             this.mainMenu.PerformLayout();
-            this.toolStrip.ResumeLayout( false );
+            this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.statusBar.ResumeLayout( false );
+            this.statusBar.ResumeLayout(false);
             this.statusBar.PerformLayout();
-            this.toolStripPanel.ResumeLayout( false );
+            this.toolStripPanel.ResumeLayout(false);
             this.toolStripPanel.PerformLayout();
-            this.ResumeLayout( false );
+            this.ResumeLayout(false);
             this.PerformLayout();
 
         }

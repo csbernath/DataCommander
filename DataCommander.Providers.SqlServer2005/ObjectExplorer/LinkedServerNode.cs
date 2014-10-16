@@ -8,8 +8,8 @@
 
     internal sealed class LinkedServerNode : ITreeNode
     {
-        private LinkedServerCollectionNode linkedServers;
-        private string name;
+        private readonly LinkedServerCollectionNode linkedServers;
+        private readonly string name;
 
         public LinkedServerNode(
             LinkedServerCollectionNode linkedServers,

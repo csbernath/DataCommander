@@ -10,16 +10,19 @@ namespace DataCommander.Providers.SqlServer2005
     internal sealed class Connection : ConnectionBase
     {
         private string connectionName;
-        private SqlConnectionStringBuilder sqlConnectionStringBuilder;
+        private readonly SqlConnectionStringBuilder sqlConnectionStringBuilder;
         private SqlConnection sqlConnection;
         private string serverName;
         private short spid;
 
-        public Connection( string connectionString )
+        public Connection(string connectionString)
         {
-            this.sqlConnectionStringBuilder = new SqlConnectionStringBuilder( connectionString );
-            this.sqlConnectionStringBuilder.ApplicationName = "Data Commander";
-            this.sqlConnectionStringBuilder.Pooling = false;
+            this.sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString)
+            {
+                ApplicationName = "Data Commander",
+                Pooling = false
+            };
+
             this.CreateConnection();
         }
 

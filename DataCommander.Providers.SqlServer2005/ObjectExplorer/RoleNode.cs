@@ -3,7 +3,7 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Collections.Generic;
     using System.Windows.Forms;
 
-    sealed class RoleNode : ITreeNode
+    internal sealed class RoleNode : ITreeNode
     {
         public RoleNode(DatabaseNode database,string name)
         {

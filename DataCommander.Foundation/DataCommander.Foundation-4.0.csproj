@@ -849,6 +849,7 @@
     <Compile Include="Threading\Tasks\CancellationToken.cs" />
     <Compile Include="Threading\Tasks\CancellationTokenSource.cs" />
     <Compile Include="Threading\Tasks\CreateTaskResponse.cs" />
+    <Compile Include="Threading\Tasks\CreateTaskResponseGeneric.cs" />
     <Compile Include="Threading\Tasks\MonitoredTaskActionState.cs" />
     <Compile Include="Threading\Tasks\MonitoredTaskFunctionState.cs" />
     <Compile Include="Threading\Tasks\MonitoredTaskState.cs" />
