@@ -1,5 +1,5 @@
-DataCommander
-=============
+Data Commander
+==============
 
 Data Commander is a front-end for SQL databases and other data sources.
     - MS SQL Server
