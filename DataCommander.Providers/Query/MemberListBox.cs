@@ -41,15 +41,15 @@ namespace DataCommander.Providers
         {
             this.response = response;
 
-            for (int i = 0; i < response.Items.Length; i++)
+            foreach (var item in response.Items)
             {
-                var listBoxItem = new ListBoxItem<IObjectName>(response.Items[i], ToString);
+                var listBoxItem = new ListBoxItem<IObjectName>(item, ToString);
                 this.ListBox.Items.Add(listBoxItem);
             }
 
             this.textBox.KeyboardHandler = this;
 
-            if (response.Items.Length > 0)
+            if (response.Items.Count > 0)
             {
                 this.prefix = this.textBox.Text.Substring(response.StartPosition, response.Length);
                 if (this.prefix.Length > 0)

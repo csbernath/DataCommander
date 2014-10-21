@@ -102,11 +102,19 @@
     <CodeContractsBaseLineFile />
     <CodeContractsCacheAnalysisResults>False</CodeContractsCacheAnalysisResults>
     <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
-    <CodeContractsReferenceAssembly>%28none%29</CodeContractsReferenceAssembly>
+    <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
     <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
     <CodeContractsSQLServerOption />
     <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
+    <CodeContractsAssertsToContractsCheckBox>True</CodeContractsAssertsToContractsCheckBox>
+    <CodeContractsRedundantTests>True</CodeContractsRedundantTests>
+    <CodeContractsMissingPublicEnsuresAsWarnings>False</CodeContractsMissingPublicEnsuresAsWarnings>
+    <CodeContractsSuggestAssumptionsForCallees>False</CodeContractsSuggestAssumptionsForCallees>
+    <CodeContractsNecessaryEnsures>True</CodeContractsNecessaryEnsures>
+    <CodeContractsSuggestReadonly>True</CodeContractsSuggestReadonly>
+    <CodeContractsSkipAnalysisIfCannotConnectToCache>False</CodeContractsSkipAnalysisIfCannotConnectToCache>
+    <CodeContractsBeingOptimisticOnExternal>True</CodeContractsBeingOptimisticOnExternal>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -229,6 +237,7 @@
     <Compile Include="IObjectName.cs" />
     <Compile Include="IProviderContract.cs" />
     <Compile Include="ITreeNode.cs" />
+    <Compile Include="ObjectName.cs" />
     <Compile Include="ProviderName.cs" />
     <Compile Include="DataParameterBase.cs" />
     <Compile Include="Field\BinaryDataFieldReader.cs" />
@@ -240,7 +249,7 @@
     <Compile Include="Field\SingleField.cs" />
     <Compile Include="Field\StreamField.cs" />
     <Compile Include="Field\StreamFieldDataReader.cs" />
-    <Compile Include="FourPartName.cs" />
+    <Compile Include="DatabaseObjectMultipartName.cs" />
     <Compile Include="IKeyboardHandler.cs" />
     <Compile Include="IObjectExplorer.cs" />
     <Compile Include="IProvider.cs" />
@@ -278,7 +287,9 @@
     <Compile Include="Connection\ConnectionStringBuilderForm.Designer.cs">
       <DependentUpon>ConnectionStringBuilderForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Query\ItemSelectedEventArgs.cs" />
     <Compile Include="Query\ListBoxItem.cs" />
+    <Compile Include="Query\QueryFormStaticMethods.cs" />
     <Compile Include="Query\TokenIterator.cs" />
     <Compile Include="Query\TokenType.cs" />
     <Compile Include="ResultWriter\BooleanDataWriter.cs" />
@@ -474,6 +485,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

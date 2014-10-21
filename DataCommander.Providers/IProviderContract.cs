@@ -3,6 +3,7 @@
 namespace DataCommander.Providers
 {
     using System;
+    using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
     using System.Diagnostics.Contracts;
@@ -135,7 +136,7 @@ namespace DataCommander.Providers
             return null;
         }
 
-        InfoMessage[] IProvider.ToInfoMessages(Exception e)
+        List<InfoMessage> IProvider.ToInfoMessages(Exception e)
         {
             throw new NotImplementedException();
         }
@@ -158,7 +159,7 @@ namespace DataCommander.Providers
             throw new NotImplementedException();
         }
 
-        string[] IProvider.GetStatements(string commandText)
+        List<string> IProvider.GetStatements(string commandText)
         {
             throw new NotImplementedException();
         }

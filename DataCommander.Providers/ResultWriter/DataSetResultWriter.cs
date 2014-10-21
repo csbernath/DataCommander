@@ -184,6 +184,8 @@ namespace DataCommander.Providers
                             dataColumn = dataTable.Columns.Add(columnName);
                         }
 
+                        dataColumn.ExtendedProperties.Add("ColumnName", columnName);
+
                         //dataColumn.AllowDBNull = sr.AllowDBNull == true;                                
                         //dataColumn.Unique = sr.IsUnique == true; // TFS provider does not support this column
                         dataColumn.ExtendedProperties.Add(0, schemaRow["DataType"]);

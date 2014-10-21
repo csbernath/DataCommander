@@ -7,19 +7,19 @@ namespace DataCommander.Providers
     {
         #region Private Fields
 
-        private static char[] operatorsOrPunctuators = new char[]
+        private static readonly char[] operatorsOrPunctuators = new char[]
         {
-            '{','}','[',']','(',')','.',',',':',';','+','-','*','/','%','&','|','^','!','~','=','<','>','?'
+            '{', '}', '[', ']', '(', ')', '.', ',', ':', ';', '+', '-', '*', '/', '%', '&', '|', '^', '!', '~', '=', '<', '>', '?'
         };
 
-        private string text;
+        private readonly string text;
         private int index = 0;
-        private int length;
+        private readonly int length;
         private int tokenIndex;
 
         #endregion
 
-        public TokenIterator( string text )
+        public TokenIterator(string text)
         {
             this.text = text;
 
@@ -42,32 +42,32 @@ namespace DataCommander.Providers
 
             while (this.index < this.length)
             {
-                char c = text[ this.index ];
+                char c = text[this.index];
 
                 if (c == 'N')
                 {
                     startPosition = this.index;
-                    if (this.index + 1 < this.length && text[ this.index + 1 ] == '\'')
+                    if (this.index + 1 < this.length && text[this.index + 1] == '\'')
                     {
                         this.index++;
                         value = this.ReadString();
                         endPosition = this.index;
-                        token = new Token( this.tokenIndex, startPosition, endPosition - 1, TokenType.String, value );
+                        token = new Token(this.tokenIndex, startPosition, endPosition - 1, TokenType.String, value);
                     }
                     else
                     {
                         value = this.ReadKeyWord();
                         endPosition = this.index;
-                        token = new Token( this.tokenIndex, startPosition, endPosition - 1, TokenType.KeyWord, value );
+                        token = new Token(this.tokenIndex, startPosition, endPosition - 1, TokenType.KeyWord, value);
                     }
                     break;
                 }
-                else if (char.IsLetter( c ) || c == '[' || c == '@')
+                else if (char.IsLetter(c) || c == '[' || c == '@')
                 {
                     startPosition = this.index;
                     value = this.ReadKeyWord();
                     endPosition = this.index;
-                    token = new Token( this.tokenIndex, startPosition, endPosition - 1, TokenType.KeyWord, value );
+                    token = new Token(this.tokenIndex, startPosition, endPosition - 1, TokenType.KeyWord, value);
                     break;
                 }
                 else if (c == '"' || c == '\'')
@@ -75,15 +75,15 @@ namespace DataCommander.Providers
                     startPosition = this.index;
                     value = this.ReadString();
                     endPosition = this.index;
-                    token = new Token( this.tokenIndex, startPosition, endPosition - 1, TokenType.String, value );
+                    token = new Token(this.tokenIndex, startPosition, endPosition - 1, TokenType.String, value);
                     break;
                 }
-                else if (char.IsDigit( c ) || c == '-')
+                else if (char.IsDigit(c) || c == '-')
                 {
                     startPosition = this.index;
                     value = this.ReadDigit();
                     endPosition = this.index;
-                    token = new Token( this.tokenIndex, startPosition, endPosition - 1, TokenType.Digit, value );
+                    token = new Token(this.tokenIndex, startPosition, endPosition - 1, TokenType.Digit, value);
                     break;
                 }
                 else if (operatorsOrPunctuators.Contains(c))
@@ -91,7 +91,7 @@ namespace DataCommander.Providers
                     startPosition = this.index;
                     value = c.ToString();
                     endPosition = this.index;
-                    token = new Token( this.tokenIndex, startPosition, endPosition, TokenType.OperatorOrPunctuator, value );
+                    token = new Token(this.tokenIndex, startPosition, endPosition, TokenType.OperatorOrPunctuator, value);
                     this.index++;
                     break;
                 }

@@ -1,12 +1,12 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
 namespace DataCommander.Providers
 {
-    internal class IdentifierParser
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+
+    public sealed class IdentifierParser
     {
-        private TextReader textReader;
+        private readonly TextReader textReader;
 
         public IdentifierParser(TextReader textReader)
         {
@@ -15,6 +15,8 @@ namespace DataCommander.Providers
 
         public IEnumerable<string> Parse()
         {
+            char peekChar = default(char);
+
             while (true)
             {
                 int peek = textReader.Peek();
@@ -22,9 +24,13 @@ namespace DataCommander.Providers
                 if (peek == -1)
                     break;
 
-                char peekChar = (char) peek;
+                peekChar = (char)peek;
 
-                if (peekChar == '[')
+                if (peekChar == '.')
+                {
+                    textReader.Read();
+                }
+                else if (peekChar == '[')
                 {
                     yield return this.ReadQuotedIdentifier();
                 }
@@ -32,6 +38,11 @@ namespace DataCommander.Providers
                 {
                     yield return this.ReadUnquotedIdentifier();
                 }
+            }
+
+            if (peekChar == '.')
+            {
+                yield return null;
             }
         }
 
@@ -42,21 +53,22 @@ namespace DataCommander.Providers
 
             while (true)
             {
-                int read = textReader.Read();
+                int peek = textReader.Peek();
 
-                if (read == -1)
+                if (peek == -1)
                     break;
 
-                char readChar = (char) read;
+                char peekChar = (char)peek;
 
-                if (readChar == ']')
+                if (peekChar == ']')
                 {
                     textReader.Read();
                     break;
                 }
                 else
                 {
-                    identifier.Append(readChar);
+                    identifier.Append(peekChar);
+                    textReader.Read();
                 }
             }
 
@@ -69,20 +81,21 @@ namespace DataCommander.Providers
 
             while (true)
             {
-                int read = textReader.Read();
+                int peek = textReader.Peek();
 
-                if (read == -1)
+                if (peek == -1)
                     break;
 
-                char readChar = (char) read;
+                char peekChar = (char)peek;
 
-                if (readChar == '.')
+                if (peekChar == '.')
                 {
                     break;
                 }
                 else
                 {
-                    identifier.Append(readChar);
+                    identifier.Append(peekChar);
+                    textReader.Read();
                 }
             }
 

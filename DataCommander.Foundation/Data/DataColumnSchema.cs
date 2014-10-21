@@ -26,6 +26,19 @@
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public object this[string name]
+        {
+            get
+            {
+                return this.schemaTableRow[name];
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public Boolean? AllowDBNull
         {
             get

@@ -101,9 +101,23 @@ namespace DataCommander.Providers
                     foreach (DataColumn dataColumn in dataTable.Columns)
                     {
                         var textBoxColumn = new DataGridViewTextBoxColumn();
-                        string columnName = dataColumn.ColumnName;
-                        textBoxColumn.DataPropertyName = columnName;
-                        textBoxColumn.HeaderText = dataColumn.ColumnName;
+                        textBoxColumn.DataPropertyName = dataColumn.ColumnName;
+                        
+                        string columnName;
+                        if (dataColumn.ExtendedProperties.ContainsKey("ColumnName"))
+                        {
+                            columnName = (string)dataColumn.ExtendedProperties["ColumnName"];
+                            if (string.IsNullOrEmpty(columnName))
+                            {
+                                columnName = "(no column name)";
+                            }
+                        }
+                        else
+                        {
+                            columnName = dataColumn.ColumnName;
+                        }
+
+                        textBoxColumn.HeaderText = columnName;
                         float maxWidth = graphics.MeasureString(columnName, font).Width;
                         Type type = (Type)dataColumn.ExtendedProperties[0];
 

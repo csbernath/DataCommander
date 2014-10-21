@@ -7,6 +7,7 @@ namespace DataCommander.Providers
     using System.Data;
     using System.Diagnostics;
     using System.Threading;
+    using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Threading;
 
@@ -65,12 +66,12 @@ namespace DataCommander.Providers
             Action<IAsyncDataAdapter, Exception> endFill,
             Action<IAsyncDataAdapter> writeEnd)
         {
-            Contract.Requires(provider != null);
-            Contract.Requires(maxRecords >= 0);
-            Contract.Requires(rowBlockSize >= 0);
-            Contract.Requires(resultWriter != null);
-            Contract.Requires(endFill != null);
-            Contract.Requires(writeEnd != null);
+            //Contract.Requires(provider != null);
+            //Contract.Requires(maxRecords >= 0);
+            //Contract.Requires(rowBlockSize >= 0);
+            //Contract.Requires(resultWriter != null);
+            //Contract.Requires(endFill != null);
+            //Contract.Requires(writeEnd != null);
 
             this.provider = provider;
             this.commands = commands;
@@ -254,6 +255,11 @@ namespace DataCommander.Providers
                     while (!thread.IsStopRequested)
                     {
                         DataTable schemaTable = dataReader.GetSchemaTable();
+                        if (schemaTable != null)
+                        {
+                            log.Trace("schemaTable:\r\n{0}", schemaTable.ToStringTable());
+                        }
+
                         if (schemaTable != null)
                         {
                             this.ReadTable(dataReader, schemaTable, tableIndex);

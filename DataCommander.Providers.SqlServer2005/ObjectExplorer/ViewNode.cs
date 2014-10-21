@@ -59,7 +59,7 @@ namespace DataCommander.Providers.SqlServer2005
         {
             get
             {
-                FourPartName name = new FourPartName(null, this.database.Name, this.schema, this.name);
+                DatabaseObjectMultipartName name = new DatabaseObjectMultipartName(null, this.database.Name, this.schema, this.name);
                 string connectionString = this.database.Databases.Server.ConnectionString;
                 string text;
                 using (var connection = new SqlConnection(connectionString))

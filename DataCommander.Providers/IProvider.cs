@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Providers
 {
     using System;
+    using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
     using System.Diagnostics.Contracts;
@@ -48,9 +49,9 @@
         string GetExceptionMessage(Exception exception);
         DataTable GetParameterTable(IDataParameterCollection parameters);
         DataTable GetSchemaTable(IDataReader dataReader);
-        string[] GetStatements(string commandText);
+        List<string> GetStatements(string commandText);
         DataSet GetTableSchema(IDbConnection connection, string tableName);
-        InfoMessage[] ToInfoMessages(Exception e);
+        List<InfoMessage> ToInfoMessages(Exception e);
 
         #endregion
     }

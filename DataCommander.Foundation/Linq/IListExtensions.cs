@@ -49,6 +49,46 @@
         /// <summary>
         /// 
         /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="compareTo"></param>
+        /// <returns></returns>
+        public static IndexedItem<T> BinarySearch<T>(this IList<T> list, Func<T, int> compareTo)
+        {
+            Contract.Requires(list != null);
+            Contract.Requires(compareTo != null);
+
+            IndexedItem<T> result = null;
+
+            Int32 from = 0;
+            Int32 to = list.Count - 1;
+
+            while (from <= to)
+            {
+                Int32 index = from + (to - from)/2;
+                var value = list[index];
+                Int32 comparisonResult = compareTo(value);
+                if (comparisonResult == 0)
+                {
+                    result = new IndexedItem<T>(index, value);
+                    break;
+                }
+                else if (comparisonResult < 0)
+                {
+                    to = index - 1;
+                }
+                else
+                {
+                    from = index + 1;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <typeparam name="TResult"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>

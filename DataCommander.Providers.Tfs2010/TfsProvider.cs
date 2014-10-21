@@ -1,13 +1,11 @@
-﻿using System.Linq;
-
-namespace DataCommander.Providers.Tfs
+﻿namespace DataCommander.Providers.Tfs
 {
     using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
+    using System.Linq;
     using DataCommander.Foundation.Data;
-    using DataCommander.Foundation.Linq;
     using DataCommander.Providers;
     using Microsoft.TeamFoundation.VersionControl.Client;
 
@@ -17,7 +15,7 @@ namespace DataCommander.Providers.Tfs
 
         static TfsProvider()
         {
-            TfsParameterCollection parameters = new TfsParameterCollection();
+            var parameters = new TfsParameterCollection();
             parameters.AddStringInput("serverPath", false, null);
             parameters.AddStringInput("localPath", true, null);
 
@@ -350,7 +348,7 @@ namespace DataCommander.Providers.Tfs
                 }
             }
 
-            response.Items = values.Select(value => new ObjectName(value)).ToArray();
+            response.Items = values.Select(value => (IObjectName)new ObjectName(value)).ToList();
             return response;
         }
 
@@ -359,7 +357,7 @@ namespace DataCommander.Providers.Tfs
             throw new NotImplementedException();
         }
 
-        InfoMessage[] IProvider.ToInfoMessages(Exception e)
+        List<InfoMessage> IProvider.ToInfoMessages(Exception exception)
         {
             throw new NotImplementedException();
         }
@@ -390,9 +388,12 @@ namespace DataCommander.Providers.Tfs
             throw new NotImplementedException();
         }
 
-        string[] IProvider.GetStatements(string commandText)
+        List<string> IProvider.GetStatements(string commandText)
         {
-            return commandText.ItemToArray();
+            return new List<string>
+            {
+                commandText
+            };
         }
 
         #endregion

@@ -10,7 +10,7 @@
         private int commandTimeout;
         private string commandText;
         private CommandType commandType;
-        private TfsParameterCollection parameters = new TfsParameterCollection();
+        private readonly TfsParameterCollection parameters = new TfsParameterCollection();
         private bool cancelled;
 
         public TfsCommand(TfsConnection connection)

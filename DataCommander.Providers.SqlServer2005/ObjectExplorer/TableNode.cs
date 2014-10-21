@@ -69,10 +69,10 @@ namespace DataCommander.Providers.SqlServer2005
 
         internal static string GetSelectStatement(
             IDbConnection connection,
-            FourPartName fourPartName )
+            DatabaseObjectMultipartName databaseObjectMultipartName )
         {
             Contract.Requires( connection != null );
-            Contract.Requires( fourPartName != null );
+            Contract.Requires( databaseObjectMultipartName != null );
 
             string commandText = string.Format(@"select  c.name
 from    [{0}].sys.schemas s (nolock)
@@ -84,9 +84,9 @@ where
     s.name = '{1}'
     and t.name = '{2}'
 order by c.column_id",
-                fourPartName.Database,
-                fourPartName.Owner,
-                fourPartName.Name);
+                databaseObjectMultipartName.Database,
+                databaseObjectMultipartName.Schema,
+                databaseObjectMultipartName.Name);
 
             var columnNames = new StringBuilder();
             bool first = true;
@@ -117,7 +117,7 @@ order by c.column_id",
 
             string query = string.Format(
 @"select  {0}
-from    [{1}].[{2}].[{3}]", columnNames, fourPartName.Database, fourPartName.Owner, fourPartName.Name );
+from    [{1}].[{2}].[{3}]", columnNames, databaseObjectMultipartName.Database, databaseObjectMultipartName.Schema, databaseObjectMultipartName.Name );
 
             return query;
         }
@@ -126,7 +126,7 @@ from    [{1}].[{2}].[{3}]", columnNames, fourPartName.Database, fourPartName.Own
         {
             get
             {
-                var name = new FourPartName( null, this.database.Name, this.owner, this.name );
+                var name = new DatabaseObjectMultipartName( null, this.database.Name, this.owner, this.name );
                 string connectionString = this.database.Databases.Server.ConnectionString;
                 string text;
                 using (var connection = new SqlConnection( connectionString ))
@@ -387,7 +387,7 @@ exec sp_MStablechecks N'{1}.[{2}]'",
 
         private void SelectScript_Click( object sender, EventArgs e )
         {
-            FourPartName name = new FourPartName( null, this.database.Name, this.owner, this.name );
+            DatabaseObjectMultipartName name = new DatabaseObjectMultipartName( null, this.database.Name, this.owner, this.name );
             string connectionString = this.database.Databases.Server.ConnectionString;
             string selectStatement;
             using (var connection = new SqlConnection( connectionString ))

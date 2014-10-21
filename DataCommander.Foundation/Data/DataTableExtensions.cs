@@ -20,11 +20,11 @@
         {
             Contract.Requires(dataTable != null);
 
-            DataColumnCollection dataColumns = dataTable.Columns;
+            var dataColumns = dataTable.Columns;
             Int32 columnCount = dataColumns.Count;
-            StringTable st = new StringTable(columnCount);
-            SetAlign(dataColumns, st.Columns);
-            WriteHeader(dataTable.Columns, st);
+            var stringTable = new StringTable(columnCount);
+            SetAlign(dataColumns, stringTable.Columns);
+            WriteHeader(dataTable.Columns, stringTable);
 
             foreach (DataRow dataRow in dataTable.Rows)
             {
@@ -32,20 +32,26 @@
 
                 if (rowState != DataRowState.Deleted)
                 {
-                    StringTableRow row = st.NewRow();
+                    StringTableRow stringTableRow = stringTable.NewRow();
                     Object[] itemArray = dataRow.ItemArray;
 
                     for (Int32 i = 0; i < itemArray.Length; i++)
                     {
-                        row[i] = itemArray[i].ToString();
+                        object value = itemArray[i];
+
+                        string valueString = value == DBNull.Value
+                            ? Database.NullString
+                            : value.ToString();
+
+                        stringTableRow[i] = valueString;
                     }
 
-                    st.Rows.Add(row);
+                    stringTable.Rows.Add(stringTableRow);
                 }
             }
 
-            WriteHeaderSeparator(st);
-            return st;
+            WriteHeaderSeparator(stringTable);
+            return stringTable;
         }
 
         internal static void SetAlign(IEnumerable dataColumns, StringTableColumnCollection columns)

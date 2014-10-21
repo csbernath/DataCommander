@@ -21,18 +21,17 @@
             }
         }
 
-        System.Data.Common.DbProviderFactory IProvider.DbProviderFactory
+        DbProviderFactory IProvider.DbProviderFactory
         {
             get
             {
-                object o = SqlCeProviderFactory.Instance.CreateCommandBuilder();
                 return SqlCeProviderFactory.Instance;
             }
         }
 
-        ConnectionBase IProvider.CreateConnection( string connectionString )
+        ConnectionBase IProvider.CreateConnection(string connectionString)
         {
-            return new Connection( connectionString );
+            return new Connection(connectionString);
         }
 
         string[] IProvider.KeyWords
@@ -51,64 +50,65 @@
             }
         }
 
-        void IProvider.DeriveParameters( System.Data.IDbCommand command )
+        void IProvider.DeriveParameters(System.Data.IDbCommand command)
         {
             throw new NotImplementedException();
         }
 
-        DataParameterBase IProvider.GetDataParameter( System.Data.IDataParameter parameter )
+        DataParameterBase IProvider.GetDataParameter(System.Data.IDataParameter parameter)
         {
             throw new NotImplementedException();
         }
 
-        System.Data.DataTable IProvider.GetParameterTable( System.Data.IDataParameterCollection parameters )
+        System.Data.DataTable IProvider.GetParameterTable(System.Data.IDataParameterCollection parameters)
         {
             throw new NotImplementedException();
         }
 
-        System.Xml.XmlReader IProvider.ExecuteXmlReader( System.Data.IDbCommand command )
+        System.Xml.XmlReader IProvider.ExecuteXmlReader(System.Data.IDbCommand command)
         {
             throw new NotImplementedException();
         }
 
-        System.Data.DataTable IProvider.GetSchemaTable( System.Data.IDataReader dataReader )
+        System.Data.DataTable IProvider.GetSchemaTable(System.Data.IDataReader dataReader)
         {
             return dataReader.GetSchemaTable();
         }
 
-        System.Data.DataSet IProvider.GetTableSchema( System.Data.IDbConnection connection, string tableName )
+        System.Data.DataSet IProvider.GetTableSchema(System.Data.IDbConnection connection, string tableName)
         {
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType( System.Data.DataRow schemaRow )
+        Type IProvider.GetColumnType(DataColumnSchema dataColumnSchema)
         {
-            DataColumnSchema sr = new DataColumnSchema( schemaRow );
-            SqlCeType sqlCeType = (SqlCeType) schemaRow[ SchemaTableColumn.ProviderType ];
-            SqlDbType sqlDbType = sqlCeType.SqlDbType;
-            Type dataType;
+            throw new NotImplementedException();
+            // System.Data.SqlServerCe.SqlCeType
+            // var sqlCeType = (SqlCeType)dataColumnSchema.ProviderType;
+            //SqlDbType sqlDbType = sqlCeType.SqlDbType;
+            //Type dataType;
 
-            switch (sqlDbType)
-            {
-                case SqlDbType.Decimal:
-                    dataType = typeof( DecimalField );
-                    break;
+            //switch (sqlDbType)
+            //{
+            //    case SqlDbType.Decimal:
+            //        dataType = typeof (DecimalField);
+            //        break;
 
-                default:
-                    dataType = sr.DataType;
-                    break;
-            }
+            //    default:
+            //        dataType = dataColumnSchema.DataType;
+            //        break;
+            //}
 
-            return dataType;
+            //return dataType;
         }
 
-        IDataReaderHelper IProvider.CreateDataReaderHelper( System.Data.IDataReader dataReader )
+        IDataReaderHelper IProvider.CreateDataReaderHelper(System.Data.IDataReader dataReader)
         {
-            SqlCeDataReader sqlCeDataReader = (SqlCeDataReader) dataReader;
-            return new SqlCeDataReaderHelper( sqlCeDataReader );
+            SqlCeDataReader sqlCeDataReader = (SqlCeDataReader)dataReader;
+            return new SqlCeDataReaderHelper(sqlCeDataReader);
         }
 
-        System.Data.Common.DbDataAdapter IProvider.CreateDataAdapter( string selectCommandText, System.Data.IDbConnection connection )
+        System.Data.Common.DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, System.Data.IDbConnection connection)
         {
             throw new NotImplementedException();
         }
@@ -121,50 +121,23 @@
             }
         }
 
-        GetCompletionResponse IProvider.GetCompletion( ConnectionBase connection, IDbTransaction transaction, string text, int position )
+        GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {
             var response = new GetCompletionResponse();
             string[] array = null;
-            SqlStatement sqlStatement = new SqlStatement( text );
+            var sqlStatement = new SqlStatement(text);
             Token[] tokens = sqlStatement.Tokens;
-            int index = sqlStatement.FindToken( position );
+            int index = sqlStatement.FindToken(position);
 
             if (index >= 0 && index < tokens.Length)
             {
-                Token token = sqlStatement.Tokens[ index ];
+                Token token = sqlStatement.Tokens[index];
                 string value = token.Value;
-
-                //if (value[0] == '@')
-                //{
-                //    if (value.IndexOf("@@") == 0)
-                //    {
-                //        array = keyWords.Where(k => k.StartsWith(value)).ToArray();
-                //    }
-                //    else
-                //    {
-                //        SortedList<string, object> list = new SortedList<string, object>();
-
-                //        for (int i = 0; i < tokens.Length; i++)
-                //        {
-                //            token = tokens[i];
-                //            string keyWord = token.Value;
-
-                //            if (keyWord != null && keyWord.Length >= 2 && keyWord.IndexOf(value) == 0 && keyWord != value)
-                //            {
-                //                if (!list.ContainsKey(token.Value))
-                //                    list.Add(token.Value, null);
-                //            }
-                //        }
-
-                //        array = new string[list.Count];
-                //        list.Keys.CopyTo(array, 0);
-                //    }
-                //}
             }
 
             if (array == null)
             {
-                SqlObject sqlObject = sqlStatement.FindSqlObject( index );
+                SqlObject sqlObject = sqlStatement.FindSqlObject(index);
                 string commandText = null;
 
                 if (sqlObject != null)
@@ -186,28 +159,28 @@
 
                         case SqlObjectTypes.Column:
                             name = sqlObject.ParentName;
-                            commandText = string.Format( @"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
+                            commandText = string.Format(@"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
 WHERE TABLE_NAME = '{0}'
-ORDER BY ORDINAL_POSITION", name );
+ORDER BY ORDINAL_POSITION", name);
                             break;
 
                         case SqlObjectTypes.Value:
-                            string[] items = sqlObject.ParentName.Split( '.' );
+                            string[] items = sqlObject.ParentName.Split('.');
                             int i = items.Length - 1;
-                            string columnName = items[ i ];
+                            string columnName = items[i];
                             string tableNameOrAlias = null;
                             if (i > 0)
                             {
                                 i--;
-                                tableNameOrAlias = items[ i ];
+                                tableNameOrAlias = items[i];
                             }
                             if (tableNameOrAlias != null)
                             {
                                 string tableName;
-                                bool contains = sqlStatement.Tables.TryGetValue( tableNameOrAlias, out tableName );
+                                bool contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out tableName);
                                 if (contains)
                                 {
-                                    commandText = string.Format( "select distinct top 10 {0} from {1} (nolock) order by 1", columnName, tableName );
+                                    commandText = string.Format("select distinct top 10 {0} from {1} (nolock) order by 1", columnName, tableName);
                                 }
                             }
                             break;
@@ -216,7 +189,7 @@ ORDER BY ORDINAL_POSITION", name );
 
                 if (commandText != null)
                 {
-                    System.Diagnostics.Trace.WriteLine( commandText );
+                    System.Diagnostics.Trace.WriteLine(commandText);
                     var list = new List<string>();
 
                     try
@@ -235,12 +208,12 @@ ORDER BY ORDINAL_POSITION", name );
                     {
                     }
 
-                    array = new string[ list.Count ];
-                    list.CopyTo( array );
+                    array = new string[list.Count];
+                    list.CopyTo(array);
                 }
             }
 
-            response.Items = array;
+            //  TODO response.Items = array;
             return response;
         }
 
@@ -248,23 +221,23 @@ ORDER BY ORDINAL_POSITION", name );
         {
         }
 
-        InfoMessage[] IProvider.ToInfoMessages( Exception e )
+        List<InfoMessage> IProvider.ToInfoMessages(Exception exception)
         {
             throw new NotImplementedException();
         }
 
-        string IProvider.GetExceptionMessage( Exception e )
+        string IProvider.GetExceptionMessage(Exception e)
         {
             return e.ToString();
         }
 
-        string IProvider.GetColumnTypeName( IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName )
+        string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
         {
-            var schemaRow = new DataColumnSchema( sourceSchemaRow );
+            var schemaRow = new DataColumnSchema(sourceSchemaRow);
             int columnSize = schemaRow.ColumnSize;
             bool? allowDBNull = schemaRow.AllowDBNull;
             Type dataType = schemaRow.DataType;
-            TypeCode typeCode = Type.GetTypeCode( dataType );
+            TypeCode typeCode = Type.GetTypeCode(dataType);
             string typeName;
 
             switch (typeCode)
@@ -302,11 +275,11 @@ ORDER BY ORDINAL_POSITION", name );
 
                     if (scale == 0)
                     {
-                        typeName = string.Format( "decimal({0})", precision );
+                        typeName = string.Format("decimal({0})", precision);
                     }
                     else
                     {
-                        typeName = string.Format( "decimal({0},{1})", precision, scale );
+                        typeName = string.Format("decimal({0},{1})", precision, scale);
                     }
 
                     break;
@@ -332,15 +305,15 @@ ORDER BY ORDINAL_POSITION", name );
                     {
                         typeName = SqlDataTypeName.Timestamp;
                     }
-                    else if (dataType == typeof( Guid ))
+                    else if (dataType == typeof (Guid))
                     {
                         typeName = "uniqueidentifier";
                     }
-                    else if (dataType == typeof( byte[] ))
+                    else if (dataType == typeof (byte[]))
                     {
                         if (columnSize <= 8000)
                         {
-                            typeName = string.Format( "varbinary({0})", columnSize );
+                            typeName = string.Format("varbinary({0})", columnSize);
                         }
                         else
                         {
@@ -385,11 +358,11 @@ ORDER BY ORDINAL_POSITION", name );
                     {
                         if (isFixedLength)
                         {
-                            typeName = string.Format( "nchar({0})", columnSize );
+                            typeName = string.Format("nchar({0})", columnSize);
                         }
                         else
                         {
-                            typeName = string.Format( "nvarchar({0})", columnSize );
+                            typeName = string.Format("nvarchar({0})", columnSize);
                         }
                     }
                     else
@@ -406,7 +379,7 @@ ORDER BY ORDINAL_POSITION", name );
             return typeName;
         }
 
-        private static object ConvertToString( object source )
+        private static object ConvertToString(object source)
         {
             object target;
             if (source == null || source == DBNull.Value)
@@ -415,13 +388,13 @@ ORDER BY ORDINAL_POSITION", name );
             }
             else
             {
-                IConvertible convertible = (IConvertible) source;
-                target = convertible.ToString( null );
+                IConvertible convertible = (IConvertible)source;
+                target = convertible.ToString(null);
             }
             return target;
         }
 
-        private static object ConvertToByteArray( object source )
+        private static object ConvertToByteArray(object source)
         {
             object target;
             if (source == null || source == DBNull.Value)
@@ -430,7 +403,7 @@ ORDER BY ORDINAL_POSITION", name );
             }
             else
             {
-                BinaryField binaryField = (BinaryField) source;
+                BinaryField binaryField = (BinaryField)source;
                 target = binaryField.Value;
             }
             return target;
@@ -442,7 +415,7 @@ ORDER BY ORDINAL_POSITION", name );
             IDbConnection destinationconnection,
             string destinationTableName,
             out IDbCommand insertCommand,
-            out Converter<object, object>[] converters )
+            out Converter<object, object>[] converters)
         {
             DataTable schemaTable;
             string[] dataTypeNames;
@@ -453,67 +426,70 @@ ORDER BY ORDINAL_POSITION", name );
                 command.CommandText = destinationTableName;
                 command.CommandType = CommandType.TableDirect;
 
-                using (IDataReader dataReader = command.ExecuteReader( CommandBehavior.SchemaOnly ))
+                using (IDataReader dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
                 {
                     schemaTable = dataReader.GetSchemaTable();
                     count = dataReader.FieldCount;
-                    dataTypeNames = new string[ count ];
+                    dataTypeNames = new string[count];
 
                     for (int i = 0; i < count; i++)
                     {
-                        dataTypeNames[ i ] = dataReader.GetDataTypeName( i );
+                        dataTypeNames[i] = dataReader.GetDataTypeName(i);
                     }
                 }
             }
 
             StringBuilder insertInto = new StringBuilder();
-            insertInto.AppendFormat( "insert into [{0}](", destinationTableName );
+            insertInto.AppendFormat("insert into [{0}](", destinationTableName);
             StringBuilder values = new StringBuilder();
-            values.Append( "values(" );
+            values.Append("values(");
             DataRowCollection schemaRows = schemaTable.Rows;
             count = schemaRows.Count;
-            converters = new Converter<object, object>[ count ];
+            converters = new Converter<object, object>[count];
             insertCommand = destinationconnection.CreateCommand();
 
             for (int i = 0; i < count; i++)
             {
                 if (i > 0)
                 {
-                    insertInto.Append( ',' );
-                    values.Append( ',' );
+                    insertInto.Append(',');
+                    values.Append(',');
                 }
 
-                DataColumnSchema columnSchema = new DataColumnSchema( schemaRows[ i ] );
-                insertInto.AppendFormat( "[{0}]", columnSchema.ColumnName );
-                values.Append( '?' );
+                DataColumnSchema columnSchema = new DataColumnSchema(schemaRows[i]);
+                insertInto.AppendFormat("[{0}]", columnSchema.ColumnName);
+                values.Append('?');
 
                 int columnSize = columnSchema.ColumnSize;
-                SqlCeType sqlCeType = (SqlCeType) schemaRows[ i ][ "ProviderType" ];
-                SqlCeParameter parameter = new SqlCeParameter( null, sqlCeType.SqlDbType );
-                insertCommand.Parameters.Add( parameter );
+                var sqlCeType = (SqlCeType)schemaRows[i]["ProviderType"];
+                var parameter = new SqlCeParameter(null, sqlCeType.SqlDbType);
+                insertCommand.Parameters.Add(parameter);
 
-                switch (dataTypeNames[ i ].ToLower())
+                switch (dataTypeNames[i].ToLower())
                 {
                     case SqlDataTypeName.NText:
-                        converters[ i ] = ConvertToString;
+                        converters[i] = ConvertToString;
                         break;
                     case SqlDataTypeName.RowVersion:
-                        converters[ i ] = ConvertToByteArray;
+                        converters[i] = ConvertToByteArray;
                         break;
                     default:
                         break;
                 }
             }
 
-            insertInto.Append( ") " );
-            values.Append( ')' );
-            insertInto.Append( values );
+            insertInto.Append(") ");
+            values.Append(')');
+            insertInto.Append(values);
             insertCommand.CommandText = insertInto.ToString();
         }
 
-        string[] IProvider.GetStatements( string commandText )
+        List<string> IProvider.GetStatements(string commandText)
         {
-            return new string[] { commandText };
+            return new List<string>
+            {
+                commandText
+            };
         }
 
         #endregion
@@ -529,7 +505,7 @@ ORDER BY ORDINAL_POSITION", name );
             }
         }
 
-        string IProvider.CommandToString( IDbCommand command )
+        string IProvider.CommandToString(IDbCommand command)
         {
             throw new NotImplementedException();
         }

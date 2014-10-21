@@ -13,7 +13,7 @@ namespace DataCommander.Providers
             int startPosition,
             int endPosition,
             TokenType type,
-            string value )
+            string value)
         {
             this.index = index;
             this.startPosition = startPosition;

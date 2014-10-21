@@ -2,6 +2,7 @@ namespace DataCommander.Providers.Wmi
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
     using System.Management;
@@ -207,7 +208,7 @@ namespace DataCommander.Providers.Wmi
             throw new NotImplementedException();
         }
 
-        InfoMessage[] IProvider.ToInfoMessages(Exception e)
+        List<InfoMessage> IProvider.ToInfoMessages(Exception exception)
         {
             throw new NotImplementedException();
         }
@@ -265,9 +266,12 @@ namespace DataCommander.Providers.Wmi
             throw new NotImplementedException();
         }
 
-        string[] IProvider.GetStatements(string commandText)
+        List<string> IProvider.GetStatements(string commandText)
         {
-            return new[] {commandText};
+            return new List<string>
+            {
+                commandText
+            };
         }
     }
 }

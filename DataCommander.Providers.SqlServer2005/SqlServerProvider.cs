@@ -5,8 +5,11 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Data;
     using System.Data.Common;
     using System.Data.SqlClient;
+    using System.Diagnostics;
+    using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Windows.Forms;
     using System.Xml;
     using DataCommander.Foundation;
     using DataCommander.Foundation.Configuration;
@@ -411,7 +414,7 @@ namespace DataCommander.Providers.SqlServer2005
             {
                 FromCache = false
             };
-            IObjectName[] array = null;
+            List<IObjectName> array = null;
             var sqlStatement = new SqlStatement(text);
             Token[] tokens = sqlStatement.Tokens;
             Token previousToken, currentToken;
@@ -419,14 +422,17 @@ namespace DataCommander.Providers.SqlServer2005
 
             if (currentToken != null)
             {
-                response.StartPosition = currentToken.StartPosition;
-                response.Length = currentToken.EndPosition - currentToken.StartPosition + 1;
+                var parts = new IdentifierParser(new StringReader(currentToken.Value)).Parse().ToList();
+                var lastPart = parts.Last();
+                int lastPartLength = lastPart != null ? lastPart.Length : 0;
+                response.StartPosition = currentToken.EndPosition - lastPartLength + 1;
+                response.Length = lastPartLength;
                 string value = currentToken.Value;
                 if (value.Length > 0 && value[0] == '@')
                 {
                     if (value.IndexOf("@@") == 0)
                     {
-                        array = keyWords.Where(k => k.StartsWith(value)).Select(keyWord => new NonSqlObjectName(keyWord)).ToArray();
+                        array = keyWords.Where(k => k.StartsWith(value)).Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
                     }
                     else
                     {
@@ -446,7 +452,7 @@ namespace DataCommander.Providers.SqlServer2005
                             }
                         }
 
-                        array = list.Keys.Select(keyWord => new NonSqlObjectName(keyWord)).ToArray();
+                        array = list.Keys.Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
                     }
                 }
             }
@@ -464,139 +470,67 @@ namespace DataCommander.Providers.SqlServer2005
 
                 if (sqlObject != null)
                 {
-                    FourPartName name;
+                    DatabaseObjectMultipartName name;
 
                     switch (sqlObject.Type)
                     {
                         case SqlObjectTypes.Database:
-                            commandText = @"select  name
-from    sys.databases (readpast)
-order by name";
-                            break;
-
-                        case SqlObjectTypes.Table | SqlObjectTypes.View:
-                            name = new FourPartName(connection.Database, sqlObject.Name);
-
-                            if (name.Owner == null)
-                            {
-                                commandText = string.Format(@"select
-     null
-    ,d.name collate database_default
-from    sys.databases d (readpast)
-union all
-select
-     s.name
-    ,o.name
-from    [{0}].sys.all_objects o (readpast)
-join    [{0}].sys.schemas s (readpast)
-on      o.schema_id = s.schema_id
-where   o.type in('U','S','V')
-order by 1",
-                                    name.Database);
-                            }
-                            else
-                            {
-                                commandText = string.Format(@"select	o.name
-from	[{0}].dbo.sysobjects o (readpast)
-join	[{0}].dbo.sysusers u (readpast)
-on	o.uid	= u.uid
-where	xtype in ('U','S','V')
-	and u.name = '{1}'
-order by 1", name.Database, name.Owner);
-                            }
-                            break;
-
-                        case SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function:
-                            name = new FourPartName(connection.Database, sqlObject.Name);
-
-                            if (name.Owner == null)
-                            {
-                                commandText = string.Format(@"select
-     null
-    ,name collate database_default
-from    sys.databases (readpast)
-union all
-select
-     s.name
-    ,o.name as Name
-from    [{0}].sys.all_objects o (readpast)
-join    [{0}].sys.schemas s (readpast)
-on      o.schema_id = s.schema_id
-where   o.type in('S','U','TF','V')
-order by 1,2", name.Database);
-                            }
-                            else
-                            {
-                                commandText = string.Format(@"select
-     null
-    ,name collate database_default
-from    sys.databases (readpast)
-union all
-select
-     s.name
-    ,o.name as Name
-from    [{0}].sys.all_objects o (readpast)
-join    [{0}].sys.schemas s (readpast)
-on      o.schema_id = s.schema_id
-where   o.type in('S','U','TF','V')
-        and s.name = {1}
-order by 1,2
-", name.Database, name.Owner.ToTSqlNVarChar());
-                            }
+                            commandText = SqlServerObject.GetDatabases();
                             break;
 
                         case SqlObjectTypes.Table:
-                            commandText = @"select
-     s.name
-    ,o.name
-from    sys.all_objects o
-join    sys.schemas s
-on      o.schema_id = s.schema_id
-where   o.type in('S','U','IT')
-order by 1,2";
-
-                            break;
-
                         case SqlObjectTypes.View:
-                            commandText = @"select  s.name + '.' + v.name
-from    sys.views v
-join    sys.schemas s
-on      v.schema_id = s.schema_id
-order by 1";
-                            break;
-
                         case SqlObjectTypes.Function:
-                            name = new FourPartName(connection.Database, sqlObject.Name);
+                        case SqlObjectTypes.Table | SqlObjectTypes.View:
+                        case SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function:
+                        {
+                            name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
+                            List<string> nameParts = sqlObject.Name != null
+                                ? new IdentifierParser(new StringReader(sqlObject.Name)).Parse().ToList()
+                                : null;
+                            int namePartsCount = nameParts != null ? nameParts.Count : 0;
+                            var statements = new List<string>();
 
-                            if (name.Owner == null)
+                            switch (namePartsCount)
                             {
-                                commandText = string.Format(@"select	u.name + '.' + o.name
-                    from	{0}.dbo.sysobjects o
-                    join	{0}.dbo.sysusers u
-                    on	o.uid	= u.uid
-                    where	o.xtype in('FN','IF','TF')
-                        --and objectproperty(o.id,'IsMSShipped') = 0
-                    order by 1", name.Database);
+                                case 0:
+                                case 1:
+                                    statements.Add(SqlServerObject.GetDatabases());
+                                    statements.Add(SqlServerObject.GetSchemas());
+                                    break;
+
+                                case 2:
+                                    if (nameParts[0] != null)
+                                    {
+                                        statements.Add(SqlServerObject.GetSchemas(database: nameParts[0]));
+
+                                        var objectTypes = sqlObject.Type.ToObjectTypes();
+                                        statements.Add(SqlServerObject.GetObjects(schema: nameParts[0], objectTypes: objectTypes));
+                                    }
+                                    break;
+
+                                case 3:
+                                {
+                                    if (nameParts[0] != null && nameParts[1] != null)
+                                    {
+                                        var objectTypes = sqlObject.Type.ToObjectTypes();
+                                        statements.Add(SqlServerObject.GetObjects(database: nameParts[0], schema: nameParts[1], objectTypes: objectTypes));
+                                    }
+                                }
+                                    break;
                             }
-                            else
-                            {
-                                commandText = string.Format(@"select	o.name
-                    from	{0}.dbo.sysobjects o
-                    join	{0}.dbo.sysusers u
-                    on	o.uid	= u.uid
-                    where	o.xtype in('FN','IF','TF')
-                        and u.name = '{1}'
-                    order by 1", name.Database, name.Owner);
-                            }
+
+                            commandText = statements.Count > 0 ? string.Join("\r\n", statements) : null;
+                        }
                             break;
 
                         case SqlObjectTypes.Column:
-                            name = new FourPartName(connection.Database, sqlObject.ParentName);
+                            name = new DatabaseObjectMultipartName(connection.Database, sqlObject.ParentName);
                             string[] owners;
 
-                            if (name.Owner != null)
+                            if (name.Schema != null)
                             {
-                                owners = new string[] {name.Owner};
+                                owners = new string[] {name.Schema};
                             }
                             else
                             {
@@ -637,11 +571,11 @@ end", name.Database, ownersString, name.Name);
                             break;
 
                         case SqlObjectTypes.Procedure:
-                            name = new FourPartName(connection.Database, sqlObject.Name);
+                            name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
 
-                            if (name.Owner == null)
+                            if (name.Schema == null)
                             {
-                                name.Owner = "dbo";
+                                name.Schema = "dbo";
                             }
 
                             commandText = string.Format(@"select
@@ -717,7 +651,7 @@ order by 1", name.Database);
                 if (commandText != null)
                 {
                     log.Write(LogLevel.Trace, "commandText:\r\n{0}", commandText);
-                    var list = new List<ObjectName>();
+                    var list = new List<IObjectName>();
                     try
                     {
                         if (connection.State != ConnectionState.Open)
@@ -728,24 +662,33 @@ order by 1", name.Database);
                         using (var context = connection.Connection.ExecuteReader(transaction, commandText, CommandType.Text, 0, CommandBehavior.Default))
                         {
                             var dataReader = context.DataReader;
-                            int fieldCount = dataReader.FieldCount;
-                            while (dataReader.Read())
+
+                            while (true)
                             {
-                                string schemaName;
-                                string objectName;
-
-                                if (fieldCount == 1)
+                                int fieldCount = dataReader.FieldCount;
+                                while (dataReader.Read())
                                 {
-                                    schemaName = null;
-                                    objectName = dataReader.GetString(0);
-                                }
-                                else
-                                {
-                                    schemaName = dataReader.GetValueOrDefault<string>(0);
-                                    objectName = dataReader.GetString(1);
+                                    string schemaName;
+                                    string objectName;
+
+                                    if (fieldCount == 1)
+                                    {
+                                        schemaName = null;
+                                        objectName = dataReader.GetString(0);
+                                    }
+                                    else
+                                    {
+                                        schemaName = dataReader.GetValueOrDefault<string>(0);
+                                        objectName = dataReader.GetString(1);
+                                    }
+
+                                    list.Add(new ObjectName(sqlObject, schemaName, objectName));
                                 }
 
-                                list.Add(new ObjectName(sqlObject, schemaName, objectName));
+                                if (!dataReader.NextResult())
+                                {
+                                    break;
+                                }
                             }
                         }
                     }
@@ -753,9 +696,10 @@ order by 1", name.Database);
                     {
                     }
 
-                    array = list.ToArray();
+                    array = list;
                 }
             }
+
             response.Items = array;
             return response;
         }
@@ -974,11 +918,12 @@ order by 1", name.Database);
             return table;
         }
 
-        string[] IProvider.GetStatements(string commandText)
+        List<string> IProvider.GetStatements(string commandText)
         {
             var sqlStatement = new SqlStatement(commandText);
             var tokens = sqlStatement.Tokens;
             var statements = new List<string>();
+
             foreach (var statementTokens in tokens.Split(token => IsBatchSeparator(commandText, token)).Where(statementTokens => statementTokens.Length > 0))
             {
                 int startIndex = statementTokens[0].StartPosition;
@@ -988,15 +933,15 @@ order by 1", name.Database);
                 statements.Add(statement);
             }
 
-            return statements.ToArray();
+            return statements;
         }
 
         DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName)
         {
             var sqlCommandBuilder = new SqlCommandBuilder();
 
-            var fourPartName = new FourPartName(connection.Database, tableName);
-            string owner = fourPartName.Owner;
+            var fourPartName = new DatabaseObjectMultipartName(connection.Database, tableName);
+            string owner = fourPartName.Schema;
             if (owner == null)
             {
                 owner = "dbo";
@@ -1064,20 +1009,23 @@ order by ic.index_column_id
             return dataSet;
         }
 
-        InfoMessage[] IProvider.ToInfoMessages(Exception e)
+        List<InfoMessage> IProvider.ToInfoMessages(Exception exception)
         {
             DateTime now = OptimizedDateTime.Now;
-            InfoMessage[] infoMessages;
-            var sqlException = e as SqlException;
+            List<InfoMessage> infoMessages;
+            var sqlException = exception as SqlException;
             if (sqlException != null)
             {
                 infoMessages = SqlServerProvider.ToInfoMessages(sqlException.Errors);
             }
             else
             {
-                string message = e.ToLogString();
+                string message = exception.ToLogString();
                 var infoMessage = new InfoMessage(now, InfoMessageSeverity.Error, message);
-                infoMessages = new InfoMessage[] {infoMessage};
+                infoMessages = new List<InfoMessage>
+                {
+                    infoMessage
+                };
             }
 
             return infoMessages;
@@ -1087,26 +1035,17 @@ order by ic.index_column_id
 
         #endregion
 
-        internal static InfoMessage[] ToInfoMessages(SqlErrorCollection sqlErrors)
+        internal static List<InfoMessage> ToInfoMessages(SqlErrorCollection sqlErrors)
         {
             DateTime now = OptimizedDateTime.Now;
             int count = sqlErrors.Count;
-            var messages = new InfoMessage[count];
+            var messages = new List<InfoMessage>(sqlErrors.Count);
 
-            for (int i = 0; i < count; i++)
+            foreach (SqlError sqlError in sqlErrors)
             {
-                SqlError error = sqlErrors[i];
-                InfoMessageSeverity severity;
-                if (error.Class == 0)
-                {
-                    severity = InfoMessageSeverity.Information;
-                }
-                else
-                {
-                    severity = InfoMessageSeverity.Error;
-                }
-                string message = error.ToLogString();
-                messages[i] = new InfoMessage(now, severity, message);
+                var severity = sqlError.Class == 0 ? InfoMessageSeverity.Information : InfoMessageSeverity.Error;
+                string message = sqlError.ToLogString();
+                messages.Add(new InfoMessage(now, severity, message));
             }
 
             return messages;

@@ -4,10 +4,10 @@ namespace DataCommander.Providers
 
     public abstract class DataParameterBase
     {
-        private IDataParameter parameter;
-        private int size;
-        private byte precision;
-        private byte scale;
+        private readonly IDataParameter parameter;
+        private readonly int size;
+        private readonly byte precision;
+        private readonly byte scale;
 
         public DataParameterBase(
             IDataParameter parameter,

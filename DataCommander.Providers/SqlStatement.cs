@@ -482,8 +482,8 @@ namespace DataCommander.Providers
 
         private static Token[] Tokenize(string text)
         {
-            List<Token> tokenList = new List<Token>();
-            TokenIterator iterator = new TokenIterator(text);
+            var tokenList = new List<Token>();
+            var iterator = new TokenIterator(text);
 
             while (true)
             {
