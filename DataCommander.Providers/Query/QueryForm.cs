@@ -2576,10 +2576,8 @@ namespace DataCommander
                 if (rowCount > 0)
                 {
                     double seconds = (double)ticks/Stopwatch.Frequency;
-                    double speedD = rowCount/seconds;
-                    int speedInt = (int)speedD;
 
-                    text += " (" + speedInt + " rows/sec)";
+                    text += " (" + Math.Round(rowCount/seconds, 0) + " rows/sec)";
                 }
 
                 sbPanelRows.Text = text;

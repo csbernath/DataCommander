@@ -45,11 +45,11 @@ namespace DataCommander.Providers.SqlServer2005
                     sb.Append(QuoteIdentifier(this.schemaName));
                     sb.Append('.');
                 }
-                else if (this.sqlObject.ParentAlias != null)
-                {
-                    sb.Append(this.sqlObject.ParentAlias);
-                    sb.Append('.');
-                }
+                //else if (this.sqlObject.ParentAlias != null)
+                //{
+                //    sb.Append(this.sqlObject.ParentAlias);
+                //    sb.Append('.');
+                //}
 
                 sb.Append(QuoteIdentifier(this.objectName));
 

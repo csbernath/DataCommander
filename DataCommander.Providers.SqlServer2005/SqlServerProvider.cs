@@ -5,11 +5,9 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Data;
     using System.Data.Common;
     using System.Data.SqlClient;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Text;
-    using System.Windows.Forms;
     using System.Xml;
     using DataCommander.Foundation;
     using DataCommander.Foundation.Configuration;
@@ -674,7 +672,7 @@ order by 1", name.Database);
                                     if (fieldCount == 1)
                                     {
                                         schemaName = null;
-                                        objectName = dataReader.GetString(0);
+                                        objectName = dataReader[0].ToString();
                                     }
                                     else
                                     {
