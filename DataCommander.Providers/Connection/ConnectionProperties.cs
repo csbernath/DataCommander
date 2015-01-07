@@ -9,13 +9,13 @@ namespace DataCommander.Providers
 
     public sealed class ConnectionProperties
     {
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        public string connectionName;
-        public string providerName;
-        public IProvider provider;
-        public string connectionString;
-        public ConnectionBase connection;
-        private static byte[] entropy = new byte[] { 0x56, 0x4f, 0x3d, 0x78, 0xf1 };
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        public string ConnectionName;
+        public string ProviderName;
+        public IProvider Provider;
+        public string ConnectionString;
+        public ConnectionBase Connection;
+        private static readonly byte[] entropy = new byte[] {0x56, 0x4f, 0x3d, 0x78, 0xf1};
 
         public static string GetValue(DbConnectionStringBuilder dbConnectionStringBuilder, string keyword)
         {
@@ -64,17 +64,17 @@ namespace DataCommander.Providers
         public void Save(ConfigurationNode folder)
         {
             ConfigurationAttributeCollection attributes = folder.Attributes;
-            attributes.SetAttributeValue("ConnectionName", connectionName);
-            attributes.SetAttributeValue("ProviderName", providerName);
-            attributes.SetAttributeValue("ConnectionString", connectionString);
+            attributes.SetAttributeValue("ConnectionName", ConnectionName);
+            attributes.SetAttributeValue("ProviderName", ProviderName);
+            attributes.SetAttributeValue("ConnectionString", ConnectionString);
         }
 
         public void Load(ConfigurationNode folder)
         {
             ConfigurationAttributeCollection attributes = folder.Attributes;
-            connectionName = attributes["ConnectionName"].GetValue<string>();
-            providerName = attributes["ProviderName"].GetValue<string>();
-            connectionString = attributes["ConnectionString"].GetValue<string>();
+            ConnectionName = attributes["ConnectionName"].GetValue<string>();
+            ProviderName = attributes["ProviderName"].GetValue<string>();
+            ConnectionString = attributes["ConnectionString"].GetValue<string>();
         }
 
         public void LoadProtectedPassword(ConfigurationNode node)
@@ -86,7 +86,7 @@ namespace DataCommander.Providers
                 bool succeeded = false;
                 try
                 {
-                    password = ConnectionProperties.UnprotectPassword(password);
+                    password = UnprotectPassword(password);
                     succeeded = true;
                 }
                 catch (Exception e)
@@ -96,10 +96,10 @@ namespace DataCommander.Providers
 
                 if (succeeded)
                 {
-                    DbConnectionStringBuilder dbConnectionStringBuilder = new DbConnectionStringBuilder();
-                    dbConnectionStringBuilder.ConnectionString = this.connectionString;
+                    var dbConnectionStringBuilder = new DbConnectionStringBuilder();
+                    dbConnectionStringBuilder.ConnectionString = this.ConnectionString;
                     dbConnectionStringBuilder["Password"] = password;
-                    this.connectionString = dbConnectionStringBuilder.ConnectionString;
+                    this.ConnectionString = dbConnectionStringBuilder.ConnectionString;
                 }
             }
         }

@@ -49,11 +49,11 @@ namespace DataCommander.Providers
             set
             {
                 connectionProperties = value;
-                connectionNameTextBox.Text = connectionProperties.connectionName;
-                string providerName = connectionProperties.providerName;
+                connectionNameTextBox.Text = connectionProperties.ConnectionName;
+                string providerName = connectionProperties.ProviderName;
                 providersComboBox.Text = providerName;
                 DbConnectionStringBuilder dbConnectionStringBuilder = new DbConnectionStringBuilder();
-                dbConnectionStringBuilder.ConnectionString = connectionProperties.connectionString;
+                dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
 
                 if (providerName == ProviderName.OleDb)
                 {
@@ -112,7 +112,7 @@ namespace DataCommander.Providers
                 int index = providersComboBox.SelectedIndex;
                 string providerName = providers[ index ];
                 IProvider provider = ProviderFactory.CreateProvider( providerName );
-                tempConnectionProperties.provider = provider;
+                tempConnectionProperties.Provider = provider;
                 this.dbProviderFactory = provider.DbProviderFactory;
                 OleDbFactory oleDbFactory = this.dbProviderFactory as OleDbFactory;
 
@@ -163,7 +163,7 @@ namespace DataCommander.Providers
         {
             ApplicationData applicationData = Application.Instance.ApplicationData;
             ConfigurationNode folder = applicationData.CurrentType;
-            folder = folder.CreateNode( tempConnectionProperties.provider.Name );
+            folder = folder.CreateNode( tempConnectionProperties.Provider.Name );
             string[] dataSourceArray;
             bool contains = folder.Attributes.TryGetAttributeValue<string[]>( "Data Sources", out dataSourceArray );
 
@@ -366,9 +366,9 @@ namespace DataCommander.Providers
                 dbConnectionStringBuilder.Remove( keyword );
             }
 
-            connectionProperties.connectionName = connectionNameTextBox.Text;
-            connectionProperties.providerName = providersComboBox.Text;
-            connectionProperties.connectionString = dbConnectionStringBuilder.ConnectionString;
+            connectionProperties.ConnectionName = connectionNameTextBox.Text;
+            connectionProperties.ProviderName = providersComboBox.Text;
+            connectionProperties.ConnectionString = dbConnectionStringBuilder.ConnectionString;
         }
 
         private void testButton_Click( object sender, EventArgs e )

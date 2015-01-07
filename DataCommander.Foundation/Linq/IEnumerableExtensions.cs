@@ -315,6 +315,17 @@ namespace DataCommander.Foundation.Linq
         /// <summary>
         /// 
         /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static IOrderedEnumerable<TSource> OrderBy<TSource>(this IEnumerable<TSource> source)
+        {
+            return source.OrderBy(IdentityFunction<TSource>.Instance);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
         public static IEnumerable<IndexedItem<TSource>> SelectIndexedItem<TSource>(this IEnumerable<TSource> source)
@@ -618,9 +629,9 @@ namespace DataCommander.Foundation.Linq
 
         private static T Clone<T>(T source)
         {
-            var cloneable = (ICloneable) source;
+            var cloneable = (ICloneable)source;
             Object cloneObject = cloneable.Clone();
-            T clone = (T) cloneObject;
+            T clone = (T)cloneObject;
             return clone;
         }
 

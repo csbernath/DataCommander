@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Sql
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Wmi", "DataCommander.Providers.Wmi\DataCommander.Providers.Wmi.csproj", "{28022DDE-613C-4A13-AE06-27C784E7919B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.SQLite", "DataCommander.Providers.SQLite\DataCommander.Providers.SQLite.csproj", "{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		ClientRelease|Any CPU = ClientRelease|Any CPU
@@ -155,6 +157,26 @@ Global
 		{28022DDE-613C-4A13-AE06-27C784E7919B}.Test|Any CPU.Build.0 = Release|Any CPU
 		{28022DDE-613C-4A13-AE06-27C784E7919B}.Test|x86.ActiveCfg = Release|x86
 		{28022DDE-613C-4A13-AE06-27C784E7919B}.Test|x86.Build.0 = Release|x86
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.ClientRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.ClientRelease|Any CPU.Build.0 = Release|Any CPU
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.ClientRelease|x86.ActiveCfg = Release|x86
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.ClientRelease|x86.Build.0 = Release|x86
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.Debug|x86.ActiveCfg = Debug|x86
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.Debug|x86.Build.0 = Debug|x86
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.NDoc|Any CPU.ActiveCfg = Release|Any CPU
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.NDoc|Any CPU.Build.0 = Release|Any CPU
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.NDoc|x86.ActiveCfg = Release|x86
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.NDoc|x86.Build.0 = Release|x86
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.Release|x86.ActiveCfg = Release|x86
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.Release|x86.Build.0 = Release|x86
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.Test|Any CPU.Build.0 = Release|Any CPU
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.Test|x86.ActiveCfg = Release|x86
+		{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}.Test|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

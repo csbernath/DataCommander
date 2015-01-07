@@ -14,6 +14,17 @@
         /// <typeparam name="TArgument"></typeparam>
         /// <param name="argument"></param>
         /// <returns></returns>
+        public static ArgumentEqualsSelection<TArgument> CreateArgumentEqualsSelection<TArgument>(TArgument argument) where TArgument : IEquatable<TArgument>
+        {
+            return new ArgumentEqualsSelection<TArgument>(argument);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TArgument"></typeparam>
+        /// <param name="argument"></param>
+        /// <returns></returns>
         public static ArgumentIsSelection<TArgument> CreateArgumentIsSelection<TArgument>(TArgument argument) where TArgument : class
         {
             return new ArgumentIsSelection<TArgument>(argument);
@@ -27,6 +38,57 @@
         public static TypeIsSelection CreateTypeIsSelection(Type type)
         {
             return new TypeIsSelection(type);
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TArgument"></typeparam>
+    public sealed class ArgumentEqualsSelection<TArgument> where TArgument : IEquatable<TArgument>
+    {
+        private readonly TArgument argument;
+        private bool selected;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="argument"></param>
+        public ArgumentEqualsSelection(TArgument argument)
+        {
+            this.argument = argument;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="other"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public ArgumentEqualsSelection<TArgument> IfArgumentEquals(TArgument other, Action action)
+        {
+            Contract.Requires(action != null);
+
+            if (!this.selected)
+            {
+                this.selected = this.argument.Equals(other);
+                if (this.selected)
+                {
+                    action();
+                }
+            }
+
+            return this;
+        }
+
+        public void Else(Action action)
+        {
+            Contract.Requires(action != null);
+
+            if (!this.selected)
+            {
+                action();
+            }
         }
     }
 

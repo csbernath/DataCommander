@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Windows.Forms;
     using DataCommander.Foundation.Configuration;
@@ -11,10 +12,11 @@
 
     internal sealed class TfsFile : ITreeNode
     {
-        private Item item;
+        private readonly Item item;
 
         public TfsFile(Item item)
         {
+            Contract.Requires(item != null);
             this.item = item;
         }
 
@@ -61,9 +63,9 @@
         {
             get
             {
-                ContextMenuStrip contextMenu = new ContextMenuStrip();
+                var contextMenu = new ContextMenuStrip();
                 ToolStripItemCollection items = contextMenu.Items;
-                ToolStripMenuItem menuItem = new ToolStripMenuItem("Open", null, this.Open_Click);
+                var menuItem = new ToolStripMenuItem("Open", null, this.Open_Click);
                 items.Add(menuItem);
 
                 ConfigurationNode node = Settings.CurrentType;
@@ -84,7 +86,7 @@
             string localFileName = Path.GetTempPath();
             localFileName = Path.Combine(localFileName, name);
             this.item.DownloadFile(localFileName);
-            ProcessStartInfo startInfo = new ProcessStartInfo(localFileName);
+            var startInfo = new ProcessStartInfo(localFileName);
             Process.Start(startInfo);
         }
 
@@ -92,7 +94,7 @@
         {
             string name = VersionControlPath.GetFileName(this.item.ServerItem);
             string localFileName = Path.GetTempPath();
-            localFileName = Path.Combine(localFileName, name);            
+            localFileName = Path.Combine(localFileName, name);
             this.item.DownloadFile(localFileName);
 
             ConfigurationNode node = Settings.CurrentType;
@@ -100,7 +102,7 @@
             string fileName;
             bool contains = attributes.TryGetAttributeValue<string>("FileName", out fileName);
             string arguments = '"' + localFileName + '"';
-            ProcessStartInfo startInfo = new ProcessStartInfo(fileName, arguments);
+            var startInfo = new ProcessStartInfo(fileName, arguments);
             Process.Start(startInfo);
         }
     }

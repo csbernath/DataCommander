@@ -2132,8 +2132,9 @@ namespace DataCommander
                     this.ShowMessage(e);
                 }
 
-                if (connection.Database != database)
+                if (connection.State == ConnectionState.Open && connection.Database != this.database)
                 {
+                    this.database = connection.Database;
                     this.SetText();
                 }
 
@@ -2178,8 +2179,27 @@ namespace DataCommander
                 {
                     if (connection.State == ConnectionState.Closed)
                     {
-                        connection.Database = database;
-                        connection.Open();
+                        this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, "Connection is closed. Opening connection..."));
+                        
+                        var csb = new SqlConnectionStringBuilder(this.connectionString);
+                        csb.InitialCatalog = this.database;
+
+                        var connectionProperties = new ConnectionProperties
+                        {
+                            Provider = this.provider,
+                            ConnectionString = csb.ConnectionString
+                        };
+                        var openConnectionForm = new OpenConnectionForm(connectionProperties);
+                        if (openConnectionForm.ShowDialog() == DialogResult.OK)
+                        {
+                            this.connection.Connection.Dispose();
+                            this.connection = connectionProperties.Connection;
+                            this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, "Opening connection succeeded."));
+                        }
+                        else
+                        {
+                            this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, "Opening connection canceled."));
+                        }
                     }
                 }
 
@@ -2379,7 +2399,7 @@ namespace DataCommander
 
         private void textBox_SelectionChanged(object sender, EventArgs e)
         {
-            RichTextBox richTextBox = (RichTextBox)sender;
+            var richTextBox = (RichTextBox)sender;
             int charIndex = richTextBox.SelectionStart;
             int line = richTextBox.GetLineFromCharIndex(charIndex) + 1;
             int lineIndex = QueryTextBox.GetLineIndex(richTextBox, -1);
@@ -2404,14 +2424,14 @@ namespace DataCommander
         }
 
         private void AddTable(
-            OleDbConnection connection,
+            OleDbConnection oleDbConnection,
             DataSet dataSet,
             Guid guid,
             string name)
         {
             try
             {
-                DataTable dataTable = connection.GetOleDbSchemaTable(guid, null);
+                DataTable dataTable = oleDbConnection.GetOleDbSchemaTable(guid, null);
                 dataTable.TableName = name;
                 dataSet.Tables.Add(dataTable);
             }
@@ -2429,13 +2449,13 @@ namespace DataCommander
 
                 var oldDbConnection = connection.Connection as OleDbConnection;
 
-                if (oldDbConnection != null && (Query == null || Query.Length == 0))
+                if (oldDbConnection != null && string.IsNullOrEmpty(this.Query))
                 {
                     var dataSet = new DataSet();
                     AddTable(oldDbConnection, dataSet, OleDbSchemaGuid.Provider_Types, "Provider Types");
                     AddTable(oldDbConnection, dataSet, OleDbSchemaGuid.DbInfoLiterals, "DbInfoLiterals");
 
-                    ADODB.Connection c2 = new ADODB.ConnectionClass();
+                    var c2 = new ADODB.ConnectionClass();
                     c2.Open(connectionString, null, null, 0);
                     ADODB.Recordset rs = c2.OpenSchema(ADODB.SchemaEnum.adSchemaDBInfoKeywords, Type.Missing, Type.Missing);
                     DataTable dataTable = OleDBHelper.Convert(rs);
@@ -2591,7 +2611,6 @@ namespace DataCommander
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            // base.OnClosing( e );
             string text = this.queryTextBox.RichTextBox.Text;
             if (this.connection != null)
             {
@@ -2684,7 +2703,7 @@ namespace DataCommander
             }
             else
             {
-                text = "Are you sure you wich to cancel this query?";
+                text = "Are you sure you wish to cancel this query?";
                 string caption = DataCommander.Providers.Application.Instance.Name;
                 DialogResult result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 
@@ -2797,7 +2816,7 @@ namespace DataCommander
 
             if (treeNode.Nodes.Count > 0)
             {
-                ITreeNode treeNode2 = (ITreeNode)treeNode.Nodes[0].Tag;
+                var treeNode2 = (ITreeNode)treeNode.Nodes[0].Tag;
 
                 if (treeNode2 == null)
                 {
@@ -2847,7 +2866,7 @@ namespace DataCommander
 
                     if (treeNode != null)
                     {
-                        ITreeNode treeNode2 = (ITreeNode)treeNode.Tag;
+                        var treeNode2 = (ITreeNode)treeNode.Tag;
 
                         if (e.Button != MouseButtons.Left)
                         {
@@ -2870,7 +2889,7 @@ namespace DataCommander
 
             if (treeNodeV != null)
             {
-                ITreeNode treeNode = (ITreeNode)treeNodeV.Tag;
+                var treeNode = (ITreeNode)treeNodeV.Tag;
                 treeNodeV.Nodes.Clear();
                 AddNodes(treeNodeV.Nodes, treeNode.GetChildren(true), treeNode.Sortable);
             }
@@ -2941,7 +2960,7 @@ namespace DataCommander
 
             if (selectedNode != null)
             {
-                ITreeNode treeNode = (ITreeNode)selectedNode.Tag;
+                var treeNode = (ITreeNode)selectedNode.Tag;
 
                 try
                 {
@@ -2993,7 +3012,7 @@ namespace DataCommander
 
             int charIndex = richTextBox.SelectionStart;
             int currentLineNumber = richTextBox.GetLineFromCharIndex(charIndex) + 1;
-            GotoLineForm form = new GotoLineForm();
+            var form = new GotoLineForm();
             int maxLineNumber = richTextBox.Lines.Length;
             form.Init(currentLineNumber, maxLineNumber);
 
@@ -3061,7 +3080,7 @@ namespace DataCommander
                         throw new NotImplementedException();
                 }
                 IStringMatcher matcher = new StringMatcher(text, comparison);
-                TreeView treeView = control as TreeView;
+                var treeView = control as TreeView;
 
                 if (treeView != null)
                 {
@@ -3092,7 +3111,7 @@ namespace DataCommander
                 }
                 else
                 {
-                    DataTableEditor dataTableViewer = control as DataTableEditor;
+                    var dataTableViewer = control as DataTableEditor;
 
                     if (dataTableViewer == null)
                     {
@@ -3144,7 +3163,7 @@ namespace DataCommander
                     }
                     else
                     {
-                        RichTextBox richTextBox = control as RichTextBox;
+                        var richTextBox = control as RichTextBox;
 
                         if (richTextBox == null)
                         {
@@ -3180,8 +3199,8 @@ namespace DataCommander
                     findTextForm = new FindTextForm();
                 }
 
-                Control control = ActiveControl;
-                DataTableEditor dataTableViewer = control as DataTableEditor;
+                Control control = this.ActiveControl;
+                var dataTableViewer = control as DataTableEditor;
 
                 if (dataTableViewer == null)
                 {
@@ -3191,7 +3210,7 @@ namespace DataCommander
 
                 if (dataTableViewer != null)
                 {
-                    DataTable dataTable = dataTableViewer.DataTable;
+                    var dataTable = dataTableViewer.DataTable;
                     string name = dataTable.TableName;
                     findTextForm.Text = string.Format("Find (DataTable: {0})", name);
                 }
@@ -3233,8 +3252,7 @@ namespace DataCommander
                 this.sbPanelText.Text = string.Format("Saving file {0}...", fileName);
                 this.sbPanelText.ForeColor = SystemColors.ControlText;
 
-                //RichTextBoxStreamType type = RichTextBoxStreamType.PlainText;
-                RichTextBoxStreamType type = RichTextBoxStreamType.UnicodePlainText;
+                var type = RichTextBoxStreamType.UnicodePlainText;
                 Encoding encoding;
 
                 switch (type)
@@ -3269,12 +3287,14 @@ namespace DataCommander
 
         private void ShowSaveFileDialog()
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Title = "Save Query";
-            saveFileDialog.Filter = "Query Files (*.sql)|*.sql";
-            saveFileDialog.AddExtension = true;
-            saveFileDialog.OverwritePrompt = true;
-            saveFileDialog.DefaultExt = "sql";
+            var saveFileDialog = new SaveFileDialog
+            {
+                Title = "Save Query",
+                Filter = "Query Files (*.sql)|*.sql",
+                AddExtension = true,
+                OverwritePrompt = true,
+                DefaultExt = "sql"
+            };
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -3285,9 +3305,9 @@ namespace DataCommander
 
         public void Save()
         {
-            if (fileName != null)
+            if (this.fileName != null)
             {
-                this.Save(fileName);
+                this.Save(this.fileName);
             }
             else
             {
@@ -3574,7 +3594,7 @@ namespace DataCommander
                             xmlWriter.Close();
                         }
 
-                        HtmlTextBox htmlTextBox = new HtmlTextBox();
+                        var htmlTextBox = new HtmlTextBox();
                         htmlTextBox.Dock = DockStyle.Fill;
 
                         TabPage tabPage = new TabPage("Xml");
@@ -3727,20 +3747,25 @@ namespace DataCommander
 
                         while (dataReader.Read())
                         {
-                            object[] values = new object[fieldCount];
+                            var values = new object[fieldCount];
                             dataReaderHelper.GetValues(values);
                             sb = new StringBuilder();
                             sb.Append(insertInto);
 
                             for (int i = 0; i < fieldCount; i++)
                             {
-                                if (i > 0)
+                                sb.Append('\t');
+
+                                if (i == 0)
                                 {
-                                    sb.Append(",\r\n");
+                                    sb.Append(' ');
+                                }
+                                {
+                                    sb.Append(',');
                                 }
 
                                 string s = InsertScriptFileWriter.ToString(values[i]);
-                                sb.AppendFormat("\t{0}\t\tas {1}", s, dataReader.GetName(i));
+                                sb.AppendFormat("{0}\t\tas {1}", s, dataReader.GetName(i));
                             }
 
                             standardOutput.WriteLine(sb);

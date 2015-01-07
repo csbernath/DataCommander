@@ -431,9 +431,9 @@ namespace DataCommander
 
                 var queryForm = new QueryForm(
                     MdiChildren.Length,
-                    connectionProperties.provider,
-                    connectionProperties.connectionString,
-                    connectionProperties.connection,
+                    connectionProperties.Provider,
+                    connectionProperties.ConnectionString,
+                    connectionProperties.Connection,
                     statusBar );
 
                 queryForm.MdiParent = this;
@@ -459,7 +459,7 @@ namespace DataCommander
                 string message = string.Format(
                     "Connection opened in {0} seconds.\r\nServerVersion: {1}",
                     StopwatchTimeSpan.ToString( connectionForm.Duration, 3 ),
-                    connectionProperties.connection.ServerVersion );
+                    connectionProperties.Connection.ServerVersion );
                 var infoMessage = new InfoMessage( OptimizedDateTime.Now, InfoMessageSeverity.Verbose, message );
                 queryForm.AddInfoMessage( infoMessage );
 
@@ -672,9 +672,9 @@ Environment.WorkingSet: {4} MB",
                     connection.Open();
 
                     var connectionProperties = new ConnectionProperties();
-                    connectionProperties.connectionName = null;
-                    connectionProperties.providerName = provider.Name;
-                    connectionProperties.connectionString = connectionString;
+                    connectionProperties.ConnectionName = null;
+                    connectionProperties.ProviderName = provider.Name;
+                    connectionProperties.ConnectionString = connectionString;
                     var node = DataCommander.Providers.Application.Instance.ConnectionsConfigurationNode;
                     var subNode = new ConfigurationNode( null );
                     node.AddChildNode( subNode );

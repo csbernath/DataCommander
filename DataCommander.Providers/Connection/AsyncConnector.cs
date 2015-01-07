@@ -12,7 +12,7 @@
         private ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private readonly ConnectionProperties connectionProperties;
         private WorkerThread thread;
-        private EndConnectionOpen endConnectionOpen;
+        private Action<Exception> endConnectionOpen;
         private long duration;
 
         public AsyncConnector(ConnectionProperties connectionProperties)
@@ -34,15 +34,18 @@
 
             try
             {
-                IProvider provider = ProviderFactory.CreateProvider(connectionProperties.providerName);
-                connectionProperties.provider = provider;
-                ConnectionBase connection = provider.CreateConnection(connectionProperties.connectionString);
+                if (connectionProperties.Provider == null)
+                {
+                    IProvider provider = ProviderFactory.CreateProvider(connectionProperties.ProviderName);
+                    connectionProperties.Provider = provider;
+                }
+                ConnectionBase connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
                 Contract.Assert(connection != null);
-                connection.ConnectionName = connectionProperties.connectionName;
+                connection.ConnectionName = connectionProperties.ConnectionName;
                 this.duration = Stopwatch.GetTimestamp();
                 connection.Open();
                 this.duration = Stopwatch.GetTimestamp() - this.duration;
-                connectionProperties.connection = connection;
+                connectionProperties.Connection = connection;
                 exception = null;
             }
             catch (Exception e)
@@ -53,13 +56,11 @@
             endConnectionOpen(exception);
         }
 
-        public void BeginOpen(EndConnectionOpen endConnectionOpen)
+        public void BeginOpen(Action<Exception> endConnectionOpen)
         {
             Contract.Assert(this.thread == null);
             this.endConnectionOpen = endConnectionOpen;
-            this.thread = new WorkerThread(this.Start);
-            this.thread.Name = "DataCommander.Providers.AsyncConnector.BeginOpen";
-            this.thread.IsBackground = true;
+            this.thread = new WorkerThread(this.Start) {Name = "DataCommander.Providers.AsyncConnector.BeginOpen", IsBackground = true};
             this.thread.Start();
         }
 

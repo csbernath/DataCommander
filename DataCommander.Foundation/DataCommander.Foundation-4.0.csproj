@@ -390,6 +390,7 @@
     <Compile Include="Linq\EnumExtensions.cs" />
     <Compile Include="Linq\Extensions.cs" />
     <Compile Include="Linq\FuncExtensions.cs" />
+    <Compile Include="Linq\IdentityFunction.cs" />
     <Compile Include="Linq\IDictionaryExtensions.cs" />
     <Compile Include="Collections\IndexableCollection\SequenceIndex.cs" />
     <Compile Include="Collections\IndexableCollection\UniqueListIndex.cs" />

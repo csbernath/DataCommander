@@ -27,7 +27,7 @@ namespace DataCommander.Providers.SqlServer2005
         public TableNode(
             DatabaseNode database,
             string owner,
-            string name )
+            string name)
         {
             this.database = database;
             this.owner = owner;
@@ -38,7 +38,7 @@ namespace DataCommander.Providers.SqlServer2005
         {
             get
             {
-                return string.Format( "{0}.{1}", this.owner, this.name );
+                return string.Format("{0}.{1}", this.owner, this.name);
             }
         }
 
@@ -50,7 +50,7 @@ namespace DataCommander.Providers.SqlServer2005
             }
         }
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             return new ITreeNode[]
             {
@@ -69,10 +69,10 @@ namespace DataCommander.Providers.SqlServer2005
 
         internal static string GetSelectStatement(
             IDbConnection connection,
-            DatabaseObjectMultipartName databaseObjectMultipartName )
+            DatabaseObjectMultipartName databaseObjectMultipartName)
         {
-            Contract.Requires( connection != null );
-            Contract.Requires( databaseObjectMultipartName != null );
+            Contract.Requires(connection != null);
+            Contract.Requires(databaseObjectMultipartName != null);
 
             string commandText = string.Format(@"select  c.name
 from    [{0}].sys.schemas s (nolock)
@@ -96,7 +96,7 @@ order by c.column_id",
                 connection.Open();
             }
 
-            using (IDataReader dataReader = connection.ExecuteReader( commandText ))
+            using (IDataReader dataReader = connection.ExecuteReader(commandText))
             {
                 while (dataReader.Read())
                 {
@@ -106,18 +106,18 @@ order by c.column_id",
                     }
                     else
                     {
-                        columnNames.Append( ",\r\n        " );
+                        columnNames.Append(",\r\n        ");
                     }
 
-                    columnNames.Append( '[' );
-                    columnNames.Append( dataReader[ 0 ] );
-                    columnNames.Append( ']' );
+                    columnNames.Append('[');
+                    columnNames.Append(dataReader[0]);
+                    columnNames.Append(']');
                 }
             }
 
             string query = string.Format(
-@"select  {0}
-from    [{1}].[{2}].[{3}]", columnNames, databaseObjectMultipartName.Database, databaseObjectMultipartName.Schema, databaseObjectMultipartName.Name );
+                @"select  {0}
+from    [{1}].[{2}].[{3}]", columnNames, databaseObjectMultipartName.Database, databaseObjectMultipartName.Schema, databaseObjectMultipartName.Name);
 
             return query;
         }
@@ -126,30 +126,30 @@ from    [{1}].[{2}].[{3}]", columnNames, databaseObjectMultipartName.Database, d
         {
             get
             {
-                var name = new DatabaseObjectMultipartName( null, this.database.Name, this.owner, this.name );
+                var name = new DatabaseObjectMultipartName(null, this.database.Name, this.owner, this.name);
                 string connectionString = this.database.Databases.Server.ConnectionString;
                 string text;
-                using (var connection = new SqlConnection( connectionString ))
+                using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    text = GetSelectStatement( connection, name );
+                    text = GetSelectStatement(connection, name);
                 }
                 return text;
             }
         }
 
-        private void Open_Click( object sender, EventArgs e )
+        private void Open_Click(object sender, EventArgs e)
         {
             MainForm mainForm = DataCommander.Providers.Application.Instance.MainForm;
-            var queryForm = (QueryForm) mainForm.ActiveMdiChild;
+            var queryForm = (QueryForm)mainForm.ActiveMdiChild;
             string name = this.database.Name + "." + this.owner + "." + this.name;
             string query = "select * from " + name;
-            queryForm.OpenTable( query );
+            queryForm.OpenTable(query);
         }
 
-        private void Schema_Click( object sender, EventArgs e )
+        private void Schema_Click(object sender, EventArgs e)
         {
-            using (new CursorManager( Cursors.WaitCursor ))
+            using (new CursorManager(Cursors.WaitCursor))
             {
                 string commandText = string.Format(
                     @"use [{0}]
@@ -158,31 +158,31 @@ exec sp_MStablekeys N'{1}.[{2}]', null, 14
 exec sp_MStablechecks N'{1}.[{2}]'",
                     database.Name,
                     owner,
-                    name );
+                    name);
 
-                log.Write( LogLevel.Trace,  commandText );
+                log.Write(LogLevel.Trace, commandText);
                 string connectionString = this.Database.Databases.Server.ConnectionString;
                 DataSet dataSet;
-                using (var connection = new SqlConnection( connectionString ))
+                using (var connection = new SqlConnection(connectionString))
                 {
-                    dataSet = connection.ExecuteDataSet( commandText );
+                    dataSet = connection.ExecuteDataSet(commandText);
                 }
-                DataTable columns = dataSet.Tables[ 0 ];
-                DataTable keys = dataSet.Tables[ 1 ];
+                DataTable columns = dataSet.Tables[0];
+                DataTable keys = dataSet.Tables[1];
 
                 DataTable schema = new DataTable();
-                schema.Columns.Add( " ", typeof( int ) );
-                schema.Columns.Add( "  ", typeof( string ) );
-                schema.Columns.Add( "Name", typeof( string ) );
-                schema.Columns.Add( "Type", typeof( string ) );
-                schema.Columns.Add( "Collation", typeof( string ) );
-                schema.Columns.Add( "Formula", typeof( string ) );
+                schema.Columns.Add(" ", typeof (int));
+                schema.Columns.Add("  ", typeof (string));
+                schema.Columns.Add("Name", typeof (string));
+                schema.Columns.Add("Type", typeof (string));
+                schema.Columns.Add("Collation", typeof (string));
+                schema.Columns.Add("Formula", typeof (string));
 
                 foreach (DataRow column in columns.Rows)
                 {
                     string identity;
 
-                    if (Convert.ToBoolean( column[ "col_identity" ] ))
+                    if (Convert.ToBoolean(column["col_identity"]))
                     {
                         identity = "IDENTITY";
                     }
@@ -192,23 +192,23 @@ exec sp_MStablechecks N'{1}.[{2}]'",
                     }
 
                     StringBuilder sb = new StringBuilder();
-                    string dbType = column[ "col_typename" ].ToString();
-                    sb.Append( dbType );
+                    string dbType = column["col_typename"].ToString();
+                    sb.Append(dbType);
 
                     switch (dbType)
                     {
                         case "decimal":
                         case "numeric":
-                            int precision = Convert.ToInt32( column[ "col_prec" ] );
-                            int scale = Convert.ToInt32( column[ "col_scale" ] );
+                            int precision = Convert.ToInt32(column["col_prec"]);
+                            int scale = Convert.ToInt32(column["col_scale"]);
 
                             if (scale == 0)
                             {
-                                sb.AppendFormat( "({0})", precision );
+                                sb.AppendFormat("({0})", precision);
                             }
                             else
                             {
-                                sb.AppendFormat( "({0},{1})", precision, scale );
+                                sb.AppendFormat("({0},{1})", precision, scale);
                             }
 
                             break;
@@ -218,7 +218,7 @@ exec sp_MStablechecks N'{1}.[{2}]'",
                         case "varchar":
                         case "nvarchar":
                         case "varbinary":
-                            int columnLength = (int) column[ "col_len" ];
+                            int columnLength = (int)column["col_len"];
                             string columnlengthString;
 
                             if (columnLength == -1)
@@ -230,27 +230,27 @@ exec sp_MStablechecks N'{1}.[{2}]'",
                                 columnlengthString = columnLength.ToString();
                             }
 
-                            sb.AppendFormat( "({0})", columnlengthString );
+                            sb.AppendFormat("({0})", columnlengthString);
                             break;
 
                         default:
                             break;
                     }
 
-                    if (!Convert.ToBoolean( column[ "col_null" ] ))
+                    if (!Convert.ToBoolean(column["col_null"]))
                     {
-                        sb.Append( " not null" );
+                        sb.Append(" not null");
                     }
 
-                    string collation = DataCommander.Foundation.Data.Database.GetValue<string>( column[ "collation" ], string.Empty );
+                    string collation = DataCommander.Foundation.Data.Database.GetValue<string>(column["collation"], string.Empty);
                     string formula = string.Empty;
 
-                    if (column[ "text" ] != DBNull.Value)
+                    if (column["text"] != DBNull.Value)
                     {
-                        formula = column[ "text" ].ToString();
+                        formula = column["text"].ToString();
                     }
 
-                    schema.Rows.Add( new object[]
+                    schema.Rows.Add(new object[]
                     {
                         column["col_id"],
                         identity,
@@ -258,20 +258,20 @@ exec sp_MStablechecks N'{1}.[{2}]'",
                         sb.ToString(),
                         collation,
                         formula,
-                    } );
+                    });
                 }
 
                 if (keys.Rows.Count > 0)
                 {
                     DataRow pk = (from row in keys.AsEnumerable()
-                                  where row.Field<byte>( "cType" ) == 1
-                                  select row).FirstOrDefault();
+                        where row.Field<byte>("cType") == 1
+                        select row).FirstOrDefault();
 
                     if (pk != null)
                     {
                         for (int i = 1; i <= 16; i++)
                         {
-                            object keyColObj = pk[ "cKeyCol" + i ];
+                            object keyColObj = pk["cKeyCol" + i];
 
                             if (keyColObj == DBNull.Value)
                             {
@@ -280,40 +280,40 @@ exec sp_MStablechecks N'{1}.[{2}]'",
 
                             string keyCol = keyColObj.ToString();
 
-                            string filter = string.Format( "Name = '{0}'", keyCol );
-                            DataRow dataRow = schema.Select( filter )[ 0 ];
-                            string identity = dataRow[ 1 ].ToString();
+                            string filter = string.Format("Name = '{0}'", keyCol);
+                            DataRow dataRow = schema.Select(filter)[0];
+                            string identity = dataRow[1].ToString();
 
                             if (identity.Length > 0)
                             {
-                                dataRow[ 1 ] = "PKEY," + dataRow[ 1 ];
+                                dataRow[1] = "PKEY," + dataRow[1];
                             }
                             else
                             {
-                                dataRow[ 1 ] = "PKEY";
+                                dataRow[1] = "PKEY";
                             }
                         }
                     }
                 }
 
-                dataSet.Tables.Add( schema );
+                dataSet.Tables.Add(schema);
 
                 MainForm mainForm = DataCommander.Providers.Application.Instance.MainForm;
-                QueryForm queryForm = (QueryForm) mainForm.ActiveMdiChild;
-                queryForm.ShowDataSet( dataSet );
+                QueryForm queryForm = (QueryForm)mainForm.ActiveMdiChild;
+                queryForm.ShowDataSet(dataSet);
             }
         }
 
-        private void ScriptTable_Click( object sender, EventArgs e )
+        private void ScriptTable_Click(object sender, EventArgs e)
         {
-            using (new CursorManager( Cursors.WaitCursor ))
+            using (new CursorManager(Cursors.WaitCursor))
             {
-                var queryForm = (QueryForm) DataCommander.Providers.Application.Instance.MainForm.ActiveMdiChild;
-                queryForm.SetStatusbarPanelText( "Copying table script to clipboard...", SystemColors.ControlText );
+                var queryForm = (QueryForm)DataCommander.Providers.Application.Instance.MainForm.ActiveMdiChild;
+                queryForm.SetStatusbarPanelText("Copying table script to clipboard...", SystemColors.ControlText);
                 var stopwatch = Stopwatch.StartNew();
 
                 string connectionString = this.database.Databases.Server.ConnectionString;
-                var csb = new SqlConnectionStringBuilder( connectionString );
+                var csb = new SqlConnectionStringBuilder(connectionString);
 
                 var connectionInfo = new SqlConnectionInfo();
                 connectionInfo.ApplicationName = csb.ApplicationName;
@@ -332,11 +332,11 @@ exec sp_MStablechecks N'{1}.[{2}]'",
                     connectionInfo.UserName = csb.UserID;
                     connectionInfo.Password = csb.Password;
                 }
-                var connection = new ServerConnection( connectionInfo );
+                var connection = new ServerConnection(connectionInfo);
                 connection.Connect();
-                var server = new Server( connection );
-                var database = server.Databases[ this.database.Name ];
-                var table = database.Tables[ this.name, this.owner ];
+                var server = new Server(connection);
+                var database = server.Databases[this.database.Name];
+                var table = database.Tables[this.name, this.owner];
 
                 var options = new ScriptingOptions();
                 options.Indexes = true;
@@ -350,54 +350,54 @@ exec sp_MStablechecks N'{1}.[{2}]'",
                 options.SchemaQualify = true;
                 options.SchemaQualifyForeignKeysReferences = true;
 
-                var stringCollection = table.Script( options );
+                var stringCollection = table.Script(options);
                 var sb = new StringBuilder();
                 foreach (string s in stringCollection)
                 {
-                    sb.AppendLine( s );
-                    sb.AppendLine( "GO" );
+                    sb.AppendLine(s);
+                    sb.AppendLine("GO");
                 }
 
-                Clipboard.SetText( sb.ToString() );
+                Clipboard.SetText(sb.ToString());
                 stopwatch.Stop();
                 queryForm.SetStatusbarPanelText(
                     string.Format(
                         "Copying table script to clipboard finished in {0} seconds.",
-                        StopwatchTimeSpan.ToString( stopwatch.ElapsedTicks, 3 ) ),
-                    SystemColors.ControlText );
+                        StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)),
+                    SystemColors.ControlText);
             }
         }
 
-        private void Indexes_Click( object sender, EventArgs e )
+        private void Indexes_Click(object sender, EventArgs e)
         {
-            string cmdText = string.Format( "use [{0}] exec sp_helpindex [{1}.{2}]", database.Name, owner, name );
+            string cmdText = string.Format("use [{0}] exec sp_helpindex [{1}.{2}]", database.Name, owner, name);
             string connectionString = this.database.Databases.Server.ConnectionString;
             DataTable dataTable;
-            using (var connection = new SqlConnection( connectionString ))
+            using (var connection = new SqlConnection(connectionString))
             {
-                dataTable = connection.ExecuteDataTable( cmdText );
+                dataTable = connection.ExecuteDataTable(cmdText);
             }
-            dataTable.TableName = string.Format( "{0} indexes", name );
+            dataTable.TableName = string.Format("{0} indexes", name);
             MainForm mainForm = DataCommander.Providers.Application.Instance.MainForm;
-            var queryForm = (QueryForm) mainForm.ActiveMdiChild;
+            var queryForm = (QueryForm)mainForm.ActiveMdiChild;
             var dataSet = new DataSet();
-            dataSet.Tables.Add( dataTable );
-            queryForm.ShowDataSet( dataSet );
+            dataSet.Tables.Add(dataTable);
+            queryForm.ShowDataSet(dataSet);
         }
 
-        private void SelectScript_Click( object sender, EventArgs e )
+        private void SelectScript_Click(object sender, EventArgs e)
         {
-            DatabaseObjectMultipartName name = new DatabaseObjectMultipartName( null, this.database.Name, this.owner, this.name );
+            var name = new DatabaseObjectMultipartName(null, this.database.Name, this.owner, this.name);
             string connectionString = this.database.Databases.Server.ConnectionString;
             string selectStatement;
-            using (var connection = new SqlConnection( connectionString ))
+            using (var connection = new SqlConnection(connectionString))
             {
-                selectStatement = GetSelectStatement( connection, name );
+                selectStatement = GetSelectStatement(connection, name);
             }
-            QueryForm.ShowText( selectStatement );
+            QueryForm.ShowText(selectStatement);
         }
 
-        private void InsertScript_Click( object sender, EventArgs e )
+        private void InsertScript_Click(object sender, EventArgs e)
         {
             string commandText = string.Format(@"select
      c.name
@@ -416,31 +416,35 @@ where
 	s.name = '{1}'
 	and o.name = '{2}'
 order by c.column_id", this.database.Name, this.owner, this.name);
-            log.Write( LogLevel.Trace,  commandText );
+            log.Write(LogLevel.Trace, commandText);
             string connectionString = this.database.Databases.Server.ConnectionString;
             DataTable table;
-            using (var connection = new SqlConnection( connectionString ))
+            using (var connection = new SqlConnection(connectionString))
             {
-                table = connection.ExecuteDataTable( commandText );
+                table = connection.ExecuteDataTable(commandText);
             }
             var sb = new StringBuilder();
 
             bool first = true;
             foreach (DataRow row in table.Rows)
             {
+                char prefix;
+
                 if (first)
                 {
                     first = false;
-                    sb.Append( "declare\r\n" );
+                    sb.Append("declare\r\n");
+                    prefix = ' ';
                 }
                 else
                 {
-                    sb.Append( ",\r\n" );
+                    sb.Append("\r\n");
+                    prefix = ',';
                 }
 
-                string variableName = (string) row[ "name" ];
-                variableName = char.ToLower( variableName[ 0 ] ) + variableName.Substring( 1 );
-                string typeName = (string) row[ "TypeName" ];
+                string variableName = (string)row["name"];
+                variableName = char.ToLower(variableName[0]) + variableName.Substring(1);
+                string typeName = (string)row["TypeName"];
 
                 switch (typeName)
                 {
@@ -448,20 +452,20 @@ order by c.column_id", this.database.Name, this.owner, this.name);
                     case "nchar":
                     case "nvarchar":
                     case "varchar":
-                        short precision = row.Field<short>( "max_length" );
+                        short precision = row.Field<short>("max_length");
                         string precisionString = precision >= 0 ? precision.ToString() : "max";
                         typeName += "(" + precisionString.ToString() + ")";
                         break;
 
                     case "decimal":
-                        int scale = row.Field<int>( "scale" );
+                        int scale = row.Field<int>("scale");
                         if (scale == 0)
                         {
-                            typeName += "(" + row[ "prec" ].ToString() + ")";
+                            typeName += "(" + row["prec"].ToString() + ")";
                         }
                         else
                         {
-                            typeName += "(" + row[ "prec" ].ToString() + ',' + scale + ")";
+                            typeName += "(" + row["prec"].ToString() + ',' + scale + ")";
                         }
                         break;
 
@@ -469,10 +473,10 @@ order by c.column_id", this.database.Name, this.owner, this.name);
                         break;
                 }
 
-                sb.AppendFormat( "    @{0} {1}", variableName, typeName );
+                sb.AppendFormat("    {0}@{1} {2}", prefix, variableName, typeName);
             }
 
-            sb.AppendFormat( "\r\ninsert into {0}.{1}\r\n(\r\n    ", owner, name );
+            sb.AppendFormat("\r\n\r\ninsert into {0}.{1}\r\n(\r\n    ", owner, name);
             first = true;
 
             foreach (DataRow row in table.Rows)
@@ -480,64 +484,62 @@ order by c.column_id", this.database.Name, this.owner, this.name);
                 if (first)
                     first = false;
                 else
-                    sb.Append( ',' );
+                    sb.Append(',');
 
-                sb.Append( row[ "name" ] );
+                sb.Append(row["name"]);
             }
 
-            sb.Append( "\r\n)\r\nselect\r\n" );
+            sb.Append("\r\n)\r\nselect\r\n");
             first = true;
 
-            StringTable st = new StringTable( 3 );
+            var st = new StringTable(3);
             int last = table.Rows.Count - 1;
 
             for (int i = 0; i < table.Rows.Count; i++)
             {
-                DataRow dataRow = table.Rows[ i ];
+                DataRow dataRow = table.Rows[i];
                 StringTableRow stringTableRow = st.NewRow();
-                string variableName = (string) dataRow[ "name" ];
-                variableName = char.ToLower( variableName[ 0 ] ) + variableName.Substring( 1 );
-                stringTableRow[ 1 ] = string.Format( "@{0}", variableName );
-                string s2 = string.Format( "as {0}", dataRow[ "name" ] );
+                string variableName = (string)dataRow["name"];
+                variableName = char.ToLower(variableName[0]) + variableName.Substring(1);
+                char prefix = i == 0 ? ' ' : ',';
+                stringTableRow[1] = string.Format("{0}@{1}", prefix, variableName);
+                string s2 = string.Format("as {0}", dataRow["name"]);
 
-                if (i < last)
-                {
-                    s2 += ',';
-                }
-
-                stringTableRow[ 2 ] = s2;
-                st.Rows.Add( stringTableRow );
+                stringTableRow[2] = s2;
+                st.Rows.Add(stringTableRow);
             }
 
-            StringWriter stringWriter = new StringWriter();
-            st.Write( stringWriter, 4 );
-            sb.Append( stringWriter );
+            var stringWriter = new StringWriter();
+            st.Write(stringWriter, 4);
+            sb.Append(stringWriter);
 
-            QueryForm.ShowText( sb.ToString() );
+            Clipboard.SetText(sb.ToString());
+            var queryForm = (QueryForm)DataCommander.Providers.Application.Instance.MainForm.ActiveMdiChild;
+            queryForm.SetStatusbarPanelText("Copying script to clipboard finished.", SystemColors.ControlText);
         }
 
         public ContextMenuStrip ContextMenu
         {
             get
             {
-                ContextMenuStrip menu = new ContextMenuStrip();
-                ToolStripMenuItem item = new ToolStripMenuItem( "Open", null, Open_Click );
-                menu.Items.Add( item );
+                var menu = new ContextMenuStrip();
+                var item = new ToolStripMenuItem("Open", null, Open_Click);
+                menu.Items.Add(item);
 
-                item = new ToolStripMenuItem( "Script Table", null, ScriptTable_Click );
-                menu.Items.Add( item );
+                item = new ToolStripMenuItem("Script Table", null, ScriptTable_Click);
+                menu.Items.Add(item);
 
-                item = new ToolStripMenuItem( "Schema", null, Schema_Click );
-                menu.Items.Add( item );
+                item = new ToolStripMenuItem("Schema", null, Schema_Click);
+                menu.Items.Add(item);
 
-                item = new ToolStripMenuItem( "Indexes", null, Indexes_Click );
-                menu.Items.Add( item );
+                item = new ToolStripMenuItem("Indexes", null, Indexes_Click);
+                menu.Items.Add(item);
 
-                item = new ToolStripMenuItem( "Select script", null, SelectScript_Click );
-                menu.Items.Add( item );
+                item = new ToolStripMenuItem("Select script", null, SelectScript_Click);
+                menu.Items.Add(item);
 
-                item = new ToolStripMenuItem( "Insert script", null, InsertScript_Click );
-                menu.Items.Add( item );
+                item = new ToolStripMenuItem("Insert script", null, InsertScript_Click);
+                menu.Items.Add(item);
 
                 return menu;
             }

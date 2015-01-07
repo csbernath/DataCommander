@@ -110,7 +110,7 @@ namespace DataCommander.Providers
                 connectionProperties.Load( subFolder );
 
                 var dbConnectionStringBuilder = new DbConnectionStringBuilder();
-                dbConnectionStringBuilder.ConnectionString = connectionProperties.connectionString;
+                dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
                 object obj;
                 bool contains = dbConnectionStringBuilder.TryGetValue( "User ID", out obj );
 
@@ -118,7 +118,7 @@ namespace DataCommander.Providers
                 {
                     string password = ConnectionProperties.GetValue( dbConnectionStringBuilder, "Password" );
                     dbConnectionStringBuilder.Remove( "Password" );
-                    connectionProperties.connectionString = dbConnectionStringBuilder.ConnectionString;
+                    connectionProperties.ConnectionString = dbConnectionStringBuilder.ConnectionString;
                     password = ConnectionProperties.ProtectPassword( password );
                     subFolder.Attributes.SetAttributeValue( "Password", password );
                 }

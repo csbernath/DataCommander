@@ -8,11 +8,11 @@
 
     internal sealed class ServerNode : ITreeNode
     {
-        private string connectionString;
+        private readonly string connectionString;
 
-        public ServerNode( string connectionString )
+        public ServerNode(string connectionString)
         {
-            Contract.Requires( !string.IsNullOrWhiteSpace( connectionString ) );
+            Contract.Requires(!string.IsNullOrWhiteSpace(connectionString));
             this.connectionString = connectionString;
         }
 
@@ -34,7 +34,7 @@
                 using (var connection = new SqlConnection(this.connectionString))
                 {
                     connection.Open();
-                    serverVersion = new Version( connection.ServerVersion ).ToString();
+                    serverVersion = new Version(connection.ServerVersion).ToString();
                 }
 
                 var csb = new SqlConnectionStringBuilder(this.connectionString);
@@ -48,10 +48,7 @@
                     userName = csb.UserID;
                 }
 
-                return string.Format( "{0}(SQL Server {1} - {2}",
-                    csb.DataSource,
-                    serverVersion,
-                    userName );
+                return string.Format("{0}(SQL Server {1} - {2})", csb.DataSource, serverVersion, userName);
             }
         }
 
@@ -63,13 +60,13 @@
             }
         }
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            var node = new DatabaseCollectionNode( this );
-            var securityNode = new SecurityNode( this );
-            var serverObjectCollectionNode = new ServerObjectCollectionNode( this );
-            var jobCollectionNode = new JobCollectionNode( this );
-            return new ITreeNode[] { node, securityNode, serverObjectCollectionNode, jobCollectionNode };
+            var node = new DatabaseCollectionNode(this);
+            var securityNode = new SecurityNode(this);
+            var serverObjectCollectionNode = new ServerObjectCollectionNode(this);
+            var jobCollectionNode = new JobCollectionNode(this);
+            return new ITreeNode[] {node, securityNode, serverObjectCollectionNode, jobCollectionNode};
         }
 
         bool ITreeNode.Sortable

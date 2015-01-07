@@ -2,7 +2,7 @@ namespace DataCommander.Providers.SqlServer2005
 {
     internal sealed class NonSqlObjectName : IObjectName
     {
-        private string objectName;
+        private readonly string objectName;
 
         public NonSqlObjectName(string objectName)
         {

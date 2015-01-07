@@ -21,7 +21,7 @@ namespace DataCommander.Providers
         private Button newButton;
         private StatusStrip statusBar;
         private ConnectionProperties connectionProperties;
-        private DataTable dataTable = new DataTable();
+        private readonly DataTable dataTable = new DataTable();
         private long duration;
         private bool isDirty;
 
@@ -221,10 +221,10 @@ namespace DataCommander.Providers
         {
             ConnectionProperties connectionProperties = new ConnectionProperties();
             connectionProperties.Load(folder);
-            row["ConnectionName"] = connectionProperties.connectionName;
-            row["ProviderName"] = connectionProperties.providerName;
+            row["ConnectionName"] = connectionProperties.ConnectionName;
+            row["ProviderName"] = connectionProperties.ProviderName;
             DbConnectionStringBuilder dbConnectionStringBuilder = new DbConnectionStringBuilder();
-            dbConnectionStringBuilder.ConnectionString = connectionProperties.connectionString;
+            dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
 
             foreach (string key in dbConnectionStringBuilder.Keys)
             {
@@ -525,10 +525,10 @@ namespace DataCommander.Providers
                     DataCommander.Providers.Application.Instance.SaveApplicationData();
                 }
             }
-            ConnectionProperties connectionProperties = new ConnectionProperties();
+            var connectionProperties = new ConnectionProperties();
             connectionProperties.Load(folder);
             connectionProperties.LoadProtectedPassword(folder);
-            OpenConnectionForm form = new OpenConnectionForm(connectionProperties);
+            var form = new OpenConnectionForm(connectionProperties);
             if (form.ShowDialog() == DialogResult.OK)
             {
                 this.connectionProperties = connectionProperties;
@@ -626,38 +626,6 @@ namespace DataCommander.Providers
         {
             this.Delete();
             e.Cancel = true;
-        }
-    }
-
-    internal sealed class DataRowSelector
-    {
-        private DataColumn column;
-        private Graphics graphics;
-        private Font font;
-
-        public DataRowSelector(DataColumn column, Graphics graphics, Font font)
-        {
-            this.column = column;
-            this.graphics = graphics;
-            this.font = font;
-        }
-
-        public float GetWidth(DataRow row)
-        {
-            string s = row[column].ToString();
-            int length = s.Length;
-            float width;
-
-            if (length <= 256)
-            {
-                width = graphics.MeasureString(s, font).Width;
-            }
-            else
-            {
-                width = 100;
-            }
-
-            return width;
         }
     }
 }

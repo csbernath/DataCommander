@@ -1,13 +1,13 @@
-using System.Data.SqlClient;
-using System.Text;
-
 namespace DataCommander.Providers.SqlServer2005
 {
+    using System.Data.SqlClient;
+    using System.Text;
+
     internal sealed class ObjectName : IObjectName
     {
         private SqlObject sqlObject;
-        private string schemaName;
-        private string objectName;
+        private readonly string schemaName;
+        private readonly string objectName;
 
         public ObjectName(SqlObject sqlObject, string schemaName, string objectName)
         {

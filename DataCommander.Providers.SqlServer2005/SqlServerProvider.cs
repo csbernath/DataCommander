@@ -5,6 +5,7 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Data;
     using System.Data.Common;
     using System.Data.SqlClient;
+    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -53,7 +54,7 @@ namespace DataCommander.Providers.SqlServer2005
         {
             get
             {
-                return "MSSqlServer";
+                return "SqlServer2005";
             }
         }
 
@@ -1035,6 +1036,7 @@ order by ic.index_column_id
 
         internal static List<InfoMessage> ToInfoMessages(SqlErrorCollection sqlErrors)
         {
+            Contract.Requires(sqlErrors != null);
             DateTime now = OptimizedDateTime.Now;
             int count = sqlErrors.Count;
             var messages = new List<InfoMessage>(sqlErrors.Count);
