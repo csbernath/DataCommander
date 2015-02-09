@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 #endif
 
 [assembly: AssemblyConfiguration("Major")]
-[assembly: AssemblyCopyright("Copyright (C) 2009-2014 DataCommander")]
+[assembly: AssemblyCopyright("Copyright (C) 2009-2015 DataCommander")]
 [assembly: AssemblyCompany("DataCommander")]
 [assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]
@@ -28,7 +28,7 @@ using System.Runtime.InteropServices;
     #endif
 #elif FOUNDATION_4_5
     #if !TEST
-    [assembly: AssemblyVersion("1.0.0.0")]
+    [assembly: AssemblyVersion("7.0.0.0")]
     [assembly: AssemblyTitle("DataCommander.Foundation-4.5")]
     #endif
 #endif

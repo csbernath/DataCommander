@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DataCommander.Providers.SqlServer2005</RootNamespace>
     <AssemblyName>DataCommander.Providers.SqlServer2005</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -86,6 +86,7 @@
     <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>%28none%29</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -95,6 +96,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -123,11 +125,13 @@
     <CodeContractsCacheAnalysisResults>False</CodeContractsCacheAnalysisResults>
     <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>%28none%29</CodeContractsReferenceAssembly>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Release\</OutputPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.SqlServer.ConnectionInfo, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
@@ -155,6 +159,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FieldReader\DoubleFieldReader.cs" />
+    <Compile Include="FieldReader\LongStringFieldReader.cs" />
+    <Compile Include="FieldReader\MoneyDataFieldReader.cs" />
     <Compile Include="NonSqlObjectName.cs" />
     <Compile Include="ObjectExplorer\ColumnCollectionNode.cs" />
     <Compile Include="ObjectExplorer\ColumnNode.cs" />
@@ -184,7 +191,9 @@
     <Compile Include="ObjectExplorer\UserDefinedTableTypeCollectionNode.cs" />
     <Compile Include="ObjectExplorer\UserDefinedTableTypeNode.cs" />
     <Compile Include="ObjectName.cs" />
-    <Compile Include="SqlDataReaderHelper.cs" />
+    <Compile Include="FieldReader\ShortStringFieldReader.cs" />
+    <Compile Include="FieldReader\SmallDateTimeDataFieldReader.cs" />
+    <Compile Include="FieldReader\SqlDataReaderHelper.cs" />
     <Compile Include="SqlObjectTypesExtensions.cs" />
     <Compile Include="SqlServerObject.cs" />
     <Compile Include="SqlServerObjectType.cs" />
@@ -200,11 +209,13 @@
     <Compile Include="ObjectExplorer\UserNode.cs" />
     <Compile Include="ObjectExplorer\ViewCollectionNode.cs" />
     <Compile Include="ObjectExplorer\ViewNode.cs" />
+    <Compile Include="FieldReader\TimeStampDataFieldReader.cs" />
+    <Compile Include="FieldReader\VariantDataFieldReader.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataCommander.Foundation\DataCommander.Foundation-4.0.csproj">
+    <ProjectReference Include="..\DataCommander.Foundation\DataCommander.Foundation-4.5.csproj">
       <Project>{1bacf0aa-4122-4c10-a8d2-248542af054c}</Project>
-      <Name>DataCommander.Foundation-4.0</Name>
+      <Name>DataCommander.Foundation-4.5</Name>
     </ProjectReference>
     <ProjectReference Include="..\DataCommander.Providers\DataCommander.Providers.csproj">
       <Project>{31A30A80-D1B6-4867-A65E-188DE9E912C8}</Project>

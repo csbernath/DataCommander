@@ -81,6 +81,10 @@
             return this;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
         public void Else(Action action)
         {
             Contract.Requires(action != null);

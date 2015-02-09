@@ -3,7 +3,7 @@ namespace DataCommander.Foundation.Threading.Tasks
     using System;
     using System.Collections.Generic;
     using System.Threading;
-#if FOUNDATION_4_0
+#if FOUNDATION_4_0 || FOUNDATION_4_5
     using System.Threading.Tasks;
 #endif
     using DataCommander.Foundation.Diagnostics;

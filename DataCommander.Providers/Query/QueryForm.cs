@@ -505,7 +505,8 @@ namespace DataCommander
                     foreach (DataTable dataTable in dataSet.Tables)
                     {
                         var commandBuilder = this.provider.DbProviderFactory.CreateCommandBuilder();
-                        var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataTable, tableSchema, this.resultWriterType, !this.openTableMode, this.sbPanelText);
+                        var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataTable, tableSchema, this.resultWriterType, !this.openTableMode,
+                            this.sbPanelText);
                         control.Dock = DockStyle.Fill;
                         //text = string.Format("Table {0}", index);
                         text = dataTable.TableName;
@@ -520,7 +521,8 @@ namespace DataCommander
                 else
                 {
                     var commandBuilder = this.provider.DbProviderFactory.CreateCommandBuilder();
-                    var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataSet.Tables[0], tableSchema, this.resultWriterType, !this.openTableMode, this.sbPanelText);
+                    var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataSet.Tables[0], tableSchema, this.resultWriterType, !this.openTableMode,
+                        this.sbPanelText);
                     control.Dock = DockStyle.Fill;
                     resultSetTabPage.Controls.Add(control);
                 }
@@ -1541,13 +1543,13 @@ namespace DataCommander
         {
             if (e.Button == MouseButtons.Right)
             {
-                ContextMenuStrip contextMenu = new ContextMenuStrip(this.components);
+                var contextMenu = new ContextMenuStrip(this.components);
                 Array values = Enum.GetValues(typeof (ResultWriterType));
 
                 for (int i = 0; i < values.Length; i++)
                 {
-                    ResultWriterType tableStyle = (ResultWriterType)values.GetValue(i);
-                    ToolStripMenuItem item = new ToolStripMenuItem();
+                    var tableStyle = (ResultWriterType)values.GetValue(i);
+                    var item = new ToolStripMenuItem();
                     item.Text = tableStyle.ToString();
                     item.Tag = tableStyle;
                     item.Click += this.TableStyleMenuItem_Click;
@@ -1564,7 +1566,6 @@ namespace DataCommander
         {
             this.ExecuteQuerySingleRow();
         }
-
 
         private void ExecuteQuery()
         {
@@ -2180,7 +2181,7 @@ namespace DataCommander
                     if (connection.State == ConnectionState.Closed)
                     {
                         this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, "Connection is closed. Opening connection..."));
-                        
+
                         var csb = new SqlConnectionStringBuilder(this.connectionString);
                         csb.InitialCatalog = this.database;
 
@@ -3569,40 +3570,51 @@ namespace DataCommander
                     while (true)
                     {
                         var writer = new StringWriter();
+                        bool read = false;
 
                         while (dataReader.Read())
                         {
+                            if (!read)
+                            {
+                                read = true;
+                            }
+
                             string fragment = (string)dataReader[0];
                             writer.Write(fragment);
                         }
 
-                        string xml = writer.ToString();
-                        var xmlDocument = new XmlDocument();
-                        string path = Path.GetTempFileName() + ".xml";
-
-                        try
+                        if (read)
                         {
-                            xmlDocument.LoadXml(xml);
-                            xmlDocument.Save(path);
+                            string xml = writer.ToString();
+                            var xmlDocument = new XmlDocument();
+                            string path = Path.GetTempFileName() + ".xml";
+
+                            try
+                            {
+                                xmlDocument.LoadXml(xml);
+                                xmlDocument.Save(path);
+                            }
+                            catch
+                            {
+                                var xmlWriter = new XmlTextWriter(path, Encoding.UTF8);
+                                xmlWriter.WriteStartElement("DataCommanderRoot");
+                                xmlWriter.WriteRaw(xml);
+                                xmlWriter.WriteEndElement();
+                                xmlWriter.Close();
+                            }
+
+                            var resultSetTabPage = new TabPage("Xml");
+                            this.resultSetsTabControl.TabPages.Add(resultSetTabPage);
+
+                            var htmlTextBox = new HtmlTextBox();
+                            htmlTextBox.Dock = DockStyle.Fill;
+
+                            resultSetTabPage.Controls.Add(htmlTextBox);
+
+                            htmlTextBox.Navigate(path);
+                            resultSetsTabControl.SelectedTab = resultSetTabPage;
+                            this.tabControl.SelectedTab = resultSetsTabPage;
                         }
-                        catch
-                        {
-                            var xmlWriter = new XmlTextWriter(path, Encoding.UTF8);
-                            xmlWriter.WriteStartElement("DataCommanderRoot");
-                            xmlWriter.WriteRaw(xml);
-                            xmlWriter.WriteEndElement();
-                            xmlWriter.Close();
-                        }
-
-                        var htmlTextBox = new HtmlTextBox();
-                        htmlTextBox.Dock = DockStyle.Fill;
-
-                        TabPage tabPage = new TabPage("Xml");
-                        tabControl.TabPages.Add(tabPage);
-                        tabPage.Controls.Add(htmlTextBox);
-
-                        htmlTextBox.Navigate(path);
-                        tabControl.SelectedTab = tabPage;
 
                         if (!dataReader.NextResult())
                         {

@@ -179,7 +179,17 @@
             DataRowCollection dataRows = dataTable.Rows;
             int rowCount = dataView.Count;
             int columnCount = dataTable.Columns.Count;
-            string currentValue = dataTable.DefaultView[rowIndex][columnIndex].ToString();
+            object currentValueObject = dataTable.DefaultView[rowIndex][columnIndex];
+            string currentValue;
+            if (currentValueObject is StringField)
+            {
+                var stringField = currentValueObject as StringField;
+                currentValue = stringField.Value;
+            }
+            else
+            {
+                currentValue = currentValueObject.ToString();
+            }
 
             if (matcher.IsMatch(currentValue))
             {

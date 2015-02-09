@@ -292,7 +292,7 @@ namespace DataCommander.Providers.SqlServer2005
             }
             catch (Exception e)
             {
-                string message = this.GetExceptionMessage(e);
+                string message = ((IProvider)this).GetExceptionMessage(e);
                 log.Write(LogLevel.Error, message);
             }
 
@@ -465,11 +465,11 @@ namespace DataCommander.Providers.SqlServer2005
             {
                 SqlObject sqlObject = sqlStatement.FindSqlObject(previousToken, currentToken);
                 string commandText = null;
-                int i;
 
                 if (sqlObject != null)
                 {
                     DatabaseObjectMultipartName name;
+                    int i;
 
                     switch (sqlObject.Type)
                     {
@@ -494,8 +494,13 @@ namespace DataCommander.Providers.SqlServer2005
                             {
                                 case 0:
                                 case 1:
+                                {
                                     statements.Add(SqlServerObject.GetDatabases());
                                     statements.Add(SqlServerObject.GetSchemas());
+
+                                    var objectTypes = sqlObject.Type.ToObjectTypes();
+                                    statements.Add(SqlServerObject.GetObjects(schema: "dbo", objectTypes: objectTypes));
+                                }
                                     break;
 
                                 case 2:
@@ -709,7 +714,7 @@ order by 1", name.Database);
             return new SqlDataParameter(sqlParameter);
         }
 
-        public string GetExceptionMessage(Exception exception)
+        string IProvider.GetExceptionMessage(Exception exception)
         {
             string message;
             var sqlException = exception as SqlException;

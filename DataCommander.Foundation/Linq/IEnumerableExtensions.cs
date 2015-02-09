@@ -152,6 +152,37 @@ namespace DataCommander.Foundation.Linq
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
+        /// <param name="partitionSize"></param>
+        /// <returns></returns>
+        public static IEnumerable<List<T>> GetPartitions<T>(this IEnumerable<T> source, int partitionSize)
+        {
+            Contract.Requires(source != null);
+            Contract.Requires(partitionSize > 0);
+
+            var partition = new List<T>(partitionSize);
+
+            foreach (var item in source)
+            {
+                if (partition.Count == partitionSize)
+                {
+                    yield return partition;
+                    partition = new List<T>(partitionSize);
+                }
+
+                partition.Add(item);
+            }
+
+            if (partition.Count > 0)
+            {
+                yield return partition;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
         public static IndexedItem<T> IndexOf<T>(this IEnumerable<T> source, Func<T, Boolean> predicate)

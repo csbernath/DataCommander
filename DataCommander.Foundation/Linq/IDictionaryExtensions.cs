@@ -58,6 +58,31 @@
         /// </summary>
         /// <typeparam name="TKey"></typeparam>
         /// <typeparam name="TValue"></typeparam>
+        /// <param name="dictionary"></param>
+        /// <param name="key"></param>
+        /// <param name="valueFactory"></param>
+        /// <returns></returns>
+        public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> valueFactory)
+        {
+            Contract.Requires(dictionary != null);
+            Contract.Requires(valueFactory != null);
+
+            TValue value;
+
+            if (!dictionary.TryGetValue(key, out value))
+            {
+                value = valueFactory(key);
+                dictionary.Add(key, value);
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
         private sealed class ReadOnlyDictionary<TKey, TValue> : IDictionary<TKey, TValue>
         {
             /// <summary>

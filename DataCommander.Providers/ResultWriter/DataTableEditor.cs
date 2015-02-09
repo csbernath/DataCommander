@@ -102,7 +102,7 @@ namespace DataCommander.Providers
                     {
                         var textBoxColumn = new DataGridViewTextBoxColumn();
                         textBoxColumn.DataPropertyName = dataColumn.ColumnName;
-                        
+
                         string columnName;
                         if (dataColumn.ExtendedProperties.ContainsKey("ColumnName"))
                         {
@@ -799,8 +799,7 @@ namespace DataCommander.Providers
             }
         }
 
-        private
-            void CopyTable_Click(object sender, EventArgs e)
+        private void CopyTable_Click(object sender, EventArgs e)
         {
             try
             {

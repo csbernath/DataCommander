@@ -8,7 +8,7 @@ namespace DataCommander.Providers.SqlServer2005
 
     internal sealed class ViewCollectionNode : ITreeNode
     {
-        public ViewCollectionNode( DatabaseNode database )
+        public ViewCollectionNode(DatabaseNode database)
         {
             this.database = database;
         }
@@ -29,34 +29,33 @@ namespace DataCommander.Providers.SqlServer2005
             }
         }
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText = @"select	u.name	as [Schema],
-	o.name	as Name
-from	{0}.dbo.sysobjects o (nolock)
-join	{0}.dbo.sysusers u (nolock)
-on	o.uid	= u.uid
-where	o.xtype	= 'V'
-        and o.uid not in(3,4)
-order by u.name,o.name";
-            commandText = string.Format( commandText, database.Name );
+            string commandText = @"select
+     s.name as SchemaName
+    ,v.name as ViewName
+from [{0}].sys.views v (nolock)
+join [{0}].sys.schemas s (nolock)
+    on v.schema_id = s.schema_id
+order by s.name,v.name";
+            commandText = string.Format(commandText, database.Name);
             string connectionString = this.database.Databases.Server.ConnectionString;
             DataTable dataTable;
-            using (var connection = new SqlConnection( connectionString ))
+            using (var connection = new SqlConnection(connectionString))
             {
-                dataTable = connection.ExecuteDataTable( null, commandText, CommandType.Text, 0 );
+                dataTable = connection.ExecuteDataTable(null, commandText, CommandType.Text, 0);
             }
             DataRowCollection dataRows = dataTable.Rows;
             int count = dataRows.Count;
             List<ITreeNode> treeNodes = new List<ITreeNode>();
-            treeNodes.Add( new SystemViewCollectionNode( this.database ) );
+            treeNodes.Add(new SystemViewCollectionNode(this.database));
 
             for (int i = 0; i < count; i++)
             {
-                DataRow row = dataRows[ i ];
-                string schema = (string) row[ 0 ];
-                string name = (string) row[ 1 ];
-                treeNodes.Add( new ViewNode( database, schema, name ) );
+                DataRow row = dataRows[i];
+                string schema = (string)row[0];
+                string name = (string)row[1];
+                treeNodes.Add(new ViewNode(database, schema, name));
             }
 
             return treeNodes;
