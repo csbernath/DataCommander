@@ -12,7 +12,7 @@ namespace DataCommander.Foundation.Threading
         private WorkerThreadPool pool;
         private WorkerThread thread;
         private WaitCallback callback;
-        private Int64 lastActivityTimestamp;
+        private long lastActivityTimestamp;
 
         /// <summary>
         /// 
@@ -30,7 +30,7 @@ namespace DataCommander.Foundation.Threading
 
             while (!this.thread.IsStopRequested)
             {
-                Boolean dequeued = this.pool.Dequeue(this.callback, waitHandles);
+                bool dequeued = this.pool.Dequeue(this.callback, waitHandles);
 
                 if (dequeued)
                 {
@@ -58,7 +58,7 @@ namespace DataCommander.Foundation.Threading
             }
         }
 
-        internal Int64 LastActivityTimestamp
+        internal long LastActivityTimestamp
         {
             get
             {

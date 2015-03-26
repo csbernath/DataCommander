@@ -42,7 +42,7 @@
 
         private void ConnectionAfterOpen( object sender, AfterOpenDbConnectionEventArgs e )
         {
-            Int64 duration = e.Timestamp - this.beforeOpen.Timestamp;
+            long duration = e.Timestamp - this.beforeOpen.Timestamp;
             if (e.Exception != null)
             {
                 log.Write( LogLevel.Error, "Opening connection finished in {0} seconds. Exception:\r\n{1}", StopwatchTimeSpan.ToString( duration, 3 ), e.Exception.ToLogString() );
@@ -60,9 +60,9 @@
             this.beforeExecuteReader = e;
         }
 
-        private static String ToString( LoggedDbCommandInfo command, Int64 duration )
+        private static string ToString( LoggedDbCommandInfo command, long duration )
         {
-            return String.Format(
+            return string.Format(
                 "Executing command started in {0} seconds.\r\ncommandId: {1},connectionState: {2},database: {3},executionType: {4},commandType: {5},commandTimeout: {6}\r\ncommandText: {7}\r\nparameters:\r\n{8}",
                     StopwatchTimeSpan.ToString( duration, 3 ),
                     command.CommandId,
@@ -77,7 +77,7 @@
 
         private void ConnectionAfterExecuteReader( object sender, AfterExecuteCommandEventArgs e )
         {
-            Int64 duration = e.Timestamp - this.beforeExecuteReader.Timestamp;
+            long duration = e.Timestamp - this.beforeExecuteReader.Timestamp;
             if (e.Exception != null)
             {
                 log.Write( LogLevel.Error, "{0}\r\nException:\r\n{1}", ToString( e.Command, duration ), e.Exception.ToLogString() );
@@ -91,7 +91,7 @@
 
         private void ConnectionAfterRead( object sender, AfterReadEventArgs e )
         {
-            Int64 duration = e.Timestamp - this.beforeExecuteReader.Timestamp;
+            long duration = e.Timestamp - this.beforeExecuteReader.Timestamp;
             log.Trace("{0} row(s) read in {1} seconds.", e.RowCount, StopwatchTimeSpan.ToString( duration, 3 ) );
         }
     }

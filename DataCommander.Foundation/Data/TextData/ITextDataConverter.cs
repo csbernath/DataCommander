@@ -13,7 +13,7 @@
         /// <param name="source"></param>
         /// <param name="column"></param>
         /// <returns></returns>
-        Object FromString(String source, TextDataColumn column);
+        object FromString(string source, TextDataColumn column);
 
         /// <summary>
         /// 
@@ -21,6 +21,6 @@
         /// <param name="value"></param>
         /// <param name="column"></param>
         /// <returns></returns>
-        String ToString(Object value, TextDataColumn column);
+        string ToString(object value, TextDataColumn column);
     }
 }

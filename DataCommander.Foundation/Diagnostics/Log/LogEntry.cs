@@ -8,14 +8,14 @@ namespace DataCommander.Foundation.Diagnostics
     public class LogEntry
     {
         #region Private Fields
-        private readonly Int64 id;
-        private readonly String logName;
+        private readonly long id;
+        private readonly string logName;
         private DateTime creationTime;
-        private Int32 managedThreadId;
-        private String threadName;
-        private String userName;
-        private String hostName;
-        private String message;
+        private int managedThreadId;
+        private string threadName;
+        private string userName;
+        private string hostName;
+        private string message;
         private LogLevel logLevel;
         #endregion
 
@@ -32,14 +32,14 @@ namespace DataCommander.Foundation.Diagnostics
         /// <param name="message"></param>
         /// <param name="logLevel"></param>
         public LogEntry(
-            Int64 id,
-            String logName,
+            long id,
+            string logName,
             DateTime creationTime,
-            Int32 managedThreadId,
-            String threadName,
-            String userName,
-            String hostName,
-            String message,
+            int managedThreadId,
+            string threadName,
+            string userName,
+            string hostName,
+            string message,
             LogLevel logLevel)
         {
             this.id = id;
@@ -56,7 +56,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public Int64 Id
+        public long Id
         {
             get
             {
@@ -67,7 +67,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public String LogName
+        public string LogName
         {
             get
             {
@@ -89,7 +89,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public Int32 ManagedThreadId
+        public int ManagedThreadId
         {
             get
             {
@@ -100,7 +100,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public String ThreadName
+        public string ThreadName
         {
             get
             {
@@ -111,7 +111,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public String HostName
+        public string HostName
         {
             get
             {
@@ -122,7 +122,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public String UserName
+        public string UserName
         {
             get
             {
@@ -133,7 +133,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public String Message
+        public string Message
         {
             get
             {

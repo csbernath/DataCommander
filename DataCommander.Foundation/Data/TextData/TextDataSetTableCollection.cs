@@ -12,7 +12,7 @@
     {
         private IndexableCollection<TextDataSetTable> collection;
         private ListIndex<TextDataSetTable> listIndex;
-        private UniqueIndex<String, TextDataSetTable> nameIndex;
+        private UniqueIndex<string, TextDataSetTable> nameIndex;
 
         /// <summary>
         /// 
@@ -20,7 +20,7 @@
         public TextDataSetTableCollection()
         {
             this.listIndex = new ListIndex<TextDataSetTable>( "List" );
-            this.nameIndex = new UniqueIndex<String, TextDataSetTable>(
+            this.nameIndex = new UniqueIndex<string, TextDataSetTable>(
                 "Name",
                 item => GetKeyResponse.Create( true, item.Name ),
                 SortOrder.None );
@@ -33,7 +33,7 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Boolean Contains( String name )
+        public bool Contains( string name )
         {
             return this.nameIndex.ContainsKey( name );
         }
@@ -43,7 +43,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public TextDataSetTable this[ Int32 index ]
+        public TextDataSetTable this[ int index ]
         {
             get
             {
@@ -56,7 +56,7 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public TextDataSetTable this[ String name ]
+        public TextDataSetTable this[ string name ]
         {
             get
             {
@@ -68,22 +68,22 @@
 
         #region IList<TextDataSetTable> Members
 
-        Int32 IList<TextDataSetTable>.IndexOf( TextDataSetTable item )
+        int IList<TextDataSetTable>.IndexOf( TextDataSetTable item )
         {
             throw new NotImplementedException();
         }
 
-        void IList<TextDataSetTable>.Insert( Int32 index, TextDataSetTable item )
+        void IList<TextDataSetTable>.Insert( int index, TextDataSetTable item )
         {
             throw new NotImplementedException();
         }
 
-        void IList<TextDataSetTable>.RemoveAt( Int32 index )
+        void IList<TextDataSetTable>.RemoveAt( int index )
         {
             throw new NotImplementedException();
         }
 
-        TextDataSetTable IList<TextDataSetTable>.this[ Int32 index ]
+        TextDataSetTable IList<TextDataSetTable>.this[ int index ]
         {
             get
             {
@@ -115,12 +115,12 @@
             this.collection.Clear();
         }
 
-        Boolean ICollection<TextDataSetTable>.Contains( TextDataSetTable item )
+        bool ICollection<TextDataSetTable>.Contains( TextDataSetTable item )
         {
             throw new NotImplementedException();
         }
 
-        void ICollection<TextDataSetTable>.CopyTo( TextDataSetTable[] array, Int32 arrayIndex )
+        void ICollection<TextDataSetTable>.CopyTo( TextDataSetTable[] array, int arrayIndex )
         {
             throw new NotImplementedException();
         }
@@ -128,7 +128,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {
@@ -136,7 +136,7 @@
             }
         }
 
-        Boolean ICollection<TextDataSetTable>.IsReadOnly
+        bool ICollection<TextDataSetTable>.IsReadOnly
         {
             get
             {
@@ -144,7 +144,7 @@
             }
         }
 
-        Boolean ICollection<TextDataSetTable>.Remove( TextDataSetTable item )
+        bool ICollection<TextDataSetTable>.Remove( TextDataSetTable item )
         {
             throw new NotImplementedException();
         }

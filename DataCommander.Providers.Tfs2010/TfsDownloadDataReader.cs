@@ -90,7 +90,7 @@
 					}
 
 					var queryForm = (QueryForm) Application.Instance.MainForm.ActiveMdiChild;
-                    queryForm.AddInfoMessage( new InfoMessage( OptimizedDateTime.Now, InfoMessageSeverity.Information, string.Format( "localPath: {0}", localPath ) ) );
+                    queryForm.AddInfoMessage( new InfoMessage( LocalTime.Default.Now, InfoMessageSeverity.Information, string.Format( "localPath: {0}", localPath ) ) );
 
 
 					if (!VersionControlPath.IsValidPath( serverPath ))

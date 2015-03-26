@@ -37,7 +37,7 @@
         /// 
         /// </summary>
         /// <param name="databaseName"></param>
-        public override void ChangeDatabase( String databaseName )
+        public override void ChangeDatabase( string databaseName )
         {
             throw new NotImplementedException();
         }
@@ -52,7 +52,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override String ConnectionString
+        public override string ConnectionString
         {
             get
             {
@@ -77,7 +77,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override String DataSource
+        public override string DataSource
         {
             get
             {
@@ -88,7 +88,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override String Database
+        public override string Database
         {
             get
             {
@@ -106,7 +106,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override String ServerVersion
+        public override string ServerVersion
         {
             get
             {

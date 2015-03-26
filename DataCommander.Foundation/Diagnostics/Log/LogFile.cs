@@ -7,21 +7,21 @@ namespace DataCommander.Foundation.Diagnostics
     internal sealed class LogFile : ILogFile
     {
         private static readonly ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
-        private String path;
-        private String fileName;
+        private string path;
+        private string fileName;
         private DateTime date;
         private FileStream fileStream;
         private readonly Encoding encoding;
-        private Int32 bufferSize;
-        private Boolean autoFlush;
+        private int bufferSize;
+        private bool autoFlush;
         private ILogFormatter formatter;
         private FileAttributes fileAttributes;
 
         public LogFile(
-            String path,
+            string path,
             Encoding encoding,
-            Int32 bufferSize,
-            Boolean autoFlush,
+            int bufferSize,
+            bool autoFlush,
             ILogFormatter formatter,
             FileAttributes fileAttributes)
         {
@@ -33,11 +33,11 @@ namespace DataCommander.Foundation.Diagnostics
             this.fileAttributes = fileAttributes;
         }
 
-        private static String GetNextFileName( String path, out DateTime date )
+        private static string GetNextFileName( string path, out DateTime date )
         {
             date = DateTime.Today;
             var sb = new StringBuilder();
-            String directoryName = Path.GetDirectoryName( path );
+            string directoryName = Path.GetDirectoryName( path );
 
             if (directoryName.Length > 0)
             {
@@ -50,15 +50,15 @@ namespace DataCommander.Foundation.Diagnostics
             sb.Append( date.ToString( "yyyy.MM.dd" ) );
             sb.Append( " [{0}]" );
             sb.Append( Path.GetExtension( path ) );
-            String format = sb.ToString();
-            Int32 id = 0;
-            String idStr = null;
+            string format = sb.ToString();
+            int id = 0;
+            string idStr = null;
 
             while (true)
             {
                 idStr = id.ToString().PadLeft( 2, '0' );
-                String fileName = String.Format( format, idStr );
-                Boolean exists = File.Exists( fileName );
+                string fileName = string.Format( format, idStr );
+                bool exists = File.Exists( fileName );
 
                 if (!exists)
                 {
@@ -68,7 +68,7 @@ namespace DataCommander.Foundation.Diagnostics
                 id++;
             }
 
-            return String.Format( format, idStr );
+            return string.Format( format, idStr );
         }
 
         private void Open()
@@ -82,7 +82,7 @@ namespace DataCommander.Foundation.Diagnostics
             catch (Exception e)
             {
                 log.Write( LogLevel.Error, e.ToString() );
-                String directory = Path.GetTempPath();
+                string directory = Path.GetTempPath();
                 this.fileName = Path.GetFileName( this.path );
                 StringBuilder sb = new StringBuilder();
                 sb.Append( directory );
@@ -90,7 +90,7 @@ namespace DataCommander.Foundation.Diagnostics
                 this.path = sb.ToString();
                 this.fileName = GetNextFileName( this.path, out this.date );
                 this.fileStream = new FileStream( this.fileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read, this.bufferSize, true );
-                log.Write( LogLevel.Error, String.Format( "LogFile path: {0}", this.fileName ) );
+                log.Write( LogLevel.Error, string.Format( "LogFile path: {0}", this.fileName ) );
             }
 
             if (this.fileStream.Length == 0)
@@ -100,7 +100,7 @@ namespace DataCommander.Foundation.Diagnostics
             }
         }
 
-        public void Write( DateTime date, String text )
+        public void Write( DateTime date, string text )
         {
             if (this.fileStream == null)
             {
@@ -125,17 +125,17 @@ namespace DataCommander.Foundation.Diagnostics
 
         void ILogFile.Open()
         {
-            String begin = this.formatter.Begin();
+            string begin = this.formatter.Begin();
 
             if (begin != null)
             {
-                this.Write( OptimizedDateTime.Now, begin );
+                this.Write( LocalTime.Default.Now, begin );
             }
         }
 
         void ILogFile.Write( LogEntry entry )
         {
-            String text = this.formatter.Format( entry );
+            string text = this.formatter.Format( entry );
             this.Write( entry.CreationTime.Date, text );
         }
 
@@ -148,7 +148,7 @@ namespace DataCommander.Foundation.Diagnostics
         {
             if (this.fileStream != null)
             {
-                String end = this.formatter.End();
+                string end = this.formatter.End();
 
                 if (end != null)
                 {
@@ -156,7 +156,7 @@ namespace DataCommander.Foundation.Diagnostics
                 }
 
                 this.fileStream.Close();
-                String name = this.fileStream.Name;
+                string name = this.fileStream.Name;
                 this.fileStream = null;
 
                 if (this.fileAttributes != default( FileAttributes ))

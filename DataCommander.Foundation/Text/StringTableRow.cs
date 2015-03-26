@@ -9,7 +9,7 @@ namespace DataCommander.Foundation.Text
     public sealed class StringTableRow
     {
         private StringTable table;
-        private String[] cells;
+        private string[] cells;
 
         /// <summary>
         /// 
@@ -20,7 +20,7 @@ namespace DataCommander.Foundation.Text
             Contract.Requires( table != null );
 
             this.table = table;
-            this.cells = new String[table.Columns.Count];
+            this.cells = new string[table.Columns.Count];
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace DataCommander.Foundation.Text
         /// <summary>
         /// 
         /// </summary>
-        public String this[ Int32 columnIndex ]
+        public string this[ int columnIndex ]
         {
             get
             {

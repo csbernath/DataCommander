@@ -26,7 +26,7 @@
             }
         }
 
-        Int32? IDbConnectionContext.CommandTimeout
+        int? IDbConnectionContext.CommandTimeout
         {
             get
             {

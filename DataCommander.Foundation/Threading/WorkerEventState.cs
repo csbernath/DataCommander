@@ -1,4 +1,4 @@
-﻿namespace Binarit.Foundation.Threading
+﻿namespace DataCommander.Foundation.Threading
 {
     internal enum WorkerEventState
     {

@@ -8,8 +8,8 @@ namespace DataCommander.Foundation.Diagnostics
     {
         private static void WriteElement(
             XmlWriter xmlWriter,
-            String name,
-            String value)
+            string name,
+            string value)
         {
             if (value != null)
             {
@@ -30,7 +30,7 @@ namespace DataCommander.Foundation.Diagnostics
             //TODO
             //MethodBase method = entry.Method;
             //Type type = method.DeclaringType;
-            //String typeName = type.FullName;
+            //string typeName = type.FullName;
             //xmlWriter.WriteElementString("type", typeName);
             //xmlWriter.WriteElementString("method", entry.Method.ToString());
             //xmlWriter.WriteElementString("message", entry.Message);
@@ -39,12 +39,12 @@ namespace DataCommander.Foundation.Diagnostics
             //xmlWriter.WriteRaw(Environment.NewLine);
         }
 
-        String ILogFormatter.Begin()
+        string ILogFormatter.Begin()
         {
             return "<logEntries>\r\n";
         }
 
-        String ILogFormatter.Format(LogEntry entry)
+        string ILogFormatter.Format(LogEntry entry)
         {
             StringWriter textWriter = new StringWriter();
             var xmlTextWriter = new XmlTextWriter(textWriter) { Formatting = Formatting.Indented, Indentation = 2, IndentChar = ' ' };
@@ -52,7 +52,7 @@ namespace DataCommander.Foundation.Diagnostics
             return textWriter.ToString();
         }
 
-        String ILogFormatter.End()
+        string ILogFormatter.End()
         {
             return "</logEntries>\r\n";
         }

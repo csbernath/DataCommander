@@ -16,7 +16,7 @@
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public static String ToLogString(this SqlCommand command)
+        public static string ToLogString(this SqlCommand command)
         {
             Contract.Requires(command != null);
 
@@ -33,7 +33,7 @@
                     var parameters = command.Parameters;
                     if (parameters.Count > 0)
                     {
-                        String parametersString = GetSpExecuteSqlParameters(parameters);
+                        string parametersString = GetSpExecuteSqlParameters(parameters);
                         sb.AppendFormat(
                             "exec sp_executesql {0},{1}",
                             command.CommandText.ToTSqlNVarChar(),
@@ -52,7 +52,7 @@
             return sb.ToString();
         }
 
-        private static String GetSpExecuteSqlParameters(SqlParameterCollection parameters)
+        private static string GetSpExecuteSqlParameters(SqlParameterCollection parameters)
         {
             var sb = new StringBuilder();
             bool first = true;

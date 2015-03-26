@@ -12,12 +12,12 @@ namespace DataCommander.Foundation.Configuration
     /// </summary>
     public static class AppSettings
     {
-        private static Lazy<NameValueCollectionReader> instance = new Lazy<NameValueCollectionReader>( CreateInstance );
+        private static Lazy<NameValueCollectionReader> instance = new Lazy<NameValueCollectionReader>(CreateInstance);
 
         private static NameValueCollectionReader CreateInstance()
         {
-            var reader = new Reader( ConfigurationManager.AppSettings );
-            return new NameValueCollectionReader( reader.TryGetValue );
+            var reader = new Reader(ConfigurationManager.AppSettings);
+            return new NameValueCollectionReader(reader.TryGetValue);
         }
 
         /// <summary>
@@ -40,14 +40,14 @@ namespace DataCommander.Foundation.Configuration
             {
                 NameValueCollection nameValueCollection = ConfigurationManager.AppSettings;
 
-                var stackTrace = new StackTrace( 1 );
-                StackFrame stackFrame = stackTrace.GetFrame( 0 );
+                var stackTrace = new StackTrace(1);
+                StackFrame stackFrame = stackTrace.GetFrame(0);
                 MethodBase methodBase = stackFrame.GetMethod();
-                String typeName = methodBase.DeclaringType.FullName;
-                String prefix = typeName + Type.Delimiter;
+                string typeName = methodBase.DeclaringType.FullName;
+                string prefix = typeName + Type.Delimiter;
 
-                var reader = new PrefixedReader( nameValueCollection, prefix );
-                return new NameValueCollectionReader( reader.TryGetValue );
+                var reader = new PrefixedReader(nameValueCollection, prefix);
+                return new NameValueCollectionReader(reader.TryGetValue);
             }
         }
 
@@ -58,17 +58,17 @@ namespace DataCommander.Foundation.Configuration
         {
             private NameValueCollection nameValueCollection;
 
-            public Reader( NameValueCollection nameValueCollection )
+            public Reader(NameValueCollection nameValueCollection)
             {
-                Contract.Requires( nameValueCollection != null );
+                Contract.Requires(nameValueCollection != null);
 
                 this.nameValueCollection = nameValueCollection;
             }
 
-            public Boolean TryGetValue( String name, out String value )
+            public bool TryGetValue(string name, out string value)
             {
-                value = this.nameValueCollection[ name ];
-                Boolean contains = value != null;
+                value = this.nameValueCollection[name];
+                bool contains = value != null;
                 return contains;
             }
         }
@@ -79,20 +79,20 @@ namespace DataCommander.Foundation.Configuration
         private sealed class PrefixedReader
         {
             private NameValueCollection nameValueCollection;
-            private String prefix;
+            private string prefix;
 
-            public PrefixedReader( NameValueCollection nameValueCollection, String prefix )
+            public PrefixedReader(NameValueCollection nameValueCollection, string prefix)
             {
-                Contract.Requires( nameValueCollection != null );
-                Contract.Requires( prefix != null );
+                Contract.Requires(nameValueCollection != null);
+                Contract.Requires(prefix != null);
 
                 this.nameValueCollection = nameValueCollection;
                 this.prefix = prefix;
             }
 
-            public Boolean TryGetValue( String name, out String value )
+            public bool TryGetValue(string name, out string value)
             {
-                String prefixedName;
+                string prefixedName;
 
                 if (this.prefix != null)
                 {
@@ -103,8 +103,8 @@ namespace DataCommander.Foundation.Configuration
                     prefixedName = name;
                 }
 
-                value = this.nameValueCollection[ prefixedName ];
-                Boolean contains = value != null;
+                value = this.nameValueCollection[prefixedName];
+                bool contains = value != null;
                 return contains;
             }
         }

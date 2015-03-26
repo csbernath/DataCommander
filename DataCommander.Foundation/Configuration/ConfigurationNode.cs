@@ -15,19 +15,19 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         public const Char Delimiter = '/';
 
-        private String name;
-        private Boolean hasName;
-        private String description;
+        private string name;
+        private bool hasName;
+        private string description;
         private ConfigurationNode parent;
         private ConfigurationNodeCollection childNodes = new ConfigurationNodeCollection();
         private ConfigurationAttributeCollection attributes = new ConfigurationAttributeCollection();
-        private Int32 index;
+        private int index;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="name"></param>
-        public ConfigurationNode( String name )
+        public ConfigurationNode( string name )
         {
             this.name = name;
             this.hasName = name != null;
@@ -36,7 +36,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public Boolean HasName
+        public bool HasName
         {
             get
             {
@@ -47,7 +47,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// Gets the name of the node.
         /// </summary>
-        public String Name
+        public string Name
         {
             get
             {
@@ -58,7 +58,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// Gets/sets the description of the node.
         /// </summary>
-        public String Description
+        public string Description
         {
             get
             {
@@ -85,11 +85,11 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// Gets the full path of the node.
         /// </summary>
-        public String FullName
+        public string FullName
         {
             get
             {
-                String fullName;
+                string fullName;
 
                 if (this.parent != null)
                 {
@@ -134,7 +134,7 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="index"></param>
         /// <param name="childNode"></param>
-        public void InsertChildNode( Int32 index, ConfigurationNode childNode )
+        public void InsertChildNode( int index, ConfigurationNode childNode )
         {
             Contract.Requires( childNode.Parent == null );
 
@@ -189,16 +189,16 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="nodeName"></param>
         /// <returns></returns>
-        public ConfigurationNode CreateNode( String nodeName )
+        public ConfigurationNode CreateNode( string nodeName )
         {
             Contract.Requires( nodeName != null );
             ConfigurationNode node = this;
-            String[] nodeNames = nodeName.Split( Delimiter );
+            string[] nodeNames = nodeName.Split( Delimiter );
 
-            for (Int32 i = 0; i < nodeNames.Length; i++)
+            for (int i = 0; i < nodeNames.Length; i++)
             {
                 ConfigurationNode childNode;
-                Boolean contains = node.ChildNodes.TryGetValue( nodeNames[ i ], out childNode );
+                bool contains = node.ChildNodes.TryGetValue( nodeNames[ i ], out childNode );
 
                 if (!contains)
                 {
@@ -219,19 +219,19 @@ namespace DataCommander.Foundation.Configuration
         /// The name can contains path delimiters.</param>
         /// <returns>Return the child node is found.
         /// Returns null if no child node found.</returns>
-        public ConfigurationNode SelectNode( String path )
+        public ConfigurationNode SelectNode( string path )
         {
             ConfigurationNode node = this;
 
             if (path != null)
             {
-                String[] childNodeNames = path.Split( Delimiter );
-                Int32 depth = 0;
+                string[] childNodeNames = path.Split( Delimiter );
+                int depth = 0;
 
-                foreach (String childNodeName in childNodeNames)
+                foreach (string childNodeName in childNodeNames)
                 {
                     ConfigurationNode childNode;
-                    Boolean contains = node.childNodes.TryGetValue( childNodeName, out childNode );
+                    bool contains = node.childNodes.TryGetValue( childNodeName, out childNode );
 
                     if (contains)
                     {
@@ -302,12 +302,12 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="textWriter"></param>
         /// <param name="level">Recursion level</param>
-        public void WriteDocumentation( TextWriter textWriter, Int32 level )
+        public void WriteDocumentation( TextWriter textWriter, int level )
         {
             Contract.Requires( textWriter != null );
 
             StringBuilder sb = new StringBuilder();
-            String indent = new String( ' ', level * 2 );
+            string indent = new string( ' ', level * 2 );
             sb.Append( indent );
             sb.Append( this.name );
             sb.Append( "\t\t" );
@@ -324,13 +324,13 @@ namespace DataCommander.Foundation.Configuration
                     sb.Append( attribute.Description );
                     sb.Append( '\t' );
 
-                    Object value = attribute.Value;
-                    String valueString = value != null ? value.ToString() : null;
-                    Boolean multiline = valueString.IndexOf( '\n' ) >= 0;
+                    object value = attribute.Value;
+                    string valueString = value != null ? value.ToString() : null;
+                    bool multiline = valueString.IndexOf( '\n' ) >= 0;
 
                     if (multiline)
                     {
-                        value = valueString.Replace( "\r", String.Empty );
+                        value = valueString.Replace( "\r", string.Empty );
                         sb.Append( '"' );
                     }
 

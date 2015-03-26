@@ -12,7 +12,7 @@
         /// <summary>
         /// 
         /// </summary>
-        String Name
+        string Name
         {
             get;
         }

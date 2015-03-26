@@ -5,17 +5,17 @@
     internal sealed class FoundationLog : ILog
     {
         private readonly FoundationLogFactory applicationLog;
-        private String name;
-        private String loggedName;
+        private string name;
+        private string loggedName;
 
-        public FoundationLog( FoundationLogFactory applicationLog, String name )
+        public FoundationLog( FoundationLogFactory applicationLog, string name )
         {
             this.applicationLog = applicationLog;
             this.name = name;
             this.loggedName = name;
         }
 
-        public String LoggedName
+        public string LoggedName
         {
             get
             {
@@ -70,82 +70,82 @@
             }
         }
 
-        void ILog.Debug( String message )
+        void ILog.Debug( string message )
         {
             this.applicationLog.Write( this, LogLevel.Debug, message );
         }
 
-        void ILog.Debug( String format, params Object[] args )
+        void ILog.Debug( string format, params object[] args )
         {
             this.applicationLog.Write( this, LogLevel.Debug, format, args );
         }
 
-        void ILog.Debug( Func<String> getMessage )
+        void ILog.Debug( Func<string> getMessage )
         {
             this.applicationLog.Write( this, LogLevel.Debug, getMessage );
         }
 
-        void ILog.Trace( String message )
+        void ILog.Trace( string message )
         {
             this.applicationLog.Write( this, LogLevel.Trace, message );
         }
 
-        void ILog.Trace( String format, params Object[] args )
+        void ILog.Trace( string format, params object[] args )
         {
             this.applicationLog.Write( this, LogLevel.Trace, format, args );
         }
 
-        void ILog.Trace( Func<String> getMessage )
+        void ILog.Trace( Func<string> getMessage )
         {
             this.applicationLog.Write( this, LogLevel.Trace, getMessage );
         }
 
-        void ILog.Information( String message )
+        void ILog.Information( string message )
         {
             this.applicationLog.Write( this, LogLevel.Information, message );
         }
 
-        void ILog.Information( String format, params Object[] args )
+        void ILog.Information( string format, params object[] args )
         {
             this.applicationLog.Write( this, LogLevel.Information, format, args );
         }
 
-        void ILog.Information( Func<String> getMessage )
+        void ILog.Information( Func<string> getMessage )
         {
             this.applicationLog.Write( this, LogLevel.Information, getMessage );
         }
 
-        void ILog.Warning( String message )
+        void ILog.Warning( string message )
         {
             this.applicationLog.Write( this, LogLevel.Warning, message );
         }
 
-        void ILog.Warning( String format, params Object[] args )
+        void ILog.Warning( string format, params object[] args )
         {
             this.applicationLog.Write( this, LogLevel.Warning, format, args );
         }
 
-        void ILog.Warning( Func<String> getMessage )
+        void ILog.Warning( Func<string> getMessage )
         {
             this.applicationLog.Write( this, LogLevel.Warning, getMessage );
         }
 
-        void ILog.Error( String message )
+        void ILog.Error( string message )
         {
             this.applicationLog.Write( this, LogLevel.Error, message );
         }
 
-        void ILog.Error( String format, params Object[] args )
+        void ILog.Error( string format, params object[] args )
         {
             this.applicationLog.Write( this, LogLevel.Error, format, args );
         }
 
-        void ILog.Error( Func<String> getMessage )
+        void ILog.Error( Func<string> getMessage )
         {
             this.applicationLog.Write( this, LogLevel.Error, getMessage );
         }
 
-        void ILog.Write( LogLevel logLevel, String message )
+        void ILog.Write( LogLevel logLevel, string message )
         {
             this.applicationLog.Write( this, logLevel, message );
         }
@@ -155,7 +155,7 @@
             this.applicationLog.Write( this, logLevel, format, args );
         }
 
-        void ILog.Write( LogLevel logLevel, Func<String> getMessage )
+        void ILog.Write( LogLevel logLevel, Func<string> getMessage )
         {
             this.applicationLog.Write( this, logLevel, getMessage );
         }

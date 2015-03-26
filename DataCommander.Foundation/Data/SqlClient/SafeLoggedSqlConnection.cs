@@ -21,17 +21,17 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="filter"></param>
         public SafeLoggedSqlConnection(
             SqlLog sqlLog,
-            Int32 applicationId,
-            String userName,
-            String hostName,
-            String connectionString,
+            int applicationId,
+            string userName,
+            string hostName,
+            string connectionString,
             ISqlLoggedSqlCommandFilter filter )
         {
             SqlLoggedSqlConnection connection = new SqlLoggedSqlConnection( sqlLog, applicationId, userName, hostName, connectionString, filter );
             this.Initialize( connection, this );
         }
 
-        Object ISafeDbConnection.Id
+        object ISafeDbConnection.Id
         {
             get
             {

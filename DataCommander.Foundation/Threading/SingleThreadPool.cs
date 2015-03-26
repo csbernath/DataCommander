@@ -13,9 +13,9 @@
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private readonly WorkerThread thread;
-        private readonly Queue<Tuple<WaitCallback, Object>> workItems = new Queue<Tuple<WaitCallback, object>>();
+        private readonly Queue<Tuple<WaitCallback, object>> workItems = new Queue<Tuple<WaitCallback, object>>();
         private readonly EventWaitHandle enqueueEvent = new EventWaitHandle(false, EventResetMode.AutoReset);
-        private Int32 queuedItemCount;
+        private int queuedItemCount;
 
         /// <summary>
         /// 
@@ -39,7 +39,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 QueuedItemCount
+        public int QueuedItemCount
         {
             get
             {
@@ -52,7 +52,7 @@
         /// </summary>
         /// <param name="callback"></param>
         /// <param name="state"></param>
-        public void QueueUserWorkItem(WaitCallback callback, Object state)
+        public void QueueUserWorkItem(WaitCallback callback, object state)
         {
             Contract.Requires(callback != null);
 
@@ -69,20 +69,20 @@
 
         private void Dequeue()
         {
-            Tuple<WaitCallback, Object>[] array;
+            Tuple<WaitCallback, object>[] array;
 
             lock (this.workItems)
             {
-                array = new Tuple<WaitCallback, Object>[this.workItems.Count];
+                array = new Tuple<WaitCallback, object>[this.workItems.Count];
                 this.workItems.CopyTo(array, 0);
                 this.workItems.Clear();
             }
 
-            for (Int32 i = 0; i < array.Length; i++)
+            for (int i = 0; i < array.Length; i++)
             {
-                Tuple<WaitCallback, Object> workItem = array[i];
+                Tuple<WaitCallback, object> workItem = array[i];
                 WaitCallback callback = workItem.Item1;
-                Object state = workItem.Item2;
+                object state = workItem.Item2;
 
                 try
                 {

@@ -9,11 +9,11 @@ namespace DataCommander.Foundation.Data.SqlClient
     {
         private readonly SqlLoggedSqlConnection connection;
         private IDbCommand command;
-        private Boolean contains;
+        private bool contains;
         private IDataReader reader;
         private DateTime startDate;
-        private Int64 startTick;
-        private Boolean logged;
+        private long startTick;
+        private bool logged;
 
         public SqlLoggedSqlDataReader(
             SqlLoggedSqlConnection connection,
@@ -26,7 +26,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         public IDataReader Execute()
         {
             Exception exception = null;
-            this.startDate = OptimizedDateTime.Now;
+            this.startDate = LocalTime.Default.Now;
             this.startTick = Stopwatch.GetTimestamp();
 
             try
@@ -40,8 +40,8 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
             finally
             {
-                Int64 ticks = Stopwatch.GetTimestamp() - this.startTick;
-                Int32 duration = StopwatchTimeSpan.ToInt32( ticks, 1000 );
+                long ticks = Stopwatch.GetTimestamp() - this.startTick;
+                int duration = StopwatchTimeSpan.ToInt32( ticks, 1000 );
                 ISqlLoggedSqlCommandFilter filter = this.connection.Filter;
                 this.contains = exception != null || filter == null || filter.Contains( this.connection.UserName, this.connection.HostName, this.command );
 
@@ -58,7 +58,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         public IDataReader Execute( CommandBehavior behavior )
         {
             Exception exception = null;
-            this.startDate = OptimizedDateTime.Now;
+            this.startDate = LocalTime.Default.Now;
             this.startTick = Stopwatch.GetTimestamp();
 
             try
@@ -72,8 +72,8 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
             finally
             {
-                Int64 ticks = Stopwatch.GetTimestamp() - this.startTick;
-                Int32 duration = StopwatchTimeSpan.ToInt32( ticks, 1000 );
+                long ticks = Stopwatch.GetTimestamp() - this.startTick;
+                int duration = StopwatchTimeSpan.ToInt32( ticks, 1000 );
                 ISqlLoggedSqlCommandFilter filter = this.connection.Filter;
                 this.contains = exception != null || filter == null || filter.Contains( this.connection.UserName, this.connection.HostName, this.command );
 
@@ -93,122 +93,122 @@ namespace DataCommander.Foundation.Data.SqlClient
 
             if (this.contains && !this.logged)
             {
-                Int64 duration = Stopwatch.GetTimestamp() - this.startTick;
+                long duration = Stopwatch.GetTimestamp() - this.startTick;
                 this.connection.CommandExeucte( this.command, this.startDate, duration, null );
             }
         }
 
-        public Boolean GetBoolean( Int32 i )
+        public bool GetBoolean( int i )
         {
             return this.reader.GetBoolean( i );
         }
 
-        public Byte GetByte( Int32 i )
+        public Byte GetByte( int i )
         {
             return this.reader.GetByte( i );
         }
 
-        public Int64 GetBytes( Int32 i, Int64 fieldOffset, Byte[] buffer, Int32 bufferoffset, Int32 length )
+        public long GetBytes( int i, long fieldOffset, Byte[] buffer, int bufferoffset, int length )
         {
             return this.reader.GetBytes( i, fieldOffset, buffer, bufferoffset, length );
         }
 
-        public Char GetChar( Int32 i )
+        public Char GetChar( int i )
         {
             return this.reader.GetChar( i );
         }
 
-        public Int64 GetChars( Int32 i, Int64 fieldoffset, Char[] buffer, Int32 bufferoffset, Int32 length )
+        public long GetChars( int i, long fieldoffset, Char[] buffer, int bufferoffset, int length )
         {
             return this.reader.GetChars( i, fieldoffset, buffer, bufferoffset, length );
         }
 
-        public IDataReader GetData( Int32 i )
+        public IDataReader GetData( int i )
         {
             return this.reader.GetData( i );
         }
 
-        public String GetDataTypeName( Int32 i )
+        public string GetDataTypeName( int i )
         {
             return this.reader.GetDataTypeName( i );
         }
 
-        public DateTime GetDateTime( Int32 i )
+        public DateTime GetDateTime( int i )
         {
             return this.reader.GetDateTime( i );
         }
 
-        public Decimal GetDecimal( Int32 i )
+        public Decimal GetDecimal( int i )
         {
             return this.reader.GetDecimal( i );
         }
 
-        public Double GetDouble( Int32 i )
+        public Double GetDouble( int i )
         {
             return this.reader.GetDouble( i );
         }
 
-        public Type GetFieldType( Int32 i )
+        public Type GetFieldType( int i )
         {
             return this.reader.GetFieldType( i );
         }
 
-        public Single GetFloat( Int32 i )
+        public Single GetFloat( int i )
         {
             return this.reader.GetFloat( i );
         }
 
-        public Guid GetGuid( Int32 i )
+        public Guid GetGuid( int i )
         {
             return this.reader.GetGuid( i );
         }
 
-        public Int16 GetInt16( Int32 i )
+        public Int16 GetInt16( int i )
         {
             return this.reader.GetInt16( i );
         }
 
-        public Int32 GetInt32( Int32 i )
+        public int GetInt32( int i )
         {
             return this.reader.GetInt32( i );
         }
 
-        public Int64 GetInt64( Int32 i )
+        public long GetInt64( int i )
         {
             return this.reader.GetInt64( i );
         }
 
-        public String GetName( Int32 i )
+        public string GetName( int i )
         {
             return this.reader.GetName( i );
         }
 
-        public Int32 GetOrdinal( String name )
+        public int GetOrdinal( string name )
         {
             return this.reader.GetOrdinal( name );
         }
 
-        public String GetString( Int32 i )
+        public string GetString( int i )
         {
             return this.reader.GetString( i );
         }
 
-        public Object GetValue( Int32 i )
+        public object GetValue( int i )
         {
             return this.reader.GetValue( i );
         }
 
-        public Int32 GetValues( Object[] values )
+        public int GetValues( object[] values )
         {
             return this.reader.GetValues( values );
         }
 
-        public Boolean IsDBNull( Int32 i )
+        public bool IsDBNull( int i )
         {
             return this.reader.IsDBNull( i );
         }
 
-        public Int32 FieldCount
+        public int FieldCount
         {
             get
             {
@@ -216,7 +216,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
         }
 
-        public Object this[ String name ]
+        public object this[ string name ]
         {
             get
             {
@@ -224,7 +224,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
         }
 
-        public Object this[ Int32 i ]
+        public object this[ int i ]
         {
             get
             {
@@ -247,7 +247,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
             finally
             {
-                Int64 duration = Stopwatch.GetTimestamp() - this.startTick;
+                long duration = Stopwatch.GetTimestamp() - this.startTick;
                 this.contains |= exception != null;
 
                 if (this.contains && !this.logged)
@@ -263,9 +263,9 @@ namespace DataCommander.Foundation.Data.SqlClient
             return this.reader.GetSchemaTable();
         }
 
-        public Boolean NextResult()
+        public bool NextResult()
         {
-            Boolean nextResult = false;
+            bool nextResult = false;
 
             if (this.contains)
             {
@@ -275,7 +275,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                 }
                 catch (Exception e)
                 {
-                    Int64 duration = Stopwatch.GetTimestamp() - this.startTick;
+                    long duration = Stopwatch.GetTimestamp() - this.startTick;
                     this.connection.CommandExeucte( this.command, this.startDate, duration, e );
                     this.logged = true;
                     throw;
@@ -289,9 +289,9 @@ namespace DataCommander.Foundation.Data.SqlClient
             return nextResult;
         }
 
-        public Boolean Read()
+        public bool Read()
         {
-            Boolean read = false;
+            bool read = false;
 
             try
             {
@@ -299,7 +299,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
             catch (Exception e)
             {
-                Int64 duration = Stopwatch.GetTimestamp() - this.startTick;
+                long duration = Stopwatch.GetTimestamp() - this.startTick;
                 this.connection.CommandExeucte( this.command, this.startDate, duration, e );
                 this.logged = true;
                 throw;
@@ -308,7 +308,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             return read;
         }
 
-        public Int32 Depth
+        public int Depth
         {
             get
             {
@@ -316,7 +316,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
         }
 
-        public Boolean IsClosed
+        public bool IsClosed
         {
             get
             {
@@ -324,7 +324,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
         }
 
-        public Int32 RecordsAffected
+        public int RecordsAffected
         {
             get
             {

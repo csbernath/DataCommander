@@ -37,9 +37,9 @@
             var node = Settings.SelectCurrentType();
             if (node != null)
             {
-                var typeName = node.Attributes[ "TypeName" ].GetValue<String>();
+                var typeName = node.Attributes[ "TypeName" ].GetValue<string>();
                 var type = Type.GetType( typeName, true );
-                Object instance = Activator.CreateInstance( type );
+                object instance = Activator.CreateInstance( type );
                 Contract.Assert( instance is ILogFactory );
                 var applicationLog = (ILogFactory) instance;
                 instance = applicationLog;

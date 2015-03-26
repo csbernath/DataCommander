@@ -12,67 +12,67 @@ namespace DataCommander.Foundation.Configuration
     internal static class TypeNameCollection
     {
         private static IndexableCollection<TypeCollectionItem> collection;
-        private static UniqueIndex<String, TypeCollectionItem> nameIndex;
+        private static UniqueIndex<string, TypeCollectionItem> nameIndex;
         private static UniqueIndex<Type, TypeCollectionItem> typeIndex;
         private static Assembly systemAssembly;
 
         static TypeNameCollection()
         {
-            nameIndex = new UniqueIndex<String, TypeCollectionItem>(
+            nameIndex = new UniqueIndex<string, TypeCollectionItem>(
                 "Name",
-                item => GetKeyResponse.Create( true, item.Name ),
-                SortOrder.None );
+                item => GetKeyResponse.Create(true, item.Name),
+                SortOrder.None);
 
             typeIndex = new UniqueIndex<Type, TypeCollectionItem>(
                 "Type",
-                item => GetKeyResponse.Create( true, item.Type ),
-                new Dictionary<Type, TypeCollectionItem>( TypeEqualityComparer.Instance ) );
+                item => GetKeyResponse.Create(true, item.Type),
+                new Dictionary<Type, TypeCollectionItem>(TypeEqualityComparer.Instance));
 
-            collection = new IndexableCollection<TypeCollectionItem>( nameIndex );
-            collection.Indexes.Add( typeIndex );
+            collection = new IndexableCollection<TypeCollectionItem>(nameIndex);
+            collection.Indexes.Add(typeIndex);
 
-            Add( TypeName.Bool, typeof( Boolean ) );
-            Add( TypeName.Char, typeof( Char ) );
-            Add( TypeName.String, typeof( String ) );
-            Add( TypeName.Object, typeof( Object ) );
+            Add(TypeName.Bool, typeof (bool));
+            Add(TypeName.Char, typeof (Char));
+            Add(TypeName.String, typeof (string));
+            Add(TypeName.Object, typeof (object));
 
-            Add( TypeName.SByte, typeof( SByte ) );
-            Add( TypeName.Int16, typeof( Int16 ) );
-            Add( TypeName.Int32, typeof( Int32 ) );
-            Add( TypeName.Int64, typeof( Int64 ) );
-            Add( TypeName.Byte, typeof( Byte ) );
-            Add( TypeName.UInt16, typeof( UInt16 ) );
-            Add( TypeName.UInt32, typeof( UInt32 ) );
-            Add( TypeName.UInt64, typeof( UInt64 ) );
+            Add(TypeName.SByte, typeof (SByte));
+            Add(TypeName.Int16, typeof (Int16));
+            Add(TypeName.Int32, typeof (int));
+            Add(TypeName.Int64, typeof (long));
+            Add(TypeName.Byte, typeof (Byte));
+            Add(TypeName.UInt16, typeof (UInt16));
+            Add(TypeName.UInt32, typeof (UInt32));
+            Add(TypeName.UInt64, typeof (UInt64));
 
-            Add( TypeName.Single, typeof( Single ) );
-            Add( TypeName.Double, typeof( Double ) );
-            Add( TypeName.Decimal, typeof( Decimal ) );
+            Add(TypeName.Single, typeof (Single));
+            Add(TypeName.Double, typeof (Double));
+            Add(TypeName.Decimal, typeof (Decimal));
 
-            Add( TypeName.DateTime, typeof( DateTime ) );
-            Add( TypeName.XmlNode, typeof( XmlNode ) );
+            Add(TypeName.DateTime, typeof (DateTime));
+            Add(TypeName.XmlNode, typeof (XmlNode));
 
-            systemAssembly = Assembly.GetAssembly( typeof( Int32 ) );
+            systemAssembly = Assembly.GetAssembly(typeof (int));
         }
 
-        private static void Add( String name, Type type )
+        private static void Add(string name, Type type)
         {
-            TypeCollectionItem item = new TypeCollectionItem( name, type );
-            collection.Add( item );
+            TypeCollectionItem item = new TypeCollectionItem(name, type);
+            collection.Add(item);
         }
 
-        public static Type GetType( String typeName )
+        public static Type GetType(string typeName)
         {
             Type type;
-            Boolean isArray = false;
-            Int32 length = typeName.Length - 2;
-            isArray = typeName != null && typeName.IndexOf( "[]" ) == length;
+            bool isArray = false;
+            int length = typeName.Length - 2;
+            isArray = typeName != null && typeName.IndexOf("[]") == length;
 
-            String typeName2;
+            string typeName2;
 
             if (isArray)
             {
-                typeName2 = typeName.Substring( 0, length );
+                typeName2 = typeName.Substring(0, length);
             }
             else
             {
@@ -80,7 +80,7 @@ namespace DataCommander.Foundation.Configuration
             }
 
             TypeCollectionItem item;
-            Boolean contains = nameIndex.TryGetValue( typeName2, out item );
+            bool contains = nameIndex.TryGetValue(typeName2, out item);
 
             if (contains)
             {
@@ -88,7 +88,7 @@ namespace DataCommander.Foundation.Configuration
             }
             else
             {
-                type = Type.GetType( typeName2 );
+                type = Type.GetType(typeName2);
             }
 
             if (type != null)
@@ -96,7 +96,7 @@ namespace DataCommander.Foundation.Configuration
                 if (isArray)
                 {
                     typeName2 = type.FullName + "[], " + type.Assembly.FullName;
-                    type = Type.GetType( typeName2, true );
+                    type = Type.GetType(typeName2, true);
                 }
             }
 
@@ -108,14 +108,14 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static String GetTypeName( Type type )
+        public static string GetTypeName(Type type)
         {
-            String typeName;
+            string typeName;
 
             if (type.IsArray)
             {
                 Type elementType = type.GetElementType();
-                typeName = GetTypeName( elementType ) + "[]";
+                typeName = GetTypeName(elementType) + "[]";
             }
             else if (type.IsEnum)
             {
@@ -135,7 +135,7 @@ namespace DataCommander.Foundation.Configuration
             else
             {
                 TypeCollectionItem item;
-                Boolean contains = typeIndex.TryGetValue( type, out item );
+                bool contains = typeIndex.TryGetValue(type, out item);
 
                 if (contains)
                 {
@@ -152,16 +152,16 @@ namespace DataCommander.Foundation.Configuration
 
         private sealed class TypeCollectionItem
         {
-            private String name;
+            private string name;
             private Type type;
 
-            public TypeCollectionItem( String name, Type type )
+            public TypeCollectionItem(string name, Type type)
             {
                 this.name = name;
                 this.type = type;
             }
 
-            public String Name
+            public string Name
             {
                 get
                 {
@@ -180,26 +180,26 @@ namespace DataCommander.Foundation.Configuration
 
         private static class TypeName
         {
-            public const String Bool = "bool";
-            public const String Char = "char";
-            public const String String = "string";
-            public const String Object = "object";
+            public const string Bool = "bool";
+            public const string Char = "char";
+            public const string String = "string";
+            public const string Object = "object";
 
-            public const String SByte = "sbyte";
-            public const String Int16 = "short";
-            public const String Int32 = "int";
-            public const String Int64 = "long";
-            public const String Byte = "byte";
-            public const String UInt16 = "ushort";
-            public const String UInt32 = "uint";
-            public const String UInt64 = "ulong";
+            public const string SByte = "sbyte";
+            public const string Int16 = "short";
+            public const string Int32 = "int";
+            public const string Int64 = "long";
+            public const string Byte = "byte";
+            public const string UInt16 = "ushort";
+            public const string UInt32 = "uint";
+            public const string UInt64 = "ulong";
 
-            public const String Single = "float";
-            public const String Double = "double";
-            public const String Decimal = "decimal";
+            public const string Single = "float";
+            public const string Double = "double";
+            public const string Decimal = "decimal";
 
-            public const String DateTime = "datetime";
-            public const String XmlNode = "xmlnode";
+            public const string DateTime = "datetime";
+            public const string XmlNode = "xmlnode";
         }
 
         private sealed class TypeEqualityComparer : IEqualityComparer<Type>
@@ -220,12 +220,12 @@ namespace DataCommander.Foundation.Configuration
 
             #region IEqualityComparer<Type> Members
 
-            public Boolean Equals( Type x, Type y )
+            public bool Equals(Type x, Type y)
             {
                 return x == y;
             }
 
-            public Int32 GetHashCode( Type obj )
+            public int GetHashCode(Type obj)
             {
                 return obj.GetHashCode();
             }

@@ -7,17 +7,17 @@ namespace DataCommander.Foundation.Data
 
     internal sealed class SqlLogError : ISqlLogItem
     {
-        private readonly Int32 applicationId;
-        private Int32 connectionNo;
-        private Int32 commandNo;
-        private Int32 executionNo;
+        private readonly int applicationId;
+        private int connectionNo;
+        private int commandNo;
+        private int executionNo;
         private Exception exception;
 
         public SqlLogError(
-            Int32 applicationId,
-            Int32 connectionNo,
-            Int32 commandNo,
-            Int32 executionNo,
+            int applicationId,
+            int connectionNo,
+            int commandNo,
+            int executionNo,
             Exception exception )
         {
             this.applicationId = applicationId;
@@ -27,7 +27,7 @@ namespace DataCommander.Foundation.Data
             this.exception = exception;
         }
 
-        public String CommandText
+        public string CommandText
         {
             get
             {
@@ -37,12 +37,12 @@ namespace DataCommander.Foundation.Data
                 if (sqlEx != null)
                 {
                     SqlErrorCollection errors = sqlEx.Errors;
-                    Int32 count = errors.Count;
+                    int count = errors.Count;
 
-                    for (Int32 i = 0; i < count; i++)
+                    for (int i = 0; i < count; i++)
                     {
                         SqlError error = errors[ i ];
-                        String procedure = error.Procedure;
+                        string procedure = error.Procedure;
 
                         if (procedure.Length == 0)
                         {
@@ -54,7 +54,7 @@ namespace DataCommander.Foundation.Data
                 }
                 else
                 {
-                    String text = this.exception.ToString();
+                    string text = this.exception.ToString();
                     sb.AppendFormat( "exec LogException {0},{1},{2},{3},{4}", this.applicationId, this.connectionNo, this.commandNo, this.executionNo, text.ToTSqlVarChar() );
                 }
 
@@ -64,13 +64,13 @@ namespace DataCommander.Foundation.Data
 
         private void AppendError(
             StringBuilder sb,
-            Int32 errorNo,
-            Int32 error,
+            int errorNo,
+            int error,
             Byte severity,
             Byte state,
-            String procedure,
-            Int32 line,
-            String message )
+            string procedure,
+            int line,
+            string message )
         {
             sb.AppendFormat(
                 "exec LogError {0},{1},{2},{3},{4},{5},{6},{7},{8},{9}\r\n",

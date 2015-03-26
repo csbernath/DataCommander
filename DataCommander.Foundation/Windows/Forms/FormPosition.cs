@@ -19,7 +19,7 @@ namespace DataCommander.Foundation.Windows.Forms
             ApplicationData applicationData )
         {
             Type type = form.GetType();
-            String nodeName = ConfigurationNodeName.FromType( type );
+            string nodeName = ConfigurationNodeName.FromType( type );
             ConfigurationNode node = applicationData.CreateNode( nodeName );
             ConfigurationAttributeCollection attributes = node.Attributes;
 
@@ -48,7 +48,7 @@ namespace DataCommander.Foundation.Windows.Forms
             Contract.Requires(form != null);
 
             Type type = form.GetType();
-            String nodeName = ConfigurationNodeName.FromType( type );
+            string nodeName = ConfigurationNodeName.FromType( type );
             ConfigurationNode node = applicationData.CreateNode( nodeName );
             FormWindowState windowState;
             node.Attributes.TryGetAttributeValue<FormWindowState>( "WindowState", FormWindowState.Normal, out windowState );
@@ -60,10 +60,10 @@ namespace DataCommander.Foundation.Windows.Forms
                 {
                     form.StartPosition = FormStartPosition.Manual;
                     ConfigurationAttributeCollection attributes = node.Attributes;
-                    form.Left = attributes[ "Left" ].GetValue<Int32>();
-                    form.Top = attributes[ "Top" ].GetValue<Int32>();
-                    Int32 width = attributes[ "Width" ].GetValue<Int32>();
-                    Int32 height = attributes[ "Height" ].GetValue<Int32>();
+                    form.Left = attributes[ "Left" ].GetValue<int>();
+                    form.Top = attributes[ "Top" ].GetValue<int>();
+                    int width = attributes[ "Width" ].GetValue<int>();
+                    int height = attributes[ "Height" ].GetValue<int>();
                     form.ClientSize = new Size( width, height );
                 }
             }

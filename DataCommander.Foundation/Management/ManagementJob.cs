@@ -36,7 +36,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Object PercentComplete
+        public object PercentComplete
         {
             get
             {

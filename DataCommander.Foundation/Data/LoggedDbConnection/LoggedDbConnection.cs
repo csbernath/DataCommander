@@ -146,7 +146,7 @@
             }
         }
 
-        Int32 IDbConnection.ConnectionTimeout
+        int IDbConnection.ConnectionTimeout
         {
             get
             {

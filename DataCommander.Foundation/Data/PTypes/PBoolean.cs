@@ -44,7 +44,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// structure using the supplied boolean value.
         /// </summary>
         /// <param name="value"></param>
-        public PBoolean( Boolean value )
+        public PBoolean( bool value )
         {
             this.sql = value;
             this.type = PValueType.Value;
@@ -73,7 +73,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PBoolean( Boolean value )
+        public static implicit operator PBoolean( bool value )
         {
             return new PBoolean( value );
         }
@@ -83,7 +83,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PBoolean( Boolean? value )
+        public static implicit operator PBoolean( bool? value )
         {
             PBoolean target;
             if (value == null)
@@ -117,9 +117,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator Boolean( PBoolean value )
+        public static implicit operator bool( PBoolean value )
         {
-            return (Boolean) value.sql;
+            return (bool) value.sql;
         }
 
         /// <summary>
@@ -128,12 +128,12 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="x">An <see cref="PBoolean"/></param>
         /// <param name="y">An <see cref="PBoolean"/></param>
         /// <returns>
-        /// A <see cref="Boolean"/> that is <c>true</c> if the two instances's <see cref="ValueType"/> are equal
+        /// A <see cref="bool"/> that is <c>true</c> if the two instances's <see cref="ValueType"/> are equal
         /// and values are equal.
         /// </returns>
-        public static Boolean operator ==( PBoolean x, PBoolean y )
+        public static bool operator ==( PBoolean x, PBoolean y )
         {
-            Boolean isEqual = x.type == y.type;
+            bool isEqual = x.type == y.type;
 
             if (isEqual)
             {
@@ -152,7 +152,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static Boolean operator !=( PBoolean x, PBoolean y )
+        public static bool operator !=( PBoolean x, PBoolean y )
         {
             return !(x == y);
         }
@@ -168,11 +168,11 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns>
         /// An <see cref="PBoolean"/> structure containing the parsed value.
         /// </returns>
-        public static PBoolean Parse( String s, PValueType type )
+        public static PBoolean Parse( string s, PValueType type )
         {
             PBoolean sp;
 
-            if (s == null || s.Length == 0)
+            if (string.IsNullOrEmpty(s))
             {
                 sp = new PBoolean( type );
             }
@@ -189,9 +189,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="y"></param>
         /// <returns></returns>
-        public override Boolean Equals( Object y )
+        public override bool Equals( object y )
         {
-            Boolean equals = y is PBoolean;
+            bool equals = y is PBoolean;
 
             if (equals)
             {
@@ -205,9 +205,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <returns></returns>
-        public override Int32 GetHashCode()
+        public override int GetHashCode()
         {
-            Int32 hashCode = this.sql.GetHashCode();
+            int hashCode = this.sql.GetHashCode();
             return hashCode;
         }
 
@@ -225,7 +225,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsNull
+        public bool IsNull
         {
             get
             {
@@ -236,7 +236,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsValue
+        public bool IsValue
         {
             get
             {
@@ -247,7 +247,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsEmpty
+        public bool IsEmpty
         {
             get
             {
@@ -258,11 +258,11 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Object Value
+        public object Value
         {
             get
             {
-                Object value;
+                object value;
 
                 switch (this.type)
                 {
@@ -302,7 +302,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsTrue
+        public bool IsTrue
         {
             get
             {
@@ -313,7 +313,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsFalse
+        public bool IsFalse
         {
             get
             {
@@ -325,7 +325,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <returns></returns>
-        public override String ToString()
+        public override string ToString()
         {
             return this.sql.ToString();
         }

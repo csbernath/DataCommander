@@ -20,21 +20,21 @@
             Contract.Requires(dataView != null);
 
             DataTable dataTable = dataView.Table;
-            Int32 columnCount = dataTable.Columns.Count;
+            int columnCount = dataTable.Columns.Count;
             var st = new StringTable(columnCount);
-            Int32 count = dataView.Count;
+            int count = dataView.Count;
 
             if (count > 0)
             {
                 DataTableExtensions.SetAlign(dataTable.Columns, st.Columns);
                 DataTableExtensions.WriteHeader(dataTable.Columns, st);
 
-                for (Int32 i = 0; i < count; i++)
+                for (int i = 0; i < count; i++)
                 {
-                    Object[] itemArray = dataView[i].Row.ItemArray;
+                    object[] itemArray = dataView[i].Row.ItemArray;
                     StringTableRow row = st.NewRow();
 
-                    for (Int32 j = 0; j < itemArray.Length; j++)
+                    for (int j = 0; j < itemArray.Length; j++)
                     {
                         row[j] = itemArray[j].ToString();
                     }

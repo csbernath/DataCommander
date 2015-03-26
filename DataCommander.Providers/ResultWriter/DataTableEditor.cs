@@ -236,7 +236,7 @@ namespace DataCommander.Providers
                     }
 
                     var queryForm = (QueryForm)Application.Instance.MainForm.ActiveMdiChild;
-                    queryForm.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, message));
+                    queryForm.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, message));
                 }
             }
         }
@@ -687,7 +687,7 @@ namespace DataCommander.Providers
             var saveFileDialog = new SaveFileDialog();
             saveFileDialog.Title = "Save table";
             saveFileDialog.Filter =
-                "HTML (*.htm)|*.htm|Fixed Width Columns (*.txt)|*.txt|Tab Separated Values (*.tsv)|*.tsv|XML Spreadsheet 2003 (*.xml)|*.xml|XML Spreadsheet 2007(*.xlsx)|*.xlsx";
+                "HTML (*.htm)|*.htm|Fixed Width Columns (*.txt)|*.txt|Tab Separated Values (*.tsv)|*.tsv|XML Spreadsheet 2007(*.xlsx)|*.xlsx";
             saveFileDialog.FilterIndex = 5;
             saveFileDialog.AddExtension = true;
             saveFileDialog.OverwritePrompt = true;
@@ -730,15 +730,11 @@ namespace DataCommander.Providers
                                 }
                                 break;
 
-                            case 4:
-                                // TODO
-                                break;
-
-                            case 5: // XML Spreadsheet 2007(*.xlsx)
+                            case 4: // XML Spreadsheet 2007(*.xlsx)
                                 var fileInfo = new FileInfo(path);
                                 using (var excelPackage = new ExcelPackage(fileInfo))
                                 {
-                                    var worksheet = excelPackage.Workbook.Worksheets.Add(string.Format("Worksheet {0:yyyy-MM-dd HHmmss}", OptimizedDateTime.Now));
+                                    var worksheet = excelPackage.Workbook.Worksheets.Add(string.Format("Worksheet {0:yyyy-MM-dd HHmmss}", LocalTime.Default.Now));
                                     worksheet.View.FreezePanes(2, 1);
 
                                     var dataView = this.dataTable.DefaultView;
@@ -840,10 +836,11 @@ namespace DataCommander.Providers
             saveFileDialog.AddExtension = true;
             saveFileDialog.OverwritePrompt = true;
             saveFileDialog.DefaultExt = "bin";
+            saveFileDialog.FileName = this.columnName;
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                var binaryField = (BinaryField)cellValue;
+                var binaryField = (BinaryField)this.cellValue;
                 string path = saveFileDialog.FileName;
 
                 using (FileStream fileStream = File.Create(path))
@@ -865,7 +862,7 @@ namespace DataCommander.Providers
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                StreamField streamField = (StreamField)cellValue;
+                var streamField = (StreamField)cellValue;
                 string path = saveFileDialog.FileName;
                 Stream source = streamField.Stream;
 

@@ -10,7 +10,7 @@
         /// <summary>
         /// 
         /// </summary>
-        Boolean IsErrorEnabled
+        bool IsErrorEnabled
         {
             get;
         }
@@ -18,7 +18,7 @@
         /// <summary>
         /// 
         /// </summary>
-        Boolean IsWarningEnabled
+        bool IsWarningEnabled
         {
             get;
         }
@@ -26,7 +26,7 @@
         /// <summary>
         /// 
         /// </summary>
-        Boolean IsInformationEnabled
+        bool IsInformationEnabled
         {
             get;
         }
@@ -34,7 +34,7 @@
         /// <summary>
         /// 
         /// </summary>
-        Boolean IsTraceEnabled
+        bool IsTraceEnabled
         {
             get;
         }
@@ -42,7 +42,7 @@
         /// <summary>
         /// 
         /// </summary>
-        Boolean IsDebugEnabled
+        bool IsDebugEnabled
         {
             get;
         }
@@ -51,103 +51,103 @@
         /// 
         /// </summary>
         /// <param name="message"></param>
-        void Debug( String message );
+        void Debug( string message );
         
         /// <summary>
         /// 
         /// </summary>
         /// <param name="format"></param>
         /// <param name="args"></param>
-        void Debug( String format, params Object[] args );
+        void Debug( string format, params object[] args );
         
         /// <summary>
         /// 
         /// </summary>
         /// <param name="getMessage"></param>
-        void Debug( Func<String> getMessage );
+        void Debug( Func<string> getMessage );
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="message"></param>
-        void Trace( String message );
+        void Trace( string message );
         
         /// <summary>
         /// 
         /// </summary>
         /// <param name="format"></param>
         /// <param name="args"></param>
-        void Trace( String format, params Object[] args );
+        void Trace( string format, params object[] args );
         
         /// <summary>
         /// 
         /// </summary>
         /// <param name="getMessage"></param>
-        void Trace( Func<String> getMessage );
+        void Trace( Func<string> getMessage );
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="message"></param>
-        void Information( String message );
+        void Information( string message );
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="format"></param>
         /// <param name="args"></param>
-        void Information( String format, params Object[] args );
+        void Information( string format, params object[] args );
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="getMessage"></param>
-        void Information( Func<String> getMessage );
+        void Information( Func<string> getMessage );
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="message"></param>
-        void Warning( String message );
+        void Warning( string message );
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="format"></param>
         /// <param name="args"></param>
-        void Warning( String format, params Object[] args );
+        void Warning( string format, params object[] args );
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="getMessage"></param>
-        void Warning( Func<String> getMessage );
+        void Warning( Func<string> getMessage );
         
         /// <summary>
         /// 
         /// </summary>
         /// <param name="message"></param>
-        void Error( String message );
+        void Error( string message );
         
         /// <summary>
         /// 
         /// </summary>
         /// <param name="format"></param>
         /// <param name="args"></param>
-        void Error( String format, params Object[] args );
+        void Error( string format, params object[] args );
         
         /// <summary>
         /// 
         /// </summary>
         /// <param name="getMessage"></param>
-        void Error( Func<String> getMessage );
+        void Error( Func<string> getMessage );
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="logLevel"></param>
         /// <param name="message"></param>
-        void Write( LogLevel logLevel, String message );
+        void Write( LogLevel logLevel, string message );
         
         /// <summary>
         /// 
@@ -155,13 +155,13 @@
         /// <param name="logLevel"></param>
         /// <param name="format"></param>
         /// <param name="args"></param>
-        void Write( LogLevel logLevel, String format, params Object[] args );
+        void Write( LogLevel logLevel, string format, params object[] args );
         
         /// <summary>
         /// 
         /// </summary>
         /// <param name="logLevel"></param>
         /// <param name="getMessage"></param>
-        void Write( LogLevel logLevel, Func<String> getMessage );
+        void Write( LogLevel logLevel, Func<string> getMessage );
     }
 }

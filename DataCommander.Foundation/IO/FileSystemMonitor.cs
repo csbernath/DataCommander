@@ -17,10 +17,10 @@ namespace DataCommander.Foundation.IO
     public sealed class FileSystemMonitor : LoopThread, ILoopable
     {
         private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private String path;
-        private String searchPattern;
-        private Int32 period;
-        private String[] last;
+        private string path;
+        private string searchPattern;
+        private int period;
+        private string[] last;
         private FileSystemEventHandler created;
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace DataCommander.Foundation.IO
         /// The directory to monitor, in standard or Universal Naming Convention (UNC) notation.
         /// </param>
         /// <param name="searchPattern">
-        /// The search String to match against the names of files in path.
+        /// The search string to match against the names of files in path.
         /// The parameter cannot end in two periods ("..") or contain two periods ("..")
         /// followed by DirectorySeparatorChar or AltDirectorySeparatorChar, nor can it contain any of the characters in InvalidPathChars. 
         /// </param>
@@ -38,16 +38,16 @@ namespace DataCommander.Foundation.IO
         /// milliseconds
         /// </param>
         public FileSystemMonitor(
-            String path,
-            String searchPattern,
-            Int32 period )
+            string path,
+            string searchPattern,
+            int period )
         {
             this.path = path;
             this.searchPattern = searchPattern;
             this.period = period;
 
             this.Initialize( this );
-            String name = String.Format( CultureInfo.InvariantCulture, "FileSystemMonitor({0},{1})", path, searchPattern );
+            string name = string.Format( CultureInfo.InvariantCulture, "FileSystemMonitor({0},{1})", path, searchPattern );
             Thread.Name = name;
         }
 
@@ -75,31 +75,31 @@ namespace DataCommander.Foundation.IO
         {
             try
             {
-                String[] current = Directory.GetFiles( this.path, this.searchPattern );
+                string[] current = Directory.GetFiles( this.path, this.searchPattern );
                 Array.Sort( current );
 
                 if (this.last != null)
                 {
-                    for (Int32 i = 0; i < current.Length; i++)
+                    for (int i = 0; i < current.Length; i++)
                     {
-                        String file = current[ i ];
-                        Int32 index = Array.BinarySearch( this.last, file );
+                        string file = current[ i ];
+                        int index = Array.BinarySearch( this.last, file );
 
                         if (index < 0 && this.Created != null)
                         {
-                            String message = String.Format( CultureInfo.InvariantCulture, "FileSystemMonitor({0}).Created: {1}", this.Thread.ManagedThreadId, file );
+                            string message = string.Format( CultureInfo.InvariantCulture, "FileSystemMonitor({0}).Created: {1}", this.Thread.ManagedThreadId, file );
                             log.Trace(message );
 
-                            String fileName = Path.GetFileName( file );
+                            string fileName = Path.GetFileName( file );
                             FileSystemEventArgs e = new FileSystemEventArgs( WatcherChangeTypes.Created, this.path, fileName );
                             this.created( this, e );
                         }
                     }
 
-                    for (Int32 i = 0; i < this.last.Length; i++)
+                    for (int i = 0; i < this.last.Length; i++)
                     {
-                        String file = this.last[ i ];
-                        Int32 index = Array.BinarySearch( current, file );
+                        string file = this.last[ i ];
+                        int index = Array.BinarySearch( current, file );
 
                         if (index < 0)
                         {
@@ -109,7 +109,7 @@ namespace DataCommander.Foundation.IO
                 }
                 else
                 {
-                    for (Int32 i = 0; i < current.Length; i++)
+                    for (int i = 0; i < current.Length; i++)
                     {
                         log.Trace("FileSystemMonitor.current[{0}]: {1}", i, current[ i ] );
                     }

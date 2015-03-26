@@ -66,7 +66,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Int64 Length
+        public override long Length
         {
             get
             {
@@ -77,7 +77,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Int64 Position
+        public override long Position
         {
             get
             {
@@ -115,7 +115,7 @@
         /// <param name="offset"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public override Int32 Read( byte[] buffer, Int32 offset, Int32 count )
+        public override int Read( byte[] buffer, int offset, int count )
         {
             if (this.beforeRead != null)
             {
@@ -131,7 +131,7 @@
         /// <param name="offset"></param>
         /// <param name="origin"></param>
         /// <returns></returns>
-        public override Int64 Seek( long offset, SeekOrigin origin )
+        public override long Seek( long offset, SeekOrigin origin )
         {
             return this.stream.Seek( offset, origin );
         }
@@ -151,7 +151,7 @@
         /// <param name="buffer"></param>
         /// <param name="offset"></param>
         /// <param name="count"></param>
-        public override void Write( Byte[] buffer, Int32 offset, Int32 count )
+        public override void Write( Byte[] buffer, int offset, int count )
         {
             this.stream.Write( buffer, offset, count );
         }

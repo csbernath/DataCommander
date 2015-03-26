@@ -11,7 +11,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String ColumnName;
+        public string ColumnName;
         
         /// <summary>
         /// 
@@ -21,21 +21,21 @@
         /// <summary>
         /// 
         /// </summary>
-        public String NumberFormat;
+        public string NumberFormat;
         
         /// <summary>
         /// 
         /// </summary>
-        public String Width;
+        public string Width;
 
         /// <summary>
         /// 
         /// </summary>
-        public Converter<Object, String> Convert;
+        public Converter<object, string> Convert;
 
         /// <summary>
         /// 
         /// </summary>
-        public Dictionary<String, Object> ExtendedProperties = new Dictionary<String, Object>();
+        public Dictionary<string, object> ExtendedProperties = new Dictionary<string, object>();
     }
 }

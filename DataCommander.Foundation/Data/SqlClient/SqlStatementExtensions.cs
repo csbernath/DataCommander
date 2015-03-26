@@ -24,7 +24,7 @@
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static Byte ToTSqlBit( this Boolean source )
+        public static Byte ToTSqlBit( this bool source )
         {
             return source ? True : False;
         }
@@ -37,7 +37,7 @@
         public static string ToTSqlDateTime( this DateTime source )
         {
             TimeSpan timeOfDay = source.TimeOfDay;
-            String format;
+            string format;
 
             if (timeOfDay.TotalMilliseconds == 0)
             {
@@ -59,7 +59,7 @@
         }
 
         /// <summary>
-        /// Converts a <see cref="System.Decimal"/> value to Microsoft SQL Server Decimal String.
+        /// Converts a <see cref="System.Decimal"/> value to Microsoft SQL Server Decimal string.
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
@@ -73,7 +73,7 @@
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static string ToTSqlInt( this Int32? source )
+        public static string ToTSqlInt( this int? source )
         {
             return source != null ? source.ToString() : SqlNull.NullString;
         }
@@ -102,7 +102,7 @@
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static String ToTSqlNVarChar( this String source )
+        public static string ToTSqlNVarChar( this string source )
         {
             string target;
             if (source != null)
@@ -142,7 +142,7 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static SqlInt32 ToSqlInt32( this Int32? value )
+        public static SqlInt32 ToSqlInt32( this int? value )
         {
             SqlInt32 returnValue;
 

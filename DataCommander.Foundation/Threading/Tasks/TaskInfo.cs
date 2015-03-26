@@ -12,16 +12,16 @@ namespace DataCommander.Foundation.Threading.Tasks
     public sealed class TaskInfo
     {
         private readonly WeakReference weakReference;
-        private readonly Int32 id;
-        private readonly String name;
-        private Int32? managedThreadId;
-        private Boolean? isThreadPoolThread;
-        private readonly DateTime creationTime = OptimizedDateTime.Now;
+        private readonly int id;
+        private readonly string name;
+        private int? managedThreadId;
+        private bool? isThreadPoolThread;
+        private readonly DateTime creationTime = LocalTime.Default.Now;
         private DateTime? startTime;
-        private Boolean isCompleted;
+        private bool isCompleted;
         private DateTime? completedTime;
 
-        internal TaskInfo( Task task, String name )
+        internal TaskInfo( Task task, string name )
         {
             this.weakReference = new WeakReference( task );
             this.id = task.Id;
@@ -31,7 +31,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Id
+        public int Id
         {
             get
             {
@@ -42,7 +42,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public String Name
+        public string Name
         {
             get
             {
@@ -53,7 +53,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public Int32? ManagedThreadId
+        public int? ManagedThreadId
         {
             get
             {
@@ -69,7 +69,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public Boolean? IsThreadPoolThread
+        public bool? IsThreadPoolThread
         {
             get
             {
@@ -112,7 +112,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsCompleted
+        public bool IsCompleted
         {
             get
             {
@@ -155,7 +155,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsAlive
+        public bool IsAlive
         {
             get
             {

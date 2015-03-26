@@ -16,10 +16,10 @@ namespace DataCommander.Foundation.Text
         /// <param name="value"></param>
         /// <param name="isUpper"></param>
         /// <returns></returns>
-        public static Char[] Encode( Byte value, Boolean isUpper )
+        public static Char[] Encode( Byte value, bool isUpper )
         {
-            Int32 d1 = (value & 0xF0) >> 4;
-            Int32 d0 = value & 0x0F;
+            int d1 = (value & 0xF0) >> 4;
+            int d0 = value & 0x0F;
 
             Char[] digits = new Char[ 2 ];
             Char[] hexChars = isUpper ? HexCharsUpper : HexCharsLower;
@@ -37,12 +37,12 @@ namespace DataCommander.Foundation.Text
         /// <param name="isUpper"></param>
         /// <returns></returns>
         [CLSCompliant( false )]
-        public static Char[] Encode( UInt16 value, Boolean isUpper )
+        public static Char[] Encode( UInt16 value, bool isUpper )
         {
-            Int32 d3 = value >> 12;
-            Int32 d2 = (value & 0x0F00) >> 8;
-            Int32 d1 = (value & 0x00F0) >> 4;
-            Int32 d0 = value & 0x000F;
+            int d3 = value >> 12;
+            int d2 = (value & 0x0F00) >> 8;
+            int d1 = (value & 0x00F0) >> 4;
+            int d0 = value & 0x000F;
 
             Char[] digits = new Char[ 4 ];
             Char[] hexChars = isUpper ? HexCharsUpper : HexCharsLower;
@@ -56,21 +56,21 @@ namespace DataCommander.Foundation.Text
         }
 
         /// <summary>
-        /// Int32 -> Char[8]
+        /// int -> Char[8]
         /// </summary>
         /// <param name="value"></param>
         /// <param name="isUpper"></param>
         /// <returns></returns>
-        public static Char[] Encode( Int32 value, Boolean isUpper )
+        public static Char[] Encode( int value, bool isUpper )
         {
-            Int32 d7 = value >> 28;
-            Int32 d6 = (value & 0x0F000000) >> 24;
-            Int32 d5 = (value & 0x00F00000) >> 20;
-            Int32 d4 = (value & 0x000F0000) >> 16;
-            Int32 d3 = (value & 0x0000F000) >> 12;
-            Int32 d2 = (value & 0x00000F00) >> 8;
-            Int32 d1 = (value & 0x000000F0) >> 4;
-            Int32 d0 = value & 0x0000000F;
+            int d7 = value >> 28;
+            int d6 = (value & 0x0F000000) >> 24;
+            int d5 = (value & 0x00F00000) >> 20;
+            int d4 = (value & 0x000F0000) >> 16;
+            int d3 = (value & 0x0000F000) >> 12;
+            int d2 = (value & 0x00000F00) >> 8;
+            int d1 = (value & 0x000000F0) >> 4;
+            int d0 = value & 0x0000000F;
 
             Char[] digits = new Char[ 8 ];
             Char[] hexChars = isUpper ? HexCharsUpper : HexCharsLower;
@@ -92,9 +92,9 @@ namespace DataCommander.Foundation.Text
         /// <param name="bytes"></param>
         /// <param name="isUpper"></param>
         /// <returns></returns>
-        public static Char[] Encode( Byte[] bytes, Boolean isUpper )
+        public static Char[] Encode( Byte[] bytes, bool isUpper )
         {
-            Int32 length = bytes.Length;
+            int length = bytes.Length;
             return Encode( bytes, length, isUpper );
         }
 
@@ -105,17 +105,17 @@ namespace DataCommander.Foundation.Text
         /// <param name="length"></param>
         /// <param name="isUpper"></param>
         /// <returns></returns>
-        public static Char[] Encode( Byte[] bytes, Int32 length, Boolean isUpper )
+        public static Char[] Encode( Byte[] bytes, int length, bool isUpper )
         {
             Char[] chars = new Char[ length << 1 ];
-            Int32 j = 0;
+            int j = 0;
             Char[] hexChars = isUpper ? HexCharsUpper : HexCharsLower;
 
-            for (Int32 i = 0; i < length; i++)
+            for (int i = 0; i < length; i++)
             {
                 Byte value = bytes[ i ];
-                Int32 d1 = (value & 0xF0) >> 4;
-                Int32 d0 = value & 0x0F;
+                int d1 = (value & 0xF0) >> 4;
+                int d0 = value & 0x0F;
 
                 chars[ j ] = hexChars[ d1 ];
                 j++;
@@ -133,10 +133,10 @@ namespace DataCommander.Foundation.Text
         /// <param name="isUpper"></param>
         /// <returns></returns>
         [CLSCompliant( false )]
-        public static String GetString( UInt16 value, Boolean isUpper )
+        public static string GetString( UInt16 value, bool isUpper )
         {
             Char[] chars = Encode( value, isUpper );
-            String s = new String( chars );
+            string s = new string( chars );
             return s;
         }
 
@@ -146,10 +146,10 @@ namespace DataCommander.Foundation.Text
         /// <param name="value"></param>
         /// <param name="isUpper"></param>
         /// <returns></returns>
-        public static String GetString( Int32 value, Boolean isUpper )
+        public static string GetString( int value, bool isUpper )
         {
             Char[] chars = Encode( value, isUpper );
-            String s = new String( chars );
+            string s = new string( chars );
             return s;
         }
 
@@ -160,9 +160,9 @@ namespace DataCommander.Foundation.Text
         /// <param name="isUpper"></param>
         /// <returns></returns>
         [CLSCompliant( false )]
-        public static String GetString( UInt64 value, Boolean isUpper )
+        public static string GetString( UInt64 value, bool isUpper )
         {
-            String format;
+            string format;
 
             if (isUpper)
             {
@@ -173,7 +173,7 @@ namespace DataCommander.Foundation.Text
                 format = "x";
             }
 
-            String s = value.ToString( format ).PadLeft( 16, '0' );
+            string s = value.ToString( format ).PadLeft( 16, '0' );
             return s;
         }
 
@@ -183,10 +183,10 @@ namespace DataCommander.Foundation.Text
         /// <param name="bytes"></param>
         /// <param name="isUpper"></param>
         /// <returns></returns>
-        public static String GetString( Byte[] bytes, Boolean isUpper )
+        public static string GetString( Byte[] bytes, bool isUpper )
         {
             Char[] chars = Encode( bytes, isUpper );
-            String s = new String( chars );
+            string s = new string( chars );
             return s;
         }
     }

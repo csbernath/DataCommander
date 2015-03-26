@@ -31,7 +31,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public override String Message
+        public override string Message
         {
             get
             {
@@ -45,20 +45,20 @@ namespace DataCommander.Foundation.Diagnostics
                 {
                     foreach (AssertMessageParameter parameter in parameters)
                     {
-                        String valueString = ToString( parameter.Value );
+                        string valueString = ToString( parameter.Value );
                         sb.AppendFormat( "{0} = {1}", parameter.Name, valueString );
                         sb.AppendLine();
                     }
                 }
 
-                String message = sb.ToString();
+                string message = sb.ToString();
                 return message;
             }
         }
 
-        private static String ToString( object value )
+        private static string ToString( object value )
         {
-            String s;
+            string s;
 
             if (value != null)
             {

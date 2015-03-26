@@ -33,12 +33,12 @@
         /// <param name="dataReader"></param>
         /// <param name="dataSet"></param>
         /// <returns></returns>
-        public static Int32 Fill( this IDataReader dataReader, DataSet dataSet )
+        public static int Fill( this IDataReader dataReader, DataSet dataSet )
         {
             Contract.Requires<ArgumentNullException>( dataReader != null );
             Contract.Requires<ArgumentNullException>( dataSet != null );
 
-            Int32 rowCount = 0;
+            int rowCount = 0;
             WorkerThread thread = WorkerThread.Current;
 
             while (!thread.IsStopRequested)
@@ -49,7 +49,7 @@
                         Locale = CultureInfo.InvariantCulture
                     };
 
-                Int32 count = dataReader.Fill( table );
+                int count = dataReader.Fill( table );
                 rowCount += count;
                 dataSet.Tables.Add( table );
 
@@ -68,7 +68,7 @@
         /// <param name="dataReader"></param>
         /// <param name="dataTable"></param>
         /// <returns></returns>
-        public static Int32 Fill( this IDataReader dataReader, DataTable dataTable )
+        public static int Fill( this IDataReader dataReader, DataTable dataTable )
         {
             Contract.Requires<ArgumentNullException>( dataReader != null );
             Contract.Requires<ArgumentNullException>( dataTable != null );
@@ -85,14 +85,14 @@
                 }
             }
 
-            Int32 fieldCount = dataReader.FieldCount;
+            int fieldCount = dataReader.FieldCount;
             DataRowCollection rows = dataTable.Rows;
-            Int32 rowCount = 0;
+            int rowCount = 0;
             WorkerThread thread = WorkerThread.Current;
 
             while (!thread.IsStopRequested && dataReader.Read())
             {
-                var values = new Object[fieldCount];
+                var values = new object[fieldCount];
                 dataReader.GetValues( values );
                 DataRow row = rows.Add( values );
                 row.AcceptChanges();

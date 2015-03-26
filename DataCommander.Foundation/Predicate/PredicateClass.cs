@@ -55,7 +55,7 @@
         /// </summary>
         /// <param name="x"></param>
         /// <returns></returns>
-        public static Boolean operator true( PredicateClass<T> x )
+        public static bool operator true( PredicateClass<T> x )
         {
             return false;
         }
@@ -65,7 +65,7 @@
         /// </summary>
         /// <param name="x"></param>
         /// <returns></returns>
-        public static Boolean operator false( PredicateClass<T> x )
+        public static bool operator false( PredicateClass<T> x )
         {
             return false;
         }
@@ -75,6 +75,6 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public abstract Boolean Evaluate( T value );
+        public abstract bool Evaluate( T value );
     }
 }

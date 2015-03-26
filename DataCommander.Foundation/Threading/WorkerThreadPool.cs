@@ -9,17 +9,17 @@ namespace DataCommander.Foundation.Threading
     /// </summary>
     public class WorkerThreadPool
     {
-        private readonly Queue<Object> queue = new Queue<Object>();
+        private readonly Queue<object> queue = new Queue<object>();
         private readonly AutoResetEvent enqueueEvent = new AutoResetEvent( false );
         private readonly WorkerThreadPoolDequeuerCollection dequeuers;
-        private Int32 maxThreadCount;
-        private Int32 activeThreadCount;
+        private int maxThreadCount;
+        private int activeThreadCount;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="maxThreadCount"></param>
-        public WorkerThreadPool( Int32 maxThreadCount )
+        public WorkerThreadPool( int maxThreadCount )
         {
             this.maxThreadCount = maxThreadCount;
             this.dequeuers = new WorkerThreadPoolDequeuerCollection( this );
@@ -29,7 +29,7 @@ namespace DataCommander.Foundation.Threading
         /// 
         /// </summary>
         /// <param name="item"></param>
-        public void QueueUserWorkItem( Object item )
+        public void QueueUserWorkItem( object item )
         {
             lock (this.queue)
             {
@@ -42,7 +42,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public Int32 QueuedItemCount
+        public int QueuedItemCount
         {
             get
             {
@@ -50,10 +50,10 @@ namespace DataCommander.Foundation.Threading
             }
         }
 
-        internal Boolean Dequeue( WaitCallback callback, WaitHandle[] waitHandles )
+        internal bool Dequeue( WaitCallback callback, WaitHandle[] waitHandles )
         {
-            Boolean dequeued;
-            Object item = null;
+            bool dequeued;
+            object item = null;
 
             if (this.queue.Count > 0)
             {
@@ -96,7 +96,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public Int32 ActiveThreadCount
+        public int ActiveThreadCount
         {
             get
             {
@@ -115,7 +115,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public Int32 MaxThreadCount
+        public int MaxThreadCount
         {
             get
             {

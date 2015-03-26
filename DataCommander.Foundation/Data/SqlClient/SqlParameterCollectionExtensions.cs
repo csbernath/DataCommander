@@ -24,7 +24,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="parameters"></param>
         /// <param name="parameterName"></param>
         /// <param name="sqlDataRecords"></param>
-        public static void AddStructured(this SqlParameterCollection parameters, String parameterName, IEnumerable<SqlDataRecord> sqlDataRecords)
+        public static void AddStructured(this SqlParameterCollection parameters, string parameterName, IEnumerable<SqlDataRecord> sqlDataRecords)
         {
             Contract.Requires(parameters != null);
 
@@ -43,18 +43,18 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public static String ToLogString( this SqlParameterCollection parameters )
+        public static string ToLogString( this SqlParameterCollection parameters )
         {
             Contract.Requires( parameters != null );
 
             StringBuilder sb = new StringBuilder();
-            Boolean first = true;
-            String s;
+            bool first = true;
+            string s;
             var numberFormatInfo = NumberFormatInfo.InvariantInfo;
 
             foreach (SqlParameter parameter in parameters)
             {
-                Object value = parameter.Value;
+                object value = parameter.Value;
 
                 if (value != null)
                 {
@@ -105,7 +105,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                                             case SqlDbType.NText:
                                                 s = value.ToString();
                                                 s = s.Replace( "\'", "''" );
-                                                s = String.Format( "'{0}'", s );
+                                                s = string.Format( "'{0}'", s );
                                                 break;
 
                                             case SqlDbType.DateTime:
@@ -117,7 +117,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                                             case SqlDbType.Float:
                                                 SqlDouble sqlDouble = (SqlDouble) value;
                                                 Double d = sqlDouble.Value;
-                                                Int64 i = (Int64) d;
+                                                long i = (long) d;
 
                                                 if (i == d)
                                                     s = i.ToString( numberFormatInfo );
@@ -139,7 +139,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                                             case SqlDbType.Money:
                                                 SqlMoney sqlMoney = (SqlMoney) value;
                                                 Decimal dec = sqlMoney.Value;
-                                                i = (Int64) dec;
+                                                i = (long) dec;
 
                                                 if (i == dec)
                                                     s = i.ToString( numberFormatInfo );
@@ -186,14 +186,14 @@ namespace DataCommander.Foundation.Data.SqlClient
                                         switch (typeCode)
                                         {
                                             case TypeCode.Boolean:
-                                                Boolean b = (Boolean) value;
+                                                bool b = (bool) value;
                                                 s = b ? "1" : "0";
                                                 break;
 
                                             case TypeCode.String:
-                                                s = (String) value;
+                                                s = (string) value;
                                                 s = s.Replace( "\'", "''" );
-                                                s = String.Format( "'{0}'", s );
+                                                s = string.Format( "'{0}'", s );
                                                 break;
 
                                             case TypeCode.DateTime:

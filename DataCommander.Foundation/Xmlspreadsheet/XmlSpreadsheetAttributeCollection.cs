@@ -10,11 +10,11 @@
     public sealed class XmlSpreadsheetAttributeCollection : ICollection<XmlSpreadsheetAttribute>
     {
         private readonly IndexableCollection<XmlSpreadsheetAttribute> items;
-        private readonly UniqueIndex<String, XmlSpreadsheetAttribute> nameIndex;
+        private readonly UniqueIndex<string, XmlSpreadsheetAttribute> nameIndex;
 
         internal XmlSpreadsheetAttributeCollection()
         {
-            this.nameIndex = new UniqueIndex<String, XmlSpreadsheetAttribute>(
+            this.nameIndex = new UniqueIndex<string, XmlSpreadsheetAttribute>(
                 "NameIndex",
                 item => GetKeyResponse.Create( true, item.LocalName ),
                 SortOrder.None );
@@ -25,7 +25,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public UniqueIndex<String, XmlSpreadsheetAttribute> NameIndex
+        public UniqueIndex<string, XmlSpreadsheetAttribute> NameIndex
         {
             get
             {
@@ -54,12 +54,12 @@
             throw new NotImplementedException();
         }
 
-        void ICollection<XmlSpreadsheetAttribute>.CopyTo( XmlSpreadsheetAttribute[] array, Int32 arrayIndex )
+        void ICollection<XmlSpreadsheetAttribute>.CopyTo( XmlSpreadsheetAttribute[] array, int arrayIndex )
         {
             throw new NotImplementedException();
         }
 
-        Int32 ICollection<XmlSpreadsheetAttribute>.Count
+        int ICollection<XmlSpreadsheetAttribute>.Count
         {
             get
             {

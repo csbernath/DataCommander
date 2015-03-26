@@ -97,7 +97,7 @@
         private void sqlBulkCopy_SqlRowsCopied( object sender, SqlRowsCopiedEventArgs e )
         {
             string message = string.Format( "{0} rows copied to destination.", e.RowsCopied );
-            this.addInfoMessage( new InfoMessage( OptimizedDateTime.Now, InfoMessageSeverity.Verbose, message ) );
+            this.addInfoMessage( new InfoMessage( LocalTime.Default.Now, InfoMessageSeverity.Verbose, message ) );
 
             var thread = WorkerThread.Current;
             if (thread.IsStopRequested)
@@ -143,7 +143,7 @@
             }
 
             string message = string.Format( "{0} rows inserted.", this.insertedRowCount );
-            this.addInfoMessage( new InfoMessage( OptimizedDateTime.Now, InfoMessageSeverity.Verbose, message ) );
+            this.addInfoMessage( new InfoMessage( LocalTime.Default.Now, InfoMessageSeverity.Verbose, message ) );
         }
 
         private void Dequeue()
@@ -220,7 +220,7 @@
             this.logResultWriter.WriteRows( rows, rowCount );
             this.readRowCount += rowCount;
             string message = string.Format( "{0} row(s) read.", this.readRowCount );
-            this.addInfoMessage( new InfoMessage( OptimizedDateTime.Now, InfoMessageSeverity.Verbose, message ) );
+            this.addInfoMessage( new InfoMessage( LocalTime.Default.Now, InfoMessageSeverity.Verbose, message ) );
             object[][] targetRows = new object[ rowCount ][];
             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {

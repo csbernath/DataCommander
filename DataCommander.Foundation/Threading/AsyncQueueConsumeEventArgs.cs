@@ -7,7 +7,7 @@ namespace DataCommander.Foundation.Threading
     /// </summary>
     public sealed class AsyncQueueConsumeEventArgs : EventArgs
     {
-        internal AsyncQueueConsumeEventArgs(Object item)
+        internal AsyncQueueConsumeEventArgs(object item)
         {
             this.item = item;
         }
@@ -15,7 +15,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public Object Item
+        public object Item
         {
             get
             {
@@ -23,6 +23,6 @@ namespace DataCommander.Foundation.Threading
             }
         }
 
-        private Object item;
+        private object item;
     }
 }

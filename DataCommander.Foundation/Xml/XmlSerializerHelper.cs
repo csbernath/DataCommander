@@ -17,13 +17,13 @@ namespace DataCommander.Foundation.Xml
         /// <param name="xml"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static Object Deserialize( String xml, Type type )
+        public static object Deserialize( string xml, Type type )
         {
             Contract.Requires(type != null);
 
             var stringReader = new StringReader( xml );
             var xmlSerializer = new XmlSerializer( type );
-            Object obj = xmlSerializer.Deserialize( stringReader );
+            object obj = xmlSerializer.Deserialize( stringReader );
             return obj;
         }
 
@@ -33,13 +33,13 @@ namespace DataCommander.Foundation.Xml
         /// <param name="xmlReader"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static Object Deserialize( XmlReader xmlReader, Type type )
+        public static object Deserialize( XmlReader xmlReader, Type type )
         {
             Contract.Requires(xmlReader != null);
             Contract.Requires(type != null);
 
             var xmlSerializer = new XmlSerializer( type );
-            Object obj = xmlSerializer.Deserialize( xmlReader );
+            object obj = xmlSerializer.Deserialize( xmlReader );
             return obj;
         }
 
@@ -49,9 +49,9 @@ namespace DataCommander.Foundation.Xml
         /// <typeparam name="T"></typeparam>
         /// <param name="xml"></param>
         /// <returns></returns>
-        public static T Deserialize<T>( String xml )
+        public static T Deserialize<T>( string xml )
         {
-            Object obj = Deserialize( xml, typeof (T) );
+            object obj = Deserialize( xml, typeof (T) );
             return (T) obj;
         }
 
@@ -63,7 +63,7 @@ namespace DataCommander.Foundation.Xml
         /// <returns></returns>
         public static T Deserialize<T>( XmlReader xmlReader )
         {
-            Object obj = Deserialize( xmlReader, typeof (T) );
+            object obj = Deserialize( xmlReader, typeof (T) );
             return (T) obj;
         }
     }

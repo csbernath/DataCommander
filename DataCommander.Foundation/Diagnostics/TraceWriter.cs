@@ -52,7 +52,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// 
         /// </summary>
         /// <param name="str"></param>
-        public override void Write(String str)
+        public override void Write(string str)
         {
             Trace.Write(str);
         }
@@ -61,7 +61,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// 
         /// </summary>
         /// <param name="str"></param>
-        public override void WriteLine(String str)
+        public override void WriteLine(string str)
         {
             Trace.WriteLine(str);
         }

@@ -21,7 +21,7 @@
         public static DataTable ExecuteDataTable(
             this DbProviderFactory factory,
             DbConnection connection,
-            String commandText)
+            string commandText)
         {
             Contract.Requires(factory != null);
             Contract.Requires(connection != null);

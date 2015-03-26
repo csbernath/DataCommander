@@ -18,7 +18,7 @@
         /// <param name="xmlWriterSettings"></param>
         /// <param name="o"></param>
         /// <returns></returns>
-        public static String SerializeToXmlString( this XmlSerializer xmlSerializer, XmlWriterSettings xmlWriterSettings, Object o )
+        public static string SerializeToXmlString( this XmlSerializer xmlSerializer, XmlWriterSettings xmlWriterSettings, object o )
         {
             Contract.Requires( xmlSerializer != null );
 

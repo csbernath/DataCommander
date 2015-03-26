@@ -20,7 +20,7 @@
         /// <param name="query"></param>
         /// <param name="selector"></param>
         /// <returns></returns>
-        public static List<T> ExecuteQuery<T>( this ManagementScope managementScope, String query, Func<ManagementObject, T> selector )
+        public static List<T> ExecuteQuery<T>( this ManagementScope managementScope, string query, Func<ManagementObject, T> selector )
         {
             Contract.Requires(managementScope != null);
 

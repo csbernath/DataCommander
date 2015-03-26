@@ -11,19 +11,19 @@ namespace DataCommander.Foundation.Configuration
     /// </summary>
     public sealed class ConfigurationNodeTree
     {
-        private ConfigurationNode rootNode = new ConfigurationNode( null );
+        private ConfigurationNode rootNode = new ConfigurationNode(null);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="xml"></param>
         /// <param name="sectionName"></param>
-        public void LoadXml( String xml, String sectionName )
+        public void LoadXml(string xml, string sectionName)
         {
             var reader = new ConfigurationReader();
-            var textReader = new StringReader( xml );
-            XmlTextReader xmlReader = new XmlTextReader( textReader );
-            this.rootNode = reader.Read( xmlReader, null, sectionName, null );
+            var textReader = new StringReader(xml);
+            var xmlReader = new XmlTextReader(textReader);
+            this.rootNode = reader.Read(xmlReader, null, sectionName, null);
         }
 
         /// <summary>
@@ -31,17 +31,17 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="xmlWriter"></param>
         /// <param name="sectionName"></param>
-        public void Save( XmlWriter xmlWriter, String sectionName )
+        public void Save(XmlWriter xmlWriter, string sectionName)
         {
-            Contract.Requires( xmlWriter != null );
-            Contract.Requires( sectionName != null );
+            Contract.Requires<ArgumentNullException>(xmlWriter != null);
+            Contract.Requires<ArgumentNullException>(sectionName != null);
 
-            xmlWriter.WriteStartElement( sectionName );
-            ConfigurationWriter.Write( xmlWriter, this.rootNode.Attributes );
+            xmlWriter.WriteStartElement(sectionName);
+            ConfigurationWriter.Write(xmlWriter, this.rootNode.Attributes);
 
             foreach (ConfigurationNode childNode in this.rootNode.ChildNodes)
             {
-                ConfigurationWriter.WriteNode( xmlWriter, childNode );
+                ConfigurationWriter.WriteNode(xmlWriter, childNode);
             }
 
             xmlWriter.WriteEndElement();
@@ -52,13 +52,14 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="sectionName"></param>
         /// <returns></returns>
-        public String GetXml( String sectionName )
+        public string GetXml(string sectionName)
         {
-            String s;
-            using (var textWriter = new StringWriter( CultureInfo.InvariantCulture ))
+            string s;
+
+            using (var textWriter = new StringWriter(CultureInfo.InvariantCulture))
             {
-                var xmlWriter = new XmlTextWriter( textWriter ) { Formatting = Formatting.Indented, Indentation = 2, IndentChar = ' ' };
-                this.Save( xmlWriter, sectionName );
+                var xmlWriter = new XmlTextWriter(textWriter) {Formatting = Formatting.Indented, Indentation = 2, IndentChar = ' '};
+                this.Save(xmlWriter, sectionName);
                 xmlWriter.Close();
                 s = textWriter.ToString();
             }
@@ -71,29 +72,29 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public ConfigurationNode SelectNode( String path )
+        public ConfigurationNode SelectNode(string path)
         {
             if (this.rootNode == null)
             {
-                this.rootNode = new ConfigurationNode( null );
+                this.rootNode = new ConfigurationNode(null);
             }
 
             ConfigurationNode node = this.rootNode;
 
             if (path != null)
             {
-                String[] nodeNames = path.Split( ConfigurationNode.Delimiter );
+                string[] nodeNames = path.Split(ConfigurationNode.Delimiter);
 
-                for (Int32 i = 0; i < nodeNames.Length; i++)
+                for (int i = 0; i < nodeNames.Length; i++)
                 {
-                    String childNodeName = nodeNames[ i ];
+                    string childNodeName = nodeNames[i];
                     ConfigurationNode childNode;
-                    Boolean contains = node.ChildNodes.TryGetValue( childNodeName, out childNode );
+                    bool contains = node.ChildNodes.TryGetValue(childNodeName, out childNode);
 
                     if (!contains)
                     {
-                        childNode = new ConfigurationNode( childNodeName );
-                        node.AddChildNode( childNode );
+                        childNode = new ConfigurationNode(childNodeName);
+                        node.AddChildNode(childNode);
                     }
 
                     node = childNode;

@@ -2,7 +2,7 @@
 {
     using System;
     using System.Diagnostics.Contracts;
-    using System.Xml;   
+    using System.Xml;
 
     /// <summary>
     /// 
@@ -17,7 +17,7 @@
         /// <param name="attributes"></param>
         public XmlAttributeReader(XmlAttributeCollection attributes)
         {
-            Contract.Requires( attributes != null );
+            Contract.Requires<ArgumentNullException>(attributes != null);
 
             this.attributes = attributes;
         }
@@ -29,12 +29,12 @@
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static Boolean TryGetValue(XmlAttributeCollection attributes, String name, out String value)
+        public static bool TryGetValue(XmlAttributeCollection attributes, string name, out string value)
         {
-            Contract.Requires(attributes != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
 
             XmlAttribute attribute = attributes[name];
-            Boolean contains = attribute != null;
+            bool contains = attribute != null;
 
             if (contains)
             {
@@ -54,7 +54,7 @@
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Boolean TryGetValue(String name, out String value)
+        public bool TryGetValue(string name, out string value)
         {
             return TryGetValue(this.attributes, name, out value);
         }

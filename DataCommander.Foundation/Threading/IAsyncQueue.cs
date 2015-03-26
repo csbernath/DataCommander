@@ -12,7 +12,7 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         /// <param name="thread">The conmsumer will run in this thread</param>
         /// <param name="id">The id of the consumer</param>
-        IConsumer CreateConsumer(WorkerThread thread, Int32 id);
+        IConsumer CreateConsumer(WorkerThread thread, int id);
 
         /// <summary>
         /// 

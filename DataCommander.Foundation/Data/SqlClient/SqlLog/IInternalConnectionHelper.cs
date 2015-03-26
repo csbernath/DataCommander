@@ -5,8 +5,8 @@ namespace DataCommander.Foundation.Data.SqlClient
 
     internal interface IInternalConnectionHelper
     {
-        Object GetInternalConnection(IDbConnection connection);
+        object GetInternalConnection(IDbConnection connection);
 
-        Boolean IsOpen(Object internalConnection);
+        bool IsOpen(object internalConnection);
     }
 }

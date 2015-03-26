@@ -10,7 +10,7 @@ namespace DataCommander.Foundation.Threading
     /// </summary>
     public class AsyncQueue
     {
-        private String name;
+        private string name;
         private IAsyncQueue asyncQueue;
         private WorkerThreadCollection consumers = new WorkerThreadCollection();
         private Queue queue = new Queue();
@@ -24,19 +24,19 @@ namespace DataCommander.Foundation.Threading
 
             public ConsumerThread(
                 AsyncQueue queue,
-                Int32 id,
+                int id,
                 ThreadPriority priority )
             {
                 this.queue = queue;
                 this.thread = new WorkerThread( this.ThreadStart );
-                this.thread.Name = String.Format( "Consumer({0},{1})", queue.name, id );
+                this.thread.Name = string.Format( "Consumer({0},{1})", queue.name, id );
                 this.thread.Priority = priority;
                 this.consumer = this.queue.asyncQueue.CreateConsumer( this.thread, id );
             }
 
             private void ThreadStart()
             {
-                Object state = this.consumer.Enter();
+                object state = this.consumer.Enter();
 
                 try
                 {
@@ -51,7 +51,7 @@ namespace DataCommander.Foundation.Threading
                 }
             }
 
-            public void Consume( Object item )
+            public void Consume( object item )
             {
                 this.consumer.Consume( item );
             }
@@ -80,9 +80,9 @@ namespace DataCommander.Foundation.Threading
         /// <param name="consumerCount">Number of consumers</param>
         /// <param name="priority">priority of consumer threads</param>
         protected void Initialize(
-            String name,
+            string name,
             IAsyncQueue asyncQueue,
-            Int32 consumerCount,
+            int consumerCount,
             ThreadPriority priority )
         {
             Contract.Requires( consumerCount > 0 );
@@ -90,7 +90,7 @@ namespace DataCommander.Foundation.Threading
             this.name = name;
             this.asyncQueue = asyncQueue;
 
-            for (Int32 id = 0; id < consumerCount; id++)
+            for (int id = 0; id < consumerCount; id++)
             {
                 ConsumerThread consumerThread = new ConsumerThread( this, id, priority );
                 this.consumers.Add( consumerThread.Thread );
@@ -105,9 +105,9 @@ namespace DataCommander.Foundation.Threading
         /// <param name="consumerCount"></param>
         /// <param name="priority"></param>
         public AsyncQueue(
-            String name,
+            string name,
             IAsyncQueue asyncQueue,
-            Int32 consumerCount,
+            int consumerCount,
             ThreadPriority priority )
         {
             this.Initialize( name, asyncQueue, consumerCount, priority );
@@ -117,7 +117,7 @@ namespace DataCommander.Foundation.Threading
         /// Adds an item to the queue.
         /// </summary>
         /// <param name="item"></param>
-        public void Enqueue( Object item )
+        public void Enqueue( object item )
         {
             Contract.Requires( item != null );
 
@@ -129,9 +129,9 @@ namespace DataCommander.Foundation.Threading
             this.queueEvent.Set();
         }
 
-        private Object Dequeue()
+        private object Dequeue()
         {
-            Object item = null;
+            object item = null;
 
             if (this.queue.Count > 0)
             {
@@ -147,7 +147,7 @@ namespace DataCommander.Foundation.Threading
             return item;
         }
 
-        private void Consume( ConsumerThread consumerThread, Object item )
+        private void Consume( ConsumerThread consumerThread, object item )
         {
             Contract.Requires( consumerThread != null );
 
@@ -176,7 +176,7 @@ namespace DataCommander.Foundation.Threading
 
             while (!thread.IsStopRequested)
             {
-                Object item = this.Dequeue();
+                object item = this.Dequeue();
 
                 if (item != null)
                 {
@@ -192,7 +192,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// Gets the number of unconsumed items (queued items).
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {

@@ -10,11 +10,11 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public const String Node = "node";
+        public const string Node = "node";
 
         /// <summary>
         /// 
         /// </summary>
-        public const String Attribute = "attribute";
+        public const string Attribute = "attribute";
     }
 }

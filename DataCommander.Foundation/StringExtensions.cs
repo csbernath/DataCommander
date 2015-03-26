@@ -13,31 +13,31 @@
     {
         private sealed class StringAsList : IList<Char>
         {
-            private readonly String source;
+            private readonly string source;
 
-            public StringAsList( String source )
+            public StringAsList( string source )
             {
                 this.source = source;
             }
 
             #region IList<Char> Members
 
-            Int32 IList<Char>.IndexOf( Char item )
+            int IList<Char>.IndexOf( Char item )
             {
                 throw new NotImplementedException();
             }
 
-            void IList<Char>.Insert( Int32 index, Char item )
+            void IList<Char>.Insert( int index, Char item )
             {
                 throw new NotImplementedException();
             }
 
-            void IList<Char>.RemoveAt( Int32 index )
+            void IList<Char>.RemoveAt( int index )
             {
                 throw new NotImplementedException();
             }
 
-            Char IList<Char>.this[ Int32 index ]
+            Char IList<Char>.this[ int index ]
             {
                 get
                 {
@@ -68,12 +68,12 @@
                 throw new NotImplementedException();
             }
 
-            void ICollection<Char>.CopyTo( Char[] array, Int32 arrayIndex )
+            void ICollection<Char>.CopyTo( Char[] array, int arrayIndex )
             {
                 throw new NotImplementedException();
             }
 
-            Int32 ICollection<Char>.Count
+            int ICollection<Char>.Count
             {
                 get
                 {
@@ -120,7 +120,7 @@
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static IList<Char> AsList( this String source )
+        public static IList<Char> AsList( this string source )
         {
             return new StringAsList( source );
         }
@@ -131,9 +131,9 @@
         /// <param name="format"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static String Format( this String format, params Object[] args )
+        public static string Format( this string format, params object[] args )
         {
-            return String.Format( format, args );
+            return string.Format( format, args );
         }
 
         /// <summary>
@@ -143,9 +143,9 @@
         /// <param name="provider"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static String Format( this String format, IFormatProvider provider, params Object[] args )
+        public static string Format( this string format, IFormatProvider provider, params object[] args )
         {
-            return String.Format( provider, format, args );
+            return string.Format( provider, format, args );
         }
 
         /// <summary>
@@ -154,9 +154,9 @@
         /// <param name="value"></param>
         /// <returns></returns>
         [Pure]
-        public static Boolean IsNullOrEmpty(this String value)
+        public static bool IsNullOrEmpty(this string value)
         {
-            return String.IsNullOrEmpty(value);
+            return string.IsNullOrEmpty(value);
         }
 
         /// <summary>
@@ -165,13 +165,13 @@
         /// <param name="value"></param>
         /// <returns></returns>
         [Pure]
-        public static bool IsNullOrWhiteSpace(this String value)
+        public static bool IsNullOrWhiteSpace(this string value)
         {
 #if FOUNDATION_3_5
-            Boolean isNullOrWhiteSpace = true;
+            bool isNullOrWhiteSpace = true;
             if (value != null)
             {
-                for (Int32 i = 0; i < value.Length; i++)
+                for (int i = 0; i < value.Length; i++)
                 {
                     if (!Char.IsWhiteSpace( value[ i ] ))
                     {
@@ -182,7 +182,7 @@
             }
             return isNullOrWhiteSpace;
 #else
-            return String.IsNullOrWhiteSpace(value);
+            return string.IsNullOrWhiteSpace(value);
 #endif
         }
 
@@ -193,12 +193,12 @@
         /// <param name="separator"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        public static String Join( String separator, IEnumerable<String> values )
+        public static string Join( string separator, IEnumerable<string> values )
         {
             var sb = new StringBuilder();
-            Boolean first = true;
+            bool first = true;
 
-            foreach (String value in values)
+            foreach (string value in values)
             {
                 if (first)
                 {
@@ -221,9 +221,9 @@
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static DateTime? ParseToNullableDateTime( this String source )
+        public static DateTime? ParseToNullableDateTime( this string source )
         {
-            return String.IsNullOrEmpty( source ) ? (DateTime?)null : DateTime.Parse( source );
+            return string.IsNullOrEmpty( source ) ? (DateTime?)null : DateTime.Parse( source );
         }
 
         /// <summary>
@@ -232,9 +232,9 @@
         /// <param name="source"></param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        public static DateTime? ParseToNullableDateTime( this String source, IFormatProvider provider )
+        public static DateTime? ParseToNullableDateTime( this string source, IFormatProvider provider )
         {
-            return String.IsNullOrEmpty( source ) ? (DateTime?)null : DateTime.Parse( source, provider );
+            return string.IsNullOrEmpty( source ) ? (DateTime?)null : DateTime.Parse( source, provider );
         }
 
         /// <summary>
@@ -244,9 +244,9 @@
         /// <param name="provider"></param>
         /// <param name="styles"></param>
         /// <returns></returns>
-        public static DateTime? ParseToNullableDateTime( this String source, IFormatProvider provider, DateTimeStyles styles )
+        public static DateTime? ParseToNullableDateTime( this string source, IFormatProvider provider, DateTimeStyles styles )
         {
-            return String.IsNullOrEmpty( source ) ? (DateTime?)null : DateTime.Parse( source, provider, styles );
+            return string.IsNullOrEmpty( source ) ? (DateTime?)null : DateTime.Parse( source, provider, styles );
         }
 
         /// <summary>
@@ -256,9 +256,9 @@
         /// <param name="format"></param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        public static DateTime? ParseExactToNullableDateTime( this String source, String format, IFormatProvider provider )
+        public static DateTime? ParseExactToNullableDateTime( this string source, string format, IFormatProvider provider )
         {
-            return String.IsNullOrEmpty( source ) ? (DateTime?)null : DateTime.ParseExact( source, format, provider );
+            return string.IsNullOrEmpty( source ) ? (DateTime?)null : DateTime.ParseExact( source, format, provider );
         }
 
         /// <summary>
@@ -266,9 +266,9 @@
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static Decimal? ParseToNullableDecimal( this String source )
+        public static Decimal? ParseToNullableDecimal( this string source )
         {
-            return String.IsNullOrEmpty( source ) ? (Decimal?)null : Decimal.Parse( source );
+            return string.IsNullOrEmpty( source ) ? (Decimal?)null : Decimal.Parse( source );
         }
 
         /// <summary>
@@ -277,9 +277,9 @@
         /// <param name="source"></param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        public static Decimal? ParseToNullableDecimal( this String source, IFormatProvider provider )
+        public static Decimal? ParseToNullableDecimal( this string source, IFormatProvider provider )
         {
-            return String.IsNullOrEmpty( source ) ? (Decimal?)null : Decimal.Parse( source, provider );
+            return string.IsNullOrEmpty( source ) ? (Decimal?)null : Decimal.Parse( source, provider );
         }
 
         /// <summary>
@@ -289,9 +289,9 @@
         /// <param name="style"></param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        public static Decimal? ParseToNullableDecimal( this String source, NumberStyles style, IFormatProvider provider )
+        public static Decimal? ParseToNullableDecimal( this string source, NumberStyles style, IFormatProvider provider )
         {
-            return String.IsNullOrEmpty( source ) ? (Decimal?)null : Decimal.Parse( source, style, provider );
+            return string.IsNullOrEmpty( source ) ? (Decimal?)null : Decimal.Parse( source, style, provider );
         }
 
         /// <summary>
@@ -299,9 +299,9 @@
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static Int32? ParseToNullableInt32( this String source )
+        public static int? ParseToNullableInt32( this string source )
         {
-            return String.IsNullOrEmpty( source ) ? (Int32?)null : Int32.Parse( source );
+            return string.IsNullOrEmpty( source ) ? (int?)null : int.Parse( source );
         }
 
         /// <summary>
@@ -310,12 +310,12 @@
         /// <param name="value"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public static String Right( this String value, Int32 length )
+        public static string Right( this string value, int length )
         {
             Contract.Requires<ArgumentNullException>( value != null );
             Contract.Requires<ArgumentOutOfRangeException>( value.Length >= length );
 
-            Int32 startIndex = value.Length - length;
+            int startIndex = value.Length - length;
             return value.Substring( startIndex );
         }
     }

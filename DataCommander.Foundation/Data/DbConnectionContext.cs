@@ -11,7 +11,7 @@
     {
         private readonly IDbConnection connection;
         private readonly IDbTransaction transaction;
-        private readonly Int32? commandTimeout;
+        private readonly int? commandTimeout;
 
         /// <summary>
         /// 
@@ -19,7 +19,7 @@
         /// <param name="connection"></param>
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
-        public DbConnectionContext( IDbConnection connection, IDbTransaction transaction, Int32? commandTimeout )
+        public DbConnectionContext( IDbConnection connection, IDbTransaction transaction, int? commandTimeout )
         {
             Contract.Requires( connection != null );
 
@@ -46,7 +46,7 @@
             }
         }
 
-        Int32? IDbConnectionContext.CommandTimeout
+        int? IDbConnectionContext.CommandTimeout
         {
             get
             {

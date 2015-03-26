@@ -3,12 +3,6 @@
     using System;
     using System.Threading;
 
-    internal enum WorkerEventState
-    {
-        NonSignaled,
-        Signaled
-    }
-
     internal class WorkerEvent : WaitHandle
     {
         private readonly EventWaitHandle eventWaitHandle;
@@ -33,7 +27,7 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        public Boolean Reset()
+        public bool Reset()
         {
             this.state = WorkerEventState.NonSignaled;
             return this.eventWaitHandle.Reset();
@@ -43,7 +37,7 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        public Boolean Set()
+        public bool Set()
         {
             this.state = WorkerEventState.Signaled;
             return this.eventWaitHandle.Set();
@@ -54,22 +48,22 @@
             this.eventWaitHandle.Close();
         }
 
-        public override Boolean WaitOne()
+        public override bool WaitOne()
         {
             return this.eventWaitHandle.WaitOne();
         }
 
-        public override Boolean WaitOne(Int32 millisecondsTimeout)
+        public override bool WaitOne(int millisecondsTimeout)
         {
             return this.eventWaitHandle.WaitOne(millisecondsTimeout);
         }
 
-        public override Boolean WaitOne(TimeSpan timeout)
+        public override bool WaitOne(TimeSpan timeout)
         {
             return this.eventWaitHandle.WaitOne(timeout);
         }
 
-        public override Boolean WaitOne(Int32 millisecondsTimeout, Boolean exitContext)
+        public override bool WaitOne(int millisecondsTimeout, bool exitContext)
         {
             return this.eventWaitHandle.WaitOne(millisecondsTimeout, exitContext);
         }

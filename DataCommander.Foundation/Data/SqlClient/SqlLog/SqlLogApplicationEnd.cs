@@ -4,16 +4,16 @@ namespace DataCommander.Foundation.Data.SqlClient
 
     internal sealed class SqlLogApplicationEnd : ISqlLogItem
     {
-        private readonly Int32 applicationId;
+        private readonly int applicationId;
         private DateTime endDate;
 
-        public SqlLogApplicationEnd( Int32 applicationId, DateTime endDate )
+        public SqlLogApplicationEnd( int applicationId, DateTime endDate )
         {
             this.applicationId = applicationId;
             this.endDate = endDate;
         }
 
-        public String CommandText
+        public string CommandText
         {
             get
             {

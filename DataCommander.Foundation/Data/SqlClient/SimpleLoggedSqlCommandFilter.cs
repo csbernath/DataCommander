@@ -8,12 +8,12 @@ namespace DataCommander.Foundation.Data.SqlClient
     internal sealed class SimpleLoggedSqlCommandFilter : ISqlLoggedSqlCommandFilter
     {
         private ConfigurationSection section;
-        private String nodeName;
+        private string nodeName;
         private SimpleLoggedSqlCommandFilterRule[] rules;
 
         public SimpleLoggedSqlCommandFilter(
             ConfigurationSection section,
-            String nodeName)
+            string nodeName)
         {
             this.section = section;
             this.nodeName = nodeName;
@@ -21,7 +21,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             this.SettingsChanged(null, null);
         }
 
-        private void SettingsChanged(Object sender, EventArgs e)
+        private void SettingsChanged(object sender, EventArgs e)
         {
             using (var log = LogFactory.Instance.GetCurrentMethodLog())
             {
@@ -33,29 +33,29 @@ namespace DataCommander.Foundation.Data.SqlClient
                     foreach (ConfigurationNode childNode in node.ChildNodes)
                     {
                         ConfigurationAttributeCollection attributes = childNode.Attributes;
-                        Boolean include = attributes["Include"].GetValue<Boolean>();
-                        String userName = attributes["UserName"].GetValue<String>();
+                        bool include = attributes["Include"].GetValue<bool>();
+                        string userName = attributes["UserName"].GetValue<string>();
 
                         if (userName == "*")
                         {
                             userName = null;
                         }
 
-                        String hostName = attributes["HostName"].GetValue<String>();
+                        string hostName = attributes["HostName"].GetValue<string>();
 
                         if (hostName == "*")
                         {
                             hostName = null;
                         }
 
-                        String database = attributes["Database"].GetValue<String>();
+                        string database = attributes["Database"].GetValue<string>();
 
                         if (database == "*")
                         {
                             database = null;
                         }
 
-                        String commandText = attributes["CommandText"].GetValue<String>();
+                        string commandText = attributes["CommandText"].GetValue<string>();
 
                         if (commandText == "*")
                         {
@@ -66,7 +66,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                         list.Add(rule);
                     }
 
-                    Int32 count = list.Count;
+                    int count = list.Count;
                     SimpleLoggedSqlCommandFilterRule[] rules;
 
                     if (count > 0)
@@ -84,25 +84,25 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
         }
 
-        Boolean ISqlLoggedSqlCommandFilter.Contains(
-            String userName,
-            String hostName,
+        bool ISqlLoggedSqlCommandFilter.Contains(
+            string userName,
+            string hostName,
             System.Data.IDbCommand command)
         {
-            Boolean contains;
+            bool contains;
 
             if (this.rules != null && this.rules.Length > 0)
             {
                 contains = false;
 
-                for (Int32 i = 0; i < this.rules.Length; i++)
+                for (int i = 0; i < this.rules.Length; i++)
                 {
                     SimpleLoggedSqlCommandFilterRule rule = this.rules[i];
-                    Boolean match = rule.Match(userName, hostName, command);
+                    bool match = rule.Match(userName, hostName, command);
 
                     if (match)
                     {
-                        Boolean include = rule.Include;
+                        bool include = rule.Include;
                         contains = (include && match) || !match;
                         break;
                     }

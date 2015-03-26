@@ -35,18 +35,18 @@ namespace DataCommander.Foundation.Configuration
     ///        </listheader>
     ///        <item>
     ///            <term>
-    ///                <see cref="Boolean">Boolean</see>,
-    ///                <see cref="Int32">Int32</see>,
-    ///                <see cref="String">String</see>
+    ///                <see cref="bool">bool</see>,
+    ///                <see cref="int">int</see>,
+    ///                <see cref="string">string</see>
     ///                etc.
     ///            </term>
     ///            <description>See <see href="ms-help://MS.MSDNQTR.2003APR.1033/csref/html/vclrfbuiltintypes.htm">Built-in Types Table</see> in C# Programmer's Reference.</description>
     ///        </item>
     ///        <item>
     ///            <term>arrays like
-    ///                <see cref="Boolean">Boolean</see>[],
-    ///                <see cref="Int32">Int32</see>[],
-    ///                <see cref="String">String</see>[]
+    ///                <see cref="bool">bool</see>[],
+    ///                <see cref="int">int</see>[],
+    ///                <see cref="string">string</see>[]
     ///                etc.
     ///            </term>
     ///            <description></description>
@@ -88,18 +88,18 @@ namespace DataCommander.Foundation.Configuration
     public sealed class ConfigurationSection
     {
         private static ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
-        private String configFileName;
-        private String sectionName;
+        private string configFileName;
+        private string sectionName;
         private ConfigurationNode rootNode;
-        private Int32 changed;
-        private Boolean isFileSystemWatcherEnabled;
+        private int changed;
+        private bool isFileSystemWatcherEnabled;
 
         /// <summary>
         /// Reads configuration settings from the specified <paramref name="configFileName"/>.
         /// </summary>
         /// <param name="configFileName"></param>
         /// <param name="sectionName"></param>
-        public ConfigurationSection( String configFileName, String sectionName )
+        public ConfigurationSection( string configFileName, string sectionName )
         {
             this.configFileName = configFileName;
             this.sectionName = sectionName;
@@ -110,7 +110,7 @@ namespace DataCommander.Foundation.Configuration
         /// 
         /// </summary>
         /// <param name="configFileName"></param>
-        public ConfigurationSection( String configFileName )
+        public ConfigurationSection( string configFileName )
         {
             this.configFileName = configFileName;
             this.sectionName = DefaultSectionName;
@@ -120,11 +120,11 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public static String DefaultSectionName
+        public static string DefaultSectionName
         {
             get
             {
-                String sectionName = typeof( ConfigurationSection ).Namespace;
+                string sectionName = typeof( ConfigurationSection ).Namespace;
                 return sectionName;
             }
         }
@@ -153,7 +153,7 @@ namespace DataCommander.Foundation.Configuration
             get
             {
                 var trace = new StackTrace( 1 );
-                String nodeName = ConfigurationNodeName.FromNamespace( trace, 0 );
+                string nodeName = ConfigurationNodeName.FromNamespace( trace, 0 );
                 ConfigurationNode node = this.SelectNode( nodeName, true );
                 return node;
             }
@@ -167,7 +167,7 @@ namespace DataCommander.Foundation.Configuration
             get
             {
                 var trace = new StackTrace( 1 );
-                String nodeName = ConfigurationNodeName.FromType( trace, 0 );
+                string nodeName = ConfigurationNodeName.FromType( trace, 0 );
                 ConfigurationNode node = this.SelectNode( nodeName, true );
                 return node;
             }
@@ -181,7 +181,7 @@ namespace DataCommander.Foundation.Configuration
             get
             {
                 var trace = new StackTrace( 1 );
-                String nodeName = ConfigurationNodeName.FromMethod( trace, 0 );
+                string nodeName = ConfigurationNodeName.FromMethod( trace, 0 );
                 ConfigurationNode node = this.SelectNode( nodeName, true );
                 return node;
             }
@@ -190,7 +190,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// Gets the name of file which the config is loaded from.
         /// </summary>
-        public String ConfigFileName
+        public string ConfigFileName
         {
             get
             {
@@ -201,7 +201,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public String SectionName
+        public string SectionName
         {
             get
             {
@@ -212,7 +212,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsFileSystemWatcherEnabled
+        public bool IsFileSystemWatcherEnabled
         {
             get
             {
@@ -220,7 +220,7 @@ namespace DataCommander.Foundation.Configuration
             }
         }
 
-        private void Check( String nodeName, ConfigurationNode node )
+        private void Check( string nodeName, ConfigurationNode node )
         {
             if (node == null)
             {
@@ -230,7 +230,7 @@ namespace DataCommander.Foundation.Configuration
                 }
                 else
                 {
-                    throw new ArgumentException( String.Format(
+                    throw new ArgumentException( string.Format(
                         "Configuration node not found.\r\nNodeName: {0}\r\nConfigFileName: {1}", nodeName, this.configFileName ) );
                 }
             }
@@ -242,7 +242,7 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="nodeName"></param>
         /// <param name="throwOnError"></param>
         /// <returns></returns>
-        public ConfigurationNode SelectNode( String nodeName, Boolean throwOnError )
+        public ConfigurationNode SelectNode( string nodeName, bool throwOnError )
         {
             if (this.changed != 0)
             {
@@ -295,7 +295,7 @@ namespace DataCommander.Foundation.Configuration
             {
                 try
                 {
-                    foreach (String fileName in fileNames)
+                    foreach (string fileName in fileNames)
                     {
                         var watcher = new IO.FileSystemWatcher( fileName );
                         watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
@@ -312,7 +312,7 @@ namespace DataCommander.Foundation.Configuration
             }
         }
 
-        private void OnChanged( Object sender, FileSystemEventArgs e )
+        private void OnChanged( object sender, FileSystemEventArgs e )
         {
             log.Trace("Settings.OnChanged. FileName: " + e.FullPath );
             Interlocked.Increment( ref this.changed );

@@ -11,7 +11,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {
@@ -22,7 +22,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsReadOnly
+        public bool IsReadOnly
         {
             get
             {
@@ -58,7 +58,7 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Contains(T item)
+        public bool Contains(T item)
         {
             Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
             return this.defaultIndex.Contains(item);
@@ -69,7 +69,7 @@
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
-        public void CopyTo(T[] array, Int32 arrayIndex)
+        public void CopyTo(T[] array, int arrayIndex)
         {
             this.defaultIndex.CopyTo(array, arrayIndex);
         }
@@ -79,7 +79,7 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Remove(T item)
+        public bool Remove(T item)
         {
             return this.indexes.All(index => index.Remove(item));
         }

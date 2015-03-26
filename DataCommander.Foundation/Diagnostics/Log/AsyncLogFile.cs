@@ -9,20 +9,20 @@ namespace DataCommander.Foundation.Diagnostics
 
     internal sealed class AsyncLogFile : ILogFile
     {
-        private String path;
-        private readonly Int32 bufferSize;
+        private string path;
+        private readonly int bufferSize;
         private readonly LogFile logFile;
         private readonly ILogFormatter formatter;
         private readonly Queue<LogEntry> queue;
         private readonly TimeSpan timerPeriod;
         private Timer timer;
-        private readonly Object flushLock = new Object();
+        private readonly object flushLock = new object();
 
         public AsyncLogFile(
-            String path,
+            string path,
             Encoding encoding,
-            Int32 queueCapacity,
-            Int32 bufferSize,
+            int queueCapacity,
+            int bufferSize,
             TimeSpan timerPeriod,
             ILogFormatter formatter,
             FileAttributes fileAttributes )
@@ -67,7 +67,7 @@ namespace DataCommander.Foundation.Diagnostics
                         this.queue.Clear();
                     }
 
-                    Int32 startIndex = 0;
+                    int startIndex = 0;
                     while (startIndex < entries.Length)
                     {
                         startIndex = this.Write( entries, startIndex );
@@ -93,7 +93,7 @@ namespace DataCommander.Foundation.Diagnostics
 
         #region Private Methods
 
-        private void TimerCallback( Object state )
+        private void TimerCallback( object state )
         {
             var thread = Thread.CurrentThread;
             thread.Priority = ThreadPriority.Lowest;
@@ -101,10 +101,10 @@ namespace DataCommander.Foundation.Diagnostics
             this.Flush();
         }
 
-        private Int32 Write( LogEntry[] entries, Int32 startIndex )
+        private int Write( LogEntry[] entries, int startIndex )
         {
             StringBuilder sb = null;
-            Int32 i;
+            int i;
             DateTime date = DateTime.MinValue;
 
             for (i = startIndex; i < entries.Length; i++)
@@ -120,7 +120,7 @@ namespace DataCommander.Foundation.Diagnostics
                     break;
                 }
 
-                String text = this.formatter.Format( entry );
+                string text = this.formatter.Format( entry );
 
                 if (sb == null)
                 {

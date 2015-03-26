@@ -27,7 +27,7 @@ namespace DataCommander.Foundation.IO
         /// <param name="inputStream"></param>
         /// <param name="outputStream"></param>
         /// <param name="bufferSize"></param>
-        public static void CopyTo( this Stream inputStream, Stream outputStream, Int32 bufferSize )
+        public static void CopyTo( this Stream inputStream, Stream outputStream, int bufferSize )
         {
             Contract.Requires<ArgumentNullException>( inputStream != null );
             Contract.Requires<ArgumentNullException>( outputStream != null );
@@ -37,7 +37,7 @@ namespace DataCommander.Foundation.IO
 
             while (true)
             {
-                Int32 read = inputStream.Read( buffer, 0, buffer.Length );
+                int read = inputStream.Read( buffer, 0, buffer.Length );
                 if (read == 0)
                 {
                     break;

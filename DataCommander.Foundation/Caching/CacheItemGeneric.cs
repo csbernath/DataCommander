@@ -10,12 +10,12 @@ namespace DataCommander.Foundation.Caching
     /// <typeparam name="T"></typeparam>
     public sealed class CacheItem<T> : ICacheItem
     {
-        private readonly String key;
+        private readonly string key;
         private readonly TimeSpan slidingExpiration;
         private readonly Func<T> getValue;
         private T value;
 
-        internal CacheItem( String key, Func<T> getValue, TimeSpan slidingExpiration )
+        internal CacheItem( string key, Func<T> getValue, TimeSpan slidingExpiration )
         {
             Contract.Requires( key != null );
             Contract.Requires( getValue != null );
@@ -39,7 +39,7 @@ namespace DataCommander.Foundation.Caching
 
         #region ICacheItem Members
 
-        String ICacheItem.Key
+        string ICacheItem.Key
         {
             get
             {
@@ -55,7 +55,7 @@ namespace DataCommander.Foundation.Caching
             }
         }
 
-        Object ICacheItem.GetValue()
+        object ICacheItem.GetValue()
         {
             T value = this.getValue();
             this.value = value;

@@ -26,13 +26,13 @@ namespace DataCommander.Foundation.Caching
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        Boolean TryGetValue( String key, out Object value );
+        bool TryGetValue( string key, out object value );
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="key"></param>
-        void Remove( String key );
+        void Remove( string key );
     }
 }
 #endif

@@ -4,16 +4,16 @@
 
     internal sealed class SqLoglCommandExecution
     {
-        private readonly Int32 commandNo;
-        private Int32 executionNo;
+        private readonly int commandNo;
+        private int executionNo;
 
-        public SqLoglCommandExecution(Int32 commandNo)
+        public SqLoglCommandExecution(int commandNo)
         {
             this.commandNo = commandNo;
             this.executionNo = 1;
         }
 
-        public Int32 CommandNo
+        public int CommandNo
         {
             get
             {
@@ -21,7 +21,7 @@
             }
         }
 
-        public Int32 ExecutionNo
+        public int ExecutionNo
         {
             get
             {

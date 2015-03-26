@@ -5,9 +5,9 @@
 
     internal sealed class Lock
     {
-        private readonly Object lockObject = new Object();
-        private Int32 counter;
-        private Int32 threadId;
+        private readonly object lockObject = new object();
+        private int counter;
+        private int threadId;
 
         public IDisposable Enter()
         {
@@ -17,9 +17,9 @@
             return new Disposer( this.Exit );
         }
 
-        public Boolean TryEnter()
+        public bool TryEnter()
         {
-            Boolean entered = Monitor.TryEnter( this.lockObject );
+            bool entered = Monitor.TryEnter( this.lockObject );
             if (entered)
             {
                 Interlocked.Increment( ref this.counter );
@@ -36,7 +36,7 @@
             Monitor.Exit( this.lockObject );
         }
 
-        public Boolean Locked
+        public bool Locked
         {
             get
             {
@@ -44,7 +44,7 @@
             }
         }
 
-        public Int32 ThreadId
+        public int ThreadId
         {
             get
             {

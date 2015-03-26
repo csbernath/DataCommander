@@ -29,11 +29,11 @@ namespace DataCommander.Foundation.Diagnostics
         public static void Contains<T>(
             ICollection<T> collection,
             T item,
-            String collectionName,
-            String itemName )
+            string collectionName,
+            string itemName )
         {
             Contract.Requires<ArgumentNullException>( collection != null );
-            Boolean contains = collection.Contains( item );
+            bool contains = collection.Contains( item );
             if (!contains)
             {
                 AssertMessage message = new AssertMessage( "CollectionAssert.Contains" );
@@ -60,13 +60,13 @@ namespace DataCommander.Foundation.Diagnostics
         public static void Contains<T>(
             ICollection<T> collection,
             Func<T, bool> predicate,
-            String collectionName,
-            String predicateText )
+            string collectionName,
+            string predicateText )
         {
             Contract.Requires<ArgumentNullException>( predicate != null );
             var enumerable = (IEnumerable<T>)collection;
             var indexedItem = enumerable.IndexOf( predicate );
-            Int32 index = indexedItem != null ? indexedItem.Index : -1;
+            int index = indexedItem != null ? indexedItem.Index : -1;
 
             if (index < 0)
             {
@@ -92,12 +92,12 @@ namespace DataCommander.Foundation.Diagnostics
         [DebuggerStepThrough]
         public static void Contains(
             IDictionary dictionary,
-            Object key,
-            String dictionaryName,
-            String keyName )
+            object key,
+            string dictionaryName,
+            string keyName )
         {
             Contract.Requires<ArgumentNullException>( dictionary != null );
-            Boolean containsKey = dictionary.Contains( key );
+            bool containsKey = dictionary.Contains( key );
 
             if (!containsKey)
             {
@@ -126,11 +126,11 @@ namespace DataCommander.Foundation.Diagnostics
         public static void ContainsKey<TKey, TValue>(
             IDictionary<TKey, TValue> dictionary,
             TKey key,
-            String dictionaryName,
-            String keyName )
+            string dictionaryName,
+            string keyName )
         {
             Contract.Requires<ArgumentNullException>( dictionary != null );
-            Boolean containsKey = dictionary.ContainsKey( key );
+            bool containsKey = dictionary.ContainsKey( key );
 
             if (!containsKey)
             {
@@ -155,11 +155,11 @@ namespace DataCommander.Foundation.Diagnostics
         public static void NotContains<T>(
             ICollection<T> collection,
             T item,
-            String collectionName,
-            String itemName )
+            string collectionName,
+            string itemName )
         {
             Contract.Requires<ArgumentNullException>( collection != null );
-            Boolean contains = collection.Contains( item );
+            bool contains = collection.Contains( item );
 
             if (contains)
             {
@@ -188,11 +188,11 @@ namespace DataCommander.Foundation.Diagnostics
         public static void NotContainsKey<TKey, TValue>(
             IDictionary<TKey, TValue> dictionary,
             TKey key,
-            String dictionaryName,
-            String keyName )
+            string dictionaryName,
+            string keyName )
         {
             Contract.Requires<ArgumentNullException>( dictionary != null );
-            Boolean containsKey = dictionary.ContainsKey( key );
+            bool containsKey = dictionary.ContainsKey( key );
 
             if (containsKey)
             {

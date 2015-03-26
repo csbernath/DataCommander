@@ -15,8 +15,8 @@
     {
         private IndexableCollection<ConfigurationAttribute> collection;
         private ListIndex<ConfigurationAttribute> listIndex;
-        private UniqueIndex<String, ConfigurationAttribute> nameIndex;
-        private String name;
+        private UniqueIndex<string, ConfigurationAttribute> nameIndex;
+        private string name;
 
         /// <summary>
         /// 
@@ -25,7 +25,7 @@
         {
             this.listIndex = new ListIndex<ConfigurationAttribute>( "List" );
 
-            this.nameIndex = new UniqueIndex<String, ConfigurationAttribute>(
+            this.nameIndex = new UniqueIndex<string, ConfigurationAttribute>(
                 "NameIndex",
                 attribute => GetKeyResponse.Create( true, attribute.Name ),
                 SortOrder.None );
@@ -39,7 +39,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public ConfigurationAttribute this[ Int32 index ]
+        public ConfigurationAttribute this[ int index ]
         {
             get
             {
@@ -63,7 +63,7 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public ConfigurationAttribute this[ String name ]
+        public ConfigurationAttribute this[ string name ]
         {
             get
             {
@@ -76,7 +76,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String Name
+        public string Name
         {
             get
             {
@@ -95,7 +95,7 @@
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <param name="description"></param>
-        public void Add( String name, Object value, String description )
+        public void Add( string name, object value, string description )
         {
             Contract.Requires( !this.ContainsKey( name ) );
             ConfigurationAttribute attribute = new ConfigurationAttribute( name, value, description );
@@ -108,7 +108,7 @@
         /// <param name="name"></param>
         /// <returns></returns>
         [Pure]
-        public Boolean ContainsKey( String name )
+        public bool ContainsKey( string name )
         {
             return this.nameIndex.ContainsKey( name );
         }
@@ -118,7 +118,7 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Int32 IndexOf( ConfigurationAttribute item )
+        public int IndexOf( ConfigurationAttribute item )
         {
             return this.listIndex.IndexOf( item );
         }
@@ -128,7 +128,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <param name="item"></param>
-        public void Insert( Int32 index, ConfigurationAttribute item )
+        public void Insert( int index, ConfigurationAttribute item )
         {
             ICollection<ConfigurationAttribute> collection = this.nameIndex;
             collection.Add( item );
@@ -140,11 +140,11 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Boolean Remove( String name )
+        public bool Remove( string name )
         {
             ConfigurationAttribute attribute;
-            Boolean contains = this.nameIndex.TryGetValue( name, out attribute );
-            Boolean succeeded;
+            bool contains = this.nameIndex.TryGetValue( name, out attribute );
+            bool succeeded;
 
             if (contains)
             {
@@ -162,7 +162,7 @@
         /// 
         /// </summary>
         /// <param name="index"></param>
-        public void RemoveAt( Int32 index )
+        public void RemoveAt( int index )
         {
             ConfigurationAttribute item = this.listIndex[ index ];
             this.listIndex.RemoveAt( index );
@@ -176,7 +176,7 @@
         /// <param name="name"></param>
         /// <param name="attribute"></param>
         /// <returns></returns>
-        public Boolean TryGetValue( String name, out ConfigurationAttribute attribute )
+        public bool TryGetValue( string name, out ConfigurationAttribute attribute )
         {
             return this.nameIndex.TryGetValue( name, out attribute );
         }
@@ -188,7 +188,7 @@
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Boolean TryGetAttributeValue<T>( String name, out T value )
+        public bool TryGetAttributeValue<T>( string name, out T value )
         {
             return this.TryGetAttributeValue<T>( name, default( T ), out value );
         }
@@ -201,10 +201,10 @@
         /// <param name="defaultValue"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Boolean TryGetAttributeValue<T>( String name, T defaultValue, out T value )
+        public bool TryGetAttributeValue<T>( string name, T defaultValue, out T value )
         {
             ConfigurationAttribute attribute;
-            Boolean contains = this.nameIndex.TryGetValue( name, out attribute );
+            bool contains = this.nameIndex.TryGetValue( name, out attribute );
 
             if (contains)
             {
@@ -223,10 +223,10 @@
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public void SetAttributeValue( String name, Object value )
+        public void SetAttributeValue( string name, object value )
         {
             ConfigurationAttribute attribute;
-            Boolean contains = this.nameIndex.TryGetValue( name, out attribute );
+            bool contains = this.nameIndex.TryGetValue( name, out attribute );
 
             if (contains)
             {
@@ -263,7 +263,7 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Contains( ConfigurationAttribute item )
+        public bool Contains( ConfigurationAttribute item )
         {
             return this.collection.Contains( item );
         }
@@ -273,7 +273,7 @@
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
-        public void CopyTo( ConfigurationAttribute[] array, Int32 arrayIndex )
+        public void CopyTo( ConfigurationAttribute[] array, int arrayIndex )
         {
             this.collection.CopyTo( array, arrayIndex );
         }
@@ -281,7 +281,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {
@@ -292,7 +292,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsReadOnly
+        public bool IsReadOnly
         {
             get
             {
@@ -305,7 +305,7 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Remove( ConfigurationAttribute item )
+        public bool Remove( ConfigurationAttribute item )
         {
             return this.collection.Remove( item );
         }

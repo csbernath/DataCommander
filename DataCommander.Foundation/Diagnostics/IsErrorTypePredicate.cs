@@ -18,7 +18,7 @@
             this.type = type;
         }
 
-        public Boolean IsTrue( Error value )
+        public bool IsTrue( Error value )
         {
             return value.Type == this.type;
         }

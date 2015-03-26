@@ -28,8 +28,8 @@
     {
         private TextDataConnection connection;
         private CommandType commandType;
-        private Int32 commandTimeout;
-        private String commandText;
+        private int commandTimeout;
+        private string commandText;
         private TextDataParameterCollection parameters = new TextDataParameterCollection();
 
         #region Constructors
@@ -51,7 +51,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override String CommandText
+        public override string CommandText
         {
             get
             {
@@ -67,7 +67,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Int32 CommandTimeout
+        public override int CommandTimeout
         {
             get
             {
@@ -182,7 +182,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Boolean DesignTimeVisible
+        public override bool DesignTimeVisible
         {
             get
             {
@@ -209,17 +209,17 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        public override Int32 ExecuteNonQuery()
+        public override int ExecuteNonQuery()
         {
             IList<TextDataColumn> columns = this.parameters.GetParameterValue<IList<TextDataColumn>>( "columns" );
             IList<ITextDataConverter> converters = this.parameters.GetParameterValue<IList<ITextDataConverter>>( "converters" );
-            IEnumerable<Object[]> rows = this.parameters.GetParameterValue<IEnumerable<Object[]>>( "rows" );
+            IEnumerable<object[]> rows = this.parameters.GetParameterValue<IEnumerable<object[]>>( "rows" );
             IConverter<TextDataCommand, TextWriter> getTextWriter = this.parameters.GetParameterValue<IConverter<TextDataCommand, TextWriter>>( "getTextWriter" );
             TextWriter textWriter = getTextWriter.Convert( this );
             TextDataStreamWriter textDataStreamWriter = new TextDataStreamWriter( textWriter, columns, converters );
-            Int32 count = 0;
+            int count = 0;
 
-            foreach (Object[] row in rows)
+            foreach (object[] row in rows)
             {
                 textDataStreamWriter.WriteRow( row );
                 count++;
@@ -232,7 +232,7 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        public override Object ExecuteScalar()
+        public override object ExecuteScalar()
         {
             throw new NotImplementedException();
         }

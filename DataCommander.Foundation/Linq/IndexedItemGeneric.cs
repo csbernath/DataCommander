@@ -8,15 +8,19 @@ namespace DataCommander.Foundation.Linq
     /// <typeparam name="T"></typeparam>
     public sealed class IndexedItem<T>
     {
-        private readonly Int32 index;
+        #region Private Fields
+
+        private readonly int index;
         private readonly T value;
+
+        #endregion
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="index"></param>
         /// <param name="value"></param>
-        public IndexedItem( Int32 index, T value )
+        public IndexedItem(int index, T value)
         {
             this.index = index;
             this.value = value;
@@ -25,7 +29,7 @@ namespace DataCommander.Foundation.Linq
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Index
+        public int Index
         {
             get
             {

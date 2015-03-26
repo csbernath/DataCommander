@@ -38,17 +38,17 @@
 
         #region IList<T> Members
 
-        Int32 IList<T>.IndexOf( T item )
+        int IList<T>.IndexOf( T item )
         {
             return Array.IndexOf( this.items, item );
         }
 
-        void IList<T>.Insert( Int32 index, T item )
+        void IList<T>.Insert( int index, T item )
         {
             throw new NotSupportedException();
         }
 
-        void IList<T>.RemoveAt( Int32 index )
+        void IList<T>.RemoveAt( int index )
         {
             throw new NotSupportedException();
         }
@@ -58,7 +58,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public T this[ Int32 index ]
+        public T this[ int index ]
         {
             get
             {
@@ -87,12 +87,12 @@
 
         bool ICollection<T>.Contains( T item )
         {
-            Int32 index = Array.IndexOf( this.items, item );
-            Boolean contains = index >= 0;
+            int index = Array.IndexOf( this.items, item );
+            bool contains = index >= 0;
             return contains;
         }
 
-        void ICollection<T>.CopyTo( T[] array, Int32 arrayIndex )
+        void ICollection<T>.CopyTo( T[] array, int arrayIndex )
         {
             this.items.CopyTo( array, arrayIndex );
         }
@@ -100,7 +100,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {

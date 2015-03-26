@@ -39,7 +39,7 @@
         /// <param name="path"></param>
         /// <param name="documentType"></param>
         /// <returns></returns>
-        public static Document Open( String path, DocumentType documentType )
+        public static Document Open( string path, DocumentType documentType )
         {
             DocumentPropertyCollection properties;
 
@@ -103,7 +103,7 @@
                 foreach (XElement xProperty in xProperties.Elements())
                 {
                     DocumentPropertyId? id;
-                    Object value = null;
+                    object value = null;
 
                     switch (xProperty.Name.LocalName)
                     {
@@ -219,10 +219,10 @@
             return properties;
         }
 
-        private static DocumentPropertyCollection ReadFromStructuredStorage( String path )
+        private static DocumentPropertyCollection ReadFromStructuredStorage( string path )
         {
             IStorage storage;
-            Int32 result = NativeMethods.StgOpenStorage( path, null, STGM.READ | STGM.SHARE_DENY_WRITE, IntPtr.Zero, 0, out storage );
+            int result = NativeMethods.StgOpenStorage( path, null, STGM.READ | STGM.SHARE_DENY_WRITE, IntPtr.Zero, 0, out storage );
 
             if (result != 0)
             {
@@ -252,7 +252,7 @@
 
                     try
                     {
-                        Object value = propVariant.Value;
+                        object value = propVariant.Value;
 
                         if (statPropSetStg.fmtid == PropertySetId.Summary)
                         {

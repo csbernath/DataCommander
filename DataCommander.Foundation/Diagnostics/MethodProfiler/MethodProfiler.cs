@@ -18,10 +18,10 @@
         /// <summary>
         /// 
         /// </summary>
-        public const String ConditionString = "FOUNDATION_METHODPROFILER";
+        public const string ConditionString = "FOUNDATION_METHODPROFILER";
 
         private static MethodCollection methods = new MethodCollection();
-        private static Dictionary<String, MethodFraction> methodFractions = new Dictionary<String, MethodFraction>();
+        private static Dictionary<string, MethodFraction> methodFractions = new Dictionary<string, MethodFraction>();
         private static MethodInvocationStackCollection stacks = new MethodInvocationStackCollection();
         private static AsyncTextWriter textWriter;
         private static MethodFormatter methodFormatter = new MethodFormatter();
@@ -29,30 +29,30 @@
 
         static MethodProfiler()
         {
-            Int64 beginTime = Stopwatch.GetTimestamp();
-            DateTime now = OptimizedDateTime.Now;
-            String applicationName;
+            long beginTime = Stopwatch.GetTimestamp();
+            DateTime now = LocalTime.Default.Now;
+            string applicationName;
             Assembly assembly = Assembly.GetEntryAssembly();
 
             if (assembly != null)
             {
-                String codeBase = assembly.CodeBase;
+                string codeBase = assembly.CodeBase;
                 Uri uri = new Uri( codeBase );
-                String fileName = uri.LocalPath;
+                string fileName = uri.LocalPath;
                 applicationName = fileName;
             }
             else
             {
-                String baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 applicationName = baseDirectory;
             }
 
-            String path = Path.GetTempFileName();
+            string path = Path.GetTempFileName();
             StreamWriter streamWriter = new StreamWriter( path, false, Encoding.UTF8, 65536 );
             textWriter = new AsyncTextWriter( streamWriter );
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendFormat( @"declare @applicationId Int32
+            sb.AppendFormat( @"declare @applicationId int
 
 exec MethodProfilerApplication_Add {0},{1}",
                 applicationName.ToTSqlNVarChar(),
@@ -69,17 +69,17 @@ exec MethodProfilerApplication_Add {0},{1}",
         [Conditional( ConditionString )]
         public static void BeginMethod()
         {
-            Int64 beginTime = Stopwatch.GetTimestamp();
-            Int32 threadId = Thread.CurrentThread.ManagedThreadId;
+            long beginTime = Stopwatch.GetTimestamp();
+            int threadId = Thread.CurrentThread.ManagedThreadId;
             StackTrace trace = new StackTrace( 1 );
             StackFrame frame = trace.GetFrame( 0 );
             MethodBase method = frame.GetMethod();
-            Int32 methodId;
-            Boolean added = false;
+            int methodId;
+            bool added = false;
 
             lock (methods)
             {
-                Boolean contains = methods.TryGetValue( method, out methodId );
+                bool contains = methods.TryGetValue( method, out methodId );
 
                 if (!contains)
                 {
@@ -101,17 +101,17 @@ exec MethodProfilerApplication_Add {0},{1}",
         /// </summary>
         /// <param name="name"></param>
         [Conditional( ConditionString )]
-        public static void BeginMethodFraction( String name )
+        public static void BeginMethodFraction( string name )
         {
-            Int64 beginTime = Stopwatch.GetTimestamp();
-            Int32 threadId = Thread.CurrentThread.ManagedThreadId;
+            long beginTime = Stopwatch.GetTimestamp();
+            int threadId = Thread.CurrentThread.ManagedThreadId;
             StackTrace trace = new StackTrace( 1 );
             StackFrame frame = trace.GetFrame( 0 );
             MethodBase method = frame.GetMethod();
-            String key = MethodFraction.GetKey( method, name );
+            string key = MethodFraction.GetKey( method, name );
             MethodFraction methodFraction;
-            Int32 methodId;
-            Boolean added = false;
+            int methodId;
+            bool added = false;
 
             lock (methods)
             {
@@ -142,12 +142,12 @@ exec MethodProfilerApplication_Add {0},{1}",
         [Conditional( ConditionString )]
         public static void EndMethod()
         {
-            Int64 endTime = Stopwatch.GetTimestamp();
-            Int32 threadId = Thread.CurrentThread.ManagedThreadId;
+            long endTime = Stopwatch.GetTimestamp();
+            int threadId = Thread.CurrentThread.ManagedThreadId;
             StackTrace trace = new StackTrace( 1 );
             StackFrame frame = trace.GetFrame( 0 );
             MethodBase method = frame.GetMethod();
-            Int32 methodId;
+            int methodId;
             methods.TryGetValue( method, out methodId );
             MethodInvocation item = stacks.Pop( threadId );
 
@@ -166,8 +166,8 @@ exec MethodProfilerApplication_Add {0},{1}",
         [Conditional( ConditionString )]
         public static void EndMethodFraction()
         {
-            Int64 endTime = Stopwatch.GetTimestamp();
-            Int32 threadId = Thread.CurrentThread.ManagedThreadId;
+            long endTime = Stopwatch.GetTimestamp();
+            int threadId = Thread.CurrentThread.ManagedThreadId;
             MethodInvocation item = stacks.Pop( threadId );
             item.EndTime = endTime;
             textWriter.Write( methodProfilerMethodInvocationFormatter, item );

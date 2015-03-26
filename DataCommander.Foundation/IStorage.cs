@@ -9,17 +9,17 @@
     internal interface IStorage
     {
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        void CreateStream( [In, MarshalAs( UnmanagedType.LPWStr )] String pwcsName, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint grfMode, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint reserved1, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint reserved2, [MarshalAs( UnmanagedType.Interface )] out CT.IStream ppstm );
+        void CreateStream( [In, MarshalAs( UnmanagedType.LPWStr )] string pwcsName, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint grfMode, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint reserved1, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint reserved2, [MarshalAs( UnmanagedType.Interface )] out CT.IStream ppstm );
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        void OpenStream( [In, MarshalAs( UnmanagedType.LPWStr )] String pwcsName, [In] IntPtr reserved1, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint grfMode, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint reserved2, [MarshalAs( UnmanagedType.Interface )] out CT.IStream ppstm );
+        void OpenStream( [In, MarshalAs( UnmanagedType.LPWStr )] string pwcsName, [In] IntPtr reserved1, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint grfMode, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint reserved2, [MarshalAs( UnmanagedType.Interface )] out CT.IStream ppstm );
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        void CreateStorage( [In, MarshalAs( UnmanagedType.LPWStr )] String pwcsName, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint grfMode, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint reserved1, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint reserved2, [MarshalAs( UnmanagedType.Interface )] out IStorage ppstg );
+        void CreateStorage( [In, MarshalAs( UnmanagedType.LPWStr )] string pwcsName, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint grfMode, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint reserved1, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint reserved2, [MarshalAs( UnmanagedType.Interface )] out IStorage ppstg );
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        void OpenStorage( [In, MarshalAs( UnmanagedType.LPWStr )] String pwcsName, [In, MarshalAs( UnmanagedType.Interface )] IStorage pstgPriority, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint grfMode, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.SNB" )] IntPtr snbExclude, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint reserved, [MarshalAs( UnmanagedType.Interface )] out IStorage ppstg );
+        void OpenStorage( [In, MarshalAs( UnmanagedType.LPWStr )] string pwcsName, [In, MarshalAs( UnmanagedType.Interface )] IStorage pstgPriority, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint grfMode, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.SNB" )] IntPtr snbExclude, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint reserved, [MarshalAs( UnmanagedType.Interface )] out IStorage ppstg );
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
         void CopyTo( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint ciidExclude, [In, MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 0 )] Guid[] rgiidExclude, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.SNB" )] IntPtr snbExclude, [In, MarshalAs( UnmanagedType.Interface )] IStorage pstgDest );
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        void MoveElementTo( [In, MarshalAs( UnmanagedType.LPWStr )] String pwcsName, [In, MarshalAs( UnmanagedType.Interface )] IStorage pstgDest, [In, MarshalAs( UnmanagedType.LPWStr )] String pwcsNewName, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint grfFlags );
+        void MoveElementTo( [In, MarshalAs( UnmanagedType.LPWStr )] string pwcsName, [In, MarshalAs( UnmanagedType.Interface )] IStorage pstgDest, [In, MarshalAs( UnmanagedType.LPWStr )] string pwcsNewName, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint grfFlags );
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
         void Commit( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint grfCommitFlags );
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
@@ -27,11 +27,11 @@
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
         void EnumElements( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint reserved1, [In] IntPtr reserved2, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.DWORD" )] uint reserved3, [MarshalAs( UnmanagedType.Interface )] out IEnumSTATSTG ppEnum );
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        void DestroyElement( [In, MarshalAs( UnmanagedType.LPWStr )] String pwcsName );
+        void DestroyElement( [In, MarshalAs( UnmanagedType.LPWStr )] string pwcsName );
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        void RenameElement( [In, MarshalAs( UnmanagedType.LPWStr )] String pwcsOldName, [In, MarshalAs( UnmanagedType.LPWStr )] String pwcsNewName );
+        void RenameElement( [In, MarshalAs( UnmanagedType.LPWStr )] string pwcsOldName, [In, MarshalAs( UnmanagedType.LPWStr )] string pwcsNewName );
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        void SetElementTimes( [In, MarshalAs( UnmanagedType.LPWStr )] String pwcsName, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.FILETIME" ), MarshalAs( UnmanagedType.LPArray )] CT.FILETIME[] pctime, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.FILETIME" ), MarshalAs( UnmanagedType.LPArray )] CT.FILETIME[] patime, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.FILETIME" ), MarshalAs( UnmanagedType.LPArray )] CT.FILETIME[] pmtime );
+        void SetElementTimes( [In, MarshalAs( UnmanagedType.LPWStr )] string pwcsName, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.FILETIME" ), MarshalAs( UnmanagedType.LPArray )] CT.FILETIME[] pctime, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.FILETIME" ), MarshalAs( UnmanagedType.LPArray )] CT.FILETIME[] patime, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.FILETIME" ), MarshalAs( UnmanagedType.LPArray )] CT.FILETIME[] pmtime );
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
         void SetClass( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.REFCLSID" )] ref Guid clsid );
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]

@@ -16,7 +16,7 @@ namespace DataCommander.Foundation.Caching
         /// <param name="getValue"></param>
         /// <param name="slidingExpiration"></param>
         /// <returns></returns>
-        public static CacheItem<T> Create<T>( String key, Func<T> getValue, TimeSpan slidingExpiration )
+        public static CacheItem<T> Create<T>( string key, Func<T> getValue, TimeSpan slidingExpiration )
         {
             return new CacheItem<T>( key, getValue, slidingExpiration );
         }

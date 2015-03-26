@@ -9,16 +9,16 @@ namespace DataCommander.Foundation.Diagnostics
     /// </summary>
     public sealed class AssertMessage
     {
-        private readonly String name;
+        private readonly string name;
         private readonly AssertMessageParameterCollection parameters;
 
-        internal AssertMessage( String name )
+        internal AssertMessage( string name )
         {
             this.name = name;
             this.parameters = new AssertMessageParameterCollection();
         }
 
-        internal AssertMessage( String name, AssertMessageParameterCollection parameters )
+        internal AssertMessage( string name, AssertMessageParameterCollection parameters )
         {
             this.name = name;
             this.parameters = parameters;
@@ -27,7 +27,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public String Name
+        public string Name
         {
             get
             {

@@ -8,7 +8,7 @@
     /// <typeparam name="T"></typeparam>
     public struct GetKeyResponse<T>
     {
-        private readonly Boolean hasKey;
+        private readonly bool hasKey;
         private readonly T key;
 
         /// <summary>
@@ -16,7 +16,7 @@
         /// </summary>
         /// <param name="hasKey"></param>
         /// <param name="key"></param>
-        public GetKeyResponse( Boolean hasKey, T key )
+        public GetKeyResponse( bool hasKey, T key )
         {
             this.hasKey = hasKey;
             this.key = key;
@@ -25,7 +25,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Boolean HasKey
+        public bool HasKey
         {
             get
             {
@@ -56,7 +56,7 @@
         /// <param name="hasKey"></param>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static GetKeyResponse<T> Create<T>( Boolean hasKey, T key )
+        public static GetKeyResponse<T> Create<T>( bool hasKey, T key )
         {
             return new GetKeyResponse<T>( hasKey, key );
         }

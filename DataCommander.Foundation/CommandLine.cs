@@ -15,19 +15,19 @@
     {
         private IndexableCollection<CommandLineArgument> arguments;
         private ListIndex<CommandLineArgument> listIndex = new ListIndex<CommandLineArgument>("listIndex");
-        private NonUniqueIndex<String, CommandLineArgument> nameIndex;
+        private NonUniqueIndex<string, CommandLineArgument> nameIndex;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="commandLine"></param>
-        public CommandLine(String commandLine)
+        public CommandLine(string commandLine)
         {
             Contract.Requires(commandLine != null);
 
             this.arguments = new IndexableCollection<CommandLineArgument>(this.listIndex);
-            var dictionary = new Dictionary<String, ICollection<CommandLineArgument>>(StringComparer.InvariantCultureIgnoreCase);
-            this.nameIndex = new NonUniqueIndex<String, CommandLineArgument>(
+            var dictionary = new Dictionary<string, ICollection<CommandLineArgument>>(StringComparer.InvariantCultureIgnoreCase);
+            this.nameIndex = new NonUniqueIndex<string, CommandLineArgument>(
                 "nameIndex",
                 argument => GetKeyResponse.Create(argument.Name != null, argument.Name),
                 dictionary,
@@ -52,7 +52,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public NonUniqueIndex<String, CommandLineArgument> NameIndex
+        public NonUniqueIndex<string, CommandLineArgument> NameIndex
         {
             get
             {
@@ -62,9 +62,9 @@
 
         #region Private Methods
 
-        private static String ReadString(TextReader textReader)
+        private static string ReadString(TextReader textReader)
         {
-            Int32 read = textReader.Read();
+            int read = textReader.Read();
             Char c = (Char) read;
             Contract.Assert(c == '"');
             var sb = new StringBuilder();
@@ -85,20 +85,20 @@
                 }
             }
 
-            String value = sb.ToString();
+            string value = sb.ToString();
             return value;
         }
 
-        private static String ReadName(TextReader textReader)
+        private static string ReadName(TextReader textReader)
         {
-            Int32 read = textReader.Read();
+            int read = textReader.Read();
             Char c = (Char) read;
             Contract.Assert(c == '/' || c == '-');
             var sb = new StringBuilder();
 
             while (true)
             {
-                Int32 peek = textReader.Peek();
+                int peek = textReader.Peek();
 
                 if (peek == -1)
                 {
@@ -118,7 +118,7 @@
                 }
             }
 
-            String name;
+            string name;
 
             if (sb.Length > 0)
             {
@@ -132,13 +132,13 @@
             return name;
         }
 
-        private static String ReadValue(TextReader textReader)
+        private static string ReadValue(TextReader textReader)
         {
             StringBuilder sb = new StringBuilder();
 
             while (true)
             {
-                Int32 peek = textReader.Peek();
+                int peek = textReader.Peek();
 
                 if (peek == -1)
                 {
@@ -159,15 +159,15 @@
                 textReader.Read();
             }
 
-            String value = sb.ToString();
+            string value = sb.ToString();
             return value;
         }
 
-        private static Tuple<String, String> ReadNameValue(TextReader textReader)
+        private static Tuple<string, string> ReadNameValue(TextReader textReader)
         {
-            String name = ReadName(textReader);
-            String value;
-            Int32 peek = textReader.Peek();
+            string name = ReadName(textReader);
+            string value;
+            int peek = textReader.Peek();
 
             if (peek >= 0)
             {
@@ -203,11 +203,11 @@
 
         private static IEnumerable<CommandLineArgument> Parse(TextReader textReader)
         {
-            Int32 index = 0;
+            int index = 0;
 
             while (true)
             {
-                Int32 peek = textReader.Peek();
+                int peek = textReader.Peek();
 
                 if (peek == -1)
                 {
@@ -218,7 +218,7 @@
 
                 if (c == '"')
                 {
-                    String value = ReadString(textReader);
+                    string value = ReadString(textReader);
                     var argument = new CommandLineArgument(index, null, value);
                     index++;
                     yield return argument;
@@ -236,7 +236,7 @@
                 }
                 else
                 {
-                    String value = ReadValue(textReader);
+                    string value = ReadValue(textReader);
                     var argument = new CommandLineArgument(index, null, value);
                     index++;
                     yield return argument;

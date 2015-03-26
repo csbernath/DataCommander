@@ -6,63 +6,63 @@ namespace DataCommander.Foundation.Configuration
 
     internal static class Convert
     {
-        public static Object ParseNumber(
-            String source,
+        public static object ParseNumber(
+            string source,
             NumberStyles style,
-            Type conversionType )
+            Type conversionType)
         {
-            Object value;
-            TypeCode typeCode = Type.GetTypeCode( conversionType );
+            object value;
+            TypeCode typeCode = Type.GetTypeCode(conversionType);
 
             switch (typeCode)
             {
                 case TypeCode.SByte:
-                    value = SByte.Parse( source, style );
+                    value = SByte.Parse(source, style);
                     break;
 
                 case TypeCode.Int16:
-                    value = Int16.Parse( source, style );
+                    value = Int16.Parse(source, style);
                     break;
 
                 case TypeCode.Int32:
-                    value = Int32.Parse( source, style, CultureInfo.InvariantCulture );
+                    value = int.Parse(source, style, CultureInfo.InvariantCulture);
                     break;
 
                 case TypeCode.Int64:
-                    value = Int64.Parse( source, style, CultureInfo.InvariantCulture );
+                    value = long.Parse(source, style, CultureInfo.InvariantCulture);
                     break;
 
                 case TypeCode.Byte:
-                    value = Byte.Parse( source, style, CultureInfo.InvariantCulture );
+                    value = Byte.Parse(source, style, CultureInfo.InvariantCulture);
                     break;
 
                 case TypeCode.UInt16:
-                    value = UInt16.Parse( source, style, CultureInfo.InvariantCulture );
+                    value = UInt16.Parse(source, style, CultureInfo.InvariantCulture);
                     break;
 
                 case TypeCode.UInt32:
-                    value = UInt32.Parse( source, style, CultureInfo.InvariantCulture );
+                    value = UInt32.Parse(source, style, CultureInfo.InvariantCulture);
                     break;
 
                 case TypeCode.UInt64:
-                    value = UInt64.Parse( source, style );
+                    value = UInt64.Parse(source, style);
                     break;
 
                 default:
-                    throw new ArgumentException( null, "conversionType" );
+                    throw new ArgumentException(null, "conversionType");
             }
 
             return value;
         }
 
-        public static Object ParseNumber( String source, Type conversionType )
+        public static object ParseNumber(string source, Type conversionType)
         {
-            String source2;
+            string source2;
             NumberStyles style;
 
-            if (source.IndexOf( "0x" ) == 0)
+            if (source.IndexOf("0x") == 0)
             {
-                source2 = source.Substring( 2 );
+                source2 = source.Substring(2);
                 style = NumberStyles.HexNumber;
             }
             else
@@ -71,23 +71,23 @@ namespace DataCommander.Foundation.Configuration
                 style = NumberStyles.Integer;
             }
 
-            return ParseNumber( source2, style, conversionType );
+            return ParseNumber(source2, style, conversionType);
         }
 
-        public static Object ChangeType(
-            String source,
+        public static object ChangeType(
+            string source,
             Type conversionType,
-            IFormatProvider formatProvider )
+            IFormatProvider formatProvider)
         {
-            Object value;
+            object value;
 
             if (conversionType.IsEnum)
             {
-                value = Enum.Parse( conversionType, source );
+                value = Enum.Parse(conversionType, source);
             }
             else
             {
-                TypeCode typeCode = Type.GetTypeCode( conversionType );
+                TypeCode typeCode = Type.GetTypeCode(conversionType);
 
                 switch (typeCode)
                 {
@@ -99,26 +99,26 @@ namespace DataCommander.Foundation.Configuration
                     case TypeCode.UInt16:
                     case TypeCode.UInt32:
                     case TypeCode.UInt64:
-                        value = ParseNumber( source, conversionType );
+                        value = ParseNumber(source, conversionType);
                         break;
 
                     default:
-                        if (conversionType == typeof( TimeSpan ))
+                        if (conversionType == typeof (TimeSpan))
                         {
-                            value = TimeSpan.Parse( source );
+                            value = TimeSpan.Parse(source);
                         }
-                        else if (conversionType == typeof( Version ))
+                        else if (conversionType == typeof (Version))
                         {
-                            value = new Version( source );
+                            value = new Version(source);
                         }
-                        else if (conversionType == typeof( Encoding ))
+                        else if (conversionType == typeof (Encoding))
                         {
-                            Boolean isInt32;
-                            Int32 codepage = 0;
+                            bool isInt32;
+                            int codepage = 0;
 
                             try
                             {
-                                codepage = Int32.Parse( source );
+                                codepage = int.Parse(source);
                                 isInt32 = true;
                             }
                             catch
@@ -127,13 +127,13 @@ namespace DataCommander.Foundation.Configuration
                             }
 
                             if (isInt32)
-                                value = Encoding.GetEncoding( codepage );
+                                value = Encoding.GetEncoding(codepage);
                             else
-                                value = Encoding.GetEncoding( source );
+                                value = Encoding.GetEncoding(source);
                         }
                         else
                         {
-                            value = System.Convert.ChangeType( source, conversionType, formatProvider );
+                            value = System.Convert.ChangeType(source, conversionType, formatProvider);
                         }
 
                         break;

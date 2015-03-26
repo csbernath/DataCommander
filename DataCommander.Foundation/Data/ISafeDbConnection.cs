@@ -11,7 +11,7 @@
         /// <summary>
         /// 
         /// </summary>
-        Object Id
+        object Id
         {
             get;
         }

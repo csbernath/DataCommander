@@ -20,7 +20,7 @@
         /// <param name="commandText"></param>
         /// <param name="commandType"></param>
         /// <returns></returns>
-        public static IDbCommand CreateCommand( this IDbConnectionContext connectionContext, String commandText, CommandType commandType )
+        public static IDbCommand CreateCommand( this IDbConnectionContext connectionContext, string commandText, CommandType commandType )
         {
             Contract.Requires<ArgumentNullException>( connectionContext != null );
             Contract.Requires<ArgumentNullException>( connectionContext.Connection != null );
@@ -36,7 +36,7 @@
         /// <param name="commandText"></param>
         /// <param name="commandType"></param>
         /// <returns></returns>
-        public static DataSet ExecuteDataSet( this IDbConnectionContext connectionContext, String commandText, CommandType commandType )
+        public static DataSet ExecuteDataSet( this IDbConnectionContext connectionContext, string commandText, CommandType commandType )
         {
             Contract.Requires<ArgumentNullException>( connectionContext != null );
             Contract.Requires<ArgumentNullException>( connectionContext.Connection != null );
@@ -52,7 +52,7 @@
         /// <param name="commandText"></param>
         /// <param name="commandType"></param>
         /// <returns></returns>
-        public static DataTable ExecuteDataTable( this IDbConnectionContext connectionContext, String commandText, CommandType commandType )
+        public static DataTable ExecuteDataTable( this IDbConnectionContext connectionContext, string commandText, CommandType commandType )
         {
             Contract.Requires<ArgumentNullException>( connectionContext != null );
             Contract.Requires<ArgumentNullException>( connectionContext.Connection != null );
@@ -68,7 +68,7 @@
         /// <param name="commandText"></param>
         /// <param name="commandType"></param>
         /// <returns></returns>
-        public static Int32 ExecuteNonQuery( this IDbConnectionContext connectionContext, String commandText, CommandType commandType )
+        public static int ExecuteNonQuery( this IDbConnectionContext connectionContext, string commandText, CommandType commandType )
         {
             Contract.Requires<ArgumentNullException>( connectionContext != null );
             Contract.Requires<ArgumentNullException>( connectionContext.Connection != null );
@@ -84,7 +84,7 @@
         /// <param name="commandText"></param>
         /// <param name="commandType"></param>
         /// <returns></returns>
-        public static Object ExecuteScalar( this IDbConnectionContext connectionContext, String commandText, CommandType commandType )
+        public static object ExecuteScalar( this IDbConnectionContext connectionContext, string commandText, CommandType commandType )
         {
             Contract.Requires<ArgumentNullException>( connectionContext != null );
             Contract.Requires<ArgumentNullException>( connectionContext.Connection != null );
@@ -101,7 +101,7 @@
         /// <param name="commandType"></param>
         /// <param name="behavior"></param>
         /// <returns></returns>
-        public static IDataReaderContext ExecuteReader( this IDbConnectionContext connectionContext, String commandText, CommandType commandType, CommandBehavior behavior )
+        public static IDataReaderContext ExecuteReader( this IDbConnectionContext connectionContext, string commandText, CommandType commandType, CommandBehavior behavior )
         {
             Contract.Requires<ArgumentNullException>( connectionContext != null );
             Contract.Requires<ArgumentNullException>( connectionContext.Connection != null );
@@ -139,9 +139,9 @@
         /// <returns></returns>
         public static IEnumerable<T> Query<T>(
             this IDbConnectionContext connectionContext,
-            String sql,
-            Object param,
-            Boolean buffered,
+            string sql,
+            object param,
+            bool buffered,
             CommandType? commandType )
         {
             Contract.Requires<ArgumentNullException>( connectionContext != null );
@@ -162,8 +162,8 @@
         /// <returns></returns>
         public static SqlMapper.GridReader QueryMultiple(
             this IDbConnectionContext connectionContext,
-            String sql,
-            Object param,
+            string sql,
+            object param,
             CommandType? commandType )
         {
             Contract.Requires<ArgumentNullException>( connectionContext != null );

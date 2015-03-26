@@ -22,7 +22,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// 
         /// </summary>
         /// <param name="connectionString"></param>
-        public SafeSqlConnection( String connectionString )
+        public SafeSqlConnection( string connectionString )
         {
             SqlConnection connection = new SqlConnection( connectionString );
             this.Initialize( connection, this );
@@ -38,9 +38,9 @@ namespace DataCommander.Foundation.Data.SqlClient
         }
 
         #region ICloneable Members
-        Object ICloneable.Clone()
+        object ICloneable.Clone()
         {
-            String connectionString = ConnectionString;
+            string connectionString = ConnectionString;
             var connection = new SafeSqlConnection( connectionString );
             return connection;
         }
@@ -62,7 +62,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             return id;
         }
 
-        Object ISafeDbConnection.Id
+        object ISafeDbConnection.Id
         {
             get
             {
@@ -80,12 +80,12 @@ namespace DataCommander.Foundation.Data.SqlClient
             Exception exception,
             TimeSpan elapsed )
         {
-            String separator = new String( '-', 80 );
+            string separator = new string( '-', 80 );
             var sb = new StringBuilder();
             sb.AppendFormat( "SafeSqlConnection.HandleException(connection), elapsed: {0}, exception:\r\n{1}", elapsed, exception.ToLogString() );            
             var sqlException = exception as SqlException;
-            Boolean handled = false;
-            Int32 timeout = 1 * 60 * 1000; // 1 minutes
+            bool handled = false;
+            int timeout = 1 * 60 * 1000; // 1 minutes
 
             if (sqlException != null)
             {
@@ -160,18 +160,18 @@ namespace DataCommander.Foundation.Data.SqlClient
         {
             Contract.Requires( command != null );
 
-            String separator = new String( '-', 80 );
+            string separator = new string( '-', 80 );
             StringBuilder sb = new StringBuilder();
             sb.AppendLine( "SafeSqlConnection.HandleException(command):\r\n" );
             SqlParameterCollection parameters = (SqlParameterCollection) command.Parameters;
-            String p = parameters.ToLogString();
-            String database = command.Connection.Database;
+            string p = parameters.ToLogString();
+            string database = command.Connection.Database;
 
             sb.AppendFormat( "Database: {0}\r\n", database );
             sb.AppendFormat( "Command: {0}\r\n{1}\r\n{2}\r\n", command.CommandText, p, separator );
             sb.AppendFormat( "Exception:{0}\r\n{1}\r\n", exception, separator );
             SqlException sqlEx = exception as SqlException;
-            Boolean handled = false;
+            bool handled = false;
 
             if (sqlEx != null)
             {

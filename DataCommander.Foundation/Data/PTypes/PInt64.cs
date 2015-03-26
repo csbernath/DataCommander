@@ -30,7 +30,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public PInt64( Int64 value )
+        public PInt64( long value )
         {
             this.sql = value;
             this.type = this.sql.IsNull ? PValueType.Null : PValueType.Value;
@@ -57,7 +57,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PInt64( Int64 value )
+        public static implicit operator PInt64( long value )
         {
             return new PInt64( value );
         }
@@ -67,7 +67,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PInt64( Int64? value )
+        public static implicit operator PInt64( long? value )
         {
             return value != null ? new PInt64( value.Value ) : Null;
         }
@@ -87,9 +87,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator Int64( PInt64 value )
+        public static implicit operator long( PInt64 value )
         {
-            return (Int64) value.sql;
+            return (long) value.sql;
         }
 
         /// <summary>
@@ -98,9 +98,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static Boolean operator ==( PInt64 x, PInt64 y )
+        public static bool operator ==( PInt64 x, PInt64 y )
         {
-            Boolean isEqual = x.type == y.type;
+            bool isEqual = x.type == y.type;
 
             if (isEqual)
             {
@@ -119,7 +119,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static Boolean operator !=( PInt64 x, PInt64 y )
+        public static bool operator !=( PInt64 x, PInt64 y )
         {
             return !(x == y);
         }
@@ -130,7 +130,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="s"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static PInt64 Parse( String s, PValueType type )
+        public static PInt64 Parse( string s, PValueType type )
         {
             PInt64 sp;
 
@@ -151,9 +151,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="y"></param>
         /// <returns></returns>
-        public override Boolean Equals( Object y )
+        public override bool Equals( object y )
         {
-            Boolean equals = y is PInt64;
+            bool equals = y is PInt64;
 
             if (equals)
             {
@@ -167,9 +167,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <returns></returns>
-        public override Int32 GetHashCode()
+        public override int GetHashCode()
         {
-            Int32 hashCode = this.sql.GetHashCode();
+            int hashCode = this.sql.GetHashCode();
             return hashCode;
         }
 
@@ -187,7 +187,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsNull
+        public bool IsNull
         {
             get
             {
@@ -198,7 +198,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsValue
+        public bool IsValue
         {
             get
             {
@@ -209,7 +209,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsEmpty
+        public bool IsEmpty
         {
             get
             {
@@ -220,11 +220,11 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Object Value
+        public object Value
         {
             get
             {
-                Object value;
+                object value;
 
                 switch (this.type)
                 {
@@ -265,7 +265,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <returns></returns>
-        public override String ToString()
+        public override string ToString()
         {
             return this.sql.ToString();
         }

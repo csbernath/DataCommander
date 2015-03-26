@@ -18,7 +18,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             this.connection = connection;
         }
 
-        private void InfoMessageEvent(Object sender, SqlInfoMessageEventArgs e)
+        private void InfoMessageEvent(object sender, SqlInfoMessageEventArgs e)
         {
             if (this.InfoMessage != null)
             {

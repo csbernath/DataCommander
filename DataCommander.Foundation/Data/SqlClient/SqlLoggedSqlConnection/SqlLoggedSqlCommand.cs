@@ -20,7 +20,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             this.command = command;
         }
 
-        public String CommandText
+        public string CommandText
         {
             get
             {
@@ -33,7 +33,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
         }
 
-        public Int32 CommandTimeout
+        public int CommandTimeout
         {
             get
             {
@@ -121,7 +121,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             return this.command.CreateParameter();
         }
 
-        public Int32 ExecuteNonQuery()
+        public int ExecuteNonQuery()
         {
             return this.connection.ExecuteNonQuery(this.command);
         }
@@ -138,7 +138,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             return loggedSqlDataReader.Execute(behavior);
         }
 
-        public Object ExecuteScalar()
+        public object ExecuteScalar()
         {
             return this.connection.ExecuteScalar(this.command);
         }

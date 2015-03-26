@@ -21,7 +21,7 @@ namespace DataCommander.Foundation.Data
         private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private IDbConnection cloneableConnection;
         private ICloneable cloneable;
-        private List<String> commands = new List<String>();
+        private List<string> commands = new List<string>();
         private AutoResetEvent queueEvent = new AutoResetEvent( false );
         private WorkerThread thread;
 
@@ -32,7 +32,7 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="cloneableConnection"></param>
         /// <param name="threadName"></param>
-        public AsyncDbConnection( IDbConnection cloneableConnection, String threadName )
+        public AsyncDbConnection( IDbConnection cloneableConnection, string threadName )
         {
             this.cloneableConnection = cloneableConnection;
             this.cloneable = (ICloneable) cloneableConnection;
@@ -46,7 +46,7 @@ namespace DataCommander.Foundation.Data
         /// 
         /// </summary>
         /// <param name="databaseName"></param>
-        public void ChangeDatabase( String databaseName )
+        public void ChangeDatabase( string databaseName )
         {
             // TODO:  Add AsyncSqlConnection.ChangeDatabase implementation
         }
@@ -82,7 +82,7 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public String ConnectionString
+        public string ConnectionString
         {
             get
             {
@@ -125,7 +125,7 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public String Database
+        public string Database
         {
             get
             {
@@ -136,7 +136,7 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public Int32 ConnectionTimeout
+        public int ConnectionTimeout
         {
             get
             {
@@ -160,9 +160,9 @@ namespace DataCommander.Foundation.Data
 
         #region Internal Methods
 
-        internal Int32 ExecuteNonQuery( AsyncDbCommand command )
+        internal int ExecuteNonQuery( AsyncDbCommand command )
         {
-            String commandText = ToString( command );
+            string commandText = ToString( command );
 
             lock (this.commands)
             {
@@ -178,9 +178,9 @@ namespace DataCommander.Foundation.Data
 
         #region Private Methods
 
-        private static String ToString( IDbCommand command )
+        private static string ToString( IDbCommand command )
         {
-            String commandText;
+            string commandText;
 
             switch (command.CommandType)
             {
@@ -188,7 +188,7 @@ namespace DataCommander.Foundation.Data
                     StringBuilder sb = new StringBuilder();
                     sb.AppendFormat( "exec {0}", command.CommandText );
                     SqlParameterCollection parameters = (SqlParameterCollection) command.Parameters;
-                    String parametersString = parameters.ToLogString();
+                    string parametersString = parameters.ToLogString();
 
                     if (parametersString.Length > 0)
                     {
@@ -218,7 +218,7 @@ namespace DataCommander.Foundation.Data
                     this.queueEvent
                 };
 
-            const Int32 Timeout = 10000;// 10 sec
+            const int Timeout = 10000;// 10 sec
 
             while (true)
             {
@@ -239,18 +239,18 @@ namespace DataCommander.Foundation.Data
             {
                 while (this.commands.Count > 0)
                 {
-                    String[] commandTextArray;
+                    string[] commandTextArray;
 
                     lock (this.commands)
                     {
-                        commandTextArray = new String[ this.commands.Count ];
+                        commandTextArray = new string[ this.commands.Count ];
                         this.commands.CopyTo( commandTextArray );
                         this.commands.Clear();
                     }
 
                     StringBuilder sb = new StringBuilder();
 
-                    for (Int32 i = 0; i < commandTextArray.Length; i++)
+                    for (int i = 0; i < commandTextArray.Length; i++)
                     {
                         if (i > 0)
                         {
@@ -260,7 +260,7 @@ namespace DataCommander.Foundation.Data
                         sb.Append( commandTextArray[ i ] );
                     }
 
-                    String commandText = sb.ToString();
+                    string commandText = sb.ToString();
                     Exception exception = null;
 
                     using (var connection = (IDbConnection) this.cloneable.Clone())
@@ -282,7 +282,7 @@ namespace DataCommander.Foundation.Data
 
                     if (exception != null)
                     {
-                        String message;
+                        string message;
                         SqlException sqlException = exception as SqlException;
 
                         if (sqlException != null)

@@ -11,7 +11,7 @@ namespace DataCommander.Foundation.Diagnostics
     public class FileLogWriter : ILogWriter
     {
         private static readonly ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
-        private readonly Boolean async;
+        private readonly bool async;
         private readonly ILogFile logFile;
 
         /// <summary>
@@ -26,13 +26,13 @@ namespace DataCommander.Foundation.Diagnostics
         /// <param name="autoFlush"></param>
         /// <param name="fileAttributes"></param>
         public FileLogWriter(
-            String path,
+            string path,
             Encoding encoding,
-            Boolean async,
-            Int32 queueCapacity,
-            Int32 bufferSize,
+            bool async,
+            int queueCapacity,
+            int bufferSize,
             TimeSpan timerPeriod,
-            Boolean autoFlush,
+            bool autoFlush,
             FileAttributes fileAttributes)
         {
             this.async = async;

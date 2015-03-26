@@ -20,7 +20,7 @@
         public static TextDataCommand GetInsertCommand(
             IList<TextDataColumn> columns,
             IList<ITextDataConverter> converters,
-            IEnumerable<Object[]> rows,
+            IEnumerable<object[]> rows,
             IConverter<TextDataCommand, TextWriter> getTextWriter)
         {
             TextDataCommand command = new TextDataCommand();

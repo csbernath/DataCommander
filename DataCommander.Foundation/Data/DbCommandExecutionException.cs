@@ -10,9 +10,9 @@
     /// </summary>
     public class DbCommandExecutionException : Exception
     {
-        private readonly String database;
-        private readonly String commandText;
-        private readonly Int32 commandTimeout;
+        private readonly string database;
+        private readonly string commandText;
+        private readonly int commandTimeout;
 
         /// <summary>
         /// 

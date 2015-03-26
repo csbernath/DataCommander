@@ -11,10 +11,10 @@ namespace DataCommander.Foundation.Threading.Tasks
     public class CancellationTokenSource : IDisposable
     {
         internal static readonly CancellationTokenSource NotCancelable = new CancellationTokenSource( false );
-        private Boolean isCancellationRequested;
+        private bool isCancellationRequested;
         private ManualResetEvent kernelEvent;
 
-        private CancellationTokenSource( Boolean set )
+        private CancellationTokenSource( bool set )
         {
         }
 
@@ -28,7 +28,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsCancellationRequested
+        public bool IsCancellationRequested
         {
             get
             {

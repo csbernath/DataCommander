@@ -21,8 +21,8 @@
         private DataTable schemaTable;
         private TextReader textReader;
         private TextDataStreamReader textDataStreamReader;
-        private Object[] values;
-        private Int32 rowCount;
+        private object[] values;
+        private int rowCount;
 
         #endregion
 
@@ -52,7 +52,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Int32 Depth
+        public override int Depth
         {
             get
             {
@@ -63,7 +63,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Int32 FieldCount
+        public override int FieldCount
         {
             get
             {
@@ -76,9 +76,9 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Boolean GetBoolean( Int32 ordinal )
+        public override bool GetBoolean( int ordinal )
         {
-            return (Boolean) this.values[ ordinal ];
+            return (bool) this.values[ ordinal ];
         }
 
         /// <summary>
@@ -86,7 +86,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Byte GetByte( Int32 ordinal )
+        public override Byte GetByte( int ordinal )
         {
             return (Byte) this.values[ ordinal ];
         }
@@ -100,7 +100,7 @@
         /// <param name="bufferOffset"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public override Int64 GetBytes( Int32 ordinal, Int64 dataOffset, Byte[] buffer, Int32 bufferOffset, Int32 length )
+        public override long GetBytes( int ordinal, long dataOffset, Byte[] buffer, int bufferOffset, int length )
         {
             throw new NotImplementedException();
         }
@@ -110,7 +110,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Char GetChar( Int32 ordinal )
+        public override Char GetChar( int ordinal )
         {
             return (Char) this.values[ ordinal ];
         }
@@ -124,7 +124,7 @@
         /// <param name="bufferOffset"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public override Int64 GetChars( Int32 ordinal, Int64 dataOffset, Char[] buffer, Int32 bufferOffset, Int32 length )
+        public override long GetChars( int ordinal, long dataOffset, Char[] buffer, int bufferOffset, int length )
         {
             throw new NotImplementedException();
         }
@@ -134,7 +134,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override String GetDataTypeName( Int32 ordinal )
+        public override string GetDataTypeName( int ordinal )
         {
             throw new NotImplementedException();
         }
@@ -144,7 +144,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override DateTime GetDateTime( Int32 ordinal )
+        public override DateTime GetDateTime( int ordinal )
         {
             return (DateTime) this.values[ ordinal ];
         }
@@ -154,7 +154,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Decimal GetDecimal( Int32 ordinal )
+        public override Decimal GetDecimal( int ordinal )
         {
             return (Decimal) this.values[ ordinal ];
         }
@@ -164,7 +164,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Double GetDouble( Int32 ordinal )
+        public override Double GetDouble( int ordinal )
         {
             return (Double) this.values[ ordinal ];
         }
@@ -183,7 +183,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Type GetFieldType( Int32 ordinal )
+        public override Type GetFieldType( int ordinal )
         {
             throw new NotImplementedException();
         }
@@ -193,7 +193,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Single GetFloat( Int32 ordinal )
+        public override Single GetFloat( int ordinal )
         {
             return (Single) this.values[ ordinal ];
         }
@@ -203,7 +203,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Guid GetGuid( Int32 ordinal )
+        public override Guid GetGuid( int ordinal )
         {
             return (Guid) this.values[ ordinal ];
         }
@@ -213,7 +213,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Int16 GetInt16( Int32 ordinal )
+        public override Int16 GetInt16( int ordinal )
         {
             return (Int16) this.values[ ordinal ];
         }
@@ -223,9 +223,9 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Int32 GetInt32( Int32 ordinal )
+        public override int GetInt32( int ordinal )
         {
-            return (Int32) this.values[ ordinal ];
+            return (int) this.values[ ordinal ];
         }
 
         /// <summary>
@@ -233,9 +233,9 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Int64 GetInt64( Int32 ordinal )
+        public override long GetInt64( int ordinal )
         {
-            return (Int64) this.values[ ordinal ];
+            return (long) this.values[ ordinal ];
         }
 
         /// <summary>
@@ -243,7 +243,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override String GetName( Int32 ordinal )
+        public override string GetName( int ordinal )
         {
             TextDataColumn column = this.columns[ ordinal ];
             return column.ColumnName;
@@ -254,7 +254,7 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public override Int32 GetOrdinal( String name )
+        public override int GetOrdinal( string name )
         {
             return this.columns.IndexOf( name );
         }
@@ -269,13 +269,13 @@
             {
                 this.schemaTable = new DataTable();
                 this.schemaTable.Locale = CultureInfo.InvariantCulture;
-                this.schemaTable.Columns.Add( "ColumnName", typeof( String ) );
+                this.schemaTable.Columns.Add( "ColumnName", typeof( string ) );
                 this.schemaTable.Columns.Add( "DataType", typeof( Type ) );
-                this.schemaTable.Columns.Add( "IsKey", typeof( Boolean ) );
+                this.schemaTable.Columns.Add( "IsKey", typeof( bool ) );
 
                 foreach (TextDataColumn column in this.columns)
                 {
-                    Object[] values =
+                    object[] values =
                     {
                         column.ColumnName,
                         column.DataType,
@@ -294,9 +294,9 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override String GetString( Int32 ordinal )
+        public override string GetString( int ordinal )
         {
-            return (String) this.values[ ordinal ];
+            return (string) this.values[ ordinal ];
         }
 
         /// <summary>
@@ -304,7 +304,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Object GetValue( Int32 ordinal )
+        public override object GetValue( int ordinal )
         {
             return this.values[ ordinal ];
         }
@@ -314,7 +314,7 @@
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        public override Int32 GetValues( Object[] values )
+        public override int GetValues( object[] values )
         {
             this.values.CopyTo( values, 0 );
             return values.Length;
@@ -323,7 +323,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Boolean HasRows
+        public override bool HasRows
         {
             get
             {
@@ -334,7 +334,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Boolean IsClosed
+        public override bool IsClosed
         {
             get
             {
@@ -347,7 +347,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Boolean IsDBNull( Int32 ordinal )
+        public override bool IsDBNull( int ordinal )
         {
             return this.values[ ordinal ] == DBNull.Value;
         }
@@ -356,7 +356,7 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        public override Boolean NextResult()
+        public override bool NextResult()
         {
             throw new NotImplementedException();
         }
@@ -365,9 +365,9 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        public override Boolean Read()
+        public override bool Read()
         {
-            Boolean read;
+            bool read;
 
             if (this.behavior == CommandBehavior.SingleRow && this.rowCount == 1)
             {
@@ -390,7 +390,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Int32 RecordsAffected
+        public override int RecordsAffected
         {
             get
             {
@@ -403,11 +403,11 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public override Object this[ String name ]
+        public override object this[ string name ]
         {
             get
             {
-                Int32 index = this.columns.IndexOf( name, true );
+                int index = this.columns.IndexOf( name, true );
                 return this.values[ index ];
             }
         }
@@ -417,7 +417,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Object this[ Int32 ordinal ]
+        public override object this[ int ordinal ]
         {
             get
             {

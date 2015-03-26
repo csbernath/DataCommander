@@ -19,7 +19,7 @@ namespace DataCommander.Foundation.Diagnostics
         #region Private Fields
 
         private static LinkedList<ListItem> items = new LinkedList<ListItem>();
-        private static Int64 id;
+        private static long id;
         private static Lazy<StringTableColumnInfo<ListItemState>[]> columns;
 
         #endregion
@@ -46,7 +46,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public static Int32 Count
+        public static int Count
         {
             get
             {
@@ -54,7 +54,7 @@ namespace DataCommander.Foundation.Diagnostics
             }
         }
 
-        private static string ToString( Int32? source )
+        private static string ToString( int? source )
         {
             return source != null ? source.Value.ToString() : null;
         }
@@ -67,16 +67,16 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public static String State
+        public static string State
         {
             get
             {
                 StringTable stringTable;
-                Int32 totalSize = 0;
+                int totalSize = 0;
 
                 lock (items)
                 {
-                    Int64 timestamp = Stopwatch.GetTimestamp();
+                    long timestamp = Stopwatch.GetTimestamp();
                     var listItemStates = items.Select( i => new ListItemState( i, timestamp ) ).ToArray();
                     stringTable = listItemStates.ToStringTable( columns.Value );
                     totalSize = listItemStates.Sum( s => s.ListItem.Size );
@@ -89,7 +89,7 @@ namespace DataCommander.Foundation.Diagnostics
                     items.Remove( removeableItems );
                 }
 
-                return String.Format( CultureInfo.InvariantCulture, "GarbageMonitor.State:\r\ntotalSize: {0}\r\n{1}", totalSize, stringTable );
+                return string.Format( CultureInfo.InvariantCulture, "GarbageMonitor.State:\r\ntotalSize: {0}\r\n{1}", totalSize, stringTable );
             }
         }
 
@@ -102,22 +102,22 @@ namespace DataCommander.Foundation.Diagnostics
         /// </summary>
         /// <param name="name"></param>
         /// <param name="target"></param>
-        public static void Add( String name, Object target )
+        public static void Add( string name, object target )
         {
             Contract.Requires( target != null );
 
-            String typeName = null;
-            Int32 size = 0;
+            string typeName = null;
+            int size = 0;
 
             if (target != null)
             {
                 Type type = target.GetType();
                 typeName = TypeNameCollection.GetTypeName( type );
 
-                if (type == typeof( String ))
+                if (type == typeof( string ))
                 {
-                    String s = (String) target;
-                    Int32 length = s.Length;
+                    string s = (string) target;
+                    int length = s.Length;
                     size = length << 1;
                 }
             }
@@ -133,14 +133,14 @@ namespace DataCommander.Foundation.Diagnostics
         /// <param name="size"></param>
         /// <param name="target"></param>
         public static void Add(
-            String name,
-            String typeName,
-            Int32 size,
-            Object target )
+            string name,
+            string typeName,
+            int size,
+            object target )
         {
             Contract.Requires( target != null );
 
-            Int64 id = Interlocked.Increment( ref GarbageMonitor.id );
+            long id = Interlocked.Increment( ref GarbageMonitor.id );
             ListItem item = new ListItem( id, name, typeName, size, target );
 
             lock (items)
@@ -154,7 +154,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// </summary>
         /// <param name="target"></param>
         /// <param name="disposeTime"></param>
-        public static void SetDisposeTime( Object target, DateTime disposeTime )
+        public static void SetDisposeTime( object target, DateTime disposeTime )
         {
             Contract.Requires( target != null );
 
@@ -174,23 +174,23 @@ namespace DataCommander.Foundation.Diagnostics
         {
             #region Private Fields
 
-            private Int64 id;
-            private String name;
-            private String typeName;
-            private Int32 size;
-            private DateTime time = OptimizedDateTime.Now;
-            private Int64 timestamp;
+            private long id;
+            private string name;
+            private string typeName;
+            private int size;
+            private DateTime time = LocalTime.Default.Now;
+            private long timestamp;
             private WeakReference weakReference;
             private DateTime? disposeTime;
 
             #endregion
 
             public ListItem(
-                Int64 id,
-                String name,
-                String typeName,
-                Int32 size,
-                Object target )
+                long id,
+                string name,
+                string typeName,
+                int size,
+                object target )
             {
                 this.id = id;
                 this.name = name;
@@ -200,7 +200,7 @@ namespace DataCommander.Foundation.Diagnostics
                 this.timestamp = Stopwatch.GetTimestamp();
             }
 
-            public Int64 Id
+            public long Id
             {
                 get
                 {
@@ -208,7 +208,7 @@ namespace DataCommander.Foundation.Diagnostics
                 }
             }
 
-            public String Name
+            public string Name
             {
                 get
                 {
@@ -216,7 +216,7 @@ namespace DataCommander.Foundation.Diagnostics
                 }
             }
 
-            public String TypeName
+            public string TypeName
             {
                 get
                 {
@@ -224,7 +224,7 @@ namespace DataCommander.Foundation.Diagnostics
                 }
             }
 
-            public Int32 Size
+            public int Size
             {
                 get
                 {
@@ -240,7 +240,7 @@ namespace DataCommander.Foundation.Diagnostics
                 }
             }
 
-            public Int64 Timestamp
+            public long Timestamp
             {
                 get
                 {
@@ -272,11 +272,11 @@ namespace DataCommander.Foundation.Diagnostics
         private sealed class ListItemState
         {
             private ListItem listItem;
-            private Int64 timestamp;
+            private long timestamp;
             private bool isAlive;
-            private Int32? generation;
+            private int? generation;
 
-            public ListItemState( ListItem listItem, Int64 timestamp )
+            public ListItemState( ListItem listItem, long timestamp )
             {
                 this.listItem = listItem;
                 this.timestamp = timestamp;
@@ -303,7 +303,7 @@ namespace DataCommander.Foundation.Diagnostics
                 }
             }
 
-            public Boolean IsAlive
+            public bool IsAlive
             {
                 get
                 {
@@ -311,7 +311,7 @@ namespace DataCommander.Foundation.Diagnostics
                 }
             }
 
-            public Int32? Generation
+            public int? Generation
             {
                 get
                 {
@@ -319,7 +319,7 @@ namespace DataCommander.Foundation.Diagnostics
                 }
             }
 
-            public Int64 Age
+            public long Age
             {
                 get
                 {

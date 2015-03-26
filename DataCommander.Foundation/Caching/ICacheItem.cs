@@ -11,7 +11,7 @@ namespace DataCommander.Foundation.Caching
         /// <summary>
         /// 
         /// </summary>
-        String Key
+        string Key
         {
             get;
         }
@@ -28,7 +28,7 @@ namespace DataCommander.Foundation.Caching
         /// 
         /// </summary>
         /// <returns></returns>
-        Object GetValue();
+        object GetValue();
     }
 }
 #endif

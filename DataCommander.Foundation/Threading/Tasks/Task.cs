@@ -14,13 +14,13 @@ namespace DataCommander.Foundation.Threading.Tasks
     public class Task : IAsyncResult, IDisposable
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private Action<Object> action;
-        private Object state;
+        private Action<object> action;
+        private object state;
         private TaskCreationOptions taskCreationOptions;
-        private static Int32 idCounter;
-        private Int32 id;
+        private static int idCounter;
+        private int id;
         private readonly EventWaitHandle completedEvent = new EventWaitHandle( false, EventResetMode.ManualReset );
-        private Boolean isCompleted;
+        private bool isCompleted;
         private Exception exception;
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <param name="state"></param>
         /// <param name="cancellationToken"></param>
         /// <param name="taskCreationOptions"></param>
-        public Task( Action<Object> action, Object state, CancellationToken cancellationToken, TaskCreationOptions taskCreationOptions )
+        public Task( Action<object> action, object state, CancellationToken cancellationToken, TaskCreationOptions taskCreationOptions )
         {
             this.Construct( action, state, cancellationToken, taskCreationOptions );
         }
@@ -47,7 +47,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public Object AsyncState
+        public object AsyncState
         {
             get
             {
@@ -74,7 +74,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsCompleted
+        public bool IsCompleted
         {
             get
             {
@@ -99,7 +99,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Id
+        public int Id
         {
             get
             {
@@ -131,7 +131,7 @@ namespace DataCommander.Foundation.Threading.Tasks
             }
             else
             {
-                Boolean succeeded = ThreadPool.QueueUserWorkItem( this.ExecuteAction );
+                bool succeeded = ThreadPool.QueueUserWorkItem( this.ExecuteAction );
 
                 if (!succeeded)
                 {
@@ -147,9 +147,9 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        public Boolean Wait( TimeSpan timeout )
+        public bool Wait( TimeSpan timeout )
         {
-            Boolean isCompleted = this.isCompleted;
+            bool isCompleted = this.isCompleted;
 
             if (!isCompleted)
             {
@@ -166,7 +166,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <param name="state"></param>
         /// <param name="cancellationToken"></param>
         /// <param name="taskCreationOptions"></param>
-        protected void Construct( Action<Object> action, Object state, CancellationToken cancellationToken, TaskCreationOptions taskCreationOptions )
+        protected void Construct( Action<object> action, object state, CancellationToken cancellationToken, TaskCreationOptions taskCreationOptions )
         {
             Contract.Requires<ArgumentNullException>( action != null );
             this.action = action;
@@ -176,7 +176,7 @@ namespace DataCommander.Foundation.Threading.Tasks
             this.id = Interlocked.Increment( ref idCounter );
         }
 
-        private void ExecuteAction( Object state )
+        private void ExecuteAction( object state )
         {
             try
             {

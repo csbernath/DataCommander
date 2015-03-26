@@ -13,13 +13,13 @@
     /// </summary>
     public sealed class AfterReadEventArgs : LoggedEventArgs
     {
-        private readonly Int32 rowCount;
+        private readonly int rowCount;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="rowCount"></param>
-        public AfterReadEventArgs( Int32 rowCount )
+        public AfterReadEventArgs( int rowCount )
         {
             this.rowCount = rowCount;
         }
@@ -27,7 +27,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 RowCount
+        public int RowCount
         {
             get
             {

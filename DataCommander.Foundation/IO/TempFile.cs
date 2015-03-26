@@ -8,8 +8,8 @@
     /// </summary>
     public sealed class TempFile : IDisposable
     {
-        private String filename;
-        private Boolean deleted;
+        private string filename;
+        private bool deleted;
 
         /// <summary>
         /// 
@@ -22,7 +22,7 @@
         /// 
         /// </summary>
         /// <param name="filename"></param>
-        public TempFile( String filename )
+        public TempFile( string filename )
         {
             this.filename = filename;
         }
@@ -30,7 +30,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String Filename
+        public string Filename
         {
             get
             {

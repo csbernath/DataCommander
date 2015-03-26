@@ -259,19 +259,19 @@ namespace DataCommander
 
         private void CloseResultTabPage(TabPage tabPage)
         {
-            var control = tabPage.Controls[0];
-            var dataTableEditor = control as DataTableEditor;
-            if (dataTableEditor != null)
-            {
-                var dataTable = dataTableEditor.DataTable;
-                dataTableEditor.DataTable = null;
-                dataTable.Clear();
-                dataTable.AcceptChanges();
-            }
+            //var control = tabPage.Controls[0];
+            //var dataTableEditor = control as DataTableEditor;
+            //if (dataTableEditor != null)
+            //{
+            //    var dataTable = dataTableEditor.DataTable;
+            //    dataTableEditor.DataTable = null;
+            //    dataTable.Clear();
+            //    dataTable.AcceptChanges();
+            //}
             tabPage.Controls.Clear();
 
-            GarbageMonitor.SetDisposeTime(control, OptimizedDateTime.Now);
-            control.Dispose();
+            //GarbageMonitor.SetDisposeTime(control, LocalTime.Default.Now);
+            //control.Dispose();
         }
 
         private void CloseResultSetTabPage(TabPage tabPage)
@@ -281,18 +281,18 @@ namespace DataCommander
             var tabControl = control as TabControl;
             if (tabControl != null)
             {
-                var tabPages = tabControl.TabPages.Cast<TabPage>().ToArray();
+                var tabPages = tabControl.TabPages.Cast<TabPage>().ToList();
                 foreach (var subTabPage in tabPages)
                 {
                     tabControl.TabPages.Remove(subTabPage);
                     this.CloseResultTabPage(subTabPage);
-                    GarbageMonitor.SetDisposeTime(subTabPage, OptimizedDateTime.Now);
-                    subTabPage.Dispose();
+                    // GarbageMonitor.SetDisposeTime(subTabPage, LocalTime.Default.Now);
+                    // subTabPage.Dispose();
                 }
-                GarbageMonitor.SetDisposeTime(tabControl, OptimizedDateTime.Now);
-                tabControl.Dispose();
-                GarbageMonitor.SetDisposeTime(tabPage, OptimizedDateTime.Now);
-                tabPage.Dispose();
+                // GarbageMonitor.SetDisposeTime(tabControl, LocalTime.Default.Now);
+                // tabControl.Dispose();
+                // GarbageMonitor.SetDisposeTime(tabPage, LocalTime.Default.Now);
+                // tabPage.Dispose();
             }
             else
             {
@@ -1292,7 +1292,7 @@ namespace DataCommander
             this.execueQuerySplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.execueQuerySplitButton.Name = "execueQuerySplitButton";
             this.execueQuerySplitButton.Size = new System.Drawing.Size(32, 22);
-            this.execueQuerySplitButton.Text = "toolStripSplitButton1";
+            this.execueQuerySplitButton.Text = "Execute Query";
             this.execueQuerySplitButton.ButtonClick += new System.EventHandler(this.toolStripSplitButton1_ButtonClick);
             // 
             // executeQueryMenuItem
@@ -2049,7 +2049,7 @@ namespace DataCommander
         public void ShowMessage(Exception e)
         {
             string message = provider.GetExceptionMessage(e);
-            var infoMessage = new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Error, message);
+            var infoMessage = new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Error, message);
             this.AddInfoMessage(infoMessage);
 
             this.tabControl.SelectedTab = this.messagesTabPage;
@@ -2079,7 +2079,7 @@ namespace DataCommander
                         "[DatabaseChanged] Database changed from {0} to {1}",
                         this.database,
                         database);
-                    var infoMessage = new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Verbose, message);
+                    var infoMessage = new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message);
                     this.AddInfoMessage(infoMessage);
 
                     this.database = args.database;
@@ -2097,7 +2097,7 @@ namespace DataCommander
             {
                 if (this.components != null)
                 {
-                    DateTime now = OptimizedDateTime.Now;
+                    DateTime now = LocalTime.Default.Now;
                     foreach (IComponent component in this.components.Components)
                     {
                         GarbageMonitor.SetDisposeTime(component, now);
@@ -2180,7 +2180,7 @@ namespace DataCommander
                 {
                     if (connection.State == ConnectionState.Closed)
                     {
-                        this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, "Connection is closed. Opening connection..."));
+                        this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Connection is closed. Opening connection..."));
 
                         var csb = new SqlConnectionStringBuilder(this.connectionString);
                         csb.InitialCatalog = this.database;
@@ -2195,11 +2195,11 @@ namespace DataCommander
                         {
                             this.connection.Connection.Dispose();
                             this.connection = connectionProperties.Connection;
-                            this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, "Opening connection succeeded."));
+                            this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Opening connection succeeded."));
                         }
                         else
                         {
-                            this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, "Opening connection canceled."));
+                            this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Opening connection canceled."));
                         }
                     }
                 }
@@ -2238,7 +2238,7 @@ namespace DataCommander
 
             if (this.cancel)
             {
-                this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, "Query was cancelled by user."));
+                this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Query was cancelled by user."));
                 this.sbPanelText.Text = "Query canceled.";
                 this.sbPanelText.ForeColor = SystemColors.ControlText;
                 this.cancel = false;
@@ -2473,7 +2473,7 @@ namespace DataCommander
 
                     if (command != null)
                     {
-                        this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, command.ToLogString()));
+                        this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, command.ToLogString()));
                         DataTable dataTable = provider.GetParameterTable(command.Parameters);
 
                         if (dataTable != null)
@@ -2571,7 +2571,7 @@ namespace DataCommander
         {
             log.Trace(ThreadMonitor.ToStringTable().ToString());
             string message = "Cancelling command...";
-            this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, message));
+            this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, message));
             sbPanelText.Text = "Cancel Executing Query...";
             sbPanelText.ForeColor = SystemColors.ControlText;
             this.cancel = true;
@@ -2636,7 +2636,7 @@ namespace DataCommander
                         string message = this.provider.GetExceptionMessage(ex);
                         Color color = messagesTextBox.SelectionColor;
                         messagesTextBox.SelectionColor = Color.Red;
-                        this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, message));
+                        this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, message));
                         messagesTextBox.SelectionColor = color;
                         hasTransactions = false;
                     }
@@ -2742,11 +2742,6 @@ namespace DataCommander
                     this.toolStrip = null;
                 }
             }
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
         }
 
         private void SetResultWriterType(ResultWriterType tableStyle)
@@ -3427,9 +3422,9 @@ namespace DataCommander
                             {
                                 if (connection.State != ConnectionState.Open)
                                 {
-                                    this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, "Opening connection..."));
+                                    this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Opening connection..."));
                                     connection.Open();
-                                    this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, "Connection opened successfully."));
+                                    this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Connection opened successfully."));
                                 }
                                 else
                                 {
@@ -3848,7 +3843,7 @@ namespace DataCommander
                 this.openTableMode = true;
                 this.command = this.sqlStatement.CreateCommand(this.provider, this.connection, this.commandType, this.commandTimeout);
                 this.dataAdapter = new AsyncDataAdapter();
-                this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, "Executing query..."));
+                this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Executing query..."));
                 this.stopwatch.Start();
                 this.timer.Start();
                 int maxRecords = int.MaxValue;
@@ -3883,7 +3878,7 @@ namespace DataCommander
             if (this.transaction == null && transaction != null)
             {
                 this.transaction = transaction;
-                this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, "Transaction created successfully."));
+                this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Transaction created successfully."));
                 this.tabControl.SelectedTab = this.messagesTabPage;
                 this.beginTransactionToolStripMenuItem.Enabled = false;
                 this.commitTransactionToolStripMenuItem.Enabled = true;
@@ -3913,7 +3908,7 @@ namespace DataCommander
                 this.transaction.Dispose();
                 this.transaction = null;
 
-                this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, "Transaction commited successfully."));
+                this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Transaction commited successfully."));
 
                 this.tabControl.SelectedTab = this.messagesTabPage;
                 this.beginTransactionToolStripMenuItem.Enabled = true;
@@ -3930,12 +3925,12 @@ namespace DataCommander
                 {
                     this.transaction.Rollback();
                     this.transaction.Dispose();
-                    this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, "Transaction rolled back successfully."));
+                    this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Transaction rolled back successfully."));
                 }
                 catch (Exception ex)
                 {
                     string message = string.Format("Rollback failed. Exception:\r\n{0}", ex.ToLogString());
-                    this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Error, message));
+                    this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Error, message));
                 }
 
                 this.transaction = null;
@@ -4021,7 +4016,7 @@ namespace DataCommander
             createTable.Append(')');
             string commandText = createTable.ToString();
 
-            this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, "\r\n" + commandText));
+            this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "\r\n" + commandText));
         }
 
         internal void CopyTable()
@@ -4053,7 +4048,7 @@ namespace DataCommander
                 IResultWriter resultWriter = new CopyResultWriter(this.AddInfoMessage, destinationProvider, destinationConnection, tableName, nextQueryForm.InvokeSetTransaction);
                 int maxRecords = int.MaxValue;
                 int rowBlockSize = 10000;
-                this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Verbose, "Copying table..."));
+                this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, "Copying table..."));
                 this.sbPanelText.Text = "Copying table...";
                 this.sbPanelText.ForeColor = SystemColors.ControlText;
                 this.SetGui(CommandState.Cancel);
@@ -4065,7 +4060,7 @@ namespace DataCommander
             }
             else
             {
-                this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, "Please open a destination connection."));
+                this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Please open a destination connection."));
             }
         }
 
@@ -4094,7 +4089,7 @@ namespace DataCommander
                 //IResultWriter resultWriter = new SqlBulkCopyResultWriter( this.AddInfoMessage, destinationProvider, destinationConnection, tableName, nextQueryForm.InvokeSetTransaction );
                 int maxRecords = int.MaxValue;
                 int rowBlockSize = 10000;
-                this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Verbose, "Copying table..."));
+                this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, "Copying table..."));
                 this.sbPanelText.Text = "Copying table...";
                 this.sbPanelText.ForeColor = SystemColors.ControlText;
                 this.SetGui(CommandState.Cancel);
@@ -4106,7 +4101,7 @@ namespace DataCommander
             }
             else
             {
-                this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, "Please open a destination connection."));
+                this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Please open a destination connection."));
             }
         }
 
@@ -4235,7 +4230,7 @@ namespace DataCommander
 
                 if (succeeded)
                 {
-                    this.AddInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, "Command(s) completed successfully."));
+                    this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Command(s) completed successfully."));
                 }
             }
             catch (Exception exception)

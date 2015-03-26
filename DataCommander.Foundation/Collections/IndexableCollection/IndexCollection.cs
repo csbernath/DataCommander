@@ -10,7 +10,7 @@
     /// <typeparam name="T"></typeparam>
     public class IndexCollection<T> : ICollection<ICollectionIndex<T>>
     {
-        private readonly Dictionary<String, ICollectionIndex<T>> dictionary = new Dictionary<String, ICollectionIndex<T>>();
+        private readonly Dictionary<string, ICollectionIndex<T>> dictionary = new Dictionary<string, ICollectionIndex<T>>();
 
         /// <summary>
         /// 
@@ -28,7 +28,7 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public ICollectionIndex<T> this[String name]
+        public ICollectionIndex<T> this[string name]
         {
             get
             {
@@ -53,7 +53,7 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Contains(ICollectionIndex<T> item)
+        public bool Contains(ICollectionIndex<T> item)
         {
 #if FOUNDATION_3_5
 #else
@@ -67,7 +67,7 @@
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
-        public void CopyTo(ICollectionIndex<T>[] array, Int32 arrayIndex)
+        public void CopyTo(ICollectionIndex<T>[] array, int arrayIndex)
         {
             this.dictionary.Values.CopyTo(array, arrayIndex);
         }
@@ -75,7 +75,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {
@@ -86,7 +86,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsReadOnly
+        public bool IsReadOnly
         {
             get
             {
@@ -99,10 +99,10 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Remove(ICollectionIndex<T> item)
+        public bool Remove(ICollectionIndex<T> item)
         {
-            Boolean succeeded;
-            Boolean contains = this.dictionary.ContainsValue(item);
+            bool succeeded;
+            bool contains = this.dictionary.ContainsValue(item);
 
             if (contains)
             {
@@ -122,7 +122,7 @@
         /// <param name="name"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean TryGetValue(String name, out ICollectionIndex<T> item)
+        public bool TryGetValue(string name, out ICollectionIndex<T> item)
         {
             return this.dictionary.TryGetValue(name, out item);
         }

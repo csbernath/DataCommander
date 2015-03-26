@@ -24,7 +24,7 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public override Boolean Evaluate(T value)
+        public override bool Evaluate(T value)
         {
             return this.predicate(value);
         }

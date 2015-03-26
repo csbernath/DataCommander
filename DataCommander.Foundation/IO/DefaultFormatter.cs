@@ -15,7 +15,7 @@
             }
         }
 
-        void IFormatter.AppendTo( StringBuilder sb, Object[] args )
+        void IFormatter.AppendTo( StringBuilder sb, object[] args )
         {
             sb.Append( args[ 0 ] );
         }

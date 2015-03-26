@@ -8,7 +8,7 @@
     internal sealed class Error
     {
         private readonly ErrorType type;
-        private readonly String message;
+        private readonly string message;
         private readonly Exception exception;
 
         /// <summary>
@@ -17,7 +17,7 @@
         /// <param name="type"></param>
         /// <param name="message"></param>
         /// <param name="exception"></param>
-        public Error( ErrorType type, String message, Exception exception )
+        public Error( ErrorType type, string message, Exception exception )
         {
             this.type = type;
             this.message = message;
@@ -35,9 +35,9 @@
             }
         }
 
-        public override String ToString()
+        public override string ToString()
         {
-            return String.Format( "{0}\r\n{1}\r\n{2}", this.type, this.message, this.exception );
+            return string.Format( "{0}\r\n{1}\r\n{2}", this.type, this.message, this.exception );
         }
     }
 }

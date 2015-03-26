@@ -16,10 +16,10 @@
         /// <param name="dataRecord"></param>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public static T GetValue<T>( this IDataRecord dataRecord, Int32 ordinal )
+        public static T GetValue<T>( this IDataRecord dataRecord, int ordinal )
         {
             Contract.Requires( dataRecord != null );
-            Object valueObject = dataRecord[ ordinal ];
+            object valueObject = dataRecord[ ordinal ];
             Contract.Assert( valueObject is T );
 
             return (T)valueObject;
@@ -34,10 +34,10 @@
         /// <returns></returns>
         public static T GetValue<T>(
             this IDataRecord dataRecord,
-            String name)
+            string name)
         {
             Contract.Requires( dataRecord != null );
-            Object valueObject = dataRecord[ name ];
+            object valueObject = dataRecord[ name ];
             Contract.Assert( valueObject is T );
 
             return (T)valueObject;
@@ -50,11 +50,11 @@
         /// <param name="dataRecord"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static T GetValueOrDefault<T>( this IDataRecord dataRecord, Int32 index )
+        public static T GetValueOrDefault<T>( this IDataRecord dataRecord, int index )
         {
             Contract.Requires( dataRecord != null );
 
-            Object value = dataRecord[ index ];
+            object value = dataRecord[ index ];
             return Database.GetValueOrDefault<T>( value );
         }
 
@@ -67,10 +67,10 @@
         /// <returns></returns>
         public static T GetValueOrDefault<T>(
             this IDataRecord dataRecord,
-            String name)
+            string name)
         {
             Contract.Requires( dataRecord != null );
-            Object value = dataRecord[ name ];
+            object value = dataRecord[ name ];
             return Database.GetValueOrDefault<T>( value );
         }
     }

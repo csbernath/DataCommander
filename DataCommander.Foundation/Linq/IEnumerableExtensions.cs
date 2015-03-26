@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+
 namespace DataCommander.Foundation.Linq
 {
     using System;
@@ -24,13 +26,13 @@ namespace DataCommander.Foundation.Linq
         /// <param name="comparer"></param>
         /// <returns></returns>
         [Pure]
-        public static Boolean AllAreEqual<TSource>(this IEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
+        public static bool AllAreEqual<TSource>(this IEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
         {
-            Boolean allAreEqual = true;
+            bool allAreEqual = true;
 
             if (source != null)
             {
-                Boolean first = true;
+                bool first = true;
                 TSource firstItem = default(TSource);
 
                 foreach (TSource item in source)
@@ -71,6 +73,38 @@ namespace DataCommander.Foundation.Linq
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="source"></param>
+        /// <typeparam name="TSource"></typeparam>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static IReadOnlyList<TSource> AsReadOnlyList<TSource>(this IEnumerable<TSource> source)
+        {
+            IReadOnlyList<TSource> readOnlyList = null;
+
+            Selection.CreateArgumentIsSelection(source)
+                .IfArgumentIsNull(delegate
+                {
+                    readOnlyList = EmptyReadOnlyList<TSource>.Instance;
+                })
+                .IfArgumentIs<IList<TSource>>(delegate(IList<TSource> list)
+                {
+                    readOnlyList = list.AsReadOnlyList();
+                })
+                .IfArgumentIs<IReadOnlyList<TSource>>(delegate(IReadOnlyList<TSource> list)
+                {
+                    readOnlyList = list;
+                })
+                .Else(delegate
+                {
+                    throw new ArgumentException();
+                });
+
+            return readOnlyList;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <typeparam name="TSource"></typeparam>
         /// <typeparam name="TResult"></typeparam>
         /// <param name="source"></param>
@@ -84,7 +118,7 @@ namespace DataCommander.Foundation.Linq
 
             if (collection != null)
             {
-                Int32 count = collection.Count;
+                int count = collection.Count;
 
                 if (count > 0)
                 {
@@ -185,14 +219,14 @@ namespace DataCommander.Foundation.Linq
         /// <param name="source"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static IndexedItem<T> IndexOf<T>(this IEnumerable<T> source, Func<T, Boolean> predicate)
+        public static IndexedItem<T> IndexOf<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             Contract.Requires(predicate != null);
 
             IndexedItem<T> result = null;
             if (source != null)
             {
-                Int32 index = 0;
+                int index = 0;
                 foreach (var item in source)
                 {
                     if (predicate(item))
@@ -214,9 +248,9 @@ namespace DataCommander.Foundation.Linq
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static Boolean IsNotNullAndAny<T>(this IEnumerable<T> source)
+        public static bool IsNotNullAndAny<T>(this IEnumerable<T> source)
         {
-            Boolean any;
+            bool any;
 
             if (source != null)
             {
@@ -252,7 +286,7 @@ namespace DataCommander.Foundation.Linq
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static Boolean IsNullOrEmpty<T>(this IEnumerable<T> source)
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
         {
             return source == null || !source.Any();
         }
@@ -269,7 +303,7 @@ namespace DataCommander.Foundation.Linq
         /// <returns></returns>
         public static MinMaxResult<TSource> MinMax<TSource, TResult>(
             this IEnumerable<TSource> source,
-            Func<TSource, Boolean> where,
+            Func<TSource, bool> where,
             Func<TSource, TResult> select,
             IComparer<TResult> comparer)
         {
@@ -278,12 +312,12 @@ namespace DataCommander.Foundation.Linq
             {
                 Contract.Assert(select != null);
 
-                Int32 count = 0;
-                Int32 whereCount = 0;
-                Int32 minIndex = -1;
+                int count = 0;
+                int whereCount = 0;
+                int minIndex = -1;
                 TSource minItem = default(TSource);
                 TResult minSelected = default(TResult);
-                Int32 maxIndex = -1;
+                int maxIndex = -1;
                 TSource maxItem = default(TSource);
                 TResult maxSelected = default(TResult);
 
@@ -337,7 +371,7 @@ namespace DataCommander.Foundation.Linq
         /// <returns></returns>
         public static MinMaxResult<TSource> MinMax<TSource, TResult>(
             this IEnumerable<TSource> source,
-            Func<TSource, Boolean> where,
+            Func<TSource, bool> where,
             Func<TSource, TResult> select) where TResult : IComparable<TResult>
         {
             return source.MinMax(where, select, Comparer<TResult>.Default);
@@ -475,7 +509,7 @@ namespace DataCommander.Foundation.Linq
         /// <param name="initialSize"></param>
         /// <param name="maxSize"></param>
         /// <returns></returns>
-        public static DynamicArray<TSource> ToDynamicArray<TSource>(this IEnumerable<TSource> source, Int32 initialSize, Int32 maxSize)
+        public static DynamicArray<TSource> ToDynamicArray<TSource>(this IEnumerable<TSource> source, int initialSize, int maxSize)
         {
             var dynamicArray = new DynamicArray<TSource>(initialSize, maxSize);
             dynamicArray.Add(source);
@@ -489,10 +523,10 @@ namespace DataCommander.Foundation.Linq
         /// <param name="source"></param>
         /// <param name="toString"></param>
         /// <returns></returns>
-        public static String ToLogString<T>(this IEnumerable<T> source, Func<T, String> toString)
+        public static string ToLogString<T>(this IEnumerable<T> source, Func<T, string> toString)
         {
             var sb = new StringBuilder();
-            Int32 index = 0;
+            int index = 0;
             foreach (var item in source)
             {
                 if (sb.Length > 0)
@@ -514,7 +548,7 @@ namespace DataCommander.Foundation.Linq
         /// <param name="source"></param>
         /// <param name="segmentSize"></param>
         /// <returns></returns>
-        public static SegmentCollection<TSource> ToSegmentCollection<TSource>(this IEnumerable<TSource> source, Int32 segmentSize)
+        public static SegmentCollection<TSource> ToSegmentCollection<TSource>(this IEnumerable<TSource> source, int segmentSize)
         {
             var segmentedList = new SegmentCollection<TSource>(segmentSize);
             segmentedList.Add(source);
@@ -544,11 +578,11 @@ namespace DataCommander.Foundation.Linq
         /// <param name="separator"></param>
         /// <param name="toString"></param>
         /// <returns></returns>
-        public static String ToString<T>(this IEnumerable<T> source, String separator, Func<T, String> toString)
+        public static string ToString<T>(this IEnumerable<T> source, string separator, Func<T, string> toString)
         {
             Contract.Requires(toString != null);
 
-            String result;
+            string result;
             if (source != null)
             {
                 StringBuilder sb = new StringBuilder();
@@ -559,7 +593,7 @@ namespace DataCommander.Foundation.Linq
                         sb.Append(separator);
                     }
 
-                    String itemString = toString(item);
+                    string itemString = toString(item);
                     sb.Append(itemString);
                 }
 
@@ -587,7 +621,7 @@ namespace DataCommander.Foundation.Linq
             #region First row: column names
 
             var row = table.NewRow();
-            for (Int32 i = 0; i < columns.Length; i++)
+            for (int i = 0; i < columns.Length; i++)
             {
                 row[i] = columns[i].ColumnName;
                 table.Columns[i].Align = columns[i].Align;
@@ -596,11 +630,11 @@ namespace DataCommander.Foundation.Linq
 
             #endregion
 
-            Int32 rowIndex = 0;
+            int rowIndex = 0;
             foreach (T item in source)
             {
                 row = table.NewRow();
-                for (Int32 i = 0; i < columns.Length; i++)
+                for (int i = 0; i < columns.Length; i++)
                 {
                     row[i] = columns[i].ToString(item, rowIndex);
                 }
@@ -611,10 +645,10 @@ namespace DataCommander.Foundation.Linq
             #region Second row: underline first row
 
             row = table.NewRow();
-            for (Int32 i = 0; i < columns.Length; i++)
+            for (int i = 0; i < columns.Length; i++)
             {
-                Int32 max = table.Rows.Select(r => r[i] == null ? 0 : r[i].Length).Max();
-                row[i] = new String('-', max);
+                int max = table.Rows.Select(r => r[i] == null ? 0 : r[i].Length).Max();
+                row[i] = new string('-', max);
             }
             table.Rows.Insert(1, row);
 
@@ -634,14 +668,14 @@ namespace DataCommander.Foundation.Linq
         /// <returns></returns>
         public static IEnumerable<TResult> Where<TSource, TResult>(
             this IEnumerable<TSource> source,
-            Func<TSource, Int32, Boolean> where,
-            Func<TSource, Int32, TResult> select)
+            Func<TSource, int, bool> where,
+            Func<TSource, int, TResult> select)
         {
             Contract.Requires<ArgumentNullException>(source != null);
             Contract.Requires<ArgumentNullException>(where != null);
             Contract.Requires<ArgumentNullException>(select != null);
 
-            Int32 index = 0;
+            int index = 0;
 
             foreach (var item in source)
             {
@@ -661,11 +695,50 @@ namespace DataCommander.Foundation.Linq
         private static T Clone<T>(T source)
         {
             var cloneable = (ICloneable)source;
-            Object cloneObject = cloneable.Clone();
+            object cloneObject = cloneable.Clone();
             T clone = (T)cloneObject;
             return clone;
         }
 
         #endregion
+
+        private sealed class EmptyReadOnlyList<T> : IReadOnlyList<T>
+        {
+            private static EmptyReadOnlyList<T> instance = new EmptyReadOnlyList<T>();
+
+            public static EmptyReadOnlyList<T> Instance
+            {
+                get
+                {
+                    return instance;
+                }
+            }
+
+            T IReadOnlyList<T>.this[int index]
+            {
+                get
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            int IReadOnlyCollection<T>.Count
+            {
+                get
+                {
+                    return 0;
+                }
+            }
+
+            IEnumerator<T> IEnumerable<T>.GetEnumerator()
+            {
+                return Enumerable.Empty<T>().GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return Enumerable.Empty<T>().GetEnumerator();
+            }
+        }
     }
 }

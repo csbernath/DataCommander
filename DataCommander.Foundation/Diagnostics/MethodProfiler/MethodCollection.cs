@@ -8,17 +8,17 @@
 
     internal sealed class MethodCollection : IEnumerable<MethodBase>
     {
-        private Int32 idSequence;
-        private Dictionary<MethodBase, Int32> methods = new Dictionary<MethodBase, Int32>();
+        private int idSequence;
+        private Dictionary<MethodBase, int> methods = new Dictionary<MethodBase, int>();
 
-        public Boolean TryGetValue(MethodBase method, out Int32 methodId)
+        public bool TryGetValue(MethodBase method, out int methodId)
         {
             return this.methods.TryGetValue(method, out methodId);
         }
 
-        public Int32 Add(MethodBase method)
+        public int Add(MethodBase method)
         {
-            Int32 id;
+            int id;
 
             lock (this.methods)
             {

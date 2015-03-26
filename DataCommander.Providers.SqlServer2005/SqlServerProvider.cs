@@ -1015,7 +1015,7 @@ order by ic.index_column_id
 
         List<InfoMessage> IProvider.ToInfoMessages(Exception exception)
         {
-            DateTime now = OptimizedDateTime.Now;
+            DateTime now = LocalTime.Default.Now;
             List<InfoMessage> infoMessages;
             var sqlException = exception as SqlException;
             if (sqlException != null)
@@ -1042,7 +1042,7 @@ order by ic.index_column_id
         internal static List<InfoMessage> ToInfoMessages(SqlErrorCollection sqlErrors)
         {
             Contract.Requires(sqlErrors != null);
-            DateTime now = OptimizedDateTime.Now;
+            DateTime now = LocalTime.Default.Now;
             int count = sqlErrors.Count;
             var messages = new List<InfoMessage>(sqlErrors.Count);
 

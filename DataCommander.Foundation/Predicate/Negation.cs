@@ -27,7 +27,7 @@ namespace DataCommander.Foundation
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public override Boolean Evaluate(T value)
+        public override bool Evaluate(T value)
         {
             return !this.predicate.Evaluate(value);
         }
@@ -36,7 +36,7 @@ namespace DataCommander.Foundation
         /// 
         /// </summary>
         /// <returns></returns>
-        public override String ToString()
+        public override string ToString()
         {
             return "not (" + this.predicate + ")";
         }

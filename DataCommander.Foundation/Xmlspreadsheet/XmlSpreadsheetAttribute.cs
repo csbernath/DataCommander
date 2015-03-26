@@ -9,15 +9,15 @@
     /// </summary>
     public sealed class XmlSpreadsheetAttribute
     {
-        private String localName;
-        private readonly String value;
+        private string localName;
+        private readonly string value;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="localName"></param>
         /// <param name="value"></param>
-        public XmlSpreadsheetAttribute( String localName, String value )
+        public XmlSpreadsheetAttribute( string localName, string value )
         {
             this.localName = localName;
             this.value = value;
@@ -26,7 +26,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String LocalName
+        public string LocalName
         {
             get
             {
@@ -37,7 +37,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String Value
+        public string Value
         {
             get
             {

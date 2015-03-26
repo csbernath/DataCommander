@@ -15,14 +15,14 @@
         /// </summary>
         /// <param name="error"></param>
         /// <returns></returns>
-        public static String ToLogString( this SqlError error )
+        public static string ToLogString( this SqlError error )
         {
             Contract.Requires( error != null );
 
             var sb = new StringBuilder();
             sb.AppendFormat( "Server: Msg {0}, Level {1}, State {2}", error.Number, error.Class, error.State );
 
-            if (!String.IsNullOrEmpty( error.Procedure ))
+            if (!string.IsNullOrEmpty( error.Procedure ))
             {
                 sb.AppendFormat( ", Procedure: {0}", error.Procedure );
             }

@@ -32,17 +32,17 @@
             }
         }
 
-        public void WriteRow( Object[] values )
+        public void WriteRow( object[] values )
         {
             Contract.Requires( values != null );
             Contract.Requires( this.Columns.Count == values.Length );
 
-            for (Int32 i = 0; i < values.Length; i++)
+            for (int i = 0; i < values.Length; i++)
             {
-                Object value = values[ i ];
+                object value = values[ i ];
                 ITextDataConverter converter = this.converters[ i ];
                 TextDataColumn column = this.columns[ i ];
-                String valueString = converter.ToString( value, column );
+                string valueString = converter.ToString( value, column );
                 Contract.Assert( !string.IsNullOrEmpty( valueString ) );
                 Contract.Assert( column.MaxLength == valueString.Length );
                 this.textWriter.Write( valueString );

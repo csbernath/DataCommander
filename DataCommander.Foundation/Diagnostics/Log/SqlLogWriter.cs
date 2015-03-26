@@ -15,15 +15,15 @@ namespace DataCommander.Foundation.Diagnostics
     internal sealed class SqlLogWriter : ILogWriter
     {
         private static ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
-        private const Int32 Period = 10000;
+        private const int Period = 10000;
         private Func<IDbConnection> createConnection;
-        private Func<LogEntry, String> logEntryToCommandText;
-        private Int32 commandTimeout;
+        private Func<LogEntry, string> logEntryToCommandText;
+        private int commandTimeout;
         private SingleThreadPool singleThreadPool;
         private List<LogEntry> entryQueue = new List<LogEntry>();
-        private Object lockObject = new Object();
+        private object lockObject = new object();
         private Timer timer;
-        private Int32 pooledItemCount;
+        private int pooledItemCount;
 
         /// <summary>
         /// 
@@ -34,7 +34,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <param name="singleThreadPool"></param>
         public SqlLogWriter(
             Func<IDbConnection> createConnection,
-            Func<LogEntry, String> logEntryToCommandText,
+            Func<LogEntry, string> logEntryToCommandText,
             int commandTimeout,
             SingleThreadPool singleThreadPool )
         {
@@ -95,7 +95,7 @@ namespace DataCommander.Foundation.Diagnostics
 
         #endregion
 
-        private void TimerCallback( Object state )
+        private void TimerCallback( object state )
         {
             lock (this.lockObject)
             {
@@ -110,7 +110,7 @@ namespace DataCommander.Foundation.Diagnostics
 
                     lock (this.entryQueue)
                     {
-                        Int32 count = this.entryQueue.Count;
+                        int count = this.entryQueue.Count;
                         array = new LogEntry[ count ];
                         this.entryQueue.CopyTo( array );
                         this.entryQueue.Clear();
@@ -127,15 +127,15 @@ namespace DataCommander.Foundation.Diagnostics
             }
         }
 
-        private void WaitCallback( Object state )
+        private void WaitCallback( object state )
         {
             try
             {
                 LogEntry[] array = (LogEntry[]) state;
                 StringBuilder sb = new StringBuilder();
-                String commandText;
+                string commandText;
 
-                for (Int32 i = 0; i < array.Length; i++)
+                for (int i = 0; i < array.Length; i++)
                 {
                     commandText = this.logEntryToCommandText( array[ i ] );
                     sb.AppendLine( commandText );

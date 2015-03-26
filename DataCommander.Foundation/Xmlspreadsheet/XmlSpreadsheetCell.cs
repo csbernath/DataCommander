@@ -12,14 +12,14 @@
     {
         private readonly XmlSpreadsheetAttributeCollection attributes = new XmlSpreadsheetAttributeCollection();
         private XmlSpreadsheetDataType dataType;
-        private String value;
+        private string value;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="dataType"></param>
         /// <param name="value"></param>
-        public XmlSpreadsheetCell( XmlSpreadsheetDataType dataType, String value )
+        public XmlSpreadsheetCell( XmlSpreadsheetDataType dataType, string value )
         {
             this.dataType = dataType;
             this.value = value;
@@ -28,7 +28,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String StyleId
+        public string StyleId
         {
             set
             {
@@ -40,7 +40,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 MergeAcross
+        public int MergeAcross
         {
             set
             {

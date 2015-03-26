@@ -17,9 +17,9 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static String ToString( Byte? value )
+        public static string ToString( Byte? value )
         {
-            String s;
+            string s;
 
             if (value != null)
             {
@@ -38,7 +38,7 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static String ToString( DBNull value )
+        public static string ToString( DBNull value )
         {
             return SqlNull.NullString;
         }
@@ -48,9 +48,9 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static String ToString( SqlDateTime value )
+        public static string ToString( SqlDateTime value )
         {
-            String s;
+            string s;
 
             if (value.IsNull)
             {
@@ -58,7 +58,7 @@
             }
             else
             {
-                String format;
+                string format;
 
                 if (value.TimeTicks == 0)
                 {
@@ -81,7 +81,7 @@
         /// <param name="value"></param>
         /// <param name="sqlDbType"></param>
         /// <returns></returns>
-        public static String ToString( Object value, SqlDbType sqlDbType )
+        public static string ToString( object value, SqlDbType sqlDbType )
         {
             var sb = new StringBuilder();
 
@@ -94,8 +94,8 @@
                 switch (sqlDbType)
                 {
                     case SqlDbType.Bit:
-                        Boolean b = (Boolean) value;
-                        Int32 i = b ? 1 : 0;
+                        bool b = (bool) value;
+                        int i = b ? 1 : 0;
                         sb.Append( i );
                         break;
 
@@ -109,7 +109,7 @@
                     case SqlDbType.Char:
                     case SqlDbType.VarChar:
                         sb.Append( '\'' );
-                        String s = value.ToString();
+                        string s = value.ToString();
 
                         if (s.IndexOf( '\'' ) >= 0)
                         {
@@ -143,7 +143,7 @@
                     case SqlDbType.DateTime:
                     case SqlDbType.SmallDateTime:
                         DateTime dateTime = (DateTime) value;
-                        String dateTimeStr = ToString( dateTime );
+                        string dateTimeStr = ToString( dateTime );
                         sb.Append( '\'' );
                         sb.Append( dateTimeStr );
                         sb.Append( '\'' );
@@ -170,7 +170,7 @@
         /// <param name="value"></param>
         public static void AppendToCommandText(
             StringBuilder commandText,
-            String value )
+            string value )
         {
             Contract.Requires( commandText != null );
             string s = value.ToTSqlNVarChar();
@@ -185,12 +185,12 @@
         /// <param name="sqlDbType"></param>
         public static void AppendToCommandText(
             StringBuilder commandText,
-            Object value,
+            object value,
             SqlDbType sqlDbType )
         {
             Contract.Requires( commandText != null );
 
-            String s = ToString( value, sqlDbType );
+            string s = ToString( value, sqlDbType );
             commandText.Append( s );
         }
 
@@ -203,7 +203,7 @@
             StringBuilder commandText,
             SqlBoolean sqlBoolean )
         {
-            Object obj;
+            object obj;
 
             if (sqlBoolean.IsNull)
             {
@@ -214,7 +214,7 @@
                 obj = sqlBoolean.Value;
             }
 
-            String s = ToString( obj, SqlDbType.Bit );
+            string s = ToString( obj, SqlDbType.Bit );
             commandText.Append( s );
         }
 
@@ -227,7 +227,7 @@
             StringBuilder commandText,
             SqlInt16 value )
         {
-            Object obj;
+            object obj;
 
             if (value.IsNull)
             {
@@ -238,7 +238,7 @@
                 obj = value.Value;
             }
 
-            String s = ToString( obj, SqlDbType.SmallInt );
+            string s = ToString( obj, SqlDbType.SmallInt );
             commandText.Append( s );
         }
 
@@ -251,7 +251,7 @@
             StringBuilder commandText,
             SqlDateTime sqlDateTime )
         {
-            Object obj;
+            object obj;
 
             if (sqlDateTime.IsNull)
             {
@@ -262,7 +262,7 @@
                 obj = sqlDateTime.Value;
             }
 
-            String s = ToString( obj, SqlDbType.DateTime );
+            string s = ToString( obj, SqlDbType.DateTime );
             commandText.Append( s );
         }
     }

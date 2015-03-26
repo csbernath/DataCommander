@@ -14,7 +14,7 @@ namespace DataCommander.Foundation.Linq
         /// <param name="index"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static IndexedItem<T> Create<T>( Int32 index, T value )
+        public static IndexedItem<T> Create<T>( int index, T value )
         {
             return new IndexedItem<T>( index, value );
         }

@@ -25,9 +25,9 @@ namespace DataCommander.Foundation.Configuration
             }
         }
 
-        Object IConfigurationSectionHandler.Create(
-            Object parent,
-            Object configContext,
+        object IConfigurationSectionHandler.Create(
+            object parent,
+            object configContext,
             XmlNode section )
         {
             return new SectionHandler( section );

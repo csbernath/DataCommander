@@ -41,16 +41,16 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        public Object[] ReadRow()
+        public object[] ReadRow()
         {
-            Object[] values = null;
-            Int32 index = 0;
+            object[] values = null;
+            int index = 0;
 
             foreach (TextDataColumn column in this.columns)
             {
-                Int32 maxLength = column.MaxLength;
+                int maxLength = column.MaxLength;
                 Char[] buffer = new Char[maxLength];
-                Int32 count = this.textReader.Read( buffer, 0, maxLength );
+                int count = this.textReader.Read( buffer, 0, maxLength );
 
                 if (count == 0)
                 {
@@ -61,13 +61,13 @@
 
                 if (index == 0)
                 {
-                    values = new Object[this.columns.Count];
+                    values = new object[this.columns.Count];
                 }
 
-                String source = new String( buffer );
+                string source = new string( buffer );
                 ITextDataConverter converter = this.converters[ index ];
                 Contract.Assert( converter != null );
-                Object value;
+                object value;
 
                 try
                 {

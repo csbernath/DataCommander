@@ -8,9 +8,9 @@
     public sealed class DocumentProperty
     {
         private readonly DocumentPropertyId id;
-        private readonly Object value;
+        private readonly object value;
 
-        internal DocumentProperty( DocumentPropertyId id, Object value )
+        internal DocumentProperty( DocumentPropertyId id, object value )
         {
             this.id = id;
             this.value = value;
@@ -30,7 +30,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Object Value
+        public object Value
         {
             get
             {

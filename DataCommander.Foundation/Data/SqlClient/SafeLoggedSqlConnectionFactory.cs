@@ -13,7 +13,7 @@ namespace DataCommander.Foundation.Data.SqlClient
     {
         private SqlLog sqlLog;
 
-        private Int32 applicationId;
+        private int applicationId;
 
         private readonly ISqlLoggedSqlCommandFilter filter;
 
@@ -24,13 +24,13 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="applicationName"></param>
         /// <param name="filter"></param>
         public SafeLoggedSqlConnectionFactory(
-            String connectionString,
-            String applicationName,
+            string connectionString,
+            string applicationName,
             ISqlLoggedSqlCommandFilter filter)
         {
             this.filter = filter;
             this.sqlLog = new SqlLog(connectionString);
-            this.applicationId = this.sqlLog.ApplicationStart(applicationName, OptimizedDateTime.Now, true);
+            this.applicationId = this.sqlLog.ApplicationStart(applicationName, LocalTime.Default.Now, true);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="userName"></param>
         /// <param name="hostName"></param>
         /// <returns></returns>
-        public IDbConnection CreateConnection(String connectionString, String userName, String hostName)
+        public IDbConnection CreateConnection(string connectionString, string userName, string hostName)
         {
             return new SafeLoggedSqlConnection(
                 this.sqlLog,

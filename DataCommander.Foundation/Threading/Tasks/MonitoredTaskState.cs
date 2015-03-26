@@ -4,7 +4,7 @@ namespace DataCommander.Foundation.Threading.Tasks
 
     internal class MonitoredTaskState
     {
-        public Object State = null;
+        public object State = null;
         public TaskInfo TaskInfo = null;
     }
 }

@@ -24,7 +24,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="connection">The connection.</param>
         /// <returns></returns>
         public static SqlCommand CreateStoreProcedureCommand(
-            String storedProcedureName,
+            string storedProcedureName,
             SqlConnection connection )
         {
             var command = connection.CreateCommand();
@@ -42,13 +42,13 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="schema"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static String GetSysComments(
+        public static string GetSysComments(
             SqlConnection connection,
-            String database,
-            String schema,
-            String name )
+            string database,
+            string schema,
+            string name )
         {
-            String commandText = String.Format(
+            string commandText = string.Format(
                 CultureInfo.InvariantCulture,
                 @"declare
     @schema     sysname,
@@ -99,7 +99,7 @@ end",
                 var dataReader = dataReaderContext.DataReader;
                 while (dataReader.Read())
                 {
-                    String s = dataReader.GetString( 0 );
+                    string s = dataReader.GetString( 0 );
                     sb.Append( s );
                 }
             }

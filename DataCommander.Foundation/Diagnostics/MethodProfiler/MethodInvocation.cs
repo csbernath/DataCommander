@@ -5,17 +5,17 @@
 
     internal sealed class MethodInvocation
     {
-        private static Int32 idSequence;
+        private static int idSequence;
         private readonly MethodInvocation parent;
-        private readonly Int32 id;
-        private readonly Int32 methodId;
-        private Int64 beginTime;
-        private Int64 endTime;
+        private readonly int id;
+        private readonly int methodId;
+        private long beginTime;
+        private long endTime;
 
         public MethodInvocation(
             MethodInvocation parent,
-            Int32 methodId,
-            Int64 beginTime)
+            int methodId,
+            long beginTime)
         {
             this.parent = parent;
             this.id = Interlocked.Increment(ref idSequence);
@@ -31,7 +31,7 @@
             }
         }
 
-        public Int32 Id
+        public int Id
         {
             get
             {
@@ -39,7 +39,7 @@
             }
         }
 
-        public Int32 MethodId
+        public int MethodId
         {
             get
             {
@@ -47,7 +47,7 @@
             }
         }
 
-        public Int64 BeginTime
+        public long BeginTime
         {
             get
             {
@@ -55,7 +55,7 @@
             }
         }
 
-        public Int64 EndTime
+        public long EndTime
         {
             get
             {

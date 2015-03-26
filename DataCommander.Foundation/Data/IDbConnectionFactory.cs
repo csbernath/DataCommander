@@ -21,9 +21,9 @@ namespace DataCommander.Foundation.Data
         /// 
         /// </summary>
         IDbConnection CreateConnection(
-            String connectionString,
-            String userName,
-            String hostName);
+            string connectionString,
+            string userName,
+            string hostName);
 
         /// <summary>
         /// 

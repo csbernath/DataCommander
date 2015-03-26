@@ -108,7 +108,7 @@
             }
         }
 
-        Object IDataParameterValue.ValueObject
+        object IDataParameterValue.ValueObject
         {
             get
             {

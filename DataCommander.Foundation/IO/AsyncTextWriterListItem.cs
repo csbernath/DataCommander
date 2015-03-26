@@ -6,9 +6,9 @@
     internal sealed class AsyncTextWriterListItem
     {
         private readonly IFormatter formatter;
-        private readonly Object[] args;
+        private readonly object[] args;
 
-        public AsyncTextWriterListItem(IFormatter formatter, params Object[] args)
+        public AsyncTextWriterListItem(IFormatter formatter, params object[] args)
         {
             this.formatter = formatter;
             this.args = args;

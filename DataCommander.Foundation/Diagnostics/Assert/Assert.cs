@@ -13,12 +13,12 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public const String ConditionString = "DEBUG";
+        public const string ConditionString = "DEBUG";
 
         /// <summary>
         /// 
         /// </summary>
-        public const String ConditionString2 = "FOUNDATION_ASSERT";
+        public const string ConditionString2 = "FOUNDATION_ASSERT";
 
         private static EventHandler<AssertFailedEventArgs> assertFailed;
 
@@ -50,7 +50,7 @@ namespace DataCommander.Foundation.Diagnostics
         [Conditional( ConditionString2 )]
         [DebuggerStepThrough]
         [Obsolete]
-        public static void AreEqual<T>( T expected, T actual, String expectedName, String actualName )
+        public static void AreEqual<T>( T expected, T actual, string expectedName, string actualName )
         {
             if (!Equals( expected, actual ))
             {
@@ -76,9 +76,9 @@ namespace DataCommander.Foundation.Diagnostics
         [Conditional( ConditionString2 )]
         [DebuggerStepThrough]
         [Obsolete]
-        public static void AreEqual<T>( IEquatable<T> expected, T actual, String expectedName, String actualName )
+        public static void AreEqual<T>( IEquatable<T> expected, T actual, string expectedName, string actualName )
         {
-            Boolean equals = expected.Equals( actual );
+            bool equals = expected.Equals( actual );
             if (!equals)
             {
                 var message = new AssertMessage( "Assert.AreEqual" );
@@ -106,10 +106,10 @@ namespace DataCommander.Foundation.Diagnostics
         [Obsolete]
         public static void Compare<T>(
             IComparable<T> arg1,
-            Func<IComparable<T>, T, Boolean> comparer,
+            Func<IComparable<T>, T, bool> comparer,
             T arg2,
-            String arg1Name,
-            String arg2Name )
+            string arg1Name,
+            string arg2Name )
         {
             IsNotNull( comparer, "comparer" );
 
@@ -135,7 +135,7 @@ namespace DataCommander.Foundation.Diagnostics
         [Conditional( ConditionString2 )]
         [DebuggerStepThrough]
         [Obsolete]
-        public static void Fail( String name, AssertMessageParameterCollection parameters )
+        public static void Fail( string name, AssertMessageParameterCollection parameters )
         {
             var message = new AssertMessage( name, parameters );
             Raise( message );
@@ -151,7 +151,7 @@ namespace DataCommander.Foundation.Diagnostics
         [Conditional( ConditionString2 )]
         [DebuggerStepThrough]
         [Obsolete]
-        public static void HasValue<T>( T? value, String name ) where T : struct
+        public static void HasValue<T>( T? value, string name ) where T : struct
         {
             if (!value.HasValue)
             {
@@ -194,10 +194,10 @@ namespace DataCommander.Foundation.Diagnostics
         [Conditional( ConditionString2 )]
         [DebuggerStepThrough]
         [Obsolete]
-        public static void IsInstanceOfType( Object value, Type expectedType, String name, AssertMessageParameterCollection additionalParameters )
+        public static void IsInstanceOfType( object value, Type expectedType, string name, AssertMessageParameterCollection additionalParameters )
         {
             IsNotNull( expectedType, "expectedType" );
-            Boolean isInstanceOfType = expectedType.IsInstanceOfType( value );
+            bool isInstanceOfType = expectedType.IsInstanceOfType( value );
 
             if (!isInstanceOfType)
             {
@@ -225,7 +225,7 @@ namespace DataCommander.Foundation.Diagnostics
         [Conditional( ConditionString2 )]
         [DebuggerStepThrough]
         [Obsolete]
-        public static void IsNull( Object value, String name )
+        public static void IsNull( object value, string name )
         {
             if (value != null)
             {
@@ -248,12 +248,12 @@ namespace DataCommander.Foundation.Diagnostics
         [Conditional( ConditionString2 )]
         [DebuggerStepThrough]
         [Obsolete]
-        public static void Is( Object value, Type expectedType, String name, AssertMessageParameterCollection additionalParameters )
+        public static void Is( object value, Type expectedType, string name, AssertMessageParameterCollection additionalParameters )
         {
             if (value != null)
             {
                 IsNotNull( expectedType, "expectedType" );
-                Boolean isInstanceOfType = expectedType.IsInstanceOfType( value );
+                bool isInstanceOfType = expectedType.IsInstanceOfType( value );
 
                 if (!isInstanceOfType)
                 {
@@ -282,7 +282,7 @@ namespace DataCommander.Foundation.Diagnostics
         [Conditional( ConditionString2 )]
         [DebuggerStepThrough]
         [Obsolete]
-        public static void IsNotNull( Object value, String name )
+        public static void IsNotNull( object value, string name )
         {
             if (value == null)
             {
@@ -303,7 +303,7 @@ namespace DataCommander.Foundation.Diagnostics
         [Conditional( ConditionString2 )]
         [DebuggerStepThrough]
         [Obsolete]
-        public static void IsNotNull<T>( T? value, String name ) where T : struct
+        public static void IsNotNull<T>( T? value, string name ) where T : struct
         {
             if (value == null)
             {
@@ -324,7 +324,7 @@ namespace DataCommander.Foundation.Diagnostics
         [Conditional( ConditionString2 )]
         [DebuggerStepThrough]
         [Obsolete]
-        public static void IsTrue( Boolean condition, String parameterName, Object parameterValue )
+        public static void IsTrue( bool condition, string parameterName, object parameterValue )
         {
             if (!condition)
             {
@@ -348,7 +348,7 @@ namespace DataCommander.Foundation.Diagnostics
         [DebuggerStepThrough]
         [Obsolete]
         public static void IsInRange<T>(
-            String name,
+            string name,
             IComparable<T> value,
             T minValueInclusive,
             T maxValueInclusive )
@@ -378,7 +378,7 @@ namespace DataCommander.Foundation.Diagnostics
         [Conditional( ConditionString2 )]
         [DebuggerStepThrough]
         [Obsolete]
-        public static void ReferenceEquals( Object arg1, Object arg2, String argName1, String argName2 )
+        public static void ReferenceEquals( object arg1, object arg2, string argName1, string argName2 )
         {
             if (!ReferenceEquals( arg1, arg2 ))
             {
@@ -401,7 +401,7 @@ namespace DataCommander.Foundation.Diagnostics
         [Conditional( ConditionString2 )]
         [DebuggerStepThrough]
         [Obsolete]
-        public static void Requires( Boolean condition, String conditionString )
+        public static void Requires( bool condition, string conditionString )
         {
             if (!condition)
             {
@@ -421,7 +421,7 @@ namespace DataCommander.Foundation.Diagnostics
         [Conditional( ConditionString2 )]
         [DebuggerStepThrough]
         [Obsolete]
-        public static void Requires( Func<Boolean> condition, String conditionString )
+        public static void Requires( Func<bool> condition, string conditionString )
         {
             IsNotNull( condition, "condition" );
 
@@ -465,9 +465,9 @@ namespace DataCommander.Foundation.Diagnostics
         [DebuggerStepThrough]
         [Obsolete]
         public static void Requires<T>(
-            Func<T, Boolean> condition,
-            String conditionString,
-            String argName,
+            Func<T, bool> condition,
+            string conditionString,
+            string argName,
             T arg )
         {
             IsNotNull( condition, "condition" );

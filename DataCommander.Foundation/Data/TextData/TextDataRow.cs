@@ -10,7 +10,7 @@
     {
         private readonly TextDataColumnCollection columns;
         private readonly Convert convert;
-        private readonly Object[] values;
+        private readonly object[] values;
 
         /// <summary>
         /// 
@@ -24,9 +24,9 @@
 
             this.columns = columns;
             this.convert = convert;
-            this.values = new Object[columns.Count];
+            this.values = new object[columns.Count];
 
-            for (Int32 i = 0; i < this.values.Length; i++)
+            for (int i = 0; i < this.values.Length; i++)
             {
                 this.values[i] = DBNull.Value;
             }
@@ -38,26 +38,26 @@
         /// <param name="value"></param>
         /// <param name="column"></param>
         /// <returns></returns>
-        public delegate Object Convert(Object value, TextDataColumn column);
+        public delegate object Convert(object value, TextDataColumn column);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="columnName"></param>
         /// <returns></returns>
-        public Object this[String columnName]
+        public object this[string columnName]
         {
             get
             {
-                Int32 index = this.columns.IndexOf(columnName, true);
+                int index = this.columns.IndexOf(columnName, true);
                 return this.values[index];
             }
 
             set
             {
-                Int32 index = this.columns.IndexOf(columnName, true);
+                int index = this.columns.IndexOf(columnName, true);
                 TextDataColumn column = this.columns[index];
-                Object convertedValue = this.convert(value, column);
+                object convertedValue = this.convert(value, column);
                 this.values[index] = convertedValue;
             }
         }
@@ -65,7 +65,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Object[] ItemArray
+        public object[] ItemArray
         {
             get
             {
@@ -89,18 +89,18 @@
         /// </summary>
         /// <param name="column"></param>
         /// <returns></returns>
-        public Object this[TextDataColumn column]
+        public object this[TextDataColumn column]
         {
             get
             {
-                Int32 index = this.columns.IndexOf(column, true);
+                int index = this.columns.IndexOf(column, true);
                 return this.values[index];
             }
 
             set
             {
-                Int32 index = this.columns.IndexOf(column, true);
-                Object convertedValue = this.convert(value, column);
+                int index = this.columns.IndexOf(column, true);
+                object convertedValue = this.convert(value, column);
                 this.values[index] = convertedValue;
             }
         }

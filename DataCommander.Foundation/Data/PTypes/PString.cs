@@ -48,7 +48,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         [DebuggerStepThrough]
-        public PString( String value )
+        public PString( string value )
         {
             this.sql = value;
             this.type = PValueType.Value;
@@ -80,7 +80,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="value"></param>
         /// <returns></returns>
         [DebuggerStepThrough]
-        public static implicit operator PString( String value )
+        public static implicit operator PString( string value )
         {
             return new PString( value );
         }
@@ -100,9 +100,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator String( PString value )
+        public static implicit operator string( PString value )
         {
-            return (String) value.sql;
+            return (string) value.sql;
         }
 
         /// <summary>
@@ -111,9 +111,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static Boolean operator ==( PString x, PString y )
+        public static bool operator ==( PString x, PString y )
         {
-            Boolean isEqual = x.type == y.type;
+            bool isEqual = x.type == y.type;
 
             if (isEqual)
             {
@@ -132,7 +132,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static Boolean operator !=( PString x, PString y )
+        public static bool operator !=( PString x, PString y )
         {
             return !(x == y);
         }
@@ -143,7 +143,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="s"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static PString Parse( String s, PValueType type )
+        public static PString Parse( string s, PValueType type )
         {
             PString sp;
 
@@ -164,9 +164,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override Boolean Equals( Object obj )
+        public override bool Equals( object obj )
         {
-            Boolean equals = obj is PString;
+            bool equals = obj is PString;
 
             if (equals)
             {
@@ -180,9 +180,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <returns></returns>
-        public override Int32 GetHashCode()
+        public override int GetHashCode()
         {
-            Int32 hashCode = this.sql.GetHashCode();
+            int hashCode = this.sql.GetHashCode();
             return hashCode;
         }
 
@@ -200,7 +200,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsNull
+        public bool IsNull
         {
             get
             {
@@ -211,7 +211,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsValue
+        public bool IsValue
         {
             get
             {
@@ -222,7 +222,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsEmpty
+        public bool IsEmpty
         {
             get
             {
@@ -233,11 +233,11 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Object Value
+        public object Value
         {
             get
             {
-                Object value;
+                object value;
 
                 switch (this.type)
                 {
@@ -278,7 +278,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <returns></returns>
-        public override String ToString()
+        public override string ToString()
         {
             return this.sql.ToString();
         }

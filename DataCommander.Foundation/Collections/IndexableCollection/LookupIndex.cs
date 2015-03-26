@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-
-namespace DataCommander.Foundation.Collections.IndexableCollection
+﻿namespace DataCommander.Foundation.Collections.IndexableCollection
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+
     /// <summary>
     /// 
     /// </summary>
@@ -13,7 +12,7 @@ namespace DataCommander.Foundation.Collections.IndexableCollection
     /// <typeparam name="T"></typeparam>
     public sealed class LookupIndex<TKey, T> : ICollectionIndex<T>
     {
-        private readonly String name;
+        private readonly string name;
         private readonly ILookup<TKey, T> lookup;
 
         /// <summary>
@@ -23,12 +22,12 @@ namespace DataCommander.Foundation.Collections.IndexableCollection
         /// <param name="source"></param>
         /// <param name="keySelector"></param>
         public LookupIndex(
-            String name,
+            string name,
             IEnumerable<T> source,
             Func<T, TKey> keySelector)
         {
-            Contract.Requires(source != null);
-            Contract.Requires(keySelector != null);
+            Contract.Requires<ArgumentNullException>(source != null);
+            Contract.Requires<ArgumentNullException>(keySelector != null);
 
             this.name = name;
             this.lookup = source.ToLookup(keySelector);
@@ -85,7 +84,7 @@ namespace DataCommander.Foundation.Collections.IndexableCollection
         {
             get
             {
-                throw new NotImplementedException();
+                return true;
             }
         }
 

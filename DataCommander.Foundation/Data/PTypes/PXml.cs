@@ -58,7 +58,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Object Value
+        public object Value
         {
             get
             {

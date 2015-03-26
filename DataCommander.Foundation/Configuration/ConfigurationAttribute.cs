@@ -12,12 +12,12 @@ namespace DataCommander.Foundation.Configuration
     /// <summary>
     /// 
     /// </summary>
-    [DebuggerDisplay( "Name = {Name}, Value = {Value}, Description = {Description}" )]
+    [DebuggerDisplay("Name = {Name}, Value = {Value}, Description = {Description}")]
     public sealed class ConfigurationAttribute
     {
-        private readonly String name;
-        private Object value;
-        private readonly String description;
+        private readonly string name;
+        private object value;
+        private readonly string description;
 
         /// <summary>
         /// 
@@ -26,9 +26,9 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="value"></param>
         /// <param name="description"></param>
         public ConfigurationAttribute(
-            String name,
-            Object value,
-            String description )
+            string name,
+            object value,
+            string description)
         {
             this.name = name;
             this.value = value;
@@ -38,7 +38,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public String Name
+        public string Name
         {
             get
             {
@@ -49,7 +49,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public Object Value
+        public object Value
         {
             get
             {
@@ -65,7 +65,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public String Description
+        public string Description
         {
             get
             {
@@ -92,7 +92,7 @@ namespace DataCommander.Foundation.Configuration
         /// <returns></returns>
         public ConfigurationAttribute Clone()
         {
-            var clone = new ConfigurationAttribute( this.name, this.value, this.description );
+            var clone = new ConfigurationAttribute(this.name, this.value, this.description);
             return clone;
         }
 
@@ -100,22 +100,22 @@ namespace DataCommander.Foundation.Configuration
         /// 
         /// </summary>
         /// <param name="textWriter"></param>
-        public void Write( TextWriter textWriter )
+        public void Write(TextWriter textWriter)
         {
-            String typeName = null;
+            string typeName = null;
             Type type = null;
 
             if (this.value != null)
             {
                 type = this.value.GetType();
-                typeName = TypeNameCollection.GetTypeName( type );
+                typeName = TypeNameCollection.GetTypeName(type);
             }
             else
             {
-                typeName = "Object";
+                typeName = "object";
             }
 
-            textWriter.Write( "  " + typeName + " " + this.name + " = " );
+            textWriter.Write("  " + typeName + " " + this.name + " = ");
 
             if (type != null)
             {
@@ -123,11 +123,11 @@ namespace DataCommander.Foundation.Configuration
                 {
                     Type elementType = type.GetElementType();
 
-                    if (elementType == typeof(Byte))
+                    if (elementType == typeof (Byte))
                     {
                         Byte[] inArray = (Byte[])this.value;
-                        String base64 = System.Convert.ToBase64String( inArray );
-                        textWriter.WriteLine( base64 );
+                        string base64 = System.Convert.ToBase64String(inArray);
+                        textWriter.WriteLine(base64);
                     }
                     else
                     {
@@ -137,12 +137,12 @@ namespace DataCommander.Foundation.Configuration
                         {
                             textWriter.WriteLine();
 
-                            Int32 index = 0;
+                            int index = 0;
 
-                            foreach (Object arrayItem in array)
+                            foreach (object arrayItem in array)
                             {
-                                textWriter.Write( "    [" + index + "] = " );
-                                Write( arrayItem, textWriter );
+                                textWriter.Write("    [" + index + "] = ");
+                                Write(arrayItem, textWriter);
                                 index++;
                             }
                         }
@@ -150,24 +150,24 @@ namespace DataCommander.Foundation.Configuration
                 }
                 else
                 {
-                    Write( this.value, textWriter );
+                    Write(this.value, textWriter);
                 }
             }
             else
             {
-                Write( this.value, textWriter );
+                Write(this.value, textWriter);
             }
         }
 
-        [ContractVerification( false )]
-        private static void Write( Object attributeValue, TextWriter textWriter )
+        [ContractVerification(false)]
+        private static void Write(object attributeValue, TextWriter textWriter)
         {
-            String attibuteValueString;
+            string attibuteValueString;
 
             if (attributeValue != null)
             {
                 Type type = attributeValue.GetType();
-                TypeCode typeCode = Type.GetTypeCode( type );
+                TypeCode typeCode = Type.GetTypeCode(type);
 
                 switch (typeCode)
                 {
@@ -177,7 +177,7 @@ namespace DataCommander.Foundation.Configuration
 
                     case TypeCode.Object:
                     {
-                        if (type == typeof(TimeSpan))
+                        if (type == typeof (TimeSpan))
                         {
                             attibuteValueString = attributeValue.ToString();
                         }
@@ -191,7 +191,7 @@ namespace DataCommander.Foundation.Configuration
                             }
                             else
                             {
-                                xmlNode = XmlHelper.Serialize( attributeValue );
+                                xmlNode = XmlHelper.Serialize(attributeValue);
                                 attibuteValueString = xmlNode.OuterXml;
                             }
                         }
@@ -209,7 +209,7 @@ namespace DataCommander.Foundation.Configuration
                 attibuteValueString = "null";
             }
 
-            textWriter.WriteLine( attibuteValueString );
+            textWriter.WriteLine(attibuteValueString);
         }
 
         /// <summary>
@@ -222,19 +222,19 @@ namespace DataCommander.Foundation.Configuration
             /// </summary>
             /// <param name="obj"></param>
             /// <returns></returns>        
-            public static XmlElement Serialize( Object obj )
+            public static XmlElement Serialize(object obj)
             {
-                Contract.Requires( obj != null );
+                Contract.Requires(obj != null);
 
                 Type type = obj.GetType();
-                XmlSerializer xmlSerializer = new XmlSerializer( type );
-                StringWriter stringWriter = new StringWriter( CultureInfo.InvariantCulture );
-                xmlSerializer.Serialize( stringWriter, obj );
+                var xmlSerializer = new XmlSerializer(type);
+                StringWriter stringWriter = new StringWriter(CultureInfo.InvariantCulture);
+                xmlSerializer.Serialize(stringWriter, obj);
 
                 StringBuilder sb = stringWriter.GetStringBuilder();
-                String s = sb.ToString();
+                string s = sb.ToString();
 
-                XmlDocument xmlDocument = new XmlDocument();
+                var xmlDocument = new XmlDocument();
                 xmlDocument.InnerXml = s;
                 XmlElement xmlElement = xmlDocument.DocumentElement;
 

@@ -15,7 +15,7 @@
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public static String GetDataTypeName( this SqlParameter parameter )
+        public static string GetDataTypeName( this SqlParameter parameter )
         {
             var sb = new StringBuilder();
             sb.Append( parameter.SqlDbType.ToString().ToLowerInvariant() );
@@ -37,10 +37,10 @@
                 case SqlDbType.NChar:
                 case SqlDbType.VarChar:
                 case SqlDbType.NVarChar:
-                    Int32 size = parameter.Size;
-                    String sizeString;
+                    int size = parameter.Size;
+                    string sizeString;
 
-                    if (size == -1 || size == Int32.MaxValue)
+                    if (size == -1 || size == int.MaxValue)
                     {
                         sizeString = "max";
                     }

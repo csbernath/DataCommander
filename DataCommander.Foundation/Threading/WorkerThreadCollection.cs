@@ -14,9 +14,9 @@ namespace DataCommander.Foundation.Threading
 
         #region IList<WorkerThread> Members
 
-        Int32 IList<WorkerThread>.IndexOf(WorkerThread item)
+        int IList<WorkerThread>.IndexOf(WorkerThread item)
         {
-            Int32 index = this.threads.IndexOf(item);
+            int index = this.threads.IndexOf(item);
             return index;
         }
 
@@ -25,7 +25,7 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         /// <param name="index"></param>
         /// <param name="item"></param>
-        public void Insert(Int32 index, WorkerThread item)
+        public void Insert(int index, WorkerThread item)
         {
             lock (this.threads)
             {
@@ -37,7 +37,7 @@ namespace DataCommander.Foundation.Threading
         /// 
         /// </summary>
         /// <param name="index"></param>
-        public void RemoveAt(Int32 index)
+        public void RemoveAt(int index)
         {
             lock (this.threads)
             {
@@ -45,7 +45,7 @@ namespace DataCommander.Foundation.Threading
             }
         }
 
-        WorkerThread IList<WorkerThread>.this[Int32 index]
+        WorkerThread IList<WorkerThread>.this[int index]
         {
             get
             {
@@ -79,12 +79,12 @@ namespace DataCommander.Foundation.Threading
             throw new Exception("The method or operation is not implemented.");
         }
 
-        Boolean ICollection<WorkerThread>.Contains(WorkerThread item)
+        bool ICollection<WorkerThread>.Contains(WorkerThread item)
         {
             throw new Exception("The method or operation is not implemented.");
         }
 
-        void ICollection<WorkerThread>.CopyTo(WorkerThread[] array, Int32 arrayIndex)
+        void ICollection<WorkerThread>.CopyTo(WorkerThread[] array, int arrayIndex)
         {
             throw new Exception("The method or operation is not implemented.");
         }
@@ -92,7 +92,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {
@@ -100,7 +100,7 @@ namespace DataCommander.Foundation.Threading
             }
         }
 
-        Boolean ICollection<WorkerThread>.IsReadOnly
+        bool ICollection<WorkerThread>.IsReadOnly
         {
             get
             {
@@ -108,7 +108,7 @@ namespace DataCommander.Foundation.Threading
             }
         }
 
-        Boolean ICollection<WorkerThread>.Remove(WorkerThread item)
+        bool ICollection<WorkerThread>.Remove(WorkerThread item)
         {
             throw new Exception("The method or operation is not implemented.");
         }
@@ -175,7 +175,7 @@ namespace DataCommander.Foundation.Threading
         private sealed class Stopper
         {
             private IList<WorkerThread> threads;
-            private Int32 count;
+            private int count;
             private EventWaitHandle stopEvent;
 
             public Stopper(IList<WorkerThread> threads, EventWaitHandle stopEvent)
@@ -196,7 +196,7 @@ namespace DataCommander.Foundation.Threading
                 }
             }
 
-            private void Thread_Stopped(Object sender, EventArgs e)
+            private void Thread_Stopped(object sender, EventArgs e)
             {
                 Interlocked.Increment(ref this.count);
 

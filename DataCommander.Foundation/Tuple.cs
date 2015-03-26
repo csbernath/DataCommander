@@ -78,7 +78,7 @@ namespace DataCommander.Foundation
             return new Tuple<T1, T2, T3, T4, T5>(item1, item2, item3, item4, item5);
         }
 
-        internal static Int32 CombineHashCodes(Int32 h1, Int32 h2)
+        internal static int CombineHashCodes(int h1, int h2)
         {
             return ((h1 << 5) + h1) ^ h2;
         }

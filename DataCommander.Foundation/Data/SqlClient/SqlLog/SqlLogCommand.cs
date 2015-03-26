@@ -12,26 +12,26 @@ namespace DataCommander.Foundation.Data.SqlClient
     {
         #region Private Fields
 
-        private readonly Int32 applicationId;
-        private IDictionary<String, SqLoglCommandExecution> commands;
-        private Int32 connectionNo;
-        private String database;
+        private readonly int applicationId;
+        private IDictionary<string, SqLoglCommandExecution> commands;
+        private int connectionNo;
+        private string database;
         private CommandType commandType;
-        private String commandText;
-        private String parameters;
+        private string commandText;
+        private string parameters;
         private DateTime startDate;
-        private Int64 duration;
+        private long duration;
         private Exception exception;
 
         #endregion
 
         public SqlLogCommand(
-            Int32 applicationId,
-            IDictionary<String, SqLoglCommandExecution> commands,
-            Int32 connectionNo,
+            int applicationId,
+            IDictionary<string, SqLoglCommandExecution> commands,
+            int connectionNo,
             IDbCommand command,
             DateTime startDate,
-            Int64 duration,
+            long duration,
             Exception exception)
         {
             this.applicationId = applicationId;
@@ -52,26 +52,26 @@ namespace DataCommander.Foundation.Data.SqlClient
             this.exception = exception;
         }
 
-        String ISqlLogItem.CommandText
+        string ISqlLogItem.CommandText
         {
             get
             {
                 switch (this.commandType)
                 {
                     case CommandType.Text:
-                        Int32 index = this.commandText.IndexOf(' ');
+                        int index = this.commandText.IndexOf(' ');
 
                         if (index >= 0)
                         {
-                            String word = this.commandText.Substring(0, index);
+                            string word = this.commandText.Substring(0, index);
                             word = word.ToLower();
 
                             switch (word)
                             {
                                 case "exec":
                                 case "execute":
-                                    Int32 startIndex = word.Length + 1;
-                                    Int32 endIndex = this.commandText.IndexOf(' ', startIndex);
+                                    int startIndex = word.Length + 1;
+                                    int endIndex = this.commandText.IndexOf(' ', startIndex);
 
                                     if (endIndex >= 0)
                                     {
@@ -90,7 +90,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                         break;
                 }
 
-                Boolean isNew;
+                bool isNew;
                 SqLoglCommandExecution command = this.GetCommandExecution(this.database, this.commandText, out isNew);
                 StringBuilder sb = new StringBuilder();
 
@@ -111,7 +111,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                 sb.Append(',');
                 sb.Append( this.startDate.ToTSqlDateTime() );
 
-                Int32 microseconds = StopwatchTimeSpan.ToInt32(this.duration, 1000000);
+                int microseconds = StopwatchTimeSpan.ToInt32(this.duration, 1000000);
                 sb.AppendFormat(",{0}\r\n", microseconds);
 
                 if (this.exception != null)
@@ -125,13 +125,13 @@ namespace DataCommander.Foundation.Data.SqlClient
         }
 
         private SqLoglCommandExecution GetCommandExecution(
-            String database,
-            String commandText,
-            out Boolean isNew)
+            string database,
+            string commandText,
+            out bool isNew)
         {
             SqLoglCommandExecution command;
             isNew = false;
-            String key = String.Format(CultureInfo.InvariantCulture, "{0}.{1}", database, commandText);
+            string key = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", database, commandText);
 
             lock (this.commands)
             {
@@ -141,7 +141,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                 }
                 else
                 {
-                    Int32 commandNo = this.commands.Count + 1;
+                    int commandNo = this.commands.Count + 1;
                     command = new SqLoglCommandExecution( commandNo );
                     this.commands.Add( key, command );
                     isNew = true;

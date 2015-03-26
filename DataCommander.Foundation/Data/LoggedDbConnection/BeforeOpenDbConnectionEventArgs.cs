@@ -13,13 +13,13 @@
     /// </summary>
     public sealed class BeforeOpenDbConnectionEventArgs : LoggedEventArgs
     {
-        private readonly String connectionString;
+        private readonly string connectionString;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="connectionString"></param>
-        public BeforeOpenDbConnectionEventArgs( String connectionString )
+        public BeforeOpenDbConnectionEventArgs( string connectionString )
         {
             this.connectionString = connectionString;
         }
@@ -27,7 +27,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String ConnectionString
+        public string ConnectionString
         {
             get
             {

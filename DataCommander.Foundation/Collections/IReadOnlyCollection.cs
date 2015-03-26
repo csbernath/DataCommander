@@ -14,7 +14,7 @@ namespace DataCommander.Foundation.Collections
         /// <summary>
         /// 
         /// </summary>
-        Int32 Count { get; }
+        int Count { get; }
     }
 }
 

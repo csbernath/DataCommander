@@ -12,18 +12,18 @@
     /// <typeparam name="T"></typeparam>
     public class DynamicArray<T> : IList<T>
     {
-        private readonly Int32 maxSize;
+        private readonly int maxSize;
 
         private T[] array;
 
-        private Int32 count;
+        private int count;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="initialSize"></param>
         /// <param name="maxSize"></param>
-        public DynamicArray( Int32 initialSize, Int32 maxSize )
+        public DynamicArray( int initialSize, int maxSize )
         {
             this.array = new T[initialSize];
             this.maxSize = maxSize;
@@ -36,7 +36,7 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Int32 IndexOf( T item )
+        public int IndexOf( T item )
         {
             return this.array.IndexOf( item );
         }
@@ -46,12 +46,12 @@
         /// </summary>
         /// <param name="index"></param>
         /// <param name="item"></param>
-        void IList<T>.Insert( Int32 index, T item )
+        void IList<T>.Insert( int index, T item )
         {
             throw new NotSupportedException();
         }
 
-        void IList<T>.RemoveAt( Int32 index )
+        void IList<T>.RemoveAt( int index )
         {
             throw new NotSupportedException();
         }
@@ -61,7 +61,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public T this[ Int32 index ]
+        public T this[ int index ]
         {
             get
             {
@@ -88,7 +88,7 @@
 
             if (this.count == this.array.Length)
             {
-                Int32 newSize = this.count == 0 ? 1 : 2 * this.count;
+                int newSize = this.count == 0 ? 1 : 2 * this.count;
 
                 if (newSize > this.maxSize)
                 {
@@ -125,12 +125,12 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Contains( T item )
+        public bool Contains( T item )
         {
             return this.array.Contains( item );
         }
 
-        void ICollection<T>.CopyTo( T[] array, Int32 arrayIndex )
+        void ICollection<T>.CopyTo( T[] array, int arrayIndex )
         {
             throw new NotImplementedException();
         }
@@ -138,7 +138,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {
@@ -149,7 +149,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsReadOnly
+        public bool IsReadOnly
         {
             get
             {
@@ -172,7 +172,7 @@
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            for (Int32 i = 0; i < this.count; i++)
+            for (int i = 0; i < this.count; i++)
             {
                 yield return this.array[ i ];
             }

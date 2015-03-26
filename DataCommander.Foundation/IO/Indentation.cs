@@ -10,7 +10,7 @@
     public sealed class Indentation : IDisposable
     {
         private readonly IndentedTextWriter textWriter;
-        private readonly Int32 indent;
+        private readonly int indent;
 
         /// <summary>
         /// 

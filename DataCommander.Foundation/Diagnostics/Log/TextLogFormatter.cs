@@ -4,7 +4,7 @@ namespace DataCommander.Foundation.Diagnostics
 
     internal sealed class TextLogFormatter : ILogFormatter
     {
-        internal static String Format( LogEntry entry )
+        internal static string Format( LogEntry entry )
         {
             Char logLevelChar;
             switch (entry.LogLevel)
@@ -34,7 +34,7 @@ namespace DataCommander.Foundation.Diagnostics
                         break;
             }
 
-            return String.Format(
+            return string.Format(
                 "[{0}|{1}|{2}|{3},{4}|{5}] {6}\r\n",
                 entry.CreationTime.ToString( "HH:mm:ss.fff" ),
                 entry.Id,
@@ -47,7 +47,7 @@ namespace DataCommander.Foundation.Diagnostics
                 //creationTime.EnvironmentTickCount,
                 //creationTime.StopwatchTimestamp );
 
-            //String userName = entry.UserName;
+            //string userName = entry.UserName;
 
             //if (userName != null)
             //{
@@ -55,7 +55,7 @@ namespace DataCommander.Foundation.Diagnostics
             //    sb.Append( userName.PadRight( 11, ' ' ) );
             //}
 
-            //String hostName = entry.HostName;
+            //string hostName = entry.HostName;
 
             //if (hostName != null)
             //{
@@ -72,7 +72,7 @@ namespace DataCommander.Foundation.Diagnostics
             //}
         }
 
-        //internal static String Format2( LogEntry entry )
+        //internal static string Format2( LogEntry entry )
         //{
         //    Char logLevelChar;
         //    switch (entry.LogLevel)
@@ -122,17 +122,17 @@ namespace DataCommander.Foundation.Diagnostics
         //    return sb.ToString();
         //}
 
-        String ILogFormatter.Begin()
+        string ILogFormatter.Begin()
         {
             return null;
         }
 
-        String ILogFormatter.Format( LogEntry entry )
+        string ILogFormatter.Format( LogEntry entry )
         {
             return Format( entry );
         }
 
-        String ILogFormatter.End()
+        string ILogFormatter.End()
         {
             return null;
         }

@@ -12,7 +12,7 @@ namespace DataCommander.Foundation.Collections.IndexableCollection
     /// <typeparam name="T"></typeparam>
     public sealed class EnumerableIndex<T> : ICollectionIndex<T>
     {
-        private String name;
+        private string name;
         private IEnumerable<T> enumerable;
 
         /// <summary>
@@ -20,9 +20,9 @@ namespace DataCommander.Foundation.Collections.IndexableCollection
         /// </summary>
         /// <param name="name"></param>
         /// <param name="enumerable"></param>
-        public EnumerableIndex(String name, IEnumerable<T> enumerable)
+        public EnumerableIndex(string name, IEnumerable<T> enumerable)
         {
-            Contract.Requires(enumerable != null);
+            Contract.Requires<ArgumentNullException>(enumerable != null);
 
             this.name = name;
             this.enumerable = enumerable;

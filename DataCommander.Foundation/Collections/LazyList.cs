@@ -55,7 +55,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public T this[Int32 index]
+        public T this[int index]
         {
             get
             {
@@ -91,9 +91,9 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Int32 IndexOf(T item)
+        public int IndexOf(T item)
         {
-            Int32 index;
+            int index;
 
             if (this.list != null)
             {
@@ -112,7 +112,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <param name="item"></param>
-        public void Insert(Int32 index, T item)
+        public void Insert(int index, T item)
         {
             this.GetList();
             this.list.Insert(index, item);
@@ -122,7 +122,7 @@
         /// 
         /// </summary>
         /// <param name="index"></param>
-        public void RemoveAt(Int32 index)
+        public void RemoveAt(int index)
         {
             if (this.list != null)
             {

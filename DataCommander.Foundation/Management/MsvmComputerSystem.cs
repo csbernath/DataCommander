@@ -32,11 +32,11 @@
         /// <param name="managementScope"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static MsvmComputerSystem GetByName( ManagementScope managementScope, String name )
+        public static MsvmComputerSystem GetByName( ManagementScope managementScope, string name )
         {
             Contract.Requires( managementScope != null );
 
-            String query = String.Format( "SELECT * FROM Msvm_ComputerSystem WHERE Name='{0}'", name );
+            string query = string.Format( "SELECT * FROM Msvm_ComputerSystem WHERE Name='{0}'", name );
             List<MsvmComputerSystem> list = managementScope.ExecuteQuery<MsvmComputerSystem>( query, mo => new MsvmComputerSystem( mo ) );
             Contract.Assert( list.Count > 0 );
             MsvmComputerSystem item;
@@ -59,11 +59,11 @@
         /// <param name="managementScope"></param>
         /// <param name="elementName"></param>
         /// <returns></returns>
-        public static List<MsvmComputerSystem> GetByElementName( ManagementScope managementScope, String elementName )
+        public static List<MsvmComputerSystem> GetByElementName( ManagementScope managementScope, string elementName )
         {
             Contract.Requires( managementScope != null );
 
-            String query = String.Format( "SELECT * FROM Msvm_ComputerSystem WHERE ElementName='{0}'", elementName );
+            string query = string.Format( "SELECT * FROM Msvm_ComputerSystem WHERE ElementName='{0}'", elementName );
             List<MsvmComputerSystem> list = managementScope.ExecuteQuery<MsvmComputerSystem>( query, mo => new MsvmComputerSystem( mo ) );
             return list;
         }
@@ -74,16 +74,16 @@
         /// <param name="managementScope"></param>
         /// <param name="elementNames"></param>
         /// <returns></returns>
-        public static List<MsvmComputerSystem> GetByElementNames( ManagementScope managementScope, IEnumerable<String> elementNames )
+        public static List<MsvmComputerSystem> GetByElementNames( ManagementScope managementScope, IEnumerable<string> elementNames )
         {
             Contract.Requires( managementScope != null );
             Contract.Requires( elementNames != null );
 
             StringBuilder sb = new StringBuilder();
             sb.AppendFormat( "SELECT * FROM Msvm_ComputerSystem WHERE" );
-            Boolean first = true;
+            bool first = true;
 
-            foreach (String elementName in elementNames)
+            foreach (string elementName in elementNames)
             {
                 if (first)
                 {
@@ -97,7 +97,7 @@
                 sb.AppendFormat( " ElementName = '{0}'", elementName );
             }
 
-            String query = sb.ToString();
+            string query = sb.ToString();
             List<MsvmComputerSystem> list = managementScope.ExecuteQuery<MsvmComputerSystem>( query, mo => new MsvmComputerSystem( mo ) );
             return list;
         }
@@ -105,12 +105,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public String ElementName
+        public string ElementName
         {
             get
             {
-                Object elementNameObject = this.managementObject[ "ElementName" ];
-                String elementName = (String)elementNameObject;
+                object elementNameObject = this.managementObject[ "ElementName" ];
+                string elementName = (string)elementNameObject;
                 return elementName;
             }
         }
@@ -122,7 +122,7 @@
         {
             get
             {
-                Object enabledStateObject = this.managementObject[ "EnabledState" ];
+                object enabledStateObject = this.managementObject[ "EnabledState" ];
                 UInt16 enabledStateUint16 = (UInt16)enabledStateObject;
                 MsvmComputerSystemEnabledState enabledState = (MsvmComputerSystemEnabledState)enabledStateUint16;
                 return enabledState;
@@ -132,12 +132,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public String Name
+        public string Name
         {
             get
             {
-                Object nameObject = this.managementObject[ "Name" ];
-                String name = (String)nameObject;
+                object nameObject = this.managementObject[ "Name" ];
+                string name = (string)nameObject;
                 return name;
             }
         }
@@ -149,7 +149,7 @@
         {
             get
             {
-                Object onTimeObject = this.managementObject[ "OnTimeInMilliseconds" ];
+                object onTimeObject = this.managementObject[ "OnTimeInMilliseconds" ];
                 UInt64 onTimeUInt64 = (UInt64)onTimeObject;
                 TimeSpan? onTime;
 
@@ -173,16 +173,16 @@
         /// <param name="reason"></param>
         /// <returns></returns>
         [CLSCompliant( false )]
-        public InitiateShutdownReturnValue InitiateShutdown( Boolean force, String reason )
+        public InitiateShutdownReturnValue InitiateShutdown( bool force, string reason )
         {
-            String query = String.Format( "SELECT * FROM Msvm_ShutdownComponent WHERE SystemName='{0}'", this.Name );
+            string query = string.Format( "SELECT * FROM Msvm_ShutdownComponent WHERE SystemName='{0}'", this.Name );
             ObjectQuery objectQuery = new ObjectQuery( query );
             ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher( this.managementObject.Scope, objectQuery );
             ManagementObjectCollection managementObjectCollection = managementObjectSearcher.Get();
             ManagementObject shutdownComponent = managementObjectCollection.AsEnumerable<ManagementObject>().First();
-            Object resultObject = shutdownComponent.InvokeMethod(
+            object resultObject = shutdownComponent.InvokeMethod(
                 "InitiateShutdown",
-                new Object[]
+                new object[]
                 {
                     force,
                     reason
@@ -200,13 +200,13 @@
         /// <returns></returns>
         public MsvmComputerSystemRequestStateChangeReturnValue RequestStateChange( MsvmComputerSystemRequestedState requestedState, out ManagementJob job )
         {
-            const String methodName = "RequestStateChange";
+            const string methodName = "RequestStateChange";
             UInt16 requestedStateuInt16 = (UInt16)requestedState;
             ManagementBaseObject inParams = this.managementObject.GetMethodParameters( methodName );
             inParams[ "RequestedState" ] = requestedStateuInt16;
             ManagementBaseObject outParams = this.managementObject.InvokeMethod( methodName, inParams, null );
             MsvmComputerSystemRequestStateChangeReturnValue returnValue = (MsvmComputerSystemRequestStateChangeReturnValue)(UInt32)outParams[ "Returnvalue" ];
-            String jobPath = (String)outParams[ "Job" ];
+            string jobPath = (string)outParams[ "Job" ];
 
             if (jobPath != null)
             {

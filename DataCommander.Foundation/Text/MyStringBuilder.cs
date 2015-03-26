@@ -24,8 +24,8 @@
             {
                 throw new ArgumentNullException((format == null) ? "format" : "args");
             }
-            Int32 num = 0;
-            Int32 length = format.Length;
+            int num = 0;
+            int length = format.Length;
             char c = '\0';
             ICustomFormatter customFormatter = null;
             if (provider != null)
@@ -73,10 +73,10 @@
                     //StringBuilder.FormatError();
                     throw new FormatException();
                 }
-                Int32 num2 = 0;
+                int num2 = 0;
                 do
                 {
-                    num2 = num2 * 10 + (Int32)c - 48;
+                    num2 = num2 * 10 + (int)c - 48;
                     num++;
                     if (num == length)
                     {
@@ -96,7 +96,7 @@
                     num++;
                 }
                 bool flag = false;
-                Int32 num3 = 0;
+                int num3 = 0;
                 if (c == ',')
                 {
                     num++;
@@ -128,7 +128,7 @@
                     }
                     do
                     {
-                        num3 = num3 * 10 + (Int32)c - 48;
+                        num3 = num3 * 10 + (int)c - 48;
                         num++;
                         if (num == length)
                         {
@@ -231,7 +231,7 @@
                 {
                     text2 = string.Empty;
                 }
-                Int32 num4 = num3 - text2.Length;
+                int num4 = num3 - text2.Length;
                 if (!flag && num4 > 0)
                 {
                     source.Append(' ', num4);

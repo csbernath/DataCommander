@@ -9,14 +9,14 @@
     [DebuggerDisplay("Name = {name}")]
     public sealed class TextDataSet
     {
-        private readonly String name;
+        private readonly string name;
         private readonly TextDataSetTableCollection tables = new TextDataSetTableCollection();
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="name"></param>
-        public TextDataSet(String name)
+        public TextDataSet(string name)
         {
             this.name = name;
         }
@@ -24,7 +24,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String Name
+        public string Name
         {
             get
             {

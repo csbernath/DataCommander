@@ -20,20 +20,20 @@ namespace DataCommander.Foundation.Caching
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private readonly IndexableCollection<CacheEntry> entries;
-        private readonly UniqueIndex<String, CacheEntry> keyIndex;
+        private readonly UniqueIndex<string, CacheEntry> keyIndex;
         private readonly NonUniqueIndex<DateTime, CacheEntry> absoluteExpirationIndex;
         private readonly LimitedConcurrencyLevelTaskScheduler scheduler;
         private readonly Timer timer;
-        private Boolean disposed;
+        private bool disposed;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="maximumConcurrencyLevel"></param>
         /// <param name="timerPeriod"></param>
-        public MemoryCache( Int32 maximumConcurrencyLevel, TimeSpan timerPeriod )
+        public MemoryCache( int maximumConcurrencyLevel, TimeSpan timerPeriod )
         {
-            this.keyIndex = new UniqueIndex<String, CacheEntry>(
+            this.keyIndex = new UniqueIndex<string, CacheEntry>(
                 "key",
                 entry => GetKeyResponse.Create( true, entry.CacheItem.Key ),
                 SortOrder.None );
@@ -69,13 +69,13 @@ namespace DataCommander.Foundation.Caching
                 entry = new CacheEntry
                         {
                             CacheItem = item,
-                            AbsoluteExpiration = OptimizedDateTime.Now + item.SlidingExpiration
+                            AbsoluteExpiration = LocalTime.Default.Now + item.SlidingExpiration
                         };
 
                 this.entries.Add( entry );
             }
 
-            Object value = item.GetValue();
+            object value = item.GetValue();
             entry.Value = value;
             entry.Initialized = true;
         }
@@ -97,7 +97,7 @@ namespace DataCommander.Foundation.Caching
                         entry = new CacheEntry
                                 {
                                     CacheItem = item,
-                                    AbsoluteExpiration = OptimizedDateTime.Now + item.SlidingExpiration
+                                    AbsoluteExpiration = LocalTime.Default.Now + item.SlidingExpiration
                                 };
 
                         this.entries.Add( entry );
@@ -114,7 +114,7 @@ namespace DataCommander.Foundation.Caching
                     if (!entry.Initialized)
                     {
                         var stopwatch = Stopwatch.StartNew();
-                        Object value = item.GetValue();
+                        object value = item.GetValue();
                         stopwatch.Stop();
                         entry.Value = value;
                         entry.Initialized = true;
@@ -124,10 +124,10 @@ namespace DataCommander.Foundation.Caching
             }
         }
 
-        Boolean ICache.TryGetValue( String key, out Object value )
+        bool ICache.TryGetValue( string key, out object value )
         {
             CacheEntry entry;
-            Boolean contains = this.keyIndex.TryGetValue( key, out entry );
+            bool contains = this.keyIndex.TryGetValue( key, out entry );
 
             if (contains)
             {
@@ -141,7 +141,7 @@ namespace DataCommander.Foundation.Caching
             return contains;
         }
 
-        void ICache.Remove( String key )
+        void ICache.Remove( string key )
         {
             lock (this.entries)
             {
@@ -182,12 +182,12 @@ namespace DataCommander.Foundation.Caching
             }
         }
 
-        private void TimerCallback( Object state )
+        private void TimerCallback( object state )
         {
             if (this.entries.Count > 0 && !disposed)
             {
                 var enumerable = (ICollection<CacheEntry>)this.absoluteExpirationIndex;
-                DateTime now = OptimizedDateTime.Now;
+                DateTime now = LocalTime.Default.Now;
                 ICollection<CacheEntry> expiredEntries;
 
                 lock (this.entries)
@@ -215,7 +215,7 @@ namespace DataCommander.Foundation.Caching
                 {
                     var item = entry.CacheItem;
                     var stopwatch = Stopwatch.StartNew();
-                    Object value = item.GetValue();
+                    object value = item.GetValue();
                     stopwatch.Stop();
                     log.Trace( "Update, item.GetValue(), key: {0}, elapsed: {1}", item.Key, stopwatch.Elapsed );
 
@@ -223,11 +223,11 @@ namespace DataCommander.Foundation.Caching
 
                     lock (this.entries)
                     {
-                        Boolean succeeded = collection.Remove( entry );
+                        bool succeeded = collection.Remove( entry );
                         Contract.Assert( succeeded, "collection.Remove( entry )" );
 
                         entry.Value = value;
-                        entry.AbsoluteExpiration = OptimizedDateTime.Now + item.SlidingExpiration;
+                        entry.AbsoluteExpiration = LocalTime.Default.Now + item.SlidingExpiration;
 
                         collection.Add( entry );
                     }

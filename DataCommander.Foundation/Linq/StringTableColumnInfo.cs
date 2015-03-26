@@ -10,9 +10,9 @@ namespace DataCommander.Foundation.Linq
     /// <typeparam name="T"></typeparam>
     public sealed class StringTableColumnInfo<T>
     {
-        private readonly String columnName;
+        private readonly string columnName;
         private readonly StringTableColumnAlign align;
-        private readonly Func<T, Int32, String> toString;
+        private readonly Func<T, int, string> toString;
 
         /// <summary>
         /// 
@@ -21,9 +21,9 @@ namespace DataCommander.Foundation.Linq
         /// <param name="align"></param>
         /// <param name="toString"></param>
         public StringTableColumnInfo(
-            String columnName,
+            string columnName,
             StringTableColumnAlign align,
-            Func<T, Int32, String> toString )
+            Func<T, int, string> toString )
         {
             Contract.Requires<ArgumentNullException>( toString != null );
 
@@ -39,17 +39,17 @@ namespace DataCommander.Foundation.Linq
         /// <param name="align"></param>
         /// <param name="getValue"></param>
         public StringTableColumnInfo(
-            String columnName,
+            string columnName,
             StringTableColumnAlign align,
-            Func<T, Object> getValue )
+            Func<T, object> getValue )
         {
             Contract.Requires<ArgumentNullException>( getValue != null );
 
             this.columnName = columnName;
             this.align = align;
-            this.toString = delegate( T item, Int32 index )
+            this.toString = delegate( T item, int index )
             {
-                Object value = getValue( item );
+                object value = getValue( item );
                 return ToString( value );
             };
         }
@@ -57,7 +57,7 @@ namespace DataCommander.Foundation.Linq
         /// <summary>
         /// 
         /// </summary>
-        public String ColumnName
+        public string ColumnName
         {
             get
             {
@@ -76,14 +76,14 @@ namespace DataCommander.Foundation.Linq
             }
         }
 
-        internal String ToString( T item, Int32 index )
+        internal string ToString( T item, int index )
         {
             return this.toString( item, index );
         }
 
-        private static String ToString( Object source )
+        private static string ToString( object source )
         {
-            String result;
+            string result;
             if (source != null)
             {
                 result = source.ToString();

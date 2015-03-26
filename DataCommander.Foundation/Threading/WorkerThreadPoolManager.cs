@@ -63,14 +63,14 @@ namespace DataCommander.Foundation.Threading
             this.timer.Dispose();
         }
 
-        private void ManagePoolDequeuers( Object state )
+        private void ManagePoolDequeuers( object state )
         {
             if (this.pool.QueuedItemCount > 0)
             {
-                Int32 addableThreadCount = this.pool.MaxThreadCount - this.pool.Dequeuers.Count;
-                Int32 count = Math.Min( addableThreadCount, 5 );
+                int addableThreadCount = this.pool.MaxThreadCount - this.pool.Dequeuers.Count;
+                int count = Math.Min( addableThreadCount, 5 );
 
-                for (Int32 i = 0; i < count; i++)
+                for (int i = 0; i < count; i++)
                 {
                     WaitCallback callback = this.waitCallbackFactory.CreateWaitCallback();
                     var dequeuer = new WorkerThreadPoolDequeuer( callback );
@@ -80,13 +80,13 @@ namespace DataCommander.Foundation.Threading
             }
             else
             {
-                Int64 timestamp = Stopwatch.GetTimestamp();
+                long timestamp = Stopwatch.GetTimestamp();
                 List<WorkerThreadPoolDequeuer> dequeuers = new List<WorkerThreadPoolDequeuer>();
                 WorkerThreadCollection threads = new WorkerThreadCollection();
 
                 foreach (WorkerThreadPoolDequeuer dequeuer in this.pool.Dequeuers)
                 {
-                    Int32 milliseconds = StopwatchTimeSpan.ToInt32( timestamp - dequeuer.LastActivityTimestamp, 1000 );
+                    int milliseconds = StopwatchTimeSpan.ToInt32( timestamp - dequeuer.LastActivityTimestamp, 1000 );
 
                     if (milliseconds >= 10000)
                     {

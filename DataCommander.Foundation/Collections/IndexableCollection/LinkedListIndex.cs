@@ -9,14 +9,14 @@
     /// <typeparam name="T"></typeparam>
     public class LinkedListIndex<T> : ICollectionIndex<T>
     {
-        private readonly String name;
+        private readonly string name;
         private readonly LinkedList<T> linkedList = new LinkedList<T>();
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="name"></param>
-        public LinkedListIndex(String name)
+        public LinkedListIndex(string name)
         {
             this.name = name;
         }
@@ -24,7 +24,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String Name
+        public string Name
         {
             get
             {
@@ -35,7 +35,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {
@@ -46,7 +46,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsReadOnly
+        public bool IsReadOnly
         {
             get
             {
@@ -76,7 +76,7 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Contains(T item)
+        public bool Contains(T item)
         {
             return this.linkedList.Contains(item);
         }
@@ -86,7 +86,7 @@
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
-        public void CopyTo(T[] array, Int32 arrayIndex)
+        public void CopyTo(T[] array, int arrayIndex)
         {
             this.linkedList.CopyTo(array, arrayIndex);
         }
@@ -96,7 +96,7 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        Boolean ICollection<T>.Remove( T item )
+        bool ICollection<T>.Remove( T item )
         {
             return this.linkedList.Remove(item);
         }

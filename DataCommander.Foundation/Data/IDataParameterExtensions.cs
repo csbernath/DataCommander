@@ -31,7 +31,7 @@
             Contract.Requires( parameter != null );
             Contract.Requires( value.Type == DataParameterValueType.Value || value.Type == DataParameterValueType.Null || value.Type == DataParameterValueType.Default );
 
-            Object valueObject;
+            object valueObject;
 
             switch (value.Type)
             {

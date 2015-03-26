@@ -15,9 +15,9 @@
         /// <param name="hostName"></param>
         /// <param name="command"></param>
         /// <returns>True if the command must be logged. False otherwise.</returns>
-        Boolean Contains(
-            String userName,
-            String hostName,
+        bool Contains(
+            string userName,
+            string hostName,
             IDbCommand command);
     }
 }

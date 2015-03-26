@@ -20,7 +20,7 @@ namespace DataCommander.Foundation.Threading
         private DateTime _startTime;
         private DateTime _stopTime;
         private readonly WorkerEvent stopRequest = new WorkerEvent( WorkerEventState.NonSignaled );
-        private Boolean isStopAccepted;
+        private bool isStopAccepted;
         private readonly WorkerEvent pauseRequest = new WorkerEvent( WorkerEventState.NonSignaled );
         private readonly WorkerEvent continueRequest = new WorkerEvent( WorkerEventState.NonSignaled );
         private EventHandler started;
@@ -104,7 +104,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsPauseRequested
+        public bool IsPauseRequested
         {
             get
             {
@@ -115,11 +115,11 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsStopRequested
+        public bool IsStopRequested
         {
             get
             {
-                Boolean isStopRequested = this.stopRequest.State == WorkerEventState.Signaled;
+                bool isStopRequested = this.stopRequest.State == WorkerEventState.Signaled;
 
                 if (isStopRequested)
                 {
@@ -174,7 +174,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         ///  Gets a unique identifier for the current managed thread.
         /// </summary>
-        public Int32 ManagedThreadId
+        public int ManagedThreadId
         {
             get
             {
@@ -185,7 +185,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         ///  Gets or sets the name of the thread.
         /// </summary>
-        public String Name
+        public string Name
         {
             get
             {
@@ -217,7 +217,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         ///  Gets or sets a value indicating whether or not a thread is a background thread.
         /// </summary>
-        public Boolean IsBackground
+        public bool IsBackground
         {
             get
             {
@@ -271,7 +271,7 @@ namespace DataCommander.Foundation.Threading
         public void Start()
         {
             log.Trace("Starting WorkerThread({0})...", this.thread.Name );
-            this._startTime = OptimizedDateTime.Now;
+            this._startTime = LocalTime.Default.Now;
             this.thread.Start();
         }
 
@@ -281,7 +281,7 @@ namespace DataCommander.Foundation.Threading
         public void Stop()
         {
             log.Trace("Stopping WorkerThread({0},{1})...", this.thread.Name, this.thread.ManagedThreadId );
-            this._stopTime = OptimizedDateTime.Now;
+            this._stopTime = LocalTime.Default.Now;
             this.stopRequest.Set();
         }
 
@@ -310,11 +310,11 @@ namespace DataCommander.Foundation.Threading
         public void WaitForStopOrContinue()
         {
             log.Write(LogLevel.Error, "WorkerThread({0},{1}) is waiting for stop or continue request...", this.thread.Name, this.thread.ManagedThreadId);
-            Int64 ticks = Stopwatch.GetTimestamp();
+            long ticks = Stopwatch.GetTimestamp();
             WaitHandle[] waitHandles = {this.stopRequest, this.continueRequest};
-            Int32 index = WaitHandle.WaitAny(waitHandles);
+            int index = WaitHandle.WaitAny(waitHandles);
             ticks = Stopwatch.GetTimestamp() - ticks;
-            String request;
+            string request;
 
             switch (index)
             {
@@ -347,7 +347,7 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         /// <param name="millisecondsTimeout"></param>
         /// <returns></returns>
-        public Boolean Join( Int32 millisecondsTimeout )
+        public bool Join( int millisecondsTimeout )
         {
             return this.thread.Join( millisecondsTimeout );
         }
@@ -357,9 +357,9 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        public Boolean WaitForStop( TimeSpan timeout )
+        public bool WaitForStop( TimeSpan timeout )
         {
-            Boolean signaled = this.stopRequest.WaitOne( timeout, false );
+            bool signaled = this.stopRequest.WaitOne( timeout, false );
             return signaled;
         }
 
@@ -368,9 +368,9 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        public Boolean WaitForStop( Int32 timeout )
+        public bool WaitForStop( int timeout )
         {
-            Boolean signaled = this.stopRequest.WaitOne( timeout, false );
+            bool signaled = this.stopRequest.WaitOne( timeout, false );
             return signaled;
         }
 
@@ -388,7 +388,7 @@ namespace DataCommander.Foundation.Threading
 
         private void PrivateStart()
         {
-            var now = OptimizedDateTime.Now;
+            var now = LocalTime.Default.Now;
             TimeSpan elapsed = now - this._startTime;
             UInt32 win32threadId = NativeMethods.GetCurrentThreadId();
 
@@ -416,7 +416,7 @@ namespace DataCommander.Foundation.Threading
                 log.Write( LogLevel.Error, "WorkerThread({0},{1}) unhandled exception:\r\n{2}", this.thread.Name, this.thread.ManagedThreadId, e );
             }
 
-            now = OptimizedDateTime.Now;
+            now = LocalTime.Default.Now;
             if (this.stopRequest.State == WorkerEventState.Signaled)
             {
                 elapsed = now - this._stopTime;

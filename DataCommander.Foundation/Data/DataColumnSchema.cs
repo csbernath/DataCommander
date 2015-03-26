@@ -39,77 +39,77 @@
         /// <summary>
         /// 
         /// </summary>
-        public Boolean? AllowDBNull
+        public bool? AllowDBNull
         {
             get
             {
-                return this.schemaTableRow.Field<Boolean?>(SchemaTableColumn.AllowDBNull);
+                return this.schemaTableRow.Field<bool?>(SchemaTableColumn.AllowDBNull);
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public String BaseColumnName
+        public string BaseColumnName
         {
             get
             {
-                return this.schemaTableRow.Field<String>(SchemaTableColumn.BaseColumnName);
+                return this.schemaTableRow.Field<string>(SchemaTableColumn.BaseColumnName);
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public String BaseSchemaName
+        public string BaseSchemaName
         {
             get
             {
-                return this.schemaTableRow.Field<String>(SchemaTableColumn.BaseSchemaName);
+                return this.schemaTableRow.Field<string>(SchemaTableColumn.BaseSchemaName);
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public String BaseTableName
+        public string BaseTableName
         {
             get
             {
-                return this.schemaTableRow.Field<String>(SchemaTableColumn.BaseTableName);
+                return this.schemaTableRow.Field<string>(SchemaTableColumn.BaseTableName);
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public String ColumnName
+        public string ColumnName
         {
             get
             {
-                return this.schemaTableRow.Field<String>(SchemaTableColumn.ColumnName);
+                return this.schemaTableRow.Field<string>(SchemaTableColumn.ColumnName);
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public Int32 ColumnOrdinal
+        public int ColumnOrdinal
         {
             get
             {
-                return (Int32) this.schemaTableRow[SchemaTableColumn.ColumnOrdinal];
+                return (int) this.schemaTableRow[SchemaTableColumn.ColumnOrdinal];
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public Int32 ColumnSize
+        public int ColumnSize
         {
             get
             {
-                return (Int32) this.schemaTableRow[SchemaTableColumn.ColumnSize];
+                return (int) this.schemaTableRow[SchemaTableColumn.ColumnSize];
             }
         }
 
@@ -127,55 +127,55 @@
         /// <summary>
         /// 
         /// </summary>
-        public Boolean? IsAliased
+        public bool? IsAliased
         {
             get
             {
-                return this.schemaTableRow.Field<Boolean?>(SchemaTableColumn.IsAliased);
+                return this.schemaTableRow.Field<bool?>(SchemaTableColumn.IsAliased);
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public Boolean? IsExpression
+        public bool? IsExpression
         {
             get
             {
-                return this.schemaTableRow.Field<Boolean?>(SchemaTableColumn.IsExpression);
+                return this.schemaTableRow.Field<bool?>(SchemaTableColumn.IsExpression);
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public Boolean? IsKey
+        public bool? IsKey
         {
             get
             {
-                return this.schemaTableRow.Field<Boolean?>(SchemaTableColumn.IsKey);
+                return this.schemaTableRow.Field<bool?>(SchemaTableColumn.IsKey);
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public Boolean? IsLong
+        public bool? IsLong
         {
             get
             {
-                return this.schemaTableRow.Field<Boolean?>(SchemaTableColumn.IsLong);
+                return this.schemaTableRow.Field<bool?>(SchemaTableColumn.IsLong);
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public Boolean? IsUnique
+        public bool? IsUnique
         {
             get
             {
-                return this.schemaTableRow.Field<Boolean?>(SchemaTableColumn.IsUnique);
+                return this.schemaTableRow.Field<bool?>(SchemaTableColumn.IsUnique);
             }
         }
 
@@ -215,11 +215,11 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 ProviderType
+        public int ProviderType
         {
             get
             {
-                return this.schemaTableRow.Field<Int32>(SchemaTableColumn.ProviderType);
+                return this.schemaTableRow.Field<int>(SchemaTableColumn.ProviderType);
             }
         }
     }

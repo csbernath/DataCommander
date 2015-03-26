@@ -9,15 +9,15 @@ namespace DataCommander.Foundation.Diagnostics
     /// </summary>
     public sealed class AssertMessageParameter
     {
-        private readonly String name;
-        private readonly Object value;
+        private readonly string name;
+        private readonly object value;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public AssertMessageParameter(String name, Object value)
+        public AssertMessageParameter(string name, object value)
         {
             this.name = name;
             this.value = value;
@@ -26,7 +26,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public String Name
+        public string Name
         {
             get
             {
@@ -37,7 +37,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public Object Value
+        public object Value
         {
             get
             {

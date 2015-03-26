@@ -12,10 +12,10 @@ namespace DataCommander.Foundation.Data.SqlClient
     public sealed class SqlLoggedSqlConnection : IDbConnection
     {
         private readonly SqlConnection connection;
-        private readonly Int32 applicationId;
-        private Int32 connectionNo;
-        private readonly String userName;
-        private readonly String hostName;
+        private readonly int applicationId;
+        private int connectionNo;
+        private readonly string userName;
+        private readonly string hostName;
         private readonly SqlLog sqlLog;
         private readonly ISqlLoggedSqlCommandFilter filter;
 
@@ -30,10 +30,10 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="filter"></param>
         public SqlLoggedSqlConnection(
             SqlLog sqlLog,
-            Int32 applicationId,
-            String userName,
-            String hostName,
-            String connectionString,
+            int applicationId,
+            string userName,
+            string hostName,
+            string connectionString,
             ISqlLoggedSqlCommandFilter filter)
         {
             Contract.Requires(sqlLog != null);
@@ -59,7 +59,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// 
         /// </summary>
         /// <param name="disposing"></param>
-        private void Dispose(Boolean disposing)
+        private void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -82,7 +82,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             return this.connection.BeginTransaction(il);
         }
 
-        void IDbConnection.ChangeDatabase(String databaseName)
+        void IDbConnection.ChangeDatabase(string databaseName)
         {
             this.connection.ChangeDatabase(databaseName);
         }
@@ -107,8 +107,8 @@ namespace DataCommander.Foundation.Data.SqlClient
         public void Open()
         {
             Exception exception = null;
-            DateTime startDate = OptimizedDateTime.Now;
-            Int64 duration = Stopwatch.GetTimestamp();
+            DateTime startDate = LocalTime.Default.Now;
+            long duration = Stopwatch.GetTimestamp();
 
             try
             {
@@ -129,7 +129,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <summary>
         /// 
         /// </summary>
-        public String ConnectionString
+        public string ConnectionString
         {
             get
             {
@@ -145,7 +145,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <summary>
         /// 
         /// </summary>
-        public Int32 ConnectionTimeout
+        public int ConnectionTimeout
         {
             get
             {
@@ -156,7 +156,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <summary>
         /// 
         /// </summary>
-        public String Database
+        public string Database
         {
             get
             {
@@ -178,18 +178,18 @@ namespace DataCommander.Foundation.Data.SqlClient
         internal void CommandExeucte(
             IDbCommand command,
             DateTime startDate,
-            Int64 duration,
+            long duration,
             Exception exception)
         {
             this.sqlLog.CommandExecute(this.applicationId, this.connectionNo, command, startDate, duration, exception);
         }
 
-        internal Int32 ExecuteNonQuery(IDbCommand command)
+        internal int ExecuteNonQuery(IDbCommand command)
         {
-            Int32 count;
+            int count;
             Exception exception = null;
-            DateTime startDate = OptimizedDateTime.Now;
-            Int64 duration = Stopwatch.GetTimestamp();
+            DateTime startDate = LocalTime.Default.Now;
+            long duration = Stopwatch.GetTimestamp();
 
             try
             {
@@ -203,7 +203,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             finally
             {
                 duration = Stopwatch.GetTimestamp() - duration;
-                Boolean contains = exception != null || this.filter == null || this.filter.Contains(this.userName, this.hostName, command);
+                bool contains = exception != null || this.filter == null || this.filter.Contains(this.userName, this.hostName, command);
 
                 if (contains)
                 {
@@ -214,13 +214,13 @@ namespace DataCommander.Foundation.Data.SqlClient
             return count;
         }
 
-        internal Object ExecuteScalar(IDbCommand command)
+        internal object ExecuteScalar(IDbCommand command)
         {
-            Object scalar = null;
+            object scalar = null;
 
             Exception exception = null;
-            DateTime startDate = OptimizedDateTime.Now;
-            Int64 duration = Stopwatch.GetTimestamp();
+            DateTime startDate = LocalTime.Default.Now;
+            long duration = Stopwatch.GetTimestamp();
 
             try
             {
@@ -234,7 +234,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             finally
             {
                 duration = Stopwatch.GetTimestamp() - duration;
-                Boolean contains = exception != null || this.filter == null || this.filter.Contains(this.userName, this.hostName, command);
+                bool contains = exception != null || this.filter == null || this.filter.Contains(this.userName, this.hostName, command);
 
                 if (contains)
                 {
@@ -259,7 +259,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <summary>
         /// 
         /// </summary>
-        public String UserName
+        public string UserName
         {
             get
             {
@@ -270,7 +270,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <summary>
         /// 
         /// </summary>
-        public String HostName
+        public string HostName
         {
             get
             {

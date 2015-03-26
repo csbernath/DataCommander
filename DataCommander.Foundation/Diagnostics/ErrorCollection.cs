@@ -9,7 +9,7 @@ namespace DataCommander.Foundation.Diagnostics
     /// </summary>
     internal sealed class ErrorCollection : Collection<Error>
     {
-        public override String ToString()
+        public override string ToString()
         {
             var sb = new StringBuilder();
 

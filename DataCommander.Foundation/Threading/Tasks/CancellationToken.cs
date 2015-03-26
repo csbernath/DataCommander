@@ -33,7 +33,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsCancellationRequested
+        public bool IsCancellationRequested
         {
             get
             {

@@ -51,8 +51,8 @@ namespace DataCommander.Foundation.Xml
         /// The matching prefix or <see langword="null"/> if no matching namespace URI is found in the current scope.
         /// </returns>
         /// <exception cref="T:System.ArgumentException">
-        /// <paramref name="ns"/> is either <see langword="null"/> or String.Empty.</exception>
-        public override String LookupPrefix(String ns)
+        /// <paramref name="ns"/> is either <see langword="null"/> or string.Empty.</exception>
+        public override string LookupPrefix(string ns)
         {
             throw new NotImplementedException();
         }
@@ -67,7 +67,7 @@ namespace DataCommander.Foundation.Xml
         /// <exception cref="T:System.ArgumentException">
         ///     <paramref name="reader"/> is <see langword="null"/>.</exception>
         /// <exception cref="T:System.Xml.XmlException"> The reader is not positioned on an element, attribute or XmlDeclaration node.</exception>
-        public override void WriteAttributes(XmlReader reader, Boolean defattr)
+        public override void WriteAttributes(XmlReader reader, bool defattr)
         {
             throw new NotImplementedException();
         }
@@ -84,7 +84,7 @@ namespace DataCommander.Foundation.Xml
         /// <exception cref="T:System.ArgumentException">The buffer length minus <paramref name="index"/> is less than <paramref name="count"/>.</exception>
         /// <exception cref="T:System.ArgumentOutOfRangeException">
         /// <paramref name="index"/> or <paramref name="count"/> is less than zero.</exception>
-        public override void WriteBase64(Byte[] buffer, Int32 index, Int32 count)
+        public override void WriteBase64(Byte[] buffer, int index, int count)
         {
             throw new NotImplementedException();
         }
@@ -101,7 +101,7 @@ namespace DataCommander.Foundation.Xml
         /// <exception cref="T:System.ArgumentException">The buffer length minus <paramref name="index"/> is less than <paramref name="count"/>.</exception>
         /// <exception cref="T:System.ArgumentOutOfRangeException">
         /// <paramref name="index"/> or <paramref name="count"/> is less than zero.</exception>
-        public override void WriteBinHex(Byte[] buffer, Int32 index, Int32 count)
+        public override void WriteBinHex(Byte[] buffer, int index, int count)
         {
             throw new NotImplementedException();
         }
@@ -112,7 +112,7 @@ namespace DataCommander.Foundation.Xml
         /// </summary>
         /// <param name="text">The text to place inside the CDATA block.</param>
         /// <exception cref="T:System.ArgumentException">The text would result in a non-well formed XML document.</exception>
-        public override void WriteCData(String text)
+        public override void WriteCData(string text)
         {
             throw new NotImplementedException();
         }
@@ -139,7 +139,7 @@ namespace DataCommander.Foundation.Xml
         /// <exception cref="T:System.ArgumentException">The buffer length minus <paramref name="index"/> is less than <paramref name="count"/>;the call results in surrogate pair characters being split or an invalid surrogate pair being written.</exception>
         /// <exception cref="T:System.ArgumentOutOfRangeException">
         /// <paramref name="index"/> or <paramref name="count"/> is less than zero.</exception>
-        public override void WriteChars(Char[] buffer, Int32 index, Int32 count)
+        public override void WriteChars(Char[] buffer, int index, int count)
         {
             throw new NotImplementedException();
         }
@@ -150,7 +150,7 @@ namespace DataCommander.Foundation.Xml
         /// </summary>
         /// <param name="text">Text to place inside the comment.</param>
         /// <exception cref="T:System.ArgumentException">The text would result in a non-well formed XML document.</exception>
-        public override void WriteComment(String text)
+        public override void WriteComment(string text)
         {
             throw new NotImplementedException();
         }
@@ -165,13 +165,13 @@ namespace DataCommander.Foundation.Xml
         /// <param name="subset">If non-null it writes [subset] where subset is replaced with the value of this argument.</param>
         /// <exception cref="T:System.InvalidOperationException">This method was called outside the prolog (after the root element).</exception>
         /// <exception cref="T:System.ArgumentException">The value for <paramref name="name "/> would result in invalid XML.</exception>
-        public override void WriteDocType(String name, String pubid, String sysid, String subset)
+        public override void WriteDocType(string name, string pubid, string sysid, string subset)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// When overridden in a derived class, closes the previous <see cref="M:System.Xml.XmlWriter.WriteStartAttribute(System.String,System.String)"/>
+        /// When overridden in a derived class, closes the previous <see cref="M:System.Xml.XmlWriter.WriteStartAttribute(System.string,System.string)"/>
         /// call.
         /// </summary>
         public override void WriteEndAttribute()
@@ -221,8 +221,8 @@ namespace DataCommander.Foundation.Xml
         /// </summary>
         /// <param name="name">The name of the entity reference.</param>
         /// <exception cref="T:System.ArgumentException">
-        /// <paramref name="name"/> is either <see langword="null"/> or String.Empty.</exception>
-        public override void WriteEntityRef(String name)
+        /// <paramref name="name"/> is either <see langword="null"/> or string.Empty.</exception>
+        public override void WriteEntityRef(string name)
         {
             throw new NotImplementedException();
         }
@@ -243,9 +243,9 @@ namespace DataCommander.Foundation.Xml
         /// </summary>
         /// <param name="name">The name to write.</param>
         /// <exception cref="T:System.ArgumentException">
-        ///     <paramref name="name "/>is not a valid XML name;or <paramref name="name"/> is either <see langword="null"/> or String.Empty.
+        ///     <paramref name="name "/>is not a valid XML name;or <paramref name="name"/> is either <see langword="null"/> or string.Empty.
         /// </exception>
-        public override void WriteName(String name)
+        public override void WriteName(string name)
         {
             throw new NotImplementedException();
         }
@@ -256,8 +256,8 @@ namespace DataCommander.Foundation.Xml
         /// </summary>
         /// <param name="name">The name to write.</param>
         /// <exception cref="T:System.ArgumentException">
-        /// <paramref name="name "/>is not a valid NmToken;or <paramref name="name"/> is either <see langword="null"/> or String.Empty.</exception>
-        public override void WriteNmToken(String name)
+        /// <paramref name="name "/>is not a valid NmToken;or <paramref name="name"/> is either <see langword="null"/> or string.Empty.</exception>
+        public override void WriteNmToken(string name)
         {
             throw new NotImplementedException();
         }
@@ -271,7 +271,7 @@ namespace DataCommander.Foundation.Xml
         /// <param name="defattr"><see langword="true"/> to copy the default attributes from the <see langword="XmlReader"/> ;otherwise, <see langword="false"/>.</param>
         /// <exception cref="T:System.ArgumentException">
         /// <paramref name="reader"/> is <see langword="null"/>.</exception>
-        public override void WriteNode(XmlReader reader, Boolean defattr)
+        public override void WriteNode(XmlReader reader, bool defattr)
         {
             throw new NotImplementedException();
         }
@@ -285,10 +285,10 @@ namespace DataCommander.Foundation.Xml
         /// <exception cref="T:System.ArgumentException">
         ///     <para> The text would result in a non-well formed XML document.</para>
         ///     <para>
-        ///         <paramref name="name"/> is either <see langword="null"/> or String.Empty.</para>
+        ///         <paramref name="name"/> is either <see langword="null"/> or string.Empty.</para>
         ///     <para>This method is being used to create an XML declaration after <see cref="M:System.Xml.XmlWriter.WriteStartDocument"/> has already been called. </para>
         /// </exception>
-        public override void WriteProcessingInstruction(String name, String text)
+        public override void WriteProcessingInstruction(string name, string text)
         {
             throw new NotImplementedException();
         }
@@ -301,11 +301,11 @@ namespace DataCommander.Foundation.Xml
         /// <param name="ns"></param>
         /// <exception cref="T:System.ArgumentException">
         ///     <para>
-        ///         <paramref name="localName"/> is either <see langword="null"/> or String.Empty.</para>
+        ///         <paramref name="localName"/> is either <see langword="null"/> or string.Empty.</para>
         ///     <para>
         ///         <paramref name="localName"/> is not a valid name.</para>
         /// </exception>
-        public override void WriteQualifiedName(String localName, String ns)
+        public override void WriteQualifiedName(string localName, string ns)
         {
             throw new NotImplementedException();
         }
@@ -321,16 +321,16 @@ namespace DataCommander.Foundation.Xml
         /// <exception cref="T:System.ArgumentException">The buffer length minus <paramref name="index"/> is less than <paramref name="count"/>.</exception>
         /// <exception cref="T:System.ArgumentOutOfRangeException">
         /// <paramref name="index"/> or <paramref name="count"/> is less than zero.</exception>
-        public override void WriteRaw(Char[] buffer, Int32 index, Int32 count)
+        public override void WriteRaw(Char[] buffer, int index, int count)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// When overridden in a derived class, writes raw markup manually from a String.
+        /// When overridden in a derived class, writes raw markup manually from a string.
         /// </summary>
-        /// <param name="data">String containing the text to write.</param>
-        public override void WriteRaw(String data)
+        /// <param name="data">string containing the text to write.</param>
+        public override void WriteRaw(string data)
         {
             throw new NotImplementedException();
         }
@@ -341,7 +341,7 @@ namespace DataCommander.Foundation.Xml
         /// <param name="prefix">The namespace prefix of the attribute.</param>
         /// <param name="localName"></param>
         /// <param name="ns"></param>
-        public override void WriteStartAttribute(String prefix, String localName, String ns)
+        public override void WriteStartAttribute(string prefix, string localName, string ns)
         {
             StackItem stackItem = this.stack.Peek();
             stackItem.HasAttributes = true;
@@ -366,7 +366,7 @@ namespace DataCommander.Foundation.Xml
         /// </summary>
         /// <param name="standalone">If <see langword="true"/>, it writes "standalone=yes";if <see langword="false"/>, it writes "standalone=no".</param>
         /// <exception cref="T:System.InvalidOperationException">This is not the first write method called after the constructor.</exception>
-        public override void WriteStartDocument(Boolean standalone)
+        public override void WriteStartDocument(bool standalone)
         {
             throw new NotImplementedException();
         }
@@ -379,7 +379,7 @@ namespace DataCommander.Foundation.Xml
         /// <param name="localName">The local name of the element.</param>
         /// <param name="ns">The namespace URI to associate with the element.</param>
         /// <exception cref="T:System.InvalidOperationException">The writer is closed.</exception>
-        public override void WriteStartElement(String prefix, String localName, String ns)
+        public override void WriteStartElement(string prefix, string localName, string ns)
         {
             StackItem parent = this.stack.Count > 0 ? this.stack.Peek() : null;
 
@@ -418,10 +418,10 @@ namespace DataCommander.Foundation.Xml
             }
         }
 
-        private static String Encode(Char c)
+        private static string Encode(Char c)
         {
             UInt16 charCode = (UInt16)c;
-            String encoded = "&#x" + charCode.ToString("x", CultureInfo.InvariantCulture) + ';';
+            string encoded = "&#x" + charCode.ToString("x", CultureInfo.InvariantCulture) + ';';
             return encoded;
         }
 
@@ -429,12 +429,12 @@ namespace DataCommander.Foundation.Xml
         /// When overridden in a derived class, writes the given text content.
         /// </summary>
         /// <param name="text">The text to write.</param>
-        /// <exception cref="T:System.ArgumentException">The text String contains an invalid surrogate pair.</exception>
-        public override void WriteString(String text)
+        /// <exception cref="T:System.ArgumentException">The text string contains an invalid surrogate pair.</exception>
+        public override void WriteString(string text)
         {
             this.textWriter.Write('"');
 
-            for (Int32 i = 0; i < text.Length; i++)
+            for (int i = 0; i < text.Length; i++)
             {
                 Char c = text[i];
 
@@ -443,7 +443,7 @@ namespace DataCommander.Foundation.Xml
                     case '"':
                     case '\r':
                     case '\n':
-                        String encoded = Encode(c);
+                        string encoded = Encode(c);
                         this.textWriter.Write(encoded);
                         break;
 
@@ -471,9 +471,9 @@ namespace DataCommander.Foundation.Xml
         /// <summary>
         /// When overridden in a derived class, writes out the given white space.
         /// </summary>
-        /// <param name="ws">The String of white space characters.</param>
-        /// <exception cref="T:System.ArgumentException">The String contains non-white space characters.</exception>
-        public override void WriteWhitespace(String ws)
+        /// <param name="ws">The string of white space characters.</param>
+        /// <exception cref="T:System.ArgumentException">The string contains non-white space characters.</exception>
+        public override void WriteWhitespace(string ws)
         {
             throw new NotImplementedException();
         }
@@ -482,7 +482,7 @@ namespace DataCommander.Foundation.Xml
         /// When overridden in a derived class, gets the current xml:lang scope.
         /// </summary>
         /// <value></value>
-        public override String XmlLang
+        public override string XmlLang
         {
             get
             {
@@ -504,16 +504,16 @@ namespace DataCommander.Foundation.Xml
 
         private sealed class StackItem
         {
-            private String localName;
-            private Boolean hasAttributes;
-            private Boolean hasChildNodes;
+            private string localName;
+            private bool hasAttributes;
+            private bool hasChildNodes;
 
-            public StackItem(String localName)
+            public StackItem(string localName)
             {
                 this.localName = localName;
             }
 
-            public String LocalName
+            public string LocalName
             {
                 get
                 {
@@ -521,7 +521,7 @@ namespace DataCommander.Foundation.Xml
                 }
             }
 
-            public Boolean HasAttributes
+            public bool HasAttributes
             {
                 get
                 {
@@ -534,7 +534,7 @@ namespace DataCommander.Foundation.Xml
                 }
             }
 
-            public Boolean HasChildNodes
+            public bool HasChildNodes
             {
                 get
                 {

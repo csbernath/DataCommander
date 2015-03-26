@@ -13,7 +13,7 @@
     /// <typeparam name="T"></typeparam>
     public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, ICollection<T>>
     {
-        private String name;
+        private string name;
         private IDictionary<TKey, ICollection<T>> dictionary;
         private Func<T, GetKeyResponse<TKey>> getKey;
         private Func<ICollection<T>> createCollection;
@@ -26,18 +26,18 @@
         /// <param name="dictionary"></param>
         /// <param name="createCollection"></param>
         public NonUniqueIndex(
-            String name,
+            string name,
             Func<T, GetKeyResponse<TKey>> getKey,
             IDictionary<TKey, ICollection<T>> dictionary,
-            Func<ICollection<T>> createCollection )
+            Func<ICollection<T>> createCollection)
         {
 #if FOUNDATION_3_5
 #else
-            Contract.Requires( getKey != null );
-            Contract.Requires( dictionary != null );
-            Contract.Requires( createCollection != null );
+            Contract.Requires<ArgumentNullException>(getKey != null);
+            Contract.Requires<ArgumentNullException>(dictionary != null);
+            Contract.Requires<ArgumentNullException>(createCollection != null);
 #endif
-            this.Initialize( name, getKey, dictionary, createCollection );
+            this.Initialize(name, getKey, dictionary, createCollection);
         }
 
         /// <summary>
@@ -47,9 +47,9 @@
         /// <param name="getKey"></param>
         /// <param name="sortOrder"></param>
         public NonUniqueIndex(
-            String name,
+            string name,
             Func<T, GetKeyResponse<TKey>> getKey,
-            SortOrder sortOrder )
+            SortOrder sortOrder)
         {
             IDictionary<TKey, ICollection<T>> dictionary;
             switch (sortOrder)
@@ -60,7 +60,7 @@
 
                 case SortOrder.Descending:
                     var comparer = ReversedComparer<TKey>.Default;
-                    dictionary = new SortedDictionary<TKey, ICollection<T>>( comparer );
+                    dictionary = new SortedDictionary<TKey, ICollection<T>>(comparer);
                     break;
 
                 case SortOrder.None:
@@ -75,13 +75,13 @@
                 name,
                 getKey,
                 dictionary,
-                () => new List<T>() );
+                () => new List<T>());
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public String Name
+        public string Name
         {
             get
             {
@@ -94,11 +94,11 @@
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public ICollection<T> this[ TKey key ]
+        public ICollection<T> this[TKey key]
         {
             get
             {
-                return this.dictionary[ key ];
+                return this.dictionary[key];
             }
         }
 
@@ -108,19 +108,19 @@
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Boolean TryGetFirstValue( TKey key, out T value )
+        public bool TryGetFirstValue(TKey key, out T value)
         {
             ICollection<T> collection;
-            Boolean contains = this.dictionary.TryGetValue( key, out collection );
+            bool contains = this.dictionary.TryGetValue(key, out collection);
 
             if (contains)
             {
-                Contract.Assert( collection != null );
+                Contract.Assert(collection != null);
                 value = collection.First();
             }
             else
             {
-                value = default( T );
+                value = default(T);
             }
 
             return contains;
@@ -131,7 +131,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {
@@ -139,7 +139,7 @@
             }
         }
 
-        Boolean ICollection<T>.IsReadOnly
+        bool ICollection<T>.IsReadOnly
         {
             get
             {
@@ -151,23 +151,23 @@
         /// 
         /// </summary>
         /// <param name="item"></param>
-        void ICollection<T>.Add( T item )
+        void ICollection<T>.Add(T item)
         {
-            var response = this.getKey( item );
+            var response = this.getKey(item);
 
             if (response.HasKey)
             {
                 var key = response.Key;
                 ICollection<T> collection;
-                Boolean contains = this.dictionary.TryGetValue( key, out collection );
+                bool contains = this.dictionary.TryGetValue(key, out collection);
 
                 if (!contains)
                 {
                     collection = this.createCollection();
-                    this.dictionary.Add( key, collection );
+                    this.dictionary.Add(key, collection);
                 }
 
-                collection.Add( item );
+                collection.Add(item);
             }
         }
 
@@ -184,20 +184,20 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Contains( T item )
+        public bool Contains(T item)
         {
-            var response = this.getKey( item );
-            Boolean contains;
+            var response = this.getKey(item);
+            bool contains;
 
             if (response.HasKey)
             {
                 var key = response.Key;
                 ICollection<T> collection;
-                contains = this.dictionary.TryGetValue( key, out collection );
+                contains = this.dictionary.TryGetValue(key, out collection);
 
                 if (contains)
                 {
-                    contains = collection.Contains( item );
+                    contains = collection.Contains(item);
                 }
             }
             else
@@ -213,7 +213,7 @@
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
-        void ICollection<T>.CopyTo( T[] array, Int32 arrayIndex )
+        void ICollection<T>.CopyTo(T[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
@@ -223,26 +223,26 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        Boolean ICollection<T>.Remove( T item )
+        bool ICollection<T>.Remove(T item)
         {
-            var response = this.getKey( item );
-            Boolean removed = false;
+            var response = this.getKey(item);
+            bool removed = false;
 
             if (response.HasKey)
             {
                 var key = response.Key;
                 ICollection<T> collection;
-                Boolean contains = this.dictionary.TryGetValue( key, out collection );
+                bool contains = this.dictionary.TryGetValue(key, out collection);
 
                 if (contains)
                 {
-                    Boolean succeeded = collection.Remove( item );
-                    Contract.Assert( succeeded, "collection.Remove" );
+                    bool succeeded = collection.Remove(item);
+                    Contract.Assert(succeeded, "collection.Remove");
 
                     if (collection.Count == 0)
                     {
-                        succeeded = this.dictionary.Remove( key );
-                        Contract.Assert( succeeded, "dictionary.Remove" );
+                        succeeded = this.dictionary.Remove(key);
+                        Contract.Assert(succeeded, "dictionary.Remove");
                     }
 
                     removed = true;
@@ -284,14 +284,14 @@
         #endregion
 
         private void Initialize(
-            String name,
+            string name,
             Func<T, GetKeyResponse<TKey>> getKey,
             IDictionary<TKey, ICollection<T>> dictionary,
-            Func<ICollection<T>> createCollection )
+            Func<ICollection<T>> createCollection)
         {
-            Contract.Requires( getKey != null );
-            Contract.Requires( dictionary != null );
-            Contract.Requires( createCollection != null );
+            Contract.Requires(getKey != null);
+            Contract.Requires(dictionary != null);
+            Contract.Requires(createCollection != null);
 
             this.name = name;
             this.getKey = getKey;
@@ -301,7 +301,7 @@
 
         #region IDictionary<TKey,ICollection<T>> Members
 
-        void IDictionary<TKey, ICollection<T>>.Add( TKey key, ICollection<T> value )
+        void IDictionary<TKey, ICollection<T>>.Add(TKey key, ICollection<T> value)
         {
             throw new NotSupportedException();
         }
@@ -311,9 +311,9 @@
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public Boolean ContainsKey( TKey key )
+        public bool ContainsKey(TKey key)
         {
-            return this.dictionary.ContainsKey( key );
+            return this.dictionary.ContainsKey(key);
         }
 
         ICollection<TKey> IDictionary<TKey, ICollection<T>>.Keys
@@ -324,7 +324,7 @@
             }
         }
 
-        Boolean IDictionary<TKey, ICollection<T>>.Remove( TKey key )
+        bool IDictionary<TKey, ICollection<T>>.Remove(TKey key)
         {
             throw new NotSupportedException();
         }
@@ -335,9 +335,9 @@
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Boolean TryGetValue( TKey key, out ICollection<T> value )
+        public bool TryGetValue(TKey key, out ICollection<T> value)
         {
-            return this.dictionary.TryGetValue( key, out value );
+            return this.dictionary.TryGetValue(key, out value);
         }
 
         ICollection<ICollection<T>> IDictionary<TKey, ICollection<T>>.Values
@@ -348,11 +348,11 @@
             }
         }
 
-        ICollection<T> IDictionary<TKey, ICollection<T>>.this[ TKey key ]
+        ICollection<T> IDictionary<TKey, ICollection<T>>.this[TKey key]
         {
             get
             {
-                return this.dictionary[ key ];
+                return this.dictionary[key];
             }
 
             set
@@ -365,7 +365,7 @@
 
         #region ICollection<KeyValuePair<TKey,ICollection<T>>> Members
 
-        void ICollection<KeyValuePair<TKey, ICollection<T>>>.Add( KeyValuePair<TKey, ICollection<T>> item )
+        void ICollection<KeyValuePair<TKey, ICollection<T>>>.Add(KeyValuePair<TKey, ICollection<T>> item)
         {
             throw new NotSupportedException();
         }
@@ -375,17 +375,17 @@
             throw new NotSupportedException();
         }
 
-        Boolean ICollection<KeyValuePair<TKey, ICollection<T>>>.Contains( KeyValuePair<TKey, ICollection<T>> item )
+        bool ICollection<KeyValuePair<TKey, ICollection<T>>>.Contains(KeyValuePair<TKey, ICollection<T>> item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<KeyValuePair<TKey, ICollection<T>>>.CopyTo( KeyValuePair<TKey, ICollection<T>>[] array, Int32 arrayIndex )
+        void ICollection<KeyValuePair<TKey, ICollection<T>>>.CopyTo(KeyValuePair<TKey, ICollection<T>>[] array, int arrayIndex)
         {
             throw new NotSupportedException();
         }
 
-        Int32 ICollection<KeyValuePair<TKey, ICollection<T>>>.Count
+        int ICollection<KeyValuePair<TKey, ICollection<T>>>.Count
         {
             get
             {
@@ -393,7 +393,7 @@
             }
         }
 
-        Boolean ICollection<KeyValuePair<TKey, ICollection<T>>>.IsReadOnly
+        bool ICollection<KeyValuePair<TKey, ICollection<T>>>.IsReadOnly
         {
             get
             {
@@ -401,7 +401,7 @@
             }
         }
 
-        Boolean ICollection<KeyValuePair<TKey, ICollection<T>>>.Remove( KeyValuePair<TKey, ICollection<T>> item )
+        bool ICollection<KeyValuePair<TKey, ICollection<T>>>.Remove(KeyValuePair<TKey, ICollection<T>> item)
         {
             throw new NotSupportedException();
         }

@@ -22,7 +22,7 @@
             foreach (ConfigurationNode childNode in logWritersNode.ChildNodes)
             {
                 var attributes = childNode.Attributes;
-                Boolean enabled = attributes[ "Enabled" ].GetValue<Boolean>();
+                bool enabled = attributes[ "Enabled" ].GetValue<bool>();
 
                 if (enabled)
                 {
@@ -47,7 +47,7 @@
             }
         }
 
-        public FoundationLogFactory( Boolean forInternalUse )
+        public FoundationLogFactory( bool forInternalUse )
         {
             var logWriter = new LogWriter
             {
@@ -92,17 +92,17 @@
         {
             if (this.multipeLog != null)
             {
-                String message = String.Format( format, args );
+                string message = string.Format( format, args );
                 var logEntry = LogEntryFactory.Create( log.LoggedName, message, logLevel );
                 this.multipeLog.Write( logEntry );
             }
         }
 
-        internal void Write( FoundationLog log, LogLevel logLevel, Func<String> getMessage )
+        internal void Write( FoundationLog log, LogLevel logLevel, Func<string> getMessage )
         {
             if (this.multipeLog != null)
             {
-                String message = getMessage();
+                string message = getMessage();
                 var logEntry = LogEntryFactory.Create( log.LoggedName, message, logLevel );
                 this.multipeLog.Write( logEntry );
             }
@@ -112,7 +112,7 @@
         {
             LogWriter logWriter = null;
             var attributes = node.Attributes;
-            String type = attributes[ "Type" ].GetValue<String>();
+            string type = attributes[ "Type" ].GetValue<string>();
 
             switch (type)
             {
@@ -125,9 +125,9 @@
 
                 case "EventLogWriter":
                     {
-                        String logName = attributes[ "LogName" ].GetValue<String>();
-                        String machineName = attributes[ "MachineName" ].GetValue<String>();
-                        String source = attributes[ "Source" ].GetValue<String>();
+                        string logName = attributes[ "LogName" ].GetValue<string>();
+                        string machineName = attributes[ "MachineName" ].GetValue<string>();
+                        string source = attributes[ "Source" ].GetValue<string>();
                         var eventLogWriter = new EventLogWriter( logName, machineName, source );
                         logWriter = new LogWriter
                         {
@@ -139,23 +139,23 @@
 
                 case "FileLogWriter":
                     {
-                        String path = attributes[ "Path" ].GetValue<String>();
+                        string path = attributes[ "Path" ].GetValue<string>();
                         path = Environment.ExpandEnvironmentVariables( path );
 
-                        Boolean async = true;
-                        attributes.TryGetAttributeValue<Boolean>( "Async", async, out async );
+                        bool async = true;
+                        attributes.TryGetAttributeValue<bool>( "Async", async, out async );
                         
-                        Int32 queueCapacity = 100000; // 100.000 log entries
-                        attributes.TryGetAttributeValue<Int32>( "QueueCapacity", queueCapacity, out queueCapacity );
+                        int queueCapacity = 100000; // 100.000 log entries
+                        attributes.TryGetAttributeValue<int>( "QueueCapacity", queueCapacity, out queueCapacity );
                         
-                        Int32 bufferSize = 1048576; // 1 MB
-                        attributes.TryGetAttributeValue<Int32>( "BufferSize", bufferSize, out bufferSize );
+                        int bufferSize = 1048576; // 1 MB
+                        attributes.TryGetAttributeValue<int>( "BufferSize", bufferSize, out bufferSize );
                         
                         TimeSpan timerPeriod = TimeSpan.FromSeconds( 10 );
                         attributes.TryGetAttributeValue<TimeSpan>( "TimerPeriod", timerPeriod, out timerPeriod );
 
-                        Boolean autoFlush = true;
-                        attributes.TryGetAttributeValue<Boolean>( "AutoFlush", autoFlush, out autoFlush );
+                        bool autoFlush = true;
+                        attributes.TryGetAttributeValue<bool>( "AutoFlush", autoFlush, out autoFlush );
 
                         FileAttributes fileAttributes;
                         node.Attributes.TryGetAttributeValue<FileAttributes>( "FileAttributes", FileAttributes.ReadOnly | FileAttributes.Hidden, out fileAttributes );
@@ -207,7 +207,7 @@
             public void Write( LogEntry logEntry )
             {
                 var logLevel = logEntry.LogLevel;
-                for (Int32 i = 0; i < this.logWriters.Length; i++)
+                for (int i = 0; i < this.logWriters.Length; i++)
                 {
                     var logWriter = this.logWriters[ i ];
                     if (logWriter.logLevel >= logLevel)

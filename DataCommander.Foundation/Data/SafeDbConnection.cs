@@ -64,7 +64,7 @@ namespace DataCommander.Foundation.Data
         /// 
         /// </summary>
         /// <param name="disposing"></param>
-        protected virtual void Dispose( Boolean disposing )
+        protected virtual void Dispose( bool disposing )
         {
             if (disposing)
             {
@@ -97,7 +97,7 @@ namespace DataCommander.Foundation.Data
         /// 
         /// </summary>
         /// <param name="databaseName"></param>
-        public void ChangeDatabase( String databaseName )
+        public void ChangeDatabase( string databaseName )
         {
             this.connection.ChangeDatabase( databaseName );
         }
@@ -126,7 +126,7 @@ namespace DataCommander.Foundation.Data
         public void Open()
         {
             WorkerThread thread = WorkerThread.Current;
-            Int32 count = 0;
+            int count = 0;
 
             while (!thread.IsStopRequested)
             {
@@ -155,7 +155,7 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public String ConnectionString
+        public string ConnectionString
         {
             get
             {
@@ -171,7 +171,7 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public Int32 ConnectionTimeout
+        public int ConnectionTimeout
         {
             get
             {
@@ -182,7 +182,7 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public String Database
+        public string Database
         {
             get
             {
@@ -221,7 +221,7 @@ namespace DataCommander.Foundation.Data
 
             while (!thread.IsStopRequested)
             {
-                Int64 ticks = Stopwatch.GetTimestamp();
+                long ticks = Stopwatch.GetTimestamp();
 
                 try
                 {
@@ -267,11 +267,11 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        internal Object ExecuteScalar( IDbCommand command )
+        internal object ExecuteScalar( IDbCommand command )
         {
             Contract.Requires<ArgumentNullException>( command != null );
 
-            Object scalar = null;
+            object scalar = null;
 
             if (this.connection.State != ConnectionState.Open)
             {
@@ -310,15 +310,15 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        internal Int32 ExecuteNonQuery( IDbCommand command )
+        internal int ExecuteNonQuery( IDbCommand command )
         {
             if (this.connection.State != ConnectionState.Open)
             {
                 this.Open();
             }
 
-            Int32 count = 0;
-            Int32 tryCount = 0;
+            int count = 0;
+            int tryCount = 0;
             WorkerThread thread = WorkerThread.Current;
 
             while (tryCount == 0 || !thread.IsStopRequested)

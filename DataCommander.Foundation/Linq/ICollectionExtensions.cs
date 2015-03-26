@@ -16,9 +16,9 @@
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
-        public static Boolean IsNullOrEmpty( this ICollection collection )
+        public static bool IsNullOrEmpty(this ICollection collection)
         {
-            Boolean isNullOrEmpty = collection == null || collection.Count == 0;
+            bool isNullOrEmpty = collection == null || collection.Count == 0;
             return isNullOrEmpty;
         }
 
@@ -28,9 +28,9 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="collection"></param>
         /// <returns></returns>
-        public static Boolean IsNullOrEmpty<T>( this ICollection<T> collection )
+        public static bool IsNullOrEmpty<T>(this ICollection<T> collection)
         {
-            Boolean isNullOrEmpty = collection == null || collection.Count == 0;
+            bool isNullOrEmpty = collection == null || collection.Count == 0;
             return isNullOrEmpty;
         }
 
@@ -40,15 +40,15 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="collection"></param>
         /// <param name="items"></param>
-        public static void Add<T>( this ICollection<T> collection, IEnumerable<T> items )
+        public static void Add<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
-            Contract.Requires<ArgumentException>( collection != null || items == null );
+            Contract.Requires<ArgumentException>(collection != null || items == null);
 
             if (items != null)
             {
                 foreach (T item in items)
                 {
-                    collection.Add( item );
+                    collection.Add(item);
                 }
             }
         }
@@ -60,17 +60,17 @@
         /// <param name="collection"></param>
         /// <param name="items"></param>
         /// <returns></returns>
-        public static Int32 Remove<T>( this ICollection<T> collection, IEnumerable<T> items )
+        public static int Remove<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
-            Contract.Requires<ArgumentException>( collection != null || items == null );
+            Contract.Requires<ArgumentException>(collection != null || items == null);
 
-            Int32 count = 0;
+            int count = 0;
 
             if (items != null)
             {
                 foreach (T item in items)
                 {
-                    Boolean removed = collection.Remove( item );
+                    bool removed = collection.Remove(item);
 
                     if (removed)
                     {
@@ -88,10 +88,10 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="collection"></param>
         /// <returns></returns>
-        public static ICollection<T> AsReadOnly<T>( this ICollection<T> collection )
+        public static ICollection<T> AsReadOnly<T>(this ICollection<T> collection)
         {
-            Contract.Requires<ArgumentNullException>( collection != null );
-            return new ReadOnlyCollection<T>( collection );
+            Contract.Requires<ArgumentNullException>(collection != null);
+            return new ReadOnlyCollection<T>(collection);
         }
 
         /// <summary>
@@ -100,13 +100,13 @@
         /// <typeparam name="TResult"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static ICollection<TResult> Cast<TResult>( this ICollection source )
+        public static ICollection<TResult> Cast<TResult>(this ICollection source)
         {
             ICollection<TResult> collection;
 
             if (source != null)
             {
-                collection = new CastedCollection<TResult>( source );
+                collection = new CastedCollection<TResult>(source);
             }
             else
             {
@@ -122,7 +122,7 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static bool HasElements<T>( this ICollection<T> source )
+        public static bool HasElements<T>(this ICollection<T> source)
         {
             return source != null && source.Count > 0;
         }
@@ -133,12 +133,12 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static T[] ToArray<T>( ICollection<T> source )
+        public static T[] ToArray<T>(ICollection<T> source)
         {
-            Contract.Requires( source != null );
+            Contract.Requires(source != null);
 
             var target = new T[source.Count];
-            source.CopyTo( target, 0 );
+            source.CopyTo(target, 0);
             return target;
         }
 
@@ -163,9 +163,9 @@
             /// 
             /// </summary>
             /// <param name="source"></param>
-            public CastedCollection( ICollection source )
+            public CastedCollection(ICollection source)
             {
-                Contract.Requires( source != null );
+                Contract.Requires(source != null);
                 this.source = source;
                 this.sourceAsList = source as IList;
             }
@@ -176,11 +176,11 @@
             /// 
             /// </summary>
             /// <param name="item"></param>
-            void ICollection<TResult>.Add( TResult item )
+            void ICollection<TResult>.Add(TResult item)
             {
-                Contract.Assert( this.sourceAsList != null );
+                Contract.Assert(this.sourceAsList != null);
 
-                this.sourceAsList.Add( item );
+                this.sourceAsList.Add(item);
             }
 
             /// <summary>
@@ -188,7 +188,7 @@
             /// </summary>
             void ICollection<TResult>.Clear()
             {
-                Contract.Assert( this.sourceAsList != null );
+                Contract.Assert(this.sourceAsList != null);
 
                 this.sourceAsList.Clear();
             }
@@ -198,7 +198,7 @@
             /// </summary>
             /// <param name="item"></param>
             /// <returns></returns>
-            Boolean ICollection<TResult>.Contains(TResult item)
+            bool ICollection<TResult>.Contains(TResult item)
             {
                 bool contains;
                 if (this.sourceAsList != null)
@@ -207,7 +207,7 @@
                 }
                 else
                 {
-                    var enumerable = (IEnumerable) this.source;
+                    var enumerable = (IEnumerable)this.source;
                     var enumerableT = enumerable.Cast<TResult>();
                     contains = enumerableT.Contains(item);
                 }
@@ -220,15 +220,15 @@
             /// </summary>
             /// <param name="array"></param>
             /// <param name="arrayIndex"></param>
-            void ICollection<TResult>.CopyTo( TResult[] array, Int32 arrayIndex )
+            void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex)
             {
-                this.source.CopyTo( array, arrayIndex );
+                this.source.CopyTo(array, arrayIndex);
             }
 
             /// <summary>
             /// 
             /// </summary>
-            Int32 ICollection<TResult>.Count
+            int ICollection<TResult>.Count
             {
                 get
                 {
@@ -239,7 +239,7 @@
             /// <summary>
             /// 
             /// </summary>
-            Boolean ICollection<TResult>.IsReadOnly
+            bool ICollection<TResult>.IsReadOnly
             {
                 get
                 {
@@ -252,7 +252,7 @@
             /// </summary>
             /// <param name="item"></param>
             /// <returns></returns>
-            Boolean ICollection<TResult>.Remove( TResult item )
+            bool ICollection<TResult>.Remove(TResult item)
             {
                 throw new NotImplementedException();
             }
@@ -304,9 +304,9 @@
             /// 
             /// </summary>
             /// <param name="collection"></param>
-            public ReadOnlyCollection( ICollection<T> collection )
+            public ReadOnlyCollection(ICollection<T> collection)
             {
-                Contract.Requires( collection != null );
+                Contract.Requires(collection != null);
 
                 this.collection = collection;
             }
@@ -317,7 +317,7 @@
             /// 
             /// </summary>
             /// <param name="item"></param>
-            void ICollection<T>.Add( T item )
+            void ICollection<T>.Add(T item)
             {
                 throw new NotSupportedException();
             }
@@ -335,13 +335,13 @@
             /// </summary>
             /// <param name="item"></param>
             /// <returns></returns>
-            Boolean ICollection<T>.Contains( T item )
+            bool ICollection<T>.Contains(T item)
             {
 #if FOUNDATION_3_5
 #else
-                Contract.Ensures( !Contract.Result<bool>() || this.Count > 0 );
+                Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
 #endif
-                return this.collection.Contains( item );
+                return this.collection.Contains(item);
             }
 
             /// <summary>
@@ -349,15 +349,15 @@
             /// </summary>
             /// <param name="array"></param>
             /// <param name="arrayIndex"></param>
-            void ICollection<T>.CopyTo( T[] array, Int32 arrayIndex )
+            void ICollection<T>.CopyTo(T[] array, int arrayIndex)
             {
-                this.collection.CopyTo( array, arrayIndex );
+                this.collection.CopyTo(array, arrayIndex);
             }
 
             /// <summary>
             /// 
             /// </summary>
-            public Int32 Count
+            public int Count
             {
                 get
                 {
@@ -368,7 +368,7 @@
             /// <summary>
             /// 
             /// </summary>
-            public Boolean IsReadOnly
+            public bool IsReadOnly
             {
                 get
                 {
@@ -381,7 +381,7 @@
             /// </summary>
             /// <param name="item"></param>
             /// <returns></returns>
-            Boolean ICollection<T>.Remove( T item )
+            bool ICollection<T>.Remove(T item)
             {
                 throw new NotSupportedException();
             }

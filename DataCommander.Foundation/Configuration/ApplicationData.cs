@@ -14,8 +14,8 @@ namespace DataCommander.Foundation.Configuration
     /// </summary>
     public sealed class ApplicationData
     {
-        private String fileName;
-        private String sectionName;
+        private string fileName;
+        private string sectionName;
         private ConfigurationNode rootNode;
 
         /// <summary>
@@ -36,9 +36,9 @@ namespace DataCommander.Foundation.Configuration
         {
             get
             {
-                var trace = new StackTrace( 1 );
-                String nodeName = ConfigurationNodeName.FromNamespace( trace, 0 );
-                ConfigurationNode node = this.CreateNode( nodeName );
+                var trace = new StackTrace(1);
+                string nodeName = ConfigurationNodeName.FromNamespace(trace, 0);
+                ConfigurationNode node = this.CreateNode(nodeName);
                 return node;
             }
         }
@@ -50,9 +50,9 @@ namespace DataCommander.Foundation.Configuration
         {
             get
             {
-                var trace = new StackTrace( 1 );
-                String nodeName = ConfigurationNodeName.FromType( trace, 0 );
-                ConfigurationNode node = this.CreateNode( nodeName );
+                var trace = new StackTrace(1);
+                string nodeName = ConfigurationNodeName.FromType(trace, 0);
+                ConfigurationNode node = this.CreateNode(nodeName);
                 return node;
             }
         }
@@ -62,16 +62,16 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="versioned"></param>
         /// <returns></returns>
-        public static String GetApplicationDataFolderPath( Boolean versioned )
+        public static string GetApplicationDataFolderPath(bool versioned)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ) );
+            sb.Append(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
 
-            String company;
-            String product;
+            string company;
+            string product;
 
             Assembly assembly = Assembly.GetEntryAssembly();
-            AssemblyCompanyAttribute companyAttribute = (AssemblyCompanyAttribute) Attribute.GetCustomAttribute( assembly, typeof( AssemblyCompanyAttribute ) );
+            AssemblyCompanyAttribute companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyCompanyAttribute));
 
             if (companyAttribute != null)
             {
@@ -87,7 +87,7 @@ namespace DataCommander.Foundation.Configuration
                 company = null;
             }
 
-            AssemblyProductAttribute productAttribute = (AssemblyProductAttribute) Attribute.GetCustomAttribute( assembly, typeof( AssemblyProductAttribute ) );
+            AssemblyProductAttribute productAttribute = (AssemblyProductAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyProductAttribute));
 
             if (productAttribute != null)
             {
@@ -112,18 +112,18 @@ namespace DataCommander.Foundation.Configuration
 
             if (company != null)
             {
-                sb.Append( Path.DirectorySeparatorChar );
-                sb.Append( company );
+                sb.Append(Path.DirectorySeparatorChar);
+                sb.Append(company);
             }
 
-            sb.Append( Path.DirectorySeparatorChar );
-            sb.Append( product );
+            sb.Append(Path.DirectorySeparatorChar);
+            sb.Append(product);
 
             if (versioned)
             {
-                sb.Append( " (" );
-                sb.Append( name.Version );
-                sb.Append( ')' );
+                sb.Append(" (");
+                sb.Append(name.Version);
+                sb.Append(')');
             }
 
             return sb.ToString();
@@ -133,14 +133,14 @@ namespace DataCommander.Foundation.Configuration
         /// 
         /// </summary>
         /// <param name="xmlReader"></param>
-        public void Load( XmlReader xmlReader )
+        public void Load(XmlReader xmlReader)
         {
             ConfigurationReader reader = new ConfigurationReader();
-            this.rootNode = reader.Read( xmlReader, this.sectionName, null, null );
+            this.rootNode = reader.Read(xmlReader, this.sectionName, null, null);
 
             if (this.rootNode == null)
             {
-                this.rootNode = new ConfigurationNode( null );
+                this.rootNode = new ConfigurationNode(null);
             }
         }
 
@@ -149,20 +149,20 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="sectionName"></param>
-        public void Load( String fileName, String sectionName )
+        public void Load(string fileName, string sectionName)
         {
             this.fileName = fileName;
             this.sectionName = sectionName;
 
-            if (File.Exists( fileName ))
+            if (File.Exists(fileName))
             {
                 var reader = new ConfigurationReader();
                 StringCollection fileNames = new StringCollection();
-                this.rootNode = reader.Read( fileName, sectionName, fileNames );
+                this.rootNode = reader.Read(fileName, sectionName, fileNames);
             }
             else
             {
-                this.rootNode = new ConfigurationNode( null );
+                this.rootNode = new ConfigurationNode(null);
             }
         }
 
@@ -171,17 +171,17 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="xmlWriter"></param>
         /// <param name="sectionName"></param>
-        public void Save( XmlWriter xmlWriter, String sectionName )
+        public void Save(XmlWriter xmlWriter, string sectionName)
         {
-            Contract.Requires( xmlWriter != null );
-            Contract.Requires( sectionName != null );
+            Contract.Requires<ArgumentNullException>(xmlWriter != null);
+            Contract.Requires<ArgumentNullException>(sectionName != null);
 
-            xmlWriter.WriteStartElement( sectionName );
-            ConfigurationWriter.Write( xmlWriter, this.rootNode.Attributes );
+            xmlWriter.WriteStartElement(sectionName);
+            ConfigurationWriter.Write(xmlWriter, this.rootNode.Attributes);
 
             foreach (ConfigurationNode childNode in this.rootNode.ChildNodes)
             {
-                ConfigurationWriter.WriteNode( xmlWriter, childNode );
+                ConfigurationWriter.WriteNode(xmlWriter, childNode);
             }
 
             xmlWriter.WriteEndElement();
@@ -192,17 +192,17 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="sectionName"></param>
-        public void Save( String fileName, String sectionName )
+        public void Save(string fileName, string sectionName)
         {
-            String directoryName = Path.GetDirectoryName( fileName );
-            Directory.CreateDirectory( directoryName );
-            using (var xmlTextWriter = new XmlTextWriter( fileName, Encoding.UTF8 ))
+            string directoryName = Path.GetDirectoryName(fileName);
+            Directory.CreateDirectory(directoryName);
+            using (var xmlTextWriter = new XmlTextWriter(fileName, Encoding.UTF8))
             {
                 xmlTextWriter.Formatting = Formatting.Indented;
                 xmlTextWriter.Indentation = 2;
                 xmlTextWriter.IndentChar = ' ';
                 xmlTextWriter.WriteStartDocument();
-                this.Save( xmlTextWriter, sectionName );
+                this.Save(xmlTextWriter, sectionName);
                 xmlTextWriter.WriteEndDocument();
                 xmlTextWriter.Close();
             }
@@ -213,14 +213,14 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         public void Save()
         {
-            String directoryName = Path.GetDirectoryName( this.fileName );
+            string directoryName = Path.GetDirectoryName(this.fileName);
 
-            if (!Directory.Exists( directoryName ))
+            if (!Directory.Exists(directoryName))
             {
-                Directory.CreateDirectory( directoryName );
+                Directory.CreateDirectory(directoryName);
             }
 
-            this.Save( this.fileName, this.sectionName );
+            this.Save(this.fileName, this.sectionName);
         }
 
         /// <summary>
@@ -228,9 +228,9 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="nodeName"></param>
         /// <returns></returns>
-        public ConfigurationNode CreateNode( String nodeName )
+        public ConfigurationNode CreateNode(string nodeName)
         {
-            return this.rootNode.CreateNode( nodeName );
+            return this.rootNode.CreateNode(nodeName);
         }
     }
 }

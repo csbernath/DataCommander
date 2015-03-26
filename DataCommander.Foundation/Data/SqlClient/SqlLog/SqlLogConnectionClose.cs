@@ -5,13 +5,13 @@ namespace DataCommander.Foundation.Data
 
     internal sealed class SqlLogConnectionClose : ISqlLogItem
     {
-        private readonly Int32 applicationId;
-        private readonly Int32 connectionNo;
+        private readonly int applicationId;
+        private readonly int connectionNo;
         private DateTime endDate;
 
         public SqlLogConnectionClose(
-            Int32 applicationId,
-            Int32 connectionNo,
+            int applicationId,
+            int connectionNo,
             DateTime endDate )
         {
             this.applicationId = applicationId;
@@ -19,7 +19,7 @@ namespace DataCommander.Foundation.Data
             this.endDate = endDate;
         }
 
-        public String CommandText
+        public string CommandText
         {
             get
             {

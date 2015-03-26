@@ -22,7 +22,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="name">See icCore.dbo.ExternalSystem table</param>
         /// <param name="connection">Microsoft SQL Server connection</param>
         /// <returns></returns>
-        public static ConfigurationAttributeCollection GetProperties( String name, IDbConnection connection )
+        public static ConfigurationAttributeCollection GetProperties( string name, IDbConnection connection )
         {
             Contract.Requires(connection != null); 
 
@@ -30,8 +30,8 @@ namespace DataCommander.Foundation.Data.SqlClient
             DataSet dataSet = ExternalSystem_GetProperties( connection, name );
             DataTable table = dataSet.Tables[ 0 ];
             DataRow row = table.Rows[ 0 ];
-            String loginame = row.Field<String>( 0 );
-            String currentUser = WindowsIdentity.GetCurrent().Name;
+            string loginame = row.Field<string>( 0 );
+            string currentUser = WindowsIdentity.GetCurrent().Name;
             DataProtectionScope scope;
 
             if (loginame == currentUser)
@@ -47,10 +47,10 @@ namespace DataCommander.Foundation.Data.SqlClient
 
             foreach (DataRow dataRow in table.Rows)
             {
-                String propertyName = (String) dataRow[ 0 ];
+                string propertyName = (string) dataRow[ 0 ];
                 ExternalSystemPropertyTypes type = (ExternalSystemPropertyTypes) (Byte) dataRow[ 1 ];
-                Object value = dataRow[ 2 ];
-                Boolean encrypted = (type & ExternalSystemPropertyTypes.Encrypted) != 0;
+                object value = dataRow[ 2 ];
+                bool encrypted = (type & ExternalSystemPropertyTypes.Encrypted) != 0;
 
                 if (encrypted)
                 {
@@ -85,7 +85,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="scope"></param>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static Byte[] Encrypt( DataProtectionScope scope, String text )
+        public static Byte[] Encrypt( DataProtectionScope scope, string text )
         {
             Byte[] bytes = Encoding.UTF8.GetBytes( text );
             Byte[] protectedBytes = ProtectedData.Protect( bytes, optionalEntropy, scope );
@@ -98,10 +98,10 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="scope"></param>
         /// <param name="bytes"></param>
         /// <returns></returns>
-        public static String Decrypt( DataProtectionScope scope, Byte[] bytes )
+        public static string Decrypt( DataProtectionScope scope, Byte[] bytes )
         {
             Byte[] unprotectedBytes = ProtectedData.Unprotect( bytes, optionalEntropy, scope );
-            String text = Encoding.UTF8.GetString( unprotectedBytes );
+            string text = Encoding.UTF8.GetString( unprotectedBytes );
             return text;
         }
 
@@ -112,9 +112,9 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="bytes"></param>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static Boolean Check( DataProtectionScope scope, Byte[] bytes, String text )
+        public static bool Check( DataProtectionScope scope, Byte[] bytes, string text )
         {
-            String s = Decrypt( scope, bytes );
+            string s = Decrypt( scope, bytes );
             return s == text;
         }
 
@@ -124,7 +124,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="connection"></param>
         /// <param name="systemName">varchar(64)</param>
         /// <returns></returns>
-        private static DataSet ExternalSystem_GetProperties( IDbConnection connection, String systemName )
+        private static DataSet ExternalSystem_GetProperties( IDbConnection connection, string systemName )
         {
             IDbCommand command = connection.CreateCommand();
             command.CommandType = CommandType.StoredProcedure;

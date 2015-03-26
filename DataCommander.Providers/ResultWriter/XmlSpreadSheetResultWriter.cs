@@ -115,7 +115,7 @@
         {
             long ticks = Stopwatch.GetTimestamp();
             string message = string.Format( "Generating Excel file {0}...", this.fileName );
-            this.addInfoMessage( new InfoMessage( OptimizedDateTime.Now, InfoMessageSeverity.Verbose, message ) );
+            this.addInfoMessage( new InfoMessage( LocalTime.Default.Now, InfoMessageSeverity.Verbose, message ) );
 
             var tables =
                 from table in this.resultDataSet.Tables
@@ -139,7 +139,7 @@
 
             ticks = Stopwatch.GetTimestamp() - ticks;
             message = string.Format( "Excel file generated successfully {0} in seconds.", StopwatchTimeSpan.ToString( ticks, 3 ) );
-            this.addInfoMessage( new InfoMessage( OptimizedDateTime.Now, InfoMessageSeverity.Verbose, message ) );
+            this.addInfoMessage( new InfoMessage( LocalTime.Default.Now, InfoMessageSeverity.Verbose, message ) );
 
             var processStartInfo = new ProcessStartInfo( this.fileName );
             Process.Start( processStartInfo );

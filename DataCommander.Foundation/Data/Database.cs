@@ -10,7 +10,6 @@ namespace DataCommander.Foundation.Data
     using System.IO;
     using System.Text;
     using System.Xml;
-    using DataCommander.Foundation.Data.SqlClient;
     using DataCommander.Foundation.Text;
     using DataCommander.Foundation.Threading;
 
@@ -26,10 +25,10 @@ namespace DataCommander.Foundation.Data
         private IDbProviderFactoryHelper providerFactoryHelper;
         private IDbCommandHelper commandHelper;
         private IDbCommandBuilderHelper commandBuilderHelper;
-        private Int32 commandTimeout;
-        private Int32 rowCount;
+        private int commandTimeout;
+        private int rowCount;
         private IDbCommand command;
-        internal const String NullString = "null";
+        internal const string NullString = "null";
 
         #endregion
 
@@ -46,7 +45,7 @@ namespace DataCommander.Foundation.Data
         /// 
         /// </summary>
         /// <param name="connection"></param>
-        public Database( IDbConnection connection )
+        public Database(IDbConnection connection)
         {
             this.connection = connection;
         }
@@ -147,7 +146,7 @@ namespace DataCommander.Foundation.Data
         /// Gets or sets the command timeout.
         /// </summary>
         /// <value>The command timeout.</value>
-        public Int32 CommandTimeout
+        public int CommandTimeout
         {
             [DebuggerStepThrough]
             get
@@ -177,7 +176,7 @@ namespace DataCommander.Foundation.Data
         /// </item>
         /// </list>
         /// </remarks>
-        public Int32 RowCount
+        public int RowCount
         {
             get
             {
@@ -197,27 +196,27 @@ namespace DataCommander.Foundation.Data
         }
 
         /// <summary>
-        /// Gets the return value (Int32) of the last executed <see cref="System.Data.IDbCommand"/>.
+        /// Gets the return value (int) of the last executed <see cref="System.Data.IDbCommand"/>.
         /// </summary>
         /// <remarks>
         /// The last executed command must be an SQL Server stored procedure.
         /// Gets the last executed command's 0th parameter's value as <see cref="System.Int32"/>
         /// </remarks>
-        public Int32 ReturnValue
+        public int ReturnValue
         {
             get
             {
-                Contract.Requires( this.Command != null );
-                Contract.Requires( this.Command.Parameters.Count > 0 );
-                Contract.Requires( this.Command.Parameters[ 0 ] is IDataParameter );
-                Contract.Requires( ( (IDataParameter)this.Command.Parameters[ 0 ] ).Direction == ParameterDirection.ReturnValue );
-                Contract.Requires( ( (IDataParameter)this.Command.Parameters[ 0 ] ).Value is Int32 );
+                Contract.Requires<ArgumentNullException>(this.Command != null);
+                Contract.Requires<ArgumentException>(this.Command.Parameters.Count > 0);
+                Contract.Requires<ArgumentException>(this.Command.Parameters[0] is IDataParameter);
+                Contract.Requires<ArgumentException>(((IDataParameter)this.Command.Parameters[0]).Direction == ParameterDirection.ReturnValue);
+                Contract.Requires<ArgumentException>(((IDataParameter)this.Command.Parameters[0]).Value is int);
 
                 IDataParameterCollection parameters = this.command.Parameters;
-                Object parameterObject = parameters[ 0 ];
-                IDataParameter parameter = (IDataParameter)parameterObject;
-                Object valueObject = parameter.Value;
-                Int32 returnValue = (Int32)valueObject;
+                object parameterObject = parameters[0];
+                var parameter = (IDataParameter)parameterObject;
+                object valueObject = parameter.Value;
+                int returnValue = (int)valueObject;
                 return returnValue;
             }
         }
@@ -236,17 +235,17 @@ namespace DataCommander.Foundation.Data
         public static DataTable ExecuteDataTable(
             DbProviderFactory factory,
             DbConnection connection,
-            String commandText )
+            string commandText)
         {
-            Contract.Requires( factory != null );
-            Contract.Requires( connection != null );
+            Contract.Requires(factory != null);
+            Contract.Requires(connection != null);
 
             var command = connection.CreateCommand();
             command.CommandText = commandText;
             var adapter = factory.CreateDataAdapter();
             adapter.SelectCommand = command;
             var table = new DataTable();
-            adapter.Fill( table );
+            adapter.Fill(table);
             return table;
         }
 
@@ -257,10 +256,10 @@ namespace DataCommander.Foundation.Data
         /// <param name="textWriter"></param>
         public static void Write(
             DataTable dataTable,
-            TextWriter textWriter )
+            TextWriter textWriter)
         {
-            Contract.Requires( dataTable != null );
-            Contract.Requires( textWriter != null );
+            Contract.Requires(dataTable != null);
+            Contract.Requires(textWriter != null);
 
             DataColumnCollection columns = dataTable.Columns;
 
@@ -270,26 +269,26 @@ namespace DataCommander.Foundation.Data
 
                 foreach (DataColumn column in columns)
                 {
-                    sb.Append( column.ColumnName );
-                    sb.Append( '\t' );
+                    sb.Append(column.ColumnName);
+                    sb.Append('\t');
                 }
 
-                textWriter.WriteLine( sb );
+                textWriter.WriteLine(sb);
 
                 foreach (DataRow row in dataTable.Rows)
                 {
                     sb.Length = 0;
-                    Object[] itemArray = row.ItemArray;
-                    Int32 last = itemArray.Length - 1;
+                    object[] itemArray = row.ItemArray;
+                    int last = itemArray.Length - 1;
 
-                    for (Int32 i = 0; i < last; i++)
+                    for (int i = 0; i < last; i++)
                     {
-                        sb.Append( itemArray[ i ] );
-                        sb.Append( '\t' );
+                        sb.Append(itemArray[i]);
+                        sb.Append('\t');
                     }
 
-                    sb.Append( itemArray[ last ] );
-                    textWriter.WriteLine( sb );
+                    sb.Append(itemArray[last]);
+                    textWriter.WriteLine(sb);
                 }
             }
         }
@@ -304,49 +303,49 @@ namespace DataCommander.Foundation.Data
         public static void Write(
             DataView dataView,
             Char columnSeparator,
-            String lineSeparator,
-            TextWriter textWriter )
+            string lineSeparator,
+            TextWriter textWriter)
         {
-            Contract.Requires( !string.IsNullOrEmpty( lineSeparator ) );
-            Contract.Requires( textWriter != null );
+            Contract.Requires(!string.IsNullOrEmpty(lineSeparator));
+            Contract.Requires(textWriter != null);
 
             if (dataView != null)
             {
-                Int32 rowCount = dataView.Count;
+                int rowCount = dataView.Count;
                 DataTable dataTable = dataView.Table;
-                Int32 last = dataTable.Columns.Count - 1;
+                int last = dataTable.Columns.Count - 1;
 
-                for (Int32 i = 0; i <= last; i++)
+                for (int i = 0; i <= last; i++)
                 {
-                    DataColumn dataColumn = dataTable.Columns[ i ];
-                    textWriter.Write( dataColumn.ColumnName );
+                    DataColumn dataColumn = dataTable.Columns[i];
+                    textWriter.Write(dataColumn.ColumnName);
 
                     if (i < last)
                     {
-                        textWriter.Write( columnSeparator );
+                        textWriter.Write(columnSeparator);
                     }
                     else
                     {
-                        textWriter.Write( lineSeparator );
+                        textWriter.Write(lineSeparator);
                     }
                 }
 
-                for (Int32 i = 0; i < rowCount; i++)
+                for (int i = 0; i < rowCount; i++)
                 {
-                    DataRow dataRow = dataView[ i ].Row;
-                    Object[] itemArray = dataRow.ItemArray;
+                    DataRow dataRow = dataView[i].Row;
+                    object[] itemArray = dataRow.ItemArray;
 
-                    for (Int32 j = 0; j <= last; j++)
+                    for (int j = 0; j <= last; j++)
                     {
-                        textWriter.Write( itemArray[ j ] );
+                        textWriter.Write(itemArray[j]);
 
                         if (j < last)
                         {
-                            textWriter.Write( columnSeparator );
+                            textWriter.Write(columnSeparator);
                         }
                         else
                         {
-                            textWriter.Write( lineSeparator );
+                            textWriter.Write(lineSeparator);
                         }
                     }
                 }
@@ -360,14 +359,14 @@ namespace DataCommander.Foundation.Data
         /// <param name="columnSeparator"></param>
         /// <param name="lineSeparator"></param>
         /// <returns></returns>
-        public static String ToString(
+        public static string ToString(
             DataView dataView,
             Char columnSeparator,
-            String lineSeparator )
+            string lineSeparator)
         {
             StringWriter textWriter = new StringWriter();
-            Write( dataView, columnSeparator, lineSeparator, textWriter );
-            String s = textWriter.ToString();
+            Write(dataView, columnSeparator, lineSeparator, textWriter);
+            string s = textWriter.ToString();
             return s;
         }
 
@@ -380,11 +379,11 @@ namespace DataCommander.Foundation.Data
         public static void Write(
             DataTable dataTable,
             DataRow[] dataRows,
-            TextWriter textWriter )
+            TextWriter textWriter)
         {
-            Contract.Requires( dataTable != null );
-            Contract.Requires( dataRows != null );
-            Contract.Requires( textWriter != null );
+            Contract.Requires(dataTable != null);
+            Contract.Requires(dataRows != null);
+            Contract.Requires(textWriter != null);
 
             DataColumnCollection columns = dataTable.Columns;
 
@@ -394,26 +393,26 @@ namespace DataCommander.Foundation.Data
 
                 foreach (DataColumn column in columns)
                 {
-                    sb.Append( column.ColumnName );
-                    sb.Append( '\t' );
+                    sb.Append(column.ColumnName);
+                    sb.Append('\t');
                 }
 
-                textWriter.WriteLine( sb );
+                textWriter.WriteLine(sb);
 
                 foreach (DataRow row in dataRows)
                 {
                     sb.Length = 0;
-                    Object[] itemArray = row.ItemArray;
-                    Int32 last = itemArray.Length - 1;
+                    object[] itemArray = row.ItemArray;
+                    int last = itemArray.Length - 1;
 
-                    for (Int32 i = 0; i < last; i++)
+                    for (int i = 0; i < last; i++)
                     {
-                        sb.Append( itemArray[ i ] );
-                        sb.Append( '\t' );
+                        sb.Append(itemArray[i]);
+                        sb.Append('\t');
                     }
 
-                    sb.Append( itemArray[ last ] );
-                    textWriter.WriteLine( sb );
+                    sb.Append(itemArray[last]);
+                    textWriter.WriteLine(sb);
                 }
             }
         }
@@ -426,7 +425,7 @@ namespace DataCommander.Foundation.Data
         /// <param name="inputNullValue"></param>
         /// <param name="outputNullValue"></param>
         /// <returns></returns>
-        public static TResult GetValue<TResult>( Object value, Object inputNullValue, TResult outputNullValue )
+        public static TResult GetValue<TResult>(object value, object inputNullValue, TResult outputNullValue)
         {
             TResult returnValue;
 
@@ -449,10 +448,10 @@ namespace DataCommander.Foundation.Data
         /// <param name="value"></param>
         /// <param name="outputNullValue"></param>
         /// <returns></returns>
-        public static TResult GetValue<TResult>( Object value, TResult outputNullValue )
+        public static TResult GetValue<TResult>(object value, TResult outputNullValue)
         {
-            Object inputNullValue = DBNull.Value;
-            return GetValue( value, inputNullValue, outputNullValue );
+            object inputNullValue = DBNull.Value;
+            return GetValue(value, inputNullValue, outputNullValue);
         }
 
         /// <summary>
@@ -461,11 +460,11 @@ namespace DataCommander.Foundation.Data
         /// <typeparam name="TResult"></typeparam>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static TResult GetValueOrDefault<TResult>( Object value )
+        public static TResult GetValueOrDefault<TResult>(object value)
         {
-            Object inputNullValue = DBNull.Value;
-            TResult outputNullValue = default( TResult );
-            return GetValue( value, inputNullValue, outputNullValue );
+            object inputNullValue = DBNull.Value;
+            TResult outputNullValue = default(TResult);
+            return GetValue(value, inputNullValue, outputNullValue);
         }
 
         /// <summary>
@@ -474,33 +473,33 @@ namespace DataCommander.Foundation.Data
         /// <param name="dataView"></param>
         /// <param name="columns"></param>
         /// <returns></returns>
-        public static String ToString(
+        public static string ToString(
             DataView dataView,
-            DataColumn[] columns )
+            DataColumn[] columns)
         {
-            Contract.Requires( dataView != null );
+            Contract.Requires(dataView != null);
 
-            String s = null;
-            Int32 count = dataView.Count;
+            string s = null;
+            int count = dataView.Count;
 
             if (count > 0)
             {
-                Int32 columnCount = columns.Length;
-                StringTable st = new StringTable( columnCount );
-                DataTableExtensions.SetAlign( columns, st.Columns );
-                DataTableExtensions.WriteHeader( columns, st );
+                int columnCount = columns.Length;
+                StringTable st = new StringTable(columnCount);
+                DataTableExtensions.SetAlign(columns, st.Columns);
+                DataTableExtensions.WriteHeader(columns, st);
 
-                for (Int32 i = 0; i < count; i++)
+                for (int i = 0; i < count; i++)
                 {
-                    DataRow dataRow = dataView[ i ].Row;
+                    DataRow dataRow = dataView[i].Row;
                     StringTableRow row = st.NewRow();
 
-                    for (Int32 j = 0; j < columns.Length; j++)
+                    for (int j = 0; j < columns.Length; j++)
                     {
-                        row[ j ] = dataRow[ columns[ j ] ].ToString();
+                        row[j] = dataRow[columns[j]].ToString();
                     }
 
-                    st.Rows.Add( row );
+                    st.Rows.Add(row);
                 }
 
                 s = st.ToString();
@@ -516,18 +515,18 @@ namespace DataCommander.Foundation.Data
         /// <param name="columnNumber"></param>
         /// <param name="rowNumber"></param>
         /// <returns></returns>
-        public static String ToString(
+        public static string ToString(
             DataTable dataTable,
-            Int32 columnNumber,
-            Int32 rowNumber )
+            int columnNumber,
+            int rowNumber)
         {
-            Contract.Requires( dataTable != null );
+            Contract.Requires(dataTable != null);
 
-            DataColumn dataColumn = dataTable.Columns[ columnNumber ];
+            DataColumn dataColumn = dataTable.Columns[columnNumber];
             Type type = dataColumn.DataType;
-            TypeCode typeCode = Type.GetTypeCode( type );
-            Object value = dataTable.Rows[ rowNumber ][ columnNumber ];
-            String s;
+            TypeCode typeCode = Type.GetTypeCode(type);
+            object value = dataTable.Rows[rowNumber][columnNumber];
+            string s;
 
             if (value == DBNull.Value)
             {
@@ -538,8 +537,8 @@ namespace DataCommander.Foundation.Data
                 switch (typeCode)
                 {
                     case TypeCode.String:
-                        s = value.ToString().Replace( "\'", "''" );
-                        s = String.Format( CultureInfo.InvariantCulture, "'{0}'", s );
+                        s = value.ToString().Replace("\'", "''");
+                        s = string.Format(CultureInfo.InvariantCulture, "'{0}'", s);
                         break;
 
                     default:
@@ -585,7 +584,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public IDbTransaction BeginTransaction()
         {
-            Contract.Requires( this.Connection != null );
+            Contract.Requires(this.Connection != null);
 
             return this.connection.BeginTransaction();
         }
@@ -595,11 +594,11 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="il"></param>
         /// <returns></returns>
-        public IDbTransaction BeginTransaction( IsolationLevel il )
+        public IDbTransaction BeginTransaction(IsolationLevel il)
         {
-            Contract.Requires( this.Connection != null );
+            Contract.Requires(this.Connection != null);
 
-            return this.connection.BeginTransaction( il );
+            return this.connection.BeginTransaction(il);
         }
 
         /// <summary>
@@ -609,11 +608,11 @@ namespace DataCommander.Foundation.Data
         /// Sets the CommandTimeout property.
         /// </remarks>
         /// <returns>
-        /// A <see cref="System.Data.IDbCommand"/> Object associated with the connection.
+        /// A <see cref="System.Data.IDbCommand"/> object associated with the connection.
         /// </returns>
         public IDbCommand CreateCommand()
         {
-            Contract.Requires( this.Connection != null );
+            Contract.Requires(this.Connection != null);
 
             this.command = this.connection.CreateCommand();
             this.command.Transaction = this.transaction;
@@ -622,11 +621,11 @@ namespace DataCommander.Foundation.Data
         }
 
         /// <summary>
-        /// Creates and returns a Command Object associated with the connection.
+        /// Creates and returns a Command object associated with the connection.
         /// </summary>
         /// <param name="commandText"></param>
-        /// <returns>A <see cref="System.Data.IDbCommand"/> Object associated with the connection.</returns>
-        public IDbCommand CreateCommand( String commandText )
+        /// <returns>A <see cref="System.Data.IDbCommand"/> object associated with the connection.</returns>
+        public IDbCommand CreateCommand(string commandText)
         {
             this.command = this.CreateCommand();
             this.command.CommandText = commandText;
@@ -638,10 +637,10 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="commandText"></param>
         /// <param name="commandType"></param>
-        /// <returns>A Command Object associated with the connection.</returns>
-        public IDbCommand CreateCommand( String commandText, CommandType commandType )
+        /// <returns>A Command object associated with the connection.</returns>
+        public IDbCommand CreateCommand(string commandText, CommandType commandType)
         {
-            this.command = this.CreateCommand( commandText );
+            this.command = this.CreateCommand(commandText);
             this.command.CommandType = commandType;
             return this.command;
         }
@@ -650,23 +649,23 @@ namespace DataCommander.Foundation.Data
         /// 
         /// </summary>
         /// <param name="command"></param>
-        public void DeriveParameters( IDbCommand command )
+        public void DeriveParameters(IDbCommand command)
         {
-            Contract.Requires( this.CommandBuilderHelper != null );
+            Contract.Requires(this.CommandBuilderHelper != null);
 
-            this.commandBuilderHelper.DeriveParameters( command );
+            this.commandBuilderHelper.DeriveParameters(command);
         }
 
         /// <summary>
-        /// Executes an SQL statement against the Connection Object of a .NET Framework data provider, and returns the number of rows affected.
+        /// Executes an SQL statement against the Connection object of a .NET Framework data provider, and returns the number of rows affected.
         /// </summary>
         /// <param name="command"></param>
         /// <returns>
         /// The number of rows affected.
         /// </returns>
-        public Int32 ExecuteNonQuery( IDbCommand command )
+        public int ExecuteNonQuery(IDbCommand command)
         {
-            Contract.Requires( command != null );
+            Contract.Requires(command != null);
 
             this.command = command;
             this.rowCount = command.ExecuteNonQuery();
@@ -680,20 +679,20 @@ namespace DataCommander.Foundation.Data
         /// <returns>
         /// The number of rows affected.
         /// </returns>
-        public Int32 ExecuteNonQuery( String commandText )
+        public int ExecuteNonQuery(string commandText)
         {
             //this.command = this.CreateCommand(commandText);
             //this.rowCount = this.command.ExecuteNonQuery();
             //return this.rowCount;
 
-            this.command = this.CreateCommand( commandText );
+            this.command = this.CreateCommand(commandText);
             try
             {
                 this.rowCount = this.command.ExecuteNonQuery();
             }
             catch (Exception exception)
             {
-                throw new DbCommandExecutionException( "Database.ExecuteNonQuery failed.", exception, this.command );
+                throw new DbCommandExecutionException("Database.ExecuteNonQuery failed.", exception, this.command);
             }
 
             return this.rowCount;
@@ -704,12 +703,12 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public Object ExecuteScalar( IDbCommand command )
+        public object ExecuteScalar(IDbCommand command)
         {
-            Contract.Requires( command != null );
+            Contract.Requires(command != null);
 
             this.command = command;
-            Object scalar = command.ExecuteScalar();
+            object scalar = command.ExecuteScalar();
             return scalar;
         }
 
@@ -718,10 +717,10 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="commandText"></param>
         /// <returns></returns>
-        public Object ExecuteScalar( String commandText )
+        public object ExecuteScalar(string commandText)
         {
-            this.command = this.CreateCommand( commandText );
-            Object scalar = this.command.ExecuteScalar();
+            this.command = this.CreateCommand(commandText);
+            object scalar = this.command.ExecuteScalar();
             return scalar;
         }
 
@@ -730,9 +729,9 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="commandText"></param>
         /// <returns></returns>
-        public IDataReader ExecuteReader( String commandText )
+        public IDataReader ExecuteReader(string commandText)
         {
-            this.command = this.CreateCommand( commandText );
+            this.command = this.CreateCommand(commandText);
             return this.command.ExecuteReader();
         }
 
@@ -741,11 +740,11 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="commandText">The text command to execute.</param>
         /// <param name="behavior">One of the <see cref="CommandBehavior"/> values.</param>
-        /// <returns>An <see cref="IDataReader"/> Object.</returns>
-        public IDataReader ExecuteReader( String commandText, CommandBehavior behavior )
+        /// <returns>An <see cref="IDataReader"/> object.</returns>
+        public IDataReader ExecuteReader(string commandText, CommandBehavior behavior)
         {
-            this.command = this.CreateCommand( commandText );
-            return this.command.ExecuteReader( behavior );
+            this.command = this.CreateCommand(commandText);
+            return this.command.ExecuteReader(behavior);
         }
 
         /// <summary>
@@ -753,9 +752,9 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="commandText"></param>
         /// <returns></returns>
-        public DataTable ExecuteDataTable( String commandText )
+        public DataTable ExecuteDataTable(string commandText)
         {
-            this.command = this.CreateCommand( commandText );
+            this.command = this.CreateCommand(commandText);
             return this.command.ExecuteDataTable();
         }
 
@@ -764,13 +763,13 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public DataTable ExecuteDataTable( IDbCommand command )
+        public DataTable ExecuteDataTable(IDbCommand command)
         {
-            Contract.Requires( command != null );
+            Contract.Requires(command != null);
 
             this.command = command;
             var dataTable = new DataTable();
-            this.rowCount = command.Fill( dataTable );
+            this.rowCount = command.Fill(dataTable);
             return dataTable;
         }
 
@@ -779,12 +778,12 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public DataSet ExecuteDataSet( IDbCommand command )
+        public DataSet ExecuteDataSet(IDbCommand command)
         {
             this.command = command;
             var dataSet = new DataSet();
             dataSet.Locale = CultureInfo.InvariantCulture;
-            this.rowCount = command.Fill( dataSet );
+            this.rowCount = command.Fill(dataSet);
             return dataSet;
         }
 
@@ -793,10 +792,10 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="commandText"></param>
         /// <returns></returns>
-        public DataSet ExecuteDataSet( String commandText )
+        public DataSet ExecuteDataSet(string commandText)
         {
-            this.command = this.CreateCommand( commandText );
-            return this.ExecuteDataSet( this.command );
+            this.command = this.CreateCommand(commandText);
+            return this.ExecuteDataSet(this.command);
         }
 
         /// <summary>
@@ -804,12 +803,12 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public XmlDocument ExecuteXmlDocument( IDbCommand command )
+        public XmlDocument ExecuteXmlDocument(IDbCommand command)
         {
-            Contract.Requires( command != null );
-            Contract.Requires( this.CommandHelper != null );
+            Contract.Requires(command != null);
+            Contract.Requires(this.CommandHelper != null);
 
-            return this.commandHelper.ExecuteXmlDocument( command );
+            return this.commandHelper.ExecuteXmlDocument(command);
         }
 
         /// <summary>
@@ -817,10 +816,10 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="commandText"></param>
         /// <returns></returns>
-        public XmlDocument ExecuteXmlDocument( String commandText )
+        public XmlDocument ExecuteXmlDocument(string commandText)
         {
-            this.command = this.CreateCommand( commandText );
-            return this.ExecuteXmlDocument( this.command );
+            this.command = this.CreateCommand(commandText);
+            return this.ExecuteXmlDocument(this.command);
         }
 
         /// <summary>
@@ -829,16 +828,16 @@ namespace DataCommander.Foundation.Data
         /// <param name="command"></param>
         /// <param name="dataTable"></param>
         /// <returns></returns>
-        public DataTable FillSchema( IDbCommand command, DataTable dataTable )
+        public DataTable FillSchema(IDbCommand command, DataTable dataTable)
         {
-            Contract.Requires( command != null );
+            Contract.Requires(command != null);
 
             this.command = command;
             DataTable schemaTable;
 
-            using (IDataReader dataReader = command.ExecuteReader( CommandBehavior.SchemaOnly | CommandBehavior.KeyInfo ))
+            using (IDataReader dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly | CommandBehavior.KeyInfo))
             {
-                schemaTable = FillSchema( dataReader, dataTable );
+                schemaTable = FillSchema(dataReader, dataTable);
             }
 
             return schemaTable;
@@ -850,15 +849,15 @@ namespace DataCommander.Foundation.Data
         /// <param name="command"></param>
         /// <param name="dataSet"></param>
         /// <returns></returns>
-        public DataTable[] FillSchema( IDbCommand command, DataSet dataSet )
+        public DataTable[] FillSchema(IDbCommand command, DataSet dataSet)
         {
-            Contract.Requires( command != null );
+            Contract.Requires(command != null);
 
             DataTable[] schemaTables;
 
-            using (IDataReader dataReader = command.ExecuteReader( CommandBehavior.SchemaOnly | CommandBehavior.KeyInfo ))
+            using (IDataReader dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly | CommandBehavior.KeyInfo))
             {
-                schemaTables = FillSchema( dataReader, dataSet );
+                schemaTables = FillSchema(dataReader, dataSet);
             }
 
             return schemaTables;
@@ -870,12 +869,12 @@ namespace DataCommander.Foundation.Data
         /// <param name="commandText"></param>
         /// <param name="dataSet"></param>
         /// <returns></returns>
-        public Int32 Fill( String commandText, DataSet dataSet )
+        public int Fill(string commandText, DataSet dataSet)
         {
-            Contract.Requires( dataSet != null );
+            Contract.Requires(dataSet != null);
 
-            this.command = this.CreateCommand( commandText );
-            this.rowCount = this.command.Fill( dataSet );
+            this.command = this.CreateCommand(commandText);
+            this.rowCount = this.command.Fill(dataSet);
             return this.rowCount;
         }
 
@@ -894,7 +893,7 @@ namespace DataCommander.Foundation.Data
             IDbConnection connection,
             IDbTransaction transaction,
             IDbCommandHelper commandHelper,
-            Int32 commandTimeout )
+            int commandTimeout)
         {
             this.connection = connection;
             this.transaction = transaction;
@@ -906,25 +905,25 @@ namespace DataCommander.Foundation.Data
 
         #region Private Methods
 
-        internal static void FillSchema( DataTable schemaTable, DataTable dataTable )
+        internal static void FillSchema(DataTable schemaTable, DataTable dataTable)
         {
             List<DataColumn> primaryKey = new List<DataColumn>();
             DataColumnCollection columns = dataTable.Columns;
-            DataColumn isKeyColumn = columns[ "IsKey" ];
+            DataColumn isKeyColumn = columns["IsKey"];
 
             foreach (DataRow row in schemaTable.Rows)
             {
-                String columnName = (String)row[ "ColumnName" ];
-                Type dataType = (Type)row[ "DataType" ];
-                Boolean isKey = isKeyColumn != null && row.Field<Boolean?>( isKeyColumn ) == true;
-                String columnNameAdd = columnName;
-                Int32 index = 2;
+                string columnName = (string)row["ColumnName"];
+                Type dataType = (Type)row["DataType"];
+                bool isKey = isKeyColumn != null && row.Field<bool?>(isKeyColumn) == true;
+                string columnNameAdd = columnName;
+                int index = 2;
 
                 while (true)
                 {
-                    if (columns.Contains( columnNameAdd ))
+                    if (columns.Contains(columnNameAdd))
                     {
-                        columnNameAdd = String.Format( "{0}{1}", columnName, index );
+                        columnNameAdd = string.Format("{0}{1}", columnName, index);
                         index++;
                     }
                     else
@@ -933,12 +932,12 @@ namespace DataCommander.Foundation.Data
                     }
                 }
 
-                DataColumn column = new DataColumn( columnNameAdd, dataType );
-                columns.Add( column );
+                DataColumn column = new DataColumn(columnNameAdd, dataType);
+                columns.Add(column);
 
                 if (isKey)
                 {
-                    primaryKey.Add( column );
+                    primaryKey.Add(column);
                 }
             }
 
@@ -948,16 +947,16 @@ namespace DataCommander.Foundation.Data
 
         private static DataTable FillSchema(
             IDataReader dataReader,
-            DataTable dataTable )
+            DataTable dataTable)
         {
             DataTable schemaTable = dataReader.GetSchemaTable();
-            FillSchema( schemaTable, dataTable );
+            FillSchema(schemaTable, dataTable);
             return schemaTable;
         }
 
         private static DataTable[] FillSchema(
             IDataReader dataReader,
-            DataSet dataSet )
+            DataSet dataSet)
         {
             WorkerThread thread = WorkerThread.Current;
             var schemaTables = new List<DataTable>();
@@ -966,9 +965,9 @@ namespace DataCommander.Foundation.Data
             {
                 DataTable dataTable = new DataTable();
                 dataTable.Locale = CultureInfo.InvariantCulture;
-                DataTable schemaTable = FillSchema( dataReader, dataTable );
-                dataSet.Tables.Add( dataTable );
-                schemaTables.Add( schemaTable );
+                DataTable schemaTable = FillSchema(dataReader, dataTable);
+                dataSet.Tables.Add(dataTable);
+                schemaTables.Add(schemaTable);
 
                 if (!dataReader.NextResult())
                 {

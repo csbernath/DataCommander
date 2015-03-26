@@ -16,13 +16,13 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="node"></param>
         public static void WriteNode(XmlWriter xmlWriter, ConfigurationNode node)
         {
-            String xmlElementName;
-            String xmlAttributeValue;
+            string xmlElementName;
+            string xmlAttributeValue;
 
             if (node.HasName)
             {
-                String nodeName = node.Name;
-                String encodedName = XmlConvert.EncodeName(nodeName);
+                string nodeName = node.Name;
+                string encodedName = XmlConvert.EncodeName(nodeName);
 
                 if (nodeName == encodedName)
                 {
@@ -69,20 +69,20 @@ namespace DataCommander.Foundation.Configuration
             {
                 xmlWriter.WriteStartElement(ConfigurationElementName.Attribute);
                 xmlWriter.WriteAttributeString("name", attribute.Name);
-                Object value = attribute.Value;
+                object value = attribute.Value;
 
                 if (value != null)
                 {
                     Type type = value.GetType();
 
-                    if (type != typeof(String))
+                    if (type != typeof(string))
                     {
-                        String typeName = TypeNameCollection.GetTypeName(type);
+                        string typeName = TypeNameCollection.GetTypeName(type);
                         xmlWriter.WriteAttributeString("type", typeName);
                     }
 
                     TypeCode typeCode = Type.GetTypeCode(type);
-                    String strValue;
+                    string strValue;
 
                     switch (typeCode)
                     {
@@ -97,7 +97,7 @@ namespace DataCommander.Foundation.Configuration
                             {
                                 Array array = (Array)value;
 
-                                for (Int32 j = 0; j < array.Length; j++)
+                                for (int j = 0; j < array.Length; j++)
                                 {
                                     xmlWriter.WriteStartElement("a");
                                     value = array.GetValue(j);
@@ -122,7 +122,7 @@ namespace DataCommander.Foundation.Configuration
                 }
                 else
                 {
-                    xmlWriter.WriteAttributeString("isNull", Boolean.TrueString);
+                    xmlWriter.WriteAttributeString("isNull", bool.TrueString);
                 }
 
                 xmlWriter.WriteEndElement();

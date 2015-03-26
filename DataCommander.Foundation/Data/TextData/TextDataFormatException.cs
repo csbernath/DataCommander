@@ -7,10 +7,10 @@
     /// </summary>
     public class TextDataFormatException : FormatException
     {
-        private readonly String message;
+        private readonly string message;
         private readonly TextDataColumn column;
         private readonly ITextDataConverter converter;
-        private readonly String fieldValue;
+        private readonly string fieldValue;
 
         /// <summary>
         /// 
@@ -19,19 +19,19 @@
         /// <param name="converter"></param>
         /// <param name="fieldValue"></param>
         /// <param name="innerException"></param>
-        public TextDataFormatException( TextDataColumn column, ITextDataConverter converter, String fieldValue, Exception innerException )
+        public TextDataFormatException( TextDataColumn column, ITextDataConverter converter, string fieldValue, Exception innerException )
             : base( null, innerException )
         {
             this.column = column;
             this.converter = converter;
             this.fieldValue = fieldValue;
-            this.message = String.Format( "Conversion ({0}) of String value '{1}' to type {2} failed. ", converter, fieldValue, column.DataType );
+            this.message = string.Format( "Conversion ({0}) of string value '{1}' to type {2} failed. ", converter, fieldValue, column.DataType );
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public override String Message
+        public override string Message
         {
             get
             {
@@ -64,7 +64,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String Fieldvalue
+        public string Fieldvalue
         {
             get
             {

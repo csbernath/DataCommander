@@ -6,9 +6,9 @@
     internal sealed class MethodFraction : MethodBase
     {
         private readonly MethodBase method;
-        private readonly String name;
+        private readonly string name;
 
-        public MethodFraction(MethodBase method, String name)
+        public MethodFraction(MethodBase method, string name)
         {
             this.method = method;
             this.name = name;
@@ -22,23 +22,23 @@
             }
         }
 
-        public static String GetKey(MethodBase method, String name)
+        public static string GetKey(MethodBase method, string name)
         {
-            String fullName = method.MethodHandle.Value.ToInt32().ToString("x") + "[" + name + "]";
+            string fullName = method.MethodHandle.Value.ToInt32().ToString("x") + "[" + name + "]";
             return fullName;
         }
 
-        public override Object[] GetCustomAttributes(Boolean inherit)
+        public override object[] GetCustomAttributes(bool inherit)
         {
             return this.method.GetCustomAttributes(inherit);
         }
 
-        public override Object[] GetCustomAttributes(Type attributeType, Boolean inherit)
+        public override object[] GetCustomAttributes(Type attributeType, bool inherit)
         {
             return this.method.GetCustomAttributes(attributeType, inherit);
         }
 
-        public override Boolean IsDefined(Type attributeType, Boolean inherit)
+        public override bool IsDefined(Type attributeType, bool inherit)
         {
             return this.method.IsDefined(attributeType, inherit);
         }
@@ -51,7 +51,7 @@
             }
         }
 
-        public override String Name
+        public override string Name
         {
             get
             {
@@ -85,7 +85,7 @@
             return this.method.GetParameters();
         }
 
-        public override Object Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, System.Globalization.CultureInfo culture)
+        public override object Invoke(object obj, BindingFlags invokeAttr, Binder binder, object[] parameters, System.Globalization.CultureInfo culture)
         {
             throw new InvalidOperationException();
         }

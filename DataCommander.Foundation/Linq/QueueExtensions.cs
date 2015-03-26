@@ -15,21 +15,21 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="queue"></param>
         /// <returns></returns>
-        public static T DequeueTail<T>( this Queue<T> queue )
+        public static T DequeueTail<T>(this Queue<T> queue)
         {
-            Contract.Requires<ArgumentNullException>( queue != null );
-            Contract.Requires( queue.Count > 0 );
+            Contract.Requires<ArgumentNullException>(queue != null);
+            Contract.Requires<ArgumentException>(queue.Count > 0);
 
             var array = new T[queue.Count];
-            queue.CopyTo( array, 0 );
+            queue.CopyTo(array, 0);
             queue.Clear();
-            Int32 last = array.Length - 1;
-            for (Int32 i = 0; i < last; i++)
+            int last = array.Length - 1;
+            for (int i = 0; i < last; i++)
             {
-                queue.Enqueue( array[ i ] );
+                queue.Enqueue(array[i]);
             }
 
-            return array[ last ];
+            return array[last];
         }
     }
 }

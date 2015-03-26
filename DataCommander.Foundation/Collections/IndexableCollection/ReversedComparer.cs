@@ -30,7 +30,7 @@
 
         #region IComparer<T> Members
 
-        Int32 IComparer<T>.Compare( T x, T y )
+        int IComparer<T>.Compare( T x, T y )
         {
             return this.comparer.Compare( y, x );
         }

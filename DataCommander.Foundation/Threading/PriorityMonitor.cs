@@ -17,7 +17,7 @@
         private readonly T monitoredObject;
         private LockRequest currentLockRequest;
         private readonly IndexableCollection<LockRequest> lockRequests;
-        private readonly NonUniqueIndex<Int32, LockRequest> priorityIndex;
+        private readonly NonUniqueIndex<int, LockRequest> priorityIndex;
 
         /// <summary>
         /// 
@@ -26,7 +26,7 @@
         public PriorityMonitor(T monitoredObject)
         {
             this.monitoredObject = monitoredObject;
-            this.priorityIndex = new NonUniqueIndex<Int32, LockRequest>(
+            this.priorityIndex = new NonUniqueIndex<int, LockRequest>(
                 "priorityIndex",
                 item => GetKeyResponse.Create(true, item.Priority),
                 SortOrder.Ascending);
@@ -61,13 +61,13 @@
         /// </summary>
         /// <param name="priority"></param>
         /// <returns></returns>
-        public LockRequest Enter(Int32 priority)
+        public LockRequest Enter(int priority)
         {
             LockRequest lockRequest = new LockRequest(this, priority);
 
             lock (this.lockRequests)
             {
-                Boolean isCompleted;
+                bool isCompleted;
 
                 if (this.currentLockRequest == null)
                 {
@@ -91,7 +91,7 @@
         /// </summary>
         /// <param name="priority"></param>
         /// <returns></returns>
-        public LockRequest TryEnter(Int32 priority)
+        public LockRequest TryEnter(int priority)
         {
             LockRequest lockRequest;
 
@@ -142,11 +142,11 @@
         public sealed class LockRequest : IDisposable
         {
             private PriorityMonitor<T> monitor;
-            private Int32 priority;
-            private Boolean isCompleted;
+            private int priority;
+            private bool isCompleted;
             private EventWaitHandle asyncWaitHandle;
 
-            internal LockRequest(PriorityMonitor<T> monitor, Int32 priority)
+            internal LockRequest(PriorityMonitor<T> monitor, int priority)
             {
                 Contract.Requires(monitor != null);
 
@@ -168,7 +168,7 @@
             /// <summary>
             /// 
             /// </summary>
-            public Int32 Priority
+            public int Priority
             {
                 get
                 {
@@ -198,7 +198,7 @@
                 }
             }
 
-            internal void Initialize(Boolean isCompleted)
+            internal void Initialize(bool isCompleted)
             {
                 log.Write(LogLevel.Trace, "Initializing lockRequest... monitoredObject: {0}, priority: {1}, isCompleted: {2}", this.monitor.MonitoredObject, this.priority,
                     isCompleted);

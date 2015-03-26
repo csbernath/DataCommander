@@ -29,7 +29,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="userName"></param>
         /// <param name="hostName"></param>
         /// <returns></returns>
-        public IDbConnection CreateConnection(String connectionString, String userName, String hostName)
+        public IDbConnection CreateConnection(string connectionString, string userName, string hostName)
         {
             return new SafeSqlConnection(connectionString);
         }

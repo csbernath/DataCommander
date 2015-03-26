@@ -49,7 +49,7 @@ namespace DataCommander.Providers.SqlServer2005
 
         private void OnStateChange( object sender, StateChangeEventArgs e )
         {
-            DateTime now = OptimizedDateTime.Now;
+            DateTime now = LocalTime.Default.Now;
             string text = string.Format( "Connection.State changed. OriginalState: {0}, CurrentState: {1}", e.OriginalState, e.CurrentState );
             this.InvokeInfoMessage
             (

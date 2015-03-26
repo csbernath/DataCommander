@@ -9,13 +9,13 @@
     /// </summary>
     public sealed class EnumerableUniversalQuantifier<T> : PredicateClass<IEnumerable<T>>
     {
-        private readonly Func<T, Boolean> predicate;
+        private readonly Func<T, bool> predicate;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="predicate"></param>
-        public EnumerableUniversalQuantifier(Func<T, Boolean> predicate)
+        public EnumerableUniversalQuantifier(Func<T, bool> predicate)
         {
             Contract.Requires(predicate != null);
 
@@ -28,12 +28,12 @@
         /// <param name="enumerable"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static Boolean Evaluate(IEnumerable<T> enumerable, Func<T, Boolean> predicate)
+        public static bool Evaluate(IEnumerable<T> enumerable, Func<T, bool> predicate)
         {
             Contract.Requires(enumerable != null);
             Contract.Requires(predicate != null);
 
-            Boolean isTrue = true;
+            bool isTrue = true;
 
             foreach (T item in enumerable)
             {
@@ -52,7 +52,7 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public override Boolean Evaluate(IEnumerable<T> value)
+        public override bool Evaluate(IEnumerable<T> value)
         {
             return Evaluate(value, this.predicate);
         }

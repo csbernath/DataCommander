@@ -13,7 +13,7 @@
     {
         private XmlSpreadsheetTable table;
         private XmlWriter xmlWriter;
-        private Int32 tableIndex = -1;
+        private int tableIndex = -1;
 
         /// <summary>
         /// 
@@ -77,15 +77,15 @@
                     }
                 }
 
-                Int32 tableIndex = 0;
+                int tableIndex = 0;
                 foreach (var tableSchema in tables)
                 {
-                    Int32 columnIndex = 0;
+                    int columnIndex = 0;
                     foreach (var column in tableSchema.Columns)
                     {
                         using (this.xmlWriter.WriteElement( "Style" ))
                         {
-                            String id = String.Format( "{0},{1}", tableIndex, columnIndex );
+                            string id = string.Format( "{0},{1}", tableIndex, columnIndex );
                             this.xmlWriter.WriteAttributeString( "ss:ID", id );
 
                             if (column.NumberFormat != null)
@@ -113,7 +113,7 @@
             Contract.Requires( table != null );
             this.tableIndex++;
             this.table = table;
-            Int32 columnIndex;
+            int columnIndex;
 
             this.xmlWriter.WriteStartElement( "Worksheet" );
             this.xmlWriter.WriteAttributeString( "ss:Name", this.table.TableName );
@@ -193,7 +193,7 @@
         /// 
         /// </summary>
         /// <param name="values"></param>
-        public void WriteRow( Object[] values )
+        public void WriteRow( object[] values )
         {
 #if FONDATION_2_0 || FOUNDATION_3_5
             // TODO
@@ -203,11 +203,11 @@
 
             this.WriteStartRow();
 
-            for (Int32 columnIndex = 0; columnIndex < values.Length; columnIndex++)
+            for (int columnIndex = 0; columnIndex < values.Length; columnIndex++)
             {
-                Object value = values[columnIndex];
+                object value = values[columnIndex];
                 XmlSpreadsheetDataType type;
-                String xmlValue;
+                string xmlValue;
 
                 if (value == DBNull.Value)
                 {
@@ -222,7 +222,7 @@
                 }
 
                 var cell = new XmlSpreadsheetCell( type, xmlValue );
-                cell.StyleId = String.Format( "{0},{1}", this.tableIndex, columnIndex );
+                cell.StyleId = string.Format( "{0},{1}", this.tableIndex, columnIndex );
                 cell.Write( this.xmlWriter );
             }
 

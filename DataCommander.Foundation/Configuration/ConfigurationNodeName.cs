@@ -10,19 +10,19 @@ namespace DataCommander.Foundation.Configuration
     /// </summary>
     public static class ConfigurationNodeName
     {
-        private static String FromTypeDelimitedName( String name )
+        private static string FromTypeDelimitedName(string name)
         {
-            Contract.Requires( name != null );
+            Contract.Requires<ArgumentNullException>(name != null);
 
-            String nodeName = name.Replace( Type.Delimiter, ConfigurationNode.Delimiter );
+            string nodeName = name.Replace(Type.Delimiter, ConfigurationNode.Delimiter);
             return nodeName;
         }
 
-        private static MethodBase GetMethod( StackTrace trace, Int32 frameIndex )
+        private static MethodBase GetMethod(StackTrace trace, int frameIndex)
         {
-            Contract.Requires( trace != null );
+            Contract.Requires<ArgumentNullException>(trace != null);
 
-            StackFrame frame = trace.GetFrame( frameIndex );
+            StackFrame frame = trace.GetFrame(frameIndex);
             MethodBase method = frame.GetMethod();
             return method;
         }
@@ -33,13 +33,13 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="trace"></param>
         /// <param name="frameIndex"></param>
         /// <returns></returns>
-        internal static String FromNamespace( StackTrace trace, Int32 frameIndex )
+        internal static string FromNamespace(StackTrace trace, int frameIndex)
         {
-            Contract.Requires( trace != null );
+            Contract.Requires<ArgumentNullException>(trace != null);
 
-            MethodBase method = GetMethod( trace, frameIndex );
-            String name = method.DeclaringType.Namespace;
-            String nodeName = FromTypeDelimitedName( name );
+            MethodBase method = GetMethod(trace, frameIndex);
+            string name = method.DeclaringType.Namespace;
+            string nodeName = FromTypeDelimitedName(name);
             return nodeName;
         }
 
@@ -48,40 +48,40 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static String FromType( Type type )
+        public static string FromType(Type type)
         {
-            Contract.Requires( type != null );
+            Contract.Requires<ArgumentNullException>(type != null);
 
-            String name = type.FullName;
-            String nodeName = FromTypeDelimitedName( name );
+            string name = type.FullName;
+            string nodeName = FromTypeDelimitedName(name);
             return nodeName;
         }
 
-        internal static String FromType( StackTrace trace, Int32 frameIndex )
+        internal static string FromType(StackTrace trace, int frameIndex)
         {
-            Contract.Requires( trace != null );
+            Contract.Requires<ArgumentNullException>(trace != null);
 
-            MethodBase method = GetMethod( trace, frameIndex );
+            MethodBase method = GetMethod(trace, frameIndex);
             Type type = method.DeclaringType;
-            String nodeName = FromType( type );
+            string nodeName = FromType(type);
             return nodeName;
         }
 
-        internal static String FromMethod( MethodBase method )
+        internal static string FromMethod(MethodBase method)
         {
-            Contract.Requires( method != null );
+            Contract.Requires<ArgumentNullException>(method != null);
 
-            String name = method.DeclaringType.FullName + Type.Delimiter + method.Name;
-            String nodeName = FromTypeDelimitedName( name );
+            string name = method.DeclaringType.FullName + Type.Delimiter + method.Name;
+            string nodeName = FromTypeDelimitedName(name);
             return nodeName;
         }
 
-        internal static String FromMethod( StackTrace trace, Int32 frameIndex )
+        internal static string FromMethod(StackTrace trace, int frameIndex)
         {
-            Contract.Requires( trace != null );
+            Contract.Requires<ArgumentNullException>(trace != null);
 
-            MethodBase method = GetMethod( trace, frameIndex );
-            String nodeName = FromMethod( method );
+            MethodBase method = GetMethod(trace, frameIndex);
+            string nodeName = FromMethod(method);
             return nodeName;
         }
     }

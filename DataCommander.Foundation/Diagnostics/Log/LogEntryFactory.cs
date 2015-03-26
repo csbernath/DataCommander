@@ -8,20 +8,20 @@ namespace DataCommander.Foundation.Diagnostics
 
     internal static class LogEntryFactory
     {
-        private static Int64 id;
+        private static long id;
 
         public static LogEntry Create(
-            String logName,
+            string logName,
             DateTime creationTime,
-            String message,
+            string message,
             LogLevel logLevel )
         {
-            Int64 id = Interlocked.Increment( ref LogEntryFactory.id );
+            long id = Interlocked.Increment( ref LogEntryFactory.id );
             var thread = Thread.CurrentThread;
-            Int32 threadId = thread.ManagedThreadId;
-            String threadName = thread.Name;
-            String userName = null;
-            String hostName = null;
+            int threadId = thread.ManagedThreadId;
+            string threadName = thread.Name;
+            string userName = null;
+            string hostName = null;
 
 #if FOUNDATION_3_5
             HttpContext context = HttpContext.Current;
@@ -57,11 +57,11 @@ namespace DataCommander.Foundation.Diagnostics
         }
 
         public static LogEntry Create(
-            String logName,
-            String message,
+            string logName,
+            string message,
             LogLevel logLevel )
         {
-            var creationTime = OptimizedDateTime.Now;
+            var creationTime = LocalTime.Default.Now;
             return Create( logName, creationTime, message, logLevel );
         }
     }

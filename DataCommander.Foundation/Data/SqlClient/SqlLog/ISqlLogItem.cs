@@ -4,7 +4,7 @@
 
     internal interface ISqlLogItem
     {
-        String CommandText
+        string CommandText
         {
             get;
         }

@@ -22,9 +22,9 @@
             if (arrays != null)
             {
                 Contract.ForAll(arrays, a => a != null);
-                Int32 resultLength = arrays.Sum(a => a.Length);
+                int resultLength = arrays.Sum(a => a.Length);
                 result = new T[resultLength];
-                Int32 index = 0;
+                int index = 0;
 
                 foreach (T[] array in arrays)
                 {
@@ -60,13 +60,13 @@
         /// <param name="item"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static Boolean Contains<T>(
+        public static bool Contains<T>(
             this T[] array,
             T item,
             IEqualityComparer<T> comparer)
         {
-            Int32 index = array.IndexOf(item, comparer);
-            Boolean contains = index >= 0;
+            int index = array.IndexOf(item, comparer);
+            bool contains = index >= 0;
             return contains;
         }
 
@@ -77,7 +77,7 @@
         /// <param name="array"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        public static Boolean Contains<T>(this T[] array, T item)
+        public static bool Contains<T>(this T[] array, T item)
         {
             IEqualityComparer<T> comparer = EqualityComparer<T>.Default;
             return array.Contains(item, comparer);
@@ -91,15 +91,15 @@
         /// <param name="item"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static Int32 IndexOf<T>(this T[] array, T item, IEqualityComparer<T> comparer)
+        public static int IndexOf<T>(this T[] array, T item, IEqualityComparer<T> comparer)
         {
-            Int32 index = -1;
+            int index = -1;
 
             if (array != null)
             {
                 Contract.Assert(comparer != null);
 
-                for (Int32 i = 0; i < array.Length; i++)
+                for (int i = 0; i < array.Length; i++)
                 {
                     if (comparer.Equals(array[i], item))
                     {
@@ -119,7 +119,7 @@
         /// <param name="array"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        public static Int32 IndexOf<T>(this T[] array, T item)
+        public static int IndexOf<T>(this T[] array, T item)
         {
             IEqualityComparer<T> comparer = EqualityComparer<T>.Default;
             return array.IndexOf(item, comparer);
@@ -130,7 +130,7 @@
         /// </summary>
         /// <param name="array"></param>
         /// <returns></returns>
-        public static Boolean IsNullOrEmpty(this Array array)
+        public static bool IsNullOrEmpty(this Array array)
         {
             return array == null || array.Length == 0;
         }

@@ -14,9 +14,9 @@
         /// </summary>
         /// <param name="errors"></param>
         /// <returns></returns>
-        public static String ToLogString( this SqlErrorCollection errors )
+        public static string ToLogString( this SqlErrorCollection errors )
         {
-            String message = null;
+            string message = null;
 
             if (errors != null)
             {
@@ -24,7 +24,7 @@
 
                 foreach (SqlError error in errors)
                 {
-                    String s = error.ToLogString();
+                    string s = error.ToLogString();
                     sb.AppendLine( s );
                 }
 

@@ -13,6 +13,6 @@
         /// </summary>
         /// <param name="sb"></param>
         /// <param name="args"></param>
-        void AppendTo( StringBuilder sb, Object[] args );
+        void AppendTo( StringBuilder sb, object[] args );
     }
 }

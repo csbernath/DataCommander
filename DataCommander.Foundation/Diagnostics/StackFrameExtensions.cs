@@ -7,19 +7,19 @@
 
     internal static class StackFrameExtensions
     {
-        public static String ToLogString( this StackFrame frame )
+        public static string ToLogString( this StackFrame frame )
         {
             Contract.Requires( frame != null );
 
             var sb = new StringBuilder();
             var method = frame.GetMethod();
             Type type = method.DeclaringType;
-            String typeName = type.FullName;
-            String name = method.Name;
+            string typeName = type.FullName;
+            string name = method.Name;
             sb.AppendFormat( "   at {0}.{1}(", typeName, name );
             var parameters = method.GetParameters();
 
-            for (Int32 j = 0; j < parameters.Length; j++)
+            for (int j = 0; j < parameters.Length; j++)
             {
                 if (j > 0)
                 {
@@ -36,11 +36,11 @@
 
             sb.Append( ')' );
 
-            String fileName = frame.GetFileName();
+            string fileName = frame.GetFileName();
 
             if (fileName != null)
             {
-                Int32 fileLineNumber = frame.GetFileLineNumber();
+                int fileLineNumber = frame.GetFileLineNumber();
                 sb.AppendFormat( " in {0}:line {1}", fileName, fileLineNumber );
             }
 

@@ -10,8 +10,8 @@ namespace DataCommander.Foundation.IO
     public sealed class TreeTextWriter
     {
         private readonly TextWriter textWriter;
-        private readonly Int32 indentation;
-        private Int32 level;
+        private readonly int indentation;
+        private int level;
         private State state;
         private readonly ConsoleColor originalForegroundColor;
         private ConsoleColor foregroundColor;
@@ -21,7 +21,7 @@ namespace DataCommander.Foundation.IO
         /// </summary>
         /// <param name="textWriter"></param>
         /// <param name="indentation"></param>
-        public TreeTextWriter( TextWriter textWriter, Int32 indentation )
+        public TreeTextWriter( TextWriter textWriter, int indentation )
         {
             this.textWriter = textWriter;
             this.indentation = indentation;
@@ -52,13 +52,13 @@ namespace DataCommander.Foundation.IO
             WriteEndElement
         }
 
-        private void WritePrefix( Int32 level )
+        private void WritePrefix( int level )
         {
             if (level > 0)
             {
-                String prefix = '|' + new String( ' ', this.indentation - 1 );
+                string prefix = '|' + new string( ' ', this.indentation - 1 );
 
-                for (Int32 i = 0;i < level;i++)
+                for (int i = 0;i < level;i++)
                 {
                     this.textWriter.Write( prefix );
                 }
@@ -69,7 +69,7 @@ namespace DataCommander.Foundation.IO
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public void WriteStartElement( String value )
+        public void WriteStartElement( string value )
         {
             if (this.state == State.WriteStartElement)
             {
@@ -87,9 +87,9 @@ namespace DataCommander.Foundation.IO
         /// </summary>
         /// <param name="format"></param>
         /// <param name="arguments"></param>
-        public void WriteStartElement( String format, params Object[] arguments )
+        public void WriteStartElement( string format, params object[] arguments )
         {
-            String value = String.Format( CultureInfo.InvariantCulture, format, arguments );
+            string value = string.Format( CultureInfo.InvariantCulture, format, arguments );
             this.WriteStartElement( value );
         }
 
@@ -97,7 +97,7 @@ namespace DataCommander.Foundation.IO
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public void WriteEndElement( String value )
+        public void WriteEndElement( string value )
         {
             this.level--;
 
@@ -120,9 +120,9 @@ namespace DataCommander.Foundation.IO
         /// </summary>
         /// <param name="format"></param>
         /// <param name="arguments"></param>
-        public void WriteEndElement( String format, params Object[] arguments )
+        public void WriteEndElement( string format, params object[] arguments )
         {
-            String value = String.Format( CultureInfo.InvariantCulture, format, arguments );
+            string value = string.Format( CultureInfo.InvariantCulture, format, arguments );
             this.WriteEndElement( value );
         }
 
@@ -130,7 +130,7 @@ namespace DataCommander.Foundation.IO
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public void WriteElement( String value )
+        public void WriteElement( string value )
         {
             if (this.state == State.WriteStartElement)
             {
@@ -159,9 +159,9 @@ namespace DataCommander.Foundation.IO
         /// </summary>
         /// <param name="format"></param>
         /// <param name="arguments"></param>
-        public void WriteElement( String format, params Object[] arguments )
+        public void WriteElement( string format, params object[] arguments )
         {
-            String value = String.Format( CultureInfo.InvariantCulture, format, arguments );
+            string value = string.Format( CultureInfo.InvariantCulture, format, arguments );
             this.WriteElement( value );
         }
 
@@ -169,9 +169,9 @@ namespace DataCommander.Foundation.IO
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public void WriteElement( Object value )
+        public void WriteElement( object value )
         {
-            String s = value != null ? value.ToString() : null;
+            string s = value != null ? value.ToString() : null;
             this.WriteElement( s );
         }
     }

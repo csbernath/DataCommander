@@ -16,14 +16,14 @@ namespace DataCommander.Foundation.Collections
 
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private IPoolableObjectFactory<T> factory;
-        private readonly Int32 minSize;
-        private readonly Int32 maxSize;
+        private readonly int minSize;
+        private readonly int maxSize;
         private LinkedList<ObjectPoolItem<T>> idleItems = new LinkedList<ObjectPoolItem<T>>();
-        private Dictionary<Int32, ObjectPoolItem<T>> activeItems = new Dictionary<Int32, ObjectPoolItem<T>>();
+        private Dictionary<int, ObjectPoolItem<T>> activeItems = new Dictionary<int, ObjectPoolItem<T>>();
         private AutoResetEvent idleEvent = new AutoResetEvent( false );
         private Timer timer;
-        private Int32 key;
-        private Boolean disposed;
+        private int key;
+        private bool disposed;
 
         #endregion
 
@@ -37,8 +37,8 @@ namespace DataCommander.Foundation.Collections
         /// <param name="maxSize"></param>
         public ObjectPool(
             IPoolableObjectFactory<T> factory,
-            Int32 minSize,
-            Int32 maxSize )
+            int minSize,
+            int maxSize )
         {
             Contract.Requires(factory != null);
             Contract.Requires(minSize >= 0);
@@ -63,7 +63,7 @@ namespace DataCommander.Foundation.Collections
         /// <summary>
         /// 
         /// </summary>
-        public Int32 MinSize
+        public int MinSize
         {
             get
             {
@@ -74,7 +74,7 @@ namespace DataCommander.Foundation.Collections
         /// <summary>
         /// 
         /// </summary>
-        public Int32 MaxSize
+        public int MaxSize
         {
             get
             {
@@ -85,7 +85,7 @@ namespace DataCommander.Foundation.Collections
         /// <summary>
         /// 
         /// </summary>
-        public Int32 IdleCount
+        public int IdleCount
         {
             get
             {
@@ -96,7 +96,7 @@ namespace DataCommander.Foundation.Collections
         /// <summary>
         /// 
         /// </summary>
-        public Int32 ActiveCount
+        public int ActiveCount
         {
             get
             {
@@ -120,7 +120,7 @@ namespace DataCommander.Foundation.Collections
         /// </summary>
         public void Clear()
         {
-            DateTime now = OptimizedDateTime.Now;
+            DateTime now = LocalTime.Default.Now;
             List<ObjectPoolItem<T>> obsoleteList = new List<ObjectPoolItem<T>>();
 
             lock (this.idleItems)
@@ -173,7 +173,7 @@ namespace DataCommander.Foundation.Collections
                             LinkedListNode<ObjectPoolItem<T>> last = this.idleItems.Last;
                             this.idleItems.RemoveLast();
                             item = last.Value;
-                            log.Trace("Item(key:{0}) reused from Object pool. idle: {1}, active: {2}.", item.Key, this.idleItems.Count, this.activeItems.Count );
+                            log.Trace("Item(key:{0}) reused from object pool. idle: {1}, active: {2}.", item.Key, this.idleItems.Count, this.activeItems.Count );
                         }
                     }
 
@@ -187,13 +187,13 @@ namespace DataCommander.Foundation.Collections
                 }
                 else
                 {
-                    Int32 count = this.idleItems.Count + this.activeItems.Count;
+                    int count = this.idleItems.Count + this.activeItems.Count;
 
                     if (count < this.maxSize)
                     {
-                        DateTime creationDate = OptimizedDateTime.Now;
+                        DateTime creationDate = LocalTime.Default.Now;
                         T value = this.factory.CreateObject();
-                        Int32 key = Interlocked.Increment( ref this.key );
+                        int key = Interlocked.Increment( ref this.key );
                         item = new ObjectPoolItem<T>( key, value, creationDate );
 
                         lock (this.activeItems)
@@ -201,12 +201,12 @@ namespace DataCommander.Foundation.Collections
                             this.activeItems.Add( item.Key, item );
                         }
 
-                        log.Trace("New item(key:{0}) created in Object pool. idle: {1}, active: {2}.", key, this.idleItems.Count, this.activeItems.Count );
+                        log.Trace("New item(key:{0}) created in object pool. idle: {1}, active: {2}.", key, this.idleItems.Count, this.activeItems.Count );
                         break;
                     }
                     else
                     {
-                        log.Trace("Object pool is active. Waiting for idle item..." );
+                        log.Trace("object pool is active. Waiting for idle item..." );
                         this.idleEvent.Reset();
 
                         if (thread == null)
@@ -220,7 +220,7 @@ namespace DataCommander.Foundation.Collections
                             this.idleEvent
                         };
 
-                        Int32 i = WaitHandle.WaitAny( waitHandles, 30000, false );
+                        int i = WaitHandle.WaitAny( waitHandles, 30000, false );
 
                         if (i == 0)
                         {
@@ -242,7 +242,7 @@ namespace DataCommander.Foundation.Collections
 
         internal void DestroyObject( ObjectPoolItem<T> item )
         {
-            Boolean idle;
+            bool idle;
 
             lock (this.activeItems)
             {
@@ -251,7 +251,7 @@ namespace DataCommander.Foundation.Collections
 
             lock (this.idleItems)
             {
-                Int32 count = this.activeItems.Count + this.idleItems.Count;
+                int count = this.activeItems.Count + this.idleItems.Count;
                 idle = count < this.maxSize;
 
                 if (idle)
@@ -274,7 +274,7 @@ namespace DataCommander.Foundation.Collections
 
         #region Private Methods
 
-        private void Dispose( Boolean disposing )
+        private void Dispose( bool disposing )
         {
             if (!this.disposed)
             {
@@ -301,7 +301,7 @@ namespace DataCommander.Foundation.Collections
                     {
                         foreach (ObjectPoolItem<T> item in this.activeItems.Values)
                         {
-                            log.Trace("Object pool item(key:{0}) is active.", item.Key );
+                            log.Trace("object pool item(key:{0}) is active.", item.Key );
                         }
                     }
                 }
@@ -310,7 +310,7 @@ namespace DataCommander.Foundation.Collections
             }
         }
 
-        private void TimerCallback( Object state )
+        private void TimerCallback( object state )
         {
             this.Clear();
         }

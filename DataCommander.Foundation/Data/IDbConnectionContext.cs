@@ -24,6 +24,6 @@
         /// <summary>
         /// 
         /// </summary>
-        Int32? CommandTimeout { get; }
+        int? CommandTimeout { get; }
     }
 }

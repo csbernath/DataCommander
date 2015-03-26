@@ -93,7 +93,7 @@
                 }
 
                 var queryForm = (QueryForm) Application.Instance.MainForm.ActiveMdiChild;
-                queryForm.AddInfoMessage( new InfoMessage( OptimizedDateTime.Now, InfoMessageSeverity.Information, string.Format( "\r\nworkspace.Name: {0}\r\nworkingFolder.LocalItem: {1}", name, workingFolder.LocalItem ) ) );
+                queryForm.AddInfoMessage( new InfoMessage( LocalTime.Default.Now, InfoMessageSeverity.Information, string.Format( "\r\nworkspace.Name: {0}\r\nworkingFolder.LocalItem: {1}", name, workingFolder.LocalItem ) ) );
             }
 
             if (this.items != null && this.index < this.items.Length)

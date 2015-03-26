@@ -45,7 +45,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public void Add( String name, Object value )
+        public void Add( string name, object value )
         {
             var item = new AssertMessageParameter( name, value );
             this.Add( item );
@@ -64,7 +64,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Contains( AssertMessageParameter item )
+        public bool Contains( AssertMessageParameter item )
         {
             return this.list.Contains( item );
         }
@@ -74,7 +74,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
-        public void CopyTo( AssertMessageParameter[] array, Int32 arrayIndex )
+        public void CopyTo( AssertMessageParameter[] array, int arrayIndex )
         {
             this.list.CopyTo( array, arrayIndex );
         }
@@ -82,7 +82,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {
@@ -93,7 +93,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsReadOnly
+        public bool IsReadOnly
         {
             get
             {
@@ -106,7 +106,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Remove( AssertMessageParameter item )
+        public bool Remove( AssertMessageParameter item )
         {
             return this.list.Remove( item );
         }

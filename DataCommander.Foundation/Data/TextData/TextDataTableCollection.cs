@@ -10,22 +10,22 @@
     {
         #region IList<TextDataTable> Members
 
-        Int32 IList<TextDataTable>.IndexOf(TextDataTable item)
+        int IList<TextDataTable>.IndexOf(TextDataTable item)
         {
             throw new NotImplementedException();
         }
 
-        void IList<TextDataTable>.Insert(Int32 index, TextDataTable item)
+        void IList<TextDataTable>.Insert(int index, TextDataTable item)
         {
             throw new NotImplementedException();
         }
 
-        void IList<TextDataTable>.RemoveAt(Int32 index)
+        void IList<TextDataTable>.RemoveAt(int index)
         {
             throw new NotImplementedException();
         }
 
-        TextDataTable IList<TextDataTable>.this[Int32 index]
+        TextDataTable IList<TextDataTable>.this[int index]
         {
             get
             {
@@ -52,27 +52,27 @@
             throw new NotImplementedException();
         }
 
-        Boolean ICollection<TextDataTable>.Contains(TextDataTable item)
+        bool ICollection<TextDataTable>.Contains(TextDataTable item)
         {
             throw new NotImplementedException();
         }
 
-        void ICollection<TextDataTable>.CopyTo(TextDataTable[] array, Int32 arrayIndex)
+        void ICollection<TextDataTable>.CopyTo(TextDataTable[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
 
-        Int32 ICollection<TextDataTable>.Count
+        int ICollection<TextDataTable>.Count
         {
             get { throw new NotImplementedException();}
         }
 
-        Boolean ICollection<TextDataTable>.IsReadOnly
+        bool ICollection<TextDataTable>.IsReadOnly
         {
             get { throw new NotImplementedException();}
         }
 
-        Boolean ICollection<TextDataTable>.Remove(TextDataTable item)
+        bool ICollection<TextDataTable>.Remove(TextDataTable item)
         {
             throw new NotImplementedException();
         }

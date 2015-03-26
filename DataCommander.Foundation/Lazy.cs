@@ -14,7 +14,7 @@ namespace DataCommander.Foundation
         #region Private Fields
 
         private readonly Func<T> valueFactory;
-        private Boolean isValueCreated;
+        private bool isValueCreated;
         private T value;
 
         #endregion
@@ -33,7 +33,7 @@ namespace DataCommander.Foundation
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsValueCreated
+        public bool IsValueCreated
         {
             get
             {

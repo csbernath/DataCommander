@@ -16,7 +16,7 @@ namespace DataCommander.Foundation.IO
 
         private TextWriter textWriter;
         private List<AsyncTextWriterListItem> list = new List<AsyncTextWriterListItem>();
-        private Object syncObject = new Object();
+        private object syncObject = new object();
         private ManualResetEvent waitHandle = new ManualResetEvent(false);
         private RegisteredWaitHandle registeredWaitHandle;
 
@@ -42,13 +42,13 @@ namespace DataCommander.Foundation.IO
                 AsyncTextWriterListItem[] items;
                 lock (this.list)
                 {
-                    Int32 count = this.list.Count;
+                    int count = this.list.Count;
                     items = new AsyncTextWriterListItem[count];
                     this.list.CopyTo(items);
                     this.list.Clear();
                 }
 
-                for (Int32 i = 0;i < items.Length;i++)
+                for (int i = 0;i < items.Length;i++)
                 {
                     items[i].AppendTo(sb);
                 }
@@ -65,14 +65,14 @@ namespace DataCommander.Foundation.IO
                 if (this.registeredWaitHandle != null)
                 {
                     ////log.Write(LogLevel.Trace,"Unregister...");
-                    Boolean succeeded = this.registeredWaitHandle.Unregister(null);
+                    bool succeeded = this.registeredWaitHandle.Unregister(null);
                     this.registeredWaitHandle = null;
                     ////log.Write(LogLevel.Trace,"Unregister succeeded.");
                 }
             }
         }
 
-        private void Callback(Object state, Boolean timedOut)
+        private void Callback(object state, bool timedOut)
         {
             if (this.list.Count > 0)
             {
@@ -91,7 +91,7 @@ namespace DataCommander.Foundation.IO
                 this.list.Add(item);
             }
 
-            const Int32 timeout = 10000;// 10 seconds
+            const int timeout = 10000;// 10 seconds
 
             lock (this.syncObject)
             {
@@ -107,7 +107,7 @@ namespace DataCommander.Foundation.IO
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public void Write(String value)
+        public void Write(string value)
         {
             AsyncTextWriterListItem item = new AsyncTextWriterListItem(DefaultFormatter.Instance, value);
             this.Write(item);
@@ -118,7 +118,7 @@ namespace DataCommander.Foundation.IO
         /// </summary>
         /// <param name="formatter"></param>
         /// <param name="args"></param>
-        public void Write(IFormatter formatter, params Object[] args)
+        public void Write(IFormatter formatter, params object[] args)
         {
             AsyncTextWriterListItem item = new AsyncTextWriterListItem(formatter, args);
             this.Write(item);

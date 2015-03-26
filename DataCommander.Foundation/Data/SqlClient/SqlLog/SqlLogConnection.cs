@@ -6,23 +6,23 @@ namespace DataCommander.Foundation.Data.SqlClient
 
     internal sealed class SqlLogConnection : ISqlLogItem
     {
-        private readonly Int32 applicationId;
-        private readonly Int32 connectionNo;
-        private readonly String name;
-        private String userName;
-        private String hostName;
+        private readonly int applicationId;
+        private readonly int connectionNo;
+        private readonly string name;
+        private string userName;
+        private string hostName;
         private DateTime startDate;
-        private Int64 duration;
+        private long duration;
         private Exception exception;
 
         public SqlLogConnection(
-            Int32 applicationId,
-            Int32 connectionNo,
-            String name,
-            String userName,
-            String hostName,
+            int applicationId,
+            int connectionNo,
+            string name,
+            string userName,
+            string hostName,
             DateTime startDate,
-            Int64 duration,
+            long duration,
             Exception exception )
         {
             this.applicationId = applicationId;
@@ -35,11 +35,11 @@ namespace DataCommander.Foundation.Data.SqlClient
             this.exception = exception;
         }
 
-        String ISqlLogItem.CommandText
+        string ISqlLogItem.CommandText
         {
             get
             {
-                Int32 microseconds = StopwatchTimeSpan.ToInt32( this.duration, 1000000 );
+                int microseconds = StopwatchTimeSpan.ToInt32( this.duration, 1000000 );
                 var sb = new StringBuilder();
                 sb.AppendFormat(
                     "exec LogConnectionOpen {0},{1},{2},{3},{4},{5},{6}",
@@ -54,7 +54,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                 if (this.exception != null)
                 {
                     SqlLogError error = new SqlLogError( this.applicationId, this.connectionNo, 0, 0, this.exception );
-                    String commandText = error.CommandText;
+                    string commandText = error.CommandText;
                     sb.Append( commandText );
                 }
 
@@ -62,7 +62,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
         }
 
-        public Int32 ApplicationId
+        public int ApplicationId
         {
             get
             {
@@ -70,7 +70,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
         }
 
-        public Int32 ConnectionNo
+        public int ConnectionNo
         {
             get
             {

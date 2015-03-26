@@ -8,7 +8,7 @@ namespace DataCommander.Foundation.Data.PTypes
     /// </summary>
     public struct PVariant : INullable
     {
-        private Object sql;
+        private object sql;
         private PValueType type;
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public PVariant( Object value )
+        public PVariant( object value )
         {
             if (value == null)
             {
@@ -72,7 +72,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsNull
+        public bool IsNull
         {
             get
             {
@@ -83,7 +83,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsValue
+        public bool IsValue
         {
             get
             {
@@ -94,7 +94,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsEmpty
+        public bool IsEmpty
         {
             get
             {
@@ -105,11 +105,11 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Object Value
+        public object Value
         {
             get
             {
-                Object value;
+                object value;
 
                 switch (this.type)
                 {
@@ -150,7 +150,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        public static implicit operator PVariant( String s )
+        public static implicit operator PVariant( string s )
         {
             return new PVariant( s );
         }
@@ -159,7 +159,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <returns></returns>
-        public override String ToString()
+        public override string ToString()
         {
             return this.sql.ToString();
         }

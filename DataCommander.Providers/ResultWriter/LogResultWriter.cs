@@ -47,21 +47,21 @@
                 message += "\r\n" + command.Parameters.ToLogString();
             }
 
-            this.addInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Verbose, message));
+            this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
 
         void IResultWriter.AfterExecuteReader()
         {
             long duration = Stopwatch.GetTimestamp() - this.beforeExecuteReaderTimestamp;
             string message = string.Format("Command({0}) started in {1} seconds.", this.commandCount, StopwatchTimeSpan.ToString(duration, 3));
-            this.addInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Verbose, message));
+            this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
             this.tableCount = 0;
         }
 
         void IResultWriter.AfterCloseReader(int affectedRows)
         {
             long duration = Stopwatch.GetTimestamp() - this.beforeExecuteReaderTimestamp;
-            DateTime now = OptimizedDateTime.Now;
+            DateTime now = LocalTime.Default.Now;
             string message = string.Format(
                 "Command({0}) completed in {1} seconds.",
                 this.commandCount,
@@ -91,7 +91,7 @@
         {
             long duration = Stopwatch.GetTimestamp() - this.firstRowReadBeginTimestamp;
             string message = string.Format("First row read completed in {0} seconds.", StopwatchTimeSpan.ToString(duration, 3));
-            this.addInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Verbose, message));
+            this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
 
         void IResultWriter.WriteRows(object[][] rows, int rowCount)
@@ -108,10 +108,10 @@
                 commandCount,
                 StopwatchTimeSpan.ToString(duration, 3),
                 this.rowCount);
-            this.addInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Verbose, message));
+            this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
 
             message = string.Format("{0} row(s) affected.", this.rowCount);
-            this.addInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Information, message));
+            this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, message));
         }
 
         void IResultWriter.WriteParameters(System.Data.IDataParameterCollection parameters)
@@ -125,7 +125,7 @@
                 "Query completed {0} command(s) in {1} seconds.",
                 this.commandCount,
                 StopwatchTimeSpan.ToString(duration, 3));
-            this.addInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Verbose, message));
+            this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
 
         #endregion

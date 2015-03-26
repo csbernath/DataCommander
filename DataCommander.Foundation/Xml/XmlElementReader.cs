@@ -28,12 +28,12 @@ namespace DataCommander.Foundation.Xml
             XmlDocument xmlDocument,
             XmlAttributeCollection attributes )
         {
-            Boolean exists = xmlReader.MoveToFirstAttribute();
+            bool exists = xmlReader.MoveToFirstAttribute();
 
             while (exists)
             {
-                String name = xmlReader.Name;
-                String value = xmlReader.Value;
+                string name = xmlReader.Name;
+                string value = xmlReader.Value;
                 XmlAttribute xmlAttribute = xmlDocument.CreateAttribute( name );
                 xmlAttribute.Value = value;
                 attributes.Append( xmlAttribute );
@@ -41,9 +41,9 @@ namespace DataCommander.Foundation.Xml
             }
         }
 
-        private static Boolean MoveToElement( XmlReader xmlReader )
+        private static bool MoveToElement( XmlReader xmlReader )
         {
-            Boolean found = false;
+            bool found = false;
 
             while (xmlReader.Read())
             {
@@ -66,12 +66,12 @@ namespace DataCommander.Foundation.Xml
         public XmlElement ReadStartElement()
         {
             XmlElement xmlElement = null;
-            Boolean found = MoveToElement( this.xmlReader );
+            bool found = MoveToElement( this.xmlReader );
 
             if (found)
             {
                 XmlDocument xmlDocument = new XmlDocument();
-                String name = this.xmlReader.Name;
+                string name = this.xmlReader.Name;
                 xmlElement = xmlDocument.CreateElement( name );
                 XmlAttributeCollection attributes = xmlElement.Attributes;
                 ReadAttributes( this.xmlReader, xmlDocument, attributes );
@@ -80,19 +80,19 @@ namespace DataCommander.Foundation.Xml
             return xmlElement;
         }
 
-        private static XmlElement ReadElement( XmlReader xmlReader, XmlDocument xmlDocument, Int32 level )
+        private static XmlElement ReadElement( XmlReader xmlReader, XmlDocument xmlDocument, int level )
         {
 #if DEBUG
             IXmlLineInfo xmlLineInfo = xmlReader as IXmlLineInfo;
 
             if (xmlLineInfo != null)
             {
-                Trace.WriteLine( String.Format( "begin {0},{1},{2},{3}", level, xmlReader.Name, xmlLineInfo.LineNumber, xmlLineInfo.LinePosition ) );
+                Trace.WriteLine( string.Format( "begin {0},{1},{2},{3}", level, xmlReader.Name, xmlLineInfo.LineNumber, xmlLineInfo.LinePosition ) );
             }
 #endif
 
-            String name = xmlReader.Name;
-            Boolean isEmptyElement = xmlReader.IsEmptyElement;
+            string name = xmlReader.Name;
+            bool isEmptyElement = xmlReader.IsEmptyElement;
             XmlElement xmlElement = xmlDocument.CreateElement( name );
 
             if (xmlReader.HasAttributes)
@@ -104,7 +104,7 @@ namespace DataCommander.Foundation.Xml
             {
                 while (true)
                 {
-                    Boolean read = xmlReader.Read();
+                    bool read = xmlReader.Read();
 
                     if (!read)
                     {
@@ -112,18 +112,18 @@ namespace DataCommander.Foundation.Xml
                     }
 
                     XmlNodeType nodeType = xmlReader.NodeType;
-                    Boolean breakable = false;
+                    bool breakable = false;
 
                     switch (nodeType)
                     {
                         case XmlNodeType.Text:
-                            String value = xmlReader.Value;
+                            string value = xmlReader.Value;
                             XmlText xmlText = xmlDocument.CreateTextNode( value );
                             xmlElement.AppendChild( xmlText );
                             break;
 
                         case XmlNodeType.CDATA:
-                            String data = xmlReader.Value;
+                            string data = xmlReader.Value;
                             XmlCDataSection xmlCDataSection = xmlDocument.CreateCDataSection( data );
                             xmlElement.AppendChild( xmlCDataSection );
                             break;
@@ -151,7 +151,7 @@ namespace DataCommander.Foundation.Xml
 #if DEBUG
             if (xmlLineInfo != null)
             {
-                Trace.WriteLine( String.Format( "end {0},{1},{2}", level, xmlLineInfo.LineNumber, xmlLineInfo.LinePosition ) );
+                Trace.WriteLine( string.Format( "end {0},{1},{2}", level, xmlLineInfo.LineNumber, xmlLineInfo.LinePosition ) );
             }
 #endif
 
@@ -169,7 +169,7 @@ namespace DataCommander.Foundation.Xml
 
             if (xmlLineInfo != null)
             {
-                Trace.WriteLine( String.Format( "BEGIN {0},{1}", xmlLineInfo.LineNumber, xmlLineInfo.LinePosition ) );
+                Trace.WriteLine( string.Format( "BEGIN {0},{1}", xmlLineInfo.LineNumber, xmlLineInfo.LinePosition ) );
             }
 #endif
 
@@ -178,10 +178,10 @@ namespace DataCommander.Foundation.Xml
             while (this.xmlReader.Read())
             {
 #if DEBUG
-                Trace.WriteLine( String.Format( "{0},{1}", this.xmlReader.Name, this.xmlReader.NodeType ) );
+                Trace.WriteLine( string.Format( "{0},{1}", this.xmlReader.Name, this.xmlReader.NodeType ) );
 #endif
                 XmlNodeType nodeType = this.xmlReader.NodeType;
-                Boolean breakable = false;
+                bool breakable = false;
 
                 switch (nodeType)
                 {
@@ -207,7 +207,7 @@ namespace DataCommander.Foundation.Xml
 #if DEBUG
             if (xmlLineInfo != null)
             {
-                Trace.WriteLine( String.Format( "END {0},{1}", xmlLineInfo.LineNumber, xmlLineInfo.LinePosition ) );
+                Trace.WriteLine( string.Format( "END {0},{1}", xmlLineInfo.LineNumber, xmlLineInfo.LinePosition ) );
             }
 #endif
 

@@ -8,10 +8,14 @@
     /// <typeparam name="T"></typeparam>
     public sealed class MinMaxResult<T>
     {
-        private readonly Int32 count;
-        private readonly Int32 whereCount;
+        #region Private Fields
+
+        private readonly int count;
+        private readonly int whereCount;
         private readonly IndexedItem<T> min;
-        private IndexedItem<T> max;
+        private readonly IndexedItem<T> max;
+
+        #endregion
 
         /// <summary>
         /// 
@@ -21,10 +25,10 @@
         /// <param name="min"></param>
         /// <param name="max"></param>
         public MinMaxResult(
-            Int32 count,
-            Int32 whereCount,
+            int count,
+            int whereCount,
             IndexedItem<T> min,
-            IndexedItem<T> max )
+            IndexedItem<T> max)
         {
             this.count = count;
             this.whereCount = whereCount;
@@ -35,7 +39,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {
@@ -46,7 +50,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 WhereCount
+        public int WhereCount
         {
             get
             {

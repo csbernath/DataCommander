@@ -40,7 +40,7 @@ namespace DataCommander.Foundation.Threading
         {
             private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
             private Action[] actions;
-            private Int32 callbackCount;
+            private int callbackCount;
             private EventWaitHandle waitHandle;
             private bool isCompleted;
             private bool completedSynchronously;
@@ -58,10 +58,10 @@ namespace DataCommander.Foundation.Threading
                 {
                     this.waitHandle = new EventWaitHandle( false, EventResetMode.ManualReset );
 
-                    for (Int32 i = 0; i < this.actions.Length; i++)
+                    for (int i = 0; i < this.actions.Length; i++)
                     {
                         Action action = this.actions[ i ];
-                        Contract.Assert( action != null, String.Format( "action[{0}]", i ) );
+                        Contract.Assert( action != null, string.Format( "action[{0}]", i ) );
                         bool succeeded = ThreadPool.QueueUserWorkItem( this.Callback, action );
                         Contract.Assert( succeeded, "Adding work item to thread pool failed." );
                     }
@@ -107,7 +107,7 @@ namespace DataCommander.Foundation.Threading
                 }
             }
 
-            private void Callback( Object state )
+            private void Callback( object state )
             {
                 var action = (Action)state;
 

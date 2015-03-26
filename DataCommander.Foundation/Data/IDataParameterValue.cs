@@ -10,7 +10,7 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        Object ValueObject
+        object ValueObject
         {
             get;
         }

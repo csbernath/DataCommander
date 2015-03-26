@@ -13,7 +13,7 @@
     /// </summary>
     public class LoggedEventArgs : EventArgs
     {
-        private readonly Int64 timestamp;
+        private readonly long timestamp;
         private readonly DateTime dateTime;
 
         /// <summary>
@@ -22,13 +22,13 @@
         public LoggedEventArgs()
         {
             this.timestamp = Stopwatch.GetTimestamp();
-            this.dateTime = OptimizedDateTime.Now;
+            this.dateTime = LocalTime.Default.Now;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public Int64 Timestamp
+        public long Timestamp
         {
             get
             {

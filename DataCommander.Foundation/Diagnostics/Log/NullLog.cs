@@ -65,75 +65,75 @@
             }
         }
 
-        void ILog.Debug( String format )
+        void ILog.Debug( string format )
         {
         }
 
-        void ILog.Debug( String format, params Object[] args )
+        void ILog.Debug( string format, params object[] args )
         {
         }
 
-        void ILog.Debug( Func<String> getMessage )
+        void ILog.Debug( Func<string> getMessage )
         {
         }
 
-        void ILog.Trace( String message )
+        void ILog.Trace( string message )
         {
         }
 
-        void ILog.Trace( String format, params Object[] args )
+        void ILog.Trace( string format, params object[] args )
         {
         }
 
-        void ILog.Trace( Func<String> getMessage )
+        void ILog.Trace( Func<string> getMessage )
         {
         }
 
-        void ILog.Information( String message )
+        void ILog.Information( string message )
         {
         }
 
-        void ILog.Information( String format, params Object[] args )
+        void ILog.Information( string format, params object[] args )
         {
         }
 
-        void ILog.Information( Func<String> getMessage )
+        void ILog.Information( Func<string> getMessage )
         {
         }
 
-        void ILog.Warning( String message )
+        void ILog.Warning( string message )
         {
         }
 
-        void ILog.Warning( String format, params Object[] args )
+        void ILog.Warning( string format, params object[] args )
         {
         }
 
-        void ILog.Warning( Func<String> getMessage )
+        void ILog.Warning( Func<string> getMessage )
         {
         }
 
-        void ILog.Error( String message )
+        void ILog.Error( string message )
         {
         }
 
-        void ILog.Error( String format, params Object[] args )
+        void ILog.Error( string format, params object[] args )
         {
         }
 
-        void ILog.Error( Func<String> getMessage )
+        void ILog.Error( Func<string> getMessage )
         {
         }
 
-        void ILog.Write( LogLevel logLevel, String message )
+        void ILog.Write( LogLevel logLevel, string message )
         {
         }
 
-        void ILog.Write( LogLevel logLevel, String format, params Object[] args )
+        void ILog.Write( LogLevel logLevel, string format, params object[] args )
         {
         }
 
-        void ILog.Write( LogLevel logLevel, Func<String> getMessage )
+        void ILog.Write( LogLevel logLevel, Func<string> getMessage )
         {
         }
 

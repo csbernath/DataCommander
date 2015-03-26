@@ -70,11 +70,11 @@ using System.Runtime.InteropServices;
     - Adding DynamicArray, SegmentCollection classes and IEnumerable<T> extension methods
     - Refactoring MemoryCache internals
     - Obsolete and new IDbConnection extension methods
-    - Adding  IDataRecordExtensions.GetValueOrDefault<T>( this IDataRecord dataRecord, Int32 index ) method
+    - Adding  IDataRecordExtensions.GetValueOrDefault<T>( this IDataRecord dataRecord, int index ) method
     - Enhancing Document.ReadFromPackage method
     - Adding DocumentPropertyId.Manager
     - Adding IDbCommand ExecuteScalarValue, ExecuteScalarValueOrDefault extension methods 
-    - Adding String Format extensions methods
+    - Adding string Format extensions methods
   
 5.0.1.0:
     - Adding TempFile class

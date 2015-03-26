@@ -4,6 +4,6 @@
 
     internal static class SqlNull
     {
-        internal const String NullString = "null";
+        internal const string NullString = "null";
     }
 }

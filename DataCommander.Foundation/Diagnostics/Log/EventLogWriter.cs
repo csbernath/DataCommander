@@ -18,9 +18,9 @@ namespace DataCommander.Foundation.Diagnostics
         /// <param name="machineName"></param>
         /// <param name="source"></param>
         public EventLogWriter(
-            String logName,
-            String machineName,
-            String source )
+            string logName,
+            string machineName,
+            string source )
         {
             try
             {
@@ -103,7 +103,7 @@ namespace DataCommander.Foundation.Diagnostics
 
             try
             {
-                String message = TextLogFormatter.Format( entry );
+                string message = TextLogFormatter.Format( entry );
                 this.eventLog.WriteEntry( message, eventLogEntryType );
             }
             catch (Exception e)

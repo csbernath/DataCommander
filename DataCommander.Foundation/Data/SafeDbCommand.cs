@@ -48,7 +48,7 @@ namespace DataCommander.Foundation.Data
         /// 
         /// </summary>
         /// <returns></returns>
-        public Int32 ExecuteNonQuery()
+        public int ExecuteNonQuery()
         {
             return this.connection.ExecuteNonQuery( this.command );
         }
@@ -76,7 +76,7 @@ namespace DataCommander.Foundation.Data
         /// 
         /// </summary>
         /// <returns></returns>
-        public Object ExecuteScalar()
+        public object ExecuteScalar()
         {
             return this.connection.ExecuteScalar( this.command );
         }
@@ -92,7 +92,7 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public String CommandText
+        public string CommandText
         {
             get
             {
@@ -108,7 +108,7 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public Int32 CommandTimeout
+        public int CommandTimeout
         {
             get
             {

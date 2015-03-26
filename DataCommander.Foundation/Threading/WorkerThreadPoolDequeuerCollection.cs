@@ -58,7 +58,7 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Int32 IndexOf(WorkerThreadPoolDequeuer item)
+        public int IndexOf(WorkerThreadPoolDequeuer item)
         {
             return this.list.IndexOf(item);
         }
@@ -68,7 +68,7 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         /// <param name="index"></param>
         /// <param name="item"></param>
-        public void Insert(Int32 index, WorkerThreadPoolDequeuer item)
+        public void Insert(int index, WorkerThreadPoolDequeuer item)
         {
             this.list.Insert(index, item);
         }
@@ -77,7 +77,7 @@ namespace DataCommander.Foundation.Threading
         /// 
         /// </summary>
         /// <param name="index"></param>
-        public void RemoveAt(Int32 index)
+        public void RemoveAt(int index)
         {
             this.list.RemoveAt(index);
         }
@@ -87,7 +87,7 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public WorkerThreadPoolDequeuer this[Int32 index]
+        public WorkerThreadPoolDequeuer this[int index]
         {
             get
             {
@@ -117,7 +117,7 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Contains(WorkerThreadPoolDequeuer item)
+        public bool Contains(WorkerThreadPoolDequeuer item)
         {
             throw new NotImplementedException();
         }
@@ -127,7 +127,7 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
-        public void CopyTo(WorkerThreadPoolDequeuer[] array, Int32 arrayIndex)
+        public void CopyTo(WorkerThreadPoolDequeuer[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
@@ -135,7 +135,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {
@@ -146,7 +146,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsReadOnly
+        public bool IsReadOnly
         {
             get
             {
@@ -154,7 +154,7 @@ namespace DataCommander.Foundation.Threading
             }
         }
 
-        Boolean ICollection<WorkerThreadPoolDequeuer>.Remove(WorkerThreadPoolDequeuer item)
+        bool ICollection<WorkerThreadPoolDequeuer>.Remove(WorkerThreadPoolDequeuer item)
         {
             throw new NotImplementedException();
         }

@@ -15,7 +15,7 @@ namespace DataCommander.Foundation.Collections
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        T this[ Int32 index ]
+        T this[ int index ]
         {
             get;
         }

@@ -9,13 +9,13 @@ namespace DataCommander.Foundation.Data
     /// </summary>
     public sealed class SqlSequence
     {
-        private readonly Int32 id;
+        private readonly int id;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="id"></param>
-        public SqlSequence( Int32 id )
+        public SqlSequence( int id )
         {
             this.id = id;
         }
@@ -26,7 +26,7 @@ namespace DataCommander.Foundation.Data
         /// <param name="connection"></param>
         public static void CreateSchema( IDbConnection connection )
         {
-            String commandText = @"create table dbo.Sequence
+            string commandText = @"create table dbo.Sequence
 (
     Id int not null,
     Name varchar(128) collate Latin1_General_CI_AS not null,
@@ -77,15 +77,15 @@ end";
         /// </summary>
         /// <param name="connection"></param>
         /// <returns></returns>
-        public Int32 GetNextSequenceValue( IDbConnection connection )
+        public int GetNextSequenceValue( IDbConnection connection )
         {
             IDbCommand command = connection.CreateCommand();
             command.CommandType = CommandType.StoredProcedure;
             command.CommandText = "GetNextSequenceValue";
             SqlParameter parameter = new SqlParameter( "@id", SqlDbType.Int ) { Value = this.id };
             command.Parameters.Add( parameter );
-            Object scalar = command.ExecuteScalar();
-            Int32 value = (Int32) scalar;
+            object scalar = command.ExecuteScalar();
+            int value = (int) scalar;
             return value;
         }
     }

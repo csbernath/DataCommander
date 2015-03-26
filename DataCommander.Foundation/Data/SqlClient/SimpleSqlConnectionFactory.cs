@@ -16,8 +16,8 @@ namespace DataCommander.Foundation.Data.SqlClient
     /// </summary>
     public sealed class SimpleSqlConnectionFactory
     {
-        private String connectionString;
-        private Int32 commandTimeout;
+        private string connectionString;
+        private int commandTimeout;
         private IDbConnectionFactory factory;
 
         /// <summary>
@@ -25,49 +25,49 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// </summary>
         /// <param name="section"></param>
         /// <param name="nodeName"></param>
-        public SimpleSqlConnectionFactory( ConfigurationSection section, String nodeName )
+        public SimpleSqlConnectionFactory( ConfigurationSection section, string nodeName )
         {
             Contract.Requires(section != null);
 
             ConfigurationNode node = section.SelectNode( nodeName, true );
-            this.connectionString = node.Attributes["ConnectionString"].GetValue<String>();
+            this.connectionString = node.Attributes["ConnectionString"].GetValue<string>();
             TimeSpan timeSpan;
 
-            Boolean contains = node.Attributes.TryGetAttributeValue<TimeSpan>( "CommandTimeout", out timeSpan );
+            bool contains = node.Attributes.TryGetAttributeValue<TimeSpan>( "CommandTimeout", out timeSpan );
 
             if (contains)
             {
-                this.commandTimeout = (Int32)timeSpan.TotalSeconds;
+                this.commandTimeout = (int)timeSpan.TotalSeconds;
             }
             else
             {
                 this.commandTimeout = 259200; // 3 days
             }
 
-            Boolean isSafe;
-            node.Attributes.TryGetAttributeValue<Boolean>( "IsSafe", out isSafe );
+            bool isSafe;
+            node.Attributes.TryGetAttributeValue<bool>( "IsSafe", out isSafe );
             ConfigurationNode sqlLogNode = node.ChildNodes["SqlLog"];
-            Boolean enabled;
-            sqlLogNode.Attributes.TryGetAttributeValue<Boolean>( "Enabled", out enabled );
+            bool enabled;
+            sqlLogNode.Attributes.TryGetAttributeValue<bool>( "Enabled", out enabled );
 
             if (enabled)
             {
                 var sqlConnectionStringBuilder = new SqlConnectionStringBuilder( this.connectionString );
-                String applicationName = sqlConnectionStringBuilder.ApplicationName;
-                String logConnectionString;
-                contains = sqlLogNode.Attributes.TryGetAttributeValue<String>( "ConnectionString", null, out logConnectionString );
+                string applicationName = sqlConnectionStringBuilder.ApplicationName;
+                string logConnectionString;
+                contains = sqlLogNode.Attributes.TryGetAttributeValue<string>( "ConnectionString", null, out logConnectionString );
 
                 if (!contains)
                 {
-                    String dataSource;
-                    contains = sqlLogNode.Attributes.TryGetAttributeValue<String>( "Data Source", null, out dataSource );
+                    string dataSource;
+                    contains = sqlLogNode.Attributes.TryGetAttributeValue<string>( "Data Source", null, out dataSource );
 
                     if (!contains)
                     {
                         dataSource = sqlConnectionStringBuilder.DataSource;
                     }
 
-                    String initialCatalog = sqlLogNode.Attributes["Initial Catalog"].GetValue<String>();
+                    string initialCatalog = sqlLogNode.Attributes["Initial Catalog"].GetValue<string>();
 
                     sqlConnectionStringBuilder =
                         new SqlConnectionStringBuilder
@@ -82,7 +82,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                     logConnectionString = sqlConnectionStringBuilder.ConnectionString;
                 }
 
-                String loggedSqlCommandFilterNodeName = sqlLogNode.FullName + ConfigurationNode.Delimiter + "LoggedSqlCommandFilter";
+                string loggedSqlCommandFilterNodeName = sqlLogNode.FullName + ConfigurationNode.Delimiter + "LoggedSqlCommandFilter";
                 SimpleLoggedSqlCommandFilter filter = new SimpleLoggedSqlCommandFilter( section, loggedSqlCommandFilterNodeName );
 
                 if (isSafe)
@@ -113,7 +113,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <summary>
         /// 
         /// </summary>
-        public Int32 CommandTimeout
+        public int CommandTimeout
         {
             get
             {
@@ -137,10 +137,10 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public System.Data.IDbConnection CreateConnection( String name )
+        public System.Data.IDbConnection CreateConnection( string name )
         {
-            String userName = null;
-            String hostName = null;
+            string userName = null;
+            string hostName = null;
 #if FOUNDATION_3_5
             HttpContext context = HttpContext.Current;
 
@@ -180,12 +180,12 @@ namespace DataCommander.Foundation.Data.SqlClient
             hostName = Environment.MachineName;
 #endif
 
-            String connectionString;
+            string connectionString;
 
             if (name != null)
             {
                 SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder( this.connectionString );
-                sqlConnectionStringBuilder.ApplicationName = String.Format( CultureInfo.InvariantCulture, "{0} {1}", sqlConnectionStringBuilder.ApplicationName, name );
+                sqlConnectionStringBuilder.ApplicationName = string.Format( CultureInfo.InvariantCulture, "{0} {1}", sqlConnectionStringBuilder.ApplicationName, name );
                 connectionString = sqlConnectionStringBuilder.ConnectionString;
             }
             else

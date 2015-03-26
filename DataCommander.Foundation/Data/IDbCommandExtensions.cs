@@ -18,7 +18,7 @@
         /// <param name="command"></param>
         /// <param name="parameterName"></param>
         /// <param name="value"></param>
-        public static void AddParameterIfNotNull(this IDbCommand command, String parameterName, Object value)
+        public static void AddParameterIfNotNull(this IDbCommand command, string parameterName, object value)
         {
             Contract.Requires(command != null);
 
@@ -72,7 +72,7 @@
         {
             Contract.Requires(command != null);
 
-            Object scalar = command.ExecuteScalar();
+            object scalar = command.ExecuteScalar();
             Contract.Assert(scalar is T);
 
             return (T) scalar;
@@ -88,7 +88,7 @@
         {
             Contract.Requires(command != null);
 
-            Object scalar = command.ExecuteScalar();
+            object scalar = command.ExecuteScalar();
             return Database.GetValueOrDefault<T>(scalar);
         }
 
@@ -98,15 +98,15 @@
         /// <param name="command"></param>
         /// <param name="dataSet"></param>
         /// <returns></returns>
-        public static Int32 Fill(
+        public static int Fill(
             this IDbCommand command,
             DataSet dataSet)
         {
             Contract.Requires(command != null);
             Contract.Requires(dataSet != null);
 
-            Int32 rowCount = 0;
-            Int32 resultIndex = 0;
+            int rowCount = 0;
+            int resultIndex = 0;
             DataTableCollection dataTables = dataSet.Tables;
             WorkerThread thread = WorkerThread.Current;
 
@@ -122,7 +122,7 @@
                     {
                         while (true)
                         {
-                            Int32 fieldCount = reader.FieldCount;
+                            int fieldCount = reader.FieldCount;
 
                             if (fieldCount > 0)
                             {
@@ -142,13 +142,13 @@
                                     dataSet.Tables.Add(table);
                                 }
 
-                                Int32 count = reader.Fill(table);
+                                int count = reader.Fill(table);
                                 rowCount += count;
                             }
 
                             if (!thread.IsStopRequested)
                             {
-                                Boolean nextResult = reader.NextResult();
+                                bool nextResult = reader.NextResult();
 
                                 if (!nextResult)
                                 {
@@ -175,13 +175,13 @@
         /// <param name="command">The command.</param>
         /// <param name="dataTable">The data table.</param>
         /// <returns></returns>
-        public static Int32 Fill(
+        public static int Fill(
             this IDbCommand command,
             DataTable dataTable)
         {
             Contract.Requires(command != null);
 
-            Int32 rowCount = 0;
+            int rowCount = 0;
             WorkerThread thread = WorkerThread.Current;
 
             if (!thread.IsStopRequested)
@@ -214,7 +214,7 @@
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public static String ToLogString(this IDbCommand command)
+        public static string ToLogString(this IDbCommand command)
         {
             Contract.Requires(command != null);
 

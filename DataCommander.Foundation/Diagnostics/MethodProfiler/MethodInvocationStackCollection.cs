@@ -5,13 +5,13 @@
 
     internal sealed class MethodInvocationStackCollection
     {
-        public void Push(Int32 threadId, Int32 methodId, Int64 beginTime)
+        public void Push(int threadId, int methodId, long beginTime)
         {
             Stack<MethodInvocation> stack;
 
             lock (this.stacks)
             {
-                Boolean contains = this.stacks.TryGetValue(threadId, out stack);
+                bool contains = this.stacks.TryGetValue(threadId, out stack);
 
                 if (!contains)
                 {
@@ -35,12 +35,12 @@
             stack.Push(item);
         }
 
-        public MethodInvocation Pop(Int32 threadId)
+        public MethodInvocation Pop(int threadId)
         {
             Stack<MethodInvocation> stack = this.stacks[threadId];
             return stack.Pop();
         }
 
-        private Dictionary<Int32, Stack<MethodInvocation>> stacks = new Dictionary<Int32, Stack<MethodInvocation>>();
+        private Dictionary<int, Stack<MethodInvocation>> stacks = new Dictionary<int, Stack<MethodInvocation>>();
     }
 }

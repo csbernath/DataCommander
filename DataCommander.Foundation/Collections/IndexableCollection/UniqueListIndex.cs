@@ -11,7 +11,7 @@
     /// <typeparam name="T"></typeparam>
     public class UniqueListIndex<TKey, T> : ICollectionIndex<T>
     {
-        private String name;
+        private string name;
         private Func<T, TKey> keySelector;
         private IList<T> list;
 
@@ -22,7 +22,7 @@
         /// <param name="keySelector"></param>
         /// <param name="list"></param>
         public UniqueListIndex(
-            String name,
+            string name,
             Func<T, TKey> keySelector,
             IList<T> list)
         {
@@ -40,7 +40,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String Name
+        public string Name
         {
             get
             {
@@ -58,7 +58,7 @@
         /// <param name="item"></param>
         public void Add(T item)
         {
-            Boolean contains = this.list.Contains(item);
+            bool contains = this.list.Contains(item);
 
             if (contains)
             {
@@ -85,7 +85,7 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Contains(T item)
+        public bool Contains(T item)
         {
 #if FOUNDATION_3_5
 #else
@@ -99,7 +99,7 @@
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
-        public void CopyTo(T[] array, Int32 arrayIndex)
+        public void CopyTo(T[] array, int arrayIndex)
         {
             this.list.CopyTo(array, arrayIndex);
         }
@@ -107,7 +107,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {
@@ -118,7 +118,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsReadOnly
+        public bool IsReadOnly
         {
             get
             {
@@ -131,7 +131,7 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Remove(T item)
+        public bool Remove(T item)
         {
             return this.list.Remove(item);
         }

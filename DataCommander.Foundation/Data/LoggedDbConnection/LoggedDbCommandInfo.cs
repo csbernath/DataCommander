@@ -8,14 +8,14 @@
     /// </summary>
     public sealed class LoggedDbCommandInfo
     {
-        private readonly Int32 commandId;
+        private readonly int commandId;
         private readonly ConnectionState connectionState;
         private LoggedDbCommandExecutionType executionType;
         private CommandType commandType;
-        private String database;
-        private Int32 commandTimeout;
-        private String commandText;
-        private String parameters;
+        private string database;
+        private int commandTimeout;
+        private string commandText;
+        private string parameters;
 
         /// <summary>
         /// 
@@ -29,14 +29,14 @@
         /// <param name="commandText"></param>
         /// <param name="parameters"></param>
         public LoggedDbCommandInfo(
-            Int32 commandId,
+            int commandId,
             ConnectionState connectionState,
-            String database,
+            string database,
             LoggedDbCommandExecutionType executionType,
             CommandType commandType,
-            Int32 commandTimeout,
-            String commandText,
-            String parameters )
+            int commandTimeout,
+            string commandText,
+            string parameters )
         {
             this.commandId = commandId;
             this.connectionState = connectionState;
@@ -51,7 +51,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 CommandId
+        public int CommandId
         {
             get
             {
@@ -73,7 +73,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String Database
+        public string Database
         {
             get
             {
@@ -106,7 +106,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 CommandTimeout
+        public int CommandTimeout
         {
             get
             {
@@ -117,7 +117,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String CommandText
+        public string CommandText
         {
             get
             {
@@ -128,7 +128,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String Parameters
+        public string Parameters
         {
             get
             {

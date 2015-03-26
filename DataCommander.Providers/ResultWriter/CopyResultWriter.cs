@@ -156,7 +156,7 @@
                 this.readRowCount - this.insertedRowCount,
                 this.waitMilliseconds);
 
-            this.addInfoMessage( new InfoMessage( OptimizedDateTime.Now, InfoMessageSeverity.Verbose, message ) );
+            this.addInfoMessage( new InfoMessage( LocalTime.Default.Now, InfoMessageSeverity.Verbose, message ) );
         }
 
         private void Dequeue()
@@ -238,7 +238,7 @@
                 this.insertedRowCount,
                 this.readRowCount - this.insertedRowCount );
 
-            this.addInfoMessage( new InfoMessage( OptimizedDateTime.Now, InfoMessageSeverity.Verbose, message ) );
+            this.addInfoMessage( new InfoMessage( LocalTime.Default.Now, InfoMessageSeverity.Verbose, message ) );
             var targetRows = new object[ rowCount ][];
             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {

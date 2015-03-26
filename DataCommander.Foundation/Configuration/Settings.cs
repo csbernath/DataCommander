@@ -15,9 +15,9 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// The config file name.
         /// </summary>
-        private static String configFileName;
+        private static string configFileName;
 
-        private static String sectionName;
+        private static string sectionName;
 
         /// <summary>
         /// The ConfigurationSection instance.
@@ -43,27 +43,27 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// Uses <see cref="AppSettings"/> to retrieve "ConfigFileName" from the app.config file.
         /// </summary>
-        public static String ConfigFileName
+        public static string ConfigFileName
         {
             get
             {
                 if (configFileName == null)
                 {
                     AppDomainSetup setup = AppDomain.CurrentDomain.SetupInformation;
-                    Boolean contains;
+                    bool contains;
 
                     try
                     {
-                        contains = AppSettings.CurrentType.TryGetString( "ConfigFileName", out configFileName );
+                        contains = AppSettings.CurrentType.TryGetString("ConfigFileName", out configFileName);
                     }
                     catch
                     {
                         contains = false;
                     }
 
-                    if (contains && !String.IsNullOrEmpty( configFileName ))
+                    if (contains && !string.IsNullOrEmpty(configFileName))
                     {
-                        configFileName = Path.Combine( setup.ApplicationBase, configFileName );
+                        configFileName = Path.Combine(setup.ApplicationBase, configFileName);
                     }
                     else
                     {
@@ -101,9 +101,9 @@ namespace DataCommander.Foundation.Configuration
             {
                 if (section == null)
                 {
-                    String configFileName = ConfigFileName;
-                    String sectionName = SectionName;
-                    section = new ConfigurationSection( configFileName, sectionName );
+                    string configFileName = ConfigFileName;
+                    string sectionName = SectionName;
+                    section = new ConfigurationSection(configFileName, sectionName);
                 }
 
                 return section;
@@ -113,7 +113,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public static String SectionName
+        public static string SectionName
         {
             get
             {
@@ -136,12 +136,12 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         public static ConfigurationNode CurrentMethod
         {
-            [MethodImpl( MethodImplOptions.NoInlining )]
+            [MethodImpl(MethodImplOptions.NoInlining)]
             get
             {
-                var trace = new StackTrace( 1 );
-                String nodeName = ConfigurationNodeName.FromMethod( trace, 0 );
-                ConfigurationNode node = Section.SelectNode( nodeName, true );
+                var trace = new StackTrace(1);
+                string nodeName = ConfigurationNodeName.FromMethod(trace, 0);
+                ConfigurationNode node = Section.SelectNode(nodeName, true);
                 return node;
             }
         }
@@ -151,12 +151,12 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         public static ConfigurationNode CurrentType
         {
-            [MethodImpl( MethodImplOptions.NoInlining )]
+            [MethodImpl(MethodImplOptions.NoInlining)]
             get
             {
-                var trace = new StackTrace( 1 );
-                String nodeName = ConfigurationNodeName.FromType( trace, 0 );
-                ConfigurationNode node = Section.SelectNode( nodeName, true );
+                var trace = new StackTrace(1);
+                string nodeName = ConfigurationNodeName.FromType(trace, 0);
+                ConfigurationNode node = Section.SelectNode(nodeName, true);
                 return node;
             }
         }
@@ -166,12 +166,12 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         public static ConfigurationNode CurrentNamespace
         {
-            [MethodImpl( MethodImplOptions.NoInlining )]
+            [MethodImpl(MethodImplOptions.NoInlining)]
             get
             {
-                var trace = new StackTrace( 1 );
-                String nodeName = ConfigurationNodeName.FromNamespace( trace, 0 );
-                ConfigurationNode node = Section.SelectNode( nodeName, true );
+                var trace = new StackTrace(1);
+                string nodeName = ConfigurationNodeName.FromNamespace(trace, 0);
+                ConfigurationNode node = Section.SelectNode(nodeName, true);
                 return node;
             }
         }
@@ -181,16 +181,16 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="assembly"></param>
         /// <returns></returns>
-        public static String GetAssemblyConfigFileName( Assembly assembly )
+        public static string GetAssemblyConfigFileName(Assembly assembly)
         {
-            Contract.Requires( assembly != null );
+            Contract.Requires<ArgumentNullException>(assembly != null);
 
-            String codeBase = assembly.CodeBase;
-            Uri uri = new Uri( codeBase );
-            String fileName = uri.LocalPath;
-            FileInfo fileInfo = new FileInfo( fileName );
+            string codeBase = assembly.CodeBase;
+            Uri uri = new Uri(codeBase);
+            string fileName = uri.LocalPath;
+            FileInfo fileInfo = new FileInfo(fileName);
             fileName = fileInfo.FullName;
-            String configFilename = fileName + ".config";
+            string configFilename = fileName + ".config";
             return configFilename;
         }
 
@@ -200,15 +200,15 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="nodeName"></param>
         /// <param name="throwOnError"></param>
         /// <returns></returns>
-        public static ConfigurationNode SelectNode( String nodeName, Boolean throwOnError )
+        public static ConfigurationNode SelectNode(string nodeName, bool throwOnError)
         {
-            return Section.SelectNode( nodeName, throwOnError );
+            return Section.SelectNode(nodeName, throwOnError);
         }
 
-        internal static ConfigurationNode SelectNode( Type type, Boolean throwOnError )
+        internal static ConfigurationNode SelectNode(Type type, bool throwOnError)
         {
-            String nodeName = ConfigurationNodeName.FromType( type );
-            ConfigurationNode node = Section.SelectNode( nodeName, throwOnError );
+            string nodeName = ConfigurationNodeName.FromType(type);
+            ConfigurationNode node = Section.SelectNode(nodeName, throwOnError);
             return node;
         }
 
@@ -216,13 +216,13 @@ namespace DataCommander.Foundation.Configuration
         /// Finds the config node of the calling method's type.
         /// </summary>
         /// <returns>null, if not found and no exception is thrown.</returns>
-        [MethodImpl( MethodImplOptions.NoInlining )]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static ConfigurationNode SelectCurrentType()
         {
-            var trace = new StackTrace( 1 );
-            String nodeName = ConfigurationNodeName.FromType( trace, 0 );
+            var trace = new StackTrace(1);
+            string nodeName = ConfigurationNodeName.FromType(trace, 0);
             //log.Trace( "SelectCurrentType, nodeName={0}", nodeName );
-            ConfigurationNode node = Section.SelectNode( nodeName, false );
+            ConfigurationNode node = Section.SelectNode(nodeName, false);
             return node;
         }
     }

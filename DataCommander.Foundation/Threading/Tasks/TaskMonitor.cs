@@ -41,7 +41,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public static Int32 Count
+        public static int Count
         {
             get
             {
@@ -63,11 +63,11 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <param name="name"></param>
         /// <returns></returns>
         public static CreateTaskResponse CreateTask(
-            Action<Object> action,
-            Object state,
+            Action<object> action,
+            object state,
             CancellationToken cancellationToken,
             TaskCreationOptions taskCreationOptions,
-            String name)
+            string name)
         {
             var monitoredTaskState = new MonitoredTaskActionState
             {
@@ -102,11 +102,11 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <param name="name"></param>
         /// <returns></returns>
         public static CreateTaskResponse<TResult> CreateTask<TResult>(
-            Func<Object, TResult> function,
-            Object state,
+            Func<object, TResult> function,
+            object state,
             CancellationToken cancellationToken,
             TaskCreationOptions taskCreationOptions,
-            String name)
+            string name)
         {
             var monitoredTaskState =
                 new MonitoredTaskFunctionState<TResult>
@@ -151,9 +151,9 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public static Int32 RemoveGarbageCollectedTasks()
+        public static int RemoveGarbageCollectedTasks()
         {
-            Int32 count;
+            int count;
 
             lock (tasks)
             {
@@ -167,11 +167,11 @@ namespace DataCommander.Foundation.Threading.Tasks
 
         #region Private Methods
 
-        private static void ExecuteAction(Object state)
+        private static void ExecuteAction(object state)
         {
             var monitoredTaskState = (MonitoredTaskActionState) state;
             var taskInfo = monitoredTaskState.TaskInfo;
-            taskInfo.StartTime = OptimizedDateTime.Now;
+            taskInfo.StartTime = LocalTime.Default.Now;
             var thread = Thread.CurrentThread;
             taskInfo.ManagedThreadId = thread.ManagedThreadId;
             taskInfo.IsThreadPoolThread = thread.IsThreadPoolThread;
@@ -183,15 +183,15 @@ namespace DataCommander.Foundation.Threading.Tasks
             finally
             {
                 taskInfo.IsCompleted = true;
-                taskInfo.CompletedTime = OptimizedDateTime.Now;
+                taskInfo.CompletedTime = LocalTime.Default.Now;
             }
         }
 
-        private static TResult ExecuteFunction<TResult>(Object state)
+        private static TResult ExecuteFunction<TResult>(object state)
         {
             var monitoredTaskState = (MonitoredTaskFunctionState<TResult>) state;
             var taskInfo = monitoredTaskState.TaskInfo;
-            taskInfo.StartTime = OptimizedDateTime.Now;
+            taskInfo.StartTime = LocalTime.Default.Now;
             var thread = Thread.CurrentThread;
             taskInfo.ManagedThreadId = thread.ManagedThreadId;
             taskInfo.IsThreadPoolThread = thread.IsThreadPoolThread;
@@ -205,20 +205,20 @@ namespace DataCommander.Foundation.Threading.Tasks
             finally
             {
                 taskInfo.IsCompleted = true;
-                taskInfo.CompletedTime = OptimizedDateTime.Now;
+                taskInfo.CompletedTime = LocalTime.Default.Now;
             }
 
             return result;
         }
 
-        private static String ToString(DateTime dateTime)
+        private static string ToString(DateTime dateTime)
         {
             return dateTime.ToString("HH:mm:ss.fff");
         }
 
-        private static String ToString(DateTime? dateTime)
+        private static string ToString(DateTime? dateTime)
         {
-            String s;
+            string s;
 
             if (dateTime != null)
             {

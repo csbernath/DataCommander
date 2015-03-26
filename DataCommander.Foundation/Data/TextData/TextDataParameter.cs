@@ -8,15 +8,15 @@
     /// </summary>
     public sealed class TextDataParameter : DbParameter
     {
-        private String name;
-        private Object value;
+        private string name;
+        private object value;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public TextDataParameter(String name, Object value)
+        public TextDataParameter(string name, object value)
         {
             this.name = name;
             this.value = value;
@@ -57,7 +57,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Boolean IsNullable
+        public override bool IsNullable
         {
             get
             {
@@ -73,7 +73,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override String ParameterName
+        public override string ParameterName
         {
             get
             {
@@ -97,7 +97,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Int32 Size
+        public override int Size
         {
             get
             {
@@ -113,7 +113,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override String SourceColumn
+        public override string SourceColumn
         {
             get
             {
@@ -129,7 +129,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Boolean SourceColumnNullMapping
+        public override bool SourceColumnNullMapping
         {
             get
             {
@@ -161,7 +161,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Object Value
+        public override object Value
         {
             get
             {

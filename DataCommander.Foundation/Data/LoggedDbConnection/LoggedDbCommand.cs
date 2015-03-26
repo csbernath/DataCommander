@@ -9,8 +9,8 @@
     {
         #region Private Fields
 
-        private static Int32 commandIdCounter;
-        private readonly Int32 commandId;
+        private static int commandIdCounter;
+        private readonly int commandId;
         private IDbCommand command;
         private EventHandler<BeforeExecuteCommandEventArgs> beforeExecuteCommand;
         private EventHandler<AfterExecuteCommandEventArgs> afterExecuteCommand;
@@ -58,7 +58,7 @@
             }
         }
 
-        Int32 IDbCommand.CommandTimeout
+        int IDbCommand.CommandTimeout
         {
             get
             {
@@ -102,7 +102,7 @@
             return this.command.CreateParameter();
         }
 
-        Int32 IDbCommand.ExecuteNonQuery()
+        int IDbCommand.ExecuteNonQuery()
         {
             var commandInfo = new Lazy<LoggedDbCommandInfo>( () => this.CreateLoggedDbCommandInfo( LoggedDbCommandExecutionType.NonQuery ) );
 
@@ -112,7 +112,7 @@
                 this.beforeExecuteCommand( this, eventArgs );
             }
 
-            Int32 rowCount;
+            int rowCount;
 
             if (this.afterExecuteCommand != null)
             {
@@ -184,7 +184,7 @@
             return dbCommand.ExecuteReader( CommandBehavior.Default );
         }
 
-        Object IDbCommand.ExecuteScalar()
+        object IDbCommand.ExecuteScalar()
         {
             var commandInfo = new Lazy<LoggedDbCommandInfo>( () => this.CreateLoggedDbCommandInfo( LoggedDbCommandExecutionType.Scalar ) );
             if (this.beforeExecuteCommand != null)
@@ -193,7 +193,7 @@
                 this.beforeExecuteCommand( this, eventArgs );
             }
 
-            Object scalar;
+            object scalar;
 
             if (this.afterExecuteCommand != null)
             {

@@ -13,9 +13,9 @@
         #region Private Fields
 
         private readonly StreamWriter streamWriter;
-        private readonly String path;
-        private readonly String tempPath;
-        private Boolean commited;
+        private readonly string path;
+        private readonly string tempPath;
+        private bool commited;
 
         #endregion
 
@@ -25,8 +25,8 @@
         /// <param name="path"></param>
         /// <param name="tempPath"></param>
         public StreamWriterTransaction(
-            String path,
-            String tempPath )
+            string path,
+            string tempPath )
         {
             this.path = path;
             this.tempPath = tempPath;
@@ -40,8 +40,8 @@
         /// <param name="tempPath"></param>
         /// <param name="encoding"></param>
         public StreamWriterTransaction(
-            String path,
-            String tempPath,
+            string path,
+            string tempPath,
             Encoding encoding )
         {
             this.path = path;
@@ -67,7 +67,7 @@
         {
             this.streamWriter.Close();
             const NativeMethods.MoveFileExFlags flags = NativeMethods.MoveFileExFlags.ReplaceExisiting;
-            Boolean succeeded = NativeMethods.MoveFileEx( this.tempPath, this.path, flags );
+            bool succeeded = NativeMethods.MoveFileEx( this.tempPath, this.path, flags );
 
             if (!succeeded)
             {

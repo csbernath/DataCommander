@@ -28,9 +28,9 @@
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
         void DeleteMultiple( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] uint cpspec, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.PROPSPEC" ), MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 0 )] PROPSPEC[] rgpspec );
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        void ReadPropertyNames( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] uint cpropid, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.PROPID" ), MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 0 )] uint[] rgpropid, [Out, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.LPOLESTR" ), MarshalAs( UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr, SizeParamIndex = 0 )] String[] rglpwstrName );
+        void ReadPropertyNames( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] uint cpropid, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.PROPID" ), MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 0 )] uint[] rgpropid, [Out, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.LPOLESTR" ), MarshalAs( UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr, SizeParamIndex = 0 )] string[] rglpwstrName );
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        void WritePropertyNames( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] uint cpropid, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.PROPID" ), MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 0 )] uint[] rgpropid, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.LPOLESTR" ), MarshalAs( UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr, SizeParamIndex = 0 )] String[] rglpwstrName );
+        void WritePropertyNames( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] uint cpropid, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.PROPID" ), MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 0 )] uint[] rgpropid, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.LPOLESTR" ), MarshalAs( UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr, SizeParamIndex = 0 )] string[] rglpwstrName );
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
         void DeletePropertyNames( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] uint cpropid, [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.PROPID" ), MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 0 )] uint[] rgpropid );
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
@@ -51,11 +51,11 @@
     internal interface IEnumSTATPROPSETSTG
     {
         [PreserveSig, MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        Int32 Next( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] uint celt, [Out, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.STATPROPSETSTG" ), MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 0 )] STATPROPSETSTG[] rgelt, [ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] out uint pceltFetched );
+        int Next( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] uint celt, [Out, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.STATPROPSETSTG" ), MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 0 )] STATPROPSETSTG[] rgelt, [ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] out uint pceltFetched );
         [PreserveSig, MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        Int32 Skip( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] uint celt );
+        int Skip( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] uint celt );
         [PreserveSig, MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        Int32 Reset();
+        int Reset();
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
         void Clone( [MarshalAs( UnmanagedType.Interface )] out IEnumSTATPROPSETSTG ppEnum );
     }
@@ -74,11 +74,11 @@
     internal interface IEnumSTATPROPSTG
     {
         [PreserveSig, MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        Int32 Next( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] uint celt, [Out, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.STATPROPSTG" ), MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 0 )] STATPROPSTG[] rgelt, [ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] out uint pceltFetched );
+        int Next( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] uint celt, [Out, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.STATPROPSTG" ), MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 0 )] STATPROPSTG[] rgelt, [ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] out uint pceltFetched );
         [PreserveSig, MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        Int32 Skip( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] uint celt );
+        int Skip( [In, ComAliasName( "Microsoft.VisualStudio.OLE.Interop.ULONG" )] uint celt );
         [PreserveSig, MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        Int32 Reset();
+        int Reset();
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
         void Clone( [MarshalAs( UnmanagedType.Interface )] out IEnumSTATPROPSTG ppEnum );
     }
@@ -104,7 +104,7 @@
     internal struct STATPROPSTG
     {
         [ComAliasName( "Microsoft.VisualStudio.OLE.Interop.LPOLESTR" ), MarshalAs( UnmanagedType.LPWStr )]
-        public String lpwstrName;
+        public string lpwstrName;
         [ComAliasName( "Microsoft.VisualStudio.OLE.Interop.PROPID" )]
         public uint PROPID;
         [ComAliasName( "Microsoft.VisualStudio.OLE.Interop.VARTYPE" )]

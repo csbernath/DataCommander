@@ -17,15 +17,26 @@
         /// <param name="items"></param>
         public static void Add(this IList list, IEnumerable items)
         {
-            Contract.Requires(list != null);
+            Contract.Requires<ArgumentNullException>(list != null);
 
             if (items != null)
             {
-                foreach (Object item in items)
+                foreach (object item in items)
                 {
                     list.Add(item);
                 }
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static IReadOnlyList<T> AsReadOnlyList<T>(this IList<T> source)
+        {
+            return new ReadOnlyListFromList<T>(source);
         }
 
         /// <summary>
@@ -39,7 +50,7 @@
 
             if (items != null)
             {
-                foreach (Object item in items)
+                foreach (object item in items)
                 {
                     list.Remove(item);
                 }
@@ -55,19 +66,19 @@
         /// <returns></returns>
         public static IndexedItem<T> BinarySearch<T>(this IList<T> list, Func<T, int> compareTo)
         {
-            Contract.Requires(list != null);
-            Contract.Requires(compareTo != null);
+            Contract.Requires<ArgumentNullException>(list != null);
+            Contract.Requires<ArgumentNullException>(compareTo != null);
 
             IndexedItem<T> result = null;
 
-            Int32 from = 0;
-            Int32 to = list.Count - 1;
+            int from = 0;
+            int to = list.Count - 1;
 
             while (from <= to)
             {
-                Int32 index = from + (to - from)/2;
+                int index = from + (to - from)/2;
                 var value = list[index];
-                Int32 comparisonResult = compareTo(value);
+                int comparisonResult = compareTo(value);
                 if (comparisonResult == 0)
                 {
                     result = new IndexedItem<T>(index, value);
@@ -116,15 +127,15 @@
         /// <param name="startIndex"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static Int32 IndexOf<T>(this IList<T> source, Int32 startIndex, Func<T, Boolean> predicate)
+        public static int IndexOf<T>(this IList<T> source, int startIndex, Func<T, bool> predicate)
         {
             Contract.Requires<ArgumentNullException>(predicate != null);
 
-            Int32 index = -1;
+            int index = -1;
             if (source != null)
             {
-                Int32 count = source.Count;
-                for (Int32 i = startIndex; i < count; i++)
+                int count = source.Count;
+                for (int i = startIndex; i < count; i++)
                 {
                     var item = source[i];
                     if (predicate(item))
@@ -146,17 +157,17 @@
         /// <param name="startIndex"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static Int32 LastIndexOf<T>(this IList<T> source, Int32 startIndex, Func<T, Boolean> predicate)
+        public static int LastIndexOf<T>(this IList<T> source, int startIndex, Func<T, bool> predicate)
         {
             Contract.Requires<ArgumentNullException>(predicate != null);
             Contract.Requires<ArgumentException>(startIndex >= 0);
 
-            Int32 index = -1;
+            int index = -1;
             if (source != null)
             {
                 Contract.Assert(startIndex < source.Count);
 
-                for (Int32 i = startIndex; i >= 0; i--)
+                for (int i = startIndex; i >= 0; i--)
                 {
                     var item = source[i];
                     if (predicate(item))
@@ -181,7 +192,7 @@
             Contract.Requires<ArgumentNullException>(source != null);
             Contract.Requires<ArgumentException>(source.Count > 0);
 
-            Int32 lastIndex = source.Count - 1;
+            int lastIndex = source.Count - 1;
             T last = source[lastIndex];
             return last;
         }
@@ -193,12 +204,12 @@
         /// <param name="source"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static Int32 LastIndexOf<T>(this IList<T> source, Func<T, bool> predicate)
+        public static int LastIndexOf<T>(this IList<T> source, Func<T, bool> predicate)
         {
-            Int32 index;
+            int index;
             if (source != null)
             {
-                Int32 startIndex = source.Count - 1;
+                int startIndex = source.Count - 1;
                 index = source.LastIndexOf(startIndex, predicate);
             }
             else
@@ -223,34 +234,34 @@
             /// <param name="source"></param>
             public CastedList(IList source)
             {
-                Contract.Requires(source != null);
+                Contract.Requires<ArgumentNullException>(source != null);
 
                 this.source = source;
             }
 
             #region IList<TResult> Members
 
-            Int32 IList<TResult>.IndexOf(TResult item)
+            int IList<TResult>.IndexOf(TResult item)
             {
                 return this.source.IndexOf(item);
             }
 
-            void IList<TResult>.Insert(Int32 index, TResult item)
+            void IList<TResult>.Insert(int index, TResult item)
             {
                 this.source.Insert(index, item);
             }
 
-            void IList<TResult>.RemoveAt(Int32 index)
+            void IList<TResult>.RemoveAt(int index)
             {
                 this.source.RemoveAt(index);
             }
 
-            TResult IList<TResult>.this[Int32 index]
+            TResult IList<TResult>.this[int index]
             {
                 get
                 {
-                    Object valueObject = this.source[index];
-                    TResult value = (TResult) valueObject;
+                    object valueObject = this.source[index];
+                    TResult value = (TResult)valueObject;
                     return value;
                 }
 
@@ -274,17 +285,17 @@
                 this.source.Clear();
             }
 
-            Boolean ICollection<TResult>.Contains(TResult item)
+            bool ICollection<TResult>.Contains(TResult item)
             {
                 return this.source.Contains(item);
             }
 
-            void ICollection<TResult>.CopyTo(TResult[] array, Int32 arrayIndex)
+            void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex)
             {
                 this.source.CopyTo(array, arrayIndex);
             }
 
-            Int32 ICollection<TResult>.Count
+            int ICollection<TResult>.Count
             {
                 get
                 {
@@ -292,7 +303,7 @@
                 }
             }
 
-            Boolean ICollection<TResult>.IsReadOnly
+            bool ICollection<TResult>.IsReadOnly
             {
                 get
                 {
@@ -300,10 +311,10 @@
                 }
             }
 
-            Boolean ICollection<TResult>.Remove(TResult item)
+            bool ICollection<TResult>.Remove(TResult item)
             {
-                Int32 index = this.source.IndexOf(item);
-                Boolean removed;
+                int index = this.source.IndexOf(item);
+                bool removed;
 
                 if (index >= 0)
                 {
@@ -341,6 +352,44 @@
             }
 
             #endregion
+        }
+
+        private sealed class ReadOnlyListFromList<T> : IReadOnlyList<T>
+        {
+            private IList<T> source;
+
+            public ReadOnlyListFromList(IList<T> source)
+            {
+                Contract.Requires<ArgumentNullException>(source != null);
+
+                this.source = source;
+            }
+
+            T IReadOnlyList<T>.this[int index]
+            {
+                get
+                {
+                    return this.source[index];
+                }
+            }
+
+            int IReadOnlyCollection<T>.Count
+            {
+                get
+                {
+                    return this.source.Count;
+                }
+            }
+
+            IEnumerator<T> IEnumerable<T>.GetEnumerator()
+            {
+                return this.source.GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return this.source.GetEnumerator();
+            }
         }
     }
 }

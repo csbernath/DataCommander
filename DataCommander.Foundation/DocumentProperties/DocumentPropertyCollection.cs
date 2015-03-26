@@ -200,7 +200,7 @@
         {
         }
 
-        internal void Add( DocumentPropertyId id, Object value )
+        internal void Add( DocumentPropertyId id, object value )
         {
             DocumentProperty property = new DocumentProperty( id, value );
             this.dictionary.Add( id, property );
@@ -223,12 +223,12 @@
             throw new NotImplementedException();
         }
 
-        void ICollection<DocumentProperty>.CopyTo( DocumentProperty[] array, Int32 arrayIndex )
+        void ICollection<DocumentProperty>.CopyTo( DocumentProperty[] array, int arrayIndex )
         {
             throw new NotImplementedException();
         }
 
-        Int32 ICollection<DocumentProperty>.Count
+        int ICollection<DocumentProperty>.Count
         {
             get
             {

@@ -92,9 +92,9 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Contains( T item )
+        public bool Contains( T item )
         {
-            Boolean contains;
+            bool contains;
 
             if (this.collection != null)
             {
@@ -113,7 +113,7 @@
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
-        public void CopyTo( T[] array, Int32 arrayIndex )
+        public void CopyTo( T[] array, int arrayIndex )
         {
             if (this.collection != null)
             {
@@ -124,11 +124,11 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {
-                Int32 count;
+                int count;
 
                 if (this.collection != null)
                 {
@@ -146,12 +146,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsReadOnly
+        public bool IsReadOnly
         {
             get
             {
                 this.GetCollection();
-                Boolean isReadOnly = isReadOnly = this.collection.IsReadOnly;
+                bool isReadOnly = isReadOnly = this.collection.IsReadOnly;
                 return isReadOnly;
             }
         }
@@ -161,9 +161,9 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Remove( T item )
+        public bool Remove( T item )
         {
-            Boolean removed;
+            bool removed;
 
             if (this.collection != null)
             {
@@ -257,7 +257,7 @@
 
             #region IEnumerator Members
 
-            Object IEnumerator.Current
+            object IEnumerator.Current
             {
                 get
                 {
@@ -265,7 +265,7 @@
                 }
             }
 
-            Boolean IEnumerator.MoveNext()
+            bool IEnumerator.MoveNext()
             {
                 return false;
             }

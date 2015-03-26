@@ -49,22 +49,22 @@ namespace DataCommander.Foundation
         }
 
         [DllImport("kernel32")]
-        public static extern Int16 FreeLibrary(Int32 hModule);
+        public static extern Int16 FreeLibrary(int hModule);
 
         [DllImport( "kernel32" )]
         public static extern UInt32 GetCurrentThreadId();
 
         [DllImport("kernel32", CharSet = CharSet.Auto)]
         public static extern UInt32 GetShortPathName(
-            String lpszLongPath,
+            string lpszLongPath,
             StringBuilder lpszShortPath,
             UInt32 cchBuffer);
 
         [DllImport("kernel32")]
-        public static extern Int32 LoadLibrary(String fileName);
+        public static extern int LoadLibrary(string fileName);
 
         [DllImport("user32")]
-        public static extern Int32 LoadString(Int32 hInstance, Int32 id, byte[] buf, Int32 buflen);
+        public static extern int LoadString(int hInstance, int id, byte[] buf, int buflen);
 
         /// <summary>
         /// 
@@ -74,9 +74,9 @@ namespace DataCommander.Foundation
         /// <param name="flags"></param>
         /// <returns></returns>
         [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern Boolean MoveFileEx(
-            String lpExistingFileName,
-            String lpNewFileName,
+        public static extern bool MoveFileEx(
+            string lpExistingFileName,
+            string lpNewFileName,
             MoveFileExFlags flags);
 
         /// <summary>Opens a compound document file and represents it as an IStorage object</summary>
@@ -90,8 +90,8 @@ namespace DataCommander.Foundation
         /// <returns>int HRESULT</returns>
         /// Needs more help form MS
         [DllImport("ole32")]
-        public static extern Int32 StgOpenStorage(
-            [MarshalAs(UnmanagedType.LPWStr)] String pwcsName,
+        public static extern int StgOpenStorage(
+            [MarshalAs(UnmanagedType.LPWStr)] string pwcsName,
             IStorage pstgPriority,
             STGM grfMode,
             IntPtr snbExclude,

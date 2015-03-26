@@ -17,7 +17,7 @@ namespace DataCommander.Foundation.Threading
     /// </summary>
     public static class ThreadMonitor
     {
-        private static SortedDictionary<Int32, WorkerThread> threads = new SortedDictionary<Int32, WorkerThread>();
+        private static SortedDictionary<int, WorkerThread> threads = new SortedDictionary<int, WorkerThread>();
 
         private static StringTableColumnInfo<WorkerThread>[] threadColumns =
         {
@@ -35,11 +35,11 @@ namespace DataCommander.Foundation.Threading
 
         private sealed class ThreadPoolRow
         {
-            public String Name;
-            public Int32 Min;
-            public Int32 Active;
-            public Int32 Available;
-            public Int32 Max;
+            public string Name;
+            public int Min;
+            public int Active;
+            public int Available;
+            public int Max;
         }
 
         private static StringTableColumnInfo<ThreadPoolRow>[] threadPoolColumns =
@@ -54,7 +54,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public static Int32 Count
+        public static int Count
         {
             get
             {
@@ -67,12 +67,12 @@ namespace DataCommander.Foundation.Threading
             get
             {
                 Thread currentThread = Thread.CurrentThread;
-                Int32 id = currentThread.ManagedThreadId;
+                int id = currentThread.ManagedThreadId;
                 WorkerThread current = null;
 
                 lock (threads)
                 {
-                    Boolean contains = threads.TryGetValue( id, out current );
+                    bool contains = threads.TryGetValue( id, out current );
 
                     if (!contains)
                     {
@@ -91,12 +91,12 @@ namespace DataCommander.Foundation.Threading
         /// <returns></returns>
         public static StringTable ThreadPoolToStringTable()
         {
-            Int32 minWorkerThreads;
-            Int32 minCompletionPortThreads;
-            Int32 maxWorkerThreads;
-            Int32 maxCompletionPortThreads;
-            Int32 availableWorkerThreads;
-            Int32 availableCompletionPortThreads;
+            int minWorkerThreads;
+            int minCompletionPortThreads;
+            int maxWorkerThreads;
+            int maxCompletionPortThreads;
+            int availableWorkerThreads;
+            int availableCompletionPortThreads;
             ThreadPool.GetMinThreads( out minWorkerThreads, out minCompletionPortThreads );
             ThreadPool.GetMaxThreads( out maxWorkerThreads, out maxCompletionPortThreads );
             ThreadPool.GetAvailableThreads( out availableWorkerThreads, out availableCompletionPortThreads );
@@ -150,9 +150,9 @@ namespace DataCommander.Foundation.Threading
         }
 
         /// <summary>
-        /// Tries to join (<see cref="System.Threading.Thread.Join(Int32)"/>) threads and removes the joined threads from the list of monitored threads.
+        /// Tries to join (<see cref="System.Threading.Thread.Join(int)"/>) threads and removes the joined threads from the list of monitored threads.
         /// </summary>
-        public static void Join( Int32 millisecondsTimout )
+        public static void Join( int millisecondsTimout )
         {
             var removableThreads = new LazyCollection<WorkerThread>( () => new List<WorkerThread>() );
 
@@ -173,7 +173,7 @@ namespace DataCommander.Foundation.Threading
                 else
                 {
                     var stopwatch = Stopwatch.StartNew();
-                    Boolean joined = thread.Thread.Join( remaining );
+                    bool joined = thread.Thread.Join( remaining );
                     stopwatch.Stop();
 
                     if (remaining >= stopwatch.Elapsed)
@@ -204,9 +204,9 @@ namespace DataCommander.Foundation.Threading
             }
         }
 
-        private static String ToString( DateTime dateTime )
+        private static string ToString( DateTime dateTime )
         {
-            String s;
+            string s;
 
             if (dateTime == DateTime.MinValue)
             {
@@ -220,9 +220,9 @@ namespace DataCommander.Foundation.Threading
             return s;
         }
 
-        private static String GetPriority( Thread thread )
+        private static string GetPriority( Thread thread )
         {
-            String priority = null;
+            string priority = null;
             if (thread.IsAlive)
             {
                 try
@@ -237,9 +237,9 @@ namespace DataCommander.Foundation.Threading
             return priority;
         }
 
-        private static String IsBackground( Thread thread )
+        private static string IsBackground( Thread thread )
         {
-            String isBackground = null;
+            string isBackground = null;
             if (thread.IsAlive)
             {
                 try

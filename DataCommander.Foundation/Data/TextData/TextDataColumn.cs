@@ -11,13 +11,13 @@
     {
         #region Private Fields
 
-        private readonly String columnName;
-        private String caption;
-        private Int32 maxLength;
+        private readonly string columnName;
+        private string caption;
+        private int maxLength;
         private readonly Type dataType;
         private Byte? numericPrecision;
         private Byte? numericScale;
-        private String format;
+        private string format;
         private IFormatProvider formatProvider;
 
         #endregion
@@ -34,13 +34,13 @@
         /// <param name="format"></param>
         /// <param name="caption"></param>
         public TextDataColumn(
-            String columnName,
-            String caption,
-            Int32 maxLength,
+            string columnName,
+            string caption,
+            int maxLength,
             Type dataType,
             Byte? numericPrecision,
             Byte? numericScale,
-            String format,
+            string format,
             IFormatProvider formatProvider)
         {
             this.columnName = columnName;
@@ -67,7 +67,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String Format
+        public string Format
         {
             get
             {
@@ -89,7 +89,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 MaxLength
+        public int MaxLength
         {
             get
             {
@@ -100,7 +100,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String ColumnName
+        public string ColumnName
         {
             get
             {
@@ -111,7 +111,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String Caption
+        public string Caption
         {
             get
             {

@@ -64,8 +64,8 @@
         /// <returns></returns>
         public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> valueFactory)
         {
-            Contract.Requires(dictionary != null);
-            Contract.Requires(valueFactory != null);
+            Contract.Requires<ArgumentNullException>(dictionary != null);
+            Contract.Requires<ArgumentNullException>(valueFactory != null);
 
             TValue value;
 
@@ -75,6 +75,23 @@
                 dictionary.Add(key, value);
             }
 
+            return value;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dictionary"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
+        {
+            Contract.Requires<ArgumentNullException>(dictionary != null);
+
+            TValue value;
+            dictionary.TryGetValue(key, out value);
             return value;
         }
 
@@ -107,7 +124,7 @@
                 throw new NotSupportedException();
             }
 
-            Boolean IDictionary<TKey, TValue>.ContainsKey( TKey key )
+            bool IDictionary<TKey, TValue>.ContainsKey( TKey key )
             {
                 return this.dictionary.ContainsKey( key );
             }
@@ -120,12 +137,12 @@
                 }
             }
 
-            Boolean IDictionary<TKey, TValue>.Remove( TKey key )
+            bool IDictionary<TKey, TValue>.Remove( TKey key )
             {
                 throw new NotImplementedException();
             }
 
-            Boolean IDictionary<TKey, TValue>.TryGetValue( TKey key, out TValue value )
+            bool IDictionary<TKey, TValue>.TryGetValue( TKey key, out TValue value )
             {
                 return this.dictionary.TryGetValue( key, out value );
             }
@@ -165,17 +182,17 @@
                 throw new NotSupportedException();
             }
 
-            Boolean ICollection<KeyValuePair<TKey, TValue>>.Contains( KeyValuePair<TKey, TValue> item )
+            bool ICollection<KeyValuePair<TKey, TValue>>.Contains( KeyValuePair<TKey, TValue> item )
             {
                 return this.dictionary.Contains( item );
             }
 
-            void ICollection<KeyValuePair<TKey, TValue>>.CopyTo( KeyValuePair<TKey, TValue>[] array, Int32 arrayIndex )
+            void ICollection<KeyValuePair<TKey, TValue>>.CopyTo( KeyValuePair<TKey, TValue>[] array, int arrayIndex )
             {
                 this.dictionary.CopyTo( array, arrayIndex );
             }
 
-            Int32 ICollection<KeyValuePair<TKey, TValue>>.Count
+            int ICollection<KeyValuePair<TKey, TValue>>.Count
             {
                 get
                 {
@@ -183,7 +200,7 @@
                 }
             }
 
-            Boolean ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
+            bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
             {
                 get
                 {
@@ -191,7 +208,7 @@
                 }
             }
 
-            Boolean ICollection<KeyValuePair<TKey, TValue>>.Remove( KeyValuePair<TKey, TValue> item )
+            bool ICollection<KeyValuePair<TKey, TValue>>.Remove( KeyValuePair<TKey, TValue> item )
             {
                 throw new NotSupportedException();
             }

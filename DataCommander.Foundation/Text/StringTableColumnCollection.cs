@@ -19,17 +19,17 @@ namespace DataCommander.Foundation.Text
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Int32 IndexOf(StringTableColumn item)
+        public int IndexOf(StringTableColumn item)
         {
             return this.columns.IndexOf(item);
         }
 
-        void IList<StringTableColumn>.Insert(Int32 index, StringTableColumn item)
+        void IList<StringTableColumn>.Insert(int index, StringTableColumn item)
         {
             throw new Exception("The method or operation is not implemented.");
         }
 
-        void IList<StringTableColumn>.RemoveAt(Int32 index)
+        void IList<StringTableColumn>.RemoveAt(int index)
         {
             throw new Exception("The method or operation is not implemented.");
         }
@@ -39,7 +39,7 @@ namespace DataCommander.Foundation.Text
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public StringTableColumn this[Int32 index]
+        public StringTableColumn this[int index]
         {
             get
             {
@@ -78,12 +78,12 @@ namespace DataCommander.Foundation.Text
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Contains(StringTableColumn item)
+        public bool Contains(StringTableColumn item)
         {
             return this.columns.Contains(item);
         }
 
-        void ICollection<StringTableColumn>.CopyTo(StringTableColumn[] array, Int32 arrayIndex)
+        void ICollection<StringTableColumn>.CopyTo(StringTableColumn[] array, int arrayIndex)
         {
             throw new Exception("The method or operation is not implemented.");
         }
@@ -91,7 +91,7 @@ namespace DataCommander.Foundation.Text
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {
@@ -102,7 +102,7 @@ namespace DataCommander.Foundation.Text
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsReadOnly
+        public bool IsReadOnly
         {
             get
             {
@@ -110,7 +110,7 @@ namespace DataCommander.Foundation.Text
             }
         }
 
-        Boolean ICollection<StringTableColumn>.Remove(StringTableColumn item)
+        bool ICollection<StringTableColumn>.Remove(StringTableColumn item)
         {
             throw new Exception("The method or operation is not implemented.");
         }

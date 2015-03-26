@@ -52,9 +52,9 @@
         /// <param name="buffer"></param>
         /// <param name="index"></param>
         /// <param name="count"></param>
-        public override void Write( Char[] buffer, Int32 index, Int32 count )
+        public override void Write( Char[] buffer, int index, int count )
         {
-            String value = new String( buffer, index, count );
+            string value = new string( buffer, index, count );
             this.Write( value );
         }
 
@@ -62,7 +62,7 @@
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public override void Write( String value )
+        public override void Write( string value )
         {
             foreach (TextWriter textWriter in this.textWriters)
             {

@@ -13,7 +13,7 @@
     {
         private IndexableCollection<TextDataParameter> collection;
         private ListIndex<TextDataParameter> listIndex;
-        private UniqueIndex<String, TextDataParameter> nameIndex;
+        private UniqueIndex<string, TextDataParameter> nameIndex;
 
         /// <summary>
         /// 
@@ -21,7 +21,7 @@
         public TextDataParameterCollection()
         {
             this.listIndex = new ListIndex<TextDataParameter>( "List" );
-            this.nameIndex = new UniqueIndex<String, TextDataParameter>(
+            this.nameIndex = new UniqueIndex<string, TextDataParameter>(
                 "Name",
                 parameter => GetKeyResponse.Create( true, parameter.ParameterName ),
                 SortOrder.None );
@@ -35,7 +35,7 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public override Int32 Add( Object value )
+        public override int Add( object value )
         {
             Contract.Requires( value != null );
             Contract.Requires( value is TextDataParameter );
@@ -81,7 +81,7 @@
         /// <param name="value"></param>
         /// <returns></returns>
         [Pure]
-        public override Boolean Contains( String value )
+        public override bool Contains( string value )
         {
             return this.nameIndex.ContainsKey( value );
         }
@@ -94,7 +94,7 @@
     /// <param name="value"></param>
     /// <returns></returns>
         [Pure]
-        public Boolean PureContains(String value)
+        public bool PureContains(string value)
         {
             return this.Contains(value);
         }
@@ -109,7 +109,7 @@
 #else
         [Pure]
 #endif
-        public override Boolean Contains( Object value )
+        public override bool Contains( object value )
         {
             throw new NotImplementedException();
         }
@@ -119,7 +119,7 @@
         /// </summary>
         /// <param name="array"></param>
         /// <param name="index"></param>
-        public override void CopyTo( Array array, Int32 index )
+        public override void CopyTo( Array array, int index )
         {
             throw new NotImplementedException();
         }
@@ -127,7 +127,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Int32 Count
+        public override int Count
         {
             get
             {
@@ -149,7 +149,7 @@
         /// </summary>
         /// <param name="parameterName"></param>
         /// <returns></returns>
-        protected override DbParameter GetParameter( String parameterName )
+        protected override DbParameter GetParameter( string parameterName )
         {
             throw new NotImplementedException();
         }
@@ -159,7 +159,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        protected override DbParameter GetParameter( Int32 index )
+        protected override DbParameter GetParameter( int index )
         {
             throw new NotImplementedException();
         }
@@ -169,7 +169,7 @@
         /// </summary>
         /// <param name="parameterName"></param>
         /// <returns></returns>
-        public override Int32 IndexOf( String parameterName )
+        public override int IndexOf( string parameterName )
         {
             throw new NotImplementedException();
         }
@@ -179,7 +179,7 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public override Int32 IndexOf( Object value )
+        public override int IndexOf( object value )
         {
             throw new NotImplementedException();
         }
@@ -189,7 +189,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <param name="value"></param>
-        public override void Insert( Int32 index, Object value )
+        public override void Insert( int index, object value )
         {
             throw new NotImplementedException();
         }
@@ -197,7 +197,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Boolean IsFixedSize
+        public override bool IsFixedSize
         {
             get
             {
@@ -208,7 +208,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Boolean IsReadOnly
+        public override bool IsReadOnly
         {
             get
             {
@@ -219,7 +219,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Boolean IsSynchronized
+        public override bool IsSynchronized
         {
             get
             {
@@ -231,7 +231,7 @@
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public override void Remove( Object value )
+        public override void Remove( object value )
         {
             throw new NotImplementedException();
         }
@@ -240,7 +240,7 @@
         /// 
         /// </summary>
         /// <param name="parameterName"></param>
-        public override void RemoveAt( String parameterName )
+        public override void RemoveAt( string parameterName )
         {
             throw new NotImplementedException();
         }
@@ -249,7 +249,7 @@
         /// 
         /// </summary>
         /// <param name="index"></param>
-        public override void RemoveAt( Int32 index )
+        public override void RemoveAt( int index )
         {
             throw new NotImplementedException();
         }
@@ -259,7 +259,7 @@
         /// </summary>
         /// <param name="parameterName"></param>
         /// <param name="value"></param>
-        protected override void SetParameter( String parameterName, DbParameter value )
+        protected override void SetParameter( string parameterName, DbParameter value )
         {
             throw new NotImplementedException();
         }
@@ -269,7 +269,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <param name="value"></param>
-        protected override void SetParameter( Int32 index, DbParameter value )
+        protected override void SetParameter( int index, DbParameter value )
         {
             throw new NotImplementedException();
         }
@@ -277,7 +277,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Object SyncRoot
+        public override object SyncRoot
         {
             get
             {
@@ -291,11 +291,11 @@
         /// <typeparam name="TResult"></typeparam>
         /// <param name="parameterName"></param>
         /// <returns></returns>
-        public TResult GetParameterValue<TResult>( String parameterName )
+        public TResult GetParameterValue<TResult>( string parameterName )
         {
             Contract.Assert( this.Contains( parameterName ) );
             TextDataParameter parameter = this.nameIndex[ parameterName ];
-            Object value = parameter.Value;
+            object value = parameter.Value;
             Contract.Assert( value is TResult );
             return (TResult)value;
         }
@@ -306,32 +306,32 @@
         /// <param name="parameterName"></param>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public Boolean TryGetValue( String parameterName, out TextDataParameter parameter )
+        public bool TryGetValue( string parameterName, out TextDataParameter parameter )
         {
             return this.nameIndex.TryGetValue( parameterName, out parameter );
         }
 
         #region IList<TextDataParameter> Members
 
-        Int32 IList<TextDataParameter>.IndexOf( TextDataParameter item )
+        int IList<TextDataParameter>.IndexOf( TextDataParameter item )
         {
             Contract.Assert( item != null );
 
             return this.listIndex.IndexOf( item );
         }
 
-        void IList<TextDataParameter>.Insert( Int32 index, TextDataParameter item )
+        void IList<TextDataParameter>.Insert( int index, TextDataParameter item )
         {
             throw new NotImplementedException();
         }
 
-        void IList<TextDataParameter>.RemoveAt( Int32 index )
+        void IList<TextDataParameter>.RemoveAt( int index )
         {
             TextDataParameter parameter = this.listIndex[ index ];
             this.collection.Remove( parameter );
         }
 
-        TextDataParameter IList<TextDataParameter>.this[ Int32 index ]
+        TextDataParameter IList<TextDataParameter>.this[ int index ]
         {
             get
             {
@@ -359,17 +359,17 @@
             this.collection.Clear();
         }
 
-        Boolean ICollection<TextDataParameter>.Contains( TextDataParameter item )
+        bool ICollection<TextDataParameter>.Contains( TextDataParameter item )
         {
             throw new NotImplementedException();
         }
 
-        void ICollection<TextDataParameter>.CopyTo( TextDataParameter[] array, Int32 arrayIndex )
+        void ICollection<TextDataParameter>.CopyTo( TextDataParameter[] array, int arrayIndex )
         {
             throw new NotImplementedException();
         }
 
-        Int32 ICollection<TextDataParameter>.Count
+        int ICollection<TextDataParameter>.Count
         {
             get
             {
@@ -377,7 +377,7 @@
             }
         }
 
-        Boolean ICollection<TextDataParameter>.IsReadOnly
+        bool ICollection<TextDataParameter>.IsReadOnly
         {
             get
             {
@@ -385,7 +385,7 @@
             }
         }
 
-        Boolean ICollection<TextDataParameter>.Remove( TextDataParameter item )
+        bool ICollection<TextDataParameter>.Remove( TextDataParameter item )
         {
             Contract.Assert( item != null );
             return this.collection.Remove( item );

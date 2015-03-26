@@ -13,14 +13,14 @@ namespace DataCommander.Foundation.IO
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private readonly Stream stream;
-        private Int64 length;
+        private long length;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="length"></param>
-        public SegmentedStreamReader( Stream stream, Int64 length )
+        public SegmentedStreamReader( Stream stream, long length )
         {
             Contract.Requires( stream != null );
 
@@ -37,7 +37,7 @@ namespace DataCommander.Foundation.IO
         protected override void Dispose( bool disposing )
         {
             base.Dispose( disposing );
-            GarbageMonitor.SetDisposeTime( this, OptimizedDateTime.Now );
+            GarbageMonitor.SetDisposeTime( this, LocalTime.Default.Now );
             log.Trace( GarbageMonitor.State );
         }
 
@@ -55,7 +55,7 @@ namespace DataCommander.Foundation.IO
         /// <param name="offset"></param>
         /// <param name="origin"></param>
         /// <returns></returns>
-        public override Int64 Seek( Int64 offset, SeekOrigin origin )
+        public override long Seek( long offset, SeekOrigin origin )
         {
             throw new NotImplementedException();
         }
@@ -64,7 +64,7 @@ namespace DataCommander.Foundation.IO
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public override void SetLength( Int64 value )
+        public override void SetLength( long value )
         {
             this.length = value;
         }
@@ -76,16 +76,16 @@ namespace DataCommander.Foundation.IO
         /// <param name="offset"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public override Int32 Read( Byte[] buffer, Int32 offset, Int32 count )
+        public override int Read( Byte[] buffer, int offset, int count )
         {
             Contract.Assert( count >= 0 );
 
-            Int32 read;
-            Int64 position = this.stream.Position;
+            int read;
+            long position = this.stream.Position;
 
             if (position < this.length)
             {
-                Int32 min = (Int32)Math.Min( this.length - position, count );
+                int min = (int)Math.Min( this.length - position, count );
                 read = this.stream.Read( buffer, offset, min );
             }
             else
@@ -102,7 +102,7 @@ namespace DataCommander.Foundation.IO
         /// <param name="buffer"></param>
         /// <param name="offset"></param>
         /// <param name="count"></param>
-        public override void Write( Byte[] buffer, Int32 offset, Int32 count )
+        public override void Write( Byte[] buffer, int offset, int count )
         {
             throw new NotImplementedException();
         }
@@ -110,7 +110,7 @@ namespace DataCommander.Foundation.IO
         /// <summary>
         /// 
         /// </summary>
-        public override Boolean CanRead
+        public override bool CanRead
         {
             get
             {
@@ -121,7 +121,7 @@ namespace DataCommander.Foundation.IO
         /// <summary>
         /// 
         /// </summary>
-        public override Boolean CanSeek
+        public override bool CanSeek
         {
             get
             {
@@ -132,7 +132,7 @@ namespace DataCommander.Foundation.IO
         /// <summary>
         /// 
         /// </summary>
-        public override Boolean CanWrite
+        public override bool CanWrite
         {
             get
             {
@@ -143,7 +143,7 @@ namespace DataCommander.Foundation.IO
         /// <summary>
         /// 
         /// </summary>
-        public override Int64 Length
+        public override long Length
         {
             get
             {
@@ -154,6 +154,6 @@ namespace DataCommander.Foundation.IO
         /// <summary>
         /// 
         /// </summary>
-        public override Int64 Position { get; set; }
+        public override long Position { get; set; }
     }
 }

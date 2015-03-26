@@ -9,19 +9,19 @@
     /// </summary>
     public sealed class Int64PerformanceCounter
     {
-        private readonly String name;
-        private readonly Func<Int64, String> toString;
-        private Int64 count;
-        private Int64 sum;
-        private Int64 min = Int64.MaxValue;
-        private Int64 max = Int64.MinValue;
+        private readonly string name;
+        private readonly Func<long, string> toString;
+        private long count;
+        private long sum;
+        private long min = long.MaxValue;
+        private long max = long.MinValue;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="name"></param>
         /// <param name="toString"></param>
-        public Int64PerformanceCounter( String name, Func<Int64, String> toString )
+        public Int64PerformanceCounter( string name, Func<long, string> toString )
         {
             Contract.Requires( toString != null );
 
@@ -33,17 +33,17 @@
         /// 
         /// </summary>
         /// <param name="item"></param>
-        public void Increment( Int64 item )
+        public void Increment( long item )
         {
             Interlocked.Increment( ref this.count );
             Interlocked.Add( ref this.sum, item );
 
             while (true)
             {
-                Int64 min = this.min;
+                long min = this.min;
                 if (item < min)
                 {
-                    Int64 originalMin = Interlocked.CompareExchange( ref this.min, item, min );
+                    long originalMin = Interlocked.CompareExchange( ref this.min, item, min );
                     if (originalMin == min)
                     {
                         break;
@@ -61,10 +61,10 @@
 
             while (true)
             {
-                Int64 max = this.max;
+                long max = this.max;
                 if (item > max)
                 {
-                    Int64 originalMax = Interlocked.CompareExchange( ref this.max, item, max );
+                    long originalMax = Interlocked.CompareExchange( ref this.max, item, max );
                     if (originalMax == max)
                     {
                         break;
@@ -84,7 +84,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int64 Count
+        public long Count
         {
             get
             {
@@ -95,7 +95,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int64 Sum
+        public long Sum
         {
             get
             {
@@ -106,7 +106,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int64 Min
+        public long Min
         {
             get
             {
@@ -117,7 +117,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int64 Max
+        public long Max
         {
             get
             {
@@ -129,14 +129,14 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        public String ToLogString()
+        public string ToLogString()
         {
-            return String.Format(
+            return string.Format(
                 "Int64PerformanceCounter '{0}'\r\ncount: {1}\r\nmin: {2}\r\navg: {3}\r\nmax: {4}\r\nsum: {5}",
                 name,
                 this.count,
                 toString( this.min ),
-                toString( (Int64)( (Double)this.Sum / this.Count ) ),
+                toString( (long)( (Double)this.Sum / this.Count ) ),
                 toString( this.max ),
                 toString( this.sum ) );
         }

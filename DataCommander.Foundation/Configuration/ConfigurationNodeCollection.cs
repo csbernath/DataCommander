@@ -15,7 +15,7 @@
 
         private ListIndex<ConfigurationNode> listIndex;
 
-        private UniqueIndex<String, ConfigurationNode> nameIndex;
+        private UniqueIndex<string, ConfigurationNode> nameIndex;
 
         /// <summary>
         /// 
@@ -23,7 +23,7 @@
         public ConfigurationNodeCollection()
         {
             this.listIndex = new ListIndex<ConfigurationNode>("List");
-            this.nameIndex = new UniqueIndex<String, ConfigurationNode>("Name", node => GetKeyResponse.Create(true, node.Name), SortOrder.Ascending);
+            this.nameIndex = new UniqueIndex<string, ConfigurationNode>("Name", node => GetKeyResponse.Create(true, node.Name), SortOrder.Ascending);
 
             this.collection = new IndexableCollection<ConfigurationNode>(this.listIndex);
             this.collection.Indexes.Add(this.nameIndex);
@@ -34,7 +34,7 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public ConfigurationNode this[String name]
+        public ConfigurationNode this[string name]
         {
             get
             {
@@ -47,7 +47,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public ConfigurationNode this[Int32 index]
+        public ConfigurationNode this[int index]
         {
             get
             {
@@ -61,7 +61,7 @@
         /// <param name="name"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean TryGetValue(String name, out ConfigurationNode item)
+        public bool TryGetValue(string name, out ConfigurationNode item)
         {
             return this.nameIndex.TryGetValue(name, out item);
         }
@@ -91,7 +91,7 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Contains(ConfigurationNode item)
+        public bool Contains(ConfigurationNode item)
         {
             return this.nameIndex.Contains(item);
         }
@@ -101,7 +101,7 @@
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
-        public void CopyTo(ConfigurationNode[] array, Int32 arrayIndex)
+        public void CopyTo(ConfigurationNode[] array, int arrayIndex)
         {
             this.collection.CopyTo(array, arrayIndex);
         }
@@ -109,7 +109,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {
@@ -120,7 +120,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsReadOnly
+        public bool IsReadOnly
         {
             get
             {
@@ -133,7 +133,7 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Boolean Remove(ConfigurationNode item)
+        public bool Remove(ConfigurationNode item)
         {
             return this.collection.Remove(item);
         }
@@ -162,7 +162,7 @@
 
         #endregion
 
-        internal void Insert(Int32 index, ConfigurationNode item)
+        internal void Insert(int index, ConfigurationNode item)
         {
             IEnumerable<ICollectionIndex<ConfigurationNode>> where = this.collection.Indexes.Where(current => current != this.listIndex);
             this.listIndex.Insert(index, item);

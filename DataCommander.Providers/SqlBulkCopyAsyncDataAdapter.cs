@@ -44,10 +44,10 @@ namespace DataCommander.Providers
         {
             this.rowCount += e.RowsCopied;
             string message = string.Format("{0} rows copied.", this.rowCount);
-            this.addInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Verbose, message));
+            this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
             if (this.cancelRequested)
             {
-                this.addInfoMessage(new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Verbose, "Aborting bulk copy..."));
+                this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, "Aborting bulk copy..."));
                 e.Abort = true;
             }
         }

@@ -11,7 +11,7 @@ namespace DataCommander.Foundation.ServiceProcess
         /// <summary>
         /// 
         /// </summary>
-        Boolean CanPauseAndContinue
+        bool CanPauseAndContinue
         {
             get;
         }
@@ -25,7 +25,7 @@ namespace DataCommander.Foundation.ServiceProcess
         /// <summary>
         /// 
         /// </summary>
-        void Start( String[] args );
+        void Start( string[] args );
 
         /// <summary>
         /// 

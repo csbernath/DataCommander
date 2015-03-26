@@ -7,9 +7,9 @@
     /// </summary>
     public sealed class CommandLineArgument
     {
-        private readonly Int32 index;
-        private readonly String name;
-        private readonly String value;
+        private readonly int index;
+        private readonly string name;
+        private readonly string value;
 
         /// <summary>
         /// 
@@ -18,9 +18,9 @@
         /// <param name="name"></param>
         /// <param name="value"></param>
         public CommandLineArgument(
-            Int32 index,
-            String name,
-            String value)
+            int index,
+            string name,
+            string value)
         {
             this.index = index;
             this.name = name;
@@ -30,7 +30,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Index
+        public int Index
         {
             get
             {
@@ -41,7 +41,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String Name
+        public string Name
         {
             get
             {
@@ -52,7 +52,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String Value
+        public string Value
         {
             get
             {

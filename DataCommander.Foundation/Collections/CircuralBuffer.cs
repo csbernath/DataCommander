@@ -11,23 +11,23 @@
     public class CircularBuffer<T> : IList<T>
     {
         private T[] array;
-        private Int32 head;
-        private Int32 tail;
-        private Int32 count;
+        private int head;
+        private int tail;
+        private int count;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="capacity"></param>
-        public CircularBuffer( Int32 capacity )
+        public CircularBuffer(int capacity)
         {
-            this.SetCapacity( capacity );
+            this.SetCapacity(capacity);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Capacity
+        public int Capacity
         {
             get
             {
@@ -40,9 +40,9 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public void AddHead( T item )
+        public void AddHead(T item)
         {
-            Contract.Requires( this.Count < this.Capacity );
+            Contract.Requires<ArgumentException>(this.Count < this.Capacity);
 
             if (this.head == -1)
             {
@@ -51,10 +51,10 @@
             }
             else
             {
-                this.head = ( this.head - 1 ) % this.array.Length;
+                this.head = (this.head - 1) % this.array.Length;
             }
 
-            this.array[ this.head ] = item;
+            this.array[this.head] = item;
             this.count++;
         }
 
@@ -63,9 +63,9 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public void AddTail( T item )
+        public void AddTail(T item)
         {
-            Contract.Assert( this.count < this.array.Length );
+            Contract.Assert(this.count < this.array.Length);
 
             if (this.head == -1)
             {
@@ -74,10 +74,10 @@
             }
             else
             {
-                this.tail = ( this.tail + 1 ) % this.array.Length;
+                this.tail = (this.tail + 1) % this.array.Length;
             }
 
-            this.array[ this.tail ] = item;
+            this.array[this.tail] = item;
             this.count++;
         }
 
@@ -85,13 +85,13 @@
         /// 
         /// </summary>
         /// <param name="items"></param>
-        public void AddTail( IEnumerable<T> items )
+        public void AddTail(IEnumerable<T> items)
         {
-            Contract.Requires<ArgumentNullException>( items != null );
+            Contract.Requires<ArgumentNullException>(items != null);
 
             foreach (var item in items)
             {
-                this.AddTail( item );
+                this.AddTail(item);
             }
         }
 
@@ -101,8 +101,8 @@
         /// <returns></returns>
         public T PeekHead()
         {
-            Contract.Requires<InvalidOperationException>( this.Count > 0 );
-            return this.array[ this.head ];
+            Contract.Requires<InvalidOperationException>(this.Count > 0);
+            return this.array[this.head];
         }
 
         /// <summary>
@@ -111,11 +111,11 @@
         /// <returns></returns>
         public T RemoveHead()
         {
-            Contract.Requires<InvalidOperationException>( this.Count > 0 );
+            Contract.Requires<InvalidOperationException>(this.Count > 0);
 
-            var item = this.array[ this.head ];
-            this.array[ this.head ] = default( T );
-            this.head = ( this.head + 1 ) % this.array.Length;
+            var item = this.array[this.head];
+            this.array[this.head] = default(T);
+            this.head = (this.head + 1) % this.array.Length;
             this.count--;
 
             return item;
@@ -127,9 +127,9 @@
         /// <returns></returns>
         public T PeekTail()
         {
-            Contract.Requires<InvalidOperationException>( this.Count > 0 );
+            Contract.Requires<InvalidOperationException>(this.Count > 0);
 
-            return this.array[ this.tail ];
+            return this.array[this.tail];
         }
 
         /// <summary>
@@ -138,11 +138,11 @@
         /// <returns></returns>
         public T RemoveTail()
         {
-            Contract.Requires<InvalidOperationException>( this.Count > 0 );
+            Contract.Requires<InvalidOperationException>(this.Count > 0);
 
-            var item = this.array[ this.tail ];
-            this.array[ this.tail ] = default( T );
-            this.tail = ( this.tail - 1 ) % this.array.Length;
+            var item = this.array[this.tail];
+            this.array[this.tail] = default(T);
+            this.tail = (this.tail - 1) % this.array.Length;
             this.count--;
             return item;
         }
@@ -151,22 +151,22 @@
         /// 
         /// </summary>
         /// <param name="capacity"></param>
-        public void SetCapacity( Int32 capacity )
+        public void SetCapacity(int capacity)
         {
-            Contract.Requires<InvalidOperationException>( capacity >= this.Count );
+            Contract.Requires<InvalidOperationException>(capacity >= this.Count);
 
             var target = new T[capacity];
             if (this.count > 0)
             {
                 if (this.head <= this.tail)
                 {
-                    Array.Copy( this.array, this.head, target, 0, this.count );
+                    Array.Copy(this.array, this.head, target, 0, this.count);
                 }
                 else
                 {
-                    Int32 headCount = this.array.Length - this.head;
-                    Array.Copy( this.array, this.head, target, 0, headCount );
-                    Array.Copy( this.array, 0, target, headCount, this.tail + 1 );
+                    int headCount = this.array.Length - this.head;
+                    Array.Copy(this.array, this.head, target, 0, headCount);
+                    Array.Copy(this.array, 0, target, headCount, this.tail + 1);
                 }
 
                 this.head = 0;
@@ -183,17 +183,17 @@
 
         #region IList<T> Members
 
-        Int32 IList<T>.IndexOf( T item )
+        int IList<T>.IndexOf(T item)
         {
             throw new NotImplementedException();
         }
 
-        void IList<T>.Insert( Int32 index, T item )
+        void IList<T>.Insert(int index, T item)
         {
             throw new NotImplementedException();
         }
 
-        void IList<T>.RemoveAt( Int32 index )
+        void IList<T>.RemoveAt(int index)
         {
             throw new NotImplementedException();
         }
@@ -203,18 +203,18 @@
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public T this[ Int32 index ]
+        public T this[int index]
         {
             get
             {
-                index = ( this.head + index ) % this.array.Length;
-                return this.array[ index ];
+                index = (this.head + index) % this.array.Length;
+                return this.array[index];
             }
 
             set
             {
-                index = ( this.head + index ) % this.array.Length;
-                this.array[ index ] = value;
+                index = (this.head + index) % this.array.Length;
+                this.array[index] = value;
             }
         }
 
@@ -222,7 +222,7 @@
 
         #region ICollection<T> Members
 
-        void ICollection<T>.Add( T item )
+        void ICollection<T>.Add(T item)
         {
             throw new NotImplementedException();
         }
@@ -232,12 +232,12 @@
             throw new NotImplementedException();
         }
 
-        bool ICollection<T>.Contains( T item )
+        bool ICollection<T>.Contains(T item)
         {
             throw new NotImplementedException();
         }
 
-        void ICollection<T>.CopyTo( T[] array, Int32 arrayIndex )
+        void ICollection<T>.CopyTo(T[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
@@ -245,7 +245,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {
@@ -261,7 +261,7 @@
             }
         }
 
-        bool ICollection<T>.Remove( T item )
+        bool ICollection<T>.Remove(T item)
         {
             throw new NotImplementedException();
         }
@@ -274,17 +274,17 @@
         {
             if (this.count > 0)
             {
-                Int32 current = this.head;
+                int current = this.head;
                 while (true)
                 {
-                    var item = this.array[ current ];
+                    var item = this.array[current];
                     yield return item;
                     if (current == this.tail)
                     {
                         break;
                     }
 
-                    current = ( current + 1 ) % array.Length;
+                    current = (current + 1) % array.Length;
                 }
             }
         }

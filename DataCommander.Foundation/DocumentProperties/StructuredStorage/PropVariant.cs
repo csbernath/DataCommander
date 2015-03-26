@@ -41,7 +41,7 @@ namespace DataCommander.Foundation.DocumentProperties
         ushort wReserved2;
         ushort wReserved3;
         IntPtr p;
-        Int32 p2;
+        int p2;
 
         #endregion // struct fields
 
@@ -67,7 +67,7 @@ namespace DataCommander.Foundation.DocumentProperties
             get { return BitConverter.ToUInt16(GetDataBytes(), 0); }
         }
 
-        Int32 lVal // LONG lVal;
+        int lVal // LONG lVal;
         {
             get { return BitConverter.ToInt32(GetDataBytes(), 0); }
         }
@@ -102,7 +102,7 @@ namespace DataCommander.Foundation.DocumentProperties
             get { return (iVal == 0 ? false : true); }
         }
 
-        Int32 scode // SCODE scode;
+        int scode // SCODE scode;
         {
             get { return lVal; }
         }
@@ -125,7 +125,7 @@ namespace DataCommander.Foundation.DocumentProperties
         /// <returns>A byte array that is the combined size of the data bits.</returns>
         private byte[] GetDataBytes()
         {
-            byte[] ret = new byte[IntPtr.Size + sizeof(Int32)];
+            byte[] ret = new byte[IntPtr.Size + sizeof(int)];
             if (IntPtr.Size == 4)
             {
                 BitConverter.GetBytes(p.ToInt32()).CopyTo(ret, 0);
@@ -142,7 +142,7 @@ namespace DataCommander.Foundation.DocumentProperties
         /// Called to properly clean up the memory referenced by a PropVariant instance.
         /// </summary>
         [DllImport("ole32.dll")]
-        private static extern Int32 PropVariantClear(ref PropVariant pvar);
+        private static extern int PropVariantClear(ref PropVariant pvar);
 
         /// <summary>
         /// Called to clear the PropVariant's referenced and local memory.
@@ -231,7 +231,7 @@ namespace DataCommander.Foundation.DocumentProperties
                             // In this case, we need to derive a pointer at offset 12,
                             // because the size of the blob is represented as a 4-byte int
                             // but the pointer is immediately after that.
-                            pBlobData = new IntPtr(BitConverter.ToInt64(GetDataBytes(), sizeof(Int32)));
+                            pBlobData = new IntPtr(BitConverter.ToInt64(GetDataBytes(), sizeof(int)));
                         }
                         else
                             throw new NotSupportedException();

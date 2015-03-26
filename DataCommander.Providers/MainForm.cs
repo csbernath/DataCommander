@@ -474,7 +474,7 @@ namespace DataCommander
                     "Connection opened in {0} seconds.\r\nServerVersion: {1}",
                     StopwatchTimeSpan.ToString(connectionForm.Duration, 3),
                     connectionProperties.Connection.ServerVersion);
-                var infoMessage = new InfoMessage(OptimizedDateTime.Now, InfoMessageSeverity.Verbose, message);
+                var infoMessage = new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message);
                 queryForm.AddInfoMessage(infoMessage);
 
                 queryForm.Show();
@@ -491,7 +491,7 @@ namespace DataCommander
             if (!e.Cancel)
             {
                 var form = (Form)sender;
-                form.MdiParent = null;
+                // form.MdiParent = null;
 
                 if (this.queryFormToolStrip != null)
                 {
@@ -516,10 +516,14 @@ namespace DataCommander
             var assembly = Assembly.GetEntryAssembly();
             string path = assembly.Location;
             DateTime lastWriteTime = File.GetLastWriteTime(path);
+            string dotNetFrameworkVersion = AppDomainMonitor.DotNetFrameworkVersion;
+
             string text = string.Format(@"Data Commander
-Environment.Version: {0}
-Processor architecture: {1}
-Build date: {2}
+
+CLR version:		{0}
+.NET Framework version:	{1}
+Processor architecture:	{2}
+Build date:		{3}
 
 Copyright © 2002-2015 Csaba Bernáth
 e-mail: csaba.bernath@gmail.com
@@ -527,12 +531,13 @@ e-mail: csaba.bernath@gmail.com
 https://github.com/csbernath/DataCommander
 
 Application Data file:
-{3}
+{4}
 
-Environment.WorkingSet: {4} MB",
+Environment.WorkingSet: {5} MB",
                 Environment.Version,
+                dotNetFrameworkVersion,
                 assembly.GetName().ProcessorArchitecture,
-                lastWriteTime.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                lastWriteTime.ToLongDateString(),
                 DataCommander.Providers.Application.Instance.FileName,
                 ((double)Environment.WorkingSet/(1024*1024)).ToString("N0"));
             string caption = "About Data Commander";

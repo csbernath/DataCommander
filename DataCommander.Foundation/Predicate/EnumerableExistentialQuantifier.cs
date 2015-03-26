@@ -10,13 +10,13 @@
     /// </summary>
     public sealed class EnumerableExistentialQuantifier<T> : PredicateClass<IEnumerable<T>>
     {
-        private Func<T, Boolean> predicate;
+        private Func<T, bool> predicate;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="predicate"></param>
-        public EnumerableExistentialQuantifier( Func<T, Boolean> predicate )
+        public EnumerableExistentialQuantifier( Func<T, bool> predicate )
         {
             Contract.Requires( predicate != null );
 
@@ -29,7 +29,7 @@
         /// <param name="enumerable"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static Boolean Evaluate( IEnumerable<T> enumerable, Func<T, Boolean> predicate )
+        public static bool Evaluate( IEnumerable<T> enumerable, Func<T, bool> predicate )
         {
             Contract.Requires( enumerable != null );
             Contract.Requires( predicate != null );
@@ -43,12 +43,12 @@
         /// <param name="enumerable"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static Int32 IndexOf( IEnumerable<T> enumerable, Predicate<T> predicate )
+        public static int IndexOf( IEnumerable<T> enumerable, Predicate<T> predicate )
         {
             Contract.Requires( enumerable != null );
             Contract.Requires( predicate != null );
 
-            Int32 index = -1;
+            int index = -1;
 
             foreach (T item in enumerable)
             {
@@ -68,7 +68,7 @@
         /// </summary>
         /// <param name="enumerable"></param>
         /// <returns></returns>
-        public override Boolean Evaluate( IEnumerable<T> enumerable )
+        public override bool Evaluate( IEnumerable<T> enumerable )
         {
             return Evaluate( enumerable, this.predicate );
         }

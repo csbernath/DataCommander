@@ -17,12 +17,12 @@
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public static String ToLogString( this IDataParameterCollection parameters )
+        public static string ToLogString( this IDataParameterCollection parameters )
         {
             Contract.Requires( parameters != null );
 
             var sqlParameters = parameters as SqlParameterCollection;
-            String s;
+            string s;
 
             if (sqlParameters != null)
             {
@@ -31,17 +31,17 @@
             else
             {
                 var sb = new StringBuilder();
-                Boolean first = true;
+                bool first = true;
 
                 foreach (IDataParameter parameter in parameters)
                 {
                     if (parameter.Direction != ParameterDirection.ReturnValue)
                     {
-                        Object value = parameter.Value;
+                        object value = parameter.Value;
 
                         if (value != null)
                         {
-                            String valueString;
+                            string valueString;
 
                             if (value == DBNull.Value)
                             {

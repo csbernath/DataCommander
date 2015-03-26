@@ -17,7 +17,7 @@
         /// </summary>
         /// <param name="e"></param>
         /// <returns></returns>
-        public static String ToLogString( this Exception e )
+        public static string ToLogString( this Exception e )
         {
             var sb = new StringBuilder();
             Append( sb, e );
@@ -40,7 +40,7 @@
         private static void Append( StringBuilder sb, SqlException sqlException )
         {
             sb.AppendLine( sqlException.ToString() );
-            String errors = sqlException.Errors.ToLogString();
+            string errors = sqlException.Errors.ToLogString();
             sb.Append( errors );
         }
 
@@ -52,7 +52,7 @@
         private static void Append( StringBuilder sb, Exception exception )
         {
             Exception current = exception;
-            Boolean first = true;
+            bool first = true;
 
             while (current != null)
             {
@@ -63,7 +63,7 @@
                 else
                 {
                     sb.AppendLine();
-                    sb.AppendLine( new String( '/', 80 ) );
+                    sb.AppendLine( new string( '/', 80 ) );
                 }
 
                 var socketException = current as SocketException;

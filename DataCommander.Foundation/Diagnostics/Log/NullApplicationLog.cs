@@ -20,7 +20,7 @@
 
         #region IApplicationLog Members
 
-        ILog ILogFactory.GetLog( String name )
+        ILog ILogFactory.GetLog( string name )
         {
             return NullLog.Instance;
         }

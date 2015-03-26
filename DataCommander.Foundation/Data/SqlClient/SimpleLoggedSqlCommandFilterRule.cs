@@ -8,18 +8,18 @@ namespace DataCommander.Foundation.Data.SqlClient
     /// </summary>
     internal sealed class SimpleLoggedSqlCommandFilterRule
     {
-        private Boolean include;
-        private readonly String userName;
-        private String hostName;
-        private readonly String database;
-        private readonly String commandText;
+        private bool include;
+        private readonly string userName;
+        private string hostName;
+        private readonly string database;
+        private readonly string commandText;
 
         public SimpleLoggedSqlCommandFilterRule(
-            Boolean include,
-            String userName,
-            String hostName,
-            String database,
-            String commandText)
+            bool include,
+            string userName,
+            string hostName,
+            string database,
+            string commandText)
         {
             this.include = include;
             this.userName = userName;
@@ -28,14 +28,14 @@ namespace DataCommander.Foundation.Data.SqlClient
             this.commandText = commandText;
         }
 
-        public Boolean Match(
-            String userName,
-            String hostName,
+        public bool Match(
+            string userName,
+            string hostName,
             IDbCommand command)
         {
-            String database = command.Connection.Database;
-            String commandText = command.CommandText;
-            Boolean match =
+            string database = command.Connection.Database;
+            string commandText = command.CommandText;
+            bool match =
                 (this.userName == null || this.userName == userName) &&
                 (this.hostName == null || this.hostName == hostName) &&
                 (this.database == null || this.database == database) &&
@@ -44,7 +44,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             return match;
         }
 
-        public Boolean Include
+        public bool Include
         {
             get
             {

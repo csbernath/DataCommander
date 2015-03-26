@@ -29,7 +29,7 @@ namespace DataCommander.Foundation.Collections
 
         bool IProducerConsumerCollection<T>.TryTake( out T item )
         {
-            Boolean succeeded = false;
+            bool succeeded = false;
             item = default( T );
 
             if (this.queue.Count > 0)
@@ -51,7 +51,7 @@ namespace DataCommander.Foundation.Collections
 
         #region ICollection Members
 
-        void ICollection.CopyTo( Array array, Int32 index )
+        void ICollection.CopyTo( Array array, int index )
         {
             lock (this.queue)
             {
@@ -59,7 +59,7 @@ namespace DataCommander.Foundation.Collections
             }
         }
 
-        Int32 ICollection.Count
+        int ICollection.Count
         {
             get
             {
@@ -75,7 +75,7 @@ namespace DataCommander.Foundation.Collections
             }
         }
 
-        Object ICollection.SyncRoot
+        object ICollection.SyncRoot
         {
             get
             {

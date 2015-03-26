@@ -12,7 +12,7 @@
     public static class DataTableExtensions
     {
         /// <summary>
-        /// Retrieves the String representation of a DataTable (like SQL Query Analyzer).
+        /// Retrieves the string representation of a DataTable (like SQL Query Analyzer).
         /// </summary>
         /// <param name="dataTable"></param>
         /// <returns></returns>
@@ -21,7 +21,7 @@
             Contract.Requires(dataTable != null);
 
             var dataColumns = dataTable.Columns;
-            Int32 columnCount = dataColumns.Count;
+            int columnCount = dataColumns.Count;
             var stringTable = new StringTable(columnCount);
             SetAlign(dataColumns, stringTable.Columns);
             WriteHeader(dataTable.Columns, stringTable);
@@ -33,9 +33,9 @@
                 if (rowState != DataRowState.Deleted)
                 {
                     StringTableRow stringTableRow = stringTable.NewRow();
-                    Object[] itemArray = dataRow.ItemArray;
+                    object[] itemArray = dataRow.ItemArray;
 
-                    for (Int32 i = 0; i < itemArray.Length; i++)
+                    for (int i = 0; i < itemArray.Length; i++)
                     {
                         object value = itemArray[i];
 
@@ -56,7 +56,7 @@
 
         internal static void SetAlign(IEnumerable dataColumns, StringTableColumnCollection columns)
         {
-            Int32 i = 0;
+            int i = 0;
 
             foreach (DataColumn dataColumn in dataColumns)
             {
@@ -96,11 +96,11 @@
             StringTable stringTable)
         {
             StringTableRow row = stringTable.NewRow();
-            Int32 count = dataColumns.Count;
+            int count = dataColumns.Count;
 
-            for (Int32 i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
-                String columnName = dataColumns[i].ColumnName;
+                string columnName = dataColumns[i].ColumnName;
                 row[i] = columnName;
             }
 
@@ -109,14 +109,14 @@
 
         internal static void WriteHeaderSeparator(StringTable st)
         {
-            Int32 columnCount = st.Columns.Count;
+            int columnCount = st.Columns.Count;
             StringTableRow row = st.NewRow();
 
-            for (Int32 i = 0; i < columnCount; i++)
+            for (int i = 0; i < columnCount; i++)
             {
                 StringTableColumn column = st.Columns[i];
-                Int32 width = st.GetMaxColumnWidth(i);
-                row[i] = new String('-', width);
+                int width = st.GetMaxColumnWidth(i);
+                row[i] = new string('-', width);
             }
 
             st.Rows.Insert(1, row);
@@ -129,11 +129,11 @@
             StringTableRow row1 = stringTable.NewRow();
             StringTableRow row2 = stringTable.NewRow();
 
-            for (Int32 i = 0; i < dataColumns.Length; i++)
+            for (int i = 0; i < dataColumns.Length; i++)
             {
-                String columnName = dataColumns[i].ColumnName;
+                string columnName = dataColumns[i].ColumnName;
                 row1[i] = columnName;
-                row2[i] = new String('-', columnName.Length);
+                row2[i] = new string('-', columnName.Length);
             }
 
             stringTable.Rows.Add(row1);

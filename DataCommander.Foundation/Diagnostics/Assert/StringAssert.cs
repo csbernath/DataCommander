@@ -19,9 +19,9 @@ namespace DataCommander.Foundation.Diagnostics
         [Conditional( Assert.ConditionString )]
         [Conditional( Assert.ConditionString2 )]
         [DebuggerStepThrough]
-        public static void IsNullOrEmpty( String value, String name )
+        public static void IsNullOrEmpty( string value, string name )
         {
-            if (!String.IsNullOrEmpty( value ))
+            if (!string.IsNullOrEmpty( value ))
             {
                 var message = new AssertMessage( "StringAssert.IsNullOrEmpty" );
                 AssertMessageParameterCollection parameters = message.Parameters;
@@ -39,7 +39,7 @@ namespace DataCommander.Foundation.Diagnostics
         [Conditional( Assert.ConditionString )]
         [Conditional( Assert.ConditionString2 )]
         [DebuggerStepThrough]
-        public static void IsNullOrWhiteSpace( String value, String name )
+        public static void IsNullOrWhiteSpace( string value, string name )
         {
             if (!value.IsNullOrWhiteSpace())
             {
@@ -60,10 +60,10 @@ namespace DataCommander.Foundation.Diagnostics
         [Conditional( Assert.ConditionString2 )]
         [DebuggerStepThrough]
         public static void IsNotNullAndNotEmpty(
-            String value,
-            String name )
+            string value,
+            string name )
         {
-            if (String.IsNullOrEmpty( value ))
+            if (string.IsNullOrEmpty( value ))
             {
                 AssertMessage message = new AssertMessage( "StringAssert.IsNotNullAndNotEmpty" );
                 AssertMessageParameterCollection parameters = message.Parameters;
@@ -81,7 +81,7 @@ namespace DataCommander.Foundation.Diagnostics
         [Conditional( Assert.ConditionString )]
         [Conditional( Assert.ConditionString2 )]
         [DebuggerStepThrough]
-        public static void IsNotNullAndNotWhiteSpace( String value, String name )
+        public static void IsNotNullAndNotWhiteSpace( string value, string name )
         {
             if (value.IsNullOrWhiteSpace())
             {

@@ -8,8 +8,8 @@
     /// </summary>
     public sealed class TextDataSetTable
     {
-        private readonly String name;
-        private readonly Int32 rowCount;
+        private readonly string name;
+        private readonly int rowCount;
         private readonly TextDataTable table;
 
         /// <summary>
@@ -18,7 +18,7 @@
         /// <param name="name"></param>
         /// <param name="rowCount"></param>
         /// <param name="table"></param>
-        public TextDataSetTable( String name, Int32 rowCount, TextDataTable table )
+        public TextDataSetTable( string name, int rowCount, TextDataTable table )
         {
             Contract.Requires(rowCount >= 0);
 
@@ -30,7 +30,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String Name
+        public string Name
         {
             get
             {
@@ -41,7 +41,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 RowCount
+        public int RowCount
         {
             get
             {

@@ -11,7 +11,7 @@
     /// <typeparam name="T"></typeparam>
     public class SequenceIndex<TKey, T> : ICollectionIndex<T>
     {
-        private String name;
+        private string name;
         private Func<TKey> getNextKey;
         private Func<T, TKey> getKey;
         private IDictionary<TKey, T> dictionary;
@@ -24,7 +24,7 @@
         /// <param name="getKey"></param>
         /// <param name="dictionary"></param>
         public SequenceIndex(
-            String name,
+            string name,
             Func<TKey> getNextKey,
             Func<T, TKey> getKey,
             IDictionary<TKey, T> dictionary)
@@ -41,7 +41,7 @@
 
         #region ICollectionIndex<T> Members
 
-        String ICollectionIndex<T>.Name
+        string ICollectionIndex<T>.Name
         {
             get
             {
@@ -73,12 +73,12 @@
             return this.dictionary.Values.Contains(item);
         }
 
-        void ICollection<T>.CopyTo(T[] array, Int32 arrayIndex)
+        void ICollection<T>.CopyTo(T[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
 
-        Int32 ICollection<T>.Count
+        int ICollection<T>.Count
         {
             get
             {
@@ -97,7 +97,7 @@
         bool ICollection<T>.Remove(T item)
         {
             TKey key = this.getKey(item);
-            Boolean removed = this.dictionary.Remove(key);
+            bool removed = this.dictionary.Remove(key);
             return removed;
         }
 

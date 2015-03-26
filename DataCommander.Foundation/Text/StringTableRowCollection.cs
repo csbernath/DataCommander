@@ -18,7 +18,7 @@ namespace DataCommander.Foundation.Text
         /// </summary>
         /// <param name="index"></param>
         /// <param name="item"></param>
-        protected override void InsertItem( Int32 index, StringTableRow item )
+        protected override void InsertItem( int index, StringTableRow item )
         {
             Contract.Assert( item != null );
 

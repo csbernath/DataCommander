@@ -4,8 +4,8 @@ namespace DataCommander.Foundation.Diagnostics
 
     internal interface ILogFormatter
     {
-        String Begin();
-        String Format( LogEntry entry );
-        String End();
+        string Begin();
+        string Format( LogEntry entry );
+        string End();
     }
 }

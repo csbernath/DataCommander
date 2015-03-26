@@ -31,7 +31,7 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public override Boolean Evaluate( T value )
+        public override bool Evaluate( T value )
         {
             return this.x.Evaluate( value ) && this.y.Evaluate( value );
         }
@@ -40,7 +40,7 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        public override String ToString()
+        public override string ToString()
         {
             return "(" + this.x + " and " + this.y + ")";
         }

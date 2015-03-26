@@ -82,7 +82,7 @@ namespace DataCommander.Foundation.Data
         /// 
         /// </summary>
         /// <returns></returns>
-        public Object ExecuteScalar()
+        public object ExecuteScalar()
         {
             // TODO:  Add AsyncDbCommand.ExecuteScalar implementation
             return null;
@@ -92,7 +92,7 @@ namespace DataCommander.Foundation.Data
         /// 
         /// </summary>
         /// <returns></returns>
-        public Int32 ExecuteNonQuery()
+        public int ExecuteNonQuery()
         {
             Contract.Assert( this.connection != null );
 
@@ -102,7 +102,7 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public Int32 CommandTimeout
+        public int CommandTimeout
         {
             get
             {
@@ -163,7 +163,7 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public String CommandText
+        public string CommandText
         {
             get
             {

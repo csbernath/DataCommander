@@ -20,7 +20,7 @@ namespace DataCommander.Foundation.Diagnostics
     ///        </item>
     ///        <item>
     ///            <term><see cref="TraceWriter"/></term>
-    ///            <description>Uses <see cref="System.Diagnostics.Trace.WriteLine(String)"/></description>
+    ///            <description>Uses <see cref="System.Diagnostics.Trace.WriteLine(string)"/></description>
     ///        </item>
     ///    </list>
     /// </remarks>
@@ -43,7 +43,7 @@ namespace DataCommander.Foundation.Diagnostics
 
         void ILogWriter.Write( LogEntry entry )
         {
-            String s = this.formatter.Format( entry );
+            string s = this.formatter.Format( entry );
             this.textWriter.Write( s );
         }
 

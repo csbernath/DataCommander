@@ -38,7 +38,7 @@
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static Boolean IsValueOrNull(this DataParameterValueType type)
+        public static bool IsValueOrNull(this DataParameterValueType type)
         {
             return type == DataParameterValueType.Value || type == DataParameterValueType.Null;
         }

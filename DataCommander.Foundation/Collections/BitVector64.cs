@@ -35,7 +35,7 @@ namespace DataCommander.Foundation.Collections
         /// <summary>
         /// 
         /// </summary>
-        public Boolean this[Int32 index]
+        public bool this[int index]
         {
             get
             {
@@ -62,9 +62,9 @@ namespace DataCommander.Foundation.Collections
         /// 
         /// </summary>
         /// <returns></returns>
-        public override String ToString()
+        public override string ToString()
         {
-            String value = this.data.ToString("X");
+            string value = this.data.ToString("X");
             value = value.PadLeft(16, '0');
             return value;
         }

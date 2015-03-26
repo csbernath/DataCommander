@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.SqlServer2005
+﻿using DataCommander.Foundation.Linq;
+
+namespace DataCommander.Providers.SqlServer2005
 {
     using System.Collections.Generic;
     using System.Data;
@@ -43,6 +45,7 @@
 
         private static ColumnNode ToColumnNode( IDataRecord dataRecord )
         {
+            int id = dataRecord.GetValue<int>("column_id");
             string columnName = dataRecord.GetValue<string>( "name" );
             byte systemTypeId = dataRecord.GetValue<byte>( "system_type_id" );
             short maxLength = dataRecord.GetValue<short>( "max_length" );
@@ -50,12 +53,13 @@
             byte scale = dataRecord.GetValue<byte>( "scale" );
             bool isNullable = dataRecord.GetValue<bool>( "is_nullable" );
             string userTypeName = dataRecord.GetValue<string>( "UserTypeName" );
-            return new ColumnNode( columnName, systemTypeId, maxLength, precision, scale, isNullable, userTypeName );
+            return new ColumnNode(id, columnName, systemTypeId, maxLength, precision, scale, isNullable, userTypeName);
         }
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
         {
-            ITreeNode[] treeNodes;
+            SortedDictionary<int, ColumnNode> columnNodes;
+
             using (var methodLog = LogFactory.Instance.GetCurrentMethodLog())
             {
                 using (var connection = new SqlConnection())
@@ -72,13 +76,14 @@ where   s.name = {1}
         and o.name = {2}
 
 select
-    c.name,
-    c.system_type_id,
-    c.max_length,
-    c.precision,
-    c.scale,
-    c.is_nullable,
-    t.name as UserTypeName
+     c.column_id
+    ,c.name
+    ,c.system_type_id
+    ,c.max_length
+    ,c.precision
+    ,c.scale
+    ,c.is_nullable
+    ,t.name as UserTypeName
 from    {0}.sys.all_columns c
 join    {0}.sys.types t
 on      c.user_type_id = t.user_type_id
@@ -110,16 +115,15 @@ order by fkc.parent_column_id",
                     connection.Open();
                     using (var dataReader = connection.ExecuteReader( commandText ))
                     {
-                        treeNodes =
-                            (from dataRecord in dataReader.AsEnumerable()
-                             select ToColumnNode( dataRecord )).ToArray();
+                        columnNodes = (from dataRecord in dataReader.AsEnumerable()
+                            select ToColumnNode(dataRecord)).ToSortedDictionary(c => c.Id);
 
                         dataReader.NextResult();
 
                         foreach (var dataRecord in dataReader.AsEnumerable())
                         {
-                            int columnId = dataRecord.GetValue<int>( "column_id" );
-                            var columnNode = (ColumnNode) treeNodes[ columnId - 1 ];
+                            int columnId = dataRecord.GetValue<int>("column_id");
+                            var columnNode = columnNodes[columnId];
                             columnNode.IsPrimaryKey = true;
                         }
 
@@ -127,14 +131,15 @@ order by fkc.parent_column_id",
 
                         while (dataReader.Read())
                         {
-                            int columnId = dataReader.GetInt32( 0 );
-                            var columnNode = (ColumnNode) treeNodes[ columnId - 1 ];
+                            int columnId = dataReader.GetInt32(0);
+                            var columnNode = columnNodes[columnId];
                             columnNode.IsForeignKey = true;
                         }
                     }
                 }
             }
-            return treeNodes;
+
+            return columnNodes.Values;
         }
 
         bool ITreeNode.Sortable

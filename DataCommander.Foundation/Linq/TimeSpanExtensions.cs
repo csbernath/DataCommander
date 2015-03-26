@@ -12,9 +12,9 @@
         /// </summary>
         /// <param name="timeSpan"></param>
         /// <returns></returns>
-        public static Double GetTotalMicroseconds( this TimeSpan timeSpan )
+        public static Double GetTotalMicroseconds(this TimeSpan timeSpan)
         {
-            return timeSpan.Ticks * 0.1;
+            return timeSpan.Ticks*0.1;
         }
     }
 }

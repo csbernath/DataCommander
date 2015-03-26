@@ -45,9 +45,9 @@ namespace DataCommander.Foundation.Diagnostics
         /// <param name="buffer"></param>
         /// <param name="index"></param>
         /// <param name="count"></param>
-        public override void Write(Char[] buffer, Int32 index, Int32 count)
+        public override void Write(Char[] buffer, int index, int count)
         {
-            String message = new String(buffer, index, count);
+            string message = new string(buffer, index, count);
             Debug.Write(message);
         }
     }

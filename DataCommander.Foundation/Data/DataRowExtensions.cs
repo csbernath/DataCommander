@@ -18,10 +18,10 @@
         /// <param name="dataRow"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static T GetValue<T>( this DataRow dataRow, String name )
+        public static T GetValue<T>( this DataRow dataRow, string name )
         {
             Contract.Requires<ArgumentNullException>( dataRow != null );
-            Object valueObject = dataRow[ name ];
+            object valueObject = dataRow[ name ];
             Contract.Assert( valueObject is T );
 
             return (T)valueObject;
@@ -37,11 +37,11 @@
         /// <returns></returns>
         public static T GetValue<T>(
             this DataRow dataRow,
-            String name,
+            string name,
             T outputNullValue )
         {
             Contract.Requires<ArgumentNullException>( dataRow != null );
-            Object valueObject = dataRow[ name ];
+            object valueObject = dataRow[ name ];
             return Database.GetValue<T>( valueObject, outputNullValue );
         }
 
@@ -52,10 +52,10 @@
         /// <param name="dataRow"></param>
         /// <param name="columnIndex"></param>
         /// <returns></returns>
-        public static T GetValueOrDefault<T>( this DataRow dataRow, Int32 columnIndex )
+        public static T GetValueOrDefault<T>( this DataRow dataRow, int columnIndex )
         {
             Contract.Requires<ArgumentNullException>( dataRow != null );
-            Object value = dataRow[ columnIndex ];
+            object value = dataRow[ columnIndex ];
             return Database.GetValueOrDefault<T>( value );
         }
 
@@ -66,10 +66,10 @@
         /// <param name="dataRow"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static T GetValueOrDefault<T>( this DataRow dataRow, String name )
+        public static T GetValueOrDefault<T>( this DataRow dataRow, string name )
         {
             Contract.Requires<ArgumentNullException>( dataRow != null );
-            Object value = dataRow[ name ];
+            object value = dataRow[ name ];
             return Database.GetValueOrDefault<T>( value );
         }
 
@@ -83,9 +83,9 @@
             Contract.Requires<ArgumentNullException>( dataRow != null );
             var st = new StringTable( 2 );
             DataTable dataTable = dataRow.Table;
-            Object[] itemArray = dataRow.ItemArray;
+            object[] itemArray = dataRow.ItemArray;
 
-            for (Int32 i = 0; i < itemArray.Length; i++)
+            for (int i = 0; i < itemArray.Length; i++)
             {
                 StringTableRow row = st.NewRow();
                 row[ 0 ] = dataTable.Columns[ i ].ColumnName;
@@ -107,7 +107,7 @@
 
             if (dataRows != null)
             {
-                Boolean first = true;
+                bool first = true;
 
                 foreach (DataRow dataRow in dataRows)
                 {
@@ -115,15 +115,15 @@
                     {
                         first = false;
                         DataTable dataTable = dataRow.Table;
-                        Int32 columnCount = dataTable.Columns.Count;
+                        int columnCount = dataTable.Columns.Count;
                         st = new StringTable( columnCount );
                         DataTableExtensions.WriteHeader( dataTable.Columns, st );
                     }
 
-                    Object[] itemArray = dataRow.ItemArray;
+                    object[] itemArray = dataRow.ItemArray;
                     StringTableRow row = st.NewRow();
 
-                    for (Int32 j = 0; j < itemArray.Length; j++)
+                    for (int j = 0; j < itemArray.Length; j++)
                     {
                         row[ j ] = itemArray[ j ].ToString();
                     }

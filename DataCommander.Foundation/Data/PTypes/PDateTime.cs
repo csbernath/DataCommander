@@ -112,9 +112,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static Boolean operator ==( PDateTime x, PDateTime y )
+        public static bool operator ==( PDateTime x, PDateTime y )
         {
-            Boolean isEqual = x.type == y.type;
+            bool isEqual = x.type == y.type;
 
             if (isEqual)
             {
@@ -133,7 +133,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static Boolean operator !=( PDateTime x, PDateTime y )
+        public static bool operator !=( PDateTime x, PDateTime y )
         {
             return !(x == y);
         }
@@ -144,7 +144,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="s"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static PDateTime Parse( String s, PValueType type )
+        public static PDateTime Parse( string s, PValueType type )
         {
             PDateTime sp;
 
@@ -165,9 +165,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="y"></param>
         /// <returns></returns>
-        public override Boolean Equals( Object y )
+        public override bool Equals( object y )
         {
-            Boolean equals = y is PDateTime;
+            bool equals = y is PDateTime;
 
             if (equals)
             {
@@ -181,9 +181,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <returns></returns>
-        public override Int32 GetHashCode()
+        public override int GetHashCode()
         {
-            Int32 hashCode = this.sql.GetHashCode();
+            int hashCode = this.sql.GetHashCode();
             return hashCode;
         }
 
@@ -201,7 +201,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsNull
+        public bool IsNull
         {
             get
             {
@@ -212,7 +212,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsValue
+        public bool IsValue
         {
             get
             {
@@ -223,7 +223,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Boolean IsEmpty
+        public bool IsEmpty
         {
             get
             {
@@ -234,11 +234,11 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public Object Value
+        public object Value
         {
             get
             {
-                Object value;
+                object value;
 
                 switch (this.type)
                 {
@@ -279,7 +279,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <returns></returns>
-        public override String ToString()
+        public override string ToString()
         {
             return this.sql.ToString();
         }

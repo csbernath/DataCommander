@@ -9,14 +9,14 @@
     [DebuggerDisplay("Name = {name}")]
     public sealed class TextDataTable
     {
-        private readonly String name;
+        private readonly string name;
         private TextDataColumnCollection columns = new TextDataColumnCollection();
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="name"></param>
-        public TextDataTable(String name)
+        public TextDataTable(string name)
         {
             this.name = name;
         }
@@ -24,7 +24,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public String Name
+        public string Name
         {
             get
             {

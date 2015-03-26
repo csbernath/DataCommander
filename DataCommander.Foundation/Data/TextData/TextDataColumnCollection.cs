@@ -13,7 +13,7 @@
     {
         private IndexableCollection<TextDataColumn> collection;
         private ListIndex<TextDataColumn> listIndex;
-        private UniqueIndex<String, TextDataColumn> nameIndex;
+        private UniqueIndex<string, TextDataColumn> nameIndex;
 
         /// <summary>
         /// 
@@ -22,7 +22,7 @@
         {
             this.listIndex = new ListIndex<TextDataColumn>( "List" );
 
-            this.nameIndex = new UniqueIndex<String, TextDataColumn>(
+            this.nameIndex = new UniqueIndex<string, TextDataColumn>(
                 "Name",
                 column => GetKeyResponse.Create( true, column.ColumnName ),
                 SortOrder.None );
@@ -35,7 +35,7 @@
         /// </summary>
         /// <param name="columnName"></param>
         /// <returns></returns>
-        public TextDataColumn this[ String columnName ]
+        public TextDataColumn this[ string columnName ]
         {
             get
             {
@@ -51,7 +51,7 @@
         /// <param name="columnName"></param>
         /// <returns></returns>
         [Pure]
-        public Boolean Contains( String columnName )
+        public bool Contains( string columnName )
         {
             return this.nameIndex.ContainsKey( columnName );
         }
@@ -61,11 +61,11 @@
         /// </summary>
         /// <param name="columnName"></param>
         /// <returns></returns>
-        public Int32 IndexOf( String columnName )
+        public int IndexOf( string columnName )
         {
             TextDataColumn column;
-            Boolean contains = this.nameIndex.TryGetValue( columnName, out column );
-            Int32 index;
+            bool contains = this.nameIndex.TryGetValue( columnName, out column );
+            int index;
 
             if (contains)
             {
@@ -79,22 +79,22 @@
             return index;
         }
 
-        internal Int32 IndexOf( String columnName, Boolean throwException )
+        internal int IndexOf( string columnName, bool throwException )
         {
-            Int32 index = this.IndexOf( columnName );
+            int index = this.IndexOf( columnName );
 
             if (index < 0)
             {
-                String message = String.Format( CultureInfo.InvariantCulture, "Column '{0} not found.", columnName );
+                string message = string.Format( CultureInfo.InvariantCulture, "Column '{0} not found.", columnName );
                 throw new IndexOutOfRangeException( message );
             }
 
             return index;
         }
 
-        internal Int32 IndexOf( TextDataColumn column, Boolean throwException )
+        internal int IndexOf( TextDataColumn column, bool throwException )
         {
-            Int32 index = this.IndexOf( column );
+            int index = this.IndexOf( column );
 
             if (index < 0)
             {
@@ -109,7 +109,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public TextDataColumn this[ Int32 index ]
+        public TextDataColumn this[ int index ]
         {
             get
             {
@@ -141,12 +141,12 @@
             throw new NotImplementedException();
         }
 
-        Boolean ICollection<TextDataColumn>.Contains( TextDataColumn item )
+        bool ICollection<TextDataColumn>.Contains( TextDataColumn item )
         {
             throw new NotImplementedException();
         }
 
-        void ICollection<TextDataColumn>.CopyTo( TextDataColumn[] array, Int32 arrayIndex )
+        void ICollection<TextDataColumn>.CopyTo( TextDataColumn[] array, int arrayIndex )
         {
             throw new NotImplementedException();
         }
@@ -154,7 +154,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Count
+        public int Count
         {
             get
             {
@@ -162,7 +162,7 @@
             }
         }
 
-        Boolean ICollection<TextDataColumn>.IsReadOnly
+        bool ICollection<TextDataColumn>.IsReadOnly
         {
             get
             {
@@ -170,7 +170,7 @@
             }
         }
 
-        Boolean ICollection<TextDataColumn>.Remove( TextDataColumn item )
+        bool ICollection<TextDataColumn>.Remove( TextDataColumn item )
         {
             throw new NotImplementedException();
         }
@@ -202,7 +202,7 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Int32 IndexOf( TextDataColumn item )
+        public int IndexOf( TextDataColumn item )
         {
             return this.listIndex.IndexOf( item );
         }
@@ -212,7 +212,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <param name="item"></param>
-        public void Insert( Int32 index, TextDataColumn item )
+        public void Insert( int index, TextDataColumn item )
         {
             throw new NotImplementedException();
         }
@@ -221,7 +221,7 @@
         /// 
         /// </summary>
         /// <param name="index"></param>
-        public void RemoveAt( Int32 index )
+        public void RemoveAt( int index )
         {
             throw new NotImplementedException();
         }

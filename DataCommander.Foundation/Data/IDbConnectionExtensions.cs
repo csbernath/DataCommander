@@ -21,9 +21,9 @@
         public static IDbCommand CreateCommand(
             this IDbConnection connection,
             IDbTransaction transaction,
-            String commandText,
+            string commandText,
             CommandType commandType,
-            Int32? commandTimeout)
+            int? commandTimeout)
         {
             Contract.Requires(connection != null);
 
@@ -52,9 +52,9 @@
         public static DataSet ExecuteDataSet(
             this IDbConnection connection,
             IDbTransaction transaction,
-            String commandText,
+            string commandText,
             CommandType commandType,
-            Int32? commandTimeout )
+            int? commandTimeout )
         {
             DataSet dataSet;
 
@@ -78,9 +78,9 @@
         public static DataTable ExecuteDataTable(
             this IDbConnection connection,
             IDbTransaction transaction,
-            String commandText,
+            string commandText,
             CommandType commandType,
-            Int32? commandTimeout )
+            int? commandTimeout )
         {
             DataTable dataTable;
 
@@ -101,14 +101,14 @@
         /// <param name="commandType"></param>
         /// <param name="commandTimeout"></param>
         /// <returns></returns>
-        public static Int32 ExecuteNonQuery(
+        public static int ExecuteNonQuery(
             this IDbConnection connection,
             IDbTransaction transaction,
-            String commandText,
+            string commandText,
             CommandType commandType,
-            Int32? commandTimeout )
+            int? commandTimeout )
         {
-            Int32 affectedRowCount;
+            int affectedRowCount;
 
             using (var command = connection.CreateCommand( transaction, commandText, commandType, commandTimeout ))
             {
@@ -131,9 +131,9 @@
         public static IDataReaderContext ExecuteReader(
             this IDbConnection connection,
             IDbTransaction transaction,
-            String commandText,
+            string commandText,
             CommandType commandType,
-            Int32? commandTimeout,
+            int? commandTimeout,
             CommandBehavior commandBehavior )
         {
             var command = connection.CreateCommand( transaction, commandText, commandType, commandTimeout );
@@ -150,16 +150,16 @@
         /// <param name="commandType"></param>
         /// <param name="commandTimeout"></param>
         /// <returns></returns>
-        public static Object ExecuteScalar(
+        public static object ExecuteScalar(
             this IDbConnection connection,
             IDbTransaction transaction,
-            String commandText,
+            string commandText,
             CommandType commandType,
-            Int32? commandTimeout )
+            int? commandTimeout )
         {
             Contract.Requires( connection != null );
 
-            Object scalar;
+            object scalar;
 
             using (var command = connection.CreateCommand( transaction, commandText, commandType, commandTimeout ))
             {

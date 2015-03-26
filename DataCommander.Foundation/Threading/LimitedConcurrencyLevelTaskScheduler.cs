@@ -16,11 +16,11 @@
     public sealed class LimitedConcurrencyLevelTaskScheduler
     {
         private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private String name;
+        private string name;
         private IProducerConsumerCollection<Action> queue;
-        private Int32 maximumConcurrencyLevel;
-        private Int32 threadCount;
-        private Int32 id;
+        private int maximumConcurrencyLevel;
+        private int threadCount;
+        private int id;
         private EventHandler done;
 
         /// <summary>
@@ -29,7 +29,7 @@
         /// <param name="name"></param>
         /// <param name="maximumConcurrencyLevel"></param>
         /// <param name="queue"></param>
-        public LimitedConcurrencyLevelTaskScheduler( String name, Int32 maximumConcurrencyLevel, IProducerConsumerCollection<Action> queue )
+        public LimitedConcurrencyLevelTaskScheduler( string name, int maximumConcurrencyLevel, IProducerConsumerCollection<Action> queue )
         {
             Contract.Requires( maximumConcurrencyLevel >= 0 );
             Contract.Requires( queue != null );
@@ -42,7 +42,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 MaximumConcurrencyLevel
+        public int MaximumConcurrencyLevel
         {
             get
             {
@@ -59,7 +59,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 QueuedItemCount
+        public int QueuedItemCount
         {
             get
             {
@@ -70,7 +70,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 ThreadCount
+        public int ThreadCount
         {
             get
             {
@@ -128,13 +128,13 @@
             }
         }
 
-        private void Start( Object state )
+        private void Start( object state )
         {
             try
             {
                 var thread = WorkerThread.Current;
-                Int32 id = Interlocked.Increment( ref this.id );
-                thread.Name = String.Format( "LimitedConcurrencyLevelTaskScheduler({0},{1})", this.name, id );
+                int id = Interlocked.Increment( ref this.id );
+                thread.Name = string.Format( "LimitedConcurrencyLevelTaskScheduler({0},{1})", this.name, id );
                 // log.Trace( "Starting scheduler thread({0}), threadCount: {1}", id, this.threadCount );
                 var stopwatch = Stopwatch.StartNew();
 
@@ -165,7 +165,7 @@
 
                 stopwatch.Stop();
                 // log.Trace( "Stopping scheduler thread({0}), count: {1}, elapsed: {2}, threadCount: {3}", id, count, stopwatch.Elapsed, this.threadCount );
-                Int32 threadCount = Interlocked.Decrement( ref this.threadCount );
+                int threadCount = Interlocked.Decrement( ref this.threadCount );
 
                 if (this.queue.Count == 0 && threadCount == 0 && this.done != null)
                 {
@@ -197,16 +197,16 @@
         /// <summary>The list of tasks to be executed.</summary>
         private readonly LinkedList<Task> _tasks = new LinkedList<Task>(); // protected by lock(_tasks)
         /// <summary>The maximum concurrency level allowed by this scheduler.</summary>
-        private readonly Int32 _maxDegreeOfParallelism;
+        private readonly int _maxDegreeOfParallelism;
         /// <summary>Whether the scheduler is currently processing work items.</summary>
-        private Int32 _delegatesQueuedOrRunning; // protected by lock(_tasks)
+        private int _delegatesQueuedOrRunning; // protected by lock(_tasks)
 
         /// <summary>
         /// Initializes an instance of the LimitedConcurrencyLevelTaskScheduler class with the
         /// specified degree of parallelism.
         /// </summary>
         /// <param name="maxDegreeOfParallelism">The maximum degree of parallelism provided by this scheduler.</param>
-        public LimitedConcurrencyLevelTaskScheduler( Int32 maxDegreeOfParallelism )
+        public LimitedConcurrencyLevelTaskScheduler( int maxDegreeOfParallelism )
         {
             if (maxDegreeOfParallelism < 1)
                 throw new ArgumentOutOfRangeException( "maxDegreeOfParallelism" );
@@ -301,7 +301,7 @@
         }
 
         /// <summary>Gets the maximum concurrency level supported by this scheduler.</summary>
-        public sealed override Int32 MaximumConcurrencyLevel
+        public sealed override int MaximumConcurrencyLevel
         {
             get
             {

@@ -17,18 +17,18 @@ namespace DataCommander.Foundation.Text
         /// <param name="colWidth"></param>
         /// <param name="alignRight"></param>
         /// <returns></returns>
-        public static String FormatColumn(
-            String col,
-            Int32 colWidth,
-            Boolean alignRight )
+        public static string FormatColumn(
+            string col,
+            int colWidth,
+            bool alignRight )
         {
-            Int32 length = col != null ? col.Length : 0;
-            Int32 spaceLen = colWidth - length;
-            String formatted;
+            int length = col != null ? col.Length : 0;
+            int spaceLen = colWidth - length;
+            string formatted;
 
             if (spaceLen >= 0)
             {
-                var space = new String( ' ', spaceLen );
+                var space = new string( ' ', spaceLen );
 
                 if (alignRight)
                 {
@@ -53,7 +53,7 @@ namespace DataCommander.Foundation.Text
         /// <param name="s"></param>
         /// <param name="index"></param>
         /// <param name="ch"></param>
-        public static unsafe void SetChar( String s, Int32 index, Char ch )
+        public static unsafe void SetChar( string s, int index, Char ch )
         {
             Contract.Requires( index >= 0 );
             Contract.Requires( index < s.Length );
@@ -68,7 +68,7 @@ namespace DataCommander.Foundation.Text
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static unsafe void ToLower( String s )
+        public static unsafe void ToLower( string s )
         {
             fixed (Char* pfixed = s)
             {
@@ -83,7 +83,7 @@ namespace DataCommander.Foundation.Text
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static unsafe void ToUpper( String s )
+        public static unsafe void ToUpper( string s )
         {
             fixed (Char* pfixed = s)
             {
@@ -103,9 +103,9 @@ namespace DataCommander.Foundation.Text
         /// <param name="parameters"></param>
         public static void WriteMethod(
             TextWriter textWriter,
-            Object obj,
-            String methodName,
-            params Object[] parameters )
+            object obj,
+            string methodName,
+            params object[] parameters )
         {
             Contract.Requires( textWriter != null );
             Contract.Requires( obj != null );
@@ -114,13 +114,13 @@ namespace DataCommander.Foundation.Text
             MethodInfo methodInfo = type.GetMethod( methodName );
             ParameterInfo[] parameterInfos = methodInfo.GetParameters();
 
-            String typeName = TypeNameCollection.GetTypeName( methodInfo.ReturnType );
+            string typeName = TypeNameCollection.GetTypeName( methodInfo.ReturnType );
 
-            String line = typeName + " " + methodName + "(" + Environment.NewLine;
+            string line = typeName + " " + methodName + "(" + Environment.NewLine;
 
-            Int32 length = Math.Min( parameters.Length, parameterInfos.Length );
+            int length = Math.Min( parameters.Length, parameterInfos.Length );
 
-            for (Int32 i = 0; i < length; i++)
+            for (int i = 0; i < length; i++)
             {
                 typeName = TypeNameCollection.GetTypeName( parameterInfos[ i ].ParameterType );
 
@@ -146,9 +146,9 @@ namespace DataCommander.Foundation.Text
         /// <param name="value"></param>
         /// <param name="nullValue"></param>
         /// <returns></returns>
-        public static Boolean ParseBoolean( String value, Boolean nullValue )
+        public static bool ParseBoolean( string value, bool nullValue )
         {
-            Boolean b = value != null && value.Length > 0 ? Boolean.Parse( value ) : nullValue;
+            bool b = value != null && value.Length > 0 ? bool.Parse( value ) : nullValue;
             return b;
         }
     }

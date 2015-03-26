@@ -9,15 +9,15 @@
     public sealed class Disposer : IDisposable
     {
         private Action dispose;
-        private Boolean disposed;
+        private bool disposed;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="dispose"></param>
-        public Disposer( Action dispose )
+        public Disposer(Action dispose)
         {
-            Contract.Requires<ArgumentNullException>( dispose != null );
+            Contract.Requires<ArgumentNullException>(dispose != null);
 
             this.dispose = dispose;
         }

@@ -13,7 +13,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="sqlBoolean"></param>
         /// <returns></returns>
-        public static PBoolean FromSqlBoolean( Object sqlBoolean )
+        public static PBoolean FromSqlBoolean( object sqlBoolean )
         {
             PBoolean sp;
 
@@ -35,7 +35,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="sqlDateTime"></param>
         /// <returns></returns>
-        public static PDateTime FromSqlDateTime( Object sqlDateTime )
+        public static PDateTime FromSqlDateTime( object sqlDateTime )
         {
             PDateTime sp;
 
@@ -57,7 +57,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="sqlDecimal"></param>
         /// <returns></returns>
-        public static PDecimal FromSqlDecimal( Object sqlDecimal )
+        public static PDecimal FromSqlDecimal( object sqlDecimal )
         {
             PDecimal sp;
 
@@ -79,7 +79,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="sqlDouble"></param>
         /// <returns></returns>
-        public static PDouble FromSqlDouble( Object sqlDouble )
+        public static PDouble FromSqlDouble( object sqlDouble )
         {
             PDouble sp;
 
@@ -101,7 +101,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static PInt16 FromSqlInt16( Object value )
+        public static PInt16 FromSqlInt16( object value )
         {
             PInt16 sp;
 
@@ -123,7 +123,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static PInt32 FromSqlInt32( Object value )
+        public static PInt32 FromSqlInt32( object value )
         {
             PInt32 sp;
 
@@ -145,7 +145,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="sqlMoney"></param>
         /// <returns></returns>
-        public static PMoney FromSqlMoney( Object sqlMoney )
+        public static PMoney FromSqlMoney( object sqlMoney )
         {
             PMoney sp;
 
@@ -167,7 +167,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="sqlString"></param>
         /// <returns></returns>
-        public static PString FromSqlString( Object sqlString )
+        public static PString FromSqlString( object sqlString )
         {
             PString sp;
 
@@ -189,7 +189,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="scalar"></param>
         /// <returns></returns>
-        public static PBoolean ScalarToPBoolean( Object scalar )
+        public static PBoolean ScalarToPBoolean( object scalar )
         {
             PBoolean sp;
 
@@ -203,7 +203,7 @@ namespace DataCommander.Foundation.Data.PTypes
             }
             else
             {
-                sp = (Boolean) scalar;
+                sp = (bool) scalar;
             }
 
             return sp;
@@ -214,7 +214,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="scalar"></param>
         /// <returns></returns>
-        public static PDateTime ScalarToPDateTime( Object scalar )
+        public static PDateTime ScalarToPDateTime( object scalar )
         {
             PDateTime sp;
 
@@ -239,7 +239,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="scalar"></param>
         /// <returns></returns>
-        public static PDecimal ScalarToPDecimal( Object scalar )
+        public static PDecimal ScalarToPDecimal( object scalar )
         {
             PDecimal sp;
 
@@ -264,7 +264,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="scalar"></param>
         /// <returns></returns>
-        public static PDouble ScalarToPDouble( Object scalar )
+        public static PDouble ScalarToPDouble( object scalar )
         {
             PDouble sp;
 
@@ -289,7 +289,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="scalar"></param>
         /// <returns></returns>
-        public static PInt16 ScalarToPInt16( Object scalar )
+        public static PInt16 ScalarToPInt16( object scalar )
         {
             PInt16 sp;
 
@@ -314,7 +314,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="scalar"></param>
         /// <returns></returns>
-        public static PInt32 ScalarToPInt32( Object scalar )
+        public static PInt32 ScalarToPInt32( object scalar )
         {
             PInt32 sp;
 
@@ -328,7 +328,7 @@ namespace DataCommander.Foundation.Data.PTypes
             }
             else
             {
-                sp = (Int32) scalar;
+                sp = (int) scalar;
             }
 
             return sp;
@@ -339,7 +339,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="scalar"></param>
         /// <returns></returns>
-        public static PMoney ScalarToPMoney( Object scalar )
+        public static PMoney ScalarToPMoney( object scalar )
         {
             PMoney sp;
 
@@ -364,7 +364,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="scalar"></param>
         /// <returns></returns>
-        public static PString ScalarToPString( Object scalar )
+        public static PString ScalarToPString( object scalar )
         {
             PString sp;
 
@@ -378,7 +378,7 @@ namespace DataCommander.Foundation.Data.PTypes
             }
             else
             {
-                sp = (String) scalar;
+                sp = (string) scalar;
             }
 
             return sp;
@@ -389,7 +389,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="scalar"></param>
         /// <returns></returns>
-        public static PXml ScalarToPXml( Object scalar )
+        public static PXml ScalarToPXml( object scalar )
         {
             PXml xml;
 

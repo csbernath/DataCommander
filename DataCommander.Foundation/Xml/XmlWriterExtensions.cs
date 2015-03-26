@@ -32,7 +32,7 @@
         /// <param name="localName"></param>
         /// <param name="ns"></param>
         /// <returns></returns>
-        public static IDisposable WriteElement( this XmlWriter xmlWriter, String prefix, String localName, String ns )
+        public static IDisposable WriteElement( this XmlWriter xmlWriter, string prefix, string localName, string ns )
         {
             Contract.Requires( xmlWriter != null );
 

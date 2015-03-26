@@ -15,7 +15,7 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static T Parse( String value )
+        public static T Parse( string value )
         {
             Contract.Requires( typeof(T).IsEnum );
 

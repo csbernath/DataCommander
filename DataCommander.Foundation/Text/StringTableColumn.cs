@@ -24,7 +24,7 @@ namespace DataCommander.Foundation.Text
     public class StringTableColumn
     {
         private StringTableColumnAlign align = StringTableColumnAlign.Left;
-        private Int32 width;
+        private int width;
 
         internal StringTableColumn()
         {
@@ -49,7 +49,7 @@ namespace DataCommander.Foundation.Text
         /// <summary>
         /// 
         /// </summary>
-        public Int32 Width
+        public int Width
         {
             get
             {

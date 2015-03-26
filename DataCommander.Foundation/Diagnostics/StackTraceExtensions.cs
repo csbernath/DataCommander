@@ -9,7 +9,7 @@ namespace DataCommander.Foundation.Diagnostics
     {
         private static readonly ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
 
-        public static String ToLogString(this StackTrace trace)
+        public static string ToLogString(this StackTrace trace)
         {
             Contract.Requires(trace != null);
 
@@ -17,9 +17,9 @@ namespace DataCommander.Foundation.Diagnostics
 
             try
             {
-                Int32 count = trace.FrameCount;
+                int count = trace.FrameCount;
 
-                for (Int32 i = 0; i < count; i++)
+                for (int i = 0; i < count; i++)
                 {
                     StackFrame frame = trace.GetFrame(i);
                     sb.Append(frame.ToLogString());
@@ -34,7 +34,7 @@ namespace DataCommander.Foundation.Diagnostics
             return sb.ToString();
         }
 
-        public static String GetTrace(Int32 skipFrames)
+        public static string GetTrace(int skipFrames)
         {
             var trace = new StackTrace(skipFrames, true);
             return ToLogString(trace);
