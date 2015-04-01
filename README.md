@@ -1,7 +1,7 @@
 Data Commander
 ==============
 
-License: https://www.gnu.org/licenses/gpl-3.0.txt
+This program is freeware and released under the [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.txt).
 
 Data Commander is a front-end for SQL databases and other data sources.
 The program has a plugin architecture for adding arbitrary data providers.
@@ -288,3 +288,14 @@ exec status '$/',null,null,'bernath'
 exec workspaces 'workspace','owner','computer'
 exec workspaces
 exec workspaces null,'bernath'
+
+References
+----------
+  * [Microsoft SQL Server Management Studio](https://msdn.microsoft.com/en-us/library/hh213248.aspx)
+  * [TOAD for SQL Server](http://www.quest.com/toad-for-sql-server/)
+  * [PL/SQL Developer](http://www.allroundautomations.com/plsqldev.html)
+  * [Query Express](http://www.albahari.com/queryexpress.html)
+  * [DBU](http://www.sydlow.com)
+  * [Blueshell Data Guy](http://www.blueshell.com/EbDg.asp)
+  * [QueryCommander](http://querycommander.rockwolf.com)
+  * [Free icons](http://www.visualpharm.com/must_have_icon_set/)
