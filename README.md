@@ -49,3 +49,6 @@ How to open a file based data source
   2. Select the required file type (Access, Excel, MSI, SQLite, SQL Server Compact)
   3. Enter the file name.
   4. Click Open button.
+
+License:
+https://www.gnu.org/licenses/gpl-3.0.txt
