@@ -297,5 +297,5 @@ References
   * [Query Express](http://www.albahari.com/queryexpress.html)
   * [DBU](http://www.sydlow.com)
   * [Blueshell Data Guy](http://www.blueshell.com/EbDg.asp)
-  * [QueryCommander](http://querycommander.rockwolf.com)
+  * [QueryCommander](http://sourceforge.net/projects/querycommander/)
   * [Free icons](http://www.visualpharm.com/must_have_icon_set/)
