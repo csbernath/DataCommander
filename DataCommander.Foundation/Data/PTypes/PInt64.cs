@@ -14,23 +14,23 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public static readonly PInt64 Null = new PInt64( PValueType.Null );
+        public static readonly PInt64 Null = new PInt64(PValueType.Null);
 
         /// <summary>
         /// 
         /// </summary>
-        public static readonly PInt64 Default = new PInt64( PValueType.Default );
+        public static readonly PInt64 Default = new PInt64(PValueType.Default);
 
         /// <summary>
         /// 
         /// </summary>
-        public static readonly PInt64 Empty = new PInt64( PValueType.Empty );
+        public static readonly PInt64 Empty = new PInt64(PValueType.Empty);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public PInt64( long value )
+        public PInt64(long value)
         {
             this.sql = value;
             this.type = this.sql.IsNull ? PValueType.Null : PValueType.Value;
@@ -40,13 +40,13 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public PInt64( SqlInt64 value )
+        public PInt64(SqlInt64 value)
         {
             this.sql = value;
             this.type = PValueType.Value;
         }
 
-        private PInt64( PValueType type )
+        private PInt64(PValueType type)
         {
             this.type = type;
             this.sql = SqlInt64.Null;
@@ -57,9 +57,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PInt64( long value )
+        public static implicit operator PInt64(long value)
         {
-            return new PInt64( value );
+            return new PInt64(value);
         }
 
         /// <summary>
@@ -67,9 +67,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PInt64( long? value )
+        public static implicit operator PInt64(long? value)
         {
-            return value != null ? new PInt64( value.Value ) : Null;
+            return value != null ? new PInt64(value.Value) : Null;
         }
 
         /// <summary>
@@ -77,9 +77,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PInt64( SqlInt64 value )
+        public static implicit operator PInt64(SqlInt64 value)
         {
-            return new PInt64( value );
+            return new PInt64(value);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator long( PInt64 value )
+        public static implicit operator long(PInt64 value)
         {
             return (long) value.sql;
         }
@@ -98,7 +98,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static bool operator ==( PInt64 x, PInt64 y )
+        public static bool operator ==(PInt64 x, PInt64 y)
         {
             bool isEqual = x.type == y.type;
 
@@ -119,7 +119,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static bool operator !=( PInt64 x, PInt64 y )
+        public static bool operator !=(PInt64 x, PInt64 y)
         {
             return !(x == y);
         }
@@ -130,17 +130,17 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="s"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static PInt64 Parse( string s, PValueType type )
+        public static PInt64 Parse(string s, PValueType type)
         {
             PInt64 sp;
 
             if (s == null || s.Length == 0)
             {
-                sp = new PInt64( type );
+                sp = new PInt64(type);
             }
             else
             {
-                sp = SqlInt64.Parse( s );
+                sp = SqlInt64.Parse(s);
             }
 
             return sp;
@@ -151,7 +151,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="y"></param>
         /// <returns></returns>
-        public override bool Equals( object y )
+        public override bool Equals(object y)
         {
             bool equals = y is PInt64;
 

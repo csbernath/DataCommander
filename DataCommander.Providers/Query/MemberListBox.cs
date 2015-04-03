@@ -1,6 +1,7 @@
 namespace DataCommander.Providers
 {
     using System;
+    using System.ComponentModel;
     using System.Linq;
     using System.Text;
     using System.Windows.Forms;
@@ -9,23 +10,23 @@ namespace DataCommander.Providers
     /// <summary>
     /// Summary description for MemberListBox.
     /// </summary>
-    internal sealed class MemberListBox : System.Windows.Forms.UserControl, IKeyboardHandler
+    internal sealed class MemberListBox : UserControl, IKeyboardHandler
     {
-        private CompletionForm completionForm;
-        private QueryTextBox textBox;
+        private readonly CompletionForm completionForm;
+        private readonly QueryTextBox textBox;
         private GetCompletionResponse response;
         private string prefix = string.Empty;
-        private System.Windows.Forms.ListBox listBox;
+        private ListBox listBox;
 
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.Container components = null;
+        private readonly Container components = null;
 
         public MemberListBox(CompletionForm completionForm, QueryTextBox textBox)
         {
             // This call is required by the Windows.Forms Form Designer.
-            InitializeComponent();
+            this.InitializeComponent();
 
             // TODO: Add any initialization after the InitForm call
             this.completionForm = completionForm;
@@ -54,7 +55,7 @@ namespace DataCommander.Providers
                 this.prefix = this.textBox.Text.Substring(response.StartPosition, response.Length);
                 if (this.prefix.Length > 0)
                 {
-                    string[] items = prefix.Split('.');
+                    string[] items = this.prefix.Split('.');
 
                     int count = response.Items[0].UnquotedName.Count(c => c == '.') + 1;
                     var sb = new StringBuilder();
@@ -80,9 +81,9 @@ namespace DataCommander.Providers
         {
             if (disposing)
             {
-                if (components != null)
+                if (this.components != null)
                 {
-                    components.Dispose();
+                    this.components.Dispose();
                 }
             }
 
@@ -125,15 +126,15 @@ namespace DataCommander.Providers
 
         private void Close()
         {
-            textBox.KeyboardHandler = null;
-            Form form = Parent as Form;
+            this.textBox.KeyboardHandler = null;
+            Form form = this.Parent as Form;
             form.Controls.Remove(this);
             form.Close();
         }
 
         private void SelectItem()
         {
-            var listBoxItem = (ListBoxItem<IObjectName>) listBox.SelectedItem;
+            var listBoxItem = (ListBoxItem<IObjectName>) this.listBox.SelectedItem;
 
             if (listBoxItem != null)
             {
@@ -190,24 +191,24 @@ namespace DataCommander.Providers
             }
         }
 
-        private void listBox_DoubleClick(object sender, System.EventArgs e)
+        private void listBox_DoubleClick(object sender, EventArgs e)
         {
-            SelectItem();
-            Close();
+            this.SelectItem();
+            this.Close();
         }
 
         public ListBox ListBox
         {
             get
             {
-                return listBox;
+                return this.listBox;
             }
         }
 
         public bool HandleKeyDown(KeyEventArgs e)
         {
             bool handled;
-            int hWnd = listBox.Handle.ToInt32();
+            int hWnd = this.listBox.Handle.ToInt32();
             NativeMethods.SendMessage(hWnd, (int) NativeMethods.Message.Keyboard.KeyDown, (int) e.KeyCode, 0);
 
             if (
@@ -222,15 +223,15 @@ namespace DataCommander.Providers
 
                 if (e.KeyCode == Keys.Down && e.Shift)
                 {
-                    int startIndex = listBox.SelectedIndex + 1;
-                    if (startIndex < listBox.Items.Count - 1)
+                    int startIndex = this.listBox.SelectedIndex + 1;
+                    if (startIndex < this.listBox.Items.Count - 1)
                     {
                         this.FindNext(startIndex);
                     }
                 }
                 else if (e.KeyCode == Keys.Up && e.Shift)
                 {
-                    int startIndex = listBox.SelectedIndex - 1;
+                    int startIndex = this.listBox.SelectedIndex - 1;
                     if (startIndex > 0)
                     {
                         this.FindPrevious(startIndex);
@@ -296,7 +297,7 @@ namespace DataCommander.Providers
 
             if (index >= 0)
             {
-                listBox.SelectedIndex = index;
+                this.listBox.SelectedIndex = index;
 
                 if (index >= 3)
                 {
@@ -304,7 +305,7 @@ namespace DataCommander.Providers
                     int wParam = (int) NativeMethods.Message.ScrollBarParameter.ThumbPosition;
                     int pos = (index - 3) << 16;
                     wParam += pos;
-                    int hWnd = listBox.Handle.ToInt32();
+                    int hWnd = this.listBox.Handle.ToInt32();
                     NativeMethods.SendMessage(hWnd, (int) NativeMethods.Message.ScrollBar.VScroll, wParam, 0);
                 }
             }
@@ -330,7 +331,7 @@ namespace DataCommander.Providers
             }
             if (index >= 0)
             {
-                listBox.SelectedIndex = index;
+                this.listBox.SelectedIndex = index;
             }
         }
 
@@ -342,33 +343,33 @@ namespace DataCommander.Providers
             {
                 // Enter
                 handled = true;
-                SelectItem();
-                Close();
+                this.SelectItem();
+                this.Close();
             }
             else if (e.KeyChar == '\x1B')
             {
                 // Escape
                 handled = true;
-                Close();
+                this.Close();
             }
             else
             {
                 if (e.KeyChar == '\x08')
                 {
                     // Backspace
-                    int length = prefix.Length;
+                    int length = this.prefix.Length;
 
                     if (length > 0)
                     {
-                        prefix = prefix.Substring(0, length - 1);
+                        this.prefix = this.prefix.Substring(0, length - 1);
                     }
                 }
                 else
                 {
-                    prefix += char.ToLower(e.KeyChar);
+                    this.prefix += char.ToLower(e.KeyChar);
                 }
 
-                Find(prefix, 0);
+                this.Find(this.prefix, 0);
             }
 
             return handled;

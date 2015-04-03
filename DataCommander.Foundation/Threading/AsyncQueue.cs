@@ -1,6 +1,5 @@
 namespace DataCommander.Foundation.Threading
 {
-    using System;
     using System.Collections;
     using System.Diagnostics.Contracts;
     using System.Threading;
@@ -12,15 +11,15 @@ namespace DataCommander.Foundation.Threading
     {
         private string name;
         private IAsyncQueue asyncQueue;
-        private WorkerThreadCollection consumers = new WorkerThreadCollection();
-        private Queue queue = new Queue();
-        private AutoResetEvent queueEvent = new AutoResetEvent( false );
+        private readonly WorkerThreadCollection consumers = new WorkerThreadCollection();
+        private readonly Queue queue = new Queue();
+        private readonly AutoResetEvent queueEvent = new AutoResetEvent( false );
 
         private sealed class ConsumerThread
         {
-            private AsyncQueue queue;
-            private WorkerThread thread;
-            private IConsumer consumer;
+            private readonly AsyncQueue queue;
+            private readonly WorkerThread thread;
+            private readonly IConsumer consumer;
 
             public ConsumerThread(
                 AsyncQueue queue,

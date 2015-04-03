@@ -15,7 +15,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public PByte( Byte value )
+        public PByte( byte value )
         {
             this.sql = value;
             this.type = PValueType.Value;
@@ -42,7 +42,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PByte( Byte value )
+        public static implicit operator PByte( byte value )
         {
             return new PByte( value );
         }
@@ -52,7 +52,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PByte( Byte? value )
+        public static implicit operator PByte( byte? value )
         {
             return value != null ? new PByte( value.Value ) : Null;
         }
@@ -72,9 +72,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator Byte( PByte value )
+        public static implicit operator byte( PByte value )
         {
-            return (Byte) value.sql;
+            return (byte) value.sql;
         }
 
         /// <summary>

@@ -2,11 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
-    using DataCommander.Providers;
+    using System.Windows.Forms;
 
     internal sealed class TableNode : ITreeNode
     {
-        string name;
+        readonly string name;
 
         public TableNode( string name )
         {
@@ -52,7 +52,7 @@
             }
         }
 
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu
         {
             get
             {

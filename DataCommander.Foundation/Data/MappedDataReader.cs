@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Foundation.Data
 {
     using System;
+    using System.Collections;
     using System.Data;
     using System.Data.Common;
     using System.Diagnostics.Contracts;
@@ -17,8 +18,8 @@
     /// </summary>
     public class MappedDataReader : DbDataReader
     {
-        private IDataReader dataReader;
-        private GetValues getValues;
+        private readonly IDataReader dataReader;
+        private readonly GetValues getValues;
 
         /// <summary>
         /// 
@@ -147,7 +148,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Decimal GetDecimal( int ordinal )
+        public override decimal GetDecimal( int ordinal )
         {
             throw new NotImplementedException();
         }
@@ -166,7 +167,7 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        public override System.Collections.IEnumerator GetEnumerator()
+        public override IEnumerator GetEnumerator()
         {
             throw new NotImplementedException();
         }

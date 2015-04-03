@@ -12,7 +12,6 @@ namespace DataCommander.Providers
         SQLite,
         InsertScriptFile,
         DataGridView,
-        XmlSpreadsheet,
         Log
     }
 }

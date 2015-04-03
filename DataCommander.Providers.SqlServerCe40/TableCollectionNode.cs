@@ -5,13 +5,12 @@
     using System.Data;
     using System.Data.SqlServerCe;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
-    using DataCommander.Providers;
+    using Application = DataCommander.Providers.Application;
 
     internal sealed class TableCollectionNode : ITreeNode
     {
-        private SqlCeObjectExplorer objectExplorer;
-        private SqlCeConnection connection;
+        private readonly SqlCeObjectExplorer objectExplorer;
+        private readonly SqlCeConnection connection;
 
         public TableCollectionNode(SqlCeObjectExplorer objectExplorer, SqlCeConnection connection)
         {
@@ -93,7 +92,7 @@
 
         private void CompactDatabase(object sender, EventArgs e)
         {
-            var form = DataCommander.Providers.Application.Instance.MainForm.ActiveMdiChild;
+            var form = Application.Instance.MainForm.ActiveMdiChild;
             var cursor = form.Cursor;
             try
             {

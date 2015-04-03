@@ -5,12 +5,10 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Data;
     using System.Data.SqlClient;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
-    using DataCommander.Providers;
 
     internal sealed class TableCollectionNode : ITreeNode
     {
-        private DatabaseNode databaseNode;
+        private readonly DatabaseNode databaseNode;
 
         public TableCollectionNode( DatabaseNode databaseNode )
         {
@@ -123,7 +121,7 @@ order by
         {
             get
             {
-                return databaseNode;
+                return this.databaseNode;
             }
         }
 

@@ -4,7 +4,7 @@
 
     internal sealed class TfsProviderFactory : DbProviderFactory
     {
-        private static TfsProviderFactory instance = new TfsProviderFactory();
+        private static readonly TfsProviderFactory instance = new TfsProviderFactory();
 
         public static TfsProviderFactory Instance
         {

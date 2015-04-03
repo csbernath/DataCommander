@@ -4,7 +4,7 @@
 
     public sealed class BooleanField
     {
-		private bool value;
+		private readonly bool value;
 
         public BooleanField(Boolean value)
         {
@@ -15,7 +15,7 @@
         {
             Int32 int32value;
 
-            if (value)
+            if (this.value)
             {
                 int32value = 1;
             }

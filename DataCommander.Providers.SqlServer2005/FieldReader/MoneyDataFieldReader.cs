@@ -6,9 +6,9 @@ namespace DataCommander.Providers.SqlServer2005
 
     sealed class MoneyDataFieldReader : IDataFieldReader
     {
-        private static NumberFormatInfo numberFormatInfo;
-        private IDataRecord dataRecord;
-        private int columnOrdinal;
+        private static readonly NumberFormatInfo numberFormatInfo;
+        private readonly IDataRecord dataRecord;
+        private readonly int columnOrdinal;
 
         static MoneyDataFieldReader()
         {
@@ -39,13 +39,13 @@ namespace DataCommander.Providers.SqlServer2005
             {
                 object value;
 
-                if (dataRecord.IsDBNull(columnOrdinal))
+                if (this.dataRecord.IsDBNull(this.columnOrdinal))
                 {
                     value = DBNull.Value;
                 }
                 else
                 {
-                    decimal d = dataRecord.GetDecimal(columnOrdinal);
+                    decimal d = this.dataRecord.GetDecimal(this.columnOrdinal);
                     value = new DecimalField(numberFormatInfo, d, null);
                 }
 

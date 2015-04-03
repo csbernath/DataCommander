@@ -10,7 +10,7 @@
 
     internal sealed class TfsGetExtendedItemsDataReader : TfsDataReader
     {
-        private TfsCommand command;
+        private readonly TfsCommand command;
         private bool first = true;
         private ExtendedItem[] items;
         private int index;
@@ -22,7 +22,7 @@
             this.command = command;
         }
 
-        public override System.Data.DataTable GetSchemaTable()
+        public override DataTable GetSchemaTable()
         {
             DataTable table = CreateSchemaTable();
             AddSchemaRowString( table, "SourceServerItem", false );
@@ -40,9 +40,9 @@
         {
             bool read;
 
-            if (first)
+            if (this.first)
             {
-                first = false;
+                this.first = false;
                 TfsParameterCollection parameters = this.command.Parameters;
                 string path = (string) parameters[ "path" ].Value;
                 RecursionType recursion;
@@ -98,7 +98,7 @@
 
             if (this.items != null && this.index < this.items.Length)
             {
-                ExtendedItem item = this.items[ index ];
+                ExtendedItem item = this.items[this.index ];
 
                 object[] values = new object[]
                 {

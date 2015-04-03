@@ -153,9 +153,9 @@
             /// <summary>
             /// 
             /// </summary>
-            private ICollection source;
+            private readonly ICollection source;
 
-            private IList sourceAsList;
+            private readonly IList sourceAsList;
 
             #endregion
 
@@ -298,7 +298,7 @@
             /// <summary>
             /// 
             /// </summary>
-            private ICollection<T> collection;
+            private readonly ICollection<T> collection;
 
             /// <summary>
             /// 

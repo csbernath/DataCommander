@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Windows.Forms;
-    using DataCommander.Providers;
 
     internal enum SqlServerSystemType
     {
@@ -37,14 +36,14 @@
 
     internal sealed class ColumnNode : ITreeNode
     {
-        private int id;
-        private string columnName;
-        private byte systemTypeId;
-        private short maxLength;
-        private byte precision;
-        private byte scale;
-        private bool isNullable;
-        private string userTypeName;
+        private readonly int id;
+        private readonly string columnName;
+        private readonly byte systemTypeId;
+        private readonly short maxLength;
+        private readonly byte precision;
+        private readonly byte scale;
+        private readonly bool isNullable;
+        private readonly string userTypeName;
         private bool isPrimaryKey;
         private bool isForeignKey;
 
@@ -112,7 +111,7 @@
 
                     case SqlServerSystemType.Decimal:
                     case SqlServerSystemType.Numeric:
-                        if (scale == 0)
+                        if (this.scale == 0)
                         {
                             typeName = string.Format( "{0}({1})", this.userTypeName, this.precision );
                         }

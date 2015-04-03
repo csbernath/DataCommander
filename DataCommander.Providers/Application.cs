@@ -11,12 +11,12 @@ namespace DataCommander.Providers
     {
         #region Private Fields
 
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private static Application application = new Application();
-        private ApplicationData applicationData = new ApplicationData();
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly Application application = new Application();
+        private readonly ApplicationData applicationData = new ApplicationData();
         private string fileName;
         private string sectionName;
-        private string name;
+        private readonly string name;
         private MainForm mainForm;
 
         #endregion
@@ -32,7 +32,7 @@ namespace DataCommander.Providers
             SystemEvents.SessionEnding += SystemEvents_SessionEnding;
         }
 
-        void SystemEvents_SessionEnding( object sender, SessionEndingEventArgs e )
+        private static void SystemEvents_SessionEnding( object sender, SessionEndingEventArgs e )
         {
             log.Write( LogLevel.Trace,  "Reason: {0}", e.Reason );
             var mainForm = application.mainForm;
@@ -97,7 +97,7 @@ namespace DataCommander.Providers
         {
             log.Write( LogLevel.Trace,  "{0}\r\n{1}", AppDomainMonitor.EnvironmentInfo, AppDomainMonitor.CurrentDomainState );
             this.mainForm = new MainForm();
-            System.Windows.Forms.Application.Run( mainForm );
+            System.Windows.Forms.Application.Run(this.mainForm );
         }
 
         public void SaveApplicationData()
@@ -127,15 +127,15 @@ namespace DataCommander.Providers
             }
 
             string tempFileName = this.fileName + ".temp";
-            applicationData.Save( tempFileName, sectionName );
-            bool succeeded = NativeMethods.MoveFileEx( tempFileName, fileName, NativeMethods.MoveFileExFlags.ReplaceExisiting );
+            this.applicationData.Save( tempFileName, this.sectionName );
+            bool succeeded = NativeMethods.MoveFileEx( tempFileName, this.fileName, NativeMethods.MoveFileExFlags.ReplaceExisiting );
             log.Write( LogLevel.Trace,  "MoveFileEx succeeded: {0}", succeeded );
         }
 
         public void LoadApplicationData( string fileName, string sectionName )
         {
-            applicationData.Load( fileName, sectionName );
-            ConfigurationNode folder = ConnectionsConfigurationNode;
+            this.applicationData.Load( fileName, sectionName );
+            ConfigurationNode folder = this.ConnectionsConfigurationNode;
 
             foreach (ConfigurationNode subFolder in folder.ChildNodes)
             {

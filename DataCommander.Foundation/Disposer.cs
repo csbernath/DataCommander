@@ -24,7 +24,7 @@
 
         void IDisposable.Dispose()
         {
-            if (!disposed && this.dispose != null)
+            if (!this.disposed && this.dispose != null)
             {
                 this.dispose();
                 this.disposed = true;

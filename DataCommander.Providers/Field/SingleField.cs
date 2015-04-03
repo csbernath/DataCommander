@@ -4,7 +4,7 @@
 
     public sealed class SingleField
     {
-        private Single value;
+        private readonly Single value;
 
         public SingleField(Single value)
         {

@@ -1,13 +1,13 @@
-using DataCommander.Foundation.Diagnostics;
-
 namespace DataCommander.Providers
 {
+    using DataCommander.Foundation.Diagnostics;
+
     public sealed class SqlObject
     {
         private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private string parentName;
-        private string parentAlias;
-        private SqlObjectTypes type;
+        private readonly string parentAlias;
+        private readonly SqlObjectTypes type;
         private string name;
 
         public SqlObject(string parentName, string parentAlias, SqlObjectTypes type, string name)
@@ -43,7 +43,7 @@ namespace DataCommander.Providers
         {
             get
             {
-                return type;
+                return this.type;
             }
         }
 

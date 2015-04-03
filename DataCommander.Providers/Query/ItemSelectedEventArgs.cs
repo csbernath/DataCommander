@@ -4,9 +4,9 @@ namespace DataCommander.Providers
 
     internal sealed class ItemSelectedEventArgs : EventArgs
     {
-        private int startIndex;
-        private int length;
-        private IObjectName objectName;
+        private readonly int startIndex;
+        private readonly int length;
+        private readonly IObjectName objectName;
 
         public ItemSelectedEventArgs(int startIndex, int length, IObjectName objectName)
         {

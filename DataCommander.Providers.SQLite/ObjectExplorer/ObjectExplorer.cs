@@ -1,8 +1,8 @@
 namespace DataCommander.Providers.SQLite
 {
     using System.Collections.Generic;
+    using System.Data;
     using System.Data.SQLite;
-    using DataCommander.Providers;
 
     internal sealed class ObjectExplorer : IObjectExplorer
     {
@@ -10,7 +10,7 @@ namespace DataCommander.Providers.SQLite
 
         #region IObjectExplorer Members
 
-        void IObjectExplorer.SetConnection(string connectionString, System.Data.IDbConnection connection)
+        void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
         {
             this.connection = (SQLiteConnection)connection;
         }
@@ -19,7 +19,7 @@ namespace DataCommander.Providers.SQLite
         {
             return new ITreeNode[]
             {
-                new DatabaseCollectionNode(connection)
+                new DatabaseCollectionNode(this.connection)
             };
         }
 

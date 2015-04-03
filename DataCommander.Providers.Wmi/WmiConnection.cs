@@ -6,7 +6,7 @@ namespace DataCommander.Providers.Wmi
 
     internal sealed class WmiConnection : IDbConnection
     {
-        private string connectionString;
+        private readonly string connectionString;
         private string dataSource;
         private ManagementScope scope;
 
@@ -109,7 +109,7 @@ namespace DataCommander.Providers.Wmi
         {
             get
             {
-                return scope;
+                return this.scope;
             }
         }
 
@@ -117,7 +117,7 @@ namespace DataCommander.Providers.Wmi
         {
             get
             {
-                return dataSource;
+                return this.dataSource;
             }
         }
     }

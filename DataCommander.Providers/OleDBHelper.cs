@@ -3,6 +3,7 @@ namespace DataCommander.Foundation.Data
     using System;
     using System.Data;
     using System.Data.OleDb;
+    using ADODB;
 
     /// <summary>
     /// 
@@ -45,7 +46,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         [CLSCompliant( false )]
         public static DataTable Convert(
-            ADODB._Recordset rs,
+            _Recordset rs,
             out OleDbParameter[] columns )
         {
             OleDbDataAdapter adapter = new OleDbDataAdapter();
@@ -54,7 +55,7 @@ namespace DataCommander.Foundation.Data
             columns = new OleDbParameter[ rs.Fields.Count ];
             int index = 0;
 
-            foreach (ADODB.Field field in rs.Fields)
+            foreach (Field field in rs.Fields)
             {
                 OleDbParameter param = new OleDbParameter();
                 param.SourceColumn = field.Name;
@@ -71,7 +72,7 @@ namespace DataCommander.Foundation.Data
                 param.Size = size;
                 param.Precision = precision;
                 param.Scale = field.NumericScale;
-                param.IsNullable = (field.Attributes & (int) ADODB.FieldAttributeEnum.adFldIsNullable) != 0;
+                param.IsNullable = (field.Attributes & (int) FieldAttributeEnum.adFldIsNullable) != 0;
 
                 columns[ index ] = param;
 
@@ -337,7 +338,7 @@ namespace DataCommander.Foundation.Data
             string tableName,
             OleDbConnection connection )
         {
-            var rs = (ADODB.Recordset) adodbRecordset;
+            var rs = (Recordset) adodbRecordset;
             OleDbParameter[] columns;
             DataTable sourceTable = Convert( rs, out columns );
             sourceTable.TableName = tableName;

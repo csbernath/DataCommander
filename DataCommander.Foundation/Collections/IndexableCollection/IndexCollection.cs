@@ -1,6 +1,6 @@
 ﻿namespace DataCommander.Foundation.Collections
 {
-    using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
 
@@ -142,7 +142,7 @@
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return this.dictionary.Values.GetEnumerator();
         }

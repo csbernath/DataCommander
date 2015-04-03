@@ -1,6 +1,5 @@
 namespace DataCommander.Foundation.Threading
 {
-    using System;
     using System.Collections.Generic;
     using System.Threading;
 
@@ -12,7 +11,7 @@ namespace DataCommander.Foundation.Threading
         private readonly Queue<object> queue = new Queue<object>();
         private readonly AutoResetEvent enqueueEvent = new AutoResetEvent( false );
         private readonly WorkerThreadPoolDequeuerCollection dequeuers;
-        private int maxThreadCount;
+        private readonly int maxThreadCount;
         private int activeThreadCount;
 
         /// <summary>

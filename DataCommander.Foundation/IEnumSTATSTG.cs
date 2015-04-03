@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation
 {
-    using System;
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using CT = System.Runtime.InteropServices.ComTypes;

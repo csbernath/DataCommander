@@ -17,7 +17,7 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static string ToString( Byte? value )
+        public static string ToString(byte? value)
         {
             string s;
 
@@ -38,7 +38,7 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static string ToString( DBNull value )
+        public static string ToString(DBNull value)
         {
             return SqlNull.NullString;
         }
@@ -48,7 +48,7 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static string ToString( SqlDateTime value )
+        public static string ToString(SqlDateTime value)
         {
             string s;
 
@@ -69,7 +69,7 @@
                     format = "yyyyMMdd HH:mm:ss.fff";
                 }
 
-                s = value.Value.ToString( format );
+                s = value.Value.ToString(format);
             }
 
             return s;
@@ -81,81 +81,81 @@
         /// <param name="value"></param>
         /// <param name="sqlDbType"></param>
         /// <returns></returns>
-        public static string ToString( object value, SqlDbType sqlDbType )
+        public static string ToString(object value, SqlDbType sqlDbType)
         {
             var sb = new StringBuilder();
 
             if (value == null)
             {
-                sb.Append( SqlNull.NullString );
+                sb.Append(SqlNull.NullString);
             }
             else
             {
                 switch (sqlDbType)
                 {
                     case SqlDbType.Bit:
-                        bool b = (bool) value;
+                        bool b = (bool)value;
                         int i = b ? 1 : 0;
-                        sb.Append( i );
+                        sb.Append(i);
                         break;
 
                     case SqlDbType.Binary:
-                        Byte[] bytes = (Byte[]) value;
-                        Char[] chars = Hex.Encode( bytes, true );
-                        sb.Append( "0x" );
-                        sb.Append( chars );
+                        byte[] bytes = (byte[])value;
+                        Char[] chars = Hex.Encode(bytes, true);
+                        sb.Append("0x");
+                        sb.Append(chars);
                         break;
 
                     case SqlDbType.Char:
                     case SqlDbType.VarChar:
-                        sb.Append( '\'' );
+                        sb.Append('\'');
                         string s = value.ToString();
 
-                        if (s.IndexOf( '\'' ) >= 0)
+                        if (s.IndexOf('\'') >= 0)
                         {
-                            sb.Append( s.Replace( "'", "''" ) );
+                            sb.Append(s.Replace("'", "''"));
                         }
                         else
                         {
-                            sb.Append( s );
+                            sb.Append(s);
                         }
 
-                        sb.Append( '\'' );
+                        sb.Append('\'');
                         break;
 
                     case SqlDbType.NText:
                     case SqlDbType.NVarChar:
-                        sb.Append( "N'" );
+                        sb.Append("N'");
                         s = value.ToString();
 
-                        if (s.IndexOf( '\'' ) >= 0)
+                        if (s.IndexOf('\'') >= 0)
                         {
-                            sb.Append( s.Replace( "'", "''" ) );
+                            sb.Append(s.Replace("'", "''"));
                         }
                         else
                         {
-                            sb.Append( s );
+                            sb.Append(s);
                         }
 
-                        sb.Append( '\'' );
+                        sb.Append('\'');
                         break;
 
                     case SqlDbType.DateTime:
                     case SqlDbType.SmallDateTime:
-                        DateTime dateTime = (DateTime) value;
-                        string dateTimeStr = ToString( dateTime );
-                        sb.Append( '\'' );
-                        sb.Append( dateTimeStr );
-                        sb.Append( '\'' );
+                        DateTime dateTime = (DateTime)value;
+                        string dateTimeStr = ToString(dateTime);
+                        sb.Append('\'');
+                        sb.Append(dateTimeStr);
+                        sb.Append('\'');
                         break;
 
                     case SqlDbType.Decimal:
-                        Decimal d = (Decimal) value;
-                        sb.Append( d.ToTSqlDecimal() );
+                        decimal d = (decimal)value;
+                        sb.Append(d.ToTSqlDecimal());
                         break;
 
                     default:
-                        sb.Append( value );
+                        sb.Append(value);
                         break;
                 }
             }
@@ -170,11 +170,11 @@
         /// <param name="value"></param>
         public static void AppendToCommandText(
             StringBuilder commandText,
-            string value )
+            string value)
         {
-            Contract.Requires( commandText != null );
+            Contract.Requires(commandText != null);
             string s = value.ToTSqlNVarChar();
-            commandText.Append( s );
+            commandText.Append(s);
         }
 
         /// <summary>
@@ -186,12 +186,12 @@
         public static void AppendToCommandText(
             StringBuilder commandText,
             object value,
-            SqlDbType sqlDbType )
+            SqlDbType sqlDbType)
         {
-            Contract.Requires( commandText != null );
+            Contract.Requires(commandText != null);
 
-            string s = ToString( value, sqlDbType );
-            commandText.Append( s );
+            string s = ToString(value, sqlDbType);
+            commandText.Append(s);
         }
 
         /// <summary>
@@ -201,7 +201,7 @@
         /// <param name="sqlBoolean"></param>
         public static void AppendToCommandText(
             StringBuilder commandText,
-            SqlBoolean sqlBoolean )
+            SqlBoolean sqlBoolean)
         {
             object obj;
 
@@ -214,8 +214,8 @@
                 obj = sqlBoolean.Value;
             }
 
-            string s = ToString( obj, SqlDbType.Bit );
-            commandText.Append( s );
+            string s = ToString(obj, SqlDbType.Bit);
+            commandText.Append(s);
         }
 
         /// <summary>
@@ -225,7 +225,7 @@
         /// <param name="value"></param>
         public static void AppendToCommandText(
             StringBuilder commandText,
-            SqlInt16 value )
+            SqlInt16 value)
         {
             object obj;
 
@@ -238,8 +238,8 @@
                 obj = value.Value;
             }
 
-            string s = ToString( obj, SqlDbType.SmallInt );
-            commandText.Append( s );
+            string s = ToString(obj, SqlDbType.SmallInt);
+            commandText.Append(s);
         }
 
         /// <summary>
@@ -249,7 +249,7 @@
         /// <param name="sqlDateTime"></param>
         public static void AppendToCommandText(
             StringBuilder commandText,
-            SqlDateTime sqlDateTime )
+            SqlDateTime sqlDateTime)
         {
             object obj;
 
@@ -262,8 +262,8 @@
                 obj = sqlDateTime.Value;
             }
 
-            string s = ToString( obj, SqlDbType.DateTime );
-            commandText.Append( s );
+            string s = ToString(obj, SqlDbType.DateTime);
+            commandText.Append(s);
         }
     }
 }

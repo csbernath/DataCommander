@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation.Data
 {
-    using System;
     using System.Data;
 
     /// <summary>
@@ -10,12 +9,12 @@
     {
         private readonly int commandId;
         private readonly ConnectionState connectionState;
-        private LoggedDbCommandExecutionType executionType;
-        private CommandType commandType;
-        private string database;
-        private int commandTimeout;
-        private string commandText;
-        private string parameters;
+        private readonly LoggedDbCommandExecutionType executionType;
+        private readonly CommandType commandType;
+        private readonly string database;
+        private readonly int commandTimeout;
+        private readonly string commandText;
+        private readonly string parameters;
 
         /// <summary>
         /// 

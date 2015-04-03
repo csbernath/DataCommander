@@ -4,14 +4,13 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Data;
     using System.Data.SqlClient;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Data.SqlClient;
 
     internal sealed class TriggerCollectionNode : ITreeNode
     {
-        private DatabaseNode database;
-        private string schema;
-        private string objectName;
+        private readonly DatabaseNode database;
+        private readonly string schema;
+        private readonly string objectName;
 
         public TriggerCollectionNode( DatabaseNode database, string owner, string objectName)
         {

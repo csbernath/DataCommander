@@ -12,9 +12,9 @@ namespace DataCommander.Providers
     {
         #region Private Fields
 
-        private IResultWriter logResultWriter;
+        private readonly IResultWriter logResultWriter;
         private QueryForm queryForm;
-        private bool showShemaTable;
+        private readonly bool showShemaTable;
         private IProvider provider;
         private DataSet dataSet;
         private DataTable dataTable;
@@ -40,7 +40,7 @@ namespace DataCommander.Providers
         {
             get
             {
-                return dataSet;
+                return this.dataSet;
             }
         }
 
@@ -93,14 +93,14 @@ namespace DataCommander.Providers
 
             try
             {
-                var targetRows = dataTable.Rows;
+                var targetRows = this.dataTable.Rows;
 
                 for (int i = 0; i < rowCount; i++)
                 {
                     targetRows.Add(rows[i]);
                 }
 
-                rowIndex += rowCount;
+                this.rowIndex += rowCount;
             }
             finally
             {
@@ -143,12 +143,12 @@ namespace DataCommander.Providers
             {
                 tableName = string.Format("Table {0}", tableCount);
             }
-            if (showShemaTable)
+            if (this.showShemaTable)
             {
                 schemaTable.TableName = string.Format("Schema {0}", tableCount);
                 this.dataSet.Tables.Add(schemaTable);
             }
-            this.dataTable = dataSet.Tables.Add();
+            this.dataTable = this.dataSet.Tables.Add();
             if (!string.IsNullOrEmpty(tableName))
             {
                 this.dataTable.TableName = tableName;
@@ -166,7 +166,7 @@ namespace DataCommander.Providers
 
                 while (true)
                 {
-                    if (dataTable.Columns.Contains(columnName2))
+                    if (this.dataTable.Columns.Contains(columnName2))
                     {
                         columnName2 = columnName + n;
                         n++;
@@ -177,11 +177,11 @@ namespace DataCommander.Providers
 
                         if (dataType != null)
                         {
-                            dataColumn = dataTable.Columns.Add(columnName, dataType);
+                            dataColumn = this.dataTable.Columns.Add(columnName, dataType);
                         }
                         else
                         {
-                            dataColumn = dataTable.Columns.Add(columnName);
+                            dataColumn = this.dataTable.Columns.Add(columnName);
                         }
 
                         dataColumn.ExtendedProperties.Add("ColumnName", columnName);

@@ -10,13 +10,13 @@ namespace DataCommander.Foundation.Diagnostics
         #region Private Fields
         private readonly long id;
         private readonly string logName;
-        private DateTime creationTime;
-        private int managedThreadId;
-        private string threadName;
-        private string userName;
-        private string hostName;
-        private string message;
-        private LogLevel logLevel;
+        private readonly DateTime creationTime;
+        private readonly int managedThreadId;
+        private readonly string threadName;
+        private readonly string userName;
+        private readonly string hostName;
+        private readonly string message;
+        private readonly LogLevel logLevel;
         #endregion
 
         /// <summary>

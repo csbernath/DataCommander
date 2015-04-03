@@ -17,7 +17,7 @@
         /// <returns></returns>
         public static StringTable ToStringTable(this DataView dataView)
         {
-            Contract.Requires(dataView != null);
+            Contract.Requires<ArgumentNullException>(dataView != null);
 
             DataTable dataTable = dataView.Table;
             int columnCount = dataTable.Columns.Count;

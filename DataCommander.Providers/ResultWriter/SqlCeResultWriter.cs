@@ -11,8 +11,8 @@
 
     internal sealed class SqlCeResultWriter : IResultWriter
     {
-        TextWriter messageWriter;
-        string tableName;
+        readonly TextWriter messageWriter;
+        readonly string tableName;
         IProvider provider;
         SqlCeConnection connection;
         SqlCeCommand insertCommand;
@@ -255,7 +255,7 @@
         {
         }
 
-        void IResultWriter.WriteParameters( System.Data.IDataParameterCollection parameters )
+        void IResultWriter.WriteParameters( IDataParameterCollection parameters )
         {
         }
 

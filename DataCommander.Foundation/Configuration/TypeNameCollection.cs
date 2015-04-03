@@ -11,10 +11,10 @@ namespace DataCommander.Foundation.Configuration
     /// </summary>
     internal static class TypeNameCollection
     {
-        private static IndexableCollection<TypeCollectionItem> collection;
-        private static UniqueIndex<string, TypeCollectionItem> nameIndex;
-        private static UniqueIndex<Type, TypeCollectionItem> typeIndex;
-        private static Assembly systemAssembly;
+        private static readonly IndexableCollection<TypeCollectionItem> collection;
+        private static readonly UniqueIndex<string, TypeCollectionItem> nameIndex;
+        private static readonly UniqueIndex<Type, TypeCollectionItem> typeIndex;
+        private static readonly Assembly systemAssembly;
 
         static TypeNameCollection()
         {
@@ -40,14 +40,14 @@ namespace DataCommander.Foundation.Configuration
             Add(TypeName.Int16, typeof (Int16));
             Add(TypeName.Int32, typeof (int));
             Add(TypeName.Int64, typeof (long));
-            Add(TypeName.Byte, typeof (Byte));
+            Add(TypeName.Byte, typeof (byte));
             Add(TypeName.UInt16, typeof (UInt16));
             Add(TypeName.UInt32, typeof (UInt32));
             Add(TypeName.UInt64, typeof (UInt64));
 
             Add(TypeName.Single, typeof (Single));
             Add(TypeName.Double, typeof (Double));
-            Add(TypeName.Decimal, typeof (Decimal));
+            Add(TypeName.Decimal, typeof (decimal));
 
             Add(TypeName.DateTime, typeof (DateTime));
             Add(TypeName.XmlNode, typeof (XmlNode));
@@ -152,8 +152,8 @@ namespace DataCommander.Foundation.Configuration
 
         private sealed class TypeCollectionItem
         {
-            private string name;
-            private Type type;
+            private readonly string name;
+            private readonly Type type;
 
             public TypeCollectionItem(string name, Type type)
             {
@@ -204,7 +204,7 @@ namespace DataCommander.Foundation.Configuration
 
         private sealed class TypeEqualityComparer : IEqualityComparer<Type>
         {
-            private static TypeEqualityComparer instance = new TypeEqualityComparer();
+            private static readonly TypeEqualityComparer instance = new TypeEqualityComparer();
 
             private TypeEqualityComparer()
             {

@@ -12,11 +12,11 @@ namespace DataCommander.Providers
     {
         #region Private Fields
 
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private string text;
-        private Token[] tokens;
-        private IDictionary<string, string> tables;
-        private Table[] allTables;
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly string text;
+        private readonly Token[] tokens;
+        private readonly IDictionary<string, string> tables;
+        private readonly Table[] allTables;
 
         #endregion
 
@@ -25,9 +25,9 @@ namespace DataCommander.Providers
             this.text = text;
             this.tokens = Tokenize(text);
             Table[] allTables;
-            this.tables = FindTables(tokens, out allTables);
+            this.tables = FindTables(this.tokens, out allTables);
             this.allTables = allTables;
-            foreach (string value in tables.Values)
+            foreach (string value in this.tables.Values)
             {
                 log.Write(LogLevel.Trace, value);
             }
@@ -47,7 +47,7 @@ namespace DataCommander.Providers
         {
             get
             {
-                return tokens;
+                return this.tokens;
             }
         }
 
@@ -66,9 +66,9 @@ namespace DataCommander.Providers
             command.CommandTimeout = commandTimeout;
             CommandType commandType2 = commandType;
 
-            if (tokens.Length > 0)
+            if (this.tokens.Length > 0)
             {
-                Token firstToken = tokens[0];
+                Token firstToken = this.tokens[0];
                 int startTokenIndex = 0;
                 bool isVBScript = false;
                 string query2 = null;
@@ -76,7 +76,7 @@ namespace DataCommander.Providers
                 if (firstToken.Type == TokenType.KeyWord)
                 {
                     string keyWord = firstToken.Value.ToLower();
-                    query2 = text;
+                    query2 = this.text;
 
                     switch (keyWord)
                     {
@@ -119,7 +119,7 @@ namespace DataCommander.Providers
                         }
                         else
                         {
-                            command.CommandText = tokens[startTokenIndex].Value;
+                            command.CommandText = this.tokens[startTokenIndex].Value;
                         }
 
                         startTokenIndex++;
@@ -166,7 +166,7 @@ namespace DataCommander.Providers
                                     }
                                     if (first != null)
                                     {
-                                        object value = GetParameterValue(dataParameter, first.Value);
+                                        object value = this.GetParameterValue(dataParameter, first.Value);
                                         if (value != null)
                                         {
                                             parameter.Value = value;
@@ -188,7 +188,7 @@ namespace DataCommander.Providers
             }
             else
             {
-                command.CommandText = text;
+                command.CommandText = this.text;
             }
 
             return command;
@@ -199,16 +199,16 @@ namespace DataCommander.Providers
             SqlObject sqlObject = null;
             if (index >= 1)
             {
-                Token prev = tokens[index - 1];
+                Token prev = this.tokens[index - 1];
 
                 if (prev.Type == TokenType.KeyWord)
                 {
                     string value = prev.Value.ToLower();
                     string name = null;
 
-                    if (index < tokens.Length)
+                    if (index < this.tokens.Length)
                     {
-                        Token token = tokens[index];
+                        Token token = this.tokens[index];
                         name = token.Value;
                     }
 
@@ -268,10 +268,10 @@ namespace DataCommander.Providers
                             break;
                     }
 
-                    if (sqlObject == null && index >= 0 && index < tokens.Length)
+                    if (sqlObject == null && index >= 0 && index < this.tokens.Length)
                     {
-                        Token token = tokens[index];
-                        sqlObject = GetSqlObject(token.Value);
+                        Token token = this.tokens[index];
+                        sqlObject = this.GetSqlObject(token.Value);
                     }
                 }
                 else if (prev.Type == TokenType.OperatorOrPunctuator)
@@ -279,11 +279,11 @@ namespace DataCommander.Providers
                     Token tokenAfterOperator = index < this.tokens.Length ? this.tokens[index] : null;
                     if (tokenAfterOperator != null && tokenAfterOperator.Value.Contains('.'))
                     {
-                        sqlObject = GetSqlObject(tokenAfterOperator.Value);
+                        sqlObject = this.GetSqlObject(tokenAfterOperator.Value);
                     }
                     else if (prev.Value == "=" && index >= 2)
                     {
-                        Token tokenBeforeOperator = tokens[index - 2];
+                        Token tokenBeforeOperator = this.tokens[index - 2];
                         sqlObject = new SqlObject(tokenBeforeOperator.Value, null, SqlObjectTypes.Value, null);
                     }
                 }
@@ -369,14 +369,14 @@ namespace DataCommander.Providers
 
                     if (sqlObject == null && currentToken != null)
                     {
-                        sqlObject = GetSqlObject( currentToken.Value );
+                        sqlObject = this.GetSqlObject( currentToken.Value );
                     }
                 }
                 else if (previousToken.Type == TokenType.OperatorOrPunctuator)
                 {
                     if (currentToken != null && currentToken.Value.Contains( '.' ))
                     {
-                        sqlObject = GetSqlObject( currentToken.Value );
+                        sqlObject = this.GetSqlObject( currentToken.Value );
                     }
                     else if (previousToken.Value == "=" && previousToken.Index > 0)
                     {
@@ -394,9 +394,9 @@ namespace DataCommander.Providers
             string tableName = null;
             int i;
 
-            for (i = 0; i < tokens.Length; i++)
+            for (i = 0; i < this.tokens.Length; i++)
             {
-                Token token = tokens[i];
+                Token token = this.tokens[i];
 
                 if (token.Type == TokenType.KeyWord)
                 {
@@ -409,9 +409,9 @@ namespace DataCommander.Providers
 
             i++;
 
-            if (i < tokens.Length)
+            if (i < this.tokens.Length)
             {
-                Token token = tokens[i];
+                Token token = this.tokens[i];
 
                 if (token.Type == TokenType.KeyWord)
                 {
@@ -642,7 +642,7 @@ namespace DataCommander.Providers
                         case ParameterDirection.InputOutput:
                             try
                             {
-                                object value = GetParameterValue(dataParameter, values[j]);
+                                object value = this.GetParameterValue(dataParameter, values[j]);
                                 parameter.Value = value;
                                 j++;
                             }
@@ -798,7 +798,7 @@ namespace DataCommander.Providers
             {
                 string alias = items[0];
                 string tableName;
-                bool contains = tables.TryGetValue(alias, out tableName);
+                bool contains = this.tables.TryGetValue(alias, out tableName);
 
                 if (contains)
                 {
@@ -819,8 +819,8 @@ namespace DataCommander.Providers
 
         private sealed class Table
         {
-            private int index;
-            private string name;
+            private readonly int index;
+            private readonly string name;
             private string alias;
 
             public Table( int index, string name, string alias )
@@ -849,8 +849,8 @@ namespace DataCommander.Providers
 
         private sealed class Parameter
         {
-            private string name;
-            private object value;
+            private readonly string name;
+            private readonly object value;
 
             public Parameter(string name, object value)
             {

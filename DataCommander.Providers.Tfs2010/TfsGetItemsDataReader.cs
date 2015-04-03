@@ -11,7 +11,7 @@
 
     internal sealed class TfsGetItemsDataReader : TfsDataReader
     {
-        private TfsCommand command;
+        private readonly TfsCommand command;
         private bool first = true;
         private int recordsAffected;
         private List<Item> items;
@@ -23,7 +23,7 @@
             this.command = command;
         }
 
-        public override System.Data.DataTable GetSchemaTable()
+        public override DataTable GetSchemaTable()
         {
             DataTable table = CreateSchemaTable();
             AddSchemaRowString(table, "Name", false);

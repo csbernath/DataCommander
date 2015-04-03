@@ -19,7 +19,7 @@ namespace DataCommander.Providers
 
             while (true)
             {
-                int peek = textReader.Peek();
+                int peek = this.textReader.Peek();
 
                 if (peek == -1)
                     break;
@@ -28,7 +28,7 @@ namespace DataCommander.Providers
 
                 if (peekChar == '.')
                 {
-                    textReader.Read();
+                    this.textReader.Read();
                 }
                 else if (peekChar == '[')
                 {
@@ -48,12 +48,12 @@ namespace DataCommander.Providers
 
         private string ReadQuotedIdentifier()
         {
-            textReader.Read();
+            this.textReader.Read();
             var identifier = new StringBuilder();
 
             while (true)
             {
-                int peek = textReader.Peek();
+                int peek = this.textReader.Peek();
 
                 if (peek == -1)
                     break;
@@ -62,13 +62,13 @@ namespace DataCommander.Providers
 
                 if (peekChar == ']')
                 {
-                    textReader.Read();
+                    this.textReader.Read();
                     break;
                 }
                 else
                 {
                     identifier.Append(peekChar);
-                    textReader.Read();
+                    this.textReader.Read();
                 }
             }
 
@@ -81,7 +81,7 @@ namespace DataCommander.Providers
 
             while (true)
             {
-                int peek = textReader.Peek();
+                int peek = this.textReader.Peek();
 
                 if (peek == -1)
                     break;
@@ -95,7 +95,7 @@ namespace DataCommander.Providers
                 else
                 {
                     identifier.Append(peekChar);
-                    textReader.Read();
+                    this.textReader.Read();
                 }
             }
 

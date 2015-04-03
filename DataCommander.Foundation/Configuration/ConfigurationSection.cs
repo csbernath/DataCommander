@@ -7,6 +7,7 @@ namespace DataCommander.Foundation.Configuration
     using System.Threading;
     using System.Xml;
     using DataCommander.Foundation.Diagnostics;
+    using FileSystemWatcher = DataCommander.Foundation.IO.FileSystemWatcher;
 
     /// <summary>
     /// Loads and parses the <c><DataCommander.Foundation.Configuration /></c> xml element from the config file.
@@ -52,8 +53,8 @@ namespace DataCommander.Foundation.Configuration
     ///            <description></description>
     ///        </item>
     ///        <item>
-    ///            <term><see cref="Byte">Byte</see>[]</term>
-    ///            <description>base64 encoded Byte array</description>
+    ///            <term><see cref="byte">byte</see>[]</term>
+    ///            <description>base64 encoded byte array</description>
     ///        </item>
     ///        <item>
     ///            <term>datetime</term>
@@ -87,9 +88,9 @@ namespace DataCommander.Foundation.Configuration
     /// </remarks>
     public sealed class ConfigurationSection
     {
-        private static ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
-        private string configFileName;
-        private string sectionName;
+        private static readonly ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
+        private readonly string configFileName;
+        private readonly string sectionName;
         private ConfigurationNode rootNode;
         private int changed;
         private bool isFileSystemWatcherEnabled;
@@ -99,7 +100,7 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="configFileName"></param>
         /// <param name="sectionName"></param>
-        public ConfigurationSection( string configFileName, string sectionName )
+        public ConfigurationSection(string configFileName, string sectionName)
         {
             this.configFileName = configFileName;
             this.sectionName = sectionName;
@@ -110,7 +111,7 @@ namespace DataCommander.Foundation.Configuration
         /// 
         /// </summary>
         /// <param name="configFileName"></param>
-        public ConfigurationSection( string configFileName )
+        public ConfigurationSection(string configFileName)
         {
             this.configFileName = configFileName;
             this.sectionName = DefaultSectionName;
@@ -124,7 +125,7 @@ namespace DataCommander.Foundation.Configuration
         {
             get
             {
-                string sectionName = typeof( ConfigurationSection ).Namespace;
+                string sectionName = typeof(ConfigurationSection).Namespace;
                 return sectionName;
             }
         }
@@ -152,9 +153,9 @@ namespace DataCommander.Foundation.Configuration
         {
             get
             {
-                var trace = new StackTrace( 1 );
-                string nodeName = ConfigurationNodeName.FromNamespace( trace, 0 );
-                ConfigurationNode node = this.SelectNode( nodeName, true );
+                var trace = new StackTrace(1);
+                string nodeName = ConfigurationNodeName.FromNamespace(trace, 0);
+                ConfigurationNode node = this.SelectNode(nodeName, true);
                 return node;
             }
         }
@@ -166,9 +167,9 @@ namespace DataCommander.Foundation.Configuration
         {
             get
             {
-                var trace = new StackTrace( 1 );
-                string nodeName = ConfigurationNodeName.FromType( trace, 0 );
-                ConfigurationNode node = this.SelectNode( nodeName, true );
+                var trace = new StackTrace(1);
+                string nodeName = ConfigurationNodeName.FromType(trace, 0);
+                ConfigurationNode node = this.SelectNode(nodeName, true);
                 return node;
             }
         }
@@ -180,9 +181,9 @@ namespace DataCommander.Foundation.Configuration
         {
             get
             {
-                var trace = new StackTrace( 1 );
-                string nodeName = ConfigurationNodeName.FromMethod( trace, 0 );
-                ConfigurationNode node = this.SelectNode( nodeName, true );
+                var trace = new StackTrace(1);
+                string nodeName = ConfigurationNodeName.FromMethod(trace, 0);
+                ConfigurationNode node = this.SelectNode(nodeName, true);
                 return node;
             }
         }
@@ -220,18 +221,18 @@ namespace DataCommander.Foundation.Configuration
             }
         }
 
-        private void Check( string nodeName, ConfigurationNode node )
+        private void Check(string nodeName, ConfigurationNode node)
         {
             if (node == null)
             {
-                if (!File.Exists( this.configFileName ))
+                if (!File.Exists(this.configFileName))
                 {
-                    throw new FileNotFoundException( "Configuration file not found.", this.configFileName );
+                    throw new FileNotFoundException("Configuration file not found.", this.configFileName);
                 }
                 else
                 {
-                    throw new ArgumentException( string.Format(
-                        "Configuration node not found.\r\nNodeName: {0}\r\nConfigFileName: {1}", nodeName, this.configFileName ) );
+                    throw new ArgumentException(string.Format(
+                        "Configuration node not found.\r\nNodeName: {0}\r\nConfigFileName: {1}", nodeName, this.configFileName));
                 }
             }
         }
@@ -242,7 +243,7 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="nodeName"></param>
         /// <param name="throwOnError"></param>
         /// <returns></returns>
-        public ConfigurationNode SelectNode( string nodeName, bool throwOnError )
+        public ConfigurationNode SelectNode(string nodeName, bool throwOnError)
         {
             if (this.changed != 0)
             {
@@ -250,18 +251,18 @@ namespace DataCommander.Foundation.Configuration
                 {
                     ConfigurationNode rootNode;
                     StringCollection fileNames;
-                    this.Load( out rootNode, out fileNames );
+                    this.Load(out rootNode, out fileNames);
                     this.rootNode = rootNode;
                 }
 
-                Interlocked.Exchange( ref this.changed, 0 );
+                Interlocked.Exchange(ref this.changed, 0);
             }
 
             ConfigurationNode node;
 
             if (this.rootNode != null)
             {
-                node = this.rootNode.SelectNode( nodeName );
+                node = this.rootNode.SelectNode(nodeName);
             }
             else
             {
@@ -270,7 +271,7 @@ namespace DataCommander.Foundation.Configuration
 
             if (throwOnError)
             {
-                this.Check( nodeName, node );
+                this.Check(nodeName, node);
             }
 
             return node;
@@ -283,12 +284,12 @@ namespace DataCommander.Foundation.Configuration
 
             try
             {
-                this.Load( out rootNode, out fileNames );
+                this.Load(out rootNode, out fileNames);
                 this.rootNode = rootNode;
             }
             catch (Exception e)
             {
-                log.Write( LogLevel.Error, e.ToString() );
+                log.Write(LogLevel.Error, e.ToString());
             }
 
             if (fileNames != null)
@@ -297,7 +298,7 @@ namespace DataCommander.Foundation.Configuration
                 {
                     foreach (string fileName in fileNames)
                     {
-                        var watcher = new IO.FileSystemWatcher( fileName );
+                        var watcher = new FileSystemWatcher(fileName);
                         watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
                         watcher.Changed += this.OnChanged;
                         watcher.EnableRaisingEvents = true;
@@ -307,27 +308,27 @@ namespace DataCommander.Foundation.Configuration
                 }
                 catch (Exception e)
                 {
-                    log.Write( LogLevel.Error, e.ToString() );
+                    log.Write(LogLevel.Error, e.ToString());
                 }
             }
         }
 
-        private void OnChanged( object sender, FileSystemEventArgs e )
+        private void OnChanged(object sender, FileSystemEventArgs e)
         {
-            log.Trace("Settings.OnChanged. FileName: " + e.FullPath );
-            Interlocked.Increment( ref this.changed );
+            log.Trace("Settings.OnChanged. FileName: " + e.FullPath);
+            Interlocked.Increment(ref this.changed);
 
             if (this.Changed != null)
             {
-                this.Changed( this, e );
+                this.Changed(this, e);
             }
         }
 
-        private void Load( out ConfigurationNode rootNode, out StringCollection fileNames )
+        private void Load(out ConfigurationNode rootNode, out StringCollection fileNames)
         {
             ConfigurationReader reader = new ConfigurationReader();
             fileNames = new StringCollection();
-            rootNode = reader.Read( this.configFileName, this.sectionName, fileNames );
+            rootNode = reader.Read(this.configFileName, this.sectionName, fileNames);
         }
     }
 }

@@ -1,3 +1,7 @@
+using System.Diagnostics;
+using System.Drawing;
+using DataCommander.Foundation.Diagnostics;
+
 namespace DataCommander.Providers.SqlServer2005
 {
     using System;
@@ -8,9 +12,9 @@ namespace DataCommander.Providers.SqlServer2005
 
     internal sealed class StoredProcedureNode : ITreeNode
     {
-        private DatabaseNode database;
-        private string owner;
-        private string name;
+        private readonly DatabaseNode database;
+        private readonly string owner;
+        private readonly string name;
 
         public StoredProcedureNode(
             DatabaseNode database,
@@ -26,7 +30,7 @@ namespace DataCommander.Providers.SqlServer2005
         {
             get
             {
-                return owner + '.' + name;
+                return this.owner + '.' + this.name;
             }
         }
 
@@ -55,29 +59,38 @@ namespace DataCommander.Providers.SqlServer2005
         {
             get
             {
-                string query = "exec " + name;
+                string query = "exec " + this.name;
                 return query;
             }
         }
 
-        void menuItemScriptObject_Click( object sender, EventArgs e )
+        private void menuItemScriptObject_Click(object sender, EventArgs e)
         {
+            var stopwatch = Stopwatch.StartNew();
             string connectionString = this.database.Databases.Server.ConnectionString;
             string text;
-            using (var connection = new SqlConnection( connectionString ))
+            using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                text = SqlDatabase.GetSysComments( connection, database.Name, owner, name );
+                text = SqlDatabase.GetSysComments(connection, this.database.Name, this.owner, this.name);
             }
 
-            QueryForm.ShowText( text );
+            Clipboard.SetText(text);
+
+            var queryForm = (QueryForm)Providers.Application.Instance.MainForm.ActiveMdiChild;
+
+            queryForm.SetStatusbarPanelText(
+                string.Format(
+                    "Copying stored prcoedure script to clipboard finished in {0} seconds.",
+                    StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)),
+                SystemColors.ControlText);
         }
 
         public ContextMenuStrip ContextMenu
         {
             get
             {
-                ToolStripMenuItem menuItemScriptObject = new ToolStripMenuItem( "Script Object", null, new EventHandler( menuItemScriptObject_Click ) );
+                ToolStripMenuItem menuItemScriptObject = new ToolStripMenuItem( "Script Object", null, new EventHandler(this.menuItemScriptObject_Click ) );
                 ContextMenuStrip contextMenu = new ContextMenuStrip();
                 contextMenu.Items.Add( menuItemScriptObject );
                 return contextMenu;

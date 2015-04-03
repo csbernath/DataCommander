@@ -14,9 +14,9 @@ namespace DataCommander.Providers.Wmi
 
         int IDataReaderHelper.GetValues(object[] values)
         {
-            return dataReader.GetValues(values);
+            return this.dataReader.GetValues(values);
         }
 
-        IDataReader dataReader;
+        readonly IDataReader dataReader;
     }
 }

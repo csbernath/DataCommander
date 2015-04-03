@@ -1,7 +1,7 @@
-using System;
-
 namespace DataCommander.Providers
 {
+    using System;
+
     internal sealed class BooleanDataWriter : DataWriterBase
     {
         public override string ToString( object value )
@@ -10,11 +10,11 @@ namespace DataCommander.Providers
 
             if (value == DBNull.Value)
             {
-                s = new string( ' ', Width );
+                s = new string( ' ', this.Width );
             }
             else
             {
-                s = value.ToString().PadLeft( Width );
+                s = value.ToString().PadLeft(this.Width );
             }
 
             return s;

@@ -11,10 +11,10 @@
 
         private static int commandIdCounter;
         private readonly int commandId;
-        private IDbCommand command;
-        private EventHandler<BeforeExecuteCommandEventArgs> beforeExecuteCommand;
-        private EventHandler<AfterExecuteCommandEventArgs> afterExecuteCommand;
-        private EventHandler<AfterReadEventArgs> afterRead;
+        private readonly IDbCommand command;
+        private readonly EventHandler<BeforeExecuteCommandEventArgs> beforeExecuteCommand;
+        private readonly EventHandler<AfterExecuteCommandEventArgs> afterExecuteCommand;
+        private readonly EventHandler<AfterReadEventArgs> afterRead;
 
         #endregion
 

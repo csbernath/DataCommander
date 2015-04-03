@@ -15,7 +15,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public PDecimal( Decimal value )
+        public PDecimal( decimal value )
         {
             this.sql = value;
             this.type = PValueType.Value;
@@ -42,7 +42,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PDecimal( Decimal value )
+        public static implicit operator PDecimal( decimal value )
         {
             return new PDecimal( value );
         }
@@ -62,9 +62,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator Decimal( PDecimal value )
+        public static implicit operator decimal( PDecimal value )
         {
-            return (Decimal) value.sql;
+            return (decimal) value.sql;
         }
 
         /// <summary>

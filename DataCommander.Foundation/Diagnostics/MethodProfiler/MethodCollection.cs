@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation.Diagnostics
 {
-    using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Reflection;
@@ -9,7 +8,7 @@
     internal sealed class MethodCollection : IEnumerable<MethodBase>
     {
         private int idSequence;
-        private Dictionary<MethodBase, int> methods = new Dictionary<MethodBase, int>();
+        private readonly Dictionary<MethodBase, int> methods = new Dictionary<MethodBase, int>();
 
         public bool TryGetValue(MethodBase method, out int methodId)
         {

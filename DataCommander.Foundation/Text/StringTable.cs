@@ -1,6 +1,5 @@
 namespace DataCommander.Foundation.Text
 {
-    using System;
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Text;
@@ -11,7 +10,7 @@ namespace DataCommander.Foundation.Text
     public class StringTable
     {
         private readonly StringTableColumnCollection columns = new StringTableColumnCollection();
-        private StringTableRowCollection rows = new StringTableRowCollection();
+        private readonly StringTableRowCollection rows = new StringTableRowCollection();
 
         /// <summary>
         /// 

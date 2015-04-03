@@ -1,10 +1,9 @@
 ﻿namespace DataCommander.Foundation.Data
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
 
-	/// <summary>
+    /// <summary>
     /// 
     /// </summary>
     public static class TextDataCommandBuilder

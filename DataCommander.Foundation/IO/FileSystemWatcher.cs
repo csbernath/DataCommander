@@ -13,13 +13,13 @@ namespace DataCommander.Foundation.IO
     /// </summary>
     public class FileSystemWatcher
     {
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private System.IO.FileSystemWatcher watcher;
-        private string fullFileName;
-        private string fileName;
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly System.IO.FileSystemWatcher watcher;
+        private readonly string fullFileName;
+        private readonly string fileName;
         private string shortFileName;
         private int count;
-        private Timer timer;
+        private readonly Timer timer;
         private FileSystemEventHandler changed;
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace DataCommander.Foundation.IO
 
                 if (name == this.fileName || name == this.ShortFileName)
                 {
-                    ////Byte[] hash = ComputeHash(fullFileName);
+                    ////byte[] hash = ComputeHash(fullFileName);
                     ////bool changed = Compare(this.hash, hash) != 0;
 
                     ////if (changed)

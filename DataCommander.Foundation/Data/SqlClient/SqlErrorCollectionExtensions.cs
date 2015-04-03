@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation.Data.SqlClient
 {
-    using System;
     using System.Data.SqlClient;
     using System.Text;
 

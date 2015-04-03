@@ -1,7 +1,5 @@
 ﻿namespace DataCommander.Foundation.Collections
 {
-    using System;
-
     /// <summary>
     /// 
     /// </summary>

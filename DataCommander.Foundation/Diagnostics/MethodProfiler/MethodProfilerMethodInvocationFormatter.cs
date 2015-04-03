@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation.Diagnostics
 {
-    using System;
     using System.Text;
     using DataCommander.Foundation.Data.SqlClient;
     using DataCommander.Foundation.IO;

@@ -13,15 +13,15 @@ namespace DataCommander.Foundation.Data.SqlClient
         #region Private Fields
 
         private readonly int applicationId;
-        private IDictionary<string, SqLoglCommandExecution> commands;
-        private int connectionNo;
-        private string database;
-        private CommandType commandType;
+        private readonly IDictionary<string, SqLoglCommandExecution> commands;
+        private readonly int connectionNo;
+        private readonly string database;
+        private readonly CommandType commandType;
         private string commandText;
         private string parameters;
         private DateTime startDate;
-        private long duration;
-        private Exception exception;
+        private readonly long duration;
+        private readonly Exception exception;
 
         #endregion
 

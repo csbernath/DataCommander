@@ -1,17 +1,16 @@
 ﻿namespace DataCommander.Foundation.Data
 {
-    using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.IO;
 
     internal sealed class TextDataStreamWriter
     {
-        private TextWriter textWriter;
+        private readonly TextWriter textWriter;
 
         private readonly IList<TextDataColumn> columns;
 
-        private IList<ITextDataConverter> converters;
+        private readonly IList<ITextDataConverter> converters;
 
         public TextDataStreamWriter( TextWriter textWriter, IList<TextDataColumn> columns, IList<ITextDataConverter> converters )
         {

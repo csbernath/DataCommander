@@ -1,10 +1,9 @@
 namespace DataCommander.Foundation.Xml
 {
-    using System;
+    using System.Xml;
 #if DEBUG
     using System.Diagnostics;
 #endif
-    using System.Xml;
 
     /// <summary>
     /// 
@@ -12,7 +11,7 @@ namespace DataCommander.Foundation.Xml
     public class XmlElementReader
     {
         private readonly XmlReader xmlReader;
-        private XmlDocument xmlDocument = new XmlDocument();
+        private readonly XmlDocument xmlDocument = new XmlDocument();
 
         /// <summary>
         /// 

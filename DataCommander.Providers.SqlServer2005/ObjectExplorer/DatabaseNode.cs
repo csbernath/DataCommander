@@ -5,12 +5,12 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Data;
     using System.Data.SqlClient;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
+    using Application = DataCommander.Providers.Application;
 
     internal sealed class DatabaseNode : ITreeNode
     {
-        private DatabaseCollectionNode databaseCollectionNode;
-        private string name;
+        private readonly DatabaseCollectionNode databaseCollectionNode;
+        private readonly string name;
 
         public DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string name)
         {
@@ -30,7 +30,7 @@ namespace DataCommander.Providers.SqlServer2005
         {
             get
             {
-                return name;
+                return this.name;
             }
         }
 
@@ -93,9 +93,9 @@ select
 	convert(decimal(15,4),fileproperty(f.name, 'SpaceUsed') * 8096.0 / 1000000)		as [Used (MB)],
 	convert(decimal(15,2),convert(float,fileproperty(name, 'SpaceUsed')) * 100.0 / size)	as [Used%],
 	convert(decimal(15,4),(f.size-fileproperty(name, 'SpaceUsed')) * 8096.0 / 1000000)	as [Free (MB)]
-from	[{0}].sys.database_files f", name);
+from	[{0}].sys.database_files f", this.name);
             string connectionString = this.databaseCollectionNode.Server.ConnectionString;
-            MainForm mainForm = DataCommander.Providers.Application.Instance.MainForm;
+            MainForm mainForm = Application.Instance.MainForm;
             QueryForm queryForm = (QueryForm)mainForm.ActiveMdiChild;
             DataSet dataSet = null;
             using (var connection = new SqlConnection(connectionString))
@@ -119,7 +119,7 @@ from	[{0}].sys.database_files f", name);
         {
             get
             {
-                ToolStripMenuItem menuItemGetInformation = new ToolStripMenuItem("Get information", null, new EventHandler(menuItemGetInformation_Click));
+                ToolStripMenuItem menuItemGetInformation = new ToolStripMenuItem("Get information", null, new EventHandler(this.menuItemGetInformation_Click));
                 ContextMenuStrip contextMenu = new ContextMenuStrip();
                 contextMenu.Items.Add(menuItemGetInformation);
                 return contextMenu;

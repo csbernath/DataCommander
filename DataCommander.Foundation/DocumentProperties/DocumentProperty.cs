@@ -1,7 +1,5 @@
 ﻿namespace DataCommander.Foundation.DocumentProperties
 {
-    using System;
-
     /// <summary>
     /// 
     /// </summary>

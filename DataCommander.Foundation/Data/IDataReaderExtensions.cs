@@ -17,9 +17,9 @@
         /// </summary>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        public static IEnumerable<IDataReader> AsEnumerable( this IDataReader dataReader )
+        public static IEnumerable<IDataReader> AsEnumerable(this IDataReader dataReader)
         {
-            Contract.Requires<ArgumentNullException>( dataReader != null );
+            Contract.Requires<ArgumentNullException>(dataReader != null);
 
             while (dataReader.Read())
             {
@@ -33,10 +33,10 @@
         /// <param name="dataReader"></param>
         /// <param name="dataSet"></param>
         /// <returns></returns>
-        public static int Fill( this IDataReader dataReader, DataSet dataSet )
+        public static int Fill(this IDataReader dataReader, DataSet dataSet)
         {
-            Contract.Requires<ArgumentNullException>( dataReader != null );
-            Contract.Requires<ArgumentNullException>( dataSet != null );
+            Contract.Requires<ArgumentNullException>(dataReader != null);
+            Contract.Requires<ArgumentNullException>(dataSet != null);
 
             int rowCount = 0;
             WorkerThread thread = WorkerThread.Current;
@@ -49,9 +49,9 @@
                         Locale = CultureInfo.InvariantCulture
                     };
 
-                int count = dataReader.Fill( table );
+                int count = dataReader.Fill(table);
                 rowCount += count;
-                dataSet.Tables.Add( table );
+                dataSet.Tables.Add(table);
 
                 if (!dataReader.NextResult())
                 {
@@ -68,10 +68,10 @@
         /// <param name="dataReader"></param>
         /// <param name="dataTable"></param>
         /// <returns></returns>
-        public static int Fill( this IDataReader dataReader, DataTable dataTable )
+        public static int Fill(this IDataReader dataReader, DataTable dataTable)
         {
-            Contract.Requires<ArgumentNullException>( dataReader != null );
-            Contract.Requires<ArgumentNullException>( dataTable != null );
+            Contract.Requires<ArgumentNullException>(dataReader != null);
+            Contract.Requires<ArgumentNullException>(dataTable != null);
 
             DataTable schemaTable = dataReader.GetSchemaTable();
 
@@ -81,7 +81,7 @@
 
                 if (columns.Count == 0)
                 {
-                    Database.FillSchema( schemaTable, dataTable );
+                    Database.FillSchema(schemaTable, dataTable);
                 }
             }
 
@@ -93,8 +93,8 @@
             while (!thread.IsStopRequested && dataReader.Read())
             {
                 var values = new object[fieldCount];
-                dataReader.GetValues( values );
-                DataRow row = rows.Add( values );
+                dataReader.GetValues(values);
+                DataRow row = rows.Add(values);
                 row.AcceptChanges();
                 rowCount++;
             }

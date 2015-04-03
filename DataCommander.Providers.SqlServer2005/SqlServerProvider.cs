@@ -1020,7 +1020,7 @@ order by ic.index_column_id
             var sqlException = exception as SqlException;
             if (sqlException != null)
             {
-                infoMessages = SqlServerProvider.ToInfoMessages(sqlException.Errors);
+                infoMessages = ToInfoMessages(sqlException.Errors);
             }
             else
             {

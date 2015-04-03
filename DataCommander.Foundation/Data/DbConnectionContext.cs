@@ -9,9 +9,13 @@
     /// </summary>
     public sealed class DbConnectionContext : IDbConnectionContext
     {
+        #region Private Fields
+
         private readonly IDbConnection connection;
         private readonly IDbTransaction transaction;
         private readonly int? commandTimeout;
+
+        #endregion
 
         /// <summary>
         /// 
@@ -19,9 +23,9 @@
         /// <param name="connection"></param>
         /// <param name="transaction"></param>
         /// <param name="commandTimeout"></param>
-        public DbConnectionContext( IDbConnection connection, IDbTransaction transaction, int? commandTimeout )
+        public DbConnectionContext(IDbConnection connection, IDbTransaction transaction, int? commandTimeout)
         {
-            Contract.Requires( connection != null );
+            Contract.Requires<ArgumentNullException>(connection != null);
 
             this.connection = connection;
             this.transaction = transaction;

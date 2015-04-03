@@ -7,7 +7,7 @@
     /// </summary>
     public struct SmallTimeSpan
     {
-        private short value;
+        private readonly short value;
 
         /// <summary>
         /// 
@@ -31,6 +31,26 @@
         public SmallTimeSpan(TimeSpan timeSpan)
         {
             this.value = ToSmallTimeSpanValue(timeSpan);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public short TotalMinutes
+        {
+            get
+            {
+                return this.value;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return ToTimeSpan(this.value).ToString();
         }
 
         private static TimeSpan ToTimeSpan(short value)

@@ -12,7 +12,7 @@
     {
         #region Private Fields
 
-        private Func<IList<T>> createList;
+        private readonly Func<IList<T>> createList;
         private IList<T> list;
 
         #endregion

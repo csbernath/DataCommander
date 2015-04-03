@@ -30,7 +30,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public PMoney( Decimal value )
+        public PMoney( decimal value )
         {
             this.sql = value;
             this.type = PValueType.Value;
@@ -57,7 +57,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PMoney( Decimal value )
+        public static implicit operator PMoney( decimal value )
         {
             return new PMoney( value );
         }
@@ -77,9 +77,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator Decimal( PMoney value )
+        public static implicit operator decimal( PMoney value )
         {
-            return (Decimal) value.sql;
+            return (decimal) value.sql;
         }
 
         /// <summary>

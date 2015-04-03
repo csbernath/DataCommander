@@ -4,7 +4,6 @@ namespace DataCommander.Foundation.Threading
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Threading;
-
     using DataCommander.Foundation.Diagnostics;
 
     /// <summary>
@@ -26,9 +25,9 @@ namespace DataCommander.Foundation.Threading
     {
         #region Private Fields
 
-        private WorkerThreadPool pool;
+        private readonly WorkerThreadPool pool;
 
-        private IWaitCallbackFactory waitCallbackFactory;
+        private readonly IWaitCallbackFactory waitCallbackFactory;
 
         private Timer timer;
 

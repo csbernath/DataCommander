@@ -9,6 +9,8 @@ namespace DataCommander.Foundation.Diagnostics
 
     internal sealed class AsyncLogFile : ILogFile
     {
+        #region Private Fields
+
         private string path;
         private readonly int bufferSize;
         private readonly LogFile logFile;
@@ -18,6 +20,8 @@ namespace DataCommander.Foundation.Diagnostics
         private Timer timer;
         private readonly object flushLock = new object();
 
+        #endregion
+
         public AsyncLogFile(
             string path,
             Encoding encoding,
@@ -25,30 +29,30 @@ namespace DataCommander.Foundation.Diagnostics
             int bufferSize,
             TimeSpan timerPeriod,
             ILogFormatter formatter,
-            FileAttributes fileAttributes )
+            FileAttributes fileAttributes)
         {
             this.path = path;
             this.bufferSize = bufferSize;
             this.timerPeriod = timerPeriod;
-            this.queue = new Queue<LogEntry>( queueCapacity );
+            this.queue = new Queue<LogEntry>(queueCapacity);
             this.formatter = formatter;
-            this.logFile = new LogFile( path, encoding, 1024, true, formatter, fileAttributes );
+            this.logFile = new LogFile(path, encoding, 1024, true, formatter, fileAttributes);
         }
 
         #region ILogFile Members
 
         void ILogFile.Open()
         {
-            Contract.Assert( this.timer == null );
+            Contract.Assert(this.timer == null);
 
-            this.timer = new Timer( this.TimerCallback, null, this.timerPeriod, this.timerPeriod );
+            this.timer = new Timer(this.TimerCallback, null, this.timerPeriod, this.timerPeriod);
         }
 
-        public void Write( LogEntry entry )
+        public void Write(LogEntry entry)
         {
             lock (this.queue)
             {
-                this.queue.Enqueue( entry );
+                this.queue.Enqueue(entry);
             }
         }
 
@@ -62,15 +66,15 @@ namespace DataCommander.Foundation.Diagnostics
 
                     lock (this.queue)
                     {
-                        entries = new LogEntry[ this.queue.Count ];
-                        this.queue.CopyTo( entries, 0 );
+                        entries = new LogEntry[this.queue.Count];
+                        this.queue.CopyTo(entries, 0);
                         this.queue.Clear();
                     }
 
                     int startIndex = 0;
                     while (startIndex < entries.Length)
                     {
-                        startIndex = this.Write( entries, startIndex );
+                        startIndex = this.Write(entries, startIndex);
                     }
                 }
             }
@@ -84,7 +88,7 @@ namespace DataCommander.Foundation.Diagnostics
                 this.timer = null;
             }
 
-            this.Flush();            
+            this.Flush();
 
             this.logFile.Close();
         }
@@ -93,7 +97,7 @@ namespace DataCommander.Foundation.Diagnostics
 
         #region Private Methods
 
-        private void TimerCallback( object state )
+        private void TimerCallback(object state)
         {
             var thread = Thread.CurrentThread;
             thread.Priority = ThreadPriority.Lowest;
@@ -101,7 +105,7 @@ namespace DataCommander.Foundation.Diagnostics
             this.Flush();
         }
 
-        private int Write( LogEntry[] entries, int startIndex )
+        private int Write(LogEntry[] entries, int startIndex)
         {
             StringBuilder sb = null;
             int i;
@@ -109,7 +113,7 @@ namespace DataCommander.Foundation.Diagnostics
 
             for (i = startIndex; i < entries.Length; i++)
             {
-                var entry = entries[ i ];
+                var entry = entries[i];
 
                 if (i == startIndex)
                 {
@@ -120,24 +124,24 @@ namespace DataCommander.Foundation.Diagnostics
                     break;
                 }
 
-                string text = this.formatter.Format( entry );
+                string text = this.formatter.Format(entry);
 
                 if (sb == null)
                 {
-                    sb = new StringBuilder( this.bufferSize );
+                    sb = new StringBuilder(this.bufferSize);
                 }
                 else if (sb.Length + text.Length > this.bufferSize)
                 {
-                    this.logFile.Write( date, sb.ToString() );
+                    this.logFile.Write(date, sb.ToString());
                     sb.Length = 0;
                 }
 
-                sb.Append( text );
+                sb.Append(text);
             }
 
             if (sb.Length > 0)
             {
-                this.logFile.Write( date, sb.ToString() );
+                this.logFile.Write(date, sb.ToString());
             }
 
             return i;

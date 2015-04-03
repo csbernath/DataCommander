@@ -1,6 +1,7 @@
 namespace DataCommander.Providers
 {
     using System;
+    using System.ComponentModel;
     using System.IO;
     using System.Text;
     using System.Windows.Forms;
@@ -9,16 +10,20 @@ namespace DataCommander.Providers
     /// <summary>
     /// Summary description for HtmlTextBox.
     /// </summary>
-    internal sealed class HtmlTextBox : System.Windows.Forms.UserControl
+    internal sealed class HtmlTextBox : UserControl
     {
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        #region Private Fields
+
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private WebBrowser webBrowser;
         private string fileName;
+
+        #endregion
 
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.Container components = null;
+        private readonly Container components = null;
 
         /// <summary>
         /// 
@@ -26,7 +31,7 @@ namespace DataCommander.Providers
         public HtmlTextBox()
         {
             // This call is required by the Windows.Forms Form Designer.
-            InitializeComponent();
+            this.InitializeComponent();
 
             // TODO: Add any initialization after the InitForm call
         }
@@ -38,17 +43,19 @@ namespace DataCommander.Providers
         {
             set
             {
-                fileName = Path.GetTempFileName();
-                fileName += ".xml";
-                FileStream fileStream = new FileStream(fileName, FileMode.OpenOrCreate);
+                this.fileName = Path.GetTempFileName();
+                this.fileName += ".xml";
 
-                using (StreamWriter streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
+                using (var fileStream = new FileStream(this.fileName, FileMode.OpenOrCreate))
                 {
-                    streamWriter.Write(value);
-                    streamWriter.Close();
+                    using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
+                    {
+                        streamWriter.Write(value);
+                        streamWriter.Close();
+                    }
                 }
-                
-                this.webBrowser.Navigate(fileName);
+
+                this.webBrowser.Navigate(this.fileName);
             }
         }
 
@@ -70,15 +77,15 @@ namespace DataCommander.Providers
                     {
                         File.Delete(this.fileName);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         log.Write(LogLevel.Error, e.ToString());
                     }
                 }
 
-                if (components != null)
+                if (this.components != null)
                 {
-                    components.Dispose();
+                    this.components.Dispose();
                 }
             }
 
@@ -86,15 +93,16 @@ namespace DataCommander.Providers
         }
 
         #region Component Designer generated code
+
         /// <summary> 
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
-            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(HtmlTextBox));
+            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (HtmlTextBox));
             this.webBrowser = new WebBrowser();
-            GarbageMonitor.Add( "webBrowser", this.webBrowser );
+            GarbageMonitor.Add("webBrowser", this.webBrowser);
             // ((System.ComponentModel.ISupportInitialize)(this.webBrowser)).BeginInit();
             this.SuspendLayout();
             // 
@@ -110,21 +118,24 @@ namespace DataCommander.Providers
             // 
             // HtmlTextBox
             // 
-            this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                          this.webBrowser});
+            this.Controls.AddRange(new System.Windows.Forms.Control[]
+            {
+                this.webBrowser
+            });
             this.Name = "HtmlTextBox";
             this.Size = new System.Drawing.Size(464, 184);
             // ((System.ComponentModel.ISupportInitialize)(this.webBrowser)).EndInit();
             this.ResumeLayout(false);
 
         }
+
         #endregion
 
         private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            if (fileName != null)
+            if (this.fileName != null)
             {
-                File.Delete(fileName);
+                File.Delete(this.fileName);
             }
         }
     }

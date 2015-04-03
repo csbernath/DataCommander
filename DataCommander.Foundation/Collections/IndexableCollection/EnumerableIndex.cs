@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-
-namespace DataCommander.Foundation.Collections.IndexableCollection
+﻿namespace DataCommander.Foundation.Collections.IndexableCollection
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+
     /// <summary>
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public sealed class EnumerableIndex<T> : ICollectionIndex<T>
     {
-        private string name;
+        private readonly string name;
         private IEnumerable<T> enumerable;
 
         /// <summary>
@@ -76,7 +75,7 @@ namespace DataCommander.Foundation.Collections.IndexableCollection
             throw new NotImplementedException();
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             throw new NotImplementedException();
         }

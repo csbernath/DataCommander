@@ -1,7 +1,7 @@
 using System;
-using System.Diagnostics.Contracts;
 using System.Reflection;
 using System.Runtime.InteropServices;
+
 #if TEST
     using System.Runtime.CompilerServices;
 #endif

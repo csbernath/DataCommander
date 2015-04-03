@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Foundation.Collections
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
 
@@ -44,7 +45,7 @@
                 this.last = this.first;
             }
 
-            if (this.last.Count == segmentSize)
+            if (this.last.Count == this.segmentSize)
             {
                 var newSegment = new Segment(this.segmentSize);
                 this.last.Next = newSegment;
@@ -150,7 +151,7 @@
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             var enumerable = (IEnumerable<T>)this;
             return enumerable.GetEnumerator();

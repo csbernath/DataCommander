@@ -1,7 +1,5 @@
 ﻿namespace DataCommander.Foundation.Data
 {
-    using System;
-
     /// <summary>
     /// 
     /// </summary>

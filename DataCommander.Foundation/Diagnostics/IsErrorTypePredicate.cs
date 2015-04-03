@@ -1,7 +1,5 @@
 ﻿namespace DataCommander.Foundation.Diagnostics
 {
-    using System;
-
     /// <summary>
     /// 
     /// </summary>
@@ -13,12 +11,12 @@
         /// 
         /// </summary>
         /// <param name="type"></param>
-        public IsErrorTypePredicate( ErrorType type )
+        public IsErrorTypePredicate(ErrorType type)
         {
             this.type = type;
         }
 
-        public bool IsTrue( Error value )
+        public bool IsTrue(Error value)
         {
             return value.Type == this.type;
         }

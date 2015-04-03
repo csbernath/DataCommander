@@ -34,18 +34,18 @@
 
             try
             {
-                if (connectionProperties.Provider == null)
+                if (this.connectionProperties.Provider == null)
                 {
-                    IProvider provider = ProviderFactory.CreateProvider(connectionProperties.ProviderName);
-                    connectionProperties.Provider = provider;
+                    IProvider provider = ProviderFactory.CreateProvider(this.connectionProperties.ProviderName);
+                    this.connectionProperties.Provider = provider;
                 }
-                ConnectionBase connection = connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
+                ConnectionBase connection = this.connectionProperties.Provider.CreateConnection(this.connectionProperties.ConnectionString);
                 Contract.Assert(connection != null);
-                connection.ConnectionName = connectionProperties.ConnectionName;
+                connection.ConnectionName = this.connectionProperties.ConnectionName;
                 this.duration = Stopwatch.GetTimestamp();
                 connection.Open();
                 this.duration = Stopwatch.GetTimestamp() - this.duration;
-                connectionProperties.Connection = connection;
+                this.connectionProperties.Connection = connection;
                 exception = null;
             }
             catch (Exception e)
@@ -53,7 +53,7 @@
                 exception = e;
             }
 
-            endConnectionOpen(exception);
+            this.endConnectionOpen(exception);
         }
 
         public void BeginOpen(Action<Exception> endConnectionOpen)
@@ -66,14 +66,14 @@
 
         public void Cancel()
         {
-            ThreadPool.QueueUserWorkItem(CancelWaitCallback);
+            ThreadPool.QueueUserWorkItem(this.CancelWaitCallback);
         }
 
         private void CancelWaitCallback(object state)
         {
             using (LogFactory.Instance.GetCurrentMethodLog())
             {
-                thread.Abort();
+                this.thread.Abort();
             }
         }
     }

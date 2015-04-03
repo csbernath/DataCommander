@@ -1,6 +1,5 @@
 namespace DataCommander.Foundation.Data.SqlClient
 {
-    using System;
     using System.Data;
 
     /// <summary>
@@ -8,9 +7,9 @@ namespace DataCommander.Foundation.Data.SqlClient
     /// </summary>
     internal sealed class SimpleLoggedSqlCommandFilterRule
     {
-        private bool include;
+        private readonly bool include;
         private readonly string userName;
-        private string hostName;
+        private readonly string hostName;
         private readonly string database;
         private readonly string commandText;
 

@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Windows.Forms;
-    using DataCommander.Providers;
 
     internal sealed class LoginNode : ITreeNode
     {

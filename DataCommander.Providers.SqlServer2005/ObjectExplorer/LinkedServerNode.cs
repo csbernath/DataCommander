@@ -4,7 +4,6 @@
     using System.Diagnostics.Contracts;
     using System.Windows.Forms;
     using DataCommander.Foundation.Linq;
-    using DataCommander.Providers;
 
     internal sealed class LinkedServerNode : ITreeNode
     {

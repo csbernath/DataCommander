@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation.Threading
 {
-    using System.Diagnostics.Contracts;
-#if FOUNDATION_3_5
+    #if FOUNDATION_3_5
     using System;
     using System.Diagnostics;
     using System.Threading;
@@ -210,7 +209,7 @@
         {
             if (maxDegreeOfParallelism < 1)
                 throw new ArgumentOutOfRangeException( "maxDegreeOfParallelism" );
-            _maxDegreeOfParallelism = maxDegreeOfParallelism;
+            this._maxDegreeOfParallelism = maxDegreeOfParallelism;
         }
 
         /// <summary>Queues a task to the scheduler.</summary>
@@ -219,13 +218,13 @@
         {
             // Add the task to the list of tasks to be processed.  If there aren't enough
             // delegates currently queued or running to process tasks, schedule another.
-            lock (_tasks)
+            lock (this._tasks)
             {
-                _tasks.AddLast( task );
-                if (_delegatesQueuedOrRunning < _maxDegreeOfParallelism)
+                this._tasks.AddLast( task );
+                if (this._delegatesQueuedOrRunning < this._maxDegreeOfParallelism)
                 {
-                    ++_delegatesQueuedOrRunning;
-                    NotifyThreadPoolOfPendingWork();
+                    ++this._delegatesQueuedOrRunning;
+                    this.NotifyThreadPoolOfPendingWork();
                 }
             }
         }
@@ -246,23 +245,23 @@
                     while (true)
                     {
                         Task item;
-                        lock (_tasks)
+                        lock (this._tasks)
                         {
                             // When there are no more items to be processed,
                             // note that we're done processing, and get out.
-                            if (_tasks.Count == 0)
+                            if (this._tasks.Count == 0)
                             {
-                                --_delegatesQueuedOrRunning;
+                                --this._delegatesQueuedOrRunning;
                                 break;
                             }
 
                             // Get the next item from the queue
-                            item = _tasks.First.Value;
-                            _tasks.RemoveFirst();
+                            item = this._tasks.First.Value;
+                            this._tasks.RemoveFirst();
                         }
 
                         // Execute the task we pulled out of the queue
-                        base.TryExecuteTask( item );
+                        this.TryExecuteTask( item );
                     }
                 }
                 // We're done processing items on the current thread
@@ -285,10 +284,10 @@
 
             // If the task was previously queued, remove it from the queue
             if (taskWasPreviouslyQueued)
-                TryDequeue( task );
+                this.TryDequeue( task );
 
             // Try to run the task.
-            return base.TryExecuteTask( task );
+            return this.TryExecuteTask( task );
         }
 
         /// <summary>Attempts to remove a previously scheduled task from the scheduler.</summary>
@@ -296,8 +295,8 @@
         /// <returns>Whether the task could be found and removed.</returns>
         protected sealed override bool TryDequeue( Task task )
         {
-            lock (_tasks)
-                return _tasks.Remove( task );
+            lock (this._tasks)
+                return this._tasks.Remove( task );
         }
 
         /// <summary>Gets the maximum concurrency level supported by this scheduler.</summary>
@@ -305,7 +304,7 @@
         {
             get
             {
-                return _maxDegreeOfParallelism;
+                return this._maxDegreeOfParallelism;
             }
         }
 
@@ -316,16 +315,16 @@
             bool lockTaken = false;
             try
             {
-                Monitor.TryEnter( _tasks, ref lockTaken );
+                Monitor.TryEnter(this._tasks, ref lockTaken );
                 if (lockTaken)
-                    return _tasks.ToArray();
+                    return this._tasks.ToArray();
                 else
                     throw new NotSupportedException();
             }
             finally
             {
                 if (lockTaken)
-                    Monitor.Exit( _tasks );
+                    Monitor.Exit(this._tasks );
             }
         }
     }

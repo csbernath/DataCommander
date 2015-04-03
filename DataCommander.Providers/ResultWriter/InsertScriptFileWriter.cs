@@ -307,9 +307,9 @@
 
             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {
-                if (firstRow)
+                if (this.firstRow)
                 {
-                    firstRow = false;
+                    this.firstRow = false;
                 }
                 else
                 {
@@ -337,7 +337,7 @@
             {
                 sb.AppendLine();
                 sb.Append("GO");
-                streamWriter.Write(sb);
+                this.streamWriter.Write(sb);
             }
         }
 
@@ -348,7 +348,7 @@
             this.streamWriter = null;
         }
 
-        void IResultWriter.WriteParameters(System.Data.IDataParameterCollection parameters)
+        void IResultWriter.WriteParameters(IDataParameterCollection parameters)
         {
             // TODO
         }

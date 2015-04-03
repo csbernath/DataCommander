@@ -2,11 +2,11 @@ namespace DataCommander.Providers
 {
     public sealed class Token
     {
-        private int index;
-        private int startPosition;
-        private int endPosition;
-        private TokenType type;
-        private string value;
+        private readonly int index;
+        private readonly int startPosition;
+        private readonly int endPosition;
+        private readonly TokenType type;
+        private readonly string value;
 
         public Token(
             int index,
@@ -34,7 +34,7 @@ namespace DataCommander.Providers
         {
             get
             {
-                return startPosition;
+                return this.startPosition;
             }
         }
 
@@ -42,7 +42,7 @@ namespace DataCommander.Providers
         {
             get
             {
-                return endPosition;
+                return this.endPosition;
             }
         }
 
@@ -50,7 +50,7 @@ namespace DataCommander.Providers
         {
             get
             {
-                return type;
+                return this.type;
             }
         }
 

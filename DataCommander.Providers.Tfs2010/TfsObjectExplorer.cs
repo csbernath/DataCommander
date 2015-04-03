@@ -1,10 +1,9 @@
 ﻿namespace DataCommander.Providers.Tfs
 {
     using System.Collections.Generic;
+    using System.Data;
     using System.Diagnostics.Contracts;
     using System.Linq;
-    using DataCommander.Providers;
-    using Microsoft.TeamFoundation.Client;
     using Microsoft.TeamFoundation.VersionControl.Client;
     using Microsoft.TeamFoundation.VersionControl.Common;
 
@@ -24,7 +23,7 @@
 
         #region IObjectExplorer Members
 
-        void IObjectExplorer.SetConnection(string connectionString, System.Data.IDbConnection connection)
+        void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
         {
             TfsDbConnection tfsDbConnection = (TfsDbConnection)connection;
             this.connection = tfsDbConnection.Connection;

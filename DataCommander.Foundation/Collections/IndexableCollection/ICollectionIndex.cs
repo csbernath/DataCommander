@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation.Collections
 {
-    using System;
     using System.Collections.Generic;
 
     /// <summary>

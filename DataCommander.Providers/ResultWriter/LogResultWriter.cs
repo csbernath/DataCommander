@@ -22,7 +22,7 @@
 
         public LogResultWriter(Action<InfoMessage> addInfoMessage)
         {
-            Contract.Requires(addInfoMessage != null);
+            Contract.Requires<ArgumentNullException>(addInfoMessage != null);
             this.addInfoMessage = addInfoMessage;
         }
 
@@ -104,8 +104,7 @@
             long duration = Stopwatch.GetTimestamp() - this.writeTableBeginTimestamp;
             string message = string.Format(
                 "Reading table({0}) from command({1}) finished in {2} seconds. The table has {3} row(s).",
-                this.tableCount,
-                commandCount,
+                this.tableCount, this.commandCount,
                 StopwatchTimeSpan.ToString(duration, 3),
                 this.rowCount);
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
@@ -114,7 +113,7 @@
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, message));
         }
 
-        void IResultWriter.WriteParameters(System.Data.IDataParameterCollection parameters)
+        void IResultWriter.WriteParameters(IDataParameterCollection parameters)
         {
         }
 

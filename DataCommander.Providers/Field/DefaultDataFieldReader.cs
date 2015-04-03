@@ -1,12 +1,12 @@
 namespace DataCommander.Providers
 {
-	using System;
-	using System.Data;
+    using System;
+    using System.Data;
 
-	public sealed class DefaultDataFieldReader : IDataFieldReader
+    public sealed class DefaultDataFieldReader : IDataFieldReader
 	{
-		private IDataRecord dataRecord;
-		private int columnOrdinal;
+		private readonly IDataRecord dataRecord;
+		private readonly int columnOrdinal;
 
 		public DefaultDataFieldReader( IDataRecord dataRecord, int columnOrdinal )
 		{
@@ -22,7 +22,7 @@ namespace DataCommander.Providers
 
 				try
 				{
-					value = this.dataRecord.GetValue(columnOrdinal);					
+					value = this.dataRecord.GetValue(this.columnOrdinal);					
 				}
 				catch (Exception e)
 				{

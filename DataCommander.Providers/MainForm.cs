@@ -9,7 +9,6 @@ namespace DataCommander
     using System.Diagnostics.Contracts;
     using System.Drawing;
     using System.IO;
-    using System.Reflection;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Security.Principal;
     using System.Text;
@@ -21,15 +20,16 @@ namespace DataCommander
     using DataCommander.Foundation.Threading;
     using DataCommander.Foundation.Windows.Forms;
     using DataCommander.Providers;
+    using Application = DataCommander.Providers.Application;
 
     /// <summary>
     /// Summary description for MainForm.
     /// </summary>
     public class MainForm : Form
     {
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private Font font;
-        private StringCollection recentFileList = new StringCollection();
+        private readonly StringCollection recentFileList = new StringCollection();
 
         private MenuStrip mainMenu;
         private ToolStripMenuItem menuItem1;
@@ -93,9 +93,9 @@ namespace DataCommander
         {
             if (disposing)
             {
-                if (components != null)
+                if (this.components != null)
                 {
-                    components.Dispose();
+                    this.components.Dispose();
                 }
             }
 
@@ -296,7 +296,7 @@ namespace DataCommander
             this.mnuAbout.MergeIndex = 0;
             this.mnuAbout.Name = "mnuAbout";
             this.mnuAbout.Size = new System.Drawing.Size(204, 22);
-            this.mnuAbout.Text = "About Data Commander";
+            this.mnuAbout.Text = "About...";
             // 
             // toolStrip
             // 
@@ -419,7 +419,7 @@ namespace DataCommander
             this.MainMenuStrip = this.mainMenu;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "Data Commander 4.5";
+            this.Text = "Data Commander";
             this.mainMenu.ResumeLayout(false);
             this.mainMenu.PerformLayout();
             this.toolStrip.ResumeLayout(false);
@@ -437,28 +437,29 @@ namespace DataCommander
 
         private void Connect()
         {
-            ConnectionForm connectionForm = new ConnectionForm(statusBar);
+            ConnectionForm connectionForm = new ConnectionForm(this.statusBar);
 
             if (connectionForm.ShowDialog() == DialogResult.OK)
             {
                 ConnectionProperties connectionProperties = connectionForm.ConnectionProperties;
 
-                var queryForm = new QueryForm(
-                    MdiChildren.Length,
+                var queryForm = new QueryForm(this.MdiChildren.Length,
                     connectionProperties.Provider,
                     connectionProperties.ConnectionString,
-                    connectionProperties.Connection,
-                    statusBar);
+                    connectionProperties.Connection, this.statusBar);
 
                 queryForm.MdiParent = this;
-                queryForm.Font = font;
-                queryForm.FormClosing += new FormClosingEventHandler(queryForm_FormClosing);
+                if (this.font != null)
+                {
+                    queryForm.Font = this.font;
+                }
+                queryForm.FormClosing += new FormClosingEventHandler(this.queryForm_FormClosing);
 
-                switch (WindowState)
+                switch (this.WindowState)
                 {
                     case FormWindowState.Normal:
-                        int width = Math.Max(ClientSize.Width - 20, 100);
-                        int height = Math.Max(ClientSize.Height - 90, 50);
+                        int width = Math.Max(this.ClientSize.Width - 20, 100);
+                        int height = Math.Max(this.ClientSize.Height - 90, 50);
                         queryForm.ClientSize = new Size(width, height);
                         break;
 
@@ -479,7 +480,7 @@ namespace DataCommander
 
                 queryForm.Show();
 
-                if (WindowState == FormWindowState.Maximized)
+                if (this.WindowState == FormWindowState.Maximized)
                 {
                     queryForm.WindowState = FormWindowState.Maximized;
                 }
@@ -501,91 +502,66 @@ namespace DataCommander
             }
         }
 
-        private void mnuConnect_Click(object sender, System.EventArgs e)
+        private void mnuConnect_Click(object sender, EventArgs e)
         {
             this.Connect();
         }
 
-        private void mnuExit_Click(object sender, System.EventArgs e)
+        private void mnuExit_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void mnuAbout_Click(object sender, System.EventArgs e)
+        private void mnuAbout_Click(object sender, EventArgs e)
         {
-            var assembly = Assembly.GetEntryAssembly();
-            string path = assembly.Location;
-            DateTime lastWriteTime = File.GetLastWriteTime(path);
-            string dotNetFrameworkVersion = AppDomainMonitor.DotNetFrameworkVersion;
+            var aboutForm = new AboutForm();
+            aboutForm.ShowDialog();
 
-            string text = string.Format(@"Data Commander
-
-CLR version:		{0}
-.NET Framework version:	{1}
-Processor architecture:	{2}
-Build date:		{3}
-
-Copyright © 2002-2015 Csaba Bernáth
-e-mail: csaba.bernath@gmail.com
-
-https://github.com/csbernath/DataCommander
-
-Application Data file:
-{4}
-
-Environment.WorkingSet: {5} MB",
-                Environment.Version,
-                dotNetFrameworkVersion,
-                assembly.GetName().ProcessorArchitecture,
-                lastWriteTime.ToLongDateString(),
-                DataCommander.Providers.Application.Instance.FileName,
-                ((double)Environment.WorkingSet/(1024*1024)).ToString("N0"));
-            string caption = "About Data Commander";
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void SaveLayout()
         {
-            ApplicationData applicationData = DataCommander.Providers.Application.Instance.ApplicationData;
+            ApplicationData applicationData = Application.Instance.ApplicationData;
             FormPosition.Save(this, applicationData);
             ConfigurationNode folder = applicationData.CurrentType;
-            string[] array = new string[recentFileList.Count];
-            recentFileList.CopyTo(array, 0);
+            string[] array = new string[this.recentFileList.Count];
+            this.recentFileList.CopyTo(array, 0);
             folder.Attributes.SetAttributeValue("RecentFileList", array);
         }
 
         private void mnuRecentFile_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
-            int index = mnuRecentFileList.DropDownItems.IndexOf(menuItem);
-            int count = recentFileList.Count;
-            string path = recentFileList[count - index - 1];
-            LoadFiles(new string[] {path});
+            int index = this.mnuRecentFileList.DropDownItems.IndexOf(menuItem);
+            int count = this.recentFileList.Count;
+            string path = this.recentFileList[count - index - 1];
+            this.LoadFiles(new string[] {path});
         }
 
         private void CreateRecentFileListMenu()
         {
-            ToolStripItemCollection menuItems = mnuRecentFileList.DropDownItems;
+            ToolStripItemCollection menuItems = this.mnuRecentFileList.DropDownItems;
             menuItems.Clear();
 
-            int count = recentFileList.Count;
+            int count = this.recentFileList.Count;
 
             for (int i = 0; i < count; i++)
             {
-                string path = recentFileList[count - i - 1];
+                string path = this.recentFileList[count - i - 1];
                 string text = string.Format("{0} {1}", i + 1, path);
-                var menuItem = new ToolStripMenuItem(text, null, mnuRecentFile_Click);
+                var menuItem = new ToolStripMenuItem(text, null, this.mnuRecentFile_Click);
                 menuItems.Add(menuItem);
             }
         }
 
         private void LoadLayout()
         {
-            ApplicationData applicationData = DataCommander.Providers.Application.Instance.ApplicationData;
+            ApplicationData applicationData = Application.Instance.ApplicationData;
             FormPosition.Load(applicationData, this);
             ConfigurationNode folder = applicationData.CurrentType;
             string[] array;
-            bool contains = folder.Attributes.TryGetAttributeValue<string[]>("RecentFileList", out array);
+            bool contains = folder.Attributes.TryGetAttributeValue("RecentFileList", out array);
 
             if (contains && array != null)
             {
@@ -593,7 +569,7 @@ Environment.WorkingSet: {5} MB",
 
                 for (i = 0; i < array.Length; i++)
                 {
-                    recentFileList.Add(array[i]);
+                    this.recentFileList.Add(array[i]);
                 }
             }
 
@@ -602,7 +578,7 @@ Environment.WorkingSet: {5} MB",
 
             if (contains)
             {
-                font = DeserializeFont(base64);
+                this.font = DeserializeFont(base64);
             }
         }
 
@@ -697,17 +673,15 @@ Environment.WorkingSet: {5} MB",
                     connectionProperties.ConnectionName = null;
                     connectionProperties.ProviderName = provider.Name;
                     connectionProperties.ConnectionString = connectionString;
-                    var node = DataCommander.Providers.Application.Instance.ConnectionsConfigurationNode;
+                    var node = Application.Instance.ConnectionsConfigurationNode;
                     var subNode = new ConfigurationNode(null);
                     node.AddChildNode(subNode);
                     connectionProperties.Save(subNode);
 
-                    var queryForm = new QueryForm(
-                        MdiChildren.Length,
+                    var queryForm = new QueryForm(this.MdiChildren.Length,
                         provider,
                         connectionString,
-                        connection,
-                        statusBar);
+                        connection, this.statusBar);
 
                     queryForm.MdiParent = this;
                     queryForm.Font = this.font;
@@ -721,12 +695,12 @@ Environment.WorkingSet: {5} MB",
             }
         }
 
-        private void mnuOpen_Click(object sender, System.EventArgs e)
+        private void mnuOpen_Click(object sender, EventArgs e)
         {
             this.Open();
         }
 
-        private void mnuCollectGarbage_Click(object sender, System.EventArgs e)
+        private void mnuCollectGarbage_Click(object sender, EventArgs e)
         {
             GC.Collect();
 
@@ -746,18 +720,18 @@ Environment.WorkingSet: {5} MB",
         {
             int i = fileNames.Length - 1;
             string path = fileNames[i];
-            QueryForm queryForm = (QueryForm)ActiveMdiChild;
+            QueryForm queryForm = (QueryForm) this.ActiveMdiChild;
             queryForm.LoadFile(path);
 
-            int index = recentFileList.IndexOf(path);
+            int index = this.recentFileList.IndexOf(path);
 
             if (index >= 0)
             {
-                recentFileList.RemoveAt(index);
+                this.recentFileList.RemoveAt(index);
             }
 
-            recentFileList.Add(path);
-            CreateRecentFileListMenu();
+            this.recentFileList.Add(path);
+            this.CreateRecentFileListMenu();
         }
 
         public StatusStrip StatusBar
@@ -791,15 +765,15 @@ Environment.WorkingSet: {5} MB",
         private void mnuFont_Click(object sender, EventArgs e)
         {
             var fontDialog = new FontDialog();
-            fontDialog.Font = font;
+            fontDialog.Font = this.font;
             var dialogResult = fontDialog.ShowDialog();
 
             if (dialogResult == DialogResult.OK)
             {
-                font = fontDialog.Font;
-                ApplicationData applicationData = DataCommander.Providers.Application.Instance.ApplicationData;
+                this.font = fontDialog.Font;
+                ApplicationData applicationData = Application.Instance.ApplicationData;
                 ConfigurationNode propertyFolder = applicationData.CurrentType;
-                propertyFolder.Attributes.SetAttributeValue("Font", Serialize(font));
+                propertyFolder.Attributes.SetAttributeValue("Font", Serialize(this.font));
             }
         }
 
@@ -807,7 +781,7 @@ Environment.WorkingSet: {5} MB",
         {
             get
             {
-                return font;
+                return this.font;
             }
         }
 
@@ -879,8 +853,7 @@ Environment.WorkingSet: {5} MB",
                     this.MdiChildren.Length,
                     provider,
                     connectionString,
-                    connection,
-                    statusBar);
+                    connection, this.statusBar);
 
                 queryForm.MdiParent = this;
                 queryForm.Font = this.font;
@@ -890,8 +863,8 @@ Environment.WorkingSet: {5} MB",
 
         private void ShowContents()
         {
-            const string fileName = "DataCommander.docx";
-            Process.Start(fileName);
+            const string url = "https://github.com/csbernath/DataCommander/blob/master/README.md";
+            Process.Start(url);
         }
 
         private void contentsToolStripMenuItem_Click(object sender, EventArgs e)

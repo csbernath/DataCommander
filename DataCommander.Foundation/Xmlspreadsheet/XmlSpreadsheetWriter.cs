@@ -12,7 +12,7 @@
     public sealed class XmlSpreadsheetWriter
     {
         private XmlSpreadsheetTable table;
-        private XmlWriter xmlWriter;
+        private readonly XmlWriter xmlWriter;
         private int tableIndex = -1;
 
         /// <summary>

@@ -1,6 +1,5 @@
 namespace DataCommander.Foundation.Text
 {
-    using System;
     using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
 

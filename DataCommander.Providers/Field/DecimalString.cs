@@ -15,22 +15,22 @@ namespace DataCommander
 			{
 				intValue = str.Substring( 0, index );
 				string fracValue = str.Substring( index + 1 );
-				scale = (byte) fracValue.Length;
+			    this.scale = (byte) fracValue.Length;
 			}
 			else
 			{
 				intValue = str;
-				scale = 0;
+			    this.scale = 0;
 			}
 
-			precision = (byte) (intValue.Length + scale);
+		    this.precision = (byte) (intValue.Length + this.scale);
 		}
 
 		public byte Precision
 		{
 			get
 			{
-				return precision;
+				return this.precision;
 			}
 		}
 
@@ -38,11 +38,11 @@ namespace DataCommander
 		{
 			get
 			{
-				return scale;
+				return this.scale;
 			}
 		}
 
-		private byte precision;
-		private byte scale;
+		private readonly byte precision;
+		private readonly byte scale;
 	}
 }

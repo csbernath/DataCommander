@@ -12,7 +12,7 @@ namespace DataCommander.Foundation.Configuration
     /// </summary>
     public static class AppSettings
     {
-        private static Lazy<NameValueCollectionReader> instance = new Lazy<NameValueCollectionReader>(CreateInstance);
+        private static readonly Lazy<NameValueCollectionReader> instance = new Lazy<NameValueCollectionReader>(CreateInstance);
 
         private static NameValueCollectionReader CreateInstance()
         {
@@ -56,7 +56,7 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         private sealed class Reader
         {
-            private NameValueCollection nameValueCollection;
+            private readonly NameValueCollection nameValueCollection;
 
             public Reader(NameValueCollection nameValueCollection)
             {
@@ -78,8 +78,8 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         private sealed class PrefixedReader
         {
-            private NameValueCollection nameValueCollection;
-            private string prefix;
+            private readonly NameValueCollection nameValueCollection;
+            private readonly string prefix;
 
             public PrefixedReader(NameValueCollection nameValueCollection, string prefix)
             {

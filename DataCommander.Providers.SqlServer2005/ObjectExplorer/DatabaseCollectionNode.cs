@@ -5,11 +5,10 @@
     using System.Data.SqlClient;
     using System.Diagnostics.Contracts;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
 
     internal sealed class DatabaseCollectionNode : ITreeNode
     {
-        private ServerNode server;
+        private readonly ServerNode server;
 
         public DatabaseCollectionNode(ServerNode server)
         {

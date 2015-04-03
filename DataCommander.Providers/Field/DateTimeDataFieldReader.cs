@@ -1,12 +1,12 @@
 ﻿namespace DataCommander.Providers
 {
-	using System;
-	using System.Data;
+    using System;
+    using System.Data;
 
-	public sealed class DateTimeDataFieldReader : IDataFieldReader
+    public sealed class DateTimeDataFieldReader : IDataFieldReader
 	{
-		private IDataRecord dataRecord;
-		private int columnOrdinal;
+		private readonly IDataRecord dataRecord;
+		private readonly int columnOrdinal;
 
 		public DateTimeDataFieldReader(
 			IDataRecord dataRecord,
@@ -22,13 +22,13 @@
 			{
 				object value;
 
-				if (dataRecord.IsDBNull( columnOrdinal ))
+				if (this.dataRecord.IsDBNull(this.columnOrdinal ))
 				{
 					value = DBNull.Value;
 				}
 				else
 				{
-					DateTime dateTime = dataRecord.GetDateTime( columnOrdinal );
+					DateTime dateTime = this.dataRecord.GetDateTime(this.columnOrdinal );
 					value = new DateTimeField( dateTime );
 				}
 

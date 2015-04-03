@@ -100,7 +100,7 @@
             ConfigurationNode node = Settings.CurrentType;
             ConfigurationAttributeCollection attributes = node.Attributes;
             string fileName;
-            bool contains = attributes.TryGetAttributeValue<string>("FileName", out fileName);
+            bool contains = attributes.TryGetAttributeValue("FileName", out fileName);
             string arguments = '"' + localFileName + '"';
             var startInfo = new ProcessStartInfo(fileName, arguments);
             Process.Start(startInfo);

@@ -6,7 +6,6 @@
     using System.Linq;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
-    using DataCommander.Providers;
 
     internal sealed class LoginCollectionNode : ITreeNode
     {

@@ -23,6 +23,6 @@ namespace DataCommander.Foundation.Threading
             }
         }
 
-        private object item;
+        private readonly object item;
     }
 }

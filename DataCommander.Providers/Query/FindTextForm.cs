@@ -1,23 +1,25 @@
 namespace DataCommander
 {
+    using System;
+    using System.ComponentModel;
     using System.Windows.Forms;
 
     /// <summary>
     /// Summary description for FindForm.
     /// </summary>
-    public class FindTextForm : System.Windows.Forms.Form
+    public class FindTextForm : Form
     {
-        private System.Windows.Forms.ComboBox cbText;
-        private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckBox cbMatchCase;
-        private System.Windows.Forms.CheckBox cbMatchWholeWord;
+        private ComboBox cbText;
+        private Button btnOK;
+        private Button btnCancel;
+        private Label label1;
+        private CheckBox cbMatchCase;
+        private CheckBox cbMatchWholeWord;
 
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.Container components = null;
+        private readonly Container components = null;
 
         /// <summary>
         /// 
@@ -27,7 +29,7 @@ namespace DataCommander
             //
             // Required for Windows Form Designer support
             //
-            InitializeComponent();
+            this.InitializeComponent();
 
             //
             // TODO: Add any constructor code after InitializeComponent call
@@ -59,12 +61,12 @@ namespace DataCommander
             {
                 RichTextBoxFinds richTextBoxFinds = RichTextBoxFinds.None;
 
-                if (cbMatchCase.Checked)
+                if (this.cbMatchCase.Checked)
                 {
                     richTextBoxFinds |= RichTextBoxFinds.MatchCase;
                 }
 
-                if (cbMatchWholeWord.Checked)
+                if (this.cbMatchWholeWord.Checked)
                 {
                     richTextBoxFinds |= RichTextBoxFinds.WholeWord;
                 }
@@ -80,9 +82,9 @@ namespace DataCommander
         {
             if (disposing)
             {
-                if (components != null)
+                if (this.components != null)
                 {
-                    components.Dispose();
+                    this.components.Dispose();
                 }
             }
 
@@ -177,9 +179,9 @@ namespace DataCommander
         }
         #endregion
 
-        private void btnOK_Click(object sender, System.EventArgs e)
+        private void btnOK_Click(object sender, EventArgs e)
         {
-            string text = cbText.Text;
+            string text = this.cbText.Text;
 
             if (text.Length > 0)
             {
@@ -187,11 +189,11 @@ namespace DataCommander
                 {
                     this.Cursor = Cursors.WaitCursor;
 
-                    int i = cbText.FindStringExact(text);
+                    int i = this.cbText.FindStringExact(text);
 
                     if (i < 0)
                     {
-                        cbText.Items.Insert(0, text);
+                        this.cbText.Items.Insert(0, text);
                     }
                 }
                 finally
@@ -201,9 +203,9 @@ namespace DataCommander
             }
         }
 
-        private void FindTextForm_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void FindTextForm_Closing(object sender, CancelEventArgs e)
         {
-            cbText.Focus();
+            this.cbText.Focus();
         }
     }
 }

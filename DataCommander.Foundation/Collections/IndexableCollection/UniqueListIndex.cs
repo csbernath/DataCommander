@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Foundation.Collections
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
 
@@ -11,9 +12,9 @@
     /// <typeparam name="T"></typeparam>
     public class UniqueListIndex<TKey, T> : ICollectionIndex<T>
     {
-        private string name;
+        private readonly string name;
         private Func<T, TKey> keySelector;
-        private IList<T> list;
+        private readonly IList<T> list;
 
         /// <summary>
         /// 
@@ -153,7 +154,7 @@
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return this.list.GetEnumerator();
         }

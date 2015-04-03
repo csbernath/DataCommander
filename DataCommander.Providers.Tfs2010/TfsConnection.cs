@@ -2,15 +2,14 @@
 {
     using System;
     using System.Data;
-    using DataCommander.Providers;
     using Microsoft.TeamFoundation.Client;
     using Microsoft.TeamFoundation.VersionControl.Client;
     using Microsoft.TeamFoundation.VersionControl.Common;
 
     internal sealed class TfsConnection : ConnectionBase
     {
-        private TfsTeamProjectCollection tfsTeamProjectCollection;
-        private VersionControlServer versionControlServer;
+        private readonly TfsTeamProjectCollection tfsTeamProjectCollection;
+        private readonly VersionControlServer versionControlServer;
         private string connectionName;
         private ConnectionState state;
 

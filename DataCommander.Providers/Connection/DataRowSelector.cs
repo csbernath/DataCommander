@@ -18,13 +18,13 @@ namespace DataCommander.Providers
 
         public float GetWidth(DataRow row)
         {
-            string s = row[column].ToString();
+            string s = row[this.column].ToString();
             int length = s.Length;
             float width;
 
             if (length <= 256)
             {
-                width = graphics.MeasureString(s, font).Width;
+                width = this.graphics.MeasureString(s, this.font).Width;
             }
             else
             {

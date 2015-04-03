@@ -4,12 +4,13 @@
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Linq;
+    using System.Windows.Forms;
     using Microsoft.TeamFoundation.VersionControl.Client;
     using Microsoft.TeamFoundation.VersionControl.Common;
 
     internal sealed class TfsProject : ITreeNode
     {
-        private Item item;
+        private readonly Item item;
 
         public TfsProject(Item item)
         {
@@ -87,7 +88,7 @@
             }
         }
 
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu
         {
             get
             {

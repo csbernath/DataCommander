@@ -33,7 +33,7 @@ namespace DataCommander.Foundation.IO
             Contract.Requires<ArgumentNullException>( outputStream != null );
             Contract.Requires<ArgumentOutOfRangeException>( bufferSize > 0 );
 
-            var buffer = new Byte[bufferSize];
+            var buffer = new byte[bufferSize];
 
             while (true)
             {

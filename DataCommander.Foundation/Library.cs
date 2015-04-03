@@ -1,6 +1,5 @@
 namespace DataCommander.Foundation
 {
-    using System;
     using System.Text;
 
     /// <exclude/>

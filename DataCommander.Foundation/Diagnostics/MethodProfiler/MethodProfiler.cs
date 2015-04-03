@@ -20,12 +20,12 @@
         /// </summary>
         public const string ConditionString = "FOUNDATION_METHODPROFILER";
 
-        private static MethodCollection methods = new MethodCollection();
-        private static Dictionary<string, MethodFraction> methodFractions = new Dictionary<string, MethodFraction>();
-        private static MethodInvocationStackCollection stacks = new MethodInvocationStackCollection();
-        private static AsyncTextWriter textWriter;
-        private static MethodFormatter methodFormatter = new MethodFormatter();
-        private static MethodProfilerMethodInvocationFormatter methodProfilerMethodInvocationFormatter = new MethodProfilerMethodInvocationFormatter();
+        private static readonly MethodCollection methods = new MethodCollection();
+        private static readonly Dictionary<string, MethodFraction> methodFractions = new Dictionary<string, MethodFraction>();
+        private static readonly MethodInvocationStackCollection stacks = new MethodInvocationStackCollection();
+        private static readonly AsyncTextWriter textWriter;
+        private static readonly MethodFormatter methodFormatter = new MethodFormatter();
+        private static readonly MethodProfilerMethodInvocationFormatter methodProfilerMethodInvocationFormatter = new MethodProfilerMethodInvocationFormatter();
 
         static MethodProfiler()
         {

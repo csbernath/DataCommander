@@ -15,7 +15,7 @@ namespace DataCommander.Providers.SqlServer2005
         {
             get
             {
-                return name;
+                return this.name;
             }
         }
     
@@ -51,7 +51,7 @@ select u.name from {0}..sysmembers m
 join {0}..sysusers u
 on m.memberuid = u.uid
 where m.groupuid = @uid
-order by u.name",database.Name,name);
+order by u.name", this.database.Name, this.name);
 
                 return query;
             }
@@ -65,7 +65,7 @@ order by u.name",database.Name,name);
             }
         }
 
-        DatabaseNode database;
-        string       name;
+        readonly DatabaseNode database;
+        readonly string       name;
     }
 }

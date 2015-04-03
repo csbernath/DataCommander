@@ -1,5 +1,6 @@
 ﻿namespace DataCommander.Foundation.Linq
 {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
@@ -17,7 +18,7 @@
         /// <returns></returns>
         public static IEnumerable<T> AsEnumerable<T>(this IEnumerator<T> enumerator)
         {
-            Contract.Requires(enumerator != null);
+            Contract.Requires<ArgumentNullException>(enumerator != null);
 
             return new Enumerable<T>(enumerator);
         }

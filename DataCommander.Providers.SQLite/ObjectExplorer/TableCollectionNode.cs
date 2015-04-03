@@ -2,11 +2,12 @@ namespace DataCommander.Providers.SQLite
 {
     using System.Collections.Generic;
     using System.Data;
+    using System.Windows.Forms;
     using DataCommander.Foundation.Data;
 
     internal sealed class TableCollectionNode : ITreeNode
     {
-        private DatabaseNode databaseNode;
+        private readonly DatabaseNode databaseNode;
 
         public TableCollectionNode(DatabaseNode databaseNode)
         {
@@ -43,8 +44,8 @@ from
 	union
 	select	'sqlite_master'
 ) t
-order by name collate nocase", databaseNode.Name);
-            Database database = new Database(databaseNode.Connection);
+order by name collate nocase", this.databaseNode.Name);
+            Database database = new Database(this.databaseNode.Connection);
             DataTable table = database.ExecuteDataTable(commandText);
             DataRowCollection rows = table.Rows;
             int count = rows.Count;
@@ -54,7 +55,7 @@ order by name collate nocase", databaseNode.Name);
             {
                 DataRow row = rows[i];
                 string name = (string)row["name"];
-                nodes[i] = new TableNode(databaseNode, name);
+                nodes[i] = new TableNode(this.databaseNode, name);
             }
 
             return nodes;
@@ -76,7 +77,7 @@ order by name collate nocase", databaseNode.Name);
             }
         }
 
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu
         {
             get
             {

@@ -1,6 +1,4 @@
-﻿using DataCommander.Foundation.Data;
-
-namespace DataCommander.Providers
+﻿namespace DataCommander.Providers
 {
     using System;
     using System.Collections.Generic;
@@ -8,6 +6,7 @@ namespace DataCommander.Providers
     using System.Data.Common;
     using System.Diagnostics.Contracts;
     using System.Xml;
+    using DataCommander.Foundation.Data;
 
     [ContractClassFor(typeof (IProvider))]
     internal abstract class IProviderContract : IProvider

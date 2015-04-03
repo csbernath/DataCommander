@@ -62,15 +62,15 @@ namespace DataCommander.Foundation.Data.SqlClient
     {
         #region Private Fields
 
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private static IInternalConnectionHelper internalConnectionHelper;
-        private WorkerThread thread;
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly IInternalConnectionHelper internalConnectionHelper;
+        private readonly WorkerThread thread;
         private int connectionCounter;
-        private SafeSqlConnection connection;
-        private Dictionary<int, Dictionary<string, SqLoglCommandExecution>> applications = new Dictionary<int, Dictionary<string, SqLoglCommandExecution>>();
-        private Dictionary<object, SqlLogConnection> connections = new Dictionary<object, SqlLogConnection>();
-        private Queue<ISqlLogItem> queue = new Queue<ISqlLogItem>();
-        private AutoResetEvent queueEvent = new AutoResetEvent( false );
+        private readonly SafeSqlConnection connection;
+        private readonly Dictionary<int, Dictionary<string, SqLoglCommandExecution>> applications = new Dictionary<int, Dictionary<string, SqLoglCommandExecution>>();
+        private readonly Dictionary<object, SqlLogConnection> connections = new Dictionary<object, SqlLogConnection>();
+        private readonly Queue<ISqlLogItem> queue = new Queue<ISqlLogItem>();
+        private readonly AutoResetEvent queueEvent = new AutoResetEvent( false );
 
         #endregion
 
@@ -224,7 +224,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             sb.Append( ',' );
             sb.Append( startDate.ToTSqlDateTime() );
             string commandText = sb.ToString();
-            int applicationId = 0;
+            int applicationId;
 
             if (this.connection.State != ConnectionState.Open)
             {

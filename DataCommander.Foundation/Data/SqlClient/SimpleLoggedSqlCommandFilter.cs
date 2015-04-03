@@ -2,13 +2,14 @@ namespace DataCommander.Foundation.Data.SqlClient
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using DataCommander.Foundation.Configuration;
     using DataCommander.Foundation.Diagnostics;
 
     internal sealed class SimpleLoggedSqlCommandFilter : ISqlLoggedSqlCommandFilter
     {
-        private ConfigurationSection section;
-        private string nodeName;
+        private readonly ConfigurationSection section;
+        private readonly string nodeName;
         private SimpleLoggedSqlCommandFilterRule[] rules;
 
         public SimpleLoggedSqlCommandFilter(
@@ -87,7 +88,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         bool ISqlLoggedSqlCommandFilter.Contains(
             string userName,
             string hostName,
-            System.Data.IDbCommand command)
+            IDbCommand command)
         {
             bool contains;
 

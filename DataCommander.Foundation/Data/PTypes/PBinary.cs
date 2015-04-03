@@ -17,7 +17,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public PBinary( Byte[] value )
+        public PBinary( byte[] value )
         {
             this.sql = new SqlBinary( value );
             this.type = PValueType.Value;
@@ -36,7 +36,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PBinary( Byte[] value )
+        public static implicit operator PBinary( byte[] value )
         {
             return new PBinary( value );
         }
@@ -46,9 +46,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator Byte[]( PBinary value )
+        public static implicit operator byte[]( PBinary value )
         {
-            return (Byte[]) value.sql;
+            return (byte[]) value.sql;
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace DataCommander.Foundation.Data.PTypes
                 else
                 {
                     this.type = PValueType.Value;
-                    this.sql = (Byte[]) value;
+                    this.sql = (byte[]) value;
                 }
             }
         }

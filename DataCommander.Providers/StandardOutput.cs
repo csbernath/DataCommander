@@ -4,6 +4,7 @@ namespace DataCommander.Providers
     using System.Data.OleDb;
     using System.IO;
     using System.Text;
+    using ADODB;
     using DataCommander.Foundation.Windows.Forms;
 
     /// <summary>
@@ -11,8 +12,8 @@ namespace DataCommander.Providers
     /// </summary>
     internal sealed class StandardOutput : IStandardOutput
     {
-        private TextWriter textWriter;
-        private QueryForm queryForm;
+        private readonly TextWriter textWriter;
+        private readonly QueryForm queryForm;
 
         public StandardOutput(
             TextWriter textWriter,
@@ -48,12 +49,12 @@ namespace DataCommander.Providers
                 }
             }
 
-            textWriter.WriteLine(sb.ToString());
+            this.textWriter.WriteLine(sb.ToString());
         }
 
         public void Write(object arg)
         {
-            ADODB.Recordset rs = arg as ADODB.Recordset;
+            Recordset rs = arg as Recordset;
 
             if (rs != null)
             {
@@ -71,7 +72,7 @@ namespace DataCommander.Providers
                     try
                     {
                         objRS = rs.NextRecordset(out recordsAffected);
-                        textWriter.WriteLine(recordsAffected + " row(s) affected.");
+                        this.textWriter.WriteLine(recordsAffected + " row(s) affected.");
                     }
                     catch
                     {
@@ -79,13 +80,13 @@ namespace DataCommander.Providers
                     }
                 }
 
-                queryForm.Invoke( () => queryForm.ShowDataSet( dataSet ) );
+                this.queryForm.Invoke( () => this.queryForm.ShowDataSet( dataSet ) );
             
             }
             else
             {
                 string s = arg.ToString();
-                textWriter.Write(s);
+                this.textWriter.Write(s);
             }
         }
     }

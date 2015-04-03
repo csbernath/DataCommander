@@ -1,8 +1,8 @@
-using System.Data;
-
 namespace DataCommander.Providers.Wmi
 {
-  class WmiCommand : IDbCommand
+    using System.Data;
+
+    class WmiCommand : IDbCommand
   {
     public WmiCommand(WmiConnection connection)
     {
@@ -15,7 +15,7 @@ namespace DataCommander.Providers.Wmi
 
     public void Cancel()
     {
-      cancelled = true;
+        this.cancelled = true;
     }
 
     public IDbDataParameter CreateParameter()
@@ -51,11 +51,11 @@ namespace DataCommander.Providers.Wmi
     {
       get
       {
-        return commandText;
+        return this.commandText;
       }
       set
       {
-        commandText = value;
+          this.commandText = value;
       }
     }
     public int CommandTimeout
@@ -84,7 +84,7 @@ namespace DataCommander.Providers.Wmi
     {
       get
       {
-        return connection;
+        return this.connection;
       }
       set
       {
@@ -95,7 +95,7 @@ namespace DataCommander.Providers.Wmi
     {
       get
       {
-        return connection;
+        return this.connection;
       }
     }
     
@@ -133,11 +133,11 @@ namespace DataCommander.Providers.Wmi
     {
       get
       {
-        return cancelled;
+        return this.cancelled;
       }
     }
 
-    WmiConnection connection;
+      readonly WmiConnection connection;
     string        commandText;
     bool          cancelled = false;
   }

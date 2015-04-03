@@ -7,9 +7,9 @@ namespace DataCommander.Providers.SQLite
     using System.Data.SQLite;
     using System.Linq;
     using System.Text;
+    using System.Xml;
     using DataCommander.Foundation.Configuration;
     using DataCommander.Foundation.Data;
-    using DataCommander.Providers;
 
     public sealed class SQLiteProvider : IProvider
     {
@@ -54,27 +54,27 @@ namespace DataCommander.Providers.SQLite
             }
         }
 
-        void IProvider.DeriveParameters(System.Data.IDbCommand command)
+        void IProvider.DeriveParameters(IDbCommand command)
         {
             throw new Exception("The method or operation is not implemented.");
         }
 
-        DataParameterBase IProvider.GetDataParameter(System.Data.IDataParameter parameter)
+        DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
         {
             throw new Exception("The method or operation is not implemented.");
         }
 
-        System.Data.DataTable IProvider.GetParameterTable(System.Data.IDataParameterCollection parameters)
+        DataTable IProvider.GetParameterTable(IDataParameterCollection parameters)
         {
             throw new Exception("The method or operation is not implemented.");
         }
 
-        System.Xml.XmlReader IProvider.ExecuteXmlReader(System.Data.IDbCommand command)
+        XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
         {
             throw new Exception("The method or operation is not implemented.");
         }
 
-        System.Data.DataTable IProvider.GetSchemaTable(System.Data.IDataReader dataReader)
+        DataTable IProvider.GetSchemaTable(IDataReader dataReader)
         {
             DataTable table = null;
             DataTable schemaTable = dataReader.GetSchemaTable();
@@ -96,7 +96,7 @@ namespace DataCommander.Providers.SQLite
                     DataRow row = schemaTable.Rows[i];
                     DataColumnSchema dataColumnSchema = new DataColumnSchema(row);
                     int columnOrdinal = dataColumnSchema.ColumnOrdinal + 1;
-                    bool isKey = Database.GetValue<bool>(row["isKey"], false);
+                    bool isKey = Database.GetValue(row["isKey"], false);
                     string pk = string.Empty;
 
                     if (isKey)
@@ -140,12 +140,12 @@ namespace DataCommander.Providers.SQLite
             return typeof (object);
         }
 
-        IDataReaderHelper IProvider.CreateDataReaderHelper(System.Data.IDataReader dataReader)
+        IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
         {
             return new SQLiteDataReaderHelper(dataReader);
         }
 
-        System.Data.Common.DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, System.Data.IDbConnection connection)
+        DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection)
         {
             throw new Exception("The method or operation is not implemented.");
         }

@@ -4,8 +4,6 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Data;
     using System.Data.SqlClient;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
-    using DataCommander.Providers;
 
     internal sealed class FunctionCollectionNode : ITreeNode
     {
@@ -41,7 +39,7 @@ join [{0}].sys.objects o (nolock)
 on	s.schema_id = o.schema_id
 where o.type in('FN','IF','TF')
 order by 1,2";
-            commandText = string.Format(commandText, database.Name);
+            commandText = string.Format(commandText, this.database.Name);
             var list = new List<ITreeNode>();
             string connectionString = this.database.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection(connectionString))
@@ -54,7 +52,7 @@ order by 1,2";
                         string owner = reader.GetString(0);
                         string name = reader.GetString(1);
                         string xtype = reader.GetString(2);
-                        FunctionNode node = new FunctionNode(database, owner, name, xtype);
+                        FunctionNode node = new FunctionNode(this.database, owner, name, xtype);
                         list.Add(node);
                     }
                 }
@@ -89,6 +87,6 @@ order by 1,2";
             }
         }
 
-        DatabaseNode database;
+        readonly DatabaseNode database;
     }
 }

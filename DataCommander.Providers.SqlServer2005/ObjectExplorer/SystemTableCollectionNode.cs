@@ -5,11 +5,10 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Data;
     using System.Data.SqlClient;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
 
     internal sealed class SystemTableCollectionNode : ITreeNode
     {
-        private DatabaseNode databaseNode;
+        private readonly DatabaseNode databaseNode;
 
         public SystemTableCollectionNode(DatabaseNode databaseNode)
         {
@@ -97,7 +96,7 @@ order by [Schema],[Name]", this.databaseNode.Name);
         {
             get
             {
-                return databaseNode;
+                return this.databaseNode;
             }
         }
 

@@ -3,11 +3,12 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Diagnostics.Contracts;
+    using System.Windows.Forms;
     using DataCommander.Foundation.Data;
 
     internal sealed class IndexCollectionNode : ITreeNode
     {
-        private TableNode tableNode;
+        private readonly TableNode tableNode;
 
         public IndexCollectionNode(TableNode tableNode)
         {
@@ -73,7 +74,7 @@
             }
         }
 
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu
         {
             get
             {

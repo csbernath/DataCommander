@@ -5,9 +5,9 @@ namespace DataCommander.Providers.SqlServer2005
 
     sealed class ShortStringFieldReader : IDataFieldReader
     {
-        private IDataRecord dataRecord;
-        private int columnOrdinal;
-        private SqlDbType sqlDbType;
+        private readonly IDataRecord dataRecord;
+        private readonly int columnOrdinal;
+        private readonly SqlDbType sqlDbType;
 
         public ShortStringFieldReader(
             IDataRecord dataRecord,

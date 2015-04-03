@@ -1,7 +1,5 @@
 namespace DataCommander.Foundation.Data
 {
-    using DataCommander.Foundation.Data.SqlClient;
-
     /// <summary>
     /// 
     /// </summary>

@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Foundation.Text
 {
     using System;
+    using System.Diagnostics;
     using System.Text;
 
     /// <summary>
@@ -88,7 +89,7 @@
                 while (c >= '0' && c <= '9' && num2 < 1000000);
                 if (num2 >= args.Length)
                 {
-                    System.Diagnostics.Trace.WriteLine(string.Format("ERROR: num2 >= args.Length, {0} >= {1}, args[{0}] is missing", num2, args.Length));
+                    Trace.WriteLine(string.Format("ERROR: num2 >= args.Length, {0} >= {1}, args[{0}] is missing", num2, args.Length));
                     break;
                 }
                 while (num < length && (c = format[num]) == ' ')

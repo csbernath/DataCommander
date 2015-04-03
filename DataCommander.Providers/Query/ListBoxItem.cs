@@ -1,11 +1,11 @@
-using System;
-
 namespace DataCommander.Providers
 {
+    using System;
+
     internal sealed class ListBoxItem<T>
     {
-        private T item;
-        private Func<T, string> toString;
+        private readonly T item;
+        private readonly Func<T, string> toString;
 
         public ListBoxItem(T item, Func<T, string> toString)
         {
@@ -17,7 +17,7 @@ namespace DataCommander.Providers
         {
             get
             {
-                return item;
+                return this.item;
             }
         }
 

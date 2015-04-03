@@ -8,7 +8,7 @@ namespace DataCommander.Foundation.Collections
     /// </summary>
     public sealed class PooledObject<T> : IDisposable
     {
-        private ObjectPool<T> pool;
+        private readonly ObjectPool<T> pool;
         private readonly ObjectPoolItem<T> item;
 
         /// <summary>

@@ -4,11 +4,10 @@
     using System.Diagnostics.Contracts;
     using System.Windows.Forms;
     using DataCommander.Foundation.Linq;
-    using DataCommander.Providers;
 
     internal sealed class SecurityNode : ITreeNode
     {
-        private ServerNode server;
+        private readonly ServerNode server;
 
         public SecurityNode(ServerNode serverNode)
         {

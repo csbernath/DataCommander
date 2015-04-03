@@ -1,24 +1,26 @@
 namespace DataCommander.Providers
 {
     using System;
+    using System.ComponentModel;
     using System.Data.Common;
     using System.Diagnostics;
     using System.Threading;
     using System.Windows.Forms;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Windows.Forms;
+    using Timer = System.Windows.Forms.Timer;
 
     /// <summary>
     /// Summary description for OpenConnectionForm.
     /// </summary>
-    internal sealed class OpenConnectionForm : System.Windows.Forms.Form
+    internal sealed class OpenConnectionForm : Form
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private Button btnCancel;
         private TextBox tbTimer;
         private TextBox textBox;
-        private System.Windows.Forms.Timer timer;
-        private System.ComponentModel.IContainer components;
+        private Timer timer;
+        private IContainer components;
         private readonly ConnectionProperties connectionProperties;
         private readonly AsyncConnector connector;
         private readonly Stopwatch stopwatch = new Stopwatch();
@@ -43,7 +45,7 @@ namespace DataCommander.Providers
             else
             {
                 log.Write(LogLevel.Error, exception.ToString());
-                IProvider provider = connectionProperties.Provider;
+                IProvider provider = this.connectionProperties.Provider;
                 string message;
 
                 if (provider != null)
@@ -72,7 +74,7 @@ namespace DataCommander.Providers
                 dialogResult = DialogResult.Cancel;
             }
 
-            DialogResult = dialogResult;
+            this.DialogResult = dialogResult;
         }
 
         /// <summary>
@@ -81,7 +83,7 @@ namespace DataCommander.Providers
         /// <param name="exception"></param>
         private void EndConnectionOpen(Exception exception)
         {
-            timer.Enabled = false;
+            this.timer.Enabled = false;
             this.handleCreatedEvent.WaitOne();
             this.Invoke(() => this.EndConnectionOpenInvoke(exception));
         }
@@ -93,10 +95,10 @@ namespace DataCommander.Providers
         public OpenConnectionForm(ConnectionProperties connectionProperties)
         {
             this.InitializeComponent();
-            this.HandleCreated += OpenConnectionForm_HandleCreated;
+            this.HandleCreated += this.OpenConnectionForm_HandleCreated;
 
-            stopwatch.Start();
-            timer.Enabled = true;
+            this.stopwatch.Start();
+            this.timer.Enabled = true;
 
             var dbConnectionStringBuilder = new DbConnectionStringBuilder();
             dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
@@ -105,7 +107,7 @@ namespace DataCommander.Providers
             object userId;
             dbConnectionStringBuilder.TryGetValue(ConnectionStringProperty.UserId, out userId);
             string dataSource = (string)dataSourceObject;
-            textBox.Text = string.Format("Connection name: {0}\r\nProvider name: {1}\r\nData Source: {2}\r\nUserId: {3}", connectionProperties.ConnectionName,
+            this.textBox.Text = string.Format("Connection name: {0}\r\nProvider name: {1}\r\nData Source: {2}\r\nUserId: {3}", connectionProperties.ConnectionName,
                 connectionProperties.ProviderName, dataSource, userId);
             this.connectionProperties = connectionProperties;
             this.Cursor = Cursors.AppStarting;
@@ -125,9 +127,9 @@ namespace DataCommander.Providers
         {
             if (disposing)
             {
-                if (components != null)
+                if (this.components != null)
                 {
-                    components.Dispose();
+                    this.components.Dispose();
                 }
             }
 
@@ -204,14 +206,14 @@ namespace DataCommander.Providers
 
         #endregion
 
-        private void btnCancel_Click(object sender, System.EventArgs e)
+        private void btnCancel_Click(object sender, EventArgs e)
         {
-            connector.Cancel();
+            this.connector.Cancel();
         }
 
-        private void timer_Tick(object sender, System.EventArgs e)
+        private void timer_Tick(object sender, EventArgs e)
         {
-            long ticks = stopwatch.ElapsedTicks;
+            long ticks = this.stopwatch.ElapsedTicks;
             this.tbTimer.Text = StopwatchTimeSpan.ToString(ticks, 0);
         }
     }

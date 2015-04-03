@@ -17,7 +17,7 @@
         private int incrementedTickCount;
         private DateTime incrementedDateTime;
 
-        private static SystemTime defaultSystemTime = new SystemTime(increment: 16, adjustment: 60*1000);
+        private static readonly SystemTime defaultSystemTime = new SystemTime(increment: 16, adjustment: 60*1000);
 
         static SystemTime()
         {

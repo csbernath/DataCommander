@@ -12,19 +12,19 @@
         /// <summary>
         /// 
         /// </summary>
-        private const Byte True = 1;
+        private const byte True = 1;
 
         /// <summary>
         /// 
         /// </summary>
-        private const Byte False = 0;
+        private const byte False = 0;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static Byte ToTSqlBit( this bool source )
+        public static byte ToTSqlBit(this bool source)
         {
             return source ? True : False;
         }
@@ -34,7 +34,7 @@
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static string ToTSqlDateTime( this DateTime source )
+        public static string ToTSqlDateTime(this DateTime source)
         {
             TimeSpan timeOfDay = source.TimeOfDay;
             string format;
@@ -55,17 +55,17 @@
                 }
             }
 
-            return string.Format( "'{0}'", source.ToString( format, CultureInfo.InvariantCulture ) );
+            return string.Format("'{0}'", source.ToString(format, CultureInfo.InvariantCulture));
         }
 
         /// <summary>
-        /// Converts a <see cref="System.Decimal"/> value to Microsoft SQL Server Decimal string.
+        /// Converts a <see cref="System.Decimal"/> value to Microsoft SQL Server decimal string.
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static string ToTSqlDecimal( this decimal source )
+        public static string ToTSqlDecimal(this decimal source)
         {
-            return source.ToString( NumberFormatInfo.InvariantInfo );
+            return source.ToString(NumberFormatInfo.InvariantInfo);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static string ToTSqlInt( this int? source )
+        public static string ToTSqlInt(this int? source)
         {
             return source != null ? source.ToString() : SqlNull.NullString;
         }
@@ -83,12 +83,12 @@
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static string ToTSqlVarChar( this string source )
+        public static string ToTSqlVarChar(this string source)
         {
             string target;
             if (source != null)
             {
-                target = "'" + source.Replace( "'", "''" ) + "'";
+                target = "'" + source.Replace("'", "''") + "'";
             }
             else
             {
@@ -102,12 +102,12 @@
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static string ToTSqlNVarChar( this string source )
+        public static string ToTSqlNVarChar(this string source)
         {
             string target;
             if (source != null)
             {
-                target = "N'" + source.Replace( "'", "''" ) + "'";
+                target = "N'" + source.Replace("'", "''") + "'";
             }
             else
             {
@@ -121,7 +121,7 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static SqlDateTime ToSqlDateTime( this DateTime? value )
+        public static SqlDateTime ToSqlDateTime(this DateTime? value)
         {
             SqlDateTime returnValue;
 
@@ -142,7 +142,7 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static SqlInt32 ToSqlInt32( this int? value )
+        public static SqlInt32 ToSqlInt32(this int? value)
         {
             SqlInt32 returnValue;
 

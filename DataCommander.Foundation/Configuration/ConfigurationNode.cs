@@ -16,18 +16,18 @@ namespace DataCommander.Foundation.Configuration
         public const Char Delimiter = '/';
 
         private string name;
-        private bool hasName;
+        private readonly bool hasName;
         private string description;
         private ConfigurationNode parent;
-        private ConfigurationNodeCollection childNodes = new ConfigurationNodeCollection();
-        private ConfigurationAttributeCollection attributes = new ConfigurationAttributeCollection();
+        private readonly ConfigurationNodeCollection childNodes = new ConfigurationNodeCollection();
+        private readonly ConfigurationAttributeCollection attributes = new ConfigurationAttributeCollection();
         private int index;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="name"></param>
-        public ConfigurationNode( string name )
+        public ConfigurationNode(string name)
         {
             this.name = name;
             this.hasName = name != null;
@@ -115,9 +115,9 @@ namespace DataCommander.Foundation.Configuration
         /// 
         /// </summary>
         /// <param name="childNode"></param>
-        public void AddChildNode( ConfigurationNode childNode )
+        public void AddChildNode(ConfigurationNode childNode)
         {
-            Contract.Requires( childNode.Parent == null );
+            Contract.Requires(childNode.Parent == null);
 
             if (childNode.name == null)
             {
@@ -125,7 +125,7 @@ namespace DataCommander.Foundation.Configuration
                 this.index++;
             }
 
-            this.childNodes.Add( childNode );
+            this.childNodes.Add(childNode);
             childNode.parent = this;
         }
 
@@ -134,9 +134,9 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="index"></param>
         /// <param name="childNode"></param>
-        public void InsertChildNode( int index, ConfigurationNode childNode )
+        public void InsertChildNode(int index, ConfigurationNode childNode)
         {
-            Contract.Requires( childNode.Parent == null );
+            Contract.Requires(childNode.Parent == null);
 
             if (childNode.name == null)
             {
@@ -144,7 +144,7 @@ namespace DataCommander.Foundation.Configuration
                 index++;
             }
 
-            this.childNodes.Insert( index, childNode );
+            this.childNodes.Insert(index, childNode);
             childNode.parent = this;
         }
 
@@ -152,12 +152,12 @@ namespace DataCommander.Foundation.Configuration
         /// 
         /// </summary>
         /// <param name="childNode"></param>
-        public void RemoveChildNode( ConfigurationNode childNode )
+        public void RemoveChildNode(ConfigurationNode childNode)
         {
-            Contract.Requires( childNode != null );
-            Contract.Requires( this == childNode.Parent );
+            Contract.Requires(childNode != null);
+            Contract.Requires(this == childNode.Parent);
 
-            this.childNodes.Remove( childNode );
+            this.childNodes.Remove(childNode);
             childNode.parent = null;
         }
 
@@ -167,18 +167,18 @@ namespace DataCommander.Foundation.Configuration
         /// <returns></returns>
         public ConfigurationNode Clone()
         {
-            ConfigurationNode clone = new ConfigurationNode( this.name );
+            ConfigurationNode clone = new ConfigurationNode(this.name);
 
             foreach (ConfigurationAttribute attribute in this.attributes)
             {
                 ConfigurationAttribute attributeClone = attribute.Clone();
-                clone.Attributes.Add( attributeClone );
+                clone.Attributes.Add(attributeClone);
             }
 
             foreach (ConfigurationNode childNode in this.childNodes)
             {
                 ConfigurationNode childNodeClone = childNode.Clone();
-                clone.AddChildNode( childNodeClone );
+                clone.AddChildNode(childNodeClone);
             }
 
             return clone;
@@ -189,21 +189,21 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="nodeName"></param>
         /// <returns></returns>
-        public ConfigurationNode CreateNode( string nodeName )
+        public ConfigurationNode CreateNode(string nodeName)
         {
-            Contract.Requires( nodeName != null );
+            Contract.Requires(nodeName != null);
             ConfigurationNode node = this;
-            string[] nodeNames = nodeName.Split( Delimiter );
+            string[] nodeNames = nodeName.Split(Delimiter);
 
             for (int i = 0; i < nodeNames.Length; i++)
             {
                 ConfigurationNode childNode;
-                bool contains = node.ChildNodes.TryGetValue( nodeNames[ i ], out childNode );
+                bool contains = node.ChildNodes.TryGetValue(nodeNames[i], out childNode);
 
                 if (!contains)
                 {
-                    childNode = new ConfigurationNode( nodeNames[ i ] );
-                    node.AddChildNode( childNode );
+                    childNode = new ConfigurationNode(nodeNames[i]);
+                    node.AddChildNode(childNode);
                 }
 
                 node = childNode;
@@ -219,19 +219,19 @@ namespace DataCommander.Foundation.Configuration
         /// The name can contains path delimiters.</param>
         /// <returns>Return the child node is found.
         /// Returns null if no child node found.</returns>
-        public ConfigurationNode SelectNode( string path )
+        public ConfigurationNode SelectNode(string path)
         {
             ConfigurationNode node = this;
 
             if (path != null)
             {
-                string[] childNodeNames = path.Split( Delimiter );
+                string[] childNodeNames = path.Split(Delimiter);
                 int depth = 0;
 
                 foreach (string childNodeName in childNodeNames)
                 {
                     ConfigurationNode childNode;
-                    bool contains = node.childNodes.TryGetValue( childNodeName, out childNode );
+                    bool contains = node.childNodes.TryGetValue(childNodeName, out childNode);
 
                     if (contains)
                     {
@@ -280,20 +280,20 @@ namespace DataCommander.Foundation.Configuration
         /// of this node to the specified <paramref name="textWriter"/>.
         /// </summary>
         /// <param name="textWriter"></param>
-        public void Write( TextWriter textWriter )
+        public void Write(TextWriter textWriter)
         {
-            textWriter.WriteLine( "[" + this.FullName + "]" );
+            textWriter.WriteLine("[" + this.FullName + "]");
 
             foreach (ConfigurationAttribute attribute in this.attributes)
             {
-                attribute.Write( textWriter );
+                attribute.Write(textWriter);
             }
 
             textWriter.WriteLine();
 
             foreach (ConfigurationNode childNode in this.childNodes)
             {
-                childNode.Write( textWriter );
+                childNode.Write(textWriter);
             }
         }
 
@@ -302,54 +302,54 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="textWriter"></param>
         /// <param name="level">Recursion level</param>
-        public void WriteDocumentation( TextWriter textWriter, int level )
+        public void WriteDocumentation(TextWriter textWriter, int level)
         {
-            Contract.Requires( textWriter != null );
+            Contract.Requires(textWriter != null);
 
             StringBuilder sb = new StringBuilder();
-            string indent = new string( ' ', level * 2 );
-            sb.Append( indent );
-            sb.Append( this.name );
-            sb.Append( "\t\t" );
-            sb.AppendLine( this.description );
+            string indent = new string(' ', level * 2);
+            sb.Append(indent);
+            sb.Append(this.name);
+            sb.Append("\t\t");
+            sb.AppendLine(this.description);
 
             if (this.attributes.Count > 0)
             {
                 foreach (ConfigurationAttribute attribute in this.attributes)
                 {
-                    sb.Append( '\t' );
-                    sb.Append( attribute.Name );
+                    sb.Append('\t');
+                    sb.Append(attribute.Name);
 
-                    sb.Append( '\t' );
-                    sb.Append( attribute.Description );
-                    sb.Append( '\t' );
+                    sb.Append('\t');
+                    sb.Append(attribute.Description);
+                    sb.Append('\t');
 
                     object value = attribute.Value;
                     string valueString = value != null ? value.ToString() : null;
-                    bool multiline = valueString.IndexOf( '\n' ) >= 0;
+                    bool multiline = valueString.IndexOf('\n') >= 0;
 
                     if (multiline)
                     {
-                        value = valueString.Replace( "\r", string.Empty );
-                        sb.Append( '"' );
+                        value = valueString.Replace("\r", string.Empty);
+                        sb.Append('"');
                     }
 
-                    sb.Append( value );
+                    sb.Append(value);
 
                     if (multiline)
                     {
-                        sb.Append( '"' );
+                        sb.Append('"');
                     }
 
-                    sb.Append( Environment.NewLine );
+                    sb.Append(Environment.NewLine);
                 }
             }
 
-            textWriter.Write( sb );
+            textWriter.Write(sb);
 
             foreach (ConfigurationNode childNode in this.childNodes)
             {
-                childNode.WriteDocumentation( textWriter, level + 1 );
+                childNode.WriteDocumentation(textWriter, level + 1);
             }
         }
     }

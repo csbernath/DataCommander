@@ -14,9 +14,9 @@
 
         private readonly TextReader textReader;
 
-        private IList<TextDataColumn> columns;
+        private readonly IList<TextDataColumn> columns;
 
-        private IList<ITextDataConverter> converters;
+        private readonly IList<ITextDataConverter> converters;
 
         #endregion
 

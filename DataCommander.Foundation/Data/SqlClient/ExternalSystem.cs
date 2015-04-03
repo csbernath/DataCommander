@@ -7,14 +7,14 @@ namespace DataCommander.Foundation.Data.SqlClient
     using System.Security.Cryptography;
     using System.Security.Principal;
     using System.Text;
-    using DataCommander.Foundation.Configuration;    
+    using DataCommander.Foundation.Configuration;
 
     /// <summary>
     /// This class provides a mechanism to store security sensitive data (like passwords) in a safe way.
     /// </summary>
     public static class ExternalSystem
     {
-        private static Byte[] optionalEntropy = { 78, 233, 56, 11, 243, 99, 21, 165, 56, 234, 111, 9, 78, 67, 87, 96 };
+        private static readonly byte[] optionalEntropy = { 78, 233, 56, 11, 243, 99, 21, 165, 56, 234, 111, 9, 78, 67, 87, 96 };
 
         /// <summary>
         /// Gets the properties of an external system related to a specfied external system client.
@@ -48,7 +48,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             foreach (DataRow dataRow in table.Rows)
             {
                 string propertyName = (string) dataRow[ 0 ];
-                ExternalSystemPropertyTypes type = (ExternalSystemPropertyTypes) (Byte) dataRow[ 1 ];
+                ExternalSystemPropertyTypes type = (ExternalSystemPropertyTypes) (byte) dataRow[ 1 ];
                 object value = dataRow[ 2 ];
                 bool encrypted = (type & ExternalSystemPropertyTypes.Encrypted) != 0;
 
@@ -85,10 +85,10 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="scope"></param>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static Byte[] Encrypt( DataProtectionScope scope, string text )
+        public static byte[] Encrypt( DataProtectionScope scope, string text )
         {
-            Byte[] bytes = Encoding.UTF8.GetBytes( text );
-            Byte[] protectedBytes = ProtectedData.Protect( bytes, optionalEntropy, scope );
+            byte[] bytes = Encoding.UTF8.GetBytes( text );
+            byte[] protectedBytes = ProtectedData.Protect( bytes, optionalEntropy, scope );
             return protectedBytes;
         }
 
@@ -98,9 +98,9 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="scope"></param>
         /// <param name="bytes"></param>
         /// <returns></returns>
-        public static string Decrypt( DataProtectionScope scope, Byte[] bytes )
+        public static string Decrypt( DataProtectionScope scope, byte[] bytes )
         {
-            Byte[] unprotectedBytes = ProtectedData.Unprotect( bytes, optionalEntropy, scope );
+            byte[] unprotectedBytes = ProtectedData.Unprotect( bytes, optionalEntropy, scope );
             string text = Encoding.UTF8.GetString( unprotectedBytes );
             return text;
         }
@@ -112,7 +112,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="bytes"></param>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static bool Check( DataProtectionScope scope, Byte[] bytes, string text )
+        public static bool Check( DataProtectionScope scope, byte[] bytes, string text )
         {
             string s = Decrypt( scope, bytes );
             return s == text;

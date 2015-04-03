@@ -1,20 +1,21 @@
 namespace DataCommander.Providers
 {
     using System;
+    using System.ComponentModel;
     using System.Drawing;
     using System.Windows.Forms;
 
     /// <summary>
     /// Summary description for CompletionForm.
     /// </summary>
-    internal sealed class CompletionForm : System.Windows.Forms.Form
+    internal sealed class CompletionForm : Form
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>kkjj
-        private System.ComponentModel.Container components = null;
+        private readonly Container components = null;
 
-        private QueryForm queryForm;
+        private readonly QueryForm queryForm;
         private EventHandler<ItemSelectedEventArgs> itemSelectedEvent;
 
         public CompletionForm(QueryForm queryForm)
@@ -22,7 +23,7 @@ namespace DataCommander.Providers
             //
             // Required for Windows Form Designer support
             //
-            InitializeComponent();
+            this.InitializeComponent();
 
             //
             // TODO: Add any constructor code after InitializeComponent call
@@ -49,13 +50,13 @@ namespace DataCommander.Providers
             listBox.Initialize(response);
             listBox.Dock = DockStyle.Fill;
 
-            Controls.Add(listBox);
+            this.Controls.Add(listBox);
 
             int charIndex = textBox.RichTextBox.SelectionStart;
             Point pos = textBox.RichTextBox.GetPositionFromCharIndex(charIndex);
             Point location = textBox.RichTextBox.PointToScreen(pos);
             location.Y += 20;
-            Location = location;
+            this.Location = location;
         }
 
         public void SelectItem(int startIndex, int length, IObjectName objectName)
@@ -73,16 +74,16 @@ namespace DataCommander.Providers
         {
             if (disposing)
             {
-                if (components != null)
+                if (this.components != null)
                 {
-                    components.Dispose();
+                    this.components.Dispose();
                 }
             }
 
             base.Dispose(disposing);
         }
 
-        protected override void OnClosed(System.EventArgs e)
+        protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
             this.queryForm.OnCompletionFormClosed();

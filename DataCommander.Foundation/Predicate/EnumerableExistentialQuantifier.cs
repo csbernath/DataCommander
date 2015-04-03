@@ -10,7 +10,7 @@
     /// </summary>
     public sealed class EnumerableExistentialQuantifier<T> : PredicateClass<IEnumerable<T>>
     {
-        private Func<T, bool> predicate;
+        private readonly Func<T, bool> predicate;
 
         /// <summary>
         /// 

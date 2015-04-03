@@ -5,7 +5,6 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Data.SqlClient;
     using System.Security.Principal;
     using DataCommander.Foundation;
-    using DataCommander.Foundation.Data;
 
     internal sealed class Connection : ConnectionBase
     {
@@ -30,17 +29,17 @@ namespace DataCommander.Providers.SqlServer2005
         {
             get
             {
-                return connectionName;
+                return this.connectionName;
             }
             set
             {
-                connectionName = value;
+                this.connectionName = value;
             }
         }
 
         private void CreateConnection()
         {
-            this.sqlConnection = new SqlConnection( sqlConnectionStringBuilder.ConnectionString );
+            this.sqlConnection = new SqlConnection(this.sqlConnectionStringBuilder.ConnectionString );
             this.Connection = this.sqlConnection;
             this.sqlConnection.FireInfoMessageEventOnUserErrors = true;
             this.sqlConnection.InfoMessage += this.OnInfoMessage;
@@ -76,20 +75,17 @@ set arithabort on" );
             {
                 string userName = null;
 
-                if (sqlConnectionStringBuilder.IntegratedSecurity)
+                if (this.sqlConnectionStringBuilder.IntegratedSecurity)
                 {
                     userName = WindowsIdentity.GetCurrent().Name;
                 }
                 else
                 {
-                    userName = sqlConnectionStringBuilder.UserID;
+                    userName = this.sqlConnectionStringBuilder.UserID;
                 }
 
-                string caption = string.Format( "{0}.{1} ({2} ({3}))",
-                    sqlConnection.DataSource,
-                    sqlConnection.Database,
-                    userName,
-                    spid );
+                string caption = string.Format( "{0}.{1} ({2} ({3}))", this.sqlConnection.DataSource, this.sqlConnection.Database,
+                    userName, this.spid );
 
                 return caption;
             }
@@ -105,7 +101,7 @@ set arithabort on" );
         {
             get
             {
-                return sqlConnection.DataSource;
+                return this.sqlConnection.DataSource;
             }
         }
 
@@ -115,7 +111,7 @@ set arithabort on" );
             {
                 string commandText = "select @@version";
                 object scalar = this.sqlConnection.ExecuteScalar( commandText );
-                string version = DataCommander.Foundation.Data.Database.GetValueOrDefault<string>( scalar );
+                string version = Foundation.Data.Database.GetValueOrDefault<string>( scalar );
 
                 /* select
           serverproperty('Collation') as Collation,
@@ -135,7 +131,7 @@ set arithabort on" );
           serverproperty('ProductLevel') as ProductLevel,
           serverproperty('ServerName') as ServerName
           */
-                string serverVersion = sqlConnection.ServerVersion;
+                string serverVersion = this.sqlConnection.ServerVersion;
                 string description;
 
                 switch (serverVersion)
@@ -217,7 +213,7 @@ set arithabort on" );
                         break;
                 }
 
-                return string.Format( "{0}\r\n{1}\r\n@@version: {2}\r\n@@servername: {3}", serverVersion, description, version, serverName );
+                return string.Format( "{0}\r\n{1}\r\n@@version: {2}\r\n@@servername: {3}", serverVersion, description, version, this.serverName );
             }
         }
 

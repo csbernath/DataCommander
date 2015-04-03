@@ -1,11 +1,14 @@
 ﻿namespace DataCommander.Providers
 {
+    using System.ComponentModel;
+    using System.Windows.Forms;
+
     partial class DataViewPropertiesForm
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -119,11 +122,11 @@
 
         #endregion
 
-        private System.Windows.Forms.Button okButton;
-        private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.RichTextBox rowFilterTextBox;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.RichTextBox sortTextBox;
+        private Button okButton;
+        private Button cancelButton;
+        private RichTextBox rowFilterTextBox;
+        private Label label1;
+        private Label label2;
+        private RichTextBox sortTextBox;
     }
 }

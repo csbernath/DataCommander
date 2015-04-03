@@ -15,7 +15,7 @@ namespace DataCommander.Foundation.Data.SqlClient
     /// </summary>
     public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
     {
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private Int16 id;
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         #region ICloneable Members
         object ICloneable.Clone()
         {
-            string connectionString = ConnectionString;
+            string connectionString = this.ConnectionString;
             var connection = new SafeSqlConnection( connectionString );
             return connection;
         }
@@ -189,9 +189,6 @@ namespace DataCommander.Foundation.Data.SqlClient
 
                     case 1205: // Transaction (Process ID %d) was deadlocked on {%Z} resources with another process and has been chosen as the deadlock victim. Rerun the transaction.
                         handled = true;
-                        break;
-
-                    default:
                         break;
                 }
             }

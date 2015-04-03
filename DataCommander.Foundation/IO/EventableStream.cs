@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation.IO
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.IO;
 
@@ -151,7 +150,7 @@
         /// <param name="buffer"></param>
         /// <param name="offset"></param>
         /// <param name="count"></param>
-        public override void Write( Byte[] buffer, int offset, int count )
+        public override void Write( byte[] buffer, int offset, int count )
         {
             this.stream.Write( buffer, offset, count );
         }

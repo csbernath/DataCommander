@@ -1,21 +1,21 @@
-using System.Diagnostics.Contracts;
-
 namespace DataCommander.Providers
 {
     using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Diagnostics;
+    using System.Diagnostics.Contracts;
     using System.Threading;
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Threading;
+    using ThreadState = System.Threading.ThreadState;
 
     internal sealed class AsyncDataAdapter : IAsyncDataAdapter
     {
         #region Private Fields
 
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private IProvider provider;
         private IEnumerable<IDbCommand> commands;
         private IDbCommand command;
@@ -110,7 +110,7 @@ namespace DataCommander.Providers
                     }
                     else
                     {
-                        bool joined = thread.Join(5000);
+                        bool joined = this.thread.Join(5000);
 
                         if (!joined)
                         {
@@ -133,7 +133,7 @@ namespace DataCommander.Providers
             using (LogFactory.Instance.GetCurrentMethodLog())
             {
                 Exception exception = null;
-                IDataReaderHelper dataReaderHelper = provider.CreateDataReaderHelper(dataReader);
+                IDataReaderHelper dataReaderHelper = this.provider.CreateDataReaderHelper(dataReader);
                 DataRowCollection schemaRows = schemaTable.Rows;
                 int count = schemaRows.Count;
                 string[] dataTypeNames = new string[count];
@@ -153,9 +153,9 @@ namespace DataCommander.Providers
                     fieldCount = 0;
                 }
 
-                var rows = new object[rowBlockSize][];
+                var rows = new object[this.rowBlockSize][];
 
-                for (i = 0; i < rowBlockSize; i++)
+                for (i = 0; i < this.rowBlockSize; i++)
                 {
                     rows[i] = new object[fieldCount];
                 }
@@ -166,7 +166,7 @@ namespace DataCommander.Providers
                 bool exitFromWhile = false;
                 var stopwatch = Stopwatch.StartNew();
 
-                while (!this.isCommandCanceled && !thread.IsStopRequested && !exitFromWhile)
+                while (!this.isCommandCanceled && !this.thread.IsStopRequested && !exitFromWhile)
                 {
                     bool read;
 
@@ -175,7 +175,7 @@ namespace DataCommander.Providers
                         first = false;
                         this.resultWriter.FirstRowReadBegin();
                         read = dataReader.Read();
-                        resultWriter.FirstRowReadEnd();
+                        this.resultWriter.FirstRowReadEnd();
                     }
                     else
                     {
@@ -196,16 +196,16 @@ namespace DataCommander.Providers
                         dataReaderHelper.GetValues(rows[i]);
                         i++;
 
-                        if (i == rowBlockSize || stopwatch.ElapsedMilliseconds >= 5000)
+                        if (i == this.rowBlockSize || stopwatch.ElapsedMilliseconds >= 5000)
                         {
-                            resultWriter.WriteRows(rows, i);
+                            this.resultWriter.WriteRows(rows, i);
                             i = 0;
                             stopwatch.Restart();
                         }
 
-                        if (this.rowCount == maxRecords)
+                        if (this.rowCount == this.maxRecords)
                         {
-                            CancelWaitCallback(null);
+                            this.CancelWaitCallback(null);
                             break;
                         }
                     }
@@ -215,10 +215,10 @@ namespace DataCommander.Providers
                     }
                 }
 
-                if (i != rowBlockSize)
+                if (i != this.rowBlockSize)
                 {
                     log.Write(LogLevel.Trace, "resultWriter.WriteRows(rows,i);");
-                    resultWriter.WriteRows(rows, i);
+                    this.resultWriter.WriteRows(rows, i);
                 }
 
                 log.Write(LogLevel.Trace, "resultWriter.WriteTableEnd(rowCount);");
@@ -244,7 +244,7 @@ namespace DataCommander.Providers
 
             try
             {
-                this.resultWriter.BeforeExecuteReader(provider, command);
+                this.resultWriter.BeforeExecuteReader(this.provider, command);
                 IDataReader dataReader = null;
                 try
                 {
@@ -252,7 +252,7 @@ namespace DataCommander.Providers
                     this.resultWriter.AfterExecuteReader();
                     int tableIndex = 0;
 
-                    while (!thread.IsStopRequested)
+                    while (!this.thread.IsStopRequested)
                     {
                         DataTable schemaTable = dataReader.GetSchemaTable();
                         if (schemaTable != null)
@@ -265,7 +265,7 @@ namespace DataCommander.Providers
                             this.ReadTable(dataReader, schemaTable, tableIndex);
                         }
 
-                        if (this.rowCount >= maxRecords || !dataReader.NextResult())
+                        if (this.rowCount >= this.maxRecords || !dataReader.NextResult())
                         {
                             break;
                         }
@@ -289,7 +289,7 @@ namespace DataCommander.Providers
             }
             catch (Exception e)
             {
-                if (Thread.CurrentThread.ThreadState == System.Threading.ThreadState.AbortRequested)
+                if (Thread.CurrentThread.ThreadState == ThreadState.AbortRequested)
                 {
                     try
                     {
@@ -306,7 +306,7 @@ namespace DataCommander.Providers
             {
                 if (command != null && command.Parameters != null)
                 {
-                    resultWriter.WriteParameters(command.Parameters);
+                    this.resultWriter.WriteParameters(command.Parameters);
                 }
                 long ticks = Stopwatch.GetTimestamp();
                 this.endFill(this, exception);

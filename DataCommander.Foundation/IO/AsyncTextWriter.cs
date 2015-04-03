@@ -1,6 +1,5 @@
 namespace DataCommander.Foundation.IO
 {
-    using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.IO;
@@ -14,10 +13,10 @@ namespace DataCommander.Foundation.IO
     {
         #region Private Fields
 
-        private TextWriter textWriter;
-        private List<AsyncTextWriterListItem> list = new List<AsyncTextWriterListItem>();
-        private object syncObject = new object();
-        private ManualResetEvent waitHandle = new ManualResetEvent(false);
+        private readonly TextWriter textWriter;
+        private readonly List<AsyncTextWriterListItem> list = new List<AsyncTextWriterListItem>();
+        private readonly object syncObject = new object();
+        private readonly ManualResetEvent waitHandle = new ManualResetEvent(false);
         private RegisteredWaitHandle registeredWaitHandle;
 
         #endregion

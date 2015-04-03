@@ -33,7 +33,7 @@ namespace DataCommander.Foundation.Configuration
                     break;
 
                 case TypeCode.Byte:
-                    value = Byte.Parse(source, style, CultureInfo.InvariantCulture);
+                    value = byte.Parse(source, style, CultureInfo.InvariantCulture);
                     break;
 
                 case TypeCode.UInt16:

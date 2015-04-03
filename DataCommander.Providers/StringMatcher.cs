@@ -9,8 +9,8 @@ namespace DataCommander
 
     internal sealed class StringMatcher : IStringMatcher
     {
-        private string subString;
-        private StringComparison comparison;
+        private readonly string subString;
+        private readonly StringComparison comparison;
 
         public StringMatcher(string subString, StringComparison comparison)
         {

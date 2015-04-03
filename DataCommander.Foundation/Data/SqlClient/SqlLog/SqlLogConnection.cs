@@ -9,11 +9,11 @@ namespace DataCommander.Foundation.Data.SqlClient
         private readonly int applicationId;
         private readonly int connectionNo;
         private readonly string name;
-        private string userName;
-        private string hostName;
+        private readonly string userName;
+        private readonly string hostName;
         private DateTime startDate;
-        private long duration;
-        private Exception exception;
+        private readonly long duration;
+        private readonly Exception exception;
 
         public SqlLogConnection(
             int applicationId,

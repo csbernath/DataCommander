@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation
 {
-    using System;
     using System.Diagnostics.Contracts;
 
     /// <summary>
@@ -10,7 +9,7 @@
     public sealed class Disjunction<T> : PredicateClass<T>
     {
         private readonly PredicateClass<T> x;
-        private PredicateClass<T> y;
+        private readonly PredicateClass<T> y;
 
         /// <summary>
         /// 

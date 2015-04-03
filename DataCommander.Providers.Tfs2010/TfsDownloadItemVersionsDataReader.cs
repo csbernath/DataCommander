@@ -4,6 +4,7 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Data;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.IO;
     using DataCommander.Foundation.Data;
@@ -12,7 +13,7 @@
 
     internal class TfsDownloadItemVersionsDataReader : TfsDataReader
     {
-        private TfsCommand command;
+        private readonly TfsCommand command;
         private string path;
         private string localPath;
         private bool first = true;
@@ -25,7 +26,7 @@
             this.command = command;
         }
 
-        public override System.Data.DataTable GetSchemaTable()
+        public override DataTable GetSchemaTable()
         {
             DataTable table = CreateSchemaTable();
             AddSchemaRowInt32( table, "ChangesetId", false );
@@ -79,15 +80,15 @@
                 bool slotMode = Database.GetValueOrDefault<bool>( parameters[ "slotMode" ].Value );
                 this.localPath = Database.GetValueOrDefault<string>( parameters[ "localPath" ].Value );
 
-                if (string.IsNullOrEmpty( localPath ))
+                if (string.IsNullOrEmpty(this.localPath ))
                 {
-                    localPath = Path.GetTempPath();
-                    localPath += Path.DirectorySeparatorChar;
-                    localPath += String.Format( "getversions [{0}]", DateTime.Now.ToString( "yyyy-MM-dd HH.mm.ss.fff" ) );
-                    Directory.CreateDirectory( localPath );
+                    this.localPath = Path.GetTempPath();
+                    this.localPath += Path.DirectorySeparatorChar;
+                    this.localPath += String.Format( "getversions [{0}]", DateTime.Now.ToString( "yyyy-MM-dd HH.mm.ss.fff" ) );
+                    Directory.CreateDirectory(this.localPath );
                 }
 
-                IEnumerable changesets = this.command.Connection.VersionControlServer.QueryHistory( path, version, deletionId, recursion, user, versionFrom, versionTo, maxCount, includeChanges, slotMode );
+                IEnumerable changesets = this.command.Connection.VersionControlServer.QueryHistory(this.path, version, deletionId, recursion, user, versionFrom, versionTo, maxCount, includeChanges, slotMode );
                 this.enumerator = this.AsEnumerable( changesets ).GetEnumerator();
             }
 
@@ -124,8 +125,8 @@
                 for (Int32 i = 0; i < changeset.Changes.Length; i++)
                 {
                     Change change = changeset.Changes[ i ];
-                    System.Diagnostics.Trace.WriteLine( change.ChangeType );
-                    System.Diagnostics.Trace.WriteLine( change.Item.ServerItem );
+                    Trace.WriteLine( change.ChangeType );
+                    Trace.WriteLine( change.Item.ServerItem );
                     this.path = change.Item.ServerItem;
 
                     if (i > 0)
@@ -142,7 +143,7 @@
                 string fileName = VersionControlPath.GetFileName( this.path );
                 string fileNameWithoutExtension = Path.GetFileNameWithoutExtension( fileName );
                 string extension = VersionControlPath.GetExtension( this.path );
-                string localFileName = localPath + Path.DirectorySeparatorChar + changesetId.ToString().PadLeft( 5, '0' ) + ';' + changeType + ';' + changeset.Committer.Replace( '\\', ' ' ) + extension;
+                string localFileName = this.localPath + Path.DirectorySeparatorChar + changesetId.ToString().PadLeft( 5, '0' ) + ';' + changeType + ';' + changeset.Committer.Replace( '\\', ' ' ) + extension;
                 this.command.Connection.VersionControlServer.DownloadFile( this.path, deletionId, versionSpec, localFileName );
                 File.SetLastWriteTime( localFileName, creationDate );
                 File.SetAttributes( localFileName, FileAttributes.ReadOnly );

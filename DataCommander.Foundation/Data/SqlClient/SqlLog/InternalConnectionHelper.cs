@@ -9,7 +9,7 @@ namespace DataCommander.Foundation.Data.SqlClient
     {
         private static readonly FieldInfo internalConnectionField;
 
-        private static FieldInfo isOpenField;
+        private static readonly FieldInfo isOpenField;
 
         static InternalConnectionHelper()
         {

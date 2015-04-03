@@ -4,12 +4,12 @@
     using System.Data;
     using System.Data.SqlClient;
     using System.Diagnostics.Contracts;
+    using System.Windows.Forms;
     using DataCommander.Foundation.Data;
-    using DataCommander.Providers;
 
     internal sealed class SystemDatabaseCollectionNode : ITreeNode
     {
-        private DatabaseCollectionNode databaseCollectionNode;
+        private readonly DatabaseCollectionNode databaseCollectionNode;
 
         public SystemDatabaseCollectionNode( DatabaseCollectionNode databaseCollectionNode )
         {
@@ -75,7 +75,7 @@ order by d.name";
             }
         }
 
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu
         {
             get
             {

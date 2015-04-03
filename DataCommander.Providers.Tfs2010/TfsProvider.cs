@@ -5,8 +5,8 @@
     using System.Data;
     using System.Data.Common;
     using System.Linq;
+    using System.Xml;
     using DataCommander.Foundation.Data;
-    using DataCommander.Providers;
     using Microsoft.TeamFoundation.VersionControl.Client;
 
     public sealed class TfsProvider : IProvider
@@ -26,7 +26,7 @@
 
             parameters = new TfsParameterCollection();
             parameters.AddStringInput("path", false, null);
-            parameters.AddValueTypeInput<RecursionType>("recursion", RecursionType.OneLevel);
+            parameters.AddValueTypeInput("recursion", RecursionType.OneLevel);
 
             TfsDataReaderFactory.Add("dir", parameters, delegate(TfsCommand command)
             {
@@ -35,7 +35,7 @@
 
             parameters = new TfsParameterCollection();
             parameters.AddStringInput("path", false, null);
-            parameters.AddValueTypeInput<RecursionType>("recursion", RecursionType.OneLevel);
+            parameters.AddValueTypeInput("recursion", RecursionType.OneLevel);
 
             TfsDataReaderFactory.Add("extendeddir", parameters, delegate(TfsCommand command)
             {
@@ -44,7 +44,7 @@
 
             parameters = new TfsParameterCollection();
             parameters.AddStringInput("path", false, null);
-            parameters.AddValueTypeInput<RecursionType>("recursion", RecursionType.Full);
+            parameters.AddValueTypeInput("recursion", RecursionType.Full);
             parameters.AddStringInput("user", true, null);
             parameters.AddInt32Input("maxCount", true, int.MaxValue);
             parameters.AddBooleanInput("includeChanges", true, false);
@@ -57,7 +57,7 @@
 
             parameters = new TfsParameterCollection();
             parameters.AddStringInput("path", false, null);
-            parameters.AddValueTypeInput<RecursionType>("recursion", RecursionType.Full);
+            parameters.AddValueTypeInput("recursion", RecursionType.Full);
             parameters.AddStringInput("workspace", true, null);
             parameters.AddStringInput("user", true, null);
 
@@ -99,7 +99,7 @@
             }
         }
 
-        System.Data.Common.DbProviderFactory IProvider.DbProviderFactory
+        DbProviderFactory IProvider.DbProviderFactory
         {
             get
             {
@@ -147,7 +147,7 @@
             }
         }
 
-        void IProvider.DeriveParameters(System.Data.IDbCommand command)
+        void IProvider.DeriveParameters(IDbCommand command)
         {
             TfsCommand tfsCommand = (TfsCommand)command;
 
@@ -165,13 +165,13 @@
             }
         }
 
-        DataParameterBase IProvider.GetDataParameter(System.Data.IDataParameter parameter)
+        DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
         {
             TfsParameter tfsParameter = (TfsParameter)parameter;
             return new TfsDataParameter(tfsParameter);
         }
 
-        System.Data.DataTable IProvider.GetParameterTable(System.Data.IDataParameterCollection parameters)
+        DataTable IProvider.GetParameterTable(IDataParameterCollection parameters)
         {
             TfsParameterCollection tfsParameters = (TfsParameterCollection)parameters;
             DataTable table = new DataTable();
@@ -200,17 +200,17 @@
             return table;
         }
 
-        System.Xml.XmlReader IProvider.ExecuteXmlReader(System.Data.IDbCommand command)
+        XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
         {
             throw new NotImplementedException();
         }
 
-        System.Data.DataTable IProvider.GetSchemaTable(System.Data.IDataReader dataReader)
+        DataTable IProvider.GetSchemaTable(IDataReader dataReader)
         {
             return new DataTable();
         }
 
-        System.Data.DataSet IProvider.GetTableSchema(System.Data.IDbConnection connection, string tableName)
+        DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName)
         {
             throw new NotImplementedException();
         }
@@ -242,13 +242,13 @@
             return type;
         }
 
-        IDataReaderHelper IProvider.CreateDataReaderHelper(System.Data.IDataReader dataReader)
+        IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
         {
             TfsDataReader tfsDataReader = (TfsDataReader)dataReader;
             return new TfsDataReaderHelper(tfsDataReader);
         }
 
-        System.Data.Common.DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, System.Data.IDbConnection connection)
+        DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection)
         {
             throw new NotImplementedException();
         }

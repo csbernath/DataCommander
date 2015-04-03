@@ -11,7 +11,7 @@
 
     internal class TfsQueryHistoryDataReader : TfsDataReader
     {
-        private TfsCommand command;
+        private readonly TfsCommand command;
         private bool first = true;
         private IEnumerator<Tuple<Changeset, int>> enumerator;
         private int recordsAffected;
@@ -22,7 +22,7 @@
             this.command = command;
         }
 
-        public override System.Data.DataTable GetSchemaTable()
+        public override DataTable GetSchemaTable()
         {
             DataTable table = CreateSchemaTable();
             AddSchemaRowInt32(table, "ChangesetId", false);

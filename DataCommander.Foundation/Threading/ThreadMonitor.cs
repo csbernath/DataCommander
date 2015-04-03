@@ -10,6 +10,7 @@ namespace DataCommander.Foundation.Threading
     using DataCommander.Foundation.Collections;
     using DataCommander.Foundation.Linq;
     using DataCommander.Foundation.Text;
+    using ThreadState = System.Threading.ThreadState;
 
     /// <summary>
     /// Monitors threads in the current process.
@@ -17,9 +18,9 @@ namespace DataCommander.Foundation.Threading
     /// </summary>
     public static class ThreadMonitor
     {
-        private static SortedDictionary<int, WorkerThread> threads = new SortedDictionary<int, WorkerThread>();
+        private static readonly SortedDictionary<int, WorkerThread> threads = new SortedDictionary<int, WorkerThread>();
 
-        private static StringTableColumnInfo<WorkerThread>[] threadColumns =
+        private static readonly StringTableColumnInfo<WorkerThread>[] threadColumns =
         {
             new StringTableColumnInfo<WorkerThread>( "Index", StringTableColumnAlign.Right, ( t, i ) => i.ToString() ),
             new StringTableColumnInfo<WorkerThread>( "ManagedThreadId", StringTableColumnAlign.Right, t => t.ManagedThreadId ),
@@ -27,7 +28,7 @@ namespace DataCommander.Foundation.Threading
             new StringTableColumnInfo<WorkerThread>( "State", StringTableColumnAlign.Left, t => t.ThreadState ),
             new StringTableColumnInfo<WorkerThread>( "StartTime", StringTableColumnAlign.Left, t => ToString( t.StartTime ) ),
             new StringTableColumnInfo<WorkerThread>( "StopTime", StringTableColumnAlign.Left, t => ToString( t.StopTime ) ),
-            new StringTableColumnInfo<WorkerThread>( "Elapsed", StringTableColumnAlign.Left, t => t.ThreadState == System.Threading.ThreadState.Stopped ? ( t.StopTime - t.StartTime ).ToString() : null ),
+            new StringTableColumnInfo<WorkerThread>( "Elapsed", StringTableColumnAlign.Left, t => t.ThreadState == ThreadState.Stopped ? ( t.StopTime - t.StartTime ).ToString() : null ),
             new StringTableColumnInfo<WorkerThread>( "Priority", StringTableColumnAlign.Left, t => GetPriority( t.Thread ) ),
             new StringTableColumnInfo<WorkerThread>( "IsBackground", StringTableColumnAlign.Left, t => IsBackground( t.Thread ) ),
             new StringTableColumnInfo<WorkerThread>( "IsThreadPoolThread", StringTableColumnAlign.Left, t => t.Thread.IsThreadPoolThread )
@@ -42,7 +43,7 @@ namespace DataCommander.Foundation.Threading
             public int Max;
         }
 
-        private static StringTableColumnInfo<ThreadPoolRow>[] threadPoolColumns =
+        private static readonly StringTableColumnInfo<ThreadPoolRow>[] threadPoolColumns =
         {
             new StringTableColumnInfo<ThreadPoolRow>( "Name", StringTableColumnAlign.Left, t => t.Name ),
             new StringTableColumnInfo<ThreadPoolRow>( "Min", StringTableColumnAlign.Right, t => t.Min ),
@@ -166,7 +167,7 @@ namespace DataCommander.Foundation.Threading
 
             foreach (var thread in currentThreads)
             {
-                if (thread.ThreadState == System.Threading.ThreadState.Unstarted)
+                if (thread.ThreadState == ThreadState.Unstarted)
                 {
                     removableThreads.Add( thread );
                 }

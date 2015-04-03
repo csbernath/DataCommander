@@ -4,7 +4,7 @@
 
     public sealed class StreamField
 	{
-		private Stream stream;
+		private readonly Stream stream;
 
 		public StreamField( Stream stream )
 		{

@@ -1,8 +1,8 @@
 namespace DataCommander.Providers
 {
-	using System.Globalization;
+    using System.Globalization;
 
-	public sealed class DoubleField
+    public sealed class DoubleField
 	{
 		public DoubleField( double value )
 		{
@@ -13,15 +13,15 @@ namespace DataCommander.Providers
 		{
 			get
 			{
-				return value;
+				return this.value;
 			}
 		}
 
 		public override string ToString()
 		{
-			return value.ToString( "N16", CultureInfo.InvariantCulture );
+			return this.value.ToString( "N16", CultureInfo.InvariantCulture );
 		}
 
-		private double value;
+		private readonly double value;
 	}
 }

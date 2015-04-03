@@ -1,22 +1,21 @@
-﻿using DataCommander.Foundation.Linq;
-
-namespace DataCommander.Providers.SqlServer2005
+﻿namespace DataCommander.Providers.SqlServer2005
 {
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
     using System.Linq;
+    using System.Windows.Forms;
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Data.SqlClient;
     using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Providers;
+    using DataCommander.Foundation.Linq;
 
     internal sealed class ColumnCollectionNode : ITreeNode
     {
         private ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private DatabaseNode database;
-        private string schemaName;
-        private string objectName;
+        private readonly DatabaseNode database;
+        private readonly string schemaName;
+        private readonly string objectName;
 
         public ColumnCollectionNode( DatabaseNode database, string schemaName, string objectName )
         {
@@ -158,7 +157,7 @@ order by fkc.parent_column_id",
             }
         }
 
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu
         {
             get
             {

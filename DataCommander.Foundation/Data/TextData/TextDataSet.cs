@@ -1,9 +1,8 @@
 ﻿namespace DataCommander.Foundation.Data
 {
-    using System;
-	using System.Diagnostics;
+    using System.Diagnostics;
 
-	/// <summary>
+    /// <summary>
     /// 
     /// </summary>
     [DebuggerDisplay("Name = {name}")]

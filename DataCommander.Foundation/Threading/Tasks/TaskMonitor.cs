@@ -3,12 +3,12 @@ namespace DataCommander.Foundation.Threading.Tasks
     using System;
     using System.Collections.Generic;
     using System.Threading;
-#if FOUNDATION_4_0 || FOUNDATION_4_5
-    using System.Threading.Tasks;
-#endif
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Linq;
     using DataCommander.Foundation.Text;
+#if FOUNDATION_4_0 || FOUNDATION_4_5
+    using System.Threading.Tasks;
+#endif
 
     /// <summary>
     /// 

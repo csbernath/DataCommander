@@ -12,12 +12,12 @@
     public static class EnumExtensions
     {
 #if FOUNDATION_3_5
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="container"></param>
-        /// <param name="flag"></param>
-        /// <returns></returns>
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="container"></param>
+    /// <param name="flag"></param>
+    /// <returns></returns>
         public static bool HasFlag( this Enum container, Enum flag )
         {
             Contract.Requires( container.GetType() == flag.GetType() );
@@ -36,15 +36,15 @@
         /// <param name="container"></param>
         /// <param name="flag"></param>
         /// <returns></returns>
-        public static T SetFlag<T>( this T container, T flag )
+        public static T SetFlag<T>(this T container, T flag)
         {
-            Contract.Requires( typeof(T).IsEnum );
-            Type type = typeof(T);
+            Contract.Requires(typeof (T).IsEnum);
+            Type type = typeof (T);
 
-            UInt64 containerUInt64 = Convert.ToUInt64( container, CultureInfo.InvariantCulture );
-            UInt64 flagUInt64 = Convert.ToUInt64( flag, CultureInfo.InvariantCulture );
+            UInt64 containerUInt64 = Convert.ToUInt64(container, CultureInfo.InvariantCulture);
+            UInt64 flagUInt64 = Convert.ToUInt64(flag, CultureInfo.InvariantCulture);
             containerUInt64 |= flagUInt64;
-            return (T)Enum.ToObject( type, containerUInt64 );
+            return (T) Enum.ToObject(type, containerUInt64);
         }
 
         /// <summary>
@@ -55,13 +55,13 @@
         /// <param name="flag"></param>
         /// <param name="set"></param>
         /// <returns></returns>
-        public static T SetFlag<T>( this T container, T flag, bool set )
+        public static T SetFlag<T>(this T container, T flag, bool set)
         {
-            Contract.Requires( typeof(T).IsEnum );
-            Type type = typeof(T);
+            Contract.Requires(typeof (T).IsEnum);
+            Type type = typeof (T);
 
-            UInt64 containerUInt64 = Convert.ToUInt64( container );
-            UInt64 flagUInt64 = Convert.ToUInt64( flag );
+            UInt64 containerUInt64 = Convert.ToUInt64(container);
+            UInt64 flagUInt64 = Convert.ToUInt64(flag);
 
             if (set)
             {
@@ -72,7 +72,7 @@
                 containerUInt64 &= ~flagUInt64;
             }
 
-            return (T)Enum.ToObject( type, containerUInt64 );
+            return (T) Enum.ToObject(type, containerUInt64);
         }
 
         /// <summary>
@@ -82,14 +82,14 @@
         /// <param name="container"></param>
         /// <param name="flag"></param>
         /// <returns></returns>
-        public static T ResetFlag<T>( this T container, T flag )
+        public static T ResetFlag<T>(this T container, T flag)
         {
-            Contract.Requires( typeof(T).IsEnum );
-            Type type = typeof(T);
-            UInt64 containerUInt64 = Convert.ToUInt64( container );
-            UInt64 flagUInt64 = Convert.ToUInt64( flag );
+            Contract.Requires(typeof (T).IsEnum);
+            Type type = typeof (T);
+            UInt64 containerUInt64 = Convert.ToUInt64(container);
+            UInt64 flagUInt64 = Convert.ToUInt64(flag);
             containerUInt64 &= ~flagUInt64;
-            return (T)Enum.ToObject( type, containerUInt64 );
+            return (T) Enum.ToObject(type, containerUInt64);
         }
 
         /// <summary>
@@ -98,21 +98,21 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static IEnumerable<Tuple<string, T>> GetPublicStaticFields<T>( Type type )
+        public static IEnumerable<Tuple<string, T>> GetPublicStaticFields<T>(Type type)
         {
-            TypeCode typeCode = Type.GetTypeCode( typeof(T) );
-            FieldInfo[] fields = type.GetFields( BindingFlags.Public | BindingFlags.Static );
+            TypeCode typeCode = Type.GetTypeCode(typeof (T));
+            FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.Static);
 
             for (int i = 0; i < fields.Length; i++)
             {
-                FieldInfo field = fields[ i ];
+                FieldInfo field = fields[i];
                 string name = field.Name;
-                TypeCode fieldTypeCode = Type.GetTypeCode( field.FieldType );
+                TypeCode fieldTypeCode = Type.GetTypeCode(field.FieldType);
 
                 if (fieldTypeCode == typeCode)
                 {
-                    T value = (T)field.GetValue( type );
-                    yield return Tuple.Create( name, value );
+                    T value = (T) field.GetValue(type);
+                    yield return Tuple.Create(name, value);
                 }
             }
         }

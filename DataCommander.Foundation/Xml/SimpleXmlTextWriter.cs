@@ -12,7 +12,7 @@ namespace DataCommander.Foundation.Xml
     /// </summary>
     public sealed class SimpleXmlTextWriter : XmlWriter
     {
-        private IndentedTextWriter textWriter;
+        private readonly IndentedTextWriter textWriter;
         private readonly Stack<StackItem> stack = new Stack<StackItem>();
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace DataCommander.Foundation.Xml
         /// When overridden in a derived class, encodes the specified binary bytes as base64 and writes out
         /// the resulting text.
         /// </summary>
-        /// <param name="buffer">Byte array to encode.</param>
+        /// <param name="buffer">byte array to encode.</param>
         /// <param name="index">The position in the buffer indicating the start of the bytes to write.</param>
         /// <param name="count">The number of bytes to write.</param>
         /// <exception cref="T:System.ArgumentNullException">
@@ -84,7 +84,7 @@ namespace DataCommander.Foundation.Xml
         /// <exception cref="T:System.ArgumentException">The buffer length minus <paramref name="index"/> is less than <paramref name="count"/>.</exception>
         /// <exception cref="T:System.ArgumentOutOfRangeException">
         /// <paramref name="index"/> or <paramref name="count"/> is less than zero.</exception>
-        public override void WriteBase64(Byte[] buffer, int index, int count)
+        public override void WriteBase64(byte[] buffer, int index, int count)
         {
             throw new NotImplementedException();
         }
@@ -93,7 +93,7 @@ namespace DataCommander.Foundation.Xml
         /// When overridden in a derived class, encodes the specified binary bytes as binhex and writes out
         /// the resulting text.
         /// </summary>
-        /// <param name="buffer">Byte array to encode.</param>
+        /// <param name="buffer">byte array to encode.</param>
         /// <param name="index">The position in the buffer indicating the start of the bytes to write.</param>
         /// <param name="count">The number of bytes to write.</param>
         /// <exception cref="T:System.ArgumentNullException">
@@ -101,7 +101,7 @@ namespace DataCommander.Foundation.Xml
         /// <exception cref="T:System.ArgumentException">The buffer length minus <paramref name="index"/> is less than <paramref name="count"/>.</exception>
         /// <exception cref="T:System.ArgumentOutOfRangeException">
         /// <paramref name="index"/> or <paramref name="count"/> is less than zero.</exception>
-        public override void WriteBinHex(Byte[] buffer, int index, int count)
+        public override void WriteBinHex(byte[] buffer, int index, int count)
         {
             throw new NotImplementedException();
         }
@@ -504,7 +504,7 @@ namespace DataCommander.Foundation.Xml
 
         private sealed class StackItem
         {
-            private string localName;
+            private readonly string localName;
             private bool hasAttributes;
             private bool hasChildNodes;
 

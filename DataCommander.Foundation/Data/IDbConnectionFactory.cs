@@ -1,6 +1,5 @@
 namespace DataCommander.Foundation.Data
 {
-    using System;
     using System.Data;
     using DataCommander.Foundation.Threading;
 

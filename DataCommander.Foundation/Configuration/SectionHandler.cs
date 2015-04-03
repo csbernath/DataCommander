@@ -1,6 +1,5 @@
 namespace DataCommander.Foundation.Configuration
 {
-    using System;
     using System.Configuration;
     using System.Xml;
 
@@ -9,7 +8,7 @@ namespace DataCommander.Foundation.Configuration
     {
         private readonly XmlNode section;
 
-        private SectionHandler( XmlNode section )
+        private SectionHandler(XmlNode section)
         {
             this.section = section;
         }
@@ -28,9 +27,9 @@ namespace DataCommander.Foundation.Configuration
         object IConfigurationSectionHandler.Create(
             object parent,
             object configContext,
-            XmlNode section )
+            XmlNode section)
         {
-            return new SectionHandler( section );
+            return new SectionHandler(section);
         }
     }
 }

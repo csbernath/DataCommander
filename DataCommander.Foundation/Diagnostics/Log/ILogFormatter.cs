@@ -1,7 +1,5 @@
 namespace DataCommander.Foundation.Diagnostics
 {
-    using System;
-
     internal interface ILogFormatter
     {
         string Begin();

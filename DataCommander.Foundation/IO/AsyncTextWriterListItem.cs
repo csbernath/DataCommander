@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation.IO
 {
-    using System;
     using System.Text;
 
     internal sealed class AsyncTextWriterListItem

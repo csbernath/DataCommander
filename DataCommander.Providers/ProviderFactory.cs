@@ -1,10 +1,10 @@
-using System;
-
 namespace DataCommander.Providers
 {
+    using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Diagnostics.Contracts;
-    using System.Reflection;
+    using ADODB;
     using DataCommander.Foundation.Configuration;
     using DataCommander.Foundation.Data;
 
@@ -50,11 +50,11 @@ namespace DataCommander.Providers
 
             try
             {
-                var c = new ADODB.ConnectionClass();
+                var c = new ConnectionClass();
 
                 c.Open(connectionString, null, null, 0);
-                ADODB.Recordset rs = c.OpenSchema(ADODB.SchemaEnum.adSchemaDBInfoKeywords, System.Type.Missing, System.Type.Missing);
-                System.Data.DataTable dataTable = OleDBHelper.Convert(rs);
+                Recordset rs = c.OpenSchema(SchemaEnum.adSchemaDBInfoKeywords, Type.Missing, Type.Missing);
+                DataTable dataTable = OleDBHelper.Convert(rs);
                 rs.Close();
                 c.Close();
 

@@ -4,11 +4,12 @@ namespace DataCommander.Providers.SQLite
     using System.Data;
     using System.Data.SQLite;
     using System.Diagnostics.Contracts;
+    using System.Windows.Forms;
     using DataCommander.Foundation.Data;
 
     internal sealed class DatabaseCollectionNode : ITreeNode
     {
-        private SQLiteConnection connection;
+        private readonly SQLiteConnection connection;
 
         public DatabaseCollectionNode(SQLiteConnection connection)
         {
@@ -69,7 +70,7 @@ namespace DataCommander.Providers.SQLite
             }
         }
 
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu
         {
             get
             {

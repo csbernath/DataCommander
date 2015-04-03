@@ -1,14 +1,14 @@
 namespace DataCommander.Providers.SQLite
 {
     using System;
+    using System.Data;
     using System.Data.SQLite;
     using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Providers;
 
     internal sealed class Connection : ConnectionBase
     {
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private SQLiteConnection sqliteConnection;
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly SQLiteConnection sqliteConnection;
         private string connectionName;
 
         public Connection( string connectionString )
@@ -43,19 +43,19 @@ namespace DataCommander.Providers.SQLite
 
         public override void Open()
         {
-            sqliteConnection.Open();
+            this.sqliteConnection.Open();
         }
 
-        public override System.Data.IDbCommand CreateCommand()
+        public override IDbCommand CreateCommand()
         {
-            return sqliteConnection.CreateCommand();
+            return this.sqliteConnection.CreateCommand();
         }
 
         public override string Caption
         {
             get
             {
-                return sqliteConnection.DataSource;
+                return this.sqliteConnection.DataSource;
             }
         }
 
@@ -63,7 +63,7 @@ namespace DataCommander.Providers.SQLite
         {
             get
             {
-                return sqliteConnection.DataSource;
+                return this.sqliteConnection.DataSource;
             }
         }
 
@@ -76,7 +76,7 @@ namespace DataCommander.Providers.SQLite
         {
             get
             {
-                return sqliteConnection.ServerVersion;
+                return this.sqliteConnection.ServerVersion;
             }
         }
 

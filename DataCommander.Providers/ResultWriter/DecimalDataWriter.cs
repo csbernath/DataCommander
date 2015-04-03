@@ -4,7 +4,7 @@ namespace DataCommander.Providers
     {
         public override string ToString( object value )
         {
-            return value.ToString().PadLeft( Width, ' ' );
+            return value.ToString().PadLeft(this.Width, ' ' );
         }
     }
 }

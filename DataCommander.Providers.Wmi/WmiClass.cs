@@ -16,7 +16,7 @@ namespace DataCommander.Providers.Wmi
         {
             get
             {
-                return manClass.ClassPath.ClassName;
+                return this.manClass.ClassPath.ClassName;
             }
         }
     
@@ -30,7 +30,7 @@ namespace DataCommander.Providers.Wmi
     
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
-            ManagementObjectCollection objects = manClass.GetSubclasses();
+            ManagementObjectCollection objects = this.manClass.GetSubclasses();
             ArrayList list = new ArrayList();
 
             foreach (ManagementClass subClass in objects)
@@ -57,7 +57,7 @@ namespace DataCommander.Providers.Wmi
         {
             get
             {
-                return string.Format("select * from {0}",Name);
+                return string.Format("select * from {0}", this.Name);
             }
         }
     
@@ -67,8 +67,8 @@ namespace DataCommander.Providers.Wmi
             {
                 return null;
             }
-        }    
+        }
 
-        ManagementClass manClass;
+        readonly ManagementClass manClass;
     }
 }

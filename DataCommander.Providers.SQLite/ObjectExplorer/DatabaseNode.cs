@@ -2,6 +2,7 @@ namespace DataCommander.Providers.SQLite
 {
     using System.Collections.Generic;
     using System.Data.SQLite;
+    using System.Windows.Forms;
 
     sealed class DatabaseNode : ITreeNode
     {
@@ -15,7 +16,7 @@ namespace DataCommander.Providers.SQLite
         {
             get
             {
-                return connection;
+                return this.connection;
             }
         }
 
@@ -24,7 +25,7 @@ namespace DataCommander.Providers.SQLite
         {
             get
             {
-                return name;
+                return this.name;
             }
         }
 
@@ -60,7 +61,7 @@ namespace DataCommander.Providers.SQLite
             }
         }
 
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu
         {
             get
             {
@@ -69,7 +70,7 @@ namespace DataCommander.Providers.SQLite
         }
         #endregion
 
-        SQLiteConnection connection;
-        string name;
+        readonly SQLiteConnection connection;
+        readonly string name;
     }
 }

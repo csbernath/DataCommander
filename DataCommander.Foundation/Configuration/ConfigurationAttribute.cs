@@ -102,7 +102,7 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="textWriter"></param>
         public void Write(TextWriter textWriter)
         {
-            string typeName = null;
+            string typeName;
             Type type = null;
 
             if (this.value != null)
@@ -123,9 +123,9 @@ namespace DataCommander.Foundation.Configuration
                 {
                     Type elementType = type.GetElementType();
 
-                    if (elementType == typeof (Byte))
+                    if (elementType == typeof (byte))
                     {
-                        Byte[] inArray = (Byte[])this.value;
+                        byte[] inArray = (byte[])this.value;
                         string base64 = System.Convert.ToBase64String(inArray);
                         textWriter.WriteLine(base64);
                     }

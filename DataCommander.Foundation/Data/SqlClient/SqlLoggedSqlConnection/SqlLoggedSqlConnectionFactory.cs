@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation.Data.SqlClient
 {
-    using System;
     using System.Data;
     using System.Data.SqlClient;
     using DataCommander.Foundation.Threading;
@@ -10,8 +9,8 @@
     /// </summary>
     public sealed class SqlLoggedSqlConnectionFactory : IDbConnectionFactory
     {
-        private SqlLog sqlLog;
-        private int applicationId;
+        private readonly SqlLog sqlLog;
+        private readonly int applicationId;
         private readonly ISqlLoggedSqlCommandFilter filter;
 
         /// <summary>

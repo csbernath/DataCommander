@@ -40,7 +40,7 @@
         {
             get
             {
-                if (value == null)
+                if (this.value == null)
                 {
                     throw new InvalidOperationException();
                 }

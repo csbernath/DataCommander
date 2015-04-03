@@ -12,15 +12,15 @@
     using Microsoft.TeamFoundation.VersionControl.Client;
     using Microsoft.TeamFoundation.VersionControl.Common;
 
-	internal sealed class TfsDownloadDataReader : TfsDataReader
+    internal sealed class TfsDownloadDataReader : TfsDataReader
 	{
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private TfsCommand command;
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly TfsCommand command;
 		private Item item;
 		private string localPath;
 		private bool first = true;
 		private int recordsAffected;
-		private Queue<Item> queue = new Queue<Item>();
+		private readonly Queue<Item> queue = new Queue<Item>();
 
 		public TfsDownloadDataReader( TfsCommand command )
 		{
@@ -64,24 +64,24 @@
 			}
 			else
 			{
-				if (first)
+				if (this.first)
 				{
-					first = false;
-					string serverPath = (string) command.Parameters[ "serverPath" ].Value;
-					this.item = command.Connection.VersionControlServer.GetItem( serverPath );
-					this.localPath = Database.GetValueOrDefault<string>( command.Parameters[ "localPath" ].Value );
+				    this.first = false;
+					string serverPath = (string) this.command.Parameters[ "serverPath" ].Value;
+					this.item = this.command.Connection.VersionControlServer.GetItem( serverPath );
+					this.localPath = Database.GetValueOrDefault<string>(this.command.Parameters[ "localPath" ].Value );
 
 					if (this.localPath == null)
 					{
 						this.localPath = Path.GetTempPath();
 						this.localPath = Path.Combine( this.localPath, DateTime.Now.ToString( "yyyyMMdd HHmmss.fff" ) );
 
-						switch (item.ItemType)
+						switch (this.item.ItemType)
 						{
 							case ItemType.File:
 							case ItemType.Folder:
 								string name = VersionControlPath.GetFileName( this.item.ServerItem );
-								this.localPath = Path.Combine( localPath, name );
+								this.localPath = Path.Combine(this.localPath, name );
 								break;
 
 							default:
@@ -90,7 +90,7 @@
 					}
 
 					var queryForm = (QueryForm) Application.Instance.MainForm.ActiveMdiChild;
-                    queryForm.AddInfoMessage( new InfoMessage( LocalTime.Default.Now, InfoMessageSeverity.Information, string.Format( "localPath: {0}", localPath ) ) );
+                    queryForm.AddInfoMessage( new InfoMessage( LocalTime.Default.Now, InfoMessageSeverity.Information, string.Format( "localPath: {0}", this.localPath ) ) );
 
 
 					if (!VersionControlPath.IsValidPath( serverPath ))
@@ -98,7 +98,7 @@
 						throw new ArgumentException( string.Format( "The parameter serverPath '{0}' is invalid.", serverPath ) );
 					}
 
-					this.queue.Enqueue( item );
+					this.queue.Enqueue(this.item );
 				}
 
 				if (this.queue.Count > 0)
@@ -113,11 +113,11 @@
 					string name = VersionControlPath.GetFileName( current.ServerItem );
 					string path;
 
-                    if (item.ServerItem.Length + 1 <= current.ServerItem.Length)
+                    if (this.item.ServerItem.Length + 1 <= current.ServerItem.Length)
                     {
-                        string secondPath = current.ServerItem.Substring( item.ServerItem.Length + 1 );
+                        string secondPath = current.ServerItem.Substring(this.item.ServerItem.Length + 1 );
                         secondPath = secondPath.Replace( VersionControlPath.Separator, Path.DirectorySeparatorChar );
-                        path = Path.Combine( localPath, secondPath );
+                        path = Path.Combine(this.localPath, secondPath );
                     }
                     else
                     {

@@ -15,7 +15,7 @@ namespace DataCommander.Providers
         public IProvider Provider;
         public string ConnectionString;
         public ConnectionBase Connection;
-        private static readonly byte[] entropy = new byte[] {0x56, 0x4f, 0x3d, 0x78, 0xf1};
+        private static readonly byte[] entropy = {0x56, 0x4f, 0x3d, 0x78, 0xf1};
 
         public static string GetValue(DbConnectionStringBuilder dbConnectionStringBuilder, string keyword)
         {
@@ -64,23 +64,23 @@ namespace DataCommander.Providers
         public void Save(ConfigurationNode folder)
         {
             ConfigurationAttributeCollection attributes = folder.Attributes;
-            attributes.SetAttributeValue("ConnectionName", ConnectionName);
-            attributes.SetAttributeValue("ProviderName", ProviderName);
-            attributes.SetAttributeValue("ConnectionString", ConnectionString);
+            attributes.SetAttributeValue("ConnectionName", this.ConnectionName);
+            attributes.SetAttributeValue("ProviderName", this.ProviderName);
+            attributes.SetAttributeValue("ConnectionString", this.ConnectionString);
         }
 
         public void Load(ConfigurationNode folder)
         {
             ConfigurationAttributeCollection attributes = folder.Attributes;
-            ConnectionName = attributes["ConnectionName"].GetValue<string>();
-            ProviderName = attributes["ProviderName"].GetValue<string>();
-            ConnectionString = attributes["ConnectionString"].GetValue<string>();
+            this.ConnectionName = attributes["ConnectionName"].GetValue<string>();
+            this.ProviderName = attributes["ProviderName"].GetValue<string>();
+            this.ConnectionString = attributes["ConnectionString"].GetValue<string>();
         }
 
         public void LoadProtectedPassword(ConfigurationNode node)
         {
             string password;
-            bool contains = node.Attributes.TryGetAttributeValue<string>("Password", out password);
+            bool contains = node.Attributes.TryGetAttributeValue("Password", out password);
             if (contains)
             {
                 bool succeeded = false;

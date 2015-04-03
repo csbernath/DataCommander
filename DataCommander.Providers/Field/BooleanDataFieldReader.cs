@@ -5,8 +5,8 @@ namespace DataCommander.Providers
 
     public sealed class BooleanDataFieldReader : IDataFieldReader
     {
-        private IDataRecord dataRecord;
-        private int columnOrdinal;
+        private readonly IDataRecord dataRecord;
+        private readonly int columnOrdinal;
 
         public BooleanDataFieldReader(IDataRecord dataRecord, int columnOrdinal)
         {
@@ -20,7 +20,7 @@ namespace DataCommander.Providers
             {
                 object value;
 
-                if (this.dataRecord.IsDBNull(columnOrdinal))
+                if (this.dataRecord.IsDBNull(this.columnOrdinal))
                 {
                     value = DBNull.Value;
                 }

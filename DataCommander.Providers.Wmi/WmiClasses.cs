@@ -1,15 +1,13 @@
-using System.Linq;
-
 namespace DataCommander.Providers.Wmi
 {
-    using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Management;
     using System.Windows.Forms;
 
     internal sealed class WmiClasses : ITreeNode
     {
-        private ManagementScope scope;
+        private readonly ManagementScope scope;
 
         public WmiClasses(ManagementScope scope)
         {
@@ -34,7 +32,7 @@ namespace DataCommander.Providers.Wmi
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
-            var manClass = new ManagementClass(scope.Path);
+            var manClass = new ManagementClass(this.scope.Path);
             ManagementObjectCollection objects = manClass.GetSubclasses();
             var list = new List<ITreeNode>();
 

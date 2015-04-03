@@ -25,12 +25,12 @@ namespace DataCommander.Providers
         {
             get
             {
-                return parameter.DbType;
+                return this.parameter.DbType;
             }
 
             set
             {
-                parameter.DbType = value;
+                this.parameter.DbType = value;
             }
         }
 
@@ -40,12 +40,12 @@ namespace DataCommander.Providers
         {
             get
             {
-                return size;
+                return this.size;
             }
 
             set
             {
-                SetSize(value);
+                this.SetSize(value);
             }
         }
 
@@ -53,7 +53,7 @@ namespace DataCommander.Providers
         {
             get
             {
-                return precision;
+                return this.precision;
             }
         }
 
@@ -61,7 +61,7 @@ namespace DataCommander.Providers
         {
             get
             {
-                return scale;
+                return this.scale;
             }
         }
     }

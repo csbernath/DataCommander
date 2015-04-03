@@ -9,7 +9,7 @@
     /// </summary>
     public sealed class XmlAttributeReader
     {
-        private XmlAttributeCollection attributes;
+        private readonly XmlAttributeCollection attributes;
 
         /// <summary>
         /// 

@@ -18,12 +18,12 @@ namespace DataCommander.Foundation.Data
     {
         #region Private Fields
 
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private IDbConnection cloneableConnection;
-        private ICloneable cloneable;
-        private List<string> commands = new List<string>();
-        private AutoResetEvent queueEvent = new AutoResetEvent( false );
-        private WorkerThread thread;
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly IDbConnection cloneableConnection;
+        private readonly ICloneable cloneable;
+        private readonly List<string> commands = new List<string>();
+        private readonly AutoResetEvent queueEvent = new AutoResetEvent( false );
+        private readonly WorkerThread thread;
 
         #endregion
 

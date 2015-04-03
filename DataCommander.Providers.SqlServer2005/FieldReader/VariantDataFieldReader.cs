@@ -20,13 +20,13 @@ namespace DataCommander.Providers.SqlServer2005
             {
                 object value;
 
-                if (sqlDataReader.IsDBNull(columnOrdinal))
+                if (this.sqlDataReader.IsDBNull(this.columnOrdinal))
                 {
                     value = DBNull.Value;
                 }
                 else
                 {
-                    value = sqlDataReader.GetValue(columnOrdinal);
+                    value = this.sqlDataReader.GetValue(this.columnOrdinal);
                     Type type = value.GetType();
 
                     if (type.IsArray)
@@ -60,7 +60,7 @@ namespace DataCommander.Providers.SqlServer2005
             }
         }
 
-        SqlDataReader sqlDataReader;
-        int columnOrdinal;
+        readonly SqlDataReader sqlDataReader;
+        readonly int columnOrdinal;
     }
 }

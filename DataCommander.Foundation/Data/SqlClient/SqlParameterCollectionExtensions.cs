@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.SqlServer.Server;
-
-namespace DataCommander.Foundation.Data.SqlClient
+﻿namespace DataCommander.Foundation.Data.SqlClient
 {
     using System;
+    using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
     using System.Data.SqlTypes;
     using System.Diagnostics.Contracts;
     using System.Globalization;
+    using System.Linq;
     using System.Text;
     using DataCommander.Foundation.Text;
+    using Microsoft.SqlServer.Server;
 
     /// <summary>
     /// 
@@ -138,7 +137,7 @@ namespace DataCommander.Foundation.Data.SqlClient
 
                                             case SqlDbType.Money:
                                                 SqlMoney sqlMoney = (SqlMoney) value;
-                                                Decimal dec = sqlMoney.Value;
+                                                decimal dec = sqlMoney.Value;
                                                 i = (long) dec;
 
                                                 if (i == dec)
@@ -170,7 +169,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                                         switch (elementTypeCode)
                                         {
                                             case TypeCode.Byte:
-                                                Byte[] bytes = (Byte[]) value;
+                                                byte[] bytes = (byte[]) value;
                                                 s = "0x" + Hex.GetString( bytes, true );
                                                 break;
 

@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation.XmlSpreadsheet
 {
-    using System;
     using System.Diagnostics.Contracts;
     using System.Xml;
     using DataCommander.Foundation.Xml;
@@ -11,8 +10,8 @@
     public sealed class XmlSpreadsheetCell
     {
         private readonly XmlSpreadsheetAttributeCollection attributes = new XmlSpreadsheetAttributeCollection();
-        private XmlSpreadsheetDataType dataType;
-        private string value;
+        private readonly XmlSpreadsheetDataType dataType;
+        private readonly string value;
 
         /// <summary>
         /// 

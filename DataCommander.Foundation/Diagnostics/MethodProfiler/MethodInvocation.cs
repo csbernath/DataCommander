@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation.Diagnostics
 {
-    using System;
     using System.Threading;
 
     internal sealed class MethodInvocation
@@ -9,7 +8,7 @@
         private readonly MethodInvocation parent;
         private readonly int id;
         private readonly int methodId;
-        private long beginTime;
+        private readonly long beginTime;
         private long endTime;
 
         public MethodInvocation(

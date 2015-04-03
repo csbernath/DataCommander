@@ -25,8 +25,8 @@
 
         private sealed class UnaryFunctionComposition<X, Y, Z>
         {
-            private Func<X, Y> func1;
-            private Func<Y, Z> func2;
+            private readonly Func<X, Y> func1;
+            private readonly Func<Y, Z> func2;
 
             public UnaryFunctionComposition(Func<X, Y> func1, Func<Y, Z> func2)
             {

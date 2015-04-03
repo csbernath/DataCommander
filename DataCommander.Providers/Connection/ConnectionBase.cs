@@ -44,7 +44,7 @@ namespace DataCommander.Providers
         {
             get
             {
-                return connection.ConnectionString;
+                return this.connection.ConnectionString;
             }
         }
 
@@ -66,9 +66,9 @@ namespace DataCommander.Providers
             {
                 string database;
 
-                if (connection != null)
+                if (this.connection != null)
                 {
-                    database = connection.Database;
+                    database = this.connection.Database;
                 }
                 else
                 {

@@ -3,7 +3,6 @@
     using System;
     using System.Diagnostics.Contracts;
     using System.Xml;
-    using DataCommander.Foundation;
 
     /// <summary>
     /// 

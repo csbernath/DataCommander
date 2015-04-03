@@ -18,13 +18,13 @@
         /// <param name="dataRow"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static T GetValue<T>( this DataRow dataRow, string name )
+        public static T GetValue<T>(this DataRow dataRow, string name)
         {
-            Contract.Requires<ArgumentNullException>( dataRow != null );
-            object valueObject = dataRow[ name ];
-            Contract.Assert( valueObject is T );
+            Contract.Requires<ArgumentNullException>(dataRow != null);
+            object valueObject = dataRow[name];
+            Contract.Assert(valueObject is T);
 
-            return (T)valueObject;
+            return (T) valueObject;
         }
 
         /// <summary>
@@ -38,11 +38,11 @@
         public static T GetValue<T>(
             this DataRow dataRow,
             string name,
-            T outputNullValue )
+            T outputNullValue)
         {
-            Contract.Requires<ArgumentNullException>( dataRow != null );
-            object valueObject = dataRow[ name ];
-            return Database.GetValue<T>( valueObject, outputNullValue );
+            Contract.Requires<ArgumentNullException>(dataRow != null);
+            object valueObject = dataRow[name];
+            return Database.GetValue(valueObject, outputNullValue);
         }
 
         /// <summary>
@@ -52,11 +52,11 @@
         /// <param name="dataRow"></param>
         /// <param name="columnIndex"></param>
         /// <returns></returns>
-        public static T GetValueOrDefault<T>( this DataRow dataRow, int columnIndex )
+        public static T GetValueOrDefault<T>(this DataRow dataRow, int columnIndex)
         {
-            Contract.Requires<ArgumentNullException>( dataRow != null );
-            object value = dataRow[ columnIndex ];
-            return Database.GetValueOrDefault<T>( value );
+            Contract.Requires<ArgumentNullException>(dataRow != null);
+            object value = dataRow[columnIndex];
+            return Database.GetValueOrDefault<T>(value);
         }
 
         /// <summary>
@@ -66,11 +66,11 @@
         /// <param name="dataRow"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static T GetValueOrDefault<T>( this DataRow dataRow, string name )
+        public static T GetValueOrDefault<T>(this DataRow dataRow, string name)
         {
-            Contract.Requires<ArgumentNullException>( dataRow != null );
-            object value = dataRow[ name ];
-            return Database.GetValueOrDefault<T>( value );
+            Contract.Requires<ArgumentNullException>(dataRow != null);
+            object value = dataRow[name];
+            return Database.GetValueOrDefault<T>(value);
         }
 
         /// <summary>
@@ -78,19 +78,19 @@
         /// </summary>
         /// <param name="dataRow"></param>
         /// <returns></returns>
-        public static StringTable ToStringTable( this DataRow dataRow )
+        public static StringTable ToStringTable(this DataRow dataRow)
         {
-            Contract.Requires<ArgumentNullException>( dataRow != null );
-            var st = new StringTable( 2 );
+            Contract.Requires<ArgumentNullException>(dataRow != null);
+            var st = new StringTable(2);
             DataTable dataTable = dataRow.Table;
             object[] itemArray = dataRow.ItemArray;
 
             for (int i = 0; i < itemArray.Length; i++)
             {
                 StringTableRow row = st.NewRow();
-                row[ 0 ] = dataTable.Columns[ i ].ColumnName;
-                row[ 1 ] = itemArray[ i ].ToString();
-                st.Rows.Add( row );
+                row[0] = dataTable.Columns[i].ColumnName;
+                row[1] = itemArray[i].ToString();
+                st.Rows.Add(row);
             }
 
             return st;
@@ -101,7 +101,7 @@
         /// </summary>
         /// <param name="dataRows"></param>
         /// <returns></returns>
-        public static StringTable ToStringTable( this IEnumerable<DataRow> dataRows )
+        public static StringTable ToStringTable(this IEnumerable<DataRow> dataRows)
         {
             StringTable st = null;
 
@@ -116,8 +116,8 @@
                         first = false;
                         DataTable dataTable = dataRow.Table;
                         int columnCount = dataTable.Columns.Count;
-                        st = new StringTable( columnCount );
-                        DataTableExtensions.WriteHeader( dataTable.Columns, st );
+                        st = new StringTable(columnCount);
+                        DataTableExtensions.WriteHeader(dataTable.Columns, st);
                     }
 
                     object[] itemArray = dataRow.ItemArray;
@@ -125,10 +125,10 @@
 
                     for (int j = 0; j < itemArray.Length; j++)
                     {
-                        row[ j ] = itemArray[ j ].ToString();
+                        row[j] = itemArray[j].ToString();
                     }
 
-                    st.Rows.Add( row );
+                    st.Rows.Add(row);
                 }
             }
 

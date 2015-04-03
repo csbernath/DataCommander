@@ -3,7 +3,6 @@ namespace DataCommander.Foundation.IO
     using System;
     using System.Diagnostics.Contracts;
     using System.IO;
-    using DataCommander.Foundation;
     using DataCommander.Foundation.Diagnostics;
 
     /// <summary>
@@ -76,7 +75,7 @@ namespace DataCommander.Foundation.IO
         /// <param name="offset"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public override int Read( Byte[] buffer, int offset, int count )
+        public override int Read( byte[] buffer, int offset, int count )
         {
             Contract.Assert( count >= 0 );
 
@@ -102,7 +101,7 @@ namespace DataCommander.Foundation.IO
         /// <param name="buffer"></param>
         /// <param name="offset"></param>
         /// <param name="count"></param>
-        public override void Write( Byte[] buffer, int offset, int count )
+        public override void Write( byte[] buffer, int offset, int count )
         {
             throw new NotImplementedException();
         }

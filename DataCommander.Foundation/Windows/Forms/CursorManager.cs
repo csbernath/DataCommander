@@ -2,14 +2,14 @@
 {
     using System;
     using System.Diagnostics.Contracts;
-    using System.Windows.Forms;    
+    using System.Windows.Forms;
 
     /// <summary>
     /// 
     /// </summary>
     public sealed class CursorManager : IDisposable
     {
-        private Cursor originalCursor;
+        private readonly Cursor originalCursor;
 
         /// <summary>
         /// 

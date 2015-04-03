@@ -1,23 +1,5 @@
 namespace DataCommander.Foundation.Text
 {
-    using System;
-
-	/// <summary>
-    /// 
-    /// </summary>
-    public enum StringTableColumnAlign
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        Left,
-
-        /// <summary>
-        /// 
-        /// </summary>
-        Right
-    }
-
     /// <summary>
     /// 
     /// </summary>

@@ -11,7 +11,7 @@
 
     internal sealed class SQLiteResultWriter : IResultWriter
     {
-        private TextWriter messageWriter;
+        private readonly TextWriter messageWriter;
         private SQLiteConnection connection;
         private SQLiteTransaction transaction;
         private string tableName;
@@ -217,7 +217,7 @@
         {
         }
 
-        void IResultWriter.WriteParameters( System.Data.IDataParameterCollection parameters )
+        void IResultWriter.WriteParameters( IDataParameterCollection parameters )
         {
         }
 

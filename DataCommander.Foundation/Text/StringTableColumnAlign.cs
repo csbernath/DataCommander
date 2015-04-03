@@ -1,4 +1,4 @@
-namespace Binarit.Foundation.Text
+namespace DataCommander.Foundation.Text
 {
     /// <summary>
     /// 

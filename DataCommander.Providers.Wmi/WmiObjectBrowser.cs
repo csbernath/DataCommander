@@ -16,7 +16,7 @@ namespace DataCommander.Providers.Wmi
         {
             return new ITreeNode[]
             {
-                new WmiClasses(connection.Scope)
+                new WmiClasses(this.connection.Scope)
             };
         }
 

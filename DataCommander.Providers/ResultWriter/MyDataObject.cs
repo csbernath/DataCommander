@@ -9,8 +9,8 @@
 
     internal sealed class MyDataObject : IDataObject
     {
-        private DataView dataView;
-        private int[] columnIndexes;
+        private readonly DataView dataView;
+        private readonly int[] columnIndexes;
 
         public MyDataObject( DataView dataView, int[] columnIndexes )
         {

@@ -1,12 +1,12 @@
 ﻿namespace DataCommander.Providers
 {
     using System;
-	using System.Data;
+    using System.Data;
 
-	public sealed class SingleFieldDataReader : IDataFieldReader
+    public sealed class SingleFieldDataReader : IDataFieldReader
     {
-        private IDataRecord dataRecord;
-        private Int32 columnOrdinal;
+        private readonly IDataRecord dataRecord;
+        private readonly Int32 columnOrdinal;
 
         public SingleFieldDataReader(IDataRecord dataRecord, Int32 columnOrdinal)
         {
@@ -22,13 +22,13 @@
             {
                 object value;
 
-                if (this.dataRecord.IsDBNull(columnOrdinal))
+                if (this.dataRecord.IsDBNull(this.columnOrdinal))
                 {
                     value = DBNull.Value;
                 }
                 else
                 {
-                    Single singleValue = (Single)this.dataRecord[columnOrdinal];
+                    Single singleValue = (Single)this.dataRecord[this.columnOrdinal];
                     value = new SingleField(singleValue);
                 }
 

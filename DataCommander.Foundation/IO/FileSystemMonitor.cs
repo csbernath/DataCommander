@@ -16,10 +16,10 @@ namespace DataCommander.Foundation.IO
     /// </remarks>
     public sealed class FileSystemMonitor : LoopThread, ILoopable
     {
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private string path;
-        private string searchPattern;
-        private int period;
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly string path;
+        private readonly string searchPattern;
+        private readonly int period;
         private string[] last;
         private FileSystemEventHandler created;
 
@@ -48,7 +48,7 @@ namespace DataCommander.Foundation.IO
 
             this.Initialize( this );
             string name = string.Format( CultureInfo.InvariantCulture, "FileSystemMonitor({0},{1})", path, searchPattern );
-            Thread.Name = name;
+            this.Thread.Name = name;
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace DataCommander.Foundation.IO
 
                         if (index < 0)
                         {
-                            log.Trace("{0}.Deleted: {1}", Thread.Name, file );
+                            log.Trace("{0}.Deleted: {1}", this.Thread.Name, file );
                         }
                     }
                 }

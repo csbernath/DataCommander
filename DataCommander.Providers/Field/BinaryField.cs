@@ -6,8 +6,8 @@ namespace DataCommander.Providers
 
     public sealed class BinaryField : IConvertible
     {
-        private byte[] bytes;
-        private string s;
+        private readonly byte[] bytes;
+        private readonly string s;
 
         public BinaryField(byte[] bytes)
         {
@@ -26,19 +26,19 @@ namespace DataCommander.Providers
                 sb.Append(')');
             }
 
-            s = sb.ToString();
+            this.s = sb.ToString();
         }
 
         public override string ToString()
         {
-            return s;
+            return this.s;
         }
 
         public byte[] Value
         {
             get
             {
-                return bytes;
+                return this.bytes;
             }
         }
 

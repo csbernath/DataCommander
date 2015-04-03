@@ -8,16 +8,16 @@ namespace DataCommander.Foundation.Text
     /// </summary>
     public sealed class StringTableRow
     {
-        private StringTable table;
-        private string[] cells;
+        private readonly StringTable table;
+        private readonly string[] cells;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="table"></param>
-        internal StringTableRow( StringTable table )
+        internal StringTableRow(StringTable table)
         {
-            Contract.Requires( table != null );
+            Contract.Requires<ArgumentNullException>(table != null);
 
             this.table = table;
             this.cells = new string[table.Columns.Count];
@@ -28,28 +28,25 @@ namespace DataCommander.Foundation.Text
         /// </summary>
         public StringTable Table
         {
-            get
-            {
-                return this.table;
-            }
+            get { return this.table; }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public string this[ int columnIndex ]
+        public string this[int columnIndex]
         {
             get
             {
-                Contract.Requires( 0 <= columnIndex && columnIndex < this.Table.Columns.Count );
+                Contract.Requires(0 <= columnIndex && columnIndex < this.Table.Columns.Count);
 
-                return this.cells[ columnIndex ];
+                return this.cells[columnIndex];
             }
 
             set
             {
-                Contract.Requires( 0 <= columnIndex && columnIndex < this.Table.Columns.Count );
-                this.cells[ columnIndex ] = value;
+                Contract.Requires(0 <= columnIndex && columnIndex < this.Table.Columns.Count);
+                this.cells[columnIndex] = value;
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace DataCommander.Foundation.Configuration
 {
-    using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
@@ -13,9 +13,9 @@
     [DebuggerDisplay( "Count = {Count}" )]
     public class ConfigurationAttributeCollection : IList<ConfigurationAttribute>
     {
-        private IndexableCollection<ConfigurationAttribute> collection;
-        private ListIndex<ConfigurationAttribute> listIndex;
-        private UniqueIndex<string, ConfigurationAttribute> nameIndex;
+        private readonly IndexableCollection<ConfigurationAttribute> collection;
+        private readonly ListIndex<ConfigurationAttribute> listIndex;
+        private readonly UniqueIndex<string, ConfigurationAttribute> nameIndex;
         private string name;
 
         /// <summary>
@@ -190,7 +190,7 @@
         /// <returns></returns>
         public bool TryGetAttributeValue<T>( string name, out T value )
         {
-            return this.TryGetAttributeValue<T>( name, default( T ), out value );
+            return this.TryGetAttributeValue( name, default( T ), out value );
         }
 
         /// <summary>
@@ -327,7 +327,7 @@
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return this.collection.GetEnumerator();
         }

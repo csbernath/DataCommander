@@ -26,25 +26,25 @@ namespace DataCommander.Foundation.Diagnostics
     /// </remarks>
     internal sealed class TextLogWriter : ILogWriter
     {
-        private TextWriter textWriter;
-        private ILogFormatter formatter;
+        private readonly TextWriter textWriter;
+        private readonly ILogFormatter formatter;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="textWriter"></param>
-        public TextLogWriter( TextWriter textWriter )
+        public TextLogWriter(TextWriter textWriter)
         {
-            Contract.Requires( textWriter != null );
+            Contract.Requires(textWriter != null);
 
             this.textWriter = textWriter;
             this.formatter = new TextLogFormatter();
         }
 
-        void ILogWriter.Write( LogEntry entry )
+        void ILogWriter.Write(LogEntry entry)
         {
-            string s = this.formatter.Format( entry );
-            this.textWriter.Write( s );
+            string s = this.formatter.Format(entry);
+            this.textWriter.Write(s);
         }
 
         #region ILogWriter Members

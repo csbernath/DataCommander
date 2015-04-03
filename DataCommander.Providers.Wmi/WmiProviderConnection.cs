@@ -4,13 +4,13 @@ namespace DataCommander.Providers.Wmi
 
     internal sealed class WmiProviderConnection : ConnectionBase
     {
-        private WmiConnection wmiConnection;
+        private readonly WmiConnection wmiConnection;
         private string connectionName;
 
         public WmiProviderConnection(string connectionString)
         {
             this.wmiConnection = new WmiConnection(connectionString);
-            this.Connection = wmiConnection;
+            this.Connection = this.wmiConnection;
         }
 
         public override string ConnectionName
@@ -27,7 +27,7 @@ namespace DataCommander.Providers.Wmi
 
         public override void Open()
         {
-            wmiConnection.Open();
+            this.wmiConnection.Open();
         }
 
         public override IDbCommand CreateCommand()
@@ -39,7 +39,7 @@ namespace DataCommander.Providers.Wmi
         {
             get
             {
-                return string.Format("WMI@{0}", wmiConnection.DataSource);
+                return string.Format("WMI@{0}", this.wmiConnection.DataSource);
             }
         }
 
@@ -47,7 +47,7 @@ namespace DataCommander.Providers.Wmi
         {
             get
             {
-                return wmiConnection.DataSource;
+                return this.wmiConnection.DataSource;
             }
         }
 

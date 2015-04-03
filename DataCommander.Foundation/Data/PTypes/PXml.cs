@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation.Data.PTypes
 {
-    using System;
     using System.Data.SqlTypes;
     using System.Diagnostics;
 

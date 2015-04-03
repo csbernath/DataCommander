@@ -15,14 +15,14 @@
 
     internal sealed class SqlBulkCopyResultWriter : IResultWriter
     {
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private IResultWriter logResultWriter;
-        private Action<InfoMessage> addInfoMessage;
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly IResultWriter logResultWriter;
+        private readonly Action<InfoMessage> addInfoMessage;
         private IProvider destinationProvider;
-        private ConnectionBase destinationConnection;
-        private SqlConnection destinationSqlConnection;
-        private string tableName;
-        private Action<IDbTransaction> setTransaction;
+        private readonly ConnectionBase destinationConnection;
+        private readonly SqlConnection destinationSqlConnection;
+        private readonly string tableName;
+        private readonly Action<IDbTransaction> setTransaction;
         private IDbTransaction transaction;
         private IDbCommand insertCommand;
         private Converter<object, object>[] converters;
@@ -251,7 +251,7 @@
             this.logResultWriter.WriteTableEnd();
         }
 
-        void IResultWriter.WriteParameters( System.Data.IDataParameterCollection parameters )
+        void IResultWriter.WriteParameters( IDataParameterCollection parameters )
         {
         }
 

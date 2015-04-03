@@ -10,7 +10,7 @@ namespace DataCommander.Providers
 
     internal sealed class FileResultWriter : IResultWriter
     {
-        private TextWriter messageWriter;
+        private readonly TextWriter messageWriter;
         private StreamWriter streamWriter;
         private DataWriterBase[] dataWriters;
 
@@ -42,12 +42,12 @@ namespace DataCommander.Providers
         void IResultWriter.WriteTableBegin(DataTable schemaTable, string[] dataTypeNames)
         {
             string path = Path.GetTempFileName();
-            messageWriter.WriteLine("fileName: {0}", path);
+            this.messageWriter.WriteLine("fileName: {0}", path);
             Encoding encoding = Encoding.UTF8;
-            streamWriter = new StreamWriter(path, false, encoding, 4096);
-            streamWriter.AutoFlush = true;
+            this.streamWriter = new StreamWriter(path, false, encoding, 4096);
+            this.streamWriter.AutoFlush = true;
             int count = schemaTable.Rows.Count;
-            dataWriters = new DataWriterBase[count];
+            this.dataWriters = new DataWriterBase[count];
             StringTable st = new StringTable(3);
             st.Columns[2].Align = StringTableColumnAlign.Right;
 
@@ -135,7 +135,7 @@ namespace DataCommander.Providers
                         throw new NotImplementedException(typeCode.ToString());
                 }
 
-                dataWriters[i] = dataWriter;
+                this.dataWriters[i] = dataWriter;
 
                 StringTableRow row = st.NewRow();
                 row[0] = (string)column[SchemaTableColumn.ColumnName];
@@ -144,7 +144,7 @@ namespace DataCommander.Providers
                 st.Rows.Add(row);
             }
 
-            messageWriter.WriteLine(st);
+            this.messageWriter.WriteLine(st);
         }
 
         public void FirstRowReadBegin()
@@ -167,24 +167,24 @@ namespace DataCommander.Providers
 
                 for (int j = 0; j < row.Length; j++)
                 {
-                    string s = dataWriters[j].ToString(row[j]);
+                    string s = this.dataWriters[j].ToString(row[j]);
                     sb.Append(s);
                 }
 
                 sb.Append("\r\n");
             }
 
-            streamWriter.Write(sb);
+            this.streamWriter.Write(sb);
         }
 
         public void WriteTableEnd()
         {
-            streamWriter.Close();
-            streamWriter = null;
-            dataWriters = null;
+            this.streamWriter.Close();
+            this.streamWriter = null;
+            this.dataWriters = null;
         }
 
-        public void WriteParameters(System.Data.IDataParameterCollection parameters)
+        public void WriteParameters(IDataParameterCollection parameters)
         {
             // TODO:  Add FileResultWriter.WriteParameters implementation
         }

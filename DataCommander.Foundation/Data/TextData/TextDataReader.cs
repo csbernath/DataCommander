@@ -1,12 +1,13 @@
 ﻿namespace DataCommander.Foundation.Data
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
     using System.Diagnostics.Contracts;
     using System.Globalization;
-    using System.IO;    
+    using System.IO;
 
     /// <summary>
     /// 
@@ -16,11 +17,11 @@
         #region Private Fields
 
         private TextDataCommand command;
-        private CommandBehavior behavior;
-        private TextDataColumnCollection columns;
+        private readonly CommandBehavior behavior;
+        private readonly TextDataColumnCollection columns;
         private DataTable schemaTable;
-        private TextReader textReader;
-        private TextDataStreamReader textDataStreamReader;
+        private readonly TextReader textReader;
+        private readonly TextDataStreamReader textDataStreamReader;
         private object[] values;
         private int rowCount;
 
@@ -86,9 +87,9 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Byte GetByte( int ordinal )
+        public override byte GetByte( int ordinal )
         {
-            return (Byte) this.values[ ordinal ];
+            return (byte) this.values[ ordinal ];
         }
 
         /// <summary>
@@ -100,7 +101,7 @@
         /// <param name="bufferOffset"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public override long GetBytes( int ordinal, long dataOffset, Byte[] buffer, int bufferOffset, int length )
+        public override long GetBytes( int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length )
         {
             throw new NotImplementedException();
         }
@@ -154,9 +155,9 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Decimal GetDecimal( int ordinal )
+        public override decimal GetDecimal( int ordinal )
         {
-            return (Decimal) this.values[ ordinal ];
+            return (decimal) this.values[ ordinal ];
         }
 
         /// <summary>
@@ -173,7 +174,7 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        public override System.Collections.IEnumerator GetEnumerator()
+        public override IEnumerator GetEnumerator()
         {
             throw new NotImplementedException();
         }

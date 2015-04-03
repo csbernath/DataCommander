@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Providers.Tfs
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Data;
     using System.Diagnostics.Contracts;
@@ -8,7 +9,7 @@
 
     internal sealed class TfsParameterCollection : IDataParameterCollection, IEnumerable<TfsParameter>
     {
-        private List<TfsParameter> list = new List<TfsParameter>();
+        private readonly List<TfsParameter> list = new List<TfsParameter>();
 
         public TfsParameter this[int index]
         {
@@ -100,53 +101,53 @@
 
         #region IList Members
 
-        int System.Collections.IList.Add(object value)
+        int IList.Add(object value)
         {
             throw new NotImplementedException();
         }
 
-        void System.Collections.IList.Clear()
+        void IList.Clear()
         {
             this.list.Clear();
         }
 
-        bool System.Collections.IList.Contains(object value)
+        bool IList.Contains(object value)
         {
             throw new NotImplementedException();
         }
 
-        int System.Collections.IList.IndexOf(object value)
+        int IList.IndexOf(object value)
         {
             throw new NotImplementedException();
         }
 
-        void System.Collections.IList.Insert(int index, object value)
+        void IList.Insert(int index, object value)
         {
             throw new NotImplementedException();
         }
 
-        bool System.Collections.IList.IsFixedSize
+        bool IList.IsFixedSize
         {
             get { throw new NotImplementedException(); }
         }
 
-        bool System.Collections.IList.IsReadOnly
+        bool IList.IsReadOnly
         {
             get { throw new NotImplementedException(); }
         }
 
-        void System.Collections.IList.Remove(object value)
+        void IList.Remove(object value)
         {
             var parameter = (TfsParameter)value;
             this.list.Remove(parameter);
         }
 
-        void System.Collections.IList.RemoveAt(int index)
+        void IList.RemoveAt(int index)
         {
             throw new NotImplementedException();
         }
 
-        object System.Collections.IList.this[int index]
+        object IList.this[int index]
         {
             get
             {
@@ -165,7 +166,7 @@
 
         #region ICollection Members
 
-        void System.Collections.ICollection.CopyTo(Array array, int index)
+        void ICollection.CopyTo(Array array, int index)
         {
             throw new NotImplementedException();
         }
@@ -178,12 +179,12 @@
             }
         }
 
-        bool System.Collections.ICollection.IsSynchronized
+        bool ICollection.IsSynchronized
         {
             get { throw new NotImplementedException(); }
         }
 
-        object System.Collections.ICollection.SyncRoot
+        object ICollection.SyncRoot
         {
             get { throw new NotImplementedException(); }
         }
@@ -192,7 +193,7 @@
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return this.list.GetEnumerator();
         }

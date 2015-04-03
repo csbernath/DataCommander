@@ -23,7 +23,7 @@
         /// </summary>
         /// <param name="initialSize"></param>
         /// <param name="maxSize"></param>
-        public DynamicArray( int initialSize, int maxSize )
+        public DynamicArray(int initialSize, int maxSize)
         {
             this.array = new T[initialSize];
             this.maxSize = maxSize;
@@ -36,9 +36,9 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public int IndexOf( T item )
+        public int IndexOf(T item)
         {
-            return this.array.IndexOf( item );
+            return this.array.IndexOf(item);
         }
 
         /// <summary>
@@ -46,12 +46,12 @@
         /// </summary>
         /// <param name="index"></param>
         /// <param name="item"></param>
-        void IList<T>.Insert( int index, T item )
+        void IList<T>.Insert(int index, T item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<T>.RemoveAt( int index )
+        void IList<T>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
@@ -61,16 +61,16 @@
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public T this[ int index ]
+        public T this[int index]
         {
             get
             {
-                return this.array[ index ];
+                return this.array[index];
             }
 
             set
             {
-                this.array[ index ] = value;
+                this.array[index] = value;
             }
         }
 
@@ -82,9 +82,9 @@
         /// 
         /// </summary>
         /// <param name="item"></param>
-        public void Add( T item )
+        public void Add(T item)
         {
-            Contract.Assert( this.count < this.maxSize );
+            Contract.Assert(this.count < this.maxSize);
 
             if (this.count == this.array.Length)
             {
@@ -95,15 +95,15 @@
                     newSize = this.maxSize;
                 }
 
-                if (newSize > count)
+                if (newSize > this.count)
                 {
                     var newArray = new T[newSize];
-                    Array.Copy( this.array, newArray, this.array.Length );
+                    Array.Copy(this.array, newArray, this.array.Length);
                     this.array = newArray;
                 }
             }
 
-            this.array[ count ] = item;
+            this.array[this.count] = item;
             this.count++;
         }
 
@@ -114,7 +114,7 @@
         {
             if (this.count > 0)
             {
-                Array.Clear( this.array, 0, this.count );
+                Array.Clear(this.array, 0, this.count);
             }
 
             this.count = 0;
@@ -125,12 +125,12 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool Contains( T item )
+        public bool Contains(T item)
         {
-            return this.array.Contains( item );
+            return this.array.Contains(item);
         }
 
-        void ICollection<T>.CopyTo( T[] array, int arrayIndex )
+        void ICollection<T>.CopyTo(T[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
@@ -157,7 +157,7 @@
             }
         }
 
-        bool ICollection<T>.Remove( T item )
+        bool ICollection<T>.Remove(T item)
         {
             throw new NotSupportedException();
         }
@@ -174,7 +174,7 @@
         {
             for (int i = 0; i < this.count; i++)
             {
-                yield return this.array[ i ];
+                yield return this.array[i];
             }
         }
 

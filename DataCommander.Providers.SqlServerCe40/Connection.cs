@@ -1,12 +1,12 @@
 ﻿namespace DataCommander.Providers.SqlServerCe
 {
     using System;
+    using System.Data;
     using System.Data.SqlServerCe;
-    using DataCommander.Providers;
 
     internal sealed class Connection : ConnectionBase
     {
-        private SqlCeConnection sqlCeConnection;
+        private readonly SqlCeConnection sqlCeConnection;
         private string connectionName;
 
         public Connection( string connectionString )
@@ -20,7 +20,7 @@
             this.sqlCeConnection.Open();
         }
 
-        public override System.Data.IDbCommand CreateCommand()
+        public override IDbCommand CreateCommand()
         {
             return this.sqlCeConnection.CreateCommand();
         }

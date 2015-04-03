@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="DataGridViewWriter.cs" company="Microsoft">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace DataCommander.Providers
+﻿namespace DataCommander.Providers
 {
     using System.Collections.Generic;
     using System.Data;
@@ -17,7 +11,7 @@ namespace DataCommander.Providers
     /// </summary>
     internal sealed class DataGridViewResultWriter : IResultWriter
     {
-        private List<DoubleBufferedDataGridView> dataGridViews = new List<DoubleBufferedDataGridView>();
+        private readonly List<DoubleBufferedDataGridView> dataGridViews = new List<DoubleBufferedDataGridView>();
 
         public DataGridViewResultWriter()
         {
@@ -37,7 +31,7 @@ namespace DataCommander.Providers
         {
         }
 
-        void IResultWriter.BeforeExecuteReader( IProvider provider, IDbCommand command )
+        void IResultWriter.BeforeExecuteReader(IProvider provider, IDbCommand command)
         {
         }
 
@@ -45,13 +39,13 @@ namespace DataCommander.Providers
         {
         }
 
-        void IResultWriter.AfterCloseReader( int affectedRows )
+        void IResultWriter.AfterCloseReader(int affectedRows)
         {
         }
 
-        private static DataGridViewColumn ToDataGridViewColumn( DataRow schemaDataRow )
+        private static DataGridViewColumn ToDataGridViewColumn(DataRow schemaDataRow)
         {
-            DataColumnSchema schema = new DataColumnSchema( schemaDataRow );
+            DataColumnSchema schema = new DataColumnSchema(schemaDataRow);
             var column = new DataGridViewTextBoxColumn()
             {
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
@@ -60,7 +54,7 @@ namespace DataCommander.Providers
             return column;
         }
 
-        void IResultWriter.WriteTableBegin( DataTable schemaTable, string[] dataTypeNames )
+        void IResultWriter.WriteTableBegin(DataTable schemaTable, string[] dataTypeNames)
         {
             var dataGridView = new DoubleBufferedDataGridView();
             dataGridView.AllowUserToAddRows = false;
@@ -69,9 +63,9 @@ namespace DataCommander.Providers
 
             var columns =
                 (from schemaRow in schemaTable.AsEnumerable()
-                 select ToDataGridViewColumn( schemaRow )).ToArray();
-            dataGridView.Columns.AddRange( columns );
-            this.dataGridViews.Add( dataGridView );
+                    select ToDataGridViewColumn(schemaRow)).ToArray();
+            dataGridView.Columns.AddRange(columns);
+            this.dataGridViews.Add(dataGridView);
         }
 
         void IResultWriter.FirstRowReadBegin()
@@ -82,23 +76,23 @@ namespace DataCommander.Providers
         {
         }
 
-        void IResultWriter.WriteRows( object[][] rows, int rowCount )
+        void IResultWriter.WriteRows(object[][] rows, int rowCount)
         {
-            var dataGridView = this.dataGridViews[ this.dataGridViews.Count - 1 ];
+            var dataGridView = this.dataGridViews[this.dataGridViews.Count - 1];
             var targetRows = dataGridView.Rows;
             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {
-                var sourceRow = rows[ rowIndex ];
+                var sourceRow = rows[rowIndex];
                 var targetRow = new DataGridViewRow();
                 var cells = targetRow.Cells;
                 for (int columnIndex = 0; columnIndex < sourceRow.Length; columnIndex++)
                 {
-                    object sourceValue = sourceRow[ columnIndex ];
+                    object sourceValue = sourceRow[columnIndex];
                     var cell = new DataGridViewTextBoxCell();
                     cell.Value = sourceValue;
-                    cells.Add( cell );
+                    cells.Add(cell);
                 }
-                targetRows.Add( targetRow );
+                targetRows.Add(targetRow);
             }
         }
 
@@ -106,7 +100,7 @@ namespace DataCommander.Providers
         {
         }
 
-        void IResultWriter.WriteParameters( IDataParameterCollection parameters )
+        void IResultWriter.WriteParameters(IDataParameterCollection parameters)
         {
         }
 

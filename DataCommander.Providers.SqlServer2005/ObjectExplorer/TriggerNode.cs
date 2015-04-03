@@ -8,10 +8,10 @@ namespace DataCommander.Providers.SqlServer2005
 
     internal sealed class TriggerNode : ITreeNode
     {
-        private DatabaseNode database;
+        private readonly DatabaseNode database;
         private string schema;
         private string objectName;
-        private string name;
+        private readonly string name;
 
         public TriggerNode( DatabaseNode database, string schema, string objectName, string name )
         {
@@ -65,7 +65,7 @@ namespace DataCommander.Providers.SqlServer2005
             using (var connection = new SqlConnection( connectionString ))
             {
                 connection.Open();
-                text = SqlDatabase.GetSysComments( connection, this.database.Name, "dbo", name );
+                text = SqlDatabase.GetSysComments( connection, this.database.Name, "dbo", this.name );
             }
             QueryForm.ShowText( text );
         }
@@ -74,7 +74,7 @@ namespace DataCommander.Providers.SqlServer2005
         {
             get
             {
-                ToolStripMenuItem menuItemScriptObject = new ToolStripMenuItem( "Script Object", null, new EventHandler( menuItemScriptObject_Click ) );
+                ToolStripMenuItem menuItemScriptObject = new ToolStripMenuItem( "Script Object", null, new EventHandler(this.menuItemScriptObject_Click ) );
                 ContextMenuStrip contextMenu = new ContextMenuStrip();
                 contextMenu.Items.Add( menuItemScriptObject );
                 return contextMenu;

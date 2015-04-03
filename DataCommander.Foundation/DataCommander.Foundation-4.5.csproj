@@ -325,6 +325,8 @@
     <Compile Include="Collections\IReadOnlyCollection.cs" />
     <Compile Include="Collections\KeyValuePair.cs" />
     <Compile Include="Collections\CircuralBuffer.cs" />
+    <Compile Include="Collections\MemberEqualityComparer.cs" />
+    <Compile Include="Collections\MultipleMemberEqualityComparer.cs" />
     <Compile Include="Collections\SegmentCollection.cs" />
     <Compile Include="SystemTime.cs" />
     <Compile Include="LocalTime.cs" />
@@ -412,7 +414,6 @@
     <Compile Include="Linq\IDictionaryExtensions.cs" />
     <Compile Include="Collections\IndexableCollection\SequenceIndex.cs" />
     <Compile Include="Collections\IndexableCollection\UniqueListIndex.cs" />
-    <Compile Include="Collections\KeyComparer.cs" />
     <Compile Include="Collections\ReadOnlyArray.cs" />
     <Compile Include="CommandLine.cs" />
     <Compile Include="CommandLineArgument.cs" />
@@ -838,6 +839,7 @@
     <Compile Include="Text\StringTableColumn.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Text\StringTableColumnAlign.cs" />
     <Compile Include="Text\StringTableColumnCollection.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,6 +1,6 @@
 ﻿namespace DataCommander.Foundation.Configuration
 {
-    using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Linq;
@@ -11,11 +11,9 @@
     /// </summary>
     public sealed class ConfigurationNodeCollection : ICollection<ConfigurationNode>
     {
-        private IndexableCollection<ConfigurationNode> collection;
-
-        private ListIndex<ConfigurationNode> listIndex;
-
-        private UniqueIndex<string, ConfigurationNode> nameIndex;
+        private readonly IndexableCollection<ConfigurationNode> collection;
+        private readonly ListIndex<ConfigurationNode> listIndex;
+        private readonly UniqueIndex<string, ConfigurationNode> nameIndex;
 
         /// <summary>
         /// 
@@ -155,7 +153,7 @@
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return this.collection.GetEnumerator();
         }

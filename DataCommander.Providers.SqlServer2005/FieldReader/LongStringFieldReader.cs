@@ -5,8 +5,8 @@ namespace DataCommander.Providers.SqlServer2005
 
     internal sealed class LongStringFieldReader : IDataFieldReader
     {
-        private IDataRecord dataRecord;
-        private int columnOrdinal;
+        private readonly IDataRecord dataRecord;
+        private readonly int columnOrdinal;
 
         public LongStringFieldReader(
             IDataRecord dataRecord,
@@ -22,13 +22,13 @@ namespace DataCommander.Providers.SqlServer2005
             {
                 object value;
 
-                if (dataRecord.IsDBNull(columnOrdinal))
+                if (this.dataRecord.IsDBNull(this.columnOrdinal))
                 {
                     value = DBNull.Value;
                 }
                 else
                 {
-                    string s = dataRecord.GetString(columnOrdinal);
+                    string s = this.dataRecord.GetString(this.columnOrdinal);
                     value = new StringField(s, SqlServerProvider.ShortStringSize);
                 }
 

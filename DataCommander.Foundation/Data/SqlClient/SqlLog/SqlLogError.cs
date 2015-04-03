@@ -8,10 +8,10 @@ namespace DataCommander.Foundation.Data
     internal sealed class SqlLogError : ISqlLogItem
     {
         private readonly int applicationId;
-        private int connectionNo;
-        private int commandNo;
-        private int executionNo;
-        private Exception exception;
+        private readonly int connectionNo;
+        private readonly int commandNo;
+        private readonly int executionNo;
+        private readonly Exception exception;
 
         public SqlLogError(
             int applicationId,
@@ -66,8 +66,8 @@ namespace DataCommander.Foundation.Data
             StringBuilder sb,
             int errorNo,
             int error,
-            Byte severity,
-            Byte state,
+            byte severity,
+            byte state,
             string procedure,
             int line,
             string message )

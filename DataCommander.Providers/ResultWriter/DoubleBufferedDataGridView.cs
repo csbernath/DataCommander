@@ -7,7 +7,7 @@
     {
         public DoubleBufferedDataGridView()
         {
-            base.RowHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            this.RowHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
         }
 
         public bool PublicDoubleBuffered
@@ -26,7 +26,7 @@
         {
             base.OnCursorChanged( e );
             bool bDefault = this.Cursor == Cursors.Default;
-            base.DoubleBuffered = bDefault;
+            this.DoubleBuffered = bDefault;
         }
 
         //protected override void OnDataBindingComplete(DataGridViewBindingCompleteEventArgs e)

@@ -1,4 +1,4 @@
-namespace DataCommander
+namespace DataCommander.Providers
 {
     using System;
     using System.IO;
@@ -44,7 +44,7 @@ namespace DataCommander
         /// <param name="str"></param>
         public override void Write(string str)
         {
-            this.textBox.Invoke(new AppendTextDelegate(AppendText), str);
+            this.textBox.Invoke(new AppendTextDelegate(this.AppendText), str);
         }
 
         /// <summary>
@@ -54,9 +54,9 @@ namespace DataCommander
         public override void WriteLine(string value)
         {
             string line = value + Environment.NewLine;
-            this.textBox.Invoke(new AppendTextDelegate(AppendText), line);
+            this.textBox.Invoke(new AppendTextDelegate(this.AppendText), line);
         }
 
-        private TextBoxBase textBox;
+        private readonly TextBoxBase textBox;
     }
 }

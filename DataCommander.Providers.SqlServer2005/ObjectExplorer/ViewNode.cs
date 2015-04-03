@@ -8,9 +8,9 @@ namespace DataCommander.Providers.SqlServer2005
 
     internal sealed class ViewNode : ITreeNode
     {
-        private DatabaseNode database;
-        private string schema;
-        private string name;
+        private readonly DatabaseNode database;
+        private readonly string schema;
+        private readonly string name;
 
         public ViewNode(
             DatabaseNode database,
@@ -26,7 +26,7 @@ namespace DataCommander.Providers.SqlServer2005
         {
             get
             {
-                return string.Format("{0}.{1}", schema, name);
+                return string.Format("{0}.{1}", this.schema, this.name);
             }
         }
 
@@ -77,7 +77,7 @@ namespace DataCommander.Providers.SqlServer2005
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                text = SqlDatabase.GetSysComments(connection, database.Name, schema, name);
+                text = SqlDatabase.GetSysComments(connection, this.database.Name, this.schema, this.name);
             }
             QueryForm.ShowText(text);
         }
@@ -86,7 +86,7 @@ namespace DataCommander.Providers.SqlServer2005
         {
             get
             {
-                ToolStripMenuItem menuItemScriptObject = new ToolStripMenuItem("Script Object", null, menuItemScriptObject_Click);
+                ToolStripMenuItem menuItemScriptObject = new ToolStripMenuItem("Script Object", null, this.menuItemScriptObject_Click);
                 ContextMenuStrip contextMenu = new ContextMenuStrip();
                 contextMenu.Items.Add(menuItemScriptObject);
                 return contextMenu;

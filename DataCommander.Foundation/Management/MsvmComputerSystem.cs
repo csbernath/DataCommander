@@ -13,7 +13,7 @@
     /// </summary>
     public sealed class MsvmComputerSystem
     {
-        private ManagementObject managementObject;
+        private readonly ManagementObject managementObject;
 
         /// <summary>
         /// 
@@ -37,7 +37,7 @@
             Contract.Requires( managementScope != null );
 
             string query = string.Format( "SELECT * FROM Msvm_ComputerSystem WHERE Name='{0}'", name );
-            List<MsvmComputerSystem> list = managementScope.ExecuteQuery<MsvmComputerSystem>( query, mo => new MsvmComputerSystem( mo ) );
+            List<MsvmComputerSystem> list = managementScope.ExecuteQuery( query, mo => new MsvmComputerSystem( mo ) );
             Contract.Assert( list.Count > 0 );
             MsvmComputerSystem item;
 
@@ -64,7 +64,7 @@
             Contract.Requires( managementScope != null );
 
             string query = string.Format( "SELECT * FROM Msvm_ComputerSystem WHERE ElementName='{0}'", elementName );
-            List<MsvmComputerSystem> list = managementScope.ExecuteQuery<MsvmComputerSystem>( query, mo => new MsvmComputerSystem( mo ) );
+            List<MsvmComputerSystem> list = managementScope.ExecuteQuery( query, mo => new MsvmComputerSystem( mo ) );
             return list;
         }
 
@@ -98,7 +98,7 @@
             }
 
             string query = sb.ToString();
-            List<MsvmComputerSystem> list = managementScope.ExecuteQuery<MsvmComputerSystem>( query, mo => new MsvmComputerSystem( mo ) );
+            List<MsvmComputerSystem> list = managementScope.ExecuteQuery( query, mo => new MsvmComputerSystem( mo ) );
             return list;
         }
 

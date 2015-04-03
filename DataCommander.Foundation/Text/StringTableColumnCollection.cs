@@ -10,7 +10,7 @@ namespace DataCommander.Foundation.Text
     /// </summary>
     public class StringTableColumnCollection : IList<StringTableColumn>
     {
-        private List<StringTableColumn> columns = new List<StringTableColumn>();
+        private readonly List<StringTableColumn> columns = new List<StringTableColumn>();
 
         #region IList<StringTableColumn> Members
 

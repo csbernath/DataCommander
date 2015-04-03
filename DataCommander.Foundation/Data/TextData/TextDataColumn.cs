@@ -12,13 +12,13 @@
         #region Private Fields
 
         private readonly string columnName;
-        private string caption;
-        private int maxLength;
+        private readonly string caption;
+        private readonly int maxLength;
         private readonly Type dataType;
-        private Byte? numericPrecision;
-        private Byte? numericScale;
-        private string format;
-        private IFormatProvider formatProvider;
+        private readonly byte? numericPrecision;
+        private readonly byte? numericScale;
+        private readonly string format;
+        private readonly IFormatProvider formatProvider;
 
         #endregion
 
@@ -38,8 +38,8 @@
             string caption,
             int maxLength,
             Type dataType,
-            Byte? numericPrecision,
-            Byte? numericScale,
+            byte? numericPrecision,
+            byte? numericScale,
             string format,
             IFormatProvider formatProvider)
         {
@@ -122,7 +122,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Byte? NumericPrecision
+        public byte? NumericPrecision
         {
             get
             {
@@ -133,7 +133,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Byte? NumericScale
+        public byte? NumericScale
         {
             get
             {

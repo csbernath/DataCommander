@@ -1,7 +1,5 @@
 ﻿namespace DataCommander.Foundation.Data.SqlClient
 {
-    using System;
-
     internal sealed class SqLoglCommandExecution
     {
         private readonly int commandNo;

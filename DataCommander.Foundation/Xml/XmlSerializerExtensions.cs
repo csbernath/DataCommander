@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation.Xml
 {
-    using System;
     using System.Diagnostics.Contracts;
     using System.Text;
     using System.Xml;

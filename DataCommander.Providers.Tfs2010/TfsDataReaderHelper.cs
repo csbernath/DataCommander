@@ -2,7 +2,7 @@
 {
     internal sealed class TfsDataReaderHelper : IDataReaderHelper
     {
-        private TfsDataReader dataReader;
+        private readonly TfsDataReader dataReader;
 
         public TfsDataReaderHelper(TfsDataReader dataReader)
         {

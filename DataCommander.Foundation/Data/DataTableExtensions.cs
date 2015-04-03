@@ -18,7 +18,7 @@
         /// <returns></returns>
         public static StringTable ToStringTable(this DataTable dataTable)
         {
-            Contract.Requires(dataTable != null);
+            Contract.Requires<ArgumentNullException>(dataTable != null);
 
             var dataColumns = dataTable.Columns;
             int columnCount = dataColumns.Count;

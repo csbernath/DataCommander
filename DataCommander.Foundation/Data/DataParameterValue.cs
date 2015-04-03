@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation.Data
 {
-    using System;
     using System.Diagnostics.Contracts;
 
     /// <summary>
@@ -9,11 +8,11 @@
     /// <typeparam name="T"></typeparam>
     public struct DataParameterValue<T> : IDataParameterValue<T>
     {
-        private static DataParameterValue<T> defaultInstance = new DataParameterValue<T>( DataParameterValueType.Default );
-        private static DataParameterValue<T> nullInstance = new DataParameterValue<T>( DataParameterValueType.Null );
-        private static DataParameterValue<T> voidInstance = new DataParameterValue<T>( DataParameterValueType.Void );
-        private DataParameterValueType type;
-        private T value;
+        private static readonly DataParameterValue<T> defaultInstance = new DataParameterValue<T>( DataParameterValueType.Default );
+        private static readonly DataParameterValue<T> nullInstance = new DataParameterValue<T>( DataParameterValueType.Null );
+        private static readonly DataParameterValue<T> voidInstance = new DataParameterValue<T>( DataParameterValueType.Void );
+        private readonly DataParameterValueType type;
+        private readonly T value;
 
         /// <summary>
         /// 

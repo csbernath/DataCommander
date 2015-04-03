@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-
 namespace DataCommander.Foundation
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// 
     /// </summary>

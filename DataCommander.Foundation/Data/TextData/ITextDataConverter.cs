@@ -1,8 +1,6 @@
 ﻿namespace DataCommander.Foundation.Data
 {
-    using System;
-
-	/// <summary>
+    /// <summary>
     /// 
     /// </summary>
     public interface ITextDataConverter

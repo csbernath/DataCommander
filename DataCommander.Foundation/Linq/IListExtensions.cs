@@ -226,7 +226,7 @@
         /// <typeparam name="TResult"></typeparam>
         private sealed class CastedList<TResult> : IList<TResult>
         {
-            private IList source;
+            private readonly IList source;
 
             /// <summary>
             /// 
@@ -261,7 +261,7 @@
                 get
                 {
                     object valueObject = this.source[index];
-                    TResult value = (TResult)valueObject;
+                    TResult value = (TResult) valueObject;
                     return value;
                 }
 
@@ -356,7 +356,7 @@
 
         private sealed class ReadOnlyListFromList<T> : IReadOnlyList<T>
         {
-            private IList<T> source;
+            private readonly IList<T> source;
 
             public ReadOnlyListFromList(IList<T> source)
             {

@@ -1,7 +1,5 @@
 namespace DataCommander.Foundation.Linq
 {
-    using System;
-
     /// <summary>
     /// 
     /// </summary>

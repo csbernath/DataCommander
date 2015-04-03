@@ -38,7 +38,7 @@
         {
             get
             {
-                return cancelled;
+                return this.cancelled;
             }
         }
 
@@ -124,7 +124,7 @@
 
         public IDataReader ExecuteReader()
         {
-            return ExecuteReader(CommandBehavior.Default);
+            return this.ExecuteReader(CommandBehavior.Default);
         }
 
         object IDbCommand.ExecuteScalar()

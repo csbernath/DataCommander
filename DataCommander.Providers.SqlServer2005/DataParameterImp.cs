@@ -5,7 +5,7 @@
 
     internal sealed class SqlDataParameter : DataParameterBase
     {
-        private SqlParameter parameter;
+        private readonly SqlParameter parameter;
 
         public SqlDataParameter(SqlParameter parameter)
             : base(parameter, parameter.Size, parameter.Precision, parameter.Scale)
@@ -17,7 +17,7 @@
 
         protected override void SetSize(int size)
         {
-            parameter.Size = size;
+            this.parameter.Size = size;
         }
     }
 }

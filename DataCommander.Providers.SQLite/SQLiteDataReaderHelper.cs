@@ -4,12 +4,11 @@ namespace DataCommander.Providers.SQLite
     using System.Data;
     using System.Data.Common;
     using System.Data.SQLite;
-    using DataCommander.Providers;
 
     internal sealed class DecimalDataFieldReader : IDataFieldReader
     {
-        SQLiteDataReader dataReader;
-        int columnOrdinal;
+        readonly SQLiteDataReader dataReader;
+        readonly int columnOrdinal;
 
         public DecimalDataFieldReader( SQLiteDataReader dataReader, int columnOrdinal )
         {
@@ -24,7 +23,7 @@ namespace DataCommander.Providers.SQLite
             get
             {
                 object value;
-                bool isDBNull = this.dataReader.IsDBNull( columnOrdinal );
+                bool isDBNull = this.dataReader.IsDBNull(this.columnOrdinal );
 
                 if (isDBNull)
                 {
@@ -43,7 +42,7 @@ namespace DataCommander.Providers.SQLite
                     //    value = new DecimalField( null, decimalValue, null );
                     //}
 
-                    decimal decimalValue = this.dataReader.GetDecimal( columnOrdinal );
+                    decimal decimalValue = this.dataReader.GetDecimal(this.columnOrdinal );
                     value = new DecimalField( null, decimalValue, null );
                 }
 
@@ -57,7 +56,7 @@ namespace DataCommander.Providers.SQLite
     internal sealed class SQLiteDataReaderHelper : IDataReaderHelper
     {
         private SQLiteDataReader sqLiteDataReader;
-        private IDataFieldReader[] dataFieldReaders;
+        private readonly IDataFieldReader[] dataFieldReaders;
 
         public SQLiteDataReaderHelper( IDataReader dataReader )
         {
@@ -68,11 +67,11 @@ namespace DataCommander.Providers.SQLite
             {
                 DataRowCollection rows = schemaTable.Rows;
                 int count = rows.Count;
-                dataFieldReaders = new IDataFieldReader[ count ];
+                this.dataFieldReaders = new IDataFieldReader[ count ];
 
                 for (int i = 0; i < count; i++)
                 {
-                    dataFieldReaders[ i ] = CreateDataFieldReader( dataReader, rows[ i ] );
+                    this.dataFieldReaders[ i ] = CreateDataFieldReader( dataReader, rows[ i ] );
                 }
             }
         }
@@ -123,7 +122,7 @@ namespace DataCommander.Providers.SQLite
         {
             for (int i = 0; i < this.dataFieldReaders.Length; i++)
             {
-                values[ i ] = dataFieldReaders[ i ].Value;
+                values[ i ] = this.dataFieldReaders[ i ].Value;
             }
 
             return this.dataFieldReaders.Length;

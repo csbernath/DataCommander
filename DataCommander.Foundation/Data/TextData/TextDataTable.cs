@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation.Data
 {
-    using System;
     using System.Diagnostics;
 
     /// <summary>
@@ -10,7 +9,7 @@
     public sealed class TextDataTable
     {
         private readonly string name;
-        private TextDataColumnCollection columns = new TextDataColumnCollection();
+        private readonly TextDataColumnCollection columns = new TextDataColumnCollection();
 
         /// <summary>
         /// 

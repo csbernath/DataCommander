@@ -1,28 +1,30 @@
 namespace DataCommander
 {
+    using System;
+    using System.ComponentModel;
     using System.Windows.Forms;
 
     /// <summary>
     /// Summary description for GotoLineForm.
     /// </summary>
-    public class GotoLineForm : System.Windows.Forms.Form
+    public class GotoLineForm : Form
     {
-        private System.Windows.Forms.Label lineNumberLabel;
-        private System.Windows.Forms.TextBox lineNumberTextBox;
-        private System.Windows.Forms.Button okButton;
-        private System.Windows.Forms.Button cancelButton;
+        private Label lineNumberLabel;
+        private TextBox lineNumberTextBox;
+        private Button okButton;
+        private Button cancelButton;
 
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.Container components = null;
+        private readonly Container components = null;
 
         public GotoLineForm()
         {
             //
             // Required for Windows Form Designer support
             //
-            InitializeComponent();
+            this.InitializeComponent();
 
             //
             // TODO: Add any constructor code after InitializeComponent call
@@ -32,15 +34,15 @@ namespace DataCommander
         public void Init(int currentLineNumber, int maxLineLineNumber)
         {
             this.maxLineLineNumber = maxLineLineNumber;
-            lineNumberLabel.Text = string.Format("Line number (1 - {0}):", maxLineLineNumber);
-            lineNumberTextBox.Text = currentLineNumber.ToString();
+            this.lineNumberLabel.Text = string.Format("Line number (1 - {0}):", maxLineLineNumber);
+            this.lineNumberTextBox.Text = currentLineNumber.ToString();
         }
 
         public int LineNumber
         {
             get
             {
-                string s = lineNumberTextBox.Text;
+                string s = this.lineNumberTextBox.Text;
                 int lineNumber = int.Parse(s);
                 return lineNumber;
             }
@@ -53,9 +55,9 @@ namespace DataCommander
         {
             if (disposing)
             {
-                if (components != null)
+                if (this.components != null)
                 {
-                    components.Dispose();
+                    this.components.Dispose();
                 }
             }
 
@@ -129,16 +131,16 @@ namespace DataCommander
         }
         #endregion
 
-        private void okButton_Click(object sender, System.EventArgs e)
+        private void okButton_Click(object sender, EventArgs e)
         {
             try
             {
-                string s = lineNumberTextBox.Text;
+                string s = this.lineNumberTextBox.Text;
                 int lineNumber = int.Parse(s);
 
-                if (lineNumber >= 1 && lineNumber <= maxLineLineNumber)
+                if (lineNumber >= 1 && lineNumber <= this.maxLineLineNumber)
                 {
-                    DialogResult = DialogResult.OK;
+                    this.DialogResult = DialogResult.OK;
                 }
             }
             catch

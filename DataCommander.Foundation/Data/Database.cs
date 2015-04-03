@@ -243,6 +243,7 @@ namespace DataCommander.Foundation.Data
             var command = connection.CreateCommand();
             command.CommandText = commandText;
             var adapter = factory.CreateDataAdapter();
+            Contract.Assert(adapter != null);
             adapter.SelectCommand = command;
             var table = new DataTable();
             adapter.Fill(table);

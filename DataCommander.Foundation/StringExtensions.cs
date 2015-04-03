@@ -1,10 +1,10 @@
 ﻿namespace DataCommander.Foundation
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Globalization;
-    using System.Text;
 
     /// <summary>
     /// 
@@ -107,7 +107,7 @@
 
             #region IEnumerable Members
 
-            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+            IEnumerator IEnumerable.GetEnumerator()
             {
                 throw new NotImplementedException();
             }
@@ -266,9 +266,9 @@
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static Decimal? ParseToNullableDecimal( this string source )
+        public static decimal? ParseToNullableDecimal( this string source )
         {
-            return string.IsNullOrEmpty( source ) ? (Decimal?)null : Decimal.Parse( source );
+            return string.IsNullOrEmpty( source ) ? (decimal?)null : decimal.Parse( source );
         }
 
         /// <summary>
@@ -277,9 +277,9 @@
         /// <param name="source"></param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        public static Decimal? ParseToNullableDecimal( this string source, IFormatProvider provider )
+        public static decimal? ParseToNullableDecimal( this string source, IFormatProvider provider )
         {
-            return string.IsNullOrEmpty( source ) ? (Decimal?)null : Decimal.Parse( source, provider );
+            return string.IsNullOrEmpty( source ) ? (decimal?)null : decimal.Parse( source, provider );
         }
 
         /// <summary>
@@ -289,9 +289,9 @@
         /// <param name="style"></param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        public static Decimal? ParseToNullableDecimal( this string source, NumberStyles style, IFormatProvider provider )
+        public static decimal? ParseToNullableDecimal( this string source, NumberStyles style, IFormatProvider provider )
         {
-            return string.IsNullOrEmpty( source ) ? (Decimal?)null : Decimal.Parse( source, style, provider );
+            return string.IsNullOrEmpty( source ) ? (decimal?)null : decimal.Parse( source, style, provider );
         }
 
         /// <summary>

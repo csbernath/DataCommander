@@ -5,11 +5,10 @@
     using System.Diagnostics.Contracts;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
-    using DataCommander.Providers;
 
     internal sealed class JobCollectionNode : ITreeNode
     {
-        private ServerNode server;
+        private readonly ServerNode server;
 
         public JobCollectionNode( ServerNode server )
         {

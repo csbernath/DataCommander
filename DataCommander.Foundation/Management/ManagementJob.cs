@@ -9,7 +9,7 @@
     /// </summary>
     public sealed class ManagementJob
     {
-        private ManagementObject managementObject;
+        private readonly ManagementObject managementObject;
 
         /// <summary>
         /// 

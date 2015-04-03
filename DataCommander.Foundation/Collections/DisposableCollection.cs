@@ -16,7 +16,7 @@
         /// </summary>
         public void Dispose()
         {
-            foreach (IDisposable item in this)
+            foreach (T item in this)
             {
                 if (item != null)
                 {

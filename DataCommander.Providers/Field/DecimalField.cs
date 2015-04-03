@@ -8,9 +8,9 @@ namespace DataCommander.Providers
     /// </summary>
     public sealed class DecimalField : IComparable
     {
-        private NumberFormatInfo numberFormatInfo;
-        private decimal decimalValue;
-        private string stringValue;
+        private readonly NumberFormatInfo numberFormatInfo;
+        private readonly decimal decimalValue;
+        private readonly string stringValue;
 
         public DecimalField(
             NumberFormatInfo numberFormatInfo,
@@ -40,7 +40,7 @@ namespace DataCommander.Providers
 
         public override string ToString()
         {
-            return decimalValue.ToString( "N", numberFormatInfo );
+            return this.decimalValue.ToString( "N", this.numberFormatInfo );
         }
 
         #region IComparable Members

@@ -5,9 +5,10 @@
     using System.Data;
     using System.Data.Common;
     using System.Data.SqlServerCe;
+    using System.Diagnostics;
     using System.Text;
+    using System.Xml;
     using DataCommander.Foundation.Data;
-    using DataCommander.Providers;
 
     public sealed class SqlServerCeProvider : IProvider
     {
@@ -50,32 +51,32 @@
             }
         }
 
-        void IProvider.DeriveParameters(System.Data.IDbCommand command)
+        void IProvider.DeriveParameters(IDbCommand command)
         {
             throw new NotImplementedException();
         }
 
-        DataParameterBase IProvider.GetDataParameter(System.Data.IDataParameter parameter)
+        DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
         {
             throw new NotImplementedException();
         }
 
-        System.Data.DataTable IProvider.GetParameterTable(System.Data.IDataParameterCollection parameters)
+        DataTable IProvider.GetParameterTable(IDataParameterCollection parameters)
         {
             throw new NotImplementedException();
         }
 
-        System.Xml.XmlReader IProvider.ExecuteXmlReader(System.Data.IDbCommand command)
+        XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
         {
             throw new NotImplementedException();
         }
 
-        System.Data.DataTable IProvider.GetSchemaTable(System.Data.IDataReader dataReader)
+        DataTable IProvider.GetSchemaTable(IDataReader dataReader)
         {
             return dataReader.GetSchemaTable();
         }
 
-        System.Data.DataSet IProvider.GetTableSchema(System.Data.IDbConnection connection, string tableName)
+        DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName)
         {
             throw new NotImplementedException();
         }
@@ -102,13 +103,13 @@
             //return dataType;
         }
 
-        IDataReaderHelper IProvider.CreateDataReaderHelper(System.Data.IDataReader dataReader)
+        IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
         {
             SqlCeDataReader sqlCeDataReader = (SqlCeDataReader)dataReader;
             return new SqlCeDataReaderHelper(sqlCeDataReader);
         }
 
-        System.Data.Common.DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, System.Data.IDbConnection connection)
+        DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection)
         {
             throw new NotImplementedException();
         }
@@ -189,7 +190,7 @@ ORDER BY ORDINAL_POSITION", name);
 
                 if (commandText != null)
                 {
-                    System.Diagnostics.Trace.WriteLine(commandText);
+                    Trace.WriteLine(commandText);
                     var list = new List<string>();
 
                     try

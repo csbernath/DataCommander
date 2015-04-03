@@ -15,12 +15,12 @@ namespace DataCommander.Foundation.Collections
         #region Private Fields
 
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private IPoolableObjectFactory<T> factory;
+        private readonly IPoolableObjectFactory<T> factory;
         private readonly int minSize;
         private readonly int maxSize;
         private LinkedList<ObjectPoolItem<T>> idleItems = new LinkedList<ObjectPoolItem<T>>();
-        private Dictionary<int, ObjectPoolItem<T>> activeItems = new Dictionary<int, ObjectPoolItem<T>>();
-        private AutoResetEvent idleEvent = new AutoResetEvent( false );
+        private readonly Dictionary<int, ObjectPoolItem<T>> activeItems = new Dictionary<int, ObjectPoolItem<T>>();
+        private readonly AutoResetEvent idleEvent = new AutoResetEvent( false );
         private Timer timer;
         private int key;
         private bool disposed;

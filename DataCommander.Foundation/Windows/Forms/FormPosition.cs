@@ -4,7 +4,7 @@ namespace DataCommander.Foundation.Windows.Forms
     using System.Diagnostics.Contracts;
     using System.Drawing;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Configuration;    
+    using DataCommander.Foundation.Configuration;
 
     /// <exclude/>
     public static class FormPosition
@@ -51,7 +51,7 @@ namespace DataCommander.Foundation.Windows.Forms
             string nodeName = ConfigurationNodeName.FromType( type );
             ConfigurationNode node = applicationData.CreateNode( nodeName );
             FormWindowState windowState;
-            node.Attributes.TryGetAttributeValue<FormWindowState>( "WindowState", FormWindowState.Normal, out windowState );
+            node.Attributes.TryGetAttributeValue( "WindowState", FormWindowState.Normal, out windowState );
             form.WindowState = windowState;
 
             if (windowState == FormWindowState.Normal)

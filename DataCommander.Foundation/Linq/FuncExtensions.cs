@@ -13,7 +13,7 @@
         /// <typeparam name="TResult"></typeparam>
         /// <param name="func"></param>
         /// <returns></returns>
-        public static Action AsAction<TResult>( this Func<TResult> func )
+        public static Action AsAction<TResult>(this Func<TResult> func)
         {
             return () => func();
         }
@@ -25,9 +25,9 @@
         /// <typeparam name="TResult"></typeparam>
         /// <param name="func"></param>
         /// <returns></returns>
-        public static Action<T> AsAction<T, TResult>( this Func<T, TResult> func )
+        public static Action<T> AsAction<T, TResult>(this Func<T, TResult> func)
         {
-            return t => func( t );
+            return t => func(t);
         }
 
         /// <summary>
@@ -38,9 +38,9 @@
         /// <typeparam name="TResult"></typeparam>
         /// <param name="func"></param>
         /// <returns></returns>
-        public static Action<T1, T2> AsAction<T1, T2, TResult>( this Func<T1, T2, TResult> func )
+        public static Action<T1, T2> AsAction<T1, T2, TResult>(this Func<T1, T2, TResult> func)
         {
-            return ( t1, t2 ) => func( t1, t2 );
+            return (t1, t2) => func(t1, t2);
         }
 
         /// <summary>
@@ -52,9 +52,9 @@
         /// <typeparam name="TResult"></typeparam>
         /// <param name="func"></param>
         /// <returns></returns>
-        public static Action<T1, T2, T3> AsAction<T1, T2, T3, TResult>( this Func<T1, T2, T3, TResult> func )
+        public static Action<T1, T2, T3> AsAction<T1, T2, T3, TResult>(this Func<T1, T2, T3, TResult> func)
         {
-            return ( t1, t2, t3 ) => func( t1, t2, t3 );
+            return (t1, t2, t3) => func(t1, t2, t3);
         }
 
         /// <summary>
@@ -67,9 +67,9 @@
         /// <typeparam name="TResult"></typeparam>
         /// <param name="func"></param>
         /// <returns></returns>
-        public static Action<T1, T2, T3, T4> AsAction<T1, T2, T3, T4, TResult>( this Func<T1, T2, T3, T4, TResult> func )
+        public static Action<T1, T2, T3, T4> AsAction<T1, T2, T3, T4, TResult>(this Func<T1, T2, T3, T4, TResult> func)
         {
-            return ( t1, t2, t3, t4 ) => func( t1, t2, t3, t4 );
+            return (t1, t2, t3, t4) => func(t1, t2, t3, t4);
         }
     }
 }

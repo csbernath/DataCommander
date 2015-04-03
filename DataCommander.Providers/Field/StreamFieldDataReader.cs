@@ -1,13 +1,13 @@
 ﻿namespace DataCommander.Providers
 {
-	using System;
+    using System;
     using System.Data;
-	using System.IO;
+    using System.IO;
 
     public sealed class StreamFieldDataReader : IDataFieldReader
 	{
-		private IDataRecord dataRecord;
-		private int columnOrdinal;
+		private readonly IDataRecord dataRecord;
+		private readonly int columnOrdinal;
 
 		public StreamFieldDataReader( IDataRecord dataRecord, int columnOrdinal )
 		{
@@ -21,7 +21,7 @@
 		{
 			get
 			{
-				Stream stream = (Stream) this.dataRecord[ columnOrdinal ];
+				Stream stream = (Stream) this.dataRecord[this.columnOrdinal ];
 				object value;
 
 				if (stream != null)

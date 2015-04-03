@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation.Diagnostics
 {
-    using System;
     using System.Collections.Generic;
 
     internal sealed class MethodInvocationStackCollection
@@ -41,6 +40,6 @@
             return stack.Pop();
         }
 
-        private Dictionary<int, Stack<MethodInvocation>> stacks = new Dictionary<int, Stack<MethodInvocation>>();
+        private readonly Dictionary<int, Stack<MethodInvocation>> stacks = new Dictionary<int, Stack<MethodInvocation>>();
     }
 }

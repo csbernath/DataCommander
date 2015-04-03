@@ -9,7 +9,7 @@
 
     internal sealed class TfsQueryPendingSetsDataReader : TfsDataReader
     {
-        private TfsCommand command;
+        private readonly TfsCommand command;
         private bool first = true;
         private PendingSet[] pendingSets;
         private IEnumerator<Tuple<int, int>> enumerator;
@@ -21,7 +21,7 @@
             this.command = command;
         }
 
-        public override System.Data.DataTable GetSchemaTable()
+        public override DataTable GetSchemaTable()
         {
             DataTable table = CreateSchemaTable();
             AddSchemaRowString( table, "Computer", false );

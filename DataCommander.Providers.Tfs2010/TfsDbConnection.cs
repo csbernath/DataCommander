@@ -5,7 +5,7 @@
 
     internal sealed class TfsDbConnection : IDbConnection
     {
-        private TfsConnection connection;
+        private readonly TfsConnection connection;
 
         public TfsDbConnection(TfsConnection connection)
         {

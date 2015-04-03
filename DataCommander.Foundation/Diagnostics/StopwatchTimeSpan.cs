@@ -65,7 +65,7 @@
 
         #region Private Fields
 
-        private long ticks;
+        private readonly long ticks;
 
         #endregion
 

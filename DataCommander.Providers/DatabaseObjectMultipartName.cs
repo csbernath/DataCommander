@@ -57,14 +57,14 @@ namespace DataCommander.Providers
                 }
             }
 
-            if (database == null)
+            if (this.database == null)
             {
-                database = currentDatabase;
+                this.database = currentDatabase;
             }
 
-            if (string.IsNullOrEmpty(schema))
+            if (string.IsNullOrEmpty(this.schema))
             {
-                schema = null;
+                this.schema = null;
             }
 
             if (this.name != null)
@@ -101,12 +101,12 @@ namespace DataCommander.Providers
         {
             get
             {
-                return schema;
+                return this.schema;
             }
 
             set
             {
-                schema = value;
+                this.schema = value;
             }
         }
 
@@ -114,7 +114,7 @@ namespace DataCommander.Providers
         {
             get
             {
-                return name;
+                return this.name;
             }
         }
 

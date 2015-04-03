@@ -13,7 +13,7 @@
     /// <typeparam name="T"></typeparam>
     public sealed class PriorityMonitor<T>
     {
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private readonly T monitoredObject;
         private LockRequest currentLockRequest;
         private readonly IndexableCollection<LockRequest> lockRequests;
@@ -142,7 +142,7 @@
         public sealed class LockRequest : IDisposable
         {
             private PriorityMonitor<T> monitor;
-            private int priority;
+            private readonly int priority;
             private bool isCompleted;
             private EventWaitHandle asyncWaitHandle;
 

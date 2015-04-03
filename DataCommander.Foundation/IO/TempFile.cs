@@ -34,7 +34,7 @@
         {
             get
             {
-                if (filename == null)
+                if (this.filename == null)
                 {
                     this.filename = Path.GetTempFileName();
                 }

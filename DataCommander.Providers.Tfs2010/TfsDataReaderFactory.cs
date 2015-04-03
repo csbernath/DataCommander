@@ -4,7 +4,7 @@
 
     internal static class TfsDataReaderFactory
     {
-        private static SortedDictionary<string, DataReaderInfo> dictionary = new SortedDictionary<string, DataReaderInfo>();
+        private static readonly SortedDictionary<string, DataReaderInfo> dictionary = new SortedDictionary<string, DataReaderInfo>();
         
         public delegate TfsDataReader CreateDataReader(TfsCommand command);
 
@@ -28,8 +28,8 @@
         public sealed class DataReaderInfo
         {
             private string name;
-            private TfsParameterCollection parameters;
-            private CreateDataReader createDataReader;
+            private readonly TfsParameterCollection parameters;
+            private readonly CreateDataReader createDataReader;
 
             public DataReaderInfo(
                 string name,

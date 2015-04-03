@@ -16,13 +16,14 @@ namespace DataCommander.Providers.SqlServer2005
     using DataCommander.Foundation.Windows.Forms;
     using Microsoft.SqlServer.Management.Common;
     using Microsoft.SqlServer.Management.Smo;
+    using Application = DataCommander.Providers.Application;
 
     internal sealed class TableNode : ITreeNode
     {
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private DatabaseNode database;
-        private string owner;
-        private string name;
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly DatabaseNode database;
+        private readonly string owner;
+        private readonly string name;
 
         public TableNode(
             DatabaseNode database,
@@ -140,7 +141,7 @@ from    [{1}].[{2}].[{3}]", columnNames, databaseObjectMultipartName.Database, d
 
         private void Open_Click(object sender, EventArgs e)
         {
-            MainForm mainForm = DataCommander.Providers.Application.Instance.MainForm;
+            MainForm mainForm = Application.Instance.MainForm;
             var queryForm = (QueryForm)mainForm.ActiveMdiChild;
             string name = this.database.Name + "." + this.owner + "." + this.name;
             string query = "select * from " + name;
@@ -155,10 +156,7 @@ from    [{1}].[{2}].[{3}]", columnNames, databaseObjectMultipartName.Database, d
                     @"use [{0}]
 exec sp_MShelpcolumns N'{1}.[{2}]', @orderby = 'id'
 exec sp_MStablekeys N'{1}.[{2}]', null, 14
-exec sp_MStablechecks N'{1}.[{2}]'",
-                    database.Name,
-                    owner,
-                    name);
+exec sp_MStablechecks N'{1}.[{2}]'", this.database.Name, this.owner, this.name);
 
                 log.Write(LogLevel.Trace, commandText);
                 string connectionString = this.Database.Databases.Server.ConnectionString;
@@ -242,7 +240,7 @@ exec sp_MStablechecks N'{1}.[{2}]'",
                         sb.Append(" not null");
                     }
 
-                    string collation = DataCommander.Foundation.Data.Database.GetValue<string>(column["collation"], string.Empty);
+                    string collation = Foundation.Data.Database.GetValue(column["collation"], string.Empty);
                     string formula = string.Empty;
 
                     if (column["text"] != DBNull.Value)
@@ -298,7 +296,7 @@ exec sp_MStablechecks N'{1}.[{2}]'",
 
                 dataSet.Tables.Add(schema);
 
-                MainForm mainForm = DataCommander.Providers.Application.Instance.MainForm;
+                MainForm mainForm = Application.Instance.MainForm;
                 QueryForm queryForm = (QueryForm)mainForm.ActiveMdiChild;
                 queryForm.ShowDataSet(dataSet);
             }
@@ -308,7 +306,7 @@ exec sp_MStablechecks N'{1}.[{2}]'",
         {
             using (new CursorManager(Cursors.WaitCursor))
             {
-                var queryForm = (QueryForm)DataCommander.Providers.Application.Instance.MainForm.ActiveMdiChild;
+                var queryForm = (QueryForm)Application.Instance.MainForm.ActiveMdiChild;
                 queryForm.SetStatusbarPanelText("Copying table script to clipboard...", SystemColors.ControlText);
                 var stopwatch = Stopwatch.StartNew();
 
@@ -370,15 +368,15 @@ exec sp_MStablechecks N'{1}.[{2}]'",
 
         private void Indexes_Click(object sender, EventArgs e)
         {
-            string cmdText = string.Format("use [{0}] exec sp_helpindex [{1}.{2}]", database.Name, owner, name);
+            string cmdText = string.Format("use [{0}] exec sp_helpindex [{1}.{2}]", this.database.Name, this.owner, this.name);
             string connectionString = this.database.Databases.Server.ConnectionString;
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
                 dataTable = connection.ExecuteDataTable(cmdText);
             }
-            dataTable.TableName = string.Format("{0} indexes", name);
-            MainForm mainForm = DataCommander.Providers.Application.Instance.MainForm;
+            dataTable.TableName = string.Format("{0} indexes", this.name);
+            MainForm mainForm = Application.Instance.MainForm;
             var queryForm = (QueryForm)mainForm.ActiveMdiChild;
             var dataSet = new DataSet();
             dataSet.Tables.Add(dataTable);
@@ -476,7 +474,7 @@ order by c.column_id", this.database.Name, this.owner, this.name);
                 sb.AppendFormat("    {0}@{1} {2}", prefix, variableName, typeName);
             }
 
-            sb.AppendFormat("\r\n\r\ninsert into {0}.{1}\r\n(\r\n    ", owner, name);
+            sb.AppendFormat("\r\n\r\ninsert into {0}.{1}\r\n(\r\n    ", this.owner, this.name);
             first = true;
 
             foreach (DataRow row in table.Rows)
@@ -514,7 +512,7 @@ order by c.column_id", this.database.Name, this.owner, this.name);
             sb.Append(stringWriter);
 
             Clipboard.SetText(sb.ToString());
-            var queryForm = (QueryForm)DataCommander.Providers.Application.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (QueryForm)Application.Instance.MainForm.ActiveMdiChild;
             queryForm.SetStatusbarPanelText("Copying script to clipboard finished.", SystemColors.ControlText);
         }
 
@@ -523,22 +521,22 @@ order by c.column_id", this.database.Name, this.owner, this.name);
             get
             {
                 var menu = new ContextMenuStrip();
-                var item = new ToolStripMenuItem("Open", null, Open_Click);
+                var item = new ToolStripMenuItem("Open", null, this.Open_Click);
                 menu.Items.Add(item);
 
-                item = new ToolStripMenuItem("Script Table", null, ScriptTable_Click);
+                item = new ToolStripMenuItem("Script Table", null, this.ScriptTable_Click);
                 menu.Items.Add(item);
 
-                item = new ToolStripMenuItem("Schema", null, Schema_Click);
+                item = new ToolStripMenuItem("Schema", null, this.Schema_Click);
                 menu.Items.Add(item);
 
-                item = new ToolStripMenuItem("Indexes", null, Indexes_Click);
+                item = new ToolStripMenuItem("Indexes", null, this.Indexes_Click);
                 menu.Items.Add(item);
 
-                item = new ToolStripMenuItem("Select script", null, SelectScript_Click);
+                item = new ToolStripMenuItem("Select script", null, this.SelectScript_Click);
                 menu.Items.Add(item);
 
-                item = new ToolStripMenuItem("Insert script", null, InsertScript_Click);
+                item = new ToolStripMenuItem("Insert script", null, this.InsertScript_Click);
                 menu.Items.Add(item);
 
                 return menu;
@@ -549,7 +547,7 @@ order by c.column_id", this.database.Name, this.owner, this.name);
         {
             get
             {
-                return database;
+                return this.database;
             }
         }
     }

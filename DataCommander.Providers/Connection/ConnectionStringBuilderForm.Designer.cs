@@ -1,11 +1,14 @@
 namespace DataCommander.Providers
 {
+    using System.ComponentModel;
+    using System.Windows.Forms;
+
     internal partial class ConnectionStringBuilderForm
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -265,24 +268,24 @@ namespace DataCommander.Providers
 
         #endregion
 
-        private System.Windows.Forms.ComboBox providersComboBox;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox dataSourcesComboBox;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox userIdTextBox;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox passwordTextBox;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ComboBox initialCatalogComboBox;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button okButton;
-        private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.CheckBox integratedSecurityCheckBox;
-        private System.Windows.Forms.Button refreshButton;
-        private System.Windows.Forms.TextBox connectionNameTextBox;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button testButton;
-        private System.Windows.Forms.ComboBox oleDbProvidersComboBox;
-        private System.Windows.Forms.Label oleDbProviderLabel;
+        private ComboBox providersComboBox;
+        private Label label1;
+        private ComboBox dataSourcesComboBox;
+        private Label label2;
+        private TextBox userIdTextBox;
+        private Label label3;
+        private TextBox passwordTextBox;
+        private Label label4;
+        private ComboBox initialCatalogComboBox;
+        private Label label5;
+        private Button okButton;
+        private Button cancelButton;
+        private CheckBox integratedSecurityCheckBox;
+        private Button refreshButton;
+        private TextBox connectionNameTextBox;
+        private Label label6;
+        private Button testButton;
+        private ComboBox oleDbProvidersComboBox;
+        private Label oleDbProviderLabel;
     }
 }

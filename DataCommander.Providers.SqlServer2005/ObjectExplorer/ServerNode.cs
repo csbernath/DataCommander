@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Data.SqlClient;
     using System.Diagnostics.Contracts;
-    using DataCommander.Providers;
+    using System.Windows.Forms;
 
     internal sealed class ServerNode : ITreeNode
     {
@@ -85,7 +85,7 @@
             }
         }
 
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu
         {
             get
             {

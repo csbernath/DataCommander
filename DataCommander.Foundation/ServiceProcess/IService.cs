@@ -1,6 +1,5 @@
 namespace DataCommander.Foundation.ServiceProcess
 {
-    using System;
     using System.ServiceProcess;
 
     /// <summary>

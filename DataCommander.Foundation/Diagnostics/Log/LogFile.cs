@@ -6,16 +6,20 @@ namespace DataCommander.Foundation.Diagnostics
 
     internal sealed class LogFile : ILogFile
     {
+        #region Private Fields
+
         private static readonly ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
         private string path;
         private string fileName;
         private DateTime date;
         private FileStream fileStream;
         private readonly Encoding encoding;
-        private int bufferSize;
-        private bool autoFlush;
-        private ILogFormatter formatter;
-        private FileAttributes fileAttributes;
+        private readonly int bufferSize;
+        private readonly bool autoFlush;
+        private readonly ILogFormatter formatter;
+        private readonly FileAttributes fileAttributes;
+
+        #endregion
 
         public LogFile(
             string path,
@@ -33,32 +37,32 @@ namespace DataCommander.Foundation.Diagnostics
             this.fileAttributes = fileAttributes;
         }
 
-        private static string GetNextFileName( string path, out DateTime date )
+        private static string GetNextFileName(string path, out DateTime date)
         {
             date = DateTime.Today;
             var sb = new StringBuilder();
-            string directoryName = Path.GetDirectoryName( path );
+            string directoryName = Path.GetDirectoryName(path);
 
             if (directoryName.Length > 0)
             {
-                sb.Append( directoryName );
-                sb.Append( Path.DirectorySeparatorChar );
+                sb.Append(directoryName);
+                sb.Append(Path.DirectorySeparatorChar);
             }
 
-            sb.Append( Path.GetFileNameWithoutExtension( path ) );
-            sb.Append( ' ' );
-            sb.Append( date.ToString( "yyyy.MM.dd" ) );
-            sb.Append( " [{0}]" );
-            sb.Append( Path.GetExtension( path ) );
+            sb.Append(Path.GetFileNameWithoutExtension(path));
+            sb.Append(' ');
+            sb.Append(date.ToString("yyyy.MM.dd"));
+            sb.Append(" [{0}]");
+            sb.Append(Path.GetExtension(path));
             string format = sb.ToString();
             int id = 0;
-            string idStr = null;
+            string idStr;
 
             while (true)
             {
-                idStr = id.ToString().PadLeft( 2, '0' );
-                string fileName = string.Format( format, idStr );
-                bool exists = File.Exists( fileName );
+                idStr = id.ToString().PadLeft(2, '0');
+                string fileName = string.Format(format, idStr);
+                bool exists = File.Exists(fileName);
 
                 if (!exists)
                 {
@@ -68,39 +72,41 @@ namespace DataCommander.Foundation.Diagnostics
                 id++;
             }
 
-            return string.Format( format, idStr );
+            return string.Format(format, idStr);
         }
 
         private void Open()
         {
-            this.fileName = GetNextFileName( this.path, out this.date );
+            this.fileName = GetNextFileName(this.path, out this.date);
 
             try
             {
-                this.fileStream = new FileStream( this.fileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read, this.bufferSize );
+                this.fileStream = new FileStream(this.fileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read,
+                    this.bufferSize);
             }
             catch (Exception e)
             {
-                log.Write( LogLevel.Error, e.ToString() );
+                log.Write(LogLevel.Error, e.ToString());
                 string directory = Path.GetTempPath();
-                this.fileName = Path.GetFileName( this.path );
+                this.fileName = Path.GetFileName(this.path);
                 StringBuilder sb = new StringBuilder();
-                sb.Append( directory );
-                sb.Append( this.fileName );
+                sb.Append(directory);
+                sb.Append(this.fileName);
                 this.path = sb.ToString();
-                this.fileName = GetNextFileName( this.path, out this.date );
-                this.fileStream = new FileStream( this.fileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read, this.bufferSize, true );
-                log.Write( LogLevel.Error, string.Format( "LogFile path: {0}", this.fileName ) );
+                this.fileName = GetNextFileName(this.path, out this.date);
+                this.fileStream = new FileStream(this.fileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read,
+                    this.bufferSize, true);
+                log.Write(LogLevel.Error, string.Format("LogFile path: {0}", this.fileName));
             }
 
             if (this.fileStream.Length == 0)
             {
-                Byte[] preamble = this.encoding.GetPreamble();
-                this.fileStream.Write( preamble, 0, preamble.Length );
+                byte[] preamble = this.encoding.GetPreamble();
+                this.fileStream.Write(preamble, 0, preamble.Length);
             }
         }
 
-        public void Write( DateTime date, string text )
+        public void Write(DateTime date, string text)
         {
             if (this.fileStream == null)
             {
@@ -112,8 +118,8 @@ namespace DataCommander.Foundation.Diagnostics
                 this.Open();
             }
 
-            Byte[] array = this.encoding.GetBytes( text );
-            this.fileStream.Write( array, 0, array.Length );
+            byte[] array = this.encoding.GetBytes(text);
+            this.fileStream.Write(array, 0, array.Length);
 
             if (this.autoFlush)
             {
@@ -129,14 +135,14 @@ namespace DataCommander.Foundation.Diagnostics
 
             if (begin != null)
             {
-                this.Write( LocalTime.Default.Now, begin );
+                this.Write(LocalTime.Default.Now, begin);
             }
         }
 
-        void ILogFile.Write( LogEntry entry )
+        void ILogFile.Write(LogEntry entry)
         {
-            string text = this.formatter.Format( entry );
-            this.Write( entry.CreationTime.Date, text );
+            string text = this.formatter.Format(entry);
+            this.Write(entry.CreationTime.Date, text);
         }
 
         void ILogFile.Flush()
@@ -152,18 +158,18 @@ namespace DataCommander.Foundation.Diagnostics
 
                 if (end != null)
                 {
-                    this.Write( DateTime.Today, end );
+                    this.Write(DateTime.Today, end);
                 }
 
                 this.fileStream.Close();
                 string name = this.fileStream.Name;
                 this.fileStream = null;
 
-                if (this.fileAttributes != default( FileAttributes ))
+                if (this.fileAttributes != default(FileAttributes))
                 {
-                    FileAttributes attributes = File.GetAttributes( name );
+                    FileAttributes attributes = File.GetAttributes(name);
                     attributes |= this.fileAttributes; // FileAttributes.ReadOnly | FileAttributes.Hidden;
-                    File.SetAttributes( name, attributes );
+                    File.SetAttributes(name, attributes);
                 }
             }
         }

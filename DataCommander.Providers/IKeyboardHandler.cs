@@ -1,8 +1,8 @@
 ﻿namespace DataCommander
 {
-	using System.Windows.Forms;
+    using System.Windows.Forms;
 
-	public interface IKeyboardHandler
+    public interface IKeyboardHandler
 	{
 		bool HandleKeyDown( KeyEventArgs e );
 

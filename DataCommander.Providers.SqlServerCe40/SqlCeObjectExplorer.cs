@@ -1,8 +1,8 @@
 ﻿namespace DataCommander.Providers.SqlServerCe
 {
     using System.Collections.Generic;
+    using System.Data;
     using System.Data.SqlServerCe;
-    using DataCommander.Providers;
 
     internal sealed class SqlCeObjectExplorer : IObjectExplorer
     {
@@ -19,7 +19,7 @@
 
         #region IObjectExplorer Members
 
-        void IObjectExplorer.SetConnection(string connectionString, System.Data.IDbConnection connection)
+        void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
         {
             this.connectionString = connectionString;
             this.connection = (SqlCeConnection)connection;

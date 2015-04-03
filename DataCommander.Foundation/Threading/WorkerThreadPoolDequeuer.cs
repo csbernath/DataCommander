@@ -1,6 +1,5 @@
 namespace DataCommander.Foundation.Threading
 {
-    using System;
     using System.Diagnostics;
     using System.Threading;
 
@@ -10,8 +9,8 @@ namespace DataCommander.Foundation.Threading
     public class WorkerThreadPoolDequeuer
     {
         private WorkerThreadPool pool;
-        private WorkerThread thread;
-        private WaitCallback callback;
+        private readonly WorkerThread thread;
+        private readonly WaitCallback callback;
         private long lastActivityTimestamp;
 
         /// <summary>

@@ -2,12 +2,13 @@
 {
     using System.Collections.Generic;
     using System.Data;
+    using System.Windows.Forms;
     using DataCommander.Foundation.Data;
 
     internal sealed class IndexNode : ITreeNode
     {
-        private TableNode tableNode;
-        private string name;
+        private readonly TableNode tableNode;
+        private readonly string name;
 
         public IndexNode( TableNode tableNode, string name )
         {
@@ -56,12 +57,12 @@ where	type = 'index'
 	and name = '{0}'", this.name );
 
                 object scalar = this.tableNode.Database.Connection.ExecuteScalar( null, commandText, CommandType.Text, 0 );
-                string sql = DataCommander.Foundation.Data.Database.GetValueOrDefault<string>( scalar );
+                string sql = Database.GetValueOrDefault<string>( scalar );
                 return sql;
             }
         }
 
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu
         {
             get
             {

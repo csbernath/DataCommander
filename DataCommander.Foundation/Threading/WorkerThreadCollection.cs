@@ -1,6 +1,7 @@
 namespace DataCommander.Foundation.Threading
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Threading;
@@ -10,7 +11,7 @@ namespace DataCommander.Foundation.Threading
     /// </summary>
     public sealed class WorkerThreadCollection : IList<WorkerThread>
     {
-        private List<WorkerThread> threads = new List<WorkerThread>();
+        private readonly List<WorkerThread> threads = new List<WorkerThread>();
 
         #region IList<WorkerThread> Members
 
@@ -126,7 +127,7 @@ namespace DataCommander.Foundation.Threading
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             throw new Exception("The method or operation is not implemented.");
         }
@@ -174,9 +175,9 @@ namespace DataCommander.Foundation.Threading
 
         private sealed class Stopper
         {
-            private IList<WorkerThread> threads;
+            private readonly IList<WorkerThread> threads;
             private int count;
-            private EventWaitHandle stopEvent;
+            private readonly EventWaitHandle stopEvent;
 
             public Stopper(IList<WorkerThread> threads, EventWaitHandle stopEvent)
             {

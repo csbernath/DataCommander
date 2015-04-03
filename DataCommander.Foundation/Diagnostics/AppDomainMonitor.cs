@@ -1,5 +1,3 @@
-using System.Runtime.Remoting.Messaging;
-
 namespace DataCommander.Foundation.Diagnostics
 {
     using System;
@@ -18,7 +16,7 @@ namespace DataCommander.Foundation.Diagnostics
     /// </summary>
     public static class AppDomainMonitor
     {
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
 
         #region Public Properties
 
@@ -39,7 +37,7 @@ namespace DataCommander.Foundation.Diagnostics
 
                     case "4.0.30319.34209":
                         dotNetFrameworkVersion = "4.5.2";
-                        break;                        
+                        break;
 
                     default:
                         dotNetFrameworkVersion = null;
@@ -57,6 +55,12 @@ namespace DataCommander.Foundation.Diagnostics
         {
             get
             {
+                int tickCount = SystemTime.GetTickCount();
+                int milliSecondsPerDay = StopwatchTimeSpan.SecondsPerDay*1000;
+                double totalDays = (double)tickCount/milliSecondsPerDay;
+                DateTime zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
+                string tickCountString = string.Format("{0} ({1:N2} days(s) from {2:yyyy.MM.dd HH:mm:ss})", tickCount, totalDays, zeroDateTime);
+
                 string message = string.Format(@"Environment information
 Environment.MachineName:            {0}
 Environment.ProcessorCount:         {1}
@@ -71,7 +75,9 @@ Environment.UserName:               {10}
 Environment.UserInteractive:        {11}
 Environment.CurrentDirectory:       {12}
 Environment.CommandLine:            {13},
-Stopwatch.Frequency:                {14}",
+System Up Time:                     {14}
+Environment.TickCount:              {15}
+Stopwatch.Frequency:                {16}",
                     Environment.MachineName,
                     Environment.ProcessorCount,
                     Environment.OSVersion,
@@ -83,7 +89,7 @@ Stopwatch.Frequency:                {14}",
                     Environment.Is64BitProcess,
 #endif
                     IntPtr.Size,
-                    IntPtr.Size * 8,
+                    IntPtr.Size*8,
                     Environment.Version,
                     DotNetFrameworkVersion,
                     Environment.UserDomainName,
@@ -91,6 +97,8 @@ Stopwatch.Frequency:                {14}",
                     Environment.UserInteractive,
                     Environment.CurrentDirectory,
                     Environment.CommandLine,
+                    SystemUpTime,
+                    tickCountString,
                     Stopwatch.Frequency);
                 return message;
             }
@@ -113,6 +121,18 @@ Stopwatch.Frequency:                {14}",
 
         #endregion
 
+        private static TimeSpan SystemUpTime
+        {
+            get
+            {
+                using (var uptime = new PerformanceCounter("System", "System Up Time"))
+                {
+                    uptime.NextValue(); //Call this an extra time before reading its value
+                    return TimeSpan.FromSeconds(uptime.NextValue());
+                }
+            }
+        }
+
         #region Private Methods
 
         private static Version GetFileVersion(Assembly assembly)
@@ -122,7 +142,8 @@ Stopwatch.Frequency:                {14}",
             try
             {
                 var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-                fileVersion = new Version(fileVersionInfo.FileMajorPart, fileVersionInfo.FileMinorPart, fileVersionInfo.FileBuildPart, fileVersionInfo.FilePrivatePart);
+                fileVersion = new Version(fileVersionInfo.FileMajorPart, fileVersionInfo.FileMinorPart,
+                    fileVersionInfo.FileBuildPart, fileVersionInfo.FilePrivatePart);
             }
             catch (Exception e)
             {
@@ -176,10 +197,12 @@ Stopwatch.Frequency:                {14}",
                         }
 
                         Version fileVersion = !string.IsNullOrEmpty(location) ? GetFileVersion(assembly) : null;
-                        DateTime? date = !string.IsNullOrEmpty(location) ? File.GetLastWriteTime(location) : (DateTime?)null;
+                        DateTime? date = !string.IsNullOrEmpty(location)
+                            ? File.GetLastWriteTime(location)
+                            : (DateTime?) null;
                         AssemblyName name = assembly.GetName();
                         string publicKeyTokenString;
-                        Byte[] publicKeyToken = name.GetPublicKeyToken();
+                        byte[] publicKeyToken = name.GetPublicKeyToken();
 
                         if (publicKeyToken != null)
                         {

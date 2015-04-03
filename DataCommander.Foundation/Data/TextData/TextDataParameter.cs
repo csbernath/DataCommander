@@ -1,9 +1,10 @@
 ﻿namespace DataCommander.Foundation.Data
 {
     using System;
-	using System.Data.Common;
+    using System.Data;
+    using System.Data.Common;
 
-	/// <summary>
+    /// <summary>
     /// 
     /// </summary>
     public sealed class TextDataParameter : DbParameter
@@ -25,7 +26,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override System.Data.DbType DbType
+        public override DbType DbType
         {
             get
             {
@@ -41,7 +42,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override System.Data.ParameterDirection Direction
+        public override ParameterDirection Direction
         {
             get
             {
@@ -145,7 +146,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override System.Data.DataRowVersion SourceVersion
+        public override DataRowVersion SourceVersion
         {
             get
             {

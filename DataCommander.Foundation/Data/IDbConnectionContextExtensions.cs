@@ -3,6 +3,7 @@
     using System;
     using System.Data;
     using System.Diagnostics.Contracts;
+
 #if DAPPER
     using System.Collections.Generic;
     using Dapper;

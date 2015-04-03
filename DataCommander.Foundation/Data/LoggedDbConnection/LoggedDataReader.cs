@@ -7,7 +7,7 @@
     internal sealed class LoggedDataReader : IDataReader
     {
         private readonly IDataReader dataReader;
-        private EventHandler<AfterReadEventArgs> afterRead;
+        private readonly EventHandler<AfterReadEventArgs> afterRead;
         private int rowCount;
 
         public LoggedDataReader(

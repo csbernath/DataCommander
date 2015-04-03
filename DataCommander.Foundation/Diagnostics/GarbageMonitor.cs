@@ -18,9 +18,9 @@ namespace DataCommander.Foundation.Diagnostics
     {
         #region Private Fields
 
-        private static LinkedList<ListItem> items = new LinkedList<ListItem>();
+        private static readonly LinkedList<ListItem> items = new LinkedList<ListItem>();
         private static long id;
-        private static Lazy<StringTableColumnInfo<ListItemState>[]> columns;
+        private static readonly Lazy<StringTableColumnInfo<ListItemState>[]> columns;
 
         #endregion
 
@@ -174,13 +174,13 @@ namespace DataCommander.Foundation.Diagnostics
         {
             #region Private Fields
 
-            private long id;
-            private string name;
-            private string typeName;
-            private int size;
-            private DateTime time = LocalTime.Default.Now;
-            private long timestamp;
-            private WeakReference weakReference;
+            private readonly long id;
+            private readonly string name;
+            private readonly string typeName;
+            private readonly int size;
+            private readonly DateTime time = LocalTime.Default.Now;
+            private readonly long timestamp;
+            private readonly WeakReference weakReference;
             private DateTime? disposeTime;
 
             #endregion
@@ -271,10 +271,10 @@ namespace DataCommander.Foundation.Diagnostics
 
         private sealed class ListItemState
         {
-            private ListItem listItem;
-            private long timestamp;
-            private bool isAlive;
-            private int? generation;
+            private readonly ListItem listItem;
+            private readonly long timestamp;
+            private readonly bool isAlive;
+            private readonly int? generation;
 
             public ListItemState( ListItem listItem, long timestamp )
             {
@@ -282,7 +282,7 @@ namespace DataCommander.Foundation.Diagnostics
                 this.timestamp = timestamp;
 
                 this.isAlive = listItem.WeakReference.IsAlive;
-                if (isAlive)
+                if (this.isAlive)
                 {
                     try
                     {

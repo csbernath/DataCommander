@@ -1,6 +1,7 @@
 namespace DataCommander.Foundation.Threading
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
 
@@ -9,9 +10,9 @@ namespace DataCommander.Foundation.Threading
     /// </summary>
     public sealed class WorkerThreadPoolDequeuerCollection : IList<WorkerThreadPoolDequeuer>
     {
-        private List<WorkerThreadPoolDequeuer> list = new List<WorkerThreadPoolDequeuer>();
-        private WorkerThreadPool pool;
-        private WorkerThreadCollection threads = new WorkerThreadCollection();
+        private readonly List<WorkerThreadPoolDequeuer> list = new List<WorkerThreadPoolDequeuer>();
+        private readonly WorkerThreadPool pool;
+        private readonly WorkerThreadCollection threads = new WorkerThreadCollection();
 
         internal WorkerThreadPoolDequeuerCollection(WorkerThreadPool pool)
         {
@@ -180,7 +181,7 @@ namespace DataCommander.Foundation.Threading
         /// 
         /// </summary>
         /// <returns></returns>
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             throw new NotImplementedException();
         }

@@ -12,6 +12,6 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        ILog GetLog( string name );
+        ILog GetLog(string name);
     }
 }

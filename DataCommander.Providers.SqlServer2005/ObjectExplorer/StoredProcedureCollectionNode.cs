@@ -4,7 +4,6 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Data;
     using System.Data.SqlClient;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
 
     sealed class StoredProcedureCollectionNode : ITreeNode
     {
@@ -20,7 +19,7 @@ namespace DataCommander.Providers.SqlServer2005
         {
             get
             {
-                return isMSShipped ? "System Stored Procedures" : "Stored Procedures";
+                return this.isMSShipped ? "System Stored Procedures" : "Stored Procedures";
             }
         }
 
@@ -68,7 +67,7 @@ order by s.name,o.name", this.database.Name, this.isMSShipped ? 1 : 0 );
                 string owner = (string)row["Owner"];
                 string name = (string)row["Name"];
 
-                treeNodes.Add(new StoredProcedureNode(database, owner, name));
+                treeNodes.Add(new StoredProcedureNode(this.database, owner, name));
             }
 
             return treeNodes;
@@ -98,7 +97,7 @@ order by s.name,o.name", this.database.Name, this.isMSShipped ? 1 : 0 );
             }
         }
 
-        DatabaseNode database;
-        bool isMSShipped;
+        readonly DatabaseNode database;
+        readonly bool isMSShipped;
     }
 }

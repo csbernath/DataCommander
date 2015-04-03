@@ -1,7 +1,5 @@
 ﻿namespace DataCommander.Foundation.Data
 {
-    using System;
-
 #if FOUNDATION_3_5
 
 #else

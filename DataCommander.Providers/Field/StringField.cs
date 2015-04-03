@@ -4,8 +4,8 @@ namespace DataCommander.Providers
 
     public sealed class StringField : IConvertible
     {
-        private string value;
-        private int length;
+        private readonly string value;
+        private readonly int length;
 
         public StringField(string value, int length)
         {
@@ -17,7 +17,7 @@ namespace DataCommander.Providers
         {
             get
             {
-                return value;
+                return this.value;
             }
         }
 
@@ -25,13 +25,13 @@ namespace DataCommander.Providers
         {
             string s;
 
-            if (value.Length > length)
+            if (this.value.Length > this.length)
             {
-                s = value.Substring(0, length);
+                s = this.value.Substring(0, this.length);
             }
             else
             {
-                s = value;
+                s = this.value;
             }
 
             return s;

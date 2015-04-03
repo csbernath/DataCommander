@@ -37,7 +37,7 @@ from    {0}.sys.schemas
 
 select  name,schema_id
 from    {0}.sys.system_views";
-            commandText = string.Format( commandText, database.Name );
+            commandText = string.Format( commandText, this.database.Name );
             List<ViewNode> treeNodes = new List<ViewNode>();
             string connectionString = this.database.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection( connectionString ))
@@ -96,6 +96,6 @@ from    {0}.sys.system_views";
             }
         }
 
-        private DatabaseNode database;
+        private readonly DatabaseNode database;
     }
 }

@@ -1,7 +1,5 @@
 namespace DataCommander.Foundation.Threading
 {
-    using System;
-
     /// <summary>
     /// AsyncQueue implementors must implement this interface.
     /// </summary>

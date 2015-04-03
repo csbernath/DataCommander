@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation.XmlSpreadsheet
 {
-    using System;
     using System.Diagnostics.Contracts;
     using System.Xml;
 
@@ -9,7 +8,7 @@
     /// </summary>
     public sealed class XmlSpreadsheetAttribute
     {
-        private string localName;
+        private readonly string localName;
         private readonly string value;
 
         /// <summary>

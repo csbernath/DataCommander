@@ -9,7 +9,7 @@
     /// </summary>
     public static class LogFactory
     {
-        private static ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
         private static ILogFactory instance = NullApplicationLog.Instance;
 
         /// <summary>
@@ -33,19 +33,19 @@
         /// </summary>
         public static void Read()
         {
-            log.Trace( "Reading LogFactory configuration..." );
+            log.Trace("Reading LogFactory configuration...");
             var node = Settings.SelectCurrentType();
             if (node != null)
             {
-                var typeName = node.Attributes[ "TypeName" ].GetValue<string>();
-                var type = Type.GetType( typeName, true );
-                object instance = Activator.CreateInstance( type );
-                Contract.Assert( instance is ILogFactory );
+                var typeName = node.Attributes["TypeName"].GetValue<string>();
+                var type = Type.GetType(typeName, true);
+                object instance = Activator.CreateInstance(type);
+                Contract.Assert(instance is ILogFactory);
                 var applicationLog = (ILogFactory) instance;
                 instance = applicationLog;
             }
 
-            log.Trace("LogFactory configuration has been read successfully." );
+            log.Trace("LogFactory configuration has been read successfully.");
         }
     }
 }

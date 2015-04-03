@@ -5,8 +5,8 @@
 
     public sealed class DateTimeOffsetDataFieldReader : IDataFieldReader
     {
-        private IDataRecord dataRecord;
-        private int columnOrdinal;
+        private readonly IDataRecord dataRecord;
+        private readonly int columnOrdinal;
 
         public DateTimeOffsetDataFieldReader(
             IDataRecord dataRecord,
@@ -22,13 +22,13 @@
             {
                 object value;
 
-                if (dataRecord.IsDBNull(columnOrdinal))
+                if (this.dataRecord.IsDBNull(this.columnOrdinal))
                 {
                     value = DBNull.Value;
                 }
                 else
                 {
-                    value = dataRecord[columnOrdinal];
+                    value = this.dataRecord[this.columnOrdinal];
                     DateTimeOffset dateTimeOffset = (DateTimeOffset)value;
                     value = new DateTimeOffsetField(dateTimeOffset);
                 }

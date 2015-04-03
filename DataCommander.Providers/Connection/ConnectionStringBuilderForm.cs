@@ -5,6 +5,7 @@ namespace DataCommander.Providers
     using System.Data;
     using System.Data.Common;
     using System.Data.OleDb;
+    using System.Diagnostics;
     using System.Text;
     using System.Windows.Forms;
     using DataCommander.Foundation.Configuration;
@@ -13,9 +14,9 @@ namespace DataCommander.Providers
 
     internal partial class ConnectionStringBuilderForm : Form
     {
-        private ConnectionProperties tempConnectionProperties = new ConnectionProperties();
+        private readonly ConnectionProperties tempConnectionProperties = new ConnectionProperties();
         private ConnectionProperties connectionProperties;
-        private IList<string> providers;
+        private readonly IList<string> providers;
         private DbProviderFactory dbProviderFactory;
         private DbConnectionStringBuilder dbConnectionStringBuilder;
         private DataTable dataSources;
@@ -24,18 +25,18 @@ namespace DataCommander.Providers
 
         public ConnectionStringBuilderForm()
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
             this.oleDbProviderLabel.Visible = false;
             this.oleDbProvidersComboBox.Visible = false;
 
             List<string> list = ProviderFactory.Providers;
             list.Sort();
-            providers = list;
+            this.providers = list;
 
-            foreach (string provider in providers)
+            foreach (string provider in this.providers)
             {
-                providersComboBox.Items.Add( provider );
+                this.providersComboBox.Items.Add(provider);
             }
         }
 
@@ -43,46 +44,52 @@ namespace DataCommander.Providers
         {
             get
             {
-                return connectionProperties;
+                return this.connectionProperties;
             }
 
             set
             {
-                connectionProperties = value;
-                connectionNameTextBox.Text = connectionProperties.ConnectionName;
-                string providerName = connectionProperties.ProviderName;
-                providersComboBox.Text = providerName;
+                this.connectionProperties = value;
+                this.connectionNameTextBox.Text = this.connectionProperties.ConnectionName;
+                string providerName = this.connectionProperties.ProviderName;
+                this.providersComboBox.Text = providerName;
                 DbConnectionStringBuilder dbConnectionStringBuilder = new DbConnectionStringBuilder();
-                dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
+                dbConnectionStringBuilder.ConnectionString = this.connectionProperties.ConnectionString;
 
                 if (providerName == ProviderName.OleDb)
                 {
-                    string oleDbProviderName = ConnectionProperties.GetValue( dbConnectionStringBuilder, ConnectionStringProperty.Provider );
+                    string oleDbProviderName = ConnectionProperties.GetValue(dbConnectionStringBuilder,
+                        ConnectionStringProperty.Provider);
                     this.InitializeOleDbProvidersComboBox();
-                    int index = this.oleDbProviders.IndexOf( 0, i => i.Name == oleDbProviderName );
+                    int index = this.oleDbProviders.IndexOf(0, i => i.Name == oleDbProviderName);
                     this.oleDbProvidersComboBox.SelectedIndex = index;
                 }
 
-                dataSourcesComboBox.Text = ConnectionProperties.GetValue( dbConnectionStringBuilder, ConnectionStringProperty.DataSource );
+                this.dataSourcesComboBox.Text = ConnectionProperties.GetValue(dbConnectionStringBuilder,
+                    ConnectionStringProperty.DataSource);
 
                 object valueObject;
-                bool contains = dbConnectionStringBuilder.TryGetValue( ConnectionStringProperty.IntegratedSecurity, out valueObject );
+                bool contains = dbConnectionStringBuilder.TryGetValue(ConnectionStringProperty.IntegratedSecurity,
+                    out valueObject);
                 bool isIntegratedSecurity;
 
                 if (contains)
                 {
                     string s = (string) valueObject;
-                    isIntegratedSecurity = bool.Parse( s );
+                    isIntegratedSecurity = bool.Parse(s);
                 }
                 else
                 {
                     isIntegratedSecurity = false;
                 }
 
-                integratedSecurityCheckBox.Checked = isIntegratedSecurity;
-                userIdTextBox.Text = ConnectionProperties.GetValue( dbConnectionStringBuilder, ConnectionStringProperty.UserId );
-                passwordTextBox.Text = ConnectionProperties.GetValue( dbConnectionStringBuilder, ConnectionStringProperty.Password );
-                initialCatalogComboBox.Text = ConnectionProperties.GetValue( dbConnectionStringBuilder, "Initial Catalog" );
+                this.integratedSecurityCheckBox.Checked = isIntegratedSecurity;
+                this.userIdTextBox.Text = ConnectionProperties.GetValue(dbConnectionStringBuilder,
+                    ConnectionStringProperty.UserId);
+                this.passwordTextBox.Text = ConnectionProperties.GetValue(dbConnectionStringBuilder,
+                    ConnectionStringProperty.Password);
+                this.initialCatalogComboBox.Text = ConnectionProperties.GetValue(dbConnectionStringBuilder,
+                    "Initial Catalog");
             }
         }
 
@@ -96,23 +103,23 @@ namespace DataCommander.Providers
             {
                 while (dataReader.Read())
                 {
-                    string name = dataReader.GetValue<string>( "SOURCES_NAME" );
-                    string description = dataReader.GetValue<string>( "SOURCES_DESCRIPTION" );
-                    OleDbProviderInfo item = new OleDbProviderInfo( name, description );
-                    this.oleDbProviders.Add( item );
-                    this.oleDbProvidersComboBox.Items.Add( description );
+                    string name = dataReader.GetValue<string>("SOURCES_NAME");
+                    string description = dataReader.GetValue<string>("SOURCES_DESCRIPTION");
+                    OleDbProviderInfo item = new OleDbProviderInfo(name, description);
+                    this.oleDbProviders.Add(item);
+                    this.oleDbProvidersComboBox.Items.Add(description);
                 }
             }
         }
 
-        private void providersComboBox_SelectedIndexChanged( object sender, EventArgs e )
+        private void providersComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
-                int index = providersComboBox.SelectedIndex;
-                string providerName = providers[ index ];
-                IProvider provider = ProviderFactory.CreateProvider( providerName );
-                tempConnectionProperties.Provider = provider;
+                int index = this.providersComboBox.SelectedIndex;
+                string providerName = this.providers[index];
+                IProvider provider = ProviderFactory.CreateProvider(providerName);
+                this.tempConnectionProperties.Provider = provider;
                 this.dbProviderFactory = provider.DbProviderFactory;
                 OleDbFactory oleDbFactory = this.dbProviderFactory as OleDbFactory;
 
@@ -128,74 +135,74 @@ namespace DataCommander.Providers
                     this.dbConnectionStringBuilder = new DbConnectionStringBuilder();
                 }
 
-                bool contains = dbConnectionStringBuilder.ContainsKey( ConnectionStringProperty.IntegratedSecurity );
-                integratedSecurityCheckBox.Enabled = contains;
-                contains = dbConnectionStringBuilder.ContainsKey( ConnectionStringProperty.InitialCatalog );
-                initialCatalogComboBox.Enabled = contains;
-                contains = dbConnectionStringBuilder.ContainsKey( ConnectionStringProperty.UserId );
+                bool contains = this.dbConnectionStringBuilder.ContainsKey(ConnectionStringProperty.IntegratedSecurity);
+                this.integratedSecurityCheckBox.Enabled = contains;
+                contains = this.dbConnectionStringBuilder.ContainsKey(ConnectionStringProperty.InitialCatalog);
+                this.initialCatalogComboBox.Enabled = contains;
+                contains = this.dbConnectionStringBuilder.ContainsKey(ConnectionStringProperty.UserId);
                 this.userIdTextBox.Enabled = contains;
 
-                foreach (string key in dbConnectionStringBuilder.Keys)
+                foreach (string key in this.dbConnectionStringBuilder.Keys)
                 {
-                    System.Diagnostics.Trace.WriteLine( key );
+                    Trace.WriteLine(key);
                 }
             }
-            catch ( Exception ex )
+            catch (Exception ex)
             {
-                MessageBox.Show( this, ex.ToString() );
+                MessageBox.Show(this, ex.ToString());
             }
         }
 
-        private void GetDataSources( string[] dataSourceArray )
+        private void GetDataSources(string[] dataSourceArray)
         {
-            dataSourcesComboBox.Items.Clear();
+            this.dataSourcesComboBox.Items.Clear();
 
             if (dataSourceArray != null)
             {
                 for (int i = 0; i < dataSourceArray.Length; i++)
                 {
-                    dataSourcesComboBox.Items.Add( dataSourceArray[ i ] );
+                    this.dataSourcesComboBox.Items.Add(dataSourceArray[i]);
                 }
             }
         }
 
-        private void GetDataSources( bool refresh )
+        private void GetDataSources(bool refresh)
         {
             ApplicationData applicationData = Application.Instance.ApplicationData;
             ConfigurationNode folder = applicationData.CurrentType;
-            folder = folder.CreateNode( tempConnectionProperties.Provider.Name );
+            folder = folder.CreateNode(this.tempConnectionProperties.Provider.Name);
             string[] dataSourceArray;
-            bool contains = folder.Attributes.TryGetAttributeValue<string[]>( "Data Sources", out dataSourceArray );
+            bool contains = folder.Attributes.TryGetAttributeValue("Data Sources", out dataSourceArray);
 
             if (!contains || refresh)
             {
-                Cursor = Cursors.WaitCursor;
-                DbDataSourceEnumerator dbDataSourceEnumerator = dbProviderFactory.CreateDataSourceEnumerator();
+                this.Cursor = Cursors.WaitCursor;
+                DbDataSourceEnumerator dbDataSourceEnumerator = this.dbProviderFactory.CreateDataSourceEnumerator();
 
                 if (dbDataSourceEnumerator != null)
                 {
-                    dataSources = dbDataSourceEnumerator.GetDataSources();
+                    this.dataSources = dbDataSourceEnumerator.GetDataSources();
                     List<string> dataSourceList = new List<string>();
 
-                    foreach (DataRow row in dataSources.Rows)
+                    foreach (DataRow row in this.dataSources.Rows)
                     {
-                        string serverName = Database.GetValueOrDefault<string>( row[ "ServerName" ] );
-                        string instanceName = Database.GetValueOrDefault<string>( row[ "InstanceName" ] );
+                        string serverName = Database.GetValueOrDefault<string>(row["ServerName"]);
+                        string instanceName = Database.GetValueOrDefault<string>(row["InstanceName"]);
                         StringBuilder sb = new StringBuilder();
 
                         if (serverName != null)
                         {
-                            sb.Append( serverName );
+                            sb.Append(serverName);
                         }
 
                         if (instanceName != null)
                         {
-                            sb.Append( '\\' );
-                            sb.Append( instanceName );
+                            sb.Append('\\');
+                            sb.Append(instanceName);
                         }
 
                         string dataSource = sb.ToString();
-                        dataSourceList.Add( dataSource );
+                        dataSourceList.Add(dataSource);
                     }
 
                     dataSourceList.Sort();
@@ -206,145 +213,147 @@ namespace DataCommander.Providers
                     dataSourceArray = null;
                 }
 
-                folder.Attributes.SetAttributeValue( "Data Sources", dataSourceArray );
-                GetDataSources( dataSourceArray );
-                Cursor = Cursors.Default;
+                folder.Attributes.SetAttributeValue("Data Sources", dataSourceArray);
+                this.GetDataSources(dataSourceArray);
+                this.Cursor = Cursors.Default;
             }
             else
             {
-                GetDataSources( dataSourceArray );
+                this.GetDataSources(dataSourceArray);
             }
         }
 
-        private void dataSourcesComboBox_SelectedIndexChanged( object sender, EventArgs e )
+        private void dataSourcesComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string dataSource = dataSourcesComboBox.Text;
+            string dataSource = this.dataSourcesComboBox.Text;
         }
 
-        private void refreshButton_Click( object sender, EventArgs e )
+        private void refreshButton_Click(object sender, EventArgs e)
         {
-            string provider = providersComboBox.Text;
+            string provider = this.providersComboBox.Text;
 
             if (provider.Length > 0)
             {
-                this.GetDataSources( true );
+                this.GetDataSources(true);
             }
         }
 
-        private void dataSourcesComboBox_DropDown( object sender, EventArgs e )
+        private void dataSourcesComboBox_DropDown(object sender, EventArgs e)
         {
-            if (dataSources == null)
+            if (this.dataSources == null)
             {
-                string provider = providersComboBox.Text;
+                string provider = this.providersComboBox.Text;
 
                 if (provider.Length > 0)
                 {
-                    this.GetDataSources( false );
+                    this.GetDataSources(false);
                 }
             }
         }
 
         private DbConnection CreateConnection()
         {
-            string dataSource = dataSourcesComboBox.Text;
-            SaveTo( dbConnectionStringBuilder );
-            string connectionString = dbConnectionStringBuilder.ToString();
-            DbConnection connection = dbProviderFactory.CreateConnection();
+            string dataSource = this.dataSourcesComboBox.Text;
+            this.SaveTo(this.dbConnectionStringBuilder);
+            string connectionString = this.dbConnectionStringBuilder.ToString();
+            DbConnection connection = this.dbProviderFactory.CreateConnection();
             connection.ConnectionString = connectionString;
             return connection;
         }
 
-        private void initialCatalogComboBox_DropDown( object sender, EventArgs e )
+        private void initialCatalogComboBox_DropDown(object sender, EventArgs e)
         {
-            string dataSource = dataSourcesComboBox.Text;
+            string dataSource = this.dataSourcesComboBox.Text;
 
-            if (!string.IsNullOrWhiteSpace( dataSource ) && initialCatalogs == null)
+            if (!string.IsNullOrWhiteSpace(dataSource) && this.initialCatalogs == null)
             {
                 try
                 {
-                    using (DbConnection connection = CreateConnection())
+                    using (DbConnection connection = this.CreateConnection())
                     {
                         connection.Open();
-                        DataTable schema = connection.GetSchema( "Databases" );
-                        initialCatalogs = new List<string>();
+                        DataTable schema = connection.GetSchema("Databases");
+                        this.initialCatalogs = new List<string>();
 
                         foreach (DataRow row in schema.Rows)
                         {
-                            string database = (string) row[ "database_name" ];
-                            initialCatalogs.Add( database );
+                            string database = (string) row["database_name"];
+                            this.initialCatalogs.Add(database);
                         }
 
-                        initialCatalogs.Sort();
+                        this.initialCatalogs.Sort();
 
-                        foreach (string database in initialCatalogs)
+                        foreach (string database in this.initialCatalogs)
                         {
-                            initialCatalogComboBox.Items.Add( database );
+                            this.initialCatalogComboBox.Items.Add(database);
                         }
                     }
                 }
-                catch ( Exception ex )
+                catch (Exception ex)
                 {
-                    Application.Instance.MainForm.StatusBar.Items[ 0 ].Text = ex.Message;
+                    Application.Instance.MainForm.StatusBar.Items[0].Text = ex.Message;
                 }
                 finally
                 {
-                    Cursor = Cursors.Default;
+                    this.Cursor = Cursors.Default;
                 }
             }
         }
 
-        private void OK_Click( object sender, EventArgs e )
+        private void OK_Click(object sender, EventArgs e)
         {
-            connectionProperties = new ConnectionProperties();
-            this.SaveTo( connectionProperties );
-            DialogResult = DialogResult.OK;
+            this.connectionProperties = new ConnectionProperties();
+            this.SaveTo(this.connectionProperties);
+            this.DialogResult = DialogResult.OK;
         }
 
-        private void SaveTo( DbConnectionStringBuilder dbConnectionStringBuilder )
+        private void SaveTo(DbConnectionStringBuilder dbConnectionStringBuilder)
         {
-            dbConnectionStringBuilder[ ConnectionStringProperty.DataSource ] = dataSourcesComboBox.Text;
+            dbConnectionStringBuilder[ConnectionStringProperty.DataSource] = this.dataSourcesComboBox.Text;
 
-            OleDbConnectionStringBuilder oleDbConnectionStringBuilder = dbConnectionStringBuilder as OleDbConnectionStringBuilder;
+            OleDbConnectionStringBuilder oleDbConnectionStringBuilder =
+                dbConnectionStringBuilder as OleDbConnectionStringBuilder;
 
             if (oleDbConnectionStringBuilder != null)
             {
                 int selectedIndex = this.oleDbProvidersComboBox.SelectedIndex;
-                OleDbProviderInfo oleDbProviderInfo = this.oleDbProviders[ selectedIndex ];
+                OleDbProviderInfo oleDbProviderInfo = this.oleDbProviders[selectedIndex];
                 oleDbConnectionStringBuilder.Provider = oleDbProviderInfo.Name;
             }
 
-            if (dbConnectionStringBuilder.ContainsKey( ConnectionStringProperty.IntegratedSecurity ))
+            if (dbConnectionStringBuilder.ContainsKey(ConnectionStringProperty.IntegratedSecurity))
             {
-                dbConnectionStringBuilder[ ConnectionStringProperty.IntegratedSecurity ] = integratedSecurityCheckBox.Checked;
+                dbConnectionStringBuilder[ConnectionStringProperty.IntegratedSecurity] =
+                    this.integratedSecurityCheckBox.Checked;
             }
 
-            if (dbConnectionStringBuilder.ContainsKey( ConnectionStringProperty.UserId ))
+            if (dbConnectionStringBuilder.ContainsKey(ConnectionStringProperty.UserId))
             {
-                dbConnectionStringBuilder[ ConnectionStringProperty.UserId ] = this.userIdTextBox.Text;
+                dbConnectionStringBuilder[ConnectionStringProperty.UserId] = this.userIdTextBox.Text;
             }
 
-            dbConnectionStringBuilder[ ConnectionStringProperty.Password ] = passwordTextBox.Text;
+            dbConnectionStringBuilder[ConnectionStringProperty.Password] = this.passwordTextBox.Text;
 
-            if (dbConnectionStringBuilder.ContainsKey( "Initial Catalog" ))
+            if (dbConnectionStringBuilder.ContainsKey("Initial Catalog"))
             {
-                dbConnectionStringBuilder[ "Initial Catalog" ] = initialCatalogComboBox.Text;
+                dbConnectionStringBuilder["Initial Catalog"] = this.initialCatalogComboBox.Text;
             }
         }
 
-        private void SaveTo( ConnectionProperties connectionProperties )
+        private void SaveTo(ConnectionProperties connectionProperties)
         {
-            if (dbConnectionStringBuilder == null)
+            if (this.dbConnectionStringBuilder == null)
             {
-                dbConnectionStringBuilder = new DbConnectionStringBuilder();
+                this.dbConnectionStringBuilder = new DbConnectionStringBuilder();
             }
 
-            this.SaveTo( dbConnectionStringBuilder );
+            this.SaveTo(this.dbConnectionStringBuilder);
             List<string> keywords = new List<string>();
 
-            foreach (string keyword in dbConnectionStringBuilder.Keys)
+            foreach (string keyword in this.dbConnectionStringBuilder.Keys)
             {
                 object obj;
-                bool contains = dbConnectionStringBuilder.TryGetValue( keyword, out obj );
+                bool contains = this.dbConnectionStringBuilder.TryGetValue(keyword, out obj);
 
                 if (contains && obj != null)
                 {
@@ -357,63 +366,53 @@ namespace DataCommander.Providers
 
                 if (!contains)
                 {
-                    keywords.Add( keyword );
+                    keywords.Add(keyword);
                 }
             }
 
             foreach (string keyword in keywords)
             {
-                dbConnectionStringBuilder.Remove( keyword );
+                this.dbConnectionStringBuilder.Remove(keyword);
             }
 
-            connectionProperties.ConnectionName = connectionNameTextBox.Text;
-            connectionProperties.ProviderName = providersComboBox.Text;
-            connectionProperties.ConnectionString = dbConnectionStringBuilder.ConnectionString;
+            connectionProperties.ConnectionName = this.connectionNameTextBox.Text;
+            connectionProperties.ProviderName = this.providersComboBox.Text;
+            connectionProperties.ConnectionString = this.dbConnectionStringBuilder.ConnectionString;
         }
 
-        private void testButton_Click( object sender, EventArgs e )
+        private void testButton_Click(object sender, EventArgs e)
         {
             try
             {
                 ConnectionProperties connectionProperties = new ConnectionProperties();
-                SaveTo( connectionProperties );
-                OpenConnectionForm form = new OpenConnectionForm( connectionProperties );
+                this.SaveTo(connectionProperties);
+                OpenConnectionForm form = new OpenConnectionForm(connectionProperties);
 
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    MessageBox.Show( "The connection was tested successfully." );
+                    MessageBox.Show("The connection was tested successfully.");
                 }
             }
-            catch ( Exception ex )
+            catch (Exception ex)
             {
-                Application.Instance.MainForm.StatusBar.Items[ 0 ].Text = ex.Message;
+                Application.Instance.MainForm.StatusBar.Items[0].Text = ex.Message;
             }
             finally
             {
-                Cursor = Cursors.Default;
+                this.Cursor = Cursors.Default;
             }
         }
 
         private sealed class OleDbProviderInfo
         {
-            public OleDbProviderInfo( string name, string description )
+            public OleDbProviderInfo(string name, string description)
             {
                 this.Name = name;
                 this.Description = description;
             }
 
-            public string Name;
-            public string Description;
+            public readonly string Name;
+            private string Description;
         }
-    }
-
-    public static class ConnectionStringProperty
-    {
-        public const string DataSource = "Data Source";
-        public const string InitialCatalog = "Initial Catalog";
-        public const string UserId = "User ID";
-        public const string Password = "Password";
-        public const string Provider = "Provider";
-        public const string IntegratedSecurity = "Integrated Security";
     }
 }

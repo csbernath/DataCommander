@@ -1,8 +1,8 @@
-using System.Linq;
-using System.Text;
-
 namespace DataCommander.Providers
 {
+    using System.Linq;
+    using System.Text;
+
     internal sealed class TokenIterator
     {
         #region Private Fields
@@ -42,12 +42,12 @@ namespace DataCommander.Providers
 
             while (this.index < this.length)
             {
-                char c = text[this.index];
+                char c = this.text[this.index];
 
                 if (c == 'N')
                 {
                     startPosition = this.index;
-                    if (this.index + 1 < this.length && text[this.index + 1] == '\'')
+                    if (this.index + 1 < this.length && this.text[this.index + 1] == '\'')
                     {
                         this.index++;
                         value = this.ReadString();
@@ -114,9 +114,9 @@ namespace DataCommander.Providers
         {
             var keyWord = new StringBuilder();
 
-            while (this.index < length)
+            while (this.index < this.length)
             {
-                char c = text[this.index];
+                char c = this.text[this.index];
                 if (char.IsWhiteSpace(c) || c == ',' || c == '(' || c == ')' || c == '=')
                 {
                     break;
@@ -139,9 +139,9 @@ namespace DataCommander.Providers
             this.index++;
             bool escape = false;
 
-            while (this.index < length)
+            while (this.index < this.length)
             {
-                char c = text[this.index];
+                char c = this.text[this.index];
                 this.index++;
 
                 if (escape)
@@ -184,9 +184,9 @@ namespace DataCommander.Providers
         {
             var digit = new StringBuilder();
 
-            while (this.index < length)
+            while (this.index < this.length)
             {
-                char c = text[this.index];
+                char c = this.text[this.index];
                 if (char.IsWhiteSpace(c) || c == ',')
                 {
                     break;

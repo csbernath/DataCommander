@@ -151,7 +151,7 @@
             get
             {
                 this.GetCollection();
-                bool isReadOnly = isReadOnly = this.collection.IsReadOnly;
+                bool isReadOnly = this.collection.IsReadOnly;
                 return isReadOnly;
             }
         }

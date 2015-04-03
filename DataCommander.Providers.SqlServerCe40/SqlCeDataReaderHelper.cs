@@ -7,12 +7,11 @@
     using System.Data.SqlTypes;
     using System.Globalization;
     using DataCommander.Foundation.Data;
-    using DataCommander.Providers;
 
     internal sealed class SqlCeDataReaderHelper : IDataReaderHelper
     {
         private SqlCeDataReader dataReader;
-        private IDataFieldReader[] dataFieldReaders;
+        private readonly IDataFieldReader[] dataFieldReaders;
 
         public SqlCeDataReaderHelper( SqlCeDataReader dataReader )
         {
@@ -23,7 +22,7 @@
             {
                 DataRowCollection schemaRows = schemaTable.Rows;
                 int count = schemaRows.Count;
-                dataFieldReaders = new IDataFieldReader[ count ];
+                this.dataFieldReaders = new IDataFieldReader[ count ];
 
                 for (int i = 0; i < count; i++)
                 {
@@ -43,7 +42,7 @@
                             break;
                     }
 
-                    dataFieldReaders[ i ] = dataFieldReader;
+                    this.dataFieldReaders[ i ] = dataFieldReader;
                 }
             }
         }
@@ -64,9 +63,9 @@
 
         private sealed class SqlDecimalFieldReader : IDataFieldReader
         {
-            private static NumberFormatInfo numberFormatInfo;
-            private SqlCeDataReader dataReader;
-            private int columnOrdinal;
+            private static readonly NumberFormatInfo numberFormatInfo;
+            private readonly SqlCeDataReader dataReader;
+            private readonly int columnOrdinal;
 
             static SqlDecimalFieldReader()
             {

@@ -11,8 +11,8 @@ namespace DataCommander.Providers
     {
         #region Private Fields
 
-        private Action<InfoMessage> addInfoMessage;
-        private SqlBulkCopy sqlBulkCopy;
+        private readonly Action<InfoMessage> addInfoMessage;
+        private readonly SqlBulkCopy sqlBulkCopy;
         private long rowCount;
         private bool cancelRequested;
         private IDbCommand command;
@@ -36,7 +36,7 @@ namespace DataCommander.Providers
             this.sqlBulkCopy.BulkCopyTimeout = int.MaxValue;
             this.sqlBulkCopy.DestinationTableName = destinationTableName;
             this.sqlBulkCopy.NotifyAfter = 100000;
-            this.sqlBulkCopy.SqlRowsCopied += new SqlRowsCopiedEventHandler(sqlBulkCopy_SqlRowsCopied);
+            this.sqlBulkCopy.SqlRowsCopied += new SqlRowsCopiedEventHandler(this.sqlBulkCopy_SqlRowsCopied);
             this.addInfoMessage = addInfoMessage;
         }
 

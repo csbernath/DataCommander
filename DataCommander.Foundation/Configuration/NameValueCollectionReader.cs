@@ -12,14 +12,14 @@
     /// <param name="key"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public delegate bool TryGetValue<TKey, TValue>( TKey key, out TValue value );
+    public delegate bool TryGetValue<TKey, TValue>(TKey key, out TValue value);
 
     /// <summary>
     /// 
     /// </summary>
     public class NameValueCollectionReader
     {
-        private TryGetValue<string, string> tryGetValue;
+        private readonly TryGetValue<string, string> tryGetValue;
 
         /// <summary>
         /// 
@@ -28,15 +28,15 @@
         /// <param name="s"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public delegate bool TryParse<T>( string s, out T value );
+        public delegate bool TryParse<T>(string s, out T value);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="tryGetValue"></param>
-        public NameValueCollectionReader( TryGetValue<string, string> tryGetValue )
+        public NameValueCollectionReader(TryGetValue<string, string> tryGetValue)
         {
-            Contract.Requires( tryGetValue != null );
+            Contract.Requires(tryGetValue != null);
             this.tryGetValue = tryGetValue;
         }
 
@@ -48,10 +48,10 @@
         /// <param name="tryParse"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public T GetValue<T>( string name, TryParse<T> tryParse, T defaultValue )
+        public T GetValue<T>(string name, TryParse<T> tryParse, T defaultValue)
         {
             T value;
-            bool contains = this.TryGetValue<T>( name, tryParse, out value );
+            bool contains = this.TryGetValue(name, tryParse, out value);
 
             if (!contains)
             {
@@ -67,9 +67,9 @@
         /// <param name="name"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public bool GetBoolean( string name, bool defaultValue )
+        public bool GetBoolean(string name, bool defaultValue)
         {
-            return this.GetValue<bool>( name, bool.TryParse, defaultValue );
+            return this.GetValue(name, bool.TryParse, defaultValue);
         }
 
         /// <summary>
@@ -78,9 +78,9 @@
         /// <param name="name"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public Double GetDouble( string name, Double defaultValue )
+        public Double GetDouble(string name, Double defaultValue)
         {
-            return this.GetValue<Double>( name, Double.TryParse, defaultValue );
+            return this.GetValue(name, Double.TryParse, defaultValue);
         }
 
         /// <summary>
@@ -89,9 +89,9 @@
         /// <param name="name"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public int GetInt32( string name, int defaultValue )
+        public int GetInt32(string name, int defaultValue)
         {
-            return this.GetValue<int>( name, int.TryParse, defaultValue );
+            return this.GetValue(name, int.TryParse, defaultValue);
         }
 
         /// <summary>
@@ -99,10 +99,10 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public string GetString( string name )
+        public string GetString(string name)
         {
             string value;
-            this.tryGetValue( name, out value );
+            this.tryGetValue(name, out value);
             return value;
         }
 
@@ -112,9 +112,9 @@
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetBoolean( string name, out bool value )
+        public bool TryGetBoolean(string name, out bool value)
         {
-            bool contains = this.TryGetValue<bool>( name, bool.TryParse, out value );
+            bool contains = this.TryGetValue(name, bool.TryParse, out value);
             return contains;
         }
 
@@ -126,19 +126,19 @@
         /// <param name="styles"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetDateTime( string name, IFormatProvider provider, DateTimeStyles styles, out DateTime value )
+        public bool TryGetDateTime(string name, IFormatProvider provider, DateTimeStyles styles, out DateTime value)
         {
             string s;
-            bool contains = this.tryGetValue( name, out s );
+            bool contains = this.tryGetValue(name, out s);
 
             if (contains)
             {
-                bool succeeded = DateTime.TryParse( s, provider, styles, out value );
-                Contract.Assert( succeeded );
+                bool succeeded = DateTime.TryParse(s, provider, styles, out value);
+                Contract.Assert(succeeded);
             }
             else
             {
-                value = default( DateTime );
+                value = default(DateTime);
             }
 
             return contains;
@@ -150,19 +150,19 @@
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetDouble( string name, out Double value )
+        public bool TryGetDouble(string name, out Double value)
         {
             string s;
-            bool contains = this.tryGetValue( name, out s );
+            bool contains = this.tryGetValue(name, out s);
 
             if (contains)
             {
-                bool succeeded = Double.TryParse( s, out value );
-                Contract.Assert( succeeded );
+                bool succeeded = Double.TryParse(s, out value);
+                Contract.Assert(succeeded);
             }
             else
             {
-                value = default( Double );
+                value = default(Double);
             }
 
             return contains;
@@ -176,19 +176,19 @@
         /// <param name="provider"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetDouble( string name, NumberStyles style, IFormatProvider provider, out Double value )
+        public bool TryGetDouble(string name, NumberStyles style, IFormatProvider provider, out Double value)
         {
             string s;
-            bool contains = this.tryGetValue( name, out s );
+            bool contains = this.tryGetValue(name, out s);
 
             if (contains)
             {
-                bool succeeded = Double.TryParse( s, style, provider, out value );
-                Contract.Assert( succeeded );
+                bool succeeded = Double.TryParse(s, style, provider, out value);
+                Contract.Assert(succeeded);
             }
             else
             {
-                value = default( Double );
+                value = default(Double);
             }
 
             return contains;
@@ -201,20 +201,20 @@
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetEnum<T>( string name, out T value )
+        public bool TryGetEnum<T>(string name, out T value)
         {
             string s;
-            bool contains = this.tryGetValue( name, out s );
+            bool contains = this.tryGetValue(name, out s);
 
             if (contains)
             {
                 Type enumType = typeof(T);
-                object valueObject = Enum.Parse( enumType, s );
+                object valueObject = Enum.Parse(enumType, s);
                 value = (T)valueObject;
             }
             else
             {
-                value = default( T );
+                value = default(T);
             }
 
             return contains;
@@ -226,9 +226,9 @@
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetInt16( string name, out Int16 value )
+        public bool TryGetInt16(string name, out Int16 value)
         {
-            bool contains = this.TryGetValue<Int16>( name, Int16.TryParse, out value );
+            bool contains = this.TryGetValue(name, Int16.TryParse, out value);
             return contains;
         }
 
@@ -238,9 +238,9 @@
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetInt32( string name, out int value )
+        public bool TryGetInt32(string name, out int value)
         {
-            bool contains = this.TryGetValue<int>( name, int.TryParse, out value );
+            bool contains = this.TryGetValue(name, int.TryParse, out value);
             return contains;
         }
 
@@ -250,9 +250,9 @@
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetInt64( string name, out long value )
+        public bool TryGetInt64(string name, out long value)
         {
-            bool contains = this.TryGetValue<long>( name, long.TryParse, out value );
+            bool contains = this.TryGetValue(name, long.TryParse, out value);
             return contains;
         }
 
@@ -264,19 +264,19 @@
         /// <param name="provider"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetSingle( string name, NumberStyles style, IFormatProvider provider, out Single value )
+        public bool TryGetSingle(string name, NumberStyles style, IFormatProvider provider, out Single value)
         {
             string s;
-            bool contains = this.tryGetValue( name, out s );
+            bool contains = this.tryGetValue(name, out s);
 
             if (contains)
             {
-                bool succeeded = Single.TryParse( s, style, provider, out value );
-                Contract.Assert( succeeded );
+                bool succeeded = Single.TryParse(s, style, provider, out value);
+                Contract.Assert(succeeded);
             }
             else
             {
-                value = default( Single );
+                value = default(Single);
             }
 
             return contains;
@@ -288,19 +288,14 @@
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetString( string name, out string value )
+        public bool TryGetString(string name, out string value)
         {
             string s;
-            bool contains = this.tryGetValue( name, out s );
+            bool contains = this.tryGetValue(name, out s);
 
-            if (contains)
-            {
-                value = s;
-            }
-            else
-            {
-                value = null;
-            }
+            value = contains
+                ? s
+                : null;
 
             return contains;
         }
@@ -311,19 +306,14 @@
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetTimeSpan( string name, out TimeSpan value )
+        public bool TryGetTimeSpan(string name, out TimeSpan value)
         {
             string s;
-            bool contains = this.tryGetValue( name, out s );
+            bool contains = this.tryGetValue(name, out s);
 
-            if (contains)
-            {
-                value = TimeSpan.Parse( s );
-            }
-            else
-            {
-                value = default( TimeSpan );
-            }
+            value = contains
+                ? TimeSpan.Parse(s)
+                : default(TimeSpan);
 
             return contains;
         }
@@ -336,20 +326,20 @@
         /// <param name="tryParse"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetValue<T>( string name, TryParse<T> tryParse, out T value )
+        public bool TryGetValue<T>(string name, TryParse<T> tryParse, out T value)
         {
-            Contract.Requires( tryParse != null );
+            Contract.Requires(tryParse != null);
             string s;
-            bool contains = this.tryGetValue( name, out s );
+            bool contains = this.tryGetValue(name, out s);
 
             if (contains)
             {
-                bool succeeded = tryParse( s, out value );
-                Contract.Assert( succeeded );
+                bool succeeded = tryParse(s, out value);
+                Contract.Assert(succeeded);
             }
             else
             {
-                value = default( T );
+                value = default(T);
             }
 
             return contains;

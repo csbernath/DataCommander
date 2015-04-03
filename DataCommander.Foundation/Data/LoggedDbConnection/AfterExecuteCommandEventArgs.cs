@@ -13,7 +13,7 @@
     /// </summary>
     public sealed class AfterExecuteCommandEventArgs : LoggedEventArgs
     {
-        private LoggedDbCommandInfo command;
+        private readonly LoggedDbCommandInfo command;
         private readonly Exception exception;
 
         /// <summary>

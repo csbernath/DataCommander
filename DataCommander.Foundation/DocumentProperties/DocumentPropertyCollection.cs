@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Foundation.DocumentProperties
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
 
     /// <summary>
@@ -194,7 +195,7 @@
     /// </summary>
     public sealed class DocumentPropertyCollection : ICollection<DocumentProperty>
     {
-        private Dictionary<DocumentPropertyId, DocumentProperty> dictionary = new Dictionary<DocumentPropertyId, DocumentProperty>();
+        private readonly Dictionary<DocumentPropertyId, DocumentProperty> dictionary = new Dictionary<DocumentPropertyId, DocumentProperty>();
 
         internal DocumentPropertyCollection()
         {
@@ -262,7 +263,7 @@
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             throw new NotImplementedException();
         }

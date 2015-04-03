@@ -11,8 +11,8 @@ namespace DataCommander.Providers
 
     internal sealed class TextResultWriter : IResultWriter
     {
-        private TextWriter textWriter;
-        private QueryForm queryForm;
+        private readonly TextWriter textWriter;
+        private readonly QueryForm queryForm;
         private int[] columnSize;
         private int rowIndex;
         private IProvider provider;
@@ -70,7 +70,7 @@ namespace DataCommander.Providers
 
         public void WriteTableBegin( DataTable schemaTable, string[] dataTypeNames )
         {
-            rowIndex = 0;
+            this.rowIndex = 0;
 
             if (schemaTable != null)
             {
@@ -79,7 +79,7 @@ namespace DataCommander.Providers
                 DataColumn dataTypeColumn = schemaTable.Columns[ "DataType" ];
 
                 int fieldCount = schemaTable.Rows.Count;
-                columnSize = new int[ fieldCount ];
+                this.columnSize = new int[ fieldCount ];
 
                 StringBuilder sb = new StringBuilder();
 
@@ -168,12 +168,12 @@ namespace DataCommander.Providers
                             break;
                     }
 
-                    columnSize[ i ] = Math.Max( numOfChars, columnName.Length );
-                    Write( sb, columnName, columnSize[ i ] );
+                    this.columnSize[ i ] = Math.Max( numOfChars, columnName.Length );
+                    this.Write( sb, columnName, this.columnSize[ i ] );
                     sb.Append( ' ' );
                 }
 
-                textWriter.WriteLine( sb.ToString() );
+                this.textWriter.WriteLine( sb.ToString() );
 
                 if (fieldCount > 0)
                 {
@@ -182,13 +182,13 @@ namespace DataCommander.Providers
 
                     for (int i = 0; i < last; i++)
                     {
-                        sb.Append( '-', columnSize[ i ] );
+                        sb.Append( '-', this.columnSize[ i ] );
                         sb.Append( ' ' );
                     }
 
-                    sb.Append( '-', columnSize[ last ] );
+                    sb.Append( '-', this.columnSize[ last ] );
 
-                    textWriter.WriteLine( sb.ToString() );
+                    this.textWriter.WriteLine( sb.ToString() );
                 }
             }
         }
@@ -299,18 +299,18 @@ namespace DataCommander.Providers
 
                     for (int j = 0; j < last; j++)
                     {
-                        Write( sb, StringValue( row[ j ], columnSize[ j ] ), columnSize[ j ] );
+                        this.Write( sb, StringValue( row[ j ], this.columnSize[ j ] ), this.columnSize[ j ] );
                         sb.Append( ' ' );
                     }
 
                     //Write(sb,StringValue(row[last]),columnSize[last]);
-                    sb.Append( StringValue( row[ last ], columnSize[ last ] ) );
+                    sb.Append( StringValue( row[ last ], this.columnSize[ last ] ) );
                     sb.Append( Environment.NewLine );
                 }
 
-                rowIndex += rowCount;
+                this.rowIndex += rowCount;
 
-                textWriter.Write( sb.ToString() );
+                this.textWriter.Write( sb.ToString() );
             }
             finally
             {
@@ -458,7 +458,7 @@ namespace DataCommander.Providers
 
         public void WriteParameters( IDataParameterCollection parameters )
         {
-            WriteParameters( parameters, textWriter, queryForm );
+            WriteParameters( parameters, this.textWriter, this.queryForm );
         }
 
         public void WriteEnd()

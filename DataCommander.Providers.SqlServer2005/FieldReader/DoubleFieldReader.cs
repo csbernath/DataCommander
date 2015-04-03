@@ -19,13 +19,13 @@ namespace DataCommander.Providers.SqlServer2005
             {
                 object value;
 
-                if (dataRecord.IsDBNull(columnOrdinal))
+                if (this.dataRecord.IsDBNull(this.columnOrdinal))
                 {
                     value = DBNull.Value;
                 }
                 else
                 {
-                    double d = dataRecord.GetDouble(columnOrdinal);
+                    double d = this.dataRecord.GetDouble(this.columnOrdinal);
                     value = new DoubleField(d);
                 }
 
@@ -33,7 +33,7 @@ namespace DataCommander.Providers.SqlServer2005
             }
         }
 
-        IDataRecord dataRecord;
-        int columnOrdinal;
+        readonly IDataRecord dataRecord;
+        readonly int columnOrdinal;
     }
 }

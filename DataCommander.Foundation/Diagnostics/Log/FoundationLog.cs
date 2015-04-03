@@ -1,15 +1,22 @@
 ﻿namespace DataCommander.Foundation.Diagnostics
 {
     using System;
+    using System.Diagnostics.Contracts;
 
     internal sealed class FoundationLog : ILog
     {
+        #region Private Fields
+
         private readonly FoundationLogFactory applicationLog;
         private string name;
         private string loggedName;
 
-        public FoundationLog( FoundationLogFactory applicationLog, string name )
+        #endregion
+
+        public FoundationLog(FoundationLogFactory applicationLog, string name)
         {
+            Contract.Requires<ArgumentNullException>(applicationLog != null);
+
             this.applicationLog = applicationLog;
             this.name = name;
             this.loggedName = name;
@@ -70,94 +77,94 @@
             }
         }
 
-        void ILog.Debug( string message )
+        void ILog.Debug(string message)
         {
-            this.applicationLog.Write( this, LogLevel.Debug, message );
+            this.applicationLog.Write(this, LogLevel.Debug, message);
         }
 
-        void ILog.Debug( string format, params object[] args )
+        void ILog.Debug(string format, params object[] args)
         {
-            this.applicationLog.Write( this, LogLevel.Debug, format, args );
+            this.applicationLog.Write(this, LogLevel.Debug, format, args);
         }
 
-        void ILog.Debug( Func<string> getMessage )
+        void ILog.Debug(Func<string> getMessage)
         {
-            this.applicationLog.Write( this, LogLevel.Debug, getMessage );
+            this.applicationLog.Write(this, LogLevel.Debug, getMessage);
         }
 
-        void ILog.Trace( string message )
+        void ILog.Trace(string message)
         {
-            this.applicationLog.Write( this, LogLevel.Trace, message );
+            this.applicationLog.Write(this, LogLevel.Trace, message);
         }
 
-        void ILog.Trace( string format, params object[] args )
+        void ILog.Trace(string format, params object[] args)
         {
-            this.applicationLog.Write( this, LogLevel.Trace, format, args );
+            this.applicationLog.Write(this, LogLevel.Trace, format, args);
         }
 
-        void ILog.Trace( Func<string> getMessage )
+        void ILog.Trace(Func<string> getMessage)
         {
-            this.applicationLog.Write( this, LogLevel.Trace, getMessage );
+            this.applicationLog.Write(this, LogLevel.Trace, getMessage);
         }
 
-        void ILog.Information( string message )
+        void ILog.Information(string message)
         {
-            this.applicationLog.Write( this, LogLevel.Information, message );
+            this.applicationLog.Write(this, LogLevel.Information, message);
         }
 
-        void ILog.Information( string format, params object[] args )
+        void ILog.Information(string format, params object[] args)
         {
-            this.applicationLog.Write( this, LogLevel.Information, format, args );
+            this.applicationLog.Write(this, LogLevel.Information, format, args);
         }
 
-        void ILog.Information( Func<string> getMessage )
+        void ILog.Information(Func<string> getMessage)
         {
-            this.applicationLog.Write( this, LogLevel.Information, getMessage );
+            this.applicationLog.Write(this, LogLevel.Information, getMessage);
         }
 
-        void ILog.Warning( string message )
+        void ILog.Warning(string message)
         {
-            this.applicationLog.Write( this, LogLevel.Warning, message );
+            this.applicationLog.Write(this, LogLevel.Warning, message);
         }
 
-        void ILog.Warning( string format, params object[] args )
+        void ILog.Warning(string format, params object[] args)
         {
-            this.applicationLog.Write( this, LogLevel.Warning, format, args );
+            this.applicationLog.Write(this, LogLevel.Warning, format, args);
         }
 
-        void ILog.Warning( Func<string> getMessage )
+        void ILog.Warning(Func<string> getMessage)
         {
-            this.applicationLog.Write( this, LogLevel.Warning, getMessage );
+            this.applicationLog.Write(this, LogLevel.Warning, getMessage);
         }
 
-        void ILog.Error( string message )
+        void ILog.Error(string message)
         {
-            this.applicationLog.Write( this, LogLevel.Error, message );
+            this.applicationLog.Write(this, LogLevel.Error, message);
         }
 
-        void ILog.Error( string format, params object[] args )
+        void ILog.Error(string format, params object[] args)
         {
-            this.applicationLog.Write( this, LogLevel.Error, format, args );
+            this.applicationLog.Write(this, LogLevel.Error, format, args);
         }
 
-        void ILog.Error( Func<string> getMessage )
+        void ILog.Error(Func<string> getMessage)
         {
-            this.applicationLog.Write( this, LogLevel.Error, getMessage );
+            this.applicationLog.Write(this, LogLevel.Error, getMessage);
         }
 
-        void ILog.Write( LogLevel logLevel, string message )
+        void ILog.Write(LogLevel logLevel, string message)
         {
-            this.applicationLog.Write( this, logLevel, message );
+            this.applicationLog.Write(this, logLevel, message);
         }
 
-        void ILog.Write( LogLevel logLevel, string format, params object[] args )
+        void ILog.Write(LogLevel logLevel, string format, params object[] args)
         {
-            this.applicationLog.Write( this, logLevel, format, args );
+            this.applicationLog.Write(this, logLevel, format, args);
         }
 
-        void ILog.Write( LogLevel logLevel, Func<string> getMessage )
+        void ILog.Write(LogLevel logLevel, Func<string> getMessage)
         {
-            this.applicationLog.Write( this, logLevel, getMessage );
+            this.applicationLog.Write(this, logLevel, getMessage);
         }
 
         #endregion

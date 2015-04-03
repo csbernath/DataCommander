@@ -24,7 +24,7 @@ namespace DataCommander.Foundation.Threading
     /// </remarks>
     public class LoopThread
     {
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private ILoopable loopable;
         private WorkerThread thread;
 

@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Foundation.Collections
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
 
@@ -11,10 +12,10 @@
     /// <typeparam name="T"></typeparam>
     public class SequenceIndex<TKey, T> : ICollectionIndex<T>
     {
-        private string name;
-        private Func<TKey> getNextKey;
-        private Func<T, TKey> getKey;
-        private IDictionary<TKey, T> dictionary;
+        private readonly string name;
+        private readonly Func<TKey> getNextKey;
+        private readonly Func<T, TKey> getKey;
+        private readonly IDictionary<TKey, T> dictionary;
 
         /// <summary>
         /// 
@@ -114,7 +115,7 @@
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return this.dictionary.Values.GetEnumerator();
         }

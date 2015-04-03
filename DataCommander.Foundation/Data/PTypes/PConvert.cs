@@ -253,7 +253,7 @@ namespace DataCommander.Foundation.Data.PTypes
             }
             else
             {
-                sp = (Decimal) scalar;
+                sp = (decimal) scalar;
             }
 
             return sp;
@@ -353,7 +353,7 @@ namespace DataCommander.Foundation.Data.PTypes
             }
             else
             {
-                sp = (Decimal) scalar;
+                sp = (decimal) scalar;
             }
 
             return sp;

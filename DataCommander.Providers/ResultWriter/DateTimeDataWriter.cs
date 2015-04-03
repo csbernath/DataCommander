@@ -1,21 +1,21 @@
-using System;
-
 namespace DataCommander.Providers
 {
+    using System;
+
     internal sealed class DateTimeDataWriter : DataWriterBase
     {
-        public override string ToString( object value )
+        public override string ToString(object value)
         {
             string s;
 
             if (value == DBNull.Value)
             {
-                s = new string( ' ', Width );
+                s = new string(' ', this.Width);
             }
             else
             {
                 DateTimeField field = (DateTimeField) value;
-                s = field.ToString().PadLeft( Width, ' ' );
+                s = field.ToString().PadLeft(this.Width, ' ');
             }
 
             return s;

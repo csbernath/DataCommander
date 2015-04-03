@@ -1,9 +1,7 @@
 ﻿namespace DataCommander.Providers.SqlServer2005
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+    using System.Windows.Forms;
 
     internal sealed class ProgrammabilityNode : ITreeNode
     {
@@ -56,7 +54,7 @@
             }
         }
 
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu
         {
             get
             {

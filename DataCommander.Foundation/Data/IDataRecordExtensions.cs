@@ -16,13 +16,14 @@
         /// <param name="dataRecord"></param>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public static T GetValue<T>( this IDataRecord dataRecord, int ordinal )
+        public static T GetValue<T>(this IDataRecord dataRecord, int ordinal)
         {
-            Contract.Requires( dataRecord != null );
-            object valueObject = dataRecord[ ordinal ];
-            Contract.Assert( valueObject is T );
+            Contract.Requires<ArgumentNullException>(dataRecord != null);
 
-            return (T)valueObject;
+            object valueObject = dataRecord[ordinal];
+            Contract.Assert(valueObject is T);
+
+            return (T) valueObject;
         }
 
         /// <summary>
@@ -36,11 +37,11 @@
             this IDataRecord dataRecord,
             string name)
         {
-            Contract.Requires( dataRecord != null );
-            object valueObject = dataRecord[ name ];
-            Contract.Assert( valueObject is T );
+            Contract.Requires(dataRecord != null);
+            object valueObject = dataRecord[name];
+            Contract.Assert(valueObject is T);
 
-            return (T)valueObject;
+            return (T) valueObject;
         }
 
         /// <summary>
@@ -50,12 +51,12 @@
         /// <param name="dataRecord"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static T GetValueOrDefault<T>( this IDataRecord dataRecord, int index )
+        public static T GetValueOrDefault<T>(this IDataRecord dataRecord, int index)
         {
-            Contract.Requires( dataRecord != null );
+            Contract.Requires<ArgumentNullException>(dataRecord != null);
 
-            object value = dataRecord[ index ];
-            return Database.GetValueOrDefault<T>( value );
+            object value = dataRecord[index];
+            return Database.GetValueOrDefault<T>(value);
         }
 
         /// <summary>
@@ -69,9 +70,10 @@
             this IDataRecord dataRecord,
             string name)
         {
-            Contract.Requires( dataRecord != null );
-            object value = dataRecord[ name ];
-            return Database.GetValueOrDefault<T>( value );
+            Contract.Requires<ArgumentNullException>(dataRecord != null);
+
+            object value = dataRecord[name];
+            return Database.GetValueOrDefault<T>(value);
         }
     }
 }

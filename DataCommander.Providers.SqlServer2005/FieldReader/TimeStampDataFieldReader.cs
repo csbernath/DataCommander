@@ -17,12 +17,12 @@ namespace DataCommander.Providers.SqlServer2005
         {
             get
             {
-                object o = sqlDataReader.GetValue(columnOrdinal);
+                object o = this.sqlDataReader.GetValue(this.columnOrdinal);
                 return o;
             }
         }
 
-        SqlDataReader sqlDataReader;
-        int columnOrdinal;
+        readonly SqlDataReader sqlDataReader;
+        readonly int columnOrdinal;
     }
 }

@@ -13,9 +13,9 @@
     /// </summary>
     public sealed class CommandLine
     {
-        private IndexableCollection<CommandLineArgument> arguments;
-        private ListIndex<CommandLineArgument> listIndex = new ListIndex<CommandLineArgument>("listIndex");
-        private NonUniqueIndex<string, CommandLineArgument> nameIndex;
+        private readonly IndexableCollection<CommandLineArgument> arguments;
+        private readonly ListIndex<CommandLineArgument> listIndex = new ListIndex<CommandLineArgument>("listIndex");
+        private readonly NonUniqueIndex<string, CommandLineArgument> nameIndex;
 
         /// <summary>
         /// 

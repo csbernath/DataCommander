@@ -9,7 +9,7 @@
 
     internal sealed class TfsQueryWorkspacesDataReader : TfsDataReader
     {
-        private TfsCommand command;
+        private readonly TfsCommand command;
         private bool first = true;
         private Workspace[] workspaces;
         private IEnumerator<Tuple<int, int>> enumerator;

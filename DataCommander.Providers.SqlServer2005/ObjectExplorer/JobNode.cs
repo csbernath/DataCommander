@@ -11,17 +11,17 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Data;
     using System.Data.SqlClient;
     using System.Diagnostics.Contracts;
-    using DataCommander.Foundation.Data;
+    using System.Windows.Forms;
     using DataCommander.Foundation.Data.SqlClient;
-    using DataCommander.Providers;
+    using Application = DataCommander.Providers.Application;
 
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
     internal sealed class JobNode : ITreeNode
     {
-        private JobCollectionNode jobs;
-        private string name;
+        private readonly JobCollectionNode jobs;
+        private readonly string name;
 
         public JobNode( 
             JobCollectionNode jobs,
@@ -81,7 +81,7 @@ namespace DataCommander.Providers.SqlServer2005
             }
         }
 
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu
         {
             get
             {

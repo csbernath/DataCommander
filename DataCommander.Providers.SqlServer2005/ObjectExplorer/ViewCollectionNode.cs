@@ -38,7 +38,7 @@ from [{0}].sys.views v (nolock)
 join [{0}].sys.schemas s (nolock)
     on v.schema_id = s.schema_id
 order by s.name,v.name";
-            commandText = string.Format(commandText, database.Name);
+            commandText = string.Format(commandText, this.database.Name);
             string connectionString = this.database.Databases.Server.ConnectionString;
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
@@ -55,7 +55,7 @@ order by s.name,v.name";
                 DataRow row = dataRows[i];
                 string schema = (string)row[0];
                 string name = (string)row[1];
-                treeNodes.Add(new ViewNode(database, schema, name));
+                treeNodes.Add(new ViewNode(this.database, schema, name));
             }
 
             return treeNodes;
@@ -85,6 +85,6 @@ order by s.name,v.name";
             }
         }
 
-        private DatabaseNode database;
+        private readonly DatabaseNode database;
     }
 }

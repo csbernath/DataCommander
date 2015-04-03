@@ -1,6 +1,5 @@
 namespace DataCommander.Foundation.Configuration
 {
-    using System;
     using System.IO;
 
     /// <summary>
@@ -13,35 +12,35 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        public static ConfigurationNode Read( TextReader reader )
+        public static ConfigurationNode Read(TextReader reader)
         {
-            var node = new ConfigurationNode( null );
+            var node = new ConfigurationNode(null);
             ConfigurationNode currentNode = node;
 
             while (reader.Peek() != -1)
             {
                 string line = reader.ReadLine();
 
-                if (!string.IsNullOrEmpty( line ))
+                if (!string.IsNullOrEmpty(line))
                 {
-                    if (line[ 0 ] == '[')
+                    if (line[0] == '[')
                     {
-                        int index = line.IndexOf( ']' );
-                        string name = line.Substring( 1, index - 1 );
-                        ConfigurationNode childNode = new ConfigurationNode( name );
-                        node.AddChildNode( childNode );
+                        int index = line.IndexOf(']');
+                        string name = line.Substring(1, index - 1);
+                        ConfigurationNode childNode = new ConfigurationNode(name);
+                        node.AddChildNode(childNode);
                         currentNode = childNode;
                     }
                     else
                     {
-                        int index = line.IndexOf( '=' );
+                        int index = line.IndexOf('=');
 
                         if (index >= 0)
                         {
-                            string name = line.Substring( 0, index );
+                            string name = line.Substring(0, index);
                             int length = line.Length - index - 1;
-                            string value = line.Substring( index + 1, length );
-                            currentNode.Attributes.Add( new ConfigurationAttribute( name, value, null ) );
+                            string value = line.Substring(index + 1, length);
+                            currentNode.Attributes.Add(new ConfigurationAttribute(name, value, null));
                         }
                     }
                 }

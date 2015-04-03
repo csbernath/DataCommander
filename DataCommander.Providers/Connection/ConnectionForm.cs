@@ -2,6 +2,7 @@ namespace DataCommander.Providers
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Data;
     using System.Data.Common;
     using System.Drawing;
@@ -12,9 +13,9 @@ namespace DataCommander.Providers
     using DataCommander.Foundation.Configuration;
     using DataCommander.Foundation.Diagnostics;
 
-    internal sealed class ConnectionForm : System.Windows.Forms.Form
+    internal sealed class ConnectionForm : Form
     {
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private Button btnOK;
         private DoubleBufferedDataGridView dataGrid;
         private Button btnCancel;
@@ -28,43 +29,43 @@ namespace DataCommander.Providers
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.Container components = new System.ComponentModel.Container();
+        private readonly Container components = new Container();
 
         public ConnectionForm(StatusStrip statusBar)
         {
             this.statusBar = statusBar;
             this.InitializeComponent();
 
-            dataTable.Columns.Add("ConnectionName", typeof(string));
-            dataTable.Columns.Add("ProviderName", typeof(string));
-            dataTable.Columns.Add("Data Source");
-            dataTable.Columns.Add("Initial Catalog");
-            dataTable.Columns.Add("Integrated Security");
-            dataTable.Columns.Add("User ID");
-            dataTable.Columns.Add("Persist Security Info");
-            dataTable.Columns.Add("Enlist");
-            dataTable.Columns.Add("Pooling");
-            dataTable.Columns.Add("Driver");
-            dataTable.Columns.Add("DBQ");
-            dataTable.Columns.Add("Unicode");
-            dataTable.Columns.Add("Extended Properties");
-            dataTable.Columns.Add("Naming");
+            this.dataTable.Columns.Add("ConnectionName", typeof(string));
+            this.dataTable.Columns.Add("ProviderName", typeof(string));
+            this.dataTable.Columns.Add("Data Source");
+            this.dataTable.Columns.Add("Initial Catalog");
+            this.dataTable.Columns.Add("Integrated Security");
+            this.dataTable.Columns.Add("User ID");
+            this.dataTable.Columns.Add("Persist Security Info");
+            this.dataTable.Columns.Add("Enlist");
+            this.dataTable.Columns.Add("Pooling");
+            this.dataTable.Columns.Add("Driver");
+            this.dataTable.Columns.Add("DBQ");
+            this.dataTable.Columns.Add("Unicode");
+            this.dataTable.Columns.Add("Extended Properties");
+            this.dataTable.Columns.Add("Naming");
 
-            ConfigurationNode folder = DataCommander.Providers.Application.Instance.ConnectionsConfigurationNode;
+            ConfigurationNode folder = Application.Instance.ConnectionsConfigurationNode;
 
             foreach (ConfigurationNode subFolder in folder.ChildNodes)
             {
-                DataRow dataRow = dataTable.NewRow();
-                LoadConnection(subFolder, dataRow);
-                dataTable.Rows.Add(dataRow);
+                DataRow dataRow = this.dataTable.NewRow();
+                this.LoadConnection(subFolder, dataRow);
+                this.dataTable.Rows.Add(dataRow);
             }
 
             //DataGridTableStyle tableStyle = new DataGridTableStyle();
             //tableStyle.MappingName = dataTable.TableName;
             //dataGrid.TableStyles.Add(tableStyle);
-            Graphics graphics = CreateGraphics();
+            Graphics graphics = this.CreateGraphics();
 
-            foreach (DataColumn column in dataTable.Columns)
+            foreach (DataColumn column in this.dataTable.Columns)
             {
                 DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
                 string columnName = column.ColumnName;
@@ -78,11 +79,11 @@ namespace DataCommander.Providers
                 {
                     float dataRowMaxWidth;
 
-                    if (dataTable.Rows.Count > 0)
+                    if (this.dataTable.Rows.Count > 0)
                     {
-                        IEnumerable<DataRow> enumerableDataRow = dataTable.Rows.Cast<DataRow>();
-                        DataRowSelector dataRowSelector = new DataRowSelector(column, graphics, Font);
-                        IEnumerable<float> enumerableDataRowWidth = enumerableDataRow.Select<DataRow, float>(dataRowSelector.GetWidth);
+                        IEnumerable<DataRow> enumerableDataRow = this.dataTable.Rows.Cast<DataRow>();
+                        DataRowSelector dataRowSelector = new DataRowSelector(column, graphics, this.Font);
+                        IEnumerable<float> enumerableDataRowWidth = enumerableDataRow.Select(dataRowSelector.GetWidth);
                         dataRowMaxWidth = enumerableDataRowWidth.Max();
                     }
                     else
@@ -97,14 +98,14 @@ namespace DataCommander.Providers
                 //this.dataGrid.Columns.Add(dataGridViewTextBoxColumn);
             }
 
-            dataGrid.DataSource = dataTable;
+            this.dataGrid.DataSource = this.dataTable;
         }
 
         public ConnectionProperties ConnectionProperties
         {
             get
             {
-                return connectionProperties;
+                return this.connectionProperties;
             }
         }
 
@@ -115,9 +116,9 @@ namespace DataCommander.Providers
         {
             if (disposing)
             {
-                if (components != null)
+                if (this.components != null)
                 {
-                    components.Dispose();
+                    this.components.Dispose();
                 }
             }
 
@@ -238,7 +239,7 @@ namespace DataCommander.Providers
             }
         }
 
-        private void btnOK_Click(object sender, System.EventArgs e)
+        private void btnOK_Click(object sender, EventArgs e)
         {
             ConfigurationNode folder = this.SelectedConfigurationNode;
             this.Connect(folder);
@@ -313,13 +314,13 @@ namespace DataCommander.Providers
 
         private void Delete()
         {
-            if (MessageBox.Show(this, "Do you want to delete the selected item(s)?", DataCommander.Providers.Application.Instance.Name, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            if (MessageBox.Show(this, "Do you want to delete the selected item(s)?", Application.Instance.Name, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
-                ConfigurationNode connectionsFolder = DataCommander.Providers.Application.Instance.ConnectionsConfigurationNode;
+                ConfigurationNode connectionsFolder = Application.Instance.ConnectionsConfigurationNode;
                 int index = this.SelectedIndex;
                 ConfigurationNode selectedFolder = connectionsFolder.ChildNodes[index];
                 connectionsFolder.RemoveChildNode(selectedFolder);
-                dataTable.Rows.RemoveAt(index);
+                this.dataTable.Rows.RemoveAt(index);
                 this.isDirty = true;
             }
         }
@@ -343,15 +344,15 @@ namespace DataCommander.Providers
             {
                 connectionProperties = form.ConnectionProperties;
                 connectionProperties.Save(folder);
-                DataRow row = dataTable.DefaultView[dataGrid.CurrentCell.RowIndex].Row;
-                LoadConnection(folder, row);
+                DataRow row = this.dataTable.DefaultView[this.dataGrid.CurrentCell.RowIndex].Row;
+                this.LoadConnection(folder, row);
             }
         }
 
         private void MoveDown()
         {
-            int index = SelectedIndex;
-            ConfigurationNode connectionsFolder = DataCommander.Providers.Application.Instance.ConnectionsConfigurationNode;
+            int index = this.SelectedIndex;
+            ConfigurationNode connectionsFolder = Application.Instance.ConnectionsConfigurationNode;
 
             if (index < connectionsFolder.ChildNodes.Count - 1)
             {
@@ -359,10 +360,10 @@ namespace DataCommander.Providers
                 connectionsFolder.RemoveChildNode(folder);
                 connectionsFolder.InsertChildNode(index + 1, folder);
 
-                dataTable.Rows.RemoveAt(index);
-                DataRow row = dataTable.NewRow();
+                this.dataTable.Rows.RemoveAt(index);
+                DataRow row = this.dataTable.NewRow();
                 this.LoadConnection(folder, row);
-                dataTable.Rows.InsertAt(row, index + 1);
+                this.dataTable.Rows.InsertAt(row, index + 1);
                 this.dataGrid.CurrentCell = this.dataGrid[0, index + 1];
             }
         }
@@ -374,19 +375,19 @@ namespace DataCommander.Providers
 
         private void MoveUp()
         {
-            int index = SelectedIndex;
+            int index = this.SelectedIndex;
 
             if (index > 0)
             {
-                ConfigurationNode connectionsFolder = DataCommander.Providers.Application.Instance.ConnectionsConfigurationNode;
+                ConfigurationNode connectionsFolder = Application.Instance.ConnectionsConfigurationNode;
                 ConfigurationNode folder = connectionsFolder.ChildNodes[index];
                 connectionsFolder.RemoveChildNode(folder);
                 connectionsFolder.InsertChildNode(index - 1, folder);
 
-                dataTable.Rows.RemoveAt(index);
-                DataRow row = dataTable.NewRow();
-                LoadConnection(folder, row);
-                dataTable.Rows.InsertAt(row, index - 1);
+                this.dataTable.Rows.RemoveAt(index);
+                DataRow row = this.dataTable.NewRow();
+                this.LoadConnection(folder, row);
+                this.dataTable.Rows.InsertAt(row, index - 1);
                 this.dataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
                 this.dataGrid.CurrentCell = this.dataGrid[0, index - 1];
             }
@@ -401,7 +402,7 @@ namespace DataCommander.Providers
         {
             if (e.Button == MouseButtons.Right)
             {
-                DataGridView.HitTestInfo hitTestInfo = dataGrid.HitTest(e.X, e.Y);
+                DataGridView.HitTestInfo hitTestInfo = this.dataGrid.HitTest(e.X, e.Y);
                 int rowIndex = hitTestInfo.RowIndex;
                 ContextMenuStrip contextMenu = new ContextMenuStrip( this.components );
                 ToolStripMenuItem menuItem;
@@ -409,24 +410,24 @@ namespace DataCommander.Providers
                 if (rowIndex >= 0)
                 {
                     this.dataGrid.CurrentCell = this.dataGrid[0, rowIndex];
-                    menuItem = new ToolStripMenuItem("&Edit", null, Edit_Click);
+                    menuItem = new ToolStripMenuItem("&Edit", null, this.Edit_Click);
                     contextMenu.Items.Add(menuItem);
-                    menuItem = new ToolStripMenuItem("C&onnect", null, Connect_Click);
+                    menuItem = new ToolStripMenuItem("C&onnect", null, this.Connect_Click);
                     contextMenu.Items.Add(menuItem);
-                    menuItem = new ToolStripMenuItem("&Copy", null, Copy_Click);
+                    menuItem = new ToolStripMenuItem("&Copy", null, this.Copy_Click);
                     contextMenu.Items.Add(menuItem);
                 }
 
-                menuItem = new ToolStripMenuItem("&Paste", null, Paste_Click);
+                menuItem = new ToolStripMenuItem("&Paste", null, this.Paste_Click);
                 contextMenu.Items.Add(menuItem);
 
                 if (rowIndex >= 0)
                 {
-                    menuItem = new ToolStripMenuItem("&Delete", null, Delete_Click);
+                    menuItem = new ToolStripMenuItem("&Delete", null, this.Delete_Click);
                     contextMenu.Items.Add(menuItem);
-                    menuItem = new ToolStripMenuItem("Move &up", null, MoveUp_Click);
+                    menuItem = new ToolStripMenuItem("Move &up", null, this.MoveUp_Click);
                     contextMenu.Items.Add(menuItem);
-                    menuItem = new ToolStripMenuItem("Move &down", null, MoveDown_Click);
+                    menuItem = new ToolStripMenuItem("Move &down", null, this.MoveDown_Click);
                     contextMenu.Items.Add(menuItem);
                 }
 
@@ -438,14 +439,14 @@ namespace DataCommander.Providers
         {
             get
             {
-                int index = dataGrid.CurrentCell.RowIndex;
+                int index = this.dataGrid.CurrentCell.RowIndex;
 
                 if (index >= 0)
                 {
-                    DataView dataView = dataTable.DefaultView;
+                    DataView dataView = this.dataTable.DefaultView;
                     DataRowView rowView = dataView[index];
                     DataRow row = rowView.Row;
-                    index = dataTable.Rows.IndexOf(row);
+                    index = this.dataTable.Rows.IndexOf(row);
                 }
 
                 return index;
@@ -464,7 +465,7 @@ namespace DataCommander.Providers
                 {
                     DataRowView dataRowView = (DataRowView)dataGridViewRow.DataBoundItem;
                     DataRow row = dataRowView.Row;
-                    int index = dataTable.Rows.IndexOf(row);
+                    int index = this.dataTable.Rows.IndexOf(row);
                     selectedCount++;
                     yield return index;
                 }
@@ -485,7 +486,7 @@ namespace DataCommander.Providers
 
                 if (index >= 0)
                 {
-                    folder = DataCommander.Providers.Application.Instance.ConnectionsConfigurationNode;
+                    folder = Application.Instance.ConnectionsConfigurationNode;
                     folder = folder.ChildNodes[index];
                 }
                 else
@@ -499,7 +500,7 @@ namespace DataCommander.Providers
 
         private ConfigurationNode ToConfigurationNode(int index)
         {
-            ConfigurationNode node = DataCommander.Providers.Application.Instance.ConnectionsConfigurationNode;
+            ConfigurationNode node = Application.Instance.ConnectionsConfigurationNode;
             node = node.ChildNodes[index];
             return node;
         }
@@ -510,7 +511,7 @@ namespace DataCommander.Providers
             {
                 IEnumerable<ConfigurationNode> configurationNodes =
                     from index in this.SelectedIndexes
-                    select ToConfigurationNode(index);
+                    select this.ToConfigurationNode(index);
 
                 return configurationNodes;
             }
@@ -522,7 +523,7 @@ namespace DataCommander.Providers
             {
                 if (MessageBox.Show(this, "Do you want to save changes?", null, MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    DataCommander.Providers.Application.Instance.SaveApplicationData();
+                    Application.Instance.SaveApplicationData();
                 }
             }
             var connectionProperties = new ConnectionProperties();
@@ -537,10 +538,10 @@ namespace DataCommander.Providers
             }
         }
 
-        private void dataGrid_DoubleClick(object sender, System.EventArgs e)
+        private void dataGrid_DoubleClick(object sender, EventArgs e)
         {
-            Point position = dataGrid.PointToClient(Cursor.Position);
-            DataGridView.HitTestInfo hitTestInfo = dataGrid.HitTest(position.X, position.Y);
+            Point position = this.dataGrid.PointToClient(Cursor.Position);
+            DataGridView.HitTestInfo hitTestInfo = this.dataGrid.HitTest(position.X, position.Y);
 
             switch (hitTestInfo.Type)
             {
@@ -552,14 +553,14 @@ namespace DataCommander.Providers
 
                     if (folder != null)
                     {
-                        Connect(folder);
+                        this.Connect(folder);
                     }
 
                     break;
             }
         }
 
-        private void dataGrid_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        private void dataGrid_KeyDown(object sender, KeyEventArgs e)
         {
             log.Write(LogLevel.Trace, "e.KeyCode: {0}\r\ne.KeyData: {1}", e.KeyCode, e.KeyData);
 
@@ -601,13 +602,13 @@ namespace DataCommander.Providers
 
         private void Add(ConnectionProperties connectionProperties)
         {
-            ConfigurationNode node = DataCommander.Providers.Application.Instance.ConnectionsConfigurationNode;
+            ConfigurationNode node = Application.Instance.ConnectionsConfigurationNode;
             ConfigurationNode subFolder = new ConfigurationNode(null);
             node.AddChildNode(subFolder);
             connectionProperties.Save(subFolder);
-            DataRow row = dataTable.NewRow();
-            LoadConnection(subFolder, row);
-            dataTable.Rows.Add(row);
+            DataRow row = this.dataTable.NewRow();
+            this.LoadConnection(subFolder, row);
+            this.dataTable.Rows.Add(row);
             this.isDirty = true;
         }
 

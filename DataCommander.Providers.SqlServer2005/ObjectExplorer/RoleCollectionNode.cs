@@ -32,7 +32,7 @@ namespace DataCommander.Providers.SqlServer2005
         IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
         {
             string commandText = "select name from {0}..sysusers where issqlrole = 1 order by name";
-            commandText = string.Format( commandText, database.Name );
+            commandText = string.Format( commandText, this.database.Name );
             string connectionString = this.database.Databases.Server.ConnectionString;
             DataTable dataTable;
             using (var connection = new SqlConnection( connectionString ))
@@ -46,7 +46,7 @@ namespace DataCommander.Providers.SqlServer2005
             for (int i = 0; i < count; i++)
             {
                 string name = (string) dataRows[ i ][ 0 ];
-                treeNodes[ i ] = new RoleNode( database, name );
+                treeNodes[ i ] = new RoleNode(this.database, name );
             }
 
             return treeNodes;
@@ -76,6 +76,6 @@ namespace DataCommander.Providers.SqlServer2005
             }
         }
 
-        private DatabaseNode database;
+        private readonly DatabaseNode database;
     }
 }

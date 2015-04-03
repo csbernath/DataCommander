@@ -5,8 +5,8 @@ namespace DataCommander.Providers.SqlServer2005
 
     internal sealed class SmallDateTimeDataFieldReader : IDataFieldReader
     {
-        private IDataRecord dataRecord;
-        private int columnOrdinal;
+        private readonly IDataRecord dataRecord;
+        private readonly int columnOrdinal;
 
         public SmallDateTimeDataFieldReader(
             IDataRecord dataRecord,
@@ -22,13 +22,13 @@ namespace DataCommander.Providers.SqlServer2005
             {
                 object value;
 
-                if (dataRecord.IsDBNull(columnOrdinal))
+                if (this.dataRecord.IsDBNull(this.columnOrdinal))
                 {
                     value = DBNull.Value;
                 }
                 else
                 {
-                    DateTime dateTime = dataRecord.GetDateTime(columnOrdinal);
+                    DateTime dateTime = this.dataRecord.GetDateTime(this.columnOrdinal);
                     string format;
 
                     if (dateTime.TimeOfDay.Ticks == 0)

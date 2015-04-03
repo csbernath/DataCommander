@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation.XmlSpreadsheet
 {
-    using System;
     using System.Collections.Generic;
 
     /// <summary>

@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Providers.SqlServer2005
 {
     using System.Collections.Generic;
+    using System.Windows.Forms;
 
     internal sealed class UserDefinedTableTypeNode : ITreeNode
     {
@@ -52,7 +53,7 @@
             }
         }
 
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu
         {
             get
             {

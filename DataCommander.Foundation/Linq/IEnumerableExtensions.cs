@@ -1,5 +1,3 @@
-using System.Collections.ObjectModel;
-
 namespace DataCommander.Foundation.Linq
 {
     using System;
@@ -86,11 +84,11 @@ namespace DataCommander.Foundation.Linq
                 {
                     readOnlyList = EmptyReadOnlyList<TSource>.Instance;
                 })
-                .IfArgumentIs<IList<TSource>>(delegate(IList<TSource> list)
+                .IfArgumentIs(delegate(IList<TSource> list)
                 {
                     readOnlyList = list.AsReadOnlyList();
                 })
-                .IfArgumentIs<IReadOnlyList<TSource>>(delegate(IReadOnlyList<TSource> list)
+                .IfArgumentIs(delegate(IReadOnlyList<TSource> list)
                 {
                     readOnlyList = list;
                 })
@@ -146,7 +144,7 @@ namespace DataCommander.Foundation.Linq
         public static IEnumerable<T> Clone<T>(this IEnumerable<T> source)
         {
             Contract.Requires(source != null);
-            return source.Select(Clone);
+            return source.Select<T, T>(Clone);
         }
 
         /// <summary>
@@ -704,7 +702,7 @@ namespace DataCommander.Foundation.Linq
 
         private sealed class EmptyReadOnlyList<T> : IReadOnlyList<T>
         {
-            private static EmptyReadOnlyList<T> instance = new EmptyReadOnlyList<T>();
+            private static readonly EmptyReadOnlyList<T> instance = new EmptyReadOnlyList<T>();
 
             public static EmptyReadOnlyList<T> Instance
             {

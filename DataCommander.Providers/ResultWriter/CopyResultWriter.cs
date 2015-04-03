@@ -17,7 +17,7 @@
 
     internal sealed class CopyResultWriter : IResultWriter
     {
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private readonly IResultWriter logResultWriter;
         private readonly Action<InfoMessage> addInfoMessage;
         private readonly IProvider destinationProvider;
@@ -32,7 +32,7 @@
         private Task task;
         private EventWaitHandle enqueueEvent;
         private bool writeEnded;
-        private bool canConvertCommandToString;
+        private readonly bool canConvertCommandToString;
         private long readRowCount;
         private long insertedRowCount;
         private long waitMilliseconds;

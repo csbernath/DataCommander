@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation
 {
-    using System;
     using System.Diagnostics.Contracts;
 
     /// <summary>

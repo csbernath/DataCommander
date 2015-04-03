@@ -1,28 +1,30 @@
 namespace DataCommander
 {
     using System;
+    using System.ComponentModel;
+    using System.Windows.Forms;
 
     /// <summary>
     /// Summary description for PasswordForm.
     /// </summary>
-    public class PasswordForm : System.Windows.Forms.Form
+    public class PasswordForm : Form
     {
-        private System.Windows.Forms.TextBox tbPassword;
-        private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Label label1;
+        private TextBox tbPassword;
+        private Button btnOK;
+        private Button btnCancel;
+        private Label label1;
 
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.Container components = null;
+        private readonly Container components = null;
 
         public PasswordForm()
         {
             //
             // Required for Windows Form Designer support
             //
-            InitializeComponent();
+            this.InitializeComponent();
 
             //
             // TODO: Add any constructor code after InitializeComponent call
@@ -36,9 +38,9 @@ namespace DataCommander
         {
             if (disposing)
             {
-                if (components != null)
+                if (this.components != null)
                 {
-                    components.Dispose();
+                    this.components.Dispose();
                 }
             }
 
@@ -117,7 +119,7 @@ namespace DataCommander
         {
             get
             {
-                return tbPassword.Text;
+                return this.tbPassword.Text;
             }
         }
     }

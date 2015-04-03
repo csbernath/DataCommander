@@ -6,11 +6,11 @@
     internal sealed class TfsParameter : IDataParameter
     {
         private string name;
-        private Type type;
+        private readonly Type type;
         private DbType dbType;
         private ParameterDirection direction;
-        private bool isNullable;
-        private object defaultValue;
+        private readonly bool isNullable;
+        private readonly object defaultValue;
         private object value;
 
         public TfsParameter(string name, Type type, DbType dbType, ParameterDirection direction, bool isNullable, object defaultValue)

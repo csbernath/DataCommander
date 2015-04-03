@@ -30,7 +30,7 @@
         private CommandType commandType;
         private int commandTimeout;
         private string commandText;
-        private TextDataParameterCollection parameters = new TextDataParameterCollection();
+        private readonly TextDataParameterCollection parameters = new TextDataParameterCollection();
 
         #region Constructors
         #endregion

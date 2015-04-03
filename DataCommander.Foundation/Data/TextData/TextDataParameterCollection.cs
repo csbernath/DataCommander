@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Foundation.Data
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Data.Common;
     using System.Diagnostics.Contracts;
@@ -11,9 +12,9 @@
     /// </summary>
     public sealed class TextDataParameterCollection : DbParameterCollection, IList<TextDataParameter>
     {
-        private IndexableCollection<TextDataParameter> collection;
-        private ListIndex<TextDataParameter> listIndex;
-        private UniqueIndex<string, TextDataParameter> nameIndex;
+        private readonly IndexableCollection<TextDataParameter> collection;
+        private readonly ListIndex<TextDataParameter> listIndex;
+        private readonly UniqueIndex<string, TextDataParameter> nameIndex;
 
         /// <summary>
         /// 
@@ -139,7 +140,7 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        public override System.Collections.IEnumerator GetEnumerator()
+        public override IEnumerator GetEnumerator()
         {
             throw new NotImplementedException();
         }
@@ -404,7 +405,7 @@
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return this.collection.GetEnumerator();
         }

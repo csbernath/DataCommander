@@ -1,9 +1,9 @@
-﻿using System;
-using System.Data;
-using DataCommander.Foundation.Data;
-
-namespace DataCommander.Providers
+﻿namespace DataCommander.Providers
 {
+    using System;
+    using System.Data;
+    using DataCommander.Foundation.Data;
+
     public static class Extensions
     {
         public static DataSet ExecuteDataSet( this IDbConnection connection, String commandText )

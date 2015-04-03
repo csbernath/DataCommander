@@ -8,10 +8,10 @@ namespace DataCommander.Providers.SqlServer2005
 
     internal sealed class FunctionNode : ITreeNode
     {
-        private DatabaseNode database;
-        private string owner;
-        private string name;
-        private string xtype;
+        private readonly DatabaseNode database;
+        private readonly string owner;
+        private readonly string name;
+        private readonly string xtype;
 
         public FunctionNode(
             DatabaseNode database,
@@ -61,16 +61,16 @@ namespace DataCommander.Providers.SqlServer2005
                 //string query = string.Format("select {0}.{1}.[{2}]()",database.Name,owner,name);
                 string query;
 
-                switch (xtype)
+                switch (this.xtype)
                 {
                     case "FN": //Scalar function
-                        query = string.Format( "select {0}.{1}.[{2}]()", database.Name, owner, name );
+                        query = string.Format( "select {0}.{1}.[{2}]()", this.database.Name, this.owner, this.name );
                         break;
 
                     case "TF": //Table function
                     case "IF": //Inlined table-function
                         query = string.Format( @"select	*
-from	{0}.{1}.[{2}]()", database.Name, owner, name );
+from	{0}.{1}.[{2}]()", this.database.Name, this.owner, this.name );
                         break;
 
                     default:
@@ -89,7 +89,7 @@ from	{0}.{1}.[{2}]()", database.Name, owner, name );
             using (var connection = new SqlConnection( connectionString ))
             {
                 connection.Open();
-                text = SqlDatabase.GetSysComments( connection, database.Name, this.owner, this.name );
+                text = SqlDatabase.GetSysComments( connection, this.database.Name, this.owner, this.name );
             }
             QueryForm.ShowText( text );
         }
@@ -98,7 +98,7 @@ from	{0}.{1}.[{2}]()", database.Name, owner, name );
         {
             get
             {
-                ToolStripMenuItem menuItemScriptObject = new ToolStripMenuItem( "Script Object", null, new EventHandler( menuItemScriptObject_Click ) );
+                ToolStripMenuItem menuItemScriptObject = new ToolStripMenuItem( "Script Object", null, new EventHandler(this.menuItemScriptObject_Click ) );
                 ContextMenuStrip contextMenu = new ContextMenuStrip();
                 contextMenu.Items.Add( menuItemScriptObject );
                 return contextMenu;

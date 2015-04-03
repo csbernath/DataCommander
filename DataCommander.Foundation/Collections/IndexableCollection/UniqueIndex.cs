@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Foundation.Collections
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
 
@@ -194,12 +195,12 @@
         {
             Contract.Assert( item != null );
 
-            var respnse = this.getKey( item );
+            var response = this.getKey( item );
             bool contains;
 
-            if (respnse.HasKey)
+            if (response.HasKey)
             {
-                contains = this.dictionary.ContainsKey( respnse.Key );
+                contains = this.dictionary.ContainsKey( response.Key );
             }
             else
             {
@@ -254,7 +255,7 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return this.dictionary.Values.GetEnumerator();
         }

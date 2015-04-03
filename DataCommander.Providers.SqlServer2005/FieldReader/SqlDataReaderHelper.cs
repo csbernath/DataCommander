@@ -19,11 +19,11 @@ namespace DataCommander.Providers.SqlServer2005
             {
                 DataRowCollection rows = schemaTable.Rows;
                 int count = rows.Count;
-                dataFieldReaders = new IDataFieldReader[count];
+                this.dataFieldReaders = new IDataFieldReader[count];
 
                 for (int i = 0; i < count; i++)
                 {
-                    dataFieldReaders[i] = CreateDataFieldReader(dataReader, new DataColumnSchema(rows[i]));
+                    this.dataFieldReaders[i] = CreateDataFieldReader(dataReader, new DataColumnSchema(rows[i]));
                 }
             }
         }
@@ -128,7 +128,7 @@ namespace DataCommander.Providers.SqlServer2005
         {
             for (int i = 0; i < this.dataFieldReaders.Length; i++)
             {
-                values[i] = dataFieldReaders[i].Value;
+                values[i] = this.dataFieldReaders[i].Value;
             }
 
             return this.dataFieldReaders.Length;

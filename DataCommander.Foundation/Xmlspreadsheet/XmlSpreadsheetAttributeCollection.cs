@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Foundation.XmlSpreadsheet
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using DataCommander.Foundation.Collections;
 
@@ -16,10 +17,10 @@
         {
             this.nameIndex = new UniqueIndex<string, XmlSpreadsheetAttribute>(
                 "NameIndex",
-                item => GetKeyResponse.Create( true, item.LocalName ),
-                SortOrder.None );
+                item => GetKeyResponse.Create(true, item.LocalName),
+                SortOrder.None);
 
-            this.items = new IndexableCollection<XmlSpreadsheetAttribute>( this.nameIndex );
+            this.items = new IndexableCollection<XmlSpreadsheetAttribute>(this.nameIndex);
         }
 
         /// <summary>
@@ -39,9 +40,9 @@
         /// 
         /// </summary>
         /// <param name="item"></param>
-        public void Add( XmlSpreadsheetAttribute item )
+        public void Add(XmlSpreadsheetAttribute item)
         {
-            this.items.Add( item );
+            this.items.Add(item);
         }
 
         void ICollection<XmlSpreadsheetAttribute>.Clear()
@@ -49,12 +50,12 @@
             throw new NotImplementedException();
         }
 
-        bool ICollection<XmlSpreadsheetAttribute>.Contains( XmlSpreadsheetAttribute item )
+        bool ICollection<XmlSpreadsheetAttribute>.Contains(XmlSpreadsheetAttribute item)
         {
             throw new NotImplementedException();
         }
 
-        void ICollection<XmlSpreadsheetAttribute>.CopyTo( XmlSpreadsheetAttribute[] array, int arrayIndex )
+        void ICollection<XmlSpreadsheetAttribute>.CopyTo(XmlSpreadsheetAttribute[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
@@ -63,7 +64,7 @@
         {
             get
             {
-                throw new NotImplementedException();
+                return this.items.Count;
             }
         }
 
@@ -75,7 +76,7 @@
             }
         }
 
-        bool ICollection<XmlSpreadsheetAttribute>.Remove( XmlSpreadsheetAttribute item )
+        bool ICollection<XmlSpreadsheetAttribute>.Remove(XmlSpreadsheetAttribute item)
         {
             throw new NotImplementedException();
         }
@@ -93,7 +94,7 @@
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             throw new NotImplementedException();
         }

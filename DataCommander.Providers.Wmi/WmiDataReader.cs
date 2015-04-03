@@ -5,6 +5,7 @@ namespace DataCommander.Providers.Wmi
     using System.Diagnostics.Contracts;
     using System.Management;
     using System.Text;
+
     internal sealed class WmiDataReader : IDataReader
     {
         private readonly WmiCommand command;
@@ -22,7 +23,7 @@ namespace DataCommander.Providers.Wmi
             var query = new ObjectQuery(command.CommandText);
             var searcher = new ManagementObjectSearcher(command.Connection.Scope, query);
             ManagementObjectCollection objects = searcher.Get();
-            enumerator = objects.GetEnumerator();
+            this.enumerator = objects.GetEnumerator();
         }
 
         public void Dispose()
@@ -203,7 +204,7 @@ namespace DataCommander.Providers.Wmi
         {
             get
             {
-                return fieldCount;
+                return this.fieldCount;
             }
         }
 
@@ -231,19 +232,19 @@ namespace DataCommander.Providers.Wmi
         {
             PropertyDataCollection properties = null;
 
-            if (firstObject == null)
+            if (this.firstObject == null)
             {
-                bool moveNext = enumerator.MoveNext();
-                firstRead = true;
+                bool moveNext = this.enumerator.MoveNext();
+                this.firstRead = true;
 
                 if (moveNext)
                 {
-                    firstObject = enumerator.Current;
-                    properties = firstObject.Properties;
+                    this.firstObject = this.enumerator.Current;
+                    properties = this.firstObject.Properties;
                 }
                 else
                 {
-                    string query = command.CommandText;
+                    string query = this.command.CommandText;
                     int index = 0;
                     bool fromFound = false;
                     string className = null;
@@ -270,7 +271,7 @@ namespace DataCommander.Providers.Wmi
 
                     query = string.Format("SELECT * FROM meta_class WHERE __this ISA '{0}'", className);
                     ObjectQuery objectQuery = new ObjectQuery(query);
-                    ManagementObjectSearcher searcher = new ManagementObjectSearcher(command.Connection.Scope, objectQuery);
+                    ManagementObjectSearcher searcher = new ManagementObjectSearcher(this.command.Connection.Scope, objectQuery);
                     ManagementObjectCollection objects = searcher.Get();
                     ManagementObjectCollection.ManagementObjectEnumerator enumerator2 = objects.GetEnumerator();
                     enumerator2.MoveNext();
@@ -363,7 +364,7 @@ namespace DataCommander.Providers.Wmi
                 schemaTable.Rows.Add(values);
             }
 
-            fieldCount = schemaTable.Rows.Count;
+            this.fieldCount = schemaTable.Rows.Count;
 
             return schemaTable;
         }
@@ -377,18 +378,18 @@ namespace DataCommander.Providers.Wmi
         {
             bool read;
 
-            if (command.Cancelled)
+            if (this.command.Cancelled)
             {
                 read = false;
             }
-            else if (firstRead)
+            else if (this.firstRead)
             {
-                read = firstObject != null;
-                firstRead = false;
+                read = this.firstObject != null;
+                this.firstRead = false;
             }
             else
             {
-                read = enumerator.MoveNext();
+                read = this.enumerator.MoveNext();
             }
 
             return read;

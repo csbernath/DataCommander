@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Foundation.Diagnostics
 {
     using System;
+    using System.Globalization;
     using System.Reflection;
 
     internal sealed class MethodFraction : MethodBase
@@ -85,7 +86,7 @@
             return this.method.GetParameters();
         }
 
-        public override object Invoke(object obj, BindingFlags invokeAttr, Binder binder, object[] parameters, System.Globalization.CultureInfo culture)
+        public override object Invoke(object obj, BindingFlags invokeAttr, Binder binder, object[] parameters, CultureInfo culture)
         {
             throw new InvalidOperationException();
         }

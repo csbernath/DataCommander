@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Foundation.Data
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using DataCommander.Foundation.Collections;
@@ -10,9 +11,9 @@
     /// </summary>
     public sealed class TextDataSetTableCollection : IList<TextDataSetTable>
     {
-        private IndexableCollection<TextDataSetTable> collection;
-        private ListIndex<TextDataSetTable> listIndex;
-        private UniqueIndex<string, TextDataSetTable> nameIndex;
+        private readonly IndexableCollection<TextDataSetTable> collection;
+        private readonly ListIndex<TextDataSetTable> listIndex;
+        private readonly UniqueIndex<string, TextDataSetTable> nameIndex;
 
         /// <summary>
         /// 
@@ -162,7 +163,7 @@
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return this.collection.GetEnumerator();
         }

@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Foundation.Collections
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
 
@@ -284,7 +285,7 @@
                         break;
                     }
 
-                    current = (current + 1) % array.Length;
+                    current = (current + 1) %this.array.Length;
                 }
             }
         }
@@ -293,7 +294,7 @@
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             var enumerable = (IEnumerable<T>)this;
             return enumerable.GetEnumerator();

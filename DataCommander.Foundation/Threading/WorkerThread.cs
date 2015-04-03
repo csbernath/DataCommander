@@ -6,6 +6,7 @@ namespace DataCommander.Foundation.Threading
     using System.Globalization;
     using System.Threading;
     using DataCommander.Foundation.Diagnostics;
+    using ThreadState = System.Threading.ThreadState;
 
     /// <summary>
     /// 
@@ -14,7 +15,7 @@ namespace DataCommander.Foundation.Threading
     {
         #region Private Fields
 
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private readonly Thread thread;
         private readonly ThreadStart start;
         private DateTime _startTime;
@@ -141,7 +142,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public System.Threading.ThreadState ThreadState
+        public ThreadState ThreadState
         {
             get
             {
