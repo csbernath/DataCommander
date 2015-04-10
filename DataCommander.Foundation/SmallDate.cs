@@ -117,11 +117,65 @@
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="smallDate"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static SmallDate operator +(SmallDate smallDate, int value)
+        {
+            int result = smallDate.value + value;
+            if (result < ushort.MinValue || ushort.MaxValue < result)
+            {
+                throw new OverflowException();
+            }
+            return new SmallDate((ushort) result);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="smallDate1"></param>
+        /// <param name="smallDate2"></param>
+        /// <returns></returns>
+        public static int operator -(SmallDate smallDate1, SmallDate smallDate2)
+        {
+            return smallDate1.value - smallDate2.value;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns></returns>
         [Pure]
         public DateTime ToDateTime()
         {
             return ToDateTime(this.value);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [Pure]
+        public SmallDate AddDays(short value)
+        {
+            int valueInt32 = this.value + value;
+            ushort valueUInt16;
+
+            if (valueInt32 < ushort.MinValue)
+            {
+                valueUInt16 = ushort.MinValue;
+            }
+            else if (ushort.MaxValue < valueInt32)
+            {
+                valueUInt16 = ushort.MaxValue;
+            }
+            else
+            {
+                valueUInt16 = (ushort)valueInt32;
+            }
+
+            return new SmallDate(valueUInt16);
         }
 
         /// <summary>

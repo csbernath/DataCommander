@@ -10,6 +10,8 @@
     /// </summary>
     public static class IEnumeratorExtensions
     {
+        #region Public Methods
+
         /// <summary>
         /// 
         /// </summary>
@@ -22,6 +24,39 @@
 
             return new Enumerable<T>(enumerator);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="enumerator"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public static List<T> Take<T>(this IEnumerator<T> enumerator, int count)
+        {
+            Contract.Requires<ArgumentNullException>(enumerator != null);
+            Contract.Requires<ArgumentOutOfRangeException>(count >= 0);
+
+            var list = new List<T>(count);
+
+            for (int i = 0; i < count; i++)
+            {
+                if (enumerator.MoveNext())
+                {
+                    var item = enumerator.Current;
+                    list.Add(item);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return list;
+        }
+
+        #endregion
+
+        #region Private Classes
 
         private sealed class Enumerable<T> : IEnumerable<T>
         {
@@ -44,5 +79,7 @@
                 return this.enumerator;
             }
         }
+
+        #endregion
     }
 }

@@ -332,6 +332,7 @@ namespace DataCommander
                     {
                         Tag = hotTab
                     });
+                    contextMenu.Items.Add(new ToolStripMenuItem("Close all", null, this.mnuCloseAllTabPages_Click, Keys.Control | Keys.Shift | Keys.F4));
                     contextMenu.Show(this.resultSetsTabControl, e.Location);
                 }
             }

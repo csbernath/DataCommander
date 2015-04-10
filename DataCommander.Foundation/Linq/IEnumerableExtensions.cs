@@ -143,7 +143,7 @@ namespace DataCommander.Foundation.Linq
         /// <returns></returns>
         public static IEnumerable<T> Clone<T>(this IEnumerable<T> source)
         {
-            Contract.Requires(source != null);
+            Contract.Requires<ArgumentNullException>(source != null);
             return source.Select<T, T>(Clone);
         }
 
@@ -166,7 +166,7 @@ namespace DataCommander.Foundation.Linq
         /// <param name="action"></param>
         public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource, int> action)
         {
-            Contract.Requires(action != null);
+            Contract.Requires<ArgumentNullException>(action != null);
 
             if (source != null)
             {
@@ -184,29 +184,52 @@ namespace DataCommander.Foundation.Linq
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
-        /// <param name="partitionSize"></param>
+        /// <param name="count"></param>
+        /// <param name="partitionCount"></param>
         /// <returns></returns>
-        public static IEnumerable<List<T>> GetPartitions<T>(this IEnumerable<T> source, int partitionSize)
+        public static IEnumerable<List<T>> GetPartitions<T>(
+            this IEnumerable<T> source,
+            int count,
+            int partitionCount)
         {
-            Contract.Requires(source != null);
-            Contract.Requires(partitionSize > 0);
+            Contract.Requires<ArgumentNullException>(source != null);
+            Contract.Requires<ArgumentOutOfRangeException>(count >= 0);
+            Contract.Requires<ArgumentOutOfRangeException>(partitionCount > 0);
 
-            var partition = new List<T>(partitionSize);
+            Contract.Ensures(Contract.Result<IEnumerable<List<T>>>().Count() <= partitionCount);
+            Contract.Ensures(Contract.ForAll(Contract.Result<IEnumerable<List<T>>>().ToList(), partition => partition.Count > 0));
 
-            foreach (var item in source)
+            int partitionSize = count/partitionCount;
+            int remainder = count%partitionCount;
+
+            using (var enumerator = source.GetEnumerator())
             {
-                if (partition.Count == partitionSize)
+                for (int partitionIndex = 0; partitionIndex < partitionCount; partitionIndex++)
                 {
-                    yield return partition;
-                    partition = new List<T>(partitionSize);
+                    int currentPartitionSize = partitionSize;
+                    if (remainder > 0)
+                    {
+                        currentPartitionSize++;
+                        remainder--;
+                    }
+
+                    if (currentPartitionSize > 0)
+                    {
+                        var partition = enumerator.Take(currentPartitionSize);
+                        if (partition.Count > 0)
+                        {
+                            yield return partition;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
-
-                partition.Add(item);
-            }
-
-            if (partition.Count > 0)
-            {
-                yield return partition;
             }
         }
 
@@ -219,7 +242,7 @@ namespace DataCommander.Foundation.Linq
         /// <returns></returns>
         public static IndexedItem<T> IndexOf<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
-            Contract.Requires(predicate != null);
+            Contract.Requires<ArgumentNullException>(predicate != null);
 
             IndexedItem<T> result = null;
             if (source != null)
@@ -445,7 +468,7 @@ namespace DataCommander.Foundation.Linq
             this IEnumerable<TSource> source,
             Func<TCollection> createCollection) where TCollection : ICollection<TSource>
         {
-            Contract.Requires(createCollection != null);
+            Contract.Requires<ArgumentNullException>(createCollection != null);
 
             TCollection collection = default(TCollection);
             if (source != null)
@@ -470,8 +493,8 @@ namespace DataCommander.Foundation.Linq
             Func<TCollection> createCollection,
             Action<TCollection, TSource> add)
         {
-            Contract.Requires(createCollection != null);
-            Contract.Requires(add != null);
+            Contract.Requires<ArgumentNullException>(createCollection != null);
+            Contract.Requires<ArgumentNullException>(add != null);
 
             TCollection collection = default(TCollection);
             if (source != null)
@@ -578,12 +601,12 @@ namespace DataCommander.Foundation.Linq
         /// <returns></returns>
         public static string ToString<T>(this IEnumerable<T> source, string separator, Func<T, string> toString)
         {
-            Contract.Requires(toString != null);
+            Contract.Requires<ArgumentNullException>(toString != null);
 
             string result;
             if (source != null)
             {
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
                 foreach (var item in source)
                 {
                     if (sb.Length > 0)
@@ -700,6 +723,8 @@ namespace DataCommander.Foundation.Linq
 
         #endregion
 
+        #region Private Classes
+
         private sealed class EmptyReadOnlyList<T> : IReadOnlyList<T>
         {
             private static readonly EmptyReadOnlyList<T> instance = new EmptyReadOnlyList<T>();
@@ -738,5 +763,7 @@ namespace DataCommander.Foundation.Linq
                 return Enumerable.Empty<T>().GetEnumerator();
             }
         }
+
+        #endregion
     }
 }

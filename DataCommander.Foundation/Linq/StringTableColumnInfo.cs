@@ -23,9 +23,9 @@ namespace DataCommander.Foundation.Linq
         public StringTableColumnInfo(
             string columnName,
             StringTableColumnAlign align,
-            Func<T, int, string> toString )
+            Func<T, int, string> toString)
         {
-            Contract.Requires<ArgumentNullException>( toString != null );
+            Contract.Requires<ArgumentNullException>(toString != null);
 
             this.columnName = columnName;
             this.align = align;
@@ -41,16 +41,16 @@ namespace DataCommander.Foundation.Linq
         public StringTableColumnInfo(
             string columnName,
             StringTableColumnAlign align,
-            Func<T, object> getValue )
+            Func<T, object> getValue)
         {
-            Contract.Requires<ArgumentNullException>( getValue != null );
+            Contract.Requires<ArgumentNullException>(getValue != null);
 
             this.columnName = columnName;
             this.align = align;
-            this.toString = delegate( T item, int index )
+            this.toString = delegate(T item, int index)
             {
-                object value = getValue( item );
-                return ToString( value );
+                object value = getValue(item);
+                return ToString(value);
             };
         }
 
@@ -76,12 +76,12 @@ namespace DataCommander.Foundation.Linq
             }
         }
 
-        internal string ToString( T item, int index )
+        internal string ToString(T item, int index)
         {
-            return this.toString( item, index );
+            return this.toString(item, index);
         }
 
-        private static string ToString( object source )
+        private static string ToString(object source)
         {
             string result;
             if (source != null)

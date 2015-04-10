@@ -88,7 +88,7 @@
 
             if (this.count == this.array.Length)
             {
-                int newSize = this.count == 0 ? 1 : 2 * this.count;
+                int newSize = this.count == 0 ? 1 : 2*this.count;
 
                 if (newSize > this.maxSize)
                 {

@@ -1,7 +1,4 @@
-﻿using DataCommander.Foundation;
-using DataCommander.Foundation.Linq;
-
-namespace DataCommander.Providers
+﻿namespace DataCommander.Providers
 {
     using System;
     using System.Diagnostics;
@@ -10,6 +7,9 @@ namespace DataCommander.Providers
     using System.Web;
     using System.Windows.Forms;
     using DataCommander.Foundation.Diagnostics;
+    using System.Linq;
+    using DataCommander.Foundation;
+    using DataCommander.Foundation.Linq;
 
     public partial class AboutForm : Form
     {
@@ -22,9 +22,15 @@ namespace DataCommander.Providers
             DateTime lastWriteTime = File.GetLastWriteTime(path);
             string dotNetFrameworkVersion = AppDomainMonitor.DotNetFrameworkVersion;
 
-            string searchPattern = string.Format("DataCommander {0:yyyy.MM.dd}*.log", LocalTime.Default.Now.Date);
-            string[] logFileNames = Directory.GetFiles(Path.GetTempPath(), searchPattern);
-            string logFileName = logFileNames.Last();
+            const string searchPattern = "DataCommander*.log";
+            var directoryInfo = new DirectoryInfo(Path.GetTempPath());
+            FileInfo[] fileInfos = directoryInfo.GetFiles(searchPattern, SearchOption.TopDirectoryOnly);
+            var fileInfo = fileInfos.OrderByDescending(i => i.CreationTime).FirstOrDefault();
+            string logFileName = null;
+            if (fileInfo != null)
+            {
+                logFileName = fileInfo.FullName;
+            }
 
             string text = string.Format(@"<div style=""font-family:verdana;font-size:9pt"">
 <a href=""https://github.com/csbernath/DataCommander"">Data Commander</a>
