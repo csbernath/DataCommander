@@ -230,23 +230,29 @@ Available providers
 Microsoft SQL Server 2005
  -------------------------
 Object Explorer
-Server
-Databases
-	System Databases	
-Tables
-			System Tables
-		Views
-			System Views
-		Stored Procedures
-			System Stored Procedures
-		Functions
-Users
-Roles
-	Security
-		Logins
-	Server Objects
-		Linked Servers
-	Jobs
+
+	Server
+		Databases
+			System Databases
+			Database
+				Tables
+					System Tables
+				Views
+					System Views
+				Programmability
+					Stored Procedures
+						System Stored Procedures
+					Functions
+					User-defined Table Types
+				Security
+					Users
+					Roles
+		Security
+			Logins
+		Server Objects
+			Linked Servers
+		Jobs
+
 Query textbox – code completion
 
 How to list databases
