@@ -31,8 +31,14 @@ The editor has syntax highlighting, code completion for SQL statements.
 The output of a query can be displayed as data grid, text, html.
 The data grid can be exported into Excel.
 
+General functions
+-----------------
+Main Form
+---------
+Connection Form
+---------------
+
 How to connect to a data source
--------------------------------
   1. Click Database\Connect menu item or press Ctrl+N.
   2. Click the New button.
   3. Enter the connection string paramateres of the new connection.
@@ -40,24 +46,15 @@ How to connect to a data source
   5. Click OK button to save the connection string.
   
 How to create a new file based data source
-------------------------------------------
   1. Click Database\New menu item.
   2. Type the file name of the new database file (SQL Server Compact, SQLite).
   3. Click Save button.
 
 How to open a file based data source
-------------------------------------
   1. Click Database\Open menu item or press Ctrl+O.
   2. Select the required file type (Access, Excel, MSI, SQLite, SQL Server Compact)
   3. Enter the file name.
   4. Click Open button.
-  
-General functions
------------------
-Main Form
----------
-Connection Form
----------------
 
 How to create a connection to a database
   1.	Click the Database/Connect menu item.
@@ -70,7 +67,6 @@ How to create a connection to a database
   8.	Click the OK button.
 	
 How to open a new query form to a database
-
   1.	Click Database/Connect menu item.
   2.	Double click left mouse button on the selected row or select the row and click the Connect button.
 
@@ -129,6 +125,7 @@ How to use the auto completion listbox
   1.	Press Ctrl+J
   2.	Press Up or Down key to navigate to the previous/next member of the list.
   3.	Press Shift+Up or Shift+Down to navigate to the next matching member of the list.
+  4.	Press Ctrl+Sub to filter items.
   4.	Press Enter to select the current list member or press Escape to close the listbox.
 
 How to modify the font of the query from
