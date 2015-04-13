@@ -236,7 +236,7 @@ namespace DataCommander.Providers
                         message = "WARNING: The table has no primary key/unique index.";
                     }
 
-                    var queryForm = (QueryForm)Application.Instance.MainForm.ActiveMdiChild;
+                    var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
                     queryForm.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, message));
                 }
             }
@@ -539,7 +539,7 @@ namespace DataCommander.Providers
                 sb.Append(')');
             }
 
-            var queryForm = (QueryForm)Application.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
             queryForm.AppendQueryText(sb.ToString());
         }
 
@@ -615,7 +615,7 @@ namespace DataCommander.Providers
             {
                 string where = this.GetWhere(dataRow);
                 sb.Append(@where);
-                var queryForm = (QueryForm)Application.Instance.MainForm.ActiveMdiChild;
+                var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
                 string text = sb.ToString();
                 queryForm.AppendQueryText(text);
             }
@@ -651,7 +651,7 @@ namespace DataCommander.Providers
 
             if (this.dataGrid.SelectedRows.Count == 1)
             {
-                var queryForm = (QueryForm)Application.Instance.MainForm.ActiveMdiChild;
+                var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
                 string text = this.statementStringBuilder.ToString();
                 this.statementStringBuilder = null;
                 queryForm.AppendQueryText(text);
@@ -661,7 +661,7 @@ namespace DataCommander.Providers
         private void CopyColumnNames_Click(object sender, EventArgs e)
         {
             var columnNames =
-                (from c in this.dataGrid.Columns.AsEnumerable<DataGridViewColumn>()
+                (from c in this.dataGrid.Columns.Cast<DataGridViewColumn>()
                     where c.Visible
                     orderby c.DisplayIndex
                     select c.DataPropertyName);
@@ -677,7 +677,7 @@ namespace DataCommander.Providers
         private int[] GetColumnIndexes()
         {
             return
-                (from c in this.dataGrid.Columns.AsEnumerable<DataGridViewColumn>()
+                (from c in this.dataGrid.Columns.Cast<DataGridViewColumn>()
                     where c.Visible
                     orderby c.DisplayIndex
                     select c.Index).ToArray();
@@ -1037,7 +1037,7 @@ namespace DataCommander.Providers
                 var columns = this.dataTable.Columns;
                 int columnCount = columns.Count;
 
-                foreach (DataGridViewRow row in this.dataGrid.Rows.AsEnumerable<DataGridViewRow>().Where(r => r.Visible == true))
+                foreach (DataGridViewRow row in this.dataGrid.Rows.Cast<DataGridViewRow>().Where(r => r.Visible))
                 {
                     xmlWriter.WriteStartElement("row");
                     for (int columnIndex = 0; columnIndex < columnCount; columnIndex++)

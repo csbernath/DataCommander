@@ -5,7 +5,6 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Data;
     using System.Data.SqlClient;
     using System.Windows.Forms;
-    using Application = DataCommander.Providers.Application;
 
     internal sealed class DatabaseNode : ITreeNode
     {
@@ -46,11 +45,10 @@ namespace DataCommander.Providers.SqlServer2005
         {
             ITreeNode[] children = new ITreeNode[]
             {
-              new TableCollectionNode(this),
-              new ViewCollectionNode(this),
-              new ProgrammabilityNode(this),
-              new UserCollectionNode(this),
-              new RoleCollectionNode(this)
+                new TableCollectionNode(this),
+                new ViewCollectionNode(this),
+                new ProgrammabilityNode(this),
+                new DatabaseSecurityNode(this)
             };
 
             return children;
@@ -95,8 +93,8 @@ select
 	convert(decimal(15,4),(f.size-fileproperty(name, 'SpaceUsed')) * 8096.0 / 1000000)	as [Free (MB)]
 from	[{0}].sys.database_files f", this.name);
             string connectionString = this.databaseCollectionNode.Server.ConnectionString;
-            MainForm mainForm = Application.Instance.MainForm;
-            QueryForm queryForm = (QueryForm)mainForm.ActiveMdiChild;
+            MainForm mainForm = DataCommanderApplication.Instance.MainForm;
+            QueryForm queryForm = (QueryForm) mainForm.ActiveMdiChild;
             DataSet dataSet = null;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -113,13 +111,14 @@ from	[{0}].sys.database_files f", this.name);
             {
                 queryForm.ShowDataSet(dataSet);
             }
-        }    
+        }
 
         ContextMenuStrip ITreeNode.ContextMenu
         {
             get
             {
-                ToolStripMenuItem menuItemGetInformation = new ToolStripMenuItem("Get information", null, new EventHandler(this.menuItemGetInformation_Click));
+                ToolStripMenuItem menuItemGetInformation = new ToolStripMenuItem("Get information", null,
+                    new EventHandler(this.menuItemGetInformation_Click));
                 ContextMenuStrip contextMenu = new ContextMenuStrip();
                 contextMenu.Items.Add(menuItemGetInformation);
                 return contextMenu;

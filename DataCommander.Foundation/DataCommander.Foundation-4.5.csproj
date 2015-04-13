@@ -466,7 +466,7 @@
     <Compile Include="Linq\IReadOnlyListExtensions.cs" />
     <Compile Include="Linq\MinMaxResult.cs" />
     <Compile Include="Linq\QueueExtensions.cs" />
-    <Compile Include="Linq\StringTableColumnInfo.cs" />
+    <Compile Include="Text\StringTableColumnInfo.cs" />
     <Compile Include="Linq\TimeSpanExtensions.cs" />
     <Compile Include="Management\InitiateShutdownReturnValue.cs" />
     <Compile Include="Management\ManagementJob.cs" />

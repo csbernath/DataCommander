@@ -641,11 +641,11 @@ namespace DataCommander.Providers
             else if (GetDataPresent(dataObject, DataFormats.FileDrop))
             {
                 string[] fileNames = (string[])dataObject.GetData(DataFormats.FileDrop);
-                Application.Instance.MainForm.LoadFiles(fileNames);
+                DataCommanderApplication.Instance.MainForm.LoadFiles(fileNames);
             }
         }
 
-        public IKeyboardHandler KeyboardHandler
+        internal IKeyboardHandler KeyboardHandler
         {
             get
             {
@@ -706,7 +706,7 @@ namespace DataCommander.Providers
                 menuItem = new ToolStripMenuItem("Copy table", null, this.CopyTable_Click);
                 items.Add(menuItem);
 
-                Form[] forms = Application.Instance.MainForm.MdiChildren;
+                Form[] forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
                 int index = Array.IndexOf(forms, (QueryForm)this.Parent);
                 if (index < forms.Length - 1)
                 {

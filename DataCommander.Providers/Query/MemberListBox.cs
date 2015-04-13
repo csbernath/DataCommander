@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace DataCommander.Providers
 {
     using System;
@@ -241,7 +243,7 @@ namespace DataCommander.Providers
             else if (e.KeyCode.In(Keys.Subtract, Keys.OemMinus) && e.Control)
             {
                 handled = true;
-                var filteredItems = this.listBox.Items.Cast<ListBoxItem<IObjectName>>().Where(item => item.Item.UnquotedName.IndexOf(this.prefix, StringComparison.InvariantCultureIgnoreCase) >= 0).ToArray();
+                var filteredItems = this.listBox.Items.Cast<ListBoxItem<IObjectName>>().Where(item => IndexOf(item.Item.UnquotedName, this.prefix) >= 0).ToArray();
                 this.listBox.Items.Clear();
                 this.listBox.Items.AddRange(filteredItems);
             }
@@ -268,7 +270,7 @@ namespace DataCommander.Providers
             // bool found = false;
             var filteredItems =
                 this.listBox.Items.Cast<ListBoxItem<IObjectName>>()
-                    .Select((listBoxItem, i) => Tuple.Create(i, listBoxItem.Item.UnquotedName.IndexOf(prefix, StringComparison.InvariantCultureIgnoreCase)))
+                    .Select((listBoxItem, i) => Tuple.Create(i, IndexOf(listBoxItem.Item.UnquotedName,prefix)))
                     .Where(item => item.Item2 >= 0).ToArray();
 
             if (filteredItems.Length > 0)
@@ -276,24 +278,6 @@ namespace DataCommander.Providers
                 var item = filteredItems.MinMax(null, i => i.Item2).Min;
                 index = item.Value.Item1;
             }
-
-            //for (int i = startIndex; i < listBox.Items.Count; i++)
-            //{
-            //    string item = listBox.Items[i].ToString();
-            //    string item2 = item.ToLower();
-            //    int j = item2.IndexOf(prefix);
-
-            //    if (j == 0)
-            //    {
-            //        index = i;
-            //        break;
-            //    }
-            //    else if (j > 0 && !found)
-            //    {
-            //        index = i;
-            //        found = true;
-            //    }
-            //}
 
             if (index >= 0)
             {
@@ -311,10 +295,46 @@ namespace DataCommander.Providers
             }
         }
 
+        private static int IndexOf(string item, string searchPattern)
+        {
+            int index = item.IndexOf(searchPattern, StringComparison.InvariantCultureIgnoreCase);
+            if (index < 0)
+            {
+                string camelCase = GetCamelCase(item);
+                index = camelCase.IndexOf(searchPattern, StringComparison.InvariantCultureIgnoreCase);
+            }
+
+            return index;
+        }
+
+        private static string GetCamelCase(string source)
+        {
+            var sb = new StringBuilder();
+
+            for (int i = 0; i < source.Length; i++)
+            {
+                char c = source[i];
+
+                if (i == 0)
+                {
+                    sb.Append(c);
+                }
+                else
+                {
+                    if (Char.GetUnicodeCategory(c) == UnicodeCategory.UppercaseLetter)
+                    {
+                        sb.Append(c);
+                    }
+                }
+            }
+
+            return sb.ToString();
+        }
+
         private void FindNext(int startIndex)
         {
-            var items = this.listBox.Items.Cast<string>();
-            int index = items.IndexOf(startIndex, item => item.IndexOf(this.prefix, StringComparison.InvariantCultureIgnoreCase) >= 0);
+            var items = this.listBox.Items.Cast<ListBoxItem<IObjectName>>();
+            int index = items.IndexOf(startIndex, item => IndexOf(item.Item.UnquotedName, this.prefix) >= 0);
             if (index >= 0)
             {
                 this.listBox.SelectedIndex = index;
@@ -323,12 +343,8 @@ namespace DataCommander.Providers
 
         private void FindPrevious(int startIndex)
         {
-            var items = this.listBox.Items.Cast<string>();
-            int index = items.LastIndexOf(startIndex, item => item.StartsWith(this.prefix, StringComparison.InvariantCultureIgnoreCase));
-            if (index == -1)
-            {
-                index = items.LastIndexOf(startIndex, item => item.IndexOf(this.prefix, StringComparison.InvariantCultureIgnoreCase) >= 0);
-            }
+            var items = this.listBox.Items.Cast<ListBoxItem<IObjectName>>().ToList();
+            int index = items.LastIndexOf(startIndex, item => IndexOf(item.Item.UnquotedName, this.prefix) >= 0);
             if (index >= 0)
             {
                 this.listBox.SelectedIndex = index;

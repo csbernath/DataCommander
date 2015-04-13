@@ -168,7 +168,7 @@ namespace DataCommander.Providers
 
         private void GetDataSources(bool refresh)
         {
-            ApplicationData applicationData = Application.Instance.ApplicationData;
+            ApplicationData applicationData = DataCommanderApplication.Instance.ApplicationData;
             ConfigurationNode folder = applicationData.CurrentType;
             folder = folder.CreateNode(this.tempConnectionProperties.Provider.Name);
             string[] dataSourceArray;
@@ -291,7 +291,7 @@ namespace DataCommander.Providers
                 }
                 catch (Exception ex)
                 {
-                    Application.Instance.MainForm.StatusBar.Items[0].Text = ex.Message;
+                    DataCommanderApplication.Instance.MainForm.StatusBar.Items[0].Text = ex.Message;
                 }
                 finally
                 {
@@ -395,7 +395,7 @@ namespace DataCommander.Providers
             }
             catch (Exception ex)
             {
-                Application.Instance.MainForm.StatusBar.Items[0].Text = ex.Message;
+                DataCommanderApplication.Instance.MainForm.StatusBar.Items[0].Text = ex.Message;
             }
             finally
             {

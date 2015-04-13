@@ -66,7 +66,7 @@ Credits:
                 dotNetFrameworkVersion,
                 assembly.GetName().ProcessorArchitecture,
                 lastWriteTime.ToLongDateString(),
-                HttpUtility.HtmlEncode(Application.Instance.FileName),
+                HttpUtility.HtmlEncode(DataCommanderApplication.Instance.FileName),
                 ((double)Environment.WorkingSet/(1024*1024)).ToString("N0"),
                 logFileName);
             

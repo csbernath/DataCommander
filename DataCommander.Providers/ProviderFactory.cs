@@ -54,7 +54,7 @@ namespace DataCommander.Providers
 
                 c.Open(connectionString, null, null, 0);
                 Recordset rs = c.OpenSchema(SchemaEnum.adSchemaDBInfoKeywords, Type.Missing, Type.Missing);
-                DataTable dataTable = OleDBHelper.Convert(rs);
+                DataTable dataTable = OleDbHelper.Convert(rs);
                 rs.Close();
                 c.Close();
 

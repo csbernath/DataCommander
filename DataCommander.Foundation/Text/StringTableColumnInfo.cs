@@ -1,8 +1,7 @@
-namespace DataCommander.Foundation.Linq
+namespace DataCommander.Foundation.Text
 {
     using System;
     using System.Diagnostics.Contracts;
-    using DataCommander.Foundation.Text;
 
     /// <summary>
     /// 

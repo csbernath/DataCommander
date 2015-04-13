@@ -177,7 +177,7 @@ namespace DataCommander.Providers.Wmi
 
         void IProvider.ClearCompletionCache()
         {
-            ConfigurationNode node = Application.Instance.ApplicationData.CurrentType;
+            ConfigurationNode node = DataCommanderApplication.Instance.ApplicationData.CurrentType;
             const string key = "ClassNames";
             node.Attributes.Remove(key);
         }

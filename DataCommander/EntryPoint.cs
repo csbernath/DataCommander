@@ -7,7 +7,7 @@ namespace DataCommander
     using System.Windows.Forms;
     using DataCommander.Foundation.Configuration;
     using DataCommander.Foundation.Diagnostics;
-    using Application = DataCommander.Providers.Application;
+    using DataCommander.Providers;
 
     /// <summary>
     /// Summary description for Class1.
@@ -39,10 +39,10 @@ namespace DataCommander
                         string fileName = applicationDataFolderPath + Path.DirectorySeparatorChar + "ApplicationData.xml";
                         methodLog.Write( LogLevel.Trace, "fileName: {0}", fileName );
                         string sectionName = Settings.SectionName;
-                        Application application = Application.Instance;
-                        application.LoadApplicationData( fileName, sectionName );
-                        application.Run();
-                        application.SaveApplicationData();
+                        DataCommanderApplication dataCommanderApplication = DataCommanderApplication.Instance;
+                        dataCommanderApplication.LoadApplicationData( fileName, sectionName );
+                        dataCommanderApplication.Run();
+                        dataCommanderApplication.SaveApplicationData();
                     }
                     catch (Exception e)
                     {

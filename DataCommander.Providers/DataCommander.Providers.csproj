@@ -250,7 +250,7 @@
     <Compile Include="AdoDB.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Application.cs">
+    <Compile Include="DataCommanderApplication.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Connection\ConnectionStringProperty.cs" />
@@ -322,6 +322,7 @@
     <Compile Include="Query\QueryFormStaticMethods.cs" />
     <Compile Include="Query\TokenIterator.cs" />
     <Compile Include="Query\TokenType.cs" />
+    <Compile Include="Query\WordDocumentCreator.cs" />
     <Compile Include="ResultWriter\BooleanDataWriter.cs" />
     <Compile Include="ResultWriter\DataViewProperties.cs" />
     <Compile Include="ResultWriter\DataWriterBase.cs" />

@@ -77,7 +77,7 @@ namespace DataCommander.Providers.SqlServer2005
 
             Clipboard.SetText(text);
 
-            var queryForm = (QueryForm)Providers.Application.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (QueryForm)Providers.DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
 
             queryForm.SetStatusbarPanelText(
                 string.Format(

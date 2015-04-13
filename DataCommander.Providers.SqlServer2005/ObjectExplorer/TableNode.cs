@@ -16,7 +16,6 @@ namespace DataCommander.Providers.SqlServer2005
     using DataCommander.Foundation.Windows.Forms;
     using Microsoft.SqlServer.Management.Common;
     using Microsoft.SqlServer.Management.Smo;
-    using Application = DataCommander.Providers.Application;
 
     internal sealed class TableNode : ITreeNode
     {
@@ -56,7 +55,8 @@ namespace DataCommander.Providers.SqlServer2005
             return new ITreeNode[]
             {
                 new ColumnCollectionNode(this.database, this.owner, this.name),
-                new TriggerCollectionNode(this.database, this.owner, this.name)
+                new TriggerCollectionNode(this.database, this.owner, this.name),
+                new IndexCollectionNode(this, this.owner, this.name)
             };
         }
 
@@ -141,7 +141,7 @@ from    [{1}].[{2}].[{3}]", columnNames, databaseObjectMultipartName.Database, d
 
         private void Open_Click(object sender, EventArgs e)
         {
-            MainForm mainForm = Application.Instance.MainForm;
+            MainForm mainForm = DataCommanderApplication.Instance.MainForm;
             var queryForm = (QueryForm)mainForm.ActiveMdiChild;
             string name = this.database.Name + "." + this.owner + "." + this.name;
             string query = "select * from " + name;
@@ -296,7 +296,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.database.Name, this.owner, this.name);
 
                 dataSet.Tables.Add(schema);
 
-                MainForm mainForm = Application.Instance.MainForm;
+                MainForm mainForm = DataCommanderApplication.Instance.MainForm;
                 QueryForm queryForm = (QueryForm)mainForm.ActiveMdiChild;
                 queryForm.ShowDataSet(dataSet);
             }
@@ -306,7 +306,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.database.Name, this.owner, this.name);
         {
             using (new CursorManager(Cursors.WaitCursor))
             {
-                var queryForm = (QueryForm)Application.Instance.MainForm.ActiveMdiChild;
+                var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
                 queryForm.SetStatusbarPanelText("Copying table script to clipboard...", SystemColors.ControlText);
                 var stopwatch = Stopwatch.StartNew();
 
@@ -376,7 +376,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.database.Name, this.owner, this.name);
                 dataTable = connection.ExecuteDataTable(cmdText);
             }
             dataTable.TableName = string.Format("{0} indexes", this.name);
-            MainForm mainForm = Application.Instance.MainForm;
+            MainForm mainForm = DataCommanderApplication.Instance.MainForm;
             var queryForm = (QueryForm)mainForm.ActiveMdiChild;
             var dataSet = new DataSet();
             dataSet.Tables.Add(dataTable);
@@ -512,7 +512,7 @@ order by c.column_id", this.database.Name, this.owner, this.name);
             sb.Append(stringWriter);
 
             Clipboard.SetText(sb.ToString());
-            var queryForm = (QueryForm)Application.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
             queryForm.SetStatusbarPanelText("Copying script to clipboard finished.", SystemColors.ControlText);
         }
 

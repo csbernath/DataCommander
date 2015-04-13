@@ -13,7 +13,6 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Diagnostics.Contracts;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data.SqlClient;
-    using Application = DataCommander.Providers.Application;
 
     /// <summary>
     /// TODO: Update summary.
@@ -74,7 +73,7 @@ namespace DataCommander.Providers.SqlServer2005
                     dataSet = connection.ExecuteDataSet( commandText );
                 }
 
-                var queryForm = (QueryForm) Application.Instance.MainForm.ActiveMdiChild;
+                var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
                 queryForm.ShowDataSet( dataSet );
 
                 return null;

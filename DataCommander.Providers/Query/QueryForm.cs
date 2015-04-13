@@ -17,6 +17,7 @@ namespace DataCommander
     using System.Runtime.InteropServices;
     using System.Text;
     using System.Threading;
+    using System.Threading.Tasks;
     using System.Windows.Forms;
     using System.Xml;
     using ADODB;
@@ -31,14 +32,7 @@ namespace DataCommander
     using DataCommander.Providers;
     using DataCommander.Providers.Query;
     using DataCommander.Providers.ResultWriter;
-    using Microsoft.Office.Interop.Word;
-    using Application = DataCommander.Providers.Application;
-    using DataTable = System.Data.DataTable;
-    using Font = System.Drawing.Font;
-    using Point = System.Drawing.Point;
-    using Task = System.Threading.Tasks.Task;
     using Timer = System.Windows.Forms.Timer;
-    using View = System.Windows.Forms.View;
 
     /// <summary>
     /// Summary description for QueryForm.
@@ -82,7 +76,7 @@ namespace DataCommander
         private ToolStripMenuItem menuItem9;
         private ToolStripMenuItem mnuSaveAs;
         private ToolStripMenuItem mnuExcel;
-        private ToolStripMenuItem mnuIntelliSense;
+        private ToolStripMenuItem mnuCodeCompletion;
         private ToolStripMenuItem mnuListMembers;
         private ToolStripMenuItem mnuGotoQueryEditor;
         private ToolStripMenuItem mnuCloseAllTabPages;
@@ -577,7 +571,7 @@ namespace DataCommander
             this.mnuPaste = new global::System.Windows.Forms.ToolStripMenuItem();
             this.mnuFind = new global::System.Windows.Forms.ToolStripMenuItem();
             this.mnuFindNext = new global::System.Windows.Forms.ToolStripMenuItem();
-            this.mnuIntelliSense = new global::System.Windows.Forms.ToolStripMenuItem();
+            this.mnuCodeCompletion = new global::System.Windows.Forms.ToolStripMenuItem();
             this.mnuListMembers = new global::System.Windows.Forms.ToolStripMenuItem();
             this.mnuClearCache = new global::System.Windows.Forms.ToolStripMenuItem();
             this.mnuGoTo = new global::System.Windows.Forms.ToolStripMenuItem();
@@ -706,7 +700,7 @@ namespace DataCommander
             this.mnuPaste,
             this.mnuFind,
             this.mnuFindNext,
-            this.mnuIntelliSense,
+            this.mnuCodeCompletion,
             this.mnuGoTo});
             this.menuItem8.MergeAction = global::System.Windows.Forms.MergeAction.Insert;
             this.menuItem8.MergeIndex = 2;
@@ -740,15 +734,15 @@ namespace DataCommander
             this.mnuFindNext.Size = new global::System.Drawing.Size(157, 22);
             this.mnuFindNext.Text = "Find &Next";
             // 
-            // mnuIntelliSense
+            // mnuCodeCompletion
             // 
-            this.mnuIntelliSense.DropDownItems.AddRange(new global::System.Windows.Forms.ToolStripItem[] {
+            this.mnuCodeCompletion.DropDownItems.AddRange(new global::System.Windows.Forms.ToolStripItem[] {
             this.mnuListMembers,
             this.mnuClearCache});
-            this.mnuIntelliSense.MergeIndex = 3;
-            this.mnuIntelliSense.Name = "mnuIntelliSense";
-            this.mnuIntelliSense.Size = new global::System.Drawing.Size(157, 22);
-            this.mnuIntelliSense.Text = "&IntelliSense";
+            this.mnuCodeCompletion.MergeIndex = 3;
+            this.mnuCodeCompletion.Name = "mnuCodeCompletion";
+            this.mnuCodeCompletion.Size = new global::System.Drawing.Size(157, 22);
+            this.mnuCodeCompletion.Text = "&Code completion";
             // 
             // mnuListMembers
             // 
@@ -1473,7 +1467,7 @@ namespace DataCommander
             this.AddInfoMessages(messages);
         }
 
-        private static string DBValue(object value)
+        internal static string DBValue(object value)
         {
             string s;
 
@@ -1526,7 +1520,7 @@ namespace DataCommander
 
             this.Text = sb.ToString();
 
-            var mainForm = Application.Instance.MainForm;
+            var mainForm = DataCommanderApplication.Instance.MainForm;
             mainForm.ActiveMdiChildToolStripTextBox.Text = sb.ToString();
         }
 
@@ -1779,42 +1773,6 @@ namespace DataCommander
             resultWriter.WriteEnd();
         }
 
-        private void dataGrid_Paint(object sender, PaintEventArgs e)
-        {
-            try
-            {
-                var dataGrid = (DataGrid)sender;
-
-                var pointInCell00 = new Point(dataGrid.GetCellBounds(0, 0).X + 4, dataGrid.GetCellBounds(0, 0).Y + 4);
-                DataGrid.HitTestInfo hti = dataGrid.HitTest(pointInCell00);
-                int row = hti.Row;
-
-                if (row == -1)
-                {
-                    row = 0;
-                }
-
-                int y = dataGrid.GetCellBounds(row, 0).Top + 2;
-
-                var currencyManager = (CurrencyManager)this.BindingContext[dataGrid.DataSource, dataGrid.DataMember];
-
-                int yDelta = dataGrid.GetCellBounds(row, 0).Height + 1;
-
-                while (y < dataGrid.Height - yDelta && row < currencyManager.Count)
-                {
-                    //get & draw the header text...  
-                    string text = (row + 1).ToString();
-                    e.Graphics.DrawString(text, dataGrid.Font, new SolidBrush(Color.Black), 12, y);
-                    yDelta = dataGrid.GetCellBounds(row, 0).Height + 1;
-                    y += yDelta;
-                    row++;
-                }
-            }
-            catch
-            {
-            }
-        }
-
         private void ShowDataTableDataGrid(DataTable dataTable)
         {
             var commandBuilder = this.provider.DbProviderFactory.CreateCommandBuilder();
@@ -1840,9 +1798,6 @@ namespace DataCommander
             dataTableEditor.StatusBarPanel = this.sbPanelText;
             dataTableEditor.DataTable = dataTable;
             this.ShowTabPage(dataTable.TableName, this.GetToolTipText(dataTable), dataTableEditor);
-
-            // queryTextBox.Height -= 1;
-            // queryTextBox.Height += 1;
         }
 
         private void ShowDataViewHtml(DataView dataView)
@@ -1883,69 +1838,11 @@ namespace DataCommander
             {
                 this.sbPanelText.Text = "Creating Word document...";
                 this.sbPanelText.ForeColor = SystemColors.ControlText;
-                var application = new ApplicationClass();
-                object template = Type.Missing;
-                object newTemplate = Type.Missing;
-                object documentType = Type.Missing;
-                object visible = Type.Missing;
-                Document document = application.Documents.Add(ref template, ref newTemplate, ref documentType, ref visible);
-                application.Selection.Font.Name = "Tahoma";
-                application.Selection.Font.Size = 8;
-
-                Range range = application.Selection.Range;
-                object defaultTableBehaviour = Type.Missing;
-                object autoFitBehaviour = WdAutoFitBehavior.wdAutoFitContent;
-
-                int numOfRows = dataTable.Rows.Count + 1;
-                int numOfColumns = Math.Min(dataTable.Columns.Count, 63);
-
-                string text = null;
-                string separator = "\t";
-
-                for (int i = 0; i < numOfColumns - 1; i++)
-                {
-                    text += dataTable.Columns[i].ColumnName + separator;
-                }
-
-                text += dataTable.Columns[numOfColumns - 1].ColumnName + Environment.NewLine;
-
-                foreach (DataRow dataRow in dataTable.Rows)
-                {
-                    for (int i = 0; i < numOfColumns - 1; i++)
-                    {
-                        text += DBValue(dataRow[i]) + separator;
-                    }
-
-                    text += DBValue(dataRow[numOfColumns - 1]) + Environment.NewLine;
-                }
-
-                application.Selection.InsertAfter(text);
-                object missing = Type.Missing;
-                object format = WdTableFormat.wdTableFormatList4;
-                Table table = application.Selection.Range.ConvertToTable(ref missing, ref missing, ref missing, ref missing, ref format, ref missing, ref missing, ref missing,
-                    ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing);
-
-                table.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitContent);
-                table.Columns.AutoFit();
-
-                foreach (Column column in table.Columns)
-                {
-                    column.Select();
-                    column.AutoFit();
-                }
-
-                string fileName = Path.GetTempFileName();
-                object fileNameObj = fileName;
-                object fileFormat = WdSaveFormat.wdFormatRTF;
-
-                document.SaveAs(ref fileNameObj, ref fileFormat, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing,
-                    ref missing, ref missing, ref missing, ref missing, ref missing);
-                document.Close(ref missing, ref missing, ref missing);
-                application.Quit(ref missing, ref missing, ref missing);
 
                 this.sbPanelText.Text = "Word document created.";
                 this.sbPanelText.ForeColor = SystemColors.ControlText;
 
+                string fileName = WordDocumentCreator.CreateWordDocument(dataTable);
 
                 var richTextBox = new RichTextBox();
                 GarbageMonitor.Add("ShowDataTableRtf.richTextBox", richTextBox);
@@ -2448,7 +2345,7 @@ namespace DataCommander
                     var c2 = new ConnectionClass();
                     c2.Open(this.connectionString, null, null, 0);
                     Recordset rs = c2.OpenSchema(SchemaEnum.adSchemaDBInfoKeywords, Type.Missing, Type.Missing);
-                    DataTable dataTable = OleDBHelper.Convert(rs);
+                    DataTable dataTable = OleDbHelper.Convert(rs);
                     c2.Close();
                     dataSet.Tables.Add(dataTable);
 
@@ -2638,7 +2535,7 @@ namespace DataCommander
                 if (hasTransactions)
                 {
                     text = "There are uncommitted transactions. Do you wish to commit these transactions before closing the window?";
-                    string caption = Application.Instance.Name;
+                    string caption = DataCommanderApplication.Instance.Name;
                     var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
                     switch (result)
                     {
@@ -2664,7 +2561,7 @@ namespace DataCommander
                     if (length > 0)
                     {
                         text = string.Format("The text in {0} has been changed.\r\nDo you want to save the changes?", this.Text);
-                        string caption = Application.Instance.Name;
+                        string caption = DataCommanderApplication.Instance.Name;
                         DialogResult result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 
                         switch (result)
@@ -2694,7 +2591,7 @@ namespace DataCommander
             else
             {
                 text = "Are you sure you wish to cancel this query?";
-                string caption = Application.Instance.Name;
+                string caption = DataCommanderApplication.Instance.Name;
                 DialogResult result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 
                 if (result == DialogResult.Yes)
@@ -3171,7 +3068,7 @@ namespace DataCommander
             if (!found)
             {
                 string message = string.Format("The specified text was not found.\r\n\r\nText: {0}\r\nControl: {1}", text, control.Name);
-                MessageBox.Show(this, message, Application.Instance.Name);
+                MessageBox.Show(this, message, DataCommanderApplication.Instance.Name);
             }
         }
 
@@ -3802,7 +3699,7 @@ namespace DataCommander
 
         private void mnuDuplicateConnection_Click(object sender, EventArgs e)
         {
-            var mainForm = Application.Instance.MainForm;
+            var mainForm = DataCommanderApplication.Instance.MainForm;
             int index = mainForm.MdiChildren.Length;
 
             var connection = this.provider.CreateConnection(this.connectionString);
@@ -3935,7 +3832,7 @@ namespace DataCommander
             SqlStatement sqlStatement = new SqlStatement(this.Query);
             IDbCommand command = sqlStatement.CreateCommand(this.provider, this.connection, this.commandType, this.commandTimeout);
 
-            Form[] forms = Application.Instance.MainForm.MdiChildren;
+            Form[] forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
             int index = Array.IndexOf(forms, this);
             IProvider destinationProvider;
 
@@ -4010,7 +3907,7 @@ namespace DataCommander
 
         internal void CopyTable()
         {
-            var forms = Application.Instance.MainForm.MdiChildren;
+            var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
             int index = Array.IndexOf(forms, this);
             if (index < forms.Length - 1)
             {
@@ -4055,7 +3952,7 @@ namespace DataCommander
 
         internal void CopyTableWithSqlBulkCopy()
         {
-            var forms = Application.Instance.MainForm.MdiChildren;
+            var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
             int index = Array.IndexOf(forms, this);
             if (index < forms.Length - 1)
             {
@@ -4108,7 +4005,7 @@ namespace DataCommander
 
         public static void ShowText(string text)
         {
-            var mainForm = Application.Instance.MainForm;
+            var mainForm = DataCommanderApplication.Instance.MainForm;
             mainForm.Cursor = Cursors.WaitCursor;
             var queryForm = (QueryForm)mainForm.ActiveMdiChild;
 

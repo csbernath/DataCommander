@@ -5,7 +5,6 @@
     using System.Data;
     using System.Data.SqlServerCe;
     using System.Windows.Forms;
-    using Application = DataCommander.Providers.Application;
 
     internal sealed class TableCollectionNode : ITreeNode
     {
@@ -92,7 +91,7 @@
 
         private void CompactDatabase(object sender, EventArgs e)
         {
-            var form = Application.Instance.MainForm.ActiveMdiChild;
+            var form = DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
             var cursor = form.Cursor;
             try
             {

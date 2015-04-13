@@ -20,7 +20,6 @@ namespace DataCommander
     using DataCommander.Foundation.Threading;
     using DataCommander.Foundation.Windows.Forms;
     using DataCommander.Providers;
-    using Application = DataCommander.Providers.Application;
 
     /// <summary>
     /// Summary description for MainForm.
@@ -522,7 +521,7 @@ namespace DataCommander
 
         private void SaveLayout()
         {
-            ApplicationData applicationData = Application.Instance.ApplicationData;
+            ApplicationData applicationData = DataCommanderApplication.Instance.ApplicationData;
             FormPosition.Save(this, applicationData);
             ConfigurationNode folder = applicationData.CurrentType;
             string[] array = new string[this.recentFileList.Count];
@@ -557,7 +556,7 @@ namespace DataCommander
 
         private void LoadLayout()
         {
-            ApplicationData applicationData = Application.Instance.ApplicationData;
+            ApplicationData applicationData = DataCommanderApplication.Instance.ApplicationData;
             FormPosition.Load(applicationData, this);
             ConfigurationNode folder = applicationData.CurrentType;
             string[] array;
@@ -673,7 +672,7 @@ namespace DataCommander
                     connectionProperties.ConnectionName = null;
                     connectionProperties.ProviderName = provider.Name;
                     connectionProperties.ConnectionString = connectionString;
-                    var node = Application.Instance.ConnectionsConfigurationNode;
+                    var node = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
                     var subNode = new ConfigurationNode(null);
                     node.AddChildNode(subNode);
                     connectionProperties.Save(subNode);
@@ -771,7 +770,7 @@ namespace DataCommander
             if (dialogResult == DialogResult.OK)
             {
                 this.font = fontDialog.Font;
-                ApplicationData applicationData = Application.Instance.ApplicationData;
+                ApplicationData applicationData = DataCommanderApplication.Instance.ApplicationData;
                 ConfigurationNode propertyFolder = applicationData.CurrentType;
                 propertyFolder.Attributes.SetAttributeValue("Font", Serialize(this.font));
             }

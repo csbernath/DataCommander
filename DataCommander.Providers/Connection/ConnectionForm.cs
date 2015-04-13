@@ -51,7 +51,7 @@ namespace DataCommander.Providers
             this.dataTable.Columns.Add("Extended Properties");
             this.dataTable.Columns.Add("Naming");
 
-            ConfigurationNode folder = Application.Instance.ConnectionsConfigurationNode;
+            ConfigurationNode folder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
 
             foreach (ConfigurationNode subFolder in folder.ChildNodes)
             {
@@ -314,9 +314,9 @@ namespace DataCommander.Providers
 
         private void Delete()
         {
-            if (MessageBox.Show(this, "Do you want to delete the selected item(s)?", Application.Instance.Name, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            if (MessageBox.Show(this, "Do you want to delete the selected item(s)?", DataCommanderApplication.Instance.Name, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
-                ConfigurationNode connectionsFolder = Application.Instance.ConnectionsConfigurationNode;
+                ConfigurationNode connectionsFolder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
                 int index = this.SelectedIndex;
                 ConfigurationNode selectedFolder = connectionsFolder.ChildNodes[index];
                 connectionsFolder.RemoveChildNode(selectedFolder);
@@ -352,7 +352,7 @@ namespace DataCommander.Providers
         private void MoveDown()
         {
             int index = this.SelectedIndex;
-            ConfigurationNode connectionsFolder = Application.Instance.ConnectionsConfigurationNode;
+            ConfigurationNode connectionsFolder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
 
             if (index < connectionsFolder.ChildNodes.Count - 1)
             {
@@ -379,7 +379,7 @@ namespace DataCommander.Providers
 
             if (index > 0)
             {
-                ConfigurationNode connectionsFolder = Application.Instance.ConnectionsConfigurationNode;
+                ConfigurationNode connectionsFolder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
                 ConfigurationNode folder = connectionsFolder.ChildNodes[index];
                 connectionsFolder.RemoveChildNode(folder);
                 connectionsFolder.InsertChildNode(index - 1, folder);
@@ -486,7 +486,7 @@ namespace DataCommander.Providers
 
                 if (index >= 0)
                 {
-                    folder = Application.Instance.ConnectionsConfigurationNode;
+                    folder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
                     folder = folder.ChildNodes[index];
                 }
                 else
@@ -500,7 +500,7 @@ namespace DataCommander.Providers
 
         private ConfigurationNode ToConfigurationNode(int index)
         {
-            ConfigurationNode node = Application.Instance.ConnectionsConfigurationNode;
+            ConfigurationNode node = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
             node = node.ChildNodes[index];
             return node;
         }
@@ -523,7 +523,7 @@ namespace DataCommander.Providers
             {
                 if (MessageBox.Show(this, "Do you want to save changes?", null, MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    Application.Instance.SaveApplicationData();
+                    DataCommanderApplication.Instance.SaveApplicationData();
                 }
             }
             var connectionProperties = new ConnectionProperties();
@@ -602,7 +602,7 @@ namespace DataCommander.Providers
 
         private void Add(ConnectionProperties connectionProperties)
         {
-            ConfigurationNode node = Application.Instance.ConnectionsConfigurationNode;
+            ConfigurationNode node = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
             ConfigurationNode subFolder = new ConfigurationNode(null);
             node.AddChildNode(subFolder);
             connectionProperties.Save(subFolder);

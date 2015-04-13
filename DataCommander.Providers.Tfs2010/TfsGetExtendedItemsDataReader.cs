@@ -92,7 +92,7 @@
                     name = "(not found)";
                 }
 
-                var queryForm = (QueryForm) Application.Instance.MainForm.ActiveMdiChild;
+                var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
                 queryForm.AddInfoMessage( new InfoMessage( LocalTime.Default.Now, InfoMessageSeverity.Information, string.Format( "\r\nworkspace.Name: {0}\r\nworkingFolder.LocalItem: {1}", name, workingFolder.LocalItem ) ) );
             }
 

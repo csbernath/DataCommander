@@ -89,7 +89,7 @@
 						}
 					}
 
-					var queryForm = (QueryForm) Application.Instance.MainForm.ActiveMdiChild;
+					var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
                     queryForm.AddInfoMessage( new InfoMessage( LocalTime.Default.Now, InfoMessageSeverity.Information, string.Format( "localPath: {0}", this.localPath ) ) );
 
 

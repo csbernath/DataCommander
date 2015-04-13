@@ -1,14 +1,15 @@
-namespace DataCommander.Foundation.Data
+namespace DataCommander.Providers
 {
+    using ADODB;
+    using DataCommander.Foundation.Data;
     using System;
     using System.Data;
     using System.Data.OleDb;
-    using ADODB;
 
     /// <summary>
     /// 
     /// </summary>
-    public static class OleDBHelper
+    public static class OleDbHelper
     {
         /// <summary>
         /// 
