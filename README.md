@@ -105,6 +105,34 @@ Query TextBox
   * Provider specific keywords are marked with red.
   * The Data Commander specific exec keyword is marked with green.
 
+|Function|Hotkey|
+|--------|------|
+|Database/Connect to data source|Ctrl+N|
+|Database/Open file based data source|Ctrl+O|
+|Database/Save all|Ctrl+Shift+S|
+|Database/Exit|Alt+F4|
+|Edit/Paste|Ctrl+V|
+|Edit/Find|Ctrl+F|
+|Edit/Find Next|F3|
+|Edit/List Members|Ctrl+J|
+|Edit/Goto|Ctrl+G|
+|Query/Describe Parameters|Ctrl+P|
+|Query/Execute Query|Ctrl+E or F5|
+|Query/Execute Query (Single Row)|Ctrl+1|
+|Query/Execute Query (Schema Only)|Ctrl+R|
+|Query/Execute Query (KeyInfo)|Ctrl+K|
+|Query/Execute Query (XML)|Ctrl+Shift+X|
+|Query/Open Table|Ctrl+Shift+O|
+|Query/Parse|Ctrl+F5|
+|Query/Result Mode/Text|Ctrl+T|
+|Query/Result Mode/DataGrid|Ctrl+D|
+|Query/Result Mode/Html|Ctrl+H|
+|Query/Result Mode/ListView|Ctrl+L|
+|Query/Close All TabPages|Ctrl+Shift+F4|
+|Query/Create Insert Statements|Ctrl+I|
+|Object Explorer|F8|
+|Help/Contents|F1|
+
 How to open a file in the query text box
   1.	Drag and drop the file into the query textbox.
   2.	Click Database/Save menu item or press Ctrl+S to save the file.
