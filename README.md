@@ -31,6 +31,18 @@ The editor has syntax highlighting, code completion for SQL statements.
 The output of a query can be displayed as data grid, text, html.
 The data grid can be exported into Excel.
 
+|Provider.Name|Namespace|Description|
+|-------------|---------|-----------|
+|Msi|DataCommander.Providers.Msi|MSI (Windows Installer) provider (implemented in Data Commander) http://wix.codeplex.com/|
+|Odp|Oracle.DataAccess.Client|Oracle .NET Provider from Oracle|
+|OleDb|System.Data.OleDb|OLE DB .NET Data Provider|
+|Oracle|System.Data.Oracle|Oracle .NET Data Provider from Microsoft|
+|SQLite|System.Data.SQLite|SQLite .NET Data Provider from http://system.data.sqlite.org|
+|SqlServer2005|System.Data.SqlClient|Microsoft SQL Server 2005 or greater|
+|SqlServerCe40|System.Data.SqlServerCe|Microsoft SQL Server Compact Edition 4.0|
+|Tfs2010|DataCommander.Providers.Tfs2010|Microsoft Team Foundation Server 2010 (implemented in Data Commander)|
+|Wmi|DataCommander.Provider.Wmi|WMI .NET Data Provider (implemented in Data Commander)
+
 General functions
 -----------------
 Main Form
