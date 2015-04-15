@@ -104,7 +104,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <param name="target"></param>
         public static void Add( string name, object target )
         {
-            Contract.Requires( target != null );
+            Contract.Requires<ArgumentNullException>(target != null);
 
             string typeName = null;
             int size = 0;
@@ -138,7 +138,7 @@ namespace DataCommander.Foundation.Diagnostics
             int size,
             object target )
         {
-            Contract.Requires( target != null );
+            Contract.Requires<ArgumentNullException>(target != null);
 
             long id = Interlocked.Increment( ref GarbageMonitor.id );
             ListItem item = new ListItem( id, name, typeName, size, target );

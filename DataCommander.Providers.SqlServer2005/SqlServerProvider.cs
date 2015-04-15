@@ -1041,7 +1041,7 @@ order by ic.index_column_id
 
         internal static List<InfoMessage> ToInfoMessages(SqlErrorCollection sqlErrors)
         {
-            Contract.Requires(sqlErrors != null);
+            Contract.Requires<ArgumentNullException>(sqlErrors != null);
             DateTime now = LocalTime.Default.Now;
             int count = sqlErrors.Count;
             var messages = new List<InfoMessage>(sqlErrors.Count);

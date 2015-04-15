@@ -83,12 +83,6 @@ namespace DataCommander.Providers
             base.Dispose(disposing);
         }
 
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-            this.queryForm.OnCompletionFormClosed();
-        }
-
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -110,7 +104,6 @@ namespace DataCommander.Providers
             this.Name = "CompletionForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.TopMost = true;
             this.ResumeLayout(false);
 
         }

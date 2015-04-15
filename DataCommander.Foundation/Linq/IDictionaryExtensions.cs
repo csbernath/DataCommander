@@ -66,7 +66,9 @@
         /// <param name="key"></param>
         /// <param name="valueFactory"></param>
         /// <returns></returns>
-        public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key,
+        public static TValue GetOrAdd<TKey, TValue>(
+            this IDictionary<TKey, TValue> dictionary,
+            TKey key,
             Func<TKey, TValue> valueFactory)
         {
             Contract.Requires<ArgumentNullException>(dictionary != null);

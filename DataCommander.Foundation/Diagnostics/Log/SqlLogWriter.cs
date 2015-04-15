@@ -42,9 +42,9 @@ namespace DataCommander.Foundation.Diagnostics
             int commandTimeout,
             SingleThreadPool singleThreadPool)
         {
-            Contract.Requires(createConnection != null);
-            Contract.Requires(logEntryToCommandText != null);
-            Contract.Requires(singleThreadPool != null);
+            Contract.Requires<ArgumentNullException>(createConnection != null);
+            Contract.Requires<ArgumentNullException>(logEntryToCommandText != null);
+            Contract.Requires<ArgumentNullException>(singleThreadPool != null);
 
             this.createConnection = createConnection;
             this.logEntryToCommandText = logEntryToCommandText;
@@ -135,8 +135,8 @@ namespace DataCommander.Foundation.Diagnostics
         {
             try
             {
-                LogEntry[] array = (LogEntry[]) state;
-                StringBuilder sb = new StringBuilder();
+                var array = (LogEntry[])state;
+                var sb = new StringBuilder();
                 string commandText;
 
                 for (int i = 0; i < array.Length; i++)

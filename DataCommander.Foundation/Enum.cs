@@ -17,7 +17,7 @@
         /// <returns></returns>
         public static T Parse( string value )
         {
-            Contract.Requires( typeof(T).IsEnum );
+            Contract.Requires<ArgumentException>(typeof (T).IsEnum);
 
             Type type = typeof(T);
             T t = (T)Enum.Parse( type, value );
@@ -31,7 +31,7 @@
         /// <returns></returns>
         public static T? ToNullableEnum( int? source )
         {
-            Contract.Requires( typeof(T).IsEnum );
+            Contract.Requires<ArgumentException>(typeof (T).IsEnum);
 
             T? target;
             if (source != null)

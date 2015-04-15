@@ -23,7 +23,7 @@
         /// <param name="commandLine"></param>
         public CommandLine(string commandLine)
         {
-            Contract.Requires(commandLine != null);
+            Contract.Requires<ArgumentNullException>(commandLine != null);
 
             this.arguments = new IndexableCollection<CommandLineArgument>(this.listIndex);
             var dictionary = new Dictionary<string, ICollection<CommandLineArgument>>(StringComparer.InvariantCultureIgnoreCase);

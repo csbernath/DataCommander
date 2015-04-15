@@ -11,8 +11,8 @@
 
         public DataReaderContext( IDbCommand command, IDataReader dataReader )
         {
-            Contract.Requires( command != null );
-            Contract.Requires( dataReader != null );
+            Contract.Requires<ArgumentNullException>(command != null);
+            Contract.Requires<ArgumentNullException>(dataReader != null);
 
             this.command = command;
             this.dataReader = dataReader;

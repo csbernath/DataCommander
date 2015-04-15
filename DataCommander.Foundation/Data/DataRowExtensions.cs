@@ -103,36 +103,36 @@
         /// <returns></returns>
         public static StringTable ToStringTable(this IEnumerable<DataRow> dataRows)
         {
-            StringTable st = null;
+            StringTable stringTable = null;
 
             if (dataRows != null)
             {
                 bool first = true;
 
-                foreach (DataRow dataRow in dataRows)
+                foreach (var dataRow in dataRows)
                 {
                     if (first)
                     {
                         first = false;
                         DataTable dataTable = dataRow.Table;
                         int columnCount = dataTable.Columns.Count;
-                        st = new StringTable(columnCount);
-                        DataTableExtensions.WriteHeader(dataTable.Columns, st);
+                        stringTable = new StringTable(columnCount);
+                        DataTableExtensions.WriteHeader(dataTable.Columns, stringTable);
                     }
 
                     object[] itemArray = dataRow.ItemArray;
-                    StringTableRow row = st.NewRow();
+                    StringTableRow row = stringTable.NewRow();
 
                     for (int j = 0; j < itemArray.Length; j++)
                     {
                         row[j] = itemArray[j].ToString();
                     }
 
-                    st.Rows.Add(row);
+                    stringTable.Rows.Add(row);
                 }
             }
 
-            return st;
+            return stringTable;
         }
     }
 }

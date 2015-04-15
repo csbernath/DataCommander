@@ -3234,8 +3234,6 @@ namespace DataCommander
             return response;
         }
 
-        private CompletionForm completionForm;
-
         private void mnuListMembers_Click(object sender, EventArgs e)
         {
             if (this.queryTextBox.KeyboardHandler == null)
@@ -3245,10 +3243,10 @@ namespace DataCommander
                     var response = this.GetCompletion();
                     if (response.Items != null)
                     {
-                        this.completionForm = new CompletionForm(this);
-                        this.completionForm.Initialize(this.queryTextBox, response);
-                        this.completionForm.ItemSelected += new EventHandler<ItemSelectedEventArgs>(this.completionForm_ItemSelected);
-                        this.completionForm.Show();
+                        var completionForm = new CompletionForm(this);
+                        completionForm.Initialize(this.queryTextBox, response);
+                        completionForm.ItemSelected += new EventHandler<ItemSelectedEventArgs>(this.completionForm_ItemSelected);
+                        completionForm.Show(this);
                         this.queryTextBox.RichTextBox.Focus();
                     }
                 }
@@ -3271,11 +3269,6 @@ namespace DataCommander
             textBox.RichTextBox.SelectionStart = e.StartIndex + objectName.Length;
 
             NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.Gdi.SetRedraw, 1, 0);
-        }
-
-        internal void OnCompletionFormClosed()
-        {
-            this.completionForm = null;
         }
 
         private void mnuClearCache_Click(object sender, EventArgs e)

@@ -27,9 +27,9 @@
             Func<T, TKey> keySelector,
             IList<T> list)
         {
-            Contract.Requires(name != null);
-            Contract.Requires(keySelector != null);
-            Contract.Requires(list != null);
+            Contract.Requires<ArgumentNullException>(name != null);
+            Contract.Requires<ArgumentNullException>(keySelector != null);
+            Contract.Requires<ArgumentNullException>(list != null);
 
             this.name = name;
             this.keySelector = keySelector;

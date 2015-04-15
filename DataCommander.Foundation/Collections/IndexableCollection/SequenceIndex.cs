@@ -30,9 +30,9 @@
             Func<T, TKey> getKey,
             IDictionary<TKey, T> dictionary)
         {
-            Contract.Requires(getNextKey != null);
-            Contract.Requires(getKey != null);
-            Contract.Requires(dictionary != null);
+            Contract.Requires<ArgumentNullException>(getNextKey != null);
+            Contract.Requires<ArgumentNullException>(getKey != null);
+            Contract.Requires<ArgumentNullException>(dictionary != null);
 
             this.name = name;
             this.getNextKey = getNextKey;

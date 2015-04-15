@@ -51,7 +51,7 @@
         /// <returns></returns>
         public static DataTable ExecuteDataTable(this IDbCommand command)
         {
-            Contract.Requires(command != null);
+            Contract.Requires<ArgumentNullException>(command != null);
 
             var dataTable = new DataTable
             {
@@ -70,12 +70,12 @@
         /// <returns></returns>
         public static T ExecuteScalarValue<T>(this IDbCommand command)
         {
-            Contract.Requires(command != null);
+            Contract.Requires<ArgumentNullException>(command != null);
 
             object scalar = command.ExecuteScalar();
             Contract.Assert(scalar is T);
 
-            return (T) scalar;
+            return (T)scalar;
         }
 
         /// <summary>
@@ -86,7 +86,7 @@
         /// <returns></returns>
         public static T ExecuteScalarValueOrDefault<T>(this IDbCommand command)
         {
-            Contract.Requires(command != null);
+            Contract.Requires<ArgumentNullException>(command != null);
 
             object scalar = command.ExecuteScalar();
             return Database.GetValueOrDefault<T>(scalar);
@@ -102,8 +102,8 @@
             this IDbCommand command,
             DataSet dataSet)
         {
-            Contract.Requires(command != null);
-            Contract.Requires(dataSet != null);
+            Contract.Requires<ArgumentNullException>(command != null);
+            Contract.Requires<ArgumentNullException>(dataSet != null);
 
             int rowCount = 0;
             int resultIndex = 0;
@@ -114,7 +114,7 @@
             {
                 IDbConnection connection = command.Connection;
 
-                using (ConnectionStateManager connectionStateManager = new ConnectionStateManager(connection))
+                using (var connectionStateManager = new ConnectionStateManager(connection))
                 {
                     connectionStateManager.Open();
 
@@ -179,7 +179,7 @@
             this IDbCommand command,
             DataTable dataTable)
         {
-            Contract.Requires(command != null);
+            Contract.Requires<ArgumentNullException>(command != null);
 
             int rowCount = 0;
             WorkerThread thread = WorkerThread.Current;
@@ -216,7 +216,7 @@
         /// <returns></returns>
         public static string ToLogString(this IDbCommand command)
         {
-            Contract.Requires(command != null);
+            Contract.Requires<ArgumentNullException>(command != null);
 
             var sb = new StringBuilder();
 

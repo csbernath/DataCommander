@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Collections.IndexableCollection
+﻿namespace DataCommander.Foundation.Collections
 {
     using System;
     using System.Collections;

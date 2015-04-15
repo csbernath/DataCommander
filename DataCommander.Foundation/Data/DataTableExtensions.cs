@@ -107,25 +107,28 @@
             stringTable.Rows.Add(row);
         }
 
-        internal static void WriteHeaderSeparator(StringTable st)
+        internal static void WriteHeaderSeparator(StringTable stringTable)
         {
-            int columnCount = st.Columns.Count;
-            StringTableRow row = st.NewRow();
+            int columnCount = stringTable.Columns.Count;
+            StringTableRow row = stringTable.NewRow();
 
             for (int i = 0; i < columnCount; i++)
             {
-                StringTableColumn column = st.Columns[i];
-                int width = st.GetMaxColumnWidth(i);
+                StringTableColumn column = stringTable.Columns[i];
+                int width = stringTable.GetMaxColumnWidth(i);
                 row[i] = new string('-', width);
             }
 
-            st.Rows.Insert(1, row);
+            stringTable.Rows.Insert(1, row);
         }
 
         internal static void WriteHeader(
             DataColumn[] dataColumns,
             StringTable stringTable)
         {
+            Contract.Requires<ArgumentNullException>(dataColumns != null);
+            Contract.Requires<ArgumentNullException>(stringTable != null);
+
             StringTableRow row1 = stringTable.NewRow();
             StringTableRow row2 = stringTable.NewRow();
 

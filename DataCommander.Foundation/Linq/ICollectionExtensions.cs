@@ -135,7 +135,7 @@
         /// <returns></returns>
         public static T[] ToArray<T>(ICollection<T> source)
         {
-            Contract.Requires(source != null);
+            Contract.Requires<ArgumentNullException>(source != null);
 
             var target = new T[source.Count];
             source.CopyTo(target, 0);
@@ -165,7 +165,7 @@
             /// <param name="source"></param>
             public CastedCollection(ICollection source)
             {
-                Contract.Requires(source != null);
+                Contract.Requires<ArgumentNullException>(source != null);
                 this.source = source;
                 this.sourceAsList = source as IList;
             }

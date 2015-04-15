@@ -15,9 +15,9 @@ namespace DataCommander.Foundation.Collections
         /// 
         /// </summary>
         /// <param name="pool"></param>
-        public PooledObject( ObjectPool<T> pool )
+        public PooledObject(ObjectPool<T> pool)
         {
-            Contract.Requires(pool != null);
+            Contract.Requires<ArgumentNullException>(pool != null);
 
             this.pool = pool;
             this.item = pool.CreateObject();
@@ -39,7 +39,7 @@ namespace DataCommander.Foundation.Collections
         /// </summary>
         public void Dispose()
         {
-            this.pool.DestroyObject( this.item );
+            this.pool.DestroyObject(this.item);
         }
     }
 }

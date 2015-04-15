@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Collections.IndexableCollection
+﻿namespace DataCommander.Foundation.Collections
 {
     using System;
     using System.Collections;
@@ -57,12 +57,18 @@
 
         int ICollection<T>.Count
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         bool ICollection<T>.IsReadOnly
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         bool ICollection<T>.Remove(T item)

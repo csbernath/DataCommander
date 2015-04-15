@@ -22,16 +22,16 @@
             IDbCommand command,
             EventHandler<BeforeExecuteCommandEventArgs> beforeExecuteCommand,
             EventHandler<AfterExecuteCommandEventArgs> afterExecuteCommand,
-            EventHandler<AfterReadEventArgs> afterRead )
+            EventHandler<AfterReadEventArgs> afterRead)
         {
-            Contract.Requires( command != null );
-            Contract.Requires( beforeExecuteCommand != null );
-            Contract.Requires( afterExecuteCommand != null );
-            Contract.Requires( afterRead != null );
+            Contract.Requires<ArgumentNullException>(command != null);
+            Contract.Requires<ArgumentNullException>(beforeExecuteCommand != null);
+            Contract.Requires<ArgumentNullException>(afterExecuteCommand != null);
+            Contract.Requires<ArgumentNullException>(afterRead != null);
 
-            Contract.Ensures( this.command != null );
+            Contract.Ensures(this.command != null);
 
-            this.commandId = Interlocked.Increment( ref commandIdCounter );
+            this.commandId = Interlocked.Increment(ref commandIdCounter);
             this.command = command;
             this.beforeExecuteCommand = beforeExecuteCommand;
             this.afterExecuteCommand = afterExecuteCommand;
@@ -104,12 +104,12 @@
 
         int IDbCommand.ExecuteNonQuery()
         {
-            var commandInfo = new Lazy<LoggedDbCommandInfo>( () => this.CreateLoggedDbCommandInfo( LoggedDbCommandExecutionType.NonQuery ) );
+            var commandInfo = new Lazy<LoggedDbCommandInfo>(() => this.CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.NonQuery));
 
             if (this.beforeExecuteCommand != null)
             {
-                var eventArgs = new BeforeExecuteCommandEventArgs( commandInfo.Value );
-                this.beforeExecuteCommand( this, eventArgs );
+                var eventArgs = new BeforeExecuteCommandEventArgs(commandInfo.Value);
+                this.beforeExecuteCommand(this, eventArgs);
             }
 
             int rowCount;
@@ -128,8 +128,8 @@
                 }
                 finally
                 {
-                    var eventArgs = new AfterExecuteCommandEventArgs( commandInfo.Value, exception );
-                    this.afterExecuteCommand( this, eventArgs );
+                    var eventArgs = new AfterExecuteCommandEventArgs(commandInfo.Value, exception);
+                    this.afterExecuteCommand(this, eventArgs);
                 }
             }
             else
@@ -140,14 +140,14 @@
             return rowCount;
         }
 
-        IDataReader IDbCommand.ExecuteReader( CommandBehavior behavior )
+        IDataReader IDbCommand.ExecuteReader(CommandBehavior behavior)
         {
-            var commandInfo = new Lazy<LoggedDbCommandInfo>( () => this.CreateLoggedDbCommandInfo( LoggedDbCommandExecutionType.Reader ) );
+            var commandInfo = new Lazy<LoggedDbCommandInfo>(() => this.CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.Reader));
 
             if (this.beforeExecuteCommand != null)
             {
-                var eventArgs = new BeforeExecuteCommandEventArgs( commandInfo.Value );
-                this.beforeExecuteCommand( this, eventArgs );
+                var eventArgs = new BeforeExecuteCommandEventArgs(commandInfo.Value);
+                this.beforeExecuteCommand(this, eventArgs);
             }
 
             IDataReader dataReader;
@@ -166,8 +166,8 @@
                 }
                 finally
                 {
-                    var eventArgs = new AfterExecuteCommandEventArgs( commandInfo.Value, exception );
-                    this.afterExecuteCommand( this, eventArgs );
+                    var eventArgs = new AfterExecuteCommandEventArgs(commandInfo.Value, exception);
+                    this.afterExecuteCommand(this, eventArgs);
                 }
             }
             else
@@ -175,22 +175,22 @@
                 dataReader = this.command.ExecuteReader();
             }
 
-            return new LoggedDataReader( dataReader, this.afterRead );
+            return new LoggedDataReader(dataReader, this.afterRead);
         }
 
         IDataReader IDbCommand.ExecuteReader()
         {
             var dbCommand = (IDbCommand)this;
-            return dbCommand.ExecuteReader( CommandBehavior.Default );
+            return dbCommand.ExecuteReader(CommandBehavior.Default);
         }
 
         object IDbCommand.ExecuteScalar()
         {
-            var commandInfo = new Lazy<LoggedDbCommandInfo>( () => this.CreateLoggedDbCommandInfo( LoggedDbCommandExecutionType.Scalar ) );
+            var commandInfo = new Lazy<LoggedDbCommandInfo>(() => this.CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.Scalar));
             if (this.beforeExecuteCommand != null)
             {
-                var eventArgs = new BeforeExecuteCommandEventArgs( commandInfo.Value );
-                this.beforeExecuteCommand( this, eventArgs );
+                var eventArgs = new BeforeExecuteCommandEventArgs(commandInfo.Value);
+                this.beforeExecuteCommand(this, eventArgs);
             }
 
             object scalar;
@@ -209,8 +209,8 @@
                 }
                 finally
                 {
-                    var args = new AfterExecuteCommandEventArgs( commandInfo.Value, exception );
-                    this.afterExecuteCommand( this, args );
+                    var args = new AfterExecuteCommandEventArgs(commandInfo.Value, exception);
+                    this.afterExecuteCommand(this, args);
                 }
             }
             else
@@ -273,7 +273,7 @@
 
         #region Private Methods
 
-        private LoggedDbCommandInfo CreateLoggedDbCommandInfo( LoggedDbCommandExecutionType executionType )
+        private LoggedDbCommandInfo CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType executionType)
         {
             var connection = this.command.Connection;
 
@@ -285,7 +285,7 @@
                 this.command.CommandType,
                 this.command.CommandTimeout,
                 this.command.CommandText,
-                this.command.Parameters.ToLogString() );
+                this.command.Parameters.ToLogString());
         }
 
         #endregion

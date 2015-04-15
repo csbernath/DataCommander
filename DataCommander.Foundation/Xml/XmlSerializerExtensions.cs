@@ -1,5 +1,6 @@
 ﻿namespace DataCommander.Foundation.Xml
 {
+    using System;
     using System.Diagnostics.Contracts;
     using System.Text;
     using System.Xml;
@@ -17,15 +18,15 @@
         /// <param name="xmlWriterSettings"></param>
         /// <param name="o"></param>
         /// <returns></returns>
-        public static string SerializeToXmlString( this XmlSerializer xmlSerializer, XmlWriterSettings xmlWriterSettings, object o )
+        public static string SerializeToXmlString(this XmlSerializer xmlSerializer, XmlWriterSettings xmlWriterSettings, object o)
         {
-            Contract.Requires( xmlSerializer != null );
+            Contract.Requires<ArgumentNullException>(xmlSerializer != null);
 
             var sb = new StringBuilder();
 
-            using (var xmlWriter = XmlWriter.Create( sb, xmlWriterSettings ))
+            using (var xmlWriter = XmlWriter.Create(sb, xmlWriterSettings))
             {
-                xmlSerializer.Serialize( xmlWriter, o );
+                xmlSerializer.Serialize(xmlWriter, o);
             }
 
             return sb.ToString();

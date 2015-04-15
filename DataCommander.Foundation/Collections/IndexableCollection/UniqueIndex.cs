@@ -25,9 +25,9 @@
         public UniqueIndex(
             string name,
             Func<T, GetKeyResponse<TKey>> getKey,
-            IDictionary<TKey, T> dictionary )
+            IDictionary<TKey, T> dictionary)
         {
-            this.Initialize( name, getKey, dictionary );
+            this.Initialize(name, getKey, dictionary);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@
         public UniqueIndex(
             string name,
             Func<T, GetKeyResponse<TKey>> getKey,
-            SortOrder sortOrder )
+            SortOrder sortOrder)
         {
             IDictionary<TKey, T> dictionary;
             switch (sortOrder)
@@ -50,7 +50,7 @@
 
                 case SortOrder.Descending:
                     var comparer = ReversedComparer<TKey>.Default;
-                    dictionary = new SortedDictionary<TKey, T>( comparer );
+                    dictionary = new SortedDictionary<TKey, T>(comparer);
                     break;
 
                 case SortOrder.None:
@@ -61,7 +61,7 @@
                     throw new ArgumentException();
             }
 
-            this.Initialize( name, getKey, dictionary );
+            this.Initialize(name, getKey, dictionary);
         }
 
         /// <summary>
@@ -80,11 +80,11 @@
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public T this[ TKey key ]
+        public T this[TKey key]
         {
             get
             {
-                return this.dictionary[ key ];
+                return this.dictionary[key];
             }
 
             set
@@ -99,9 +99,9 @@
         /// <param name="key"></param>
         /// <returns></returns>
         [Pure]
-        public bool ContainsKey( TKey key )
+        public bool ContainsKey(TKey key)
         {
-            return this.dictionary.ContainsKey( key );
+            return this.dictionary.ContainsKey(key);
         }
 
         #region ICollectionIndex<TKey,T> Members
@@ -133,9 +133,9 @@
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
-        public void CopyTo( T[] array, int arrayIndex )
+        public void CopyTo(T[] array, int arrayIndex)
         {
-            this.dictionary.Values.CopyTo( array, arrayIndex );
+            this.dictionary.Values.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -144,9 +144,9 @@
         /// <param name="key"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool TryGetValue( TKey key, out T item )
+        public bool TryGetValue(TKey key, out T item)
         {
-            return this.dictionary.TryGetValue( key, out item );
+            return this.dictionary.TryGetValue(key, out item);
         }
 
         /// <summary>
@@ -166,15 +166,15 @@
         /// 
         /// </summary>
         /// <param name="item"></param>
-        void ICollection<T>.Add( T item )
+        void ICollection<T>.Add(T item)
         {
-            var response = this.getKey( item );
+            var response = this.getKey(item);
 
             if (response.HasKey)
             {
                 var key = response.Key;
-                Contract.Assert( !this.dictionary.ContainsKey( key ) );
-                this.dictionary.Add( key, item );
+                Contract.Assert(!this.dictionary.ContainsKey(key));
+                this.dictionary.Add(key, item);
             }
         }
 
@@ -191,16 +191,16 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool Contains( T item )
+        public bool Contains(T item)
         {
-            Contract.Assert( item != null );
+            Contract.Assert(item != null);
 
-            var response = this.getKey( item );
+            var response = this.getKey(item);
             bool contains;
 
             if (response.HasKey)
             {
-                contains = this.dictionary.ContainsKey( response.Key );
+                contains = this.dictionary.ContainsKey(response.Key);
             }
             else
             {
@@ -215,16 +215,16 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        bool ICollection<T>.Remove( T item )
+        bool ICollection<T>.Remove(T item)
         {
-            Contract.Assert( item != null );
+            Contract.Assert(item != null);
 
-            var response = this.getKey( item );
+            var response = this.getKey(item);
             bool succeeded;
 
             if (response.HasKey)
             {
-                succeeded = this.dictionary.Remove( response.Key );
+                succeeded = this.dictionary.Remove(response.Key);
             }
             else
             {
@@ -269,7 +269,7 @@
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        void IDictionary<TKey, T>.Add( TKey key, T value )
+        void IDictionary<TKey, T>.Add(TKey key, T value)
         {
             throw new NotSupportedException();
         }
@@ -290,7 +290,7 @@
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        bool IDictionary<TKey, T>.Remove( TKey key )
+        bool IDictionary<TKey, T>.Remove(TKey key)
         {
             throw new NotSupportedException();
         }
@@ -314,7 +314,7 @@
         /// 
         /// </summary>
         /// <param name="item"></param>
-        void ICollection<KeyValuePair<TKey, T>>.Add( KeyValuePair<TKey, T> item )
+        void ICollection<KeyValuePair<TKey, T>>.Add(KeyValuePair<TKey, T> item)
         {
             throw new NotSupportedException();
         }
@@ -324,7 +324,7 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        bool ICollection<KeyValuePair<TKey, T>>.Contains( KeyValuePair<TKey, T> item )
+        bool ICollection<KeyValuePair<TKey, T>>.Contains(KeyValuePair<TKey, T> item)
         {
             throw new NotSupportedException();
         }
@@ -339,7 +339,7 @@
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
-        void ICollection<KeyValuePair<TKey, T>>.CopyTo( KeyValuePair<TKey, T>[] array, int arrayIndex )
+        void ICollection<KeyValuePair<TKey, T>>.CopyTo(KeyValuePair<TKey, T>[] array, int arrayIndex)
         {
             throw new NotSupportedException();
         }
@@ -349,18 +349,18 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool Remove( KeyValuePair<TKey, T> item )
+        public bool Remove(KeyValuePair<TKey, T> item)
         {
             throw new NotSupportedException();
         }
 
         #endregion
 
-        private void Initialize( string name, Func<T, GetKeyResponse<TKey>> getKey, IDictionary<TKey, T> dictionary )
+        private void Initialize(string name, Func<T, GetKeyResponse<TKey>> getKey, IDictionary<TKey, T> dictionary)
         {
-            Contract.Requires( name != null );
-            Contract.Requires( getKey != null );
-            Contract.Requires( dictionary != null );
+            Contract.Requires<ArgumentNullException>(name != null);
+            Contract.Requires<ArgumentNullException>(getKey != null);
+            Contract.Requires<ArgumentNullException>(dictionary != null);
 
             this.name = name;
             this.getKey = getKey;

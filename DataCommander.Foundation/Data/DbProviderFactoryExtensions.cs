@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Foundation.Data
+﻿using System;
+
+namespace DataCommander.Foundation.Data
 {
     using System.Data;
     using System.Data.Common;
@@ -22,8 +24,8 @@
             DbConnection connection,
             string commandText)
         {
-            Contract.Requires(factory != null);
-            Contract.Requires(connection != null);
+            Contract.Requires<ArgumentNullException>(factory != null);
+            Contract.Requires<ArgumentNullException>(connection != null);
 
             var command = connection.CreateCommand();
             command.CommandText = commandText;

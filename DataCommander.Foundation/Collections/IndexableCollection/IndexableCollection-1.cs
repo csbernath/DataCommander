@@ -1,5 +1,6 @@
 ﻿namespace DataCommander.Foundation.Collections
 {
+    using System;
     using System.Diagnostics.Contracts;
 
     /// <summary>
@@ -48,13 +49,13 @@
         /// 
         /// </summary>
         /// <param name="defaultIndex"></param>
-        public IndexableCollection( ICollectionIndex<T> defaultIndex )
+        public IndexableCollection(ICollectionIndex<T> defaultIndex)
         {
-            Contract.Requires( defaultIndex != null );
-            Contract.Ensures( this.indexes.Count == 1 );
+            Contract.Requires<ArgumentNullException>(defaultIndex != null);
+            Contract.Ensures(this.indexes.Count == 1);
 
             this.defaultIndex = defaultIndex;
-            this.indexes.Add( defaultIndex );
+            this.indexes.Add(defaultIndex);
         }
 
         /// <summary>
@@ -71,9 +72,9 @@
         [ContractInvariantMethod]
         private void ContractInvariant()
         {
-            Contract.Invariant( this.indexes != null );
-            Contract.Invariant( this.defaultIndex != null );
-            Contract.Invariant( this.indexes.Count > 0 );
+            Contract.Invariant(this.indexes != null);
+            Contract.Invariant(this.defaultIndex != null);
+            Contract.Invariant(this.indexes.Count > 0);
         }
     }
 }

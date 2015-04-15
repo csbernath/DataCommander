@@ -289,9 +289,9 @@
             IDictionary<TKey, ICollection<T>> dictionary,
             Func<ICollection<T>> createCollection)
         {
-            Contract.Requires(getKey != null);
-            Contract.Requires(dictionary != null);
-            Contract.Requires(createCollection != null);
+            Contract.Requires<ArgumentNullException>(getKey != null);
+            Contract.Requires<ArgumentNullException>(dictionary != null);
+            Contract.Requires<ArgumentNullException>(createCollection != null);
 
             this.name = name;
             this.getKey = getKey;

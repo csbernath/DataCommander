@@ -19,7 +19,13 @@ namespace DataCommander.Providers
 
                 foreach (var childNode in node.ChildNodes)
                 {
-                    providers.Add(childNode.Name);
+                    bool enabled;
+                    childNode.Attributes.TryGetAttributeValue("Enabled",out enabled);
+
+                    if (enabled)
+                    {
+                        providers.Add(childNode.Name);
+                    }
                 }
 
                 return providers;

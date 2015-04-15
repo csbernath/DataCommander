@@ -57,20 +57,6 @@ namespace DataCommander.Foundation.Linq
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="enumerable"></param>
-        /// <returns></returns>
-        public static IEnumerable<TSource> AsEnumerable<TSource>(this IEnumerable enumerable)
-        {
-            foreach (TSource item in enumerable)
-            {
-                yield return item;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="source"></param>
         /// <typeparam name="TSource"></typeparam>
         /// <returns></returns>

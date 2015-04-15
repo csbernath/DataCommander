@@ -224,7 +224,7 @@ namespace DataCommander.Foundation.Configuration
             /// <returns></returns>        
             public static XmlElement Serialize(object obj)
             {
-                Contract.Requires(obj != null);
+                Contract.Requires<ArgumentNullException>(obj != null);
 
                 Type type = obj.GetType();
                 var xmlSerializer = new XmlSerializer(type);

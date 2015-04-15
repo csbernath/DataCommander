@@ -11,7 +11,7 @@
     /// </summary>
     /// <param name="values"></param>
     /// <returns></returns>
-    public delegate int GetValues( object[] values );
+    public delegate int GetValues(object[] values);
 
     /// <summary>
     /// 
@@ -26,10 +26,10 @@
         /// </summary>
         /// <param name="dataReader"></param>
         /// <param name="getValues"></param>
-        public MappedDataReader( IDataReader dataReader, GetValues getValues )
+        public MappedDataReader(IDataReader dataReader, GetValues getValues)
         {
-            Contract.Requires( dataReader != null );
-            Contract.Requires( getValues != null );
+            Contract.Requires<ArgumentNullException>(dataReader != null);
+            Contract.Requires<ArgumentNullException>(getValues != null);
 
             this.dataReader = dataReader;
             this.getValues = getValues;
@@ -70,7 +70,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override bool GetBoolean( int ordinal )
+        public override bool GetBoolean(int ordinal)
         {
             throw new NotImplementedException();
         }
@@ -80,31 +80,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override byte GetByte( int ordinal )
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <param name="dataOffset"></param>
-        /// <param name="buffer"></param>
-        /// <param name="bufferOffset"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
-        public override long GetBytes( int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length )
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ordinal"></param>
-        /// <returns></returns>
-        public override Char GetChar( int ordinal )
+        public override byte GetByte(int ordinal)
         {
             throw new NotImplementedException();
         }
@@ -118,7 +94,7 @@
         /// <param name="bufferOffset"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public override long GetChars( int ordinal, long dataOffset, Char[] buffer, int bufferOffset, int length )
+        public override long GetBytes(int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length)
         {
             throw new NotImplementedException();
         }
@@ -128,7 +104,21 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override string GetDataTypeName( int ordinal )
+        public override Char GetChar(int ordinal)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ordinal"></param>
+        /// <param name="dataOffset"></param>
+        /// <param name="buffer"></param>
+        /// <param name="bufferOffset"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public override long GetChars(int ordinal, long dataOffset, Char[] buffer, int bufferOffset, int length)
         {
             throw new NotImplementedException();
         }
@@ -138,7 +128,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override DateTime GetDateTime( int ordinal )
+        public override string GetDataTypeName(int ordinal)
         {
             throw new NotImplementedException();
         }
@@ -148,7 +138,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override decimal GetDecimal( int ordinal )
+        public override DateTime GetDateTime(int ordinal)
         {
             throw new NotImplementedException();
         }
@@ -158,7 +148,17 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override double GetDouble( int ordinal )
+        public override decimal GetDecimal(int ordinal)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ordinal"></param>
+        /// <returns></returns>
+        public override double GetDouble(int ordinal)
         {
             throw new NotImplementedException();
         }
@@ -177,9 +177,9 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Type GetFieldType( int ordinal )
+        public override Type GetFieldType(int ordinal)
         {
-            return this.dataReader.GetFieldType( ordinal );
+            return this.dataReader.GetFieldType(ordinal);
         }
 
         /// <summary>
@@ -187,7 +187,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override float GetFloat( int ordinal )
+        public override float GetFloat(int ordinal)
         {
             throw new NotImplementedException();
         }
@@ -197,7 +197,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Guid GetGuid( int ordinal )
+        public override Guid GetGuid(int ordinal)
         {
             throw new NotImplementedException();
         }
@@ -207,7 +207,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Int16 GetInt16( int ordinal )
+        public override Int16 GetInt16(int ordinal)
         {
             throw new NotImplementedException();
         }
@@ -217,7 +217,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override int GetInt32( int ordinal )
+        public override int GetInt32(int ordinal)
         {
             throw new NotImplementedException();
         }
@@ -227,7 +227,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override long GetInt64( int ordinal )
+        public override long GetInt64(int ordinal)
         {
             throw new NotImplementedException();
         }
@@ -237,9 +237,9 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override string GetName( int ordinal )
+        public override string GetName(int ordinal)
         {
-            return this.dataReader.GetName( ordinal );
+            return this.dataReader.GetName(ordinal);
         }
 
         /// <summary>
@@ -247,9 +247,9 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public override int GetOrdinal( string name )
+        public override int GetOrdinal(string name)
         {
-            return this.dataReader.GetOrdinal( name );
+            return this.dataReader.GetOrdinal(name);
         }
 
         /// <summary>
@@ -266,7 +266,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override string GetString( int ordinal )
+        public override string GetString(int ordinal)
         {
             throw new NotImplementedException();
         }
@@ -276,7 +276,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override object GetValue( int ordinal )
+        public override object GetValue(int ordinal)
         {
             throw new NotImplementedException();
         }
@@ -286,9 +286,9 @@
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        public override int GetValues( object[] values )
+        public override int GetValues(object[] values)
         {
-            return this.getValues( values );
+            return this.getValues(values);
         }
 
         /// <summary>
@@ -318,9 +318,9 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override bool IsDBNull( int ordinal )
+        public override bool IsDBNull(int ordinal)
         {
-            return this.dataReader.IsDBNull( ordinal );
+            return this.dataReader.IsDBNull(ordinal);
         }
 
         /// <summary>
@@ -357,7 +357,7 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public override object this[ string name ]
+        public override object this[string name]
         {
             get
             {
@@ -370,7 +370,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override object this[ int ordinal ]
+        public override object this[int ordinal]
         {
             get
             {

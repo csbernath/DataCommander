@@ -237,8 +237,8 @@ namespace DataCommander.Foundation.Data
             DbConnection connection,
             string commandText)
         {
-            Contract.Requires(factory != null);
-            Contract.Requires(connection != null);
+            Contract.Requires<ArgumentNullException>(factory != null);
+            Contract.Requires<ArgumentNullException>(connection != null);
 
             var command = connection.CreateCommand();
             command.CommandText = commandText;
@@ -259,8 +259,8 @@ namespace DataCommander.Foundation.Data
             DataTable dataTable,
             TextWriter textWriter)
         {
-            Contract.Requires(dataTable != null);
-            Contract.Requires(textWriter != null);
+            Contract.Requires<ArgumentNullException>(dataTable != null);
+            Contract.Requires<ArgumentNullException>(textWriter != null);
 
             DataColumnCollection columns = dataTable.Columns;
 
@@ -382,9 +382,9 @@ namespace DataCommander.Foundation.Data
             DataRow[] dataRows,
             TextWriter textWriter)
         {
-            Contract.Requires(dataTable != null);
-            Contract.Requires(dataRows != null);
-            Contract.Requires(textWriter != null);
+            Contract.Requires<ArgumentNullException>(dataTable != null);
+            Contract.Requires<ArgumentNullException>(dataRows != null);
+            Contract.Requires<ArgumentNullException>(textWriter != null);
 
             DataColumnCollection columns = dataTable.Columns;
 
@@ -521,7 +521,7 @@ namespace DataCommander.Foundation.Data
             int columnNumber,
             int rowNumber)
         {
-            Contract.Requires(dataTable != null);
+            Contract.Requires<ArgumentNullException>(dataTable != null);
 
             DataColumn dataColumn = dataTable.Columns[columnNumber];
             Type type = dataColumn.DataType;
@@ -706,7 +706,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public object ExecuteScalar(IDbCommand command)
         {
-            Contract.Requires(command != null);
+            Contract.Requires<ArgumentNullException>(command != null);
 
             this.command = command;
             object scalar = command.ExecuteScalar();
@@ -766,7 +766,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public DataTable ExecuteDataTable(IDbCommand command)
         {
-            Contract.Requires(command != null);
+            Contract.Requires<ArgumentNullException>(command != null);
 
             this.command = command;
             var dataTable = new DataTable();
@@ -806,8 +806,8 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public XmlDocument ExecuteXmlDocument(IDbCommand command)
         {
-            Contract.Requires(command != null);
-            Contract.Requires(this.CommandHelper != null);
+            Contract.Requires<ArgumentNullException>(command != null);
+            Contract.Requires<ArgumentNullException>(this.CommandHelper != null);
 
             return this.commandHelper.ExecuteXmlDocument(command);
         }
@@ -852,7 +852,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public DataTable[] FillSchema(IDbCommand command, DataSet dataSet)
         {
-            Contract.Requires(command != null);
+            Contract.Requires<ArgumentNullException>(command != null);
 
             DataTable[] schemaTables;
 
@@ -872,7 +872,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public int Fill(string commandText, DataSet dataSet)
         {
-            Contract.Requires(dataSet != null);
+            Contract.Requires<ArgumentNullException>(dataSet != null);
 
             this.command = this.CreateCommand(commandText);
             this.rowCount = this.command.Fill(dataSet);

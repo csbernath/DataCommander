@@ -189,7 +189,7 @@
 
             public MultipleLog(IEnumerable<LogWriter> logWriters)
             {
-                Contract.Requires(logWriters != null);
+                Contract.Requires<ArgumentNullException>(logWriters != null);
 
                 this.logWriters = logWriters.ToArray();
             }

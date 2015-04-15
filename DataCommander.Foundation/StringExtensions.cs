@@ -11,118 +11,14 @@
     /// </summary>
     public static class StringExtensions
     {
-        private sealed class StringAsList : IList<Char>
-        {
-            private readonly string source;
-
-            public StringAsList( string source )
-            {
-                this.source = source;
-            }
-
-            #region IList<Char> Members
-
-            int IList<Char>.IndexOf( Char item )
-            {
-                throw new NotImplementedException();
-            }
-
-            void IList<Char>.Insert( int index, Char item )
-            {
-                throw new NotImplementedException();
-            }
-
-            void IList<Char>.RemoveAt( int index )
-            {
-                throw new NotImplementedException();
-            }
-
-            Char IList<Char>.this[ int index ]
-            {
-                get
-                {
-                    return this.source[ index ];
-                }
-                set
-                {
-                    throw new NotImplementedException();
-                }
-            }
-
-            #endregion
-
-            #region ICollection<Char> Members
-
-            void ICollection<Char>.Add( Char item )
-            {
-                throw new NotImplementedException();
-            }
-
-            void ICollection<Char>.Clear()
-            {
-                throw new NotImplementedException();
-            }
-
-            bool ICollection<Char>.Contains( Char item )
-            {
-                throw new NotImplementedException();
-            }
-
-            void ICollection<Char>.CopyTo( Char[] array, int arrayIndex )
-            {
-                throw new NotImplementedException();
-            }
-
-            int ICollection<Char>.Count
-            {
-                get
-                {
-                    return this.source.Length;
-                }
-            }
-
-            bool ICollection<Char>.IsReadOnly
-            {
-                get
-                {
-                    return true;
-                }
-            }
-
-            bool ICollection<Char>.Remove( Char item )
-            {
-                throw new NotImplementedException();
-            }
-
-            #endregion
-
-            #region IEnumerable<Char> Members
-
-            IEnumerator<Char> IEnumerable<Char>.GetEnumerator()
-            {
-                throw new NotImplementedException();
-            }
-
-            #endregion
-
-            #region IEnumerable Members
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                throw new NotImplementedException();
-            }
-
-            #endregion
-        }
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static IList<Char> AsList( this string source )
+        public static IList<Char> AsList(this string source)
         {
-            return new StringAsList( source );
+            return new StringAsList(source);
         }
 
         /// <summary>
@@ -131,9 +27,9 @@
         /// <param name="format"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static string Format( this string format, params object[] args )
+        public static string Format(this string format, params object[] args)
         {
-            return string.Format( format, args );
+            return string.Format(format, args);
         }
 
         /// <summary>
@@ -143,9 +39,9 @@
         /// <param name="provider"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static string Format( this string format, IFormatProvider provider, params object[] args )
+        public static string Format(this string format, IFormatProvider provider, params object[] args)
         {
-            return string.Format( provider, format, args );
+            return string.Format(provider, format, args);
         }
 
         /// <summary>
@@ -187,12 +83,12 @@
         }
 
 #if FOUNDATION_3_5
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="separator"></param>
-        /// <param name="values"></param>
-        /// <returns></returns>
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="separator"></param>
+    /// <param name="values"></param>
+    /// <returns></returns>
         public static string Join( string separator, IEnumerable<string> values )
         {
             var sb = new StringBuilder();
@@ -221,9 +117,9 @@
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static DateTime? ParseToNullableDateTime( this string source )
+        public static DateTime? ParseToNullableDateTime(this string source)
         {
-            return string.IsNullOrEmpty( source ) ? (DateTime?)null : DateTime.Parse( source );
+            return string.IsNullOrEmpty(source) ? (DateTime?) null : DateTime.Parse(source);
         }
 
         /// <summary>
@@ -232,9 +128,9 @@
         /// <param name="source"></param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        public static DateTime? ParseToNullableDateTime( this string source, IFormatProvider provider )
+        public static DateTime? ParseToNullableDateTime(this string source, IFormatProvider provider)
         {
-            return string.IsNullOrEmpty( source ) ? (DateTime?)null : DateTime.Parse( source, provider );
+            return string.IsNullOrEmpty(source) ? (DateTime?) null : DateTime.Parse(source, provider);
         }
 
         /// <summary>
@@ -244,9 +140,10 @@
         /// <param name="provider"></param>
         /// <param name="styles"></param>
         /// <returns></returns>
-        public static DateTime? ParseToNullableDateTime( this string source, IFormatProvider provider, DateTimeStyles styles )
+        public static DateTime? ParseToNullableDateTime(this string source, IFormatProvider provider,
+            DateTimeStyles styles)
         {
-            return string.IsNullOrEmpty( source ) ? (DateTime?)null : DateTime.Parse( source, provider, styles );
+            return string.IsNullOrEmpty(source) ? (DateTime?) null : DateTime.Parse(source, provider, styles);
         }
 
         /// <summary>
@@ -256,9 +153,9 @@
         /// <param name="format"></param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        public static DateTime? ParseExactToNullableDateTime( this string source, string format, IFormatProvider provider )
+        public static DateTime? ParseExactToNullableDateTime(this string source, string format, IFormatProvider provider)
         {
-            return string.IsNullOrEmpty( source ) ? (DateTime?)null : DateTime.ParseExact( source, format, provider );
+            return string.IsNullOrEmpty(source) ? (DateTime?) null : DateTime.ParseExact(source, format, provider);
         }
 
         /// <summary>
@@ -266,9 +163,9 @@
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static decimal? ParseToNullableDecimal( this string source )
+        public static decimal? ParseToNullableDecimal(this string source)
         {
-            return string.IsNullOrEmpty( source ) ? (decimal?)null : decimal.Parse( source );
+            return string.IsNullOrEmpty(source) ? (decimal?) null : decimal.Parse(source);
         }
 
         /// <summary>
@@ -277,9 +174,9 @@
         /// <param name="source"></param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        public static decimal? ParseToNullableDecimal( this string source, IFormatProvider provider )
+        public static decimal? ParseToNullableDecimal(this string source, IFormatProvider provider)
         {
-            return string.IsNullOrEmpty( source ) ? (decimal?)null : decimal.Parse( source, provider );
+            return string.IsNullOrEmpty(source) ? (decimal?) null : decimal.Parse(source, provider);
         }
 
         /// <summary>
@@ -289,9 +186,9 @@
         /// <param name="style"></param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        public static decimal? ParseToNullableDecimal( this string source, NumberStyles style, IFormatProvider provider )
+        public static decimal? ParseToNullableDecimal(this string source, NumberStyles style, IFormatProvider provider)
         {
-            return string.IsNullOrEmpty( source ) ? (decimal?)null : decimal.Parse( source, style, provider );
+            return string.IsNullOrEmpty(source) ? (decimal?) null : decimal.Parse(source, style, provider);
         }
 
         /// <summary>
@@ -299,9 +196,9 @@
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static int? ParseToNullableInt32( this string source )
+        public static int? ParseToNullableInt32(this string source)
         {
-            return string.IsNullOrEmpty( source ) ? (int?)null : int.Parse( source );
+            return string.IsNullOrEmpty(source) ? (int?) null : int.Parse(source);
         }
 
         /// <summary>
@@ -310,13 +207,117 @@
         /// <param name="value"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public static string Right( this string value, int length )
+        public static string Right(this string value, int length)
         {
-            Contract.Requires<ArgumentNullException>( value != null );
-            Contract.Requires<ArgumentOutOfRangeException>( value.Length >= length );
+            Contract.Requires<ArgumentNullException>(value != null);
+            Contract.Requires<ArgumentOutOfRangeException>(value.Length >= length);
 
             int startIndex = value.Length - length;
-            return value.Substring( startIndex );
+            return value.Substring(startIndex);
+        }
+
+        private sealed class StringAsList : IList<Char>
+        {
+            private readonly string source;
+
+            public StringAsList(string source)
+            {
+                this.source = source;
+            }
+
+            #region IList<Char> Members
+
+            int IList<Char>.IndexOf(Char item)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IList<Char>.Insert(int index, Char item)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IList<Char>.RemoveAt(int index)
+            {
+                throw new NotImplementedException();
+            }
+
+            Char IList<Char>.this[int index]
+            {
+                get
+                {
+                    return this.source[index];
+                }
+                set
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            #endregion
+
+            #region ICollection<Char> Members
+
+            void ICollection<Char>.Add(Char item)
+            {
+                throw new NotImplementedException();
+            }
+
+            void ICollection<Char>.Clear()
+            {
+                throw new NotImplementedException();
+            }
+
+            bool ICollection<Char>.Contains(Char item)
+            {
+                throw new NotImplementedException();
+            }
+
+            void ICollection<Char>.CopyTo(Char[] array, int arrayIndex)
+            {
+                throw new NotImplementedException();
+            }
+
+            int ICollection<Char>.Count
+            {
+                get
+                {
+                    return this.source.Length;
+                }
+            }
+
+            bool ICollection<Char>.IsReadOnly
+            {
+                get
+                {
+                    return true;
+                }
+            }
+
+            bool ICollection<Char>.Remove(Char item)
+            {
+                throw new NotImplementedException();
+            }
+
+            #endregion
+
+            #region IEnumerable<Char> Members
+
+            IEnumerator<Char> IEnumerable<Char>.GetEnumerator()
+            {
+                throw new NotImplementedException();
+            }
+
+            #endregion
+
+            #region IEnumerable Members
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                throw new NotImplementedException();
+            }
+
+            #endregion
         }
     }
 }

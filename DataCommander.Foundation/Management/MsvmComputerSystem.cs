@@ -179,7 +179,7 @@
             ObjectQuery objectQuery = new ObjectQuery( query );
             ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher( this.managementObject.Scope, objectQuery );
             ManagementObjectCollection managementObjectCollection = managementObjectSearcher.Get();
-            ManagementObject shutdownComponent = managementObjectCollection.AsEnumerable<ManagementObject>().First();
+            ManagementObject shutdownComponent = managementObjectCollection.Cast<ManagementObject>().First();
             object resultObject = shutdownComponent.InvokeMethod(
                 "InitiateShutdown",
                 new object[]

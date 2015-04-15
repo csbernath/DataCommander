@@ -24,9 +24,9 @@
         /// 
         /// </summary>
         /// <param name="createCollection"></param>
-        public LazyCollection( Func<ICollection<T>> createCollection )
+        public LazyCollection(Func<ICollection<T>> createCollection)
         {
-            this.Initialize( createCollection );
+            this.Initialize(createCollection);
         }
 
         /// <summary>
@@ -42,9 +42,9 @@
         /// 
         /// </summary>
         /// <param name="createCollection"></param>
-        protected void Initialize( Func<ICollection<T>> createCollection )
+        protected void Initialize(Func<ICollection<T>> createCollection)
         {
-            Contract.Requires( createCollection != null );
+            Contract.Requires<ArgumentNullException>(createCollection != null);
 
             this.createCollection = createCollection;
         }
@@ -70,10 +70,10 @@
         /// 
         /// </summary>
         /// <param name="item"></param>
-        public void Add( T item )
+        public void Add(T item)
         {
             this.GetCollection();
-            this.collection.Add( item );
+            this.collection.Add(item);
         }
 
         /// <summary>
@@ -92,13 +92,13 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool Contains( T item )
+        public bool Contains(T item)
         {
             bool contains;
 
             if (this.collection != null)
             {
-                contains = this.collection.Contains( item );
+                contains = this.collection.Contains(item);
             }
             else
             {
@@ -113,11 +113,11 @@
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
-        public void CopyTo( T[] array, int arrayIndex )
+        public void CopyTo(T[] array, int arrayIndex)
         {
             if (this.collection != null)
             {
-                this.collection.CopyTo( array, arrayIndex );
+                this.collection.CopyTo(array, arrayIndex);
             }
         }
 
@@ -161,13 +161,13 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool Remove( T item )
+        public bool Remove(T item)
         {
             bool removed;
 
             if (this.collection != null)
             {
-                removed = this.collection.Remove( item );
+                removed = this.collection.Remove(item);
             }
             else
             {
@@ -224,7 +224,7 @@
             if (this.collection == null)
             {
                 this.collection = this.createCollection();
-                Contract.Assert( this.collection != null );
+                Contract.Assert(this.collection != null);
             }
         }
 

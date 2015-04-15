@@ -8,11 +8,15 @@ namespace DataCommander.Providers.SqlServer2005
 
     internal sealed class Connection : ConnectionBase
     {
+        #region Private Fields
+
         private string connectionName;
         private readonly SqlConnectionStringBuilder sqlConnectionStringBuilder;
         private SqlConnection sqlConnection;
         private string serverName;
         private short spid;
+
+        #endregion
 
         public Connection(string connectionString)
         {
@@ -39,34 +43,34 @@ namespace DataCommander.Providers.SqlServer2005
 
         private void CreateConnection()
         {
-            this.sqlConnection = new SqlConnection(this.sqlConnectionStringBuilder.ConnectionString );
+            this.sqlConnection = new SqlConnection(this.sqlConnectionStringBuilder.ConnectionString);
             this.Connection = this.sqlConnection;
             this.sqlConnection.FireInfoMessageEventOnUserErrors = true;
             this.sqlConnection.InfoMessage += this.OnInfoMessage;
             this.sqlConnection.StateChange += this.OnStateChange;
         }
 
-        private void OnStateChange( object sender, StateChangeEventArgs e )
+        private void OnStateChange(object sender, StateChangeEventArgs e)
         {
             DateTime now = LocalTime.Default.Now;
-            string text = string.Format( "Connection.State changed. OriginalState: {0}, CurrentState: {1}", e.OriginalState, e.CurrentState );
+            string text = string.Format("Connection.State changed. OriginalState: {0}, CurrentState: {1}", e.OriginalState, e.CurrentState);
             this.InvokeInfoMessage
-            (
-                new InfoMessage[]
-                {
-                    new InfoMessage(now,InfoMessageSeverity.Information, text)
-                }
-            );
+                (
+                    new InfoMessage[]
+                    {
+                        new InfoMessage(now, InfoMessageSeverity.Information, text)
+                    }
+                );
         }
 
         public override void Open()
         {
             this.sqlConnection.Open();
-            var table = this.sqlConnection.ExecuteDataTable( @"select @@servername,@@spid
-set arithabort on" );
-            var row = table.Rows[ 0 ];
-            this.serverName = (string) row[ 0 ];
-            this.spid = (short) row[ 1 ];
+            var table = this.sqlConnection.ExecuteDataTable(@"select @@servername,@@spid
+set arithabort on");
+            var row = table.Rows[0];
+            this.serverName = (string)row[0];
+            this.spid = (short)row[1];
         }
 
         public override string Caption
@@ -84,17 +88,17 @@ set arithabort on" );
                     userName = this.sqlConnectionStringBuilder.UserID;
                 }
 
-                string caption = string.Format( "{0}.{1} ({2} ({3}))", this.sqlConnection.DataSource, this.sqlConnection.Database,
-                    userName, this.spid );
+                string caption = string.Format("{0}.{1} ({2} ({3}))", this.sqlConnection.DataSource, this.sqlConnection.Database,
+                    userName, this.spid);
 
                 return caption;
             }
         }
 
-        private void OnInfoMessage( object sender, SqlInfoMessageEventArgs e )
+        private void OnInfoMessage(object sender, SqlInfoMessageEventArgs e)
         {
-            var infoMessages = SqlServerProvider.ToInfoMessages( e.Errors );
-            this.InvokeInfoMessage( infoMessages );
+            var infoMessages = SqlServerProvider.ToInfoMessages(e.Errors);
+            this.InvokeInfoMessage(infoMessages);
         }
 
         public override string DataSource
@@ -110,8 +114,8 @@ set arithabort on" );
             get
             {
                 string commandText = "select @@version";
-                object scalar = this.sqlConnection.ExecuteScalar( commandText );
-                string version = Foundation.Data.Database.GetValueOrDefault<string>( scalar );
+                object scalar = this.sqlConnection.ExecuteScalar(commandText);
+                string version = Foundation.Data.Database.GetValueOrDefault<string>(scalar);
 
                 /* select
           serverproperty('Collation') as Collation,
@@ -213,7 +217,7 @@ set arithabort on" );
                         break;
                 }
 
-                return string.Format( "{0}\r\n{1}\r\n@@version: {2}\r\n@@servername: {3}", serverVersion, description, version, this.serverName );
+                return string.Format("{0}\r\n{1}\r\n@@version: {2}\r\n@@servername: {3}", serverVersion, description, version, this.serverName);
             }
         }
 
@@ -221,8 +225,8 @@ set arithabort on" );
         {
             get
             {
-                object scalar = this.sqlConnection.ExecuteScalar( "select @@trancount" );
-                int transactionCount = (int) scalar;
+                object scalar = this.sqlConnection.ExecuteScalar("select @@trancount");
+                int transactionCount = (int)scalar;
                 return transactionCount;
             }
         }
@@ -232,7 +236,7 @@ set arithabort on" );
             return this.sqlConnection.CreateCommand();
         }
 
-        protected override void SetDatabase( string database )
+        protected override void SetDatabase(string database)
         {
             this.sqlConnectionStringBuilder.InitialCatalog = database;
             this.sqlConnection.Dispose();

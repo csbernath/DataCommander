@@ -30,7 +30,7 @@
             using (var managementObjectSearcher = new ManagementObjectSearcher( managementScope, objectQuery ))
             {
                 ManagementObjectCollection managementObjectCollection = managementObjectSearcher.Get();
-                var enumerable = managementObjectCollection.AsEnumerable<ManagementObject>().Select( selector );
+                var enumerable = managementObjectCollection.Cast<ManagementObject>().Select( selector );
                 list = new List<T>( enumerable );
             }
 

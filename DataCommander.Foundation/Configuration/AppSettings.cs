@@ -60,7 +60,7 @@ namespace DataCommander.Foundation.Configuration
 
             public Reader(NameValueCollection nameValueCollection)
             {
-                Contract.Requires(nameValueCollection != null);
+                Contract.Requires<ArgumentNullException>(nameValueCollection != null);
 
                 this.nameValueCollection = nameValueCollection;
             }
@@ -83,8 +83,8 @@ namespace DataCommander.Foundation.Configuration
 
             public PrefixedReader(NameValueCollection nameValueCollection, string prefix)
             {
-                Contract.Requires(nameValueCollection != null);
-                Contract.Requires(prefix != null);
+                Contract.Requires<ArgumentNullException>(nameValueCollection != null);
+                Contract.Requires<ArgumentNullException>(prefix != null);
 
                 this.nameValueCollection = nameValueCollection;
                 this.prefix = prefix;

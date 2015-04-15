@@ -25,7 +25,7 @@
         /// <param name="createList"></param>
         public LazyList(Func<IList<T>> createList)
         {
-            Contract.Requires(createList != null);
+            Contract.Requires<ArgumentNullException>(createList != null);
 
             this.createList = createList;
             this.Initialize(this.GetCollection);

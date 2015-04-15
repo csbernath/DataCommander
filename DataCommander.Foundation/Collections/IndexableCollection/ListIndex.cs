@@ -205,8 +205,8 @@
 
         private void Initialize(string name, IList<T> list)
         {
-            Contract.Requires(name != null);
-            Contract.Requires(list != null);
+            Contract.Requires<ArgumentNullException>(name != null);
+            Contract.Requires<ArgumentNullException>(list != null);
 
             this.name = name;
             this.list = list;

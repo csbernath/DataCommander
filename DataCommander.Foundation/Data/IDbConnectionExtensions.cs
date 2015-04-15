@@ -1,5 +1,6 @@
 ﻿namespace DataCommander.Foundation.Data
 {
+    using System;
     using System.Data;
     using System.Diagnostics.Contracts;
 
@@ -24,7 +25,7 @@
             CommandType commandType,
             int? commandTimeout)
         {
-            Contract.Requires(connection != null);
+            Contract.Requires<ArgumentNullException>(connection != null);
 
             var command = connection.CreateCommand();
             command.Transaction = transaction;
@@ -53,11 +54,11 @@
             IDbTransaction transaction,
             string commandText,
             CommandType commandType,
-            int? commandTimeout )
+            int? commandTimeout)
         {
             DataSet dataSet;
 
-            using (var command = connection.CreateCommand( transaction, commandText, commandType, commandTimeout ))
+            using (var command = connection.CreateCommand(transaction, commandText, commandType, commandTimeout))
             {
                 dataSet = command.ExecuteDataSet();
             }
@@ -79,11 +80,11 @@
             IDbTransaction transaction,
             string commandText,
             CommandType commandType,
-            int? commandTimeout )
+            int? commandTimeout)
         {
             DataTable dataTable;
 
-            using (var command = connection.CreateCommand( transaction, commandText, commandType, commandTimeout ))
+            using (var command = connection.CreateCommand(transaction, commandText, commandType, commandTimeout))
             {
                 dataTable = command.ExecuteDataTable();
             }
@@ -105,11 +106,11 @@
             IDbTransaction transaction,
             string commandText,
             CommandType commandType,
-            int? commandTimeout )
+            int? commandTimeout)
         {
             int affectedRowCount;
 
-            using (var command = connection.CreateCommand( transaction, commandText, commandType, commandTimeout ))
+            using (var command = connection.CreateCommand(transaction, commandText, commandType, commandTimeout))
             {
                 affectedRowCount = command.ExecuteNonQuery();
             }
@@ -133,11 +134,11 @@
             string commandText,
             CommandType commandType,
             int? commandTimeout,
-            CommandBehavior commandBehavior )
+            CommandBehavior commandBehavior)
         {
-            var command = connection.CreateCommand( transaction, commandText, commandType, commandTimeout );
-            var dataReader = command.ExecuteReader( commandBehavior );
-            return new DataReaderContext( command, dataReader );
+            var command = connection.CreateCommand(transaction, commandText, commandType, commandTimeout);
+            var dataReader = command.ExecuteReader(commandBehavior);
+            return new DataReaderContext(command, dataReader);
         }
 
         /// <summary>
@@ -154,13 +155,11 @@
             IDbTransaction transaction,
             string commandText,
             CommandType commandType,
-            int? commandTimeout )
+            int? commandTimeout)
         {
-            Contract.Requires( connection != null );
-
             object scalar;
 
-            using (var command = connection.CreateCommand( transaction, commandText, commandType, commandTimeout ))
+            using (var command = connection.CreateCommand(transaction, commandText, commandType, commandTimeout))
             {
                 scalar = command.ExecuteScalar();
             }

@@ -24,7 +24,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <returns></returns>
         public static ConfigurationAttributeCollection GetProperties( string name, IDbConnection connection )
         {
-            Contract.Requires(connection != null); 
+            Contract.Requires<ArgumentNullException>(connection != null);
 
             var properties = new ConfigurationAttributeCollection { Name = name };
             DataSet dataSet = ExternalSystem_GetProperties( connection, name );

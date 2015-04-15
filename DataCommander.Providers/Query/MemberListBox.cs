@@ -1,9 +1,8 @@
-using System.Globalization;
-
 namespace DataCommander.Providers
 {
     using System;
     using System.ComponentModel;
+    using System.Globalization;
     using System.Linq;
     using System.Text;
     using System.Windows.Forms;
@@ -40,15 +39,22 @@ namespace DataCommander.Providers
             return objectName.UnquotedName;
         }
 
-        public void Initialize(GetCompletionResponse response)
+        private void LoadItems()
         {
-            this.response = response;
+            this.listBox.Items.Clear();
 
-            foreach (var item in response.Items)
+            foreach (var item in this.response.Items)
             {
                 var listBoxItem = new ListBoxItem<IObjectName>(item, ToString);
                 this.ListBox.Items.Add(listBoxItem);
             }
+        }
+
+        public void Initialize(GetCompletionResponse response)
+        {
+            this.response = response;
+
+            this.LoadItems();
 
             this.textBox.KeyboardHandler = this;
 
@@ -106,7 +112,7 @@ namespace DataCommander.Providers
             // listBox
             // 
             this.listBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte) (238)));
+            this.listBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(238)));
             this.listBox.Name = "listBox";
             this.listBox.Size = new System.Drawing.Size(180, 134);
             this.listBox.TabIndex = 0;
@@ -129,14 +135,14 @@ namespace DataCommander.Providers
         private void Close()
         {
             this.textBox.KeyboardHandler = null;
-            Form form = this.Parent as Form;
+            var form = (Form)this.Parent;
             form.Controls.Remove(this);
             form.Close();
         }
 
         private void SelectItem()
         {
-            var listBoxItem = (ListBoxItem<IObjectName>) this.listBox.SelectedItem;
+            var listBoxItem = (ListBoxItem<IObjectName>)this.listBox.SelectedItem;
 
             if (listBoxItem != null)
             {
@@ -211,7 +217,7 @@ namespace DataCommander.Providers
         {
             bool handled;
             int hWnd = this.listBox.Handle.ToInt32();
-            NativeMethods.SendMessage(hWnd, (int) NativeMethods.Message.Keyboard.KeyDown, (int) e.KeyCode, 0);
+            NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.Keyboard.KeyDown, (int)e.KeyCode, 0);
 
             if (
                 e.KeyCode == Keys.Down ||
@@ -254,11 +260,6 @@ namespace DataCommander.Providers
             else
             {
                 handled = false;
-
-                //        if (e.KeyCode == Keys.Delete)
-                //        {
-                //          int i = 0; // TODO
-                //        }
             }
 
             return handled;
@@ -270,7 +271,7 @@ namespace DataCommander.Providers
             // bool found = false;
             var filteredItems =
                 this.listBox.Items.Cast<ListBoxItem<IObjectName>>()
-                    .Select((listBoxItem, i) => Tuple.Create(i, IndexOf(listBoxItem.Item.UnquotedName,prefix)))
+                    .Select((listBoxItem, i) => Tuple.Create(i, IndexOf(listBoxItem.Item.UnquotedName, prefix)))
                     .Where(item => item.Item2 >= 0).ToArray();
 
             if (filteredItems.Length > 0)
@@ -286,11 +287,11 @@ namespace DataCommander.Providers
                 if (index >= 3)
                 {
                     // scrolling 3 items up
-                    int wParam = (int) NativeMethods.Message.ScrollBarParameter.ThumbPosition;
+                    int wParam = (int)NativeMethods.Message.ScrollBarParameter.ThumbPosition;
                     int pos = (index - 3) << 16;
                     wParam += pos;
                     int hWnd = this.listBox.Handle.ToInt32();
-                    NativeMethods.SendMessage(hWnd, (int) NativeMethods.Message.ScrollBar.VScroll, wParam, 0);
+                    NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.ScrollBar.VScroll, wParam, 0);
                 }
             }
         }
@@ -384,6 +385,8 @@ namespace DataCommander.Providers
                 {
                     this.prefix += char.ToLower(e.KeyChar);
                 }
+
+                this.LoadItems();
 
                 this.Find(this.prefix, 0);
             }

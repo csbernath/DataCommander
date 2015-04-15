@@ -117,7 +117,7 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="childNode"></param>
         public void AddChildNode(ConfigurationNode childNode)
         {
-            Contract.Requires(childNode.Parent == null);
+            Contract.Requires<ArgumentException>(childNode.Parent == null);
 
             if (childNode.name == null)
             {
@@ -136,7 +136,7 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="childNode"></param>
         public void InsertChildNode(int index, ConfigurationNode childNode)
         {
-            Contract.Requires(childNode.Parent == null);
+            Contract.Requires<ArgumentException>(childNode.Parent == null);
 
             if (childNode.name == null)
             {
