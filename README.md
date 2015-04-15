@@ -35,7 +35,7 @@ The data grid can be exported into Excel.
 |-------------|-----------|
 |Msi|MSI (Windows Installer) provider (implemented in Data Commander) using [Wix](http://wixtoolset.org)|
 |Odp|[Oracle .NET Provider](http://www.oracle.com/technetwork/topics/dotnet/index-085163.html) from Oracle|
-|OleDb|(OLE DB .NET Data Provider](https://msdn.microsoft.com/en-us/library/system.data.oledb%28v=vs.110%29.aspx)|
+|OleDb|[OLE DB .NET Data Provider](https://msdn.microsoft.com/en-us/library/system.data.oledb%28v=vs.110%29.aspx)|
 |Oracle|[Oracle .NET Data Provider](https://msdn.microsoft.com/en-us/library/system.data.oracleclient%28v=vs.110%29.aspx) from Microsoft|
 |SQLite|[SQLite .NET Data Provider](http://system.data.sqlite.org)|
 |SqlServer2005|[Microsoft SQL Server](http://www.microsoft.com/en-us/server-cloud/products/sql-server/) 2005 or greater|
