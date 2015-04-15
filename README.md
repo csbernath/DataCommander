@@ -123,7 +123,7 @@ Query TextBox
 |Query/Execute Query (KeyInfo)|Ctrl+K|
 |Query/Execute Query (XML)|Ctrl+Shift+X|
 |Query/Open Table|Ctrl+Shift+O|
-|Query/Cancel Executing Query|Ctrl+F12|
+|Query/Cancel Executing Query|Alt+Pause|
 |Query/Parse|Ctrl+F5|
 |Query/Result Mode/Text|Ctrl+T|
 |Query/Result Mode/DataGrid|Ctrl+D|
