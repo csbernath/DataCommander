@@ -33,14 +33,14 @@ The data grid can be exported into Excel.
 
 |Provider.Name|Description|
 |-------------|-----------|
-|Msi|MSI (Windows Installer) provider (implemented in Data Commander) http://wixtoolset.org|
-|Odp|Oracle .NET Provider from Oracle http://www.oracle.com/technetwork/topics/dotnet/index-085163.html|
-|OleDb|OLE DB .NET Data Provider https://msdn.microsoft.com/en-us/library/system.data.oledb%28v=vs.110%29.aspx|
-|Oracle|Oracle .NET Data Provider from Microsoft https://msdn.microsoft.com/en-us/library/system.data.oracleclient%28v=vs.110%29.aspx|
-|SQLite|SQLite .NET Data Provider from http://system.data.sqlite.org|
-|SqlServer2005|Microsoft SQL Server 2005 or greater http://www.microsoft.com/en-us/server-cloud/products/sql-server/|
-|SqlServerCe40|Microsoft SQL Server Compact Edition 4.0 http://www.microsoft.com/en-us/download/details.aspx?id=17876|
-|Tfs2010|Microsoft Team Foundation Server 2010 (implemented in Data Commander) https://msdn.microsoft.com/en-us/vstudio/ff637362.aspx|
+|Msi|MSI (Windows Installer) provider (implemented in Data Commander) using [Wix](http://wixtoolset.org)|
+|Odp|[Oracle .NET Provider](http://www.oracle.com/technetwork/topics/dotnet/index-085163.html) from Oracle|
+|OleDb|(OLE DB .NET Data Provider](https://msdn.microsoft.com/en-us/library/system.data.oledb%28v=vs.110%29.aspx)|
+|Oracle|[Oracle .NET Data Provider](https://msdn.microsoft.com/en-us/library/system.data.oracleclient%28v=vs.110%29.aspx) from Microsoft|
+|SQLite|[SQLite .NET Data Provider](http://system.data.sqlite.org)|
+|SqlServer2005|[Microsoft SQL Server](http://www.microsoft.com/en-us/server-cloud/products/sql-server/) 2005 or greater|
+|SqlServerCe40|[Microsoft SQL Server Compact Edition 4.0](http://www.microsoft.com/en-us/download/details.aspx?id=17876)|
+|Tfs2010|[Microsoft Team Foundation Server 2010](https://msdn.microsoft.com/en-us/vstudio/ff637362.aspx) (implemented in Data Commander)|
 |Wmi|WMI .NET Data Provider (implemented in Data Commander)
 
 General functions
