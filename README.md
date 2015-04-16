@@ -14,7 +14,7 @@ Relational database servers:
   * Oracle
 
 Relational file databases:
-  * SQLite  
+  * SQLite
   * Microsoft SQL Server Compact
   * Microsoft Access
   * Microsoft Excel 
@@ -332,6 +332,78 @@ exec status '$/',null,null,'bernath'
 exec workspaces 'workspace','owner','computer'
 exec workspaces
 exec workspaces null,'bernath'
+
+Changes:
+
+2015-02-06: Upgrading to .NET Framework 4.5.
+
+2014-05-29: [DataTableEditor] Saving data table into Excel 2007 .xlsx file.
+
+2014-04-04: [CompletionForm] Adding quote handling to multipart identitifers (use [Foo.UnitTest])
+
+2014-03-03: [SqlServer2005] “Adding User-Defined Table Types” node to object explorer.
+
+2013-01-16: Adding “Copy table with SqlBulkCopy” context menu item in query text editor.
+
+2012-12-20: [QueryForm] Adding XmlSpreadsheet result writer (Microsoft Office XML Spreadsheet 2002 format). See
+http://msdn.microsoft.com/en-us/library/office/aa140066(v=office.10).aspx.
+
+2012-12-18: [SqlServer2005] Adding Security/Logins node to object explorer.
+
+2012-12-18: [SqlServer2005] Adding ‘System Databases’ node to object explorer.
+
+2012-12-18: Adding active query form text to toolbar.
+2012-12-18: Adding Save All menu item. Save All menu item saves all query form texts into %TEMP% directory.
+2012-12-04: Upgrading .NET 1.0 StatusBar to NET 2.0 StatusStrip control. Colorizing errors displayed on statusbar with red.
+2012-11-30: Adding info message severity verbose. Information severity is displayed in blue color, verbose in black.
+2012-11-30: Handling SQL batches separated by GO (SqlServer2005)
+2012-09-25: [SqlServer2005] Fixing collation issue in union+order by with different collations in code completion.
+2012-07-16: Performance tuning: adding info messages to Messages textbox asynchronously.
+2012-07-03: [SqlServer2005] Adding Column child nodes to Table node in object browser.
+2012-06-28: Refactoring code completion for handling four part names (database.owner.name).
+2012-05-08: Adding Tfs2010 provider.
+2012-03-29: Adding DateTimeOffset field type handling.
+2011-08-29: [DataTableEditor] Adding hide rows and unhide all rows menu item to row header context menu.
+2011-08-23: [SqlStatement] The auto completion for column names now (partially) works without table alias.
+2011-08-18: [MemberListBox] Adding Ctrl+Subtract key handler for filtering the list. Enhanced Ctrl+Up and Ctrl+Down searching.
+2011-07-29: [DataTableEditor] Copying table as HTML copies only visible rows ordered by the data grid view’s display index.
+2011-07-29: [DataTableEditor] Allowing column ordering by the user (data grid view’s display indexes).
+2011-07-28: [QueryForm] Adding Parse menu item to Query menu.
+2011-07-28: [DataTableEditor] Removing row number from row header due to performance issues.
+2011-07-27: [DataTableEditor] Experimental. Adding row number to row header.
+2011-07-26: [DataTableEditor] Adding ‘Copy table as XML’ menu item to context menu.
+2011-07-14: [MainForm] Adding ‘Close All Documents’ menu item to main menu.
+2011-07-14: [MainForm] Adding a new toolstrip panel to the main form and moving the main menu and the main toolbar to the new toolstrip panel. Removing query form toolbar (Execute, Cancel buttons) from main menu and adding it to the query form.
+2011-07-13: Adding VisualPharm icon web site to references.
+2011-07-13: [MainForm] Using the built in MDI child window menu item instead of custom code.
+2011-07-13: [QueryForm] Adding dropdown toolbar button for executing query and removing the menu item from the main menu.
+2011-07-13: Changing HTML result table font to Tahoma 8pt.
+2011-07-12: [SqlServerCe40] Adding shrink database and compact database menu items to object explorer Tables node context menu.
+2011-07-12: [SqlServerCe40] Adding auto completion for tables and columns.
+2011-06-25: [DataTableEditor] Adding hide column and unhide all columns menu item to column header context menu.
+2011-06-23: [SqlServer2005] Adding Databases node to object explorer.
+2011-06-21: Adding a new code completion: How to list the distinct top 10 field values of a column.
+2011-06-20: Adding DataViewProperties form .
+2011-06-17: [QueryForm] refactoring result set handling. A new static tab page has been added to the result tab control. Every result set will be added to this static tab page as a tab control with tab pages per table.
+2011-06-16: [MainForm] replacing AboutForm with a simple MessageBox 
+2011-06-15: [QueryForm] adding command text logging to Messages tab page
+2011-06-15: [SqlStatement] enhancing SQL statement parsing
+-	@parameter = value
+-	default value
+-	unicode  strings: N’…’
+2011-06-06: [QueryForm] Implementing case sensitive mode when finding text in non-richtextbox controls like DataTable, TreeView.
+2011-06-03: [DataTableViewer] Improving clipboard handling (SetDataObject with multiple attempts instead of SetText)
+2011-06-03: [QueryTextBox] Adding [ and ] characters to word separators (e.g. [varchar])
+2011-06-03: [SqlServer2005] Adding ‘Script Table’ menu item to table node context menu in object explorer (using SMO).
+2011-06-02: [SqlServer2005] Adding ShortStringSize attribute to app.config for SQL Server 2005 provider.
+2011-06-02: Removing DataCommander.rtf embedded resource. Adding Help/Content menu item which opens DataCommander.docx directly.
+2011-06-02: Automatic backup of query statements. The query form writes the text of the form into the log file when closing the form.
+2011-06-02: [ConnectionForm] Making Connection selector window resizable.
+2011-06-02: [SQLite] Using the new SQLite .NET provider from http://system.data.sqlite.org.
+2011-06-02: [DataTableViewer] Speeding up DataGridView with double buffering.
+2011-06-01: [SqlServer2005] Uprading and fixing  intellisense to new sys views
+2011-05-30: [SqlServer2005] Moving system stored procedures node under stored procedures node in object exlorer
+2011-03-26: Creating  Microsoft.NET 4.0 based version of Data Commander.
 
 References
 ----------
