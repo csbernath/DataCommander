@@ -41,11 +41,22 @@ namespace DataCommander.Foundation.Diagnostics
 
             if (async)
             {
-                this.logFile = new AsyncLogFile( path, encoding, queueCapacity, bufferSize, timerPeriod, formatter, fileAttributes );
+                this.logFile = new AsyncLogFile(path, encoding, queueCapacity, bufferSize, timerPeriod, formatter, fileAttributes);
             }
             else
             {
-                this.logFile = new LogFile( path, encoding, bufferSize, autoFlush, formatter, fileAttributes );
+                this.logFile = new LogFile(path, encoding, bufferSize, autoFlush, formatter, fileAttributes);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string FileName
+        {
+            get
+            {
+                return this.logFile.FileName;
             }
         }
 
@@ -59,29 +70,29 @@ namespace DataCommander.Foundation.Diagnostics
             }
             catch (Exception e)
             {
-                log.Write( LogLevel.Error, e.ToLogString() );
+                log.Write(LogLevel.Error, e.ToLogString());
             }
         }
 
-        void ILogWriter.Write( LogEntry logEntry )
+        void ILogWriter.Write(LogEntry logEntry)
         {
             try
             {
                 if (this.async)
                 {
-                    this.logFile.Write( logEntry );
+                    this.logFile.Write(logEntry);
                 }
                 else
                 {
                     lock (this.logFile)
                     {
-                        this.logFile.Write( logEntry );
+                        this.logFile.Write(logEntry);
                     }
                 }
             }
             catch (Exception e)
             {
-                log.Write( LogLevel.Error, e.ToString() );
+                log.Write(LogLevel.Error, e.ToString());
             }
         }
 
@@ -93,7 +104,7 @@ namespace DataCommander.Foundation.Diagnostics
             }
             catch (Exception e)
             {
-                log.Write( LogLevel.Error, e.ToLogString() );
+                log.Write(LogLevel.Error, e.ToLogString());
             }
         }
 
@@ -105,7 +116,7 @@ namespace DataCommander.Foundation.Diagnostics
             }
             catch (Exception e)
             {
-                log.Write( LogLevel.Error, e.ToLogString() );
+                log.Write(LogLevel.Error, e.ToLogString());
             }
         }
 

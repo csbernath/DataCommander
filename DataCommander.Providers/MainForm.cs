@@ -79,10 +79,13 @@ namespace DataCommander
             //
             this.LoadLayout();
 
-            //Assembly assembly = Assembly.GetExecutingAssembly();
-            //this.Text = this.Text + " (" + Environment.Version + ' ' + assembly.GetName().ProcessorArchitecture + ')';
+            DateTime start = Process.GetCurrentProcess().StartTime;
+            DateTime end = DateTime.Now;
+            TimeSpan elapsed = end - start;
 
-            this.toolStripStatusLabel.Text = WindowsIdentity.GetCurrent().Name;
+            string message = string.Format("Current user: {0}. Application loaded in {1} seconds.", WindowsIdentity.GetCurrent().Name, new StopwatchTimeSpan(elapsed).ToString(3));
+            this.toolStripStatusLabel.Text = message;
+            log.Trace(message);
         }
 
         /// <summary>

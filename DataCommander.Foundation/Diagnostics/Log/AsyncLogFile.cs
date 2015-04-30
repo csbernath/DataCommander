@@ -41,6 +41,14 @@ namespace DataCommander.Foundation.Diagnostics
 
         #region ILogFile Members
 
+        string ILogFile.FileName
+        {
+            get
+            {
+                return this.logFile.FileName;
+            }
+        }
+
         void ILogFile.Open()
         {
             Contract.Assert(this.timer == null);

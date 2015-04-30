@@ -39,7 +39,8 @@
             return new ITreeNode[]
             {
                 new UserCollectionNode(this.databaseNode),
-                new RoleCollectionNode(this.databaseNode)
+                new RoleCollectionNode(this.databaseNode),
+                new SchemaCollectionNode(this.databaseNode)
             };
         }
 

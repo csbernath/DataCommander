@@ -3,13 +3,11 @@
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using System.Web;
     using System.Windows.Forms;
     using DataCommander.Foundation.Diagnostics;
-    using System.Linq;
-    using DataCommander.Foundation;
-    using DataCommander.Foundation.Linq;
 
     public partial class AboutForm : Form
     {
@@ -21,38 +19,30 @@
             string path = assembly.Location;
             DateTime lastWriteTime = File.GetLastWriteTime(path);
             string dotNetFrameworkVersion = AppDomainMonitor.DotNetFrameworkVersion;
-
-            const string searchPattern = "DataCommander*.log";
-            var directoryInfo = new DirectoryInfo(Path.GetTempPath());
-            FileInfo[] fileInfos = directoryInfo.GetFiles(searchPattern, SearchOption.TopDirectoryOnly);
-            var fileInfo = fileInfos.OrderByDescending(i => i.CreationTime).FirstOrDefault();
-            string logFileName = null;
-            if (fileInfo != null)
-            {
-                logFileName = fileInfo.FullName;
-            }
+            string logFileName = LogFactory.Instance.FileName;
 
             string text = string.Format(@"<div style=""font-family:verdana;font-size:9pt"">
 <a href=""https://github.com/csbernath/DataCommander"">Data Commander</a>
+<br/>
 <br/>
 Copyright © 2002-2015 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Bernáth</a>
 <br/>
 This program is freeware and released under the <a href=""https://www.gnu.org/licenses/gpl.txt"">GNU General Public Licence</a>.
 <br/>
 <br/>
-Build date: {3}
+Build date: {0}
 <br/>
 <br/>
-<a href=""localfile://{4}"">Application Data file</a>
+<a href=""localfile://{1}"">Application Data file</a>
 <br/>
-<a href=""localfile://{6}"">Log file</a>
+<a href=""localfile://{2}"">Log file</a>
 <br/>
 <br/>
 <table style=""font-family:verdana;font-size:9pt"">
-<tr><td>.NET CLR version:</td><td>{0}</td></tr>
-<tr><td>.NET Framework version:</td><td>{1}</td></tr>
-<tr><td>.NET Processor architecture:</td><td>{2}</td></tr>
-<tr><td>Allocated physical memory:</td><td>{5} MB</td></tr>
+<tr><td>.NET CLR version:</td><td>{3}</td></tr>
+<tr><td>.NET Framework version:</td><td>{4}</td></tr>
+<tr><td>.NET Processor architecture:</td><td>{5}</td></tr>
+<tr><td>Allocated physical memory:</td><td>{6} MB</td></tr>
 </table>
 </br>
 Credits:
@@ -62,14 +52,14 @@ Credits:
     <li><a href=""https://system.data.sqlite.org"">System.Data.SQLite</a></li>
 </ul>
 </div>",
+                lastWriteTime.ToLongDateString(),
+                HttpUtility.HtmlEncode(DataCommanderApplication.Instance.FileName),
+                logFileName,
                 Environment.Version,
                 dotNetFrameworkVersion,
                 assembly.GetName().ProcessorArchitecture,
-                lastWriteTime.ToLongDateString(),
-                HttpUtility.HtmlEncode(DataCommanderApplication.Instance.FileName),
-                ((double)Environment.WorkingSet/(1024*1024)).ToString("N0"),
-                logFileName);
-            
+                ((double)Environment.WorkingSet/(1024*1024)).ToString("N0"));
+
             InitializeComponent();
 
             this.webBrowser1.DocumentText = text;

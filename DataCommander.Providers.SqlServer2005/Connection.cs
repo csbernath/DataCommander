@@ -212,6 +212,14 @@ set arithabort on");
                         description = "SQL Server 2008 (RTM)";
                         break;
 
+                    case "10.50.1600":
+                        description = "SQL Server 2008 R2 (RTM)";
+                        break;
+
+                    case "10.50.6000":
+                        description = "SQL Server 2008 R2 Service Pack 3";
+                        break;
+
                     default:
                         description = null;
                         break;

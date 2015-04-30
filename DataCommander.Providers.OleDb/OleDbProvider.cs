@@ -199,7 +199,7 @@ namespace DataCommander.Providers.OleDb
                 bool allowDBNull = (bool) row["AllowDBNull"];
 
                 string dataTypeName = dataReader.GetDataTypeName(i);
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
                 sb.Append(dataReader.GetDataTypeName(i));
 
                 switch (dbType)

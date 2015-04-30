@@ -19,7 +19,7 @@ namespace DataCommander.Providers
 
         public TextResultWriter(
             TextWriter textWriter,
-            QueryForm queryForm )
+            QueryForm queryForm)
         {
             this.textWriter = textWriter;
             this.queryForm = queryForm;
@@ -29,7 +29,7 @@ namespace DataCommander.Providers
         {
         }
 
-        void IResultWriter.BeforeExecuteReader( IProvider provider, IDbCommand command )
+        void IResultWriter.BeforeExecuteReader(IProvider provider, IDbCommand command)
         {
             this.provider = provider;
         }
@@ -38,7 +38,7 @@ namespace DataCommander.Providers
         {
         }
 
-        void IResultWriter.AfterCloseReader( int affectedRows )
+        void IResultWriter.AfterCloseReader(int affectedRows)
         {
         }
 
@@ -49,46 +49,46 @@ namespace DataCommander.Providers
         private void Write(
             StringBuilder sb,
             string text,
-            int width )
+            int width)
         {
             int length = width - text.Length;
 
             if (length > 0)
             {
-                sb.Append( text );
+                sb.Append(text);
 
-                if (text.IndexOf( Environment.NewLine ) < 0)
+                if (text.IndexOf(Environment.NewLine) < 0)
                 {
-                    sb.Append( ' ', length );
+                    sb.Append(' ', length);
                 }
             }
             else
             {
-                sb.Append( text.Substring( 0, width ) );
+                sb.Append(text.Substring(0, width));
             }
         }
 
-        public void WriteTableBegin( DataTable schemaTable, string[] dataTypeNames )
+        public void WriteTableBegin(DataTable schemaTable)
         {
             this.rowIndex = 0;
 
             if (schemaTable != null)
             {
-                DataColumn columnNameColumn = schemaTable.Columns[ SchemaTableColumn.ColumnName ];
-                DataColumn columnSizeColumn = schemaTable.Columns[ "ColumnSize" ];
-                DataColumn dataTypeColumn = schemaTable.Columns[ "DataType" ];
+                DataColumn columnNameColumn = schemaTable.Columns[SchemaTableColumn.ColumnName];
+                DataColumn columnSizeColumn = schemaTable.Columns["ColumnSize"];
+                DataColumn dataTypeColumn = schemaTable.Columns["DataType"];
 
                 int fieldCount = schemaTable.Rows.Count;
-                this.columnSize = new int[ fieldCount ];
+                this.columnSize = new int[fieldCount];
 
                 StringBuilder sb = new StringBuilder();
 
                 for (int i = 0; i < fieldCount; i++)
                 {
-                    DataRow schemaRow = schemaTable.Rows[ i ];
-                    string columnName = (string) schemaRow[ columnNameColumn ];
-                    Type type = (Type) schemaRow[ dataTypeColumn ];
-                    int numOfBytes = (int) schemaRow[ columnSizeColumn ];
+                    DataRow schemaRow = schemaTable.Rows[i];
+                    string columnName = (string)schemaRow[columnNameColumn];
+                    Type type = (Type)schemaRow[dataTypeColumn];
+                    int numOfBytes = (int)schemaRow[columnSizeColumn];
 
                     Type elementType;
 
@@ -106,7 +106,7 @@ namespace DataCommander.Providers
                         elementType = type;
                     }
 
-                    TypeCode typeCode = Type.GetTypeCode( elementType );
+                    TypeCode typeCode = Type.GetTypeCode(elementType);
 
                     int numOfChars;
 
@@ -115,7 +115,7 @@ namespace DataCommander.Providers
                         case TypeCode.Byte:
                             if (type.IsArray)
                             {
-                                numOfChars = Math.Min( 100, numOfBytes ) * 2 + 2;
+                                numOfChars = Math.Min(100, numOfBytes)*2 + 2;
                             }
                             else
                             {
@@ -142,8 +142,8 @@ namespace DataCommander.Providers
 
                         case TypeCode.Decimal:
                             //numOfChars = numOfBytes;
-                            short precision = (short) schemaRow[ "NumericPrecision" ];
-                            short scale = schemaRow.Field<short>( "NumericScale" );
+                            short precision = (short)schemaRow["NumericPrecision"];
+                            short scale = schemaRow.Field<short>("NumericScale");
                             numOfChars = precision + 3;
                             break;
 
@@ -152,11 +152,11 @@ namespace DataCommander.Providers
                             break;
 
                         case TypeCode.String:
-                            numOfChars = Math.Min( numOfBytes, 2048 );
+                            numOfChars = Math.Min(numOfBytes, 2048);
                             break;
 
                         default:
-                            if (elementType == typeof( Guid ))
+                            if (elementType == typeof (Guid))
                             {
                                 numOfChars = Guid.Empty.ToString().Length;
                             }
@@ -168,12 +168,12 @@ namespace DataCommander.Providers
                             break;
                     }
 
-                    this.columnSize[ i ] = Math.Max( numOfChars, columnName.Length );
-                    this.Write( sb, columnName, this.columnSize[ i ] );
-                    sb.Append( ' ' );
+                    this.columnSize[i] = Math.Max(numOfChars, columnName.Length);
+                    this.Write(sb, columnName, this.columnSize[i]);
+                    sb.Append(' ');
                 }
 
-                this.textWriter.WriteLine( sb.ToString() );
+                this.textWriter.WriteLine(sb.ToString());
 
                 if (fieldCount > 0)
                 {
@@ -182,18 +182,18 @@ namespace DataCommander.Providers
 
                     for (int i = 0; i < last; i++)
                     {
-                        sb.Append( '-', this.columnSize[ i ] );
-                        sb.Append( ' ' );
+                        sb.Append('-', this.columnSize[i]);
+                        sb.Append(' ');
                     }
 
-                    sb.Append( '-', this.columnSize[ last ] );
+                    sb.Append('-', this.columnSize[last]);
 
-                    this.textWriter.WriteLine( sb.ToString() );
+                    this.textWriter.WriteLine(sb.ToString());
                 }
             }
         }
 
-        private static string StringValue( object value, int columnSize )
+        private static string StringValue(object value, int columnSize)
         {
             string stringValue = null;
 
@@ -208,27 +208,27 @@ namespace DataCommander.Providers
             else
             {
                 Type type = value.GetType();
-                TypeCode typeCode = Type.GetTypeCode( type );
+                TypeCode typeCode = Type.GetTypeCode(type);
                 bool isArray = type.IsArray;
 
                 if (isArray)
                 {
                     if (typeCode == TypeCode.Byte)
                     {
-                        byte[] bytes = (byte[]) value;
+                        byte[] bytes = (byte[])value;
                         StringBuilder sb = new StringBuilder();
-                        sb.Append( "0x" );
+                        sb.Append("0x");
 
                         for (int i = 0; i < bytes.Length; i++)
                         {
-                            string s = bytes[ i ].ToString( "x" );
+                            string s = bytes[i].ToString("x");
 
                             if (s.Length == 1)
                             {
                                 s = "0" + s;
                             }
 
-                            sb.Append( s );
+                            sb.Append(s);
                         }
 
                         stringValue = sb.ToString();
@@ -239,17 +239,17 @@ namespace DataCommander.Providers
                     switch (typeCode)
                     {
                         case TypeCode.Int32:
-                            stringValue = value.ToString().PadLeft( columnSize );
+                            stringValue = value.ToString().PadLeft(columnSize);
                             break;
 
                         case TypeCode.DateTime:
-                            DateTime dateTime = (DateTime) value;
-                            stringValue = dateTime.ToString( "yyyy.MM.dd HH:mm:ss.fff" );
+                            DateTime dateTime = (DateTime)value;
+                            stringValue = dateTime.ToString("yyyy.MM.dd HH:mm:ss.fff");
                             break;
 
                         default:
                             stringValue = value.ToString();
-                            stringValue = stringValue.Replace( "\x00", null );
+                            stringValue = stringValue.Replace("\x00", null);
                             break;
                     }
                 }
@@ -262,7 +262,7 @@ namespace DataCommander.Providers
         {
         }
 
-        public void FirstRowReadEnd()
+        public void FirstRowReadEnd(string[] dataTypeNames)
         {
         }
 
@@ -284,7 +284,7 @@ namespace DataCommander.Providers
         //    textWriter.WriteLine(sb.ToString());
         //}
 
-        public void WriteRows( object[][] rows, int rowCount )
+        public void WriteRows(object[][] rows, int rowCount)
         {
             MethodProfiler.BeginMethod();
 
@@ -294,23 +294,23 @@ namespace DataCommander.Providers
 
                 for (int i = 0; i < rowCount; i++)
                 {
-                    object[] row = rows[ i ];
+                    object[] row = rows[i];
                     int last = row.Length - 1;
 
                     for (int j = 0; j < last; j++)
                     {
-                        this.Write( sb, StringValue( row[ j ], this.columnSize[ j ] ), this.columnSize[ j ] );
-                        sb.Append( ' ' );
+                        this.Write(sb, StringValue(row[j], this.columnSize[j]), this.columnSize[j]);
+                        sb.Append(' ');
                     }
 
                     //Write(sb,StringValue(row[last]),columnSize[last]);
-                    sb.Append( StringValue( row[ last ], this.columnSize[ last ] ) );
-                    sb.Append( Environment.NewLine );
+                    sb.Append(StringValue(row[last], this.columnSize[last]));
+                    sb.Append(Environment.NewLine);
                 }
 
                 this.rowIndex += rowCount;
 
-                this.textWriter.Write( sb.ToString() );
+                this.textWriter.Write(sb.ToString());
             }
             finally
             {
@@ -331,11 +331,11 @@ namespace DataCommander.Providers
         public static void WriteParameters(
             IDataParameterCollection parameters,
             TextWriter textWriter,
-            QueryForm queryForm )
+            QueryForm queryForm)
         {
             if (parameters.Count > 0)
             {
-                StringTable stringTable = new StringTable( 4 );
+                StringTable stringTable = new StringTable(4);
 
                 foreach (IDataParameter parameter in parameters)
                 {
@@ -356,7 +356,7 @@ namespace DataCommander.Providers
                         switch (parameter.DbType)
                         {
                             case DbType.DateTime:
-                                DateTime dateTime = (DateTime) value;
+                                DateTime dateTime = (DateTime)value;
                                 valueString = dateTime.ToTSqlDateTime();
                                 break;
 
@@ -443,22 +443,22 @@ namespace DataCommander.Providers
                     //}
 
                     var row = stringTable.NewRow();
-                    row[ 0 ] = parameter.Direction.ToString();
-                    row[ 1 ] = name;
-                    row[ 2 ] = parameter.DbType.ToString( "G" );
-                    row[ 3 ] = valueString;
-                    stringTable.Rows.Add( row );
+                    row[0] = parameter.Direction.ToString();
+                    row[1] = name;
+                    row[2] = parameter.DbType.ToString("G");
+                    row[3] = valueString;
+                    stringTable.Rows.Add(row);
 
                     //sb.Append(StringHelper.FormatColumn(parameter.DbType.ToString(),22));       
                 }
 
-                textWriter.WriteLine( stringTable );
+                textWriter.WriteLine(stringTable);
             }
         }
 
-        public void WriteParameters( IDataParameterCollection parameters )
+        public void WriteParameters(IDataParameterCollection parameters)
         {
-            WriteParameters( parameters, this.textWriter, this.queryForm );
+            WriteParameters(parameters, this.textWriter, this.queryForm);
         }
 
         public void WriteEnd()

@@ -75,7 +75,7 @@
             }
         }
 
-        void IResultWriter.WriteTableBegin(DataTable schemaTable, string[] dataTypeNames)
+        void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
             this.writeTableBeginTimestamp = Stopwatch.GetTimestamp();
             this.tableCount++;
@@ -87,7 +87,7 @@
             this.firstRowReadBeginTimestamp = Stopwatch.GetTimestamp();
         }
 
-        void IResultWriter.FirstRowReadEnd()
+        void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
         {
             long duration = Stopwatch.GetTimestamp() - this.firstRowReadBeginTimestamp;
             string message = string.Format("First row read completed in {0} seconds.", StopwatchTimeSpan.ToString(duration, 3));

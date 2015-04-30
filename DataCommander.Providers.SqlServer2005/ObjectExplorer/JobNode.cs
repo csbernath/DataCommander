@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="JobNode.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace DataCommander.Providers.SqlServer2005
+﻿namespace DataCommander.Providers.SqlServer2005
 {
     using System;
     using System.Collections.Generic;
@@ -22,11 +16,11 @@ namespace DataCommander.Providers.SqlServer2005
         private readonly JobCollectionNode jobs;
         private readonly string name;
 
-        public JobNode( 
+        public JobNode(
             JobCollectionNode jobs,
-            string name )
+            string name)
         {
-            Contract.Requires( jobs != null );
+            Contract.Requires<ArgumentNullException>(jobs != null);
             this.jobs = jobs;
             this.name = name;
         }
@@ -49,7 +43,7 @@ namespace DataCommander.Providers.SqlServer2005
             }
         }
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             throw new NotImplementedException();
         }
@@ -68,13 +62,13 @@ namespace DataCommander.Providers.SqlServer2005
             {
                 string commandText = string.Format(@"msdb..sp_help_job @job_name = {0}", this.name.ToTSqlNVarChar());
                 DataSet dataSet;
-                using (var connection = new SqlConnection( this.jobs.Server.ConnectionString ))
+                using (var connection = new SqlConnection(this.jobs.Server.ConnectionString))
                 {
-                    dataSet = connection.ExecuteDataSet( commandText );
+                    dataSet = connection.ExecuteDataSet(commandText);
                 }
 
-                var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-                queryForm.ShowDataSet( dataSet );
+                var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+                queryForm.ShowDataSet(dataSet);
 
                 return null;
             }

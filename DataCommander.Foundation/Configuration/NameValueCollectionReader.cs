@@ -78,9 +78,9 @@
         /// <param name="name"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public Double GetDouble(string name, Double defaultValue)
+        public double GetDouble(string name, double defaultValue)
         {
-            return this.GetValue(name, Double.TryParse, defaultValue);
+            return this.GetValue(name, double.TryParse, defaultValue);
         }
 
         /// <summary>
@@ -150,19 +150,19 @@
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetDouble(string name, out Double value)
+        public bool TryGetDouble(string name, out double value)
         {
             string s;
             bool contains = this.tryGetValue(name, out s);
 
             if (contains)
             {
-                bool succeeded = Double.TryParse(s, out value);
+                bool succeeded = double.TryParse(s, out value);
                 Contract.Assert(succeeded);
             }
             else
             {
-                value = default(Double);
+                value = default(double);
             }
 
             return contains;
@@ -176,19 +176,19 @@
         /// <param name="provider"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetDouble(string name, NumberStyles style, IFormatProvider provider, out Double value)
+        public bool TryGetDouble(string name, NumberStyles style, IFormatProvider provider, out double value)
         {
             string s;
             bool contains = this.tryGetValue(name, out s);
 
             if (contains)
             {
-                bool succeeded = Double.TryParse(s, style, provider, out value);
+                bool succeeded = double.TryParse(s, style, provider, out value);
                 Contract.Assert(succeeded);
             }
             else
             {
-                value = default(Double);
+                value = default(double);
             }
 
             return contains;

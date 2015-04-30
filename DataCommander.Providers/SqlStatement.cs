@@ -521,7 +521,7 @@ namespace DataCommander.Providers
                         case DbType.Boolean:
                             string valueStr = (string)value;
                             double valueDbl;
-                            bool ok = Double.TryParse(valueStr, NumberStyles.Any, null, out valueDbl);
+                            bool ok = double.TryParse(valueStr, NumberStyles.Any, null, out valueDbl);
 
                             if (ok)
                             {

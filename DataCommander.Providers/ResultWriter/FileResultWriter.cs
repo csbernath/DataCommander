@@ -39,7 +39,7 @@ namespace DataCommander.Providers
         {
         }
 
-        void IResultWriter.WriteTableBegin(DataTable schemaTable, string[] dataTypeNames)
+        void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
             string path = Path.GetTempFileName();
             this.messageWriter.WriteLine("fileName: {0}", path);
@@ -152,14 +152,14 @@ namespace DataCommander.Providers
             // TODO:  Add FileResultWriter.FirstRowReadBegin implementation
         }
 
-        public void FirstRowReadEnd()
+        public void FirstRowReadEnd(string[] dataTypeNames)
         {
             // TODO:  Add FileResultWriter.FirstRowReadEnd implementation
         }
 
         public void WriteRows(object[][] rows, int rowCount)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             for (int i = 0; i < rowCount; i++)
             {

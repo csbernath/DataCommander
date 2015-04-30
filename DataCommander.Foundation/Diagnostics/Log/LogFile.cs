@@ -129,6 +129,14 @@ namespace DataCommander.Foundation.Diagnostics
 
         #region ILogFile Members
 
+        public string FileName
+        {
+            get
+            {
+                return this.fileName;
+            }
+        }
+
         void ILogFile.Open()
         {
             string begin = this.formatter.Begin();

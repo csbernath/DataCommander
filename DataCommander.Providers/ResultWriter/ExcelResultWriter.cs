@@ -55,10 +55,10 @@
             this.logResultWriter.AfterCloseReader(affectedRows);
         }
 
-        void IResultWriter.WriteTableBegin(DataTable schemaTable, string[] dataTypeNames)
+        void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
-            this.logResultWriter.WriteTableBegin(schemaTable, dataTypeNames);
-            this.CreateTable(schemaTable, dataTypeNames);
+            this.logResultWriter.WriteTableBegin(schemaTable);
+            this.CreateTable(schemaTable);
         }
 
         void IResultWriter.FirstRowReadBegin()
@@ -66,9 +66,9 @@
             this.logResultWriter.FirstRowReadBegin();
         }
 
-        void IResultWriter.FirstRowReadEnd()
+        void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
         {
-            this.logResultWriter.FirstRowReadEnd();
+            this.logResultWriter.FirstRowReadEnd(dataTypeNames);
         }
 
         void IResultWriter.WriteRows(object[][] rows, int rowCount)
@@ -110,7 +110,7 @@
 
         #endregion
 
-        private void CreateTable(DataTable schemaTable, string[] dataTypeNames)
+        private void CreateTable(DataTable schemaTable)
         {
             var worksheets = this.excelPackage.Workbook.Worksheets;
             string tableName = string.Format("Table{0}", worksheets.Count + 1);

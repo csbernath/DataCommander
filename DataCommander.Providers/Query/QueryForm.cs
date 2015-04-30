@@ -915,7 +915,8 @@ namespace DataCommander
             this.mnuCancel.Enabled = false;
             this.mnuCancel.MergeIndex = 11;
             this.mnuCancel.Name = "mnuCancel";
-            this.mnuCancel.ShortcutKeys = ((global::System.Windows.Forms.Keys)((global::System.Windows.Forms.Keys.Control | global::System.Windows.Forms.Keys.F12)));
+            //this.mnuCancel.ShortcutKeys = ((global::System.Windows.Forms.Keys)((global::System.Windows.Forms.Keys.Control | global::System.Windows.Forms.Keys.F12)));
+            this.mnuCancel.ShortcutKeys = ((global::System.Windows.Forms.Keys)((global::System.Windows.Forms.Keys.Alt| global::System.Windows.Forms.Keys.Pause)));
             this.mnuCancel.Size = new global::System.Drawing.Size(269, 22);
             this.mnuCancel.Text = "&Cancel Executing Query";
             this.mnuCancel.Click += new global::System.EventHandler(this.mnuCancel_Click);
@@ -1751,7 +1752,7 @@ namespace DataCommander
                 });
             }
 
-            resultWriter.WriteTableBegin(schemaTable, null);
+            resultWriter.WriteTableBegin(schemaTable);
 
             int colCount = dataTable.Columns.Count;
 

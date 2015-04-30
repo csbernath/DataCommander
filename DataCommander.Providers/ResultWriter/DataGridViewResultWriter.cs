@@ -54,7 +54,7 @@
             return column;
         }
 
-        void IResultWriter.WriteTableBegin(DataTable schemaTable, string[] dataTypeNames)
+        void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
             var dataGridView = new DoubleBufferedDataGridView();
             dataGridView.AllowUserToAddRows = false;
@@ -72,7 +72,7 @@
         {
         }
 
-        void IResultWriter.FirstRowReadEnd()
+        void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
         {
         }
 

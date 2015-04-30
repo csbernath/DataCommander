@@ -17,7 +17,7 @@
         private string tableName;
         private SQLiteCommand insertCommand;
 
-        public SQLiteResultWriter( TextWriter messageWriter, string tableName )
+        public SQLiteResultWriter(TextWriter messageWriter, string tableName)
         {
             this.messageWriter = messageWriter;
             this.tableName = tableName;
@@ -29,39 +29,39 @@
         {
         }
 
-        void IResultWriter.BeforeExecuteReader( IProvider provider, IDbCommand command )
+        void IResultWriter.BeforeExecuteReader(IProvider provider, IDbCommand command)
         {
         }
 
         void IResultWriter.AfterExecuteReader()
         {
             string fileName = Path.GetTempFileName() + ".sqlite";
-            this.messageWriter.WriteLine( fileName );
+            this.messageWriter.WriteLine(fileName);
             SQLiteConnectionStringBuilder sb = new SQLiteConnectionStringBuilder();
             sb.DataSource = fileName;
             sb.DateTimeFormat = SQLiteDateFormats.ISO8601;
-            this.connection = new SQLiteConnection( sb.ConnectionString );
+            this.connection = new SQLiteConnection(sb.ConnectionString);
             this.connection.Open();
         }
 
-        void IResultWriter.AfterCloseReader( int affectedRows )
+        void IResultWriter.AfterCloseReader(int affectedRows)
         {
         }
 
-        void IResultWriter.WriteTableBegin( DataTable schemaTable, string[] dataTypeNames )
+        void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
-            Trace.WriteLine( schemaTable.ToStringTable() );
+            Trace.WriteLine(schemaTable.ToStringTable());
             StringBuilder sb = new StringBuilder();
             DataRowCollection schemaRows = schemaTable.Rows;
             int schemaRowCount = schemaRows.Count;
             string insertStatement = null;
             StringBuilder insertValues = new StringBuilder();
             this.insertCommand = new SQLiteCommand();
-            StringTable st = new StringTable( 3 );
+            StringTable st = new StringTable(3);
 
             for (int i = 0; i < schemaRowCount; i++)
             {
-                var schemaRow = new DataColumnSchema( schemaRows[ i ] );
+                var schemaRow = new DataColumnSchema(schemaRows[i]);
                 StringTableRow stringTableRow = st.NewRow();
 
                 if (i == 0)
@@ -73,27 +73,27 @@
                         this.tableName = tableName;
                     }
 
-                    this.tableName = this.tableName.Replace( '.', '_' );
-                    this.tableName = this.tableName.Replace( '[', '_' );
-                    this.tableName = this.tableName.Replace( ']', '_' );
+                    this.tableName = this.tableName.Replace('.', '_');
+                    this.tableName = this.tableName.Replace('[', '_');
+                    this.tableName = this.tableName.Replace(']', '_');
 
-                    sb.AppendFormat( "CREATE TABLE {0}\r\n(\r\n", this.tableName );
+                    sb.AppendFormat("CREATE TABLE {0}\r\n(\r\n", this.tableName);
                     insertStatement = "INSERT INTO " + this.tableName + '(';
-                    insertValues.Append( "VALUES(" );
+                    insertValues.Append("VALUES(");
                 }
                 else
                 {
                     insertStatement += ',';
-                    insertValues.Append( ',' );
+                    insertValues.Append(',');
                 }
 
                 string columnName = schemaRow.ColumnName;
-                stringTableRow[ 1 ] = columnName;
+                stringTableRow[1] = columnName;
                 insertStatement += columnName;
-                insertValues.Append( '?' );
-                int columnSize = (int) schemaRow.ColumnSize;
+                insertValues.Append('?');
+                int columnSize = (int)schemaRow.ColumnSize;
                 Type dataType = schemaRow.DataType;
-                TypeCode typeCode = Type.GetTypeCode( dataType );
+                TypeCode typeCode = Type.GetTypeCode(dataType);
                 string typeName;
                 DbType dbType;
 
@@ -115,12 +115,12 @@
 
                         if (precision <= 28 && scale <= 28)
                         {
-                            typeName = string.Format( "DECIMAL({0},{1})", precision, scale );
+                            typeName = string.Format("DECIMAL({0},{1})", precision, scale);
                             dbType = DbType.Decimal;
                         }
                         else
                         {
-                            typeName = string.Format( "-- DECIMAL({0},{1})", precision, scale );
+                            typeName = string.Format("-- DECIMAL({0},{1})", precision, scale);
                             dbType = DbType.Object;
                         }
 
@@ -147,7 +147,7 @@
                         break;
 
                     case TypeCode.String:
-                        typeName = string.Format( "VARCHAR({0})", columnSize );
+                        typeName = string.Format("VARCHAR({0})", columnSize);
                         dbType = DbType.String;
                         break;
 
@@ -155,34 +155,34 @@
                         throw new NotImplementedException();
                 }
 
-                stringTableRow[ 2 ] = typeName;
-                st.Rows.Add( stringTableRow );
+                stringTableRow[2] = typeName;
+                st.Rows.Add(stringTableRow);
                 bool allowDBNull = schemaRow.AllowDBNull.Value;
 
                 if (!allowDBNull)
                 {
-                    stringTableRow[ 2 ] += " NOT NULL";
+                    stringTableRow[2] += " NOT NULL";
                 }
 
                 if (i < schemaRowCount - 1)
                 {
-                    stringTableRow[ 2 ] += ',';
+                    stringTableRow[2] += ',';
                 }
 
-                SQLiteParameter parameter = new SQLiteParameter( dbType );
-                this.insertCommand.Parameters.Add( parameter );
+                SQLiteParameter parameter = new SQLiteParameter(dbType);
+                this.insertCommand.Parameters.Add(parameter);
             }
 
             StringWriter stringWriter = new StringWriter();
-            st.Write( stringWriter, 4 );
-            sb.Append( stringWriter );
-            sb.Append( ')' );
-            insertValues.Append( ')' );
+            st.Write(stringWriter, 4);
+            sb.Append(stringWriter);
+            sb.Append(')');
+            insertValues.Append(')');
             insertStatement += ") " + insertValues;
             string commandText = sb.ToString();
-            Trace.WriteLine( commandText );
-            Trace.WriteLine( insertStatement );
-            this.connection.ExecuteNonQuery( null, commandText, CommandType.Text, 0 );
+            Trace.WriteLine(commandText);
+            Trace.WriteLine(insertStatement);
+            this.connection.ExecuteNonQuery(null, commandText, CommandType.Text, 0);
             this.transaction = this.connection.BeginTransaction();
             this.insertCommand.Connection = this.connection;
             this.insertCommand.Transaction = this.transaction;
@@ -193,20 +193,20 @@
         {
         }
 
-        void IResultWriter.FirstRowReadEnd()
+        void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
         {
         }
 
-        void IResultWriter.WriteRows( object[][] rows, int rowCount )
+        void IResultWriter.WriteRows(object[][] rows, int rowCount)
         {
             for (int i = 0; i < rowCount; i++)
             {
-                object[] row = rows[ i ];
+                object[] row = rows[i];
 
                 for (int j = 0; j < row.Length; j++)
                 {
-                    SQLiteParameter parameter = this.insertCommand.Parameters[ j ];
-                    parameter.Value = row[ j ];
+                    SQLiteParameter parameter = this.insertCommand.Parameters[j];
+                    parameter.Value = row[j];
                 }
 
                 this.insertCommand.ExecuteNonQuery();
@@ -217,7 +217,7 @@
         {
         }
 
-        void IResultWriter.WriteParameters( IDataParameterCollection parameters )
+        void IResultWriter.WriteParameters(IDataParameterCollection parameters)
         {
         }
 

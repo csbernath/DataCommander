@@ -136,15 +136,8 @@ namespace DataCommander.Providers
                 IDataReaderHelper dataReaderHelper = this.provider.CreateDataReaderHelper(dataReader);
                 DataRowCollection schemaRows = schemaTable.Rows;
                 int count = schemaRows.Count;
-                string[] dataTypeNames = new string[count];
 
-                int i;
-                for (i = 0; i < count; i++)
-                {
-                    dataTypeNames[i] = dataReader.GetDataTypeName(i);
-                }
-
-                this.resultWriter.WriteTableBegin(schemaTable, dataTypeNames);
+                this.resultWriter.WriteTableBegin(schemaTable);
 
                 int fieldCount = dataReader.FieldCount;
 
@@ -154,6 +147,7 @@ namespace DataCommander.Providers
                 }
 
                 var rows = new object[this.rowBlockSize][];
+                int i;
 
                 for (i = 0; i < this.rowBlockSize; i++)
                 {
@@ -175,7 +169,18 @@ namespace DataCommander.Providers
                         first = false;
                         this.resultWriter.FirstRowReadBegin();
                         read = dataReader.Read();
-                        this.resultWriter.FirstRowReadEnd();
+
+                        string[] dataTypeNames = new string[count];
+
+                        if (read)
+                        {
+                            for (int j = 0; j < count; j++)
+                            {
+                                dataTypeNames[j] = dataReader.GetDataTypeName(j);
+                            }
+                        }
+
+                        this.resultWriter.FirstRowReadEnd(dataTypeNames);
                     }
                     else
                     {

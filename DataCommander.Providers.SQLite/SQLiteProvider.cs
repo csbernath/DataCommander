@@ -107,9 +107,9 @@ namespace DataCommander.Providers.SQLite
                     int columnSize = dataColumnSchema.ColumnSize;
                     DbType dbType = (DbType)row["ProviderType"];
                     bool allowDBNull = (bool)row["AllowDBNull"];
-                    string dataTypeName = dataReader.GetDataTypeName(i);
                     var sb = new StringBuilder();
-                    sb.Append(dataReader.GetDataTypeName(i));
+                    string dataTypeName = (string)dataColumnSchema["DataTypeName"];
+                    sb.Append(dataTypeName);
 
                     if (!allowDBNull)
                     {

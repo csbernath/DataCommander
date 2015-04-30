@@ -280,7 +280,7 @@
             return sb.ToString();
         }
 
-        void IResultWriter.WriteTableBegin(DataTable schemaTable, string[] dataTypeNames)
+        void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
             this.schemaTable = schemaTable;
             this.messageWriter.WriteLine(GetCreateTableStatement(schemaTable));
@@ -296,7 +296,7 @@
         {
         }
 
-        void IResultWriter.FirstRowReadEnd()
+        void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
         {
         }
 

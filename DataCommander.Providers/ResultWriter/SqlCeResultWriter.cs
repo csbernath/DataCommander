@@ -11,13 +11,13 @@
 
     internal sealed class SqlCeResultWriter : IResultWriter
     {
-        readonly TextWriter messageWriter;
-        readonly string tableName;
-        IProvider provider;
-        SqlCeConnection connection;
-        SqlCeCommand insertCommand;
+        private readonly TextWriter messageWriter;
+        private readonly string tableName;
+        private IProvider provider;
+        private SqlCeConnection connection;
+        private SqlCeCommand insertCommand;
 
-        public SqlCeResultWriter( TextWriter messageWriter, string tableName )
+        public SqlCeResultWriter(TextWriter messageWriter, string tableName)
         {
             this.messageWriter = messageWriter;
             this.tableName = tableName;
@@ -29,7 +29,7 @@
         {
         }
 
-        void IResultWriter.BeforeExecuteReader( IProvider provider, IDbCommand command )
+        void IResultWriter.BeforeExecuteReader(IProvider provider, IDbCommand command)
         {
             this.provider = provider;
         }
@@ -37,42 +37,42 @@
         void IResultWriter.AfterExecuteReader()
         {
             string fileName = Path.GetTempFileName() + ".sdf";
-            this.messageWriter.WriteLine( fileName );
+            this.messageWriter.WriteLine(fileName);
             DbConnectionStringBuilder sb = new DbConnectionStringBuilder();
-            sb.Add( "Data Source", fileName );
+            sb.Add("Data Source", fileName);
             string connectionString = sb.ConnectionString;
-            SqlCeEngine sqlCeEngine = new SqlCeEngine( connectionString );
+            SqlCeEngine sqlCeEngine = new SqlCeEngine(connectionString);
             sqlCeEngine.CreateDatabase();
-            this.connection = new SqlCeConnection( connectionString );
+            this.connection = new SqlCeConnection(connectionString);
             this.connection.Open();
         }
 
-        void IResultWriter.AfterCloseReader( int affectedRows )
+        void IResultWriter.AfterCloseReader(int affectedRows)
         {
         }
 
-        void IResultWriter.WriteTableBegin( DataTable schemaTable, string[] dataTypeNames )
+        void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
             StringBuilder createTable = new StringBuilder();
-            createTable.AppendFormat( "create table [{0}]\r\n(\r\n", this.tableName );
+            createTable.AppendFormat("create table [{0}]\r\n(\r\n", this.tableName);
             StringBuilder insertInto = new StringBuilder();
-            insertInto.AppendFormat( "insert into [{0}](", this.tableName );
+            insertInto.AppendFormat("insert into [{0}](", this.tableName);
             StringBuilder values = new StringBuilder();
-            values.Append( "values(" );
-            StringTable stringTable = new StringTable( 3 );
+            values.Append("values(");
+            StringTable stringTable = new StringTable(3);
             this.insertCommand = this.connection.CreateCommand();
             int last = schemaTable.Rows.Count - 1;
 
             for (int i = 0; i <= last; i++)
             {
-                DataRow dataRow = schemaTable.Rows[ i ];
-                var schemaRow = new DataColumnSchema( dataRow );
+                DataRow dataRow = schemaTable.Rows[i];
+                var schemaRow = new DataColumnSchema(dataRow);
                 string columnName = schemaRow.ColumnName;
                 int columnSize = schemaRow.ColumnSize;
                 bool? allowDBNull = schemaRow.AllowDBNull;
                 Type dataType = schemaRow.DataType;
-                string dataTypeName = dataTypeNames[ i ];
-                TypeCode typeCode = Type.GetTypeCode( dataType );
+                string dataTypeName = "???";
+                TypeCode typeCode = Type.GetTypeCode(dataType);
                 string typeName;
                 SqlDbType sqlDbType;
 
@@ -110,11 +110,11 @@
 
                         if (scale == 0)
                         {
-                            typeName = string.Format( "decimal({0})", precision );
+                            typeName = string.Format("decimal({0})", precision);
                         }
                         else
                         {
-                            typeName = string.Format( "decimal({0},{1})", precision, scale );
+                            typeName = string.Format("decimal({0},{1})", precision, scale);
                         }
 
                         break;
@@ -167,12 +167,12 @@
                         {
                             if (isFixedLength)
                             {
-                                typeName = string.Format( "nchar({0})", columnSize );
+                                typeName = string.Format("nchar({0})", columnSize);
                                 sqlDbType = SqlDbType.NChar;
                             }
                             else
                             {
-                                typeName = string.Format( "nvarchar({0})", columnSize );
+                                typeName = string.Format("nvarchar({0})", columnSize);
                                 sqlDbType = SqlDbType.NVarChar;
                             }
                         }
@@ -189,41 +189,41 @@
                 }
 
                 StringTableRow row = stringTable.NewRow();
-                row[ 1 ] = columnName;
-                row[ 2 ] = typeName;
+                row[1] = columnName;
+                row[2] = typeName;
 
                 if (allowDBNull != null && !allowDBNull.Value)
                 {
-                    row[ 2 ] += " not null";
+                    row[2] += " not null";
                 }
 
-                insertInto.Append( columnName );
-                values.Append( '?' );
+                insertInto.Append(columnName);
+                values.Append('?');
 
                 if (i < last)
                 {
-                    row[ 2 ] += ',';
-                    insertInto.Append( ',' );
-                    values.Append( ',' );
+                    row[2] += ',';
+                    insertInto.Append(',');
+                    values.Append(',');
                 }
 
-                stringTable.Rows.Add( row );
-                SqlCeParameter parameter = new SqlCeParameter( null, sqlDbType );
-                this.insertCommand.Parameters.Add( parameter );
+                stringTable.Rows.Add(row);
+                SqlCeParameter parameter = new SqlCeParameter(null, sqlDbType);
+                this.insertCommand.Parameters.Add(parameter);
             }
 
             StringWriter stringWriter = new StringWriter();
-            stringTable.Write( stringWriter, 4 );
-            createTable.AppendLine( stringWriter.ToString() );
-            createTable.Append( ')' );
+            stringTable.Write(stringWriter, 4);
+            createTable.AppendLine(stringWriter.ToString());
+            createTable.Append(')');
             string commandText = createTable.ToString();
-            this.messageWriter.WriteLine( commandText );
-            this.connection.ExecuteNonQuery( null, commandText, CommandType.Text, 0 );
-            insertInto.Append( ") " );
-            values.Append( ')' );
-            insertInto.Append( values );
+            this.messageWriter.WriteLine(commandText);
+            this.connection.ExecuteNonQuery(null, commandText, CommandType.Text, 0);
+            insertInto.Append(") ");
+            values.Append(')');
+            insertInto.Append(values);
             string insertCommandText = insertInto.ToString();
-            this.messageWriter.WriteLine( insertCommandText );
+            this.messageWriter.WriteLine(insertCommandText);
             this.insertCommand.CommandText = insertInto.ToString();
         }
 
@@ -231,20 +231,20 @@
         {
         }
 
-        void IResultWriter.FirstRowReadEnd()
+        void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
         {
         }
 
-        void IResultWriter.WriteRows( object[][] rows, int rowCount )
+        void IResultWriter.WriteRows(object[][] rows, int rowCount)
         {
             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {
-                object[] row = rows[ rowIndex ];
+                object[] row = rows[rowIndex];
 
                 for (int columnIndex = 0; columnIndex < row.Length; columnIndex++)
                 {
-                    object value = row[ columnIndex ];
-                    this.insertCommand.Parameters[ columnIndex ].Value = value;
+                    object value = row[columnIndex];
+                    this.insertCommand.Parameters[columnIndex].Value = value;
                 }
 
                 this.insertCommand.ExecuteNonQuery();
@@ -255,7 +255,7 @@
         {
         }
 
-        void IResultWriter.WriteParameters( IDataParameterCollection parameters )
+        void IResultWriter.WriteParameters(IDataParameterCollection parameters)
         {
         }
 

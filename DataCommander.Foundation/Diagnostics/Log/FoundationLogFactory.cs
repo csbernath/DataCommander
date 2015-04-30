@@ -60,6 +60,26 @@
 
         #region IApplicationLog Members
 
+        string ILogFactory.FileName
+        {
+            get
+            {
+                string fileName;
+                var fileLogWriter = this.multipeLog.LogWriters.Select(w => w.logWriter).OfType<FileLogWriter>().FirstOrDefault();
+
+                if (fileLogWriter != null)
+                {
+                    fileName = fileLogWriter.FileName;
+                }
+                else
+                {
+                    fileName = null;
+                }
+
+                return fileName;
+            }
+        }
+
         ILog ILogFactory.GetLog(string name)
         {
             return new FoundationLog(this, name);
@@ -162,6 +182,7 @@
                         FileAttributes.ReadOnly | FileAttributes.Hidden, out fileAttributes);
                     var fileLogWriter = new FileLogWriter(path, Encoding.UTF8, async, queueCapacity, bufferSize,
                         timerPeriod, autoFlush, fileAttributes);
+
                     logWriter = new LogWriter
                     {
                         logWriter = fileLogWriter
@@ -192,6 +213,14 @@
                 Contract.Requires<ArgumentNullException>(logWriters != null);
 
                 this.logWriters = logWriters.ToArray();
+            }
+
+            public LogWriter[] LogWriters
+            {
+                get
+                {
+                    return this.logWriters;
+                }
             }
 
             #region IDisposable Members

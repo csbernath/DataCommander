@@ -1,11 +1,10 @@
-using DataCommander.Foundation.Data;
-
 namespace DataCommander.Providers.SqlServer2005
 {
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
     using System.Windows.Forms;
+    using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Data.SqlClient;
 
     internal sealed class IndexCollectionNode : ITreeNode

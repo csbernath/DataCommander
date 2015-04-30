@@ -12,11 +12,11 @@
 
         void AfterCloseReader(int affectedRows);
 
-        void WriteTableBegin(DataTable schemaTable, string[] dataTypeNames);
+        void WriteTableBegin(DataTable schemaTable);
 
         void FirstRowReadBegin();
 
-        void FirstRowReadEnd();
+        void FirstRowReadEnd(string[] dataTypeNames);
 
         void WriteRows(object[][] rows, int rowCount);
 

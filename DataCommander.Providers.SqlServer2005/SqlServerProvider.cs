@@ -795,10 +795,11 @@ order by 1", name.Database);
         {
             DataTable table = null;
             DataTable schemaTable = dataReader.GetSchemaTable();
-            log.Trace("\r\n" + schemaTable.ToStringTable().ToString());
 
             if (schemaTable != null)
             {
+                log.Trace("\r\n" + schemaTable.ToStringTable().ToString());
+
                 table = new DataTable("SchemaTable");
                 DataColumnCollection columns = table.Columns;
                 columns.Add(" ", typeof (int));

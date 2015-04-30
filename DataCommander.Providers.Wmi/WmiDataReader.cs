@@ -151,7 +151,7 @@ namespace DataCommander.Providers.Wmi
                     {
                         case CimType.DateTime:
                             string dmtfDate = value.ToString();
-                            StringBuilder sb = new StringBuilder();
+                            var sb = new StringBuilder();
                             sb.Append( dmtfDate.Substring( 0, 4 ) );
                             sb.Append( '-' );
                             sb.Append( dmtfDate.Substring( 4, 2 ) );

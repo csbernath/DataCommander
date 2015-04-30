@@ -520,9 +520,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataCommander.Foundation\DataCommander.Foundation-4.5.csproj">
+    <ProjectReference Include="..\DataCommander.Foundation\DataCommander.Foundation.csproj">
       <Project>{1bacf0aa-4122-4c10-a8d2-248542af054c}</Project>
-      <Name>DataCommander.Foundation-4.5</Name>
+      <Name>DataCommander.Foundation</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

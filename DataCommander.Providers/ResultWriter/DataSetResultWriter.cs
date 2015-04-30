@@ -20,8 +20,6 @@ namespace DataCommander.Providers
         private DataTable dataTable;
         private int rowIndex;
 
-        private delegate void WriteTableBeginDelegate(int tableIndex, DataTable schemaTable, string[] dataTypeNames);
-
         #endregion
 
         public DataSetResultWriter(
@@ -70,10 +68,10 @@ namespace DataCommander.Providers
             this.logResultWriter.AfterCloseReader(affectedRows);
         }
 
-        void IResultWriter.WriteTableBegin(DataTable schemaTable, string[] dataTypeNames)
+        void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
-            this.logResultWriter.WriteTableBegin(schemaTable, dataTypeNames);
-            this.CreateTable(schemaTable, dataTypeNames);
+            this.logResultWriter.WriteTableBegin(schemaTable);
+            this.CreateTable(schemaTable);
         }
 
         void IResultWriter.FirstRowReadBegin()
@@ -81,9 +79,9 @@ namespace DataCommander.Providers
             this.logResultWriter.FirstRowReadBegin();
         }
 
-        void IResultWriter.FirstRowReadEnd()
+        void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
         {
-            this.logResultWriter.FirstRowReadEnd();
+            this.logResultWriter.FirstRowReadEnd(dataTypeNames);
         }
 
         void IResultWriter.WriteRows(object[][] rows, int rowCount)
@@ -135,7 +133,7 @@ namespace DataCommander.Providers
 
         #region Private Methods
 
-        private void CreateTable(DataTable schemaTable, string[] dataTypeNames)
+        private void CreateTable(DataTable schemaTable)
         {
             int tableCount = this.dataSet.Tables.Count + 1;
             string tableName = schemaTable.TableName;
@@ -184,7 +182,7 @@ namespace DataCommander.Providers
                             dataColumn = this.dataTable.Columns.Add(columnName);
                         }
 
-                        dataColumn.ExtendedProperties.Add("ColumnName", columnName);
+                        dataColumn.ExtendedProperties.Add("ColumnName", dataColumnSchema.ColumnName);
 
                         //dataColumn.AllowDBNull = sr.AllowDBNull == true;                                
                         //dataColumn.Unique = sr.IsUnique == true; // TFS provider does not support this column
