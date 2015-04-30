@@ -285,6 +285,7 @@ Object Explorer
 				Security
 					Users
 					Roles
+					Schemas
 		Security
 			Logins
 		Server Objects
