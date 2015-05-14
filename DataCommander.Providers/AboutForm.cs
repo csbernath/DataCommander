@@ -3,7 +3,6 @@
     using System;
     using System.Diagnostics;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using System.Web;
     using System.Windows.Forms;
@@ -21,16 +20,20 @@
             string dotNetFrameworkVersion = AppDomainMonitor.DotNetFrameworkVersion;
             string logFileName = LogFactory.Instance.FileName;
 
-            string text = string.Format(@"<div style=""font-family:verdana;font-size:9pt"">
-<a href=""https://github.com/csbernath/DataCommander"">Data Commander</a>
+            string text = string.Format(@"
+<style>
+    a {{text-decoration:none}}
+</style>
+<div style=""font-family:verdana;font-size:9pt"">
+<a href=""https://github.com/csbernath/DataCommander"">Data Commander on GitHub</a>
+<br/>
+<br/>
+Build date: {0}
 <br/>
 <br/>
 Copyright © 2002-2015 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Bernáth</a>
 <br/>
 This program is freeware and released under the <a href=""https://www.gnu.org/licenses/gpl.txt"">GNU General Public Licence</a>.
-<br/>
-<br/>
-Build date: {0}
 <br/>
 <br/>
 <a href=""localfile://{1}"">Application Data file</a>
@@ -48,11 +51,13 @@ Build date: {0}
 Credits:
 </br>
 <ul style=""list-style-type:none"">
+    <li><a href=""https://www.visualstudio.com/en-us/news/vs2013-community-vs.aspx"">Visual Studio 2013 Community Edition</a></li>
+    <li><a href=""https://www.jetbrains.com/resharper/"">JetBrains R# ReSharper Free Open Source License</a></li>
     <li><a href=""http://epplus.codeplex.com"">EPPlus-Create advanced Excel spreadsheets on the server</a></li>
     <li><a href=""https://system.data.sqlite.org"">System.Data.SQLite</a></li>
 </ul>
 </div>",
-                lastWriteTime.ToLongDateString(),
+                lastWriteTime.ToString("yyyy-MM-dd"),
                 HttpUtility.HtmlEncode(DataCommanderApplication.Instance.FileName),
                 logFileName,
                 Environment.Version,

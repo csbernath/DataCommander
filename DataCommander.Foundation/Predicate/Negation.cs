@@ -1,5 +1,6 @@
 namespace DataCommander.Foundation
 {
+    using System;
     using System.Diagnostics.Contracts;
 
     /// <summary>
@@ -16,7 +17,7 @@ namespace DataCommander.Foundation
         /// <param name="predicate"></param>
         public Negation(PredicateClass<T> predicate)
         {
-            Contract.Requires(predicate != null);
+            Contract.Requires<ArgumentNullException>(predicate != null);
 
             this.predicate = predicate;
         }

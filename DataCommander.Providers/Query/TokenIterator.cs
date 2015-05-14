@@ -36,12 +36,12 @@ namespace DataCommander.Providers
         public Token Next()
         {
             Token token = null;
-            int startPosition;
-            int endPosition;
-            string value;
 
             while (this.index < this.length)
             {
+                int startPosition;
+                int endPosition;
+                string value;
                 char c = this.text[this.index];
 
                 if (c == 'N')
@@ -112,12 +112,12 @@ namespace DataCommander.Providers
 
         private string ReadKeyWord()
         {
-            var keyWord = new StringBuilder();
+            var sb = new StringBuilder();
 
             while (this.index < this.length)
             {
                 char c = this.text[this.index];
-                if (char.IsWhiteSpace(c) || c == ',' || c == '(' || c == ')' || c == '=')
+                if (char.IsWhiteSpace(c) || c == ',' || c == '(' || c == ')' || c == '=' || c == '+')
                 {
                     break;
                 }
@@ -125,17 +125,16 @@ namespace DataCommander.Providers
                 {
                     this.index++;
                 }
-                keyWord.Append(c);
+                sb.Append(c);
             }
 
-            string keyWord2 = keyWord.ToString();
-
-            return keyWord2;
+            string keyWord = sb.ToString();
+            return keyWord;
         }
 
         private string ReadString()
         {
-            var keyWord = new StringBuilder();
+            var sb = new StringBuilder();
             this.index++;
             bool escape = false;
 
@@ -159,7 +158,7 @@ namespace DataCommander.Providers
                         c = '\t';
                     }
 
-                    keyWord.Append(c);
+                    sb.Append(c);
 
                     escape = false;
                 }
@@ -173,16 +172,16 @@ namespace DataCommander.Providers
                 }
                 else
                 {
-                    keyWord.Append(c);
+                    sb.Append(c);
                 }
             }
 
-            return keyWord.ToString();
+            return sb.ToString();
         }
 
         private string ReadDigit()
         {
-            var digit = new StringBuilder();
+            var sb = new StringBuilder();
 
             while (this.index < this.length)
             {
@@ -195,10 +194,10 @@ namespace DataCommander.Providers
                 {
                     this.index++;
                 }
-                digit.Append(c);
+                sb.Append(c);
             }
 
-            return digit.ToString();
+            return sb.ToString();
         }
 
         #endregion

@@ -17,7 +17,7 @@
         /// <param name="predicate"></param>
         public EnumerableUniversalQuantifier(Func<T, bool> predicate)
         {
-            Contract.Requires(predicate != null);
+            Contract.Requires<ArgumentNullException>(predicate != null);
 
             this.predicate = predicate;
         }
@@ -30,8 +30,8 @@
         /// <returns></returns>
         public static bool Evaluate(IEnumerable<T> enumerable, Func<T, bool> predicate)
         {
-            Contract.Requires(enumerable != null);
-            Contract.Requires(predicate != null);
+            Contract.Requires<ArgumentNullException>(enumerable != null);
+            Contract.Requires<ArgumentNullException>(predicate != null);
 
             bool isTrue = true;
 

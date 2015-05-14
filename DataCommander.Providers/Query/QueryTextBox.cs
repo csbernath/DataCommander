@@ -20,7 +20,7 @@ namespace DataCommander.Providers
         private ToolStripStatusLabel sbPanel;
         private IKeyboardHandler keyboardHandler;
         private int tabSize = 4;
-        private readonly bool insertSpaces = true;
+        private const bool insertSpaces = true;
         private int columnIndex;
 
         private RichTextBox richTextBox;
@@ -185,7 +185,8 @@ namespace DataCommander.Providers
             RichTextBox richTextBox,
             int i)
         {
-            return NativeMethods.SendMessage(richTextBox.Handle.ToInt32(), (int)NativeMethods.Message.EditBox.LineIndex, i, 0);
+            return NativeMethods.SendMessage(richTextBox.Handle.ToInt32(), (int) NativeMethods.Message.EditBox.LineIndex,
+                i, 0);
         }
 
         private int LineIndex(int i)
@@ -335,7 +336,7 @@ namespace DataCommander.Providers
 
                 IntPtr intPtr = this.richTextBox.Handle;
                 int hWnd = intPtr.ToInt32();
-                NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.Gdi.SetRedraw, 0, 0);
+                NativeMethods.SendMessage(hWnd, (int) NativeMethods.Message.Gdi.SetRedraw, 0, 0);
 
                 MethodProfiler.BeginMethodFraction("ControlText");
 
@@ -350,49 +351,93 @@ namespace DataCommander.Providers
                     MethodProfiler.EndMethodFraction();
                 }
 
-                MethodProfiler.BeginMethodFraction("NextWordStart");
-
-                try
+                var subString = text.Substring(startIndex, endIndex - startIndex + 1);
+                var tokenIterator = new TokenIterator(subString);
+                var tokens = new List<Token>();
+                while (true)
                 {
-                    int startWord = NextWordStart(text, startIndex);
-
-                    while (startWord <= endIndex)
+                    var token = tokenIterator.Next();
+                    if (token == null)
                     {
-                        if (stopwatch.ElapsedTicks > maxTicks)
-                        {
-                            break;
-                        }
+                        break;
+                    }
+                    tokens.Add(token);
+                }
 
-                        int endWord = WordEnd(text, startWord);
-                        int length = endWord - startWord + 1;
+                foreach (var token in tokens)
+                {
+                    Color? color = null;
 
-                        if (length == 0)
-                        {
-                            break;
-                        }
-
-                        string word = text.Substring(startWord, length);
-                        word = word.ToUpper();
-                        Color color = Color.Black;
-
-                        foreach (KeyWordList keyWordList in this.keyWordLists)
-                        {
-                            if (Array.BinarySearch(keyWordList.KeyWords, word) >= 0)
+                    switch (token.Type)
+                    {
+                        case TokenType.KeyWord:
+                            color = Color.Black;
+                            string keyWord = token.Value.ToUpper();
+                            foreach (KeyWordList keyWordList in this.keyWordLists)
                             {
-                                color = keyWordList.Color;
-                                break;
+                                if (Array.BinarySearch(keyWordList.KeyWords, keyWord) >= 0)
+                                {
+                                    color = keyWordList.Color;
+                                    break;
+                                }
                             }
-                        }
+                            break;
 
-                        this.SetColor(startWord, length, color);
+                        case TokenType.String:
+                            color = Color.Red;
+                            break;
+                    }
 
-                        startWord = NextWordStart(text, endWord + 1);
+                    if (color != null)
+                    {
+                        this.SetColor(startIndex + token.StartPosition, token.EndPosition - token.StartPosition + 1,
+                            color.Value);
                     }
                 }
-                finally
-                {
-                    MethodProfiler.EndMethodFraction();
-                }
+
+                //MethodProfiler.BeginMethodFraction("NextWordStart");
+
+                //try
+                //{
+                //    int startWord = NextWordStart(text, startIndex);
+
+                //    while (startWord <= endIndex)
+                //    {
+                //        if (stopwatch.ElapsedTicks > maxTicks)
+                //        {
+                //            break;
+                //        }
+
+                //        int endWord = WordEnd(text, startWord);
+                //        int length = endWord - startWord + 1;
+
+                //        if (length == 0)
+                //        {
+                //            break;
+                //        }
+
+                //        string word = text.Substring(startWord, length);
+                //        word = word.ToUpper();
+                //        Color color = Color.Black;
+
+                //        foreach (KeyWordList keyWordList in this.keyWordLists)
+                //        {
+                //            if (Array.BinarySearch(keyWordList.KeyWords, word) >= 0)
+                //            {
+                //                color = keyWordList.Color;
+                //                break;
+                //            }
+                //        }
+
+                //        this.SetColor(startWord, length, color);
+
+                //        startWord = NextWordStart(text, endWord + 1);
+                //    }
+                //}
+                //finally
+                //{
+                //    MethodProfiler.EndMethodFraction();
+                //}
 
                 MethodProfiler.BeginMethodFraction("Selection");
 
@@ -400,7 +445,7 @@ namespace DataCommander.Providers
                 {
                     this.richTextBox.SelectionStart = orgSelectionStart;
                     this.richTextBox.SelectionLength = orgSelectionLength;
-                    NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.Gdi.SetRedraw, 1, 0);
+                    NativeMethods.SendMessage(hWnd, (int) NativeMethods.Message.Gdi.SetRedraw, 1, 0);
                     this.richTextBox.Refresh();
                 }
                 finally
@@ -548,7 +593,7 @@ namespace DataCommander.Providers
                         string text;
                         int length;
 
-                        if (this.insertSpaces)
+                        if (insertSpaces)
                         {
                             //text = new string( ' ', tabSize );
 
@@ -631,7 +676,7 @@ namespace DataCommander.Providers
 
             if (GetDataPresent(dataObject, DataFormats.UnicodeText))
             {
-                string text = (string)GetData(dataObject, DataFormats.UnicodeText);
+                string text = (string) GetData(dataObject, DataFormats.UnicodeText);
                 int startIndex = this.richTextBox.SelectionStart;
                 this.richTextBox.SelectionLength = 0;
                 this.richTextBox.SelectedText = text;
@@ -640,7 +685,7 @@ namespace DataCommander.Providers
             }
             else if (GetDataPresent(dataObject, DataFormats.FileDrop))
             {
-                string[] fileNames = (string[])dataObject.GetData(DataFormats.FileDrop);
+                string[] fileNames = (string[]) dataObject.GetData(DataFormats.FileDrop);
                 DataCommanderApplication.Instance.MainForm.LoadFiles(fileNames);
             }
         }
@@ -691,7 +736,7 @@ namespace DataCommander.Providers
 
         private void CopyTableWithSqlBulkCopy_Click(object sender, EventArgs e)
         {
-            var queryForm = (QueryForm)this.Parent;
+            var queryForm = (QueryForm) this.Parent;
             queryForm.CopyTableWithSqlBulkCopy();
         }
 
@@ -699,22 +744,23 @@ namespace DataCommander.Providers
         {
             if (e.Button == MouseButtons.Right)
             {
-                ContextMenuStrip contextMenu = new ContextMenuStrip(this.components);
+                var contextMenu = new ContextMenuStrip(this.components);
                 ToolStripItemCollection items = contextMenu.Items;
-                ToolStripMenuItem menuItem = new ToolStripMenuItem("Create table", null, this.CreateTable_Click);
+                var menuItem = new ToolStripMenuItem("Create table", null, this.CreateTable_Click);
                 items.Add(menuItem);
                 menuItem = new ToolStripMenuItem("Copy table", null, this.CopyTable_Click);
                 items.Add(menuItem);
 
                 Form[] forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
-                int index = Array.IndexOf(forms, (QueryForm)this.Parent);
+                int index = Array.IndexOf(forms, (QueryForm) this.Parent);
                 if (index < forms.Length - 1)
                 {
-                    var nextQueryForm = (QueryForm)forms[index + 1];
+                    var nextQueryForm = (QueryForm) forms[index + 1];
                     var destinationProvider = nextQueryForm.Provider;
                     if (destinationProvider.DbProviderFactory == SqlClientFactory.Instance)
                     {
-                        menuItem = new ToolStripMenuItem("Copy table with SqlBulkCopy", null, this.CopyTableWithSqlBulkCopy_Click);
+                        menuItem = new ToolStripMenuItem("Copy table with SqlBulkCopy", null,
+                            this.CopyTableWithSqlBulkCopy_Click);
                         items.Add(menuItem);
                     }
                 }

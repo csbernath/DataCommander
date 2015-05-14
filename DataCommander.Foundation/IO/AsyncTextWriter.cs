@@ -1,5 +1,6 @@
 namespace DataCommander.Foundation.IO
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.IO;
@@ -27,7 +28,7 @@ namespace DataCommander.Foundation.IO
         /// <param name="textWriter"></param>
         public AsyncTextWriter(TextWriter textWriter)
         {
-            Contract.Requires(textWriter != null);
+            Contract.Requires<ArgumentNullException>(textWriter != null);
 
             this.textWriter = textWriter;
         }
@@ -47,7 +48,7 @@ namespace DataCommander.Foundation.IO
                     this.list.Clear();
                 }
 
-                for (int i = 0;i < items.Length;i++)
+                for (int i = 0; i < items.Length; i++)
                 {
                     items[i].AppendTo(sb);
                 }
@@ -90,14 +91,15 @@ namespace DataCommander.Foundation.IO
                 this.list.Add(item);
             }
 
-            const int timeout = 10000;// 10 seconds
+            const int timeout = 10000; // 10 seconds
 
             lock (this.syncObject)
             {
                 if (this.registeredWaitHandle == null)
                 {
                     // log.Write("ThreadPool.RegisterWaitForSingleObject",LogLevel.Trace);
-                    this.registeredWaitHandle = ThreadPool.RegisterWaitForSingleObject(this.waitHandle, this.Callback, null, timeout, false);
+                    this.registeredWaitHandle = ThreadPool.RegisterWaitForSingleObject(this.waitHandle, this.Callback,
+                        null, timeout, false);
                 }
             }
         }
@@ -108,7 +110,7 @@ namespace DataCommander.Foundation.IO
         /// <param name="value"></param>
         public void Write(string value)
         {
-            AsyncTextWriterListItem item = new AsyncTextWriterListItem(DefaultFormatter.Instance, value);
+            var item = new AsyncTextWriterListItem(DefaultFormatter.Instance, value);
             this.Write(item);
         }
 
@@ -119,7 +121,7 @@ namespace DataCommander.Foundation.IO
         /// <param name="args"></param>
         public void Write(IFormatter formatter, params object[] args)
         {
-            AsyncTextWriterListItem item = new AsyncTextWriterListItem(formatter, args);
+            var item = new AsyncTextWriterListItem(formatter, args);
             this.Write(item);
         }
 

@@ -1,5 +1,6 @@
 ﻿namespace DataCommander.Foundation
 {
+    using System;
     using System.Diagnostics.Contracts;
 
     /// <summary>
@@ -16,10 +17,10 @@
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public Conjunction( PredicateClass<T> x, PredicateClass<T> y )
+        public Conjunction(PredicateClass<T> x, PredicateClass<T> y)
         {
-            Contract.Requires( x != null );
-            Contract.Requires( y != null );
+            Contract.Requires<ArgumentNullException>(x != null);
+            Contract.Requires<ArgumentNullException>(y != null);
 
             this.x = x;
             this.y = y;
@@ -30,9 +31,9 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public override bool Evaluate( T value )
+        public override bool Evaluate(T value)
         {
-            return this.x.Evaluate( value ) && this.y.Evaluate( value );
+            return this.x.Evaluate(value) && this.y.Evaluate(value);
         }
 
         /// <summary>

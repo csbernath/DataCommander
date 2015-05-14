@@ -15,9 +15,9 @@
         /// 
         /// </summary>
         /// <param name="stream"></param>
-        public EventableStream( Stream stream )
+        public EventableStream(Stream stream)
         {
-            Contract.Requires<ArgumentNullException>( stream != null );
+            Contract.Requires<ArgumentNullException>(stream != null);
             this.stream = stream;
         }
 
@@ -114,14 +114,14 @@
         /// <param name="offset"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public override int Read( byte[] buffer, int offset, int count )
+        public override int Read(byte[] buffer, int offset, int count)
         {
             if (this.beforeRead != null)
             {
-                this.beforeRead( this, null );
+                this.beforeRead(this, null);
             }
 
-            return this.stream.Read( buffer, offset, count );
+            return this.stream.Read(buffer, offset, count);
         }
 
         /// <summary>
@@ -130,18 +130,18 @@
         /// <param name="offset"></param>
         /// <param name="origin"></param>
         /// <returns></returns>
-        public override long Seek( long offset, SeekOrigin origin )
+        public override long Seek(long offset, SeekOrigin origin)
         {
-            return this.stream.Seek( offset, origin );
+            return this.stream.Seek(offset, origin);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public override void SetLength( long value )
+        public override void SetLength(long value)
         {
-            this.stream.SetLength( value );
+            this.stream.SetLength(value);
         }
 
         /// <summary>
@@ -150,9 +150,9 @@
         /// <param name="buffer"></param>
         /// <param name="offset"></param>
         /// <param name="count"></param>
-        public override void Write( byte[] buffer, int offset, int count )
+        public override void Write(byte[] buffer, int offset, int count)
         {
-            this.stream.Write( buffer, offset, count );
+            this.stream.Write(buffer, offset, count);
         }
 
 #if FOUNDATION_3_5
@@ -165,7 +165,7 @@
         [ContractInvariantMethod]
         private new void ObjectInvariant()
         {
-            Contract.Invariant( this.stream != null );
+            Contract.Invariant(this.stream != null);
         }
 #endif
     }

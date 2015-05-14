@@ -22,7 +22,7 @@
         /// 
         /// </summary>
         /// <param name="filename"></param>
-        public TempFile( string filename )
+        public TempFile(string filename)
         {
             this.filename = filename;
         }
@@ -49,7 +49,7 @@
         public void Delete()
         {
             this.deleted = true;
-            File.Delete( this.filename );
+            File.Delete(this.filename);
         }
 
         #region IDisposable Members

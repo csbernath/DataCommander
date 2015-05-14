@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Foundation
 {
     using System;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -16,6 +17,8 @@
         /// <param name="predicate"></param>
         public SystemPredicate(Predicate<T> predicate)
         {
+            Contract.Requires<ArgumentNullException>(predicate != null);
+
             this.predicate = predicate;
         }
 

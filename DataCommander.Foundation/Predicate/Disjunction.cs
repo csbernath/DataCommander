@@ -1,5 +1,6 @@
 ﻿namespace DataCommander.Foundation
 {
+    using System;
     using System.Diagnostics.Contracts;
 
     /// <summary>
@@ -18,8 +19,8 @@
         /// <param name="y"></param>
         public Disjunction(PredicateClass<T> x, PredicateClass<T> y)
         {
-            Contract.Requires(x != null);
-            Contract.Requires(y != null);
+            Contract.Requires<ArgumentNullException>(x != null);
+            Contract.Requires<ArgumentNullException>(y != null);
 
             this.x = x;
             this.y = y;

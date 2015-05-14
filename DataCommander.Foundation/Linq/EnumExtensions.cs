@@ -38,11 +38,11 @@
         /// <returns></returns>
         public static T SetFlag<T>(this T container, T flag)
         {
-            Contract.Requires(typeof (T).IsEnum);
+            Contract.Requires<ArgumentException>(typeof (T).IsEnum);
             Type type = typeof (T);
 
-            UInt64 containerUInt64 = Convert.ToUInt64(container, CultureInfo.InvariantCulture);
-            UInt64 flagUInt64 = Convert.ToUInt64(flag, CultureInfo.InvariantCulture);
+            ulong containerUInt64 = Convert.ToUInt64(container, CultureInfo.InvariantCulture);
+            ulong flagUInt64 = Convert.ToUInt64(flag, CultureInfo.InvariantCulture);
             containerUInt64 |= flagUInt64;
             return (T) Enum.ToObject(type, containerUInt64);
         }
@@ -57,7 +57,7 @@
         /// <returns></returns>
         public static T SetFlag<T>(this T container, T flag, bool set)
         {
-            Contract.Requires(typeof (T).IsEnum);
+            Contract.Requires<ArgumentException>(typeof (T).IsEnum);
             Type type = typeof (T);
 
             UInt64 containerUInt64 = Convert.ToUInt64(container);
@@ -84,10 +84,10 @@
         /// <returns></returns>
         public static T ResetFlag<T>(this T container, T flag)
         {
-            Contract.Requires(typeof (T).IsEnum);
+            Contract.Requires<ArgumentNullException>(typeof (T).IsEnum);
             Type type = typeof (T);
-            UInt64 containerUInt64 = Convert.ToUInt64(container);
-            UInt64 flagUInt64 = Convert.ToUInt64(flag);
+            ulong containerUInt64 = Convert.ToUInt64(container);
+            ulong flagUInt64 = Convert.ToUInt64(flag);
             containerUInt64 &= ~flagUInt64;
             return (T) Enum.ToObject(type, containerUInt64);
         }

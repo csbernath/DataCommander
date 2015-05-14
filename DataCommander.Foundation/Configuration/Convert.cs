@@ -17,11 +17,11 @@ namespace DataCommander.Foundation.Configuration
             switch (typeCode)
             {
                 case TypeCode.SByte:
-                    value = SByte.Parse(source, style);
+                    value = sbyte.Parse(source, style);
                     break;
 
                 case TypeCode.Int16:
-                    value = Int16.Parse(source, style);
+                    value = short.Parse(source, style);
                     break;
 
                 case TypeCode.Int32:
@@ -37,15 +37,15 @@ namespace DataCommander.Foundation.Configuration
                     break;
 
                 case TypeCode.UInt16:
-                    value = UInt16.Parse(source, style, CultureInfo.InvariantCulture);
+                    value = ushort.Parse(source, style, CultureInfo.InvariantCulture);
                     break;
 
                 case TypeCode.UInt32:
-                    value = UInt32.Parse(source, style, CultureInfo.InvariantCulture);
+                    value = uint.Parse(source, style, CultureInfo.InvariantCulture);
                     break;
 
                 case TypeCode.UInt64:
-                    value = UInt64.Parse(source, style);
+                    value = ulong.Parse(source, style);
                     break;
 
                 default:

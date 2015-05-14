@@ -36,10 +36,11 @@
         void IResultWriter.BeforeExecuteReader(IProvider provider, IDbCommand command)
         {
             this.beforeExecuteReaderTimestamp = Stopwatch.GetTimestamp();
-            this.commandCount++;
-            string message = string.Format("Executing command({0})\r\n{1}",
+            string message = string.Format("Executing command[{0}]\r\n{1}",
                 this.commandCount,
                 command.CommandText);
+
+            this.commandCount++;
 
             var parameters = command.Parameters;
             if (!parameters.IsNullOrEmpty())
@@ -53,7 +54,7 @@
         void IResultWriter.AfterExecuteReader()
         {
             long duration = Stopwatch.GetTimestamp() - this.beforeExecuteReaderTimestamp;
-            string message = string.Format("Command({0}) started in {1} seconds.", this.commandCount, StopwatchTimeSpan.ToString(duration, 3));
+            string message = string.Format("Command[{0}] started in {1} seconds.", this.commandCount - 1, StopwatchTimeSpan.ToString(duration, 3));
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
             this.tableCount = 0;
         }
@@ -63,15 +64,15 @@
             long duration = Stopwatch.GetTimestamp() - this.beforeExecuteReaderTimestamp;
             DateTime now = LocalTime.Default.Now;
             string message = string.Format(
-                "Command({0}) completed in {1} seconds.",
-                this.commandCount,
+                "Command[{0}] completed in {1} seconds.",
+                this.commandCount - 1,
                 StopwatchTimeSpan.ToString(duration, 3));
             this.addInfoMessage(new InfoMessage(now, InfoMessageSeverity.Verbose, message));
 
             if (affectedRows >= 0)
             {
                 message = string.Format("{0} row(s) affected.", affectedRows);
-                this.addInfoMessage(new InfoMessage(now, InfoMessageSeverity.Information, message));
+                this.addInfoMessage(new InfoMessage(now, InfoMessageSeverity.Verbose, message));
             }
         }
 
@@ -103,14 +104,12 @@
         {
             long duration = Stopwatch.GetTimestamp() - this.writeTableBeginTimestamp;
             string message = string.Format(
-                "Reading table({0}) from command({1}) finished in {2} seconds. The table has {3} row(s).",
-                this.tableCount, this.commandCount,
-                StopwatchTimeSpan.ToString(duration, 3),
-                this.rowCount);
+                "Reading {0} row(s) from command[{1}] into table[{2}] finished in {3} seconds.",
+                this.rowCount,
+                this.commandCount - 1,
+                this.tableCount - 1,
+                StopwatchTimeSpan.ToString(duration, 3));
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
-
-            message = string.Format("{0} row(s) affected.", this.rowCount);
-            this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, message));
         }
 
         void IResultWriter.WriteParameters(IDataParameterCollection parameters)

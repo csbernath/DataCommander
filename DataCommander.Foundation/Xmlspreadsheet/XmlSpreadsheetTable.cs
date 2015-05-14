@@ -11,7 +11,7 @@
         /// 
         /// </summary>
         public string TableName;
-        
+
         /// <summary>
         /// 
         /// </summary>

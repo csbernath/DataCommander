@@ -1,5 +1,6 @@
 ﻿namespace DataCommander.Foundation.XmlSpreadsheet
 {
+    using System;
     using System.Diagnostics.Contracts;
     using System.Xml;
 
@@ -16,7 +17,7 @@
         /// </summary>
         /// <param name="localName"></param>
         /// <param name="value"></param>
-        public XmlSpreadsheetAttribute( string localName, string value )
+        public XmlSpreadsheetAttribute(string localName, string value)
         {
             this.localName = localName;
             this.value = value;
@@ -48,11 +49,11 @@
         /// 
         /// </summary>
         /// <param name="xmlWriter"></param>
-        public void Write( XmlWriter xmlWriter )
+        public void Write(XmlWriter xmlWriter)
         {
-            Contract.Requires( xmlWriter != null );
+            Contract.Requires<ArgumentNullException>(xmlWriter != null);
 
-            xmlWriter.WriteAttributeString( this.localName, this.value );
+            xmlWriter.WriteAttributeString(this.localName, this.value);
         }
     }
 }

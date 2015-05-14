@@ -21,7 +21,7 @@ namespace DataCommander.Foundation.IO
         /// </summary>
         /// <param name="textWriter"></param>
         /// <param name="indentation"></param>
-        public TreeTextWriter( TextWriter textWriter, int indentation )
+        public TreeTextWriter(TextWriter textWriter, int indentation)
         {
             this.textWriter = textWriter;
             this.indentation = indentation;
@@ -52,15 +52,15 @@ namespace DataCommander.Foundation.IO
             WriteEndElement
         }
 
-        private void WritePrefix( int level )
+        private void WritePrefix(int level)
         {
             if (level > 0)
             {
-                string prefix = '|' + new string( ' ', this.indentation - 1 );
+                string prefix = '|' + new string(' ', this.indentation - 1);
 
-                for (int i = 0;i < level;i++)
+                for (int i = 0; i < level; i++)
                 {
-                    this.textWriter.Write( prefix );
+                    this.textWriter.Write(prefix);
                 }
             }
         }
@@ -69,15 +69,15 @@ namespace DataCommander.Foundation.IO
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public void WriteStartElement( string value )
+        public void WriteStartElement(string value)
         {
             if (this.state == State.WriteStartElement)
             {
                 this.textWriter.WriteLine();
             }
 
-            this.WritePrefix( this.level );
-            this.textWriter.Write( value );
+            this.WritePrefix(this.level);
+            this.textWriter.Write(value);
             this.level++;
             this.state = State.WriteStartElement;
         }
@@ -87,26 +87,26 @@ namespace DataCommander.Foundation.IO
         /// </summary>
         /// <param name="format"></param>
         /// <param name="arguments"></param>
-        public void WriteStartElement( string format, params object[] arguments )
+        public void WriteStartElement(string format, params object[] arguments)
         {
-            string value = string.Format( CultureInfo.InvariantCulture, format, arguments );
-            this.WriteStartElement( value );
+            string value = string.Format(CultureInfo.InvariantCulture, format, arguments);
+            this.WriteStartElement(value);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public void WriteEndElement( string value )
+        public void WriteEndElement(string value)
         {
             this.level--;
 
             if (this.state == State.WriteEndElement)
             {
-                this.WritePrefix( this.level );
+                this.WritePrefix(this.level);
             }
 
-            this.textWriter.WriteLine( value );
+            this.textWriter.WriteLine(value);
 
             if (this.state == State.WriteStartElement)
             {
@@ -120,31 +120,31 @@ namespace DataCommander.Foundation.IO
         /// </summary>
         /// <param name="format"></param>
         /// <param name="arguments"></param>
-        public void WriteEndElement( string format, params object[] arguments )
+        public void WriteEndElement(string format, params object[] arguments)
         {
-            string value = string.Format( CultureInfo.InvariantCulture, format, arguments );
-            this.WriteEndElement( value );
+            string value = string.Format(CultureInfo.InvariantCulture, format, arguments);
+            this.WriteEndElement(value);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public void WriteElement( string value )
+        public void WriteElement(string value)
         {
             if (this.state == State.WriteStartElement)
             {
                 this.textWriter.WriteLine();
             }
 
-            this.WritePrefix( this.level );
+            this.WritePrefix(this.level);
 
             if (this.originalForegroundColor != this.foregroundColor)
             {
                 Console.ForegroundColor = this.foregroundColor;
             }
 
-            this.textWriter.WriteLine( value );
+            this.textWriter.WriteLine(value);
 
             if (this.originalForegroundColor != this.foregroundColor)
             {
@@ -159,20 +159,20 @@ namespace DataCommander.Foundation.IO
         /// </summary>
         /// <param name="format"></param>
         /// <param name="arguments"></param>
-        public void WriteElement( string format, params object[] arguments )
+        public void WriteElement(string format, params object[] arguments)
         {
-            string value = string.Format( CultureInfo.InvariantCulture, format, arguments );
-            this.WriteElement( value );
+            string value = string.Format(CultureInfo.InvariantCulture, format, arguments);
+            this.WriteElement(value);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public void WriteElement( object value )
+        public void WriteElement(object value)
         {
             string s = value != null ? value.ToString() : null;
-            this.WriteElement( s );
+            this.WriteElement(s);
         }
     }
 }

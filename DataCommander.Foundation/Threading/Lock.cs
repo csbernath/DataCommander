@@ -11,18 +11,18 @@
 
         public IDisposable Enter()
         {
-            Monitor.Enter( this.lockObject );
-            Interlocked.Increment( ref this.counter );
+            Monitor.Enter(this.lockObject);
+            Interlocked.Increment(ref this.counter);
             this.threadId = Thread.CurrentThread.ManagedThreadId;
-            return new Disposer( this.Exit );
+            return new Disposer(this.Exit);
         }
 
         public bool TryEnter()
         {
-            bool entered = Monitor.TryEnter( this.lockObject );
+            bool entered = Monitor.TryEnter(this.lockObject);
             if (entered)
             {
-                Interlocked.Increment( ref this.counter );
+                Interlocked.Increment(ref this.counter);
                 this.threadId = Thread.CurrentThread.ManagedThreadId;
             }
 
@@ -32,8 +32,8 @@
         public void Exit()
         {
             this.threadId = 0;
-            Interlocked.Decrement( ref this.counter );
-            Monitor.Exit( this.lockObject );
+            Interlocked.Decrement(ref this.counter);
+            Monitor.Exit(this.lockObject);
         }
 
         public bool Locked

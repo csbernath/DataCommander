@@ -20,14 +20,25 @@
             Contract.Requires<ArgumentNullException>(error != null);
 
             var sb = new StringBuilder();
-            sb.AppendFormat("Server: Msg {0}, Level {1}, State {2}", error.Number, error.Class, error.State);
 
-            if (!string.IsNullOrEmpty(error.Procedure))
+            bool hasProcedure = !string.IsNullOrEmpty(error.Procedure);
+
+            if (error.Number == 0 && error.Class == 0 && error.State == 1 && !hasProcedure)
             {
-                sb.AppendFormat(", Procedure: {0}", error.Procedure);
+                sb.AppendFormat("[Server: Line {0}] ", error.LineNumber);
+            }
+            else
+            {
+                sb.AppendFormat("[Server: Msg {0}, Level {1}, State {2}", error.Number, error.Class, error.State);
+
+                if (hasProcedure)
+                {
+                    sb.AppendFormat(", Procedure: {0}", error.Procedure);
+                }
+
+                sb.AppendFormat(", Line {0}] ", error.LineNumber);
             }
 
-            sb.AppendFormat(", Line {0}\r\n", error.LineNumber);
             sb.Append(error.Message);
             return sb.ToString();
         }

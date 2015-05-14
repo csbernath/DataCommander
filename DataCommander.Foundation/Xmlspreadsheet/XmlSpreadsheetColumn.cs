@@ -12,17 +12,17 @@
         /// 
         /// </summary>
         public string ColumnName;
-        
+
         /// <summary>
         /// 
         /// </summary>
         public XmlSpreadsheetDataType DataType;
-        
+
         /// <summary>
         /// 
         /// </summary>
         public string NumberFormat;
-        
+
         /// <summary>
         /// 
         /// </summary>

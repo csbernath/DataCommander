@@ -38,11 +38,11 @@
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public override void Write( char value )
+        public override void Write(char value)
         {
             foreach (TextWriter textWriter in this.textWriters)
             {
-                textWriter.Write( value );
+                textWriter.Write(value);
             }
         }
 
@@ -52,21 +52,21 @@
         /// <param name="buffer"></param>
         /// <param name="index"></param>
         /// <param name="count"></param>
-        public override void Write( Char[] buffer, int index, int count )
+        public override void Write(Char[] buffer, int index, int count)
         {
-            string value = new string( buffer, index, count );
-            this.Write( value );
+            string value = new string(buffer, index, count);
+            this.Write(value);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public override void Write( string value )
+        public override void Write(string value)
         {
             foreach (TextWriter textWriter in this.textWriters)
             {
-                textWriter.Write( value );
+                textWriter.Write(value);
             }
         }
     }

@@ -12,7 +12,7 @@
     public sealed class EnumerableIndex<T> : ICollectionIndex<T>
     {
         private readonly string name;
-        private IEnumerable<T> enumerable;
+        private readonly IEnumerable<T> enumerable;
 
         /// <summary>
         /// 
@@ -37,29 +37,29 @@
 
         void ICollection<T>.Add(T item)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         void ICollection<T>.Clear()
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         bool ICollection<T>.Contains(T item)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         void ICollection<T>.CopyTo(T[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         int ICollection<T>.Count
         {
             get
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
         }
 
@@ -67,23 +67,23 @@
         {
             get
             {
-                throw new NotImplementedException();
+                return true;
             }
         }
 
         bool ICollection<T>.Remove(T item)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.enumerable.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.enumerable.GetEnumerator();
         }
     }
 }

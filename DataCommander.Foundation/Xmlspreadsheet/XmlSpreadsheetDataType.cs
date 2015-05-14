@@ -24,7 +24,7 @@
         /// 
         /// </summary>
         String,
-        
+
         /// <summary>
         /// 
         /// </summary>

@@ -118,7 +118,8 @@
             Contract.Requires(lockRequest.Monitor == this);
             Contract.Requires(lockRequest == this.CurrentLockRequest);
 
-            log.Write(LogLevel.Trace, "Exiting lockRequest... monitoredObject: {0}, priority: {1}", this.monitoredObject, lockRequest.Priority);
+            log.Write(LogLevel.Trace, "Exiting lockRequest... monitoredObject: {0}, priority: {1}", this.monitoredObject,
+                lockRequest.Priority);
 
             lock (this.lockRequests)
             {
@@ -200,7 +201,9 @@
 
             internal void Initialize(bool isCompleted)
             {
-                log.Write(LogLevel.Trace, "Initializing lockRequest... monitoredObject: {0}, priority: {1}, isCompleted: {2}", this.monitor.MonitoredObject, this.priority,
+                log.Write(LogLevel.Trace,
+                    "Initializing lockRequest... monitoredObject: {0}, priority: {1}, isCompleted: {2}",
+                    this.monitor.MonitoredObject, this.priority,
                     isCompleted);
 
                 if (isCompleted)
@@ -215,7 +218,9 @@
 
             internal void Complete()
             {
-                log.Write(LogLevel.Trace, "Completing lockRequest... monitoredObject: {0}, priority:{1}, asyncWaitHandle != null: {2}", this.monitor.MonitoredObject, this.priority,
+                log.Write(LogLevel.Trace,
+                    "Completing lockRequest... monitoredObject: {0}, priority:{1}, asyncWaitHandle != null: {2}",
+                    this.monitor.MonitoredObject, this.priority,
                     this.asyncWaitHandle != null);
                 this.isCompleted = true;
 

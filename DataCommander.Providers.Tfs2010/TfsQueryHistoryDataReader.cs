@@ -11,14 +11,18 @@
 
     internal class TfsQueryHistoryDataReader : TfsDataReader
     {
+        #region Private Fields
+
         private readonly TfsCommand command;
         private bool first = true;
         private IEnumerator<Tuple<Changeset, int>> enumerator;
-        private int recordsAffected;
+        private int recordCount;
+
+        #endregion
 
         public TfsQueryHistoryDataReader(TfsCommand command)
         {
-            Contract.Requires(command != null);
+            Contract.Requires<ArgumentNullException>(command != null);
             this.command = command;
         }
 
@@ -33,20 +37,6 @@
             AddSchemaRowString(table, "ServerItem", true);
             return table;
         }
-
-        //private static int Count( IEnumerable enumerable )
-        //{
-        //    Contract.Requires(enumerable != null);
-        //    IEnumerator enumerator = enumerable.GetEnumerator();
-        //    int count = 0;
-
-        //    while (enumerator.MoveNext())
-        //    {
-        //        count++;
-        //    }
-
-        //    return count;
-        //}
 
         public override bool Read()
         {
@@ -121,7 +111,7 @@
                 }
 
                 this.Values = values;
-                this.recordsAffected++;
+                this.recordCount++;
                 read = true;
             }
             else
@@ -136,7 +126,7 @@
         {
             get
             {
-                return this.recordsAffected;
+                return -1;
             }
         }
 

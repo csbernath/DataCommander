@@ -32,6 +32,7 @@ namespace DataCommander
     using DataCommander.Providers;
     using DataCommander.Providers.Query;
     using DataCommander.Providers.ResultWriter;
+    using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
     using Timer = System.Windows.Forms.Timer;
 
     /// <summary>
@@ -143,7 +144,7 @@ namespace DataCommander
         private readonly TabControl resultSetsTabControl;
         private ToolStrip toolStrip;
         private ToolStripSeparator toolStripSeparator4;
-        private ToolStripSplitButton execueQuerySplitButton;
+        private ToolStripSplitButton executeQuerySplitButton;
         private ToolStripMenuItem executeQueryMenuItem;
         private ToolStripMenuItem executeQuerySingleRowToolStripMenuItem;
         private ToolStripMenuItem cToolStripMenuItem;
@@ -481,55 +482,57 @@ namespace DataCommander
 
         public void ShowDataSet(DataSet dataSet)
         {
-            if (dataSet != null && dataSet.Tables.Count > 0)
+            using (var log = LogFactory.Instance.GetCurrentMethodLog())
             {
-                DataSet tableSchema = null;
-                string text;
-                if (this.openTableMode)
+                if (dataSet != null && dataSet.Tables.Count > 0)
                 {
-                    string tableName = this.sqlStatement.FindTableName();
-                    text = tableName;
-                    dataSet.Tables[0].TableName = tableName;
-                    tableSchema = this.provider.GetTableSchema(this.connection.Connection, tableName);
-                }
-                else
-                {
-                    this.resultSetCount++;
-                    text = string.Format("Set {0}", this.resultSetCount);
-                }
-                var resultSetTabPage = new TabPage(text);
-                GarbageMonitor.Add("resultSetTabPage", resultSetTabPage);
-                resultSetTabPage.ToolTipText = null; // TODO
-                this.resultSetsTabControl.TabPages.Add(resultSetTabPage);
-                this.resultSetsTabControl.SelectedTab = resultSetTabPage;
-                if (dataSet.Tables.Count > 1)
-                {
-                    TabControl tabControl = new TabControl();
-                    tabControl.Dock = DockStyle.Fill;
-                    int index = 0;
-                    foreach (DataTable dataTable in dataSet.Tables)
+                    DataSet tableSchema = null;
+                    string text;
+                    if (this.openTableMode)
+                    {
+                        string tableName = this.sqlStatement.FindTableName();
+                        text = tableName;
+                        dataSet.Tables[0].TableName = tableName;
+                        tableSchema = this.provider.GetTableSchema(this.connection.Connection, tableName);
+                    }
+                    else
+                    {
+                        this.resultSetCount++;
+                        text = string.Format("Set {0}", this.resultSetCount);
+                    }
+                    var resultSetTabPage = new TabPage(text);
+                    GarbageMonitor.Add("resultSetTabPage", resultSetTabPage);
+                    resultSetTabPage.ToolTipText = null; // TODO
+                    this.resultSetsTabControl.TabPages.Add(resultSetTabPage);
+                    this.resultSetsTabControl.SelectedTab = resultSetTabPage;
+                    if (dataSet.Tables.Count > 1)
+                    {
+                        var tabControl = new TabControl {Dock = DockStyle.Fill};
+                        int index = 0;
+                        foreach (DataTable dataTable in dataSet.Tables)
+                        {
+                            var commandBuilder = this.provider.DbProviderFactory.CreateCommandBuilder();
+                            var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataTable, tableSchema, this.resultWriterType, !this.openTableMode,
+                                this.sbPanelText);
+                            control.Dock = DockStyle.Fill;
+                            //text = string.Format("Table {0}", index);
+                            text = dataTable.TableName;
+                            var tabPage = new TabPage(text);
+                            tabPage.ToolTipText = null; // TODO
+                            tabPage.Controls.Add(control);
+                            tabControl.TabPages.Add(tabPage);
+                            index++;
+                        }
+                        resultSetTabPage.Controls.Add(tabControl);
+                    }
+                    else
                     {
                         var commandBuilder = this.provider.DbProviderFactory.CreateCommandBuilder();
-                        var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataTable, tableSchema, this.resultWriterType, !this.openTableMode,
+                        var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataSet.Tables[0], tableSchema, this.resultWriterType, !this.openTableMode,
                             this.sbPanelText);
                         control.Dock = DockStyle.Fill;
-                        //text = string.Format("Table {0}", index);
-                        text = dataTable.TableName;
-                        var tabPage = new TabPage(text);
-                        tabPage.ToolTipText = null; // TODO
-                        tabPage.Controls.Add(control);
-                        tabControl.TabPages.Add(tabPage);
-                        index++;
+                        resultSetTabPage.Controls.Add(control);
                     }
-                    resultSetTabPage.Controls.Add(tabControl);
-                }
-                else
-                {
-                    var commandBuilder = this.provider.DbProviderFactory.CreateCommandBuilder();
-                    var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataSet.Tables[0], tableSchema, this.resultWriterType, !this.openTableMode,
-                        this.sbPanelText);
-                    control.Dock = DockStyle.Fill;
-                    resultSetTabPage.Controls.Add(control);
                 }
             }
         }
@@ -628,7 +631,7 @@ namespace DataCommander
             this.tabControl = new global::System.Windows.Forms.TabControl();
             this.toolStrip = new global::System.Windows.Forms.ToolStrip();
             this.toolStripSeparator4 = new global::System.Windows.Forms.ToolStripSeparator();
-            this.execueQuerySplitButton = new global::System.Windows.Forms.ToolStripSplitButton();
+            this.executeQuerySplitButton = new global::System.Windows.Forms.ToolStripSplitButton();
             this.executeQueryMenuItem = new global::System.Windows.Forms.ToolStripMenuItem();
             this.executeQuerySingleRowToolStripMenuItem = new global::System.Windows.Forms.ToolStripMenuItem();
             this.cToolStripMenuItem = new global::System.Windows.Forms.ToolStripMenuItem();
@@ -1251,7 +1254,7 @@ namespace DataCommander
             this.toolStrip.Dock = global::System.Windows.Forms.DockStyle.None;
             this.toolStrip.Items.AddRange(new global::System.Windows.Forms.ToolStripItem[] {
             this.toolStripSeparator4,
-            this.execueQuerySplitButton,
+            this.executeQuerySplitButton,
             this.cancelQueryButton});
             this.toolStrip.Location = new Point(303, 281);
             this.toolStrip.Name = "toolStrip";
@@ -1264,20 +1267,20 @@ namespace DataCommander
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new global::System.Drawing.Size(6, 25);
             // 
-            // execueQuerySplitButton
+            // executeQuerySplitButton
             // 
-            this.execueQuerySplitButton.DisplayStyle = global::System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.execueQuerySplitButton.DropDownItems.AddRange(new global::System.Windows.Forms.ToolStripItem[] {
+            this.executeQuerySplitButton.DisplayStyle = global::System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.executeQuerySplitButton.DropDownItems.AddRange(new global::System.Windows.Forms.ToolStripItem[] {
             this.executeQueryMenuItem,
             this.executeQuerySingleRowToolStripMenuItem,
             this.cToolStripMenuItem,
             this.openTableToolStripMenuItem});
-            this.execueQuerySplitButton.Image = ((global::System.Drawing.Image)(resources.GetObject("execueQuerySplitButton.Image")));
-            this.execueQuerySplitButton.ImageTransparentColor = global::System.Drawing.Color.Magenta;
-            this.execueQuerySplitButton.Name = "execueQuerySplitButton";
-            this.execueQuerySplitButton.Size = new global::System.Drawing.Size(32, 22);
-            this.execueQuerySplitButton.Text = "Execute Query";
-            this.execueQuerySplitButton.ButtonClick += new global::System.EventHandler(this.toolStripSplitButton1_ButtonClick);
+            this.executeQuerySplitButton.Image = ((global::System.Drawing.Image)(resources.GetObject("executeQuerySplitButton.Image")));
+            this.executeQuerySplitButton.ImageTransparentColor = global::System.Drawing.Color.Magenta;
+            this.executeQuerySplitButton.Name = "executeQuerySplitButton";
+            this.executeQuerySplitButton.Size = new global::System.Drawing.Size(32, 22);
+            this.executeQuerySplitButton.Text = "Execute Query";
+            this.executeQuerySplitButton.ButtonClick += new global::System.EventHandler(this.toolStripSplitButton1_ButtonClick);
             // 
             // executeQueryMenuItem
             // 
@@ -1632,7 +1635,7 @@ namespace DataCommander
                         this.tabControl.SelectedTab = this.messagesTabPage;
                         break;
 
-                    case ResultWriterType.SQLite:
+                    case ResultWriterType.SqLite:
                         maxRecords = int.MaxValue;
                         string tableName = this.sqlStatement.FindTableName();
                         resultWriter = new SQLiteResultWriter(this.textBoxWriter, tableName);
@@ -2104,7 +2107,7 @@ namespace DataCommander
                         case ResultWriterType.Html:
                         case ResultWriterType.ListView:
                         case ResultWriterType.Rtf:
-                        case ResultWriterType.SQLite:
+                        case ResultWriterType.SqLite:
                         case ResultWriterType.Text:
                             this.tabControl.SelectedTab = this.resultSetsTabPage;
                             break;
@@ -2126,7 +2129,7 @@ namespace DataCommander
             if (this.cancel)
             {
                 this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Query was cancelled by user."));
-                this.sbPanelText.Text = "Query canceled.";
+                this.sbPanelText.Text = "Query was cancelled by user.";
                 this.sbPanelText.ForeColor = SystemColors.ControlText;
                 this.cancel = false;
             }
@@ -2135,7 +2138,7 @@ namespace DataCommander
                 if (this.errorCount == 0)
                 {
                     this.sbPanelText.ForeColor = SystemColors.ControlText;
-                    this.sbPanelText.Text = "Query completed.";
+                    this.sbPanelText.Text = "Query executed successfully.";
                 }
                 else
                 {
@@ -2183,8 +2186,8 @@ namespace DataCommander
             this.mnuExecuteQueryKeyInfo.Enabled = ok;
             this.mnuExecuteQueryXml.Enabled = ok;
 
-            log.Write(LogLevel.Trace, "this.execueQuerySplitButton.Enabled = {0};", ok);
-            this.execueQuerySplitButton.Enabled = ok;
+            log.Trace("this.executeQuerySplitButton.Enabled = {0};", ok);
+            this.executeQuerySplitButton.Enabled = ok;
             this.cancelQueryButton.Enabled = cancel;
         }
 
@@ -2293,22 +2296,6 @@ namespace DataCommander
             int lineIndex = QueryTextBox.GetLineIndex(richTextBox, -1);
             int col = charIndex - lineIndex + 1;
             this.sbPanelCaretPosition.Text = "Ln " + line + " Col " + col;
-        }
-
-        private void mnuExecuteQuery_Click(object sender, EventArgs e)
-        {
-            if (this.Query.Length > 0)
-            {
-                this.ExecuteQuery();
-            }
-        }
-
-        private void mnuExecuteQueryF5_Click(object sender, EventArgs e)
-        {
-            if (this.Query.Length > 0)
-            {
-                this.ExecuteQuery();
-            }
         }
 
         private void AddTable(
@@ -3739,7 +3726,7 @@ namespace DataCommander
 
         private void sQLiteDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.SetResultWriterType(ResultWriterType.SQLite);
+            this.SetResultWriterType(ResultWriterType.SqLite);
         }
 
         private void createSqlCeDatabaseToolStripMenuItem_Click(object sender, EventArgs e)

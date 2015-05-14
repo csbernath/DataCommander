@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Foundation
 {
     using System;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -13,7 +14,7 @@
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static implicit operator Predicate<T>( PredicateClass<T> predicate )
+        public static implicit operator Predicate<T>(PredicateClass<T> predicate)
         {
             return predicate.Evaluate;
         }
@@ -23,9 +24,9 @@
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static PredicateClass<T> operator !( PredicateClass<T> predicate )
+        public static PredicateClass<T> operator !(PredicateClass<T> predicate)
         {
-            return new Negation<T>( predicate );
+            return new Negation<T>(predicate);
         }
 
         /// <summary>
@@ -34,9 +35,9 @@
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static PredicateClass<T> operator &( PredicateClass<T> x, PredicateClass<T> y )
+        public static PredicateClass<T> operator &(PredicateClass<T> x, PredicateClass<T> y)
         {
-            return new Conjunction<T>( x, y );
+            return new Conjunction<T>(x, y);
         }
 
         /// <summary>
@@ -45,9 +46,9 @@
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static PredicateClass<T> operator |( PredicateClass<T> x, PredicateClass<T> y )
+        public static PredicateClass<T> operator |(PredicateClass<T> x, PredicateClass<T> y)
         {
-            return new Disjunction<T>( x, y );
+            return new Disjunction<T>(x, y);
         }
 
         /// <summary>
@@ -55,7 +56,7 @@
         /// </summary>
         /// <param name="x"></param>
         /// <returns></returns>
-        public static bool operator true( PredicateClass<T> x )
+        public static bool operator true(PredicateClass<T> x)
         {
             return false;
         }
@@ -65,7 +66,7 @@
         /// </summary>
         /// <param name="x"></param>
         /// <returns></returns>
-        public static bool operator false( PredicateClass<T> x )
+        public static bool operator false(PredicateClass<T> x)
         {
             return false;
         }
@@ -75,6 +76,7 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public abstract bool Evaluate( T value );
+        [Pure]
+        public abstract bool Evaluate(T value);
     }
 }

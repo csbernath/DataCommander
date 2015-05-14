@@ -16,9 +16,9 @@
         /// 
         /// </summary>
         /// <param name="predicate"></param>
-        public EnumerableExistentialQuantifier( Func<T, bool> predicate )
+        public EnumerableExistentialQuantifier(Func<T, bool> predicate)
         {
-            Contract.Requires( predicate != null );
+            Contract.Requires<ArgumentNullException>(predicate != null);
 
             this.predicate = predicate;
         }
@@ -29,12 +29,12 @@
         /// <param name="enumerable"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static bool Evaluate( IEnumerable<T> enumerable, Func<T, bool> predicate )
+        public static bool Evaluate(IEnumerable<T> enumerable, Func<T, bool> predicate)
         {
-            Contract.Requires( enumerable != null );
-            Contract.Requires( predicate != null );
+            Contract.Requires<ArgumentNullException>(enumerable != null);
+            Contract.Requires<ArgumentNullException>(predicate != null);
 
-            return enumerable.Any( predicate );
+            return enumerable.Any(predicate);
         }
 
         /// <summary>
@@ -43,10 +43,10 @@
         /// <param name="enumerable"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static int IndexOf( IEnumerable<T> enumerable, Predicate<T> predicate )
+        public static int IndexOf(IEnumerable<T> enumerable, Predicate<T> predicate)
         {
-            Contract.Requires( enumerable != null );
-            Contract.Requires( predicate != null );
+            Contract.Requires<ArgumentNullException>(enumerable != null);
+            Contract.Requires<ArgumentNullException>(predicate != null);
 
             int index = -1;
 
@@ -54,7 +54,7 @@
             {
                 index++;
 
-                if (predicate( item ))
+                if (predicate(item))
                 {
                     break;
                 }
@@ -68,9 +68,9 @@
         /// </summary>
         /// <param name="enumerable"></param>
         /// <returns></returns>
-        public override bool Evaluate( IEnumerable<T> enumerable )
+        public override bool Evaluate(IEnumerable<T> enumerable)
         {
-            return Evaluate( enumerable, this.predicate );
+            return Evaluate(enumerable, this.predicate);
         }
     }
 }

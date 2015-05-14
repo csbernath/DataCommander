@@ -18,7 +18,7 @@
         /// </summary>
         /// <param name="dataType"></param>
         /// <param name="value"></param>
-        public XmlSpreadsheetCell( XmlSpreadsheetDataType dataType, string value )
+        public XmlSpreadsheetCell(XmlSpreadsheetDataType dataType, string value)
         {
             this.dataType = dataType;
             this.value = value;
@@ -31,8 +31,8 @@
         {
             set
             {
-                var attribute = new XmlSpreadsheetAttribute( "ss:StyleID", value );
-                this.attributes.Add( attribute );
+                var attribute = new XmlSpreadsheetAttribute("ss:StyleID", value);
+                this.attributes.Add(attribute);
             }
         }
 
@@ -43,8 +43,8 @@
         {
             set
             {
-                var attribute = new XmlSpreadsheetAttribute( "ss:MergeAcross", value.ToString() );
-                this.attributes.Add( attribute );
+                var attribute = new XmlSpreadsheetAttribute("ss:MergeAcross", value.ToString());
+                this.attributes.Add(attribute);
             }
         }
 
@@ -52,21 +52,21 @@
         /// 
         /// </summary>
         /// <param name="xmlWriter"></param>
-        public void Write( XmlWriter xmlWriter )
+        public void Write(XmlWriter xmlWriter)
         {
-            Contract.Requires( xmlWriter != null );
+            Contract.Requires(xmlWriter != null);
 
-            using (xmlWriter.WriteElement( "Cell" ))
+            using (xmlWriter.WriteElement("Cell"))
             {
                 foreach (var attribute in this.attributes)
                 {
-                    attribute.Write( xmlWriter );
+                    attribute.Write(xmlWriter);
                 }
 
-                using (xmlWriter.WriteElement( "Data" ))
+                using (xmlWriter.WriteElement("Data"))
                 {
-                    xmlWriter.WriteAttributeString( "ss:Type", this.dataType.ToString() );
-                    xmlWriter.WriteString( this.value );
+                    xmlWriter.WriteAttributeString("ss:Type", this.dataType.ToString());
+                    xmlWriter.WriteString(this.value);
                 }
             }
         }

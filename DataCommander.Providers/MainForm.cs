@@ -59,6 +59,7 @@ namespace DataCommander
         private ToolStripMenuItem saveAllToolStripMenuItem;
         private ToolStripTextBox activeMdiChildToolStripTextBox;
         private ToolStripMenuItem recentConnectionsToolStripMenuItem;
+        private ToolStripMenuItem checkForToolStripMenuItem;
         private ToolStrip queryFormToolStrip;
 
         /// <summary>
@@ -113,7 +114,7 @@ namespace DataCommander
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof (MainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.menuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.NewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -142,6 +143,7 @@ namespace DataCommander
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.checkForToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusBar.SuspendLayout();
@@ -151,13 +153,11 @@ namespace DataCommander
             // mainMenu
             // 
             this.mainMenu.Dock = System.Windows.Forms.DockStyle.None;
-            this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
-            {
-                this.menuItem1,
-                this.mnuFont,
-                this.mnuWindow,
-                this.mnuHelp
-            });
+            this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItem1,
+            this.mnuFont,
+            this.mnuWindow,
+            this.mnuHelp});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.MdiWindowListItem = this.mnuWindow;
             this.mainMenu.Name = "mainMenu";
@@ -166,17 +166,15 @@ namespace DataCommander
             // 
             // menuItem1
             // 
-            this.menuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
-            {
-                this.NewToolStripMenuItem,
-                this.mnuConnect,
-                this.mnuOpen,
-                this.recentConnectionsToolStripMenuItem,
-                this.saveAllToolStripMenuItem,
-                this.mnuRecentFileList,
-                this.mnuCollectGarbage,
-                this.mnuExit
-            });
+            this.menuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.NewToolStripMenuItem,
+            this.mnuConnect,
+            this.mnuOpen,
+            this.recentConnectionsToolStripMenuItem,
+            this.saveAllToolStripMenuItem,
+            this.mnuRecentFileList,
+            this.mnuCollectGarbage,
+            this.mnuExit});
             this.menuItem1.MergeIndex = 1;
             this.menuItem1.Name = "menuItem1";
             this.menuItem1.Size = new System.Drawing.Size(67, 20);
@@ -218,8 +216,8 @@ namespace DataCommander
             // saveAllToolStripMenuItem
             // 
             this.saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
-            this.saveAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                                                                                       | System.Windows.Forms.Keys.S)));
+            this.saveAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.S)));
             this.saveAllToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.saveAllToolStripMenuItem.Text = "Save All";
             this.saveAllToolStripMenuItem.Click += new System.EventHandler(this.saveAllToolStripMenuItem_Click);
@@ -257,10 +255,8 @@ namespace DataCommander
             // 
             // mnuWindow
             // 
-            this.mnuWindow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
-            {
-                this.closeAllDocumentsMenuItem
-            });
+            this.mnuWindow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.closeAllDocumentsMenuItem});
             this.mnuWindow.MergeIndex = 6;
             this.mnuWindow.Name = "mnuWindow";
             this.mnuWindow.Size = new System.Drawing.Size(63, 20);
@@ -275,11 +271,10 @@ namespace DataCommander
             // 
             // mnuHelp
             // 
-            this.mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
-            {
-                this.contentsToolStripMenuItem,
-                this.mnuAbout
-            });
+            this.mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contentsToolStripMenuItem,
+            this.checkForToolStripMenuItem,
+            this.mnuAbout});
             this.mnuHelp.MergeIndex = 7;
             this.mnuHelp.Name = "mnuHelp";
             this.mnuHelp.Size = new System.Drawing.Size(44, 20);
@@ -289,7 +284,7 @@ namespace DataCommander
             // 
             this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
             this.contentsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.contentsToolStripMenuItem.Text = "Contents";
             this.contentsToolStripMenuItem.Click += new System.EventHandler(this.contentsToolStripMenuItem_Click);
             // 
@@ -297,26 +292,24 @@ namespace DataCommander
             // 
             this.mnuAbout.MergeIndex = 0;
             this.mnuAbout.Name = "mnuAbout";
-            this.mnuAbout.Size = new System.Drawing.Size(204, 22);
+            this.mnuAbout.Size = new System.Drawing.Size(173, 22);
             this.mnuAbout.Text = "About...";
             // 
             // toolStrip
             // 
             this.toolStrip.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip.ImageList = this.imageList;
-            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
-            {
-                this.btnConnect,
-                this.openButton,
-                this.saveButton,
-                this.toolStripSeparator1,
-                this.helpButton,
-                this.toolStripSeparator2,
-                this.activeMdiChildToolStripTextBox
-            });
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnConnect,
+            this.openButton,
+            this.saveButton,
+            this.toolStripSeparator1,
+            this.helpButton,
+            this.toolStripSeparator2,
+            this.activeMdiChildToolStripTextBox});
             this.toolStrip.Location = new System.Drawing.Point(3, 24);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(549, 25);
+            this.toolStrip.Size = new System.Drawing.Size(518, 25);
             this.toolStrip.TabIndex = 2;
             // 
             // imageList
@@ -384,10 +377,8 @@ namespace DataCommander
             // 
             // statusBar
             // 
-            this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
-            {
-                this.toolStripStatusLabel
-            });
+            this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel});
             this.statusBar.Location = new System.Drawing.Point(0, 531);
             this.statusBar.Name = "statusBar";
             this.statusBar.Size = new System.Drawing.Size(792, 22);
@@ -408,6 +399,14 @@ namespace DataCommander
             this.toolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
             this.toolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.toolStripPanel.Size = new System.Drawing.Size(792, 49);
+            // 
+            // checkForToolStripMenuItem
+            // 
+            this.checkForToolStripMenuItem.Name = "checkForToolStripMenuItem";
+            this.checkForToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
+            this.checkForToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.checkForToolStripMenuItem.Text = "Check for updates ";
+            this.checkForToolStripMenuItem.Click += new System.EventHandler(this.checkForToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -978,6 +977,12 @@ namespace DataCommander
             {
                 return this.activeMdiChildToolStripTextBox;
             }
+        }
+
+        private void checkForToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string url = "https://github.com/csbernath/DataCommander/releases";
+            Process.Start(url);
         }
     }
 }

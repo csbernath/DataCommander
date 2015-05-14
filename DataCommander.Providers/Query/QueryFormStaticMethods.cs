@@ -173,8 +173,8 @@
             ref int columnIndex)
         {
             bool found = false;
-            DataTable dataTable = dataView.Table;
-            DataRowCollection dataRows = dataTable.Rows;
+            var dataTable = dataView.Table;
+            var dataRows = dataTable.Rows;
             int rowCount = dataView.Count;
             int columnCount = dataTable.Columns.Count;
             object currentValueObject = dataTable.DefaultView[rowIndex][columnIndex];

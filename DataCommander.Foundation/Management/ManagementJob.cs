@@ -17,7 +17,7 @@
         /// <param name="managementObject"></param>
         public ManagementJob(ManagementObject managementObject)
         {
-            Contract.Requires(managementObject != null);
+            Contract.Requires<ArgumentNullException>(managementObject != null);
 
             this.managementObject = managementObject;
         }
@@ -29,7 +29,7 @@
         {
             get
             {
-                return (ManagementJobState)(UInt16)this.managementObject["JobState"];
+                return (ManagementJobState)(ushort)this.managementObject["JobState"];
             }
         }
 

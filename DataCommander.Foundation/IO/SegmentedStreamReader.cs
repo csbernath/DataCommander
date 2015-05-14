@@ -19,25 +19,25 @@ namespace DataCommander.Foundation.IO
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="length"></param>
-        public SegmentedStreamReader( Stream stream, long length )
+        public SegmentedStreamReader(Stream stream, long length)
         {
-            Contract.Requires( stream != null );
+            Contract.Requires<ArgumentNullException>(stream != null);
 
             this.stream = stream;
             this.length = length;
-            GarbageMonitor.Add( null, "SegmentedStreamReader", 0, this );
-            log.Trace( GarbageMonitor.State );
+            GarbageMonitor.Add(null, "SegmentedStreamReader", 0, this);
+            log.Trace(GarbageMonitor.State);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="disposing"></param>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            base.Dispose( disposing );
-            GarbageMonitor.SetDisposeTime( this, LocalTime.Default.Now );
-            log.Trace( GarbageMonitor.State );
+            base.Dispose(disposing);
+            GarbageMonitor.SetDisposeTime(this, LocalTime.Default.Now);
+            log.Trace(GarbageMonitor.State);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace DataCommander.Foundation.IO
         /// <param name="offset"></param>
         /// <param name="origin"></param>
         /// <returns></returns>
-        public override long Seek( long offset, SeekOrigin origin )
+        public override long Seek(long offset, SeekOrigin origin)
         {
             throw new NotImplementedException();
         }
@@ -63,7 +63,7 @@ namespace DataCommander.Foundation.IO
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public override void SetLength( long value )
+        public override void SetLength(long value)
         {
             this.length = value;
         }
@@ -75,17 +75,17 @@ namespace DataCommander.Foundation.IO
         /// <param name="offset"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public override int Read( byte[] buffer, int offset, int count )
+        public override int Read(byte[] buffer, int offset, int count)
         {
-            Contract.Assert( count >= 0 );
+            Contract.Assert(count >= 0);
 
             int read;
             long position = this.stream.Position;
 
             if (position < this.length)
             {
-                int min = (int)Math.Min( this.length - position, count );
-                read = this.stream.Read( buffer, offset, min );
+                int min = (int) Math.Min(this.length - position, count);
+                read = this.stream.Read(buffer, offset, min);
             }
             else
             {
@@ -101,7 +101,7 @@ namespace DataCommander.Foundation.IO
         /// <param name="buffer"></param>
         /// <param name="offset"></param>
         /// <param name="count"></param>
-        public override void Write( byte[] buffer, int offset, int count )
+        public override void Write(byte[] buffer, int offset, int count)
         {
             throw new NotImplementedException();
         }
@@ -153,6 +153,10 @@ namespace DataCommander.Foundation.IO
         /// <summary>
         /// 
         /// </summary>
-        public override long Position { get; set; }
+        public override long Position
+        {
+            get;
+            set;
+        }
     }
 }

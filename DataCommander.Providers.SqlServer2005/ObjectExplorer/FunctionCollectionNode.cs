@@ -30,37 +30,11 @@ namespace DataCommander.Providers.SqlServer2005
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText = @"select
-    s.name	as SchemaName,
-	o.name	as Name,
-	o.type
-from [{0}].sys.schemas s (nolock)
-join [{0}].sys.objects o (nolock)
-on	s.schema_id = o.schema_id
-where o.type in('FN','IF','TF')
-order by 1,2";
-            commandText = string.Format(commandText, this.database.Name);
-            var list = new List<ITreeNode>();
-            string connectionString = this.database.Databases.Server.ConnectionString;
-            using (var connection = new SqlConnection(connectionString))
+            return new ITreeNode[]
             {
-                connection.Open();
-                using (IDataReader reader = connection.ExecuteReader(commandText))
-                {
-                    while (reader.Read())
-                    {
-                        string owner = reader.GetString(0);
-                        string name = reader.GetString(1);
-                        string xtype = reader.GetString(2);
-                        FunctionNode node = new FunctionNode(this.database, owner, name, xtype);
-                        list.Add(node);
-                    }
-                }
-            }
-
-            ITreeNode[] treeNodes = new ITreeNode[list.Count];
-            list.CopyTo(treeNodes);
-            return treeNodes;
+                new TableValuedFunctionCollectionNode(this.database),
+                new ScalarValuedFunctionCollectionNode(this.database)
+            };
         }
 
         public bool Sortable

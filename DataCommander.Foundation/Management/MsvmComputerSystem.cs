@@ -19,9 +19,9 @@
         /// 
         /// </summary>
         /// <param name="managementObject"></param>
-        public MsvmComputerSystem( ManagementObject managementObject )
+        public MsvmComputerSystem(ManagementObject managementObject)
         {
-            Contract.Requires( managementObject != null );
+            Contract.Requires<ArgumentNullException>(managementObject != null);
 
             this.managementObject = managementObject;
         }
@@ -32,13 +32,13 @@
         /// <param name="managementScope"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static MsvmComputerSystem GetByName( ManagementScope managementScope, string name )
+        public static MsvmComputerSystem GetByName(ManagementScope managementScope, string name)
         {
-            Contract.Requires( managementScope != null );
+            Contract.Requires(managementScope != null);
 
-            string query = string.Format( "SELECT * FROM Msvm_ComputerSystem WHERE Name='{0}'", name );
-            List<MsvmComputerSystem> list = managementScope.ExecuteQuery( query, mo => new MsvmComputerSystem( mo ) );
-            Contract.Assert( list.Count > 0 );
+            string query = string.Format("SELECT * FROM Msvm_ComputerSystem WHERE Name='{0}'", name);
+            List<MsvmComputerSystem> list = managementScope.ExecuteQuery(query, mo => new MsvmComputerSystem(mo));
+            Contract.Assert(list.Count > 0);
             MsvmComputerSystem item;
 
             if (list.Count == 0)
@@ -47,7 +47,7 @@
             }
             else
             {
-                item = list[ 0 ];
+                item = list[0];
             }
 
             return item;
@@ -59,12 +59,12 @@
         /// <param name="managementScope"></param>
         /// <param name="elementName"></param>
         /// <returns></returns>
-        public static List<MsvmComputerSystem> GetByElementName( ManagementScope managementScope, string elementName )
+        public static List<MsvmComputerSystem> GetByElementName(ManagementScope managementScope, string elementName)
         {
-            Contract.Requires( managementScope != null );
+            Contract.Requires(managementScope != null);
 
-            string query = string.Format( "SELECT * FROM Msvm_ComputerSystem WHERE ElementName='{0}'", elementName );
-            List<MsvmComputerSystem> list = managementScope.ExecuteQuery( query, mo => new MsvmComputerSystem( mo ) );
+            string query = string.Format("SELECT * FROM Msvm_ComputerSystem WHERE ElementName='{0}'", elementName);
+            List<MsvmComputerSystem> list = managementScope.ExecuteQuery(query, mo => new MsvmComputerSystem(mo));
             return list;
         }
 
@@ -74,13 +74,14 @@
         /// <param name="managementScope"></param>
         /// <param name="elementNames"></param>
         /// <returns></returns>
-        public static List<MsvmComputerSystem> GetByElementNames( ManagementScope managementScope, IEnumerable<string> elementNames )
+        public static List<MsvmComputerSystem> GetByElementNames(ManagementScope managementScope,
+            IEnumerable<string> elementNames)
         {
-            Contract.Requires( managementScope != null );
-            Contract.Requires( elementNames != null );
+            Contract.Requires(managementScope != null);
+            Contract.Requires(elementNames != null);
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendFormat( "SELECT * FROM Msvm_ComputerSystem WHERE" );
+            sb.AppendFormat("SELECT * FROM Msvm_ComputerSystem WHERE");
             bool first = true;
 
             foreach (string elementName in elementNames)
@@ -91,14 +92,14 @@
                 }
                 else
                 {
-                    sb.Append( " OR" );
+                    sb.Append(" OR");
                 }
 
-                sb.AppendFormat( " ElementName = '{0}'", elementName );
+                sb.AppendFormat(" ElementName = '{0}'", elementName);
             }
 
             string query = sb.ToString();
-            List<MsvmComputerSystem> list = managementScope.ExecuteQuery( query, mo => new MsvmComputerSystem( mo ) );
+            List<MsvmComputerSystem> list = managementScope.ExecuteQuery(query, mo => new MsvmComputerSystem(mo));
             return list;
         }
 
@@ -109,8 +110,8 @@
         {
             get
             {
-                object elementNameObject = this.managementObject[ "ElementName" ];
-                string elementName = (string)elementNameObject;
+                object elementNameObject = this.managementObject["ElementName"];
+                string elementName = (string) elementNameObject;
                 return elementName;
             }
         }
@@ -122,9 +123,9 @@
         {
             get
             {
-                object enabledStateObject = this.managementObject[ "EnabledState" ];
-                UInt16 enabledStateUint16 = (UInt16)enabledStateObject;
-                MsvmComputerSystemEnabledState enabledState = (MsvmComputerSystemEnabledState)enabledStateUint16;
+                object enabledStateObject = this.managementObject["EnabledState"];
+                UInt16 enabledStateUint16 = (UInt16) enabledStateObject;
+                MsvmComputerSystemEnabledState enabledState = (MsvmComputerSystemEnabledState) enabledStateUint16;
                 return enabledState;
             }
         }
@@ -136,8 +137,8 @@
         {
             get
             {
-                object nameObject = this.managementObject[ "Name" ];
-                string name = (string)nameObject;
+                object nameObject = this.managementObject["Name"];
+                string name = (string) nameObject;
                 return name;
             }
         }
@@ -149,13 +150,13 @@
         {
             get
             {
-                object onTimeObject = this.managementObject[ "OnTimeInMilliseconds" ];
-                UInt64 onTimeUInt64 = (UInt64)onTimeObject;
+                object onTimeObject = this.managementObject["OnTimeInMilliseconds"];
+                UInt64 onTimeUInt64 = (UInt64) onTimeObject;
                 TimeSpan? onTime;
 
                 if (onTimeUInt64 != 0)
                 {
-                    onTime = TimeSpan.FromMilliseconds( onTimeUInt64 );
+                    onTime = TimeSpan.FromMilliseconds(onTimeUInt64);
                 }
                 else
                 {
@@ -172,12 +173,13 @@
         /// <param name="force"></param>
         /// <param name="reason"></param>
         /// <returns></returns>
-        [CLSCompliant( false )]
-        public InitiateShutdownReturnValue InitiateShutdown( bool force, string reason )
+        [CLSCompliant(false)]
+        public InitiateShutdownReturnValue InitiateShutdown(bool force, string reason)
         {
-            string query = string.Format( "SELECT * FROM Msvm_ShutdownComponent WHERE SystemName='{0}'", this.Name );
-            ObjectQuery objectQuery = new ObjectQuery( query );
-            ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher( this.managementObject.Scope, objectQuery );
+            string query = string.Format("SELECT * FROM Msvm_ShutdownComponent WHERE SystemName='{0}'", this.Name);
+            ObjectQuery objectQuery = new ObjectQuery(query);
+            ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher(
+                this.managementObject.Scope, objectQuery);
             ManagementObjectCollection managementObjectCollection = managementObjectSearcher.Get();
             ManagementObject shutdownComponent = managementObjectCollection.Cast<ManagementObject>().First();
             object resultObject = shutdownComponent.InvokeMethod(
@@ -186,10 +188,10 @@
                 {
                     force,
                     reason
-                } );
+                });
 
-            UInt32 result = (UInt32)resultObject;
-            return (InitiateShutdownReturnValue)result;
+            UInt32 result = (UInt32) resultObject;
+            return (InitiateShutdownReturnValue) result;
         }
 
         /// <summary>
@@ -198,21 +200,23 @@
         /// <param name="requestedState"></param>
         /// <param name="job"></param>
         /// <returns></returns>
-        public MsvmComputerSystemRequestStateChangeReturnValue RequestStateChange( MsvmComputerSystemRequestedState requestedState, out ManagementJob job )
+        public MsvmComputerSystemRequestStateChangeReturnValue RequestStateChange(
+            MsvmComputerSystemRequestedState requestedState, out ManagementJob job)
         {
             const string methodName = "RequestStateChange";
-            UInt16 requestedStateuInt16 = (UInt16)requestedState;
-            ManagementBaseObject inParams = this.managementObject.GetMethodParameters( methodName );
-            inParams[ "RequestedState" ] = requestedStateuInt16;
-            ManagementBaseObject outParams = this.managementObject.InvokeMethod( methodName, inParams, null );
-            MsvmComputerSystemRequestStateChangeReturnValue returnValue = (MsvmComputerSystemRequestStateChangeReturnValue)(UInt32)outParams[ "Returnvalue" ];
-            string jobPath = (string)outParams[ "Job" ];
+            ushort requestedStateuInt16 = (ushort) requestedState;
+            ManagementBaseObject inParams = this.managementObject.GetMethodParameters(methodName);
+            inParams["RequestedState"] = requestedStateuInt16;
+            ManagementBaseObject outParams = this.managementObject.InvokeMethod(methodName, inParams, null);
+            var returnValue = (MsvmComputerSystemRequestStateChangeReturnValue) (uint) outParams["Returnvalue"];
+            string jobPath = (string) outParams["Job"];
 
             if (jobPath != null)
             {
-                ManagementObject jobObject = new ManagementObject( this.managementObject.Scope, new ManagementPath( jobPath ), null );
+                ManagementObject jobObject = new ManagementObject(this.managementObject.Scope,
+                    new ManagementPath(jobPath), null);
                 jobObject.Get();
-                job = new ManagementJob( jobObject );
+                job = new ManagementJob(jobObject);
             }
             else
             {

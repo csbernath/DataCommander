@@ -26,16 +26,16 @@ namespace DataCommander.Foundation.IO
         /// Creates a new instance to watch NTFS events.
         /// </summary>
         /// <param name="fileName">The file to watch</param>
-        public FileSystemWatcher( string fileName )
+        public FileSystemWatcher(string fileName)
         {
             this.fullFileName = fileName;
             this.shortFileName = this.ShortFileName;
-            FileInfo fileInfo = new FileInfo( fileName );
+            FileInfo fileInfo = new FileInfo(fileName);
             string path = fileInfo.DirectoryName;
-            this.fileName = fileInfo.Name.ToUpper( CultureInfo.InvariantCulture );
-            this.watcher = new System.IO.FileSystemWatcher( path );
+            this.fileName = fileInfo.Name.ToUpper(CultureInfo.InvariantCulture);
+            this.watcher = new System.IO.FileSystemWatcher(path);
             this.watcher.Changed += this.OnChanged;
-            this.timer = new Timer( this.TimerCallback, null, Timeout.Infinite, Timeout.Infinite );
+            this.timer = new Timer(this.TimerCallback, null, Timeout.Infinite, Timeout.Infinite);
         }
 
         /// <summary>
@@ -95,13 +95,13 @@ namespace DataCommander.Foundation.IO
             {
                 if (this.shortFileName == null)
                 {
-                    var sb = new StringBuilder( 255 );
-                    UInt32 i = NativeMethods.GetShortPathName( this.fullFileName, sb, (UInt32) sb.Capacity );
+                    var sb = new StringBuilder(255);
+                    UInt32 i = NativeMethods.GetShortPathName(this.fullFileName, sb, (UInt32) sb.Capacity);
 
                     if (i > 0)
                     {
-                        this.shortFileName = sb.ToString().ToUpper( CultureInfo.InvariantCulture );
-                        FileInfo fileInfo = new FileInfo( this.shortFileName );
+                        this.shortFileName = sb.ToString().ToUpper(CultureInfo.InvariantCulture);
+                        FileInfo fileInfo = new FileInfo(this.shortFileName);
                         this.shortFileName = fileInfo.Name;
                     }
                 }
@@ -110,14 +110,14 @@ namespace DataCommander.Foundation.IO
             }
         }
 
-        private void TimerCallback( object state )
+        private void TimerCallback(object state)
         {
-            log.Trace("Calling FileSystemWatcher.Changed event handlers... count: " + this.count );
-            this.Changed( this, new FileSystemEventArgs( WatcherChangeTypes.Changed, this.fullFileName, this.fullFileName ) );
+            log.Trace("Calling FileSystemWatcher.Changed event handlers... count: " + this.count);
+            this.Changed(this, new FileSystemEventArgs(WatcherChangeTypes.Changed, this.fullFileName, this.fullFileName));
             this.count = 0;
         }
 
-        private void OnChanged( object sender, FileSystemEventArgs e )
+        private void OnChanged(object sender, FileSystemEventArgs e)
         {
             if (this.Changed != null)
             {
@@ -138,13 +138,13 @@ namespace DataCommander.Foundation.IO
                     {
                         if (this.count == 0)
                         {
-                            this.timer.Change( 10000, Timeout.Infinite );
+                            this.timer.Change(10000, Timeout.Infinite);
                         }
 
                         this.count++;
                     }
 
-                    log.Trace("FileSystemWatcher.OnChanged: {0},{1}", name, e.ChangeType );
+                    log.Trace("FileSystemWatcher.OnChanged: {0},{1}", name, e.ChangeType);
                 }
             }
         }

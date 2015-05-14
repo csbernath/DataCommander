@@ -26,11 +26,11 @@
         /// <param name="tempPath"></param>
         public StreamWriterTransaction(
             string path,
-            string tempPath )
+            string tempPath)
         {
             this.path = path;
             this.tempPath = tempPath;
-            this.streamWriter = new StreamWriter( tempPath, false );
+            this.streamWriter = new StreamWriter(tempPath, false);
         }
 
         /// <summary>
@@ -42,11 +42,11 @@
         public StreamWriterTransaction(
             string path,
             string tempPath,
-            Encoding encoding )
+            Encoding encoding)
         {
             this.path = path;
             this.tempPath = tempPath;
-            this.streamWriter = new StreamWriter( tempPath, false, encoding );
+            this.streamWriter = new StreamWriter(tempPath, false, encoding);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@
         {
             this.streamWriter.Close();
             const NativeMethods.MoveFileExFlags flags = NativeMethods.MoveFileExFlags.ReplaceExisiting;
-            bool succeeded = NativeMethods.MoveFileEx( this.tempPath, this.path, flags );
+            bool succeeded = NativeMethods.MoveFileEx(this.tempPath, this.path, flags);
 
             if (!succeeded)
             {
@@ -86,7 +86,7 @@
 
             if (!this.commited)
             {
-                File.Delete( this.tempPath );
+                File.Delete(this.tempPath);
             }
         }
     }

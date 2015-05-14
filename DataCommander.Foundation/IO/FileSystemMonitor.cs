@@ -40,14 +40,14 @@ namespace DataCommander.Foundation.IO
         public FileSystemMonitor(
             string path,
             string searchPattern,
-            int period )
+            int period)
         {
             this.path = path;
             this.searchPattern = searchPattern;
             this.period = period;
 
-            this.Initialize( this );
-            string name = string.Format( CultureInfo.InvariantCulture, "FileSystemMonitor({0},{1})", path, searchPattern );
+            this.Initialize(this);
+            string name = string.Format(CultureInfo.InvariantCulture, "FileSystemMonitor({0},{1})", path, searchPattern);
             this.Thread.Name = name;
         }
 
@@ -67,7 +67,7 @@ namespace DataCommander.Foundation.IO
             }
         }
 
-        void ILoopable.First( Exception exception )
+        void ILoopable.First(Exception exception)
         {
         }
 
@@ -75,35 +75,37 @@ namespace DataCommander.Foundation.IO
         {
             try
             {
-                string[] current = Directory.GetFiles( this.path, this.searchPattern );
-                Array.Sort( current );
+                string[] current = Directory.GetFiles(this.path, this.searchPattern);
+                Array.Sort(current);
 
                 if (this.last != null)
                 {
                     for (int i = 0; i < current.Length; i++)
                     {
-                        string file = current[ i ];
-                        int index = Array.BinarySearch( this.last, file );
+                        string file = current[i];
+                        int index = Array.BinarySearch(this.last, file);
 
                         if (index < 0 && this.Created != null)
                         {
-                            string message = string.Format( CultureInfo.InvariantCulture, "FileSystemMonitor({0}).Created: {1}", this.Thread.ManagedThreadId, file );
-                            log.Trace(message );
+                            string message = string.Format(CultureInfo.InvariantCulture,
+                                "FileSystemMonitor({0}).Created: {1}", this.Thread.ManagedThreadId, file);
+                            log.Trace(message);
 
-                            string fileName = Path.GetFileName( file );
-                            FileSystemEventArgs e = new FileSystemEventArgs( WatcherChangeTypes.Created, this.path, fileName );
-                            this.created( this, e );
+                            string fileName = Path.GetFileName(file);
+                            FileSystemEventArgs e = new FileSystemEventArgs(WatcherChangeTypes.Created, this.path,
+                                fileName);
+                            this.created(this, e);
                         }
                     }
 
                     for (int i = 0; i < this.last.Length; i++)
                     {
-                        string file = this.last[ i ];
-                        int index = Array.BinarySearch( current, file );
+                        string file = this.last[i];
+                        int index = Array.BinarySearch(current, file);
 
                         if (index < 0)
                         {
-                            log.Trace("{0}.Deleted: {1}", this.Thread.Name, file );
+                            log.Trace("{0}.Deleted: {1}", this.Thread.Name, file);
                         }
                     }
                 }
@@ -111,7 +113,7 @@ namespace DataCommander.Foundation.IO
                 {
                     for (int i = 0; i < current.Length; i++)
                     {
-                        log.Trace("FileSystemMonitor.current[{0}]: {1}", i, current[ i ] );
+                        log.Trace("FileSystemMonitor.current[{0}]: {1}", i, current[i]);
                     }
                 }
 
@@ -119,10 +121,10 @@ namespace DataCommander.Foundation.IO
             }
             catch (Exception e)
             {
-                log.Write( LogLevel.Error, e.ToString() );
+                log.Write(LogLevel.Error, e.ToString());
             }
 
-            this.Thread.WaitForStop( this.period );
+            this.Thread.WaitForStop(this.period);
         }
 
         void ILoopable.Last()

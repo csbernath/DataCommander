@@ -167,6 +167,8 @@
     <Compile Include="NonSqlObjectName.cs" />
     <Compile Include="ObjectExplorer\ColumnCollectionNode.cs" />
     <Compile Include="ObjectExplorer\ColumnNode.cs" />
+    <Compile Include="ObjectExplorer\ScalarValuedFunctionCollectionNode.cs" />
+    <Compile Include="ObjectExplorer\TableValuedFunctionCollectionNode.cs" />
     <Compile Include="ObjectExplorer\SchemaCollectionNode.cs" />
     <Compile Include="ObjectExplorer\SchemaNode.cs" />
     <Compile Include="ObjectExplorer\IndexNode.cs" />

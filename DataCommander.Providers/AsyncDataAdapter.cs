@@ -66,12 +66,12 @@ namespace DataCommander.Providers
             Action<IAsyncDataAdapter, Exception> endFill,
             Action<IAsyncDataAdapter> writeEnd)
         {
-            //Contract.Requires(provider != null);
-            //Contract.Requires(maxRecords >= 0);
-            //Contract.Requires(rowBlockSize >= 0);
-            //Contract.Requires(resultWriter != null);
-            //Contract.Requires(endFill != null);
-            //Contract.Requires(writeEnd != null);
+            Contract.Requires<ArgumentNullException>(provider != null);
+            Contract.Requires<ArgumentOutOfRangeException>(maxRecords >= 0);
+            Contract.Requires<ArgumentOutOfRangeException>(rowBlockSize >= 0);
+            Contract.Requires<ArgumentNullException>(resultWriter != null);
+            Contract.Requires<ArgumentNullException>(endFill != null);
+            Contract.Requires<ArgumentNullException>(writeEnd != null);
 
             this.provider = provider;
             this.commands = commands;
@@ -130,6 +130,10 @@ namespace DataCommander.Providers
             DataTable schemaTable,
             int tableIndex)
         {
+            Contract.Requires<ArgumentNullException>(dataReader != null);
+            Contract.Requires<ArgumentNullException>(schemaTable != null);
+            Contract.Requires<ArgumentOutOfRangeException>(tableIndex >= 0);
+
             using (LogFactory.Instance.GetCurrentMethodLog())
             {
                 Exception exception = null;
@@ -243,7 +247,7 @@ namespace DataCommander.Providers
 
         private void Fill(IDbCommand command)
         {
-            Contract.Requires(command != null);
+            Contract.Requires<ArgumentNullException>(command != null);
 
             Exception exception = null;
 

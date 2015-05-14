@@ -18,12 +18,12 @@ namespace DataCommander.Foundation.Threading
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private readonly Thread thread;
         private readonly ThreadStart start;
-        private DateTime _startTime;
-        private DateTime _stopTime;
-        private readonly WorkerEvent stopRequest = new WorkerEvent( WorkerEventState.NonSignaled );
+        private DateTime startTime;
+        private DateTime stopTime;
+        private readonly WorkerEvent stopRequest = new WorkerEvent(WorkerEventState.NonSignaled);
         private bool isStopAccepted;
-        private readonly WorkerEvent pauseRequest = new WorkerEvent( WorkerEventState.NonSignaled );
-        private readonly WorkerEvent continueRequest = new WorkerEvent( WorkerEventState.NonSignaled );
+        private readonly WorkerEvent pauseRequest = new WorkerEvent(WorkerEventState.NonSignaled);
+        private readonly WorkerEvent continueRequest = new WorkerEvent(WorkerEventState.NonSignaled);
         private EventHandler started;
         private EventHandler stopped;
 
@@ -35,18 +35,18 @@ namespace DataCommander.Foundation.Threading
         /// 
         /// </summary>
         /// <param name="start"></param>
-        public WorkerThread( ThreadStart start )
+        public WorkerThread(ThreadStart start)
         {
-            Contract.Requires<ArgumentNullException>( start != null );
+            Contract.Requires<ArgumentNullException>(start != null);
 
             this.start = start;
-            this.thread = new Thread( this.PrivateStart );
-            ThreadMonitor.Add( this );
+            this.thread = new Thread(this.PrivateStart);
+            ThreadMonitor.Add(this);
         }
 
-        internal WorkerThread( Thread thread )
+        internal WorkerThread(Thread thread)
         {
-            Contract.Requires( thread != null );
+            Contract.Requires(thread != null);
 
             this.thread = thread;
         }
@@ -129,8 +129,9 @@ namespace DataCommander.Foundation.Threading
                         this.isStopAccepted = true;
                         if (log.IsTraceEnabled)
                         {
-                            var stackTrace = new StackTrace( 1, true );
-                            log.Trace("WorkerThread({0},{1}) accepted stop request.\r\n{2}", this.thread.Name, this.thread.ManagedThreadId, stackTrace );
+                            var stackTrace = new StackTrace(1, true);
+                            log.Trace("WorkerThread({0},{1}) accepted stop request.\r\n{2}", this.thread.Name,
+                                this.thread.ManagedThreadId, stackTrace);
                         }
                     }
                 }
@@ -250,7 +251,7 @@ namespace DataCommander.Foundation.Threading
         {
             get
             {
-                return this._startTime;
+                return this.startTime;
             }
         }
 
@@ -258,7 +259,7 @@ namespace DataCommander.Foundation.Threading
         {
             get
             {
-                return this._stopTime;
+                return this.stopTime;
             }
         }
 
@@ -271,8 +272,8 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public void Start()
         {
-            log.Trace("Starting WorkerThread({0})...", this.thread.Name );
-            this._startTime = LocalTime.Default.Now;
+            log.Trace("Starting WorkerThread({0})...", this.thread.Name);
+            this.startTime = LocalTime.Default.Now;
             this.thread.Start();
         }
 
@@ -281,8 +282,8 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public void Stop()
         {
-            log.Trace("Stopping WorkerThread({0},{1})...", this.thread.Name, this.thread.ManagedThreadId );
-            this._stopTime = LocalTime.Default.Now;
+            log.Trace("Stopping WorkerThread({0},{1})...", this.thread.Name, this.thread.ManagedThreadId);
+            this.stopTime = LocalTime.Default.Now;
             this.stopRequest.Set();
         }
 
@@ -291,7 +292,7 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public void Pause()
         {
-            log.Trace("WorkerThread({0},{1}) is requested to pause.", this.thread.Name, this.thread.ManagedThreadId );
+            log.Trace("WorkerThread({0},{1}) is requested to pause.", this.thread.Name, this.thread.ManagedThreadId);
             this.pauseRequest.Set();
         }
 
@@ -300,7 +301,7 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public void Continue()
         {
-            log.Trace("WorkerThread({0},{1}) is requested to continue.", this.thread.Name, this.thread.ManagedThreadId );
+            log.Trace("WorkerThread({0},{1}) is requested to continue.", this.thread.Name, this.thread.ManagedThreadId);
             this.pauseRequest.Reset();
             this.continueRequest.Set();
         }
@@ -310,7 +311,8 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public void WaitForStopOrContinue()
         {
-            log.Write(LogLevel.Error, "WorkerThread({0},{1}) is waiting for stop or continue request...", this.thread.Name, this.thread.ManagedThreadId);
+            log.Write(LogLevel.Error, "WorkerThread({0},{1}) is waiting for stop or continue request...",
+                this.thread.Name, this.thread.ManagedThreadId);
             long ticks = Stopwatch.GetTimestamp();
             WaitHandle[] waitHandles = {this.stopRequest, this.continueRequest};
             int index = WaitHandle.WaitAny(waitHandles);
@@ -332,7 +334,8 @@ namespace DataCommander.Foundation.Threading
                     break;
             }
 
-            log.Trace("WorkerThread({0},{1}) accepted {2} request in {3} seconds.", this.thread.Name, this.thread.ManagedThreadId, request, StopwatchTimeSpan.ToString(ticks, 6));
+            log.Trace("WorkerThread({0},{1}) accepted {2} request in {3} seconds.", this.thread.Name,
+                this.thread.ManagedThreadId, request, StopwatchTimeSpan.ToString(ticks, 6));
         }
 
         /// <summary>
@@ -348,9 +351,9 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         /// <param name="millisecondsTimeout"></param>
         /// <returns></returns>
-        public bool Join( int millisecondsTimeout )
+        public bool Join(int millisecondsTimeout)
         {
-            return this.thread.Join( millisecondsTimeout );
+            return this.thread.Join(millisecondsTimeout);
         }
 
         /// <summary>
@@ -358,9 +361,9 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        public bool WaitForStop( TimeSpan timeout )
+        public bool WaitForStop(TimeSpan timeout)
         {
-            bool signaled = this.stopRequest.WaitOne( timeout, false );
+            bool signaled = this.stopRequest.WaitOne(timeout, false);
             return signaled;
         }
 
@@ -369,9 +372,9 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        public bool WaitForStop( int timeout )
+        public bool WaitForStop(int timeout)
         {
-            bool signaled = this.stopRequest.WaitOne( timeout, false );
+            bool signaled = this.stopRequest.WaitOne(timeout, false);
             return signaled;
         }
 
@@ -390,7 +393,7 @@ namespace DataCommander.Foundation.Threading
         private void PrivateStart()
         {
             var now = LocalTime.Default.Now;
-            TimeSpan elapsed = now - this._startTime;
+            TimeSpan elapsed = now - this.startTime;
             UInt32 win32threadId = NativeMethods.GetCurrentThreadId();
 
             log.Write(
@@ -399,13 +402,13 @@ namespace DataCommander.Foundation.Threading
                 this.thread.Name,
                 this.thread.ManagedThreadId,
                 elapsed,
-                win32threadId );
+                win32threadId);
 
             this.thread.CurrentUICulture = CultureInfo.InvariantCulture;
 
             if (this.started != null)
             {
-                this.started( this, null );
+                this.started(this, null);
             }
 
             try
@@ -414,30 +417,31 @@ namespace DataCommander.Foundation.Threading
             }
             catch (Exception e)
             {
-                log.Write( LogLevel.Error, "WorkerThread({0},{1}) unhandled exception:\r\n{2}", this.thread.Name, this.thread.ManagedThreadId, e );
+                log.Write(LogLevel.Error, "WorkerThread({0},{1}) unhandled exception:\r\n{2}", this.thread.Name,
+                    this.thread.ManagedThreadId, e);
             }
 
             now = LocalTime.Default.Now;
             if (this.stopRequest.State == WorkerEventState.Signaled)
             {
-                elapsed = now - this._stopTime;
+                elapsed = now - this.stopTime;
             }
             else
             {
                 elapsed = TimeSpan.Zero;
             }
 
-            this._stopTime = now;
+            this.stopTime = now;
 
             log.Trace(
                 "WorkerThread({0},{1}) stopped in {2} seconds.",
                 this.thread.Name,
                 this.thread.ManagedThreadId,
-                elapsed );
+                elapsed);
 
             if (this.stopped != null)
             {
-                this.stopped( this, null );
+                this.stopped(this, null);
             }
         }
 

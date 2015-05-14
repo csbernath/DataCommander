@@ -39,9 +39,9 @@ namespace DataCommander.Foundation.Threading
         /// If this class is not inherited the caller can initialize the instance here.
         /// </summary>
         /// <param name="loopable"></param>
-        public LoopThread( ILoopable loopable )
+        public LoopThread(ILoopable loopable)
         {
-            this.Initialize( loopable );
+            this.Initialize(loopable);
         }
 
         /// <summary>
@@ -59,10 +59,10 @@ namespace DataCommander.Foundation.Threading
         /// Inherited class must initialize the base class with this method.
         /// </summary>
         /// <param name="loopable"></param>
-        protected void Initialize( ILoopable loopable )
+        protected void Initialize(ILoopable loopable)
         {
             this.loopable = loopable;
-            this.thread = new WorkerThread( this.Start );
+            this.thread = new WorkerThread(this.Start);
         }
 
         private void Start()
@@ -75,7 +75,7 @@ namespace DataCommander.Foundation.Threading
                 {
                     if (!this.thread.IsStopRequested)
                     {
-                        this.loopable.First( exception );
+                        this.loopable.First(exception);
                         exception = null;
 
                         while (!this.thread.IsStopRequested)
@@ -87,7 +87,8 @@ namespace DataCommander.Foundation.Threading
                 catch (Exception e)
                 {
                     exception = e;
-                    log.Write( LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", this.thread.Name, this.thread.ManagedThreadId, e.ToLogString() );
+                    log.Write(LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", this.thread.Name,
+                        this.thread.ManagedThreadId, e.ToLogString());
                 }
             }
 
@@ -97,7 +98,8 @@ namespace DataCommander.Foundation.Threading
             }
             catch (Exception e)
             {
-                log.Write( LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", this.thread.Name, this.thread.ManagedThreadId, e.ToLogString() );
+                log.Write(LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", this.thread.Name,
+                    this.thread.ManagedThreadId, e.ToLogString());
             }
         }
     }

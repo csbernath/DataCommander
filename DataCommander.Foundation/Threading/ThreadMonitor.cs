@@ -22,16 +22,20 @@ namespace DataCommander.Foundation.Threading
 
         private static readonly StringTableColumnInfo<WorkerThread>[] threadColumns =
         {
-            new StringTableColumnInfo<WorkerThread>( "Index", StringTableColumnAlign.Right, ( t, i ) => i.ToString() ),
-            new StringTableColumnInfo<WorkerThread>( "ManagedThreadId", StringTableColumnAlign.Right, t => t.ManagedThreadId ),
-            new StringTableColumnInfo<WorkerThread>( "Name", StringTableColumnAlign.Left, t => t.Name ),
-            new StringTableColumnInfo<WorkerThread>( "State", StringTableColumnAlign.Left, t => t.ThreadState ),
-            new StringTableColumnInfo<WorkerThread>( "StartTime", StringTableColumnAlign.Left, t => ToString( t.StartTime ) ),
-            new StringTableColumnInfo<WorkerThread>( "StopTime", StringTableColumnAlign.Left, t => ToString( t.StopTime ) ),
-            new StringTableColumnInfo<WorkerThread>( "Elapsed", StringTableColumnAlign.Left, t => t.ThreadState == ThreadState.Stopped ? ( t.StopTime - t.StartTime ).ToString() : null ),
-            new StringTableColumnInfo<WorkerThread>( "Priority", StringTableColumnAlign.Left, t => GetPriority( t.Thread ) ),
-            new StringTableColumnInfo<WorkerThread>( "IsBackground", StringTableColumnAlign.Left, t => IsBackground( t.Thread ) ),
-            new StringTableColumnInfo<WorkerThread>( "IsThreadPoolThread", StringTableColumnAlign.Left, t => t.Thread.IsThreadPoolThread )
+            new StringTableColumnInfo<WorkerThread>("Index", StringTableColumnAlign.Right, (t, i) => i.ToString()),
+            new StringTableColumnInfo<WorkerThread>("ManagedThreadId", StringTableColumnAlign.Right,
+                t => t.ManagedThreadId),
+            new StringTableColumnInfo<WorkerThread>("Name", StringTableColumnAlign.Left, t => t.Name),
+            new StringTableColumnInfo<WorkerThread>("State", StringTableColumnAlign.Left, t => t.ThreadState),
+            new StringTableColumnInfo<WorkerThread>("StartTime", StringTableColumnAlign.Left, t => ToString(t.StartTime)),
+            new StringTableColumnInfo<WorkerThread>("StopTime", StringTableColumnAlign.Left, t => ToString(t.StopTime)),
+            new StringTableColumnInfo<WorkerThread>("Elapsed", StringTableColumnAlign.Left,
+                t => t.ThreadState == ThreadState.Stopped ? (t.StopTime - t.StartTime).ToString() : null),
+            new StringTableColumnInfo<WorkerThread>("Priority", StringTableColumnAlign.Left, t => GetPriority(t.Thread)),
+            new StringTableColumnInfo<WorkerThread>("IsBackground", StringTableColumnAlign.Left,
+                t => IsBackground(t.Thread)),
+            new StringTableColumnInfo<WorkerThread>("IsThreadPoolThread", StringTableColumnAlign.Left,
+                t => t.Thread.IsThreadPoolThread)
         };
 
         private sealed class ThreadPoolRow
@@ -45,11 +49,11 @@ namespace DataCommander.Foundation.Threading
 
         private static readonly StringTableColumnInfo<ThreadPoolRow>[] threadPoolColumns =
         {
-            new StringTableColumnInfo<ThreadPoolRow>( "Name", StringTableColumnAlign.Left, t => t.Name ),
-            new StringTableColumnInfo<ThreadPoolRow>( "Min", StringTableColumnAlign.Right, t => t.Min ),
-            new StringTableColumnInfo<ThreadPoolRow>( "Active", StringTableColumnAlign.Right, t => t.Active ),
-            new StringTableColumnInfo<ThreadPoolRow>( "Available", StringTableColumnAlign.Right, t => t.Available ),
-            new StringTableColumnInfo<ThreadPoolRow>( "Max", StringTableColumnAlign.Right, t => t.Max )
+            new StringTableColumnInfo<ThreadPoolRow>("Name", StringTableColumnAlign.Left, t => t.Name),
+            new StringTableColumnInfo<ThreadPoolRow>("Min", StringTableColumnAlign.Right, t => t.Min),
+            new StringTableColumnInfo<ThreadPoolRow>("Active", StringTableColumnAlign.Right, t => t.Active),
+            new StringTableColumnInfo<ThreadPoolRow>("Available", StringTableColumnAlign.Right, t => t.Available),
+            new StringTableColumnInfo<ThreadPoolRow>("Max", StringTableColumnAlign.Right, t => t.Max)
         };
 
         /// <summary>
@@ -73,12 +77,12 @@ namespace DataCommander.Foundation.Threading
 
                 lock (threads)
                 {
-                    bool contains = threads.TryGetValue( id, out current );
+                    bool contains = threads.TryGetValue(id, out current);
 
                     if (!contains)
                     {
-                        current = new WorkerThread( currentThread );
-                        threads.Add( id, current );
+                        current = new WorkerThread(currentThread);
+                        threads.Add(id, current);
                     }
                 }
 
@@ -98,12 +102,12 @@ namespace DataCommander.Foundation.Threading
             int maxCompletionPortThreads;
             int availableWorkerThreads;
             int availableCompletionPortThreads;
-            ThreadPool.GetMinThreads( out minWorkerThreads, out minCompletionPortThreads );
-            ThreadPool.GetMaxThreads( out maxWorkerThreads, out maxCompletionPortThreads );
-            ThreadPool.GetAvailableThreads( out availableWorkerThreads, out availableCompletionPortThreads );
+            ThreadPool.GetMinThreads(out minWorkerThreads, out minCompletionPortThreads);
+            ThreadPool.GetMaxThreads(out maxWorkerThreads, out maxCompletionPortThreads);
+            ThreadPool.GetAvailableThreads(out availableWorkerThreads, out availableCompletionPortThreads);
 
             var threadPoolRows = new ThreadPoolRow[2];
-            threadPoolRows[ 0 ] =
+            threadPoolRows[0] =
                 new ThreadPoolRow
                 {
                     Name = "WorkerThreads",
@@ -113,7 +117,7 @@ namespace DataCommander.Foundation.Threading
                     Max = maxWorkerThreads
                 };
 
-            threadPoolRows[ 1 ] =
+            threadPoolRows[1] =
                 new ThreadPoolRow
                 {
                     Name = "CompletionPortThreads",
@@ -123,7 +127,7 @@ namespace DataCommander.Foundation.Threading
                     Max = maxCompletionPortThreads
                 };
 
-            return threadPoolRows.ToStringTable( threadPoolColumns );
+            return threadPoolRows.ToStringTable(threadPoolColumns);
         }
 
         /// <summary>
@@ -134,28 +138,28 @@ namespace DataCommander.Foundation.Threading
             StringTable stringTable;
             lock (threads)
             {
-                stringTable = threads.Values.ToStringTable( threadColumns );
+                stringTable = threads.Values.ToStringTable(threadColumns);
             }
 
             return stringTable;
         }
 
-        internal static void Add( WorkerThread thread )
+        internal static void Add(WorkerThread thread)
         {
-            Contract.Requires<ArgumentNullException>( thread != null );
+            Contract.Requires<ArgumentNullException>(thread != null);
 
             lock (threads)
             {
-                threads.Add( thread.ManagedThreadId, thread );
+                threads.Add(thread.ManagedThreadId, thread);
             }
         }
 
         /// <summary>
         /// Tries to join (<see cref="System.Threading.Thread.Join(int)"/>) threads and removes the joined threads from the list of monitored threads.
         /// </summary>
-        public static void Join( int millisecondsTimout )
+        public static void Join(int millisecondsTimout)
         {
-            var removableThreads = new LazyCollection<WorkerThread>( () => new List<WorkerThread>() );
+            var removableThreads = new LazyCollection<WorkerThread>(() => new List<WorkerThread>());
 
             WorkerThread[] currentThreads;
             lock (threads)
@@ -163,18 +167,18 @@ namespace DataCommander.Foundation.Threading
                 currentThreads = threads.Values.ToArray();
             }
 
-            TimeSpan remaining = TimeSpan.FromMilliseconds( millisecondsTimout );
+            TimeSpan remaining = TimeSpan.FromMilliseconds(millisecondsTimout);
 
             foreach (var thread in currentThreads)
             {
                 if (thread.ThreadState == ThreadState.Unstarted)
                 {
-                    removableThreads.Add( thread );
+                    removableThreads.Add(thread);
                 }
                 else
                 {
                     var stopwatch = Stopwatch.StartNew();
-                    bool joined = thread.Thread.Join( remaining );
+                    bool joined = thread.Thread.Join(remaining);
                     stopwatch.Stop();
 
                     if (remaining >= stopwatch.Elapsed)
@@ -188,7 +192,7 @@ namespace DataCommander.Foundation.Threading
 
                     if (joined)
                     {
-                        removableThreads.Add( thread );
+                        removableThreads.Add(thread);
                     }
                 }
             }
@@ -199,13 +203,13 @@ namespace DataCommander.Foundation.Threading
                 {
                     foreach (var thread in removableThreads)
                     {
-                        threads.Remove( thread.ManagedThreadId );
+                        threads.Remove(thread.ManagedThreadId);
                     }
                 }
             }
         }
 
-        private static string ToString( DateTime dateTime )
+        private static string ToString(DateTime dateTime)
         {
             string s;
 
@@ -215,13 +219,13 @@ namespace DataCommander.Foundation.Threading
             }
             else
             {
-                s = dateTime.ToString( "yyyy.MM.dd HH:mm:ss.ffffff", CultureInfo.InvariantCulture );
+                s = dateTime.ToString("yyyy.MM.dd HH:mm:ss.ffffff", CultureInfo.InvariantCulture);
             }
 
             return s;
         }
 
-        private static string GetPriority( Thread thread )
+        private static string GetPriority(Thread thread)
         {
             string priority = null;
             if (thread.IsAlive)
@@ -238,7 +242,7 @@ namespace DataCommander.Foundation.Threading
             return priority;
         }
 
-        private static string IsBackground( Thread thread )
+        private static string IsBackground(Thread thread)
         {
             string isBackground = null;
             if (thread.IsAlive)

@@ -9,7 +9,7 @@ namespace DataCommander.Providers
         ListView,
         Excel,
         File,
-        SQLite,
+        SqLite,
         InsertScriptFile,
         DataGridView,
         Log

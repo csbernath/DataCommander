@@ -19,8 +19,5 @@ namespace DataCommander.Providers.SqlServer2005
 
         // V = View
         public const string View = "V";
-
-        // FN = SQL scalar function
-        // public const ScalarFunction = "FN";
     }
 }
