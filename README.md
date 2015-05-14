@@ -133,6 +133,7 @@ Query TextBox
 |Query/Create Insert Statements|Ctrl+I|
 |Object Explorer|F8|
 |Help/Contents|F1|
+|Check for updates|F12|
 
 How to open a file in the query text box
   1.	Drag and drop the file into the query textbox.
