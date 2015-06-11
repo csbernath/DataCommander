@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Msi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.OleDb", "DataCommander.Providers.OleDb\DataCommander.Providers.OleDb.csproj", "{A24A2AE0-CB55-460D-9305-3F426DA3B3A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Tfs-11.0.0.0", "DataCommander.Providers.Tfs-11.0.0.0\DataCommander.Providers.Tfs-11.0.0.0.csproj", "{C9DC3080-122B-4F26-B2FB-B4A985983DC8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		ClientRelease|Any CPU = ClientRelease|Any CPU
@@ -280,6 +282,21 @@ Global
 		{A24A2AE0-CB55-460D-9305-3F426DA3B3A6}.Test|Any CPU.Build.0 = Release|Any CPU
 		{A24A2AE0-CB55-460D-9305-3F426DA3B3A6}.Test|x86.ActiveCfg = Release|x86
 		{A24A2AE0-CB55-460D-9305-3F426DA3B3A6}.Test|x86.Build.0 = Release|x86
+		{C9DC3080-122B-4F26-B2FB-B4A985983DC8}.ClientRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{C9DC3080-122B-4F26-B2FB-B4A985983DC8}.ClientRelease|Any CPU.Build.0 = Release|Any CPU
+		{C9DC3080-122B-4F26-B2FB-B4A985983DC8}.ClientRelease|x86.ActiveCfg = Release|Any CPU
+		{C9DC3080-122B-4F26-B2FB-B4A985983DC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9DC3080-122B-4F26-B2FB-B4A985983DC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9DC3080-122B-4F26-B2FB-B4A985983DC8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C9DC3080-122B-4F26-B2FB-B4A985983DC8}.NDoc|Any CPU.ActiveCfg = Release|Any CPU
+		{C9DC3080-122B-4F26-B2FB-B4A985983DC8}.NDoc|Any CPU.Build.0 = Release|Any CPU
+		{C9DC3080-122B-4F26-B2FB-B4A985983DC8}.NDoc|x86.ActiveCfg = Release|Any CPU
+		{C9DC3080-122B-4F26-B2FB-B4A985983DC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9DC3080-122B-4F26-B2FB-B4A985983DC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9DC3080-122B-4F26-B2FB-B4A985983DC8}.Release|x86.ActiveCfg = Release|Any CPU
+		{C9DC3080-122B-4F26-B2FB-B4A985983DC8}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{C9DC3080-122B-4F26-B2FB-B4A985983DC8}.Test|Any CPU.Build.0 = Release|Any CPU
+		{C9DC3080-122B-4F26-B2FB-B4A985983DC8}.Test|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
