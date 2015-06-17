@@ -40,7 +40,7 @@ The data grid can be exported into Excel.
 |SQLite|[SQLite .NET Data Provider](http://system.data.sqlite.org)|
 |SqlServer2005|[Microsoft SQL Server](http://www.microsoft.com/en-us/server-cloud/products/sql-server/) 2005 or greater|
 |SqlServerCe40|[Microsoft SQL Server Compact Edition 4.0](http://www.microsoft.com/en-us/download/details.aspx?id=17876)|
-|Tfs-11.0.0.0|[Microsoft Team Foundation Server](https://msdn.microsoft.com/en-us/vstudio/ff637362.aspx) (implemented in Data Commander)|
+|Tfs-11.0.0.0|[Microsoft Team Foundation Server](https://msdn.microsoft.com/en-us/vstudio/ff637362.aspx)|
 |Wmi|[Windows Management Instrumentation](https://msdn.microsoft.com/en-us/library/aa394582(v=vs.85).aspx)
 
 General functions
