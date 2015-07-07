@@ -1,11 +1,10 @@
 namespace DataCommander.Providers.Odp
 {
-	using System.Collections.Generic;
-	using System.Data;
-	using System.Windows.Forms;
-	using DataCommander.Foundation.Data;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Windows.Forms;
 
-	internal sealed class FunctionCollectionNode : ITreeNode
+    internal sealed class FunctionCollectionNode : ITreeNode
 	{
 		private SchemaNode schemaNode;
 

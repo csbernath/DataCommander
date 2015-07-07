@@ -2,10 +2,9 @@
 {
     using System.Collections.Generic;
     using System.Data;
-    using DataCommander.Foundation.Data;
-    using DataCommander.Providers;
+    using System.Windows.Forms;
 
-	internal sealed class SynonymNode : ITreeNode
+    internal sealed class SynonymNode : ITreeNode
 	{
 		private SchemaNode schema;
 		private string name;
@@ -67,7 +66,7 @@ where	s.OWNER			= '{0}'
 			}
 		}
 
-		System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
+		ContextMenuStrip ITreeNode.ContextMenu
 		{
 			get
 			{

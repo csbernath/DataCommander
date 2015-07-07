@@ -8,6 +8,9 @@
         public DoubleBufferedDataGridView()
         {
             this.RowHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+            // AccessViolationException on ToolTip that faults COMCTL32.dll - .NET 4.0
+            this.ShowCellToolTips = false;
         }
 
         public bool PublicDoubleBuffered

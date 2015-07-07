@@ -140,6 +140,8 @@ set arithabort on");
 
                 switch (serverVersion)
                 {
+                    #region SQL Server 2000
+
                     case "08.00.0194":
                         description = "SQL Server 2000 RTM";
                         break;
@@ -163,6 +165,10 @@ set arithabort on");
                     case "08.00.2187":
                         description = "SQL Server 2000 post SP4 hotfix build (build 2187)";
                         break;
+
+                    #endregion
+
+                    #region SQL Server 2005
 
                     case "09.00.1399":
                         description = "SQL Server 2005";
@@ -208,17 +214,31 @@ set arithabort on");
                         description = "Security update for SQL Server 2005 Service Pack 4 GDR: June 14, 2011";
                         break;
 
+                    #endregion
+
+                    #region SQL Server 2008
+
                     case "10.00.1600":
                         description = "SQL Server 2008 (RTM)";
                         break;
 
                     case "10.50.1600":
-                        description = "SQL Server 2008 R2 (RTM)";
+                        description = "SQL Server 2008 R2 RTM: April 21, 2010";
                         break;
 
                     case "10.50.6000":
-                        description = "SQL Server 2008 R2 Service Pack 3";
+                        description = "SQL Server 2008 R2 Service Pack 3 (SP3): September 26, 2014";
                         break;
+
+                    #endregion
+
+                    #region SQL Server 2012
+
+                    case "11.00.2100":
+                        description = "SQL Server 2012 RTM: March 6, 2012";
+                        break;
+
+                    #endregion
 
                     default:
                         description = null;

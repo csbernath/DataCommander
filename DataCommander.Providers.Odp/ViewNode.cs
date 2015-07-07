@@ -3,10 +3,9 @@ namespace DataCommander.Providers.Odp
     using System;
     using System.Collections.Generic;
     using System.Windows.Forms;
-    using DataCommander.Providers;
     using Oracle.ManagedDataAccess.Client;
 
-	internal sealed class ViewNode : ITreeNode
+    internal sealed class ViewNode : ITreeNode
 	{
 		private ViewCollectionNode parent;
 		private string name;
@@ -70,7 +69,7 @@ namespace DataCommander.Providers.Odp
 					{
 						string append = dataReader.GetString( 0 );
 
-						MainForm mainForm = DataCommander.Providers.DataCommanderApplication.Instance.MainForm;
+						MainForm mainForm = DataCommanderApplication.Instance.MainForm;
 						QueryForm queryForm = (QueryForm) mainForm.ActiveMdiChild;
 						QueryTextBox querytextBox = queryForm.QueryTextBox;
 						int selectionStart = querytextBox.RichTextBox.TextLength;

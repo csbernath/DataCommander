@@ -1,10 +1,10 @@
 namespace DataCommander.Providers.Odp
 {
-	using System.Collections.Generic;
-	using System.Data;
-	using System.Windows.Forms;
-	using DataCommander.Foundation.Data;
-	using Oracle.ManagedDataAccess.Client;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Windows.Forms;
+    using DataCommander.Foundation.Data;
+    using Oracle.ManagedDataAccess.Client;
 
     internal class IndexeCollectionNode : ITreeNode
 	{

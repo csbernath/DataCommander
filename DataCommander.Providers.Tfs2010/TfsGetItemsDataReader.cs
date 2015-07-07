@@ -13,13 +13,12 @@
     {
         private readonly TfsCommand command;
         private bool first = true;
-        private int recordsAffected;
         private List<Item> items;
         private int index;
 
         public TfsGetItemsDataReader(TfsCommand command)
-        {            
-            Contract.Requires(command != null);
+        {
+            Contract.Requires<ArgumentNullException>(command != null);
             this.command = command;
         }
 
@@ -115,7 +114,6 @@
 
                     this.Values = values;
                     read = true;
-                    this.recordsAffected++;
                     this.index++;
                 }
                 else
@@ -131,7 +129,7 @@
         {
             get
             {
-                return this.recordsAffected;
+                return -1;
             }
         }
 

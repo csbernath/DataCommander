@@ -1,13 +1,12 @@
 ﻿namespace DataCommander.Providers.Msi
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Data;
-	using DataCommander.Foundation.Diagnostics;
-	using Microsoft.Deployment.WindowsInstaller;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
     using System.Diagnostics.Contracts;
+    using Microsoft.Deployment.WindowsInstaller;
 
-	internal sealed class MsiDataReader : IDataReader
+    internal sealed class MsiDataReader : IDataReader
 	{
 		private MsiCommand command;
 		private CommandBehavior behavior;

@@ -1,12 +1,8 @@
 ﻿namespace DataCommander.Providers.Msi
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Data.Common;
-	using System.Linq;
-	using System.Text;
+    using System.Data.Common;
 
-	internal sealed class MsiProviderFactory : DbProviderFactory
+    internal sealed class MsiProviderFactory : DbProviderFactory
 	{
 		private static MsiProviderFactory instance = new MsiProviderFactory();
 

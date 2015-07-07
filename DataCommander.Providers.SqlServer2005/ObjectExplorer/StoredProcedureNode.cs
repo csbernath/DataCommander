@@ -1,14 +1,13 @@
-using System.Diagnostics;
-using System.Drawing;
-using DataCommander.Foundation.Diagnostics;
-
 namespace DataCommander.Providers.SqlServer2005
 {
     using System;
     using System.Collections.Generic;
     using System.Data.SqlClient;
+    using System.Diagnostics;
+    using System.Drawing;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data.SqlClient;
+    using DataCommander.Foundation.Diagnostics;
 
     internal sealed class StoredProcedureNode : ITreeNode
     {
@@ -77,7 +76,7 @@ namespace DataCommander.Providers.SqlServer2005
 
             Clipboard.SetText(text);
 
-            var queryForm = (QueryForm)Providers.DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
 
             queryForm.SetStatusbarPanelText(
                 string.Format(

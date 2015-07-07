@@ -1,10 +1,10 @@
 ﻿namespace DataCommander.Providers.Odp
 {
-	using System;
-	using System.Collections.Generic;
-    using DataCommander.Providers;
+    using System;
+    using System.Collections.Generic;
+    using System.Windows.Forms;
 
-	internal sealed class SequenceNode : ITreeNode
+    internal sealed class SequenceNode : ITreeNode
 	{
 		private SchemaNode schemaNode;
 		private string name;
@@ -54,7 +54,7 @@
 			}
 		}
 
-		System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
+		ContextMenuStrip ITreeNode.ContextMenu
 		{
 			get
 			{

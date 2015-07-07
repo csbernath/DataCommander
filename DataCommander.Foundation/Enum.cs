@@ -15,12 +15,12 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static T Parse( string value )
+        public static T Parse(string value)
         {
             Contract.Requires<ArgumentException>(typeof (T).IsEnum);
 
-            Type type = typeof(T);
-            T t = (T)Enum.Parse( type, value );
+            Type type = typeof (T);
+            T t = (T)Enum.Parse(type, value);
             return t;
         }
 
@@ -29,14 +29,14 @@
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static T? ToNullableEnum( int? source )
+        public static T? ToNullableEnum(int? source)
         {
             Contract.Requires<ArgumentException>(typeof (T).IsEnum);
 
             T? target;
             if (source != null)
             {
-                target = (T)Enum.ToObject( typeof(T), source.Value );
+                target = (T)Enum.ToObject(typeof (T), source.Value);
             }
             else
             {

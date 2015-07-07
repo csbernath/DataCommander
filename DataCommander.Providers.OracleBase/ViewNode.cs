@@ -4,7 +4,6 @@ namespace DataCommander.Providers.OracleBase
     using System.Collections.Generic;
     using System.Data;
     using System.Windows.Forms;
-    using DataCommander.Providers;
 
     public sealed class ViewNode : ITreeNode
     {
@@ -72,7 +71,7 @@ namespace DataCommander.Providers.OracleBase
                     {
                         string append = dataReader.GetString(0);
 
-                        MainForm mainForm = DataCommander.Providers.DataCommanderApplication.Instance.MainForm;
+                        MainForm mainForm = DataCommanderApplication.Instance.MainForm;
                         QueryForm queryForm = (QueryForm)mainForm.ActiveMdiChild;
                         QueryTextBox querytextBox = queryForm.QueryTextBox;
                         int selectionStart = querytextBox.RichTextBox.TextLength;

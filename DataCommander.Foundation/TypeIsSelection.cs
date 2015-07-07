@@ -17,6 +17,7 @@
         /// <param name="type"></param>
         public TypeIsSelection(Type type)
         {
+            Contract.Requires<ArgumentNullException>(type != null);
             this.type = type;
         }
 
@@ -28,7 +29,7 @@
         /// <returns></returns>
         public TypeIsSelection IfTypeIs<T>(Action action)
         {
-            Contract.Requires(action != null);
+            Contract.Requires<ArgumentNullException>(action != null);
 
             if (!this.selected && this.type == typeof (T))
             {
@@ -45,7 +46,7 @@
         /// <param name="action"></param>
         public void Else(Action action)
         {
-            Contract.Requires(action != null);
+            Contract.Requires<ArgumentNullException>(action != null);
 
             if (!this.selected)
             {

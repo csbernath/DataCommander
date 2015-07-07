@@ -1,13 +1,10 @@
 ﻿namespace DataCommander.Providers.Msi
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using DataCommander.Providers;
-	using Microsoft.Deployment.WindowsInstaller;
+    using System.Collections.Generic;
+    using System.Windows.Forms;
+    using Microsoft.Deployment.WindowsInstaller;
 
-	internal sealed class MsiTableNode : ITreeNode
+    internal sealed class MsiTableNode : ITreeNode
 	{
 		private MsiConnection connection;
 		private TableInfo table;
@@ -57,7 +54,7 @@
 			}
 		}
 
-		System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
+		ContextMenuStrip ITreeNode.ContextMenu
 		{
 			get
 			{

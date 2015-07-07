@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Providers.OracleClient
 {
     using System.Data.OracleClient;
-    using DataCommander.Providers;
 
     internal sealed class OracleDataReaderHelper : IDataReaderHelper
     {

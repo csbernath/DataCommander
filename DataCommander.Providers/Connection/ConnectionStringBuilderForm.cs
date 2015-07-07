@@ -53,29 +53,26 @@ namespace DataCommander.Providers
                 this.connectionNameTextBox.Text = this.connectionProperties.ConnectionName;
                 string providerName = this.connectionProperties.ProviderName;
                 this.providersComboBox.Text = providerName;
-                DbConnectionStringBuilder dbConnectionStringBuilder = new DbConnectionStringBuilder();
+                var dbConnectionStringBuilder = new DbConnectionStringBuilder();
                 dbConnectionStringBuilder.ConnectionString = this.connectionProperties.ConnectionString;
 
                 if (providerName == ProviderName.OleDb)
                 {
-                    string oleDbProviderName = ConnectionProperties.GetValue(dbConnectionStringBuilder,
-                        ConnectionStringProperty.Provider);
+                    string oleDbProviderName = dbConnectionStringBuilder.GetValue(ConnectionStringProperty.Provider);
                     this.InitializeOleDbProvidersComboBox();
                     int index = this.oleDbProviders.IndexOf(0, i => i.Name == oleDbProviderName);
                     this.oleDbProvidersComboBox.SelectedIndex = index;
                 }
 
-                this.dataSourcesComboBox.Text = ConnectionProperties.GetValue(dbConnectionStringBuilder,
-                    ConnectionStringProperty.DataSource);
+                this.dataSourcesComboBox.Text = dbConnectionStringBuilder.GetValue(ConnectionStringProperty.DataSource) ?? dbConnectionStringBuilder.GetValue("Server");
 
                 object valueObject;
-                bool contains = dbConnectionStringBuilder.TryGetValue(ConnectionStringProperty.IntegratedSecurity,
-                    out valueObject);
+                bool contains = dbConnectionStringBuilder.TryGetValue(ConnectionStringProperty.IntegratedSecurity, out valueObject);
                 bool isIntegratedSecurity;
 
                 if (contains)
                 {
-                    string s = (string) valueObject;
+                    string s = (string)valueObject;
                     isIntegratedSecurity = bool.Parse(s);
                 }
                 else
@@ -84,12 +81,9 @@ namespace DataCommander.Providers
                 }
 
                 this.integratedSecurityCheckBox.Checked = isIntegratedSecurity;
-                this.userIdTextBox.Text = ConnectionProperties.GetValue(dbConnectionStringBuilder,
-                    ConnectionStringProperty.UserId);
-                this.passwordTextBox.Text = ConnectionProperties.GetValue(dbConnectionStringBuilder,
-                    ConnectionStringProperty.Password);
-                this.initialCatalogComboBox.Text = ConnectionProperties.GetValue(dbConnectionStringBuilder,
-                    "Initial Catalog");
+                this.userIdTextBox.Text = dbConnectionStringBuilder.GetValue(ConnectionStringProperty.UserId);
+                this.passwordTextBox.Text = dbConnectionStringBuilder.GetValue(ConnectionStringProperty.Password);
+                this.initialCatalogComboBox.Text = dbConnectionStringBuilder.GetValue(ConnectionStringProperty.InitialCatalog) ?? dbConnectionStringBuilder.GetValue("Database");
             }
         }
 
@@ -277,7 +271,7 @@ namespace DataCommander.Providers
 
                         foreach (DataRow row in schema.Rows)
                         {
-                            string database = (string) row["database_name"];
+                            string database = (string)row["database_name"];
                             this.initialCatalogs.Add(database);
                         }
 

@@ -1,4 +1,4 @@
-namespace DataCommander.Providers
+namespace DataCommander.Providers.SqlServer2005
 {
     using System.Data.SqlClient;
     using System.IO;
@@ -8,7 +8,7 @@ namespace DataCommander.Providers
     /// <summary>
     /// See <see cref="http://msdn.microsoft.com/en-us/library/ms177563.aspx"/>.
     /// </summary>
-    public sealed class DatabaseObjectMultipartName
+    internal sealed class DatabaseObjectMultipartName
     {
         private string server;
         private string database;

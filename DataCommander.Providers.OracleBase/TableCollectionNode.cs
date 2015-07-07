@@ -1,12 +1,12 @@
 namespace DataCommander.Providers.OracleBase
 {
     using System.Collections.Generic;
-	using System.Data;
-	using System.Windows.Forms;
-	using DataCommander.Foundation.Configuration;
-	using DataCommander.Foundation.Data;
+    using System.Data;
+    using System.Windows.Forms;
+    using DataCommander.Foundation.Configuration;
+    using DataCommander.Foundation.Data;
 
-	/// <summary>
+    /// <summary>
 	/// Summary description for TablesNode.
 	/// </summary>
 	public sealed class TableCollectionNode : ITreeNode
@@ -34,7 +34,7 @@ namespace DataCommander.Providers.OracleBase
 
 		public IEnumerable<ITreeNode> GetChildren( bool refresh )
 		{
-			ConfigurationNode folder = DataCommander.Providers.DataCommanderApplication.Instance.ApplicationData.CurrentType;
+			ConfigurationNode folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
 			string key = schema.SchemasNode.Connection.Database + "." + schema.Name;
 			string[] tables;
 			bool contains = folder.Attributes.TryGetAttributeValue( key, out tables );

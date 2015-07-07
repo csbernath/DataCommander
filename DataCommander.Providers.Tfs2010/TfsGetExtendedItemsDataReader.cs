@@ -14,11 +14,10 @@
         private bool first = true;
         private ExtendedItem[] items;
         private int index;
-        private int recordsAffected;
 
-        public TfsGetExtendedItemsDataReader( TfsCommand command )
+        public TfsGetExtendedItemsDataReader(TfsCommand command)
         {
-            Contract.Requires( command != null );
+            Contract.Requires<ArgumentNullException>(command != null);
             this.command = command;
         }
 
@@ -115,7 +114,6 @@
                 this.Values = values;
                 read = true;
                 this.index++;
-                this.recordsAffected++;
             }
             else
             {
@@ -129,7 +127,7 @@
         {
             get
             {
-                return this.recordsAffected;
+                return -1;
             }
         }
 

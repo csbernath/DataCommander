@@ -1,12 +1,11 @@
 ﻿namespace DataCommander.Providers.Msi
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Data;
-	using System.Linq;
-	using System.Text;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Data;
 
-	internal sealed class MsiParameterCollection : IDataParameterCollection
+    internal sealed class MsiParameterCollection : IDataParameterCollection
 	{
 		private List<object> parameters = new List<object>();
 
@@ -43,32 +42,32 @@
 
 		#region IList Members
 
-		int System.Collections.IList.Add( object value )
+		int IList.Add( object value )
 		{
 			throw new NotImplementedException();
 		}
 
-		void System.Collections.IList.Clear()
+		void IList.Clear()
 		{
 			throw new NotImplementedException();
 		}
 
-		bool System.Collections.IList.Contains( object value )
+		bool IList.Contains( object value )
 		{
 			throw new NotImplementedException();
 		}
 
-		int System.Collections.IList.IndexOf( object value )
+		int IList.IndexOf( object value )
 		{
 			throw new NotImplementedException();
 		}
 
-		void System.Collections.IList.Insert( int index, object value )
+		void IList.Insert( int index, object value )
 		{
 			throw new NotImplementedException();
 		}
 
-		bool System.Collections.IList.IsFixedSize
+		bool IList.IsFixedSize
 		{
 			get
 			{
@@ -76,7 +75,7 @@
 			}
 		}
 
-		bool System.Collections.IList.IsReadOnly
+		bool IList.IsReadOnly
 		{
 			get
 			{
@@ -84,17 +83,17 @@
 			}
 		}
 
-		void System.Collections.IList.Remove( object value )
+		void IList.Remove( object value )
 		{
 			throw new NotImplementedException();
 		}
 
-		void System.Collections.IList.RemoveAt( int index )
+		void IList.RemoveAt( int index )
 		{
 			throw new NotImplementedException();
 		}
 
-		object System.Collections.IList.this[ int index ]
+		object IList.this[ int index ]
 		{
 			get
 			{
@@ -110,12 +109,12 @@
 
 		#region ICollection Members
 
-		void System.Collections.ICollection.CopyTo( Array array, int index )
+		void ICollection.CopyTo( Array array, int index )
 		{
 			throw new NotImplementedException();
 		}
 
-		int System.Collections.ICollection.Count
+		int ICollection.Count
 		{
 			get
 			{
@@ -123,7 +122,7 @@
 			}
 		}
 
-		bool System.Collections.ICollection.IsSynchronized
+		bool ICollection.IsSynchronized
 		{
 			get
 			{
@@ -131,7 +130,7 @@
 			}
 		}
 
-		object System.Collections.ICollection.SyncRoot
+		object ICollection.SyncRoot
 		{
 			get
 			{
@@ -143,7 +142,7 @@
 
 		#region IEnumerable Members
 
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		IEnumerator IEnumerable.GetEnumerator()
 		{
 			throw new NotImplementedException();
 		}

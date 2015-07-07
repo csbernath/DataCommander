@@ -17,24 +17,6 @@ namespace DataCommander.Providers
         public ConnectionBase Connection;
         private static readonly byte[] entropy = {0x56, 0x4f, 0x3d, 0x78, 0xf1};
 
-        public static string GetValue(DbConnectionStringBuilder dbConnectionStringBuilder, string keyword)
-        {
-            object obj;
-            bool contains = dbConnectionStringBuilder.TryGetValue(keyword, out obj);
-            string value;
-
-            if (contains)
-            {
-                value = (string)obj;
-            }
-            else
-            {
-                value = null;
-            }
-
-            return value;
-        }
-
         public static string ProtectPassword(string password)
         {
             byte[] bytes;
@@ -102,6 +84,27 @@ namespace DataCommander.Providers
                     this.ConnectionString = dbConnectionStringBuilder.ConnectionString;
                 }
             }
+        }
+    }
+
+    internal static class DbConnectionStringBuilderExtensions
+    {
+        public static string GetValue(this DbConnectionStringBuilder dbConnectionStringBuilder, string keyword)
+        {
+            object obj;
+            bool contains = dbConnectionStringBuilder.TryGetValue(keyword, out obj);
+            string value;
+
+            if (contains)
+            {
+                value = (string)obj;
+            }
+            else
+            {
+                value = null;
+            }
+
+            return value;
         }
     }
 }

@@ -297,7 +297,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.database.Name, this.owner, this.name);
                 dataSet.Tables.Add(schema);
 
                 MainForm mainForm = DataCommanderApplication.Instance.MainForm;
-                QueryForm queryForm = (QueryForm)mainForm.ActiveMdiChild;
+                var queryForm = (QueryForm)mainForm.ActiveMdiChild;
                 queryForm.ShowDataSet(dataSet);
             }
         }

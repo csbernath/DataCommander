@@ -2,7 +2,6 @@
 {
     using System.Data;
     using System.Diagnostics.Contracts;
-    using DataCommander.Providers;
     using Microsoft.Deployment.WindowsInstaller;
 
     internal sealed class MsiDataReaderHelper : IDataReaderHelper

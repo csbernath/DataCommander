@@ -6,6 +6,7 @@
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Text;
+    using System.Xml.Schema;
     using DataCommander.Foundation;
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Data.SqlClient;
@@ -21,7 +22,7 @@
 
         public InsertScriptFileWriter(string tableName, TextWriter messageWriter)
         {
-            Contract.Requires(messageWriter != null);
+            Contract.Requires<ArgumentNullException>(messageWriter != null);
 
             this.tableName = tableName;
             this.messageWriter = messageWriter;
@@ -157,7 +158,8 @@
                     })
                     .IfTypeIs<DateTimeField>(() =>
                     {
-                        s = "'" + value.ToString() + "'";
+                        var dateTimeField = (DateTimeField)value;
+                        s = dateTimeField.Value.ToTSqlDateTime();
                     })
                     .Else(() =>
                     {
@@ -259,9 +261,9 @@
 
         private static string GetSqlStatementPrefix(string tableName, DataTable schemaTable)
         {
-            DataRowCollection schemaRows = schemaTable.Rows;
+            var schemaRows = schemaTable.Rows;
             int columnCount = schemaRows.Count;
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendFormat("insert into {0}(", tableName);
 
             for (int columnIndex = 0; columnIndex < columnCount; columnIndex++)
@@ -288,7 +290,7 @@
 
             string path = Path.GetTempFileName();
             this.messageWriter.WriteLine("fileName: {0}", path);
-            Encoding encoding = Encoding.UTF8;
+            var encoding = Encoding.UTF8;
             this.streamWriter = new StreamWriter(path, false, encoding, 4096);
         }
 
@@ -303,7 +305,7 @@
         void IResultWriter.WriteRows(object[][] rows, int rowCount)
         {
             int fieldCount = this.schemaTable.Rows.Count;
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {

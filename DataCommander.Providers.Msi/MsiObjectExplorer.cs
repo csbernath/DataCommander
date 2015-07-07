@@ -1,13 +1,9 @@
 ﻿namespace DataCommander.Providers.Msi
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using DataCommander.Providers;
+    using System.Collections.Generic;
     using System.Data;
 
-	internal sealed class MsiObjectExplorer : IObjectExplorer
+    internal sealed class MsiObjectExplorer : IObjectExplorer
 	{
 		private MsiConnection connection;
 

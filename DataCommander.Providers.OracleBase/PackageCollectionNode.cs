@@ -4,7 +4,6 @@ namespace DataCommander.Providers.OracleBase
     using System.Data;
     using System.Windows.Forms;
     using DataCommander.Foundation.Configuration;
-    using DataCommander.Foundation.Data;
 
     /// <summary>
     /// Summary description for TablesNode.
@@ -36,7 +35,7 @@ namespace DataCommander.Providers.OracleBase
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {            
-            ConfigurationNode folder = DataCommander.Providers.DataCommanderApplication.Instance.ApplicationData.CurrentType;
+            ConfigurationNode folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
             string key = schema.SchemasNode.Connection.Database + "." + schema.Name;
             string[] packages;
             bool contains = folder.Attributes.TryGetAttributeValue(key, out packages);            

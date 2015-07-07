@@ -18,11 +18,10 @@
         private string localPath;
         private bool first = true;
         private IEnumerator<Tuple<Changeset, int>> enumerator;
-        private int recordsAffected;
 
-        public TfsDownloadItemVersionsDataReader( TfsCommand command )
-        {            
-            Contract.Requires(command != null);
+        public TfsDownloadItemVersionsDataReader(TfsCommand command)
+        {
+            Contract.Requires<ArgumentNullException>(command != null);
             this.command = command;
         }
 
@@ -148,7 +147,6 @@
                 File.SetLastWriteTime( localFileName, creationDate );
                 File.SetAttributes( localFileName, FileAttributes.ReadOnly );
 
-                this.recordsAffected++;
                 read = true;
             }
             else
@@ -163,7 +161,7 @@
         {
             get
             {
-                return this.recordsAffected;
+                return -1;
             }
         }
 

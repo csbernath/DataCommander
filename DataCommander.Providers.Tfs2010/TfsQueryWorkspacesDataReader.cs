@@ -9,32 +9,36 @@
 
     internal sealed class TfsQueryWorkspacesDataReader : TfsDataReader
     {
+        private static DataTable schemaTable;
         private readonly TfsCommand command;
         private bool first = true;
         private Workspace[] workspaces;
         private IEnumerator<Tuple<int, int>> enumerator;
         private int index;
-        private int recordsAffected;
 
-        public TfsQueryWorkspacesDataReader( TfsCommand command )
+        static TfsQueryWorkspacesDataReader()
         {
-            Contract.Requires(command != null);
+            schemaTable = CreateSchemaTable();
+            AddSchemaRowString(schemaTable, "Computer", false);
+            AddSchemaRowString(schemaTable, "OwnerName", false);
+            AddSchemaRowString(schemaTable, "Name", false);
+            AddSchemaRowString(schemaTable, "Comment", false);
+            AddSchemaRowString(schemaTable, "DisplayName", false);
+            AddSchemaRowString(schemaTable, "FolderType", false);
+            AddSchemaRowBoolean(schemaTable, "IsCloaked", false);
+            AddSchemaRowString(schemaTable, "FolderServerItem", false);
+            AddSchemaRowString(schemaTable, "FolderLocalItem", false);
+        }
+
+        public TfsQueryWorkspacesDataReader(TfsCommand command)
+        {
+            Contract.Requires<ArgumentNullException>(command != null);
             this.command = command;
         }
 
         public override DataTable GetSchemaTable()
         {
-            DataTable table = CreateSchemaTable();
-            AddSchemaRowString( table, "Computer", false );
-            AddSchemaRowString( table, "OwnerName", false );
-            AddSchemaRowString( table, "Name", false );
-            AddSchemaRowString( table, "Comment", false );
-            AddSchemaRowString( table, "DisplayName", false );
-            AddSchemaRowString( table, "FolderType", false );
-            AddSchemaRowBoolean( table, "IsCloaked", false );
-            AddSchemaRowString( table, "FolderServerItem", false );
-            AddSchemaRowString( table, "FolderLocalItem", false );
-            return table;
+            return schemaTable;
         }
 
         public override bool Read()
@@ -45,11 +49,11 @@
             {
                 this.first = false;
                 TfsParameterCollection parameters = this.command.Parameters;
-                string workspace = Database.GetValueOrDefault<string>( parameters[ "workspace" ].Value );
-                string owner = Database.GetValueOrDefault<string>( parameters[ "owner" ].Value );
-                string computer = Database.GetValueOrDefault<string>( parameters[ "computer" ].Value );
-                this.workspaces = this.command.Connection.VersionControlServer.QueryWorkspaces( workspace, owner, computer );
-                this.enumerator = AsEnumerable( this.workspaces ).GetEnumerator();
+                string workspace = Database.GetValueOrDefault<string>(parameters["workspace"].Value);
+                string owner = Database.GetValueOrDefault<string>(parameters["owner"].Value);
+                string computer = Database.GetValueOrDefault<string>(parameters["computer"].Value);
+                this.workspaces = this.command.Connection.VersionControlServer.QueryWorkspaces(workspace, owner, computer);
+                this.enumerator = AsEnumerable(this.workspaces).GetEnumerator();
             }
 
             bool moveNext = this.enumerator.MoveNext();
@@ -57,10 +61,10 @@
             if (moveNext)
             {
                 Tuple<int, int> pair = this.enumerator.Current;
-                Workspace workspace = this.workspaces[ pair.Item1 ];
+                Workspace workspace = this.workspaces[pair.Item1];
                 int folderIndex = pair.Item2;
 
-                object[] values = new object[]
+                var values = new object[]
                 {
                     workspace.Computer,
                     workspace.OwnerName,
@@ -75,16 +79,15 @@
 
                 if (folderIndex >= 0)
                 {
-                    WorkingFolder folder = workspace.Folders[ folderIndex ];
-                    values[ 5 ] = folder.Type.ToString();
-                    values[ 6 ] = folder.IsCloaked;
-                    values[ 7 ] = folder.ServerItem;
-                    values[ 8 ] = folder.LocalItem;
+                    WorkingFolder folder = workspace.Folders[folderIndex];
+                    values[5] = folder.Type.ToString();
+                    values[6] = folder.IsCloaked;
+                    values[7] = folder.ServerItem;
+                    values[8] = folder.LocalItem;
                 }
 
                 this.Values = values;
                 read = true;
-                this.recordsAffected++;
                 this.index++;
             }
             else
@@ -99,7 +102,7 @@
         {
             get
             {
-                return this.recordsAffected;
+                return -1;
             }
         }
 
@@ -111,25 +114,23 @@
             }
         }
 
-        private static IEnumerable<Tuple<int, int>> AsEnumerable( Workspace[] workspaces )
+        private static IEnumerable<Tuple<int, int>> AsEnumerable(Workspace[] workspaces)
         {
-            List<Tuple<int, int>> list = new List<Tuple<int, int>>();
-
             for (int i = 0; i < workspaces.Length; i++)
             {
-                Workspace workspace = workspaces[ i ];
+                Workspace workspace = workspaces[i];
                 WorkingFolder[] folders = workspace.Folders;
 
                 if (folders.Length > 0)
                 {
                     for (int j = 0; j < folders.Length; j++)
                     {
-                        yield return new Tuple<int, int>( i, j );
+                        yield return Tuple.Create(i, j);
                     }
                 }
                 else
                 {
-                    yield return new Tuple<int, int>( i, -1 );
+                    yield return Tuple.Create(i, -1);
                 }
             }
         }

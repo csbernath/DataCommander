@@ -32,7 +32,6 @@ namespace DataCommander
     using DataCommander.Providers;
     using DataCommander.Providers.Query;
     using DataCommander.Providers.ResultWriter;
-    using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
     using Timer = System.Windows.Forms.Timer;
 
     /// <summary>
@@ -976,7 +975,6 @@ namespace DataCommander
             // 
             this.mnuHtml.MergeIndex = 2;
             this.mnuHtml.Name = "mnuHtml";
-            this.mnuHtml.ShortcutKeys = ((global::System.Windows.Forms.Keys)((global::System.Windows.Forms.Keys.Control | global::System.Windows.Forms.Keys.H)));
             this.mnuHtml.Size = new global::System.Drawing.Size(221, 22);
             this.mnuHtml.Text = "&Html";
             this.mnuHtml.Click += new global::System.EventHandler(this.mnuHtml_Click);
@@ -3368,7 +3366,7 @@ namespace DataCommander
                         while (dataReader.Read())
                         {
                             rowCount++;
-                            object[] values = new object[dataReader.FieldCount];
+                            var values = new object[dataReader.FieldCount];
                             dataReaderHelper.GetValues(values);
 
                             var dataTable = new DataTable("SingleRow(" + rowCount + ")");
@@ -3503,75 +3501,94 @@ namespace DataCommander
                 this.sqlStatement = new SqlStatement(this.Query);
                 this.command = this.sqlStatement.CreateCommand(this.provider, this.connection, CommandType.Text, this.commandTimeout);
                 string tableName = this.sqlStatement.FindTableName();
+                int tableIndex = 0;
 
                 using (var dataReader = this.command.ExecuteReader())
                 {
-                    var dataReaderHelper = this.provider.CreateDataReaderHelper(dataReader);
-                    DataTable schemaTable = dataReader.GetSchemaTable();
-
-                    if (tableName != null)
+                    while (true)
                     {
-                        schemaTable.TableName = tableName;
-                    }
-                    else
-                    {
-                        tableName = schemaTable.TableName;
-                    }
-
-                    this.standardOutput.WriteLine(InsertScriptFileWriter.GetCreateTableStatement(schemaTable));
-                    DataRowCollection schemaRows = schemaTable.Rows;
-                    int columnCount = schemaRows.Count;
-                    var sb = new StringBuilder();
-                    sb.AppendFormat("insert into {0}(", tableName);
-
-                    for (int i = 0; i < columnCount; i++)
-                    {
-                        if (i > 0)
+                        if (tableIndex > 0)
                         {
-                            sb.Append(',');
+                            tableName = string.Format("Table{0}", tableIndex);
                         }
 
-                        DataRow schemaRow = schemaRows[i];
-                        string columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
-                        sb.Append(columnName);
-                    }
+                        var dataReaderHelper = this.provider.CreateDataReaderHelper(dataReader);
+                        DataTable schemaTable = dataReader.GetSchemaTable();
+                        var sb = new StringBuilder();
 
-                    sb.Append(") values(");
-                    string insertInto = sb.ToString();
-                    int fieldCount = dataReader.FieldCount;
-                    sb.Length = 0;
-                    int statementCount = 0;
-
-                    while (dataReader.Read())
-                    {
-                        object[] values = new object[fieldCount];
-                        dataReaderHelper.GetValues(values);
-                        sb.Append(insertInto);
-
-                        for (int i = 0; i < fieldCount; i++)
+                        if (schemaTable != null)
                         {
-                            if (i > 0)
+                            if (tableName != null)
                             {
-                                sb.Append(',');
+                                schemaTable.TableName = tableName;
+                            }
+                            else
+                            {
+                                tableName = schemaTable.TableName;
                             }
 
-                            string s = InsertScriptFileWriter.ToString(values[i]);
-                            sb.Append(s);
+                            this.standardOutput.WriteLine(InsertScriptFileWriter.GetCreateTableStatement(schemaTable));
+                            DataRowCollection schemaRows = schemaTable.Rows;
+                            int columnCount = schemaRows.Count;
+                            sb.AppendFormat("insert into {0}(", tableName);
+
+                            for (int i = 0; i < columnCount; i++)
+                            {
+                                if (i > 0)
+                                {
+                                    sb.Append(',');
+                                }
+
+                                DataRow schemaRow = schemaRows[i];
+                                string columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
+                                sb.Append(columnName);
+                            }
                         }
 
-                        sb.AppendLine(");");
-                        statementCount++;
+                        sb.Append(") values(");
+                        string insertInto = sb.ToString();
+                        int fieldCount = dataReader.FieldCount;
+                        sb.Length = 0;
+                        int statementCount = 0;
 
-                        if (statementCount%100 == 0)
+                        while (dataReader.Read())
+                        {
+                            object[] values = new object[fieldCount];
+                            dataReaderHelper.GetValues(values);
+                            sb.Append(insertInto);
+
+                            for (int i = 0; i < fieldCount; i++)
+                            {
+                                if (i > 0)
+                                {
+                                    sb.Append(',');
+                                }
+
+                                string s = InsertScriptFileWriter.ToString(values[i]);
+                                sb.Append(s);
+                            }
+
+                            sb.AppendLine(");");
+                            statementCount++;
+
+                            if (statementCount%100 == 0)
+                            {
+                                this.standardOutput.Write(sb);
+                                sb.Length = 0;
+                            }
+                        }
+
+                        if (statementCount%100 != 0)
                         {
                             this.standardOutput.Write(sb);
-                            sb.Length = 0;
                         }
-                    }
 
-                    if (statementCount%100 != 0)
-                    {
-                        this.standardOutput.Write(sb);
+                        if (!dataReader.NextResult())
+                        {
+                            break;
+                        }
+
+                        tableIndex++;
                     }
                 }
 

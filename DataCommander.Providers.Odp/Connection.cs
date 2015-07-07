@@ -4,7 +4,6 @@ namespace DataCommander.Providers.Odp
     using System.Data;
     using System.Text;
     using DataCommander.Foundation;
-    using DataCommander.Providers;
     using Oracle.ManagedDataAccess.Client;
 
     internal sealed class Connection : ConnectionBase

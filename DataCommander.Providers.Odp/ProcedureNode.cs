@@ -5,7 +5,6 @@ namespace DataCommander.Providers.Odp
     using System.Data;
     using System.Text;
     using System.Windows.Forms;
-	using DataCommander.Foundation.Data;
 
     internal sealed class ProcedureNode : ITreeNode
     {

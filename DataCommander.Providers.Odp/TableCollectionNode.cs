@@ -35,7 +35,7 @@ namespace DataCommander.Providers.Odp
 
 		public IEnumerable<ITreeNode> GetChildren( bool refresh )
 		{
-			ConfigurationNode folder = DataCommander.Providers.DataCommanderApplication.Instance.ApplicationData.CurrentType;
+			ConfigurationNode folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
 			string key = schema.SchemasNode.Connection.DataSource + "." + schema.Name;
 			string[] tables;
 			bool contains = folder.Attributes.TryGetAttributeValue( key, out tables );

@@ -3,6 +3,7 @@ namespace DataCommander.Providers
     using System.Data.Common;
     using System.Diagnostics;
     using System.Reflection;
+    using System.Windows.Forms;
     using DataCommander.Foundation.Configuration;
     using DataCommander.Foundation.Diagnostics;
     using Microsoft.Win32;
@@ -99,7 +100,7 @@ namespace DataCommander.Providers
             log.Write(LogLevel.Trace, "{0}\r\n{1}", AppDomainMonitor.EnvironmentInfo,
                 AppDomainMonitor.CurrentDomainState);
             this.mainForm = new MainForm();
-            System.Windows.Forms.Application.Run(this.mainForm);
+            Application.Run(this.mainForm);
         }
 
         public void SaveApplicationData()
@@ -114,15 +115,15 @@ namespace DataCommander.Providers
                 var dbConnectionStringBuilder = new DbConnectionStringBuilder();
                 dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
                 object obj;
-                bool contains = dbConnectionStringBuilder.TryGetValue("User ID", out obj);
+                bool contains = dbConnectionStringBuilder.TryGetValue(ConnectionStringProperty.UserId, out obj);
 
                 if (contains)
                 {
-                    string password = ConnectionProperties.GetValue(dbConnectionStringBuilder, "Password");
-                    dbConnectionStringBuilder.Remove("Password");
+                    string password = dbConnectionStringBuilder.GetValue(ConnectionStringProperty.Password);
+                    dbConnectionStringBuilder.Remove(ConnectionStringProperty.Password);
                     connectionProperties.ConnectionString = dbConnectionStringBuilder.ConnectionString;
                     password = ConnectionProperties.ProtectPassword(password);
-                    subFolder.Attributes.SetAttributeValue("Password", password);
+                    subFolder.Attributes.SetAttributeValue(ConnectionStringProperty.Password, password);
                 }
 
                 connectionProperties.Save(subFolder);

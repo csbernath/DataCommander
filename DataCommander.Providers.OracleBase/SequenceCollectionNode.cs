@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Windows.Forms;
     using DataCommander.Foundation.Data;
-    using DataCommander.Providers;
 
     internal sealed class SequenceCollectionNode : ITreeNode
     {
@@ -68,7 +68,7 @@ order by s.SEQUENCE_NAME
             }
         }
 
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu
         {
             get
             {

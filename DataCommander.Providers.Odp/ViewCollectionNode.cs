@@ -4,7 +4,6 @@ namespace DataCommander.Providers.Odp
     using System.Collections.Generic;
     using System.Data;
     using System.Windows.Forms;
-	using DataCommander.Foundation.Data;
 
     internal sealed class ViewCollectionNode : ITreeNode
     {

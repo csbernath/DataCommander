@@ -1,9 +1,9 @@
 namespace DataCommander.Providers.OracleBase
 {
-	using System.Collections.Generic;
-	using System.Windows.Forms;
+    using System.Collections.Generic;
+    using System.Windows.Forms;
 
-	/// <summary>
+    /// <summary>
     /// Summary description for TablesNode.
     /// </summary>
     public sealed class TriggerNode : ITreeNode

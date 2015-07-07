@@ -463,7 +463,7 @@ namespace DataCommander.Providers.SqlServer2005
 
             if (array == null)
             {
-                SqlObject sqlObject = sqlStatement.FindSqlObject(previousToken, currentToken);
+                var sqlObject = sqlStatement.FindSqlObject(previousToken, currentToken);
                 string commandText = null;
 
                 if (sqlObject != null)
@@ -801,122 +801,118 @@ order by 1", name.Database);
                 log.Trace("\r\n" + schemaTable.ToStringTable().ToString());
 
                 table = new DataTable("SchemaTable");
-                DataColumnCollection columns = table.Columns;
+                var columns = table.Columns;
                 columns.Add(" ", typeof (int));
                 columns.Add("  ", typeof (string));
                 columns.Add("Name", typeof (string));
                 columns.Add("Size", typeof (int));
                 columns.Add("DbType", typeof (string));
                 columns.Add("DataType", typeof (Type));
-                int i = 0;
+                int columnIndex = 0;
                 int? columnOrdinalAddition = null;
 
-                using (var dataTableReader = new DataTableReader(schemaTable))
+                foreach (DataRow dataRow in schemaTable.Rows)
                 {
-                    while (dataTableReader.Read())
-                    {
-                        int columnOrdinal = (int)dataTableReader["ColumnOrdinal"];
+                    var dataColumnSchema = new DataColumnSchema(dataRow);
+                    int columnOrdinal = dataColumnSchema.ColumnOrdinal;
 
-                        if (columnOrdinalAddition == null)
+                    if (columnOrdinalAddition == null)
+                    {
+                        if (columnOrdinal == 0)
                         {
-                            if (columnOrdinal == 0)
+                            columnOrdinalAddition = 1;
+                        }
+                        else
+                        {
+                            columnOrdinalAddition = 0;
+                        }
+                    }
+
+                    string pk = string.Empty;
+
+                    if (dataColumnSchema.IsKey == true)
+                    {
+                        pk = "PKEY";
+                    }
+
+                    if (dataColumnSchema.IsIdentity == true)
+                    {
+                        if (pk.Length > 0)
+                        {
+                            pk += ',';
+                        }
+
+                        pk += "IDENTITY";
+                    }
+
+                    int columnSize = dataColumnSchema.ColumnSize;
+                    var dbType = (SqlDbType)dataColumnSchema.ProviderType;
+                    string dataTypeName = dataReader.GetDataTypeName(columnIndex);
+                    var sb = new StringBuilder();
+                    sb.Append(dataTypeName);
+
+                    switch (dbType)
+                    {
+                        case SqlDbType.Char:
+                        case SqlDbType.VarChar:
+                        case SqlDbType.NChar:
+                        case SqlDbType.NVarChar:
+                        case SqlDbType.Binary:
+                        case SqlDbType.VarBinary:
+                            string columnSizeString;
+
+                            if (columnSize == int.MaxValue)
                             {
-                                columnOrdinalAddition = 1;
+                                columnSizeString = "max";
                             }
                             else
                             {
-                                columnOrdinalAddition = 0;
-                            }
-                        }
-
-                        bool isKey = dataTableReader.GetValueOrDefault<bool>("IsKey");
-                        bool isIdentity = (bool)dataTableReader["IsIdentity"];
-                        string pk = string.Empty;
-
-                        if (isKey)
-                        {
-                            pk = "PKEY";
-                        }
-
-                        if (isIdentity)
-                        {
-                            if (pk.Length > 0)
-                            {
-                                pk += ',';
+                                columnSizeString = columnSize.ToString();
                             }
 
-                            pk += "IDENTITY";
-                        }
+                            sb.AppendFormat("({0})", columnSizeString);
+                            break;
 
-                        int columnSize = (int)dataTableReader["ColumnSize"];
-                        SqlDbType dbType = (SqlDbType)dataTableReader["ProviderType"];
-                        bool allowDBNull = (bool)dataTableReader["AllowDBNull"];
-                        string dataTypeName = dataReader.GetDataTypeName(i);
-                        var sb = new StringBuilder();
-                        sb.Append(dataTypeName);
+                        case SqlDbType.Decimal:
+                            short precision = dataColumnSchema.NumericPrecision.GetValueOrDefault();
+                            short scale = dataColumnSchema.NumericScale.GetValueOrDefault();
 
-                        switch (dbType)
-                        {
-                            case SqlDbType.Char:
-                            case SqlDbType.VarChar:
-                            case SqlDbType.NChar:
-                            case SqlDbType.NVarChar:
-                            case SqlDbType.Binary:
-                            case SqlDbType.VarBinary:
-                                string columnSizeString;
+                            if (scale == 0)
+                                sb.AppendFormat("({0})", precision);
+                            else
+                                sb.AppendFormat("({0},{1})", precision, scale);
 
-                                if (columnSize == int.MaxValue)
-                                {
-                                    columnSizeString = "max";
-                                }
-                                else
-                                {
-                                    columnSizeString = columnSize.ToString();
-                                }
+                            if (precision <= 9)
+                                columnSize = 5;
+                            else if (precision <= 19)
+                                columnSize = 9;
+                            else if (precision <= 28)
+                                columnSize = 13;
+                            else
+                                columnSize = 17;
+                            break;
 
-                                sb.AppendFormat("({0})", columnSizeString);
-                                break;
-
-                            case SqlDbType.Decimal:
-                                short precision = (short)dataTableReader["NumericPrecision"];
-                                short scale = (short)dataTableReader["NumericScale"];
-
-                                if (scale == 0)
-                                    sb.AppendFormat("({0})", precision);
-                                else
-                                    sb.AppendFormat("({0},{1})", precision, scale);
-
-                                if (precision <= 9)
-                                    columnSize = 5;
-                                else if (precision <= 19)
-                                    columnSize = 9;
-                                else if (precision <= 28)
-                                    columnSize = 13;
-                                else
-                                    columnSize = 17;
-                                break;
-
-                            default:
-                                break;
-                        }
-
-                        if (!allowDBNull)
-                        {
-                            sb.Append(" not null");
-                        }
-
-                        table.Rows.Add(new object[]
-                        {
-                            columnOrdinal + columnOrdinalAddition,
-                            pk,
-                            dataTableReader[SchemaTableColumn.ColumnName],
-                            columnSize,
-                            sb.ToString(),
-                            dataTableReader["DataType"],
-                        });
-
-                        i++;
+                        default:
+                            break;
                     }
+
+                    bool allowDBNull = dataColumnSchema.AllowDBNull.GetValueOrDefault();                    
+                    if (!allowDBNull)
+                    {
+                        sb.Append(" not null");
+                    }
+
+                    table.Rows.Add(new object[]
+                    {
+                        columnOrdinal + columnOrdinalAddition,
+                        pk,
+                        dataColumnSchema.ColumnName,
+                        columnSize,
+                        sb.ToString(),
+                        dataColumnSchema.DataType
+                    });
+
+                    columnIndex++;
                 }
             }
 

@@ -203,7 +203,7 @@ namespace DataCommander.Providers
             this.Name = "ConnectionForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Connect to Database";
+            this.Text = "Connect to data source";
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).EndInit();
             this.ResumeLayout(false);
 
@@ -220,12 +220,15 @@ namespace DataCommander.Providers
 
         private void LoadConnection(ConfigurationNode folder, DataRow row)
         {
-            ConnectionProperties connectionProperties = new ConnectionProperties();
+            var connectionProperties = new ConnectionProperties();
             connectionProperties.Load(folder);
             row["ConnectionName"] = connectionProperties.ConnectionName;
             row["ProviderName"] = connectionProperties.ProviderName;
-            DbConnectionStringBuilder dbConnectionStringBuilder = new DbConnectionStringBuilder();
+            var dbConnectionStringBuilder = new DbConnectionStringBuilder();
             dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
+
+            string dataSource = null;
+            string initialCatalog = null;
 
             foreach (string key in dbConnectionStringBuilder.Keys)
             {
@@ -235,7 +238,26 @@ namespace DataCommander.Providers
                 {
                     object value = dbConnectionStringBuilder[key];
                     row[column] = value;
+
+                    if (string.Equals(key, ConnectionStringProperty.DataSource, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        dataSource = (string)value;
+                    }
+                    else if (string.Equals(key, ConnectionStringProperty.InitialCatalog, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        initialCatalog = (string)value;
+                    }
                 }
+            }
+
+            if (dataSource == null)
+            {
+                row[ConnectionStringProperty.DataSource] = dbConnectionStringBuilder.GetValue("Server");
+            }
+
+            if (initialCatalog == null)
+            {
+                row[ConnectionStringProperty.InitialCatalog] = dbConnectionStringBuilder.GetValue("Database");
             }
         }
 

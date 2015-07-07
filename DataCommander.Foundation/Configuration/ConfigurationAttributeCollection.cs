@@ -9,8 +9,8 @@
     /// <summary>
     /// 
     /// </summary>
-    [DebuggerTypeProxy( typeof(ConfigurationAttributeCollectionDebugger) )]
-    [DebuggerDisplay( "Count = {Count}" )]
+    [DebuggerTypeProxy(typeof (ConfigurationAttributeCollectionDebugger))]
+    [DebuggerDisplay("Count = {Count}")]
     public class ConfigurationAttributeCollection : IList<ConfigurationAttribute>
     {
         private readonly IndexableCollection<ConfigurationAttribute> collection;
@@ -23,15 +23,15 @@
         /// </summary>
         public ConfigurationAttributeCollection()
         {
-            this.listIndex = new ListIndex<ConfigurationAttribute>( "List" );
+            this.listIndex = new ListIndex<ConfigurationAttribute>("List");
 
             this.nameIndex = new UniqueIndex<string, ConfigurationAttribute>(
                 "NameIndex",
-                attribute => GetKeyResponse.Create( true, attribute.Name ),
-                SortOrder.None );
+                attribute => GetKeyResponse.Create(true, attribute.Name),
+                SortOrder.None);
 
-            this.collection = new IndexableCollection<ConfigurationAttribute>( this.listIndex );
-            this.collection.Indexes.Add( this.nameIndex );
+            this.collection = new IndexableCollection<ConfigurationAttribute>(this.listIndex);
+            this.collection.Indexes.Add(this.nameIndex);
         }
 
         /// <summary>
@@ -39,22 +39,22 @@
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public ConfigurationAttribute this[ int index ]
+        public ConfigurationAttribute this[int index]
         {
             get
             {
-                Contract.Assert( 0 <= index && index < this.Count );
+                Contract.Assert(0 <= index && index < this.Count);
 
-                return this.listIndex[ index ];
+                return this.listIndex[index];
             }
 
             set
             {
-                ConfigurationAttribute originalItem = this.listIndex[ index ];
+                ConfigurationAttribute originalItem = this.listIndex[index];
                 ICollection<ConfigurationAttribute> collection = this.nameIndex;
-                collection.Remove( originalItem );
-                this.listIndex[ index ] = value;
-                collection.Add( value );
+                collection.Remove(originalItem);
+                this.listIndex[index] = value;
+                collection.Add(value);
             }
         }
 
@@ -63,13 +63,13 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public ConfigurationAttribute this[ string name ]
+        public ConfigurationAttribute this[string name]
         {
             get
             {
-                Contract.Requires( this.ContainsKey( name ) );
+                Contract.Requires(this.ContainsKey(name));
 
-                return this.nameIndex[ name ];
+                return this.nameIndex[name];
             }
         }
 
@@ -95,11 +95,11 @@
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <param name="description"></param>
-        public void Add( string name, object value, string description )
+        public void Add(string name, object value, string description)
         {
-            Contract.Requires( !this.ContainsKey( name ) );
-            ConfigurationAttribute attribute = new ConfigurationAttribute( name, value, description );
-            this.collection.Add( attribute );
+            Contract.Requires(!this.ContainsKey(name));
+            ConfigurationAttribute attribute = new ConfigurationAttribute(name, value, description);
+            this.collection.Add(attribute);
         }
 
         /// <summary>
@@ -108,9 +108,9 @@
         /// <param name="name"></param>
         /// <returns></returns>
         [Pure]
-        public bool ContainsKey( string name )
+        public bool ContainsKey(string name)
         {
-            return this.nameIndex.ContainsKey( name );
+            return this.nameIndex.ContainsKey(name);
         }
 
         /// <summary>
@@ -118,9 +118,9 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public int IndexOf( ConfigurationAttribute item )
+        public int IndexOf(ConfigurationAttribute item)
         {
-            return this.listIndex.IndexOf( item );
+            return this.listIndex.IndexOf(item);
         }
 
         /// <summary>
@@ -128,11 +128,11 @@
         /// </summary>
         /// <param name="index"></param>
         /// <param name="item"></param>
-        public void Insert( int index, ConfigurationAttribute item )
+        public void Insert(int index, ConfigurationAttribute item)
         {
             ICollection<ConfigurationAttribute> collection = this.nameIndex;
-            collection.Add( item );
-            this.listIndex.Insert( index, item );
+            collection.Add(item);
+            this.listIndex.Insert(index, item);
         }
 
         /// <summary>
@@ -140,15 +140,15 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public bool Remove( string name )
+        public bool Remove(string name)
         {
             ConfigurationAttribute attribute;
-            bool contains = this.nameIndex.TryGetValue( name, out attribute );
+            bool contains = this.nameIndex.TryGetValue(name, out attribute);
             bool succeeded;
 
             if (contains)
             {
-                succeeded = this.collection.Remove( attribute );
+                succeeded = this.collection.Remove(attribute);
             }
             else
             {
@@ -162,12 +162,12 @@
         /// 
         /// </summary>
         /// <param name="index"></param>
-        public void RemoveAt( int index )
+        public void RemoveAt(int index)
         {
-            ConfigurationAttribute item = this.listIndex[ index ];
-            this.listIndex.RemoveAt( index );
+            ConfigurationAttribute item = this.listIndex[index];
+            this.listIndex.RemoveAt(index);
             ICollection<ConfigurationAttribute> collection = this.nameIndex;
-            collection.Remove( item );
+            collection.Remove(item);
         }
 
         /// <summary>
@@ -176,9 +176,9 @@
         /// <param name="name"></param>
         /// <param name="attribute"></param>
         /// <returns></returns>
-        public bool TryGetValue( string name, out ConfigurationAttribute attribute )
+        public bool TryGetValue(string name, out ConfigurationAttribute attribute)
         {
-            return this.nameIndex.TryGetValue( name, out attribute );
+            return this.nameIndex.TryGetValue(name, out attribute);
         }
 
         /// <summary>
@@ -188,9 +188,9 @@
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetAttributeValue<T>( string name, out T value )
+        public bool TryGetAttributeValue<T>(string name, out T value)
         {
-            return this.TryGetAttributeValue( name, default( T ), out value );
+            return this.TryGetAttributeValue(name, default(T), out value);
         }
 
         /// <summary>
@@ -201,10 +201,10 @@
         /// <param name="defaultValue"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetAttributeValue<T>( string name, T defaultValue, out T value )
+        public bool TryGetAttributeValue<T>(string name, T defaultValue, out T value)
         {
             ConfigurationAttribute attribute;
-            bool contains = this.nameIndex.TryGetValue( name, out attribute );
+            bool contains = this.nameIndex.TryGetValue(name, out attribute);
 
             if (contains)
             {
@@ -223,10 +223,10 @@
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public void SetAttributeValue( string name, object value )
+        public void SetAttributeValue(string name, object value)
         {
             ConfigurationAttribute attribute;
-            bool contains = this.nameIndex.TryGetValue( name, out attribute );
+            bool contains = this.nameIndex.TryGetValue(name, out attribute);
 
             if (contains)
             {
@@ -234,8 +234,8 @@
             }
             else
             {
-                attribute = new ConfigurationAttribute( name, value, null );
-                this.collection.Add( attribute );
+                attribute = new ConfigurationAttribute(name, value, null);
+                this.collection.Add(attribute);
             }
         }
 
@@ -245,9 +245,9 @@
         /// 
         /// </summary>
         /// <param name="item"></param>
-        public void Add( ConfigurationAttribute item )
+        public void Add(ConfigurationAttribute item)
         {
-            this.collection.Add( item );
+            this.collection.Add(item);
         }
 
         /// <summary>
@@ -263,9 +263,9 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool Contains( ConfigurationAttribute item )
+        public bool Contains(ConfigurationAttribute item)
         {
-            return this.collection.Contains( item );
+            return this.collection.Contains(item);
         }
 
         /// <summary>
@@ -273,9 +273,9 @@
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
-        public void CopyTo( ConfigurationAttribute[] array, int arrayIndex )
+        public void CopyTo(ConfigurationAttribute[] array, int arrayIndex)
         {
-            this.collection.CopyTo( array, arrayIndex );
+            this.collection.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -305,9 +305,9 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool Remove( ConfigurationAttribute item )
+        public bool Remove(ConfigurationAttribute item)
         {
-            return this.collection.Remove( item );
+            return this.collection.Remove(item);
         }
 
         #endregion

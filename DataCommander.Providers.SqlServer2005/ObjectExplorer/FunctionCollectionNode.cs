@@ -1,8 +1,6 @@
 namespace DataCommander.Providers.SqlServer2005
 {
     using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlClient;
     using System.Windows.Forms;
 
     internal sealed class FunctionCollectionNode : ITreeNode

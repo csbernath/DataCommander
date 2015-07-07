@@ -34,25 +34,29 @@
 
         public void AddBooleanInput(string name, bool isNullable, bool defaultValue)
         {
-            TfsParameter parameter = new TfsParameter(name, typeof(bool), DbType.Boolean, ParameterDirection.Input, isNullable, defaultValue);
+            var parameter = new TfsParameter(name, typeof (bool), DbType.Boolean, ParameterDirection.Input, isNullable,
+                defaultValue);
             this.Add(parameter);
         }
-        
+
         public void AddInt32Input(string name, bool isNullable, int defaultValue)
         {
-            TfsParameter parameter = new TfsParameter(name, typeof(int), DbType.Int32, ParameterDirection.Input, isNullable, defaultValue);
+            var parameter = new TfsParameter(name, typeof (int), DbType.Int32, ParameterDirection.Input, isNullable,
+                defaultValue);
             this.Add(parameter);
         }
 
         public void AddStringInput(string name, bool isNullable, object defaultValue)
         {
-            TfsParameter parameter = new TfsParameter(name, typeof(string), DbType.String, ParameterDirection.Input, isNullable, defaultValue);
+            var parameter = new TfsParameter(name, typeof (string), DbType.String, ParameterDirection.Input, isNullable,
+                defaultValue);
             this.Add(parameter);
         }
 
-        public void AddValueTypeInput<T>(string name, T defaultValue) where T: struct
+        public void AddValueTypeInput<T>(string name, T defaultValue) where T : struct
         {
-            TfsParameter parameter = new TfsParameter(name, typeof(T), DbType.Object, ParameterDirection.Input, true, defaultValue);
+            var parameter = new TfsParameter(name, typeof (T), DbType.Object, ParameterDirection.Input, true,
+                defaultValue);
             this.Add(parameter);
         }
 
@@ -128,17 +132,23 @@
 
         bool IList.IsFixedSize
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         bool IList.IsReadOnly
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         void IList.Remove(object value)
         {
-            var parameter = (TfsParameter)value;
+            var parameter = (TfsParameter) value;
             this.list.Remove(parameter);
         }
 
@@ -157,7 +167,7 @@
             set
             {
                 Contract.Requires(value is TfsParameter);
-                TfsParameter parameter = (TfsParameter)value;
+                TfsParameter parameter = (TfsParameter) value;
                 this.list[index] = parameter;
             }
         }
@@ -181,12 +191,18 @@
 
         bool ICollection.IsSynchronized
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         object ICollection.SyncRoot
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         #endregion

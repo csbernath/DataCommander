@@ -3,9 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using System.Linq;
-    using System.Text;
-    using DataCommander.Providers;
+    using System.Data.Common;
+    using System.Xml;
+    using DataCommander.Foundation.Data;
 
     public sealed class MsiProvider : IProvider
     {
@@ -96,7 +96,7 @@
             }
         }
 
-        System.Data.Common.DbProviderFactory IProvider.DbProviderFactory
+        DbProviderFactory IProvider.DbProviderFactory
         {
             get
             {
@@ -138,7 +138,7 @@
             return new MsiProviderConnection(connectionString);
         }
 
-        System.Data.Common.DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection)
+        DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection)
         {
             throw new NotImplementedException();
         }
@@ -154,12 +154,12 @@
             throw new NotImplementedException();
         }
 
-        System.Xml.XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
+        XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
         {
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType(Foundation.Data.DataColumnSchema dataColumnSchema)
+        Type IProvider.GetColumnType(DataColumnSchema dataColumnSchema)
         {
             return typeof (object);
         }

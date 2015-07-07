@@ -161,9 +161,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DatabaseObjectMultipartName.cs" />
     <Compile Include="FieldReader\DoubleFieldReader.cs" />
     <Compile Include="FieldReader\LongStringFieldReader.cs" />
     <Compile Include="FieldReader\MoneyDataFieldReader.cs" />
+    <Compile Include="IdentifierParser.cs" />
     <Compile Include="NonSqlObjectName.cs" />
     <Compile Include="ObjectExplorer\ColumnCollectionNode.cs" />
     <Compile Include="ObjectExplorer\ColumnNode.cs" />

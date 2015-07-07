@@ -178,14 +178,14 @@ namespace DataCommander
             this.menuItem1.MergeIndex = 1;
             this.menuItem1.Name = "menuItem1";
             this.menuItem1.Size = new System.Drawing.Size(67, 20);
-            this.menuItem1.Text = "&Database";
+            this.menuItem1.Text = "&DataSource";
             // 
             // NewToolStripMenuItem
             // 
             this.NewToolStripMenuItem.Name = "NewToolStripMenuItem";
             this.NewToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
-            this.NewToolStripMenuItem.Text = "&New";
-            this.NewToolStripMenuItem.Click += new System.EventHandler(this.NewToolStripMenuItem_Click);
+            this.NewToolStripMenuItem.Text = "&Create";
+            this.NewToolStripMenuItem.Click += new System.EventHandler(this.CreateMenuItem_Click);
             // 
             // mnuConnect
             // 
@@ -326,7 +326,7 @@ namespace DataCommander
             this.btnConnect.Image = ((System.Drawing.Image)(resources.GetObject("btnConnect.Image")));
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(23, 22);
-            this.btnConnect.ToolTipText = "Connect to Database";
+            this.btnConnect.ToolTipText = "Connect to data source";
             this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
             // openButton
@@ -337,7 +337,7 @@ namespace DataCommander
             this.openButton.Name = "openButton";
             this.openButton.Size = new System.Drawing.Size(23, 22);
             this.openButton.Text = "toolStripButton1";
-            this.openButton.ToolTipText = "Open database";
+            this.openButton.ToolTipText = "Open data source";
             this.openButton.Click += new System.EventHandler(this.openButton_Click);
             // 
             // saveButton
@@ -811,7 +811,7 @@ namespace DataCommander
             this.ShowContents();
         }
 
-        private void NewToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CreateMenuItem_Click(object sender, EventArgs e)
         {
             var dialog = new SaveFileDialog();
             dialog.Filter = "SQL Server Compact 4.0 files (*.sdf)|*.sdf|SQLite files (*.sqlite)|*.sqlite";

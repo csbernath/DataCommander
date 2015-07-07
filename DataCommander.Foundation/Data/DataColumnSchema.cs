@@ -160,6 +160,17 @@
         /// <summary>
         /// 
         /// </summary>
+        public bool? IsIdentity
+        {
+            get
+            {
+                return this.schemaTableRow.Field<bool?>("IsIdentity");
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public bool? IsLong
         {
             get

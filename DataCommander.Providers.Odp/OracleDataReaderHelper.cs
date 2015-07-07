@@ -1,9 +1,9 @@
 namespace DataCommander.Providers.Odp
 {
-	using System;
-	using System.Data;
-	using Oracle.ManagedDataAccess.Client;
-	using Oracle.ManagedDataAccess.Types;
+    using System;
+    using System.Data;
+    using Oracle.ManagedDataAccess.Client;
+    using Oracle.ManagedDataAccess.Types;
 
     internal sealed class OracleTimeStampField
     {

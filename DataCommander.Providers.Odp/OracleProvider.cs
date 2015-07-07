@@ -1,7 +1,6 @@
 namespace DataCommander.Providers.Odp
 {
     using System;
-    using System.CodeDom;
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
@@ -9,8 +8,6 @@ namespace DataCommander.Providers.Odp
     using System.Xml;
     using DataCommander.Foundation.Configuration;
     using DataCommander.Foundation.Data;
-    using DataCommander.Foundation.Linq;
-    using DataCommander.Providers;
     using Oracle.ManagedDataAccess.Client;
     using Oracle.ManagedDataAccess.Types;
 
@@ -559,7 +556,7 @@ order by OBJECT_NAME", oracleName.Owner );
 
                 string key = sb.ToString();
                 ApplicationData applicationData = DataCommanderApplication.Instance.ApplicationData;
-                string folderName = DataCommander.Foundation.Configuration.ConfigurationNodeName.FromType( typeof( OracleProvider ) ) + ConfigurationNode.Delimiter + "CompletionCache";
+                string folderName = ConfigurationNodeName.FromType( typeof( OracleProvider ) ) + ConfigurationNode.Delimiter + "CompletionCache";
                 ConfigurationNode folder = applicationData.CreateNode( folderName );
                 bool contains = folder.Attributes.TryGetAttributeValue( key, out items );
                 response.FromCache = contains;

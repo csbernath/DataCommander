@@ -1,15 +1,9 @@
 ﻿namespace DataCommander.Providers.Msi
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Data.Common;
-	using System.Linq;
-	using System.Text;
-	using DataCommander.Providers;
-	using Microsoft.Deployment.WindowsInstaller;
-	using DataCommander.Foundation.Diagnostics;
+    using System;
+    using System.Data;
 
-	internal sealed class MsiProviderConnection : ConnectionBase
+    internal sealed class MsiProviderConnection : ConnectionBase
 	{
 		private string connectionString;
 		private MsiConnection msiConnection;
@@ -27,7 +21,7 @@
 			this.msiConnection.Open();
 		}
 
-		public override System.Data.IDbCommand CreateCommand()
+		public override IDbCommand CreateCommand()
 		{
 			return this.msiConnection.CreateCommand();
 		}

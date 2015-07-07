@@ -1,11 +1,10 @@
 namespace DataCommander.Providers.OracleBase
 {
-	using System.Collections.Generic;
-	using System.Data;
-	using System.Windows.Forms;
-	using DataCommander.Foundation.Data;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Windows.Forms;
 
-	public sealed class FunctionCollectionNode : ITreeNode
+    public sealed class FunctionCollectionNode : ITreeNode
 	{
 		private SchemaNode schemaNode;
 

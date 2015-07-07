@@ -1,10 +1,10 @@
-namespace DataCommander.Providers
+namespace DataCommander.Providers.MySql
 {
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
 
-    public sealed class IdentifierParser
+    internal sealed class IdentifierParser
     {
         private readonly TextReader textReader;
 
@@ -22,7 +22,9 @@ namespace DataCommander.Providers
                 int peek = this.textReader.Peek();
 
                 if (peek == -1)
+                {
                     break;
+                }
 
                 peekChar = (char)peek;
 
@@ -30,7 +32,7 @@ namespace DataCommander.Providers
                 {
                     this.textReader.Read();
                 }
-                else if (peekChar == '[')
+                else if (peekChar == '\'')
                 {
                     yield return this.ReadQuotedIdentifier();
                 }
@@ -46,6 +48,8 @@ namespace DataCommander.Providers
             }
         }
 
+        #region Private Methods
+
         private string ReadQuotedIdentifier()
         {
             this.textReader.Read();
@@ -60,7 +64,7 @@ namespace DataCommander.Providers
 
                 char peekChar = (char)peek;
 
-                if (peekChar == ']')
+                if (peekChar == '\'')
                 {
                     this.textReader.Read();
                     break;
@@ -101,5 +105,7 @@ namespace DataCommander.Providers
 
             return identifier.ToString();
         }
+
+        #endregion
     }
 }

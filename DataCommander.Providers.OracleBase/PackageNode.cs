@@ -5,7 +5,6 @@ namespace DataCommander.Providers.OracleBase
     using System.Data;
     using System.Text;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
 
     /// <summary>
     /// Summary description for TablesNode.
@@ -107,7 +106,7 @@ order by procedure_name", schemaNode.Name, name);
                 sb.Append(line);
             }
 
-            MainForm mainForm = DataCommander.Providers.DataCommanderApplication.Instance.MainForm;
+            MainForm mainForm = DataCommanderApplication.Instance.MainForm;
             QueryForm queryForm = (QueryForm)mainForm.ActiveMdiChild;
             QueryTextBox tbQuery = queryForm.QueryTextBox;
             int selectionStart = tbQuery.RichTextBox.TextLength;

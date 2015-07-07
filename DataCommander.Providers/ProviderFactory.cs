@@ -6,7 +6,6 @@ namespace DataCommander.Providers
     using System.Diagnostics.Contracts;
     using ADODB;
     using DataCommander.Foundation.Configuration;
-    using DataCommander.Foundation.Data;
 
     public static class ProviderFactory
     {
@@ -34,7 +33,7 @@ namespace DataCommander.Providers
 
         public static IProvider CreateProvider(string name)
         {
-            Contract.Requires( name != null );
+            Contract.Requires<ArgumentNullException>( name != null );
             Contract.Ensures(Contract.Result<IProvider>() != null);
 
             ConfigurationNode folder = Settings.CurrentNamespace;

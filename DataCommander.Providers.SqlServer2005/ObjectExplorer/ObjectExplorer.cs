@@ -23,7 +23,7 @@ namespace DataCommander.Providers.SqlServer2005
 
         IEnumerable<ITreeNode> IObjectExplorer.GetChildren(bool refresh)
         {
-            return new ServerNode( this.connectionString ).ItemToArray();
+            return new ServerNode(this.connectionString).ItemToArray();
         }
 
         bool IObjectExplorer.Sortable
@@ -32,6 +32,6 @@ namespace DataCommander.Providers.SqlServer2005
             {
                 return false;
             }
-        }        
+        }
     }
 }

@@ -5,7 +5,6 @@ namespace DataCommander.Providers.OracleBase
     using System.Data;
     using System.Text;
     using System.Windows.Forms;
-	using DataCommander.Foundation.Data;
 
     public sealed class ProcedureNode : ITreeNode
     {
