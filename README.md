@@ -11,6 +11,7 @@ The following plugins are already implemented:
 Relational database servers:
   * iDB2
   * Microsoft SQL Server
+  * MySQL
   * Oracle
 
 Relational file databases:
@@ -34,6 +35,7 @@ The data grid can be exported into Excel.
 |Provider.Name|Description|
 |-------------|-----------|
 |Msi|[Windows Installer](https://msdn.microsoft.com/en-us/library/cc185688(v=vs.85).aspx) using [Wix](http://wixtoolset.org)|
+|MySql|[MySQL](https://www.mysql.com/)|
 |Odp|[Oracle](http://www.oracle.com/technetwork/topics/dotnet/index-085163.html) from Oracle|
 |OleDb|[OLE DB](https://msdn.microsoft.com/en-us/library/system.data.oledb%28v=vs.110%29.aspx)|
 |Oracle|[Oracle](https://msdn.microsoft.com/en-us/library/system.data.oracleclient%28v=vs.110%29.aspx) from Microsoft|
@@ -127,7 +129,6 @@ Query TextBox
 |Query/Parse|Ctrl+F5|
 |Query/Result Mode/Text|Ctrl+T|
 |Query/Result Mode/DataGrid|Ctrl+D|
-|Query/Result Mode/Html|Ctrl+H|
 |Query/Result Mode/ListView|Ctrl+L|
 |Query/Close All TabPages|Ctrl+Shift+F4|
 |Query/Create Insert Statements|Ctrl+I|
