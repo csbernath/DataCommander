@@ -13,6 +13,7 @@ Relational database servers:
   * Microsoft SQL Server
   * MySQL
   * Oracle
+  * PostrgeSQL (coming soon)
 
 Relational file databases:
   * SQLite
