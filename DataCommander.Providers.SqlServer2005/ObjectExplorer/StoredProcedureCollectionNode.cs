@@ -4,6 +4,7 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Data;
     using System.Data.SqlClient;
     using System.Windows.Forms;
+    using Foundation.Data;
 
     sealed class StoredProcedureCollectionNode : ITreeNode
     {
@@ -51,7 +52,8 @@ order by s.name,o.name", this.database.Name, this.isMSShipped ? 1 : 0 );
             string connectionString = this.database.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
-                dataTable = connection.ExecuteDataTable(commandText);
+                var transactionScope = new DbTransactionScope(connection, null);
+                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
             }
             DataRowCollection dataRows = dataTable.Rows;
             int count = dataRows.Count;

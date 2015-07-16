@@ -70,7 +70,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         private readonly Dictionary<int, Dictionary<string, SqLoglCommandExecution>> applications = new Dictionary<int, Dictionary<string, SqLoglCommandExecution>>();
         private readonly Dictionary<object, SqlLogConnection> connections = new Dictionary<object, SqlLogConnection>();
         private readonly Queue<ISqlLogItem> queue = new Queue<ISqlLogItem>();
-        private readonly AutoResetEvent queueEvent = new AutoResetEvent( false );
+        private readonly AutoResetEvent queueEvent = new AutoResetEvent(false);
 
         #endregion
 
@@ -93,15 +93,15 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// Initializes a new instance of the <see cref="SqlLog"/> class.
         /// </summary>
         /// <param name="connectionString"></param>
-        public SqlLog( string connectionString )
+        public SqlLog(string connectionString)
         {
-            this.thread = new WorkerThread( this.Start )
+            this.thread = new WorkerThread(this.Start)
             {
                 Name = typeof (SqlLog).Name,
                 Priority = ThreadPriority.Lowest
             };
 
-            this.connection = new SafeSqlConnection( connectionString );
+            this.connection = new SafeSqlConnection(connectionString);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                 lock (this.queue)
                 {
                     array = new ISqlLogItem[this.queue.Count];
-                    this.queue.CopyTo( array, 0 );
+                    this.queue.CopyTo(array, 0);
                     this.queue.Clear();
                 }
 
@@ -132,9 +132,9 @@ namespace DataCommander.Foundation.Data.SqlClient
 
                 for (int i = 0; i < array.Length; i++)
                 {
-                    ISqlLogItem item = array[ i ];
+                    ISqlLogItem item = array[i];
                     string commandText = item.CommandText;
-                    sb.Append( commandText );
+                    sb.Append(commandText);
                 }
 
                 string cmdText = sb.ToString();
@@ -149,22 +149,22 @@ namespace DataCommander.Foundation.Data.SqlClient
                     command.ExecuteNonQuery();
                     ticks = Stopwatch.GetTimestamp() - ticks;
                 }
-                catch ( Exception e )
+                catch (Exception e)
                 {
-                    log.Write( LogLevel.Error, e.ToString() );
+                    log.Write(LogLevel.Error, e.ToString());
                 }
                 finally
                 {
-                    Double seconds = (Double) ticks/Stopwatch.Frequency;
-                    int speed = (int) ( array.Length/seconds );
+                    Double seconds = (Double)ticks/Stopwatch.Frequency;
+                    int speed = (int)(array.Length/seconds);
 
                     log.Write(
                         LogLevel.Trace,
                         "SqlLog.Flush() called. Count: {0}, Elapsed: {1}, Speed: {2} item/sec\r\n{3}",
                         array.Length,
-                        StopwatchTimeSpan.ToString( ticks, 3 ),
+                        StopwatchTimeSpan.ToString(ticks, 3),
                         speed,
-                        cmdText );
+                        cmdText);
                 }
             }
         }
@@ -175,7 +175,7 @@ namespace DataCommander.Foundation.Data.SqlClient
 
             while (!this.thread.IsStopRequested)
             {
-                int i = WaitHandle.WaitAny( waitHandles );
+                int i = WaitHandle.WaitAny(waitHandles);
                 this.CheckConnections();
 
                 if (i == 0)
@@ -187,7 +187,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                         list = this.connections.Keys.ToList();
                     }
 
-                    this.CloseConnections( list, LocalTime.Default.Now );
+                    this.CloseConnections(list, LocalTime.Default.Now);
                 }
 
                 this.Flush();
@@ -199,14 +199,14 @@ namespace DataCommander.Foundation.Data.SqlClient
             {
                 foreach (int applicationId in this.applications.Keys)
                 {
-                    SqlLogApplicationEnd item = new SqlLogApplicationEnd( applicationId, endDate );
-                    this.Enqueue( item );
+                    SqlLogApplicationEnd item = new SqlLogApplicationEnd(applicationId, endDate);
+                    this.Enqueue(item);
                 }
             }
 
             this.Flush();
 
-            log.Trace("queue.Count: {0}", this.queue.Count );
+            log.Trace("queue.Count: {0}", this.queue.Count);
         }
 
         /// <summary>
@@ -216,13 +216,13 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="startDate"></param>
         /// <param name="safe"></param>
         /// <returns></returns>
-        public int ApplicationStart( string name, DateTime startDate, bool safe )
+        public int ApplicationStart(string name, DateTime startDate, bool safe)
         {
             var sb = new StringBuilder();
-            sb.Append( "exec LogApplicationStart " );
-            sb.Append( name.ToTSqlVarChar() );
-            sb.Append( ',' );
-            sb.Append( startDate.ToTSqlDateTime() );
+            sb.Append("exec LogApplicationStart ");
+            sb.Append(name.ToTSqlVarChar());
+            sb.Append(',');
+            sb.Append(startDate.ToTSqlDateTime());
             string commandText = sb.ToString();
             int applicationId;
 
@@ -238,13 +238,14 @@ namespace DataCommander.Foundation.Data.SqlClient
                 }
             }
 
-            applicationId = (int) this.connection.Connection.ExecuteScalar( null, commandText, CommandType.Text, 0 );
-            log.Trace("SqlLog.ApplicationStart({0})", applicationId );
+            var transactionScope = new DbTransactionScope(this.connection, null);
+            applicationId = (int)transactionScope.ExecuteScalar(new CommandDefinition { CommandText = commandText });
+            log.Trace("SqlLog.ApplicationStart({0})", applicationId);
             var commands = new Dictionary<string, SqLoglCommandExecution>();
 
             lock (this.applications)
             {
-                this.applications.Add( applicationId, commands );
+                this.applications.Add(applicationId, commands);
             }
 
             return applicationId;
@@ -255,34 +256,34 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// </summary>
         /// <param name="applicationId">The identifier of the application. See <see cref="ApplicationStart"/>.</param>
         /// <param name="endDate">The end date of the application.</param>
-        public void ApplicationEnd( int applicationId, DateTime endDate )
+        public void ApplicationEnd(int applicationId, DateTime endDate)
         {
-            SqlLogApplicationEnd item = new SqlLogApplicationEnd( applicationId, endDate );
-            this.Enqueue( item );
+            var item = new SqlLogApplicationEnd(applicationId, endDate);
+            this.Enqueue(item);
 
             lock (this.applications)
             {
-                this.applications.Remove( applicationId );
+                this.applications.Remove(applicationId);
             }
         }
 
         private void ConnectionClosed(
             object internalConnection,
-            DateTime endDate )
+            DateTime endDate)
         {
-            SqlLogConnection sqlLogConnection = this.connections[ internalConnection ];
+            SqlLogConnection sqlLogConnection = this.connections[internalConnection];
 
             lock (this.connections)
             {
-                this.connections.Remove( internalConnection );
+                this.connections.Remove(internalConnection);
             }
 
             if (sqlLogConnection != null)
             {
                 int applicationId = sqlLogConnection.ApplicationId;
                 int connectionNo = sqlLogConnection.ConnectionNo;
-                SqlLogConnectionClose item = new SqlLogConnectionClose( applicationId, connectionNo, endDate );
-                this.Enqueue( item );
+                SqlLogConnectionClose item = new SqlLogConnectionClose(applicationId, connectionNo, endDate);
+                this.Enqueue(item);
             }
         }
 
@@ -294,34 +295,34 @@ namespace DataCommander.Foundation.Data.SqlClient
             {
                 foreach (object connection in this.connections.Keys)
                 {
-                    bool isOpen = internalConnectionHelper.IsOpen( connection );
+                    bool isOpen = internalConnectionHelper.IsOpen(connection);
 
                     if (!isOpen)
                     {
-                        list.Add( connection );
+                        list.Add(connection);
                     }
                 }
             }
 
             if (list.Count > 0)
             {
-                this.CloseConnections( list, LocalTime.Default.Now );
+                this.CloseConnections(list, LocalTime.Default.Now);
             }
         }
 
-        private void CloseConnections( IEnumerable<object> connections, DateTime endDate )
+        private void CloseConnections(IEnumerable<object> connections, DateTime endDate)
         {
             foreach (object connection in connections)
             {
-                this.ConnectionClosed( connection, endDate );
+                this.ConnectionClosed(connection, endDate);
             }
         }
 
-        private void Enqueue( ISqlLogItem item )
+        private void Enqueue(ISqlLogItem item)
         {
             lock (this.queue)
             {
-                this.queue.Enqueue( item );
+                this.queue.Enqueue(item);
             }
 
             this.queueEvent.Set();
@@ -345,14 +346,14 @@ namespace DataCommander.Foundation.Data.SqlClient
             string hostName,
             DateTime startDate,
             long duration,
-            Exception exception )
+            Exception exception)
         {
-            object internalConnection = internalConnectionHelper.GetInternalConnection( connection );
+            object internalConnection = internalConnectionHelper.GetInternalConnection(connection);
             SqlLogConnection sqlLogConnection = null;
 
             if (internalConnection != null)
             {
-                this.connections.TryGetValue( internalConnection, out sqlLogConnection );
+                this.connections.TryGetValue(internalConnection, out sqlLogConnection);
             }
 
             bool isNew = sqlLogConnection == null;
@@ -364,23 +365,23 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
             else
             {
-                connectionNo = Interlocked.Increment( ref this.connectionCounter );
-                SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder( connection.ConnectionString );
+                connectionNo = Interlocked.Increment(ref this.connectionCounter);
+                SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connection.ConnectionString);
                 string name = sqlConnectionStringBuilder.ApplicationName;
-                sqlLogConnection = new SqlLogConnection( applicationId, connectionNo, name, userName, hostName, startDate, duration, exception );
+                sqlLogConnection = new SqlLogConnection(applicationId, connectionNo, name, userName, hostName, startDate, duration, exception);
 
                 if (internalConnection != null)
                 {
                     lock (this.connections)
                     {
-                        this.connections.Add( internalConnection, sqlLogConnection );
+                        this.connections.Add(internalConnection, sqlLogConnection);
                     }
                 }
 
-                string trace = new StackTrace( 2, true ).ToString();
-                log.Trace("LoggedSqlConnection.Open() succeeded. ConnectionNo: {0}\r\n{1}", connectionNo, trace );
+                string trace = new StackTrace(2, true).ToString();
+                log.Trace("LoggedSqlConnection.Open() succeeded. ConnectionNo: {0}\r\n{1}", connectionNo, trace);
 
-                this.Enqueue( sqlLogConnection );
+                this.Enqueue(sqlLogConnection);
             }
 
             return connectionNo;
@@ -391,19 +392,19 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// Logs the event if the connection is removed from the pool.
         /// </summary>
         /// <param name="connection"></param>
-        public void CloseConnection( IDbConnection connection )
+        public void CloseConnection(IDbConnection connection)
         {
-            object internalConnection = internalConnectionHelper.GetInternalConnection( connection );
+            object internalConnection = internalConnectionHelper.GetInternalConnection(connection);
             connection.Close();
 
             if (internalConnection != null)
             {
-                bool isOpen = internalConnectionHelper.IsOpen( internalConnection );
+                bool isOpen = internalConnectionHelper.IsOpen(internalConnection);
 
                 if (!isOpen)
                 {
                     DateTime endDate = LocalTime.Default.Now;
-                    this.ConnectionClosed( internalConnection, endDate );
+                    this.ConnectionClosed(internalConnection, endDate);
                 }
             }
         }
@@ -413,19 +414,19 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// Logs the close event if the connection is removed from the pool.
         /// </summary>
         /// <param name="connection"></param>
-        public void DisposeConnection( IDbConnection connection )
+        public void DisposeConnection(IDbConnection connection)
         {
-            object internalConnection = internalConnectionHelper.GetInternalConnection( connection );
+            object internalConnection = internalConnectionHelper.GetInternalConnection(connection);
             connection.Dispose();
 
             if (internalConnection != null)
             {
-                bool isOpen = internalConnectionHelper.IsOpen( internalConnection );
+                bool isOpen = internalConnectionHelper.IsOpen(internalConnection);
 
                 if (!isOpen)
                 {
                     DateTime endDate = LocalTime.Default.Now;
-                    this.ConnectionClosed( internalConnection, endDate );
+                    this.ConnectionClosed(internalConnection, endDate);
                 }
             }
         }
@@ -445,11 +446,11 @@ namespace DataCommander.Foundation.Data.SqlClient
             IDbCommand command,
             DateTime startDate,
             long duration,
-            Exception exception )
+            Exception exception)
         {
-            Dictionary<string, SqLoglCommandExecution> commands = this.applications[ applicationId ];
-            var item = new SqlLogCommand( applicationId, commands, connectionNo, command, startDate, duration, exception );
-            this.Enqueue( item );
+            Dictionary<string, SqLoglCommandExecution> commands = this.applications[applicationId];
+            var item = new SqlLogCommand(applicationId, commands, connectionNo, command, startDate, duration, exception);
+            this.Enqueue(item);
         }
     }
 }

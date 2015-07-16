@@ -13,10 +13,14 @@
     /// <typeparam name="T"></typeparam>
     public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, ICollection<T>>
     {
+        #region Private Fields
+
         private string name;
         private IDictionary<TKey, ICollection<T>> dictionary;
         private Func<T, GetKeyResponse<TKey>> getKey;
         private Func<ICollection<T>> createCollection;
+
+        #endregion
 
         /// <summary>
         /// 

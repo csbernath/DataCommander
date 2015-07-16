@@ -8,8 +8,8 @@ namespace DataCommander.Providers.Odp
     /// </summary>
     internal sealed class TriggerNode : ITreeNode
     {
-		private TableNode tableNode;
-		private string name;
+		private readonly TableNode tableNode;
+		private readonly string name;
 
         public TriggerNode(
           TableNode tableNode,

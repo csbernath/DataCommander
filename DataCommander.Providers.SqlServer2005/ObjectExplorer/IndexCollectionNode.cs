@@ -62,16 +62,16 @@ order by i.name",
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                using (var context = connection.ExecuteReader(null, commandText, CommandType.Text, 0, CommandBehavior.Default))
+                var transactionScope = new DbTransactionScope(connection, null);
+                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
                 {
-                    var dataReader = context.DataReader;
-                    while (dataReader.Read())
+                    return dataReader.Read(dataRecord =>
                     {
-                        string name = dataReader.GetString(0);
-                        byte type = dataReader.GetByte(1);
-                        bool isUnique = dataReader.GetBoolean(2);
-                        yield return new IndexNode(this.tableNode, name, type, isUnique);
-                    }
+                        string name = dataRecord.GetString(0);
+                        byte type = dataRecord.GetByte(1);
+                        bool isUnique = dataRecord.GetBoolean(2);
+                        return new IndexNode(this.tableNode, name, type, isUnique);
+                    });
                 }
             }
         }

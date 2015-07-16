@@ -46,17 +46,18 @@ namespace DataCommander.Foundation.Data.SqlClient
         }
         #endregion
 
-        internal static Int16 GetId( IDbConnection connection )
+        internal static Int16 GetId(IDbConnection connection)
         {
+            var transactionScope = new DbTransactionScope(connection, null);
             Int16 id = 0;
 
             try
             {
-                id = (Int16) connection.ExecuteScalar( null, "select @@spid", CommandType.Text, 0 );
+                id = (Int16)transactionScope.ExecuteScalar(new CommandDefinition {CommandText = "select @@spid"});
             }
             catch (Exception e)
             {
-                log.Write( LogLevel.Error, "Exception:\r\n{0}", e.ToLogString() );
+                log.Write(LogLevel.Error, "Exception:\r\n{0}", e.ToLogString());
             }
 
             return id;

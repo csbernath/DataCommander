@@ -12,68 +12,89 @@
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="dataRecord"></param>
-        /// <param name="ordinal"></param>
+        /// <param name="columnIndex"></param>
         /// <returns></returns>
-        public static T GetValue<T>(this IDataRecord dataRecord, int ordinal)
+        public static bool? GetNullableBoolean(this IDataRecord dataRecord, int columnIndex)
         {
             Contract.Requires<ArgumentNullException>(dataRecord != null);
 
-            object valueObject = dataRecord[ordinal];
-            Contract.Assert(valueObject is T);
-
-            return (T) valueObject;
+            return dataRecord.IsDBNull(columnIndex)
+                ? (bool?)null
+                : dataRecord.GetBoolean(columnIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="dataRecord"></param>
-        /// <param name="name"></param>
+        /// <param name="columnIndex"></param>
         /// <returns></returns>
-        public static T GetValue<T>(
-            this IDataRecord dataRecord,
-            string name)
+        public static DateTime? GetNullableDateTime(this IDataRecord dataRecord, int columnIndex)
         {
-            Contract.Requires(dataRecord != null);
-            object valueObject = dataRecord[name];
-            Contract.Assert(valueObject is T);
+            Contract.Requires<ArgumentNullException>(dataRecord != null);
 
-            return (T) valueObject;
+            return dataRecord.IsDBNull(columnIndex)
+                ? (DateTime?)null
+                : dataRecord.GetDateTime(columnIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="dataRecord"></param>
-        /// <param name="index"></param>
+        /// <param name="columnIndex"></param>
         /// <returns></returns>
-        public static T GetValueOrDefault<T>(this IDataRecord dataRecord, int index)
+        public static decimal? GetNullableDecimal(this IDataRecord dataRecord, int columnIndex)
         {
             Contract.Requires<ArgumentNullException>(dataRecord != null);
 
-            object value = dataRecord[index];
-            return Database.GetValueOrDefault<T>(value);
+            return dataRecord.IsDBNull(columnIndex)
+                ? (decimal?)null
+                : dataRecord.GetDecimal(columnIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="dataRecord"></param>
-        /// <param name="name"></param>
+        /// <param name="columnIndex"></param>
         /// <returns></returns>
-        public static T GetValueOrDefault<T>(
-            this IDataRecord dataRecord,
-            string name)
+        public static short? GetNullableInt16(this IDataRecord dataRecord, int columnIndex)
         {
             Contract.Requires<ArgumentNullException>(dataRecord != null);
 
-            object value = dataRecord[name];
-            return Database.GetValueOrDefault<T>(value);
+            return dataRecord.IsDBNull(columnIndex)
+                ? (short?) null
+                : dataRecord.GetInt16(columnIndex);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataRecord"></param>
+        /// <param name="columnIndex"></param>
+        /// <returns></returns>
+        public static int? GetNullableInt32(this IDataRecord dataRecord, int columnIndex)
+        {
+            Contract.Requires<ArgumentNullException>(dataRecord != null);
+
+            return dataRecord.IsDBNull(columnIndex)
+                ? (int?)null
+                : dataRecord.GetInt32(columnIndex);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataRecord"></param>
+        /// <param name="columnIndex"></param>
+        /// <returns></returns>
+        public static string GetStringOrDefault(this IDataRecord dataRecord, int columnIndex)
+        {
+            return dataRecord.IsDBNull(columnIndex)
+                ? (string)null
+                : dataRecord.GetString(columnIndex);
         }
     }
 }

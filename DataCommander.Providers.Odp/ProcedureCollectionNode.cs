@@ -3,8 +3,9 @@ namespace DataCommander.Providers.Odp
     using System.Collections.Generic;
     using System.Data;
     using System.Windows.Forms;
+    using DataCommander.Foundation.Data;
 
-    sealed class ProcedureCollectionNode : ITreeNode
+    internal sealed class ProcedureCollectionNode : ITreeNode
     {
         public ProcedureCollectionNode(SchemaNode schemaNode)
         {
@@ -31,24 +32,21 @@ namespace DataCommander.Providers.Odp
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-			string commandText = string.Format( @"select	OBJECT_NAME
+            string commandText = string.Format(@"select	OBJECT_NAME
 from	SYS.ALL_OBJECTS
 where	OWNER	= '{0}'
 	and OBJECT_TYPE	= 'PROCEDURE'
-order by OBJECT_NAME", schemaNode.Name );
-            List<ITreeNode> list = new List<ITreeNode>();
+order by OBJECT_NAME", schemaNode.Name);
+            var transactionScope = new DbTransactionScope(this.schemaNode.SchemasNode.Connection, null);
 
-            using (IDataReader dataReader = schemaNode.SchemasNode.Connection.ExecuteReader(commandText))
-            {
-                while (dataReader.Read())
+            return transactionScope.ExecuteReader(
+                new CommandDefinition {CommandText = commandText},
+                CommandBehavior.Default,
+                dataRecord =>
                 {
-                    string procedureName = dataReader.GetString(0);
-                    ProcedureNode procedureNode = new ProcedureNode(schemaNode, null, procedureName);
-                    list.Add(procedureNode);
-                }
-            }
-
-            return list.ToArray();
+                    string procedureName = dataRecord.GetString(0);
+                    return new ProcedureNode(schemaNode, null, procedureName);
+                });
         }
 
         bool ITreeNode.Sortable
@@ -77,6 +75,6 @@ order by OBJECT_NAME", schemaNode.Name );
 
         #endregion
 
-        SchemaNode schemaNode;
+        private readonly SchemaNode schemaNode;
     }
 }

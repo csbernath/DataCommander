@@ -98,6 +98,6 @@ namespace DataCommander.Providers.Odp
 		{
 		}
 
-		SchemaNode schema;
+        readonly SchemaNode schema;
 	}
 }

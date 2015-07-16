@@ -37,18 +37,16 @@ namespace DataCommander.Providers.OracleBase
 from	SYS.ALL_SYNONYMS s
 where	s.OWNER	= '{0}'
 order by s.SYNONYM_NAME";
-
+            var transactionScope = new DbTransactionScope(schema.SchemasNode.Connection, null);
             commandText = string.Format(commandText, schema.Name);
-
-            DataTable dataTable = schema.SchemasNode.Connection.ExecuteDataTable( null, commandText, CommandType.Text, 0 );
+            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
             int count = dataTable.Rows.Count;
 
-            ITreeNode[] treeNodes = new ITreeNode[count];
+            var treeNodes = new ITreeNode[count];
 
 			for (int i = 0; i < count; i++)
 			{
 				string name = (string) dataTable.Rows[ i ][ 0 ];
-
 				treeNodes[ i ] = new SynonymNode( schema, name );
 			}
 
@@ -87,6 +85,6 @@ order by s.SYNONYM_NAME";
             }
         }
 
-        SchemaNode schema;
+        readonly SchemaNode schema;
     }
 }

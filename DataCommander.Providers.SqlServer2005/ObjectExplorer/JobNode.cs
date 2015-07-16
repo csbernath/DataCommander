@@ -7,6 +7,7 @@
     using System.Diagnostics.Contracts;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data.SqlClient;
+    using Foundation.Data;
 
     /// <summary>
     /// TODO: Update summary.
@@ -64,7 +65,8 @@
                 DataSet dataSet;
                 using (var connection = new SqlConnection(this.jobs.Server.ConnectionString))
                 {
-                    dataSet = connection.ExecuteDataSet(commandText);
+                    var transactionScope = new DbTransactionScope(connection, null);
+                    dataSet = transactionScope.ExecuteDataSet(new CommandDefinition {CommandText = commandText});
                 }
 
                 var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;

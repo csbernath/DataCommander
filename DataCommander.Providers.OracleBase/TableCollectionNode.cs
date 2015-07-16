@@ -95,6 +95,6 @@ namespace DataCommander.Providers.OracleBase
 			}
 		}
 
-		SchemaNode schema;
+        readonly SchemaNode schema;
 	}
 }

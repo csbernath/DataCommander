@@ -5,6 +5,7 @@
     using System.Data.SqlClient;
     using System.Diagnostics.Contracts;
     using System.Windows.Forms;
+    using Foundation.Data;
 
     internal sealed class DatabaseCollectionNode : ITreeNode
     {
@@ -44,25 +45,29 @@
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
+            var list = new List<ITreeNode>();
+            list.Add(new SystemDatabaseCollectionNode(this));
+
             string connectionString = this.server.ConnectionString;
-            DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
                 const string commandText = @"select d.name
 from sys.databases d (nolock)
 where name not in('master','model','msdb','tempdb')
 order by d.name";
-                dataTable = connection.ExecuteDataTable(commandText);
-            }
 
-            List<ITreeNode> list = new List<ITreeNode>();
-            list.Add( new SystemDatabaseCollectionNode( this ) );
+                connection.Open();
+                var transactionScope = new DbTransactionScope(connection, null);
 
-            foreach (DataRow dataRow in dataTable.Rows)
-            {
-                string name = (string)dataRow[0];
-                DatabaseNode node = new DatabaseNode(this, name);
-                list.Add(node);
+                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+                {
+                    dataReader.Read(dataRecord =>
+                    {
+                        string name = dataRecord.GetString(0);
+                        var node = new DatabaseNode(this, name);
+                        list.Add(node);
+                    });
+                }
             }
 
             return list;

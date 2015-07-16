@@ -86,6 +86,6 @@ namespace DataCommander.Providers.Odp
         {
         }
 
-        TableNode table;
+        readonly TableNode table;
     }
 }

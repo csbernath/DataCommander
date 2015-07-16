@@ -3,10 +3,11 @@ namespace DataCommander.Providers.OracleBase
     using System.Collections.Generic;
     using System.Data;
     using System.Windows.Forms;
+    using DataCommander.Foundation.Data;
 
     public sealed class FunctionCollectionNode : ITreeNode
 	{
-		private SchemaNode schemaNode;
+		private readonly SchemaNode schemaNode;
 
 		public FunctionCollectionNode( SchemaNode schemaNode )
 		{
@@ -31,29 +32,26 @@ namespace DataCommander.Providers.OracleBase
 			}
 		}
 
-		IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
-		{
-			string commandText = string.Format( @"select	OBJECT_NAME
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+        {
+            string commandText = string.Format(@"select	OBJECT_NAME
 from	SYS.ALL_OBJECTS
 where	OWNER	= '{0}'
 	and OBJECT_TYPE	= 'FUNCTION'
-order by OBJECT_NAME", schemaNode.Name );
-			List<ITreeNode> list = new List<ITreeNode>();
+order by OBJECT_NAME", schemaNode.Name);
+            var transactionScope = new DbTransactionScope(schemaNode.SchemasNode.Connection, null);
 
-			using (IDataReader dataReader = schemaNode.SchemasNode.Connection.ExecuteReader( commandText ))
-			{
-				while (dataReader.Read())
-				{
-					string procedureName = dataReader.GetString( 0 );
-					FunctionNode functionNode = new FunctionNode( schemaNode, null, procedureName );
-					list.Add( functionNode );
-				}
-			}
+            using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+            {
+                return dataReader.Read(dataRecord =>
+                {
+                    string procedureName = dataRecord.GetString(0);
+                    return new FunctionNode(schemaNode, null, procedureName);
+                });
+            }
+        }
 
-			return list.ToArray();
-		}
-
-		bool ITreeNode.Sortable
+        bool ITreeNode.Sortable
 		{
 			get
 			{

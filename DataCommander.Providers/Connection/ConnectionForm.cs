@@ -252,12 +252,14 @@ namespace DataCommander.Providers
 
             if (dataSource == null)
             {
-                row[ConnectionStringProperty.DataSource] = dbConnectionStringBuilder.GetValue("Server");
+                row[ConnectionStringProperty.DataSource] =
+                    dbConnectionStringBuilder.GetValue(ConnectionStringProperty.Server)
+                    ?? dbConnectionStringBuilder.GetValue(ConnectionStringProperty.Host);
             }
 
             if (initialCatalog == null)
             {
-                row[ConnectionStringProperty.InitialCatalog] = dbConnectionStringBuilder.GetValue("Database");
+                row[ConnectionStringProperty.InitialCatalog] = dbConnectionStringBuilder.GetValue(ConnectionStringProperty.Database);
             }
         }
 

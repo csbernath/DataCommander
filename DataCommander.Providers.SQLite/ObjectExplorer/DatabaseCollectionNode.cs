@@ -35,20 +35,20 @@ namespace DataCommander.Providers.SQLite
             }
         }
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             const string commandText = @"PRAGMA database_list;";
-            List<ITreeNode> children = new List<ITreeNode>();
+            var children = new List<ITreeNode>();
+            var transactionScope = new DbTransactionScope(this.connection, null);
 
-            using (var dataReaderContext = this.connection.ExecuteReader( null, commandText, CommandType.Text, 0, CommandBehavior.Default ))
+            using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
             {
-                var dataReader = dataReaderContext.DataReader;
-                while (dataReader.Read())
+                dataReader.Read(dataRecord =>
                 {
-                    string name = dataReader.GetValueOrDefault<string>( "name" );
-                    DatabaseNode databaseNode = new DatabaseNode( this.connection, name );
-                    children.Add( databaseNode );
-                }
+                    string name = dataRecord.GetString(1);
+                    var databaseNode = new DatabaseNode(this.connection, name);
+                    children.Add(databaseNode);
+                });
             }
 
             return children;

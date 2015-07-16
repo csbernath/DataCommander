@@ -51,13 +51,14 @@
         {
             get
             {
-                string commandText = string.Format( @"select	sql
+                string commandText = string.Format(@"select	sql
 from	main.sqlite_master
 where	type = 'index'
-	and name = '{0}'", this.name );
+	and name = '{0}'", this.name);
+                var transactionScope = new DbTransactionScope(this.tableNode.Database.Connection, null);
 
-                object scalar = this.tableNode.Database.Connection.ExecuteScalar( null, commandText, CommandType.Text, 0 );
-                string sql = Database.GetValueOrDefault<string>( scalar );
+                object scalar = transactionScope.ExecuteScalar(new CommandDefinition {CommandText = commandText});
+                string sql = Database.GetValueOrDefault<string>(scalar);
                 return sql;
             }
         }

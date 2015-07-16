@@ -38,34 +38,31 @@ from    {0}.sys.schemas
 select  name,schema_id
 from    {0}.sys.system_views";
             commandText = string.Format( commandText, this.database.Name );
-            List<ViewNode> treeNodes = new List<ViewNode>();
+            var treeNodes = new List<ViewNode>();
             string connectionString = this.database.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection( connectionString ))
             {
                 connection.Open();
-                using (var context = connection.ExecuteReader( null, commandText, CommandType.Text, 0, CommandBehavior.Default ))
+                var transactionScope = new DbTransactionScope(connection, null);
+                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition { CommandText = commandText }, CommandBehavior.Default))
                 {
-                    var dataReader = context.DataReader;
-                    Dictionary<int, string> schemas = new Dictionary<int, string>();
+                    var schemas = new Dictionary<int, string>();
 
-                    while (dataReader.Read())
+                    dataReader.Read(dataRecord =>
                     {
-                        string name = dataReader.GetString( 0 );
-                        int id = dataReader.GetInt32( 1 );
-                        schemas.Add( id, name );
-                    }
+                        string name = dataRecord.GetString(0);
+                        int id = dataRecord.GetInt32(1);
+                        schemas.Add(id, name);
+                    });
 
-                    if (dataReader.NextResult())
+                    dataReader.Read(dataRecord =>
                     {
-                        while (dataReader.Read())
-                        {
-                            string name = dataReader.GetString( 0 );
-                            int schemaId = dataReader.GetInt32( 1 );
-                            string schemaName = schemas[ schemaId ];
-                            ViewNode viewNode = new ViewNode( this.database, schemaName, name );
-                            treeNodes.Add( viewNode );
-                        }
-                    }
+                        string name = dataRecord.GetString(0);
+                        int schemaId = dataRecord.GetInt32(1);
+                        string schemaName = schemas[schemaId];
+                        var viewNode = new ViewNode(this.database, schemaName, name);
+                        treeNodes.Add(viewNode);
+                    });
                 }
             }
 

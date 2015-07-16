@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Drawing;
+    using System.Linq;
     using System.Windows.Forms;
     using Foundation.Data;
     using global::MySql.Data.MySqlClient;
@@ -70,21 +71,11 @@ from {0}.{1}", this.databaseNode.Name, this.name);
         private void ShowCreateTable_Click(object sender, EventArgs e)
         {
             string commandText = string.Format("show create table {0}.{1}", this.databaseNode.Name, this.name);
-            string createTableStatement = null;
-
-            using (var connection = new MySqlConnection(this.databaseNode.ObjectExplorer.ConnectionString))
-            {
-                connection.Open();
-                using (var context = connection.ExecuteReader(null, commandText, CommandType.Text, 0, CommandBehavior.Default))
-                {
-                    var dataReader = context.DataReader;
-                    while (dataReader.Read())
-                    {
-                        createTableStatement = dataReader.GetString(1);
-                    }
-                }
-            }
-
+            string createTableStatement = MySqlClientFactory.Instance.ExecuteReader(
+                this.databaseNode.ObjectExplorer.ConnectionString,
+                commandText,
+                dataRecord => dataRecord.GetString(0)).First();
+            
             Clipboard.SetText(createTableStatement);
             var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
             queryForm.SetStatusbarPanelText("Copying create table statement to clipboard finished.", SystemColors.ControlText);

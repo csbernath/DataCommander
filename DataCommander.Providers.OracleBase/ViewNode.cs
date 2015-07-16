@@ -7,8 +7,8 @@ namespace DataCommander.Providers.OracleBase
 
     public sealed class ViewNode : ITreeNode
     {
-        private ViewCollectionNode parent;
-        private string name;
+        private readonly ViewCollectionNode parent;
+        private readonly string name;
 
         public ViewNode(ViewCollectionNode parent, string name)
         {

@@ -7,7 +7,7 @@
     public sealed class SequenceNode : ITreeNode
 	{
 		private SchemaNode schemaNode;
-		private string name;
+		private readonly string name;
 
 		public SequenceNode( SchemaNode schemaNode, string name )
 		{

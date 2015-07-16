@@ -24,13 +24,13 @@ namespace DataCommander.Providers.Odp
             parameter.Size = size;
         }
 
-        OracleParameter parameter;
+        readonly OracleParameter parameter;
     }
 
     internal sealed class OracleProvider : IProvider
     {
         private string connectionString;
-        private ObjectExplorer objectExplorer = new ObjectExplorer();
+        private readonly ObjectExplorer objectExplorer = new ObjectExplorer();
 
         string IProvider.Name
         {
@@ -562,8 +562,9 @@ order by OBJECT_NAME", oracleName.Owner );
                 response.FromCache = contains;
 
                 if (!contains)
-                {                    
-                    DataTable table = connection.Connection.ExecuteDataTable( commandText );
+                {
+                    var transactionScope = new DbTransactionScope(connection.Connection, null);
+                    DataTable table = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
                     int count = table.Rows.Count;
                     items = new string[ count ];
 

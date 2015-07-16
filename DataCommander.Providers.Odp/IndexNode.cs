@@ -64,7 +64,7 @@ order by column_position", table.Schema.Name, table.Name, name);
         {
         }
 
-        TableNode table;
-        string name;
+        readonly TableNode table;
+        readonly string name;
     }
 }

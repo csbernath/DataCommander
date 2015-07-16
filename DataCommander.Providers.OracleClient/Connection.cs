@@ -82,7 +82,7 @@ namespace DataCommander.Providers.OracleClient
         {
         }
 
-        OracleConnection oracleConnection;
+        readonly OracleConnection oracleConnection;
 
         public override string ConnectionName
         {

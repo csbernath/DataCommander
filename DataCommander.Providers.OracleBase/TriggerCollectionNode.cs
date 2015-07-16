@@ -82,6 +82,6 @@ namespace DataCommander.Providers.OracleBase
             }
         }
 
-        TableNode table;
+        readonly TableNode table;
     }
 }

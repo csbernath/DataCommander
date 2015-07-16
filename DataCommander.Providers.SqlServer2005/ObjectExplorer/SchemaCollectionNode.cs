@@ -45,15 +45,15 @@ order by s.name";
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                using (var context = connection.ExecuteReader(null, commandText, CommandType.Text, 0, CommandBehavior.Default))
+                var transactionScope = new DbTransactionScope(connection, null);
+                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
                 {
-                    var dataReader = context.DataReader;
-                    while (dataReader.Read())
+                    dataReader.Read(dataRecord =>
                     {
-                        string name = dataReader.GetString(0);
+                        string name = dataRecord.GetString(0);
                         var treeNode = new SchemaNode(this.database, name);
                         treeNodes.Add(treeNode);
-                    }
+                    });
                 }
             }
 

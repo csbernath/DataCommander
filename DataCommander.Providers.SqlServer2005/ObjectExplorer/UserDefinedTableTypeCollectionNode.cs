@@ -46,16 +46,16 @@ order by 1,2", this.database.Name);
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                using (var context = connection.ExecuteReader(null, commandText, CommandType.Text, null, CommandBehavior.Default))
+                var transactionScope = new DbTransactionScope(connection, null);
+                using (var reader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
                 {
-                    var dataReader = context.DataReader;
-                    while (dataReader.Read())
+                    reader.Read(dataRecord =>
                     {
-                        string schema = dataReader.GetString(0);
-                        string name = dataReader.GetString(1);
+                        string schema = dataRecord.GetString(0);
+                        string name = dataRecord.GetString(1);
                         var tableTypeNode = new UserDefinedTableTypeNode(this.database, schema, name);
                         tableTypeNodes.Add(tableTypeNode);
-                    }
+                    });
                 }
             }
 

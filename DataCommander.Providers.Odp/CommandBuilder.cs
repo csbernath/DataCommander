@@ -43,7 +43,7 @@ where	owner			= '{0}'
 	--and data_level = 0
 order by overload,position";
 			commandText = string.Format( commandText, owner, packageName, objectName, overload );
-			OracleCommand command = new OracleCommand( commandText, connection );
+			var command = new OracleCommand( commandText, connection );
 
 			using (OracleDataReader dataReader = command.ExecuteReader())
 			{
@@ -51,13 +51,13 @@ order by overload,position";
 
 				while (dataReader.Read())
 				{
-					string argumentName = dataReader.GetValueOrDefault<string>( "ARGUMENT_NAME" );
-					string dataType = dataReader.GetValue<string>( "DATA_TYPE" );
-					string inOut = dataReader.GetValue<string>( "IN_OUT" );
-					decimal? dataLength = dataReader.GetValueOrDefault<decimal?>( "DATA_LENGTH" );
-					decimal? precision = dataReader.GetValueOrDefault<decimal?>( "DATA_PRECISION" );
-					decimal? scale = dataReader.GetValueOrDefault<decimal?>( "DATA_SCALE" );
-					ParameterDirection direction;
+					string argumentName = dataReader.GetStringOrDefault(0);
+					string dataType = dataReader.GetString(1);
+				    string inOut = dataReader.GetString(2);
+					decimal? dataLength = dataReader.GetNullableDecimal(3);
+				    decimal? precision = dataReader.GetNullableDecimal(4);
+				    decimal? scale = dataReader.GetNullableDecimal(5);
+				    ParameterDirection direction;
 
 					switch (inOut)
 					{
@@ -66,15 +66,7 @@ order by overload,position";
 							break;
 
 						case "OUT":
-							if (first)
-							{
-								direction = ParameterDirection.ReturnValue;
-							}
-							else
-							{
-								direction = ParameterDirection.Output;
-							}
-
+							direction = first ? ParameterDirection.ReturnValue : ParameterDirection.Output;
 							break;
 
 						case "IN/OUT":
@@ -137,14 +129,17 @@ order by overload,position";
 							throw new NotImplementedException();
 					}
 
-					OracleParameter parameter = new OracleParameter();
-					parameter.ParameterName = argumentName;
-					parameter.Direction = direction;
-					parameter.OracleDbType = dbType;
-					parameter.Size = (int) dataLength.GetValueOrDefault();
-					parameter.Precision = (byte) precision.GetValueOrDefault();
-					parameter.Scale = (byte) scale.GetValueOrDefault();
-					parameters.Add( parameter );
+				    var parameter = new OracleParameter
+				    {
+				        ParameterName = argumentName,
+				        Direction = direction,
+				        OracleDbType = dbType,
+				        Size = (int)dataLength.GetValueOrDefault(),
+				        Precision = (byte)precision.GetValueOrDefault(),
+				        Scale = (byte)scale.GetValueOrDefault()
+				    };
+
+				    parameters.Add( parameter );
 
 					if (first)
 					{

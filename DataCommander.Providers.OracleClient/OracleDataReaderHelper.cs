@@ -4,7 +4,7 @@
 
     internal sealed class OracleDataReaderHelper : IDataReaderHelper
     {
-        private OracleDataReader oracleDataReader;
+        private readonly OracleDataReader oracleDataReader;
 
         public OracleDataReaderHelper( OracleDataReader oracleDataReader )
         {

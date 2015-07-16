@@ -23,7 +23,7 @@ namespace DataCommander.Foundation.Data
         /// 
         /// </summary>
         /// <param name="connection"></param>
-        public static void CreateSchema( IDbConnection connection )
+        public static void CreateSchema(IDbConnection connection)
         {
             string commandText = @"create table dbo.Sequence
 (
@@ -33,8 +33,8 @@ namespace DataCommander.Foundation.Data
     constraint PK_Sequence primary key clustered(Id)
 )";
 
-            connection.ExecuteNonQuery( null, commandText, CommandType.Text, 0 );
-
+            var transactionScope = new DbTransactionScope(connection, null);
+            transactionScope.ExecuteNonQuery(new CommandDefinition {CommandText = commandText});
             commandText = @"create proc dbo.IncrementSequence
 (
     @name varchar(128),
@@ -68,7 +68,7 @@ begin
     raiserror('Sequence not found.',16,1)
 end";
 
-            connection.ExecuteNonQuery( null, commandText, CommandType.Text, 0 );
+            transactionScope.ExecuteNonQuery(new CommandDefinition {CommandText = commandText});
         }
 
         /// <summary>

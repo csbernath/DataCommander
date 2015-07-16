@@ -35,18 +35,18 @@ namespace DataCommander
                 {
                     try
                     {
-                        string applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath( false );
+                        string applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(false);
                         string fileName = applicationDataFolderPath + Path.DirectorySeparatorChar + "ApplicationData.xml";
-                        methodLog.Write( LogLevel.Trace, "fileName: {0}", fileName );
+                        methodLog.Write(LogLevel.Trace, "fileName: {0}", fileName);
                         string sectionName = Settings.SectionName;
                         DataCommanderApplication dataCommanderApplication = DataCommanderApplication.Instance;
-                        dataCommanderApplication.LoadApplicationData( fileName, sectionName );
+                        dataCommanderApplication.LoadApplicationData(fileName, sectionName);
                         dataCommanderApplication.Run();
                         dataCommanderApplication.SaveApplicationData();
                     }
                     catch (Exception e)
                     {
-                        MessageBox.Show( e.ToString(), "Fatal Application Error in Data Commander!", MessageBoxButtons.OK, MessageBoxIcon.Error );
+                        MessageBox.Show(e.ToString(), "Fatal Application Error in Data Commander!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }

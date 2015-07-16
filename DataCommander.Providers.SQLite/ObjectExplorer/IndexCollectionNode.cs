@@ -35,24 +35,24 @@
             }
         }
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             //            string commandText = string.Format(@"select	idx
             //from	main.sqlite_stat1
             //where	tbl = '{0}'
             //order by idx", this.tableNode.Name);
-            string commandText = string.Format( "PRAGMA index_list({0});", this.tableNode.Name );
-            List<ITreeNode> children = new List<ITreeNode>();
+            string commandText = string.Format("PRAGMA index_list({0});", this.tableNode.Name);
+            var children = new List<ITreeNode>();
+            var transactionScope = new DbTransactionScope(this.tableNode.Database.Connection, null);
 
-            using (var context = this.tableNode.Database.Connection.ExecuteReader( null, commandText, CommandType.Text, 0, CommandBehavior.Default ))
+            using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
             {
-                var dataReader = context.DataReader;
-                if (dataReader.Read())
+                dataReader.Read(dataRecord =>
                 {
-                    string name = Database.GetValueOrDefault<string>( dataReader[ "Name" ] );
-                    IndexNode indexNode = new IndexNode( this.tableNode, name );
-                    children.Add( indexNode );
-                }
+                    string name = dataRecord.GetString(0);
+                    IndexNode indexNode = new IndexNode(this.tableNode, name);
+                    children.Add(indexNode);
+                });
             }
 
             return children;

@@ -6,6 +6,7 @@
     using System.Data.Common;
     using System.Data.SqlServerCe;
     using System.Diagnostics;
+    using System.Linq;
     using System.Text;
     using System.Xml;
     using DataCommander.Foundation.Data;
@@ -195,15 +196,15 @@ ORDER BY ORDINAL_POSITION", name);
 
                     try
                     {
-                        using (var context = connection.Connection.ExecuteReader(transaction, commandText, CommandType.Text, 0, CommandBehavior.Default))
-                        {
-                            var dataReader = context.DataReader;
-                            while (dataReader.Read())
+                        var transactionScope = new DbTransactionScope(connection.Connection, null);
+                        //list = 
+                        var x = transactionScope.ExecuteReader(
+                            new CommandDefinition {CommandText = commandText},
+                            CommandBehavior.Default,
+                            dataRecord =>
                             {
-                                string stringValue = dataReader[0].ToString();
-                                list.Add(stringValue);
-                            }
-                        }
+                                return dataRecord.GetString(0);
+                            });
                     }
                     catch
                     {

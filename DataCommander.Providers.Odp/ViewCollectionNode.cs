@@ -3,11 +3,13 @@ namespace DataCommander.Providers.Odp
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Data.Common;
     using System.Windows.Forms;
+    using Foundation.Data;
 
     internal sealed class ViewCollectionNode : ITreeNode
     {
-		private SchemaNode schemaNode;
+		private readonly SchemaNode schemaNode;
 
         public ViewCollectionNode(SchemaNode schemaNode)
         {
@@ -34,10 +36,11 @@ namespace DataCommander.Providers.Odp
         {
             string commandText = "select view_name from all_views where owner = '{0}' order by view_name";
             commandText = String.Format(commandText, schemaNode.Name);
-            DataTable dataTable = schemaNode.SchemasNode.Connection.ExecuteDataTable(commandText);
+            var transactionScope = new DbTransactionScope(this.SchemaNode.SchemasNode.Connection, null);
+            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
             DataRowCollection dataRows = dataTable.Rows;
             int count = dataRows.Count;
-            ITreeNode[] treeNodes = new ITreeNode[count];
+            var treeNodes = new ITreeNode[count];
 
             for (int i = 0; i < count; i++)
             {

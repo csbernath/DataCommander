@@ -55,6 +55,8 @@ Credits:
     <li><a href=""https://www.jetbrains.com/resharper/"">JetBrains R# ReSharper Free Open Source License</a></li>
     <li><a href=""http://epplus.codeplex.com"">EPPlus-Create advanced Excel spreadsheets on the server</a></li>
     <li><a href=""https://system.data.sqlite.org"">System.Data.SQLite</a></li>
+    <li><a href=""https://www.nuget.org/packages/MySql.Data/"">ADO.Net driver for MySQL</a></li>
+    <li><a href=""http://npgsql.projects.pgfoundry.org/"">Npgsql - .Net Data Provider for Postgresql</a></li>
 </ul>
 </div>",
                 lastWriteTime.ToString("yyyy-MM-dd"),

@@ -36,9 +36,9 @@
             }
         }
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText = @"declare @provider nvarchar(128)
+            const string commandText = @"declare @provider nvarchar(128)
 select  @provider = s.provider
 from    sys.servers s (nolock)
 where   s.name = @name
@@ -70,29 +70,25 @@ end
 
 drop table #catalog";
 
-            ITreeNode[] childNodes;
-            using (var connection = new SqlConnection( this.linkedServer.LinkedServers.Server.ConnectionString ))
+            using (var connection = new SqlConnection(this.linkedServer.LinkedServers.Server.ConnectionString))
             {
                 connection.Open();
-
-                var command = connection.CreateCommand();
-                command.CommandText = commandText;
-                var parameters = command.Parameters;
-
-                var parameter = new SqlParameter( "@name", SqlDbType.NVarChar, 128 );
-                parameter.Value = this.linkedServer.Name;
-                parameters.Add( parameter );
-                parameters.Add( new SqlParameter( "@getSystemCatalogs", false ) );
-
-                using (var dataReader = command.ExecuteReader())
+                var transactionScope = new DbTransactionScope(connection, null);
+                var commandDefinition = new CommandDefinition
                 {
-                    childNodes =
-                        (from dataRecord in dataReader.AsEnumerable()
-                         select new LinkedServerCatalogNode( this.linkedServer, dataReader.GetString( 0 ) )).ToArray();
+                    CommandText = commandText,
+                    Parameters = new List<object>
+                    {
+                        new SqlParameter("@name", this.linkedServer.Name),
+                        new SqlParameter("@getSystemCatalogs", false)
+                    }
+                };
+
+                using (var dataReader = transactionScope.ExecuteReader(commandDefinition, CommandBehavior.Default))
+                {
+                    return dataReader.Read(dataRecord => new LinkedServerCatalogNode(this.linkedServer, dataRecord.GetString(0)));
                 }
             }
-
-            return childNodes;
         }
 
         bool ITreeNode.Sortable

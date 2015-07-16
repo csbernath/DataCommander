@@ -11,8 +11,8 @@
 
     internal sealed class Connection : ConnectionBase
     {
-        private string connectionString;
-        private MySqlConnection mySqlConnection;
+        private readonly string connectionString;
+        private readonly MySqlConnection mySqlConnection;
         private string connectionName;
 
         public Connection(string connectionString)

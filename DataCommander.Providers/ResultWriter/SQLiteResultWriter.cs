@@ -182,7 +182,8 @@
             string commandText = sb.ToString();
             Trace.WriteLine(commandText);
             Trace.WriteLine(insertStatement);
-            this.connection.ExecuteNonQuery(null, commandText, CommandType.Text, 0);
+            var transactionScope = new DbTransactionScope(this.connection, null);
+            transactionScope.ExecuteNonQuery(new CommandDefinition {CommandText = commandText});
             this.transaction = this.connection.BeginTransaction();
             this.insertCommand.Connection = this.connection;
             this.insertCommand.Transaction = this.transaction;

@@ -2,6 +2,7 @@ namespace DataCommander.Providers.MySql
 {
     using System.Collections.Generic;
     using System.Data;
+    using DataCommander.Foundation;
     using Foundation.Data;
     using global::MySql.Data.MySqlClient;
 
@@ -39,19 +40,15 @@ where
     and TABLE_TYPE = 'BASE TABLE'
 order by TABLE_NAME", this.databaseNode.Name);
 
-            using (var connection = new MySqlConnection(this.databaseNode.ObjectExplorer.ConnectionString))
-            {
-                connection.Open();
-                using (var context = connection.ExecuteReader(null, commandText, CommandType.Text, 0, CommandBehavior.Default))
+            return MySqlClientFactory.Instance.ExecuteReader(
+                this.databaseNode.ObjectExplorer.ConnectionString,
+                new CommandDefinition {CommandText = commandText},
+                CommandBehavior.Default,
+                dataRecord =>
                 {
-                    var dataReader = context.DataReader;
-                    while (dataReader.Read())
-                    {
-                        string name = dataReader.GetString(0);
-                        yield return new TableNode(this.databaseNode, name);
-                    }
-                }
-            }
+                    string name = dataRecord.GetString(0);
+                    return new TableNode(this.databaseNode, name);
+                });
         }
 
         bool ITreeNode.Sortable

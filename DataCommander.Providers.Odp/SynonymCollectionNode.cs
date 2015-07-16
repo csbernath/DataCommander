@@ -3,6 +3,7 @@ namespace DataCommander.Providers.Odp
     using System.Collections.Generic;
     using System.Data;
     using System.Windows.Forms;
+    using Foundation.Data;
 
     /// <summary>
     /// 
@@ -32,24 +33,22 @@ namespace DataCommander.Providers.Odp
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
-			string commandText = @"select	s.SYNONYM_NAME
+            string commandText = @"select	s.SYNONYM_NAME
 from	SYS.ALL_SYNONYMS s
 where	s.OWNER	= '{0}'
 order by s.SYNONYM_NAME";
 
             commandText = string.Format(commandText, schema.Name);
-
-            DataTable dataTable = schema.SchemasNode.Connection.ExecuteDataTable(commandText);
+            var transactionScope = new DbTransactionScope(this.Schema.SchemasNode.Connection, null);
+            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
             int count = dataTable.Rows.Count;
+            var treeNodes = new ITreeNode[count];
 
-            ITreeNode[] treeNodes = new ITreeNode[count];
-
-			for (int i = 0; i < count; i++)
-			{
-				string name = (string) dataTable.Rows[ i ][ 0 ];
-
-				treeNodes[ i ] = new SynonymNode( schema, name );
-			}
+            for (int i = 0; i < count; i++)
+            {
+                string name = (string)dataTable.Rows[i][0];
+                treeNodes[i] = new SynonymNode(schema, name);
+            }
 
             return treeNodes;
         }
@@ -90,6 +89,6 @@ order by s.SYNONYM_NAME";
         {
         }
 
-        SchemaNode schema;
+        readonly SchemaNode schema;
     }
 }

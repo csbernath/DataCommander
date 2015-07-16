@@ -23,7 +23,7 @@ namespace DataCommander.Providers.OracleClient
             parameter.Size = size;
         }
 
-        private OracleParameter parameter;
+        private readonly OracleParameter parameter;
     }
 
     public sealed class OracleProvider : IProvider

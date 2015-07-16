@@ -11,7 +11,7 @@ namespace DataCommander.Providers.OracleBase
     /// </summary>
     public sealed class SchemaCollectionNode : ITreeNode
     {
-        private IDbConnection connection;
+        private readonly IDbConnection connection;
         private string selectedSchema;
 
         public SchemaCollectionNode(IDbConnection connection)
@@ -41,10 +41,10 @@ namespace DataCommander.Providers.OracleBase
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             string commandText = "select username from all_users order by username";
-            DataTable dataTable = connection.ExecuteDataTable( null, commandText, CommandType.Text, 0 );
+            var transactionScope = new DbTransactionScope(this.Connection, null);
+            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
             int count = dataTable.Rows.Count;
-
-            ITreeNode[] treeNodes = new ITreeNode[count];
+            var treeNodes = new ITreeNode[count];
 
             for (int i = 0; i < count; i++)
             {

@@ -5,6 +5,7 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Data;
     using System.Data.SqlClient;
     using System.Windows.Forms;
+    using Foundation.Data;
 
     internal sealed class SystemTableCollectionNode : ITreeNode
     {
@@ -63,7 +64,8 @@ order by [Schema],[Name]", this.databaseNode.Name);
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
-                dataTable = connection.ExecuteDataTable(commandText);
+                var transactionScope = new DbTransactionScope(connection, null);
+                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
             }
             foreach (DataRow dataRow in dataTable.Rows)
             {

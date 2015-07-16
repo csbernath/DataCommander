@@ -17,7 +17,7 @@
         /// <returns></returns>
         public new TextDataCommand CreateCommand()
         {
-            var command = new TextDataCommand { Connection = this };
+            var command = new TextDataCommand {Connection = this};
             return command;
         }
 
@@ -28,7 +28,7 @@
         /// </summary>
         /// <param name="isolationLevel"></param>
         /// <returns></returns>
-        protected override DbTransaction BeginDbTransaction( IsolationLevel isolationLevel )
+        protected override DbTransaction BeginDbTransaction(IsolationLevel isolationLevel)
         {
             throw new NotImplementedException();
         }
@@ -37,7 +37,7 @@
         /// 
         /// </summary>
         /// <param name="databaseName"></param>
-        public override void ChangeDatabase( string databaseName )
+        public override void ChangeDatabase(string databaseName)
         {
             throw new NotImplementedException();
         }

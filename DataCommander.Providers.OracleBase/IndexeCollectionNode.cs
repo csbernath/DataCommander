@@ -7,7 +7,7 @@ namespace DataCommander.Providers.OracleBase
 
     internal class IndexeCollectionNode : ITreeNode
     {
-        private TableNode table;
+        private readonly TableNode table;
 
         public IndexeCollectionNode(TableNode tableNode)
         {

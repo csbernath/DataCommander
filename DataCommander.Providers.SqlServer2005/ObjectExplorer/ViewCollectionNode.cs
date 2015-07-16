@@ -43,7 +43,8 @@ order by s.name,v.name";
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
-                dataTable = connection.ExecuteDataTable(null, commandText, CommandType.Text, 0);
+                var transactionScope = new DbTransactionScope(connection, null);
+                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
             }
             DataRowCollection dataRows = dataTable.Rows;
             int count = dataRows.Count;

@@ -5,6 +5,7 @@
     using System.Data;
     using System.Data.SqlServerCe;
     using System.Windows.Forms;
+    using Foundation.Data;
 
     internal sealed class TableCollectionNode : ITreeNode
     {
@@ -38,8 +39,9 @@
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             string commandText = "SELECT * FROM INFORMATION_SCHEMA.TABLES";
-            DataTable dataTable = this.connection.ExecuteDataTable(commandText);
-            List<ITreeNode> nodes = new List<ITreeNode>();
+            var transactionScope = new DbTransactionScope(this.connection, null);
+            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
+            var nodes = new List<ITreeNode>();
 
             foreach (DataRow dataRow in dataTable.Rows)
             {

@@ -4,13 +4,14 @@ namespace DataCommander.Providers.OracleBase
     using System.Data;
     using System.Windows.Forms;
     using DataCommander.Foundation.Configuration;
+    using Foundation.Data;
 
     /// <summary>
     /// Summary description for TablesNode.
     /// </summary>
     public sealed class PackageCollectionNode : ITreeNode
     {
-        private SchemaNode schema;
+        private readonly SchemaNode schema;
 
         public PackageCollectionNode(SchemaNode schema)
         {
@@ -34,17 +35,18 @@ namespace DataCommander.Providers.OracleBase
         }
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
-        {            
+        {
             ConfigurationNode folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
             string key = schema.SchemasNode.Connection.Database + "." + schema.Name;
             string[] packages;
-            bool contains = folder.Attributes.TryGetAttributeValue(key, out packages);            
+            bool contains = folder.Attributes.TryGetAttributeValue(key, out packages);
 
             if (!contains || refresh)
             {
                 string commandText = "select object_name from all_objects where owner = '{0}' and object_type = 'PACKAGE' order by object_name";
                 commandText = string.Format(commandText, schema.Name);
-                DataTable dataTable = schema.SchemasNode.Connection.ExecuteDataTable(commandText);
+                var transactionScope = new DbTransactionScope(this.Schema.SchemasNode.Connection, null);
+                DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
                 int count = dataTable.Rows.Count;
                 packages = new string[count];
 
@@ -56,7 +58,7 @@ namespace DataCommander.Providers.OracleBase
                 folder.Attributes.SetAttributeValue(key, packages);
             }
 
-            ITreeNode[] treeNodes = new ITreeNode[packages.Length];
+            var treeNodes = new ITreeNode[packages.Length];
 
             for (int i = 0; i < packages.Length; i++)
                 treeNodes[i] = new PackageNode(schema, packages[i]);

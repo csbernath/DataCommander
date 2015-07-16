@@ -8,7 +8,7 @@
 
     internal sealed class SequenceCollectionNode : ITreeNode
     {
-        private SchemaNode schemaNode;
+        private readonly SchemaNode schemaNode;
 
         public SequenceCollectionNode( SchemaNode schemaNode )
         {
@@ -33,23 +33,20 @@
             }
         }
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText = string.Format( @"select	s.SEQUENCE_NAME
+            string commandText = string.Format(@"select	s.SEQUENCE_NAME
 from	SYS.ALL_SEQUENCES s
 where	s.SEQUENCE_OWNER	= '{0}'
 order by s.SEQUENCE_NAME
-", this.schemaNode.Name );
+", this.schemaNode.Name);
+            var transactionScope = new DbTransactionScope(schemaNode.SchemasNode.Connection, null);
 
-            using (var context = this.schemaNode.SchemasNode.Connection.ExecuteReader( null, commandText, CommandType.Text, 0, CommandBehavior.Default ))
+            return transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default, dataRecord =>
             {
-                var dataReader = context.DataReader;
-                while (dataReader.Read())
-                {
-                    string name = dataReader.GetString( 0 );
-                    yield return new SequenceNode( this.schemaNode, name );
-                }
-            }
+                string name = dataRecord.GetString(0);
+                return (ITreeNode)new SequenceNode(this.schemaNode, name);
+            });
         }
 
         bool ITreeNode.Sortable

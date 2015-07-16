@@ -2,7 +2,9 @@ namespace DataCommander.Providers.Odp
 {
     using System.Collections.Generic;
     using System.Data;
+    using System.Data.Common;
     using System.Windows.Forms;
+    using Foundation.Data;
     using Oracle.ManagedDataAccess.Client;
 
     /// <summary>
@@ -36,10 +38,10 @@ namespace DataCommander.Providers.Odp
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             string commandText = "select username from all_users order by username";
-            DataTable dataTable = connection.ExecuteDataTable(commandText);
+            var transactionScope = new DbTransactionScope(this.connection, null);
+            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
             int count = dataTable.Rows.Count;
-
-            ITreeNode[] treeNodes = new ITreeNode[count];
+            var treeNodes = new ITreeNode[count];
 
             for (int i = 0; i < count; i++)
             {
@@ -98,7 +100,7 @@ namespace DataCommander.Providers.Odp
             }
         }
 
-        OracleConnection connection;
+        readonly OracleConnection connection;
         string selectedSchema;
     }
 }

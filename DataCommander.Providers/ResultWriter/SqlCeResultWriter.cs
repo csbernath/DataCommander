@@ -218,7 +218,8 @@
             createTable.Append(')');
             string commandText = createTable.ToString();
             this.messageWriter.WriteLine(commandText);
-            this.connection.ExecuteNonQuery(null, commandText, CommandType.Text, 0);
+            var transactionScope = new DbTransactionScope(this.connection, null);
+            transactionScope.ExecuteNonQuery(new CommandDefinition {CommandText = commandText});
             insertInto.Append(") ");
             values.Append(')');
             insertInto.Append(values);

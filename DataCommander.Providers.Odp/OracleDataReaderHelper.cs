@@ -55,8 +55,8 @@ namespace DataCommander.Providers.Odp
 
     internal sealed class OracleTimestampFieldReader : IDataFieldReader
     {
-        private OracleDataReader dataReader;
-        private int columnOrdinal;
+        private readonly OracleDataReader dataReader;
+        private readonly int columnOrdinal;
 
         public OracleTimestampFieldReader(
             OracleDataReader dataReader,
@@ -93,8 +93,8 @@ namespace DataCommander.Providers.Odp
 
     internal sealed class OracleTimestampTZFieldReader : IDataFieldReader
     {
-        private OracleDataReader dataReader;
-        private int columnOrdinal;
+        private readonly OracleDataReader dataReader;
+        private readonly int columnOrdinal;
 
         public OracleTimestampTZFieldReader(
             OracleDataReader dataReader,
@@ -131,8 +131,8 @@ namespace DataCommander.Providers.Odp
 
     internal sealed class OracleTimestampLTZFieldReader : IDataFieldReader
     {
-        private OracleDataReader dataReader;
-        private int columnOrdinal;
+        private readonly OracleDataReader dataReader;
+        private readonly int columnOrdinal;
 
         public OracleTimestampLTZFieldReader(
             OracleDataReader dataReader,
@@ -169,8 +169,8 @@ namespace DataCommander.Providers.Odp
 
     internal sealed class LongStringFieldReader : IDataFieldReader
     {
-        private IDataRecord dataRecord;
-        private int columnOrdinal;
+        private readonly IDataRecord dataRecord;
+        private readonly int columnOrdinal;
 
         public LongStringFieldReader(
             IDataRecord dataRecord,
@@ -307,8 +307,8 @@ namespace DataCommander.Providers.Odp
 
 	internal sealed class OracleNumberDataFieldReader : IDataFieldReader
 	{
-		private OracleDataReader oracleDataReader;
-		private int columnOrdinal;
+		private readonly OracleDataReader oracleDataReader;
+		private readonly int columnOrdinal;
 
 		public OracleNumberDataFieldReader( OracleDataReader oracleDataReader, int columnOrdinal )
 		{
@@ -343,8 +343,8 @@ namespace DataCommander.Providers.Odp
 
 	internal sealed class DateTimeDataFieldReader : IDataFieldReader
 	{
-		private OracleDataReader oracleDataReader;
-		private int columnOrdinal;
+		private readonly OracleDataReader oracleDataReader;
+		private readonly int columnOrdinal;
 
 		public DateTimeDataFieldReader(
 			OracleDataReader oracleDataReader,			
@@ -397,7 +397,7 @@ namespace DataCommander.Providers.Odp
 	sealed class OracleDataReaderHelper : IDataReaderHelper
 	{
 		private OracleDataReader oracleDataReader;
-		private IDataFieldReader[] dataFieldReaders;
+		private readonly IDataFieldReader[] dataFieldReaders;
 
 		public OracleDataReaderHelper( IDataReader dataReader )
 		{

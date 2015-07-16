@@ -5,12 +5,13 @@ namespace DataCommander.Providers.Odp
     using System.Data;
     using System.Text;
     using System.Windows.Forms;
+    using DataCommander.Foundation.Data;
 
     internal sealed class FunctionNode : ITreeNode
     {
-		private SchemaNode schemaNode;
-		private PackageNode packageNode;
-		private string name;
+        private readonly SchemaNode schemaNode;
+        private readonly PackageNode packageNode;
+        private readonly string name;
 
         public FunctionNode(
             SchemaNode schemaNode,
@@ -57,17 +58,17 @@ namespace DataCommander.Providers.Odp
             {
                 string query = "EXEC " + schemaNode.Name + '.';
 
-				if (this.packageNode != null)
-				{
-					query += packageNode.Name + '.';
-				}
+                if (this.packageNode != null)
+                {
+                    query += packageNode.Name + '.';
+                }
 
                 query += name;
                 return query;
             }
         }
 
-        void ScriptObject_Click(object sender, EventArgs e)
+        private void ScriptObject_Click(object sender, EventArgs e)
         {
             string commandText = string.Format(@"select	text
 from	all_source
@@ -75,20 +76,21 @@ where	owner = '{0}'
 	and name = '{1}'
 	and type = 'FUNCTION'
 order by line", schemaNode.Name, name);
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             string text;
+            var transactionScope = new DbTransactionScope(this.schemaNode.SchemasNode.Connection, null);
 
-            using (IDataReader dataReader = schemaNode.SchemasNode.Connection.ExecuteReader(commandText))
-            {
-                while (dataReader.Read())
+            transactionScope.ExecuteReader(
+                new CommandDefinition {CommandText = commandText},
+                CommandBehavior.Default,
+                dataRecord =>
                 {
-                    text = dataReader.GetString(0);
+                    text = dataRecord.GetString(0);
                     sb.Append(text);
-                }
-            }
+                });
 
             text = sb.ToString();
-            QueryForm.ShowText( text );
+            QueryForm.ShowText(text);
         }
 
         public ContextMenuStrip ContextMenu

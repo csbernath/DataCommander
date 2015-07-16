@@ -223,11 +223,10 @@ order by name collate nocase";
 
                 if (commandText != null)
                 {
-                    using (var dataReader = connection.Connection.ExecuteReader(commandText))
+                    var transactionScope = new DbTransactionScope(connection.Connection, null);
+                    using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
                     {
-                        response.Items =
-                            (from dataRecord in dataReader.AsEnumerable()
-                                select (IObjectName)new ObjectName(dataRecord.GetValueOrDefault<string>(columnName))).ToList();
+                        response.Items = dataReader.Read(dataRecord => (IObjectName)new ObjectName(dataRecord.GetStringOrDefault(0))).ToList();
                     }
                 }
             }

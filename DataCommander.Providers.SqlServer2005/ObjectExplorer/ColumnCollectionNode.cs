@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
-    using System.Linq;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Data.SqlClient;
@@ -17,7 +16,7 @@
         private readonly string schemaName;
         private readonly string objectName;
 
-        public ColumnCollectionNode( DatabaseNode database, string schemaName, string objectName )
+        public ColumnCollectionNode(DatabaseNode database, string schemaName, string objectName)
         {
             this.database = database;
             this.schemaName = schemaName;
@@ -42,20 +41,7 @@
             }
         }
 
-        private static ColumnNode ToColumnNode( IDataRecord dataRecord )
-        {
-            int id = dataRecord.GetValue<int>("column_id");
-            string columnName = dataRecord.GetValue<string>( "name" );
-            byte systemTypeId = dataRecord.GetValue<byte>( "system_type_id" );
-            short maxLength = dataRecord.GetValue<short>( "max_length" );
-            byte precision = dataRecord.GetValue<byte>( "precision" );
-            byte scale = dataRecord.GetValue<byte>( "scale" );
-            bool isNullable = dataRecord.GetValue<bool>( "is_nullable" );
-            string userTypeName = dataRecord.GetValue<string>( "UserTypeName" );
-            return new ColumnNode(id, columnName, systemTypeId, maxLength, precision, scale, isNullable, userTypeName);
-        }
-
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             SortedDictionary<int, ColumnNode> columnNodes;
 
@@ -65,7 +51,7 @@
                 {
                     var cb = new SqlCommandBuilder();
                     connection.ConnectionString = this.database.Databases.Server.ConnectionString;
-                    string commandText = string.Format( @"declare @object_id int
+                    string commandText = string.Format(@"declare @object_id int
 
 select  @object_id = o.object_id
 from    {0}.sys.schemas s
@@ -105,35 +91,31 @@ select  fkc.parent_column_id
 from    {0}.sys.foreign_key_columns fkc
 where   fkc.parent_object_id = @object_id
 order by fkc.parent_column_id",
-                        cb.QuoteIdentifier( this.database.Name ),
+                        cb.QuoteIdentifier(this.database.Name),
                         this.schemaName.ToTSqlNVarChar(),
                         this.objectName.ToTSqlNVarChar()
-                    );
+                        );
 
-                    methodLog.Write( LogLevel.Trace, "commandText:\r\n{0}", commandText );
+                    methodLog.Write(LogLevel.Trace, "commandText:\r\n{0}", commandText);
                     connection.Open();
-                    using (var dataReader = connection.ExecuteReader( commandText ))
+                    var transactionScope = new DbTransactionScope(connection, null);
+                    using (var reader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
                     {
-                        columnNodes = (from dataRecord in dataReader.AsEnumerable()
-                            select ToColumnNode(dataRecord)).ToSortedDictionary(c => c.Id);
+                        columnNodes = reader.Read(dataRecord => ToColumnNode(dataRecord)).ToSortedDictionary(c => c.Id);
 
-                        dataReader.NextResult();
-
-                        foreach (var dataRecord in dataReader.AsEnumerable())
+                        reader.Read(dataRecord =>
                         {
-                            int columnId = dataRecord.GetValue<int>("column_id");
+                            int columnId = dataRecord.GetInt32(0);
                             var columnNode = columnNodes[columnId];
                             columnNode.IsPrimaryKey = true;
-                        }
+                        });
 
-                        dataReader.NextResult();
-
-                        while (dataReader.Read())
+                        reader.Read(dataRecord =>
                         {
-                            int columnId = dataReader.GetInt32(0);
+                            int columnId = dataRecord.GetInt32(0);
                             var columnNode = columnNodes[columnId];
                             columnNode.IsForeignKey = true;
-                        }
+                        });
                     }
                 }
             }
@@ -163,6 +145,24 @@ order by fkc.parent_column_id",
             {
                 return null;
             }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private static ColumnNode ToColumnNode(IDataRecord dataRecord)
+        {
+            int id = dataRecord.GetInt32(0);
+            string columnName = dataRecord.GetString(1);
+            byte systemTypeId = dataRecord.GetByte(2);
+            short maxLength = dataRecord.GetInt16(3);
+            byte precision = dataRecord.GetByte(4);
+            byte scale = dataRecord.GetByte(5);
+            bool isNullable = dataRecord.GetBoolean(6);
+            string userTypeName = dataRecord.GetString(7);
+
+            return new ColumnNode(id, columnName, systemTypeId, maxLength, precision, scale, isNullable, userTypeName);
         }
 
         #endregion

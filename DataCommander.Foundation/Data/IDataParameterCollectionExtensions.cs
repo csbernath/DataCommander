@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Foundation.Data
+﻿using System.Collections.Generic;
+
+namespace DataCommander.Foundation.Data
 {
     using System;
     using System.Data;
@@ -12,6 +14,19 @@
     /// </summary>
     public static class IDataParameterCollectionExtensions
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataParameterCollection"></param>
+        /// <param name="parameters"></param>
+        public static void AddRange(this IDataParameterCollection dataParameterCollection, IEnumerable<object> parameters)
+        {
+            foreach (var parameter in parameters)
+            {
+                dataParameterCollection.Add(parameter);
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>

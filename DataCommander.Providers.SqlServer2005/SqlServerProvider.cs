@@ -16,6 +16,7 @@ namespace DataCommander.Providers.SqlServer2005
     using DataCommander.Foundation.Data.SqlClient;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Linq;
+    using Foundation.Diagnostics.Log;
 
     internal sealed class SqlServerProvider : IProvider
     {
@@ -663,33 +664,33 @@ order by 1", name.Database);
                             connection.Open();
                         }
 
-                        using (var context = connection.Connection.ExecuteReader(transaction, commandText, CommandType.Text, 0, CommandBehavior.Default))
+                        var transactionScope = new DbTransactionScope(connection.Connection, transaction);
+                        using (var reader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
                         {
-                            var dataReader = context.DataReader;
-
                             while (true)
                             {
-                                int fieldCount = dataReader.FieldCount;
-                                while (dataReader.Read())
+                                reader.Read(dataRecord =>
                                 {
+                                    int fieldCount = dataRecord.FieldCount;
+
                                     string schemaName;
                                     string objectName;
 
                                     if (fieldCount == 1)
                                     {
                                         schemaName = null;
-                                        objectName = dataReader[0].ToString();
+                                        objectName = dataRecord.GetString(0);
                                     }
                                     else
                                     {
-                                        schemaName = dataReader.GetValueOrDefault<string>(0);
-                                        objectName = dataReader.GetString(1);
+                                        schemaName = dataRecord.GetStringOrDefault(0);
+                                        objectName = dataRecord.GetString(1);
                                     }
 
                                     list.Add(new ObjectName(sqlObject, schemaName, objectName));
-                                }
+                                });
 
-                                if (!dataReader.NextResult())
+                                if (!reader.NextResult())
                                 {
                                     break;
                                 }
@@ -798,7 +799,8 @@ order by 1", name.Database);
 
             if (schemaTable != null)
             {
-                log.Trace("\r\n" + schemaTable.ToStringTable().ToString());
+                log.Trace(CallerInformation.Get(), schemaTable.ToStringTable().ToString());
+                log.Trace(CallerInformation.Get(), "{0}", schemaTable.TableName);
 
                 table = new DataTable("SchemaTable");
                 var columns = table.Columns;
@@ -896,7 +898,7 @@ order by 1", name.Database);
                             break;
                     }
 
-                    bool allowDBNull = dataColumnSchema.AllowDBNull.GetValueOrDefault();                    
+                    bool allowDBNull = dataColumnSchema.AllowDBNull.GetValueOrDefault();
                     if (!allowDBNull)
                     {
                         sb.Append(" not null");
@@ -1006,7 +1008,9 @@ order by ic.index_column_id
                 owner.ToTSqlNVarChar(),
                 fourPartName.Name.ToTSqlNVarChar());
             log.Write(LogLevel.Trace, commandText);
-            DataSet dataSet = connection.ExecuteDataSet(commandText);
+
+            var transactionScope = new DbTransactionScope(connection, null);
+            DataSet dataSet = transactionScope.ExecuteDataSet(new CommandDefinition {CommandText = commandText});
             return dataSet;
         }
 

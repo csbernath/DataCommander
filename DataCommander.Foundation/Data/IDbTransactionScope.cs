@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Data
+namespace DataCommander.Foundation.Data
 {
     using System.Data;
     using System.Diagnostics.Contracts;
@@ -6,9 +6,8 @@
     /// <summary>
     /// 
     /// </summary>
-    [ContractClass( typeof(IDbConnectionContextContract) )]
-
-    public interface IDbConnectionContext
+    [ContractClass(typeof (IDbTransactionScopeContract))]
+    public interface IDbTransactionScope
     {
         /// <summary>
         /// 
@@ -19,10 +18,5 @@
         /// 
         /// </summary>
         IDbTransaction Transaction { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        int? CommandTimeout { get; }
     }
 }

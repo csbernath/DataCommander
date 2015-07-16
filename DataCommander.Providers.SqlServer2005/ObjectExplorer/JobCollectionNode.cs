@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Providers.SqlServer2005
 {
     using System.Collections.Generic;
+    using System.Data;
     using System.Data.SqlClient;
     using System.Diagnostics.Contracts;
     using System.Windows.Forms;
@@ -42,21 +43,22 @@
             }
         }
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText = @"select  j.name
+            const string commandText = @"select  j.name
 from    msdb.dbo.sysjobs j (nolock)
 order by j.name";
-            using (var connection = new SqlConnection( this.Server.ConnectionString ))
+            using (var connection = new SqlConnection(this.Server.ConnectionString))
             {
                 connection.Open();
-                using (var dataReader = connection.ExecuteReader( commandText ))
+                var transactionScope = new DbTransactionScope(connection, null);
+                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
                 {
-                    foreach (var dataRecord in dataReader.AsEnumerable())
+                    return dataReader.Read(dataRecord =>
                     {
-                        string name = dataRecord.GetString( 0 );
-                        yield return new JobNode( this, name );
-                    }
+                        string name = dataRecord.GetString(0);
+                        return (ITreeNode)new JobNode(this, name);
+                    });
                 }
             }
         }

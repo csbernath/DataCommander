@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Providers.SqlServer2005
 {
     using System.Collections.Generic;
+    using System.Data;
     using System.Data.SqlClient;
     using System.Diagnostics.Contracts;
     using System.Linq;
@@ -43,25 +44,26 @@
             }
         }
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText = @"select  s.name
+            const string commandText = @"select  s.name
 from    sys.servers s (nolock)
 where   s.is_linked = 1
 order by s.name";
-            ITreeNode[] childNodes;
+
             using (var connection = new SqlConnection(this.server.ConnectionString))
             {
                 connection.Open();
-                using (var dataReader = connection.ExecuteReader( commandText ))
+                var transactionScope = new DbTransactionScope(connection, null);
+                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText},CommandBehavior.Default))
                 {
-                    childNodes =
-                        (from dataRecord in dataReader.AsEnumerable()
-                         select new LinkedServerNode( this, dataReader.GetString( 0 ) )).ToArray();
+                    return dataReader.Read(dataRecord =>
+                    {
+                        string name = dataRecord.GetString(0);
+                        return new LinkedServerNode(this, name);
+                    });
                 }
             }
-
-            return childNodes;
         }
 
         bool ITreeNode.Sortable

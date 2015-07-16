@@ -5,6 +5,7 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Data;
     using System.Data.SqlClient;
     using System.Windows.Forms;
+    using Foundation.Data;
 
     internal sealed class DatabaseNode : ITreeNode
     {
@@ -94,13 +95,14 @@ select
 from	[{0}].sys.database_files f", this.name);
             string connectionString = this.databaseCollectionNode.Server.ConnectionString;
             MainForm mainForm = DataCommanderApplication.Instance.MainForm;
-            QueryForm queryForm = (QueryForm) mainForm.ActiveMdiChild;
+            var queryForm = (QueryForm) mainForm.ActiveMdiChild;
             DataSet dataSet = null;
             using (var connection = new SqlConnection(connectionString))
             {
+                var transactionScope = new DbTransactionScope(connection, null);
                 try
                 {
-                    dataSet = connection.ExecuteDataSet(commandText);
+                    dataSet = transactionScope.ExecuteDataSet(new CommandDefinition {CommandText = commandText});
                 }
                 catch (SqlException sqlException)
                 {

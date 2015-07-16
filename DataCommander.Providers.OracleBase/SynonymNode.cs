@@ -3,11 +3,12 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Windows.Forms;
+    using Foundation.Data;
 
     public sealed class SynonymNode : ITreeNode
 	{
-		private SchemaNode schema;
-		private string name;
+		private readonly SchemaNode schema;
+		private readonly string name;
 
 		public SynonymNode( SchemaNode schema, string name )
 		{
@@ -33,24 +34,24 @@
 			}
 		}
 
-		IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
-		{
-			string commandText = string.Format( @"
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+        {
+            string commandText = string.Format(@"
 select	s.TABLE_OWNER,
 	s.TABLE_NAME
 from	SYS.ALL_SYNONYMS s
 where	s.OWNER			= '{0}'
-	and s.SYNONYM_NAME	= '{1}'", this.schema.Name, this.name );
+	and s.SYNONYM_NAME	= '{1}'", this.schema.Name, this.name);
+            var transactionScope = new DbTransactionScope(this.schema.SchemasNode.Connection, null);
+            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
+            DataRow dataRow = dataTable.Rows[0];
+            string schemaName = (string)dataRow["TABLE_OWNER"];
+            var schemaNode = new SchemaNode(this.schema.SchemasNode, schemaName);
+            var tableNode = new TableNode(schemaNode, (string)dataRow["TABLE_NAME"], true);
+            return new ITreeNode[] {tableNode};
+        }
 
-			DataTable dataTable = this.schema.SchemasNode.Connection.ExecuteDataTable( commandText );
-			DataRow dataRow = dataTable.Rows[ 0 ];
-			string schemaName = (string) dataRow[ "TABLE_OWNER" ];
-			SchemaNode schemaNode = new SchemaNode( this.schema.SchemasNode, schemaName );
-			TableNode tableNode = new TableNode( schemaNode, (string) dataRow[ "TABLE_NAME" ], true );
-			return new ITreeNode[] { tableNode };
-		}
-
-		bool ITreeNode.Sortable
+        bool ITreeNode.Sortable
 		{
 			get
 			{

@@ -2,7 +2,6 @@ namespace DataCommander.Providers.SQLite
 {
     using System;
     using System.Collections.Generic;
-    using System.Data;
     using System.Data.SQLite;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
@@ -12,7 +11,7 @@ namespace DataCommander.Providers.SQLite
         private readonly DatabaseNode databaseNode;
         private readonly string name;
 
-        public TableNode( DatabaseNode databaseNode, string name )
+        public TableNode(DatabaseNode databaseNode, string name)
         {
             this.databaseNode = databaseNode;
             this.name = name;
@@ -44,10 +43,10 @@ namespace DataCommander.Providers.SQLite
             }
         }
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             ITreeNode[] treeNodes = new ITreeNode[1];
-            treeNodes[ 0 ] = new IndexCollectionNode( this );
+            treeNodes[0] = new IndexCollectionNode(this);
             return treeNodes;
         }
 
@@ -63,29 +62,29 @@ namespace DataCommander.Providers.SQLite
         {
             get
             {
-                return string.Format( "select\t*\r\nfrom\t{0}.{1}", this.databaseNode.Name, this.name );
+                return string.Format("select\t*\r\nfrom\t{0}.{1}", this.databaseNode.Name, this.name);
             }
         }
 
         private static string GetScript(
             SQLiteConnection connection,
             string databaseName,
-            string name )
+            string name)
         {
-            string commandText = string.Format( @"
+            string commandText = string.Format(@"
 select  sql
 from	{0}.sqlite_master
-where	name	= '{1}'", databaseName, name );
-
-            object scalar = connection.ExecuteScalar( null, commandText, CommandType.Text, 0 );
-            string script = Foundation.Data.Database.GetValueOrDefault<string>( scalar );
+where	name	= '{1}'", databaseName, name);
+            var transactionScope = new DbTransactionScope(connection, null);
+            object scalar = transactionScope.ExecuteScalar(new CommandDefinition {CommandText = commandText});
+            string script = Foundation.Data.Database.GetValueOrDefault<string>(scalar);
             return script;
         }
 
-        private void Script_Click( object sender, EventArgs e )
+        private void Script_Click(object sender, EventArgs e)
         {
-            string script = GetScript(this.databaseNode.Connection, this.databaseNode.Name, this.name );
-            QueryForm.ShowText( script );
+            string script = GetScript(this.databaseNode.Connection, this.databaseNode.Name, this.name);
+            QueryForm.ShowText(script);
         }
 
         ContextMenuStrip ITreeNode.ContextMenu
@@ -97,7 +96,7 @@ where	name	= '{1}'", databaseName, name );
                 if (this.name != "sqlite_master")
                 {
                     contextMenu = new ContextMenuStrip();
-                    contextMenu.Items.Add( "Script", null, new EventHandler(this.Script_Click ) );
+                    contextMenu.Items.Add("Script", null, new EventHandler(this.Script_Click));
                 }
 
                 return contextMenu;

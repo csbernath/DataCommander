@@ -7,7 +7,6 @@ namespace DataCommander.Providers.SqlServer2005
     internal sealed class IndexNode : ITreeNode
     {
         private readonly TableNode tableNode;
-        private string schema;
         private readonly string name;
         private readonly byte type;
         private readonly bool isUnique;

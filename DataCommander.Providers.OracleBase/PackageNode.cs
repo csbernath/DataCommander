@@ -5,6 +5,7 @@ namespace DataCommander.Providers.OracleBase
     using System.Data;
     using System.Text;
     using System.Windows.Forms;
+    using DataCommander.Foundation.Data;
 
     /// <summary>
     /// Summary description for TablesNode.
@@ -44,19 +45,13 @@ from	all_procedures
 where	owner = '{0}'
 	and object_name = '{1}'
 order by procedure_name", schemaNode.Name, name);
-            List<ITreeNode> list = new List<ITreeNode>();
+            var transactionScope = new DbTransactionScope(schemaNode.SchemasNode.Connection, null);
 
-            using (IDataReader dataReader = schemaNode.SchemasNode.Connection.ExecuteReader(commandText))
+            return transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default, dataRecord =>
             {
-                while (dataReader.Read())
-                {
-                    string procedureName = dataReader.GetString(0);
-                    ProcedureNode procedureNode = new ProcedureNode(schemaNode, this, procedureName);
-                    list.Add(procedureNode);
-                }
-            }
-
-            return list.ToArray();
+                string procedureName = dataRecord.GetString(0);
+                return new ProcedureNode(schemaNode, this, procedureName);
+            });
         }
 
         public bool Sortable
@@ -73,8 +68,9 @@ order by procedure_name", schemaNode.Name, name);
             {
                 string commandText = "select text from all_source where owner = '{0}' and type = 'PACKAGE' and name = '{1}'";
                 commandText = String.Format(commandText, schemaNode.Name, name);
-                DataTable dataTable = schemaNode.SchemasNode.Connection.ExecuteDataTable(commandText);
-                StringBuilder sb = new StringBuilder();
+                var transactionScope = new DbTransactionScope(schemaNode.SchemasNode.Connection, null);
+                DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
+                var sb = new StringBuilder();
 
                 for (int i = 0; i < dataTable.Rows.Count; i++)
                 {
@@ -94,10 +90,11 @@ order by procedure_name", schemaNode.Name, name);
         {
             string commandText = "select text from all_source where owner = '{0}' and name = '{1}' and type = 'PACKAGE BODY'";
             commandText = string.Format(commandText, schemaNode.Name, name);
-            DataTable dataTable = schemaNode.SchemasNode.Connection.ExecuteDataTable(commandText);
+            var transactionScope = new DbTransactionScope(this.schemaNode.SchemasNode.Connection, null);
+            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
             DataRowCollection dataRows = dataTable.Rows;
             int count = dataRows.Count;
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             for (int i = 0; i < count; i++)
             {
@@ -107,7 +104,7 @@ order by procedure_name", schemaNode.Name, name);
             }
 
             MainForm mainForm = DataCommanderApplication.Instance.MainForm;
-            QueryForm queryForm = (QueryForm)mainForm.ActiveMdiChild;
+            var queryForm = (QueryForm)mainForm.ActiveMdiChild;
             QueryTextBox tbQuery = queryForm.QueryTextBox;
             int selectionStart = tbQuery.RichTextBox.TextLength;
 
@@ -144,7 +141,7 @@ order by procedure_name", schemaNode.Name, name);
             }
         }
 
-        SchemaNode schemaNode;
-        string name;
+        readonly SchemaNode schemaNode;
+        readonly string name;
     }
 }

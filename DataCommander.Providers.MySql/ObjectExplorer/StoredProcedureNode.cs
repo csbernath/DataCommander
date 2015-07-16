@@ -3,6 +3,7 @@
     using System;
     using System.Data;
     using System.Drawing;
+    using System.Linq;
     using System.Windows.Forms;
     using global::MySql.Data.MySqlClient;
     using DataCommander.Foundation.Data;
@@ -71,20 +72,10 @@
         private void ShowCreateProcedure_Click(object sender, EventArgs e)
         {
             string commandText = string.Format("show create procedure {0}.{1}", this.databaseNode.Name, this.name);
-            string statement = null;
-
-            using (var connection = new MySqlConnection(this.databaseNode.ObjectExplorer.ConnectionString))
-            {
-                connection.Open();
-                using (var context = connection.ExecuteReader(null, commandText, CommandType.Text, 0, CommandBehavior.Default))
-                {
-                    var dataReader = context.DataReader;
-                    while (dataReader.Read())
-                    {
-                        statement = dataReader.GetString(2);
-                    }
-                }
-            }
+            string statement = MySqlClientFactory.Instance.ExecuteReader(
+                this.databaseNode.ObjectExplorer.ConnectionString,
+                commandText,
+                dataRecord => dataRecord.GetString(2)).First();
 
             Clipboard.SetText(statement);
             var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;

@@ -8,8 +8,8 @@ namespace DataCommander.Providers.OracleBase
     /// </summary>
     public sealed class SchemaNode : ITreeNode
     {
-		private SchemaCollectionNode schemasNode;
-		private string name;
+		private readonly SchemaCollectionNode schemasNode;
+		private readonly string name;
 
         public SchemaNode(
           SchemaCollectionNode schemasNode,

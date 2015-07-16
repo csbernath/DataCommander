@@ -5,8 +5,8 @@ namespace DataCommander.Providers.OracleBase
 
     internal sealed class IndexNode : ITreeNode
     {
-        private TableNode table;
-        private string name;
+        private readonly TableNode table;
+        private readonly string name;
 
         public IndexNode(
           TableNode table,

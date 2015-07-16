@@ -14,7 +14,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <summary>
         /// 
         /// </summary>
-        public static readonly SqlDateTime SqlDateTimeZero = new SqlDateTime( 1900, 1, 1 );
+        public static readonly SqlDateTime SqlDateTimeZero = new SqlDateTime(1900, 1, 1);
 
         /// <summary>
         /// Creates the store procedure command.
@@ -24,12 +24,12 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <returns></returns>
         public static SqlCommand CreateStoreProcedureCommand(
             string storedProcedureName,
-            SqlConnection connection )
+            SqlConnection connection)
         {
             var command = connection.CreateCommand();
             command.CommandText = storedProcedureName;
             command.CommandType = CommandType.StoredProcedure;
-            SqlCommandBuilder.DeriveParameters( command );
+            SqlCommandBuilder.DeriveParameters(command);
             return command;
         }
 
@@ -45,7 +45,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             SqlConnection connection,
             string database,
             string schema,
-            string name )
+            string name)
         {
             string commandText = string.Format(
                 CultureInfo.InvariantCulture,
@@ -89,18 +89,19 @@ begin
 end",
                 database,
                 schema.ToTSqlNVarChar(),
-                name.ToTSqlNVarChar() );
+                name.ToTSqlNVarChar());
 
             var sb = new StringBuilder();
+            var transactionScope = new DbTransactionScope(connection, null);
 
-            using (var dataReaderContext = connection.ExecuteReader( null, commandText, CommandType.Text, 0, CommandBehavior.Default ))
+            using (var gridReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
             {
-                var dataReader = dataReaderContext.DataReader;
-                while (dataReader.Read())
+                gridReader.Read(dataRecord =>
                 {
-                    string s = dataReader.GetString( 0 );
-                    sb.Append( s );
-                }
+                    string s = dataRecord.GetString(0);
+                    sb.Append(s);
+                    return true;
+                });
             }
 
             return sb.ToString();

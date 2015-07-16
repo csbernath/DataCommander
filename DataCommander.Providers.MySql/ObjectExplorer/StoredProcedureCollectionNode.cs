@@ -11,7 +11,7 @@
 
     internal sealed class StoredProcedureCollectionNode : ITreeNode
     {
-        private DatabaseNode databaseNode;
+        private readonly DatabaseNode databaseNode;
 
         public StoredProcedureCollectionNode(DatabaseNode databaseNode)
         {
@@ -43,20 +43,14 @@ where
     and r.ROUTINE_TYPE = 'PROCEDURE'
 order by r.ROUTINE_NAME", this.databaseNode.Name.ToTSqlVarChar());
 
-            using (var connection = new MySqlConnection(this.databaseNode.ObjectExplorer.ConnectionString))
-            {
-                connection.Open();
-
-                using (var context = connection.ExecuteReader(null, commandText, CommandType.Text, 0, CommandBehavior.Default))
+            return MySqlClientFactory.Instance.ExecuteReader(
+                this.databaseNode.ObjectExplorer.ConnectionString,
+                commandText,
+                dataRecord =>
                 {
-                    var dataReader = context.DataReader;
-                    while (dataReader.Read())
-                    {
-                        string name = dataReader.GetString(0);
-                        yield return new StoredProcedureNode(this.databaseNode, name);
-                    }
-                }
-            }
+                    string name = dataRecord.GetString(0);
+                    return new StoredProcedureNode(this.databaseNode, name);
+                });
         }
 
         bool ITreeNode.Sortable

@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Providers.SqlServer2005
 {
     using System.Collections.Generic;
+    using System.Data;
     using System.Data.SqlClient;
     using System.Diagnostics.Contracts;
     using System.Linq;
@@ -42,19 +43,15 @@ from sys.server_principals sp (nolock)
 where   sp.type in('S','U','G')
 order by name";
 
-            ITreeNode[] childNodes;
             using (var connection = new SqlConnection(this.server.ConnectionString))
             {
                 connection.Open();
-                using (var dataReader = connection.ExecuteReader(commandText))
+                var transactionScope = new DbTransactionScope(connection, null);
+                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
                 {
-                    childNodes =
-                        (from dataRecord in dataReader.AsEnumerable()
-                            select new LoginNode(dataReader.GetString(0))).ToArray();
+                    return dataReader.Read(dataRecord => new LoginNode(dataRecord.GetString(0)));
                 }
             }
-
-            return childNodes;
         }
 
         bool ITreeNode.Sortable

@@ -8,8 +8,8 @@ namespace DataCommander.Providers.Odp
 
     internal sealed class Connection : ConnectionBase
     {
-		private OracleConnectionStringBuilder oracleConnectionStringBuilder;
-		private OracleConnection oracleConnection;
+		private readonly OracleConnectionStringBuilder oracleConnectionStringBuilder;
+		private readonly OracleConnection oracleConnection;
 		private string connectionName;
 
         public Connection(string connectionString)

@@ -8,5 +8,8 @@ namespace DataCommander.Providers
         public const string Password = "Password";
         public const string Provider = "Provider";
         public const string IntegratedSecurity = "Integrated Security";
+        public const string Server = "Server";
+        public const string Database = "Database";
+        public const string Host = "Host";
     }
 }

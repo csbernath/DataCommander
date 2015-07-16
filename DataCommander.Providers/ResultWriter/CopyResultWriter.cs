@@ -142,7 +142,12 @@
                 string commandText = sb.ToString();
                 try
                 {
-                    this.destinationConnection.Connection.ExecuteNonQuery(this.insertCommand.Transaction, commandText, CommandType.Text, 3600);
+                    var transactionScope = new DbTransactionScope(this.destinationConnection.Connection, this.insertCommand.Transaction);
+                    transactionScope.ExecuteNonQuery(new CommandDefinition
+                    {
+                        CommandText = commandText,
+                        CommandTimeout = 3600
+                    });
                 }
                 catch (Exception e)
                 {

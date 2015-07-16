@@ -10,9 +10,9 @@ namespace DataCommander.Providers.Odp
 	/// </summary>
 	internal sealed class TableNode : ITreeNode
 	{
-		private SchemaNode schema;
-		private string name;
-		private bool showFullName;
+		private readonly SchemaNode schema;
+		private readonly string name;
+		private readonly bool showFullName;
 
 		public TableNode(
 			SchemaNode schema,

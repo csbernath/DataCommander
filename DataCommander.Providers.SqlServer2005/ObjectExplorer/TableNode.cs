@@ -10,10 +10,12 @@ namespace DataCommander.Providers.SqlServer2005
     using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Threading;
     using System.Windows.Forms;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Text;
     using DataCommander.Foundation.Windows.Forms;
+    using Foundation.Data;
     using Microsoft.SqlServer.Management.Common;
     using Microsoft.SqlServer.Management.Smo;
 
@@ -97,9 +99,10 @@ order by c.column_id",
                 connection.Open();
             }
 
-            using (IDataReader dataReader = connection.ExecuteReader(commandText))
+            var transactionScope = new DbTransactionScope(connection, null);
+            using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
             {
-                while (dataReader.Read())
+                dataReader.Read(dataRecord =>
                 {
                     if (first)
                     {
@@ -111,9 +114,9 @@ order by c.column_id",
                     }
 
                     columnNames.Append('[');
-                    columnNames.Append(dataReader[0]);
+                    columnNames.Append(dataRecord[0]);
                     columnNames.Append(']');
-                }
+                });
             }
 
             string query = string.Format(
@@ -163,7 +166,8 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.database.Name, this.owner, this.name);
                 DataSet dataSet;
                 using (var connection = new SqlConnection(connectionString))
                 {
-                    dataSet = connection.ExecuteDataSet(commandText);
+                    var transactionScope = new DbTransactionScope(connection, null);
+                    dataSet = transactionScope.ExecuteDataSet(new CommandDefinition { CommandText = commandText });
                 }
                 DataTable columns = dataSet.Tables[0];
                 DataTable keys = dataSet.Tables[1];
@@ -373,7 +377,8 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.database.Name, this.owner, this.name);
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
-                dataTable = connection.ExecuteDataTable(cmdText);
+                var transactionScope = new DbTransactionScope(connection, null);
+                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = cmdText});
             }
             dataTable.TableName = string.Format("{0} indexes", this.name);
             MainForm mainForm = DataCommanderApplication.Instance.MainForm;
@@ -419,7 +424,8 @@ order by c.column_id", this.database.Name, this.owner, this.name);
             DataTable table;
             using (var connection = new SqlConnection(connectionString))
             {
-                table = connection.ExecuteDataTable(commandText);
+                var transactionScope = new DbTransactionScope(connection, null);
+                table = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
             }
             var sb = new StringBuilder();
 

@@ -459,8 +459,8 @@ namespace DataCommander
                 switch (this.WindowState)
                 {
                     case FormWindowState.Normal:
-                        int width = Math.Max(this.ClientSize.Width - 20, 100);
-                        int height = Math.Max(this.ClientSize.Height - 90, 50);
+                        int width = Math.Max(this.ClientSize.Width + 70, 100);
+                        int height = Math.Max(this.ClientSize.Height - 120, 50);
                         queryForm.ClientSize = new Size(width, height);
                         break;
 

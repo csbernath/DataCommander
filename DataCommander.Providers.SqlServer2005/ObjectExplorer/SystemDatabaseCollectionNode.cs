@@ -11,9 +11,9 @@
     {
         private readonly DatabaseCollectionNode databaseCollectionNode;
 
-        public SystemDatabaseCollectionNode( DatabaseCollectionNode databaseCollectionNode )
+        public SystemDatabaseCollectionNode(DatabaseCollectionNode databaseCollectionNode)
         {
-            Contract.Requires( databaseCollectionNode != null );
+            Contract.Requires(databaseCollectionNode != null);
             this.databaseCollectionNode = databaseCollectionNode;
         }
 
@@ -35,25 +35,26 @@
             }
         }
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             string connectionString = this.databaseCollectionNode.Server.ConnectionString;
             DataTable dataTable;
-            using (var connection = new SqlConnection( connectionString ))
+            using (var connection = new SqlConnection(connectionString))
             {
+                var transactionScope = new DbTransactionScope(connection, null);
                 const string commandText = @"select d.name
 from sys.databases d (nolock)
 where name in('master','model','msdb','tempdb')
 order by d.name";
-                dataTable = connection.ExecuteDataTable( null, commandText, CommandType.Text, 0 );
+                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
             }
 
             List<ITreeNode> list = new List<ITreeNode>();
             foreach (DataRow dataRow in dataTable.Rows)
             {
-                string name = (string) dataRow[ 0 ];
-                DatabaseNode node = new DatabaseNode( this.databaseCollectionNode, name );
-                list.Add( node );
+                string name = (string)dataRow[0];
+                DatabaseNode node = new DatabaseNode(this.databaseCollectionNode, name);
+                list.Add(node);
             }
 
             return list;

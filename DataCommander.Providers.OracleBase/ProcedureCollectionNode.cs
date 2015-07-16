@@ -30,27 +30,23 @@ namespace DataCommander.Providers.OracleBase
             }
         }
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText = string.Format( @"select	OBJECT_NAME
+            string commandText = string.Format(@"select	OBJECT_NAME
 from	SYS.ALL_OBJECTS
 where	OWNER	= '{0}'
 	and OBJECT_TYPE	= 'PROCEDURE'
-order by OBJECT_NAME", schemaNode.Name );
-            List<ITreeNode> list = new List<ITreeNode>();
+order by OBJECT_NAME", schemaNode.Name);
+            var transactionScope = new DbTransactionScope(schemaNode.SchemasNode.Connection, null);
 
-            using (var context = schemaNode.SchemasNode.Connection.ExecuteReader( null, commandText, CommandType.Text, 0, CommandBehavior.Default ))
+            using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
             {
-                var dataReader = context.DataReader;
-                while (dataReader.Read())
+                return dataReader.Read(dataRecord =>
                 {
-                    string procedureName = dataReader.GetString( 0 );
-                    ProcedureNode procedureNode = new ProcedureNode( schemaNode, null, procedureName );
-                    list.Add( procedureNode );
-                }
+                    string procedureName = dataRecord.GetString(0);
+                    return new ProcedureNode(schemaNode, null, procedureName);
+                });
             }
-
-            return list.ToArray();
         }
 
         bool ITreeNode.Sortable
@@ -79,6 +75,6 @@ order by OBJECT_NAME", schemaNode.Name );
 
         #endregion
 
-        private SchemaNode schemaNode;
+        private readonly SchemaNode schemaNode;
     }
 }

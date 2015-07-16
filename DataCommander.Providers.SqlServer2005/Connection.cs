@@ -5,6 +5,7 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Data.SqlClient;
     using System.Security.Principal;
     using DataCommander.Foundation;
+    using Foundation.Data;
 
     internal sealed class Connection : ConnectionBase
     {
@@ -65,12 +66,21 @@ namespace DataCommander.Providers.SqlServer2005
 
         public override void Open()
         {
+            const string commandText = @"select @@servername,@@spid
+set arithabort on";
+
             this.sqlConnection.Open();
-            var table = this.sqlConnection.ExecuteDataTable(@"select @@servername,@@spid
-set arithabort on");
-            var row = table.Rows[0];
-            this.serverName = (string)row[0];
-            this.spid = (short)row[1];
+            var transactionScope = new DbTransactionScope(this.sqlConnection, null);
+
+            using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+            {
+                dataReader.Read(dataRecord =>
+                {
+                    this.serverName = dataRecord.GetString(0);
+                    this.spid = dataRecord.GetInt16(1);
+                    return false;
+                });
+            }
         }
 
         public override string Caption
@@ -113,8 +123,9 @@ set arithabort on");
         {
             get
             {
+                var transactionScope = new DbTransactionScope(this.sqlConnection, null);
                 string commandText = "select @@version";
-                object scalar = this.sqlConnection.ExecuteScalar(commandText);
+                object scalar = transactionScope.ExecuteScalar(new CommandDefinition {CommandText = commandText});
                 string version = Foundation.Data.Database.GetValueOrDefault<string>(scalar);
 
                 /* select
@@ -140,7 +151,7 @@ set arithabort on");
 
                 switch (serverVersion)
                 {
-                    #region SQL Server 2000
+                        #region SQL Server 2000
 
                     case "08.00.0194":
                         description = "SQL Server 2000 RTM";
@@ -166,9 +177,9 @@ set arithabort on");
                         description = "SQL Server 2000 post SP4 hotfix build (build 2187)";
                         break;
 
-                    #endregion
+                        #endregion
 
-                    #region SQL Server 2005
+                        #region SQL Server 2005
 
                     case "09.00.1399":
                         description = "SQL Server 2005";
@@ -214,9 +225,9 @@ set arithabort on");
                         description = "Security update for SQL Server 2005 Service Pack 4 GDR: June 14, 2011";
                         break;
 
-                    #endregion
+                        #endregion
 
-                    #region SQL Server 2008
+                        #region SQL Server 2008
 
                     case "10.00.1600":
                         description = "SQL Server 2008 (RTM)";
@@ -230,15 +241,15 @@ set arithabort on");
                         description = "SQL Server 2008 R2 Service Pack 3 (SP3): September 26, 2014";
                         break;
 
-                    #endregion
+                        #endregion
 
-                    #region SQL Server 2012
+                        #region SQL Server 2012
 
                     case "11.00.2100":
                         description = "SQL Server 2012 RTM: March 6, 2012";
                         break;
 
-                    #endregion
+                        #endregion
 
                     default:
                         description = null;
@@ -253,7 +264,8 @@ set arithabort on");
         {
             get
             {
-                object scalar = this.sqlConnection.ExecuteScalar("select @@trancount");
+                var transactionScope = new DbTransactionScope(this.sqlConnection, null);
+                object scalar = transactionScope.ExecuteScalar(new CommandDefinition {CommandText = "select @@trancount"});
                 int transactionCount = (int)scalar;
                 return transactionCount;
             }

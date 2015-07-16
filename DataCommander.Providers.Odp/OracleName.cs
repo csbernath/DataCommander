@@ -3,8 +3,8 @@
 
     internal sealed class OracleName
     {
-        private string owner;
-        private string name;
+        private readonly string owner;
+        private readonly string name;
 
         public OracleName( string userId, string name )
         {
