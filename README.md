@@ -13,7 +13,7 @@ Relational database servers:
   * Microsoft SQL Server
   * MySQL
   * Oracle
-  * PostrgeSQL (coming soon)
+  * PostgreSQL
 
 Relational file databases:
   * SQLite
@@ -37,9 +37,10 @@ The data grid can be exported into Excel.
 |-------------|-----------|
 |Msi|[Windows Installer](https://msdn.microsoft.com/en-us/library/cc185688(v=vs.85).aspx) using [Wix](http://wixtoolset.org)|
 |MySql|[MySQL](https://www.mysql.com/)|
-|Odp|[Oracle](http://www.oracle.com/technetwork/topics/dotnet/index-085163.html) from Oracle|
+|Odp|Oracle using [ODP.NET provider](http://www.oracle.com/technetwork/topics/dotnet/index-085163.html) from Oracle|
 |OleDb|[OLE DB](https://msdn.microsoft.com/en-us/library/system.data.oledb%28v=vs.110%29.aspx)|
-|Oracle|[Oracle](https://msdn.microsoft.com/en-us/library/system.data.oracleclient%28v=vs.110%29.aspx) from Microsoft|
+|Oracle|Oracle using [Oracle provider](https://msdn.microsoft.com/en-us/library/system.data.oracleclient%28v=vs.110%29.aspx) from Microsoft|
+|PostgreSQL|[PostgreSQL](https://github.com/npgsql/Npgsql)|
 |SQLite|[SQLite .NET Data Provider](http://system.data.sqlite.org)|
 |SqlServer2005|[Microsoft SQL Server](http://www.microsoft.com/en-us/server-cloud/products/sql-server/) 2005 or greater|
 |SqlServerCe40|[Microsoft SQL Server Compact Edition 4.0](http://www.microsoft.com/en-us/download/details.aspx?id=17876)|
