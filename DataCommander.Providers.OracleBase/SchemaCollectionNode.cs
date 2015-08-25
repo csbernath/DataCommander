@@ -3,6 +3,7 @@ namespace DataCommander.Providers.OracleBase
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
+    using System.Threading;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
 
@@ -42,7 +43,7 @@ namespace DataCommander.Providers.OracleBase
         {
             string commandText = "select username from all_users order by username";
             var transactionScope = new DbTransactionScope(this.Connection, null);
-            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
+            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
             int count = dataTable.Rows.Count;
             var treeNodes = new ITreeNode[count];
 

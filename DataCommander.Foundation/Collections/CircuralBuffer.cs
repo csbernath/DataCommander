@@ -9,12 +9,16 @@
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class CircularBuffer<T> : IList<T>
+    public sealed class CircularBuffer<T> : IList<T>
     {
+        #region Private Fields
+
         private T[] array;
         private int head;
         private int tail;
         private int count;
+
+        #endregion
 
         /// <summary>
         /// 

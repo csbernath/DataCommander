@@ -1,11 +1,5 @@
 ﻿namespace DataCommander.Foundation.Data
 {
-#if FOUNDATION_3_5
-
-#else
-
-#endif
-
     /// <summary>
     /// 
     /// </summary>
@@ -17,7 +11,7 @@
         /// 
         /// </summary>
         /// <param name="connectionString"></param>
-        public BeforeOpenDbConnectionEventArgs( string connectionString )
+        public BeforeOpenDbConnectionEventArgs(string connectionString)
         {
             this.connectionString = connectionString;
         }

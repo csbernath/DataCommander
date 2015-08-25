@@ -2,6 +2,7 @@ namespace DataCommander.Providers.Odp
 {
     using System.Collections.Generic;
     using System.Data;
+    using System.Threading;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
     using Oracle.ManagedDataAccess.Client;
@@ -40,7 +41,7 @@ namespace DataCommander.Providers.Odp
             DataTable dataTable = new DataTable();
             OracleCommand command = new OracleCommand(commandText, table.Schema.SchemasNode.Connection);
             command.FetchSize = 256 * 1024;
-            command.Fill(dataTable);
+            command.Fill(dataTable, CancellationToken.None);
             int count = dataTable.Rows.Count;
             string[] triggers = new string[count];
 

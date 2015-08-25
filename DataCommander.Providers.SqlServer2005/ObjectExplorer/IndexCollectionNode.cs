@@ -3,6 +3,7 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
+    using System.Linq;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Data.SqlClient;
@@ -71,7 +72,7 @@ order by i.name",
                         byte type = dataRecord.GetByte(1);
                         bool isUnique = dataRecord.GetBoolean(2);
                         return new IndexNode(this.tableNode, name, type, isUnique);
-                    });
+                    }).ToList();
                 }
             }
         }

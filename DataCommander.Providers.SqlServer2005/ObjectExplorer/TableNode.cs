@@ -167,7 +167,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.database.Name, this.owner, this.name);
                 using (var connection = new SqlConnection(connectionString))
                 {
                     var transactionScope = new DbTransactionScope(connection, null);
-                    dataSet = transactionScope.ExecuteDataSet(new CommandDefinition { CommandText = commandText });
+                    dataSet = transactionScope.ExecuteDataSet(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
                 }
                 DataTable columns = dataSet.Tables[0];
                 DataTable keys = dataSet.Tables[1];
@@ -378,7 +378,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.database.Name, this.owner, this.name);
             using (var connection = new SqlConnection(connectionString))
             {
                 var transactionScope = new DbTransactionScope(connection, null);
-                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = cmdText});
+                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = cmdText }, CancellationToken.None);
             }
             dataTable.TableName = string.Format("{0} indexes", this.name);
             MainForm mainForm = DataCommanderApplication.Instance.MainForm;
@@ -425,7 +425,7 @@ order by c.column_id", this.database.Name, this.owner, this.name);
             using (var connection = new SqlConnection(connectionString))
             {
                 var transactionScope = new DbTransactionScope(connection, null);
-                table = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
+                table = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
             }
             var sb = new StringBuilder();
 
@@ -462,14 +462,14 @@ order by c.column_id", this.database.Name, this.owner, this.name);
                         break;
 
                     case "decimal":
-                        int scale = row.Field<int>("scale");
+                        byte scale = row.Field<byte>("scale");
                         if (scale == 0)
                         {
-                            typeName += "(" + row["prec"].ToString() + ")";
+                            typeName += "(" + row["precision"].ToString() + ")";
                         }
                         else
                         {
-                            typeName += "(" + row["prec"].ToString() + ',' + scale + ")";
+                            typeName += "(" + row["precision"].ToString() + ',' + scale + ")";
                         }
                         break;
 

@@ -7,6 +7,7 @@ namespace DataCommander.Foundation.Data.SqlClient
     using System.Security.Cryptography;
     using System.Security.Principal;
     using System.Text;
+    using System.Threading;
     using DataCommander.Foundation.Configuration;
 
     /// <summary>
@@ -133,7 +134,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             parameters.Add( new SqlParameter( "@returnValue", SqlDbType.Int, 4, ParameterDirection.ReturnValue, true, 0, 0, null, DataRowVersion.Current, null ) );
             parameters.Add( new SqlParameter( "@systemName", SqlDbType.VarChar, 64, ParameterDirection.Input, true, 0, 0, null, DataRowVersion.Current, null ) );
             parameters[ 1 ].Value = systemName;
-            DataSet dataSet = command.ExecuteDataSet();
+            DataSet dataSet = command.ExecuteDataSet(CancellationToken.None);
             return dataSet;
         }
     }

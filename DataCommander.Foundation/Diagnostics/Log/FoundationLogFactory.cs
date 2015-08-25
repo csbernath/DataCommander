@@ -165,9 +165,6 @@
                     bool async = true;
                     attributes.TryGetAttributeValue("Async", async, out async);
 
-                    int queueCapacity = 100000; // 100.000 log entries
-                    attributes.TryGetAttributeValue("QueueCapacity", queueCapacity, out queueCapacity);
-
                     int bufferSize = 1048576; // 1 MB
                     attributes.TryGetAttributeValue("BufferSize", bufferSize, out bufferSize);
 
@@ -178,10 +175,15 @@
                     attributes.TryGetAttributeValue("AutoFlush", autoFlush, out autoFlush);
 
                     FileAttributes fileAttributes;
-                    node.Attributes.TryGetAttributeValue("FileAttributes",
-                        FileAttributes.ReadOnly | FileAttributes.Hidden, out fileAttributes);
-                    var fileLogWriter = new FileLogWriter(path, Encoding.UTF8, async, queueCapacity, bufferSize,
-                        timerPeriod, autoFlush, fileAttributes);
+                    attributes.TryGetAttributeValue("FileAttributes", FileAttributes.ReadOnly | FileAttributes.Hidden, out fileAttributes);
+
+                    string dateTimeProviderString = "SystemTime";
+                    attributes.TryGetAttributeValue("DateTimeProvider", dateTimeProviderString, out dateTimeProviderString);
+                    var dateTimeProvider = dateTimeProviderString == "LocalTime"
+                        ? (IDateTimeProvider)LocalTime.Default
+                        : SystemTime.Default;
+
+                    var fileLogWriter = new FileLogWriter(path, Encoding.UTF8, async, bufferSize, timerPeriod, autoFlush, fileAttributes, dateTimeProvider);
 
                     logWriter = new LogWriter
                     {

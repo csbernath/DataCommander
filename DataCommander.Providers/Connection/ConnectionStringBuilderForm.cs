@@ -12,6 +12,7 @@ namespace DataCommander.Providers
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Linq;
     using Foundation;
+    using Foundation.Collections;
 
     internal partial class ConnectionStringBuilderForm : Form
     {
@@ -61,7 +62,8 @@ namespace DataCommander.Providers
                 {
                     string oleDbProviderName = dbConnectionStringBuilder.GetValue(ConnectionStringProperty.Provider);
                     this.InitializeOleDbProvidersComboBox();
-                    int index = this.oleDbProviders.IndexOf(0, i => i.Name == oleDbProviderName);
+                    int index = this.oleDbProviders.IndexOf(i => i.Name == oleDbProviderName);
+
                     this.oleDbProvidersComboBox.SelectedIndex = index;
                 }
 

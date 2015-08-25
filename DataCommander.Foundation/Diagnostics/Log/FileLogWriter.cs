@@ -1,6 +1,7 @@
 namespace DataCommander.Foundation.Diagnostics
 {
     using System;
+    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Text;
     using DataCommander.Foundation.Linq;
@@ -13,6 +14,7 @@ namespace DataCommander.Foundation.Diagnostics
         private static readonly ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
         private readonly bool async;
         private readonly ILogFile logFile;
+        private readonly IDateTimeProvider dateTimeProvider;
 
         /// <summary>
         /// 
@@ -20,32 +22,35 @@ namespace DataCommander.Foundation.Diagnostics
         /// <param name="path"></param>
         /// <param name="encoding"></param>
         /// <param name="async"></param>
-        /// <param name="queueCapacity"></param>
         /// <param name="bufferSize"></param>
         /// <param name="timerPeriod"></param>
         /// <param name="autoFlush"></param>
         /// <param name="fileAttributes"></param>
+        /// <param name="dateTimeProvider"></param>
         public FileLogWriter(
             string path,
             Encoding encoding,
             bool async,
-            int queueCapacity,
             int bufferSize,
             TimeSpan timerPeriod,
             bool autoFlush,
-            FileAttributes fileAttributes)
+            FileAttributes fileAttributes,
+            IDateTimeProvider dateTimeProvider)
         {
+            Contract.Requires<ArgumentNullException>(dateTimeProvider != null);
+
             this.async = async;
             ILogFormatter formatter = new TextLogFormatter();
             // ILogFormatter formatter = new XmlLogFormatter();
+            this.dateTimeProvider = dateTimeProvider;
 
             if (async)
             {
-                this.logFile = new AsyncLogFile(path, encoding, queueCapacity, bufferSize, timerPeriod, formatter, fileAttributes);
+                this.logFile = new AsyncLogFile(path, encoding, bufferSize, timerPeriod, formatter, fileAttributes, dateTimeProvider);
             }
             else
             {
-                this.logFile = new LogFile(path, encoding, bufferSize, autoFlush, formatter, fileAttributes);
+                this.logFile = new LogFile(path, encoding, bufferSize, autoFlush, formatter, fileAttributes, dateTimeProvider);
             }
         }
 

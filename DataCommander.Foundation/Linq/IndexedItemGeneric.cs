@@ -4,7 +4,7 @@ namespace DataCommander.Foundation.Linq
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public sealed class IndexedItem<T>
+    public struct IndexedItem<T>
     {
         #region Private Fields
 

@@ -4,6 +4,7 @@ namespace DataCommander.Providers.Odp
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
+    using System.Threading;
     using System.Windows.Forms;
     using Foundation.Data;
 
@@ -37,7 +38,7 @@ namespace DataCommander.Providers.Odp
             string commandText = "select view_name from all_views where owner = '{0}' order by view_name";
             commandText = String.Format(commandText, schemaNode.Name);
             var transactionScope = new DbTransactionScope(this.SchemaNode.SchemasNode.Connection, null);
-            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
+            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
             DataRowCollection dataRows = dataTable.Rows;
             int count = dataRows.Count;
             var treeNodes = new ITreeNode[count];

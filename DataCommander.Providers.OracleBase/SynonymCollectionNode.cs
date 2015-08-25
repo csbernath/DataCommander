@@ -2,6 +2,7 @@ namespace DataCommander.Providers.OracleBase
 {
     using System.Collections.Generic;
     using System.Data;
+    using System.Threading;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
 
@@ -39,7 +40,7 @@ where	s.OWNER	= '{0}'
 order by s.SYNONYM_NAME";
             var transactionScope = new DbTransactionScope(schema.SchemasNode.Connection, null);
             commandText = string.Format(commandText, schema.Name);
-            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
+            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
             int count = dataTable.Rows.Count;
 
             var treeNodes = new ITreeNode[count];

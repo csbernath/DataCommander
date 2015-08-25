@@ -2,6 +2,7 @@ namespace DataCommander.Providers.OracleBase
 {
     using System.Collections.Generic;
     using System.Data;
+    using System.Threading;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
 
@@ -40,7 +41,7 @@ namespace DataCommander.Providers.OracleBase
             IDbCommand command = table.Schema.SchemasNode.Connection.CreateCommand();
             // TODO
             // command.FetchSize = 256 * 1024;
-            command.Fill(dataTable);
+            command.Fill(dataTable, CancellationToken.None);
             int count = dataTable.Rows.Count;
             string[] triggers = new string[count];
 

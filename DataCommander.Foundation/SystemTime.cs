@@ -6,7 +6,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public sealed class SystemTime
+    public sealed class SystemTime : IDateTimeProvider
     {
         private static volatile int sharedTickCount;
         private static DateTime sharedDateTime;
@@ -17,7 +17,7 @@
         private int incrementedTickCount;
         private DateTime incrementedDateTime;
 
-        private static readonly SystemTime defaultSystemTime = new SystemTime(increment: 16, adjustment: 60*1000);
+        private static readonly SystemTime DefaultSystemTime = new SystemTime(increment: 16, adjustment: 60*1000);
 
         static SystemTime()
         {
@@ -62,7 +62,7 @@
         {
             get
             {
-                return defaultSystemTime;
+                return DefaultSystemTime;
             }
         }
 
@@ -105,6 +105,14 @@
                 }
 
                 return sharedDateTime;
+            }
+        }
+
+        DateTime IDateTimeProvider.Now
+        {
+            get
+            {
+                return Default.UtcNow;
             }
         }
     }

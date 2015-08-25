@@ -20,28 +20,28 @@ namespace DataCommander.Foundation.Diagnostics
         public EventLogWriter(
             string logName,
             string machineName,
-            string source )
+            string source)
         {
             try
             {
-                if (!EventLog.SourceExists( source, machineName ))
+                if (!EventLog.SourceExists(source, machineName))
                 {
-                    EventSourceCreationData sourceData = new EventSourceCreationData( source, logName ) { MachineName = machineName };
-                    EventLog.CreateEventSource( sourceData );
+                    var sourceData = new EventSourceCreationData(source, logName) {MachineName = machineName};
+                    EventLog.CreateEventSource(sourceData);
                 }
             }
             catch (Exception e)
             {
-                log.Write( LogLevel.Error, e.ToString() );
+                log.Write(LogLevel.Error, e.ToString());
             }
 
             try
             {
-                this.eventLog = new EventLog( logName, machineName, source );
+                this.eventLog = new EventLog(logName, machineName, source);
             }
             catch (Exception e)
             {
-                log.Write( LogLevel.Error, e.ToString() );
+                log.Write(LogLevel.Error, e.ToString());
             }
         }
 
@@ -79,9 +79,8 @@ namespace DataCommander.Foundation.Diagnostics
             }
         }
 
-        void ILogWriter.Write( LogEntry entry )
+        void ILogWriter.Write(LogEntry entry)
         {
-            LogLevel logLevel = entry.LogLevel;
             EventLogEntryType eventLogEntryType;
 
             switch (entry.LogLevel)
@@ -103,12 +102,12 @@ namespace DataCommander.Foundation.Diagnostics
 
             try
             {
-                string message = TextLogFormatter.Format( entry );
-                this.eventLog.WriteEntry( message, eventLogEntryType );
+                string message = TextLogFormatter.Format(entry);
+                this.eventLog.WriteEntry(message, eventLogEntryType);
             }
             catch (Exception e)
             {
-                log.Write( LogLevel.Error, e.ToString() );
+                log.Write(LogLevel.Error, e.ToString());
             }
         }
     }

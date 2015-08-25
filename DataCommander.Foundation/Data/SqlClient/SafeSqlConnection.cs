@@ -6,6 +6,7 @@ namespace DataCommander.Foundation.Data.SqlClient
     using System.Data.SqlClient;
     using System.Diagnostics.Contracts;
     using System.Text;
+    using System.Threading;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Linq;
     using DataCommander.Foundation.Threading;
@@ -16,34 +17,37 @@ namespace DataCommander.Foundation.Data.SqlClient
     public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly CancellationToken cancellationToken = CancellationToken.None;
         private Int16 id;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="connectionString"></param>
-        public SafeSqlConnection( string connectionString )
+        public SafeSqlConnection(string connectionString)
         {
-            SqlConnection connection = new SqlConnection( connectionString );
-            this.Initialize( connection, this );
+            var connection = new SqlConnection(connectionString);
+            this.Initialize(connection, this);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="connection"></param>
-        public SafeSqlConnection( IDbConnection connection )
+        public SafeSqlConnection(IDbConnection connection)
         {
-            this.Initialize( connection, this );
+            this.Initialize(connection, this);
         }
 
         #region ICloneable Members
+
         object ICloneable.Clone()
         {
             string connectionString = this.ConnectionString;
-            var connection = new SafeSqlConnection( connectionString );
+            var connection = new SafeSqlConnection(connectionString);
             return connection;
         }
+
         #endregion
 
         internal static Int16 GetId(IDbConnection connection)
@@ -63,13 +67,21 @@ namespace DataCommander.Foundation.Data.SqlClient
             return id;
         }
 
+        CancellationToken ISafeDbConnection.CancellationToken
+        {
+            get
+            {
+                return this.cancellationToken;
+            }
+        }
+
         object ISafeDbConnection.Id
         {
             get
             {
                 if (this.id == 0)
                 {
-                    this.id = GetId( this.Connection );
+                    this.id = GetId(this.Connection);
                 }
 
                 return this.id;
@@ -79,14 +91,15 @@ namespace DataCommander.Foundation.Data.SqlClient
         internal static void HandleException(
             IDbConnection connection,
             Exception exception,
-            TimeSpan elapsed )
+            TimeSpan elapsed,
+            CancellationToken cancellationToken)
         {
-            string separator = new string( '-', 80 );
+            string separator = new string('-', 80);
             var sb = new StringBuilder();
-            sb.AppendFormat( "SafeSqlConnection.HandleException(connection), elapsed: {0}, exception:\r\n{1}", elapsed, exception.ToLogString() );            
+            sb.AppendFormat("SafeSqlConnection.HandleException(connection), elapsed: {0}, exception:\r\n{1}", elapsed, exception.ToLogString());
             var sqlException = exception as SqlException;
             bool handled = false;
-            int timeout = 1 * 60 * 1000; // 1 minutes
+            int timeout = 1*60*1000; // 1 minutes
 
             if (sqlException != null)
             {
@@ -97,14 +110,15 @@ namespace DataCommander.Foundation.Data.SqlClient
                         timeout = 500; // 500 milliseconds
                         break;
 
-                    case 2: // A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections
+                    case 2:
+                        // A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections
                         handled = true;
-                        timeout = 5 * 1000; // 5 seconds
+                        timeout = 5*1000; // 5 seconds
                         break;
 
                     case 4060: // Cannot open database requested in login '%.*ls'. Login fails.
                         handled = true;
-                        timeout = 5 * 1000; // 5 seconds;
+                        timeout = 5*1000; // 5 seconds;
                         break;
 
                     default:
@@ -135,13 +149,12 @@ namespace DataCommander.Foundation.Data.SqlClient
 
             if (handled)
             {
-                sb.AppendFormat( "\r\nWaiting {0}...", TimeSpan.FromMilliseconds( timeout ) );
-                log.Error( sb.ToString() );
+                sb.AppendFormat("\r\nWaiting {0}...", TimeSpan.FromMilliseconds(timeout));
+                log.Error(sb.ToString());
 
                 if (timeout > 0)
                 {
-                    WorkerThread thread = WorkerThread.Current;
-                    thread.WaitForStop( timeout );
+                    cancellationToken.WaitHandle.WaitOne(timeout);
                 }
             }
             else
@@ -150,33 +163,31 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
         }
 
-        void ISafeDbConnection.HandleException( Exception exception, TimeSpan elapsed )
+        void ISafeDbConnection.HandleException(Exception exception, TimeSpan elapsed)
         {
-            HandleException( this.Connection, exception, elapsed );
+            HandleException(this.Connection, exception, elapsed, this.cancellationToken);
         }
 
-        internal static void HandleException(
-            Exception exception,
-            IDbCommand command )
+        internal static void HandleException(Exception exception, IDbCommand command, CancellationToken cancellationToken)
         {
-            Contract.Requires( command != null );
+            Contract.Requires<ArgumentNullException>(command != null);
 
-            string separator = new string( '-', 80 );
+            string separator = new string('-', 80);
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine( "SafeSqlConnection.HandleException(command):\r\n" );
-            SqlParameterCollection parameters = (SqlParameterCollection) command.Parameters;
+            sb.AppendLine("SafeSqlConnection.HandleException(command):\r\n");
+            SqlParameterCollection parameters = (SqlParameterCollection)command.Parameters;
             string p = parameters.ToLogString();
             string database = command.Connection.Database;
 
-            sb.AppendFormat( "Database: {0}\r\n", database );
-            sb.AppendFormat( "Command: {0}\r\n{1}\r\n{2}\r\n", command.CommandText, p, separator );
-            sb.AppendFormat( "Exception:{0}\r\n{1}\r\n", exception, separator );
+            sb.AppendFormat("Database: {0}\r\n", database);
+            sb.AppendFormat("Command: {0}\r\n{1}\r\n{2}\r\n", command.CommandText, p, separator);
+            sb.AppendFormat("Exception:{0}\r\n{1}\r\n", exception, separator);
             SqlException sqlEx = exception as SqlException;
             bool handled = false;
 
             if (sqlEx != null)
             {
-                sb.AppendFormat( "{0}\r\n{1}\r\n", sqlEx.Errors.ToLogString(), separator );
+                sb.AppendFormat("{0}\r\n{1}\r\n", sqlEx.Errors.ToLogString(), separator);
 
                 switch (sqlEx.Number)
                 {
@@ -188,18 +199,18 @@ namespace DataCommander.Foundation.Data.SqlClient
                         handled = true;
                         break;
 
-                    case 1205: // Transaction (Process ID %d) was deadlocked on {%Z} resources with another process and has been chosen as the deadlock victim. Rerun the transaction.
+                    case 1205:
+                        // Transaction (Process ID %d) was deadlocked on {%Z} resources with another process and has been chosen as the deadlock victim. Rerun the transaction.
                         handled = true;
                         break;
                 }
             }
 
-            log.Write( LogLevel.Error, sb.ToString() );
+            log.Write(LogLevel.Error, sb.ToString());
 
             if (handled)
             {
-                WorkerThread thread = WorkerThread.Current;
-                thread.WaitForStop( 1 * 60 * 1000 );// 1 minutes
+                cancellationToken.WaitHandle.WaitOne(1*60*1000); // 1 minutes
             }
             else
             {
@@ -207,9 +218,9 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
         }
 
-        void ISafeDbConnection.HandleException( Exception exception, IDbCommand command )
+        void ISafeDbConnection.HandleException(Exception exception, IDbCommand command)
         {
-            HandleException( exception, command );
+            HandleException(exception, command, this.cancellationToken);
         }
     }
 }

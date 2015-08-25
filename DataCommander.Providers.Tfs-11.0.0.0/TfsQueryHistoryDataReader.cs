@@ -7,6 +7,7 @@
     using System.Diagnostics.Contracts;
     using System.Linq;
     using DataCommander.Foundation.Data;
+    using Foundation;
     using Microsoft.TeamFoundation.VersionControl.Client;
 
     internal class TfsQueryHistoryDataReader : TfsDataReader
@@ -53,14 +54,15 @@
                 RecursionType recursion;
                 if (parameter != null && parameter.Value != null && parameter.Value != DBNull.Value)
                 {
-                    recursion = (RecursionType)parameter.Value;
+                    recursion = Enum<RecursionType>.Parse((string)parameter.Value);
                 }
                 else
                 {
                     recursion = RecursionType.Full;
                 }
 
-                string user = Database.GetValueOrDefault<string>(parameters["user"].Value);
+                parameter = parameters.FirstOrDefault(p=>p.ParameterName == "user");
+                string user = parameter != null ? Database.GetValueOrDefault<string>(parameter.Value) : null;
                 VersionSpec versionFrom = null;
                 VersionSpec versionTo = null;
                 parameter = parameters.FirstOrDefault( p => p.ParameterName == "maxCount" );
@@ -78,7 +80,8 @@
                     maxCount = (int)TfsDataReaderFactory.Dictionary[ this.command.CommandText ].Parameters[ "maxCount" ].DefaultValue;
                 }
 
-                bool includeChanges = Database.GetValueOrDefault<bool>(parameters["includeChanges"].Value);
+                parameter = parameters.FirstOrDefault(p => p.ParameterName == "includeChanges");
+                bool includeChanges = parameter != null ? Database.GetValueOrDefault<bool>(parameters["includeChanges"].Value) : false;
                 bool slotMode = Database.GetValueOrDefault<bool>(parameters["slotMode"].Value);
                 IEnumerable changesets = this.command.Connection.VersionControlServer.QueryHistory(path, version, deletionId, recursion, user, versionFrom, versionTo, maxCount, includeChanges, slotMode);
                 this.enumerator = this.AsEnumerable(changesets).GetEnumerator();

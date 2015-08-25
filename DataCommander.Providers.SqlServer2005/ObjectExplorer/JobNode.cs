@@ -5,6 +5,7 @@
     using System.Data;
     using System.Data.SqlClient;
     using System.Diagnostics.Contracts;
+    using System.Threading;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data.SqlClient;
     using Foundation.Data;
@@ -66,7 +67,7 @@
                 using (var connection = new SqlConnection(this.jobs.Server.ConnectionString))
                 {
                     var transactionScope = new DbTransactionScope(connection, null);
-                    dataSet = transactionScope.ExecuteDataSet(new CommandDefinition {CommandText = commandText});
+                    dataSet = transactionScope.ExecuteDataSet(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
                 }
 
                 var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;

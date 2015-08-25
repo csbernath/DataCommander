@@ -2,6 +2,7 @@ namespace DataCommander.Providers.OracleBase
 {
     using System.Collections.Generic;
     using System.Data;
+    using System.Threading;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
 
@@ -38,7 +39,7 @@ namespace DataCommander.Providers.OracleBase
             command.CommandText = commandText;
             // TODO
             // command.FetchSize = 256 * 1024;
-            DataTable dataTable = command.ExecuteDataTable();
+            DataTable dataTable = command.ExecuteDataTable(CancellationToken.None);
             int count = dataTable.Rows.Count;
             string[] indexes = new string[count];
 

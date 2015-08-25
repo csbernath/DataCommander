@@ -24,6 +24,7 @@
         private readonly ConnectionBase destinationConnection;
         private readonly string tableName;
         private readonly Action<IDbTransaction> setTransaction;
+        private readonly CancellationToken cancellationToken;
         private IDbTransaction transaction;
         private IDbCommand insertCommand;
         private Converter<object, object>[] converters;
@@ -42,7 +43,8 @@
             IProvider destinationProvider,
             ConnectionBase destinationConnection,
             string tableName,
-            Action<IDbTransaction> setTransaction)
+            Action<IDbTransaction> setTransaction,
+            CancellationToken cancellationToken)
         {
             this.logResultWriter = new LogResultWriter(addInfoMessage);
             this.addInfoMessage = addInfoMessage;
@@ -51,6 +53,7 @@
             this.destinationConnection = destinationConnection;
             this.tableName = tableName;
             this.setTransaction = setTransaction;
+            this.cancellationToken = cancellationToken;
         }
 
         #region IResultWriter Members
@@ -263,13 +266,12 @@
             this.queue.Enqueue(queueItem);
             this.enqueueEvent.Set();
 
-            var thread = WorkerThread.Current;
-            while (!thread.IsStopRequested && this.queue.Count > 5)
+            while (!this.cancellationToken.IsCancellationRequested && this.queue.Count > 5)
             {
                 this.waitMilliseconds += 500;
                 log.Write(LogLevel.Trace, "this.waitMilliseconds: {0}", this.waitMilliseconds);
 
-                thread.WaitForStop(500);
+                this.cancellationToken.WaitHandle.WaitOne(500);
             }
         }
 

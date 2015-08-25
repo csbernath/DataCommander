@@ -62,12 +62,10 @@
         /// <summary>
         /// 
         /// </summary>
-        public static SmallDate Today
+        public static SmallDate Today(IDateTimeProvider dateTimeProvider)
         {
-            get
-            {
-                return new SmallDate(DateTime.Today);
-            }
+            DateTime today = dateTimeProvider.Today();
+            return new SmallDate(today);
         }
 
         /// <summary>

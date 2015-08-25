@@ -9,6 +9,7 @@ namespace DataCommander.Foundation.Data
     using System.Globalization;
     using System.IO;
     using System.Text;
+    using System.Threading;
     using System.Xml;
     using DataCommander.Foundation.Text;
     using DataCommander.Foundation.Threading;
@@ -478,7 +479,7 @@ namespace DataCommander.Foundation.Data
             DataView dataView,
             DataColumn[] columns)
         {
-            Contract.Requires(dataView != null);
+            Contract.Requires<ArgumentNullException>(dataView != null);
 
             string s = null;
             int count = dataView.Count;
@@ -749,42 +750,45 @@ namespace DataCommander.Foundation.Data
         }
 
         /// <summary>
-        /// Executes the command and fills a <see cref="System.Data.DataTable"/>.
+        /// 
         /// </summary>
         /// <param name="commandText"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public DataTable ExecuteDataTable(string commandText)
+        public DataTable ExecuteDataTable(string commandText, CancellationToken cancellationToken)
         {
             this.command = this.CreateCommand(commandText);
-            return this.command.ExecuteDataTable();
+            return this.command.ExecuteDataTable(cancellationToken);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="command"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public DataTable ExecuteDataTable(IDbCommand command)
+        public DataTable ExecuteDataTable(IDbCommand command, CancellationToken cancellationToken)
         {
             Contract.Requires<ArgumentNullException>(command != null);
 
             this.command = command;
             var dataTable = new DataTable();
-            this.rowCount = command.Fill(dataTable);
+            this.rowCount = command.Fill(dataTable,cancellationToken);
             return dataTable;
         }
 
         /// <summary>
-        /// Executes the command and fills a <see cref="System.Data.DataSet"/>.
+        /// 
         /// </summary>
         /// <param name="command"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public DataSet ExecuteDataSet(IDbCommand command)
+        public DataSet ExecuteDataSet(IDbCommand command, CancellationToken cancellationToken)
         {
             this.command = command;
             var dataSet = new DataSet();
             dataSet.Locale = CultureInfo.InvariantCulture;
-            this.rowCount = command.Fill(dataSet);
+            this.rowCount = command.Fill(dataSet, cancellationToken);
             return dataSet;
         }
 
@@ -792,11 +796,12 @@ namespace DataCommander.Foundation.Data
         /// 
         /// </summary>
         /// <param name="commandText"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public DataSet ExecuteDataSet(string commandText)
+        public DataSet ExecuteDataSet(string commandText, CancellationToken cancellationToken)
         {
             this.command = this.CreateCommand(commandText);
-            return this.ExecuteDataSet(this.command);
+            return this.ExecuteDataSet(this.command, cancellationToken);
         }
 
         /// <summary>
@@ -831,7 +836,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public DataTable FillSchema(IDbCommand command, DataTable dataTable)
         {
-            Contract.Requires(command != null);
+            Contract.Requires<ArgumentNullException>(command != null);
 
             this.command = command;
             DataTable schemaTable;
@@ -849,8 +854,9 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="command"></param>
         /// <param name="dataSet"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public DataTable[] FillSchema(IDbCommand command, DataSet dataSet)
+        public static DataTable[] FillSchema(IDbCommand command, DataSet dataSet, CancellationToken cancellationToken)
         {
             Contract.Requires<ArgumentNullException>(command != null);
 
@@ -858,7 +864,7 @@ namespace DataCommander.Foundation.Data
 
             using (IDataReader dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly | CommandBehavior.KeyInfo))
             {
-                schemaTables = FillSchema(dataReader, dataSet);
+                schemaTables = FillSchema(dataReader, dataSet, cancellationToken);
             }
 
             return schemaTables;
@@ -869,13 +875,14 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="commandText"></param>
         /// <param name="dataSet"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public int Fill(string commandText, DataSet dataSet)
+        public int Fill(string commandText, DataSet dataSet, CancellationToken cancellationToken)
         {
             Contract.Requires<ArgumentNullException>(dataSet != null);
 
             this.command = this.CreateCommand(commandText);
-            this.rowCount = this.command.Fill(dataSet);
+            this.rowCount = this.command.Fill(dataSet, cancellationToken);
             return this.rowCount;
         }
 
@@ -957,15 +964,14 @@ namespace DataCommander.Foundation.Data
 
         private static DataTable[] FillSchema(
             IDataReader dataReader,
-            DataSet dataSet)
+            DataSet dataSet,
+            CancellationToken cancellationToken)
         {
-            WorkerThread thread = WorkerThread.Current;
             var schemaTables = new List<DataTable>();
 
-            while (!thread.IsStopRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
-                DataTable dataTable = new DataTable();
-                dataTable.Locale = CultureInfo.InvariantCulture;
+                var dataTable = new DataTable {Locale = CultureInfo.InvariantCulture};
                 DataTable schemaTable = FillSchema(dataReader, dataTable);
                 dataSet.Tables.Add(dataTable);
                 schemaTables.Add(schemaTable);

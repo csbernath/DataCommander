@@ -1,11 +1,5 @@
 ﻿namespace DataCommander.Foundation.Data
 {
-#if FOUNDATION_3_5
-
-#else
-
-#endif
-
     /// <summary>
     /// 
     /// </summary>
@@ -17,7 +11,7 @@
         /// 
         /// </summary>
         /// <param name="rowCount"></param>
-        public AfterReadEventArgs( int rowCount )
+        public AfterReadEventArgs(int rowCount)
         {
             this.rowCount = rowCount;
         }

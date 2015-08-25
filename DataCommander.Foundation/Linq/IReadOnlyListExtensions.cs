@@ -3,12 +3,45 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
+    using DataCommander.Foundation.Collections;
 
     /// <summary>
     /// 
     /// </summary>
     public static class IReadOnlyListExtensions
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="values"></param>
+        /// <param name="keySelector"></param>
+        /// <returns></returns>
+        [Pure]
+        public static ReadOnlyNonUniqueSortedList<TKey, TValue> AsReadOnlyNonUniqueSortedList<TKey, TValue>(
+            this IReadOnlyList<TValue> values,
+            Func<TValue, TKey> keySelector)
+        {
+            return new ReadOnlyNonUniqueSortedList<TKey, TValue>(values, keySelector);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="values"></param>
+        /// <param name="keySelector"></param>
+        /// <returns></returns>
+        [Pure]
+        public static ReadOnlySortedList<TKey, TValue> AsReadOnlySortedList<TKey, TValue>(
+            this IReadOnlyList<TValue> values,
+            Func<TValue, TKey> keySelector)
+        {
+            return new ReadOnlySortedList<TKey, TValue>(values, keySelector);
+        }
+
         /// <summary>
         /// 
         /// </summary>

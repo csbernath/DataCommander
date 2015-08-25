@@ -2,6 +2,7 @@ namespace DataCommander.Providers.Odp
 {
     using System.Collections.Generic;
     using System.Data;
+    using System.Threading;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
     using Oracle.ManagedDataAccess.Client;
@@ -37,7 +38,7 @@ namespace DataCommander.Providers.Odp
 			commandText = string.Format( commandText, table.Schema.Name, table.Name );
 			OracleCommand command = new OracleCommand( commandText, table.Schema.SchemasNode.Connection );
 			command.FetchSize = 256 * 1024;
-			DataTable dataTable = command.ExecuteDataTable();
+			DataTable dataTable = command.ExecuteDataTable(CancellationToken.None);
 			int count = dataTable.Rows.Count;
 			string[] indexes = new string[ count ];
 

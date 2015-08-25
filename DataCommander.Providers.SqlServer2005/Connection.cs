@@ -249,6 +249,10 @@ set arithabort on";
                         description = "SQL Server 2012 RTM: March 6, 2012";
                         break;
 
+                    case "11.00.5058":
+                        description = "SQL Server 2012 Service Pack 2 (SP2): June 10, 2014";
+                        break;
+
                         #endregion
 
                     default:

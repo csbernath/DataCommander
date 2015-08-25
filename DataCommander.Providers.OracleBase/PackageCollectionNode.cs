@@ -2,6 +2,7 @@ namespace DataCommander.Providers.OracleBase
 {
     using System.Collections.Generic;
     using System.Data;
+    using System.Threading;
     using System.Windows.Forms;
     using DataCommander.Foundation.Configuration;
     using Foundation.Data;
@@ -46,7 +47,7 @@ namespace DataCommander.Providers.OracleBase
                 string commandText = "select object_name from all_objects where owner = '{0}' and object_type = 'PACKAGE' order by object_name";
                 commandText = string.Format(commandText, schema.Name);
                 var transactionScope = new DbTransactionScope(this.Schema.SchemasNode.Connection, null);
-                DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
+                DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
                 int count = dataTable.Rows.Count;
                 packages = new string[count];
 

@@ -3,6 +3,7 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
+    using System.Linq;
     using System.Windows.Forms;
     using Foundation.Data;
 
@@ -42,21 +43,18 @@ where o.type = 'FN'
 order by 1,2";
             commandText = string.Format(commandText, this.database.Name);
             string connectionString = this.database.Databases.Server.ConnectionString;
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                var transactionScope = new DbTransactionScope(connection, null);
-                using (var reader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+
+            return SqlClientFactory.Instance.ExecuteReader2(
+                this.database.Databases.Server.ConnectionString,
+                new CommandDefinition {CommandText = commandText},
+                CommandBehavior.Default,
+                dataRecord =>
                 {
-                    return reader.Read(dataRecord =>
-                    {
-                        string owner = dataRecord.GetString(0);
-                        string name = dataRecord.GetString(1);
-                        string xtype = dataRecord.GetString(2);
-                        return new FunctionNode(this.database, owner, name, xtype);
-                    });
-                }
-            }
+                    string owner = dataRecord.GetString(0);
+                    string name = dataRecord.GetString(1);
+                    string xtype = dataRecord.GetString(2);
+                    return new FunctionNode(this.database, owner, name, xtype);
+                });
         }
 
         public bool Sortable

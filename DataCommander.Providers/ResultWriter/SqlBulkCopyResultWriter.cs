@@ -23,6 +23,7 @@
         private readonly SqlConnection destinationSqlConnection;
         private readonly string tableName;
         private readonly Action<IDbTransaction> setTransaction;
+        private readonly CancellationToken cancellationToken;
         private IDbTransaction transaction;
         private IDbCommand insertCommand;
         private Converter<object, object>[] converters;
@@ -41,7 +42,8 @@
             IProvider destinationProvider,
             ConnectionBase destinationConnection,
             string tableName,
-            Action<IDbTransaction> setTransaction)
+            Action<IDbTransaction> setTransaction,
+            CancellationToken cancellationToken)
         {
             Contract.Requires(destinationProvider.DbProviderFactory == SqlClientFactory.Instance);
             this.destinationSqlConnection = (SqlConnection)destinationConnection.Connection;
@@ -53,6 +55,7 @@
             this.destinationConnection = destinationConnection;
             this.tableName = tableName;
             this.setTransaction = setTransaction;
+            this.cancellationToken = cancellationToken;
         }
 
         #region IResultWriter Members
@@ -99,8 +102,7 @@
             string message = string.Format("{0} rows copied to destination.", e.RowsCopied);
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
 
-            var thread = WorkerThread.Current;
-            if (thread.IsStopRequested)
+            if (this.cancellationToken.IsCancellationRequested)
             {
                 e.Abort = true;
             }
@@ -238,11 +240,10 @@
 
             this.queue.Enqueue(queueItem);
             this.enqueueEvent.Set();
-
-            var thread = WorkerThread.Current;
-            while (!thread.IsStopRequested && this.queue.Count > 10)
+            
+            while (!this.cancellationToken.IsCancellationRequested && this.queue.Count > 10)
             {
-                thread.WaitForStop(500);
+                this.cancellationToken.WaitHandle.WaitOne(500);
             }
         }
 

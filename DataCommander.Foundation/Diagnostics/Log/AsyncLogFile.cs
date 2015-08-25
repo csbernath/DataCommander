@@ -1,7 +1,7 @@
 namespace DataCommander.Foundation.Diagnostics
 {
     using System;
-    using System.Collections.Generic;
+    using System.Collections.Concurrent;
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Text;
@@ -15,28 +15,31 @@ namespace DataCommander.Foundation.Diagnostics
         private readonly int bufferSize;
         private readonly LogFile logFile;
         private readonly ILogFormatter formatter;
-        private readonly Queue<LogEntry> queue;
+        private readonly ConcurrentQueue<LogEntry> queue;
         private readonly TimeSpan timerPeriod;
+        private readonly IDateTimeProvider dateTimeProvider;
         private Timer timer;
-        private readonly object flushLock = new object();
 
         #endregion
 
         public AsyncLogFile(
             string path,
             Encoding encoding,
-            int queueCapacity,
             int bufferSize,
             TimeSpan timerPeriod,
             ILogFormatter formatter,
-            FileAttributes fileAttributes)
+            FileAttributes fileAttributes,
+            IDateTimeProvider dateTimeProvider)
         {
+            Contract.Requires<ArgumentNullException>(dateTimeProvider != null);
+
             this.path = path;
             this.bufferSize = bufferSize;
             this.timerPeriod = timerPeriod;
-            this.queue = new Queue<LogEntry>(queueCapacity);
+            this.queue = new ConcurrentQueue<LogEntry>();
             this.formatter = formatter;
-            this.logFile = new LogFile(path, encoding, 1024, true, formatter, fileAttributes);
+            this.logFile = new LogFile(path, encoding, 1024, true, formatter, fileAttributes, dateTimeProvider);
+            this.dateTimeProvider = dateTimeProvider;
         }
 
         #region ILogFile Members
@@ -58,33 +61,16 @@ namespace DataCommander.Foundation.Diagnostics
 
         public void Write(LogEntry entry)
         {
-            lock (this.queue)
-            {
-                this.queue.Enqueue(entry);
-            }
+            this.queue.Enqueue(entry);
         }
 
         public void Flush()
         {
-            while (this.queue.Count > 0)
+            LogEntry logEntry;
+            while (this.queue.TryDequeue(out logEntry))
             {
-                lock (this.flushLock)
-                {
-                    LogEntry[] entries;
-
-                    lock (this.queue)
-                    {
-                        entries = new LogEntry[this.queue.Count];
-                        this.queue.CopyTo(entries, 0);
-                        this.queue.Clear();
-                    }
-
-                    int startIndex = 0;
-                    while (startIndex < entries.Length)
-                    {
-                        startIndex = this.Write(entries, startIndex);
-                    }
-                }
+                string text = this.formatter.Format(logEntry);
+                this.logFile.Write(logEntry.CreationTime, text);
             }
         }
 
@@ -111,48 +97,6 @@ namespace DataCommander.Foundation.Diagnostics
             thread.Priority = ThreadPriority.Lowest;
 
             this.Flush();
-        }
-
-        private int Write(LogEntry[] entries, int startIndex)
-        {
-            StringBuilder sb = null;
-            int i;
-            DateTime date = DateTime.MinValue;
-
-            for (i = startIndex; i < entries.Length; i++)
-            {
-                var entry = entries[i];
-
-                if (i == startIndex)
-                {
-                    date = entry.CreationTime.Date;
-                }
-                else if (entry.CreationTime.Date != date)
-                {
-                    break;
-                }
-
-                string text = this.formatter.Format(entry);
-
-                if (sb == null)
-                {
-                    sb = new StringBuilder(this.bufferSize);
-                }
-                else if (sb.Length + text.Length > this.bufferSize)
-                {
-                    this.logFile.Write(date, sb.ToString());
-                    sb.Length = 0;
-                }
-
-                sb.Append(text);
-            }
-
-            if (sb.Length > 0)
-            {
-                this.logFile.Write(date, sb.ToString());
-            }
-
-            return i;
         }
 
         #endregion

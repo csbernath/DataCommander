@@ -2,12 +2,6 @@
 {
     using System;
 
-#if FOUNDATION_3_5
-
-#else
-
-#endif
-
     /// <summary>
     /// 
     /// </summary>
@@ -19,7 +13,7 @@
         /// 
         /// </summary>
         /// <param name="exception"></param>
-        public AfterOpenDbConnectionEventArgs( Exception exception )
+        public AfterOpenDbConnectionEventArgs(Exception exception)
         {
             this.exception = exception;
         }

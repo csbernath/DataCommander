@@ -2,12 +2,6 @@
 {
     using System;
 
-#if FOUNDATION_3_5
-
-#else
-
-#endif
-
     /// <summary>
     /// 
     /// </summary>
@@ -23,7 +17,7 @@
         /// <param name="exception"></param>
         public AfterExecuteCommandEventArgs(
             LoggedDbCommandInfo command,
-            Exception exception )
+            Exception exception)
         {
             this.command = command;
             this.exception = exception;

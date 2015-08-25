@@ -3,6 +3,7 @@ namespace DataCommander.Providers.Odp
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
+    using System.Threading;
     using System.Windows.Forms;
     using Foundation.Data;
     using Oracle.ManagedDataAccess.Client;
@@ -39,7 +40,7 @@ namespace DataCommander.Providers.Odp
         {
             string commandText = "select username from all_users order by username";
             var transactionScope = new DbTransactionScope(this.connection, null);
-            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
+            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
             int count = dataTable.Rows.Count;
             var treeNodes = new ITreeNode[count];
 

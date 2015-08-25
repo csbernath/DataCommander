@@ -17,7 +17,7 @@
         /// <param name="cursor"></param>
         public CursorManager(Cursor cursor)
         {
-            Contract.Requires(cursor != null);
+            Contract.Requires<ArgumentNullException>(cursor != null);
 
             this.originalCursor = Cursor.Current;
             Cursor.Current = cursor;

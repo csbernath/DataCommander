@@ -9,6 +9,7 @@ namespace DataCommander.Providers.SqlServer2005
     using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Threading;
     using System.Xml;
     using DataCommander.Foundation;
     using DataCommander.Foundation.Configuration;
@@ -1010,7 +1011,7 @@ order by ic.index_column_id
             log.Write(LogLevel.Trace, commandText);
 
             var transactionScope = new DbTransactionScope(connection, null);
-            DataSet dataSet = transactionScope.ExecuteDataSet(new CommandDefinition {CommandText = commandText});
+            DataSet dataSet = transactionScope.ExecuteDataSet(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
             return dataSet;
         }
 

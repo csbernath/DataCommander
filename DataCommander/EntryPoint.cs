@@ -14,13 +14,10 @@ namespace DataCommander
     /// </summary>
     internal static class EntryPoint
     {
-        private static ILog log;
-
         [STAThread]
         public static void Main()
         {
             LogFactory.Read();
-            log = LogFactory.Instance.GetCurrentTypeLog();
             MethodProfiler.BeginMethod();
 
             try
@@ -39,7 +36,7 @@ namespace DataCommander
                         string fileName = applicationDataFolderPath + Path.DirectorySeparatorChar + "ApplicationData.xml";
                         methodLog.Write(LogLevel.Trace, "fileName: {0}", fileName);
                         string sectionName = Settings.SectionName;
-                        DataCommanderApplication dataCommanderApplication = DataCommanderApplication.Instance;
+                        var dataCommanderApplication = DataCommanderApplication.Instance;
                         dataCommanderApplication.LoadApplicationData(fileName, sectionName);
                         dataCommanderApplication.Run();
                         dataCommanderApplication.SaveApplicationData();

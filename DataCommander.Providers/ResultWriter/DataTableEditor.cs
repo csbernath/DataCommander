@@ -289,6 +289,12 @@ namespace DataCommander.Providers
                 {
                     this.components.Dispose();
                 }
+
+                if (this.dataGrid != null)
+                {
+                    this.dataGrid.Dispose();
+                    this.dataGrid = null;
+                }
             }
 
             base.Dispose(disposing);

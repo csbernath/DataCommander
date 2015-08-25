@@ -1,12 +1,5 @@
 ﻿namespace DataCommander.Foundation.Data
 {
-
-#if FOUNDATION_3_5
-
-#else
-
-#endif
-
     /// <summary>
     /// 
     /// </summary>
@@ -18,7 +11,7 @@
         /// 
         /// </summary>
         /// <param name="command"></param>
-        public BeforeExecuteCommandEventArgs( LoggedDbCommandInfo command )
+        public BeforeExecuteCommandEventArgs(LoggedDbCommandInfo command)
         {
             this.command = command;
         }

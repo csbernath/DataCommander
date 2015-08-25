@@ -3,6 +3,7 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
+    using System.Threading;
     using System.Windows.Forms;
     using Foundation.Data;
 
@@ -53,7 +54,7 @@ order by s.name,o.name", this.database.Name, this.isMSShipped ? 1 : 0 );
             using (var connection = new SqlConnection(connectionString))
             {
                 var transactionScope = new DbTransactionScope(connection, null);
-                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
+                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
             }
             DataRowCollection dataRows = dataTable.Rows;
             int count = dataRows.Count;

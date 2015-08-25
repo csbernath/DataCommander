@@ -148,7 +148,7 @@
 
         void IList.Remove(object value)
         {
-            var parameter = (TfsParameter) value;
+            var parameter = (TfsParameter)value;
             this.list.Remove(parameter);
         }
 
@@ -167,7 +167,7 @@
             set
             {
                 Contract.Requires(value is TfsParameter);
-                TfsParameter parameter = (TfsParameter) value;
+                var parameter = (TfsParameter)value;
                 this.list[index] = parameter;
             }
         }

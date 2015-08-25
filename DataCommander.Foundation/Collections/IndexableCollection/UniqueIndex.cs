@@ -10,7 +10,7 @@
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="T"></typeparam>
-    public class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, T>
+    public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, T>
     {
         private string name;
         private Func<T, GetKeyResponse<TKey>> getKey;

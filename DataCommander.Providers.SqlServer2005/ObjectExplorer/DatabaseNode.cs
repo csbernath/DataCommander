@@ -4,6 +4,7 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
+    using System.Threading;
     using System.Windows.Forms;
     using Foundation.Data;
 
@@ -102,7 +103,7 @@ from	[{0}].sys.database_files f", this.name);
                 var transactionScope = new DbTransactionScope(connection, null);
                 try
                 {
-                    dataSet = transactionScope.ExecuteDataSet(new CommandDefinition {CommandText = commandText});
+                    dataSet = transactionScope.ExecuteDataSet(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
                 }
                 catch (SqlException sqlException)
                 {

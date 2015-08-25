@@ -67,29 +67,6 @@ namespace DataCommander.Foundation.Threading
             }
         }
 
-        internal static WorkerThread Current
-        {
-            get
-            {
-                Thread currentThread = Thread.CurrentThread;
-                int id = currentThread.ManagedThreadId;
-                WorkerThread current = null;
-
-                lock (threads)
-                {
-                    bool contains = threads.TryGetValue(id, out current);
-
-                    if (!contains)
-                    {
-                        current = new WorkerThread(currentThread);
-                        threads.Add(id, current);
-                    }
-                }
-
-                return current;
-            }
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -159,7 +136,7 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public static void Join(int millisecondsTimout)
         {
-            var removableThreads = new LazyCollection<WorkerThread>(() => new List<WorkerThread>());
+            var removableThreads = new List<WorkerThread>();
 
             WorkerThread[] currentThreads;
             lock (threads)

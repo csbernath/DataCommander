@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Data;
+    using System.Threading;
     using System.Windows.Forms;
     using Foundation.Data;
 
@@ -43,7 +44,7 @@ from	SYS.ALL_SYNONYMS s
 where	s.OWNER			= '{0}'
 	and s.SYNONYM_NAME	= '{1}'", this.schema.Name, this.name);
             var transactionScope = new DbTransactionScope(this.schema.SchemasNode.Connection, null);
-            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
+            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
             DataRow dataRow = dataTable.Rows[0];
             string schemaName = (string)dataRow["TABLE_OWNER"];
             var schemaNode = new SchemaNode(this.schema.SchemasNode, schemaName);

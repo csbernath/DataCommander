@@ -4,6 +4,7 @@
     using System.Data;
     using System.Data.SqlClient;
     using System.Diagnostics.Contracts;
+    using System.Threading;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
 
@@ -46,7 +47,7 @@
 from sys.databases d (nolock)
 where name in('master','model','msdb','tempdb')
 order by d.name";
-                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
+                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
             }
 
             List<ITreeNode> list = new List<ITreeNode>();

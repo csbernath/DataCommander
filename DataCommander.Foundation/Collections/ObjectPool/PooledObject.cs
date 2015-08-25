@@ -2,6 +2,7 @@ namespace DataCommander.Foundation.Collections
 {
     using System;
     using System.Diagnostics.Contracts;
+    using System.Threading;
 
     /// <summary>
     /// 
@@ -20,7 +21,7 @@ namespace DataCommander.Foundation.Collections
             Contract.Requires<ArgumentNullException>(pool != null);
 
             this.pool = pool;
-            this.item = pool.CreateObject();
+            this.item = pool.CreateObject(CancellationToken.None);
         }
 
         /// <summary>

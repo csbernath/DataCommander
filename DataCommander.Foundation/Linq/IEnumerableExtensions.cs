@@ -61,6 +61,7 @@ namespace DataCommander.Foundation.Linq
         /// <typeparam name="TSource"></typeparam>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
+        [Pure]
         public static IReadOnlyList<TSource> AsReadOnlyList<TSource>(this IEnumerable<TSource> source)
         {
             IReadOnlyList<TSource> readOnlyList = null;
@@ -93,6 +94,7 @@ namespace DataCommander.Foundation.Linq
         /// <typeparam name="TResult"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
+        [Pure]
         public static List<TResult> CreateList<TSource, TResult>(this IEnumerable<TSource> source)
         {
             Contract.Requires<ArgumentNullException>(source != null);
@@ -124,13 +126,14 @@ namespace DataCommander.Foundation.Linq
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static IEnumerable<T> Clone<T>(this IEnumerable<T> source)
+        [Pure]
+        public static IEnumerable<TSource> Clone<TSource>(this IEnumerable<TSource> source)
         {
             Contract.Requires<ArgumentNullException>(source != null);
-            return source.Select<T, T>(Clone);
+            return source.Select<TSource, TSource>(Clone);
         }
 
         /// <summary>
@@ -139,9 +142,56 @@ namespace DataCommander.Foundation.Linq
         /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
+        [Pure]
         public static IEnumerable<TSource> EmptyIfNull<TSource>(this IEnumerable<TSource> source)
         {
             return source ?? Enumerable.Empty<TSource>();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        [Pure]
+        public static IEnumerable<PreviousAndCurrent<TSource>> SelectPreviousAndCurrent<TSource>(this IEnumerable<TSource> source)
+        {
+            if (source != null)
+            {
+                using (var enumerator = source.GetEnumerator())
+                {
+                    if (enumerator.MoveNext())
+                    {
+                        var previous = enumerator.Current;
+                        while (enumerator.MoveNext())
+                        {
+                            var current = enumerator.Current;
+                            yield return new PreviousAndCurrent<TSource>(previous,current);
+                            previous = current;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="keySelector"></param>
+        /// <returns></returns>
+        [Pure]
+        public static IEnumerable<PreviousAndCurrent<TKey>> SelectPreviousAndCurrentKey<TSource, TKey>(
+            this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector)
+        {
+            Contract.Requires<ArgumentNullException>(source != null);
+            Contract.Requires<ArgumentNullException>(keySelector != null);
+
+            return source.Select(keySelector).SelectPreviousAndCurrent();
         }
 
         /// <summary>
@@ -168,13 +218,13 @@ namespace DataCommander.Foundation.Linq
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <param name="count"></param>
         /// <param name="partitionCount"></param>
         /// <returns></returns>
-        public static IEnumerable<List<T>> GetPartitions<T>(
-            this IEnumerable<T> source,
+        public static IEnumerable<List<TSource>> GetPartitions<TSource>(
+            this IEnumerable<TSource> source,
             int count,
             int partitionCount)
         {
@@ -182,8 +232,8 @@ namespace DataCommander.Foundation.Linq
             Contract.Requires<ArgumentOutOfRangeException>(count >= 0);
             Contract.Requires<ArgumentOutOfRangeException>(partitionCount > 0);
 
-            Contract.Ensures(Contract.Result<IEnumerable<List<T>>>().Count() <= partitionCount);
-            Contract.Ensures(Contract.ForAll(Contract.Result<IEnumerable<List<T>>>().ToList(), partition => partition.Count > 0));
+            Contract.Ensures(Contract.Result<IEnumerable<List<TSource>>>().Count() <= partitionCount);
+            Contract.Ensures(Contract.ForAll(Contract.Result<IEnumerable<List<TSource>>>().ToList(), partition => partition.Count > 0));
 
             int partitionSize = count/partitionCount;
             int remainder = count%partitionCount;
@@ -222,53 +272,53 @@ namespace DataCommander.Foundation.Linq
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static IndexedItem<T> IndexOf<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        public static IndexedItem<TSource> IndexOf<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             Contract.Requires<ArgumentNullException>(predicate != null);
 
-            IndexedItem<T> result = null;
+            int index = -1;
+            TSource result = default(TSource);
+
             if (source != null)
             {
-                int index = 0;
                 foreach (var item in source)
                 {
+                    index++;
                     if (predicate(item))
                     {
-                        result = new IndexedItem<T>(index, item);
+                        result = item;
                         break;
                     }
-
-                    index++;
                 }
             }
 
-            return result;
+            return new IndexedItem<TSource>(index, result);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static bool IsNotNullAndAny<T>(this IEnumerable<T> source)
+        public static bool IsNotNullAndAny<TSource>(this IEnumerable<TSource> source)
         {
             bool any;
 
             if (source != null)
             {
-                var collection = source as ICollection<T>;
+                var collection = source as ICollection<TSource>;
                 if (collection != null)
                 {
                     any = collection.Count > 0;
                 }
                 else
                 {
-                    var readOnlyCollection = source as IReadOnlyCollection<T>;
+                    var readOnlyCollection = source as IReadOnlyCollection<TSource>;
                     if (readOnlyCollection != null)
                     {
                         any = readOnlyCollection.Count > 0;
@@ -290,10 +340,10 @@ namespace DataCommander.Foundation.Linq
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
+        public static bool IsNullOrEmpty<TSource>(this IEnumerable<TSource> source)
         {
             return source == null || !source.Any();
         }
@@ -356,12 +406,12 @@ namespace DataCommander.Foundation.Linq
                 minMaxResult = new MinMaxResult<TSource>(
                     count,
                     whereCount,
-                    minIndex >= 0 ? new IndexedItem<TSource>(minIndex, minItem) : null,
-                    maxIndex >= 0 ? new IndexedItem<TSource>(maxIndex, maxItem) : null);
+                    new IndexedItem<TSource>(minIndex, minItem),
+                    new IndexedItem<TSource>(maxIndex, maxItem));
             }
             else
             {
-                minMaxResult = new MinMaxResult<TSource>(0, 0, null, null);
+                minMaxResult = new MinMaxResult<TSource>(0, 0, new IndexedItem<TSource>(-1, default(TSource)), new IndexedItem<TSource>(-1, default(TSource)));
             }
 
             return minMaxResult;
@@ -416,19 +466,19 @@ namespace DataCommander.Foundation.Linq
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <param name="isSeparator"></param>
         /// <returns></returns>
-        public static IEnumerable<T[]> Split<T>(this IEnumerable<T> source, Func<T, bool> isSeparator)
+        public static IEnumerable<TSource[]> Split<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> isSeparator)
         {
-            var list = new List<T>();
+            var list = new List<TSource>();
             foreach (var item in source)
             {
                 if (isSeparator(item))
                 {
                     yield return list.ToArray();
-                    list = new List<T>();
+                    list = new List<TSource>();
                 }
                 else
                 {
@@ -526,11 +576,11 @@ namespace DataCommander.Foundation.Linq
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <param name="toString"></param>
         /// <returns></returns>
-        public static string ToLogString<T>(this IEnumerable<T> source, Func<T, string> toString)
+        public static string ToLogString<TSource>(this IEnumerable<TSource> source, Func<TSource, string> toString)
         {
             var sb = new StringBuilder();
             int index = 0;
@@ -555,11 +605,11 @@ namespace DataCommander.Foundation.Linq
         /// <param name="source"></param>
         /// <param name="segmentSize"></param>
         /// <returns></returns>
-        public static SegmentCollection<TSource> ToSegmentCollection<TSource>(this IEnumerable<TSource> source, int segmentSize)
+        public static SegmentedCollection<TSource> ToSegmentedCollection<TSource>(this IEnumerable<TSource> source, int segmentSize)
         {
-            var segmentedList = new SegmentCollection<TSource>(segmentSize);
-            segmentedList.Add(source);
-            return segmentedList;
+            var collection = new SegmentedCollection<TSource>(segmentSize);
+            collection.Add(source);
+            return collection;
         }
 
         /// <summary>
@@ -572,9 +622,24 @@ namespace DataCommander.Foundation.Linq
         /// <returns></returns>
         public static SortedDictionary<TKey, TValue> ToSortedDictionary<TKey, TValue>(this IEnumerable<TValue> source, Func<TValue, TKey> keySelector)
         {
+            Contract.Requires<ArgumentNullException>(source != null);
+            Contract.Requires<ArgumentNullException>(keySelector != null);
+
             var dictionary = new SortedDictionary<TKey, TValue>();
             dictionary.Add(source, keySelector);
             return dictionary;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        public static SortedSet<T> ToSortedSet<T>(this IEnumerable<T> source, IComparer<T> comparer)
+        {
+            return new SortedSet<T>(source, comparer);
         }
 
         /// <summary>
@@ -617,11 +682,11 @@ namespace DataCommander.Foundation.Linq
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <param name="columns"></param>
         /// <returns></returns>
-        public static StringTable ToStringTable<T>(this IEnumerable<T> source, params StringTableColumnInfo<T>[] columns)
+        public static StringTable ToStringTable<TSource>(this IEnumerable<TSource> source, params StringTableColumnInfo<TSource>[] columns)
         {
             var table = new StringTable(columns.Length);
 
@@ -638,7 +703,7 @@ namespace DataCommander.Foundation.Linq
             #endregion
 
             int rowIndex = 0;
-            foreach (T item in source)
+            foreach (TSource item in source)
             {
                 row = table.NewRow();
                 for (int i = 0; i < columns.Length; i++)
@@ -705,49 +770,6 @@ namespace DataCommander.Foundation.Linq
             object cloneObject = cloneable.Clone();
             T clone = (T)cloneObject;
             return clone;
-        }
-
-        #endregion
-
-        #region Private Classes
-
-        private sealed class EmptyReadOnlyList<T> : IReadOnlyList<T>
-        {
-            private static readonly EmptyReadOnlyList<T> instance = new EmptyReadOnlyList<T>();
-
-            public static EmptyReadOnlyList<T> Instance
-            {
-                get
-                {
-                    return instance;
-                }
-            }
-
-            T IReadOnlyList<T>.this[int index]
-            {
-                get
-                {
-                    throw new ArgumentOutOfRangeException();
-                }
-            }
-
-            int IReadOnlyCollection<T>.Count
-            {
-                get
-                {
-                    return 0;
-                }
-            }
-
-            IEnumerator<T> IEnumerable<T>.GetEnumerator()
-            {
-                return Enumerable.Empty<T>().GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return Enumerable.Empty<T>().GetEnumerator();
-            }
         }
 
         #endregion

@@ -272,6 +272,12 @@ namespace DataCommander
             //    dataTable.Clear();
             //    dataTable.AcceptChanges();
             //}
+
+            foreach (Control control in tabPage.Controls)
+            {
+                control.Dispose();
+            }
+
             tabPage.Controls.Clear();
 
             //GarbageMonitor.SetDisposeTime(control, LocalTime.Default.Now);
@@ -1013,8 +1019,6 @@ namespace DataCommander
             // sQLiteDatabaseToolStripMenuItem
             // 
             this.sQLiteDatabaseToolStripMenuItem.Name = "sQLiteDatabaseToolStripMenuItem";
-            this.sQLiteDatabaseToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
-            | System.Windows.Forms.Keys.S)));
             this.sQLiteDatabaseToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
             this.sQLiteDatabaseToolStripMenuItem.Text = "SQLite database";
             this.sQLiteDatabaseToolStripMenuItem.Click += new System.EventHandler(this.sQLiteDatabaseToolStripMenuItem_Click);
@@ -1054,7 +1058,7 @@ namespace DataCommander
             // 
             this.mnuCloseTabPage.MergeIndex = 17;
             this.mnuCloseTabPage.Name = "mnuCloseTabPage";
-            this.mnuCloseTabPage.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4)));
+            //this.mnuCloseTabPage.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4)));
             this.mnuCloseTabPage.Size = new System.Drawing.Size(269, 22);
             this.mnuCloseTabPage.Text = "Close Current &TabPage";
             this.mnuCloseTabPage.Click += new System.EventHandler(this.mnuCloseTabPage_Click);
@@ -1681,7 +1685,7 @@ namespace DataCommander
 
                 this.stopwatch.Start();
                 this.timer.Start();
-                this.ShowTimer(0);
+                this.ShowTimer();
 
                 this.errorCount = 0;
                 this.dataAdapter.BeginFill(this.provider, commands, maxRecords, this.rowBlockSize, resultWriter, this.EndFillInvoker, this.WriteEndInvoker);
@@ -2119,12 +2123,15 @@ namespace DataCommander
             {
                 this.Invoke(() => this.EndFillHandleException(ex));
             }
+
+            this.dataAdapter = null;
+            this.dataSetResultWriter = null;
         }
 
         private void WriteEnd(IAsyncDataAdapter dataAdapter)
         {
             this.timer.Stop();
-            this.ShowTimer(3);
+            this.WriteRows(dataAdapter.RowCount, 3);
             this.stopwatch.Reset();
 
             if (this.cancel)
@@ -2152,6 +2159,15 @@ namespace DataCommander
             this.SetGui(CommandState.Execute);
             this.FocusControl(this.queryTextBox);
             this.Cursor = Cursors.Default;
+
+            string message = string.Format("WorkingSet: {0} MB, Managed memory: {1} MB, GC collection count: {2},{3},{4}",
+                Math.Round((double)Environment.WorkingSet/1024/1024, 2),
+                Math.Round((double)GC.GetTotalMemory(false)/1024/1024, 2),
+                GC.CollectionCount(0),
+                GC.CollectionCount(1),
+                GC.CollectionCount(2));
+
+            this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
 
         private void EndFillInvoker(IAsyncDataAdapter dataAdapter, Exception e)
@@ -2459,30 +2475,35 @@ namespace DataCommander
             this.CancelQuery();
         }
 
-        private void ShowTimer(int scale)
+        private void WriteRows(long rowCount, int scale)
         {
             long ticks = this.stopwatch.ElapsedTicks;
             this.sbPanelTimer.Text = StopwatchTimeSpan.ToString(ticks, scale);
 
+            string text = rowCount.ToString() + " row(s).";
+
+            if (rowCount > 0)
+            {
+                double seconds = (double)ticks / Stopwatch.Frequency;
+
+                text += " (" + Math.Round(rowCount / seconds, 0) + " rows/sec)";
+            }
+
+            this.sbPanelRows.Text = text;
+        }
+
+        private void ShowTimer()
+        {
             if (this.dataAdapter != null)
             {
                 long rowCount = this.dataAdapter.RowCount;
-                string text = rowCount.ToString() + " row(s).";
-
-                if (rowCount > 0)
-                {
-                    double seconds = (double)ticks/Stopwatch.Frequency;
-
-                    text += " (" + Math.Round(rowCount/seconds, 0) + " rows/sec)";
-                }
-
-                this.sbPanelRows.Text = text;
+                this.WriteRows(rowCount, 0);
             }
         }
 
         private void Timer_Tick(object o, EventArgs e)
         {
-            this.Invoke(() => this.ShowTimer(0));
+            this.Invoke(() => this.ShowTimer());
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -3932,7 +3953,8 @@ namespace DataCommander
                     tableName = tableName.Substring(1, tableName.Length - 2);
                 }
 
-                IResultWriter resultWriter = new CopyResultWriter(this.AddInfoMessage, destinationProvider, destinationConnection, tableName, nextQueryForm.InvokeSetTransaction);
+                IResultWriter resultWriter = new CopyResultWriter(this.AddInfoMessage, destinationProvider, destinationConnection, tableName,
+                    nextQueryForm.InvokeSetTransaction, CancellationToken.None);
                 int maxRecords = int.MaxValue;
                 int rowBlockSize = 10000;
                 this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, "Copying table..."));

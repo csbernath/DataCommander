@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlServerCe;
+    using System.Threading;
     using System.Windows.Forms;
     using Foundation.Data;
 
@@ -40,7 +41,7 @@
         {
             string commandText = "SELECT * FROM INFORMATION_SCHEMA.TABLES";
             var transactionScope = new DbTransactionScope(this.connection, null);
-            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
+            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
             var nodes = new List<ITreeNode>();
 
             foreach (DataRow dataRow in dataTable.Rows)

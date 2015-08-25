@@ -2,6 +2,7 @@ namespace DataCommander.Providers.Odp
 {
     using System.Collections.Generic;
     using System.Data;
+    using System.Threading;
     using System.Windows.Forms;
     using Foundation.Data;
 
@@ -40,7 +41,7 @@ order by s.SYNONYM_NAME";
 
             commandText = string.Format(commandText, schema.Name);
             var transactionScope = new DbTransactionScope(this.Schema.SchemasNode.Connection, null);
-            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
+            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
             int count = dataTable.Rows.Count;
             var treeNodes = new ITreeNode[count];
 

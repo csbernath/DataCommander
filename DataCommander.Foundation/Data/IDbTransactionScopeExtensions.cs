@@ -4,6 +4,7 @@ namespace DataCommander.Foundation.Data
     using System.Collections.Generic;
     using System.Data;
     using System.Diagnostics.Contracts;
+    using System.Threading;
 
     /// <summary>
     /// 
@@ -108,16 +109,18 @@ namespace DataCommander.Foundation.Data
                 dataReader.Read(read);
             }
         }
-
+        
         /// <summary>
         /// 
         /// </summary>
         /// <param name="transactionScope"></param>
         /// <param name="commandDefinition"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public static DataSet ExecuteDataSet(
             this IDbTransactionScope transactionScope,
-            CommandDefinition commandDefinition)
+            CommandDefinition commandDefinition,
+            CancellationToken cancellationToken)
         {
             Contract.Requires<ArgumentNullException>(transactionScope != null);
             Contract.Requires<ArgumentNullException>(commandDefinition != null);
@@ -125,21 +128,23 @@ namespace DataCommander.Foundation.Data
 
             using (var command = transactionScope.CreateCommand(commandDefinition))
             {
-                dataSet = command.ExecuteDataSet();
+                dataSet = command.ExecuteDataSet(cancellationToken);
             }
 
             return dataSet;
         }
-
+        
         /// <summary>
         /// 
         /// </summary>
         /// <param name="transactionScope"></param>
         /// <param name="commandDefinition"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public static DataTable ExecuteDataTable(
             this IDbTransactionScope transactionScope,
-            CommandDefinition commandDefinition)
+            CommandDefinition commandDefinition,
+            CancellationToken cancellationToken)
         {
             Contract.Requires<ArgumentNullException>(transactionScope != null);
             Contract.Requires<ArgumentNullException>(commandDefinition != null);
@@ -147,7 +152,7 @@ namespace DataCommander.Foundation.Data
 
             using (var command = transactionScope.CreateCommand(commandDefinition))
             {
-                dataTable = command.ExecuteDataTable();
+                dataTable = command.ExecuteDataTable(cancellationToken);
             }
 
             return dataTable;

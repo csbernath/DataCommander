@@ -4,6 +4,7 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
+    using System.Threading;
     using System.Windows.Forms;
     using Foundation.Data;
 
@@ -65,7 +66,7 @@ order by [Schema],[Name]", this.databaseNode.Name);
             using (var connection = new SqlConnection(connectionString))
             {
                 var transactionScope = new DbTransactionScope(connection, null);
-                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
+                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
             }
             foreach (DataRow dataRow in dataTable.Rows)
             {

@@ -15,9 +15,9 @@ namespace DataCommander.Foundation.Diagnostics
             string logName,
             DateTime creationTime,
             string message,
-            LogLevel logLevel )
+            LogLevel logLevel)
         {
-            long id = Interlocked.Increment( ref LogEntryFactory.id );
+            long id = Interlocked.Increment(ref LogEntryFactory.id);
             var thread = Thread.CurrentThread;
             int threadId = thread.ManagedThreadId;
             string threadName = thread.Name;
@@ -54,16 +54,16 @@ namespace DataCommander.Foundation.Diagnostics
             }
 #endif
 
-            return new LogEntry( id, logName, creationTime, threadId, threadName, userName, hostName, message, logLevel );
+            return new LogEntry(id, logName, creationTime, threadId, threadName, userName, hostName, message, logLevel);
         }
 
         public static LogEntry Create(
             string logName,
             string message,
-            LogLevel logLevel )
+            LogLevel logLevel)
         {
-            var creationTime = LocalTime.Default.Now;
-            return Create( logName, creationTime, message, logLevel );
+            var creationTime = SystemTime.Default.UtcNow;
+            return Create(logName, creationTime, message, logLevel);
         }
     }
 }

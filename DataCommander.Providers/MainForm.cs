@@ -595,7 +595,7 @@ namespace DataCommander
             {
                 var fileDialog = new OpenFileDialog();
                 fileDialog.Filter =
-                    "Access Files(*.mdb)|*.mdb|Access 2007 Files(*.accdb)|*.accdb|Excel files (*.xls;*.xlsx)|*.xls;*.xlsx|MSI files (*.msi)|*.msi|SQLite files (*.*)|*.*|SQL Server Compact files (*.sdf)|*.sdf|SQL Server Compact 4.0 files (*.sdf)|*.sdf";
+                    "SQL script files(*.sql)|*.sql|Access Files(*.mdb)|*.mdb|Access 2007 Files(*.accdb)|*.accdb|Excel files (*.xls;*.xlsx)|*.xls;*.xlsx|MSI files (*.msi)|*.msi|SQLite files (*.*)|*.*|SQL Server Compact files (*.sdf)|*.sdf|SQL Server Compact 4.0 files (*.sdf)|*.sdf";
                 fileDialog.RestoreDirectory = true;
                 string currentDirectory = Environment.CurrentDirectory;
 
@@ -608,22 +608,26 @@ namespace DataCommander
 
                     string fileName = fileDialog.FileName;
                     string extension = Path.GetExtension(fileName).ToLower();
-                    string connectionString;
-                    IProvider provider;
+                    string connectionString = null;
+                    IProvider provider = null;
 
                     switch (fileDialog.FilterIndex)
                     {
                         case 1:
+                            this.LoadFiles(fileDialog.FileNames);
+                            break;
+
+                        case 2:
                             connectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + fileName;
                             provider = ProviderFactory.CreateProvider(ProviderName.OleDb);
                             break;
 
-                        case 2:
+                        case 3:
                             connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Persist Security Info=False", fileName);
                             provider = ProviderFactory.CreateProvider(ProviderName.OleDb);
                             break;
 
-                        case 3:
+                        case 4:
                             if (extension == ".xls")
                             {
                                 if (Environment.Is64BitProcess)
@@ -643,22 +647,22 @@ namespace DataCommander
                             provider = ProviderFactory.CreateProvider(ProviderName.OleDb);
                             break;
 
-                        case 4:
+                        case 5:
                             connectionString = string.Format("Data Source={0}", fileName);
                             provider = ProviderFactory.CreateProvider("Msi");
                             break;
 
-                        case 5:
+                        case 6:
                             connectionString = string.Format("Data Source={0}", fileName);
                             provider = ProviderFactory.CreateProvider(ProviderName.SQLite);
                             break;
 
-                        case 6:
+                        case 7:
                             connectionString = string.Format("Data Source={0}", fileName);
                             provider = ProviderFactory.CreateProvider("SqlServerCe");
                             break;
 
-                        case 7:
+                        case 8:
                             connectionString = string.Format("Data Source={0}", fileName);
                             provider = ProviderFactory.CreateProvider("SqlServerCe40");
                             break;
@@ -667,26 +671,29 @@ namespace DataCommander
                             throw new NotSupportedException();
                     }
 
-                    ConnectionBase connection = provider.CreateConnection(connectionString);
-                    connection.Open();
+                    if (provider != null)
+                    {
+                        ConnectionBase connection = provider.CreateConnection(connectionString);
+                        connection.Open();
 
-                    var connectionProperties = new ConnectionProperties();
-                    connectionProperties.ConnectionName = null;
-                    connectionProperties.ProviderName = provider.Name;
-                    connectionProperties.ConnectionString = connectionString;
-                    var node = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
-                    var subNode = new ConfigurationNode(null);
-                    node.AddChildNode(subNode);
-                    connectionProperties.Save(subNode);
+                        var connectionProperties = new ConnectionProperties();
+                        connectionProperties.ConnectionName = null;
+                        connectionProperties.ProviderName = provider.Name;
+                        connectionProperties.ConnectionString = connectionString;
+                        var node = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
+                        var subNode = new ConfigurationNode(null);
+                        node.AddChildNode(subNode);
+                        connectionProperties.Save(subNode);
 
-                    var queryForm = new QueryForm(this.MdiChildren.Length,
-                        provider,
-                        connectionString,
-                        connection, this.statusBar);
+                        var queryForm = new QueryForm(this.MdiChildren.Length,
+                            provider,
+                            connectionString,
+                            connection, this.statusBar);
 
-                    queryForm.MdiParent = this;
-                    queryForm.Font = this.font;
-                    queryForm.Show();
+                        queryForm.MdiParent = this;
+                        queryForm.Font = this.font;
+                        queryForm.Show();
+                    }
                 }
             }
             catch (Exception ex)

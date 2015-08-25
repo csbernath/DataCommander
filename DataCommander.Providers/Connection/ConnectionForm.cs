@@ -12,6 +12,7 @@ namespace DataCommander.Providers
     using System.Xml;
     using DataCommander.Foundation.Configuration;
     using DataCommander.Foundation.Diagnostics;
+    using DataCommander.Foundation.Windows.Forms;
 
     internal sealed class ConnectionForm : Form
     {
@@ -550,15 +551,19 @@ namespace DataCommander.Providers
                     DataCommanderApplication.Instance.SaveApplicationData();
                 }
             }
-            var connectionProperties = new ConnectionProperties();
-            connectionProperties.Load(folder);
-            connectionProperties.LoadProtectedPassword(folder);
-            var form = new OpenConnectionForm(connectionProperties);
-            if (form.ShowDialog() == DialogResult.OK)
+
+            using (new CursorManager(Cursors.WaitCursor))
             {
-                this.connectionProperties = connectionProperties;
-                this.DialogResult = DialogResult.OK;
-                this.duration = form.Duration;
+                var connectionProperties = new ConnectionProperties();
+                connectionProperties.Load(folder);
+                connectionProperties.LoadProtectedPassword(folder);
+                var form = new OpenConnectionForm(connectionProperties);
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    this.connectionProperties = connectionProperties;
+                    this.DialogResult = DialogResult.OK;
+                    this.duration = form.Duration;
+                }
             }
         }
 

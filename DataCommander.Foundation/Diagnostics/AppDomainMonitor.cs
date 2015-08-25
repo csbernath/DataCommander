@@ -39,6 +39,10 @@ namespace DataCommander.Foundation.Diagnostics
                         dotNetFrameworkVersion = "4.5.2";
                         break;
 
+                    case "4.0.30319.42000":
+                        dotNetFrameworkVersion = "4.6";
+                        break;
+
                     default:
                         dotNetFrameworkVersion = null;
                         break;
@@ -75,9 +79,8 @@ Environment.UserName:               {10}
 Environment.UserInteractive:        {11}
 Environment.CurrentDirectory:       {12}
 Environment.CommandLine:            {13},
-System Up Time:                     {14}
-Environment.TickCount:              {15}
-Stopwatch.Frequency:                {16}",
+Environment.TickCount:              {14}
+Stopwatch.Frequency:                {15}",
                     Environment.MachineName,
                     Environment.ProcessorCount,
                     Environment.OSVersion,
@@ -97,7 +100,6 @@ Stopwatch.Frequency:                {16}",
                     Environment.UserInteractive,
                     Environment.CurrentDirectory,
                     Environment.CommandLine,
-                    SystemUpTime,
                     tickCountString,
                     Stopwatch.Frequency);
                 return message;
@@ -120,18 +122,6 @@ Stopwatch.Frequency:                {16}",
         }
 
         #endregion
-
-        private static TimeSpan SystemUpTime
-        {
-            get
-            {
-                using (var uptime = new PerformanceCounter("System", "System Up Time"))
-                {
-                    uptime.NextValue(); //Call this an extra time before reading its value
-                    return TimeSpan.FromSeconds(uptime.NextValue());
-                }
-            }
-        }
 
         #region Private Methods
 

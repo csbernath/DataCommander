@@ -51,24 +51,30 @@
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSource"></typeparam>
         /// <typeparam name="TResult"></typeparam>
         /// <param name="t"></param>
         /// <param name="getValue"></param>
         /// <returns></returns>
-        public static TResult GetValueOrDefault<T, TResult>(this T t, Func<T, TResult> getValue) where T : class
+        public static TResult GetValueOrDefault<TSource, TResult>(this TSource t, Func<TSource, TResult> getValue) where TSource : class
         {
-            TResult result;
-            if (t != null)
-            {
-                result = getValue(t);
-            }
-            else
-            {
-                result = default(TResult);
-            }
+            Contract.Requires<ArgumentNullException>(getValue != null);
 
-            return result;
+            return t != null
+                ? getValue(t)
+                : default(TResult);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="objA"></param>
+        /// <param name="objB"></param>
+        /// <returns></returns>
+        public static bool ReferenceEquals<T>(this T objA, T objB) where T : class
+        {
+            return object.ReferenceEquals(objA, objB);
         }
 
         /// <summary>

@@ -7,6 +7,7 @@ namespace DataCommander.Providers
     using System.Text;
     using System.Windows.Forms;
     using DataCommander.Foundation.Linq;
+    using Foundation.Collections;
 
     /// <summary>
     /// Summary description for MemberListBox.
@@ -335,7 +336,14 @@ namespace DataCommander.Providers
         private void FindNext(int startIndex)
         {
             var items = this.listBox.Items.Cast<ListBoxItem<IObjectName>>();
-            int index = items.IndexOf(startIndex, item => IndexOf(item.Item.UnquotedName, this.prefix) >= 0);
+
+            int index = LinearSearch.IndexOf(startIndex, items.Count - 1, currentIndex =>
+            {
+                var item = items[currentIndex];
+                string name = item.Item.UnquotedName;
+                return name.IndexOf(this.prefix) >= 0;
+            });
+
             if (index >= 0)
             {
                 this.listBox.SelectedIndex = index;
@@ -345,7 +353,13 @@ namespace DataCommander.Providers
         private void FindPrevious(int startIndex)
         {
             var items = this.listBox.Items.Cast<ListBoxItem<IObjectName>>().ToList();
-            int index = items.LastIndexOf(startIndex, item => IndexOf(item.Item.UnquotedName, this.prefix) >= 0);
+            int index = LinearSearch.LastIndexOf(startIndex, items.Count - 1, currentIndex =>
+            {
+                var item = items[currentIndex];
+                string name = item.Item.UnquotedName;
+                return name.IndexOf(this.prefix) >= 0;
+            });
+
             if (index >= 0)
             {
                 this.listBox.SelectedIndex = index;

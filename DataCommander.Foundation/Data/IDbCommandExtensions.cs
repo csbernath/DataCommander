@@ -5,6 +5,7 @@
     using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Text;
+    using System.Threading;
     using DataCommander.Foundation.Threading;
 
     /// <summary>
@@ -36,20 +37,22 @@
         /// 
         /// </summary>
         /// <param name="command"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static DataSet ExecuteDataSet(this IDbCommand command)
+        public static DataSet ExecuteDataSet(this IDbCommand command, CancellationToken cancellationToken)
         {
             var dataSet = new DataSet();
-            command.Fill(dataSet);
+            command.Fill(dataSet, cancellationToken);
             return dataSet;
         }
 
         /// <summary>
-        /// Execute the command and fills a <see cref="System.Data.DataTable"/>.
-        /// </summary>T
+        /// 
+        /// </summary>
         /// <param name="command"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static DataTable ExecuteDataTable(this IDbCommand command)
+        public static DataTable ExecuteDataTable(this IDbCommand command, CancellationToken cancellationToken)
         {
             Contract.Requires<ArgumentNullException>(command != null);
 
@@ -58,7 +61,7 @@
                 Locale = CultureInfo.InvariantCulture
             };
 
-            command.Fill(dataTable);
+            command.Fill(dataTable, cancellationToken);
             return dataTable;
         }
 
@@ -97,10 +100,12 @@
         /// </summary>
         /// <param name="command"></param>
         /// <param name="dataSet"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public static int Fill(
             this IDbCommand command,
-            DataSet dataSet)
+            DataSet dataSet,
+            CancellationToken cancellationToken)
         {
             Contract.Requires<ArgumentNullException>(command != null);
             Contract.Requires<ArgumentNullException>(dataSet != null);
@@ -108,9 +113,8 @@
             int rowCount = 0;
             int resultIndex = 0;
             DataTableCollection dataTables = dataSet.Tables;
-            WorkerThread thread = WorkerThread.Current;
 
-            if (!thread.IsStopRequested)
+            if (!cancellationToken.IsCancellationRequested)
             {
                 IDbConnection connection = command.Connection;
 
@@ -134,19 +138,18 @@
                                 }
                                 else
                                 {
-                                    table =
-                                        new DataTable
-                                        {
-                                            Locale = CultureInfo.InvariantCulture
-                                        };
+                                    table = new DataTable
+                                    {
+                                        Locale = CultureInfo.InvariantCulture
+                                    };
                                     dataSet.Tables.Add(table);
                                 }
 
-                                int count = reader.Fill(table);
+                                int count = reader.Fill(table, cancellationToken);
                                 rowCount += count;
                             }
 
-                            if (!thread.IsStopRequested)
+                            if (!cancellationToken.IsCancellationRequested)
                             {
                                 bool nextResult = reader.NextResult();
 
@@ -170,21 +173,22 @@
         }
 
         /// <summary>
-        /// Fills the specified command.
+        /// 
         /// </summary>
-        /// <param name="command">The command.</param>
-        /// <param name="dataTable">The data table.</param>
+        /// <param name="command"></param>
+        /// <param name="dataTable"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public static int Fill(
             this IDbCommand command,
-            DataTable dataTable)
+            DataTable dataTable,
+            CancellationToken cancellationToken)
         {
             Contract.Requires<ArgumentNullException>(command != null);
 
             int rowCount = 0;
-            WorkerThread thread = WorkerThread.Current;
 
-            if (!thread.IsStopRequested)
+            if (!cancellationToken.IsCancellationRequested)
             {
                 IDbConnection connection = command.Connection;
 
@@ -194,9 +198,9 @@
 
                     try
                     {
-                        using (IDataReader dataReader = command.ExecuteReader())
+                        using (var dataReader = command.ExecuteReader())
                         {
-                            rowCount = dataReader.Fill(dataTable);
+                            rowCount = dataReader.Fill(dataTable, cancellationToken);
                         }
                     }
                     catch (Exception exception)

@@ -7,6 +7,7 @@
     using System.Web;
     using System.Windows.Forms;
     using DataCommander.Foundation.Diagnostics;
+    using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 
     public partial class AboutForm : Form
     {
@@ -18,7 +19,6 @@
             string path = assembly.Location;
             DateTime lastWriteTime = File.GetLastWriteTime(path);
             string dotNetFrameworkVersion = AppDomainMonitor.DotNetFrameworkVersion;
-            string logFileName = LogFactory.Instance.FileName;
 
             string text = string.Format(@"
 <style>
@@ -38,14 +38,14 @@ This program is freeware and released under the <a href=""https://www.gnu.org/li
 <br/>
 <a href=""localfile://{1}"">Application Data file</a>
 <br/>
-<a href=""localfile://{2}"">Log file</a>
+<a href=""logfile://"">Log file</a>
 <br/>
 <br/>
 <table style=""font-family:verdana;font-size:9pt"">
-<tr><td>.NET CLR version:</td><td>{3}</td></tr>
-<tr><td>.NET Framework version:</td><td>{4}</td></tr>
-<tr><td>.NET Processor architecture:</td><td>{5}</td></tr>
-<tr><td>Allocated physical memory:</td><td>{6} MB</td></tr>
+<tr><td>.NET CLR version:</td><td>{2}</td></tr>
+<tr><td>.NET Framework version:</td><td>{3}</td></tr>
+<tr><td>.NET Processor architecture:</td><td>{4}</td></tr>
+<tr><td>Allocated physical memory:</td><td>{5} MB</td></tr>
 </table>
 </br>
 Credits:
@@ -61,7 +61,6 @@ Credits:
 </div>",
                 lastWriteTime.ToString("yyyy-MM-dd"),
                 HttpUtility.HtmlEncode(DataCommanderApplication.Instance.FileName),
-                logFileName,
                 Environment.Version,
                 dotNetFrameworkVersion,
                 assembly.GetName().ProcessorArchitecture,
@@ -90,21 +89,36 @@ Credits:
             }
             else
             {
-                string url;
+                string url = null;
+                bool exists = false;
 
                 if (e.Url.Scheme == "localfile")
                 {
                     var uriBuilder = new UriBuilder(e.Url);
                     uriBuilder.Scheme = "file";
-                    //url = uriBuilder.Uri.ToString();
                     url = HttpUtility.UrlDecode(uriBuilder.Path);
+                    exists = File.Exists(url);
+                }
+                else if (e.Url.Scheme == "logfile")
+                {
+                    string logFileName = LogFactory.Instance.FileName;
+                    if (logFileName != null)
+                    {
+                        exists = true;
+                        url = logFileName;
+                    }
                 }
                 else
                 {
+                    exists = true;
                     url = e.Url.ToString();
                 }
 
-                Process.Start(url);
+                if (exists)
+                {
+                    Process.Start(url);
+                }
+
                 e.Cancel = true;
             }
         }

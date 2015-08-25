@@ -26,19 +26,20 @@ namespace DataCommander.Foundation.Diagnostics
 
         static GarbageMonitor()
         {
-            columns = new Lazy<StringTableColumnInfo<ListItemState>[]>( () =>
+            columns = new Lazy<StringTableColumnInfo<ListItemState>[]>(() =>
                 new[]
                 {
-                    new StringTableColumnInfo<ListItemState>("Id", StringTableColumnAlign.Right, i=>i.ListItem.Id),
-                    new StringTableColumnInfo<ListItemState>("Name", StringTableColumnAlign.Left, i=>i.ListItem.Name),
-                    new StringTableColumnInfo<ListItemState>("TypeName", StringTableColumnAlign.Left, i=>i.ListItem.TypeName),
-                    new StringTableColumnInfo<ListItemState>("Size", StringTableColumnAlign.Right, i=>i.ListItem.Size),
-                    new StringTableColumnInfo<ListItemState>("Time", StringTableColumnAlign.Right, i=>i.ListItem.Time.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture)),
-                    new StringTableColumnInfo<ListItemState>("DisposeTime", StringTableColumnAlign.Right, i=>ToString(i.ListItem.DisposeTime)),
-                    new StringTableColumnInfo<ListItemState>("Age", StringTableColumnAlign.Right, i=>StopwatchTimeSpan.ToString(i.Age,3)),
-                    new StringTableColumnInfo<ListItemState>("IsAlive", StringTableColumnAlign.Left, i=>i.ListItem.WeakReference.IsAlive),
-                    new StringTableColumnInfo<ListItemState>("Generation", StringTableColumnAlign.Right, i=>ToString(i.Generation))
-                } );
+                    new StringTableColumnInfo<ListItemState>("Id", StringTableColumnAlign.Right, i => i.ListItem.Id),
+                    new StringTableColumnInfo<ListItemState>("Name", StringTableColumnAlign.Left, i => i.ListItem.Name),
+                    new StringTableColumnInfo<ListItemState>("TypeName", StringTableColumnAlign.Left, i => i.ListItem.TypeName),
+                    new StringTableColumnInfo<ListItemState>("Size", StringTableColumnAlign.Right, i => i.ListItem.Size),
+                    new StringTableColumnInfo<ListItemState>("Time", StringTableColumnAlign.Right,
+                        i => i.ListItem.Time.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture)),
+                    new StringTableColumnInfo<ListItemState>("DisposeTime", StringTableColumnAlign.Right, i => ToString(i.ListItem.DisposeTime)),
+                    new StringTableColumnInfo<ListItemState>("Age", StringTableColumnAlign.Right, i => StopwatchTimeSpan.ToString(i.Age, 3)),
+                    new StringTableColumnInfo<ListItemState>("IsAlive", StringTableColumnAlign.Left, i => i.ListItem.WeakReference.IsAlive),
+                    new StringTableColumnInfo<ListItemState>("Generation", StringTableColumnAlign.Right, i => ToString(i.Generation))
+                });
         }
 
         #region Public Properties
@@ -54,14 +55,14 @@ namespace DataCommander.Foundation.Diagnostics
             }
         }
 
-        private static string ToString( int? source )
+        private static string ToString(int? source)
         {
             return source != null ? source.Value.ToString() : null;
         }
 
-        private static string ToString( DateTime? source )
+        private static string ToString(DateTime? source)
         {
-            return source != null ? source.Value.ToString( "HH:mm:ss.fff", CultureInfo.InvariantCulture ) : null;
+            return source != null ? source.Value.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture) : null;
         }
 
         /// <summary>
@@ -77,19 +78,19 @@ namespace DataCommander.Foundation.Diagnostics
                 lock (items)
                 {
                     long timestamp = Stopwatch.GetTimestamp();
-                    var listItemStates = items.Select( i => new ListItemState( i, timestamp ) ).ToArray();
-                    stringTable = listItemStates.ToStringTable( columns.Value );
-                    totalSize = listItemStates.Sum( s => s.ListItem.Size );
+                    var listItemStates = items.Select(i => new ListItemState(i, timestamp)).ToArray();
+                    stringTable = listItemStates.ToStringTable(columns.Value);
+                    totalSize = listItemStates.Sum(s => s.ListItem.Size);
 
                     var removeableItems =
                         from listItemState in listItemStates
                         where !listItemState.IsAlive
                         select listItemState.ListItem;
 
-                    items.Remove( removeableItems );
+                    items.Remove(removeableItems);
                 }
 
-                return string.Format( CultureInfo.InvariantCulture, "GarbageMonitor.State:\r\ntotalSize: {0}\r\n{1}", totalSize, stringTable );
+                return string.Format(CultureInfo.InvariantCulture, "GarbageMonitor.State:\r\ntotalSize: {0}\r\n{1}", totalSize, stringTable);
             }
         }
 
@@ -102,7 +103,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// </summary>
         /// <param name="name"></param>
         /// <param name="target"></param>
-        public static void Add( string name, object target )
+        public static void Add(string name, object target)
         {
             Contract.Requires<ArgumentNullException>(target != null);
 
@@ -112,17 +113,17 @@ namespace DataCommander.Foundation.Diagnostics
             if (target != null)
             {
                 Type type = target.GetType();
-                typeName = TypeNameCollection.GetTypeName( type );
+                typeName = TypeNameCollection.GetTypeName(type);
 
-                if (type == typeof( string ))
+                if (type == typeof (string))
                 {
-                    string s = (string) target;
+                    string s = (string)target;
                     int length = s.Length;
                     size = length << 1;
                 }
             }
 
-            Add( name, typeName, size, target );
+            Add(name, typeName, size, target);
         }
 
         /// <summary>
@@ -136,16 +137,16 @@ namespace DataCommander.Foundation.Diagnostics
             string name,
             string typeName,
             int size,
-            object target )
+            object target)
         {
             Contract.Requires<ArgumentNullException>(target != null);
 
-            long id = Interlocked.Increment( ref GarbageMonitor.id );
-            ListItem item = new ListItem( id, name, typeName, size, target );
+            long id = Interlocked.Increment(ref GarbageMonitor.id);
+            ListItem item = new ListItem(id, name, typeName, size, target);
 
             lock (items)
             {
-                items.AddLast( item );
+                items.AddLast(item);
             }
         }
 
@@ -154,13 +155,13 @@ namespace DataCommander.Foundation.Diagnostics
         /// </summary>
         /// <param name="target"></param>
         /// <param name="disposeTime"></param>
-        public static void SetDisposeTime( object target, DateTime disposeTime )
+        public static void SetDisposeTime(object target, DateTime disposeTime)
         {
-            Contract.Requires( target != null );
+            Contract.Requires(target != null);
 
             lock (items)
             {
-                var item = items.FirstOrDefault( i => i.WeakReference.Target == target );
+                var item = items.FirstOrDefault(i => i.WeakReference.Target == target);
                 if (item != null)
                 {
                     item.DisposeTime = disposeTime;
@@ -190,13 +191,13 @@ namespace DataCommander.Foundation.Diagnostics
                 string name,
                 string typeName,
                 int size,
-                object target )
+                object target)
             {
                 this.id = id;
                 this.name = name;
                 this.typeName = typeName;
                 this.size = size;
-                this.weakReference = new WeakReference( target );
+                this.weakReference = new WeakReference(target);
                 this.timestamp = Stopwatch.GetTimestamp();
             }
 
@@ -276,7 +277,7 @@ namespace DataCommander.Foundation.Diagnostics
             private readonly bool isAlive;
             private readonly int? generation;
 
-            public ListItemState( ListItem listItem, long timestamp )
+            public ListItemState(ListItem listItem, long timestamp)
             {
                 this.listItem = listItem;
                 this.timestamp = timestamp;
@@ -286,7 +287,7 @@ namespace DataCommander.Foundation.Diagnostics
                 {
                     try
                     {
-                        this.generation = GC.GetGeneration( this.listItem.WeakReference );
+                        this.generation = GC.GetGeneration(this.listItem.WeakReference);
                     }
                     catch
                     {

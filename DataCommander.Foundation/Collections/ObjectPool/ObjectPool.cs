@@ -157,10 +157,9 @@ namespace DataCommander.Foundation.Collections
 
         #region Internal Methods
 
-        internal ObjectPoolItem<T> CreateObject()
+        internal ObjectPoolItem<T> CreateObject(CancellationToken cancellationToken)
         {
             ObjectPoolItem<T> item = null;
-            WorkerThread thread = null;
 
             while (true)
             {
@@ -209,14 +208,9 @@ namespace DataCommander.Foundation.Collections
                         log.Trace("object pool is active. Waiting for idle item..." );
                         this.idleEvent.Reset();
 
-                        if (thread == null)
-                        {
-                            thread = WorkerThread.Current;
-                        }
-
                         WaitHandle[] waitHandles =
                         {
-                            thread.StopRequest,
+                            cancellationToken.WaitHandle,
                             this.idleEvent
                         };
 

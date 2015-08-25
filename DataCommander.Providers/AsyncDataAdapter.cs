@@ -66,13 +66,6 @@ namespace DataCommander.Providers
             Action<IAsyncDataAdapter, Exception> endFill,
             Action<IAsyncDataAdapter> writeEnd)
         {
-            Contract.Requires<ArgumentNullException>(provider != null);
-            Contract.Requires<ArgumentOutOfRangeException>(maxRecords >= 0);
-            Contract.Requires<ArgumentOutOfRangeException>(rowBlockSize >= 0);
-            Contract.Requires<ArgumentNullException>(resultWriter != null);
-            Contract.Requires<ArgumentNullException>(endFill != null);
-            Contract.Requires<ArgumentNullException>(writeEnd != null);
-
             this.provider = provider;
             this.commands = commands;
             this.maxRecords = maxRecords;

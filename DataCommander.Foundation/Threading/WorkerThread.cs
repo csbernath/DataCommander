@@ -17,7 +17,7 @@ namespace DataCommander.Foundation.Threading
 
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private readonly Thread thread;
-        private readonly ThreadStart start;
+        private ThreadStart start;
         private DateTime startTime;
         private DateTime stopTime;
         private readonly WorkerEvent stopRequest = new WorkerEvent(WorkerEventState.NonSignaled);
@@ -42,13 +42,6 @@ namespace DataCommander.Foundation.Threading
             this.start = start;
             this.thread = new Thread(this.PrivateStart);
             ThreadMonitor.Add(this);
-        }
-
-        internal WorkerThread(Thread thread)
-        {
-            Contract.Requires(thread != null);
-
-            this.thread = thread;
         }
 
         #endregion
@@ -90,17 +83,6 @@ namespace DataCommander.Foundation.Threading
         #endregion
 
         #region Public Properties
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static WorkerThread Current
-        {
-            get
-            {
-                return ThreadMonitor.Current;
-            }
-        }
 
         /// <summary>
         /// 
@@ -443,6 +425,8 @@ namespace DataCommander.Foundation.Threading
             {
                 this.stopped(this, null);
             }
+
+            this.start = null;
         }
 
         #endregion

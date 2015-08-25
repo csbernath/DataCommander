@@ -9,7 +9,7 @@
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class SegmentCollection<T> : ICollection<T>
+    public class SegmentedCollection<T> : ICollection<T>
     {
         #region Private Fields
 
@@ -24,7 +24,7 @@
         /// 
         /// </summary>
         /// <param name="segmentSize"></param>
-        public SegmentCollection(int segmentSize)
+        public SegmentedCollection(int segmentSize)
         {
             Contract.Requires<ArgumentOutOfRangeException>(segmentSize > 0);
 

@@ -3,10 +3,14 @@ namespace DataCommander.Providers
     using System.Data.Common;
     using System.Diagnostics;
     using System.Reflection;
-    using System.Windows.Forms;
+    using System.Threading;
+    using System.Threading.Tasks;
     using DataCommander.Foundation.Configuration;
     using DataCommander.Foundation.Diagnostics;
+    using Microsoft.Office.Interop.Word;
     using Microsoft.Win32;
+    using Application = System.Windows.Forms.Application;
+    using Task = System.Threading.Tasks.Task;
 
     public sealed class DataCommanderApplication
     {
@@ -97,8 +101,11 @@ namespace DataCommander.Providers
 
         public void Run()
         {
-            log.Write(LogLevel.Trace, "{0}\r\n{1}", AppDomainMonitor.EnvironmentInfo,
-                AppDomainMonitor.CurrentDomainState);
+            Task.Run(() =>
+            {
+                log.Write(LogLevel.Trace, "{0}\r\n{1}", AppDomainMonitor.EnvironmentInfo, AppDomainMonitor.CurrentDomainState);
+            });
+
             this.mainForm = new MainForm();
             Application.Run(this.mainForm);
         }

@@ -1,4 +1,7 @@
-﻿namespace DataCommander.Foundation.Linq
+﻿using System.Windows.Forms;
+using DataCommander.Foundation.Collections;
+
+namespace DataCommander.Foundation.Linq
 {
     using System;
     using System.Collections;
@@ -38,6 +41,54 @@
         {
             return new ReadOnlyListFromList<T>(source);
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="values"></param>
+        /// <param name="getKey"></param>
+        /// <returns></returns>
+        [Pure]
+        public static ReadOnlySortedList<TKey, TValue> AsReadOnlySortedList<TKey, TValue>(
+            this IList<TValue> values,
+            Func<TValue, TKey> getKey)
+        {
+            return values.AsReadOnlyList().AsReadOnlySortedList(getKey);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="values"></param>
+        /// <param name="keySelector"></param>
+        /// <returns></returns>
+        [Pure]
+        public static ReadOnlyNonUniqueSortedList<TKey, TValue> AsReadOnlyNonUniqueSortedList<TKey, TValue>(
+            this IList<TValue> values,
+            Func<TValue, TKey> keySelector)
+        {
+            return values.AsReadOnlyList().AsReadOnlyNonUniqueSortedList(keySelector);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="values"></param>
+        /// <param name="getKey"></param>
+        /// <returns></returns>
+        [Pure]
+        public static IReadOnlyDictionary<TKey, TValue> AsReadOnlyDictionary<TKey, TValue>(
+            this IList<TValue> values,
+            Func<TValue, TKey> getKey)
+        {
+            return values.AsReadOnlySortedList(getKey);
+        }
 
         /// <summary>
         /// 
@@ -60,63 +111,12 @@
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="compareTo"></param>
-        /// <returns></returns>
-        public static IndexedItem<T> BinarySearch<T>(this IList<T> list, Func<T, int> compareTo)
-        {
-            Contract.Requires<ArgumentNullException>(list != null);
-            Contract.Requires<ArgumentNullException>(compareTo != null);
-
-            IndexedItem<T> result = null;
-
-            int from = 0;
-            int to = list.Count - 1;
-
-            while (from <= to)
-            {
-                int index = from + (to - from)/2;
-                var value = list[index];
-                int comparisonResult = compareTo(value);
-                if (comparisonResult == 0)
-                {
-                    result = new IndexedItem<T>(index, value);
-                    break;
-                }
-                else if (comparisonResult < 0)
-                {
-                    to = index - 1;
-                }
-                else
-                {
-                    from = index + 1;
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <typeparam name="TResult"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
         public static IList<TResult> Cast<TResult>(this IList source)
         {
-            IList<TResult> list;
-
-            if (source != null)
-            {
-                list = new CastedList<TResult>(source);
-            }
-            else
-            {
-                list = null;
-            }
-
-            return list;
+            return source != null ? new CastedList<TResult>(source) : null;
         }
 
         /// <summary>
@@ -124,29 +124,15 @@
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
-        /// <param name="startIndex"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static int IndexOf<T>(this IList<T> source, int startIndex, Func<T, bool> predicate)
+        public static int IndexOf<T>(this IList<T> source, Func<T, bool> predicate)
         {
-            Contract.Requires<ArgumentNullException>(predicate != null);
+            Contract.Requires<ArgumentNullException>(source != null);
 
-            int index = -1;
-            if (source != null)
-            {
-                int count = source.Count;
-                for (int i = startIndex; i < count; i++)
-                {
-                    var item = source[i];
-                    if (predicate(item))
-                    {
-                        index = i;
-                        break;
-                    }
-                }
-            }
-
-            return index;
+            const int minIndex = 0;
+            int maxIndex = source.Count - 1;
+            return LinearSearch.IndexOf(minIndex, maxIndex, index => predicate(source[index]));
         }
 
         /// <summary>
@@ -154,31 +140,15 @@
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
-        /// <param name="startIndex"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static int LastIndexOf<T>(this IList<T> source, int startIndex, Func<T, bool> predicate)
+        public static int LastIndexOf<T>(this IList<T> source, Func<T, bool> predicate)
         {
-            Contract.Requires<ArgumentNullException>(predicate != null);
-            Contract.Requires<ArgumentException>(startIndex >= 0);
+            Contract.Requires<ArgumentNullException>(source != null);
 
-            int index = -1;
-            if (source != null)
-            {
-                Contract.Assert(startIndex < source.Count);
-
-                for (int i = startIndex; i >= 0; i--)
-                {
-                    var item = source[i];
-                    if (predicate(item))
-                    {
-                        index = i;
-                        break;
-                    }
-                }
-            }
-
-            return index;
+            const int minIndex = 0;
+            int maxIndex = source.Count - 1;
+            return LinearSearch.LastIndexOf(minIndex, maxIndex, index => predicate(source[index]));
         }
 
         /// <summary>
@@ -195,29 +165,6 @@
             int lastIndex = source.Count - 1;
             T last = source[lastIndex];
             return last;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        public static int LastIndexOf<T>(this IList<T> source, Func<T, bool> predicate)
-        {
-            int index;
-            if (source != null)
-            {
-                int startIndex = source.Count - 1;
-                index = source.LastIndexOf(startIndex, predicate);
-            }
-            else
-            {
-                index = -1;
-            }
-
-            return index;
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ namespace DataCommander.Providers.OracleBase
     using System.Collections.Generic;
     using System.Data;
     using System.Text;
+    using System.Threading;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
 
@@ -69,7 +70,7 @@ order by procedure_name", schemaNode.Name, name);
                 string commandText = "select text from all_source where owner = '{0}' and type = 'PACKAGE' and name = '{1}'";
                 commandText = String.Format(commandText, schemaNode.Name, name);
                 var transactionScope = new DbTransactionScope(schemaNode.SchemasNode.Connection, null);
-                DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
+                DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
                 var sb = new StringBuilder();
 
                 for (int i = 0; i < dataTable.Rows.Count; i++)
@@ -91,7 +92,7 @@ order by procedure_name", schemaNode.Name, name);
             string commandText = "select text from all_source where owner = '{0}' and name = '{1}' and type = 'PACKAGE BODY'";
             commandText = string.Format(commandText, schemaNode.Name, name);
             var transactionScope = new DbTransactionScope(this.schemaNode.SchemasNode.Connection, null);
-            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
+            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
             DataRowCollection dataRows = dataTable.Rows;
             int count = dataRows.Count;
             var sb = new StringBuilder();

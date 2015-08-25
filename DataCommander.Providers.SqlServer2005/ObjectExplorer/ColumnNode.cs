@@ -98,15 +98,20 @@
             get
             {
                 string typeName;
-                switch ((SqlServerSystemType) (int) this.systemTypeId)
+                var systemType = (SqlServerSystemType)(int)this.systemTypeId;
+                switch (systemType)
                 {
                     case SqlServerSystemType.Char:
-                    case SqlServerSystemType.NChar:
-                    case SqlServerSystemType.NVarChar:
                     case SqlServerSystemType.VarBinary:
                     case SqlServerSystemType.VarChar:
                         string maxLengthString = this.maxLength >= 0 ? this.maxLength.ToString() : "max";
                         typeName = string.Format( "{0}({1})", this.userTypeName, maxLengthString );
+                        break;
+
+                    case SqlServerSystemType.NChar:
+                    case SqlServerSystemType.NVarChar:
+                        maxLengthString = this.maxLength >= 0 ? (this.maxLength/2).ToString() : "max";
+                        typeName = string.Format("{0}({1})", this.userTypeName, maxLengthString);
                         break;
 
                     case SqlServerSystemType.Decimal:

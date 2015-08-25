@@ -5,6 +5,7 @@
     using System.Data;
     using System.Diagnostics.Contracts;
     using System.Globalization;
+    using System.Threading;
     using DataCommander.Foundation.Threading;
 
     /// <summary>
@@ -32,16 +33,16 @@
         /// </summary>
         /// <param name="dataReader"></param>
         /// <param name="dataSet"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static int Fill(this IDataReader dataReader, DataSet dataSet)
+        public static int Fill(this IDataReader dataReader, DataSet dataSet, CancellationToken cancellationToken)
         {
             Contract.Requires<ArgumentNullException>(dataReader != null);
             Contract.Requires<ArgumentNullException>(dataSet != null);
 
             int rowCount = 0;
-            WorkerThread thread = WorkerThread.Current;
 
-            while (!thread.IsStopRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 var table =
                     new DataTable
@@ -49,7 +50,7 @@
                         Locale = CultureInfo.InvariantCulture
                     };
 
-                int count = dataReader.Fill(table);
+                int count = dataReader.Fill(table, cancellationToken);
                 rowCount += count;
                 dataSet.Tables.Add(table);
 
@@ -67,8 +68,9 @@
         /// </summary>
         /// <param name="dataReader"></param>
         /// <param name="dataTable"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static int Fill(this IDataReader dataReader, DataTable dataTable)
+        public static int Fill(this IDataReader dataReader, DataTable dataTable, CancellationToken cancellationToken)
         {
             Contract.Requires<ArgumentNullException>(dataReader != null);
             Contract.Requires<ArgumentNullException>(dataTable != null);
@@ -88,9 +90,8 @@
             int fieldCount = dataReader.FieldCount;
             DataRowCollection rows = dataTable.Rows;
             int rowCount = 0;
-            WorkerThread thread = WorkerThread.Current;
 
-            while (!thread.IsStopRequested && dataReader.Read())
+            while (!cancellationToken.IsCancellationRequested && dataReader.Read())
             {
                 var values = new object[fieldCount];
                 dataReader.GetValues(values);

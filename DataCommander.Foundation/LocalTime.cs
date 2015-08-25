@@ -6,7 +6,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public sealed class LocalTime
+    public sealed class LocalTime : IDateTimeProvider
     {
         private static DateTime sharedDateTime;
 
@@ -16,7 +16,7 @@
         private int incrementedTickCount;
         private DateTime incrementedDateTime;
 
-        private static readonly LocalTime defaultLocalTime = new LocalTime(increment: 16, adjustment: 1000);
+        private static readonly LocalTime DefaultLocalTime = new LocalTime(increment: 16, adjustment: 1000);
 
         static LocalTime()
         {
@@ -49,7 +49,7 @@
         {
             get
             {
-                return defaultLocalTime;
+                return DefaultLocalTime;
             }
         }
 

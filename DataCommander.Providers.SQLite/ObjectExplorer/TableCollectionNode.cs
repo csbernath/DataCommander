@@ -2,6 +2,7 @@ namespace DataCommander.Providers.SQLite
 {
     using System.Collections.Generic;
     using System.Data;
+    using System.Threading;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
 
@@ -46,7 +47,7 @@ from
 ) t
 order by name collate nocase", this.databaseNode.Name);
             Database database = new Database(this.databaseNode.Connection);
-            DataTable table = database.ExecuteDataTable(commandText);
+            DataTable table = database.ExecuteDataTable(commandText, CancellationToken.None);
             DataRowCollection rows = table.Rows;
             int count = rows.Count;
             ITreeNode[] nodes = new ITreeNode[count];

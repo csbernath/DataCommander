@@ -109,6 +109,8 @@ namespace DataCommander.Providers
         void IResultWriter.WriteTableEnd()
         {
             this.logResultWriter.WriteTableEnd();
+
+            GarbageMonitor.Add("DataSetResultWriter", "System.Data.DataTable", this.dataTable.Rows.Count, this.dataTable);
         }
 
         void IResultWriter.WriteParameters(IDataParameterCollection parameters)
@@ -135,15 +137,15 @@ namespace DataCommander.Providers
 
         private void CreateTable(DataTable schemaTable)
         {
-            int tableCount = this.dataSet.Tables.Count + 1;
+            int tableIndex = this.dataSet.Tables.Count;
             string tableName = schemaTable.TableName;
             if (tableName == "SchemaTable")
             {
-                tableName = string.Format("Table {0}", tableCount);
+                tableName = string.Format("Table {0}", tableIndex);
             }
             if (this.showShemaTable)
             {
-                schemaTable.TableName = string.Format("Schema {0}", tableCount);
+                schemaTable.TableName = string.Format("Schema {0}", tableIndex);
                 this.dataSet.Tables.Add(schemaTable);
             }
             this.dataTable = this.dataSet.Tables.Add();

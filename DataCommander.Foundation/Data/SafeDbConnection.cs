@@ -122,10 +122,9 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public void Open()
         {
-            WorkerThread thread = WorkerThread.Current;
             int count = 0;
 
-            while (!thread.IsStopRequested)
+            while (!this.safeDbConnection.CancellationToken.IsCancellationRequested)
             {
                 count++;
                 var stopwatch = new Stopwatch();
@@ -200,9 +199,8 @@ namespace DataCommander.Foundation.Data
             }
 
             IDataReader reader = null;
-            WorkerThread thread = WorkerThread.Current;
 
-            while (!thread.IsStopRequested)
+            while (!this.safeDbConnection.CancellationToken.IsCancellationRequested)
             {
                 long ticks = Stopwatch.GetTimestamp();
 
@@ -261,9 +259,7 @@ namespace DataCommander.Foundation.Data
                 this.Open();
             }
 
-            WorkerThread thread = WorkerThread.Current;
-
-            while (!thread.IsStopRequested)
+            while (!this.safeDbConnection.CancellationToken.IsCancellationRequested)
             {
                 try
                 {
@@ -302,9 +298,8 @@ namespace DataCommander.Foundation.Data
 
             int count = 0;
             int tryCount = 0;
-            WorkerThread thread = WorkerThread.Current;
 
-            while (tryCount == 0 || !thread.IsStopRequested)
+            while (tryCount == 0 || !this.safeDbConnection.CancellationToken.IsCancellationRequested)
             {
                 try
                 {

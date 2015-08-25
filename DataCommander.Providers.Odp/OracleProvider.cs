@@ -5,6 +5,7 @@ namespace DataCommander.Providers.Odp
     using System.Data;
     using System.Data.Common;
     using System.Text;
+    using System.Threading;
     using System.Xml;
     using DataCommander.Foundation.Configuration;
     using DataCommander.Foundation.Data;
@@ -564,7 +565,7 @@ order by OBJECT_NAME", oracleName.Owner );
                 if (!contains)
                 {
                     var transactionScope = new DbTransactionScope(connection.Connection, null);
-                    DataTable table = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText});
+                    DataTable table = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
                     int count = table.Rows.Count;
                     items = new string[ count ];
 

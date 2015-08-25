@@ -66,7 +66,7 @@ order by 1",
                     {
                         string name = dataRecord.GetString(0);
                         return new TriggerNode(this.database, this.schema, this.objectName, name);
-                    });
+                    }).ToList();
                 }
             }
         }
