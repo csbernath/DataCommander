@@ -28,7 +28,7 @@ Special data sources:
   * TFS (Team Foundation Server)
   * WMI
      
-Written in C# and can be run on Windows, .NET Framework 4.5.
+Written in C# and can be run on Windows, .NET Framework 4.6.
 The editor has syntax highlighting, code completion for SQL statements.
 The output of a query can be displayed as data grid, text, html.
 The data grid can be exported into Excel.
