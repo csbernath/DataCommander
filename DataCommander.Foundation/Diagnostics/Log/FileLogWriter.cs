@@ -1,7 +1,6 @@
 namespace DataCommander.Foundation.Diagnostics
 {
     using System;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Text;
     using DataCommander.Foundation.Linq;
@@ -14,7 +13,6 @@ namespace DataCommander.Foundation.Diagnostics
         private static readonly ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
         private readonly bool async;
         private readonly ILogFile logFile;
-        private readonly IDateTimeProvider dateTimeProvider;
 
         /// <summary>
         /// 
@@ -26,7 +24,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <param name="timerPeriod"></param>
         /// <param name="autoFlush"></param>
         /// <param name="fileAttributes"></param>
-        /// <param name="dateTimeProvider"></param>
+        /// <param name="dateTimeKind"></param>
         public FileLogWriter(
             string path,
             Encoding encoding,
@@ -35,22 +33,19 @@ namespace DataCommander.Foundation.Diagnostics
             TimeSpan timerPeriod,
             bool autoFlush,
             FileAttributes fileAttributes,
-            IDateTimeProvider dateTimeProvider)
+            DateTimeKind dateTimeKind)
         {
-            Contract.Requires<ArgumentNullException>(dateTimeProvider != null);
-
             this.async = async;
             ILogFormatter formatter = new TextLogFormatter();
             // ILogFormatter formatter = new XmlLogFormatter();
-            this.dateTimeProvider = dateTimeProvider;
 
             if (async)
             {
-                this.logFile = new AsyncLogFile(path, encoding, bufferSize, timerPeriod, formatter, fileAttributes, dateTimeProvider);
+                this.logFile = new AsyncLogFile(path, encoding, bufferSize, timerPeriod, formatter, fileAttributes, dateTimeKind);
             }
             else
             {
-                this.logFile = new LogFile(path, encoding, bufferSize, autoFlush, formatter, fileAttributes, dateTimeProvider);
+                this.logFile = new LogFile(path, encoding, bufferSize, autoFlush, formatter, fileAttributes, dateTimeKind);
             }
         }
 

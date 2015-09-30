@@ -12,7 +12,6 @@ namespace DataCommander.Providers
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Linq;
     using Foundation;
-    using Foundation.Collections;
 
     internal partial class ConnectionStringBuilderForm : Form
     {

@@ -13,7 +13,10 @@ namespace DataCommander.Providers.OracleClient
     internal class DataParameterImp : DataParameterBase
     {
         public DataParameterImp(OracleParameter parameter)
+
+#pragma warning disable CS0618 // Type or member is obsolete
             : base(parameter, parameter.Size, parameter.Precision, parameter.Scale)
+#pragma warning restore CS0618 // Type or member is obsolete
         {
             this.parameter = parameter;
         }
@@ -312,7 +315,9 @@ namespace DataCommander.Providers.OracleClient
         {
             get
             {
+#pragma warning disable 618
                 return OracleClientFactory.Instance;
+#pragma warning restore 618
             }
         }
 

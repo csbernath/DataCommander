@@ -38,7 +38,7 @@
 
             sharedDateTime = DateTime.Now;
 
-            this.incrementedTickCount = SystemTime.TickCount;
+            this.incrementedTickCount = UniversalTime.TickCount;
             this.incrementedDateTime = sharedDateTime;
         }
 
@@ -61,7 +61,7 @@
         {
             get
             {
-                int elapsed = SystemTime.GetTickCount() - this.incrementedTickCount;
+                int elapsed = UniversalTime.GetTickCount() - this.incrementedTickCount;
                 if (this.increment <= elapsed)
                 {
                     if (elapsed < this.adjustment)
@@ -77,7 +77,7 @@
                         sharedDateTime = DateTime.Now;
                     }
 
-                    this.incrementedTickCount = SystemTime.TickCount;
+                    this.incrementedTickCount = UniversalTime.TickCount;
                     this.incrementedDateTime = sharedDateTime;
                 }
 

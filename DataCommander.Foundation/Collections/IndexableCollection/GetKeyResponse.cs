@@ -14,7 +14,7 @@
         /// </summary>
         /// <param name="hasKey"></param>
         /// <param name="key"></param>
-        public GetKeyResponse( bool hasKey, T key )
+        public GetKeyResponse(bool hasKey, T key)
         {
             this.hasKey = hasKey;
             this.key = key;
@@ -54,9 +54,9 @@
         /// <param name="hasKey"></param>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static GetKeyResponse<T> Create<T>( bool hasKey, T key )
+        public static GetKeyResponse<T> Create<T>(bool hasKey, T key)
         {
-            return new GetKeyResponse<T>( hasKey, key );
+            return new GetKeyResponse<T>(hasKey, key);
         }
     }
 }

@@ -6,7 +6,6 @@
     using System.Data.Common;
     using System.Data.SqlServerCe;
     using System.Diagnostics;
-    using System.Linq;
     using System.Text;
     using System.Xml;
     using DataCommander.Foundation.Data;

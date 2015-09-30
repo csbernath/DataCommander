@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.30729</ProductVersion>
@@ -37,7 +37,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -64,7 +64,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;FOUNDATION_4_5</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;FOUNDATION_4_6</DefineConstants>
     <DocumentationFile>bin\Debug\DataCommander.Foundation.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
@@ -113,6 +113,7 @@
     <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
     <CodeContractsDisjunctiveRequires>False</CodeContractsDisjunctiveRequires>
     <Prefer32Bit>false</Prefer32Bit>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -121,7 +122,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;FOUNDATION_4_5</DefineConstants>
+    <DefineConstants>TRACE;FOUNDATION_4_6</DefineConstants>
     <DocumentationFile>DataCommander.Foundation-4.0.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
@@ -180,7 +181,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>FOUNDATION_4_5</DefineConstants>
+    <DefineConstants>FOUNDATION_4_6</DefineConstants>
     <DocumentationFile>DataCommander.Foundation-3.5.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
@@ -200,7 +201,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Test\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;FOUNDATION_4_5;TEST</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;FOUNDATION_4_6;TEST</DefineConstants>
     <BaseAddress>285212672</BaseAddress>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <FileAlignment>4096</FileAlignment>
@@ -250,7 +251,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ClientRelease|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\ClientRelease\</OutputPath>
-    <DefineConstants>TRACE;FOUNDATION_4_5</DefineConstants>
+    <DefineConstants>TRACE;FOUNDATION_4_6</DefineConstants>
     <BaseAddress>285212672</BaseAddress>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DocumentationFile>DataCommander.Foundation-4.0.xml</DocumentationFile>
@@ -283,6 +284,10 @@
       <Name>System.Data</Name>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.98.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.98.1\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
@@ -318,12 +323,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Collections\ConcurrentQueue.cs" />
+    <Compile Include="Collections\EmptyArray.cs" />
     <Compile Include="Collections\LargeObjectHeap.cs" />
     <Compile Include="Collections\SegmentedArrayBuilder.cs" />
     <Compile Include="Collections\DisposableCollection.cs" />
     <Compile Include="Collections\DynamicArray.cs" />
     <Compile Include="Collections\EmptyReadOnlyList.cs" />
-    <Compile Include="Collections\IndexableCollection\EnumerableIndex.cs" />
     <Compile Include="Collections\IndexableCollection\GetKeyResponse.cs" />
     <Compile Include="Collections\IndexableCollection\ICollectionIndex.cs">
       <SubType>Code</SubType>
@@ -333,7 +338,6 @@
     <Compile Include="Collections\IndexableCollection\IndexCollection.cs" />
     <Compile Include="Collections\IndexableCollection\LinkedListIndex.cs" />
     <Compile Include="Collections\IndexableCollection\ListIndex.cs" />
-    <Compile Include="Collections\IndexableCollection\LookupIndex.cs" />
     <Compile Include="Collections\IndexableCollection\NonUniqueIndex.cs" />
     <Compile Include="Collections\IndexableCollection\ReversedComparer.cs" />
     <Compile Include="Collections\IndexableCollection\SequenceIndex.cs" />
@@ -769,6 +773,7 @@
     <Compile Include="IO\SegmentedStreamReader.cs" />
     <Compile Include="IO\StreamExtensions.cs" />
     <Compile Include="IO\StreamWriterTransaction.cs" />
+    <Compile Include="IO\StringBuilderReader.cs" />
     <Compile Include="IO\TempFile.cs" />
     <Compile Include="IO\TreeTextWriter.cs" />
     <Compile Include="IDateTimeProvider.cs" />
@@ -942,7 +947,7 @@
     <Compile Include="SmallTimeSpan.cs" />
     <Compile Include="STGM.cs" />
     <Compile Include="StringExtensions.cs" />
-    <Compile Include="SystemTime.cs" />
+    <Compile Include="UniversalTime.cs" />
     <Compile Include="Tuple.cs" />
     <Compile Include="Tuple2.cs" />
     <Compile Include="Tuple3.cs" />
@@ -983,6 +988,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Collections\IndexableCollection\ClassDiagram.cd" />
     <None Include="Collections\ObjectPool\ClassDiagram.cd" />
     <None Include="Configuration\ClassDiagram.cd" />

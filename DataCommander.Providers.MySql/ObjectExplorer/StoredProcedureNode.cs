@@ -74,11 +74,12 @@
             string commandText = string.Format("show create procedure {0}.{1}", this.databaseNode.Name, this.name);
             string statement = MySqlClientFactory.Instance.ExecuteReader(
                 this.databaseNode.ObjectExplorer.ConnectionString,
-                commandText,
+                new CommandDefinition {CommandText = commandText},
+                CommandBehavior.Default,
                 dataRecord => dataRecord.GetString(2)).First();
 
             Clipboard.SetText(statement);
-            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
             queryForm.SetStatusbarPanelText("Copying create procedure statement to clipboard finished.", SystemColors.ControlText);
         }
     }

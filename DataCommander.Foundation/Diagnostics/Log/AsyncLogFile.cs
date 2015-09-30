@@ -17,7 +17,6 @@ namespace DataCommander.Foundation.Diagnostics
         private readonly ILogFormatter formatter;
         private readonly ConcurrentQueue<LogEntry> queue;
         private readonly TimeSpan timerPeriod;
-        private readonly IDateTimeProvider dateTimeProvider;
         private Timer timer;
 
         #endregion
@@ -29,17 +28,14 @@ namespace DataCommander.Foundation.Diagnostics
             TimeSpan timerPeriod,
             ILogFormatter formatter,
             FileAttributes fileAttributes,
-            IDateTimeProvider dateTimeProvider)
+            DateTimeKind dateTimeKind)
         {
-            Contract.Requires<ArgumentNullException>(dateTimeProvider != null);
-
             this.path = path;
             this.bufferSize = bufferSize;
             this.timerPeriod = timerPeriod;
             this.queue = new ConcurrentQueue<LogEntry>();
             this.formatter = formatter;
-            this.logFile = new LogFile(path, encoding, 1024, true, formatter, fileAttributes, dateTimeProvider);
-            this.dateTimeProvider = dateTimeProvider;
+            this.logFile = new LogFile(path, encoding, 1024, true, formatter, fileAttributes, dateTimeKind);
         }
 
         #region ILogFile Members

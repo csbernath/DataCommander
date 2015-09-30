@@ -16,6 +16,23 @@
         /// <summary>
         /// 
         /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="t"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public static TResult IfNotNull<TSource, TResult>(this TSource t, Func<TSource, TResult> selector)
+        {
+            Contract.Requires<ArgumentNullException>(selector != null);
+
+            return t != null
+                ? selector(t)
+                : default(TResult);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -46,23 +63,6 @@
         {
             Contract.Requires<ArgumentNullException>(collection != null);
             return collection.Contains(item);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="t"></param>
-        /// <param name="getValue"></param>
-        /// <returns></returns>
-        public static TResult GetValueOrDefault<TSource, TResult>(this TSource t, Func<TSource, TResult> getValue) where TSource : class
-        {
-            Contract.Requires<ArgumentNullException>(getValue != null);
-
-            return t != null
-                ? getValue(t)
-                : default(TResult);
         }
 
         /// <summary>

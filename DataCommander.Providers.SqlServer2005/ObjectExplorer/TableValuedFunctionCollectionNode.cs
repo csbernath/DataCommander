@@ -3,7 +3,6 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
-    using System.Linq;
     using System.Windows.Forms;
     using Foundation.Data;
 
@@ -44,7 +43,7 @@ order by 1,2";
             commandText = string.Format(commandText, this.database.Name);
             string connectionString = this.database.Databases.Server.ConnectionString;
 
-            return SqlClientFactory.Instance.ExecuteReader2(
+            return SqlClientFactory.Instance.ExecuteReader(
                 this.database.Databases.Server.ConnectionString,
                 new CommandDefinition {CommandText = commandText},
                 CommandBehavior.Default,

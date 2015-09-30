@@ -76,7 +76,8 @@ from {0}.{1}", this.databaseNode.Name, this.name);
             string commandText = string.Format("show create table {0}.{1}", this.databaseNode.Name, this.name);
             string createTableStatement = MySqlClientFactory.Instance.ExecuteReader(
                 this.databaseNode.ObjectExplorer.ConnectionString,
-                commandText,
+                new CommandDefinition {CommandText = commandText},
+                CommandBehavior.Default,
                 dataRecord => dataRecord.GetString(1)).First();
 
             Clipboard.SetText(createTableStatement);

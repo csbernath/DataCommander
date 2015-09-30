@@ -6,7 +6,6 @@
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Text;
-    using System.Xml.Schema;
     using DataCommander.Foundation;
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Data.SqlClient;

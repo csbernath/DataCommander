@@ -304,232 +304,54 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArgumentEqualsSelection.cs" />
-    <Compile Include="ArgumentIsSelection.cs" />
     <Compile Include="Caching\CacheEntry.cs" />
     <Compile Include="Caching\CacheItem.cs" />
     <Compile Include="Caching\CacheItemGeneric.cs" />
     <Compile Include="Caching\ICache.cs" />
     <Compile Include="Caching\ICacheItem.cs" />
     <Compile Include="Caching\MemoryCache.cs" />
+    <Compile Include="Collections\BinarySearch.cs" />
+    <Compile Include="Collections\BitVector64.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Collections\CircuralBuffer.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Collections\ConcurrentQueue.cs" />
+    <Compile Include="Collections\LargeObjectHeap.cs" />
+    <Compile Include="Collections\SegmentedArrayBuilder.cs" />
     <Compile Include="Collections\DisposableCollection.cs" />
-    <Compile Include="Collections\IndexableCollection\GetKeyResponse.cs" />
-    <Compile Include="Collections\IndexableCollection\EnumerableIndex.cs" />
-    <Compile Include="Collections\IndexableCollection\LookupIndex.cs" />
-    <Compile Include="Collections\IndexableCollection\ReversedComparer.cs" />
-    <Compile Include="Collections\IndexableCollection\SortOrder.cs" />
-    <Compile Include="Collections\IProducerConsumerCollection.cs" />
-    <Compile Include="Collections\IReadOnlyDictionary.cs" />
-    <Compile Include="Collections\IReadOnlyList.cs" />
-    <Compile Include="Collections\IReadOnlyCollection.cs" />
-    <Compile Include="Collections\KeyValuePair.cs" />
-    <Compile Include="Collections\CircuralBuffer.cs" />
-    <Compile Include="Collections\MemberEqualityComparer.cs" />
-    <Compile Include="Collections\MultipleMemberEqualityComparer.cs" />
-    <Compile Include="Collections\SegmentCollection.cs" />
-    <Compile Include="Data\CommandDefinition.cs" />
-    <Compile Include="Data\DbTransactionScope.cs" />
-    <Compile Include="Data\IDbTransactionScopeExtensions.cs" />
-    <Compile Include="Data\DataReader.cs" />
-    <Compile Include="Data\IDbTransactionScopeContract.cs" />
-    <Compile Include="Data\IDbTransactionScope.cs" />
-    <Compile Include="Diagnostics\Log\CallerInformation.cs" />
-    <Compile Include="Diagnostics\Log\ILogExtensions.cs" />
-    <Compile Include="SystemTime.cs" />
-    <Compile Include="LocalTime.cs" />
-    <Compile Include="Data\IDataParameterValue.cs" />
-    <Compile Include="Data\IDataParameterValueGeneric.cs" />
-    <Compile Include="Data\DbCommandExecutionException.cs" />
-    <Compile Include="Data\IDataParameterCollectionExtensions.cs" />
-    <Compile Include="Data\IDbProviderFactoryHelper.cs" />
-    <Compile Include="Data\LoggedDbConnection\AfterExecuteCommandEventArgs.cs" />
-    <Compile Include="Data\LoggedDbConnection\BeforeExecuteCommandEventArgs.cs" />
-    <Compile Include="Data\LoggedDbConnection\BeforeOpenDbConnectionEventArgs.cs" />
-    <Compile Include="Data\LoggedDbConnection\AfterOpenDbConnectionEventArgs.cs" />
-    <Compile Include="Data\LoggedDbConnection\AfterReadEventArgs.cs" />
-    <Compile Include="Data\LoggedDbConnection\LoggedDbCommandExecutionType.cs" />
-    <Compile Include="Data\LoggedDbConnection\LoggedDbCommandInfo.cs" />
-    <Compile Include="Data\LoggedDbConnection\DbConnectionLogger.cs" />
-    <Compile Include="Data\LoggedDbConnection\LoggedDbCommand.cs" />
-    <Compile Include="Data\LoggedDbConnection\LoggedDbConnection.cs" />
-    <Compile Include="Data\LoggedDbConnection\LoggedDataReader.cs" />
-    <Compile Include="Data\LoggedDbConnection\LoggedDbConnectionFactory.cs" />
-    <Compile Include="Data\LoggedDbConnection\LoggedEventArgs.cs" />
-    <Compile Include="Data\IDbCommandBuilderHelper.cs" />
-    <Compile Include="Data\SqlClient\NativeSqlCommandFactory.cs" />
-    <Compile Include="Data\SqlClient\SafeLoggedSqlConnectionFactory.cs" />
-    <Compile Include="Data\SqlClient\SafeSqlConnectionFactory.cs" />
-    <Compile Include="Data\SqlClient\SqlCommandExtensions.cs" />
-    <Compile Include="Data\SqlClient\SqlErrorCollectionExtensions.cs" />
-    <Compile Include="Data\SqlClient\SqlErrorExtensions.cs" />
-    <Compile Include="Data\SqlClient\SqlLog\IInternalConnectionHelper.cs" />
-    <Compile Include="Data\SqlClient\SqlLog\InternalConnectionHelper.cs" />
-    <Compile Include="Data\SqlClient\SqlLog\InternalConnectionHelper2.cs" />
-    <Compile Include="Data\SqlClient\SqlParameterCollectionExtensions.cs" />
-    <Compile Include="Data\SqlClient\SqlParameterExtensions.cs" />
-    <Compile Include="Data\SqlClient\SqlStatementBuilder.cs" />
-    <Compile Include="Data\SqlClient\SqlStatementExtensions.cs" />
-    <Compile Include="Data\SqlNull.cs" />
-    <Compile Include="SmallDate.cs" />
-    <Compile Include="Diagnostics\Assert\Assert.cs" />
-    <Compile Include="Diagnostics\Assert\AssertFailedEventArgs.cs" />
-    <Compile Include="Diagnostics\Assert\AssertFailedException.cs" />
-    <Compile Include="Diagnostics\Assert\AssertMessage.cs" />
-    <Compile Include="Diagnostics\Assert\AssertMessageParameter.cs" />
-    <Compile Include="Diagnostics\Assert\AssertMessageParameterCollection.cs" />
-    <Compile Include="Diagnostics\Assert\CollectionAssert.cs" />
-    <Compile Include="Diagnostics\Assert\StringAssert.cs" />
-    <Compile Include="Diagnostics\Int64PerformanceCounter.cs" />
-    <Compile Include="Diagnostics\Log\LogFactory.cs" />
-    <Compile Include="Diagnostics\Log\ConsoleLogWriter.cs" />
-    <Compile Include="Diagnostics\Log\FoundationLogFactory.cs" />
-    <Compile Include="Diagnostics\Log\FoundationLog.cs" />
-    <Compile Include="Diagnostics\Log\ILogFactory.cs" />
-    <Compile Include="Diagnostics\Log\ILogFactoryExtensions.cs" />
-    <Compile Include="Diagnostics\Log\InternalLogFactory.cs" />
-    <Compile Include="Diagnostics\Log\NullApplicationLog.cs" />
-    <Compile Include="Diagnostics\Log\NullLog.cs" />
-    <Compile Include="Diagnostics\Log\ILog.cs" />
-    <Compile Include="Diagnostics\StackFrameExtensions.cs" />
-    <Compile Include="Diagnostics\StackTraceExtensions.cs" />
-    <Compile Include="Disposer.cs" />
-    <Compile Include="DocumentProperties\DocumentProperty.cs" />
-    <Compile Include="DocumentProperties\DocumentType.cs" />
-    <Compile Include="Enum.cs" />
-    <Compile Include="IIntervalComparer.cs" />
-    <Compile Include="Interval.cs" />
-    <Compile Include="LeftClosedRightClosedIntervalComparer.cs" />
-    <Compile Include="IO\EventableStream.cs" />
-    <Compile Include="IO\SegmentedStreamReader.cs" />
-    <Compile Include="IO\StreamExtensions.cs" />
-    <Compile Include="IO\TempFile.cs" />
-    <Compile Include="Lazy.cs" />
-    <Compile Include="LeftClosedRightOpenIntervalComparer.cs" />
-    <Compile Include="Library.cs" />
-    <Compile Include="Linq\ArrayExtensions.cs" />
     <Compile Include="Collections\DynamicArray.cs" />
-    <Compile Include="Linq\EnumExtensions.cs" />
-    <Compile Include="Linq\Extensions.cs" />
-    <Compile Include="Linq\FuncExtensions.cs" />
-    <Compile Include="Linq\IdentityFunction.cs" />
-    <Compile Include="Linq\IDictionaryExtensions.cs" />
-    <Compile Include="Collections\IndexableCollection\SequenceIndex.cs" />
-    <Compile Include="Collections\IndexableCollection\UniqueListIndex.cs" />
-    <Compile Include="Collections\ReadOnlyArray.cs" />
-    <Compile Include="CommandLine.cs" />
-    <Compile Include="CommandLineArgument.cs" />
-    <Compile Include="Comparers.cs" />
-    <Compile Include="Configuration\ConfigurationAttributeCollectionDebugger.cs" />
-    <Compile Include="Configuration\XmlAttributeReader.cs" />
-    <Compile Include="CurrentDirectoryChanger.cs" />
-    <Compile Include="Data\DataParameterValue.cs" />
-    <Compile Include="Data\DataParameterValueType.cs" />
-    <Compile Include="Data\DataRowExtensions.cs" />
-    <Compile Include="Data\DataSetExtensions.cs" />
-    <Compile Include="Data\DataTableExtensions.cs" />
-    <Compile Include="Data\DataViewExtensions.cs" />
-    <Compile Include="Data\DbProviderFactoryExtensions.cs" />
-    <Compile Include="Data\IDataParameterExtensions.cs" />
-    <Compile Include="Data\IDataReaderExtensions.cs" />
-    <Compile Include="Data\IDataRecordExtensions.cs" />
-    <Compile Include="Data\IDbCommandExtensions.cs" />
-    <Compile Include="Data\ISafeDbConnection.cs" />
-    <Compile Include="Data\MappedDataReader.cs" />
-    <Compile Include="Data\PTypes\PXml.cs" />
-    <Compile Include="Data\DataColumnSchema.cs" />
-    <Compile Include="Diagnostics\Error.cs" />
-    <Compile Include="Diagnostics\ErrorType.cs" />
-    <Compile Include="Linq\ExceptionExtensions.cs" />
-    <Compile Include="Diagnostics\IsErrorTypePredicate.cs" />
-    <Compile Include="Diagnostics\Log\MemoryLogWriter.cs" />
-    <Compile Include="Diagnostics\StopwatchTimeSpan.cs" />
-    <Compile Include="DocumentProperties\DocumentPropertyCollection.cs" />
-    <Compile Include="DocumentProperties\Document.cs" />
-    <Compile Include="DocumentProperties\StructuredStorage\IStorage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DocumentProperties\StructuredStorage\Extensions.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IEnumSTATSTG.cs" />
-    <Compile Include="IO\AsyncTextWriterListItem.cs" />
-    <Compile Include="IO\DefaultFormatter.cs" />
-    <Compile Include="IO\IFormatter.cs" />
-    <Compile Include="IO\Indentation.cs" />
-    <Compile Include="IO\MultiTextWriter.cs" />
-    <Compile Include="IStorage.cs" />
-    <Compile Include="Linq\IEnumerableExtensions.cs" />
-    <Compile Include="Linq\IEnumeratorExtensions.cs" />
-    <Compile Include="Linq\IndexedItem.cs" />
-    <Compile Include="Linq\IndexedItemGeneric.cs" />
-    <Compile Include="Linq\IProducerConsumerCollectionExtensions.cs" />
-    <Compile Include="Linq\IReadOnlyListExtensions.cs" />
-    <Compile Include="Linq\MinMaxResult.cs" />
-    <Compile Include="Linq\QueueExtensions.cs" />
-    <Compile Include="Text\StringTableColumnInfo.cs" />
-    <Compile Include="Linq\TimeSpanExtensions.cs" />
-    <Compile Include="Management\InitiateShutdownReturnValue.cs" />
-    <Compile Include="Management\ManagementJob.cs" />
-    <Compile Include="Management\ManagementJobState.cs" />
-    <Compile Include="Management\ManagementScopeExtensions.cs" />
-    <Compile Include="Management\MsvmComputerSystem.cs" />
-    <Compile Include="Management\MsvmComputerSystemEnabledState.cs" />
-    <Compile Include="Management\MsvmComputerSystemRequestedState.cs" />
-    <Compile Include="Management\MsvmComputerSystemRequestStateChangeReturnValue.cs" />
-    <Compile Include="NotNullable.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Configuration\NameValueCollectionReader.cs" />
-    <Compile Include="Collections\IndexableCollection\IndexableCollection-2.cs" />
+    <Compile Include="Collections\EmptyReadOnlyList.cs" />
+    <Compile Include="Collections\IndexableCollection\EnumerableIndex.cs" />
+    <Compile Include="Collections\IndexableCollection\GetKeyResponse.cs" />
     <Compile Include="Collections\IndexableCollection\ICollectionIndex.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Collections\IndexableCollection\IndexableCollection-1.cs" />
+    <Compile Include="Collections\IndexableCollection\IndexableCollection-2.cs" />
     <Compile Include="Collections\IndexableCollection\IndexCollection.cs" />
     <Compile Include="Collections\IndexableCollection\LinkedListIndex.cs" />
     <Compile Include="Collections\IndexableCollection\ListIndex.cs" />
+    <Compile Include="Collections\IndexableCollection\LookupIndex.cs" />
     <Compile Include="Collections\IndexableCollection\NonUniqueIndex.cs" />
+    <Compile Include="Collections\IndexableCollection\ReversedComparer.cs" />
+    <Compile Include="Collections\IndexableCollection\SequenceIndex.cs" />
+    <Compile Include="Collections\IndexableCollection\SortOrder.cs" />
     <Compile Include="Collections\IndexableCollection\UniqueIndex.cs" />
-    <Compile Include="Collections\LazyCollection.cs" />
-    <Compile Include="Linq\ICollectionExtensions.cs" />
-    <Compile Include="Predicate\Conjunction.cs" />
-    <Compile Include="Predicate\Disjunction.cs" />
-    <Compile Include="Predicate\EnumerableExistentialQuantifier.cs" />
-    <Compile Include="Predicate\EnumerableUniversalQuantifier.cs" />
-    <Compile Include="Linq\IListExtensions.cs" />
-    <Compile Include="Collections\LazyList.cs" />
-    <Compile Include="Predicate\PredicateClass.cs" />
-    <Compile Include="Predicate\SystemPredicate.cs" />
-    <Compile Include="Configuration\ConfigurationAttributeCollection.cs" />
-    <Compile Include="Configuration\ConfigurationNodeCollection.cs" />
-    <Compile Include="Data\SqlClient\SqlLoggedSqlConnection\ISqlLoggedSqlCommandFilter.cs" />
-    <Compile Include="Data\SqlClient\SqlLog\ISqlLogItem.cs" />
-    <Compile Include="Data\SqlClient\SqlLoggedSqlConnection\SqlLoggedSqlConnectionFactory.cs" />
-    <Compile Include="Data\SqlClient\SqlLog\SqlLogCommandExecution.cs" />
-    <Compile Include="Data\TextData\TextDataFormatException.cs" />
-    <Compile Include="Data\TextData\TextDataSet.cs" />
-    <Compile Include="Data\TextData\TextDataSetTable.cs" />
-    <Compile Include="Data\TextData\TextDataSetTableCollection.cs" />
-    <Compile Include="Data\TextData\TextDataTable.cs" />
-    <Compile Include="Data\TextData\TextDataTableCollection.cs" />
-    <Compile Include="Diagnostics\MethodProfiler\MethodProfilerMethodInvocationFormatter.cs" />
-    <Compile Include="Diagnostics\MethodProfiler\MethodInvocationStackCollection.cs" />
-    <Compile Include="Diagnostics\MethodProfiler\MethodInvocation.cs" />
-    <Compile Include="Diagnostics\MethodProfiler\MethodFraction.cs" />
-    <Compile Include="Diagnostics\MethodProfiler\MethodCollection.cs" />
-    <Compile Include="Diagnostics\MethodProfiler\MethodFormatter.cs" />
-    <Compile Include="Diagnostics\MethodProfiler\MethodProfiler.cs" />
-    <Compile Include="FunctionComposition.cs" />
-    <Compile Include="Collections\BitVector64.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Predicate\Negation.cs" />
-    <Compile Include="Collections\ObjectPool\IPoolableObjectFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Collections\IndexableCollection\UniqueListIndex.cs" />
+    <Compile Include="Collections\IProducerConsumerCollection.cs" />
+    <Compile Include="Collections\IReadOnlyCollection.cs" />
+    <Compile Include="Collections\IReadOnlyDictionary.cs" />
+    <Compile Include="Collections\IReadOnlyList.cs" />
+    <Compile Include="Collections\KeyValuePair.cs" />
+    <Compile Include="Collections\LinearSearch.cs" />
+    <Compile Include="Collections\MemberEqualityComparer.cs" />
+    <Compile Include="Collections\MultipleMemberEqualityComparer.cs" />
     <Compile Include="Collections\NamespaceDoc.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Collections\ObjectPool\IPoolableObjectFactory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Collections\ObjectPool\ObjectPool.cs">
@@ -541,10 +363,34 @@
     <Compile Include="Collections\ObjectPool\PooledObject.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Collections\ReadOnlyArray.cs" />
+    <Compile Include="Collections\ReadOnlyListSegment.cs" />
+    <Compile Include="Collections\ReadOnlyNonUniqueSortedList.cs" />
+    <Compile Include="Collections\ReadOnlySortedList.cs" />
+    <Compile Include="Collections\SegmentedCollection.cs" />
+    <Compile Include="Collections\SegmentedListBuilder.cs" />
     <Compile Include="Configuration\ApplicationData.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Configuration\AppSettings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\ConfigurationAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\ConfigurationAttributeCollection.cs" />
+    <Compile Include="Configuration\ConfigurationAttributeCollectionDebugger.cs" />
+    <Compile Include="Configuration\ConfigurationElementName.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\ConfigurationNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\ConfigurationNodeCollection.cs" />
+    <Compile Include="Configuration\ConfigurationNodeName.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\ConfigurationNodeTree.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Configuration\ConfigurationReader.cs">
@@ -565,18 +411,7 @@
     <Compile Include="Configuration\NamespaceDoc.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Configuration\ConfigurationAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Configuration\ConfigurationNode.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Configuration\ConfigurationNodeName.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Configuration\ConfigurationNodeTree.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Configuration\NameValueCollectionReader.cs" />
     <Compile Include="Configuration\SectionHandler.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -586,26 +421,37 @@
     <Compile Include="Configuration\TypeNameCollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Configuration\ConfigurationElementName.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Configuration\XmlAttributeReader.cs" />
     <Compile Include="Data\AsyncDbCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data\AsyncDbConnection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data\SqlClient\SqlCommandBuilderHelper.cs" />
+    <Compile Include="Data\CommandDefinition.cs" />
     <Compile Include="Data\ConnectionStateManager.cs" />
     <Compile Include="Data\Database.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data\SqlClient\ExternalSystem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Data\SqlClient\ExternalSystemPropertyTypes.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Data\DataColumnSchema.cs" />
+    <Compile Include="Data\DataParameterValue.cs" />
+    <Compile Include="Data\DataParameterValueType.cs" />
+    <Compile Include="Data\DataReader.cs" />
+    <Compile Include="Data\DataRowExtensions.cs" />
+    <Compile Include="Data\DataSetExtensions.cs" />
+    <Compile Include="Data\DataTableExtensions.cs" />
+    <Compile Include="Data\DataViewExtensions.cs" />
+    <Compile Include="Data\DbCommandExecutionException.cs" />
+    <Compile Include="Data\DbProviderFactoryExtensions.cs" />
+    <Compile Include="Data\DbTransactionScope.cs" />
+    <Compile Include="Data\IDataParameterCollectionExtensions.cs" />
+    <Compile Include="Data\IDataParameterExtensions.cs" />
+    <Compile Include="Data\IDataParameterValue.cs" />
+    <Compile Include="Data\IDataParameterValueGeneric.cs" />
+    <Compile Include="Data\IDataReaderExtensions.cs" />
+    <Compile Include="Data\IDataRecordExtensions.cs" />
+    <Compile Include="Data\IDbCommandBuilderHelper.cs" />
+    <Compile Include="Data\IDbCommandExtensions.cs" />
     <Compile Include="Data\IDbCommandHelper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -615,15 +461,25 @@
     <Compile Include="Data\IDbConnectionHelper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data\SqlClient\SqlLoggedSqlConnection\SqlLoggedSqlCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Data\SqlClient\SqlLoggedSqlConnection\SqlLoggedSqlConnection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Data\SqlClient\SqlLoggedSqlConnection\SqlLoggedSqlDataReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Data\IDbProviderFactoryHelper.cs" />
+    <Compile Include="Data\IDbTransactionScope.cs" />
+    <Compile Include="Data\IDbTransactionScopeContract.cs" />
+    <Compile Include="Data\IDbTransactionScopeExtensions.cs" />
+    <Compile Include="Data\ISafeDbConnection.cs" />
+    <Compile Include="Data\LoggedDbConnection\AfterExecuteCommandEventArgs.cs" />
+    <Compile Include="Data\LoggedDbConnection\AfterOpenDbConnectionEventArgs.cs" />
+    <Compile Include="Data\LoggedDbConnection\AfterReadEventArgs.cs" />
+    <Compile Include="Data\LoggedDbConnection\BeforeExecuteCommandEventArgs.cs" />
+    <Compile Include="Data\LoggedDbConnection\BeforeOpenDbConnectionEventArgs.cs" />
+    <Compile Include="Data\LoggedDbConnection\DbConnectionLogger.cs" />
+    <Compile Include="Data\LoggedDbConnection\LoggedDataReader.cs" />
+    <Compile Include="Data\LoggedDbConnection\LoggedDbCommand.cs" />
+    <Compile Include="Data\LoggedDbConnection\LoggedDbCommandExecutionType.cs" />
+    <Compile Include="Data\LoggedDbConnection\LoggedDbCommandInfo.cs" />
+    <Compile Include="Data\LoggedDbConnection\LoggedDbConnection.cs" />
+    <Compile Include="Data\LoggedDbConnection\LoggedDbConnectionFactory.cs" />
+    <Compile Include="Data\LoggedDbConnection\LoggedEventArgs.cs" />
+    <Compile Include="Data\MappedDataReader.cs" />
     <Compile Include="Data\PTypes\NamespaceDoc.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -675,18 +531,28 @@
     <Compile Include="Data\PTypes\PVariant.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data\PTypes\PXml.cs" />
     <Compile Include="Data\SafeDbCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data\SafeDbConnection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data\SqlClient\ExternalSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Data\SqlClient\ExternalSystemPropertyTypes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Data\SqlClient\NativeSqlCommandFactory.cs" />
     <Compile Include="Data\SqlClient\SafeLoggedSqlConnection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data\SqlClient\SafeLoggedSqlConnectionFactory.cs" />
     <Compile Include="Data\SqlClient\SafeSqlConnection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data\SqlClient\SafeSqlConnectionFactory.cs" />
     <Compile Include="Data\SqlClient\SimpleLoggedSqlCommandFilter.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -696,6 +562,8 @@
     <Compile Include="Data\SqlClient\SimpleSqlConnectionFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data\SqlClient\SqlCommandBuilderHelper.cs" />
+    <Compile Include="Data\SqlClient\SqlCommandExtensions.cs" />
     <Compile Include="Data\SqlClient\SqlCommandHelper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -703,6 +571,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data\SqlClient\SqlDatabase.cs" />
+    <Compile Include="Data\SqlClient\SqlErrorCollectionExtensions.cs" />
+    <Compile Include="Data\SqlClient\SqlErrorExtensions.cs" />
+    <Compile Include="Data\SqlClient\SqlLog\IInternalConnectionHelper.cs" />
+    <Compile Include="Data\SqlClient\SqlLog\InternalConnectionHelper.cs" />
+    <Compile Include="Data\SqlClient\SqlLog\InternalConnectionHelper2.cs" />
+    <Compile Include="Data\SqlClient\SqlLog\ISqlLogItem.cs" />
     <Compile Include="Data\SqlClient\SqlLog\SqlLog.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -712,6 +586,7 @@
     <Compile Include="Data\SqlClient\SqlLog\SqlLogCommand.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data\SqlClient\SqlLog\SqlLogCommandExecution.cs" />
     <Compile Include="Data\SqlClient\SqlLog\SqlLogConnection.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -721,9 +596,25 @@
     <Compile Include="Data\SqlClient\SqlLog\SqlLogError.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data\SqlClient\SqlLoggedSqlConnection\ISqlLoggedSqlCommandFilter.cs" />
+    <Compile Include="Data\SqlClient\SqlLoggedSqlConnection\SqlLoggedSqlCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Data\SqlClient\SqlLoggedSqlConnection\SqlLoggedSqlConnection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Data\SqlClient\SqlLoggedSqlConnection\SqlLoggedSqlConnectionFactory.cs" />
+    <Compile Include="Data\SqlClient\SqlLoggedSqlConnection\SqlLoggedSqlDataReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Data\SqlClient\SqlParameterCollectionExtensions.cs" />
+    <Compile Include="Data\SqlClient\SqlParameterExtensions.cs" />
     <Compile Include="Data\SqlClient\SqlSequence.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data\SqlClient\SqlStatementBuilder.cs" />
+    <Compile Include="Data\SqlClient\SqlStatementExtensions.cs" />
+    <Compile Include="Data\SqlNull.cs" />
     <Compile Include="Data\TextData\ITextDataConverter.cs" />
     <Compile Include="Data\TextData\TextDataColumn.cs" />
     <Compile Include="Data\TextData\TextDataColumnCollection.cs" />
@@ -734,33 +625,60 @@
     <Compile Include="Data\TextData\TextDataConnection.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Data\TextData\TextDataFormatException.cs" />
     <Compile Include="Data\TextData\TextDataParameter.cs" />
     <Compile Include="Data\TextData\TextDataParameterCollection.cs" />
     <Compile Include="Data\TextData\TextDataReader.cs" />
     <Compile Include="Data\TextData\TextDataRow.cs" />
+    <Compile Include="Data\TextData\TextDataSet.cs" />
+    <Compile Include="Data\TextData\TextDataSetTable.cs" />
+    <Compile Include="Data\TextData\TextDataSetTableCollection.cs" />
     <Compile Include="Data\TextData\TextDataStreamReader.cs" />
     <Compile Include="Data\TextData\TextDataStreamWriter.cs" />
+    <Compile Include="Data\TextData\TextDataTable.cs" />
+    <Compile Include="Data\TextData\TextDataTableCollection.cs" />
     <Compile Include="Diagnostics\AppDomainMonitor.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\Log\AsyncLogFile.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Diagnostics\Assert\Assert.cs" />
+    <Compile Include="Diagnostics\Assert\AssertFailedEventArgs.cs" />
+    <Compile Include="Diagnostics\Assert\AssertFailedException.cs" />
+    <Compile Include="Diagnostics\Assert\AssertMessage.cs" />
+    <Compile Include="Diagnostics\Assert\AssertMessageParameter.cs" />
+    <Compile Include="Diagnostics\Assert\AssertMessageParameterCollection.cs" />
+    <Compile Include="Diagnostics\Assert\CollectionAssert.cs" />
+    <Compile Include="Diagnostics\Assert\StringAssert.cs" />
+    <Compile Include="Diagnostics\Contracts\FoundationContract.cs" />
     <Compile Include="Diagnostics\DebugWriter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Diagnostics\Error.cs" />
     <Compile Include="Diagnostics\ErrorCollection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Diagnostics\ErrorType.cs" />
+    <Compile Include="Diagnostics\GarbageMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Diagnostics\Int64PerformanceCounter.cs" />
+    <Compile Include="Diagnostics\IsErrorTypePredicate.cs" />
+    <Compile Include="Diagnostics\Log\AsyncLogFile.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Diagnostics\Log\CallerInformation.cs" />
+    <Compile Include="Diagnostics\Log\ConsoleLogWriter.cs" />
     <Compile Include="Diagnostics\Log\EventLogWriter.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Diagnostics\Log\FileLogWriter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\GarbageMonitor.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Diagnostics\Log\FoundationLog.cs" />
+    <Compile Include="Diagnostics\Log\FoundationLogFactory.cs" />
+    <Compile Include="Diagnostics\Log\ILog.cs" />
+    <Compile Include="Diagnostics\Log\ILogExtensions.cs" />
+    <Compile Include="Diagnostics\Log\ILogFactory.cs" />
+    <Compile Include="Diagnostics\Log\ILogFactoryExtensions.cs" />
     <Compile Include="Diagnostics\Log\ILogFile.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -770,12 +688,14 @@
     <Compile Include="Diagnostics\Log\ILogWriter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Diagnostics\Log\InternalLogFactory.cs" />
     <Compile Include="Diagnostics\Log\LogEntry.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Diagnostics\Log\LogEntryFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Diagnostics\Log\LogFactory.cs" />
     <Compile Include="Diagnostics\Log\LogFile.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -785,9 +705,9 @@
     <Compile Include="Diagnostics\Log\LogState.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\NamespaceDoc.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Diagnostics\Log\MemoryLogWriter.cs" />
+    <Compile Include="Diagnostics\Log\NullApplicationLog.cs" />
+    <Compile Include="Diagnostics\Log\NullLog.cs" />
     <Compile Include="Diagnostics\Log\SqlLogWriter.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -797,40 +717,106 @@
     <Compile Include="Diagnostics\Log\TextLogWriter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\TraceWriter.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Diagnostics\Log\XmlLogFormatter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Diagnostics\MethodProfiler\MethodCollection.cs" />
+    <Compile Include="Diagnostics\MethodProfiler\MethodFormatter.cs" />
+    <Compile Include="Diagnostics\MethodProfiler\MethodFraction.cs" />
+    <Compile Include="Diagnostics\MethodProfiler\MethodInvocation.cs" />
+    <Compile Include="Diagnostics\MethodProfiler\MethodInvocationStackCollection.cs" />
+    <Compile Include="Diagnostics\MethodProfiler\MethodProfiler.cs" />
+    <Compile Include="Diagnostics\MethodProfiler\MethodProfilerMethodInvocationFormatter.cs" />
+    <Compile Include="Diagnostics\NamespaceDoc.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Diagnostics\StackFrameExtensions.cs" />
+    <Compile Include="Diagnostics\StackTraceExtensions.cs" />
+    <Compile Include="Diagnostics\StopwatchTimeSpan.cs" />
+    <Compile Include="Diagnostics\TraceWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DocumentProperties\Document.cs" />
+    <Compile Include="DocumentProperties\DocumentProperty.cs" />
+    <Compile Include="DocumentProperties\DocumentPropertyCollection.cs" />
+    <Compile Include="DocumentProperties\DocumentType.cs" />
+    <Compile Include="DocumentProperties\StructuredStorage\Extensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DocumentProperties\StructuredStorage\IStorage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DocumentProperties\StructuredStorage\PropertySetId.cs" />
+    <Compile Include="DocumentProperties\StructuredStorage\PropVariant.cs" />
+    <Compile Include="DocumentProperties\StructuredStorage\StgDocumentSummaryPropertyId.cs" />
+    <Compile Include="DocumentProperties\StructuredStorage\StgSummaryPropertyId.cs" />
+    <Compile Include="IDateTimeProviderExtensions.cs" />
     <Compile Include="IO\AsyncTextWriter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IO\StreamWriterTransaction.cs" />
+    <Compile Include="IO\AsyncTextWriterListItem.cs" />
+    <Compile Include="IO\DefaultFormatter.cs" />
+    <Compile Include="IO\EventableStream.cs" />
     <Compile Include="IO\FileSystemMonitor.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IO\FileSystemWatcher.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IO\IFormatter.cs" />
+    <Compile Include="IO\Indentation.cs" />
+    <Compile Include="IO\MultiTextWriter.cs" />
+    <Compile Include="IO\SegmentedStreamReader.cs" />
+    <Compile Include="IO\StreamExtensions.cs" />
+    <Compile Include="IO\StreamWriterTransaction.cs" />
+    <Compile Include="IO\TempFile.cs" />
     <Compile Include="IO\TreeTextWriter.cs" />
-    <Compile Include="NamespaceDoc.cs">
+    <Compile Include="IDateTimeProvider.cs" />
+    <Compile Include="Linq\ArrayExtensions.cs" />
+    <Compile Include="Linq\EnumExtensions.cs" />
+    <Compile Include="Linq\ExceptionExtensions.cs" />
+    <Compile Include="Linq\Extensions.cs" />
+    <Compile Include="Linq\FuncExtensions.cs" />
+    <Compile Include="Linq\ICollectionExtensions.cs" />
+    <Compile Include="Linq\IdentityFunction.cs" />
+    <Compile Include="Linq\IDictionaryExtensions.cs" />
+    <Compile Include="Linq\IEnumerableExtensions.cs" />
+    <Compile Include="Linq\IEnumeratorExtensions.cs" />
+    <Compile Include="Linq\IListExtensions.cs" />
+    <Compile Include="Linq\IndexedItem.cs" />
+    <Compile Include="Linq\IndexedItemAndPreviousItem.cs" />
+    <Compile Include="Linq\IndexedItemGeneric.cs" />
+    <Compile Include="Linq\IProducerConsumerCollectionExtensions.cs" />
+    <Compile Include="Linq\IReadOnlyListExtensions.cs" />
+    <Compile Include="Linq\MinMaxResult.cs" />
+    <Compile Include="Linq\PreviousAndCurrent.cs" />
+    <Compile Include="Linq\QueueExtensions.cs" />
+    <Compile Include="Linq\TimeSpanExtensions.cs" />
+    <Compile Include="Management\InitiateShutdownReturnValue.cs" />
+    <Compile Include="Management\ManagementJob.cs" />
+    <Compile Include="Management\ManagementJobState.cs" />
+    <Compile Include="Management\ManagementScopeExtensions.cs" />
+    <Compile Include="Management\MsvmComputerSystem.cs" />
+    <Compile Include="Management\MsvmComputerSystemEnabledState.cs" />
+    <Compile Include="Management\MsvmComputerSystemRequestedState.cs" />
+    <Compile Include="Management\MsvmComputerSystemRequestStateChangeReturnValue.cs" />
+    <Compile Include="Predicate\Conjunction.cs" />
+    <Compile Include="Predicate\Disjunction.cs" />
+    <Compile Include="Predicate\EnumerableExistentialQuantifier.cs" />
+    <Compile Include="Predicate\EnumerableUniversalQuantifier.cs" />
+    <Compile Include="Predicate\Negation.cs" />
+    <Compile Include="Predicate\PredicateClass.cs" />
+    <Compile Include="Predicate\SystemPredicate.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Selection.cs" />
     <Compile Include="ServiceProcess\IService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="STGM.cs" />
-    <Compile Include="StringExtensions.cs" />
-    <Compile Include="DocumentProperties\StructuredStorage\StgDocumentSummaryPropertyId.cs" />
-    <Compile Include="DocumentProperties\StructuredStorage\PropertySetId.cs" />
-    <Compile Include="DocumentProperties\StructuredStorage\PropVariant.cs" />
-    <Compile Include="DocumentProperties\StructuredStorage\StgSummaryPropertyId.cs" />
-    <Compile Include="Text\MyStringBuilder.cs" />
     <Compile Include="Text\Hex.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Text\MyStringBuilder.cs" />
     <Compile Include="Text\StringHelper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -844,6 +830,7 @@
     <Compile Include="Text\StringTableColumnCollection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Text\StringTableColumnInfo.cs" />
     <Compile Include="Text\StringTableRow.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -854,10 +841,10 @@
     <Compile Include="Threading\AsyncQueueConsumeEventArgs.cs" />
     <Compile Include="Threading\IAsyncQueue.cs" />
     <Compile Include="Threading\IConsumer.cs" />
-    <Compile Include="Threading\LimitedConcurrencyLevelTaskScheduler.cs" />
     <Compile Include="Threading\ILoopable.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Threading\LimitedConcurrencyLevelTaskScheduler.cs" />
     <Compile Include="Threading\Lock.cs" />
     <Compile Include="Threading\LoopThread.cs">
       <SubType>Code</SubType>
@@ -878,8 +865,8 @@
     <Compile Include="Threading\Tasks\Task.cs" />
     <Compile Include="Threading\Tasks\TaskCreationOptions.cs" />
     <Compile Include="Threading\Tasks\TaskGeneric.cs" />
-    <Compile Include="Threading\Tasks\TaskMonitor.cs" />
     <Compile Include="Threading\Tasks\TaskInfo.cs" />
+    <Compile Include="Threading\Tasks\TaskMonitor.cs" />
     <Compile Include="Threading\Tasks\WorkerTask.cs" />
     <Compile Include="Threading\ThreadMonitor.cs">
       <SubType>Code</SubType>
@@ -904,26 +891,11 @@
     <Compile Include="Threading\WorkerThreadPoolManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NativeMethods.cs" />
-    <Compile Include="SmallTimeSpan.cs" />
-    <Compile Include="Tuple.cs" />
-    <Compile Include="Tuple2.cs" />
-    <Compile Include="Tuple3.cs" />
-    <Compile Include="Tuple4.cs" />
-    <Compile Include="Tuple5.cs" />
-    <Compile Include="TypeIsSelection.cs" />
     <Compile Include="Windows\Forms\ControlExtensions.cs" />
     <Compile Include="Windows\Forms\CursorManager.cs" />
     <Compile Include="Windows\Forms\FormPosition.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="XmlSpreadsheet\XmlSpreadsheetAttribute.cs" />
-    <Compile Include="XmlSpreadsheet\XmlSpreadsheetAttributeCollection.cs" />
-    <Compile Include="XmlSpreadsheet\XmlSpreadsheetCell.cs" />
-    <Compile Include="XmlSpreadsheet\XmlSpreadsheetColumn.cs" />
-    <Compile Include="XmlSpreadsheet\XmlSpreadsheetDataType.cs" />
-    <Compile Include="XmlSpreadsheet\XmlSpreadsheetTable.cs" />
-    <Compile Include="XmlSpreadsheet\XmlSpreadsheetWriter.cs" />
     <Compile Include="Xml\SimpleXmlTextWriter.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -935,6 +907,48 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Xml\XmlWriterExtensions.cs" />
+    <Compile Include="XmlSpreadsheet\XmlSpreadsheetAttribute.cs" />
+    <Compile Include="XmlSpreadsheet\XmlSpreadsheetAttributeCollection.cs" />
+    <Compile Include="XmlSpreadsheet\XmlSpreadsheetCell.cs" />
+    <Compile Include="XmlSpreadsheet\XmlSpreadsheetColumn.cs" />
+    <Compile Include="XmlSpreadsheet\XmlSpreadsheetDataType.cs" />
+    <Compile Include="XmlSpreadsheet\XmlSpreadsheetTable.cs" />
+    <Compile Include="XmlSpreadsheet\XmlSpreadsheetWriter.cs" />
+    <Compile Include="ArgumentEqualsSelection.cs" />
+    <Compile Include="ArgumentIsSelection.cs" />
+    <Compile Include="CommandLine.cs" />
+    <Compile Include="CommandLineArgument.cs" />
+    <Compile Include="Comparers.cs" />
+    <Compile Include="CurrentDirectoryChanger.cs" />
+    <Compile Include="Disposer.cs" />
+    <Compile Include="Enum.cs" />
+    <Compile Include="FunctionComposition.cs" />
+    <Compile Include="IEnumSTATSTG.cs" />
+    <Compile Include="IIntervalComparer.cs" />
+    <Compile Include="Interval.cs" />
+    <Compile Include="IStorage.cs" />
+    <Compile Include="Lazy.cs" />
+    <Compile Include="LeftClosedRightClosedIntervalComparer.cs" />
+    <Compile Include="LeftClosedRightOpenIntervalComparer.cs" />
+    <Compile Include="Library.cs" />
+    <Compile Include="LocalTime.cs" />
+    <Compile Include="NamespaceDoc.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NativeMethods.cs" />
+    <Compile Include="NotNullable.cs" />
+    <Compile Include="Selection.cs" />
+    <Compile Include="SmallDate.cs" />
+    <Compile Include="SmallTimeSpan.cs" />
+    <Compile Include="STGM.cs" />
+    <Compile Include="StringExtensions.cs" />
+    <Compile Include="SystemTime.cs" />
+    <Compile Include="Tuple.cs" />
+    <Compile Include="Tuple2.cs" />
+    <Compile Include="Tuple3.cs" />
+    <Compile Include="Tuple4.cs" />
+    <Compile Include="Tuple5.cs" />
+    <Compile Include="TypeIsSelection.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

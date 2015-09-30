@@ -1,8 +1,8 @@
 namespace DataCommander.Foundation.Linq
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Text;
@@ -59,8 +59,8 @@ namespace DataCommander.Foundation.Linq
         /// </summary>
         /// <param name="source"></param>
         /// <typeparam name="TSource"></typeparam>
+        /// <exception cref="ArgumentException"></exception>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         [Pure]
         public static IReadOnlyList<TSource> AsReadOnlyList<TSource>(this IEnumerable<TSource> source)
         {
@@ -73,7 +73,7 @@ namespace DataCommander.Foundation.Linq
                 })
                 .IfArgumentIs(delegate(IList<TSource> list)
                 {
-                    readOnlyList = list.AsReadOnlyList();
+                    readOnlyList = new ReadOnlyCollection<TSource>(list);
                 })
                 .IfArgumentIs(delegate(IReadOnlyList<TSource> list)
                 {

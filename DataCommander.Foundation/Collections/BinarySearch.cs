@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Foundation.Collections
+﻿using System.Diagnostics;
+
+namespace DataCommander.Foundation.Collections
 {
     using System;
     using System.Diagnostics.Contracts;
@@ -46,6 +48,83 @@
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="minIndex"></param>
+        /// <param name="maxIndex"></param>
+        /// <param name="lessThan"></param>
+        /// <param name="equals"></param>
+        public static void Search(int minIndex, int maxIndex,
+            Func<int, bool> lessThan,
+            Func<int, bool> equals)
+        {
+            int currentMinIndex = minIndex;
+            int currentMaxIndex = maxIndex;
+
+            while (currentMinIndex < currentMaxIndex)
+            {
+                int midIndex = currentMinIndex + (currentMaxIndex - currentMinIndex)/2;
+
+                if (lessThan(midIndex))
+                {
+                    Debug.WriteLine($"[{midIndex}] < key");
+                    currentMinIndex = midIndex + 1;
+                }
+                else
+                {
+                    Debug.WriteLine($"key <= [{midIndex}]");
+                    currentMaxIndex = midIndex;
+                }
+            }
+
+            if (currentMinIndex == currentMaxIndex)
+            {
+                if (currentMinIndex == minIndex)
+                {
+                    if (equals(minIndex))
+                    {
+                        Debug.WriteLine($"key = [{minIndex}]");
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"key < [{minIndex}]");
+                    }
+                }
+                else if (currentMaxIndex == maxIndex)
+                {
+                    if (lessThan(maxIndex))
+                    {
+                        Debug.WriteLine($"[{maxIndex}] < key");
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"key <= [{maxIndex}]");
+
+                        if (equals(maxIndex))
+                        {
+                            Debug.WriteLine($"key = [{maxIndex}]");
+                        }
+                        else
+                        {
+                            Debug.WriteLine($"key < [{maxIndex}]");
+                        }
+                    }
+                }
+                else
+                {
+                    if (equals(minIndex))
+                    {
+                        Debug.WriteLine($"key = [{minIndex}]");
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"key != [{minIndex}]");
+                    }
+                }
+            }
         }
     }
 }

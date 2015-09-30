@@ -150,6 +150,8 @@ namespace DataCommander.Providers
 
                         if (true)
                         {
+                            int rowIndex = 0;
+
                             foreach (DataRow dataRow in this.dataTable.Rows)
                             {
                                 string s = dataRow[dataColumn].ToString();
@@ -165,6 +167,13 @@ namespace DataCommander.Providers
                                         maxWidth = width;
                                     }
                                 }
+
+                                if (rowIndex == 999)
+                                {
+                                    break;
+                                }
+
+                                rowIndex++;
                             }
 
                             if (maxWidth > 250)
@@ -788,7 +797,8 @@ namespace DataCommander.Providers
                         }
 
                         stopwatch.Stop();
-                        this.statusBarPanel.Text = string.Format("Table saved successfully in {0} seconds.", StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3));
+                        this.statusBarPanel.Text = string.Format("Table saved successfully in {0} seconds.",
+                            StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3));
                     }
                     catch (Exception ex)
                     {
@@ -811,7 +821,8 @@ namespace DataCommander.Providers
                 Clipboard.SetDataObject(dataObject);
                 if (this.statusBarPanel != null)
                 {
-                    this.statusBarPanel.Text = string.Format("Data copied to clipboard. Data is available in 3 formats: HTML, TAB separated text, FIXED width text.");
+                    this.statusBarPanel.Text =
+                        string.Format("Data copied to clipboard. Data is available in 3 formats: HTML, TAB separated text, FIXED width text.");
                 }
             }
             finally
@@ -869,7 +880,7 @@ namespace DataCommander.Providers
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                var streamField = (StreamField) this.cellValue;
+                var streamField = (StreamField)this.cellValue;
                 string path = saveFileDialog.FileName;
                 Stream source = streamField.Stream;
 
@@ -898,7 +909,7 @@ namespace DataCommander.Providers
 
             if (s == null)
             {
-                StringField stringField = (StringField) this.cellValue;
+                StringField stringField = (StringField)this.cellValue;
                 s = stringField.Value;
             }
 
@@ -972,7 +983,8 @@ namespace DataCommander.Providers
 
                 if (this.statusBarPanel != null)
                 {
-                    this.statusBarPanel.Text = string.Format("RowFilter ({0}) applied. {1} row(s) found from {2} row(s).", rowFilter, dataView.Count, this.dataTable.Rows.Count);
+                    this.statusBarPanel.Text = string.Format("RowFilter ({0}) applied. {1} row(s) found from {2} row(s).", rowFilter, dataView.Count,
+                        this.dataTable.Rows.Count);
                 }
             }
             catch (Exception ex)
@@ -1003,7 +1015,7 @@ namespace DataCommander.Providers
         private void CopyArrayField_Click(object sender, EventArgs e)
         {
             var sb = new StringBuilder();
-            var array = (Array) this.cellValue;
+            var array = (Array)this.cellValue;
 
             for (int i = 0; i < array.Length; i++)
             {
@@ -1257,7 +1269,7 @@ namespace DataCommander.Providers
                                     switch (typeCode)
                                     {
                                         case TypeCode.String:
-                                            valueStr = (string) this.cellValue;
+                                            valueStr = (string)this.cellValue;
 
                                             if (valueStr.Length < 256)
                                             {
@@ -1309,7 +1321,7 @@ namespace DataCommander.Providers
                                 })
                                 .IfTypeIs<StringField>(() =>
                                 {
-                                    var stringField = (StringField) this.cellValue;
+                                    var stringField = (StringField)this.cellValue;
                                     string value = stringField.Value;
                                     int length = value != null ? value.Length : 0;
                                     menuItem = new ToolStripMenuItem("Copy string field", null, new EventHandler(this.CopyStringField_Click));
@@ -1324,7 +1336,7 @@ namespace DataCommander.Providers
                                 })
                                 .IfTypeIs<string>(() =>
                                 {
-                                    string value = (string) this.cellValue;
+                                    string value = (string)this.cellValue;
                                     int length = value.Length;
 
                                     menuItem = new ToolStripMenuItem("Copy string field", null, new EventHandler(this.CopyStringField_Click));

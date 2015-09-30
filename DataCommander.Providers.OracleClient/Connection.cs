@@ -10,11 +10,13 @@ namespace DataCommander.Providers.OracleClient
     {
         private string connectionName;
 
-        public Connection( string connectionString )
+        public Connection(string connectionString)
         {
-            oracleConnection = new OracleConnection( connectionString );
+#pragma warning disable 618
+            oracleConnection = new OracleConnection(connectionString);
+#pragma warning restore 618
             this.Connection = oracleConnection;
-            oracleConnection.InfoMessage += new OracleInfoMessageEventHandler( OnInfoMessage );
+            oracleConnection.InfoMessage += new OracleInfoMessageEventHandler(OnInfoMessage);
         }
 
         public override void Open()
@@ -32,20 +34,20 @@ namespace DataCommander.Providers.OracleClient
             }
         }
 
-        void OnInfoMessage( object sender, OracleInfoMessageEventArgs e )
+        private void OnInfoMessage(object sender, OracleInfoMessageEventArgs e)
         {
             DateTime now = LocalTime.Default.Now;
 
             StringBuilder sb = new StringBuilder();
-            sb.Append( e.Message );
-            sb.Append( Environment.NewLine );
-            sb.Append( "Code: " );
-            sb.Append( e.Code );
-            sb.Append( Environment.NewLine );
-            sb.Append( "Source: " );
-            sb.Append( e.Source );
+            sb.Append(e.Message);
+            sb.Append(Environment.NewLine);
+            sb.Append("Code: ");
+            sb.Append(e.Code);
+            sb.Append(Environment.NewLine);
+            sb.Append("Source: ");
+            sb.Append(e.Source);
 
-            this.InvokeInfoMessage( new InfoMessage[] { new InfoMessage( now, InfoMessageSeverity.Information, sb.ToString() ) } );
+            this.InvokeInfoMessage(new InfoMessage[] {new InfoMessage(now, InfoMessageSeverity.Information, sb.ToString())});
         }
 
         public override string DataSource
@@ -72,17 +74,19 @@ namespace DataCommander.Providers.OracleClient
                 return 0;
             }
         }
-        
+
         public override IDbCommand CreateCommand()
         {
             return oracleConnection.CreateCommand();
         }
 
-        protected override void SetDatabase( string database )
+        protected override void SetDatabase(string database)
         {
         }
 
-        readonly OracleConnection oracleConnection;
+#pragma warning disable 618
+        private readonly OracleConnection oracleConnection;
+#pragma warning restore 618
 
         public override string ConnectionName
         {

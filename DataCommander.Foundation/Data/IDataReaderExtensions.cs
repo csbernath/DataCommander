@@ -6,7 +6,6 @@
     using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Threading;
-    using DataCommander.Foundation.Threading;
 
     /// <summary>
     /// 

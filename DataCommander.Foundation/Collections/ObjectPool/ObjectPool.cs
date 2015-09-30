@@ -5,7 +5,6 @@ namespace DataCommander.Foundation.Collections
     using System.Diagnostics.Contracts;
     using System.Threading;
     using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Threading;
 
     /// <summary>
     /// 

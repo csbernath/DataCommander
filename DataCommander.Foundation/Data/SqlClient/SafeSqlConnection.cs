@@ -9,7 +9,6 @@ namespace DataCommander.Foundation.Data.SqlClient
     using System.Threading;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Linq;
-    using DataCommander.Foundation.Threading;
 
     /// <summary>
     /// Safe SQL Server connection for Windows Services.

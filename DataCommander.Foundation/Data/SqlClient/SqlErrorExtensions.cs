@@ -27,6 +27,10 @@
             {
                 sb.AppendFormat("[Server: Line {0}] ", error.LineNumber);
             }
+            else if (error.Class == 0 && error.State == 1 && error.LineNumber == 1)
+            {
+                sb.AppendFormat("[Server: Msg {0}] ", error.Number);
+            }
             else
             {
                 sb.AppendFormat("[Server: Msg {0}, Level {1}, State {2}", error.Number, error.Class, error.State);

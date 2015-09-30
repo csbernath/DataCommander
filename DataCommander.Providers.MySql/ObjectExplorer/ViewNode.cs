@@ -43,7 +43,10 @@
 
         bool ITreeNode.Sortable
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         string ITreeNode.Query
@@ -73,11 +76,12 @@ from {0}.{1}", this.databaseNode.Name, this.name);
             string commandText = string.Format("show create table {0}.{1}", this.databaseNode.Name, this.name);
             string createTableStatement = MySqlClientFactory.Instance.ExecuteReader(
                 this.databaseNode.ObjectExplorer.ConnectionString,
-                commandText,
+                new CommandDefinition {CommandText = commandText},
+                CommandBehavior.Default,
                 dataRecord => dataRecord.GetString(0)).First();
-            
+
             Clipboard.SetText(createTableStatement);
-            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
             queryForm.SetStatusbarPanelText("Copying create table statement to clipboard finished.", SystemColors.ControlText);
         }
 

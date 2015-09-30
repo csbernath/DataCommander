@@ -6,7 +6,7 @@ namespace DataCommander.Foundation.Threading.Tasks
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Linq;
     using DataCommander.Foundation.Text;
-#if FOUNDATION_4_0 || FOUNDATION_4_5
+#if FOUNDATION_4_0 || FOUNDATION_4_5 || FOUNDATION_4_6
     using System.Threading.Tasks;
 #endif
 
@@ -108,12 +108,11 @@ namespace DataCommander.Foundation.Threading.Tasks
             TaskCreationOptions taskCreationOptions,
             string name)
         {
-            var monitoredTaskState =
-                new MonitoredTaskFunctionState<TResult>
-                {
-                    Function = function,
-                    State = state
-                };
+            var monitoredTaskState = new MonitoredTaskFunctionState<TResult>
+            {
+                Function = function,
+                State = state
+            };
 
             var task = new Task<TResult>(ExecuteFunction<TResult>, monitoredTaskState, cancellationToken, taskCreationOptions);
             var taskInfo = new TaskInfo(task, name);

@@ -6,7 +6,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public sealed class SystemTime : IDateTimeProvider
+    public sealed class UniversalTime : IDateTimeProvider
     {
         private static volatile int sharedTickCount;
         private static DateTime sharedDateTime;
@@ -17,9 +17,9 @@
         private int incrementedTickCount;
         private DateTime incrementedDateTime;
 
-        private static readonly SystemTime DefaultSystemTime = new SystemTime(increment: 16, adjustment: 60*1000);
+        private static readonly UniversalTime defaultUniversalTime = new UniversalTime(increment: 16, adjustment: 60*1000);
 
-        static SystemTime()
+        static UniversalTime()
         {
             sharedTickCount = Environment.TickCount;
             sharedDateTime = DateTime.UtcNow;
@@ -30,7 +30,7 @@
         /// </summary>
         /// <param name="increment">increment interval in milliseconds</param>
         /// <param name="adjustment">adjustement interval in millseconds</param>
-        public SystemTime(int increment, int adjustment)
+        public UniversalTime(int increment, int adjustment)
         {
             Contract.Requires<ArgumentOutOfRangeException>(increment >= 0);
             Contract.Requires<ArgumentOutOfRangeException>(increment <= adjustment);
@@ -58,11 +58,11 @@
         /// <summary>
         /// 
         /// </summary>
-        public static SystemTime Default
+        public static UniversalTime Default
         {
             get
             {
-                return DefaultSystemTime;
+                return defaultUniversalTime;
             }
         }
 

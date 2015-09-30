@@ -42,7 +42,6 @@ namespace DataCommander
         private ToolStripMenuItem mnuOpen;
         private ToolStripButton btnConnect;
         private ToolStripMenuItem mnuWindow;
-        private ToolStripMenuItem mnuCollectGarbage;
         private ToolStripMenuItem mnuRecentFileList;
         private ToolStripMenuItem mnuFont;
         private ToolStripButton openButton;
@@ -60,7 +59,9 @@ namespace DataCommander
         private ToolStripTextBox activeMdiChildToolStripTextBox;
         private ToolStripMenuItem recentConnectionsToolStripMenuItem;
         private ToolStripMenuItem checkForToolStripMenuItem;
+        private ToolStripStatusLabel managedMemoryToolStripStatusLabel;
         private ToolStrip queryFormToolStrip;
+        private Timer timer;
 
         /// <summary>
         /// 
@@ -84,9 +85,37 @@ namespace DataCommander
             DateTime end = DateTime.Now;
             TimeSpan elapsed = end - start;
 
-            string message = string.Format("Current user: {0}. Application loaded in {1} seconds.", WindowsIdentity.GetCurrent().Name, new StopwatchTimeSpan(elapsed).ToString(3));
+            string message = string.Format("Current user: {0}. Application loaded in {1} seconds.", WindowsIdentity.GetCurrent().Name,
+                new StopwatchTimeSpan(elapsed).ToString(3));
             this.toolStripStatusLabel.Text = message;
             log.Trace(message);
+
+            this.UpdateTotalMemory();
+
+            this.timer = new Timer(this.components)
+            {
+                Interval = 10000, // 10 seconds
+            };
+            this.timer.Tick += Timer_Tick;
+            this.timer.Start();
+        }
+
+        public void UpdateTotalMemory()
+        {
+            long totalMemory = GC.GetTotalMemory(false);
+            double totalMemoryMB = (double)totalMemory/1024.0/1024.0;
+            string text = string.Format("{0} MB", Math.Round(totalMemoryMB, 0));
+
+            this.managedMemoryToolStripStatusLabel.Text = text;
+
+            this.managedMemoryToolStripStatusLabel.ForeColor = totalMemoryMB <= 256
+                ? SystemColors.ControlText
+                : Color.Red;
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            this.UpdateTotalMemory();
         }
 
         /// <summary>
@@ -123,13 +152,13 @@ namespace DataCommander
             this.recentConnectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuRecentFileList = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuCollectGarbage = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuFont = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuWindow = new System.Windows.Forms.ToolStripMenuItem();
             this.closeAllDocumentsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.contentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkForToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
@@ -142,8 +171,8 @@ namespace DataCommander
             this.activeMdiChildToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.managedMemoryToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripPanel = new System.Windows.Forms.ToolStripPanel();
-            this.checkForToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusBar.SuspendLayout();
@@ -173,11 +202,10 @@ namespace DataCommander
             this.recentConnectionsToolStripMenuItem,
             this.saveAllToolStripMenuItem,
             this.mnuRecentFileList,
-            this.mnuCollectGarbage,
             this.mnuExit});
             this.menuItem1.MergeIndex = 1;
             this.menuItem1.Name = "menuItem1";
-            this.menuItem1.Size = new System.Drawing.Size(67, 20);
+            this.menuItem1.Size = new System.Drawing.Size(79, 20);
             this.menuItem1.Text = "&DataSource";
             // 
             // NewToolStripMenuItem
@@ -229,14 +257,6 @@ namespace DataCommander
             this.mnuRecentFileList.Size = new System.Drawing.Size(187, 22);
             this.mnuRecentFileList.Text = "Recent &File List";
             // 
-            // mnuCollectGarbage
-            // 
-            this.mnuCollectGarbage.MergeIndex = 3;
-            this.mnuCollectGarbage.Name = "mnuCollectGarbage";
-            this.mnuCollectGarbage.Size = new System.Drawing.Size(187, 22);
-            this.mnuCollectGarbage.Text = "Collect &Garbage";
-            this.mnuCollectGarbage.Click += new System.EventHandler(this.mnuCollectGarbage_Click);
-            // 
             // mnuExit
             // 
             this.mnuExit.Name = "mnuExit";
@@ -284,15 +304,23 @@ namespace DataCommander
             // 
             this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
             this.contentsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.contentsToolStripMenuItem.Text = "Contents";
             this.contentsToolStripMenuItem.Click += new System.EventHandler(this.contentsToolStripMenuItem_Click);
+            // 
+            // checkForToolStripMenuItem
+            // 
+            this.checkForToolStripMenuItem.Name = "checkForToolStripMenuItem";
+            this.checkForToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
+            this.checkForToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.checkForToolStripMenuItem.Text = "Check for updates ";
+            this.checkForToolStripMenuItem.Click += new System.EventHandler(this.checkForToolStripMenuItem_Click);
             // 
             // mnuAbout
             // 
             this.mnuAbout.MergeIndex = 0;
             this.mnuAbout.Name = "mnuAbout";
-            this.mnuAbout.Size = new System.Drawing.Size(173, 22);
+            this.mnuAbout.Size = new System.Drawing.Size(198, 22);
             this.mnuAbout.Text = "About...";
             // 
             // toolStrip
@@ -378,16 +406,30 @@ namespace DataCommander
             // statusBar
             // 
             this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel});
+            this.toolStripStatusLabel,
+            this.managedMemoryToolStripStatusLabel});
             this.statusBar.Location = new System.Drawing.Point(0, 531);
             this.statusBar.Name = "statusBar";
+            this.statusBar.ShowItemToolTips = true;
             this.statusBar.Size = new System.Drawing.Size(792, 22);
             this.statusBar.TabIndex = 3;
             // 
             // toolStripStatusLabel
             // 
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(0, 17);
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(677, 17);
+            this.toolStripStatusLabel.Spring = true;
+            this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // managedMemoryToolStripStatusLabel
+            // 
+            this.managedMemoryToolStripStatusLabel.AutoSize = false;
+            this.managedMemoryToolStripStatusLabel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.managedMemoryToolStripStatusLabel.Name = "managedMemoryToolStripStatusLabel";
+            this.managedMemoryToolStripStatusLabel.Size = new System.Drawing.Size(100, 17);
+            this.managedMemoryToolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.managedMemoryToolStripStatusLabel.ToolTipText = "Managed memory";
+            this.managedMemoryToolStripStatusLabel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.managedMemoryToolStripStatusLabel_MouseUp);
             // 
             // toolStripPanel
             // 
@@ -399,14 +441,6 @@ namespace DataCommander
             this.toolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
             this.toolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.toolStripPanel.Size = new System.Drawing.Size(792, 49);
-            // 
-            // checkForToolStripMenuItem
-            // 
-            this.checkForToolStripMenuItem.Name = "checkForToolStripMenuItem";
-            this.checkForToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
-            this.checkForToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
-            this.checkForToolStripMenuItem.Text = "Check for updates ";
-            this.checkForToolStripMenuItem.Click += new System.EventHandler(this.checkForToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -444,7 +478,9 @@ namespace DataCommander
             {
                 ConnectionProperties connectionProperties = connectionForm.ConnectionProperties;
 
-                var queryForm = new QueryForm(this.MdiChildren.Length,
+                var queryForm = new QueryForm(
+                    this,
+                    this.MdiChildren.Length,
                     connectionProperties.Provider,
                     connectionProperties.ConnectionString,
                     connectionProperties.Connection, this.statusBar);
@@ -685,7 +721,9 @@ namespace DataCommander
                         node.AddChildNode(subNode);
                         connectionProperties.Save(subNode);
 
-                        var queryForm = new QueryForm(this.MdiChildren.Length,
+                        var queryForm = new QueryForm(
+                            this,
+                            this.MdiChildren.Length,
                             provider,
                             connectionString,
                             connection, this.statusBar);
@@ -706,22 +744,6 @@ namespace DataCommander
         private void mnuOpen_Click(object sender, EventArgs e)
         {
             this.Open();
-        }
-
-        private void mnuCollectGarbage_Click(object sender, EventArgs e)
-        {
-            GC.Collect();
-
-            var sb = new StringBuilder();
-            sb.AppendLine();
-            sb.Append(GarbageMonitor.State);
-            sb.AppendLine();
-            sb.Append(ThreadMonitor.ToStringTable().ToString());
-            sb.AppendLine();
-            sb.Append(AppDomainMonitor.CurrentDomainState);
-            log.Trace(sb.ToString());
-
-            ThreadMonitor.Join(0);
         }
 
         public void LoadFiles(string[] fileNames)
@@ -858,6 +880,7 @@ namespace DataCommander
                 connection.Open();
 
                 var queryForm = new QueryForm(
+                    this,
                     this.MdiChildren.Length,
                     provider,
                     connectionString,
@@ -990,6 +1013,38 @@ namespace DataCommander
         {
             string url = "https://github.com/csbernath/DataCommander/releases";
             Process.Start(url);
+        }
+
+        private void managedMemoryToolStripStatusLabel_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var menu = new ContextMenuStrip(this.components);
+
+                var menuItem = new ToolStripMenuItem("Collect garbage");
+                menuItem.Click += CollectGarbage_Click;
+                menu.Items.Add(menuItem);
+
+                var bounds = this.managedMemoryToolStripStatusLabel.Bounds;
+                var location = e.Location;
+                menu.Show(this.statusBar, bounds.X + location.X, bounds.Y + location.Y);
+            }
+        }
+
+        private void CollectGarbage_Click(object sender, EventArgs e)
+        {
+            GC.Collect();
+
+            var sb = new StringBuilder();
+            sb.AppendLine();
+            sb.Append(GarbageMonitor.State);
+            sb.AppendLine();
+            sb.Append(ThreadMonitor.ToStringTable().ToString());
+            sb.AppendLine();
+            sb.Append(AppDomainMonitor.CurrentDomainState);
+            log.Trace(sb.ToString());
+
+            ThreadMonitor.Join(0);
         }
     }
 }

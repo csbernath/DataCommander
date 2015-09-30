@@ -167,12 +167,23 @@
 
         private int IndexOfKey(TKey key)
         {
-            return BinarySearch.IndexOf(0, this.values.Count - 1, index =>
+            int indexOfKey;
+
+            if (this.values.Count > 0)
             {
-                var otherValue = this.values[index];
-                var otherKey = this.keySelector(otherValue);
-                return this.comparison(key, otherKey);
-            });
+                indexOfKey = BinarySearch.IndexOf(0, this.values.Count - 1, index =>
+                {
+                    var otherValue = this.values[index];
+                    var otherKey = this.keySelector(otherValue);
+                    return this.comparison(key, otherKey);
+                });
+            }
+            else
+            {
+                indexOfKey = -1;
+            }
+
+            return indexOfKey;
         }
 
         #endregion

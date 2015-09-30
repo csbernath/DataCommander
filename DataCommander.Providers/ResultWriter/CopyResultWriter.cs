@@ -13,7 +13,6 @@
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Linq;
-    using DataCommander.Foundation.Threading;
 
     internal sealed class CopyResultWriter : IResultWriter
     {

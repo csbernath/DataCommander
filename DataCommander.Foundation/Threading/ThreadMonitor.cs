@@ -7,7 +7,6 @@ namespace DataCommander.Foundation.Threading
     using System.Globalization;
     using System.Linq;
     using System.Threading;
-    using DataCommander.Foundation.Collections;
     using DataCommander.Foundation.Linq;
     using DataCommander.Foundation.Text;
     using ThreadState = System.Threading.ThreadState;

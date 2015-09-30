@@ -2,7 +2,6 @@ namespace DataCommander.Providers.MySql
 {
     using System.Collections.Generic;
     using System.Data;
-    using DataCommander.Foundation;
     using Foundation.Data;
     using global::MySql.Data.MySqlClient;
 

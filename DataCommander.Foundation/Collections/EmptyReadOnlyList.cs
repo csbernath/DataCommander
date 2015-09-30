@@ -3,7 +3,6 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
 
     internal sealed class EmptyReadOnlyList<T> : IReadOnlyList<T>
     {
@@ -39,7 +38,8 @@
 
         public IEnumerator<T> GetEnumerator()
         {
-            return Enumerable.Empty<T>().GetEnumerator();
+            var emptyArray = (IEnumerable<T>)EmptyArray<T>.Value;
+            return emptyArray.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

@@ -56,14 +56,5 @@ namespace DataCommander.Foundation.Diagnostics
 
             return new LogEntry(id, logName, creationTime, threadId, threadName, userName, hostName, message, logLevel);
         }
-
-        public static LogEntry Create(
-            string logName,
-            string message,
-            LogLevel logLevel)
-        {
-            var creationTime = SystemTime.Default.UtcNow;
-            return Create(logName, creationTime, message, logLevel);
-        }
     }
 }

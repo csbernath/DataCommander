@@ -2,9 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Data;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using DataCommander.Foundation.Data.SqlClient;
     using global::MySql.Data.MySqlClient;
     using DataCommander.Foundation.Data;
@@ -45,7 +42,8 @@ order by r.ROUTINE_NAME", this.databaseNode.Name.ToTSqlVarChar());
 
             return MySqlClientFactory.Instance.ExecuteReader(
                 this.databaseNode.ObjectExplorer.ConnectionString,
-                commandText,
+                new CommandDefinition {CommandText = commandText},
+                CommandBehavior.Default,
                 dataRecord =>
                 {
                     string name = dataRecord.GetString(0);

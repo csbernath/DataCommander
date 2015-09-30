@@ -3,11 +3,12 @@
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
+    using System.Runtime.Versioning;
     using System.Web;
     using System.Windows.Forms;
     using DataCommander.Foundation.Diagnostics;
-    using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 
     public partial class AboutForm : Form
     {
@@ -19,6 +20,7 @@
             string path = assembly.Location;
             DateTime lastWriteTime = File.GetLastWriteTime(path);
             string dotNetFrameworkVersion = AppDomainMonitor.DotNetFrameworkVersion;
+            var targetFrameworkAttribute = assembly.GetCustomAttribute<TargetFrameworkAttribute>();
 
             string text = string.Format(@"
 <style>
@@ -36,23 +38,25 @@ Copyright © 2002-2015 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Berná
 This program is freeware and released under the <a href=""https://www.gnu.org/licenses/gpl.txt"">GNU General Public Licence</a>.
 <br/>
 <br/>
-<a href=""localfile://{1}"">Application Data file</a>
+Target Framework: {1}
+<br/>
+<br/>
+<a href=""localfile://{2}"">Application Data file</a>
 <br/>
 <a href=""logfile://"">Log file</a>
 <br/>
 <br/>
 <table style=""font-family:verdana;font-size:9pt"">
-<tr><td>.NET CLR version:</td><td>{2}</td></tr>
-<tr><td>.NET Framework version:</td><td>{3}</td></tr>
-<tr><td>.NET Processor architecture:</td><td>{4}</td></tr>
-<tr><td>Allocated physical memory:</td><td>{5} MB</td></tr>
+<tr><td>.NET CLR version:</td><td>{3}</td></tr>
+<tr><td>.NET Framework version:</td><td>{4}</td></tr>
+<tr><td>.NET Processor architecture:</td><td>{5}</td></tr>
 </table>
 </br>
 Credits:
 </br>
 <ul style=""list-style-type:none"">
-    <li><a href=""https://www.visualstudio.com/en-us/news/vs2013-community-vs.aspx"">Visual Studio 2013 Community Edition</a></li>
-    <li><a href=""https://www.jetbrains.com/resharper/"">JetBrains R# ReSharper Free Open Source License</a></li>
+    <li><a href=""https://www.visualstudio.com/products/visual-studio-community-vs"">Visual Studio 2015 Community Edition</a></li>                  
+    <li><a href=""https://www.jetbrains.com/resharper/"">JetBrains R# ReSharper Ultimate Free Open Source License</a></li>
     <li><a href=""http://epplus.codeplex.com"">EPPlus-Create advanced Excel spreadsheets on the server</a></li>
     <li><a href=""https://system.data.sqlite.org"">System.Data.SQLite</a></li>
     <li><a href=""https://www.nuget.org/packages/MySql.Data/"">ADO.Net driver for MySQL</a></li>
@@ -60,11 +64,11 @@ Credits:
 </ul>
 </div>",
                 lastWriteTime.ToString("yyyy-MM-dd"),
+                targetFrameworkAttribute.FrameworkDisplayName,
                 HttpUtility.HtmlEncode(DataCommanderApplication.Instance.FileName),
                 Environment.Version,
                 dotNetFrameworkVersion,
-                assembly.GetName().ProcessorArchitecture,
-                ((double)Environment.WorkingSet/(1024*1024)).ToString("N0"));
+                assembly.GetName().ProcessorArchitecture);
 
             InitializeComponent();
 

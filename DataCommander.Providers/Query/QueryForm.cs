@@ -44,6 +44,7 @@ namespace DataCommander
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private static readonly NumberFormatInfo numberFormatInfo;
 
+        private readonly MainForm mainForm;
         private MenuStrip mainMenu;
         private ToolStripMenuItem menuItem1;
         private StatusStrip statusBar;
@@ -170,6 +171,7 @@ namespace DataCommander
         }
 
         public QueryForm(
+            MainForm mainForm,
             int index,
             IProvider provider,
             string connectionString,
@@ -177,6 +179,8 @@ namespace DataCommander
             StatusStrip parentStatusBar)
         {
             GarbageMonitor.Add("QueryForm", this);
+
+            this.mainForm = mainForm;
             this.provider = provider;
             this.connectionString = connectionString;
             this.connection = connection;
@@ -2075,7 +2079,8 @@ namespace DataCommander
                 {
                     if (this.connection.State == ConnectionState.Closed)
                     {
-                        this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Connection is closed. Opening connection..."));
+                        this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information,
+                            "Connection is closed. Opening connection..."));
 
                         var csb = new SqlConnectionStringBuilder(this.connectionString);
                         csb.InitialCatalog = this.database;
@@ -2126,6 +2131,8 @@ namespace DataCommander
 
             this.dataAdapter = null;
             this.dataSetResultWriter = null;
+
+            this.Invoke(() => this.mainForm.UpdateTotalMemory());
         }
 
         private void WriteEnd(IAsyncDataAdapter dataAdapter)
@@ -2159,15 +2166,6 @@ namespace DataCommander
             this.SetGui(CommandState.Execute);
             this.FocusControl(this.queryTextBox);
             this.Cursor = Cursors.Default;
-
-            string message = string.Format("WorkingSet: {0} MB, Managed memory: {1} MB, GC collection count: {2},{3},{4}",
-                Math.Round((double)Environment.WorkingSet/1024/1024, 2),
-                Math.Round((double)GC.GetTotalMemory(false)/1024/1024, 2),
-                GC.CollectionCount(0),
-                GC.CollectionCount(1),
-                GC.CollectionCount(2));
-
-            this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
 
         private void EndFillInvoker(IAsyncDataAdapter dataAdapter, Exception e)
@@ -3145,19 +3143,7 @@ namespace DataCommander
                 this.sbPanelText.ForeColor = SystemColors.ControlText;
 
                 const RichTextBoxStreamType type = RichTextBoxStreamType.UnicodePlainText;
-                Encoding encoding;
-
-                switch (type)
-                {
-                    case RichTextBoxStreamType.PlainText:
-                    default:
-                        encoding = Encoding.ASCII;
-                        break;
-
-                    case RichTextBoxStreamType.UnicodePlainText:
-                        encoding = Encoding.Unicode;
-                        break;
-                }
+                Encoding encoding = Encoding.Unicode;
 
                 using (FileStream stream = File.Create(fileName))
                 {
@@ -3518,9 +3504,6 @@ namespace DataCommander
             try
             {
                 var textWriter = this.standardOutput.TextWriter;
-                switch (this.resultWriterType)
-                {
-                }
 
                 this.sqlStatement = new SqlStatement(this.Query);
                 this.command = this.sqlStatement.CreateCommand(this.provider, this.connection, CommandType.Text, this.commandTimeout);
@@ -3734,7 +3717,7 @@ namespace DataCommander
                 connection.Connection.ChangeDatabase(database);
             }
 
-            var queryForm = new QueryForm(index, this.provider, this.connectionString, connection, mainForm.StatusBar);
+            var queryForm = new QueryForm(this.mainForm, index, this.provider, this.connectionString, connection, mainForm.StatusBar);
             queryForm.Font = mainForm.SelectedFont;
             queryForm.MdiParent = mainForm;
             queryForm.WindowState = this.WindowState;

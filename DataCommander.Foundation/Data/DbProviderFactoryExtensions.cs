@@ -43,39 +43,6 @@
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="dbProviderFactory"></param>
-        /// <param name="connectionString"></param>
-        /// <param name="commandDefinition"></param>
-        /// <param name="commandBehavior"></param>
-        /// <param name="read"></param>
-        [Obsolete]
-        public static IEnumerable<T> ExecuteReader<T>(
-            this DbProviderFactory dbProviderFactory,
-            string connectionString,
-            CommandDefinition commandDefinition,
-            CommandBehavior commandBehavior,
-            Func<IDataRecord, T> read)
-        {
-            Contract.Requires<ArgumentNullException>(dbProviderFactory != null);
-            Contract.Requires<ArgumentNullException>(commandDefinition != null);
-            Contract.Requires<ArgumentNullException>(read != null);
-
-            using (var connection = dbProviderFactory.CreateConnection())
-            {
-                connection.ConnectionString = connectionString;
-                connection.Open();
-                var transactionScope = new DbTransactionScope(connection, null);
-
-                using (var dataReader = transactionScope.ExecuteReader(commandDefinition, commandBehavior))
-                {
-                    return dataReader.Read(read);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="dbProviderFactory"></param>
         /// <param name="connectionString"></param>
@@ -83,7 +50,7 @@
         /// <param name="commandBehavior"></param>
         /// <param name="read"></param>
         /// <returns></returns>
-        public static List<T> ExecuteReader2<T>(
+        public static List<T> ExecuteReader<T>(
             this DbProviderFactory dbProviderFactory,
             string connectionString,
             CommandDefinition commandDefinition,
@@ -105,23 +72,6 @@
                     return dataReader.Read(read).ToList();
                 }
             }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dbProviderFactory"></param>
-        /// <param name="connnectionString"></param>
-        /// <param name="commandText"></param>
-        /// <param name="read"></param>
-        [Obsolete]
-        public static IEnumerable<T> ExecuteReader<T>(
-            this DbProviderFactory dbProviderFactory,
-            string connnectionString,
-            string commandText,
-            Func<IDataRecord, T> read)
-        {
-            return dbProviderFactory.ExecuteReader(connnectionString, new CommandDefinition {CommandText = commandText}, CommandBehavior.Default, read);
         }
     }
 }

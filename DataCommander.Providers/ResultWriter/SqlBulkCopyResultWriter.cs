@@ -11,7 +11,6 @@
     using DataCommander.Foundation;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Linq;
-    using DataCommander.Foundation.Threading;
 
     internal sealed class SqlBulkCopyResultWriter : IResultWriter
     {
@@ -25,9 +24,9 @@
         private readonly Action<IDbTransaction> setTransaction;
         private readonly CancellationToken cancellationToken;
         private IDbTransaction transaction;
-        private IDbCommand insertCommand;
-        private Converter<object, object>[] converters;
-        private IDbDataParameter[] parameters;
+        //private IDbCommand insertCommand;
+        private Converter<object, object>[] converters = null;
+        //private IDbDataParameter[] parameters;
         private ConcurrentQueue<QueueItem> queue;
         private Task task;
         private EventWaitHandle enqueueEvent;

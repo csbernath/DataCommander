@@ -6,7 +6,6 @@ namespace DataCommander.Foundation.Data
     using System.Diagnostics.Contracts;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Linq;
-    using DataCommander.Foundation.Threading;
 
     /// <summary>
     /// Safe IDbConnection wrapper for Windows Services.

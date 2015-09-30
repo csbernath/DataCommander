@@ -20,7 +20,6 @@ namespace DataCommander.Providers
         private ToolStripStatusLabel sbPanel;
         private IKeyboardHandler keyboardHandler;
         private int tabSize = 4;
-        private const bool insertSpaces = true;
         private int columnIndex;
 
         private RichTextBox richTextBox;
@@ -590,29 +589,9 @@ namespace DataCommander.Providers
                     else if (e.KeyCode == Keys.Tab)
                     {
                         e.Handled = true;
-                        string text;
-                        int length;
 
-                        if (insertSpaces)
-                        {
-                            //text = new string( ' ', tabSize );
-
-                            //1 -> 4
-                            //2 -> 3
-                            //3 -> 2
-                            //4 -> 1
-                            //5 -> 4
-                            //6 -> 3
-                            //7 -> 2                            
-
-                            length = -((this.columnIndex - 1)%this.tabSize) + this.tabSize;
-                            text = new string(' ', length);
-                        }
-                        else
-                        {
-                            text = new string('\t', 1);
-                        }
-
+                        int length = -((this.columnIndex - 1)%this.tabSize) + this.tabSize;
+                        string text = new string(' ', length);
                         length = this.richTextBox.SelectionLength;
 
                         if (length == 0)

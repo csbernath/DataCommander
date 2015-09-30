@@ -59,7 +59,7 @@ namespace DataCommander.Foundation.Diagnostics
         {
             get
             {
-                int tickCount = SystemTime.GetTickCount();
+                int tickCount = UniversalTime.GetTickCount();
                 int milliSecondsPerDay = StopwatchTimeSpan.SecondsPerDay*1000;
                 double totalDays = (double)tickCount/milliSecondsPerDay;
                 DateTime zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);

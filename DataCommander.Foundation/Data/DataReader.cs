@@ -11,9 +11,11 @@ namespace DataCommander.Foundation.Data
     public sealed class DataReader : IDisposable
     {
         #region Private Fields
+
         private readonly IDbCommand command;
         private readonly IDataReader dataReader;
         private bool nextResultCalled = true;
+
         #endregion
 
         private DataReader(IDbCommand command, IDataReader dataReader)
@@ -119,8 +121,10 @@ namespace DataCommander.Foundation.Data
         {
             Contract.Assert(this.dataReader != null);
             Contract.Assert(!this.nextResultCalled);
+
             bool nextResult = this.dataReader.NextResult();
             this.nextResultCalled = true;
+
             return nextResult;
         }
 

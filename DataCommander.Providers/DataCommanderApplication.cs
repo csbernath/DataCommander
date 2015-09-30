@@ -3,11 +3,8 @@ namespace DataCommander.Providers
     using System.Data.Common;
     using System.Diagnostics;
     using System.Reflection;
-    using System.Threading;
-    using System.Threading.Tasks;
     using DataCommander.Foundation.Configuration;
     using DataCommander.Foundation.Diagnostics;
-    using Microsoft.Office.Interop.Word;
     using Microsoft.Win32;
     using Application = System.Windows.Forms.Application;
     using Task = System.Threading.Tasks.Task;

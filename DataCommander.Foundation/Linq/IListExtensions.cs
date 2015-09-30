@@ -1,12 +1,10 @@
-﻿using System.Windows.Forms;
-using DataCommander.Foundation.Collections;
-
-namespace DataCommander.Foundation.Linq
+﻿namespace DataCommander.Foundation.Linq
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
+    using DataCommander.Foundation.Collections;
 
     /// <summary>
     /// 
@@ -29,65 +27,6 @@ namespace DataCommander.Foundation.Linq
                     list.Add(item);
                 }
             }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static IReadOnlyList<T> AsReadOnlyList<T>(this IList<T> source)
-        {
-            return new ReadOnlyListFromList<T>(source);
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="values"></param>
-        /// <param name="getKey"></param>
-        /// <returns></returns>
-        [Pure]
-        public static ReadOnlySortedList<TKey, TValue> AsReadOnlySortedList<TKey, TValue>(
-            this IList<TValue> values,
-            Func<TValue, TKey> getKey)
-        {
-            return values.AsReadOnlyList().AsReadOnlySortedList(getKey);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="values"></param>
-        /// <param name="keySelector"></param>
-        /// <returns></returns>
-        [Pure]
-        public static ReadOnlyNonUniqueSortedList<TKey, TValue> AsReadOnlyNonUniqueSortedList<TKey, TValue>(
-            this IList<TValue> values,
-            Func<TValue, TKey> keySelector)
-        {
-            return values.AsReadOnlyList().AsReadOnlyNonUniqueSortedList(keySelector);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="values"></param>
-        /// <param name="getKey"></param>
-        /// <returns></returns>
-        [Pure]
-        public static IReadOnlyDictionary<TKey, TValue> AsReadOnlyDictionary<TKey, TValue>(
-            this IList<TValue> values,
-            Func<TValue, TKey> getKey)
-        {
-            return values.AsReadOnlySortedList(getKey);
         }
 
         /// <summary>

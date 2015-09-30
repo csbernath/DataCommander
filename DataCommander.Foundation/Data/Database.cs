@@ -12,7 +12,6 @@ namespace DataCommander.Foundation.Data
     using System.Threading;
     using System.Xml;
     using DataCommander.Foundation.Text;
-    using DataCommander.Foundation.Threading;
 
     /// <summary>
     /// Helper base class for ADO.NET.

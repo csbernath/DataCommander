@@ -3,6 +3,7 @@
     using Foundation.Data;
     using global::MySql.Data.MySqlClient;
     using System;
+    using System.Data;
     using System.Drawing;
     using System.Linq;
     using System.Windows.Forms;
@@ -73,7 +74,8 @@
             string commandText = string.Format("show create function {0}.{1}", this.databaseNode.Name, this.name);
             string statement = MySqlClientFactory.Instance.ExecuteReader(
                 this.databaseNode.ObjectExplorer.ConnectionString,
-                commandText,
+                new CommandDefinition {CommandText = commandText},
+                CommandBehavior.Default,
                 dataRecord => dataRecord.GetString(2)).First();
 
             Clipboard.SetText(statement);

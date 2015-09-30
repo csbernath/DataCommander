@@ -18,7 +18,7 @@
         /// <param name="schemaTableRow"></param>
         public DataColumnSchema(DataRow schemaTableRow)
         {
-            Contract.Requires(schemaTableRow != null);
+            Contract.Requires<ArgumentNullException>(schemaTableRow != null);
 
             this.schemaTableRow = schemaTableRow;
         }

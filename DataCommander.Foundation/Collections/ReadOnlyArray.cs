@@ -38,17 +38,17 @@
 
         #region IList<T> Members
 
-        int IList<T>.IndexOf( T item )
+        int IList<T>.IndexOf(T item)
         {
-            return Array.IndexOf( this.items, item );
+            return Array.IndexOf(this.items, item);
         }
 
-        void IList<T>.Insert( int index, T item )
+        void IList<T>.Insert(int index, T item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<T>.RemoveAt( int index )
+        void IList<T>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
@@ -58,11 +58,11 @@
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public T this[ int index ]
+        public T this[int index]
         {
             get
             {
-                return this.items[ index ];
+                return this.items[index];
             }
 
             set
@@ -75,7 +75,7 @@
 
         #region ICollection<T> Members
 
-        void ICollection<T>.Add( T item )
+        void ICollection<T>.Add(T item)
         {
             throw new NotSupportedException();
         }
@@ -85,16 +85,16 @@
             throw new NotSupportedException();
         }
 
-        bool ICollection<T>.Contains( T item )
+        bool ICollection<T>.Contains(T item)
         {
-            int index = Array.IndexOf( this.items, item );
+            int index = Array.IndexOf(this.items, item);
             bool contains = index >= 0;
             return contains;
         }
 
-        void ICollection<T>.CopyTo( T[] array, int arrayIndex )
+        void ICollection<T>.CopyTo(T[] array, int arrayIndex)
         {
-            this.items.CopyTo( array, arrayIndex );
+            this.items.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@
             }
         }
 
-        bool ICollection<T>.Remove( T item )
+        bool ICollection<T>.Remove(T item)
         {
             throw new NotSupportedException();
         }
@@ -145,7 +145,7 @@
         [ContractInvariantMethod]
         private void ObjectInvariant()
         {
-            Contract.Invariant( this.items != null );
+            Contract.Invariant(this.items != null);
         }
     }
 }

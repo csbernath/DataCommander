@@ -12,11 +12,19 @@
     internal sealed class FoundationLogFactory : ILogFactory
     {
         private readonly MultipleLog multipeLog;
+        private readonly IDateTimeProvider dateTimeProvider;
 
         public FoundationLogFactory()
         {
             var logWriters = new List<LogWriter>();
             var node = Settings.CurrentType;
+            
+            var dateTimeKind = DateTimeKind.Utc;
+            node.Attributes.TryGetAttributeValue("DateTimeKind", DateTimeKind.Utc, out dateTimeKind);
+            this.dateTimeProvider = dateTimeKind == DateTimeKind.Utc
+                ? (IDateTimeProvider) UniversalTime.Default
+                : LocalTime.Default;
+
             var logWritersNode = node.ChildNodes["LogWriters"];
 
             foreach (ConfigurationNode childNode in logWritersNode.ChildNodes)
@@ -55,6 +63,7 @@
                 logLevel = LogLevel.Debug
             };
 
+            this.dateTimeProvider = LocalTime.Default;
             this.multipeLog = new MultipleLog(logWriter.ItemAsEnumerable());
         }
 
@@ -103,7 +112,7 @@
         {
             if (this.multipeLog != null)
             {
-                var logEntry = LogEntryFactory.Create(log.LoggedName, message, logLevel);
+                var logEntry = LogEntryFactory.Create(log.LoggedName, this.dateTimeProvider.Now, message, logLevel);
                 this.multipeLog.Write(logEntry);
             }
         }
@@ -113,7 +122,7 @@
             if (this.multipeLog != null)
             {
                 string message = string.Format(format, args);
-                var logEntry = LogEntryFactory.Create(log.LoggedName, message, logLevel);
+                var logEntry = LogEntryFactory.Create(log.LoggedName, this.dateTimeProvider.Now, message, logLevel);
                 this.multipeLog.Write(logEntry);
             }
         }
@@ -123,7 +132,7 @@
             if (this.multipeLog != null)
             {
                 string message = getMessage();
-                var logEntry = LogEntryFactory.Create(log.LoggedName, message, logLevel);
+                var logEntry = LogEntryFactory.Create(log.LoggedName, this.dateTimeProvider.Now, message, logLevel);
                 this.multipeLog.Write(logEntry);
             }
         }
@@ -177,13 +186,10 @@
                     FileAttributes fileAttributes;
                     attributes.TryGetAttributeValue("FileAttributes", FileAttributes.ReadOnly | FileAttributes.Hidden, out fileAttributes);
 
-                    string dateTimeProviderString = "SystemTime";
-                    attributes.TryGetAttributeValue("DateTimeProvider", dateTimeProviderString, out dateTimeProviderString);
-                    var dateTimeProvider = dateTimeProviderString == "LocalTime"
-                        ? (IDateTimeProvider)LocalTime.Default
-                        : SystemTime.Default;
+                    var dateTimeKind = DateTimeKind.Utc;
+                    node.Attributes.TryGetAttributeValue("DateTimeKind", DateTimeKind.Utc, out dateTimeKind);
 
-                    var fileLogWriter = new FileLogWriter(path, Encoding.UTF8, async, bufferSize, timerPeriod, autoFlush, fileAttributes, dateTimeProvider);
+                    var fileLogWriter = new FileLogWriter(path, Encoding.UTF8, async, bufferSize, timerPeriod, autoFlush, fileAttributes, dateTimeKind);
 
                     logWriter = new LogWriter
                     {

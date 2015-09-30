@@ -1,7 +1,6 @@
 namespace DataCommander.Foundation.Diagnostics
 {
     using System;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Text;
 
@@ -19,7 +18,7 @@ namespace DataCommander.Foundation.Diagnostics
         private readonly bool autoFlush;
         private readonly ILogFormatter formatter;
         private readonly FileAttributes fileAttributes;
-        private readonly IDateTimeProvider dateTimeProvider;
+        private readonly DateTimeKind dateTimeKind;
 
         #endregion
 
@@ -30,36 +29,33 @@ namespace DataCommander.Foundation.Diagnostics
             bool autoFlush,
             ILogFormatter formatter,
             FileAttributes fileAttributes,
-            IDateTimeProvider dateTimeProvider)
+            DateTimeKind dateTimeKind)
         {
-            Contract.Requires<ArgumentNullException>(dateTimeProvider != null);
-
             this.path = path;
             this.encoding = encoding;
             this.bufferSize = bufferSize;
             this.autoFlush = autoFlush;
             this.formatter = formatter;
             this.fileAttributes = fileAttributes;
-            this.dateTimeProvider = dateTimeProvider;
+            this.dateTimeKind = dateTimeKind;
         }
 
-        private FileStream Open(string fileName)
+        private FileStream Open(string fileName, DateTime dateTime)
         {
-            DateTime now = dateTimeProvider.Now;
-            this.date = now.Date;
+            this.date = dateTime.Date;
 
-            this.fileName = fileName.Replace("{date}", now.ToString("yyyy.MM.dd"));
-            this.fileName = this.fileName.Replace("{time}", now.ToString("HH.mm.ss.fff"));
+            this.fileName = fileName.Replace("{date}", dateTime.ToString("yyyy.MM.dd"));
+            this.fileName = this.fileName.Replace("{time}", dateTime.ToString("HH.mm.ss.fff"));
             this.fileName = this.fileName.Replace("{guid}", Guid.NewGuid().ToString());
 
             return new FileStream(this.fileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read, this.bufferSize);
         }
 
-        private void Open()
+        private void Open(DateTime dateTime)
         {
             try
             {
-                this.fileStream = this.Open(this.path);
+                this.fileStream = this.Open(this.path, dateTime);
             }
             catch (Exception e)
             {
@@ -68,7 +64,7 @@ namespace DataCommander.Foundation.Diagnostics
                 string directory = Path.GetTempPath();
                 string fileName = Path.GetFileName(this.path);
                 this.path = Path.Combine(directory, fileName);
-                this.fileStream = this.Open(this.path);
+                this.fileStream = this.Open(this.path, dateTime);
 
                 log.Write(LogLevel.Error, string.Format("LogFile path: {0}", this.fileName));
             }
@@ -80,16 +76,16 @@ namespace DataCommander.Foundation.Diagnostics
             }
         }
 
-        public void Write(DateTime date, string text)
+        public void Write(DateTime dateTime, string text)
         {
             if (this.fileStream == null)
             {
-                this.Open();
+                this.Open(dateTime);
             }
             else if (date.Date != this.date)
             {
                 this.Close();
-                this.Open();
+                this.Open(dateTime);
             }
 
             byte[] array = this.encoding.GetBytes(text);
@@ -124,7 +120,7 @@ namespace DataCommander.Foundation.Diagnostics
         void ILogFile.Write(LogEntry entry)
         {
             string text = this.formatter.Format(entry);
-            this.Write(entry.CreationTime.Date, text);
+            this.Write(entry.CreationTime, text);
         }
 
         void ILogFile.Flush()
@@ -140,8 +136,7 @@ namespace DataCommander.Foundation.Diagnostics
 
                 if (end != null)
                 {
-                    DateTime today = this.dateTimeProvider.Today();
-                    this.Write(DateTime.Today, end);
+                    this.Write(LocalTime.Default.Now, end);
                 }
 
                 this.fileStream.Close();
