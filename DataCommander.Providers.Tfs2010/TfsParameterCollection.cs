@@ -4,7 +4,6 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Data;
-    using System.Diagnostics.Contracts;
     using System.Linq;
 
     internal sealed class TfsParameterCollection : IDataParameterCollection, IEnumerable<TfsParameter>
@@ -166,7 +165,6 @@
 
             set
             {
-                Contract.Requires(value is TfsParameter);
                 TfsParameter parameter = (TfsParameter) value;
                 this.list[index] = parameter;
             }

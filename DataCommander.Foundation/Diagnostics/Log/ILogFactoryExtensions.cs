@@ -39,12 +39,12 @@
         {
             var stackFrame = new StackFrame(1, false);
             Type type = stackFrame.GetMethod().DeclaringType;
-            string name = string.Format("{0}.{1}", type.FullName, sectionName);
+            string name = $"{type.FullName}.{sectionName}";
             var log = applicationLog.GetLog(name);
             var foundationLog = log as FoundationLog;
             if (foundationLog != null)
             {
-                foundationLog.LoggedName = string.Format("{0}.{1}", type.Name, sectionName);
+                foundationLog.LoggedName = $"{type.Name}.{sectionName}";
             }
 
             return log;
@@ -61,12 +61,12 @@
             var stackFrame = new StackFrame(1, false);
             var method = stackFrame.GetMethod();
             Type type = method.DeclaringType;
-            string name = string.Format("{0}.{1}", type.FullName, method.Name);
+            string name = $"{type.FullName}.{method.Name}";
             var log = applicationLog.GetLog(name);
             var foundationLog = log as FoundationLog;
             if (foundationLog != null)
             {
-                foundationLog.LoggedName = string.Format("{0}.{1}", type.Name, method.Name);
+                foundationLog.LoggedName = $"{type.Name}.{method.Name}";
             }
 
             if (parameters.Length > 0)

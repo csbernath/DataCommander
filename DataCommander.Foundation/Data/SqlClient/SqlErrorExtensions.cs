@@ -23,9 +23,16 @@
 
             bool hasProcedure = !string.IsNullOrEmpty(error.Procedure);
 
-            if (error.Number == 0 && error.Class == 0 && error.State == 1 && !hasProcedure)
+            if (error.Number == 0 && error.Class == 0 && error.State == 1)
             {
-                sb.AppendFormat("[Server: Line {0}] ", error.LineNumber);
+                if (hasProcedure)
+                {
+                    sb.AppendFormat("[Server: Procedure {0}, Line {1}] ", error.Procedure, error.LineNumber);
+                }
+                else
+                {
+                    sb.AppendFormat("[Server: Line {0}] ", error.LineNumber);
+                }
             }
             else if (error.Class == 0 && error.State == 1 && error.LineNumber == 1)
             {

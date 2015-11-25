@@ -79,9 +79,7 @@ namespace DataCommander.Providers.SqlServer2005
             var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
 
             queryForm.SetStatusbarPanelText(
-                string.Format(
-                    "Copying stored prcoedure script to clipboard finished in {0} seconds.",
-                    StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)),
+                $"Copying stored prcoedure script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.",
                 SystemColors.ControlText);
         }
 

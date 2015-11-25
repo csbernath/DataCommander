@@ -13,7 +13,7 @@ namespace DataCommander.Providers.SqlServer2005
         private string objectName;
         private readonly string name;
 
-        public TriggerNode( DatabaseNode database, string schema, string objectName, string name )
+        public TriggerNode(DatabaseNode database, string schema, string objectName, string name)
         {
             this.database = database;
             this.schema = schema;
@@ -37,7 +37,7 @@ namespace DataCommander.Providers.SqlServer2005
             }
         }
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             return null;
         }
@@ -58,25 +58,25 @@ namespace DataCommander.Providers.SqlServer2005
             }
         }
 
-        void menuItemScriptObject_Click( object sender, EventArgs e )
+        void menuItemScriptObject_Click(object sender, EventArgs e)
         {
             string connectionString = this.database.Databases.Server.ConnectionString;
             string text;
-            using (var connection = new SqlConnection( connectionString ))
+            using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                text = SqlDatabase.GetSysComments( connection, this.database.Name, "dbo", this.name );
+                text = SqlDatabase.GetSysComments(connection, this.database.Name, this.schema, this.name);
             }
-            QueryForm.ShowText( text );
+            QueryForm.ShowText(text);
         }
 
         public ContextMenuStrip ContextMenu
         {
             get
             {
-                ToolStripMenuItem menuItemScriptObject = new ToolStripMenuItem( "Script Object", null, new EventHandler(this.menuItemScriptObject_Click ) );
+                ToolStripMenuItem menuItemScriptObject = new ToolStripMenuItem("Script Object", null, new EventHandler(this.menuItemScriptObject_Click));
                 ContextMenuStrip contextMenu = new ContextMenuStrip();
-                contextMenu.Items.Add( menuItemScriptObject );
+                contextMenu.Items.Add(menuItemScriptObject);
                 return contextMenu;
             }
         }

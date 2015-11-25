@@ -930,7 +930,7 @@ namespace DataCommander.Foundation.Data
                 {
                     if (columns.Contains(columnNameAdd))
                     {
-                        columnNameAdd = string.Format("{0}{1}", columnName, index);
+                        columnNameAdd = $"{columnName}{index}";
                         index++;
                     }
                     else

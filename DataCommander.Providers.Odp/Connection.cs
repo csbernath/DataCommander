@@ -30,7 +30,7 @@ namespace DataCommander.Providers.Odp
         {
             get
             {
-                string caption = string.Format("{0}@{1}", oracleConnectionStringBuilder.UserID, oracleConnectionStringBuilder.DataSource);
+                string caption = $"{oracleConnectionStringBuilder.UserID}@{oracleConnectionStringBuilder.DataSource}";
                 return caption;
             }
         }

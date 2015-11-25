@@ -34,7 +34,7 @@ namespace DataCommander
         public void Init(int currentLineNumber, int maxLineLineNumber)
         {
             this.maxLineLineNumber = maxLineLineNumber;
-            this.lineNumberLabel.Text = string.Format("Line number (1 - {0}):", maxLineLineNumber);
+            this.lineNumberLabel.Text = $"Line number (1 - {maxLineLineNumber}):";
             this.lineNumberTextBox.Text = currentLineNumber.ToString();
         }
 

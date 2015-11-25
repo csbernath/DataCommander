@@ -62,7 +62,7 @@ namespace DataCommander.Providers.SQLite
         {
             get
             {
-                return string.Format("select\t*\r\nfrom\t{0}.{1}", this.databaseNode.Name, this.name);
+                return $"select\t*\r\nfrom\t{this.databaseNode.Name}.{this.name}";
             }
         }
 
@@ -71,10 +71,10 @@ namespace DataCommander.Providers.SQLite
             string databaseName,
             string name)
         {
-            string commandText = string.Format(@"
+            string commandText = $@"
 select  sql
-from	{0}.sqlite_master
-where	name	= '{1}'", databaseName, name);
+from	{databaseName}.sqlite_master
+where	name	= '{name}'";
             var transactionScope = new DbTransactionScope(connection, null);
             object scalar = transactionScope.ExecuteScalar(new CommandDefinition {CommandText = commandText});
             string script = Foundation.Data.Database.GetValueOrDefault<string>(scalar);

@@ -462,7 +462,7 @@ namespace DataCommander.Providers.OracleClient
 
             using (IDbCommand command = destinationconnection.CreateCommand())
             {
-                command.CommandText = string.Format("select * from {0}", destinationTableName);
+                command.CommandText = $"select * from {destinationTableName}";
 
                 //OracleDataAdapter adapter = new OracleDataAdapter( (OracleCommand)command );
                 //adapter.FillSchema(new DataSet(), SchemaType.Source);
@@ -505,7 +505,7 @@ namespace DataCommander.Providers.OracleClient
 
                 int columnSize = schemaRow.ColumnSize;
                 OracleType oracleType = (OracleType) schemaRow.ProviderType;
-                OracleParameter parameter = new OracleParameter(string.Format("p{0}", i + 1), oracleType);
+                OracleParameter parameter = new OracleParameter($"p{i + 1}", oracleType);
                 insertCommand.Parameters.Add(parameter);
                 Converter<object, object> converter;
 

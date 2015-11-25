@@ -23,7 +23,7 @@ namespace DataCommander.Foundation.Data
         {
             get
             {
-                return string.Format( "exec LogConnectionClose {0},{1},{2}\r\n", this.applicationId, this.connectionNo, this.endDate.ToTSqlDateTime() );
+                return $"exec LogConnectionClose {this.applicationId},{this.connectionNo},{this.endDate.ToTSqlDateTime()}\r\n";
             }
         }
     }

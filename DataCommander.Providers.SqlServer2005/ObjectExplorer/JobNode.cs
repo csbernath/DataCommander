@@ -62,7 +62,7 @@
         {
             get
             {
-                string commandText = string.Format(@"msdb..sp_help_job @job_name = {0}", this.name.ToTSqlNVarChar());
+                string commandText = $@"msdb..sp_help_job @job_name = {this.name.ToTSqlNVarChar()}";
                 DataSet dataSet;
                 using (var connection = new SqlConnection(this.jobs.Server.ConnectionString))
                 {

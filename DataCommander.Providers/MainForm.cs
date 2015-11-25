@@ -85,8 +85,7 @@ namespace DataCommander
             DateTime end = DateTime.Now;
             TimeSpan elapsed = end - start;
 
-            string message = string.Format("Current user: {0}. Application loaded in {1} seconds.", WindowsIdentity.GetCurrent().Name,
-                new StopwatchTimeSpan(elapsed).ToString(3));
+            string message = $"Current user: {WindowsIdentity.GetCurrent().Name}. Application loaded in {new StopwatchTimeSpan(elapsed).ToString(3)} seconds.";
             this.toolStripStatusLabel.Text = message;
             log.Trace(message);
 
@@ -104,7 +103,7 @@ namespace DataCommander
         {
             long totalMemory = GC.GetTotalMemory(false);
             double totalMemoryMB = (double)totalMemory/1024.0/1024.0;
-            string text = string.Format("{0} MB", Math.Round(totalMemoryMB, 0));
+            string text = $"{Math.Round(totalMemoryMB, 0)} MB";
 
             this.managedMemoryToolStripStatusLabel.Text = text;
 
@@ -377,6 +376,7 @@ namespace DataCommander
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(23, 22);
             this.saveButton.ToolTipText = "Save Query";
+            this.saveButton.Click += new EventHandler(this.saveButton_Click);
             // 
             // toolStripSeparator1
             // 
@@ -508,10 +508,8 @@ namespace DataCommander
                         break;
                 }
 
-                string message = string.Format(
-                    "Connection opened in {0} seconds.\r\nServerVersion: {1}",
-                    StopwatchTimeSpan.ToString(connectionForm.Duration, 3),
-                    connectionProperties.Connection.ServerVersion);
+                string message =
+                    $"Connection opened in {StopwatchTimeSpan.ToString(connectionForm.Duration, 3)} seconds.\r\nServerVersion: {connectionProperties.Connection.ServerVersion}";
                 var infoMessage = new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message);
                 queryForm.AddInfoMessage(infoMessage);
 
@@ -586,7 +584,7 @@ namespace DataCommander
             for (int i = 0; i < count; i++)
             {
                 string path = this.recentFileList[count - i - 1];
-                string text = string.Format("{0} {1}", i + 1, path);
+                string text = $"{i + 1} {path}";
                 var menuItem = new ToolStripMenuItem(text, null, this.mnuRecentFile_Click);
                 menuItems.Add(menuItem);
             }
@@ -659,7 +657,7 @@ namespace DataCommander
                             break;
 
                         case 3:
-                            connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Persist Security Info=False", fileName);
+                            connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={fileName};Persist Security Info=False";
                             provider = ProviderFactory.CreateProvider(ProviderName.OleDb);
                             break;
 
@@ -668,38 +666,38 @@ namespace DataCommander
                             {
                                 if (Environment.Is64BitProcess)
                                 {
-                                    connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=Excel 8.0", fileName);
+                                    connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={fileName};Extended Properties=Excel 8.0";
                                 }
                                 else
                                 {
-                                    connectionString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=Excel 8.0", fileName);
+                                    connectionString = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source={fileName};Extended Properties=Excel 8.0";
                                 }
                             }
                             else
                             {
-                                connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=Excel 12.0", fileName);
+                                connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={fileName};Extended Properties=Excel 12.0";
                             }
 
                             provider = ProviderFactory.CreateProvider(ProviderName.OleDb);
                             break;
 
                         case 5:
-                            connectionString = string.Format("Data Source={0}", fileName);
+                            connectionString = $"Data Source={fileName}";
                             provider = ProviderFactory.CreateProvider("Msi");
                             break;
 
                         case 6:
-                            connectionString = string.Format("Data Source={0}", fileName);
+                            connectionString = $"Data Source={fileName}";
                             provider = ProviderFactory.CreateProvider(ProviderName.SQLite);
                             break;
 
                         case 7:
-                            connectionString = string.Format("Data Source={0}", fileName);
+                            connectionString = $"Data Source={fileName}";
                             provider = ProviderFactory.CreateProvider("SqlServerCe");
                             break;
 
                         case 8:
-                            connectionString = string.Format("Data Source={0}", fileName);
+                            connectionString = $"Data Source={fileName}";
                             provider = ProviderFactory.CreateProvider("SqlServerCe40");
                             break;
 
@@ -992,7 +990,7 @@ namespace DataCommander
                     }
                 }
             }
-            this.toolStripStatusLabel.Text = string.Format("All items saved to {0}.", fileNamePrefix);
+            this.toolStripStatusLabel.Text = $"All items saved to {fileNamePrefix}.";
             this.Cursor = Cursors.Default;
         }
 

@@ -77,7 +77,7 @@
 
                 if (workingFolder == null)
                 {
-                    throw new Exception( string.Format( "Workspace not found for '{0}'", path ) );
+                    throw new Exception($"Workspace not found for '{path}'");
                 }
 
                 string name;
@@ -92,7 +92,8 @@
                 }
 
                 var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-                queryForm.AddInfoMessage( new InfoMessage( LocalTime.Default.Now, InfoMessageSeverity.Information, string.Format( "\r\nworkspace.Name: {0}\r\nworkingFolder.LocalItem: {1}", name, workingFolder.LocalItem ) ) );
+                queryForm.AddInfoMessage( new InfoMessage( LocalTime.Default.Now, InfoMessageSeverity.Information,
+                    $"\r\nworkspace.Name: {name}\r\nworkingFolder.LocalItem: {workingFolder.LocalItem}") );
             }
 
             if (this.items != null && this.index < this.items.Length)

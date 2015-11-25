@@ -33,12 +33,14 @@
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText = string.Format(@"select r.ROUTINE_NAME
+            string commandText =
+                $@"select r.ROUTINE_NAME
 from information_schema.ROUTINES r
 where
-    r.ROUTINE_SCHEMA = {0}
+    r.ROUTINE_SCHEMA = {this.databaseNode.Name.ToTSqlVarChar()
+                    }
     and r.ROUTINE_TYPE = 'FUNCTION'
-order by r.ROUTINE_NAME", this.databaseNode.Name.ToTSqlVarChar());
+order by r.ROUTINE_NAME";
 
             return MySqlClientFactory.Instance.ExecuteReader(
                 this.databaseNode.ObjectExplorer.ConnectionString,

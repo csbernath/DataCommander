@@ -222,7 +222,7 @@
                 long fractionInt64 = (long)fraction;
                 if (fractionInt64 < multiplier)
                 {
-                    fractionString = string.Format(".{0}", fractionInt64.ToString().PadLeft(scale, '0'));
+                    fractionString = $".{fractionInt64.ToString().PadLeft(scale, '0')}";
                 }
                 else
                 {
@@ -256,7 +256,7 @@
             sb.Append(':');
             sb.Append(seconds.ToString().PadLeft(2, '0'));
 
-            string s = string.Format("{0}{1}", sb, fractionString);
+            string s = $"{sb}{fractionString}";
             return s;
         }
 

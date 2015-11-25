@@ -66,17 +66,8 @@
 
         private static string ToString(LoggedDbCommandInfo command, long duration)
         {
-            return string.Format(
-                "Executing command started in {0} seconds.\r\ncommandId: {1},connectionState: {2},database: {3},executionType: {4},commandType: {5},commandTimeout: {6}\r\ncommandText: {7}\r\nparameters:\r\n{8}",
-                StopwatchTimeSpan.ToString(duration, 3),
-                command.CommandId,
-                command.ConnectionState,
-                command.Database,
-                command.ExecutionType,
-                command.CommandType,
-                command.CommandTimeout,
-                command.CommandText,
-                command.Parameters);
+            return
+                $"Executing command started in {StopwatchTimeSpan.ToString(duration, 3)} seconds.\r\ncommandId: {command.CommandId},connectionState: {command.ConnectionState},database: {command.Database},executionType: {command.ExecutionType},commandType: {command.CommandType},commandTimeout: {command.CommandTimeout}\r\ncommandText: {command.CommandText}\r\nparameters:\r\n{command.Parameters}";
         }
 
         private void ConnectionAfterExecuteReader(object sender, AfterExecuteCommandEventArgs e)

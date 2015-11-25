@@ -28,7 +28,7 @@ namespace DataCommander.Foundation.Threading
             {
                 this.queue = queue;
                 this.thread = new WorkerThread( this.ThreadStart );
-                this.thread.Name = string.Format( "Consumer({0},{1})", queue.name, id );
+                this.thread.Name = $"Consumer({queue.name},{id})";
                 this.thread.Priority = priority;
                 this.consumer = this.queue.asyncQueue.CreateConsumer( this.thread, id );
             }

@@ -86,7 +86,7 @@ namespace DataCommander.Foundation.Xml
 
             if (xmlLineInfo != null)
             {
-                Trace.WriteLine( string.Format( "begin {0},{1},{2},{3}", level, xmlReader.Name, xmlLineInfo.LineNumber, xmlLineInfo.LinePosition ) );
+                Trace.WriteLine($"begin {level},{xmlReader.Name},{xmlLineInfo.LineNumber},{xmlLineInfo.LinePosition}");
             }
 #endif
 
@@ -150,7 +150,7 @@ namespace DataCommander.Foundation.Xml
 #if DEBUG
             if (xmlLineInfo != null)
             {
-                Trace.WriteLine( string.Format( "end {0},{1},{2}", level, xmlLineInfo.LineNumber, xmlLineInfo.LinePosition ) );
+                Trace.WriteLine($"end {level},{xmlLineInfo.LineNumber},{xmlLineInfo.LinePosition}");
             }
 #endif
 
@@ -168,7 +168,7 @@ namespace DataCommander.Foundation.Xml
 
             if (xmlLineInfo != null)
             {
-                Trace.WriteLine( string.Format( "BEGIN {0},{1}", xmlLineInfo.LineNumber, xmlLineInfo.LinePosition ) );
+                Trace.WriteLine($"BEGIN {xmlLineInfo.LineNumber},{xmlLineInfo.LinePosition}");
             }
 #endif
 
@@ -177,7 +177,7 @@ namespace DataCommander.Foundation.Xml
             while (this.xmlReader.Read())
             {
 #if DEBUG
-                Trace.WriteLine( string.Format( "{0},{1}", this.xmlReader.Name, this.xmlReader.NodeType ) );
+                Trace.WriteLine($"{this.xmlReader.Name},{this.xmlReader.NodeType}");
 #endif
                 XmlNodeType nodeType = this.xmlReader.NodeType;
                 bool breakable = false;
@@ -206,7 +206,7 @@ namespace DataCommander.Foundation.Xml
 #if DEBUG
             if (xmlLineInfo != null)
             {
-                Trace.WriteLine( string.Format( "END {0},{1}", xmlLineInfo.LineNumber, xmlLineInfo.LinePosition ) );
+                Trace.WriteLine($"END {xmlLineInfo.LineNumber},{xmlLineInfo.LinePosition}");
             }
 #endif
 

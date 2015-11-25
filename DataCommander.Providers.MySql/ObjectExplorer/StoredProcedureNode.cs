@@ -71,7 +71,7 @@
 
         private void ShowCreateProcedure_Click(object sender, EventArgs e)
         {
-            string commandText = string.Format("show create procedure {0}.{1}", this.databaseNode.Name, this.name);
+            string commandText = $"show create procedure {this.databaseNode.Name}.{this.name}";
             string statement = MySqlClientFactory.Instance.ExecuteReader(
                 this.databaseNode.ObjectExplorer.ConnectionString,
                 new CommandDefinition {CommandText = commandText},

@@ -17,22 +17,26 @@ namespace DataCommander.Providers.MySql
             Contract.Requires(!string.IsNullOrWhiteSpace(tableSchema));
             Contract.Requires(tableTypes != null && tableTypes.Any());
 
-            return string.Format(@"select TABLE_NAME
+            return
+                $@"select TABLE_NAME
 from information_schema.TABLES
 where
-    TABLE_SCHEMA = {0}
-    and TABLE_TYPE in({1})
-order by TABLE_NAME", tableSchema.ToTSqlVarChar(), string.Join(",", tableTypes.Select(o => o.ToTSqlVarChar())));
+    TABLE_SCHEMA = {tableSchema.ToTSqlVarChar()}
+    and TABLE_TYPE in({
+                    string.Join(",", tableTypes.Select(o => o.ToTSqlVarChar()))})
+order by TABLE_NAME";
         }
 
         public static string GetColumns(string tableSchema, string tableName)
         {
-            return string.Format(@"select COLUMN_NAME
+            return
+                $@"select COLUMN_NAME
 from information_schema.COLUMNS
 where
-    TABLE_SCHEMA = {0}
-    and TABLE_NAME = {1}
-order by ORDINAL_POSITION", tableSchema.ToTSqlVarChar(), tableName.ToTSqlVarChar());
+    TABLE_SCHEMA = {tableSchema.ToTSqlVarChar()}
+    and TABLE_NAME = {
+                    tableName.ToTSqlVarChar()}
+order by ORDINAL_POSITION";
         }
     }
 }

@@ -3,7 +3,6 @@
     using System;
     using System.Diagnostics;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using System.Runtime.Versioning;
     using System.Web;
@@ -22,7 +21,8 @@
             string dotNetFrameworkVersion = AppDomainMonitor.DotNetFrameworkVersion;
             var targetFrameworkAttribute = assembly.GetCustomAttribute<TargetFrameworkAttribute>();
 
-            string text = string.Format(@"
+            string text =
+                $@"
 <style>
     a {{text-decoration:none}}
 </style>
@@ -30,7 +30,9 @@
 <a href=""https://github.com/csbernath/DataCommander"">Data Commander on GitHub</a>
 <br/>
 <br/>
-Build date: {0}
+Build date: {
+                    lastWriteTime.ToString("yyyy-MM-dd")
+                    }
 <br/>
 <br/>
 Copyright © 2002-2015 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Bernáth</a>
@@ -38,18 +40,24 @@ Copyright © 2002-2015 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Berná
 This program is freeware and released under the <a href=""https://www.gnu.org/licenses/gpl.txt"">GNU General Public Licence</a>.
 <br/>
 <br/>
-Target Framework: {1}
+Target Framework: {
+                    targetFrameworkAttribute.FrameworkDisplayName}
 <br/>
 <br/>
-<a href=""localfile://{2}"">Application Data file</a>
+<a href=""localfile://{
+                    HttpUtility.HtmlEncode(DataCommanderApplication.Instance.FileName)
+                    }"">Application Data file</a>
 <br/>
 <a href=""logfile://"">Log file</a>
 <br/>
 <br/>
 <table style=""font-family:verdana;font-size:9pt"">
-<tr><td>.NET CLR version:</td><td>{3}</td></tr>
-<tr><td>.NET Framework version:</td><td>{4}</td></tr>
-<tr><td>.NET Processor architecture:</td><td>{5}</td></tr>
+<tr><td>.NET CLR version:</td><td>{
+                    Environment.Version}</td></tr>
+<tr><td>.NET Framework version:</td><td>{dotNetFrameworkVersion
+                    }</td></tr>
+<tr><td>.NET Processor architecture:</td><td>{assembly.GetName().ProcessorArchitecture
+                    }</td></tr>
 </table>
 </br>
 Credits:
@@ -62,13 +70,7 @@ Credits:
     <li><a href=""https://www.nuget.org/packages/MySql.Data/"">ADO.Net driver for MySQL</a></li>
     <li><a href=""http://npgsql.projects.pgfoundry.org/"">Npgsql - .Net Data Provider for Postgresql</a></li>
 </ul>
-</div>",
-                lastWriteTime.ToString("yyyy-MM-dd"),
-                targetFrameworkAttribute.FrameworkDisplayName,
-                HttpUtility.HtmlEncode(DataCommanderApplication.Instance.FileName),
-                Environment.Version,
-                dotNetFrameworkVersion,
-                assembly.GetName().ProcessorArchitecture);
+</div>";
 
             InitializeComponent();
 

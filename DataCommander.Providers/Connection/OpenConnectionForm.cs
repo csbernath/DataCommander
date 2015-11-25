@@ -107,8 +107,8 @@ namespace DataCommander.Providers
             object userId;
             dbConnectionStringBuilder.TryGetValue(ConnectionStringProperty.UserId, out userId);
             string dataSource = (string)dataSourceObject;
-            this.textBox.Text = string.Format("Connection name: {0}\r\nProvider name: {1}\r\nData Source: {2}\r\nUserId: {3}", connectionProperties.ConnectionName,
-                connectionProperties.ProviderName, dataSource, userId);
+            this.textBox.Text =
+                $"Connection name: {connectionProperties.ConnectionName}\r\nProvider name: {connectionProperties.ProviderName}\r\nData Source: {dataSource}\r\nUserId: {userId}";
             this.connectionProperties = connectionProperties;
             this.Cursor = Cursors.AppStarting;
             this.connector = new AsyncConnector(connectionProperties);

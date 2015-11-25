@@ -25,7 +25,7 @@
             this.column = column;
             this.converter = converter;
             this.fieldValue = fieldValue;
-            this.message = string.Format( "Conversion ({0}) of string value '{1}' to type {2} failed. ", converter, fieldValue, column.DataType );
+            this.message = $"Conversion ({converter}) of string value '{fieldValue}' to type {column.DataType} failed. ";
         }
 
         /// <summary>

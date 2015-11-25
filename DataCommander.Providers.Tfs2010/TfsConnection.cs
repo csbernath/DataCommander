@@ -87,7 +87,7 @@
             {
                 int supportedFeatures = this.versionControlServer.SupportedFeatures;
                 SupportedFeatures supportedFeaturesEnum = (SupportedFeatures)supportedFeatures;
-                return string.Format("versionControlServer.SupportedFeatures: {0}", supportedFeaturesEnum.ToString("G"));
+                return $"versionControlServer.SupportedFeatures: {supportedFeaturesEnum.ToString("G")}";
             }
         }
 

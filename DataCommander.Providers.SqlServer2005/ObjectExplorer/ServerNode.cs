@@ -48,7 +48,7 @@
                     userName = csb.UserID;
                 }
 
-                return string.Format("{0}(SQL Server {1} - {2})", csb.DataSource, serverVersion, userName);
+                return $"{csb.DataSource}(SQL Server {serverVersion} - {userName})";
             }
         }
 

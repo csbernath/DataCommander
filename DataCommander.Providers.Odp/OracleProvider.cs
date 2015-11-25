@@ -444,10 +444,10 @@ namespace DataCommander.Providers.Odp
                 {
                     case SqlObjectTypes.Table:
                         OracleName oracleName = new OracleName( userId, sqlObject.Name );
-                        commandText = String.Format( @"select	TABLE_NAME
+                        commandText = $@"select	TABLE_NAME
 from	SYS.ALL_TABLES
-where	OWNER	= '{0}'	
-order by TABLE_NAME", oracleName.Owner );
+where	OWNER	= '{oracleName.Owner}'	
+order by TABLE_NAME";
                         sqlObject.ParentName = oracleName.Owner;
                         break;
 
@@ -476,11 +476,12 @@ order by TABLE_NAME", oracleName.Owner );
                             sqlObject.ParentName = owner;
                         }
 
-                        commandText = String.Format( @"select	OBJECT_NAME
+                        commandText =
+                            $@"select	OBJECT_NAME
 from	SYS.ALL_OBJECTS
-where	OWNER	= '{0}'
+where	OWNER	= '{owner}'
 	and OBJECT_TYPE in('TABLE','VIEW')
-order by OBJECT_NAME", owner );
+order by OBJECT_NAME";
                         sqlObject.Name = null;
 
                         break;
@@ -505,22 +506,25 @@ order by OBJECT_NAME", owner );
                                 sqlObject.ParentName = owner + '.' + tableName;
                             }
 
-                            commandText = string.Format( @"select	COLUMN_NAME
+                            commandText =
+                                $@"select	COLUMN_NAME
 from	SYS.ALL_TAB_COLUMNS
-where	OWNER = '{0}'
-	and TABLE_NAME = '{1}'
-order by COLUMN_ID", owner, tableName );
+where	OWNER = '{owner}'
+	and TABLE_NAME = '{tableName}'
+order by COLUMN_ID";
                         }
 
                         break;
 
                     case SqlObjectTypes.Function:
                         oracleName = new OracleName( userId, sqlObject.ParentName );
-                        commandText = string.Format( @"select	OBJECT_NAME
+                        commandText =
+                            $@"select	OBJECT_NAME
 from	SYS.ALL_OBJECTS
-where	OWNER	= '{0}'
+where	OWNER	= '{oracleName.Owner
+                                }'
 	and OBJECT_TYPE	= 'FUNCTION'
-order by OBJECT_NAME", oracleName.Owner );
+order by OBJECT_NAME";
                         sqlObject.ParentName = oracleName.Owner;
                         break;
 

@@ -45,7 +45,7 @@
         {
             get
             {
-                return string.Format("Data Source={0}", this.connection.TfsTeamProjectCollection.Uri);
+                return $"Data Source={this.connection.TfsTeamProjectCollection.Uri}";
             }
 
             set

@@ -648,9 +648,7 @@ namespace DataCommander.Providers
                             }
                             catch (Exception e)
                             {
-                                string message = string.Format(
-                                    "Invalid parameter value: {0}\r\nIndex: {1}.\r\nMessage: {2}",
-                                    values[j], j, e.Message);
+                                string message = $"Invalid parameter value: {values[j]}\r\nIndex: {j}.\r\nMessage: {e.Message}";
                                 throw new ArgumentException(message, parameter.ParameterName, e);
                             }
 

@@ -28,7 +28,7 @@ namespace DataCommander.Providers
 				{
 					string name = this.dataRecord.GetName(this.columnOrdinal);
 					string dataTypeName = this.dataRecord.GetDataTypeName( this.columnOrdinal );
-					string message = string.Format( "dataRecord.GetValue(columnordinal) failed. Column name: {0}, column dataTypeName: {1}", name, dataTypeName );
+					string message = $"dataRecord.GetValue(columnordinal) failed. Column name: {name}, column dataTypeName: {dataTypeName}";
 					throw new Exception(message, e);
 				}
 

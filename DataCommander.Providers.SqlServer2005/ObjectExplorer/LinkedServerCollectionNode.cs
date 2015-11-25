@@ -4,6 +4,7 @@
     using System.Data;
     using System.Data.SqlClient;
     using System.Diagnostics.Contracts;
+    using System.Linq;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
 
@@ -50,19 +51,23 @@ from    sys.servers s (nolock)
 where   s.is_linked = 1
 order by s.name";
 
+            List<ITreeNode> treeNodes;
+
             using (var connection = new SqlConnection(this.server.ConnectionString))
             {
                 connection.Open();
                 var transactionScope = new DbTransactionScope(connection, null);
-                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText},CommandBehavior.Default))
+                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
                 {
-                    return dataReader.Read(dataRecord =>
+                    treeNodes = dataReader.Read(dataRecord =>
                     {
                         string name = dataRecord.GetString(0);
-                        return new LinkedServerNode(this, name);
-                    });
+                        return (ITreeNode)new LinkedServerNode(this, name);
+                    }).ToList();
                 }
             }
+
+            return treeNodes;
         }
 
         bool ITreeNode.Sortable

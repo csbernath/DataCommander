@@ -1,5 +1,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander", "DataCommander\DataCommander.csproj", "{FCD0459F-B6BF-4F88-8466-F31732C97EC3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers", "DataCommander.Providers\DataCommander.Providers.csproj", "{31A30A80-D1B6-4867-A65E-188DE9E912C8}"
@@ -39,6 +41,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.MySql", "DataCommander.Providers.MySql\DataCommander.Providers.MySql.csproj", "{CEE8D8F8-B448-49A4-A8F8-C7CA4549172E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.PostgreSql", "DataCommander.Providers.PostgreSql\DataCommander.Providers.PostgreSql.csproj", "{F4553DD9-F793-4DD1-9D34-98449264018B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Tfs-14.0.0.0", "DataCommander.Providers.Tfs-14.0.0.0\DataCommander.Providers.Tfs-14.0.0.0.csproj", "{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -331,6 +335,26 @@ Global
 		{F4553DD9-F793-4DD1-9D34-98449264018B}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{F4553DD9-F793-4DD1-9D34-98449264018B}.Test|Any CPU.Build.0 = Release|Any CPU
 		{F4553DD9-F793-4DD1-9D34-98449264018B}.Test|x86.ActiveCfg = Release|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.ClientRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.ClientRelease|Any CPU.Build.0 = Release|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.ClientRelease|x86.ActiveCfg = Release|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.ClientRelease|x86.Build.0 = Release|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Debug|x86.Build.0 = Debug|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.NDoc|Any CPU.ActiveCfg = Release|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.NDoc|Any CPU.Build.0 = Release|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.NDoc|x86.ActiveCfg = Release|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.NDoc|x86.Build.0 = Release|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Release|x86.ActiveCfg = Release|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Release|x86.Build.0 = Release|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Test|Any CPU.Build.0 = Release|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Test|x86.ActiveCfg = Release|Any CPU
+		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Test|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

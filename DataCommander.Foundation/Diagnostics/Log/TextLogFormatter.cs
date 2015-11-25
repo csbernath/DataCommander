@@ -34,15 +34,8 @@ namespace DataCommander.Foundation.Diagnostics
                     break;
             }
 
-            return string.Format(
-                "[{0}|{1}|{2}|{3},{4}|{5}] {6}\r\n",
-                entry.CreationTime.ToString("HH:mm:ss.fff"),
-                entry.Id,
-                logLevelChar,
-                entry.ThreadName,
-                entry.ManagedThreadId,
-                entry.LogName,
-                entry.Message);
+            return
+                $"[{entry.CreationTime.ToString("HH:mm:ss.fff")}|{entry.Id}|{logLevelChar}|{entry.ThreadName},{entry.ManagedThreadId}|{entry.LogName}] {entry.Message}\r\n";
         }
 
         string ILogFormatter.Begin()

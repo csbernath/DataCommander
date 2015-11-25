@@ -43,7 +43,7 @@ namespace DataCommander.Providers
         private void sqlBulkCopy_SqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
         {
             this.rowCount += e.RowsCopied;
-            string message = string.Format("{0} rows copied.", this.rowCount);
+            string message = $"{this.rowCount} rows copied.";
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
             if (this.cancelRequested)
             {

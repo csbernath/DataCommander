@@ -40,7 +40,7 @@ namespace DataCommander.Providers.SqlServer2005
         {
             get
             {
-                return string.Format("{0}.{1}", this.owner, this.name);
+                return $"{this.owner}.{this.name}";
             }
         }
 
@@ -79,13 +79,13 @@ namespace DataCommander.Providers.SqlServer2005
 
             string commandText = string.Format(@"select  c.name
 from    [{0}].sys.schemas s (nolock)
-join    [{0}].sys.tables t (nolock)
-    on s.schema_id = t.schema_id
+join    [{0}].sys.objects o (nolock)
+    on s.schema_id = o.schema_id
 join    [{0}].sys.columns c (nolock)
-    on t.object_id = c.object_id
+    on o.object_id = c.object_id
 where
     s.name = '{1}'
-    and t.name = '{2}'
+    and o.name = '{2}'
 order by c.column_id",
                 databaseObjectMultipartName.Database,
                 databaseObjectMultipartName.Schema,
@@ -119,9 +119,10 @@ order by c.column_id",
                 });
             }
 
-            string query = string.Format(
-                @"select  {0}
-from    [{1}].[{2}].[{3}]", columnNames, databaseObjectMultipartName.Database, databaseObjectMultipartName.Schema, databaseObjectMultipartName.Name);
+            string query =
+                $@"select  {columnNames}
+from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.Schema}].[{
+                    databaseObjectMultipartName.Name}]";
 
             return query;
         }
@@ -282,7 +283,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.database.Name, this.owner, this.name);
 
                             string keyCol = keyColObj.ToString();
 
-                            string filter = string.Format("Name = '{0}'", keyCol);
+                            string filter = $"Name = '{keyCol}'";
                             DataRow dataRow = schema.Select(filter)[0];
                             string identity = dataRow[1].ToString();
 
@@ -363,16 +364,14 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.database.Name, this.owner, this.name);
                 Clipboard.SetText(sb.ToString());
                 stopwatch.Stop();
                 queryForm.SetStatusbarPanelText(
-                    string.Format(
-                        "Copying table script to clipboard finished in {0} seconds.",
-                        StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)),
+                    $"Copying table script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.",
                     SystemColors.ControlText);
             }
         }
 
         private void Indexes_Click(object sender, EventArgs e)
         {
-            string cmdText = string.Format("use [{0}] exec sp_helpindex [{1}.{2}]", this.database.Name, this.owner, this.name);
+            string cmdText = $"use [{this.database.Name}] exec sp_helpindex [{this.owner}.{this.name}]";
             string connectionString = this.database.Databases.Server.ConnectionString;
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
@@ -380,7 +379,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.database.Name, this.owner, this.name);
                 var transactionScope = new DbTransactionScope(connection, null);
                 dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = cmdText }, CancellationToken.None);
             }
-            dataTable.TableName = string.Format("{0} indexes", this.name);
+            dataTable.TableName = $"{this.name} indexes";
             MainForm mainForm = DataCommanderApplication.Instance.MainForm;
             var queryForm = (QueryForm)mainForm.ActiveMdiChild;
             var dataSet = new DataSet();
@@ -506,8 +505,8 @@ order by c.column_id", this.database.Name, this.owner, this.name);
                 string variableName = (string)dataRow["name"];
                 variableName = char.ToLower(variableName[0]) + variableName.Substring(1);
                 char prefix = i == 0 ? ' ' : ',';
-                stringTableRow[1] = string.Format("{0}@{1}", prefix, variableName);
-                string s2 = string.Format("as {0}", dataRow["name"]);
+                stringTableRow[1] = $"{prefix}@{variableName}";
+                string s2 = $"as {dataRow["name"]}";
 
                 stringTableRow[2] = s2;
                 st.Rows.Add(stringTableRow);

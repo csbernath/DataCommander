@@ -159,7 +159,7 @@ namespace DataCommander.Providers.SqlServer2005
 
             using (IDbCommand command = destinationconnection.CreateCommand())
             {
-                command.CommandText = string.Format("select {0} from {1}", string.Join(",", sourceColumnNames), destinationTableName);
+                command.CommandText = $"select {string.Join(",", sourceColumnNames)} from {destinationTableName}";
                 command.CommandType = CommandType.Text;
 
                 using (IDataReader dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
@@ -200,7 +200,7 @@ namespace DataCommander.Providers.SqlServer2005
                 int providerType = columnSchema.ProviderType;
                 DbType dbType = (DbType)providerType;
                 var parameter = new SqlParameter();
-                parameter.ParameterName = string.Format("@p{0}", i);
+                parameter.ParameterName = $"@p{i}";
                 //parameter.DbType = dbType;
                 insertCommand.Parameters.Add(parameter);
 
@@ -338,12 +338,12 @@ namespace DataCommander.Providers.SqlServer2005
                     break;
 
                 case TypeCode.String:
-                    typeName = string.Format("{0}({1})", SqlDataTypeName.NVarChar, columnSize);
+                    typeName = $"{SqlDataTypeName.NVarChar}({columnSize})";
                     break;
 
                 default:
                     // TODO
-                    typeName = string.Format("'{0}'", typeCode);
+                    typeName = $"'{typeCode}'";
                     break;
             }
 
@@ -424,7 +424,7 @@ namespace DataCommander.Providers.SqlServer2005
             if (currentToken != null)
             {
                 var parts = new IdentifierParser(new StringReader(currentToken.Value)).Parse().ToList();
-                var lastPart = parts.Last();
+                var lastPart = parts.Count > 0 ? parts.Last() : null;
                 int lastPartLength = lastPart != null ? lastPart.Length : 0;
                 response.StartPosition = currentToken.EndPosition - lastPartLength + 1;
                 response.Length = lastPartLength;
@@ -641,13 +641,13 @@ order by 1", name.Database);
                                         {
                                             like = "%";
                                         }
-                                        @where = string.Format("where {0} like N'{1}'", columnName, like);
+                                        @where = $"where {columnName} like N'{like}'";
                                     }
                                     else
                                     {
                                         @where = null;
                                     }
-                                    commandText = string.Format("select distinct top 100 {0} from {1} (readpast) {2} order by 1", columnName, tableName, @where);
+                                    commandText = $"select distinct top 100 {columnName} from {tableName} (readpast) {@where} order by 1";
                                 }
                             }
                             break;

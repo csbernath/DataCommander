@@ -83,7 +83,7 @@
                 {
                     this.localPath = Path.GetTempPath();
                     this.localPath += Path.DirectorySeparatorChar;
-                    this.localPath += String.Format( "getversions [{0}]", DateTime.Now.ToString( "yyyy-MM-dd HH.mm.ss.fff" ) );
+                    this.localPath += $"getversions [{DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss.fff")}]";
                     Directory.CreateDirectory(this.localPath );
                 }
 

@@ -85,11 +85,11 @@ namespace DataCommander.Providers
                         if (scale > 0)
                         {
                             length++;
-                            dataTypeName = string.Format("decimal({0},{1})", precision, scale);
+                            dataTypeName = $"decimal({precision},{scale})";
                         }
                         else
                         {
-                            dataTypeName = string.Format("decimal({0})", precision);
+                            dataTypeName = $"decimal({precision})";
                         }
 
                         dataWriter = new DecimalDataWriter();
@@ -113,7 +113,7 @@ namespace DataCommander.Providers
                     case TypeCode.String:
                         length = (int)column["ColumnSize"];
                         length = Math.Min(1024, length);
-                        dataTypeName = string.Format("varchar({0})", length);
+                        dataTypeName = $"varchar({length})";
                         dataWriter = new StringDataWriter();
                         dataWriter.Init(length);
                         break;

@@ -238,7 +238,7 @@ namespace DataCommander.Providers
                     if (uniqueIndexColumns.Length > 0)
                     {
                         message = "The table has a primary key/unique index. Columns: " +
-                                  uniqueIndexColumns.Select(r => (string)r["ColumnName"]).Aggregate((n1, n2) => string.Format("{0},{1}", n1, n2));
+                                  uniqueIndexColumns.Select(r => (string)r["ColumnName"]).Aggregate((n1, n2) => $"{n1},{n2}");
                     }
                     else
                     {
@@ -750,7 +750,7 @@ namespace DataCommander.Providers
                                 var fileInfo = new FileInfo(path);
                                 using (var excelPackage = new ExcelPackage(fileInfo))
                                 {
-                                    var worksheet = excelPackage.Workbook.Worksheets.Add(string.Format("Worksheet {0:yyyy-MM-dd HHmmss}", LocalTime.Default.Now));
+                                    var worksheet = excelPackage.Workbook.Worksheets.Add($"Worksheet {LocalTime.Default.Now:yyyy-MM-dd HHmmss}");
                                     worksheet.View.FreezePanes(2, 1);
 
                                     var dataView = this.dataTable.DefaultView;
@@ -797,8 +797,7 @@ namespace DataCommander.Providers
                         }
 
                         stopwatch.Stop();
-                        this.statusBarPanel.Text = string.Format("Table saved successfully in {0} seconds.",
-                            StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3));
+                        this.statusBarPanel.Text = $"Table saved successfully in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.";
                     }
                     catch (Exception ex)
                     {
@@ -842,7 +841,7 @@ namespace DataCommander.Providers
             {
                 dataView.RowFilter = properties.RowFilter;
                 dataView.Sort = properties.Sort;
-                this.statusBarPanel.Text = string.Format("RowFilter = \"{0}\" applied. dataView.Count: {1}", properties.RowFilter, dataView.Count);
+                this.statusBarPanel.Text = $"RowFilter = \"{properties.RowFilter}\" applied. dataView.Count: {dataView.Count}";
             }
         }
 
@@ -983,8 +982,7 @@ namespace DataCommander.Providers
 
                 if (this.statusBarPanel != null)
                 {
-                    this.statusBarPanel.Text = string.Format("RowFilter ({0}) applied. {1} row(s) found from {2} row(s).", rowFilter, dataView.Count,
-                        this.dataTable.Rows.Count);
+                    this.statusBarPanel.Text = $"RowFilter ({rowFilter}) applied. {dataView.Count} row(s) found from {this.dataTable.Rows.Count} row(s).";
                 }
             }
             catch (Exception ex)
@@ -1169,7 +1167,7 @@ namespace DataCommander.Providers
                 ToolStripMenuItem menuItem;
                 if (rowFilter != null && rowFilter.Length > 0)
                 {
-                    menuItem = new ToolStripMenuItem(string.Format("Remove rowFilter: {0}", rowFilter), null, this.RemoveRowFilter_Click);
+                    menuItem = new ToolStripMenuItem($"Remove rowFilter: {rowFilter}", null, this.RemoveRowFilter_Click);
                     menu.Items.Add(menuItem);
                 }
 
@@ -1210,7 +1208,7 @@ namespace DataCommander.Providers
                     {
                         this.columnIndex = hitTestInfo.ColumnIndex;
                         this.columnName = this.dataTable.Columns[this.columnIndex].ColumnName;
-                        menuItem = new ToolStripMenuItem(string.Format("Copy column name '{0}'", this.columnName), null, this.CopyColumnName_Click);
+                        menuItem = new ToolStripMenuItem($"Copy column name '{this.columnName}'", null, this.CopyColumnName_Click);
                         menu.Items.Add(menuItem);
                         menuItem = new ToolStripMenuItem("Hide column", null, this.HideColumn_Click);
                         menu.Items.Add(menuItem);
@@ -1229,7 +1227,7 @@ namespace DataCommander.Providers
 
                         if (this.columnName.IndexOf('!') >= 0)
                         {
-                            this.columnName = string.Format("[{0}]", this.columnName);
+                            this.columnName = $"[{this.columnName}]";
                         }
 
                         menuItem = new ToolStripMenuItem("&Find", null, this.Find_Click);
@@ -1245,7 +1243,7 @@ namespace DataCommander.Providers
 
                                 if (value != null && value.Length < 256)
                                 {
-                                    rowFilter = string.Format("[{0}] = '{1}'", this.columnName, stringField.Value);
+                                    rowFilter = $"[{this.columnName}] = '{stringField.Value}'";
                                 }
                             })
                             .IfArgumentIs<DateTimeField>(dateTimeField =>
@@ -1259,7 +1257,7 @@ namespace DataCommander.Providers
                             {
                                 if (this.cellValue == DBNull.Value)
                                 {
-                                    rowFilter = string.Format("[{0}] is null", this.columnName);
+                                    rowFilter = $"[{this.columnName}] is null";
                                 }
                                 else
                                 {
@@ -1273,8 +1271,8 @@ namespace DataCommander.Providers
 
                                             if (valueStr.Length < 256)
                                             {
-                                                valueStr = string.Format("'{0}'", this.cellValue);
-                                                rowFilter = string.Format("[{0}] = {1}", this.columnName, valueStr);
+                                                valueStr = $"'{this.cellValue}'";
+                                                rowFilter = $"[{this.columnName}] = {valueStr}";
                                             }
 
                                             break;
@@ -1282,19 +1280,19 @@ namespace DataCommander.Providers
                                         case TypeCode.Object:
                                             if (type == typeof (Guid))
                                             {
-                                                valueStr = string.Format("'{0}'", this.cellValue);
+                                                valueStr = $"'{this.cellValue}'";
                                             }
                                             else
                                             {
                                                 valueStr = this.cellValue.ToString();
                                             }
 
-                                            rowFilter = string.Format("[{0}] = {1}", this.columnName, valueStr);
+                                            rowFilter = $"[{this.columnName}] = {valueStr}";
                                             break;
 
                                         default:
                                             valueStr = this.cellValue.ToString();
-                                            rowFilter = string.Format("[{0}] = {1}", this.columnName, valueStr);
+                                            rowFilter = $"[{this.columnName}] = {valueStr}";
                                             break;
                                     }
                                 }
@@ -1328,7 +1326,7 @@ namespace DataCommander.Providers
                                     menu.Items.Add(menuItem);
 
                                     menuItem = new ToolStripMenuItem(
-                                        string.Format("Save string field (length: {0}) as", length),
+                                        $"Save string field (length: {length}) as",
                                         null,
                                         new EventHandler(this.SaveStringField_Click));
 
@@ -1343,7 +1341,7 @@ namespace DataCommander.Providers
                                     menu.Items.Add(menuItem);
 
                                     menuItem = new ToolStripMenuItem(
-                                        string.Format("Save string field (length: {0}) as", length),
+                                        $"Save string field (length: {length}) as",
                                         null,
                                         new EventHandler(this.SaveStringField_Click));
 

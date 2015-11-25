@@ -115,12 +115,12 @@
 
                         if (precision <= 28 && scale <= 28)
                         {
-                            typeName = string.Format("DECIMAL({0},{1})", precision, scale);
+                            typeName = $"DECIMAL({precision},{scale})";
                             dbType = DbType.Decimal;
                         }
                         else
                         {
-                            typeName = string.Format("-- DECIMAL({0},{1})", precision, scale);
+                            typeName = $"-- DECIMAL({precision},{scale})";
                             dbType = DbType.Object;
                         }
 
@@ -147,7 +147,7 @@
                         break;
 
                     case TypeCode.String:
-                        typeName = string.Format("VARCHAR({0})", columnSize);
+                        typeName = $"VARCHAR({columnSize})";
                         dbType = DbType.String;
                         break;
 

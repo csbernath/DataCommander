@@ -66,7 +66,7 @@ namespace DataCommander.Foundation.Diagnostics
                 this.path = Path.Combine(directory, fileName);
                 this.fileStream = this.Open(this.path, dateTime);
 
-                log.Write(LogLevel.Error, string.Format("LogFile path: {0}", this.fileName));
+                log.Write(LogLevel.Error, $"LogFile path: {this.fileName}");
             }
 
             if (this.fileStream.Length == 0)
@@ -82,7 +82,7 @@ namespace DataCommander.Foundation.Diagnostics
             {
                 this.Open(dateTime);
             }
-            else if (date.Date != this.date)
+            else if (dateTime.Date != this.date)
             {
                 this.Close();
                 this.Open(dateTime);

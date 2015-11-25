@@ -522,7 +522,7 @@ namespace DataCommander.Providers
 
                                         if (!IsSeparator(c2))
                                         {
-                                            endIndex = WordEnd(text, endIndex + 2);
+                                            endIndex = WordEnd(text, selectionStart);
                                         }
                                     }
                                 }

@@ -36,9 +36,7 @@
         void IResultWriter.BeforeExecuteReader(IProvider provider, IDbCommand command)
         {
             this.beforeExecuteReaderTimestamp = Stopwatch.GetTimestamp();
-            string message = string.Format("Executing command[{0}]\r\n{1}",
-                this.commandCount,
-                command.CommandText);
+            string message = $"Executing command[{this.commandCount}]\r\n{command.CommandText}";
 
             this.commandCount++;
 
@@ -54,7 +52,7 @@
         void IResultWriter.AfterExecuteReader()
         {
             long duration = Stopwatch.GetTimestamp() - this.beforeExecuteReaderTimestamp;
-            string message = string.Format("Command[{0}] started in {1} seconds.", this.commandCount - 1, StopwatchTimeSpan.ToString(duration, 3));
+            string message = $"Command[{this.commandCount - 1}] started in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
             this.tableCount = 0;
         }
@@ -63,15 +61,12 @@
         {
             long duration = Stopwatch.GetTimestamp() - this.beforeExecuteReaderTimestamp;
             DateTime now = LocalTime.Default.Now;
-            string message = string.Format(
-                "Command[{0}] completed in {1} seconds.",
-                this.commandCount - 1,
-                StopwatchTimeSpan.ToString(duration, 3));
+            string message = $"Command[{this.commandCount - 1}] completed in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
             this.addInfoMessage(new InfoMessage(now, InfoMessageSeverity.Verbose, message));
 
             if (affectedRows >= 0)
             {
-                message = string.Format("{0} row(s) affected.", affectedRows);
+                message = $"{affectedRows} row(s) affected.";
                 this.addInfoMessage(new InfoMessage(now, InfoMessageSeverity.Verbose, message));
             }
         }
@@ -91,7 +86,7 @@
         void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
         {
             long duration = Stopwatch.GetTimestamp() - this.firstRowReadBeginTimestamp;
-            string message = string.Format("First row read completed in {0} seconds.", StopwatchTimeSpan.ToString(duration, 3));
+            string message = $"First row read completed in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
 
@@ -103,12 +98,8 @@
         void IResultWriter.WriteTableEnd()
         {
             long duration = Stopwatch.GetTimestamp() - this.writeTableBeginTimestamp;
-            string message = string.Format(
-                "Reading {0} row(s) from command[{1}] into table[{2}] finished in {3} seconds.",
-                this.rowCount,
-                this.commandCount - 1,
-                this.tableCount - 1,
-                StopwatchTimeSpan.ToString(duration, 3));
+            string message =
+                $"Reading {this.rowCount} row(s) from command[{this.commandCount - 1}] into table[{this.tableCount - 1}] finished in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
 
@@ -119,10 +110,7 @@
         void IResultWriter.End()
         {
             long duration = Stopwatch.GetTimestamp() - this.beginTimestamp;
-            string message = string.Format(
-                "Query completed {0} command(s) in {1} seconds.",
-                this.commandCount,
-                StopwatchTimeSpan.ToString(duration, 3));
+            string message = $"Query completed {this.commandCount} command(s) in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
 

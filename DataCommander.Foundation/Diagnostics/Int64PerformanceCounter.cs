@@ -135,10 +135,8 @@
         /// <returns></returns>
         public string ToLogString()
         {
-            return string.Format(
-                "Int64PerformanceCounter '{0}'\r\ncount: {1}\r\nmin: {2}\r\navg: {3}\r\nmax: {4}\r\nsum: {5}", this.name,
-                this.count, this.toString(this.min), this.toString((long) ((Double) this.Sum/this.Count)),
-                this.toString(this.max), this.toString(this.sum));
+            return
+                $"Int64PerformanceCounter '{this.name}'\r\ncount: {this.count}\r\nmin: {this.toString(this.min)}\r\navg: {this.toString((long)((Double)this.Sum/this.Count))}\r\nmax: {this.toString(this.max)}\r\nsum: {this.toString(this.sum)}";
         }
     }
 }

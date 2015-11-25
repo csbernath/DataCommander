@@ -141,11 +141,11 @@ namespace DataCommander.Providers
             string tableName = schemaTable.TableName;
             if (tableName == "SchemaTable")
             {
-                tableName = string.Format("Table {0}", tableIndex);
+                tableName = $"Table {tableIndex}";
             }
             if (this.showShemaTable)
             {
-                schemaTable.TableName = string.Format("Schema {0}", tableIndex);
+                schemaTable.TableName = $"Schema {tableIndex}";
                 this.dataSet.Tables.Add(schemaTable);
             }
             this.dataTable = this.dataSet.Tables.Add();

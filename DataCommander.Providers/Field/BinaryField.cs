@@ -15,7 +15,7 @@ namespace DataCommander.Providers
             int length = Math.Min(bytes.Length, 16);
             char[] chars = Hex.Encode(bytes, length, true);
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("0x");
             sb.Append(chars);
 

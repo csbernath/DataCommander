@@ -36,7 +36,7 @@
         {
             Contract.Requires(managementScope != null);
 
-            string query = string.Format("SELECT * FROM Msvm_ComputerSystem WHERE Name='{0}'", name);
+            string query = $"SELECT * FROM Msvm_ComputerSystem WHERE Name='{name}'";
             List<MsvmComputerSystem> list = managementScope.ExecuteQuery(query, mo => new MsvmComputerSystem(mo));
             Contract.Assert(list.Count > 0);
             MsvmComputerSystem item;
@@ -63,7 +63,7 @@
         {
             Contract.Requires(managementScope != null);
 
-            string query = string.Format("SELECT * FROM Msvm_ComputerSystem WHERE ElementName='{0}'", elementName);
+            string query = $"SELECT * FROM Msvm_ComputerSystem WHERE ElementName='{elementName}'";
             List<MsvmComputerSystem> list = managementScope.ExecuteQuery(query, mo => new MsvmComputerSystem(mo));
             return list;
         }
@@ -176,7 +176,7 @@
         [CLSCompliant(false)]
         public InitiateShutdownReturnValue InitiateShutdown(bool force, string reason)
         {
-            string query = string.Format("SELECT * FROM Msvm_ShutdownComponent WHERE SystemName='{0}'", this.Name);
+            string query = $"SELECT * FROM Msvm_ShutdownComponent WHERE SystemName='{this.Name}'";
             ObjectQuery objectQuery = new ObjectQuery(query);
             ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher(
                 this.managementObject.Scope, objectQuery);

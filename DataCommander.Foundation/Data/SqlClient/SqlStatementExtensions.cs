@@ -55,7 +55,7 @@
                 }
             }
 
-            return string.Format("'{0}'", source.ToString(format, CultureInfo.InvariantCulture));
+            return $"'{source.ToString(format, CultureInfo.InvariantCulture)}'";
         }
 
         /// <summary>

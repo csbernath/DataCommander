@@ -183,7 +183,6 @@ namespace DataCommander.Providers.SQLite
             if (sqlObject != null)
             {
                 string commandText = null;
-                string columnName = null;
                 response.FromCache = false;
 
                 switch (sqlObject.Type)
@@ -194,7 +193,6 @@ select	name
 from	sqlite_master
 where   type    = 'table'
 order by name collate nocase";
-                        columnName = "name";
                         break;
 
                     case SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function:
@@ -203,7 +201,6 @@ select	name
 from	sqlite_master
 where   type    = 'table'
 order by name collate nocase";
-                        columnName = "name";
                         break;
 
                     case SqlObjectTypes.Index:
@@ -212,12 +209,10 @@ select	name
 from	sqlite_master
 where   type    = 'index'
 order by name collate nocase";
-                        columnName = "name";
                         break;
 
                     case SqlObjectTypes.Column:
-                        commandText = string.Format("PRAGMA table_info({0});", sqlObject.ParentName);
-                        columnName = "name";
+                        commandText = $"PRAGMA table_info({sqlObject.ParentName});";
                         break;
                 }
 
@@ -246,7 +241,7 @@ order by name collate nocase";
 
             if (sqliteException != null)
             {
-                message = string.Format("ErrorCode: {0}\r\nMessage: {1}", sqliteException.ErrorCode, sqliteException.Message);
+                message = $"ErrorCode: {sqliteException.ErrorCode}\r\nMessage: {sqliteException.Message}";
             }
             else
             {
@@ -287,7 +282,7 @@ order by name collate nocase";
                 case SqlDataTypeName.NChar:
                 case SqlDataTypeName.VarChar:
                 case SqlDataTypeName.NVarChar:
-                    typeName = string.Format("{0}({1})", sourceDataTypeName, columnSize);
+                    typeName = $"{sourceDataTypeName}({columnSize})";
                     break;
 
                 case SqlDataTypeName.Decimal:
@@ -295,16 +290,16 @@ order by name collate nocase";
                     short scale = schemaRow.NumericScale.Value;
                     if (scale == 0)
                     {
-                        typeName = string.Format("decimal({0})", precision);
+                        typeName = $"decimal({precision})";
                     }
                     else
                     {
-                        typeName = string.Format("decimal({0},{1})", precision, scale);
+                        typeName = $"decimal({precision},{scale})";
                     }
                     break;
 
                 case SqlDataTypeName.Xml:
-                    typeName = string.Format("nvarchar({0})", int.MaxValue);
+                    typeName = $"nvarchar({int.MaxValue})";
                     break;
 
                 default:
@@ -366,7 +361,7 @@ order by name collate nocase";
 
             using (IDbCommand command = destinationconnection.CreateCommand())
             {
-                command.CommandText = String.Format("select * from {0}", destinationTableName);
+                command.CommandText = $"select * from {destinationTableName}";
                 command.CommandType = CommandType.Text;
 
                 using (var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))

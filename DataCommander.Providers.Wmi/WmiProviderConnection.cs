@@ -39,7 +39,7 @@ namespace DataCommander.Providers.Wmi
         {
             get
             {
-                return string.Format("WMI@{0}", this.wmiConnection.DataSource);
+                return $"WMI@{this.wmiConnection.DataSource}";
             }
         }
 

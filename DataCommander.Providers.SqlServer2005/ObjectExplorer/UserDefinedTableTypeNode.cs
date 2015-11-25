@@ -20,7 +20,7 @@
         {
             get
             {
-                return string.Format("{0}.{1}", this.schema, this.name);
+                return $"{this.schema}.{this.name}";
             }
         }
 

@@ -110,11 +110,11 @@
 
                         if (scale == 0)
                         {
-                            typeName = string.Format("decimal({0})", precision);
+                            typeName = $"decimal({precision})";
                         }
                         else
                         {
-                            typeName = string.Format("decimal({0},{1})", precision, scale);
+                            typeName = $"decimal({precision},{scale})";
                         }
 
                         break;
@@ -167,12 +167,12 @@
                         {
                             if (isFixedLength)
                             {
-                                typeName = string.Format("nchar({0})", columnSize);
+                                typeName = $"nchar({columnSize})";
                                 sqlDbType = SqlDbType.NChar;
                             }
                             else
                             {
-                                typeName = string.Format("nvarchar({0})", columnSize);
+                                typeName = $"nvarchar({columnSize})";
                                 sqlDbType = SqlDbType.NVarChar;
                             }
                         }

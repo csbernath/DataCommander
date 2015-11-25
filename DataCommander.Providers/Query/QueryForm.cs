@@ -251,7 +251,7 @@ namespace DataCommander
                 this.mnuObjectExplorer.Enabled = false;
             }
 
-            string text = string.Format("&{0} - {1}", index + 1, this.Text);
+            string text = $"&{index + 1} - {this.Text}";
 
             this.database = connection.Database;
             this.SetResultWriterType(ResultWriterType.DataGrid);
@@ -507,7 +507,7 @@ namespace DataCommander
                     else
                     {
                         this.resultSetCount++;
-                        text = string.Format("Set {0}", this.resultSetCount);
+                        text = $"Set {this.resultSetCount}";
                     }
                     var resultSetTabPage = new TabPage(text);
                     GarbageMonitor.Add("resultSetTabPage", resultSetTabPage);
@@ -1407,7 +1407,7 @@ namespace DataCommander
             }
 
             ticks = Stopwatch.GetTimestamp() - ticks;
-            this.sbPanelText.Text = string.Format("{0} item(s) added to Object Explorer in {1}.", count, StopwatchTimeSpan.ToString(ticks, 3));
+            this.sbPanelText.Text = $"{count} item(s) added to Object Explorer in {StopwatchTimeSpan.ToString(ticks, 3)}.";
             this.sbPanelText.ForeColor = SystemColors.ControlText;
         }
 
@@ -1975,9 +1975,7 @@ namespace DataCommander
             {
                 if (this.database != args.database)
                 {
-                    string message = string.Format(
-                        "[DatabaseChanged] Database changed from {0} to {1}",
-                        this.database, this.database);
+                    string message = $"[DatabaseChanged] Database changed from {this.database} to {this.database}";
                     var infoMessage = new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message);
                     this.AddInfoMessage(infoMessage);
 
@@ -2568,7 +2566,7 @@ namespace DataCommander
 
                     if (length > 0)
                     {
-                        text = string.Format("The text in {0} has been changed.\r\nDo you want to save the changes?", this.Text);
+                        text = $"The text in {this.Text} has been changed.\r\nDo you want to save the changes?";
                         string caption = DataCommanderApplication.Instance.Name;
                         DialogResult result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 
@@ -2948,7 +2946,7 @@ namespace DataCommander
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                this.sbPanelText.Text = string.Format("Finding {0}...", text);
+                this.sbPanelText.Text = $"Finding {text}...";
                 this.sbPanelText.ForeColor = SystemColors.ControlText;
                 StringComparison comparison;
                 var options = this.findTextForm.RichTextBoxFinds;
@@ -3021,7 +3019,7 @@ namespace DataCommander
                                 dataView.RowFilter = rowFilter;
                                 int count = dataView.Count;
                                 found = count > 0;
-                                this.sbPanelText.Text = string.Format("{0} rows found. RowFilter: {1}", count, rowFilter);
+                                this.sbPanelText.Text = $"{count} rows found. RowFilter: {rowFilter}";
                                 this.sbPanelText.ForeColor = SystemColors.ControlText;
                             }
                             else if (text.StartsWith("Sort="))
@@ -3029,7 +3027,7 @@ namespace DataCommander
                                 string sort = text.Substring(5);
                                 DataView dataView = dataTable.DefaultView;
                                 dataView.Sort = sort;
-                                this.sbPanelText.Text = string.Format("Rows sorted by {0}.", sort);
+                                this.sbPanelText.Text = $"Rows sorted by {sort}.";
                                 this.sbPanelText.ForeColor = SystemColors.ControlText;
                             }
                             else
@@ -3075,7 +3073,7 @@ namespace DataCommander
 
             if (!found)
             {
-                string message = string.Format("The specified text was not found.\r\n\r\nText: {0}\r\nControl: {1}", text, control.Name);
+                string message = $"The specified text was not found.\r\n\r\nText: {text}\r\nControl: {control.Name}";
                 MessageBox.Show(this, message, DataCommanderApplication.Instance.Name);
             }
         }
@@ -3102,7 +3100,7 @@ namespace DataCommander
                 {
                     var dataTable = dataTableViewer.DataTable;
                     string name = dataTable.TableName;
-                    this.findTextForm.Text = string.Format("Find (DataTable: {0})", name);
+                    this.findTextForm.Text = $"Find (DataTable: {name})";
                 }
                 else
                 {
@@ -3139,7 +3137,7 @@ namespace DataCommander
 
             try
             {
-                this.sbPanelText.Text = string.Format("Saving file {0}...", fileName);
+                this.sbPanelText.Text = $"Saving file {fileName}...";
                 this.sbPanelText.ForeColor = SystemColors.ControlText;
 
                 const RichTextBoxStreamType type = RichTextBoxStreamType.UnicodePlainText;
@@ -3154,7 +3152,7 @@ namespace DataCommander
 
                 this.fileName = fileName;
                 this.SetText();
-                this.sbPanelText.Text = string.Format("File {0} saved successfully.", fileName);
+                this.sbPanelText.Text = $"File {fileName} saved successfully.";
                 this.sbPanelText.ForeColor = SystemColors.ControlText;
             }
             finally
@@ -3225,7 +3223,7 @@ namespace DataCommander
             string from = response.FromCache ? "cache" : "data source";
             ticks = Stopwatch.GetTimestamp() - ticks;
             int length = response.Items != null ? response.Items.Count : 0;
-            this.sbPanelText.Text = string.Format("GetCompletion returned {0} items from {1} in {2} seconds.", length, from, StopwatchTimeSpan.ToString(ticks, 3));
+            this.sbPanelText.Text = $"GetCompletion returned {length} items from {@from} in {StopwatchTimeSpan.ToString(ticks, 3)} seconds.";
             this.sbPanelText.ForeColor = SystemColors.ControlText;
             return response;
         }
@@ -3516,7 +3514,7 @@ namespace DataCommander
                     {
                         if (tableIndex > 0)
                         {
-                            tableName = string.Format("Table{0}", tableIndex);
+                            tableName = $"Table{tableIndex}";
                         }
 
                         var dataReaderHelper = this.provider.CreateDataReaderHelper(dataReader);
@@ -3690,7 +3688,7 @@ namespace DataCommander
             this.queryTextBox.Text = text;
             this.fileName = path;
             this.SetText();
-            this.sbPanelText.Text = string.Format("File {0} loaded successfully.", this.fileName);
+            this.sbPanelText.Text = $"File {this.fileName} loaded successfully.";
             this.sbPanelText.ForeColor = SystemColors.ControlText;
         }
 
@@ -3820,7 +3818,7 @@ namespace DataCommander
                 }
                 catch (Exception ex)
                 {
-                    string message = string.Format("Rollback failed. Exception:\r\n{0}", ex.ToLogString());
+                    string message = $"Rollback failed. Exception:\r\n{ex.ToLogString()}";
                     this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Error, message));
                 }
 

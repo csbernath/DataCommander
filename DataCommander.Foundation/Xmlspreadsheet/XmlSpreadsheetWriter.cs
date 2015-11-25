@@ -85,7 +85,7 @@
                     {
                         using (this.xmlWriter.WriteElement("Style"))
                         {
-                            string id = string.Format("{0},{1}", tableIndex, columnIndex);
+                            string id = $"{tableIndex},{columnIndex}";
                             this.xmlWriter.WriteAttributeString("ss:ID", id);
 
                             if (column.NumberFormat != null)
@@ -222,7 +222,7 @@
                 }
 
                 var cell = new XmlSpreadsheetCell(type, xmlValue);
-                cell.StyleId = string.Format("{0},{1}", this.tableIndex, columnIndex);
+                cell.StyleId = $"{this.tableIndex},{columnIndex}";
                 cell.Write(this.xmlWriter);
             }
 

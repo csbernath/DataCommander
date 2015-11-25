@@ -183,7 +183,7 @@
     <Compile Include="ObjectExplorer\DatabaseSecurityNode.cs" />
     <Compile Include="ObjectExplorer\ServerObjectCollectionNode.cs" />
     <Compile Include="ObjectExplorer\DatabaseCollectionNode.cs" />
-    <Compile Include="DataParameterImp.cs" />
+    <Compile Include="SqlDataParameter.cs" />
     <Compile Include="ObjectExplorer\JobCollectionNode.cs" />
     <Compile Include="ObjectExplorer\JobNode.cs" />
     <Compile Include="ObjectExplorer\LoginCollectionNode.cs" />

@@ -9,6 +9,7 @@
     using DataCommander.Foundation;
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Data.SqlClient;
+    using Foundation.Text;
 
     internal sealed class InsertScriptFileWriter : IResultWriter
     {
@@ -111,14 +112,14 @@
                 switch (dataTypeName)
                 {
                     case SqlDataTypeName.Decimal:
-                        dataTypeName += string.Format("({0},{1})", dataColumnSchema.NumericPrecision, dataColumnSchema.NumericScale);
+                        dataTypeName += $"({dataColumnSchema.NumericPrecision},{dataColumnSchema.NumericScale})";
                         break;
 
                     case SqlDataTypeName.Char:
                     case SqlDataTypeName.NChar:
                     case SqlDataTypeName.NVarChar:
                     case SqlDataTypeName.VarChar:
-                        dataTypeName += string.Format("({0})", columnSizeString);
+                        dataTypeName += $"({columnSizeString})";
                         break;
 
                     default:
@@ -149,6 +150,14 @@
                     .IfTypeIs<Guid>(() =>
                     {
                         s = "'" + value.ToString() + "'";
+                    })
+                    .IfTypeIs<BinaryField>(() =>
+                    {
+                        var binaryField = (BinaryField)value;
+                        var sb = new StringBuilder();
+                        sb.Append("0x");
+                        sb.Append(Hex.Encode(binaryField.Value, true));
+                        s = sb.ToString();
                     })
                     .IfTypeIs<StringField>(() =>
                     {
@@ -191,7 +200,7 @@
                                 break;
 
                             case TypeCode.DateTime:
-                                s = string.Format("TO_DATE('{0:yyyy-MM-dd HH:mm:ss}','YYYY-MM-DD HH24:MI:SS')", value);
+                                s = $"TO_DATE('{value:yyyy-MM-dd HH:mm:ss}','YYYY-MM-DD HH24:MI:SS')";
                                 break;
 
                             case TypeCode.String:

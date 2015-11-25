@@ -105,24 +105,24 @@
                     case SqlServerSystemType.VarBinary:
                     case SqlServerSystemType.VarChar:
                         string maxLengthString = this.maxLength >= 0 ? this.maxLength.ToString() : "max";
-                        typeName = string.Format( "{0}({1})", this.userTypeName, maxLengthString );
+                        typeName = $"{this.userTypeName}({maxLengthString})";
                         break;
 
                     case SqlServerSystemType.NChar:
                     case SqlServerSystemType.NVarChar:
                         maxLengthString = this.maxLength >= 0 ? (this.maxLength/2).ToString() : "max";
-                        typeName = string.Format("{0}({1})", this.userTypeName, maxLengthString);
+                        typeName = $"{this.userTypeName}({maxLengthString})";
                         break;
 
                     case SqlServerSystemType.Decimal:
                     case SqlServerSystemType.Numeric:
                         if (this.scale == 0)
                         {
-                            typeName = string.Format( "{0}({1})", this.userTypeName, this.precision );
+                            typeName = $"{this.userTypeName}({this.precision})";
                         }
                         else
                         {
-                            typeName = string.Format( "{0}({1},{2})", this.userTypeName, this.precision, this.scale );
+                            typeName = $"{this.userTypeName}({this.precision},{this.scale})";
                         }
                         break;
 
@@ -131,12 +131,8 @@
                         break;
                 }
 
-                return string.Format( "{0} ({1}{2}{3}, {4})",
-                    this.columnName,
-                    this.isPrimaryKey ? "PK, " : null,
-                    this.isForeignKey ? "FK, " : null,
-                    typeName,
-                    this.isNullable ? "null" : "not null" );
+                return
+                    $"{this.columnName} ({(this.isPrimaryKey ? "PK, " : null)}{(this.isForeignKey ? "FK, " : null)}{typeName}, {(this.isNullable ? "null" : "not null")})";
             }
         }
 

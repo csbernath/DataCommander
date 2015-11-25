@@ -54,7 +54,7 @@ namespace DataCommander.Providers.SqlServer2005
         private void OnStateChange(object sender, StateChangeEventArgs e)
         {
             DateTime now = LocalTime.Default.Now;
-            string text = string.Format("Connection.State changed. OriginalState: {0}, CurrentState: {1}", e.OriginalState, e.CurrentState);
+            string text = $"Connection.State changed. OriginalState: {e.OriginalState}, CurrentState: {e.CurrentState}";
             this.InvokeInfoMessage
                 (
                     new InfoMessage[]
@@ -98,8 +98,7 @@ set arithabort on";
                     userName = this.sqlConnectionStringBuilder.UserID;
                 }
 
-                string caption = string.Format("{0}.{1} ({2} ({3}))", this.sqlConnection.DataSource, this.sqlConnection.Database,
-                    userName, this.spid);
+                string caption = $"{this.sqlConnection.DataSource}.{this.sqlConnection.Database} ({userName} ({this.spid}))";
 
                 return caption;
             }
@@ -198,11 +197,13 @@ set arithabort on";
                         break;
 
                     case "09.00.3073":
-                        description = "SQL Server 2005 SP2 + 954606 MS08-052: Description of the security update for GDI+ for SQL Server 2005 Service Pack 2 GDR: September 9, 2008";
+                        description =
+                            "SQL Server 2005 SP2 + 954606 MS08-052: Description of the security update for GDI+ for SQL Server 2005 Service Pack 2 GDR: September 9, 2008";
                         break;
 
                     case "09.00.3080":
-                        description = "SQL Server 2005 SP2 + 970895 MS09-062: Description of the security update for GDI+ for SQL Server 2005 Service Pack 2 GDR: October 13, 2009";
+                        description =
+                            "SQL Server 2005 SP2 + 970895 MS09-062: Description of the security update for GDI+ for SQL Server 2005 Service Pack 2 GDR: October 13, 2009";
                         break;
 
                     case "09.00.3186":
@@ -255,12 +256,20 @@ set arithabort on";
 
                         #endregion
 
+                        #region SQL Server 2014
+
+                    case "12.00.2430":
+                        description = "2999197 Cumulative update package 4 (CU4) for SQL Server 2014: October 21, 2014";
+                        break;
+
+                        #endregion
+
                     default:
                         description = null;
                         break;
                 }
 
-                return string.Format("{0}\r\n{1}\r\n@@version: {2}\r\n@@servername: {3}", serverVersion, description, version, this.serverName);
+                return $"{serverVersion}\r\n{description}\r\n@@version: {version}\r\n@@servername: {this.serverName}";
             }
         }
 

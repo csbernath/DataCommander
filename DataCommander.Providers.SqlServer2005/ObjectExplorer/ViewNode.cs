@@ -26,7 +26,7 @@ namespace DataCommander.Providers.SqlServer2005
         {
             get
             {
-                return string.Format("{0}.{1}", this.schema, this.name);
+                return $"{this.schema}.{this.name}";
             }
         }
 
@@ -59,7 +59,7 @@ namespace DataCommander.Providers.SqlServer2005
         {
             get
             {
-                DatabaseObjectMultipartName name = new DatabaseObjectMultipartName(null, this.database.Name, this.schema, this.name);
+                var name = new DatabaseObjectMultipartName(null, this.database.Name, this.schema, this.name);
                 string connectionString = this.database.Databases.Server.ConnectionString;
                 string text;
                 using (var connection = new SqlConnection(connectionString))
@@ -70,7 +70,7 @@ namespace DataCommander.Providers.SqlServer2005
             }
         }
 
-        void menuItemScriptObject_Click(object sender, EventArgs e)
+        private void menuItemScriptObject_Click(object sender, EventArgs e)
         {
             string connectionString = this.database.Databases.Server.ConnectionString;
             string text;
@@ -86,7 +86,7 @@ namespace DataCommander.Providers.SqlServer2005
         {
             get
             {
-                ToolStripMenuItem menuItemScriptObject = new ToolStripMenuItem("Script Object", null, this.menuItemScriptObject_Click);
+                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, this.menuItemScriptObject_Click);
                 ContextMenuStrip contextMenu = new ContextMenuStrip();
                 contextMenu.Items.Add(menuItemScriptObject);
                 return contextMenu;

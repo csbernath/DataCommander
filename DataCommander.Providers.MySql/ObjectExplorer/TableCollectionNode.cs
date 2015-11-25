@@ -32,12 +32,14 @@ namespace DataCommander.Providers.MySql
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText = string.Format(@"select TABLE_NAME
+            string commandText =
+                $@"select TABLE_NAME
 from INFORMATION_SCHEMA.TABLES
 where
-    TABLE_SCHEMA = '{0}'
+    TABLE_SCHEMA = '{this.databaseNode.Name
+                    }'
     and TABLE_TYPE = 'BASE TABLE'
-order by TABLE_NAME", this.databaseNode.Name);
+order by TABLE_NAME";
 
             return MySqlClientFactory.Instance.ExecuteReader(
                 this.databaseNode.ObjectExplorer.ConnectionString,

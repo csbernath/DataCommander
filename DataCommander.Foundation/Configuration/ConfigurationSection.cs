@@ -231,8 +231,7 @@ namespace DataCommander.Foundation.Configuration
                 }
                 else
                 {
-                    throw new ArgumentException(string.Format(
-                        "Configuration node not found.\r\nNodeName: {0}\r\nConfigFileName: {1}", nodeName, this.configFileName));
+                    throw new ArgumentException($"Configuration node not found.\r\nNodeName: {nodeName}\r\nConfigFileName: {this.configFileName}");
                 }
             }
         }

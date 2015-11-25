@@ -99,7 +99,7 @@
     <Compile Include="ObjectExplorer\DatabaseNode.cs" />
     <Compile Include="ObjectExplorer\DatabaseCollectionNode.cs" />
     <Compile Include="ObjectExplorer\IndexCollectionNode.cs" />
-    <Compile Include="IndexNode.cs" />
+    <Compile Include="ObjectExplorer\IndexNode.cs" />
     <Compile Include="ObjectExplorer\TableNode.cs" />
     <Compile Include="ObjectExplorer\ObjectExplorer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

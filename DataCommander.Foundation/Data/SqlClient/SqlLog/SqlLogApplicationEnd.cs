@@ -17,10 +17,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         {
             get
             {
-                return string.Format(
-                    "exec LogApplicationEnd {0},{1}\r\n",
-                    this.applicationId,
-                    this.endDate.ToTSqlDateTime() );
+                return $"exec LogApplicationEnd {this.applicationId},{this.endDate.ToTSqlDateTime()}\r\n";
             }
         }
     }

@@ -26,6 +26,8 @@ namespace DataCommander.Foundation.Linq
         [Pure]
         public static bool AllAreEqual<TSource>(this IEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
         {
+            Contract.Requires<ArgumentNullException>(comparer != null);
+
             bool allAreEqual = true;
 
             if (source != null)
@@ -167,7 +169,7 @@ namespace DataCommander.Foundation.Linq
                         while (enumerator.MoveNext())
                         {
                             var current = enumerator.Current;
-                            yield return new PreviousAndCurrent<TSource>(previous,current);
+                            yield return new PreviousAndCurrent<TSource>(previous, current);
                             previous = current;
                         }
                     }
@@ -281,7 +283,7 @@ namespace DataCommander.Foundation.Linq
             Contract.Requires<ArgumentNullException>(predicate != null);
 
             int index = -1;
-            TSource result = default(TSource);
+            var result = default(TSource);
 
             if (source != null)
             {
@@ -296,7 +298,44 @@ namespace DataCommander.Foundation.Linq
                 }
             }
 
-            return new IndexedItem<TSource>(index, result);
+            return IndexedItem.Create(index, result);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="firstArgumentIsExtremum"></param>
+        /// <returns></returns>
+        [Pure]
+        public static IndexedItem<TSource> IndexOfExtremum<TSource>(this IEnumerable<TSource> source, Func<TSource, TSource, bool> firstArgumentIsExtremum)
+        {
+            int indexOfExtremum = -1;
+            var extremum = default(TSource);
+
+            if (source != null)
+            {
+                int currentIndex = 0;
+
+                foreach (var item in source)
+                {
+                    if (currentIndex == 0)
+                    {
+                        extremum = item;
+                        indexOfExtremum = 0;
+                    }
+                    else if (firstArgumentIsExtremum(item, extremum))
+                    {
+                        extremum = item;
+                        indexOfExtremum = currentIndex;
+                    }
+
+                    currentIndex++;
+                }
+            }
+
+            return IndexedItem.Create(indexOfExtremum, extremum);
         }
 
         /// <summary>

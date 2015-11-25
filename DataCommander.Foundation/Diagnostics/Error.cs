@@ -37,7 +37,7 @@
 
         public override string ToString()
         {
-            return string.Format( "{0}\r\n{1}\r\n{2}", this.type, this.message, this.exception );
+            return $"{this.type}\r\n{this.message}\r\n{this.exception}";
         }
     }
 }

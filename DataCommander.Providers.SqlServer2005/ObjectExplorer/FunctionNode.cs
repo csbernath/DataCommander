@@ -29,7 +29,7 @@ namespace DataCommander.Providers.SqlServer2005
         {
             get
             {
-                return string.Format( "{0}.{1}", this.owner, this.name );
+                return $"{this.owner}.{this.name}";
             }
         }
 
@@ -64,13 +64,13 @@ namespace DataCommander.Providers.SqlServer2005
                 switch (this.xtype)
                 {
                     case "FN": //Scalar function
-                        query = string.Format( "select {0}.{1}.[{2}]()", this.database.Name, this.owner, this.name );
+                        query = $"select {this.database.Name}.{this.owner}.[{this.name}]()";
                         break;
 
                     case "TF": //Table function
                     case "IF": //Inlined table-function
-                        query = string.Format( @"select	*
-from	{0}.{1}.[{2}]()", this.database.Name, this.owner, this.name );
+                        query = $@"select	*
+from	{this.database.Name}.{this.owner}.[{this.name}]()";
                         break;
 
                     default:

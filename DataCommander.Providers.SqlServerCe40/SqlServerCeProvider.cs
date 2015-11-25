@@ -160,9 +160,9 @@
 
                         case SqlObjectTypes.Column:
                             name = sqlObject.ParentName;
-                            commandText = string.Format(@"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
-WHERE TABLE_NAME = '{0}'
-ORDER BY ORDINAL_POSITION", name);
+                            commandText = $@"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = '{name}'
+ORDER BY ORDINAL_POSITION";
                             break;
 
                         case SqlObjectTypes.Value:
@@ -181,7 +181,7 @@ ORDER BY ORDINAL_POSITION", name);
                                 bool contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out tableName);
                                 if (contains)
                                 {
-                                    commandText = string.Format("select distinct top 10 {0} from {1} (nolock) order by 1", columnName, tableName);
+                                    commandText = $"select distinct top 10 {columnName} from {tableName} (nolock) order by 1";
                                 }
                             }
                             break;
@@ -276,11 +276,11 @@ ORDER BY ORDINAL_POSITION", name);
 
                     if (scale == 0)
                     {
-                        typeName = string.Format("decimal({0})", precision);
+                        typeName = $"decimal({precision})";
                     }
                     else
                     {
-                        typeName = string.Format("decimal({0},{1})", precision, scale);
+                        typeName = $"decimal({precision},{scale})";
                     }
 
                     break;
@@ -314,7 +314,7 @@ ORDER BY ORDINAL_POSITION", name);
                     {
                         if (columnSize <= 8000)
                         {
-                            typeName = string.Format("varbinary({0})", columnSize);
+                            typeName = $"varbinary({columnSize})";
                         }
                         else
                         {
@@ -359,11 +359,11 @@ ORDER BY ORDINAL_POSITION", name);
                     {
                         if (isFixedLength)
                         {
-                            typeName = string.Format("nchar({0})", columnSize);
+                            typeName = $"nchar({columnSize})";
                         }
                         else
                         {
-                            typeName = string.Format("nvarchar({0})", columnSize);
+                            typeName = $"nvarchar({columnSize})";
                         }
                     }
                     else

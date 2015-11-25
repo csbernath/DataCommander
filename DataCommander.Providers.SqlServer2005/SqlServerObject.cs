@@ -34,11 +34,13 @@ end", database);
             Contract.Requires(!string.IsNullOrWhiteSpace(schema));
             Contract.Requires(objectTypes != null && objectTypes.Any());
 
-            return string.Format(@"declare @schema_id int
+            return
+                $@"declare @schema_id int
 
 select @schema_id = schema_id
 from sys.schemas (nolock)
-where name = '{0}'
+where name = '{schema
+                    }'
 
 if @schema_id is not null
 begin
@@ -46,9 +48,10 @@ begin
     from sys.all_objects o (nolock)
     where
         o.schema_id = @schema_id
-        and o.type in({1})
+        and o.type in({
+                    string.Join(",", objectTypes.Select(o => o.ToTSqlVarChar()))})
     order by o.name
-end", schema, string.Join(",", objectTypes.Select(o=>o.ToTSqlVarChar())));
+end";
         }
 
         public static string GetObjects(

@@ -104,7 +104,7 @@
                                             case SqlDbType.NText:
                                                 s = value.ToString();
                                                 s = s.Replace( "\'", "''" );
-                                                s = string.Format( "'{0}'", s );
+                                                s = $"'{s}'";
                                                 break;
 
                                             case SqlDbType.DateTime:
@@ -192,7 +192,7 @@
                                             case TypeCode.String:
                                                 s = (string) value;
                                                 s = s.Replace( "\'", "''" );
-                                                s = string.Format( "'{0}'", s );
+                                                s = $"'{s}'";
                                                 break;
 
                                             case TypeCode.DateTime:

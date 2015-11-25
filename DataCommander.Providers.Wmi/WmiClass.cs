@@ -57,7 +57,7 @@ namespace DataCommander.Providers.Wmi
         {
             get
             {
-                return string.Format("select * from {0}", this.Name);
+                return $"select * from {this.Name}";
             }
         }
     

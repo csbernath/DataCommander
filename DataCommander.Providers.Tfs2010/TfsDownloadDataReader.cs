@@ -89,12 +89,12 @@
                     }
 
                     var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-                    queryForm.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, string.Format("localPath: {0}", this.localPath)));
+                    queryForm.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, $"localPath: {this.localPath}"));
 
 
                     if (!VersionControlPath.IsValidPath(serverPath))
                     {
-                        throw new ArgumentException(string.Format("The parameter serverPath '{0}' is invalid.", serverPath));
+                        throw new ArgumentException($"The parameter serverPath '{serverPath}' is invalid.");
                     }
 
                     this.queue.Enqueue(this.item);
@@ -141,7 +141,7 @@
 
                                 if (!directoryInfo.Exists)
                                 {
-                                    throw new ArgumentException(string.Format("The directory '{0}' does not exist.", path));
+                                    throw new ArgumentException($"The directory '{path}' does not exist.");
                                 }
                             }
 

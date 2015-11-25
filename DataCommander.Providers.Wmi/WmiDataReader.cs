@@ -269,7 +269,7 @@ namespace DataCommander.Providers.Wmi
                         }
                     }
 
-                    query = string.Format("SELECT * FROM meta_class WHERE __this ISA '{0}'", className);
+                    query = $"SELECT * FROM meta_class WHERE __this ISA '{className}'";
                     ObjectQuery objectQuery = new ObjectQuery(query);
                     ManagementObjectSearcher searcher = new ManagementObjectSearcher(this.command.Connection.Scope, objectQuery);
                     ManagementObjectCollection objects = searcher.Get();

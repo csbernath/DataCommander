@@ -63,45 +63,32 @@ namespace DataCommander.Foundation.Diagnostics
                 int milliSecondsPerDay = StopwatchTimeSpan.SecondsPerDay*1000;
                 double totalDays = (double)tickCount/milliSecondsPerDay;
                 DateTime zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
-                string tickCountString = string.Format("{0} ({1:N2} days(s) from {2:yyyy.MM.dd HH:mm:ss})", tickCount, totalDays, zeroDateTime);
+                string tickCountString = $"{tickCount} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";
 
-                string message = string.Format(@"Environment information
-Environment.MachineName:            {0}
-Environment.ProcessorCount:         {1}
-Environment.OSVersion:              {2}
-Environment.Is64BitOperatingSystem: {3}
-Environment.Is64BitProcess:         {4}
-IntPtr.Size:                        {5} ({6} bit)
-CLR version:                        {7}
-.NET Framework version:             {8}
-Environment.UserDomainName:         {9}
-Environment.UserName:               {10}
-Environment.UserInteractive:        {11}
-Environment.CurrentDirectory:       {12}
-Environment.CommandLine:            {13},
-Environment.TickCount:              {14}
-Stopwatch.Frequency:                {15}",
-                    Environment.MachineName,
-                    Environment.ProcessorCount,
-                    Environment.OSVersion,
-#if FOUNDATION_3_5
-                    "?",
-                    "?",
-#else
-                    Environment.Is64BitOperatingSystem,
-                    Environment.Is64BitProcess,
-#endif
-                    IntPtr.Size,
-                    IntPtr.Size*8,
-                    Environment.Version,
-                    DotNetFrameworkVersion,
-                    Environment.UserDomainName,
-                    Environment.UserName,
-                    Environment.UserInteractive,
-                    Environment.CurrentDirectory,
-                    Environment.CommandLine,
-                    tickCountString,
-                    Stopwatch.Frequency);
+                string message =
+                    $@"Environment information
+Environment.MachineName:            {Environment.MachineName}
+Environment.ProcessorCount:         {
+                        Environment.ProcessorCount}
+Environment.OSVersion:              {Environment.OSVersion}
+Environment.Is64BitOperatingSystem: {
+                        Environment.Is64BitOperatingSystem}
+Environment.Is64BitProcess:         {Environment.Is64BitProcess
+                        }
+IntPtr.Size:                        {IntPtr.Size} ({IntPtr.Size*8} bit)
+CLR version:                        {Environment.Version
+                        }
+.NET Framework version:             {DotNetFrameworkVersion}
+Environment.UserDomainName:         {Environment.UserDomainName
+                        }
+Environment.UserName:               {Environment.UserName}
+Environment.UserInteractive:        {Environment.UserInteractive
+                        }
+Environment.CurrentDirectory:       {Environment.CurrentDirectory}
+Environment.CommandLine:            {Environment.CommandLine
+                        },
+Environment.TickCount:              {tickCountString}
+Stopwatch.Frequency:                {Stopwatch.Frequency}";
                 return message;
             }
         }

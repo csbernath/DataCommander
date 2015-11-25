@@ -240,7 +240,7 @@
 
             if (mySqlException != null)
             {
-                message = string.Format("ErrorCode: {0}, Number: {1}, Message: {2}", mySqlException.ErrorCode, mySqlException.Number, mySqlException.Message);
+                message = $"ErrorCode: {mySqlException.ErrorCode}, Number: {mySqlException.Number}, Message: {mySqlException.Message}";
             }
             else
             {

@@ -503,13 +503,13 @@ namespace DataCommander.Foundation.Configuration
                     }
                     else
                     {
-                        message = string.Format("RootNode not found. fileName: {0}, sectionName: {1}", this.fileName, sectionName);
+                        message = $"RootNode not found. fileName: {this.fileName}, sectionName: {sectionName}";
                         this.AddError(ErrorType.Error, message, null);
                     }
                 }
                 else
                 {
-                    message = string.Format("RootNode not found. fileName: {0}, sectionName: {1}", this.fileName, sectionName);
+                    message = $"RootNode not found. fileName: {this.fileName}, sectionName: {sectionName}";
                     this.AddError(ErrorType.Information, message, null);
                 }
             }
@@ -519,7 +519,7 @@ namespace DataCommander.Foundation.Configuration
             }
 
             long ticks = Stopwatch.GetTimestamp() - startTick;
-            message = string.Format("{0} loaded successfully in {1}.", configFilename, StopwatchTimeSpan.ToString(ticks, 3));
+            message = $"{configFilename} loaded successfully in {StopwatchTimeSpan.ToString(ticks, 3)}.";
             LogLevel logLevel;
             IEnumerable<Error> source = this.errors.Where(e => e.Type == ErrorType.Error);
 

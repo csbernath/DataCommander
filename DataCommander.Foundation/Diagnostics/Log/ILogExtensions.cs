@@ -24,11 +24,8 @@ namespace DataCommander.Foundation.Diagnostics
             Contract.Requires<ArgumentNullException>(log != null);
             Contract.Requires<ArgumentNullException>(callerInformation != null);
 
-            string messageWithCallerInformation = string.Format("CallerInformation: {0},{1},{2}\r\n{3}",
-                callerInformation.CallerMemberName,
-                callerInformation.CallerFilePath,
-                callerInformation.CallerLineNumber,
-                message);
+            string messageWithCallerInformation =
+                $"CallerInformation: {callerInformation.CallerMemberName},{callerInformation.CallerFilePath},{callerInformation.CallerLineNumber}\r\n{message}";
 
             log.Trace(messageWithCallerInformation);
         }
