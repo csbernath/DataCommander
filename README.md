@@ -27,11 +27,16 @@ Special data sources:
   * MSI (Windows Installer)
   * TFS (Team Foundation Server)
   * WMI
-     
-Written in C# and can be run on Windows, .NET Framework 4.6.
-The editor has syntax highlighting, code completion for SQL statements.
-The output of a query can be displayed as data grid, text, html.
-The data grid can be exported into Excel.
+
+Features:
+  * The editor has syntax highlighting, code completion for SQL statements.
+  * The output of a query can be displayed as data grid, text, html.
+  * The data grid can be exported into Excel.
+
+Development environment:
+  * .NET Framework 4.6
+  * C# 6.0
+  * Visual Studio 2015 Community Edition
 
 |Provider.Name|Description|
 |-------------|-----------|
