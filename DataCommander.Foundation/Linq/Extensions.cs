@@ -16,23 +16,6 @@
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="t"></param>
-        /// <param name="selector"></param>
-        /// <returns></returns>
-        public static TResult IfNotNull<TSource, TResult>(this TSource t, Func<TSource, TResult> selector)
-        {
-            Contract.Requires<ArgumentNullException>(selector != null);
-
-            return t != null
-                ? selector(t)
-                : default(TResult);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="item"></param>
         /// <returns></returns>

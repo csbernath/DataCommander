@@ -19,7 +19,7 @@ namespace DataCommander.Providers
                 foreach (var childNode in node.ChildNodes)
                 {
                     bool enabled;
-                    childNode.Attributes.TryGetAttributeValue("Enabled",out enabled);
+                    childNode.Attributes.TryGetAttributeValue("Enabled", out enabled);
 
                     if (enabled)
                     {
@@ -33,7 +33,7 @@ namespace DataCommander.Providers
 
         public static IProvider CreateProvider(string name)
         {
-            Contract.Requires<ArgumentNullException>( name != null );
+            Contract.Requires<ArgumentNullException>(name != null);
             Contract.Ensures(Contract.Result<IProvider>() != null);
 
             ConfigurationNode folder = Settings.CurrentNamespace;

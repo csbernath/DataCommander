@@ -229,9 +229,9 @@ namespace DataCommander
             this.resultSetsTabControl.Dock = DockStyle.Fill;
             this.resultSetsTabPage.Controls.Add(this.resultSetsTabControl);
 
+            this.tabControl.TabPages.Add(this.resultSetsTabPage);
             this.tabControl.TabPages.Add(this.messagesTabPage);
             this.tabControl.SelectedTab = this.messagesTabPage;
-            this.tabControl.TabPages.Add(this.resultSetsTabPage);
 
             this.standardOutput = new StandardOutput(new TextBoxWriter(this.messagesTextBox), this);
 
@@ -524,7 +524,6 @@ namespace DataCommander
                             var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataTable, tableSchema, this.resultWriterType, !this.openTableMode,
                                 this.sbPanelText);
                             control.Dock = DockStyle.Fill;
-                            //text = string.Format("Table {0}", index);
                             text = dataTable.TableName;
                             var tabPage = new TabPage(text);
                             tabPage.ToolTipText = null; // TODO
@@ -1588,25 +1587,36 @@ namespace DataCommander
                 string query = this.Query;
                 var statements = this.provider.GetStatements(query);
                 log.Write(LogLevel.Trace, "Query:\r\n{0}", query);
-                IEnumerable<IDbCommand> commands;
+                IEnumerable<AsyncDataAdapterCommand> commands;
 
                 if (statements.Count == 1)
                 {
-                    this.sqlStatement = new SqlStatement(statements[0]);
+                    this.sqlStatement = new SqlStatement(statements[0].CommandText);
                     var command = this.sqlStatement.CreateCommand(this.provider, this.connection, this.commandType, this.commandTimeout);
                     command.Transaction = this.transaction;
-                    commands = command.ItemAsEnumerable();
+                    commands = new[]
+                    {
+                        new AsyncDataAdapterCommand
+                        {
+                            LineIndex = 0,
+                            Command = command
+                        }
+                    };
                 }
                 else
                 {
                     var transactionScope = new DbTransactionScope(this.connection.Connection, this.transaction);
                     commands =
                         from statement in statements
-                        select transactionScope.CreateCommand(new CommandDefinition
+                        select new AsyncDataAdapterCommand
                         {
-                            CommandText = statement,
-                            CommandTimeout = this.commandTimeout
-                        });
+                            LineIndex = statement.LineIndex,
+                            Command = transactionScope.CreateCommand(new CommandDefinition
+                            {
+                                CommandText = statement.CommandText,
+                                CommandTimeout = this.commandTimeout
+                            })
+                        };
                 }
 
                 int maxRecords;
@@ -1678,12 +1688,17 @@ namespace DataCommander
                         textBox.Multiline = true;
                         textBox.WordWrap = false;
                         textBox.Font = this.font;
+                        textBox.Dock = DockStyle.Fill;
                         textBox.ScrollBars = RichTextBoxScrollBars.Both;
                         textBox.SelectionChanged += this.textBox_SelectionChanged;
 
-                        this.ShowTabPage("TextResult", this.GetToolTipText(null), textBox);
+                        var resultSetTabPage = new TabPage("TextResult");
+                        resultSetTabPage.Controls.Add(textBox);
+                        this.resultSetsTabControl.TabPages.Add(resultSetTabPage);
+                        this.resultSetsTabControl.SelectedTab = resultSetTabPage;
+
                         var textWriter = new TextBoxWriter(textBox);
-                        resultWriter = new TextResultWriter(textWriter, this);
+                        resultWriter = new TextResultWriter(this.AddInfoMessage, textWriter, this);
                         break;
                 }
 
@@ -1713,9 +1728,9 @@ namespace DataCommander
             this.ShowTabPage("TextResult", this.GetToolTipText(null), textBox);
 
             TextWriter textWriter = new TextBoxWriter(textBox);
-            var resultWriter = new TextResultWriter(textWriter, this);
+            var resultWriter = (IResultWriter)new TextResultWriter(this.AddInfoMessage, textWriter, this);
 
-            resultWriter.WriteBegin();
+            resultWriter.Begin(this.provider);
 
             var schemaTable = new DataTable();
 
@@ -1783,7 +1798,7 @@ namespace DataCommander
 
             resultWriter.WriteTableEnd();
 
-            resultWriter.WriteEnd();
+            resultWriter.End();
         }
 
         private void ShowDataTableDataGrid(DataTable dataTable)
@@ -2126,11 +2141,6 @@ namespace DataCommander
             {
                 this.Invoke(() => this.EndFillHandleException(ex));
             }
-
-            this.dataAdapter = null;
-            this.dataSetResultWriter = null;
-
-            this.Invoke(() => this.mainForm.UpdateTotalMemory());
         }
 
         private void WriteEnd(IAsyncDataAdapter dataAdapter)
@@ -2161,9 +2171,13 @@ namespace DataCommander
             }
 
             this.dataAdapter = null;
+            this.dataSetResultWriter = null;
+
             this.SetGui(CommandState.Execute);
             this.FocusControl(this.queryTextBox);
             this.Cursor = Cursors.Default;
+
+            this.Invoke(() => this.mainForm.UpdateTotalMemory());
         }
 
         private void EndFillInvoker(IAsyncDataAdapter dataAdapter, Exception e)
@@ -3270,7 +3284,7 @@ namespace DataCommander
             this.provider.ClearCompletionCache();
         }
 
-        private void ExecuteReader(CommandBehavior commandBehavior)
+        private async void ExecuteReader(CommandBehavior commandBehavior)
         {
             try
             {
@@ -3296,7 +3310,7 @@ namespace DataCommander
                                 if (this.connection.State != ConnectionState.Open)
                                 {
                                     this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Opening connection..."));
-                                    this.connection.Open();
+                                    await this.connection.OpenAsync(CancellationToken.None);
                                     this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Connection opened successfully."));
                                 }
                                 else
@@ -3700,14 +3714,14 @@ namespace DataCommander
             this.tvObjectExplorer.DoDragDrop(text, DragDropEffects.All);
         }
 
-        private void mnuDuplicateConnection_Click(object sender, EventArgs e)
+        private async void mnuDuplicateConnection_Click(object sender, EventArgs e)
         {
             var mainForm = DataCommanderApplication.Instance.MainForm;
             int index = mainForm.MdiChildren.Length;
 
             var connection = this.provider.CreateConnection(this.connectionString);
             connection.ConnectionName = this.connection.ConnectionName;
-            connection.Open();
+            await connection.OpenAsync(CancellationToken.None);
             string database = this.Connection.Database;
 
             if (connection.Database != this.Connection.Database)
@@ -3738,7 +3752,17 @@ namespace DataCommander
                 const int maxRecords = int.MaxValue;
                 this.dataSetResultWriter = new DataSetResultWriter(this.AddInfoMessage, this, this.showSchemaTable);
                 IResultWriter resultWriter = this.dataSetResultWriter;
-                this.dataAdapter.BeginFill(this.provider, this.command.ItemAsEnumerable(), maxRecords, this.rowBlockSize, resultWriter, this.EndFillInvoker, this.WriteEndInvoker);
+                this.dataAdapter.BeginFill(
+                    this.provider,
+                    new[]
+                    {
+                        new AsyncDataAdapterCommand
+                        {
+                            LineIndex = 0,
+                            Command = this.command
+                        }
+                    },
+                    maxRecords, this.rowBlockSize, resultWriter, this.EndFillInvoker, this.WriteEndInvoker);
             }
             catch (Exception ex)
             {
@@ -3759,7 +3783,17 @@ namespace DataCommander
             int maxRecords = int.MaxValue;
             string tableName = sqlStatement.FindTableName();
             var sqlCeResultWriter = new SqlCeResultWriter(this.textBoxWriter, tableName);
-            asyncDataAdatper.BeginFill(this.provider, this.command.ItemAsEnumerable(), maxRecords, this.rowBlockSize, sqlCeResultWriter, this.EndFillInvoker, this.WriteEndInvoker);
+            asyncDataAdatper.BeginFill(
+                this.provider,
+                new[]
+                {
+                    new AsyncDataAdapterCommand
+                    {
+                        LineIndex = 0,
+                        Command = this.command
+                    }
+                },
+                maxRecords, this.rowBlockSize, sqlCeResultWriter, this.EndFillInvoker, this.WriteEndInvoker);
         }
 
         private void SetTransaction(IDbTransaction transaction)
@@ -3946,7 +3980,17 @@ namespace DataCommander
                 this.stopwatch.Start();
                 this.timer.Start();
                 this.dataAdapter = new AsyncDataAdapter();
-                this.dataAdapter.BeginFill(this.provider, this.command.ItemAsEnumerable(), maxRecords, rowBlockSize, resultWriter, this.EndFillInvoker, this.WriteEndInvoker);
+                this.dataAdapter.BeginFill(
+                    this.provider,
+                    new[]
+                    {
+                        new AsyncDataAdapterCommand
+                        {
+                            LineIndex = 0,
+                            Command = this.command
+                        }
+                    },
+                    maxRecords, rowBlockSize, resultWriter, this.EndFillInvoker, this.WriteEndInvoker);
             }
             else
             {
@@ -3987,7 +4031,17 @@ namespace DataCommander
                 this.stopwatch.Start();
                 this.timer.Start();
                 this.dataAdapter = new SqlBulkCopyAsyncDataAdapter(destinationConnection, destionationTransaction, tableName, this.AddInfoMessage);
-                this.dataAdapter.BeginFill(this.provider, this.command.ItemAsEnumerable(), maxRecords, rowBlockSize, null, this.EndFillInvoker, this.WriteEndInvoker);
+                this.dataAdapter.BeginFill(
+                    this.provider,
+                    new[]
+                    {
+                        new AsyncDataAdapterCommand
+                        {
+                            LineIndex = 0,
+                            Command = this.command
+                        }
+                    },
+                    maxRecords, rowBlockSize, null, this.EndFillInvoker, this.WriteEndInvoker);
             }
             else
             {

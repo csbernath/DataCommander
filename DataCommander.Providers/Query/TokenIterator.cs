@@ -16,6 +16,7 @@ namespace DataCommander.Providers
         private int index = 0;
         private readonly int length;
         private int tokenIndex;
+        private int lineIndex;
 
         #endregion
 
@@ -52,13 +53,13 @@ namespace DataCommander.Providers
                         this.index++;
                         value = this.ReadString();
                         endPosition = this.index;
-                        token = new Token(this.tokenIndex, startPosition, endPosition - 1, TokenType.String, value);
+                        token = new Token(this.tokenIndex, startPosition, endPosition - 1, this.lineIndex, TokenType.String, value);
                     }
                     else
                     {
                         value = this.ReadKeyWord();
                         endPosition = this.index;
-                        token = new Token(this.tokenIndex, startPosition, endPosition - 1, TokenType.KeyWord, value);
+                        token = new Token(this.tokenIndex, startPosition, endPosition - 1, this.lineIndex, TokenType.KeyWord, value);
                     }
                     break;
                 }
@@ -67,7 +68,7 @@ namespace DataCommander.Providers
                     startPosition = this.index;
                     value = this.ReadKeyWord();
                     endPosition = this.index;
-                    token = new Token(this.tokenIndex, startPosition, endPosition - 1, TokenType.KeyWord, value);
+                    token = new Token(this.tokenIndex, startPosition, endPosition - 1, this.lineIndex, TokenType.KeyWord, value);
                     break;
                 }
                 else if (c == '"' || c == '\'')
@@ -75,7 +76,7 @@ namespace DataCommander.Providers
                     startPosition = this.index;
                     value = this.ReadString();
                     endPosition = this.index;
-                    token = new Token(this.tokenIndex, startPosition, endPosition - 1, TokenType.String, value);
+                    token = new Token(this.tokenIndex, startPosition, endPosition - 1, this.lineIndex, TokenType.String, value);
                     break;
                 }
                 else if (char.IsDigit(c) || c == '-')
@@ -83,7 +84,7 @@ namespace DataCommander.Providers
                     startPosition = this.index;
                     value = this.ReadDigit();
                     endPosition = this.index;
-                    token = new Token(this.tokenIndex, startPosition, endPosition - 1, TokenType.Digit, value);
+                    token = new Token(this.tokenIndex, startPosition, endPosition - 1, this.lineIndex, TokenType.Digit, value);
                     break;
                 }
                 else if (operatorsOrPunctuators.Contains(c))
@@ -91,9 +92,14 @@ namespace DataCommander.Providers
                     startPosition = this.index;
                     value = c.ToString();
                     endPosition = this.index;
-                    token = new Token(this.tokenIndex, startPosition, endPosition, TokenType.OperatorOrPunctuator, value);
+                    token = new Token(this.tokenIndex, startPosition, endPosition, this.lineIndex, TokenType.OperatorOrPunctuator, value);
                     this.index++;
                     break;
+                }
+                else if (c == '\r')
+                {
+                    this.lineIndex++;
+                    this.index += 2;
                 }
                 else
                 {

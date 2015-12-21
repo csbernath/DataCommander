@@ -4,6 +4,8 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Data;
     using System.Data.SqlClient;
     using System.Security.Principal;
+    using System.Threading;
+    using System.Threading.Tasks;
     using DataCommander.Foundation;
     using Foundation.Data;
 
@@ -64,22 +66,26 @@ namespace DataCommander.Providers.SqlServer2005
                 );
         }
 
-        public override void Open()
+        public override async Task OpenAsync(CancellationToken cancellationToken)
         {
-            const string commandText = @"select @@servername,@@spid
+            await this.sqlConnection.OpenAsync(cancellationToken);
+
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                const string commandText = @"select @@servername,@@spid
 set arithabort on";
 
-            this.sqlConnection.Open();
-            var transactionScope = new DbTransactionScope(this.sqlConnection, null);
+                var transactionScope = new DbTransactionScope(this.sqlConnection, null);
 
-            using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
-            {
-                dataReader.Read(dataRecord =>
+                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
                 {
-                    this.serverName = dataRecord.GetString(0);
-                    this.spid = dataRecord.GetInt16(1);
-                    return false;
-                });
+                    dataReader.Read(dataRecord =>
+                    {
+                        this.serverName = dataRecord.GetString(0);
+                        this.spid = dataRecord.GetInt16(1);
+                        return false;
+                    });
+                }
             }
         }
 

@@ -3,6 +3,8 @@ namespace DataCommander.Providers.SQLite
     using System;
     using System.Data;
     using System.Data.SQLite;
+    using System.Threading;
+    using System.Threading.Tasks;
     using DataCommander.Foundation.Diagnostics;
 
     internal sealed class Connection : ConnectionBase
@@ -41,9 +43,9 @@ namespace DataCommander.Providers.SQLite
             }
         }
 
-        public override void Open()
+        public override Task OpenAsync(CancellationToken cancellationToken)
         {
-            this.sqliteConnection.Open();
+            return this.sqliteConnection.OpenAsync(cancellationToken);
         }
 
         public override IDbCommand CreateCommand()

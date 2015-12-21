@@ -4,6 +4,8 @@ namespace DataCommander.Providers.OracleClient
     using System.Data;
     using System.Data.OracleClient;
     using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
     using DataCommander.Foundation;
 
     internal sealed class Connection : ConnectionBase
@@ -19,9 +21,9 @@ namespace DataCommander.Providers.OracleClient
             oracleConnection.InfoMessage += new OracleInfoMessageEventHandler(OnInfoMessage);
         }
 
-        public override void Open()
+        public override Task OpenAsync(CancellationToken cancellationToken)
         {
-            oracleConnection.Open();
+            return this.oracleConnection.OpenAsync(cancellationToken);
         }
 
         public override string Caption

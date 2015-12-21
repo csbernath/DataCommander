@@ -158,7 +158,7 @@
             throw new NotImplementedException();
         }
 
-        List<string> IProvider.GetStatements(string commandText)
+        List<Statement> IProvider.GetStatements(string commandText)
         {
             throw new NotImplementedException();
         }

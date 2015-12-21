@@ -17,7 +17,7 @@ namespace DataCommander.Providers
         private bool cancelRequested;
         private IDbCommand command;
         private IProvider provider;
-        private IEnumerable<IDbCommand> commands;
+        private IEnumerable<AsyncDataAdapterCommand> commands;
         private int maxRecords;
         private int rowBlockSize;
         private IResultWriter resultWriter;
@@ -78,7 +78,7 @@ namespace DataCommander.Providers
             }
         }
 
-        void IAsyncDataAdapter.BeginFill(IProvider provider, IEnumerable<IDbCommand> commands, int maxRecords, int rowBlockSize, IResultWriter resultWriter,
+        void IAsyncDataAdapter.BeginFill(IProvider provider, IEnumerable<AsyncDataAdapterCommand> commands, int maxRecords, int rowBlockSize, IResultWriter resultWriter,
             Action<IAsyncDataAdapter, Exception> endFill, Action<IAsyncDataAdapter> writeEnd)
         {
             this.provider = provider;
@@ -114,8 +114,8 @@ namespace DataCommander.Providers
                         break;
                     }
 
-                    this.command = command;
-                    using (var dataReader = command.ExecuteReader())
+                    this.command = command.Command;
+                    using (var dataReader = this.command.ExecuteReader())
                     {
                         this.sqlBulkCopy.WriteToServer(dataReader);
                     }

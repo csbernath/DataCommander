@@ -442,11 +442,15 @@ order by name collate nocase";
             throw new NotImplementedException();
         }
 
-        List<string> IProvider.GetStatements(string commandText)
+        List<Statement> IProvider.GetStatements(string commandText)
         {
-            return new List<string>
+            return new List<Statement>
             {
-                commandText
+                new Statement
+                {
+                    LineIndex = 0,
+                    CommandText = commandText
+                }
             };
         }
 

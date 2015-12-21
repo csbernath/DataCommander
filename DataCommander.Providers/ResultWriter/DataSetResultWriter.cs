@@ -46,15 +46,15 @@ namespace DataCommander.Providers
 
         #region IResultWriter Members
 
-        void IResultWriter.Begin()
+        void IResultWriter.Begin(IProvider provider)
         {
-            this.logResultWriter.Begin();
+            this.logResultWriter.Begin(provider);
+            this.provider = provider;
         }
 
-        void IResultWriter.BeforeExecuteReader(IProvider provider, IDbCommand command)
+        void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command)
         {
-            this.logResultWriter.BeforeExecuteReader(provider, command);
-            this.provider = provider;
+            this.logResultWriter.BeforeExecuteReader(command);
         }
 
         void IResultWriter.AfterExecuteReader()

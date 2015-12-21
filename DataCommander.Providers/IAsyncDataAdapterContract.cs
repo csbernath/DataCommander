@@ -32,7 +32,7 @@ namespace DataCommander.Providers
             }
         }
 
-        void IAsyncDataAdapter.BeginFill(IProvider provider, IEnumerable<IDbCommand> commands, int maxRecords, int rowBlockSize, IResultWriter resultWriter,
+        void IAsyncDataAdapter.BeginFill(IProvider provider, IEnumerable<AsyncDataAdapterCommand> commands, int maxRecords, int rowBlockSize, IResultWriter resultWriter,
             Action<IAsyncDataAdapter, Exception> endFill, Action<IAsyncDataAdapter> writeEnd)
         {
             Contract.Requires<ArgumentNullException>(provider != null);

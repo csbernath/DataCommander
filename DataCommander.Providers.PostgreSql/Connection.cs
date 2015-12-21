@@ -2,6 +2,8 @@
 {
     using System;
     using System.Data;
+    using System.Threading;
+    using System.Threading.Tasks;
     using DataCommander.Providers;
     using Npgsql;
 
@@ -22,9 +24,9 @@
             this.Connection = this.npgsqlConnection;
         }
 
-        public override void Open()
+        public override Task OpenAsync(CancellationToken cancellationToken)
         {
-            this.npgsqlConnection.Open();
+            return this.npgsqlConnection.OpenAsync(cancellationToken);
         }
 
         public override IDbCommand CreateCommand()

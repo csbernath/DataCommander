@@ -662,7 +662,7 @@ order by 1", name.Database);
                     {
                         if (connection.State != ConnectionState.Open)
                         {
-                            connection.Open();
+                            connection.OpenAsync(CancellationToken.None).Wait();
                         }
 
                         var transactionScope = new DbTransactionScope(connection.Connection, transaction);
@@ -922,18 +922,22 @@ order by 1", name.Database);
             return table;
         }
 
-        List<string> IProvider.GetStatements(string commandText)
+        List<Statement> IProvider.GetStatements(string commandText)
         {
             var sqlStatement = new SqlStatement(commandText);
             var tokens = sqlStatement.Tokens;
-            var statements = new List<string>();
+            var statements = new List<Statement>();
 
             foreach (var statementTokens in tokens.Split(token => IsBatchSeparator(commandText, token)).Where(statementTokens => statementTokens.Length > 0))
             {
                 int startIndex = statementTokens[0].StartPosition;
                 int endIndex = statementTokens.Last().EndPosition;
                 int length = endIndex - startIndex + 1;
-                string statement = commandText.Substring(startIndex, length);
+                var statement = new Statement
+                {
+                    LineIndex = statementTokens[0].LineIndex,
+                    CommandText = commandText.Substring(startIndex, length)
+                };
                 statements.Add(statement);
             }
 

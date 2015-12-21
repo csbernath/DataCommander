@@ -1,6 +1,8 @@
 namespace DataCommander.Providers.Wmi
 {
     using System.Data;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     internal sealed class WmiProviderConnection : ConnectionBase
     {
@@ -25,9 +27,9 @@ namespace DataCommander.Providers.Wmi
             }
         }
 
-        public override void Open()
+        public override Task OpenAsync(CancellationToken cancellationToken)
         {
-            this.wmiConnection.Open();
+            return Task.Factory.StartNew(this.wmiConnection.Open);
         }
 
         public override IDbCommand CreateCommand()

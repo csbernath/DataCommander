@@ -28,15 +28,16 @@
 
         #region IResultWriter Members
 
-        void IResultWriter.Begin()
+        void IResultWriter.Begin(IProvider provider)
         {
             this.beginTimestamp = Stopwatch.GetTimestamp();
         }
 
-        void IResultWriter.BeforeExecuteReader(IProvider provider, IDbCommand command)
+        void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand)
         {
             this.beforeExecuteReaderTimestamp = Stopwatch.GetTimestamp();
-            string message = $"Executing command[{this.commandCount}]\r\n{command.CommandText}";
+            var command = asyncDataAdapterCommand.Command;
+            string message = $"Executing command[{this.commandCount}] from line {asyncDataAdapterCommand.LineIndex + 1}...\r\n{command.CommandText}";
 
             this.commandCount++;
 

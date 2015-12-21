@@ -2,6 +2,8 @@
 {
     using System;
     using System.Data;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Microsoft.TeamFoundation.Client;
     using Microsoft.TeamFoundation.VersionControl.Client;
     using Microsoft.TeamFoundation.VersionControl.Common;
@@ -36,10 +38,13 @@
             }
         }
 
-        public override void Open()
+        public override Task OpenAsync(CancellationToken cancellationToken)
         {
-            this.tfsTeamProjectCollection.Authenticate();
-            this.state = ConnectionState.Open;
+            return Task.Factory.StartNew(() =>
+            {
+                this.tfsTeamProjectCollection.Authenticate();
+                this.state = ConnectionState.Open;
+            });
         }
 
         public override IDbCommand CreateCommand()

@@ -13,9 +13,9 @@
         /// </summary>
         /// <param name="control"></param>
         /// <param name="action"></param>
-        public static void Invoke( this Control control, Action action )
+        public static void Invoke(this Control control, Action action)
         {
-            control.Invoke( action );
+            control.Invoke(action);
         }
     }
 }

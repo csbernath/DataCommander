@@ -4,6 +4,8 @@ namespace DataCommander.Providers
     using System.Collections.Generic;
     using System.Data;
     using System.Diagnostics.Contracts;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public abstract class ConnectionBase
     {
@@ -22,7 +24,9 @@ namespace DataCommander.Providers
 			}
 		}
 
-        public abstract void Open();
+        //public abstract void Open();
+
+        public abstract Task OpenAsync(CancellationToken cancellationToken);
 
         public void Close()
         {

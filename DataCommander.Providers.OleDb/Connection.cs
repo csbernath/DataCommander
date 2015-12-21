@@ -3,6 +3,8 @@ namespace DataCommander.Providers.OleDb
     using System;
     using System.Data;
     using System.Data.OleDb;
+    using System.Threading;
+    using System.Threading.Tasks;
     using DataCommander.Foundation;
 
     internal sealed class Connection : ConnectionBase
@@ -30,9 +32,9 @@ namespace DataCommander.Providers.OleDb
             }
         }
 
-        public override void Open()
+        public override Task OpenAsync(CancellationToken cancellationToken)
         {
-            this.oledbConnection.Open();
+            return this.oledbConnection.OpenAsync(cancellationToken);
         }
 
         public override string Caption

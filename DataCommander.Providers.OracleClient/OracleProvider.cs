@@ -10,25 +10,6 @@ namespace DataCommander.Providers.OracleClient
     using DataCommander.Foundation.Data;
     using DataCommander.Providers.OracleBase;
 
-    internal class DataParameterImp : DataParameterBase
-    {
-        public DataParameterImp(OracleParameter parameter)
-
-#pragma warning disable CS0618 // Type or member is obsolete
-            : base(parameter, parameter.Size, parameter.Precision, parameter.Scale)
-#pragma warning restore CS0618 // Type or member is obsolete
-        {
-            this.parameter = parameter;
-        }
-
-        protected override void SetSize(int size)
-        {
-            parameter.Size = size;
-        }
-
-        private readonly OracleParameter parameter;
-    }
-
     public sealed class OracleProvider : IProvider
     {
         //void IProvider.DeriveParameters( IDbCommand command )
@@ -542,9 +523,16 @@ namespace DataCommander.Providers.OracleClient
             throw new NotImplementedException();
         }
 
-        List<string> IProvider.GetStatements(string commandText)
+        List<Statement> IProvider.GetStatements(string commandText)
         {
-            throw new NotImplementedException();
+            return new List<Statement>
+            {
+                new Statement
+                {
+                    LineIndex = 0,
+                    CommandText = commandText
+                }
+            };
         }
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text,

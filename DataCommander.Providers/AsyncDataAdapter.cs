@@ -17,8 +17,8 @@ namespace DataCommander.Providers
 
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private IProvider provider;
-        private IEnumerable<IDbCommand> commands;
-        private IDbCommand command;
+        private IEnumerable<AsyncDataAdapterCommand> commands;
+        private AsyncDataAdapterCommand command;
         private int maxRecords;
         private int rowBlockSize;
         private IResultWriter resultWriter;
@@ -59,7 +59,7 @@ namespace DataCommander.Providers
 
         void IAsyncDataAdapter.BeginFill(
             IProvider provider,
-            IEnumerable<IDbCommand> commands,
+            IEnumerable<AsyncDataAdapterCommand> commands,
             int maxRecords,
             int rowBlockSize,
             IResultWriter resultWriter,
@@ -238,15 +238,16 @@ namespace DataCommander.Providers
             }
         }
 
-        private void Fill(IDbCommand command)
+        private void Fill(AsyncDataAdapterCommand asyncDataAdapterCommand)
         {
-            Contract.Requires<ArgumentNullException>(command != null);
+            Contract.Requires<ArgumentNullException>(asyncDataAdapterCommand != null);
+            var command = asyncDataAdapterCommand.Command;
 
             Exception exception = null;
 
             try
             {
-                this.resultWriter.BeforeExecuteReader(this.provider, command);
+                this.resultWriter.BeforeExecuteReader(asyncDataAdapterCommand);
                 IDataReader dataReader = null;
                 try
                 {
@@ -319,14 +320,15 @@ namespace DataCommander.Providers
 
         private void Fill()
         {
-            this.resultWriter.Begin();
+            this.resultWriter.Begin(this.provider);
+
             try
             {
                 foreach (var command in this.commands)
                 {
                     this.command = command;
                     this.Fill(command);
-                    command.Dispose();
+                    command.Command.Dispose();
                 }
             }
             finally
@@ -340,7 +342,7 @@ namespace DataCommander.Providers
         {
             using (LogFactory.Instance.GetCurrentMethodLog())
             {
-                this.command.Cancel();
+                this.command.Command.Cancel();
             }
         }
 

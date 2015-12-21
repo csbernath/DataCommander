@@ -1,6 +1,8 @@
 ﻿namespace DataCommander.Providers.MySql
 {
     using System;
+    using System.Threading;
+    using System.Threading.Tasks;
     using DataCommander.Providers;
     using global::MySql.Data.MySqlClient;
 
@@ -17,9 +19,9 @@
             this.Connection = this.mySqlConnection;
         }
 
-        public override void Open()
+        public override Task OpenAsync(CancellationToken cancellationToken)
         {
-            this.mySqlConnection.Open();
+            return this.mySqlConnection.OpenAsync(cancellationToken);
         }
 
         public override System.Data.IDbCommand CreateCommand()

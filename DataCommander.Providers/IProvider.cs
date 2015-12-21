@@ -49,7 +49,7 @@
         string GetExceptionMessage(Exception exception);
         DataTable GetParameterTable(IDataParameterCollection parameters);
         DataTable GetSchemaTable(IDataReader dataReader);
-        List<string> GetStatements(string commandText);
+        List<Statement> GetStatements(string commandText);
         DataSet GetTableSchema(IDbConnection connection, string tableName);
         List<InfoMessage> ToInfoMessages(Exception e);
 

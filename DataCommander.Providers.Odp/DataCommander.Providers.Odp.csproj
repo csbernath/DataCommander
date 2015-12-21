@@ -74,6 +74,7 @@
     <Compile Include="Connection.cs" />
     <Compile Include="DataFieldReader\DateTimeDataFieldReader.cs" />
     <Compile Include="DataFieldReader\LongStringFieldReader.cs" />
+    <Compile Include="DataParameterImp.cs" />
     <Compile Include="ObjectExplorer\FunctionNode.cs" />
     <Compile Include="ObjectExplorer\FunctionCollectionNode.cs" />
     <Compile Include="ObjectExplorer\IndexeCollectionNode.cs" />
@@ -136,7 +137,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

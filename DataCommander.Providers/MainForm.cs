@@ -12,6 +12,7 @@ namespace DataCommander
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Security.Principal;
     using System.Text;
+    using System.Threading;
     using System.Windows.Forms;
     using DataCommander.Foundation;
     using DataCommander.Foundation.Configuration;
@@ -20,6 +21,7 @@ namespace DataCommander
     using DataCommander.Foundation.Threading;
     using DataCommander.Foundation.Windows.Forms;
     using DataCommander.Providers;
+    using Timer = System.Windows.Forms.Timer;
 
     /// <summary>
     /// Summary description for MainForm.
@@ -623,7 +625,7 @@ namespace DataCommander
             base.OnClosing(e);
         }
 
-        private void Open()
+        private async void Open()
         {
             try
             {
@@ -708,7 +710,7 @@ namespace DataCommander
                     if (provider != null)
                     {
                         ConnectionBase connection = provider.CreateConnection(connectionString);
-                        connection.Open();
+                        await connection.OpenAsync(CancellationToken.None);
 
                         var connectionProperties = new ConnectionProperties();
                         connectionProperties.ConnectionName = null;
@@ -838,7 +840,7 @@ namespace DataCommander
             this.ShowContents();
         }
 
-        private void CreateMenuItem_Click(object sender, EventArgs e)
+        private async void CreateMenuItem_Click(object sender, EventArgs e)
         {
             var dialog = new SaveFileDialog();
             dialog.Filter = "SQL Server Compact 4.0 files (*.sdf)|*.sdf|SQLite files (*.sqlite)|*.sqlite";
@@ -875,7 +877,7 @@ namespace DataCommander
                 var provider = ProviderFactory.CreateProvider(providerName);
                 Contract.Assert(provider != null);
                 var connection = provider.CreateConnection(connectionString);
-                connection.Open();
+                await connection.OpenAsync(CancellationToken.None);
 
                 var queryForm = new QueryForm(
                     this,

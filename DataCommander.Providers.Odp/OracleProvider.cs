@@ -12,22 +12,6 @@ namespace DataCommander.Providers.Odp
     using Oracle.ManagedDataAccess.Client;
     using Oracle.ManagedDataAccess.Types;
 
-    internal sealed class DataParameterImp : DataParameterBase
-    {
-        public DataParameterImp( OracleParameter parameter )
-            : base( parameter, parameter.Size, parameter.Precision, parameter.Scale )
-        {
-            this.parameter = parameter;
-        }
-
-        protected override void SetSize( int size )
-        {
-            parameter.Size = size;
-        }
-
-        readonly OracleParameter parameter;
-    }
-
     internal sealed class OracleProvider : IProvider
     {
         private string connectionString;
@@ -842,11 +826,15 @@ order by OBJECT_NAME";
             throw new NotImplementedException();
         }
 
-        List<string> IProvider.GetStatements(string commandText)
+        List<Statement> IProvider.GetStatements(string commandText)
         {
-            return new List<string>
+            return new List<Statement>
             {
-                commandText
+                new Statement
+                {
+                    LineIndex = 0,
+                    CommandText = commandText
+                }
             };
         }
 

@@ -2,6 +2,8 @@
 {
     using System;
     using System.Data;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     internal sealed class MsiProviderConnection : ConnectionBase
 	{
@@ -16,12 +18,12 @@
 			this.Connection = this.msiConnection;
 		}
 
-		public override void Open()
-		{
-			this.msiConnection.Open();
-		}
+        public override Task OpenAsync(CancellationToken cancellationToken)
+        {
+            return Task.Factory.StartNew(this.msiConnection.Open);
+        }
 
-		public override IDbCommand CreateCommand()
+        public override IDbCommand CreateCommand()
 		{
 			return this.msiConnection.CreateCommand();
 		}

@@ -25,11 +25,11 @@
 
         #region IResultWriter Members
 
-        void IResultWriter.Begin()
+        void IResultWriter.Begin(IProvider provider)
         {
         }
 
-        void IResultWriter.BeforeExecuteReader(IProvider provider, IDbCommand command)
+        void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command)
         {
         }
 

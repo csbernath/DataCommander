@@ -5,6 +5,7 @@ namespace DataCommander.Providers
     using System.Data.Common;
     using System.Diagnostics;
     using System.Threading;
+    using System.Threading.Tasks;
     using System.Windows.Forms;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Windows.Forms;
@@ -22,15 +23,18 @@ namespace DataCommander.Providers
         private Timer timer;
         private IContainer components;
         private readonly ConnectionProperties connectionProperties;
-        private readonly AsyncConnector connector;
+        //private readonly AsyncConnector connector;
         private readonly Stopwatch stopwatch = new Stopwatch();
         private readonly EventWaitHandle handleCreatedEvent = new EventWaitHandle(false, EventResetMode.ManualReset);
+        private readonly CancellationTokenSource cancellationTokenSource;
+        private readonly Task task;
+        private long duration;
 
         public long Duration
         {
             get
             {
-                return this.connector.Duration;
+                return this.duration;
             }
         }
 
@@ -111,8 +115,31 @@ namespace DataCommander.Providers
                 $"Connection name: {connectionProperties.ConnectionName}\r\nProvider name: {connectionProperties.ProviderName}\r\nData Source: {dataSource}\r\nUserId: {userId}";
             this.connectionProperties = connectionProperties;
             this.Cursor = Cursors.AppStarting;
-            this.connector = new AsyncConnector(connectionProperties);
-            this.connector.BeginOpen(this.EndConnectionOpen);
+
+            if (this.connectionProperties.Provider == null)
+            {
+                this.connectionProperties.Provider = ProviderFactory.CreateProvider(this.connectionProperties.ProviderName);
+            }
+
+            var connection = this.connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
+            this.cancellationTokenSource = new CancellationTokenSource();
+
+            var stopwatch = Stopwatch.StartNew();
+
+            this.task = Task.Factory.StartNew(() =>
+            {
+                var task = connection.OpenAsync(this.cancellationTokenSource.Token);
+                task.ContinueWith(t =>
+                {
+                    this.duration = stopwatch.ElapsedTicks;
+
+                    if (!cancellationTokenSource.IsCancellationRequested)
+                    {
+                        connectionProperties.Connection = connection;
+                        this.EndConnectionOpen(task.Exception);
+                    }
+                });
+            });
         }
 
         private void OpenConnectionForm_HandleCreated(object sender, EventArgs e)
@@ -208,7 +235,7 @@ namespace DataCommander.Providers
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            this.connector.Cancel();
+            this.cancellationTokenSource.Cancel();
         }
 
         private void timer_Tick(object sender, EventArgs e)

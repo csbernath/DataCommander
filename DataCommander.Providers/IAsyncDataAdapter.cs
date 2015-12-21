@@ -2,7 +2,6 @@ namespace DataCommander.Providers
 {
     using System;
     using System.Collections.Generic;
-    using System.Data;
     using System.Diagnostics.Contracts;
 
     [ContractClass(typeof (IAsyncDataAdapterContract))]
@@ -16,7 +15,7 @@ namespace DataCommander.Providers
 
         void BeginFill(
             IProvider provider,
-            IEnumerable<IDbCommand> commands,
+            IEnumerable<AsyncDataAdapterCommand> commands,
             int maxRecords,
             int rowBlockSize,
             IResultWriter resultWriter,

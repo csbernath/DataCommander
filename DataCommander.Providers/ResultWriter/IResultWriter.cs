@@ -4,9 +4,9 @@
 
     internal interface IResultWriter
     {
-        void Begin();
+        void Begin(IProvider provider);
 
-        void BeforeExecuteReader(IProvider provider, IDbCommand command);
+        void BeforeExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand);
 
         void AfterExecuteReader();
 

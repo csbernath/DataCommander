@@ -3,6 +3,8 @@ namespace DataCommander.Providers.Odp
     using System;
     using System.Data;
     using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
     using DataCommander.Foundation;
     using Oracle.ManagedDataAccess.Client;
 
@@ -20,9 +22,9 @@ namespace DataCommander.Providers.Odp
             oracleConnection.InfoMessage += new OracleInfoMessageEventHandler(OnInfoMessage);
         }
 
-        public override void Open()
+        public override async Task OpenAsync(CancellationToken cancellationToken)
         {
-            oracleConnection.Open();
+            await this.oracleConnection.OpenAsync(cancellationToken);
             bool enlist = bool.Parse(oracleConnectionStringBuilder.Enlist);
         }
 
