@@ -202,6 +202,23 @@ namespace DataCommander.Foundation.Linq
         /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <param name="action"></param>
+        public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource> action)
+        {
+            Contract.Requires<ArgumentNullException>(source != null);
+            Contract.Requires<ArgumentNullException>(action != null);
+
+            foreach (var item in source)
+            {
+                action(item);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="action"></param>
         public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource, int> action)
         {
             Contract.Requires<ArgumentNullException>(action != null);

@@ -324,21 +324,31 @@ namespace DataCommander
 
         private void resultSetsTabControl_MouseUp(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            var hitTestInfo = new TCHITTESTINFO(e.X, e.Y);
+            int index = SendMessage(this.resultSetsTabControl.Handle, TCM_HITTEST, IntPtr.Zero, ref hitTestInfo);
+            var hotTab = index >= 0 ? this.resultSetsTabControl.TabPages[index] : null;
+
+            switch (e.Button)
             {
-                var hitTestInfo = new TCHITTESTINFO(e.X, e.Y);
-                int index = SendMessage(this.resultSetsTabControl.Handle, TCM_HITTEST, IntPtr.Zero, ref hitTestInfo);
-                if (index >= 0)
-                {
-                    TabPage hotTab = this.resultSetsTabControl.TabPages[index];
-                    var contextMenu = new ContextMenuStrip(this.components);
-                    contextMenu.Items.Add(new ToolStripMenuItem("Close", null, this.CloseResultSetTabPage_Click)
+                case MouseButtons.Middle:
+                    if (index >= 0)
                     {
-                        Tag = hotTab
-                    });
-                    contextMenu.Items.Add(new ToolStripMenuItem("Close all", null, this.mnuCloseAllTabPages_Click, Keys.Control | Keys.Shift | Keys.F4));
-                    contextMenu.Show(this.resultSetsTabControl, e.Location);
-                }
+                        this.CloseResultSetTabPage(hotTab);
+                    }
+                    break;
+
+                case MouseButtons.Right:
+                    if (index >= 0)
+                    {
+                        var contextMenu = new ContextMenuStrip(this.components);
+                        contextMenu.Items.Add(new ToolStripMenuItem("Close", null, this.CloseResultSetTabPage_Click)
+                        {
+                            Tag = hotTab
+                        });
+                        contextMenu.Items.Add(new ToolStripMenuItem("Close all", null, this.mnuCloseAllTabPages_Click, Keys.Control | Keys.Shift | Keys.F4));
+                        contextMenu.Show(this.resultSetsTabControl, e.Location);
+                    }
+                    break;
             }
         }
 
@@ -3311,7 +3321,8 @@ namespace DataCommander
                                 {
                                     this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Opening connection..."));
                                     await this.connection.OpenAsync(CancellationToken.None);
-                                    this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Connection opened successfully."));
+                                    this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information,
+                                        "Connection opened successfully."));
                                 }
                                 else
                                 {
@@ -3341,6 +3352,7 @@ namespace DataCommander
                         } while (dataReader.NextResult());
 
                         this.ShowDataSet(dataSet);
+                        this.tabControl.SelectedTab = this.resultSetsTabPage;
                     }
                     finally
                     {
@@ -3381,8 +3393,8 @@ namespace DataCommander
                 {
                     do
                     {
-                        DataTable schemaTable = this.provider.GetSchemaTable(dataReader);
-                        IDataReaderHelper dataReaderHelper = this.provider.CreateDataReaderHelper(dataReader);
+                        var schemaTable = this.provider.GetSchemaTable(dataReader);
+                        var dataReaderHelper = this.provider.CreateDataReaderHelper(dataReader);
                         int rowCount = 0;
 
                         while (dataReader.Read())
@@ -3418,10 +3430,12 @@ namespace DataCommander
                             }
                         }
                     } while (dataReader.NextResult());
+
                     dataReader.Close();
                 }
 
                 this.ShowDataSet(dataSet);
+                this.tabControl.SelectedTab = this.resultSetsTabPage;
             }
             catch (Exception ex)
             {

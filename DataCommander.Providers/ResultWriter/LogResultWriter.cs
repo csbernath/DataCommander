@@ -75,6 +75,10 @@
         void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
             this.writeTableBeginTimestamp = Stopwatch.GetTimestamp();
+
+            DateTime now = LocalTime.Default.Now;
+            this.addInfoMessage(new InfoMessage(now, InfoMessageSeverity.Verbose, $"SchemaTable of table[{this.tableCount}]:\r\n{schemaTable.ToStringTable()}"));
+
             this.tableCount++;
             this.rowCount = 0;
         }

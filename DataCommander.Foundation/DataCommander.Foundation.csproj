@@ -321,6 +321,7 @@
     <Compile Include="Collections\ConcurrentQueue.cs" />
     <Compile Include="Collections\EmptyArray.cs" />
     <Compile Include="Collections\LargeObjectHeap.cs" />
+    <Compile Include="Collections\PreOrderTreeTraversal.cs" />
     <Compile Include="Collections\SegmentedArrayBuilder.cs" />
     <Compile Include="Collections\DisposableCollection.cs" />
     <Compile Include="Collections\DynamicArray.cs" />
