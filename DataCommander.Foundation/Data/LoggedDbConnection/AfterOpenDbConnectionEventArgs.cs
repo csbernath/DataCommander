@@ -21,12 +21,6 @@
         /// <summary>
         /// 
         /// </summary>
-        public Exception Exception
-        {
-            get
-            {
-                return this.exception;
-            }
-        }
+        public Exception Exception => this.exception;
     }
 }

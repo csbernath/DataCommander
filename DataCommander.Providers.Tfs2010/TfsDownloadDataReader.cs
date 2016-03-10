@@ -27,21 +27,9 @@
             this.command = command;
         }
 
-        public override int FieldCount
-        {
-            get
-            {
-                return 4;
-            }
-        }
+        public override int FieldCount => 4;
 
-        public override int RecordsAffected
-        {
-            get
-            {
-                return -1;
-            }
-        }
+        public override int RecordsAffected => -1;
 
         public override DataTable GetSchemaTable()
         {

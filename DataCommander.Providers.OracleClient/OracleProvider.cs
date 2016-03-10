@@ -284,13 +284,7 @@ namespace DataCommander.Providers.OracleClient
 
         #region IProvider Members
 
-        string IProvider.Name
-        {
-            get
-            {
-                return "System.Data.OracleClient";
-            }
-        }
+        string IProvider.Name => "System.Data.OracleClient";
 
         DbProviderFactory IProvider.DbProviderFactory
         {
@@ -322,13 +316,7 @@ namespace DataCommander.Providers.OracleClient
             }
         }
 
-        bool IProvider.IsCommandCancelable
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool IProvider.IsCommandCancelable => true;
 
         void IProvider.DeriveParameters(IDbCommand command)
         {
@@ -378,13 +366,7 @@ namespace DataCommander.Providers.OracleClient
             throw new NotImplementedException();
         }
 
-        IObjectExplorer IProvider.ObjectExplorer
-        {
-            get
-            {
-                return new ObjectExplorer();
-            }
-        }
+        IObjectExplorer IProvider.ObjectExplorer => new ObjectExplorer();
 
         void IProvider.ClearCompletionCache()
         {
@@ -510,13 +492,7 @@ namespace DataCommander.Providers.OracleClient
             insertCommand.CommandText = insertInto.ToString();
         }
 
-        bool IProvider.CanConvertCommandToString
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IProvider.CanConvertCommandToString => false;
 
         List<InfoMessage> IProvider.ToInfoMessages(Exception e)
         {
@@ -544,6 +520,11 @@ namespace DataCommander.Providers.OracleClient
         string IProvider.CommandToString(IDbCommand command)
         {
             throw new NotImplementedException();
+        }
+
+        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder()
+        {
+            return new ConnectionStringBuilder();
         }
 
         #endregion

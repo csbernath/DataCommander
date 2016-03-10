@@ -15,13 +15,7 @@
             this.name = name;
         }
 
-        public override Type DeclaringType
-        {
-            get
-            {
-                return this.method.DeclaringType;
-            }
-        }
+        public override Type DeclaringType => this.method.DeclaringType;
 
         public static string GetKey(MethodBase method, string name)
         {
@@ -44,37 +38,13 @@
             return this.method.IsDefined(attributeType, inherit);
         }
 
-        public override MemberTypes MemberType
-        {
-            get
-            {
-                return this.method.MemberType;
-            }
-        }
+        public override MemberTypes MemberType => this.method.MemberType;
 
-        public override string Name
-        {
-            get
-            {
-                return this.method.Name + "[" + this.name + "]";
-            }
-        }
+        public override string Name => this.method.Name + "[" + this.name + "]";
 
-        public override Type ReflectedType
-        {
-            get
-            {
-                return this.method.ReflectedType;
-            }
-        }
+        public override Type ReflectedType => this.method.ReflectedType;
 
-        public override MethodAttributes Attributes
-        {
-            get
-            {
-                return this.method.Attributes;
-            }
-        }
+        public override MethodAttributes Attributes => this.method.Attributes;
 
         public override MethodImplAttributes GetMethodImplementationFlags()
         {

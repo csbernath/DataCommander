@@ -33,35 +33,17 @@
         /// <summary>
         /// 
         /// </summary>
-        public static DataParameterValue<T> Default
-        {
-            get
-            {
-                return defaultInstance;
-            }
-        }
+        public static DataParameterValue<T> Default => defaultInstance;
 
         /// <summary>
         /// 
         /// </summary>
-        public static DataParameterValue<T> Null
-        {
-            get
-            {
-                return nullInstance;
-            }
-        }
+        public static DataParameterValue<T> Null => nullInstance;
 
         /// <summary>
         /// 
         /// </summary>
-        public static DataParameterValue<T> Void
-        {
-            get
-            {
-                return voidInstance;
-            }
-        }
+        public static DataParameterValue<T> Void => voidInstance;
 
         /// <summary>
         /// 
@@ -86,13 +68,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public DataParameterValueType Type
-        {
-            get
-            {
-                return this.type;
-            }
-        }
+        public DataParameterValueType Type => this.type;
 
         /// <summary>
         /// 
@@ -107,12 +83,6 @@
             }
         }
 
-        object IDataParameterValue.ValueObject
-        {
-            get
-            {
-                return this.Value;
-            }
-        }
+        object IDataParameterValue.ValueObject => this.Value;
     }
 }

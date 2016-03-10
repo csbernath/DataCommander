@@ -11,34 +11,16 @@ namespace DataCommander.Providers.OracleBase
         private IDbConnection connection;
         private SchemaCollectionNode schemasNode;
 
-        public IDbConnection Connection
-        {
-            get
-            {
-                return this.connection;
-            }
-        }
+        public IDbConnection Connection => this.connection;
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             return new ITreeNode[] { schemasNode };
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
-        public SchemaCollectionNode SchemasNode
-        {
-            get
-            {
-                return schemasNode;
-            }
-        }
+        public SchemaCollectionNode SchemasNode => schemasNode;
 
         #region IObjectExplorer Members
 

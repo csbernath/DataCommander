@@ -38,13 +38,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name => this.name;
 
         /// <summary>
         /// 
@@ -65,13 +59,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public string Description
-        {
-            get
-            {
-                return this.description;
-            }
-        }
+        public string Description => this.description;
 
         /// <summary>
         /// 

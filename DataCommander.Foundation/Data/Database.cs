@@ -93,35 +93,17 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public IDbCommandHelper CommandHelper
-        {
-            get
-            {
-                return this.commandHelper;
-            }
-        }
+        public IDbCommandHelper CommandHelper => this.commandHelper;
 
         /// <summary>
         /// 
         /// </summary>
-        public IDbCommandBuilderHelper CommandBuilderHelper
-        {
-            get
-            {
-                return this.commandBuilderHelper;
-            }
-        }
+        public IDbCommandBuilderHelper CommandBuilderHelper => this.commandBuilderHelper;
 
         /// <summary>
         /// Gets the underlying <see cref="IDbConnection.State"/>.
         /// </summary>
-        public ConnectionState State
-        {
-            get
-            {
-                return this.connection.State;
-            }
-        }
+        public ConnectionState State => this.connection.State;
 
         /// <summary>
         /// Gets or sets the transaction.
@@ -176,24 +158,12 @@ namespace DataCommander.Foundation.Data
         /// </item>
         /// </list>
         /// </remarks>
-        public int RowCount
-        {
-            get
-            {
-                return this.rowCount;
-            }
-        }
+        public int RowCount => this.rowCount;
 
         /// <summary>
         /// Gets the last executed <see cref="System.Data.IDbCommand"/>.
         /// </summary>
-        public IDbCommand Command
-        {
-            get
-            {
-                return this.command;
-            }
-        }
+        public IDbCommand Command => this.command;
 
         /// <summary>
         /// Gets the return value (int) of the last executed <see cref="System.Data.IDbCommand"/>.

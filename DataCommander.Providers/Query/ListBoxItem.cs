@@ -13,13 +13,7 @@ namespace DataCommander.Providers
             this.toString = toString;
         }
 
-        public T Item
-        {
-            get
-            {
-                return this.item;
-            }
-        }
+        public T Item => this.item;
 
         public override string ToString()
         {

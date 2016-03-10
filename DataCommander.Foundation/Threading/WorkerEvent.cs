@@ -15,13 +15,7 @@
             this.SafeWaitHandle = this.eventWaitHandle.SafeWaitHandle;
         }
 
-        public WorkerEventState State
-        {
-            get
-            {
-                return this.state;
-            }
-        }
+        public WorkerEventState State => this.state;
 
         /// <summary>
         /// 

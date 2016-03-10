@@ -69,13 +69,7 @@
         /// 
         /// </summary>
         [Pure]
-        public int Count
-        {
-            get
-            {
-                return this.groups != null ? this.groups.Count : 0;
-            }
-        }
+        public int Count => this.groups != null ? this.groups.Count : 0;
 
         /// <summary>
         /// 

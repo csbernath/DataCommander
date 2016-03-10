@@ -37,13 +37,7 @@ namespace DataCommander.Providers.OleDb
             return this.oledbConnection.OpenAsync(cancellationToken);
         }
 
-        public override string Caption
-        {
-            get
-            {
-                return this.oledbConnection.ConnectionString;
-            }
-        }
+        public override string Caption => this.oledbConnection.ConnectionString;
 
         void OnInfoMessage( object sender, OleDbInfoMessageEventArgs e )
         {
@@ -52,21 +46,9 @@ namespace DataCommander.Providers.OleDb
             this.InvokeInfoMessage( new InfoMessage[] { new InfoMessage( now, InfoMessageSeverity.Information, text ) } );
         }
 
-        public override string DataSource
-        {
-            get
-            {
-                return this.oledbConnection.DataSource;
-            }
-        }
+        public override string DataSource => this.oledbConnection.DataSource;
 
-        public override string ServerVersion
-        {
-            get
-            {
-                return this.oledbConnection.ServerVersion;
-            }
-        }
+        public override string ServerVersion => this.oledbConnection.ServerVersion;
 
         public override IDbCommand CreateCommand()
         {
@@ -77,13 +59,6 @@ namespace DataCommander.Providers.OleDb
         {
         }
 
-        public override int TransactionCount
-        {
-            get
-            {
-                // TODO
-                return 0;
-            }
-        }
+        public override int TransactionCount => 0;
     }
 }

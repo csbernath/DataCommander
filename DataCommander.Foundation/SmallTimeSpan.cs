@@ -36,13 +36,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public short TotalMinutes
-        {
-            get
-            {
-                return this.value;
-            }
-        }
+        public short TotalMinutes => this.value;
 
         /// <summary>
         /// 

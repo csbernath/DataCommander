@@ -50,89 +50,41 @@
         /// <summary>
         /// 
         /// </summary>
-        public int CommandId
-        {
-            get
-            {
-                return this.commandId;
-            }
-        }
+        public int CommandId => this.commandId;
 
         /// <summary>
         /// 
         /// </summary>
-        public ConnectionState ConnectionState
-        {
-            get
-            {
-                return this.connectionState;
-            }
-        }
+        public ConnectionState ConnectionState => this.connectionState;
 
         /// <summary>
         /// 
         /// </summary>
-        public string Database
-        {
-            get
-            {
-                return this.database;
-            }
-        }
+        public string Database => this.database;
 
         /// <summary>
         /// 
         /// </summary>
-        public LoggedDbCommandExecutionType ExecutionType
-        {
-            get
-            {
-                return this.executionType;
-            }
-        }
+        public LoggedDbCommandExecutionType ExecutionType => this.executionType;
 
         /// <summary>
         /// 
         /// </summary>
-        public CommandType CommandType
-        {
-            get
-            {
-                return this.commandType;
-            }
-        }
+        public CommandType CommandType => this.commandType;
 
         /// <summary>
         /// 
         /// </summary>
-        public int CommandTimeout
-        {
-            get
-            {
-                return this.commandTimeout;
-            }
-        }
+        public int CommandTimeout => this.commandTimeout;
 
         /// <summary>
         /// 
         /// </summary>
-        public string CommandText
-        {
-            get
-            {
-                return this.commandText;
-            }
-        }
+        public string CommandText => this.commandText;
 
         /// <summary>
         /// 
         /// </summary>
-        public string Parameters
-        {
-            get
-            {
-                return this.parameters;
-            }
-        }
+        public string Parameters => this.parameters;
     }
 }

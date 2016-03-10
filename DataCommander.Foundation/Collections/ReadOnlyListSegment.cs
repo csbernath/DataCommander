@@ -43,24 +43,12 @@
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public T this[int index]
-        {
-            get
-            {
-                return this.list[offset + index];
-            }
-        }
+        public T this[int index] => this.list[offset + index];
 
         /// <summary>
         /// 
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.count;
-            }
-        }
+        public int Count => this.count;
 
         /// <summary>
         /// 

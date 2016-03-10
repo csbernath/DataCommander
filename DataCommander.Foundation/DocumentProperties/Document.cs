@@ -25,13 +25,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public DocumentPropertyCollection Properties
-        {
-            get
-            {
-                return this.properties;
-            }
-        }
+        public DocumentPropertyCollection Properties => this.properties;
 
         /// <summary>
         /// 

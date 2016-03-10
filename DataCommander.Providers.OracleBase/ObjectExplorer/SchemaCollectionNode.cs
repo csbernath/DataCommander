@@ -20,24 +20,12 @@ namespace DataCommander.Providers.OracleBase
             this.connection = connection;
             DbConnectionStringBuilder sb = new DbConnectionStringBuilder();
             sb.ConnectionString = connection.ConnectionString;
-            this.selectedSchema = (string)sb[ ConnectionStringProperty.UserId ];
+            this.selectedSchema = (string) sb[ConnectionStringKeyword.UserId];
         }
 
-        public string Name
-        {
-            get
-            {
-                return "Schemas";
-            }
-        }
+        public string Name => "Schemas";
 
-        public bool IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool IsLeaf => false;
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
@@ -49,44 +37,20 @@ namespace DataCommander.Providers.OracleBase
 
             for (int i = 0; i < count; i++)
             {
-                string name = (string)dataTable.Rows[i][0];
+                string name = (string) dataTable.Rows[i][0];
                 treeNodes[i] = new SchemaNode(this, name);
             }
 
             return treeNodes;
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
-        public string Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public string Query => null;
 
-        public ContextMenuStrip ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public ContextMenuStrip ContextMenu => null;
 
-        public IDbConnection Connection
-        {
-            get
-            {
-                return this.connection;
-            }
-        }
+        public IDbConnection Connection => this.connection;
 
         public string SelectedSchema
         {

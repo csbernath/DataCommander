@@ -15,13 +15,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public IList<TextWriter> TextWriters
-        {
-            get
-            {
-                return this.textWriters;
-            }
-        }
+        public IList<TextWriter> TextWriters => this.textWriters;
 
         /// <summary>
         /// 

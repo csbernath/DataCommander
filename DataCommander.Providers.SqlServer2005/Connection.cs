@@ -116,13 +116,7 @@ set arithabort on";
             this.InvokeInfoMessage(infoMessages);
         }
 
-        public override string DataSource
-        {
-            get
-            {
-                return this.sqlConnection.DataSource;
-            }
-        }
+        public override string DataSource => this.sqlConnection.DataSource;
 
         public override string ServerVersion
         {

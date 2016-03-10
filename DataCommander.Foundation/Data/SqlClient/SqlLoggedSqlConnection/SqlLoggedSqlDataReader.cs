@@ -210,29 +210,11 @@ namespace DataCommander.Foundation.Data.SqlClient
             return this.reader.IsDBNull(i);
         }
 
-        public int FieldCount
-        {
-            get
-            {
-                return this.reader.FieldCount;
-            }
-        }
+        public int FieldCount => this.reader.FieldCount;
 
-        public object this[string name]
-        {
-            get
-            {
-                return this.reader[name];
-            }
-        }
+        public object this[string name] => this.reader[name];
 
-        public object this[int i]
-        {
-            get
-            {
-                return this.reader[i];
-            }
-        }
+        public object this[int i] => this.reader[i];
 
         public void Close()
         {
@@ -310,28 +292,10 @@ namespace DataCommander.Foundation.Data.SqlClient
             return read;
         }
 
-        public int Depth
-        {
-            get
-            {
-                return this.reader.Depth;
-            }
-        }
+        public int Depth => this.reader.Depth;
 
-        public bool IsClosed
-        {
-            get
-            {
-                return this.reader.IsClosed;
-            }
-        }
+        public bool IsClosed => this.reader.IsClosed;
 
-        public int RecordsAffected
-        {
-            get
-            {
-                return this.reader.RecordsAffected;
-            }
-        }
+        public int RecordsAffected => this.reader.RecordsAffected;
     }
 }

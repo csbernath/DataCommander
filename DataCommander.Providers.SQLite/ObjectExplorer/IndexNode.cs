@@ -17,34 +17,16 @@
 
         #region ITreeNode Members
 
-        string ITreeNode.Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        string ITreeNode.Name => this.name;
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool ITreeNode.IsLeaf => true;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
         {
             return null;
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
         string ITreeNode.Query
         {
@@ -62,13 +44,7 @@ where	type = 'index'
             }
         }
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        ContextMenuStrip ITreeNode.ContextMenu => null;
 
         #endregion
     }

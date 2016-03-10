@@ -26,23 +26,11 @@ namespace DataCommander
 		    this.precision = (byte) (intValue.Length + this.scale);
 		}
 
-		public byte Precision
-		{
-			get
-			{
-				return this.precision;
-			}
-		}
+		public byte Precision => this.precision;
 
-		public byte Scale
-		{
-			get
-			{
-				return this.scale;
-			}
-		}
+        public byte Scale => this.scale;
 
-		private readonly byte precision;
+        private readonly byte precision;
 		private readonly byte scale;
 	}
 }

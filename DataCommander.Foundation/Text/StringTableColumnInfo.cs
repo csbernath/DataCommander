@@ -56,24 +56,12 @@ namespace DataCommander.Foundation.Text
         /// <summary>
         /// 
         /// </summary>
-        public string ColumnName
-        {
-            get
-            {
-                return this.columnName;
-            }
-        }
+        public string ColumnName => this.columnName;
 
         /// <summary>
         /// 
         /// </summary>
-        public StringTableColumnAlign Align
-        {
-            get
-            {
-                return this.align;
-            }
-        }
+        public StringTableColumnAlign Align => this.align;
 
         internal string ToString(T item, int index)
         {

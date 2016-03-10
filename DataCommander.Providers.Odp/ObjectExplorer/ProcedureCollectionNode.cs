@@ -1,9 +1,9 @@
-namespace DataCommander.Providers.Odp
+namespace DataCommander.Providers.Odp.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
+    using Foundation.Data;
 
     internal sealed class ProcedureCollectionNode : ITreeNode
     {
@@ -14,21 +14,9 @@ namespace DataCommander.Providers.Odp
 
         #region ITreeNode Members
 
-        string ITreeNode.Name
-        {
-            get
-            {
-                return "Procedures";
-            }
-        }
+        string ITreeNode.Name => "Procedures";
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -50,29 +38,11 @@ order by OBJECT_NAME";
                 });
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        ContextMenuStrip ITreeNode.ContextMenu => null;
 
         #endregion
 

@@ -48,74 +48,46 @@ namespace DataCommander.Foundation.DocumentProperties
         #region union members
 
         sbyte cVal // CHAR cVal;
-        {
-            get { return (sbyte) this.GetDataBytes()[0]; }
-        }
+            => (sbyte) this.GetDataBytes()[0];
 
         byte bVal // UCHAR bVal;
-        {
-            get { return this.GetDataBytes()[0]; }
-        }
+            => this.GetDataBytes()[0];
 
         short iVal // SHORT iVal;
-        {
-            get { return BitConverter.ToInt16(this.GetDataBytes(), 0); }
-        }
+            => BitConverter.ToInt16(this.GetDataBytes(), 0);
 
         ushort uiVal // USHORT uiVal;
-        {
-            get { return BitConverter.ToUInt16(this.GetDataBytes(), 0); }
-        }
+            => BitConverter.ToUInt16(this.GetDataBytes(), 0);
 
         int lVal // LONG lVal;
-        {
-            get { return BitConverter.ToInt32(this.GetDataBytes(), 0); }
-        }
+            => BitConverter.ToInt32(this.GetDataBytes(), 0);
 
         uint ulVal // ULONG ulVal;
-        {
-            get { return BitConverter.ToUInt32(this.GetDataBytes(), 0); }
-        }
+            => BitConverter.ToUInt32(this.GetDataBytes(), 0);
 
         long hVal // LARGE_INTEGER hVal;
-        {
-            get { return BitConverter.ToInt64(this.GetDataBytes(), 0); }
-        }
+            => BitConverter.ToInt64(this.GetDataBytes(), 0);
 
         ulong uhVal // ULARGE_INTEGER uhVal;
-        {
-            get { return BitConverter.ToUInt64(this.GetDataBytes(), 0); }
-        }
+            => BitConverter.ToUInt64(this.GetDataBytes(), 0);
 
         float fltVal // FLOAT fltVal;
-        {
-            get { return BitConverter.ToSingle(this.GetDataBytes(), 0); }
-        }
+            => BitConverter.ToSingle(this.GetDataBytes(), 0);
 
         double dblVal // DOUBLE dblVal;
-        {
-            get { return BitConverter.ToDouble(this.GetDataBytes(), 0); }
-        }
+            => BitConverter.ToDouble(this.GetDataBytes(), 0);
 
         bool boolVal // VARIANT_BOOL boolVal;
-        {
-            get { return (this.iVal == 0 ? false : true); }
-        }
+            => (this.iVal == 0 ? false : true);
 
         int scode // SCODE scode;
-        {
-            get { return this.lVal; }
-        }
+            => this.lVal;
 
         decimal cyVal // CY cyVal;
-        {
-            get { return decimal.FromOACurrency(this.hVal); }
-        }
+            => decimal.FromOACurrency(this.hVal);
 
         DateTime date // DATE date;
-        {
-            get { return DateTime.FromOADate(this.dblVal); }
-        }
+            => DateTime.FromOADate(this.dblVal);
 
         #endregion // union members
 
@@ -168,10 +140,7 @@ namespace DataCommander.Foundation.DocumentProperties
         /// <summary>
         /// Gets the variant type.
         /// </summary>
-        public VarEnum Type
-        {
-            get { return (VarEnum) this.vt; }
-        }
+        public VarEnum Type => (VarEnum) this.vt;
 
         /// <summary>
         /// Gets the variant value.

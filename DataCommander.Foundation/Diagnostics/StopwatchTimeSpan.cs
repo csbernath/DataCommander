@@ -90,90 +90,42 @@
         /// <summary>
         /// 
         /// </summary>
-        public long Ticks
-        {
-            get
-            {
-                return this.ticks;
-            }
-        }
+        public long Ticks => this.ticks;
 
         /// <summary>
         /// 
         /// </summary>
-        public TimeSpan Elapsed
-        {
-            get
-            {
-                return ToTimeSpan(this.ticks);
-            }
-        }
+        public TimeSpan Elapsed => ToTimeSpan(this.ticks);
 
         /// <summary>
         /// 
         /// </summary>
-        public double TotalHours
-        {
-            get
-            {
-                return (double)this.ticks/TicksPerHour;
-            }
-        }
+        public double TotalHours => (double)this.ticks/TicksPerHour;
 
         /// <summary>
         /// 
         /// </summary>
-        public double TotalMinutes
-        {
-            get
-            {
-                return (double)this.ticks/TicksPerMinute;
-            }
-        }
+        public double TotalMinutes => (double)this.ticks/TicksPerMinute;
 
         /// <summary>
         /// 
         /// </summary>
-        public double TotalSeconds
-        {
-            get
-            {
-                return (double)this.ticks/TicksPerSecond;
-            }
-        }
+        public double TotalSeconds => (double)this.ticks/TicksPerSecond;
 
         /// <summary>
         /// 
         /// </summary>
-        public double TotalMilliseconds
-        {
-            get
-            {
-                return (double)this.ticks*1000/TicksPerSecond;
-            }
-        }
+        public double TotalMilliseconds => (double)this.ticks*1000/TicksPerSecond;
 
         /// <summary>
         /// 
         /// </summary>
-        public double TotalMicroseconds
-        {
-            get
-            {
-                return (double)this.ticks*1000000/TicksPerSecond;
-            }
-        }
+        public double TotalMicroseconds => (double)this.ticks*1000000/TicksPerSecond;
 
         /// <summary>
         /// 
         /// </summary>
-        public double TotalNanoseconds
-        {
-            get
-            {
-                return (double)this.ticks*1000000000/TicksPerSecond;
-            }
-        }
+        public double TotalNanoseconds => (double)this.ticks*1000000000/TicksPerSecond;
 
         /// <summary>
         /// 

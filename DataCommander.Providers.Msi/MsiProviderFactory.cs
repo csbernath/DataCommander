@@ -10,15 +10,9 @@
 		{
 		}
 
-		public static MsiProviderFactory Instance
-		{
-			get
-			{
-				return instance;
-			}
-		}
+		public static MsiProviderFactory Instance => instance;
 
-		public override DbConnectionStringBuilder CreateConnectionStringBuilder()
+        public override DbConnectionStringBuilder CreateConnectionStringBuilder()
 		{
 			return new DbConnectionStringBuilder();
 		}

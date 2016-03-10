@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.Odp
+namespace DataCommander.Providers.Odp.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data;
@@ -19,21 +19,9 @@ namespace DataCommander.Providers.Odp
             this.selectedSchema = oracleConnectionStringBuilder.UserID;
         }
 
-        public string Name
-        {
-            get
-            {
-                return "Schemas";
-            }
-        }
+        public string Name => "Schemas";
 
-        public bool IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool IsLeaf => false;
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
@@ -52,37 +40,13 @@ namespace DataCommander.Providers.Odp
             return treeNodes;
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
-        public string Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public string Query => null;
 
-        public ContextMenuStrip ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public ContextMenuStrip ContextMenu => null;
 
-        public OracleConnection Connection
-        {
-            get
-            {
-                return connection;
-            }
-        }
+        public OracleConnection Connection => connection;
 
         public void BeforeExpand()
         {

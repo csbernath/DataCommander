@@ -64,13 +64,7 @@ namespace DataCommander.Providers.MySql
             }
         }
 
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name => this.name;
 
         public override string ToString()
         {

@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Providers.SqlServerCe
+﻿namespace DataCommander.Providers.SqlServerCe40
 {
     using System;
     using System.Data;
@@ -40,42 +40,17 @@
             }
         }
 
-        public override string Caption
-        {
-            get
-            {
-                return this.sqlCeConnection.DataSource;
-            }
-        }
+        public override string Caption => this.sqlCeConnection.DataSource;
 
-        public override string DataSource
-        {
-            get
-            {
-                return this.sqlCeConnection.DataSource;
-            }
-        }
+        public override string DataSource => this.sqlCeConnection.DataSource;
 
         protected override void SetDatabase(string database)
         {
             throw new NotImplementedException();
         }
 
-        public override string ServerVersion
-        {
-            get
-            {
-                return this.sqlCeConnection.ServerVersion;
-            }
-        }
+        public override string ServerVersion => this.sqlCeConnection.ServerVersion;
 
-        public override int TransactionCount
-        {
-            get
-            {
-                // TODO
-                return 0;
-            }
-        }
+        public override int TransactionCount => 0;
     }
 }

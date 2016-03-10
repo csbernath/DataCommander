@@ -281,24 +281,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.collection.Count;
-            }
-        }
+        public int Count => this.collection.Count;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadOnly
-        {
-            get
-            {
-                return this.collection.IsReadOnly;
-            }
-        }
+        public bool IsReadOnly => this.collection.IsReadOnly;
 
         /// <summary>
         /// 

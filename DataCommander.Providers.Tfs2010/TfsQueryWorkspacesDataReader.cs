@@ -98,21 +98,9 @@
             return read;
         }
 
-        public override int RecordsAffected
-        {
-            get
-            {
-                return -1;
-            }
-        }
+        public override int RecordsAffected => -1;
 
-        public override int FieldCount
-        {
-            get
-            {
-                return 9;
-            }
-        }
+        public override int FieldCount => 9;
 
         private static IEnumerable<Tuple<int, int>> AsEnumerable(Workspace[] workspaces)
         {

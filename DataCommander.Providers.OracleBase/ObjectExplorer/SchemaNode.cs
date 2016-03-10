@@ -19,21 +19,9 @@ namespace DataCommander.Providers.OracleBase
             this.name = name;
         }
 
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-        }
+        public string Name => name;
 
-        public bool IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool IsLeaf => false;
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
@@ -51,36 +39,12 @@ namespace DataCommander.Providers.OracleBase
             return treeNodes;
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
-        public string Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public string Query => null;
 
-        public ContextMenuStrip ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public ContextMenuStrip ContextMenu => null;
 
-        public SchemaCollectionNode SchemasNode
-        {
-            get
-            {
-                return schemasNode;
-            }
-        }
+        public SchemaCollectionNode SchemasNode => schemasNode;
     }
 }

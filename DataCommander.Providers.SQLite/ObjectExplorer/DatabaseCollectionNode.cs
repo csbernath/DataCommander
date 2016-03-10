@@ -19,21 +19,9 @@ namespace DataCommander.Providers.SQLite
 
         #region ITreeNode Members
 
-        string ITreeNode.Name
-        {
-            get
-            {
-                return "Databases";
-            }
-        }
+        string ITreeNode.Name => "Databases";
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -54,29 +42,11 @@ namespace DataCommander.Providers.SQLite
             return children;
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        ContextMenuStrip ITreeNode.ContextMenu => null;
 
         #endregion
     }

@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Providers.SqlServer2005
+﻿namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
+    using Foundation.Data;
 
     internal sealed class UserDefinedTableTypeCollectionNode : ITreeNode
     {
@@ -15,21 +15,9 @@
             this.database = database;
         }
 
-        string ITreeNode.Name
-        {
-            get
-            {
-                return "User-Defined Table Types";
-            }
-        }
+        string ITreeNode.Name => "User-Defined Table Types";
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -62,28 +50,10 @@ order by 1,2", this.database.Name);
             return tableTypeNodes;
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        ContextMenuStrip ITreeNode.ContextMenu => null;
     }
 }

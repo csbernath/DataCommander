@@ -62,21 +62,9 @@ namespace DataCommander.Providers.Odp
             }
         }
 
-        public override string DataSource
-        {
-            get
-            {
-                return this.oracleConnection.DataSource;
-            }
-        }
+        public override string DataSource => this.oracleConnection.DataSource;
 
-        public override string ServerVersion
-        {
-            get
-            {
-                return this.oracleConnection.ServerVersion;
-            }
-        }
+        public override string ServerVersion => this.oracleConnection.ServerVersion;
 
         public override IDbCommand CreateCommand()
         {
@@ -90,13 +78,6 @@ namespace DataCommander.Providers.Odp
         {
         }
 
-        public override int TransactionCount
-        {
-            get
-            {
-                // TODO
-                return 0;
-            }
-        }
+        public override int TransactionCount => 0;
     }
 }

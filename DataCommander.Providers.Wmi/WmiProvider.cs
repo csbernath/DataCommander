@@ -12,46 +12,22 @@ namespace DataCommander.Providers.Wmi
 
     internal sealed class WmiProvider : IProvider
     {
-        string IProvider.Name
-        {
-            get
-            {
-                return "WmiProvider";
-            }
-        }
+        string IProvider.Name => "WmiProvider";
 
-        public DbProviderFactory DbProviderFactory
-        {
-            get
-            {
-                return WmiProviderFactory.Instance;
-            }
-        }
+        public DbProviderFactory DbProviderFactory => WmiProviderFactory.Instance;
 
         ConnectionBase IProvider.CreateConnection(string connectionString)
         {
             return new WmiProviderConnection(connectionString);
         }
 
-        string[] IProvider.KeyWords
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string[] IProvider.KeyWords => null;
 
         //void IProvider.SetStandardOutput(IDbCommand command, IStandardOutput standardOutput)
         //{
         //}
 
-        bool IProvider.IsCommandCancelable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IProvider.IsCommandCancelable => false;
 
         void IProvider.DeriveParameters(IDbCommand command)
         {
@@ -154,13 +130,7 @@ namespace DataCommander.Providers.Wmi
             return null;
         }
 
-        IObjectExplorer IProvider.ObjectExplorer
-        {
-            get
-            {
-                return new WmiObjectExplorer();
-            }
-        }
+        IObjectExplorer IProvider.ObjectExplorer => new WmiObjectExplorer();
 
         private static void AddClassNames(ManagementClass manClass, IList list)
         {
@@ -276,6 +246,11 @@ namespace DataCommander.Providers.Wmi
                     CommandText = commandText
                 }
             };
+        }
+
+        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder()
+        {
+            return new ConnectionStringBuilder();
         }
     }
 }

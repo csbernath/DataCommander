@@ -4,12 +4,6 @@
     {
         private static readonly FoundationLogFactory instance = new FoundationLogFactory(true);
 
-        public static ILogFactory Instance
-        {
-            get
-            {
-                return instance;
-            }
-        }
+        public static ILogFactory Instance => instance;
     }
 }

@@ -22,13 +22,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public static ConsoleLogWriter Instance
-        {
-            get
-            {
-                return instance;
-            }
-        }
+        public static ConsoleLogWriter Instance => instance;
 
         #region ILogWriter Members
 

@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.SqlServer2005
+namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System;
     using System.Collections.Generic;
@@ -6,8 +6,8 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Diagnostics;
     using System.Drawing;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data.SqlClient;
-    using DataCommander.Foundation.Diagnostics;
+    using Foundation.Data.SqlClient;
+    using Foundation.Diagnostics;
 
     internal sealed class StoredProcedureNode : ITreeNode
     {
@@ -25,34 +25,16 @@ namespace DataCommander.Providers.SqlServer2005
             this.name = name;
         }
 
-        public string Name
-        {
-            get
-            {
-                return this.owner + '.' + this.name;
-            }
-        }
+        public string Name => this.owner + '.' + this.name;
 
-        public bool IsLeaf
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public bool IsLeaf => true;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
         {
             return null;
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
         public string Query
         {

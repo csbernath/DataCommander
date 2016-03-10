@@ -100,21 +100,9 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.items.Length;
-            }
-        }
+        public int Count => this.items.Length;
 
-        bool ICollection<T>.IsReadOnly
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool ICollection<T>.IsReadOnly => true;
 
         bool ICollection<T>.Remove(T item)
         {

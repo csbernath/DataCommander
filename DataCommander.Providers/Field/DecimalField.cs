@@ -22,21 +22,9 @@ namespace DataCommander.Providers
             this.stringValue = stringValue;
         }
 
-        public decimal DecimalValue
-        {
-            get
-            {
-                return this.decimalValue;
-            }
-        }
+        public decimal DecimalValue => this.decimalValue;
 
-        public string StringValue
-        {
-            get
-            {
-                return this.stringValue;
-            }
-        }
+        public string StringValue => this.stringValue;
 
         public override string ToString()
         {

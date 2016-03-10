@@ -41,13 +41,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public WorkerThread Thread
-        {
-            get
-            {
-                return this.thread;
-            }
-        }
+        public WorkerThread Thread => this.thread;
 
         internal WorkerThreadPool Pool
         {
@@ -57,12 +51,6 @@ namespace DataCommander.Foundation.Threading
             }
         }
 
-        internal long LastActivityTimestamp
-        {
-            get
-            {
-                return this.lastActivityTimestamp;
-            }
-        }
+        internal long LastActivityTimestamp => this.lastActivityTimestamp;
     }
 }

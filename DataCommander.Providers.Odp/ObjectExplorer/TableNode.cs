@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.Odp
+namespace DataCommander.Providers.Odp.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Windows.Forms;
@@ -24,23 +24,11 @@ namespace DataCommander.Providers.Odp
 			this.showFullName = showFullName;
 		}
 
-		public string Name
-		{
-			get
-			{
-				return showFullName ? this.schema.Name + "." + this.name : this.name;
-			}
-		}
+		public string Name => showFullName ? this.schema.Name + "." + this.name : this.name;
 
-		public bool IsLeaf
-		{
-			get
-			{
-				return false;
-			}
-		}
+	    public bool IsLeaf => false;
 
-		public IEnumerable<ITreeNode> GetChildren( bool refresh )
+	    public IEnumerable<ITreeNode> GetChildren( bool refresh )
 		{
 			return new ITreeNode[]
               {
@@ -49,40 +37,16 @@ namespace DataCommander.Providers.Odp
               };
 		}
 
-		public bool Sortable
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public bool Sortable => false;
 
-		public string Query
-		{
-			get
-			{
-				return "select * from " + schema.Name + "." + name;
-			}
-		}
+	    public string Query => "select * from " + schema.Name + "." + name;
 
-		public ContextMenuStrip ContextMenu
-		{
-			get
-			{
-				return null;
-			}
-		}
+	    public ContextMenuStrip ContextMenu => null;
 
-		public void BeforeExpand()
+	    public void BeforeExpand()
 		{
 		}
 
-		public SchemaNode Schema
-		{
-			get
-			{
-				return schema;
-			}
-		}
+		public SchemaNode Schema => schema;
 	}
 }

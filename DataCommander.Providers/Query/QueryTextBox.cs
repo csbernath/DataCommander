@@ -24,13 +24,7 @@ namespace DataCommander.Providers
 
         private RichTextBox richTextBox;
 
-        public RichTextBox RichTextBox
-        {
-            get
-            {
-                return this.richTextBox;
-            }
-        }
+        public RichTextBox RichTextBox => this.richTextBox;
 
         /// <summary> 
         /// Required designer variable.
@@ -96,13 +90,7 @@ namespace DataCommander.Providers
             }
         }
 
-        public string SelectedText
-        {
-            get
-            {
-                return this.richTextBox.SelectedText;
-            }
-        }
+        public string SelectedText => this.richTextBox.SelectedText;
 
         public void Paste()
         {

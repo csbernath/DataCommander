@@ -24,13 +24,7 @@ namespace DataCommander.Providers
         /// <summary>
         /// 
         /// </summary>
-        public override Encoding Encoding
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public override Encoding Encoding => null;
 
         private void AppendText(string text)
         {

@@ -138,6 +138,8 @@
     <Compile Include="Connection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ConnectionStringBuilder.cs" />
+    <Compile Include="DataParameterImp.cs" />
     <Compile Include="ObjectExplorer.cs">
       <SubType>Code</SubType>
     </Compile>

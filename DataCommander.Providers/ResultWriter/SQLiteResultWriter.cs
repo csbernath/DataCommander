@@ -33,7 +33,7 @@
         {
         }
 
-        void IResultWriter.AfterExecuteReader()
+        void IResultWriter.AfterExecuteReader(int fieldCount)
         {
             string fileName = Path.GetTempFileName() + ".sqlite";
             this.messageWriter.WriteLine(fileName);

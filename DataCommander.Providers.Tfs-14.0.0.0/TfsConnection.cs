@@ -22,21 +22,9 @@
             this.Connection = new TfsDbConnection(this);
         }
 
-        internal TfsTeamProjectCollection TfsTeamProjectCollection
-        {
-            get
-            {
-                return this.tfsTeamProjectCollection;
-            }
-        }
+        internal TfsTeamProjectCollection TfsTeamProjectCollection => this.tfsTeamProjectCollection;
 
-        internal VersionControlServer VersionControlServer
-        {
-            get
-            {
-                return this.versionControlServer;
-            }
-        }
+        internal VersionControlServer VersionControlServer => this.versionControlServer;
 
         public override Task OpenAsync(CancellationToken cancellationToken)
         {
@@ -65,21 +53,9 @@
             }
         }
 
-        public override string Caption
-        {
-            get
-            {
-                return "Team Foundation Server";
-            }
-        }
+        public override string Caption => "Team Foundation Server";
 
-        public override string DataSource
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public override string DataSource => null;
 
         protected override void SetDatabase(string database)
         {
@@ -96,20 +72,8 @@
             }
         }
 
-        public override int TransactionCount
-        {
-            get
-            {
-                return 0;
-            }
-        }
+        public override int TransactionCount => 0;
 
-        public ConnectionState ConnectionState
-        {
-            get
-            {
-                return this.state;
-            }
-        }
+        public ConnectionState ConnectionState => this.state;
     }
 }

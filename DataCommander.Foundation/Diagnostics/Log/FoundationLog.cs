@@ -37,45 +37,15 @@
 
         #region ILog Members
 
-        bool ILog.IsErrorEnabled
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool ILog.IsErrorEnabled => true;
 
-        bool ILog.IsWarningEnabled
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool ILog.IsWarningEnabled => true;
 
-        bool ILog.IsInformationEnabled
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool ILog.IsInformationEnabled => true;
 
-        bool ILog.IsTraceEnabled
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool ILog.IsTraceEnabled => true;
 
-        bool ILog.IsDebugEnabled
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool ILog.IsDebugEnabled => true;
 
         void ILog.Debug(string message)
         {

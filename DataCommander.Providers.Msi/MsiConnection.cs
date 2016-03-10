@@ -38,13 +38,7 @@
             return new MsiCommand(this);
         }
 
-        internal Database Database
-        {
-            get
-            {
-                return this.database;
-            }
-        }
+        internal Database Database => this.database;
 
         #region IDbConnection Members
 
@@ -93,26 +87,14 @@
             throw new NotImplementedException();
         }
 
-        string IDbConnection.Database
-        {
-            get
-            {
-                return this.database.FilePath;
-            }
-        }
+        string IDbConnection.Database => this.database.FilePath;
 
         void IDbConnection.Open()
         {
             throw new NotImplementedException();
         }
 
-        ConnectionState IDbConnection.State
-        {
-            get
-            {
-                return this.state;
-            }
-        }
+        ConnectionState IDbConnection.State => this.state;
 
         #endregion
 

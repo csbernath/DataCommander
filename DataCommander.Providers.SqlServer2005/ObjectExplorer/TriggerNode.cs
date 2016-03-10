@@ -1,10 +1,10 @@
-namespace DataCommander.Providers.SqlServer2005
+namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System;
     using System.Collections.Generic;
     using System.Data.SqlClient;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data.SqlClient;
+    using Foundation.Data.SqlClient;
 
     internal sealed class TriggerNode : ITreeNode
     {
@@ -21,42 +21,18 @@ namespace DataCommander.Providers.SqlServer2005
             this.name = name;
         }
 
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name => this.name;
 
-        public bool IsLeaf
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public bool IsLeaf => true;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             return null;
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
-        public string Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public string Query => null;
 
         void menuItemScriptObject_Click(object sender, EventArgs e)
         {

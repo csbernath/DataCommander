@@ -25,52 +25,16 @@ namespace DataCommander.Providers
             this.value = value;
         }
 
-        public int Index
-        {
-            get
-            {
-                return this.index;
-            }
-        }
+        public int Index => this.index;
 
-        public int StartPosition
-        {
-            get
-            {
-                return this.startPosition;
-            }
-        }
+        public int StartPosition => this.startPosition;
 
-        public int EndPosition
-        {
-            get
-            {
-                return this.endPosition;
-            }
-        }
+        public int EndPosition => this.endPosition;
 
-        public int LineIndex
-        {
-            get
-            {
-                return this.lineIndex;
-            }
-        }
+        public int LineIndex => this.lineIndex;
 
-        public TokenType Type
-        {
-            get
-            {
-                return this.type;
-            }
-        }
+        public TokenType Type => this.type;
 
-        public string Value
-        {
-            get
-            {
-                return this.value;
-            }
-        }
+        public string Value => this.value;
     }
 }

@@ -37,24 +37,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public T MonitoredObject
-        {
-            get
-            {
-                return this.monitoredObject;
-            }
-        }
+        public T MonitoredObject => this.monitoredObject;
 
         /// <summary>
         /// 
         /// </summary>
-        public LockRequest CurrentLockRequest
-        {
-            get
-            {
-                return this.currentLockRequest;
-            }
-        }
+        public LockRequest CurrentLockRequest => this.currentLockRequest;
 
         /// <summary>
         /// 
@@ -158,46 +146,22 @@
             /// <summary>
             /// 
             /// </summary>
-            public PriorityMonitor<T> Monitor
-            {
-                get
-                {
-                    return this.monitor;
-                }
-            }
+            public PriorityMonitor<T> Monitor => this.monitor;
 
             /// <summary>
             /// 
             /// </summary>
-            public int Priority
-            {
-                get
-                {
-                    return this.priority;
-                }
-            }
+            public int Priority => this.priority;
 
             /// <summary>
             /// 
             /// </summary>
-            public WaitHandle AsyncWaitHandle
-            {
-                get
-                {
-                    return this.asyncWaitHandle;
-                }
-            }
+            public WaitHandle AsyncWaitHandle => this.asyncWaitHandle;
 
             /// <summary>
             /// 
             /// </summary>
-            public bool IsCompleted
-            {
-                get
-                {
-                    return this.isCompleted;
-                }
-            }
+            public bool IsCompleted => this.isCompleted;
 
             internal void Initialize(bool isCompleted)
             {

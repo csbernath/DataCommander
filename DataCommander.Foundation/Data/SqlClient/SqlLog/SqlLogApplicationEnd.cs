@@ -13,12 +13,6 @@ namespace DataCommander.Foundation.Data.SqlClient
             this.endDate = endDate;
         }
 
-        public string CommandText
-        {
-            get
-            {
-                return $"exec LogApplicationEnd {this.applicationId},{this.endDate.ToTSqlDateTime()}\r\n";
-            }
-        }
+        public string CommandText => $"exec LogApplicationEnd {this.applicationId},{this.endDate.ToTSqlDateTime()}\r\n";
     }
 }

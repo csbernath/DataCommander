@@ -302,13 +302,7 @@
         }
 
         /// <summary>Gets the maximum concurrency level supported by this scheduler.</summary>
-        public override sealed int MaximumConcurrencyLevel
-        {
-            get
-            {
-                return this._maxDegreeOfParallelism;
-            }
-        }
+        public override sealed int MaximumConcurrencyLevel => this._maxDegreeOfParallelism;
 
         /// <summary>Gets an enumerable of the tasks currently scheduled on this scheduler.</summary>
         /// <returns>An enumerable of the tasks currently scheduled.</returns>

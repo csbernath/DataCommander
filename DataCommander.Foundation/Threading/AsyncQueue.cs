@@ -55,13 +55,7 @@ namespace DataCommander.Foundation.Threading
                 this.consumer.Consume( item );
             }
 
-            public WorkerThread Thread
-            {
-                get
-                {
-                    return this.thread;
-                }
-            }
+            public WorkerThread Thread => this.thread;
         }
 
         /// <summary>
@@ -191,23 +185,11 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// Gets the number of unconsumed items (queued items).
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.queue.Count;
-            }
-        }
+        public int Count => this.queue.Count;
 
         /// <summary>
         /// Gets the consumer thread list.
         /// </summary>
-        public WorkerThreadCollection Consumers
-        {
-            get
-            {
-                return this.consumers;
-            }
-        }
+        public WorkerThreadCollection Consumers => this.consumers;
     }
 }

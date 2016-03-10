@@ -36,20 +36,8 @@
             Monitor.Exit(this.lockObject);
         }
 
-        public bool Locked
-        {
-            get
-            {
-                return this.counter > 0;
-            }
-        }
+        public bool Locked => this.counter > 0;
 
-        public int ThreadId
-        {
-            get
-            {
-                return this.threadId;
-            }
-        }
+        public int ThreadId => this.threadId;
     }
 }

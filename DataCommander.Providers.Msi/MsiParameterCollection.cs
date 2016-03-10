@@ -114,15 +114,9 @@
 			throw new NotImplementedException();
 		}
 
-		int ICollection.Count
-		{
-			get
-			{
-				return this.parameters.Count;
-			}
-		}
+		int ICollection.Count => this.parameters.Count;
 
-		bool ICollection.IsSynchronized
+        bool ICollection.IsSynchronized
 		{
 			get
 			{

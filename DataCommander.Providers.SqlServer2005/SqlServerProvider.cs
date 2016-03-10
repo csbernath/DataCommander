@@ -17,6 +17,7 @@ namespace DataCommander.Providers.SqlServer2005
     using DataCommander.Foundation.Data.SqlClient;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Linq;
+    using FieldReader;
     using Foundation.Diagnostics.Log;
 
     internal sealed class SqlServerProvider : IProvider
@@ -24,7 +25,7 @@ namespace DataCommander.Providers.SqlServer2005
         #region Private Fields
 
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private ObjectExplorer objectBrowser;
+        private ObjectExplorer.ObjectExplorer objectBrowser;
         private static string[] keyWords;
         private static readonly int shortStringSize;
 
@@ -40,33 +41,15 @@ namespace DataCommander.Providers.SqlServer2005
 
         #endregion
 
-        public static int ShortStringSize
-        {
-            get
-            {
-                return shortStringSize;
-            }
-        }
+        public static int ShortStringSize => shortStringSize;
 
         #region IProvider Members
 
         #region Properties
 
-        string IProvider.Name
-        {
-            get
-            {
-                return "SqlServer2005";
-            }
-        }
+        string IProvider.Name => "SqlServer2005";
 
-        DbProviderFactory IProvider.DbProviderFactory
-        {
-            get
-            {
-                return SqlClientFactory.Instance;
-            }
-        }
+        DbProviderFactory IProvider.DbProviderFactory => SqlClientFactory.Instance;
 
         ConnectionBase IProvider.CreateConnection(string connectionString)
         {
@@ -87,21 +70,9 @@ namespace DataCommander.Providers.SqlServer2005
             }
         }
 
-        bool IProvider.CanConvertCommandToString
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool IProvider.CanConvertCommandToString => true;
 
-        bool IProvider.IsCommandCancelable
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool IProvider.IsCommandCancelable => true;
 
         IObjectExplorer IProvider.ObjectExplorer
         {
@@ -109,7 +80,7 @@ namespace DataCommander.Providers.SqlServer2005
             {
                 if (this.objectBrowser == null)
                 {
-                    this.objectBrowser = new ObjectExplorer();
+                    this.objectBrowser = new ObjectExplorer.ObjectExplorer();
                 }
 
                 return this.objectBrowser;
@@ -128,6 +99,11 @@ namespace DataCommander.Providers.SqlServer2005
         {
             var sqlCommand = (SqlCommand)command;
             return sqlCommand.ToLogString();
+        }
+
+        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder()
+        {
+            return new SqlServerConnectionStringBuilder();
         }
 
         IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)

@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Providers.SqlServerCe
+﻿namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
 {
     using System;
     using System.Collections.Generic;
@@ -21,21 +21,9 @@
 
         #region ITreeNode Members
 
-        string ITreeNode.Name
-        {
-            get
-            {
-                return "Tables";
-            }
-        }
+        string ITreeNode.Name => "Tables";
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -54,21 +42,9 @@
             return nodes;
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ITreeNode.Query => null;
 
         ContextMenuStrip ITreeNode.ContextMenu
         {

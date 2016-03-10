@@ -23,23 +23,11 @@
         /// <summary>
         /// 
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name => this.name;
 
         /// <summary>
         /// 
         /// </summary>
-        public TextDataColumnCollection Columns
-        {
-            get
-            {
-                return this.columns;
-            }
-        }
+        public TextDataColumnCollection Columns => this.columns;
     }
 }

@@ -41,13 +41,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name => this.name;
 
         #endregion
 
@@ -108,24 +102,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.list.Count;
-            }
-        }
+        public int Count => this.list.Count;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadOnly
-        {
-            get
-            {
-                return this.list.IsReadOnly;
-            }
-        }
+        public bool IsReadOnly => this.list.IsReadOnly;
 
         /// <summary>
         /// 

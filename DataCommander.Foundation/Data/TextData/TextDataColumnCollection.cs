@@ -155,13 +155,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.collection.Count;
-            }
-        }
+        public int Count => this.collection.Count;
 
         bool ICollection<TextDataColumn>.IsReadOnly
         {

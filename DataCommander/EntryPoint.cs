@@ -9,9 +9,6 @@ namespace DataCommander
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Providers;
 
-    /// <summary>
-    /// Summary description for Class1.
-    /// </summary>
     internal static class EntryPoint
     {
         [STAThread]
@@ -26,8 +23,6 @@ namespace DataCommander
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 
                 string path = Path.GetTempPath();
-                //string defaulgLogFileName = Path.Combine(path, "DataCommander.defaultlog");
-                //DefaultLog.Add( new FileLogWriter( defaulgLogFileName, Encoding.UTF8, false, 4096, true, FileAttributes.ReadOnly | FileAttributes.Hidden ) );
                 using (var methodLog = LogFactory.Instance.GetCurrentMethodLog())
                 {
                     try
@@ -50,7 +45,6 @@ namespace DataCommander
             finally
             {
                 LogFactory.Instance.Dispose();
-                //DefaultLog.Close();
                 MethodProfiler.EndMethod();
                 MethodProfiler.Close();
             }

@@ -23,13 +23,7 @@ namespace DataCommander.Providers
             this.queryForm = queryForm;
         }
 
-        public TextWriter TextWriter
-        {
-            get
-            {
-                return this.textWriter;
-            }
-        }
+        public TextWriter TextWriter => this.textWriter;
 
         public void WriteLine(params object[] args)
         {

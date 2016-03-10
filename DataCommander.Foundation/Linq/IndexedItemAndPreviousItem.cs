@@ -23,23 +23,11 @@ namespace DataCommander.Foundation.Linq
         /// <summary>
         /// 
         /// </summary>
-        public T PreviousItem
-        {
-            get
-            {
-                return this.previousItem;
-            }
-        }
+        public T PreviousItem => this.previousItem;
 
         /// <summary>
         /// 
         /// </summary>
-        public IndexedItem<T> CurrentItem
-        {
-            get
-            {
-                return this.currentItem;
-            }
-        }
+        public IndexedItem<T> CurrentItem => this.currentItem;
     }
 }

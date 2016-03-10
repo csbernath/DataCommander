@@ -52,13 +52,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public string FileName
-        {
-            get
-            {
-                return this.logFile.FileName;
-            }
-        }
+        public string FileName => this.logFile.FileName;
 
         #region ILogWriter Members
 

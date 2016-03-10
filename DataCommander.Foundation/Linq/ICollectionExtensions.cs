@@ -228,13 +228,7 @@
             /// <summary>
             /// 
             /// </summary>
-            int ICollection<TResult>.Count
-            {
-                get
-                {
-                    return this.source.Count;
-                }
-            }
+            int ICollection<TResult>.Count => this.source.Count;
 
             /// <summary>
             /// 
@@ -357,24 +351,12 @@
             /// <summary>
             /// 
             /// </summary>
-            public int Count
-            {
-                get
-                {
-                    return this.collection.Count;
-                }
-            }
+            public int Count => this.collection.Count;
 
             /// <summary>
             /// 
             /// </summary>
-            public bool IsReadOnly
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            public bool IsReadOnly => true;
 
             /// <summary>
             /// 

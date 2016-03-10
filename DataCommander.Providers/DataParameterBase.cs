@@ -49,20 +49,8 @@ namespace DataCommander.Providers
             }
         }
 
-        public byte Precision
-        {
-            get
-            {
-                return this.precision;
-            }
-        }
+        public byte Precision => this.precision;
 
-        public byte Scale
-        {
-            get
-            {
-                return this.scale;
-            }
-        }
+        public byte Scale => this.scale;
     }
 }

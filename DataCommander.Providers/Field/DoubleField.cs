@@ -9,15 +9,9 @@ namespace DataCommander.Providers
 			this.value = value;
 		}
 
-		public double Value
-		{
-			get
-			{
-				return this.value;
-			}
-		}
+		public double Value => this.value;
 
-		public override string ToString()
+        public override string ToString()
 		{
 			return this.value.ToString( "N16", CultureInfo.InvariantCulture );
 		}

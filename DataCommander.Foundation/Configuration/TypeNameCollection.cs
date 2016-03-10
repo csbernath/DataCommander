@@ -161,21 +161,9 @@ namespace DataCommander.Foundation.Configuration
                 this.type = type;
             }
 
-            public string Name
-            {
-                get
-                {
-                    return this.name;
-                }
-            }
+            public string Name => this.name;
 
-            public Type Type
-            {
-                get
-                {
-                    return this.type;
-                }
-            }
+            public Type Type => this.type;
         }
 
         private static class TypeName
@@ -210,13 +198,7 @@ namespace DataCommander.Foundation.Configuration
             {
             }
 
-            public static TypeEqualityComparer Instance
-            {
-                get
-                {
-                    return instance;
-                }
-            }
+            public static TypeEqualityComparer Instance => instance;
 
             #region IEqualityComparer<Type> Members
 

@@ -17,23 +17,11 @@
         /// <summary>
         /// 
         /// </summary>
-        public DocumentPropertyId Id
-        {
-            get
-            {
-                return this.id;
-            }
-        }
+        public DocumentPropertyId Id => this.id;
 
         /// <summary>
         /// 
         /// </summary>
-        public object Value
-        {
-            get
-            {
-                return this.value;
-            }
-        }
+        public object Value => this.value;
     }
 }

@@ -57,13 +57,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public object Value
-        {
-            get
-            {
-                return this.sqlXml;
-            }
-        }
+        public object Value => this.sqlXml;
 
         /// <summary>
         /// 

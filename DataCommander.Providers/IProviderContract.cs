@@ -109,13 +109,7 @@
             throw new NotImplementedException();
         }
 
-        IObjectExplorer IProvider.ObjectExplorer
-        {
-            get
-            {
-                return null;
-            }
-        }
+        IObjectExplorer IProvider.ObjectExplorer => null;
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {
@@ -159,6 +153,11 @@
         }
 
         List<Statement> IProvider.GetStatements(string commandText)
+        {
+            throw new NotImplementedException();
+        }
+
+        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder()
         {
             throw new NotImplementedException();
         }

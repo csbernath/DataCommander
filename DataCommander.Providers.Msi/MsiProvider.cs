@@ -11,13 +11,7 @@
     {
         #region IProvider Members
 
-        bool IProvider.CanConvertCommandToString
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IProvider.CanConvertCommandToString => false;
 
         //public Type ToDataType(int providerType, int columnSize)
         //{
@@ -88,45 +82,15 @@
 
         #endregion
 
-        string IProvider.Name
-        {
-            get
-            {
-                return "Msi";
-            }
-        }
+        string IProvider.Name => "Msi";
 
-        DbProviderFactory IProvider.DbProviderFactory
-        {
-            get
-            {
-                return MsiProviderFactory.Instance;
-            }
-        }
+        DbProviderFactory IProvider.DbProviderFactory => MsiProviderFactory.Instance;
 
-        string[] IProvider.KeyWords
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string[] IProvider.KeyWords => null;
 
-        bool IProvider.IsCommandCancelable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IProvider.IsCommandCancelable => false;
 
-        IObjectExplorer IProvider.ObjectExplorer
-        {
-            get
-            {
-                return new MsiObjectExplorer();
-            }
-        }
+        IObjectExplorer IProvider.ObjectExplorer => new MsiObjectExplorer();
 
         void IProvider.ClearCompletionCache()
         {
@@ -209,6 +173,11 @@
         List<InfoMessage> IProvider.ToInfoMessages(Exception e)
         {
             throw new NotImplementedException();
+        }
+
+        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder()
+        {
+            return new ConnectionStringBuilder();
         }
     }
 }

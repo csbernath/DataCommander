@@ -17,31 +17,13 @@ namespace DataCommander.Providers.SQLite
             this.name = name;
         }
 
-        public DatabaseNode Database
-        {
-            get
-            {
-                return this.databaseNode;
-            }
-        }
+        public DatabaseNode Database => this.databaseNode;
 
         #region ITreeNode Members
 
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name => this.name;
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -50,21 +32,9 @@ namespace DataCommander.Providers.SQLite
             return treeNodes;
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return $"select\t*\r\nfrom\t{this.databaseNode.Name}.{this.name}";
-            }
-        }
+        string ITreeNode.Query => $"select\t*\r\nfrom\t{this.databaseNode.Name}.{this.name}";
 
         private static string GetScript(
             SQLiteConnection connection,

@@ -99,13 +99,7 @@ namespace DataCommander.Foundation.Diagnostics
 
         #region ILogFile Members
 
-        public string FileName
-        {
-            get
-            {
-                return this.fileName;
-            }
-        }
+        public string FileName => this.fileName;
 
         void ILogFile.Open()
         {

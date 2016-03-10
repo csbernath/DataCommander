@@ -21,13 +21,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public ConfigurationNode RootNode
-        {
-            get
-            {
-                return this.rootNode;
-            }
-        }
+        public ConfigurationNode RootNode => this.rootNode;
 
         /// <summary>
         /// 

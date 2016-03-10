@@ -33,29 +33,11 @@ namespace DataCommander.Providers
 
         #region IAsyncDataAdapter Members
 
-        IResultWriter IAsyncDataAdapter.ResultWriter
-        {
-            get
-            {
-                return this.resultWriter;
-            }
-        }
+        IResultWriter IAsyncDataAdapter.ResultWriter => this.resultWriter;
 
-        long IAsyncDataAdapter.RowCount
-        {
-            get
-            {
-                return this.rowCount;
-            }
-        }
+        long IAsyncDataAdapter.RowCount => this.rowCount;
 
-        int IAsyncDataAdapter.TableCount
-        {
-            get
-            {
-                return this.tableCount;
-            }
-        }
+        int IAsyncDataAdapter.TableCount => this.tableCount;
 
         void IAsyncDataAdapter.BeginFill(
             IProvider provider,
@@ -252,19 +234,20 @@ namespace DataCommander.Providers
                 try
                 {
                     dataReader = command.ExecuteReader();
-                    this.resultWriter.AfterExecuteReader();
+                    int fieldCount = dataReader.FieldCount;
+                    this.resultWriter.AfterExecuteReader(fieldCount);
                     int tableIndex = 0;
 
                     while (!this.thread.IsStopRequested)
                     {
-                        DataTable schemaTable = dataReader.GetSchemaTable();
-                        if (schemaTable != null)
+                        if (fieldCount > 0)
                         {
-                            log.Trace("schemaTable:\r\n{0}", schemaTable.ToStringTable());
-                        }
+                            DataTable schemaTable = dataReader.GetSchemaTable();
+                            if (schemaTable != null)
+                            {
+                                log.Trace("schemaTable:\r\n{0}", schemaTable.ToStringTable());
+                            }
 
-                        if (schemaTable != null)
-                        {
                             this.ReadTable(dataReader, schemaTable, tableIndex);
                         }
 

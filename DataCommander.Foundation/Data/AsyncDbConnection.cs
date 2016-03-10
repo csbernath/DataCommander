@@ -71,13 +71,7 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public ConnectionState State
-        {
-            get
-            {
-                return this.cloneableConnection.State;
-            }
-        }
+        public ConnectionState State => this.cloneableConnection.State;
 
         /// <summary>
         /// 
@@ -125,24 +119,12 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public string Database
-        {
-            get
-            {
-                return this.cloneableConnection.Database;
-            }
-        }
+        public string Database => this.cloneableConnection.Database;
 
         /// <summary>
         /// 
         /// </summary>
-        public int ConnectionTimeout
-        {
-            get
-            {
-                return this.cloneableConnection.ConnectionTimeout;
-            }
-        }
+        public int ConnectionTimeout => this.cloneableConnection.ConnectionTimeout;
 
         #endregion
 

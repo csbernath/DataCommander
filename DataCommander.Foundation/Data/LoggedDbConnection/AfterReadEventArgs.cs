@@ -19,12 +19,6 @@
         /// <summary>
         /// 
         /// </summary>
-        public int RowCount
-        {
-            get
-            {
-                return this.rowCount;
-            }
-        }
+        public int RowCount => this.rowCount;
     }
 }

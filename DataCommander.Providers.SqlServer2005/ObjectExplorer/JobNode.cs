@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Providers.SqlServer2005
+﻿namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System;
     using System.Collections.Generic;
@@ -7,8 +7,8 @@
     using System.Diagnostics.Contracts;
     using System.Threading;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data.SqlClient;
     using Foundation.Data;
+    using Foundation.Data.SqlClient;
 
     /// <summary>
     /// TODO: Update summary.
@@ -29,34 +29,16 @@
 
         #region ITreeNode Members
 
-        string ITreeNode.Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        string ITreeNode.Name => this.name;
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool ITreeNode.IsLeaf => true;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             throw new NotImplementedException();
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
         string ITreeNode.Query
         {
@@ -77,13 +59,7 @@
             }
         }
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        ContextMenuStrip ITreeNode.ContextMenu => null;
 
         #endregion
     }

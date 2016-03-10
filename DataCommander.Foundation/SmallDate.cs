@@ -71,35 +71,17 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Year
-        {
-            get
-            {
-                return ToDateTime(this.value).Year;
-            }
-        }
+        public int Year => ToDateTime(this.value).Year;
 
         /// <summary>
         /// 
         /// </summary>
-        public int Month
-        {
-            get
-            {
-                return ToDateTime(this.value).Month;
-            }
-        }
+        public int Month => ToDateTime(this.value).Month;
 
         /// <summary>
         /// 
         /// </summary>
-        public int Day
-        {
-            get
-            {
-                return ToDateTime(this.value).Day;
-            }
-        }
+        public int Day => ToDateTime(this.value).Day;
 
         /// <summary>
         /// 

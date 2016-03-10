@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.SqlServer2005
+namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data;
@@ -13,21 +13,9 @@ namespace DataCommander.Providers.SqlServer2005
             this.database = database;
         }
 
-        public string Name
-        {
-            get
-            {
-                return "Scalar-valued Functions";
-            }
-        }
+        public string Name => "Scalar-valued Functions";
 
-        public bool IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -56,29 +44,11 @@ order by 1,2";
                 });
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
-        public string Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public string Query => null;
 
-        public ContextMenuStrip ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public ContextMenuStrip ContextMenu => null;
 
         readonly DatabaseNode database;
     }

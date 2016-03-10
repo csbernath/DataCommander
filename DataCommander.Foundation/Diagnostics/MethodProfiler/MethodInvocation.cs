@@ -22,37 +22,13 @@
             this.beginTime = beginTime;
         }
 
-        public MethodInvocation Parent
-        {
-            get
-            {
-                return this.parent;
-            }
-        }
+        public MethodInvocation Parent => this.parent;
 
-        public int Id
-        {
-            get
-            {
-                return this.id;
-            }
-        }
+        public int Id => this.id;
 
-        public int MethodId
-        {
-            get
-            {
-                return this.methodId;
-            }
-        }
+        public int MethodId => this.methodId;
 
-        public long BeginTime
-        {
-            get
-            {
-                return this.beginTime;
-            }
-        }
+        public long BeginTime => this.beginTime;
 
         public long EndTime
         {

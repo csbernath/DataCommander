@@ -146,13 +146,7 @@
             }
         }
 
-        int IDbConnection.ConnectionTimeout
-        {
-            get
-            {
-                return this.connection.ConnectionTimeout;
-            }
-        }
+        int IDbConnection.ConnectionTimeout => this.connection.ConnectionTimeout;
 
         IDbCommand IDbConnection.CreateCommand()
         {
@@ -160,13 +154,7 @@
             return new LoggedDbCommand( command, this.beforeExecuteCommand, this.afterExecuteCommand, this.afterRead );
         }
 
-        string IDbConnection.Database
-        {
-            get
-            {
-                return this.connection.Database;
-            }
-        }
+        string IDbConnection.Database => this.connection.Database;
 
         void IDbConnection.Open()
         {
@@ -200,13 +188,7 @@
             }
         }
 
-        ConnectionState IDbConnection.State
-        {
-            get
-            {
-                return this.connection.State;
-            }
-        }
+        ConnectionState IDbConnection.State => this.connection.State;
 
         #endregion
 

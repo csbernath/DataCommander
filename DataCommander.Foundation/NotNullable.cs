@@ -25,13 +25,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public bool HasValue
-        {
-            get
-            {
-                return this.value != null;
-            }
-        }
+        public bool HasValue => this.value != null;
 
         /// <summary>
         /// 

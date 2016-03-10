@@ -50,10 +50,10 @@
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
 
-        void IResultWriter.AfterExecuteReader()
+        void IResultWriter.AfterExecuteReader(int fieldCount)
         {
             long duration = Stopwatch.GetTimestamp() - this.beforeExecuteReaderTimestamp;
-            string message = $"Command[{this.commandCount - 1}] started in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
+            string message = $"Command[{this.commandCount - 1}] started in {StopwatchTimeSpan.ToString(duration, 3)} seconds. Field count: {fieldCount}";
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
             this.tableCount = 0;
         }

@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Providers.Odp
+﻿namespace DataCommander.Providers.Odp.ObjectExplorer
 {
     using System;
     using System.Collections.Generic;
@@ -17,23 +17,11 @@
 
 		#region ITreeNode Members
 
-		string ITreeNode.Name
-		{
-			get
-			{
-				return this.name;
-			}
-		}
+		string ITreeNode.Name => this.name;
 
-		bool ITreeNode.IsLeaf
-		{
-			get
-			{
-				return true;
-			}
-		}
+        bool ITreeNode.IsLeaf => true;
 
-		IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
 		{
 			throw new NotImplementedException();
 		}

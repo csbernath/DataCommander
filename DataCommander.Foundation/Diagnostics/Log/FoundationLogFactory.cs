@@ -223,13 +223,7 @@
                 this.logWriters = logWriters.ToArray();
             }
 
-            public LogWriter[] LogWriters
-            {
-                get
-                {
-                    return this.logWriters;
-                }
-            }
+            public LogWriter[] LogWriters => this.logWriters;
 
             #region IDisposable Members
 

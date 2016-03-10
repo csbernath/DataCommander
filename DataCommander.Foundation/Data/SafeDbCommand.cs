@@ -156,13 +156,7 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public IDataParameterCollection Parameters
-        {
-            get
-            {
-                return this.command.Parameters;
-            }
-        }
+        public IDataParameterCollection Parameters => this.command.Parameters;
 
         /// <summary>
         /// 
@@ -199,12 +193,6 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public IDbCommand Command
-        {
-            get
-            {
-                return this.command;
-            }
-        }
+        public IDbCommand Command => this.command;
     }
 }

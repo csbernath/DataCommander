@@ -28,7 +28,7 @@ namespace DataCommander.Providers.Odp
 				overload = "= '" + overload + "'";
 			}
 
-			string commandText = @"select	argument_name,
+			const string format = @"select	argument_name,
 	data_type,
 	default_value,
 	in_out,
@@ -42,8 +42,8 @@ where	owner			= '{0}'
     and overload		{3}
 	--and data_level = 0
 order by overload,position";
-			commandText = string.Format( commandText, owner, packageName, objectName, overload );
-			var command = new OracleCommand( commandText, connection );
+		    string commandText = string.Format(format, owner, packageName, objectName, overload);
+		    var command = new OracleCommand(commandText, connection);
 
 			using (OracleDataReader dataReader = command.ExecuteReader())
 			{

@@ -9,42 +9,14 @@ namespace DataCommander.Providers.OleDb
     using System.Xml;
     using DataCommander.Foundation.Data;
 
-    internal sealed class DataParameterImp : DataParameterBase
-    {
-        public DataParameterImp(OleDbParameter parameter)
-            : base(parameter, parameter.Size, parameter.Precision, parameter.Scale)
-        {
-            this.parameter = parameter;
-        }
-
-        protected override void SetSize(int size)
-        {
-            this.parameter.Size = size;
-        }
-
-        private readonly OleDbParameter parameter;
-    }
-
     internal sealed class OleDbProvider : IProvider
     {
         private string connectionString;
         private static string[] keyWords;
 
-        string IProvider.Name
-        {
-            get
-            {
-                return ProviderName.OleDb;
-            }
-        }
+        string IProvider.Name => ProviderName.OleDb;
 
-        DbProviderFactory IProvider.DbProviderFactory
-        {
-            get
-            {
-                return OleDbFactory.Instance;
-            }
-        }
+        DbProviderFactory IProvider.DbProviderFactory => OleDbFactory.Instance;
 
         public ConnectionBase CreateConnection(string connectionString)
         {
@@ -63,21 +35,9 @@ namespace DataCommander.Providers.OleDb
             }
         }
 
-        bool IProvider.CanConvertCommandToString
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IProvider.CanConvertCommandToString => false;
 
-        bool IProvider.IsCommandCancelable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IProvider.IsCommandCancelable => false;
 
         public void DeriveParameters(IDbCommand command)
         {
@@ -281,13 +241,7 @@ namespace DataCommander.Providers.OleDb
             return null;
         }
 
-        public IObjectExplorer ObjectBrowser
-        {
-            get
-            {
-                return new ObjectExplorer();
-            }
-        }
+        public IObjectExplorer ObjectBrowser => new ObjectExplorer();
 
         public void ClearCompletionCache()
         {
@@ -310,13 +264,7 @@ namespace DataCommander.Providers.OleDb
             return new Connection(connectionString);
         }
 
-        string[] IProvider.KeyWords
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string[] IProvider.KeyWords => null;
 
         void IProvider.DeriveParameters(IDbCommand command)
         {
@@ -353,13 +301,7 @@ namespace DataCommander.Providers.OleDb
             throw new NotImplementedException();
         }
 
-        IObjectExplorer IProvider.ObjectExplorer
-        {
-            get
-            {
-                return new ObjectExplorer();
-            }
-        }
+        IObjectExplorer IProvider.ObjectExplorer => new ObjectExplorer();
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text,
             int position)
@@ -414,6 +356,11 @@ namespace DataCommander.Providers.OleDb
                     CommandText = commandText
                 }
             };
+        }
+
+        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder()
+        {
+            return new ConnectionStringBuilder();
         }
 
         #endregion

@@ -20,12 +20,6 @@ namespace DataCommander.Providers.Wmi
             };
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
     }
 }

@@ -41,13 +41,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public int QueuedItemCount
-        {
-            get
-            {
-                return this.queue.Count;
-            }
-        }
+        public int QueuedItemCount => this.queue.Count;
 
         internal bool Dequeue( WaitCallback callback, WaitHandle[] waitHandles )
         {
@@ -84,42 +78,18 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public WorkerThreadPoolDequeuerCollection Dequeuers
-        {
-            get
-            {
-                return this.dequeuers;
-            }
-        }
+        public WorkerThreadPoolDequeuerCollection Dequeuers => this.dequeuers;
 
         /// <summary>
         /// 
         /// </summary>
-        public int ActiveThreadCount
-        {
-            get
-            {
-                return this.activeThreadCount;
-            }
-        }
+        public int ActiveThreadCount => this.activeThreadCount;
 
-        internal AutoResetEvent EnqueueEvent
-        {
-            get
-            {
-                return this.enqueueEvent;
-            }
-        }
+        internal AutoResetEvent EnqueueEvent => this.enqueueEvent;
 
         /// <summary>
         /// 
         /// </summary>
-        public int MaxThreadCount
-        {
-            get
-            {
-                return this.maxThreadCount;
-            }
-        }
+        public int MaxThreadCount => this.maxThreadCount;
     }
 }

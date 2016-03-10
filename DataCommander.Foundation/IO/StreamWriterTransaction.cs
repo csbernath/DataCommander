@@ -52,13 +52,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public StreamWriter Writer
-        {
-            get
-            {
-                return this.streamWriter;
-            }
-        }
+        public StreamWriter Writer => this.streamWriter;
 
         /// <summary>
         /// 

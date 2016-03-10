@@ -15,12 +15,12 @@
         /// <param name="xmlWriter"></param>
         /// <param name="localName"></param>
         /// <returns></returns>
-        public static IDisposable WriteElement( this XmlWriter xmlWriter, string localName )
+        public static IDisposable WriteElement(this XmlWriter xmlWriter, string localName)
         {
-            Contract.Requires( xmlWriter != null );
+            Contract.Requires<ArgumentNullException>(xmlWriter != null);
 
-            xmlWriter.WriteStartElement( localName );
-            return new Disposer( xmlWriter.WriteEndElement );
+            xmlWriter.WriteStartElement(localName);
+            return new Disposer(xmlWriter.WriteEndElement);
         }
 
         /// <summary>
@@ -31,12 +31,12 @@
         /// <param name="localName"></param>
         /// <param name="ns"></param>
         /// <returns></returns>
-        public static IDisposable WriteElement( this XmlWriter xmlWriter, string prefix, string localName, string ns )
+        public static IDisposable WriteElement(this XmlWriter xmlWriter, string prefix, string localName, string ns)
         {
-            Contract.Requires( xmlWriter != null );
+            Contract.Requires<ArgumentNullException>(xmlWriter != null);
 
-            xmlWriter.WriteStartElement( prefix, localName, ns );
-            return new Disposer( xmlWriter.WriteEndElement );
+            xmlWriter.WriteStartElement(prefix, localName, ns);
+            return new Disposer(xmlWriter.WriteEndElement);
         }
     }
 }

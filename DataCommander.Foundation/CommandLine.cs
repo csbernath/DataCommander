@@ -41,24 +41,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public ListIndex<CommandLineArgument> ListIndex
-        {
-            get
-            {
-                return this.listIndex;
-            }
-        }
+        public ListIndex<CommandLineArgument> ListIndex => this.listIndex;
 
         /// <summary>
         /// 
         /// </summary>
-        public NonUniqueIndex<string, CommandLineArgument> NameIndex
-        {
-            get
-            {
-                return this.nameIndex;
-            }
-        }
+        public NonUniqueIndex<string, CommandLineArgument> NameIndex => this.nameIndex;
 
         #region Private Methods
 

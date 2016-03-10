@@ -24,20 +24,8 @@ namespace DataCommander.Foundation.Data
             this.transaction = transaction;
         }
 
-        IDbConnection IDbTransactionScope.Connection
-        {
-            get
-            {
-                return this.connection;
-            }
-        }
+        IDbConnection IDbTransactionScope.Connection => this.connection;
 
-        IDbTransaction IDbTransactionScope.Transaction
-        {
-            get
-            {
-                return this.transaction;
-            }
-        }
+        IDbTransaction IDbTransactionScope.Transaction => this.transaction;
     }
 }

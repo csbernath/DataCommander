@@ -91,13 +91,7 @@ namespace DataCommander.Foundation.Text
         /// <summary>
         /// 
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.columns.Count;
-            }
-        }
+        public int Count => this.columns.Count;
 
         /// <summary>
         /// 

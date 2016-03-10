@@ -6,13 +6,7 @@
     {
         private static readonly TfsProviderFactory instance = new TfsProviderFactory();
 
-        public static TfsProviderFactory Instance
-        {
-            get
-            {
-                return instance;
-            }
-        }
+        public static TfsProviderFactory Instance => instance;
 
         public override DbConnectionStringBuilder CreateConnectionStringBuilder()
         {

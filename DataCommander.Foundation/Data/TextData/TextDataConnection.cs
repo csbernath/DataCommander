@@ -117,12 +117,6 @@
         /// <summary>
         /// 
         /// </summary>
-        public override ConnectionState State
-        {
-            get
-            {
-                return ConnectionState.Open;
-            }
-        }
+        public override ConnectionState State => ConnectionState.Open;
     }
 }

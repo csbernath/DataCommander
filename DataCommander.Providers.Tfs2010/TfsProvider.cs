@@ -91,21 +91,9 @@
 
         #region IProvider Members
 
-        string IProvider.Name
-        {
-            get
-            {
-                return "Tfs";
-            }
-        }
+        string IProvider.Name => "Tfs";
 
-        DbProviderFactory IProvider.DbProviderFactory
-        {
-            get
-            {
-                return TfsProviderFactory.Instance;
-            }
-        }
+        DbProviderFactory IProvider.DbProviderFactory => TfsProviderFactory.Instance;
 
         ConnectionBase IProvider.CreateConnection(string connectionString)
         {
@@ -131,21 +119,9 @@
             }
         }
 
-        bool IProvider.CanConvertCommandToString
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IProvider.CanConvertCommandToString => false;
 
-        bool IProvider.IsCommandCancelable
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool IProvider.IsCommandCancelable => true;
 
         void IProvider.DeriveParameters(IDbCommand command)
         {

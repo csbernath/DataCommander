@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Providers.SqlServer2005
+﻿namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Windows.Forms;
@@ -67,13 +67,7 @@
             this.userTypeName = userTypeName;
         }
 
-        public int Id
-        {
-            get
-            {
-                return this.id;
-            }
-        }
+        public int Id => this.id;
 
         public bool IsPrimaryKey
         {
@@ -136,42 +130,18 @@
             }
         }
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool ITreeNode.IsLeaf => true;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
         {
             return null;
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        ContextMenuStrip ITreeNode.ContextMenu => null;
 
         #endregion
     }

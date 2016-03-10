@@ -206,13 +206,7 @@ namespace DataCommander.Providers
             this.Close();
         }
 
-        public ListBox ListBox
-        {
-            get
-            {
-                return this.listBox;
-            }
-        }
+        public ListBox ListBox => this.listBox;
 
         public bool HandleKeyDown(KeyEventArgs e)
         {

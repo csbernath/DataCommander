@@ -9,7 +9,38 @@
     using DataCommander.Foundation;
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Data.SqlClient;
+    using Foundation.Collections;
     using Foundation.Text;
+
+    internal enum FieldType
+    {
+        None,
+        Guid,
+        String,
+        StringArray,
+        BinaryField,
+        StringField,
+        DateTimeField,
+        StreamField
+    }
+
+    internal static class FieldTypeDictionary
+    {
+        private static readonly TypeDictionary<FieldType> typeDictionary = new TypeDictionary<FieldType>();
+
+        static FieldTypeDictionary()
+        {
+            typeDictionary.Add<Guid>(FieldType.Guid);
+            typeDictionary.Add<string>(FieldType.String);
+            typeDictionary.Add<string[]>(FieldType.StringArray);
+            typeDictionary.Add<BinaryField>(FieldType.BinaryField);
+            typeDictionary.Add<DateTimeField>(FieldType.DateTimeField);
+            typeDictionary.Add<StreamField>(FieldType.StreamField);
+            typeDictionary.Add<StringField>(FieldType.StringField);
+        }
+
+        public static TypeDictionary<FieldType> Instance => typeDictionary;
+    }
 
     internal sealed class InsertScriptFileWriter : IResultWriter
     {
@@ -145,32 +176,33 @@
             if (value != null)
             {
                 Type type = value.GetType();
+                var fieldType = FieldTypeDictionary.Instance.GetValueOrDefault(type);
 
-                Selection.CreateTypeIsSelection(type)
-                    .IfTypeIs<Guid>(() =>
-                    {
+                switch (fieldType)
+                {
+                    case FieldType.Guid:
                         s = "'" + value.ToString() + "'";
-                    })
-                    .IfTypeIs<BinaryField>(() =>
-                    {
+                        break;
+
+                    case FieldType.BinaryField:
                         var binaryField = (BinaryField)value;
                         var sb = new StringBuilder();
                         sb.Append("0x");
                         sb.Append(Hex.Encode(binaryField.Value, true));
                         s = sb.ToString();
-                    })
-                    .IfTypeIs<StringField>(() =>
-                    {
+                        break;
+
+                    case FieldType.StringField:
                         var stringField = (StringField)value;
                         s = stringField.Value.ToTSqlNVarChar();
-                    })
-                    .IfTypeIs<DateTimeField>(() =>
-                    {
+                        break;
+
+                    case FieldType.DateTimeField:
                         var dateTimeField = (DateTimeField)value;
                         s = dateTimeField.Value.ToTSqlDateTime();
-                    })
-                    .Else(() =>
-                    {
+                        break;
+
+                    default:
                         TypeCode typeCode = Type.GetTypeCode(type);
 
                         switch (typeCode)
@@ -239,7 +271,8 @@
                                 }
                                 break;
                         }
-                    });
+                        break;
+                }
             }
             else
             {
@@ -259,7 +292,7 @@
         {
         }
 
-        void IResultWriter.AfterExecuteReader()
+        void IResultWriter.AfterExecuteReader(int fieldCount)
         {
         }
 

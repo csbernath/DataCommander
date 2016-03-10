@@ -34,7 +34,7 @@
         {
         }
 
-        void IResultWriter.AfterExecuteReader()
+        void IResultWriter.AfterExecuteReader(int fieldCount)
         {
             string fileName = Path.GetTempFileName() + ".sdf";
             this.messageWriter.WriteLine(fileName);

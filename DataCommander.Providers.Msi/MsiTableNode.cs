@@ -17,51 +17,21 @@
 
 		#region ITreeNode Members
 
-		string ITreeNode.Name
-		{
-			get
-			{
-				return this.table.Name;
-			}
-		}
+		string ITreeNode.Name => this.table.Name;
 
-		bool ITreeNode.IsLeaf
-		{
-			get
-			{
-				return true;
-			}
-		}
+        bool ITreeNode.IsLeaf => true;
 
-		IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
 		{
 			return null;
 		}
 
-		bool ITreeNode.Sortable
-		{
-			get
-			{
-				return false;
-			}
-		}
+		bool ITreeNode.Sortable => false;
 
-		string ITreeNode.Query
-		{
-			get
-			{
-				return this.table.SqlSelectString;
-			}
-		}
+        string ITreeNode.Query => this.table.SqlSelectString;
 
-		ContextMenuStrip ITreeNode.ContextMenu
-		{
-			get
-			{
-				return null;
-			}
-		}
+        ContextMenuStrip ITreeNode.ContextMenu => null;
 
-		#endregion
+        #endregion
 	}
 }

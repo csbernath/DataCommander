@@ -32,13 +32,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Capacity
-        {
-            get
-            {
-                return this.array.Length;
-            }
-        }
+        public int Capacity => this.array.Length;
 
         /// <summary>
         /// 
@@ -250,21 +244,9 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.count;
-            }
-        }
+        public int Count => this.count;
 
-        bool ICollection<T>.IsReadOnly
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ICollection<T>.IsReadOnly => false;
 
         bool ICollection<T>.Remove(T item)
         {

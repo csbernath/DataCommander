@@ -34,13 +34,7 @@ namespace DataCommander.Providers
 
         #region Public Properties
 
-        public DataSet DataSet
-        {
-            get
-            {
-                return this.dataSet;
-            }
-        }
+        public DataSet DataSet => this.dataSet;
 
         #endregion
 
@@ -57,9 +51,9 @@ namespace DataCommander.Providers
             this.logResultWriter.BeforeExecuteReader(command);
         }
 
-        void IResultWriter.AfterExecuteReader()
+        void IResultWriter.AfterExecuteReader(int fieldCount)
         {
-            this.logResultWriter.AfterExecuteReader();
+            this.logResultWriter.AfterExecuteReader(fieldCount);
             this.dataSet = new DataSet();
         }
 

@@ -29,13 +29,7 @@
             this.applicationId = this.sqlLog.ApplicationStart(applicationName, LocalTime.Default.Now, false);
         }
 
-        WorkerThread IDbConnectionFactory.Thread
-        {
-            get
-            {
-                return this.sqlLog.Thread;
-            }
-        }
+        WorkerThread IDbConnectionFactory.Thread => this.sqlLog.Thread;
 
         IDbConnection IDbConnectionFactory.CreateConnection(
             string connectionString,

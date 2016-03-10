@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Providers.SqlServer2005
+﻿namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System;
     using System.Collections.Generic;
@@ -16,13 +16,7 @@
             this.connectionString = connectionString;
         }
 
-        public string ConnectionString
-        {
-            get
-            {
-                return this.connectionString;
-            }
-        }
+        public string ConnectionString => this.connectionString;
 
         #region ITreeNode Members
 
@@ -52,13 +46,7 @@
             }
         }
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -69,29 +57,11 @@
             return new ITreeNode[] {node, securityNode, serverObjectCollectionNode, jobCollectionNode};
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        ContextMenuStrip ITreeNode.ContextMenu => null;
 
         #endregion
     }

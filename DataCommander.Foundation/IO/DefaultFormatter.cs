@@ -6,13 +6,7 @@
     {
         private static readonly DefaultFormatter instance = new DefaultFormatter();
 
-        public static DefaultFormatter Instance
-        {
-            get
-            {
-                return instance;
-            }
-        }
+        public static DefaultFormatter Instance => instance;
 
         void IFormatter.AppendTo(StringBuilder sb, object[] args)
         {

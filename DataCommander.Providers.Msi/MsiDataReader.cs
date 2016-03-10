@@ -22,15 +22,9 @@
 			this.view = this.command.Connection.Database.OpenView( this.command.CommandText );
 		}
 
-		public View View
-		{
-			get
-			{
-				return this.view;
-			}
-		}
+		public View View => this.view;
 
-		#region IDataReader Members
+        #region IDataReader Members
 
 		void IDataReader.Close()
 		{
@@ -104,15 +98,9 @@
 			return read;
 		}
 
-		int IDataReader.RecordsAffected
-		{
-			get
-			{
-				return this.recordsAffected;
-			}
-		}
+		int IDataReader.RecordsAffected => this.recordsAffected;
 
-		#endregion
+        #endregion
 
 		#region IDisposable Members
 
@@ -133,15 +121,9 @@
 
 		#region IDataRecord Members
 
-		int IDataRecord.FieldCount
-		{
-			get
-			{
-				return this.view.Columns.Count;
-			}
-		}
+		int IDataRecord.FieldCount => this.view.Columns.Count;
 
-		bool IDataRecord.GetBoolean( int i )
+        bool IDataRecord.GetBoolean( int i )
 		{
 			throw new NotImplementedException();
 		}
@@ -280,14 +262,8 @@
 			}
 		}
 
-		object IDataRecord.this[ int i ]
-		{
-			get
-			{
-				return this.GetValue( i );
-			}
-		}
+		object IDataRecord.this[ int i ] => this.GetValue( i );
 
-		#endregion
+        #endregion
 	}
 }

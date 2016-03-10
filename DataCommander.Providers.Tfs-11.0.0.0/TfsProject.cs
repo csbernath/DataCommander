@@ -28,15 +28,9 @@
             }
         }
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.IsLeaf => false;
 
-		internal static IEnumerable<ITreeNode> GetChildren( Item item )
+        internal static IEnumerable<ITreeNode> GetChildren( Item item )
 		{			
             Contract.Requires(item != null);
 			ItemSet itemSet = item.VersionControlServer.GetItems( item.ServerItem, RecursionType.OneLevel );
@@ -72,29 +66,11 @@
 			return GetChildren( this.item );
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return this.item.ServerItem;
-            }
-        }
+        string ITreeNode.Query => this.item.ServerItem;
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        ContextMenuStrip ITreeNode.ContextMenu => null;
 
         #endregion
 

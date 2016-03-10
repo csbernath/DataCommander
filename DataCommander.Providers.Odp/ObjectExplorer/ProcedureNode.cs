@@ -1,11 +1,11 @@
-namespace DataCommander.Providers.Odp
+namespace DataCommander.Providers.Odp.ObjectExplorer
 {
     using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Text;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
+    using Foundation.Data;
 
     internal sealed class ProcedureNode : ITreeNode
     {
@@ -23,34 +23,16 @@ namespace DataCommander.Providers.Odp
             this.name = name;
         }
 
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-        }
+        public string Name => name;
 
-        public bool IsLeaf
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public bool IsLeaf => true;
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             return null;
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
         public string Query
         {

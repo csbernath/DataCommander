@@ -31,7 +31,7 @@ namespace DataCommander.Providers
         {
         }
 
-        void IResultWriter.AfterExecuteReader()
+        void IResultWriter.AfterExecuteReader(int fieldCount)
         {
         }
 

@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Connection.cs" />
+    <Compile Include="ConnectionStringBuilder.cs" />
     <Compile Include="ObjectExplorer\DatabaseNode.cs" />
     <Compile Include="ObjectExplorer\DatabaseCollectionNode.cs" />
     <Compile Include="ObjectExplorer\IndexCollectionNode.cs" />

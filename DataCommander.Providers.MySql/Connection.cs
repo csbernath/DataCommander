@@ -42,13 +42,7 @@
             }
         }
 
-        public override string Caption
-        {
-            get
-            {
-                return this.connectionName;
-            }
-        }
+        public override string Caption => this.connectionName;
 
         public override string DataSource
         {
@@ -65,20 +59,8 @@
             throw new NotImplementedException();
         }
 
-        public override string ServerVersion
-        {
-            get
-            {
-                return this.mySqlConnection.ServerVersion;
-            }
-        }
+        public override string ServerVersion => this.mySqlConnection.ServerVersion;
 
-        public override int TransactionCount
-        {
-            get
-            {
-                return 0; // TODO
-            }
-        }
+        public override int TransactionCount => 0;
     }
 }

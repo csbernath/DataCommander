@@ -128,13 +128,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override int Count
-        {
-            get
-            {
-                return this.collection.Count;
-            }
-        }
+        public override int Count => this.collection.Count;
 
         /// <summary>
         /// 
@@ -370,21 +364,9 @@
             throw new NotImplementedException();
         }
 
-        int ICollection<TextDataParameter>.Count
-        {
-            get
-            {
-                return this.collection.Count;
-            }
-        }
+        int ICollection<TextDataParameter>.Count => this.collection.Count;
 
-        bool ICollection<TextDataParameter>.IsReadOnly
-        {
-            get
-            {
-                return this.collection.IsReadOnly;
-            }
-        }
+        bool ICollection<TextDataParameter>.IsReadOnly => this.collection.IsReadOnly;
 
         bool ICollection<TextDataParameter>.Remove( TextDataParameter item )
         {

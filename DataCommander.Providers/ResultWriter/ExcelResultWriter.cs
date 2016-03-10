@@ -42,9 +42,9 @@
             this.logResultWriter.BeforeExecuteReader(command);
         }
 
-        void IResultWriter.AfterExecuteReader()
+        void IResultWriter.AfterExecuteReader(int fieldCount)
         {
-            this.logResultWriter.AfterExecuteReader();
+            this.logResultWriter.AfterExecuteReader(fieldCount);
 
             string fileName = Path.GetTempFileName() + ".xlsx";
             this.excelPackage = new ExcelPackage(new FileInfo(fileName));

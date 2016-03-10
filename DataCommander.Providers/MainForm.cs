@@ -764,13 +764,7 @@ namespace DataCommander
             this.CreateRecentFileListMenu();
         }
 
-        public StatusStrip StatusBar
-        {
-            get
-            {
-                return this.statusBar;
-            }
-        }
+        public StatusStrip StatusBar => this.statusBar;
 
         private static string Serialize(Font font)
         {
@@ -807,13 +801,7 @@ namespace DataCommander
             }
         }
 
-        public Font SelectedFont
-        {
-            get
-            {
-                return this.font;
-            }
-        }
+        public Font SelectedFont => this.font;
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
@@ -851,7 +839,7 @@ namespace DataCommander
 
             if (result == DialogResult.OK)
             {
-                sb.Add(ConnectionStringProperty.DataSource, dialog.FileName);
+                sb.Add(ConnectionStringKeyword.DataSource, dialog.FileName);
 
                 string connectionString;
                 string providerName;
@@ -1001,13 +989,7 @@ namespace DataCommander
             this.SaveAll();
         }
 
-        public ToolStripTextBox ActiveMdiChildToolStripTextBox
-        {
-            get
-            {
-                return this.activeMdiChildToolStripTextBox;
-            }
-        }
+        public ToolStripTextBox ActiveMdiChildToolStripTextBox => this.activeMdiChildToolStripTextBox;
 
         private void checkForToolStripMenuItem_Click(object sender, EventArgs e)
         {

@@ -61,13 +61,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public IndexCollection<T> Indexes
-        {
-            get
-            {
-                return this.indexes;
-            }
-        }
+        public IndexCollection<T> Indexes => this.indexes;
 
         [ContractInvariantMethod]
         private void ContractInvariant()

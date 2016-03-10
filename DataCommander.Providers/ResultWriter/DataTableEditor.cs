@@ -63,13 +63,7 @@ namespace DataCommander.Providers
 
         #region Properties
 
-        public DataGridView DataGrid
-        {
-            get
-            {
-                return this.dataGrid;
-            }
-        }
+        public DataGridView DataGrid => this.dataGrid;
 
         public DataTable DataTable
         {
@@ -925,38 +919,39 @@ namespace DataCommander.Providers
             string value = null;
             Encoding encoding = null;
 
-            Selection.CreateArgumentIsSelection(this.cellValue)
-                .IfArgumentIs<StringField>(stringField =>
+            if (this.cellValue.IfAsNotNull(delegate(StringField stringField)
+            {
+                var stringReader = new StringReader(stringField.Value);
+                var xmlTextReader = new XmlTextReader(stringReader);
+                bool isXml;
+
+                try
                 {
-                    var stringReader = new StringReader(stringField.Value);
-                    var xmlTextReader = new XmlTextReader(stringReader);
-                    bool isXml;
+                    bool read = xmlTextReader.Read();
+                    isXml = true;
+                }
+                catch
+                {
+                    isXml = false;
+                }
 
-                    try
-                    {
-                        bool read = xmlTextReader.Read();
-                        isXml = true;
-                    }
-                    catch
-                    {
-                        isXml = false;
-                    }
+                if (isXml)
+                {
+                    saveFileDialog.Filter = "XML files (*.xml)|*.xml";
+                    saveFileDialog.DefaultExt = "xml";
+                    encoding = xmlTextReader.Encoding;
+                }
+                else
+                {
+                    saveFileDialog.Filter = "Text Files (*.txt)|*.txt";
+                    saveFileDialog.DefaultExt = "txt";
+                    encoding = Encoding.UTF8;
+                }
 
-                    if (isXml)
-                    {
-                        saveFileDialog.Filter = "XML files (*.xml)|*.xml";
-                        saveFileDialog.DefaultExt = "xml";
-                        encoding = xmlTextReader.Encoding;
-                    }
-                    else
-                    {
-                        saveFileDialog.Filter = "Text Files (*.txt)|*.txt";
-                        saveFileDialog.DefaultExt = "txt";
-                        encoding = Encoding.UTF8;
-                    }
-
-                    value = stringField.Value;
-                });
+                value = stringField.Value;
+            }))
+            {
+            }
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -1235,26 +1230,24 @@ namespace DataCommander.Providers
 
                         this.cellValue = dataRow[columnNumber];
                         Type type = this.cellValue.GetType();
+                        var fieldType = FieldTypeDictionary.Instance.GetValueOrDefault(type);
 
-                        Selection.CreateArgumentIsSelection(this.cellValue)
-                            .IfArgumentIs<StringField>(stringField =>
-                            {
-                                string value = stringField.Value;
+                        switch (fieldType)
+                        {
+                            case FieldType.StringField:
+                                string value = ((StringField)this.cellValue).Value;
 
                                 if (value != null && value.Length < 256)
                                 {
-                                    rowFilter = $"[{this.columnName}] = '{stringField.Value}'";
+                                    rowFilter = $"[{this.columnName}] = '{value}'";
                                 }
-                            })
-                            .IfArgumentIs<DateTimeField>(dateTimeField =>
-                            {
+                                break;
+
+                            case FieldType.DateTimeField:
                                 rowFilter = null;
-                            })
-                            .IfArgumentIs<StreamField>(streamField =>
-                            {
-                            })
-                            .Else(() =>
-                            {
+                                break;
+
+                            default:
                                 if (this.cellValue == DBNull.Value)
                                 {
                                     rowFilter = $"[{this.columnName}] is null";
@@ -1296,7 +1289,8 @@ namespace DataCommander.Providers
                                             break;
                                     }
                                 }
-                            });
+                                break;
+                        }
 
                         if (rowFilter != null)
                         {
@@ -1306,18 +1300,19 @@ namespace DataCommander.Providers
 
                         if (this.cellValue != DBNull.Value)
                         {
-                            Selection.CreateTypeIsSelection(type)
-                                .IfTypeIs<BinaryField>(() =>
-                                {
+                            switch (fieldType)
+                            {
+                                case FieldType.BinaryField:
                                     menuItem = new ToolStripMenuItem("Save binary field as", null, this.SaveBinaryField_Click);
                                     menu.Items.Add(menuItem);
-                                })
-                                .IfTypeIs<StreamField>(() =>
-                                {
+                                    break;
+
+                                case FieldType.StreamField:
                                     menuItem = new ToolStripMenuItem("Save stream field as", null, this.SaveStreamField_Click);
                                     menu.Items.Add(menuItem);
-                                })
-                                .IfTypeIs<StringField>(() =>
+                                    break;
+
+                                case FieldType.StringField:
                                 {
                                     var stringField = (StringField)this.cellValue;
                                     string value = stringField.Value;
@@ -1331,8 +1326,10 @@ namespace DataCommander.Providers
                                         new EventHandler(this.SaveStringField_Click));
 
                                     menu.Items.Add(menuItem);
-                                })
-                                .IfTypeIs<string>(() =>
+                                }
+                                    break;
+
+                                case FieldType.String:
                                 {
                                     string value = (string)this.cellValue;
                                     int length = value.Length;
@@ -1346,15 +1343,16 @@ namespace DataCommander.Providers
                                         new EventHandler(this.SaveStringField_Click));
 
                                     menu.Items.Add(menuItem);
-                                })
-                                .IfTypeIs<string[]>(() =>
-                                {
+                                }
+                                    break;
+
+                                case FieldType.StringArray:
                                     menuItem = new ToolStripMenuItem("Copy string[] field", null, this.CopyArrayField_Click);
                                     menu.Items.Add(menuItem);
-                                });
+                                    break;
+                            }
                         }
                     }
-
                         break;
 
                     case DataGridViewHitTestType.RowHeader:

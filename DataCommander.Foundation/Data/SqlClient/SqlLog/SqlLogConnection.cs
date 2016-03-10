@@ -62,20 +62,8 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
         }
 
-        public int ApplicationId
-        {
-            get
-            {
-                return this.applicationId;
-            }
-        }
+        public int ApplicationId => this.applicationId;
 
-        public int ConnectionNo
-        {
-            get
-            {
-                return this.connectionNo;
-            }
-        }
+        public int ConnectionNo => this.connectionNo;
     }
 }

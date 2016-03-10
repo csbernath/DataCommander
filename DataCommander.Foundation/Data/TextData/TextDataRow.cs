@@ -65,24 +65,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public object[] ItemArray
-        {
-            get
-            {
-                return this.values;
-            }
-        }
+        public object[] ItemArray => this.values;
 
         /// <summary>
         /// 
         /// </summary>
-        public TextDataColumnCollection Columns
-        {
-            get
-            {
-                return this.columns;
-            }
-        }
+        public TextDataColumnCollection Columns => this.columns;
 
         /// <summary>
         /// 

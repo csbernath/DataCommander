@@ -8,7 +8,7 @@
 
         void BeforeExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand);
 
-        void AfterExecuteReader();
+        void AfterExecuteReader(int fieldCount);
 
         void AfterCloseReader(int affectedRows);
 

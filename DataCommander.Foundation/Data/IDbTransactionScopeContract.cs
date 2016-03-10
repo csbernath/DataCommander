@@ -16,12 +16,6 @@ namespace DataCommander.Foundation.Data
             }
         }
 
-        IDbTransaction IDbTransactionScope.Transaction
-        {
-            get
-            {
-                return null;
-            }
-        }
+        IDbTransaction IDbTransactionScope.Transaction => null;
     }
 }

@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Providers.Odp
+﻿namespace DataCommander.Providers.Odp.ObjectExplorer
 {
     using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
+    using Foundation.Data;
 
     internal sealed class SequenceCollectionNode : ITreeNode
     {
@@ -17,21 +17,9 @@
 
         #region ITreeNode Members
 
-        string ITreeNode.Name
-        {
-            get
-            {
-                return "Sequences";
-            }
-        }
+        string ITreeNode.Name => "Sequences";
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -53,13 +41,7 @@ order by s.SEQUENCE_NAME
                 });
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
         string ITreeNode.Query
         {

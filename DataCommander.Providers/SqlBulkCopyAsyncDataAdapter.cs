@@ -62,21 +62,9 @@ namespace DataCommander.Providers
             }
         }
 
-        long IAsyncDataAdapter.RowCount
-        {
-            get
-            {
-                return this.rowCount;
-            }
-        }
+        long IAsyncDataAdapter.RowCount => this.rowCount;
 
-        int IAsyncDataAdapter.TableCount
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        int IAsyncDataAdapter.TableCount => 1;
 
         void IAsyncDataAdapter.BeginFill(IProvider provider, IEnumerable<AsyncDataAdapterCommand> commands, int maxRecords, int rowBlockSize, IResultWriter resultWriter,
             Action<IAsyncDataAdapter, Exception> endFill, Action<IAsyncDataAdapter> writeEnd)

@@ -45,13 +45,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public static LocalTime Default
-        {
-            get
-            {
-                return DefaultLocalTime;
-            }
-        }
+        public static LocalTime Default => DefaultLocalTime;
 
         /// <summary>
         /// Gets the current date and time on this computer, expressed as the local time.

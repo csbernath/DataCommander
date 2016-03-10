@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.Odp
+namespace DataCommander.Providers.Odp.ObjectExplorer
 {
     using System;
     using System.Collections.Generic;
@@ -16,36 +16,18 @@ namespace DataCommander.Providers.Odp
 			this.name = name;
 		}
 
-		public string Name
-		{
-			get
-			{
-				return this.name;
-			}
-		}
+		public string Name => this.name;
 
-		public bool IsLeaf
-		{
-			get
-			{
-				return true;
-			}
-		}
+        public bool IsLeaf => true;
 
-		public IEnumerable<ITreeNode> GetChildren( bool refresh )
+        public IEnumerable<ITreeNode> GetChildren( bool refresh )
 		{
 			return null;
 		}
 
-		public bool Sortable
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public bool Sortable => false;
 
-		public string Query
+        public string Query
 		{
 			get
 			{

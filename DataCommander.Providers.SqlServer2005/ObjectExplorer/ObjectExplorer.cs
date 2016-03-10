@@ -1,20 +1,14 @@
-namespace DataCommander.Providers.SqlServer2005
+namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data;
-    using DataCommander.Foundation.Linq;
+    using Foundation.Linq;
 
     internal sealed class ObjectExplorer : IObjectExplorer
     {
         private string connectionString;
 
-        public string ConnectionString
-        {
-            get
-            {
-                return this.connectionString;
-            }
-        }
+        public string ConnectionString => this.connectionString;
 
         void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
         {
@@ -26,12 +20,6 @@ namespace DataCommander.Providers.SqlServer2005
             return new ServerNode(this.connectionString).ItemToArray();
         }
 
-        bool IObjectExplorer.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IObjectExplorer.Sortable => false;
     }
 }

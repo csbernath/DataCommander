@@ -10,21 +10,9 @@
     {
         private readonly List<TfsParameter> list = new List<TfsParameter>();
 
-        public TfsParameter this[int index]
-        {
-            get
-            {
-                return this.list[index];
-            }
-        }
+        public TfsParameter this[int index] => this.list[index];
 
-        public TfsParameter this[string parameterName]
-        {
-            get
-            {
-                return this.GetParameter(parameterName);
-            }
-        }
+        public TfsParameter this[string parameterName] => this.GetParameter(parameterName);
 
         public void Add(TfsParameter parameter)
         {
@@ -179,13 +167,7 @@
             throw new NotImplementedException();
         }
 
-        public int Count
-        {
-            get
-            {
-                return this.list.Count;
-            }
-        }
+        public int Count => this.list.Count;
 
         bool ICollection.IsSynchronized
         {

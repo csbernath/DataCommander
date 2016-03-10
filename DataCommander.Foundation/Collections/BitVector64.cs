@@ -24,13 +24,7 @@ namespace DataCommander.Foundation.Collections
         /// 
         /// </summary>
         [CLSCompliant(false)]
-        public UInt64 Value
-        {
-            get
-            {
-                return this.data;
-            }
-        }
+        public UInt64 Value => this.data;
 
         /// <summary>
         /// 

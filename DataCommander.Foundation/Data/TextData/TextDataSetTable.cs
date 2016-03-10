@@ -29,34 +29,16 @@
         /// <summary>
         /// 
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name => this.name;
 
         /// <summary>
         /// 
         /// </summary>
-        public int RowCount
-        {
-            get
-            {
-                return this.rowCount;
-            }
-        }
+        public int RowCount => this.rowCount;
 
         /// <summary>
         /// 
         /// </summary>
-        public TextDataTable Table
-        {
-            get
-            {
-                return this.table;
-            }
-        }
+        public TextDataTable Table => this.table;
     }
 }

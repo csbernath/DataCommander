@@ -64,13 +64,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override int FieldCount
-        {
-            get
-            {
-                return this.columns.Count;
-            }
-        }
+        public override int FieldCount => this.columns.Count;
 
         /// <summary>
         /// 
@@ -391,13 +385,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override int RecordsAffected
-        {
-            get
-            {
-                return this.rowCount;
-            }
-        }
+        public override int RecordsAffected => this.rowCount;
 
         /// <summary>
         /// 
@@ -418,12 +406,6 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override object this[ int ordinal ]
-        {
-            get
-            {
-                return this.values[ ordinal ];
-            }
-        }
+        public override object this[ int ordinal ] => this.values[ ordinal ];
     }
 }

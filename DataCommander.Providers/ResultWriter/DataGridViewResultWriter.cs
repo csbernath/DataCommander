@@ -17,13 +17,7 @@
         {
         }
 
-        public List<DoubleBufferedDataGridView> DataGridViews
-        {
-            get
-            {
-                return this.dataGridViews;
-            }
-        }
+        public List<DoubleBufferedDataGridView> DataGridViews => this.dataGridViews;
 
         #region IResultWriter Members
 
@@ -35,7 +29,7 @@
         {
         }
 
-        void IResultWriter.AfterExecuteReader()
+        void IResultWriter.AfterExecuteReader(int fieldCount)
         {
         }
 

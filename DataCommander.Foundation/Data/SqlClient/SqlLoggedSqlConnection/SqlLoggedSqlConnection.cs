@@ -145,35 +145,17 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <summary>
         /// 
         /// </summary>
-        public int ConnectionTimeout
-        {
-            get
-            {
-                return this.connection.ConnectionTimeout;
-            }
-        }
+        public int ConnectionTimeout => this.connection.ConnectionTimeout;
 
         /// <summary>
         /// 
         /// </summary>
-        public string Database
-        {
-            get
-            {
-                return this.connection.Database;
-            }
-        }
+        public string Database => this.connection.Database;
 
         /// <summary>
         /// 
         /// </summary>
-        public ConnectionState State
-        {
-            get
-            {
-                return this.connection.State;
-            }
-        }
+        public ConnectionState State => this.connection.State;
 
         internal void CommandExeucte(
             IDbCommand command,
@@ -248,42 +230,18 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <summary>
         /// 
         /// </summary>
-        public ISqlLoggedSqlCommandFilter Filter
-        {
-            get
-            {
-                return this.filter;
-            }
-        }
+        public ISqlLoggedSqlCommandFilter Filter => this.filter;
 
         /// <summary>
         /// 
         /// </summary>
-        public string UserName
-        {
-            get
-            {
-                return this.userName;
-            }
-        }
+        public string UserName => this.userName;
 
         /// <summary>
         /// 
         /// </summary>
-        public string HostName
-        {
-            get
-            {
-                return this.hostName;
-            }
-        }
+        public string HostName => this.hostName;
 
-        internal SqlConnection Connection
-        {
-            get
-            {
-                return this.connection;
-            }
-        }
+        internal SqlConnection Connection => this.connection;
     }
 }

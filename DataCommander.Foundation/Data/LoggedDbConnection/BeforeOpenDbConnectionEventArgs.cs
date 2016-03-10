@@ -19,12 +19,6 @@
         /// <summary>
         /// 
         /// </summary>
-        public string ConnectionString
-        {
-            get
-            {
-                return this.connectionString;
-            }
-        }
+        public string ConnectionString => this.connectionString;
     }
 }

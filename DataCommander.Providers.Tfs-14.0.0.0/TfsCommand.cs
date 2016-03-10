@@ -19,13 +19,7 @@
             this.connection = connection;
         }
 
-        public TfsConnection Connection
-        {
-            get
-            {
-                return this.connection;
-            }
-        }
+        public TfsConnection Connection => this.connection;
 
         #region IDbCommand Members
 
@@ -34,13 +28,7 @@
             this.cancelled = true;
         }
 
-        internal bool Cancelled
-        {
-            get
-            {
-                return this.cancelled;
-            }
-        }
+        internal bool Cancelled => this.cancelled;
 
         public string CommandText
         {
@@ -132,21 +120,9 @@
             throw new NotSupportedException();
         }
 
-        IDataParameterCollection IDbCommand.Parameters
-        {
-            get
-            {
-                return this.parameters;
-            }
-        }
+        IDataParameterCollection IDbCommand.Parameters => this.parameters;
 
-        public TfsParameterCollection Parameters
-        {
-            get
-            {
-                return this.parameters;
-            }
-        }
+        public TfsParameterCollection Parameters => this.parameters;
 
         void IDbCommand.Prepare()
         {

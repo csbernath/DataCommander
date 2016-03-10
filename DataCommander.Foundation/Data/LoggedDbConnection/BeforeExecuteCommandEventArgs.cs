@@ -19,12 +19,6 @@
         /// <summary>
         /// 
         /// </summary>
-        public LoggedDbCommandInfo Command
-        {
-            get
-            {
-                return this.command;
-            }
-        }
+        public LoggedDbCommandInfo Command => this.command;
     }
 }

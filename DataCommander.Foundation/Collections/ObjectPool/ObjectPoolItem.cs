@@ -22,28 +22,10 @@ namespace DataCommander.Foundation.Collections
             this.creationDate = creationDate;
         }
 
-        public int Key
-        {
-            get
-            {
-                return this.key;
-            }
-        }
+        public int Key => this.key;
 
-        public T Value
-        {
-            get
-            {
-                return this.value;
-            }
-        }
+        public T Value => this.value;
 
-        public DateTime CreationDate
-        {
-            get
-            {
-                return this.creationDate;
-            }
-        }
+        public DateTime CreationDate => this.creationDate;
     }
 }

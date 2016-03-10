@@ -26,10 +26,7 @@ namespace DataCommander.Foundation.Text
         /// <summary>
         /// 
         /// </summary>
-        public StringTable Table
-        {
-            get { return this.table; }
-        }
+        public StringTable Table => this.table;
 
         /// <summary>
         /// 

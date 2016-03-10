@@ -200,29 +200,11 @@ namespace DataCommander.Providers.Wmi
             return true;
         }
 
-        public int FieldCount
-        {
-            get
-            {
-                return this.fieldCount;
-            }
-        }
+        public int FieldCount => this.fieldCount;
 
-        public object this[string name]
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public object this[string name] => null;
 
-        public object this[int i]
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public object this[int i] => null;
 
         public void Close()
         {
@@ -395,28 +377,10 @@ namespace DataCommander.Providers.Wmi
             return read;
         }
 
-        public int Depth
-        {
-            get
-            {
-                return 0;
-            }
-        }
+        public int Depth => 0;
 
-        public bool IsClosed
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public bool IsClosed => true;
 
-        public int RecordsAffected
-        {
-            get
-            {
-                return 0;
-            }
-        }
+        public int RecordsAffected => 0;
     }
 }

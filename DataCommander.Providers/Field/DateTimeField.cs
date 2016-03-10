@@ -12,13 +12,7 @@ namespace DataCommander.Providers
             this.value = value;
         }
 
-        public DateTime Value
-        {
-            get
-            {
-                return this.value;
-            }
-        }
+        public DateTime Value => this.value;
 
         public static bool TryParse(string s, out DateTime dateTime)
         {

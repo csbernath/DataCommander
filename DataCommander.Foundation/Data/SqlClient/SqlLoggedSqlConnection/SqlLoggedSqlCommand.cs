@@ -72,13 +72,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
         }
 
-        public IDataParameterCollection Parameters
-        {
-            get
-            {
-                return this.command.Parameters;
-            }
-        }
+        public IDataParameterCollection Parameters => this.command.Parameters;
 
         public IDbTransaction Transaction
         {

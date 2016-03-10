@@ -31,24 +31,12 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public int Id
-        {
-            get
-            {
-                return this.id;
-            }
-        }
+        public int Id => this.id;
 
         /// <summary>
         /// 
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name => this.name;
 
         /// <summary>
         /// 
@@ -85,13 +73,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public DateTime CreationTime
-        {
-            get
-            {
-                return this.creationTime;
-            }
-        }
+        public DateTime CreationTime => this.creationTime;
 
         /// <summary>
         /// 
@@ -144,24 +126,12 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public TimeSpan? CompletedTimeSpan
-        {
-            get
-            {
-                return this.completedTime - this.startTime;
-            }
-        }
+        public TimeSpan? CompletedTimeSpan => this.completedTime - this.startTime;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsAlive
-        {
-            get
-            {
-                return this.weakReference.IsAlive;
-            }
-        }
+        public bool IsAlive => this.weakReference.IsAlive;
 
         /// <summary>
         /// 

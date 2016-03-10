@@ -47,24 +47,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public static int TickCount
-        {
-            get
-            {
-                return sharedTickCount;
-            }
-        }
+        public static int TickCount => sharedTickCount;
 
         /// <summary>
         /// 
         /// </summary>
-        public static UniversalTime Default
-        {
-            get
-            {
-                return defaultUniversalTime;
-            }
-        }
+        public static UniversalTime Default => defaultUniversalTime;
 
         /// <summary>
         /// 
@@ -108,12 +96,6 @@
             }
         }
 
-        DateTime IDateTimeProvider.Now
-        {
-            get
-            {
-                return Default.UtcNow;
-            }
-        }
+        DateTime IDateTimeProvider.Now => Default.UtcNow;
     }
 }

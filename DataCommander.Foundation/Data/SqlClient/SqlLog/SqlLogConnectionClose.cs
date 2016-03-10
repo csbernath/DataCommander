@@ -19,12 +19,6 @@ namespace DataCommander.Foundation.Data
             this.endDate = endDate;
         }
 
-        public string CommandText
-        {
-            get
-            {
-                return $"exec LogConnectionClose {this.applicationId},{this.connectionNo},{this.endDate.ToTSqlDateTime()}\r\n";
-            }
-        }
+        public string CommandText => $"exec LogConnectionClose {this.applicationId},{this.connectionNo},{this.endDate.ToTSqlDateTime()}\r\n";
     }
 }

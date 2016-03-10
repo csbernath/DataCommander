@@ -17,23 +17,11 @@ namespace DataCommander.Providers.OracleBase
 			this.schema = schema;
 		}
 
-		public string Name
-		{
-			get
-			{
-				return "Tables";
-			}
-		}
+		public string Name => "Tables";
 
-		public bool IsLeaf
-		{
-			get
-			{
-				return false;
-			}
-		}
+        public bool IsLeaf => false;
 
-		public IEnumerable<ITreeNode> GetChildren( bool refresh )
+        public IEnumerable<ITreeNode> GetChildren( bool refresh )
 		{
 			ConfigurationNode folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
 			string key = schema.SchemasNode.Connection.Database + "." + schema.Name;
@@ -72,29 +60,11 @@ namespace DataCommander.Providers.OracleBase
 			return treeNodes;
 		}
 
-		public bool Sortable
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public bool Sortable => false;
 
-		public string Query
-		{
-			get
-			{
-				return null;
-			}
-		}
+        public string Query => null;
 
-		public ContextMenuStrip ContextMenu
-		{
-			get
-			{
-				return null;
-			}
-		}
+        public ContextMenuStrip ContextMenu => null;
 
         readonly SchemaNode schema;
 	}

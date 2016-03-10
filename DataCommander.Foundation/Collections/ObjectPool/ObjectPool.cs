@@ -62,46 +62,23 @@ namespace DataCommander.Foundation.Collections
         /// <summary>
         /// 
         /// </summary>
-        public int MinSize
-        {
-            get
-            {
-                return this.minSize;
-            }
-        }
+        public int MinSize => this.minSize;
 
         /// <summary>
         /// 
         /// </summary>
-        public int MaxSize
-        {
-            get
-            {
-                return this.maxSize;
-            }
-        }
+        public int MaxSize => this.maxSize;
 
         /// <summary>
         /// 
         /// </summary>
-        public int IdleCount
-        {
-            get
-            {
-                return this.idleItems.Count;
-            }
-        }
+        public int IdleCount => this.idleItems.Count;
 
         /// <summary>
         /// 
         /// </summary>
-        public int ActiveCount
-        {
-            get
-            {
-                return this.activeItems.Count;
-            }
-        }
+        public int ActiveCount => this.activeItems.Count;
+
         #endregion
 
         #region Public Methods

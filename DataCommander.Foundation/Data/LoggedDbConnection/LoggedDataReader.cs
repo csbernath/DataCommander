@@ -28,26 +28,14 @@
             this.dataReader.Close();
         }
 
-        int IDataReader.Depth
-        {
-            get
-            {
-                return this.dataReader.Depth;
-            }
-        }
+        int IDataReader.Depth => this.dataReader.Depth;
 
         DataTable IDataReader.GetSchemaTable()
         {
             return this.dataReader.GetSchemaTable();
         }
 
-        bool IDataReader.IsClosed
-        {
-            get
-            {
-                return this.dataReader.IsClosed;
-            }
-        }
+        bool IDataReader.IsClosed => this.dataReader.IsClosed;
 
         bool IDataReader.NextResult()
         {
@@ -70,13 +58,7 @@
             return read;
         }
 
-        int IDataReader.RecordsAffected
-        {
-            get
-            {
-                return this.dataReader.RecordsAffected;
-            }
-        }
+        int IDataReader.RecordsAffected => this.dataReader.RecordsAffected;
 
         #endregion
 
@@ -91,13 +73,7 @@
 
         #region IDataRecord Members
 
-        int IDataRecord.FieldCount
-        {
-            get
-            {
-                return this.dataReader.FieldCount;
-            }
-        }
+        int IDataRecord.FieldCount => this.dataReader.FieldCount;
 
         bool IDataRecord.GetBoolean( int i )
         {
@@ -209,21 +185,9 @@
             return this.dataReader.IsDBNull( i );
         }
 
-        object IDataRecord.this[ string name ]
-        {
-            get
-            {
-                return this.dataReader[ name ];
-            }
-        }
+        object IDataRecord.this[ string name ] => this.dataReader[ name ];
 
-        object IDataRecord.this[ int i ]
-        {
-            get
-            {
-                return this.dataReader[ i ];
-            }
-        }
+        object IDataRecord.this[ int i ] => this.dataReader[ i ];
 
         #endregion
     }

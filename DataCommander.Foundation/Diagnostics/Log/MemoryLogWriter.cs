@@ -21,13 +21,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public IEnumerable<LogEntry> LogEntries
-        {
-            get
-            {
-                return this.logEntries;
-            }
-        }
+        public IEnumerable<LogEntry> LogEntries => this.logEntries;
 
         #region ILogWriter Members
 

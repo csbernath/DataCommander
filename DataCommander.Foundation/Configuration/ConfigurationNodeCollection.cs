@@ -32,26 +32,14 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public ConfigurationNode this[string name]
-        {
-            get
-            {
-                return this.nameIndex[name];
-            }
-        }
+        public ConfigurationNode this[string name] => this.nameIndex[name];
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public ConfigurationNode this[int index]
-        {
-            get
-            {
-                return this.listIndex[index];
-            }
-        }
+        public ConfigurationNode this[int index] => this.listIndex[index];
 
         /// <summary>
         /// 
@@ -107,24 +95,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.collection.Count;
-            }
-        }
+        public int Count => this.collection.Count;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadOnly
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool IsReadOnly => false;
 
         /// <summary>
         /// 

@@ -16,13 +16,7 @@ namespace DataCommander.Providers.OleDb
             return treeNodes;
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
         private OleDbConnection connection;
 

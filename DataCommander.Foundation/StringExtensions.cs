@@ -278,21 +278,9 @@
                 throw new NotImplementedException();
             }
 
-            int ICollection<Char>.Count
-            {
-                get
-                {
-                    return this.source.Length;
-                }
-            }
+            int ICollection<Char>.Count => this.source.Length;
 
-            bool ICollection<Char>.IsReadOnly
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            bool ICollection<Char>.IsReadOnly => true;
 
             bool ICollection<Char>.Remove(Char item)
             {

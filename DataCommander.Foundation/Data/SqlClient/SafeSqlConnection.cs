@@ -66,13 +66,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             return id;
         }
 
-        CancellationToken ISafeDbConnection.CancellationToken
-        {
-            get
-            {
-                return this.cancellationToken;
-            }
-        }
+        CancellationToken ISafeDbConnection.CancellationToken => this.cancellationToken;
 
         object ISafeDbConnection.Id
         {

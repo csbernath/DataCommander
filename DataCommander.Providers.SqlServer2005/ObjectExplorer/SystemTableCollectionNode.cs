@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.SqlServer2005
+namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System;
     using System.Collections.Generic;
@@ -17,21 +17,9 @@ namespace DataCommander.Providers.SqlServer2005
             this.databaseNode = databaseNode;
         }
 
-        string ITreeNode.Name
-        {
-            get
-            {
-                return "System Tables";
-            }
-        }
+        string ITreeNode.Name => "System Tables";
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -79,36 +67,12 @@ order by [Schema],[Name]", this.databaseNode.Name);
             return childNodes;
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ITreeNode.Query => null;
 
-        public DatabaseNode DatabaseNode
-        {
-            get
-            {
-                return this.databaseNode;
-            }
-        }
+        public DatabaseNode DatabaseNode => this.databaseNode;
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        ContextMenuStrip ITreeNode.ContextMenu => null;
     }
 }

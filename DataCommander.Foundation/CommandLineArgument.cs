@@ -28,34 +28,16 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Index
-        {
-            get
-            {
-                return this.index;
-            }
-        }
+        public int Index => this.index;
 
         /// <summary>
         /// 
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name => this.name;
 
         /// <summary>
         /// 
         /// </summary>
-        public string Value
-        {
-            get
-            {
-                return this.value;
-            }
-        }
+        public string Value => this.value;
     }
 }

@@ -16,13 +16,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public XmlNode Section
-        {
-            get
-            {
-                return this.section;
-            }
-        }
+        public XmlNode Section => this.section;
 
         object IConfigurationSectionHandler.Create(
             object parent,

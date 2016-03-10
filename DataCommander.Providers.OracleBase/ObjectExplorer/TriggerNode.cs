@@ -19,49 +19,19 @@ namespace DataCommander.Providers.OracleBase
             this.name = name;
         }
 
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-        }
+        public string Name => name;
 
-        public bool IsLeaf
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public bool IsLeaf => true;
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             return null;
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
-        public string Query
-        {
-            get
-            {
-                return "select * from " + tableNode.Schema.Name + "." + name;
-            }
-        }
+        public string Query => "select * from " + tableNode.Schema.Name + "." + name;
 
-        public ContextMenuStrip ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public ContextMenuStrip ContextMenu => null;
     }
 }

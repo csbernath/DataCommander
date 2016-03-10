@@ -31,45 +31,21 @@
         /// <summary>
         /// 
         /// </summary>
-        public override string Message
-        {
-            get
-            {
-                return this.message;
-            }
-        }
+        public override string Message => this.message;
 
         /// <summary>
         /// 
         /// </summary>
-        public TextDataColumn Column
-        {
-            get
-            {
-                return this.column;
-            }
-        }
+        public TextDataColumn Column => this.column;
 
         /// <summary>
         /// 
         /// </summary>
-        public ITextDataConverter Converter
-        {
-            get
-            {
-                return this.converter;
-            }
-        }
+        public ITextDataConverter Converter => this.converter;
 
         /// <summary>
         /// 
         /// </summary>
-        public string Fieldvalue
-        {
-            get
-            {
-                return this.fieldValue;
-            }
-        }
+        public string Fieldvalue => this.fieldValue;
     }
 }

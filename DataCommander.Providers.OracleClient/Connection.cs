@@ -26,15 +26,7 @@ namespace DataCommander.Providers.OracleClient
             return this.oracleConnection.OpenAsync(cancellationToken);
         }
 
-        public override string Caption
-        {
-            get
-            {
-                //string caption = string.Format("{0}@{1}",connectionString.UserId,oracleConnection.DataSource);
-                //return caption;
-                return null;
-            }
-        }
+        public override string Caption => null;
 
         private void OnInfoMessage(object sender, OracleInfoMessageEventArgs e)
         {
@@ -52,30 +44,11 @@ namespace DataCommander.Providers.OracleClient
             this.InvokeInfoMessage(new InfoMessage[] {new InfoMessage(now, InfoMessageSeverity.Information, sb.ToString())});
         }
 
-        public override string DataSource
-        {
-            get
-            {
-                return oracleConnection.DataSource;
-            }
-        }
+        public override string DataSource => oracleConnection.DataSource;
 
-        public override string ServerVersion
-        {
-            get
-            {
-                return oracleConnection.ServerVersion;
-            }
-        }
+        public override string ServerVersion => oracleConnection.ServerVersion;
 
-        public override int TransactionCount
-        {
-            get
-            {
-                // TODO
-                return 0;
-            }
-        }
+        public override int TransactionCount => 0;
 
         public override IDbCommand CreateCommand()
         {

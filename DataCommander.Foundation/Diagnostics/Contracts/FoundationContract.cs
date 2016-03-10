@@ -1,12 +1,51 @@
 ﻿namespace DataCommander.Foundation.Diagnostics.Contracts
 {
     using System;
+    using DataCommander.Foundation.Collections;
 
     /// <summary>
     /// 
     /// </summary>
     public static class FoundationContract
     {
+        private enum ExceptionType
+        {
+            None,
+            ArgumentNullException,
+            ArgumentOutOfRangeException
+        }
+
+        private static readonly TypeDictionary<ExceptionType> typeDictionary = new TypeDictionary<ExceptionType>();
+
+        static FoundationContract()
+        {
+            typeDictionary.Add<ArgumentNullException>(ExceptionType.ArgumentNullException);
+            typeDictionary.Add<ArgumentOutOfRangeException>(ExceptionType.ArgumentOutOfRangeException);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public static void Assert(bool condition)
+        {
+            Assert(condition, null);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <param name="userMessage"></param>
+        public static void Assert(bool condition, string userMessage)
+        {
+            if (!condition)
+            {
+                throw new InvalidOperationException(userMessage);
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -27,19 +66,18 @@
         {
             if (!condition)
             {
-                Selection.CreateTypeIsSelection(typeof (TException))
-                    .IfTypeIs<ArgumentNullException>(() =>
-                    {
+                var exceptionType = typeDictionary.GetValueOrDefault<TException>();
+                switch (exceptionType)
+                {
+                    case ExceptionType.ArgumentNullException:
                         throw new ArgumentNullException(userMessage, (Exception)null);
-                    })
-                    .IfTypeIs<ArgumentOutOfRangeException>(() =>
-                    {
+
+                    case ExceptionType.ArgumentOutOfRangeException:
                         throw new ArgumentOutOfRangeException(userMessage, (Exception)null);
-                    })
-                    .Else(() =>
-                    {
+
+                    default:
                         throw new Exception(userMessage);
-                    });
+                }
             }
         }
 

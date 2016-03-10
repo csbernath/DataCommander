@@ -27,13 +27,7 @@ namespace DataCommander.Foundation.Collections
         /// <summary>
         /// 
         /// </summary>
-        public T Value
-        {
-            get
-            {
-                return this.item.Value;
-            }
-        }
+        public T Value => this.item.Value;
 
         /// <summary>
         /// 

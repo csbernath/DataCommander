@@ -10,24 +10,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.defaultIndex.Count;
-            }
-        }
+        public int Count => this.defaultIndex.Count;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadOnly
-        {
-            get
-            {
-                return this.defaultIndex.IsReadOnly;
-            }
-        }
+        public bool IsReadOnly => this.defaultIndex.IsReadOnly;
 
         /// <summary>
         /// 

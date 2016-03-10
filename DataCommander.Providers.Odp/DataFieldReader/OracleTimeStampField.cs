@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.Odp
+namespace DataCommander.Providers.Odp.DataFieldReader
 {
     using System;
     using Oracle.ManagedDataAccess.Types;

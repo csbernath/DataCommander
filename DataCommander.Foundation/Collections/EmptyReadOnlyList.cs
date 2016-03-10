@@ -12,13 +12,7 @@
         {
         }
 
-        public static IReadOnlyList<T> Instance
-        {
-            get
-            {
-                return instance;
-            }
-        }
+        public static IReadOnlyList<T> Instance => instance;
 
         T IReadOnlyList<T>.this[int index]
         {
@@ -28,13 +22,7 @@
             }
         }
 
-        int IReadOnlyCollection<T>.Count
-        {
-            get
-            {
-                return 0;
-            }
-        }
+        int IReadOnlyCollection<T>.Count => 0;
 
         public IEnumerator<T> GetEnumerator()
         {

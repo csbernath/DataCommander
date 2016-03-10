@@ -161,6 +161,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SqlServerConnectionStringBuilder.cs" />
     <Compile Include="DatabaseObjectMultipartName.cs" />
     <Compile Include="FieldReader\DoubleFieldReader.cs" />
     <Compile Include="FieldReader\LongStringFieldReader.cs" />

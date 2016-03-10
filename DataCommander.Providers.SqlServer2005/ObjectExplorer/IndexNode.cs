@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.SqlServer2005
+namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Text;
@@ -57,34 +57,16 @@ namespace DataCommander.Providers.SqlServer2005
             }
         }
 
-        public bool IsLeaf
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public bool IsLeaf => true;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             return null;
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
-        public string Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public string Query => null;
 
         //private void menuItemScriptObject_Click(object sender, EventArgs e)
         //{
@@ -99,16 +81,6 @@ namespace DataCommander.Providers.SqlServer2005
         //    QueryForm.ShowText(text);
         //}
 
-        public ContextMenuStrip ContextMenu
-        {
-            get
-            {
-                return null;
-                //ToolStripMenuItem menuItemScriptObject = new ToolStripMenuItem("Script Object", null, new EventHandler(this.menuItemScriptObject_Click));
-                //ContextMenuStrip contextMenu = new ContextMenuStrip();
-                //contextMenu.Items.Add(menuItemScriptObject);
-                //return contextMenu;
-            }
-        }
+        public ContextMenuStrip ContextMenu => null;
     }
 }

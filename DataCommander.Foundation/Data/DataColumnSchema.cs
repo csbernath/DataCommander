@@ -28,210 +28,96 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public object this[string name]
-        {
-            get
-            {
-                return this.schemaTableRow[name];
-            }
-        }
+        public object this[string name] => this.schemaTableRow[name];
 
         /// <summary>
         /// 
         /// </summary>
-        public bool? AllowDBNull
-        {
-            get
-            {
-                return this.schemaTableRow.Field<bool?>(SchemaTableColumn.AllowDBNull);
-            }
-        }
+        public bool? AllowDBNull => this.schemaTableRow.Field<bool?>(SchemaTableColumn.AllowDBNull);
 
         /// <summary>
         /// 
         /// </summary>
-        public string BaseColumnName
-        {
-            get
-            {
-                return this.schemaTableRow.Field<string>(SchemaTableColumn.BaseColumnName);
-            }
-        }
+        public string BaseColumnName => this.schemaTableRow.Field<string>(SchemaTableColumn.BaseColumnName);
 
         /// <summary>
         /// 
         /// </summary>
-        public string BaseSchemaName
-        {
-            get
-            {
-                return this.schemaTableRow.Field<string>(SchemaTableColumn.BaseSchemaName);
-            }
-        }
+        public string BaseSchemaName => this.schemaTableRow.Field<string>(SchemaTableColumn.BaseSchemaName);
 
         /// <summary>
         /// 
         /// </summary>
-        public string BaseTableName
-        {
-            get
-            {
-                return this.schemaTableRow.Field<string>(SchemaTableColumn.BaseTableName);
-            }
-        }
+        public string BaseTableName => this.schemaTableRow.Field<string>(SchemaTableColumn.BaseTableName);
 
         /// <summary>
         /// 
         /// </summary>
-        public string ColumnName
-        {
-            get
-            {
-                return this.schemaTableRow.Field<string>(SchemaTableColumn.ColumnName);
-            }
-        }
+        public string ColumnName => this.schemaTableRow.Field<string>(SchemaTableColumn.ColumnName);
 
         /// <summary>
         /// 
         /// </summary>
-        public int ColumnOrdinal
-        {
-            get
-            {
-                return (int) this.schemaTableRow[SchemaTableColumn.ColumnOrdinal];
-            }
-        }
+        public int ColumnOrdinal => (int) this.schemaTableRow[SchemaTableColumn.ColumnOrdinal];
 
         /// <summary>
         /// 
         /// </summary>
-        public int ColumnSize
-        {
-            get
-            {
-                return (int) this.schemaTableRow[SchemaTableColumn.ColumnSize];
-            }
-        }
+        public int ColumnSize => (int) this.schemaTableRow[SchemaTableColumn.ColumnSize];
 
         /// <summary>
         /// 
         /// </summary>
-        public Type DataType
-        {
-            get
-            {
-                return (Type) this.schemaTableRow[SchemaTableColumn.DataType];
-            }
-        }
+        public Type DataType => (Type) this.schemaTableRow[SchemaTableColumn.DataType];
 
         /// <summary>
         /// 
         /// </summary>
-        public bool? IsAliased
-        {
-            get
-            {
-                return this.schemaTableRow.Field<bool?>(SchemaTableColumn.IsAliased);
-            }
-        }
+        public bool? IsAliased => this.schemaTableRow.Field<bool?>(SchemaTableColumn.IsAliased);
 
         /// <summary>
         /// 
         /// </summary>
-        public bool? IsExpression
-        {
-            get
-            {
-                return this.schemaTableRow.Field<bool?>(SchemaTableColumn.IsExpression);
-            }
-        }
+        public bool? IsExpression => this.schemaTableRow.Field<bool?>(SchemaTableColumn.IsExpression);
 
         /// <summary>
         /// 
         /// </summary>
-        public bool? IsKey
-        {
-            get
-            {
-                return this.schemaTableRow.Field<bool?>(SchemaTableColumn.IsKey);
-            }
-        }
+        public bool? IsKey => this.schemaTableRow.Field<bool?>(SchemaTableColumn.IsKey);
 
         /// <summary>
         /// 
         /// </summary>
-        public bool? IsIdentity
-        {
-            get
-            {
-                return this.schemaTableRow.Field<bool?>("IsIdentity");
-            }
-        }
+        public bool? IsIdentity => this.schemaTableRow.Field<bool?>("IsIdentity");
 
         /// <summary>
         /// 
         /// </summary>
-        public bool? IsLong
-        {
-            get
-            {
-                return this.schemaTableRow.Field<bool?>(SchemaTableColumn.IsLong);
-            }
-        }
+        public bool? IsLong => this.schemaTableRow.Field<bool?>(SchemaTableColumn.IsLong);
 
         /// <summary>
         /// 
         /// </summary>
-        public bool? IsUnique
-        {
-            get
-            {
-                return this.schemaTableRow.Field<bool?>(SchemaTableColumn.IsUnique);
-            }
-        }
+        public bool? IsUnique => this.schemaTableRow.Field<bool?>(SchemaTableColumn.IsUnique);
 
         /// <summary>
         /// 
         /// </summary>
-        public Type NonVersionedProviderType
-        {
-            get
-            {
-                return (Type) this.schemaTableRow[SchemaTableColumn.NonVersionedProviderType];
-            }
-        }
+        public Type NonVersionedProviderType => (Type) this.schemaTableRow[SchemaTableColumn.NonVersionedProviderType];
 
         /// <summary>
         /// 
         /// </summary>
-        public Int16? NumericPrecision
-        {
-            get
-            {
-                return this.schemaTableRow.Field<Int16?>(SchemaTableColumn.NumericPrecision);
-            }
-        }
+        public Int16? NumericPrecision => this.schemaTableRow.Field<Int16?>(SchemaTableColumn.NumericPrecision);
 
         /// <summary>
         /// 
         /// </summary>
-        public Int16? NumericScale
-        {
-            get
-            {
-                return this.schemaTableRow.Field<Int16?>(SchemaTableColumn.NumericScale);
-            }
-        }
+        public Int16? NumericScale => this.schemaTableRow.Field<Int16?>(SchemaTableColumn.NumericScale);
 
         /// <summary>
         /// 
         /// </summary>
-        public int ProviderType
-        {
-            get
-            {
-                return this.schemaTableRow.Field<int>(SchemaTableColumn.ProviderType);
-            }
-        }
+        public int ProviderType => this.schemaTableRow.Field<int>(SchemaTableColumn.ProviderType);
     }
 }

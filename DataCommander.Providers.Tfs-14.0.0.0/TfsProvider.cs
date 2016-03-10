@@ -91,27 +91,18 @@
 
         #region IProvider Members
 
-        string IProvider.Name
-        {
-            get
-            {
-                return "Tfs-11.0.0.0";
-            }
-        }
+        string IProvider.Name => "Tfs-14.0.0.0";
 
-        DbProviderFactory IProvider.DbProviderFactory
-        {
-            get
-            {
-                return TfsProviderFactory.Instance;
-            }
-        }
+        DbProviderFactory IProvider.DbProviderFactory => TfsProviderFactory.Instance;
 
         ConnectionBase IProvider.CreateConnection(string connectionString)
         {
-            var dbConnectionStringBuilder = new DbConnectionStringBuilder();
-            dbConnectionStringBuilder.ConnectionString = connectionString;
-            string uriString = (string)dbConnectionStringBuilder[ConnectionStringProperty.Server];
+            var connectionStringBuilder = (IDbConnectionStringBuilder)new TfsConnectionStringBuilder();
+            connectionStringBuilder.ConnectionString = connectionString;
+
+            object value;
+            connectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out value);
+            string uriString = (string)value;
             var uri = new Uri(uriString);
             return new TfsConnection(uri);
         }
@@ -131,21 +122,9 @@
             }
         }
 
-        bool IProvider.CanConvertCommandToString
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IProvider.CanConvertCommandToString => false;
 
-        bool IProvider.IsCommandCancelable
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool IProvider.IsCommandCancelable => true;
 
         void IProvider.DeriveParameters(IDbCommand command)
         {
@@ -398,6 +377,11 @@
                     CommandText = commandText
                 }
             };
+        }
+
+        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder()
+        {
+            return new TfsConnectionStringBuilder();
         }
 
         #endregion

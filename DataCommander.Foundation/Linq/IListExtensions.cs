@@ -181,21 +181,9 @@
                 this.source.CopyTo(array, arrayIndex);
             }
 
-            int ICollection<TResult>.Count
-            {
-                get
-                {
-                    return this.source.Count;
-                }
-            }
+            int ICollection<TResult>.Count => this.source.Count;
 
-            bool ICollection<TResult>.IsReadOnly
-            {
-                get
-                {
-                    return this.source.IsReadOnly;
-                }
-            }
+            bool ICollection<TResult>.IsReadOnly => this.source.IsReadOnly;
 
             bool ICollection<TResult>.Remove(TResult item)
             {
@@ -251,21 +239,9 @@
                 this.source = source;
             }
 
-            T IReadOnlyList<T>.this[int index]
-            {
-                get
-                {
-                    return this.source[index];
-                }
-            }
+            T IReadOnlyList<T>.this[int index] => this.source[index];
 
-            int IReadOnlyCollection<T>.Count
-            {
-                get
-                {
-                    return this.source.Count;
-                }
-            }
+            int IReadOnlyCollection<T>.Count => this.source.Count;
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator()
             {

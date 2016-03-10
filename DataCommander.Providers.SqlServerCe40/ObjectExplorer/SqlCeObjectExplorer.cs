@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Providers.SqlServerCe
+﻿namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data;
@@ -9,13 +9,7 @@
         private string connectionString;
         private SqlCeConnection connection;
 
-        public string ConnectionString
-        {
-            get
-            {
-                return this.connectionString;
-            }
-        }
+        public string ConnectionString => this.connectionString;
 
         #region IObjectExplorer Members
 
@@ -30,13 +24,7 @@
             yield return new TableCollectionNode(this, this.connection);
         }
 
-        bool IObjectExplorer.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IObjectExplorer.Sortable => false;
 
         #endregion
     }

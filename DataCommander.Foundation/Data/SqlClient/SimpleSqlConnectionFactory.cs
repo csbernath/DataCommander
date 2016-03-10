@@ -115,24 +115,12 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <summary>
         /// 
         /// </summary>
-        public int CommandTimeout
-        {
-            get
-            {
-                return this.commandTimeout;
-            }
-        }
+        public int CommandTimeout => this.commandTimeout;
 
         /// <summary>
         /// 
         /// </summary>
-        public IDbConnectionFactory Factory
-        {
-            get
-            {
-                return this.factory;
-            }
-        }
+        public IDbConnectionFactory Factory => this.factory;
 
         /// <summary>
         /// 

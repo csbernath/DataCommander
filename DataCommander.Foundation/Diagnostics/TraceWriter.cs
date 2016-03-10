@@ -31,13 +31,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public override Encoding Encoding
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public override Encoding Encoding => null;
 
         /// <summary>
         /// 

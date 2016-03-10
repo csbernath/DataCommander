@@ -46,24 +46,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public override int Depth
-        {
-            get
-            {
-                return this.dataReader.Depth;
-            }
-        }
+        public override int Depth => this.dataReader.Depth;
 
         /// <summary>
         /// 
         /// </summary>
-        public override int FieldCount
-        {
-            get
-            {
-                return this.dataReader.FieldCount;
-            }
-        }
+        public override int FieldCount => this.dataReader.FieldCount;
 
         /// <summary>
         /// 
@@ -305,13 +293,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override bool IsClosed
-        {
-            get
-            {
-                return this.dataReader.IsClosed;
-            }
-        }
+        public override bool IsClosed => this.dataReader.IsClosed;
 
         /// <summary>
         /// 
@@ -344,13 +326,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override int RecordsAffected
-        {
-            get
-            {
-                return this.dataReader.RecordsAffected;
-            }
-        }
+        public override int RecordsAffected => this.dataReader.RecordsAffected;
 
         /// <summary>
         /// 

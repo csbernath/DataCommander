@@ -93,13 +93,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.threads.Count;
-            }
-        }
+        public int Count => this.threads.Count;
 
         bool ICollection<WorkerThread>.IsReadOnly
         {

@@ -24,35 +24,17 @@
         /// <summary>
         /// 
         /// </summary>
-        public override bool CanRead
-        {
-            get
-            {
-                return this.stream.CanRead;
-            }
-        }
+        public override bool CanRead => this.stream.CanRead;
 
         /// <summary>
         /// 
         /// </summary>
-        public override bool CanSeek
-        {
-            get
-            {
-                return this.stream.CanSeek;
-            }
-        }
+        public override bool CanSeek => this.stream.CanSeek;
 
         /// <summary>
         /// 
         /// </summary>
-        public override bool CanWrite
-        {
-            get
-            {
-                return this.stream.CanWrite;
-            }
-        }
+        public override bool CanWrite => this.stream.CanWrite;
 
         /// <summary>
         /// 
@@ -65,13 +47,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override long Length
-        {
-            get
-            {
-                return this.stream.Length;
-            }
-        }
+        public override long Length => this.stream.Length;
 
         /// <summary>
         /// 

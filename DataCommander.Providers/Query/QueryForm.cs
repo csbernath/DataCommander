@@ -356,21 +356,9 @@ namespace DataCommander
 
         #region Properties
 
-        public CommandState ButtonState
-        {
-            get
-            {
-                return this.buttonState;
-            }
-        }
+        public CommandState ButtonState => this.buttonState;
 
-        public ConnectionBase Connection
-        {
-            get
-            {
-                return this.connection;
-            }
-        }
+        public ConnectionBase Connection => this.connection;
 
         public override Font Font
         {
@@ -396,21 +384,9 @@ namespace DataCommander
             }
         }
 
-        public static NumberFormatInfo NumberFormat
-        {
-            get
-            {
-                return numberFormatInfo;
-            }
-        }
+        public static NumberFormatInfo NumberFormat => numberFormatInfo;
 
-        public IProvider Provider
-        {
-            get
-            {
-                return this.provider;
-            }
-        }
+        public IProvider Provider => this.provider;
 
         private string Query
         {
@@ -428,37 +404,13 @@ namespace DataCommander
             }
         }
 
-        public QueryTextBox QueryTextBox
-        {
-            get
-            {
-                return this.queryTextBox;
-            }
-        }
+        public QueryTextBox QueryTextBox => this.queryTextBox;
 
-        internal int ResultSetCount
-        {
-            get
-            {
-                return this.resultSetCount;
-            }
-        }
+        internal int ResultSetCount => this.resultSetCount;
 
-        public ResultWriterType TableStyle
-        {
-            get
-            {
-                return this.resultWriterType;
-            }
-        }
+        public ResultWriterType TableStyle => this.resultWriterType;
 
-        internal ToolStrip ToolStrip
-        {
-            get
-            {
-                return this.toolStrip;
-            }
-        }
+        internal ToolStrip ToolStrip => this.toolStrip;
 
         #endregion
 

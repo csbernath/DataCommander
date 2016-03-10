@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Providers.SqlServerCe
+﻿namespace DataCommander.Providers.SqlServerCe40
 {
     using System;
     using System.Data;
@@ -6,7 +6,7 @@
     using System.Data.SqlServerCe;
     using System.Data.SqlTypes;
     using System.Globalization;
-    using DataCommander.Foundation.Data;
+    using Foundation.Data;
 
     internal sealed class SqlCeDataReaderHelper : IDataReaderHelper
     {

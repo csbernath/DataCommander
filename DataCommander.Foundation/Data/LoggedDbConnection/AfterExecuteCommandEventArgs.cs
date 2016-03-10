@@ -26,24 +26,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public LoggedDbCommandInfo Command
-        {
-            get
-            {
-                return this.command;
-            }
-        }
+        public LoggedDbCommandInfo Command => this.command;
 
         /// <summary>
         /// 
         /// </summary>
-        public Exception Exception
-        {
-            get
-            {
-                return this.exception;
-            }
-        }
+        public Exception Exception => this.exception;
     }
 
 }

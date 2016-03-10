@@ -23,13 +23,8 @@ namespace DataCommander.Providers.SQLite
             };
         }
 
-        bool IObjectExplorer.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IObjectExplorer.Sortable => false;
+
         #endregion
     }
 }

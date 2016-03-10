@@ -64,13 +64,7 @@
             return f;
         }
 
-        bool IObjectExplorer.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IObjectExplorer.Sortable => false;
 
         private static TfsProject ToTfsProject(Item item)
         {

@@ -11,13 +11,7 @@
             this.executionNo = 1;
         }
 
-        public int CommandNo
-        {
-            get
-            {
-                return this.commandNo;
-            }
-        }
+        public int CommandNo => this.commandNo;
 
         public int ExecutionNo
         {

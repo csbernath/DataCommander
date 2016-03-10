@@ -157,21 +157,9 @@
             return read;
         }
 
-        public override int RecordsAffected
-        {
-            get
-            {
-                return -1;
-            }
-        }
+        public override int RecordsAffected => -1;
 
-        public override int FieldCount
-        {
-            get
-            {
-                return 6;
-            }
-        }
+        public override int FieldCount => 6;
 
         private IEnumerable<Tuple<Changeset, int>> AsEnumerable( IEnumerable changesets )
         {

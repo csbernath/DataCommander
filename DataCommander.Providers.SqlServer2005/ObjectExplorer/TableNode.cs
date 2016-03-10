@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.SqlServer2005
+namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System;
     using System.Collections.Generic;
@@ -12,10 +12,10 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Text;
     using System.Threading;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Text;
-    using DataCommander.Foundation.Windows.Forms;
     using Foundation.Data;
+    using Foundation.Diagnostics;
+    using Foundation.Text;
+    using Foundation.Windows.Forms;
     using Microsoft.SqlServer.Management.Common;
     using Microsoft.SqlServer.Management.Smo;
 
@@ -36,21 +36,9 @@ namespace DataCommander.Providers.SqlServer2005
             this.name = name;
         }
 
-        public string Name
-        {
-            get
-            {
-                return $"{this.owner}.{this.name}";
-            }
-        }
+        public string Name => $"{this.owner}.{this.name}";
 
-        public bool IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -62,13 +50,7 @@ namespace DataCommander.Providers.SqlServer2005
             };
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
         internal static string GetSelectStatement(
             IDbConnection connection,
@@ -548,12 +530,6 @@ order by c.column_id", this.database.Name, this.owner, this.name);
             }
         }
 
-        public DatabaseNode Database
-        {
-            get
-            {
-                return this.database;
-            }
-        }
+        public DatabaseNode Database => this.database;
     }
 }

@@ -67,13 +67,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name => this.name;
 
         /// <summary>
         /// 
@@ -109,24 +103,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadOnly
-        {
-            get
-            {
-                return this.dictionary.IsReadOnly;
-            }
-        }
+        public bool IsReadOnly => this.dictionary.IsReadOnly;
 
         /// <summary>
         /// 
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.dictionary.Count;
-            }
-        }
+        public int Count => this.dictionary.Count;
 
         /// <summary>
         /// 
@@ -277,13 +259,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public ICollection<TKey> Keys
-        {
-            get
-            {
-                return this.dictionary.Keys;
-            }
-        }
+        public ICollection<TKey> Keys => this.dictionary.Keys;
 
         /// <summary>
         /// 
@@ -298,13 +274,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public ICollection<T> Values
-        {
-            get
-            {
-                return this.dictionary.Values;
-            }
-        }
+        public ICollection<T> Values => this.dictionary.Values;
 
         #endregion
 

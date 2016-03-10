@@ -22,13 +22,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public WorkerThreadCollection Threads
-        {
-            get
-            {
-                return this.threads;
-            }
-        }
+        public WorkerThreadCollection Threads => this.threads;
 
         /// <summary>
         /// 

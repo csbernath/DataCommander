@@ -43,45 +43,15 @@ namespace DataCommander.Providers
 
         #region Public Properties
 
-        public static DataCommanderApplication Instance
-        {
-            get
-            {
-                return dataCommanderApplication;
-            }
-        }
+        public static DataCommanderApplication Instance => dataCommanderApplication;
 
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name => this.name;
 
-        public ApplicationData ApplicationData
-        {
-            get
-            {
-                return this.applicationData;
-            }
-        }
+        public ApplicationData ApplicationData => this.applicationData;
 
-        public string FileName
-        {
-            get
-            {
-                return this.fileName;
-            }
-        }
+        public string FileName => this.fileName;
 
-        public MainForm MainForm
-        {
-            get
-            {
-                return this.mainForm;
-            }
-        }
+        public MainForm MainForm => this.mainForm;
 
         public ConfigurationNode ConnectionsConfigurationNode
         {
@@ -119,15 +89,15 @@ namespace DataCommander.Providers
                 var dbConnectionStringBuilder = new DbConnectionStringBuilder();
                 dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
                 object obj;
-                bool contains = dbConnectionStringBuilder.TryGetValue(ConnectionStringProperty.UserId, out obj);
+                bool contains = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out obj);
 
                 if (contains)
                 {
-                    string password = dbConnectionStringBuilder.GetValue(ConnectionStringProperty.Password);
-                    dbConnectionStringBuilder.Remove(ConnectionStringProperty.Password);
+                    string password = dbConnectionStringBuilder.GetValue(ConnectionStringKeyword.Password);
+                    dbConnectionStringBuilder.Remove(ConnectionStringKeyword.Password);
                     connectionProperties.ConnectionString = dbConnectionStringBuilder.ConnectionString;
                     password = ConnectionProperties.ProtectPassword(password);
-                    subFolder.Attributes.SetAttributeValue(ConnectionStringProperty.Password, password);
+                    subFolder.Attributes.SetAttributeValue(ConnectionStringKeyword.Password, password);
                 }
 
                 connectionProperties.Save(subFolder);
@@ -150,7 +120,7 @@ namespace DataCommander.Providers
                 var connectionProperties = new ConnectionProperties();
                 connectionProperties.Load(subFolder);
                 connectionProperties.LoadProtectedPassword(subFolder);
-                connectionProperties.Save(subFolder);
+                //connectionProperties.Save(subFolder);
             }
 
             this.fileName = fileName;

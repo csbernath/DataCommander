@@ -21,21 +21,9 @@ namespace DataCommander.Providers.OracleBase
             this.name = name;
         }
 
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-        }
+        public string Name => name;
 
-        public bool IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool IsLeaf => false;
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
@@ -56,13 +44,7 @@ order by procedure_name";
             });
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
         public string Query
         {
@@ -135,13 +117,7 @@ order by procedure_name";
             }
         }
 
-        public SchemaNode SchemaNode
-        {
-            get
-            {
-                return schemaNode;
-            }
-        }
+        public SchemaNode SchemaNode => schemaNode;
 
         readonly SchemaNode schemaNode;
         readonly string name;

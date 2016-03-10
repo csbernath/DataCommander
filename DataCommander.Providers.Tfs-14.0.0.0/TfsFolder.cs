@@ -16,13 +16,7 @@
 
         #region ITreeNode Members
 
-        string ITreeNode.Name
-        {
-            get
-            {
-                return TfsObjectExplorer.GetName(this.item);
-            }
-        }
+        string ITreeNode.Name => TfsObjectExplorer.GetName(this.item);
 
         bool ITreeNode.IsLeaf
         {
@@ -76,29 +70,11 @@
             return TfsProject.GetChildren(this.item);
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return this.item.ServerItem;
-            }
-        }
+        string ITreeNode.Query => this.item.ServerItem;
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        ContextMenuStrip ITreeNode.ContextMenu => null;
 
         private static TfsFolder ToTfsItem(Item item)
         {

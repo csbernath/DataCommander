@@ -25,23 +25,11 @@
         /// <summary>
         /// 
         /// </summary>
-        public ManagementJobState JobState
-        {
-            get
-            {
-                return (ManagementJobState)(ushort)this.managementObject["JobState"];
-            }
-        }
+        public ManagementJobState JobState => (ManagementJobState)(ushort)this.managementObject["JobState"];
 
         /// <summary>
         /// 
         /// </summary>
-        public object PercentComplete
-        {
-            get
-            {
-                return this.managementObject["PercentComplete"];
-            }
-        }
+        public object PercentComplete => this.managementObject["PercentComplete"];
     }
 }

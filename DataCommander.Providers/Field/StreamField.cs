@@ -11,12 +11,6 @@
 			this.stream = stream;
 		}
 
-		public Stream Stream
-		{
-			get
-			{
-				return this.stream;
-			}
-		}
+		public Stream Stream => this.stream;
 	}
 }

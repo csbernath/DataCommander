@@ -47,13 +47,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// Gets the underlying <see cref="WorkerThread"/>.
         /// </summary>
-        public WorkerThread Thread
-        {
-            get
-            {
-                return this.thread;
-            }
-        }
+        public WorkerThread Thread => this.thread;
 
         /// <summary>
         /// Inherited class must initialize the base class with this method.

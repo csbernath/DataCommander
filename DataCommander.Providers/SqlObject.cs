@@ -31,21 +31,9 @@ namespace DataCommander.Providers
             }
         }
 
-        public string ParentAlias
-        {
-            get
-            {
-                return this.parentAlias;
-            }
-        }
+        public string ParentAlias => this.parentAlias;
 
-        public SqlObjectTypes Type
-        {
-            get
-            {
-                return this.type;
-            }
-        }
+        public SqlObjectTypes Type => this.type;
 
         public string Name
         {

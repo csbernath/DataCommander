@@ -9,20 +9,8 @@ namespace DataCommander.Providers
             this.objectName = objectName;
         }
 
-        string IObjectName.UnquotedName
-        {
-            get
-            {
-                return this.objectName;
-            }
-        }
+        string IObjectName.UnquotedName => this.objectName;
 
-        string IObjectName.QuotedName
-        {
-            get
-            {
-                return this.objectName;
-            }
-        }
+        string IObjectName.QuotedName => this.objectName;
     }
 }

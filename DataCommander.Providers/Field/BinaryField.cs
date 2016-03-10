@@ -34,13 +34,7 @@ namespace DataCommander.Providers
             return this.s;
         }
 
-        public byte[] Value
-        {
-            get
-            {
-                return this.bytes;
-            }
-        }
+        public byte[] Value => this.bytes;
 
         #region IConvertible Members
 

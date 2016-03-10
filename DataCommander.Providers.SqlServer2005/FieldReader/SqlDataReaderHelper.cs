@@ -1,9 +1,9 @@
-namespace DataCommander.Providers.SqlServer2005
+namespace DataCommander.Providers.SqlServer2005.FieldReader
 {
     using System;
     using System.Data;
     using System.Data.SqlClient;
-    using DataCommander.Foundation.Data;
+    using Foundation.Data;
 
     internal sealed class SqlDataReaderHelper : IDataReaderHelper
     {

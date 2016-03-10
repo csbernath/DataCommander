@@ -136,13 +136,7 @@
                 return this.dictionary.ContainsKey(key);
             }
 
-            ICollection<TKey> IDictionary<TKey, TValue>.Keys
-            {
-                get
-                {
-                    return this.dictionary.Keys;
-                }
-            }
+            ICollection<TKey> IDictionary<TKey, TValue>.Keys => this.dictionary.Keys;
 
             bool IDictionary<TKey, TValue>.Remove(TKey key)
             {
@@ -154,13 +148,7 @@
                 return this.dictionary.TryGetValue(key, out value);
             }
 
-            ICollection<TValue> IDictionary<TKey, TValue>.Values
-            {
-                get
-                {
-                    return this.dictionary.Values;
-                }
-            }
+            ICollection<TValue> IDictionary<TKey, TValue>.Values => this.dictionary.Values;
 
             TValue IDictionary<TKey, TValue>.this[TKey key]
             {
@@ -199,21 +187,9 @@
                 this.dictionary.CopyTo(array, arrayIndex);
             }
 
-            int ICollection<KeyValuePair<TKey, TValue>>.Count
-            {
-                get
-                {
-                    return this.dictionary.Count;
-                }
-            }
+            int ICollection<KeyValuePair<TKey, TValue>>.Count => this.dictionary.Count;
 
-            bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly => true;
 
             bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
             {

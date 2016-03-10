@@ -19,27 +19,15 @@
 
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private static string[] keyWords;
-        private ObjectExplorer objectExplorer;
+        private ObjectExplorer.ObjectExplorer objectExplorer;
 
         #endregion
 
         #region IProvider Members
 
-        string IProvider.Name
-        {
-            get
-            {
-                return "MySql";
-            }
-        }
+        string IProvider.Name => "MySql";
 
-        DbProviderFactory IProvider.DbProviderFactory
-        {
-            get
-            {
-                return MySqlClientFactory.Instance;
-            }
-        }
+        DbProviderFactory IProvider.DbProviderFactory => MySqlClientFactory.Instance;
 
         string[] IProvider.KeyWords
         {
@@ -63,13 +51,7 @@
             }
         }
 
-        bool IProvider.IsCommandCancelable
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool IProvider.IsCommandCancelable => true;
 
         IObjectExplorer IProvider.ObjectExplorer
         {
@@ -77,7 +59,7 @@
             {
                 if (this.objectExplorer == null)
                 {
-                    this.objectExplorer = new ObjectExplorer();
+                    this.objectExplorer = new ObjectExplorer.ObjectExplorer();
                 }
 
                 return this.objectExplorer;
@@ -412,6 +394,11 @@
         List<InfoMessage> IProvider.ToInfoMessages(Exception e)
         {
             throw new NotImplementedException();
+        }
+
+        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder()
+        {
+            return new ConnectionStringBuilder();
         }
 
         #endregion

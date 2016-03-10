@@ -1,10 +1,10 @@
-namespace DataCommander.Providers.Odp
+namespace DataCommander.Providers.Odp.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data;
     using System.Threading;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
+    using Foundation.Data;
     using Oracle.ManagedDataAccess.Client;
 
     internal class IndexeCollectionNode : ITreeNode
@@ -16,23 +16,11 @@ namespace DataCommander.Providers.Odp
 			this.table = tableNode;
 		}
 
-		public string Name
-		{
-			get
-			{
-				return "Indexes";
-			}
-		}
+		public string Name => "Indexes";
 
-		public bool IsLeaf
-		{
-			get
-			{
-				return false;
-			}
-		}
+        public bool IsLeaf => false;
 
-		public IEnumerable<ITreeNode> GetChildren( bool refresh )
+        public IEnumerable<ITreeNode> GetChildren( bool refresh )
 		{
 			string commandText = "select index_name from sys.all_indexes where owner = '{0}' and table_name = '{1}' order by index_name";
 			commandText = string.Format( commandText, table.Schema.Name, table.Name );
@@ -58,31 +46,13 @@ namespace DataCommander.Providers.Odp
 			return treeNodes;
 		}
 
-		public bool Sortable
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public bool Sortable => false;
 
-		public string Query
-		{
-			get
-			{
-				return null;
-			}
-		}
+        public string Query => null;
 
-		public ContextMenuStrip ContextMenu
-		{
-			get
-			{
-				return null;
-			}
-		}
+        public ContextMenuStrip ContextMenu => null;
 
-		public void BeforeExpand()
+        public void BeforeExpand()
 		{
 		}
 	}

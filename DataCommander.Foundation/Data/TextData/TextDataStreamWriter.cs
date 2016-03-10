@@ -23,13 +23,7 @@
             this.converters = converters;
         }
 
-        public IList<TextDataColumn> Columns
-        {
-            get
-            {
-                return this.columns;
-            }
-        }
+        public IList<TextDataColumn> Columns => this.columns;
 
         public void WriteRow( object[] values )
         {

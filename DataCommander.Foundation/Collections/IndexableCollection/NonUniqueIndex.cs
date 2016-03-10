@@ -85,26 +85,14 @@
         /// <summary>
         /// 
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name => this.name;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public ICollection<T> this[TKey key]
-        {
-            get
-            {
-                return this.dictionary[key];
-            }
-        }
+        public ICollection<T> this[TKey key] => this.dictionary[key];
 
         /// <summary>
         /// 
@@ -135,21 +123,9 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.dictionary.Count;
-            }
-        }
+        public int Count => this.dictionary.Count;
 
-        bool ICollection<T>.IsReadOnly
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ICollection<T>.IsReadOnly => false;
 
         /// <summary>
         /// 
@@ -320,13 +296,7 @@
             return this.dictionary.ContainsKey(key);
         }
 
-        ICollection<TKey> IDictionary<TKey, ICollection<T>>.Keys
-        {
-            get
-            {
-                return this.dictionary.Keys;
-            }
-        }
+        ICollection<TKey> IDictionary<TKey, ICollection<T>>.Keys => this.dictionary.Keys;
 
         bool IDictionary<TKey, ICollection<T>>.Remove(TKey key)
         {
@@ -344,13 +314,7 @@
             return this.dictionary.TryGetValue(key, out value);
         }
 
-        ICollection<ICollection<T>> IDictionary<TKey, ICollection<T>>.Values
-        {
-            get
-            {
-                return this.dictionary.Values;
-            }
-        }
+        ICollection<ICollection<T>> IDictionary<TKey, ICollection<T>>.Values => this.dictionary.Values;
 
         ICollection<T> IDictionary<TKey, ICollection<T>>.this[TKey key]
         {
@@ -389,21 +353,9 @@
             throw new NotSupportedException();
         }
 
-        int ICollection<KeyValuePair<TKey, ICollection<T>>>.Count
-        {
-            get
-            {
-                return this.dictionary.Count;
-            }
-        }
+        int ICollection<KeyValuePair<TKey, ICollection<T>>>.Count => this.dictionary.Count;
 
-        bool ICollection<KeyValuePair<TKey, ICollection<T>>>.IsReadOnly
-        {
-            get
-            {
-                return this.dictionary.IsReadOnly;
-            }
-        }
+        bool ICollection<KeyValuePair<TKey, ICollection<T>>>.IsReadOnly => this.dictionary.IsReadOnly;
 
         bool ICollection<KeyValuePair<TKey, ICollection<T>>>.Remove(KeyValuePair<TKey, ICollection<T>> item)
         {

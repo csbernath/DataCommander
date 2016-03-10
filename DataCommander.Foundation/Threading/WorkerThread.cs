@@ -87,13 +87,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public bool IsPauseRequested
-        {
-            get
-            {
-                return this.pauseRequest.State == WorkerEventState.Signaled;
-            }
-        }
+        public bool IsPauseRequested => this.pauseRequest.State == WorkerEventState.Signaled;
 
         /// <summary>
         /// 
@@ -125,46 +119,22 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public ThreadState ThreadState
-        {
-            get
-            {
-                return this.thread.ThreadState;
-            }
-        }
+        public ThreadState ThreadState => this.thread.ThreadState;
 
         /// <summary>
         /// 
         /// </summary>
-        public WaitHandle PauseRequest
-        {
-            get
-            {
-                return this.pauseRequest;
-            }
-        }
+        public WaitHandle PauseRequest => this.pauseRequest;
 
         /// <summary>
         /// 
         /// </summary>
-        public WaitHandle StopRequest
-        {
-            get
-            {
-                return this.stopRequest;
-            }
-        }
+        public WaitHandle StopRequest => this.stopRequest;
 
         /// <summary>
         ///  Gets a unique identifier for the current managed thread.
         /// </summary>
-        public int ManagedThreadId
-        {
-            get
-            {
-                return this.thread.ManagedThreadId;
-            }
-        }
+        public int ManagedThreadId => this.thread.ManagedThreadId;
 
         /// <summary>
         ///  Gets or sets the name of the thread.
@@ -217,33 +187,15 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public Thread Thread
-        {
-            get
-            {
-                return this.thread;
-            }
-        }
+        public Thread Thread => this.thread;
 
         #endregion
 
         #region Internal Properties
 
-        internal DateTime StartTime
-        {
-            get
-            {
-                return this.startTime;
-            }
-        }
+        internal DateTime StartTime => this.startTime;
 
-        internal DateTime StopTime
-        {
-            get
-            {
-                return this.stopTime;
-            }
-        }
+        internal DateTime StopTime => this.stopTime;
 
         #endregion
 

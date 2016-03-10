@@ -15,13 +15,7 @@ namespace DataCommander.Providers.SQLite
     {
         #region IProvider Members
 
-        string IProvider.Name
-        {
-            get
-            {
-                return ProviderName.SQLite;
-            }
-        }
+        string IProvider.Name => ProviderName.SQLite;
 
         ConnectionBase IProvider.CreateConnection(string connectionString)
         {
@@ -38,21 +32,9 @@ namespace DataCommander.Providers.SQLite
             }
         }
 
-        bool IProvider.CanConvertCommandToString
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IProvider.CanConvertCommandToString => false;
 
-        bool IProvider.IsCommandCancelable
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool IProvider.IsCommandCancelable => true;
 
         void IProvider.DeriveParameters(IDbCommand command)
         {
@@ -150,13 +132,7 @@ namespace DataCommander.Providers.SQLite
             throw new Exception("The method or operation is not implemented.");
         }
 
-        IObjectExplorer IProvider.ObjectExplorer
-        {
-            get
-            {
-                return new ObjectExplorer();
-            }
-        }
+        IObjectExplorer IProvider.ObjectExplorer => new ObjectExplorer();
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {
@@ -256,13 +232,7 @@ order by name collate nocase";
             throw new NotImplementedException();
         }
 
-        DbProviderFactory IProvider.DbProviderFactory
-        {
-            get
-            {
-                return SQLiteFactory.Instance;
-            }
-        }
+        DbProviderFactory IProvider.DbProviderFactory => SQLiteFactory.Instance;
 
         DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName)
         {
@@ -452,6 +422,11 @@ order by name collate nocase";
                     CommandText = commandText
                 }
             };
+        }
+
+        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder()
+        {
+            return new ConnectionStringBuilder();
         }
 
         #endregion

@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnectionStringBuilder.cs" />
     <Compile Include="MsiCommand.cs" />
     <Compile Include="MsiConnection.cs" />
     <Compile Include="MsiDataReader.cs" />

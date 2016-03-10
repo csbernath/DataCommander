@@ -12,22 +12,10 @@ namespace DataCommander.Providers.Wmi
             this.manClass = manClass;
         }
 
-        public string Name
-        {
-            get
-            {
-                return this.manClass.ClassPath.ClassName;
-            }
-        }
-    
-        public bool IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
-    
+        public string Name => this.manClass.ClassPath.ClassName;
+
+        public bool IsLeaf => false;
+
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             ManagementObjectCollection objects = this.manClass.GetSubclasses();
@@ -45,29 +33,11 @@ namespace DataCommander.Providers.Wmi
             return array;
         }
     
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
-        public string Query
-        {
-            get
-            {
-                return $"select * from {this.Name}";
-            }
-        }
-    
-        public ContextMenuStrip ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public string Query => $"select * from {this.Name}";
+
+        public ContextMenuStrip ContextMenu => null;
 
         readonly ManagementClass manClass;
     }

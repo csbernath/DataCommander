@@ -18,28 +18,10 @@ namespace DataCommander.Providers
             this.message = message;
         }
 
-        public DateTime CreationTime
-        {
-            get
-            {
-                return this.creationTime;
-            }
-        }
+        public DateTime CreationTime => this.creationTime;
 
-        public InfoMessageSeverity Severity
-        {
-            get
-            {
-                return this.severity;
-            }
-        }
+        public InfoMessageSeverity Severity => this.severity;
 
-        public String Message
-        {
-            get
-            {
-                return this.message;
-            }
-        }
+        public String Message => this.message;
     }
 }

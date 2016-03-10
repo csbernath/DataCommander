@@ -44,13 +44,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public TextDataSetTable this[ int index ]
-        {
-            get
-            {
-                return this.listIndex[ index ];
-            }
-        }
+        public TextDataSetTable this[ int index ] => this.listIndex[ index ];
 
         /// <summary>
         /// 
@@ -129,13 +123,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.collection.Count;
-            }
-        }
+        public int Count => this.collection.Count;
 
         bool ICollection<TextDataSetTable>.IsReadOnly
         {

@@ -12,13 +12,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <summary>
         /// 
         /// </summary>
-        public WorkerThread Thread
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public WorkerThread Thread => null;
 
         /// <summary>
         /// 

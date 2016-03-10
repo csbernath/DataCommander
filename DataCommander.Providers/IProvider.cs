@@ -27,6 +27,7 @@
         void ClearCompletionCache();
         string CommandToString(IDbCommand command);
         ConnectionBase CreateConnection(string connectionString);
+        IDbConnectionStringBuilder CreateConnectionStringBuilder();
         DbDataAdapter CreateDataAdapter(string selectCommandText, IDbConnection connection);
         IDataReaderHelper CreateDataReaderHelper(IDataReader dataReader);
 

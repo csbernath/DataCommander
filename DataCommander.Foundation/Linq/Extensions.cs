@@ -38,6 +38,40 @@
         /// <summary>
         /// 
         /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TTarget"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="action"></param>
+        public static void IfArgumentIs<TSource, TTarget>(this TSource source, Action<TTarget> action) where TTarget : class
+        {
+            if (source is TTarget)
+            {
+                var target = source as TTarget;
+                action(target);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TTarget"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="action"></param>
+        public static bool IfAsNotNull<TSource, TTarget>(this TSource source, Action<TTarget> action) where TTarget : class
+        {
+            var target = source as TTarget;
+            bool selected = target != null;
+            if (selected)
+            {
+                action(target);
+            }
+            return selected;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="item"></param>
         /// <param name="collection"></param>

@@ -10,23 +10,11 @@
         {
         }
 
-        public static NullApplicationLog Instance
-        {
-            get
-            {
-                return instance;
-            }
-        }
+        public static NullApplicationLog Instance => instance;
 
         #region IApplicationLog Members
 
-        string ILogFactory.FileName
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ILogFactory.FileName => null;
 
         ILog ILogFactory.GetLog(string name)
         {

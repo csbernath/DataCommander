@@ -42,13 +42,7 @@
 
         #region ICollectionIndex<T> Members
 
-        string ICollectionIndex<T>.Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        string ICollectionIndex<T>.Name => this.name;
 
         #endregion
 
@@ -79,21 +73,9 @@
             throw new NotImplementedException();
         }
 
-        int ICollection<T>.Count
-        {
-            get
-            {
-                return this.dictionary.Count;
-            }
-        }
+        int ICollection<T>.Count => this.dictionary.Count;
 
-        bool ICollection<T>.IsReadOnly
-        {
-            get
-            {
-                return this.dictionary.IsReadOnly;
-            }
-        }
+        bool ICollection<T>.IsReadOnly => this.dictionary.IsReadOnly;
 
         bool ICollection<T>.Remove(T item)
         {

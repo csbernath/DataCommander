@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.SqlServer2005
+namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System;
     using System.Collections.Generic;
@@ -19,29 +19,11 @@ namespace DataCommander.Providers.SqlServer2005
             this.name = name;
         }
 
-        public DatabaseCollectionNode Databases
-        {
-            get
-            {
-                return this.databaseCollectionNode;
-            }
-        }
+        public DatabaseCollectionNode Databases => this.databaseCollectionNode;
 
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name => this.name;
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -56,21 +38,9 @@ namespace DataCommander.Providers.SqlServer2005
             return children;
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ITreeNode.Query => null;
 
         private void menuItemGetInformation_Click(object sender, EventArgs e)
         {

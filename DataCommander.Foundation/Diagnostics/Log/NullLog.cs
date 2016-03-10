@@ -15,55 +15,19 @@
         {
         }
 
-        public static NullLog Instance
-        {
-            get
-            {
-                return instance;
-            }
-        }
+        public static NullLog Instance => instance;
 
         #region ILog Members
 
-        bool ILog.IsErrorEnabled
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ILog.IsErrorEnabled => false;
 
-        bool ILog.IsWarningEnabled
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ILog.IsWarningEnabled => false;
 
-        bool ILog.IsInformationEnabled
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ILog.IsInformationEnabled => false;
 
-        bool ILog.IsTraceEnabled
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ILog.IsTraceEnabled => false;
 
-        bool ILog.IsDebugEnabled
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ILog.IsDebugEnabled => false;
 
         void ILog.Debug( string format )
         {

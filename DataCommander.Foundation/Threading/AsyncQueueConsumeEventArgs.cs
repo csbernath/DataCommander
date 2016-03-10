@@ -15,13 +15,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public object Item
-        {
-            get
-            {
-                return this.item;
-            }
-        }
+        public object Item => this.item;
 
         private readonly object item;
     }

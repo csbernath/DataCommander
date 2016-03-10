@@ -124,20 +124,8 @@
             return read;
         }
 
-        public override int RecordsAffected
-        {
-            get
-            {
-                return -1;
-            }
-        }
+        public override int RecordsAffected => -1;
 
-        public override int FieldCount
-        {
-            get
-            {
-                return 8;
-            }
-        }
+        public override int FieldCount => 8;
     }
 }

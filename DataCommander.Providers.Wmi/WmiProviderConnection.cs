@@ -37,38 +37,13 @@ namespace DataCommander.Providers.Wmi
             return this.wmiConnection.CreateCommand();
         }
 
-        public override string Caption
-        {
-            get
-            {
-                return $"WMI@{this.wmiConnection.DataSource}";
-            }
-        }
+        public override string Caption => $"WMI@{this.wmiConnection.DataSource}";
 
-        public override string DataSource
-        {
-            get
-            {
-                return this.wmiConnection.DataSource;
-            }
-        }
+        public override string DataSource => this.wmiConnection.DataSource;
 
-        public override string ServerVersion
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public override string ServerVersion => null;
 
-        public override int TransactionCount
-        {
-            get
-            {
-                // TODO
-                return 0;
-            }
-        }
+        public override int TransactionCount => 0;
 
         protected override void SetDatabase(string database)
         {

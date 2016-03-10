@@ -47,13 +47,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public static int Count
-        {
-            get
-            {
-                return items.Count;
-            }
-        }
+        public static int Count => items.Count;
 
         private static string ToString(int? source)
         {
@@ -201,61 +195,19 @@ namespace DataCommander.Foundation.Diagnostics
                 this.timestamp = Stopwatch.GetTimestamp();
             }
 
-            public long Id
-            {
-                get
-                {
-                    return this.id;
-                }
-            }
+            public long Id => this.id;
 
-            public string Name
-            {
-                get
-                {
-                    return this.name;
-                }
-            }
+            public string Name => this.name;
 
-            public string TypeName
-            {
-                get
-                {
-                    return this.typeName;
-                }
-            }
+            public string TypeName => this.typeName;
 
-            public int Size
-            {
-                get
-                {
-                    return this.size;
-                }
-            }
+            public int Size => this.size;
 
-            public DateTime Time
-            {
-                get
-                {
-                    return this.time;
-                }
-            }
+            public DateTime Time => this.time;
 
-            public long Timestamp
-            {
-                get
-                {
-                    return this.timestamp;
-                }
-            }
+            public long Timestamp => this.timestamp;
 
-            public WeakReference WeakReference
-            {
-                get
-                {
-                    return this.weakReference;
-                }
-            }
+            public WeakReference WeakReference => this.weakReference;
 
             public DateTime? DisposeTime
             {
@@ -296,37 +248,13 @@ namespace DataCommander.Foundation.Diagnostics
                 }
             }
 
-            public ListItem ListItem
-            {
-                get
-                {
-                    return this.listItem;
-                }
-            }
+            public ListItem ListItem => this.listItem;
 
-            public bool IsAlive
-            {
-                get
-                {
-                    return this.isAlive;
-                }
-            }
+            public bool IsAlive => this.isAlive;
 
-            public int? Generation
-            {
-                get
-                {
-                    return this.generation;
-                }
-            }
+            public int? Generation => this.generation;
 
-            public long Age
-            {
-                get
-                {
-                    return this.timestamp - this.listItem.Timestamp;
-                }
-            }
+            public long Age => this.timestamp - this.listItem.Timestamp;
         }
     }
 }

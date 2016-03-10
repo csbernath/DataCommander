@@ -26,24 +26,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public string LocalName
-        {
-            get
-            {
-                return this.localName;
-            }
-        }
+        public string LocalName => this.localName;
 
         /// <summary>
         /// 
         /// </summary>
-        public string Value
-        {
-            get
-            {
-                return this.value;
-            }
-        }
+        public string Value => this.value;
 
         /// <summary>
         /// 

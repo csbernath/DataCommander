@@ -22,13 +22,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public static IComparer<T> Default
-        {
-            get
-            {
-                return instance.Value;
-            }
-        }
+        public static IComparer<T> Default => instance.Value;
 
         #region IComparer<T> Members
 

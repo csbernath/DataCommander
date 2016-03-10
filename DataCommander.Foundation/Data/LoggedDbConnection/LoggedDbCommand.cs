@@ -221,13 +221,7 @@
             return scalar;
         }
 
-        IDataParameterCollection IDbCommand.Parameters
-        {
-            get
-            {
-                return this.command.Parameters;
-            }
-        }
+        IDataParameterCollection IDbCommand.Parameters => this.command.Parameters;
 
         void IDbCommand.Prepare()
         {

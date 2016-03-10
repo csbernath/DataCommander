@@ -11,9 +11,6 @@ namespace DataCommander.Providers
     using DataCommander.Foundation.Windows.Forms;
     using Timer = System.Windows.Forms.Timer;
 
-    /// <summary>
-    /// Summary description for OpenConnectionForm.
-    /// </summary>
     internal sealed class OpenConnectionForm : Form
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
@@ -23,20 +20,13 @@ namespace DataCommander.Providers
         private Timer timer;
         private IContainer components;
         private readonly ConnectionProperties connectionProperties;
-        //private readonly AsyncConnector connector;
         private readonly Stopwatch stopwatch = new Stopwatch();
         private readonly EventWaitHandle handleCreatedEvent = new EventWaitHandle(false, EventResetMode.ManualReset);
         private readonly CancellationTokenSource cancellationTokenSource;
         private readonly Task task;
         private long duration;
 
-        public long Duration
-        {
-            get
-            {
-                return this.duration;
-            }
-        }
+        public long Duration => this.duration;
 
         private void EndConnectionOpenInvoke(Exception exception)
         {
@@ -107,9 +97,9 @@ namespace DataCommander.Providers
             var dbConnectionStringBuilder = new DbConnectionStringBuilder();
             dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
             object dataSourceObject;
-            bool contains = dbConnectionStringBuilder.TryGetValue(ConnectionStringProperty.DataSource, out dataSourceObject);
+            bool contains = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out dataSourceObject);
             object userId;
-            dbConnectionStringBuilder.TryGetValue(ConnectionStringProperty.UserId, out userId);
+            dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out userId);
             string dataSource = (string)dataSourceObject;
             this.textBox.Text =
                 $"Connection name: {connectionProperties.ConnectionName}\r\nProvider name: {connectionProperties.ProviderName}\r\nData Source: {dataSource}\r\nUserId: {userId}";

@@ -58,13 +58,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public static int Count
-        {
-            get
-            {
-                return threads.Count;
-            }
-        }
+        public static int Count => threads.Count;
 
         /// <summary>
         /// 

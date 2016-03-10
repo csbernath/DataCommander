@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Providers.MySql
+﻿namespace DataCommander.Providers.MySql.ObjectExplorer
 {
     using System;
     using System.Collections.Generic;
@@ -20,21 +20,9 @@
             this.name = name;
         }
 
-        string ITreeNode.Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        string ITreeNode.Name => this.name;
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool ITreeNode.IsLeaf => true;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -49,14 +37,8 @@
             }
         }
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return $@"select *
+        string ITreeNode.Query => $@"select *
 from {this.databaseNode.Name}.{this.name}";
-            }
-        }
 
         System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
         {

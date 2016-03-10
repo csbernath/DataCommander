@@ -410,13 +410,7 @@ namespace DataCommander.Foundation.Xml
         /// When overridden in a derived class, gets the state of the writer.
         /// </summary>
         /// <value></value>
-        public override WriteState WriteState
-        {
-            get
-            {
-                return new WriteState();
-            }
-        }
+        public override WriteState WriteState => new WriteState();
 
         private static string Encode(Char c)
         {
@@ -513,13 +507,7 @@ namespace DataCommander.Foundation.Xml
                 this.localName = localName;
             }
 
-            public string LocalName
-            {
-                get
-                {
-                    return this.localName;
-                }
-            }
+            public string LocalName => this.localName;
 
             public bool HasAttributes
             {

@@ -9,20 +9,8 @@ namespace DataCommander.Providers.SqlServer2005
             this.objectName = objectName;
         }
 
-        string IObjectName.UnquotedName
-        {
-            get
-            {
-                return this.objectName;
-            }
-        }
+        string IObjectName.UnquotedName => this.objectName;
 
-        string IObjectName.QuotedName
-        {
-            get
-            {
-                return this.objectName;
-            }
-        }
+        string IObjectName.QuotedName => this.objectName;
     }
 }

@@ -1,12 +1,12 @@
-﻿namespace DataCommander.Providers.MySql
+﻿namespace DataCommander.Providers.MySql.ObjectExplorer
 {
-    using Foundation.Data;
-    using global::MySql.Data.MySqlClient;
     using System;
     using System.Data;
     using System.Drawing;
     using System.Linq;
     using System.Windows.Forms;
+    using Foundation.Data;
+    using global::MySql.Data.MySqlClient;
 
     internal sealed class FunctionNode : ITreeNode
     {
@@ -19,42 +19,18 @@
             this.name = name;
         }
 
-        string ITreeNode.Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        string ITreeNode.Name => this.name;
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool ITreeNode.IsLeaf => true;
 
         System.Collections.Generic.IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             return null;
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ITreeNode.Query => null;
 
         ContextMenuStrip ITreeNode.ContextMenu
         {

@@ -26,10 +26,7 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public IDbConnection Connection
-        {
-            get { return this.connection; }
-        }
+        public IDbConnection Connection => this.connection;
 
         /// <summary>
         /// 
@@ -161,26 +158,17 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public int ConnectionTimeout
-        {
-            get { return this.connection.ConnectionTimeout; }
-        }
+        public int ConnectionTimeout => this.connection.ConnectionTimeout;
 
         /// <summary>
         /// 
         /// </summary>
-        public string Database
-        {
-            get { return this.connection.Database; }
-        }
+        public string Database => this.connection.Database;
 
         /// <summary>
         /// 
         /// </summary>
-        public ConnectionState State
-        {
-            get { return this.connection.State; }
-        }
+        public ConnectionState State => this.connection.State;
 
         /// <summary>
         /// 

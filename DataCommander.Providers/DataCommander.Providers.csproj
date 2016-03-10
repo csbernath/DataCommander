@@ -253,10 +253,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AsyncDataAdapterCommand.cs" />
+    <Compile Include="Connection\ConnectionStringKeyword.cs" />
     <Compile Include="DataCommanderApplication.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Connection\ConnectionStringProperty.cs" />
+    </Compile>    
     <Compile Include="Connection\DatabaseChangedEventArgs.cs" />
     <Compile Include="Connection\DataRowSelector.cs" />
     <Compile Include="Connection\InfoMessage.cs" />
@@ -266,6 +266,7 @@
     <Compile Include="IAsyncDataAdapter.cs" />
     <Compile Include="IAsyncDataAdapterContract.cs" />
     <Compile Include="IDataReaderHelper.cs" />
+    <Compile Include="IDbConnectionStringBuilder.cs" />
     <Compile Include="IObjectName.cs" />
     <Compile Include="IProviderContract.cs" />
     <Compile Include="ITreeNode.cs" />

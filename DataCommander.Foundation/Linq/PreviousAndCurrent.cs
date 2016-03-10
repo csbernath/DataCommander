@@ -18,23 +18,11 @@ namespace DataCommander.Foundation.Linq
         /// <summary>
         /// 
         /// </summary>
-        public T Previous
-        {
-            get
-            {
-                return this.previous;
-            }
-        }
+        public T Previous => this.previous;
 
         /// <summary>
         /// 
         /// </summary>
-        public T Current
-        {
-            get
-            {
-                return this.current;
-            }
-        }
+        public T Current => this.current;
     }
 }

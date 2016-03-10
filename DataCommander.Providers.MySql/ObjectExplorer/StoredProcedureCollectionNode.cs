@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Providers.MySql
+﻿namespace DataCommander.Providers.MySql.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data;
-    using DataCommander.Foundation.Data.SqlClient;
+    using Foundation.Data;
+    using Foundation.Data.SqlClient;
     using global::MySql.Data.MySqlClient;
-    using DataCommander.Foundation.Data;
 
     internal sealed class StoredProcedureCollectionNode : ITreeNode
     {
@@ -15,21 +15,9 @@
             this.databaseNode = databaseNode;
         }
 
-        string ITreeNode.Name
-        {
-            get
-            {
-                return "Stored Procedures";
-            }
-        }
+        string ITreeNode.Name => "Stored Procedures";
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -53,28 +41,10 @@ order by r.ROUTINE_NAME";
                 });
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ITreeNode.Query => null;
 
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu => null;
     }
 }

@@ -35,13 +35,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <summary>
         /// 
         /// </summary>
-        public WorkerThread Thread
-        {
-            get
-            {
-                return this.sqlLog.Thread;
-            }
-        }
+        public WorkerThread Thread => this.sqlLog.Thread;
 
         /// <summary>
         /// 

@@ -28,13 +28,7 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public ICollectionIndex<T> this[string name]
-        {
-            get
-            {
-                return this.dictionary[name];
-            }
-        }
+        public ICollectionIndex<T> this[string name] => this.dictionary[name];
 
         /// <summary>
         /// 
@@ -75,24 +69,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.dictionary.Count;
-            }
-        }
+        public int Count => this.dictionary.Count;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadOnly
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool IsReadOnly => false;
 
         /// <summary>
         /// 

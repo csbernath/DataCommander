@@ -138,13 +138,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public ConfigurationNode RootNode
-        {
-            get
-            {
-                return this.rootNode;
-            }
-        }
+        public ConfigurationNode RootNode => this.rootNode;
 
         /// <summary>
         /// 
@@ -191,35 +185,17 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// Gets the name of file which the config is loaded from.
         /// </summary>
-        public string ConfigFileName
-        {
-            get
-            {
-                return this.configFileName;
-            }
-        }
+        public string ConfigFileName => this.configFileName;
 
         /// <summary>
         /// 
         /// </summary>
-        public string SectionName
-        {
-            get
-            {
-                return this.sectionName;
-            }
-        }
+        public string SectionName => this.sectionName;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsFileSystemWatcherEnabled
-        {
-            get
-            {
-                return this.isFileSystemWatcherEnabled;
-            }
-        }
+        public bool IsFileSystemWatcherEnabled => this.isFileSystemWatcherEnabled;
 
         private void Check(string nodeName, ConfigurationNode node)
         {

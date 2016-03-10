@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.SqlServer2005
+namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System;
     using System.Collections.Generic;
@@ -17,21 +17,9 @@ namespace DataCommander.Providers.SqlServer2005
             this.databaseNode = databaseNode;
         }
 
-        public string Name
-        {
-            get
-            {
-                return "Tables";
-            }
-        }
+        public string Name => "Tables";
 
-        public bool IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
         {
@@ -104,36 +92,12 @@ order by
             return childNodes;
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
-        public string Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public string Query => null;
 
-        public DatabaseNode DatabaseNode
-        {
-            get
-            {
-                return this.databaseNode;
-            }
-        }
+        public DatabaseNode DatabaseNode => this.databaseNode;
 
-        public ContextMenuStrip ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public ContextMenuStrip ContextMenu => null;
     }
 }

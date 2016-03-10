@@ -47,7 +47,7 @@ namespace DataCommander.Providers.Wmi
             DbConnectionStringBuilder sb = new DbConnectionStringBuilder();
             sb.ConnectionString = this.connectionString;
             object value;            
-            bool contains = sb.TryGetValue( ConnectionStringProperty.DataSource, out value );
+            bool contains = sb.TryGetValue( ConnectionStringKeyword.DataSource, out value );
             string dataSource;
 
             if (contains)
@@ -81,44 +81,14 @@ namespace DataCommander.Providers.Wmi
             }
         }
 
-        public int ConnectionTimeout
-        {
-            get
-            {
-                return 0;
-            }
-        }
+        public int ConnectionTimeout => 0;
 
-        public string Database
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public string Database => null;
 
-        public ConnectionState State
-        {
-            get
-            {
-                return ConnectionState.Closed;
-            }
-        }
+        public ConnectionState State => ConnectionState.Closed;
 
-        public ManagementScope Scope
-        {
-            get
-            {
-                return this.scope;
-            }
-        }
+        public ManagementScope Scope => this.scope;
 
-        public string DataSource
-        {
-            get
-            {
-                return this.dataSource;
-            }
-        }
+        public string DataSource => this.dataSource;
     }
 }

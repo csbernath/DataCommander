@@ -12,13 +12,7 @@
             this.connection = connection;
         }
 
-        public TfsConnection Connection
-        {
-            get
-            {
-                return this.connection;
-            }
-        }
+        public TfsConnection Connection => this.connection;
 
         #region IDbConnection Members
 
@@ -64,26 +58,14 @@
             throw new NotImplementedException();
         }
 
-        string IDbConnection.Database
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string IDbConnection.Database => null;
 
         void IDbConnection.Open()
         {
             throw new NotImplementedException();
         }
 
-        ConnectionState IDbConnection.State
-        {
-            get
-            {
-                return this.connection.ConnectionState;
-            }
-        }
+        ConnectionState IDbConnection.State => this.connection.ConnectionState;
 
         #endregion
 

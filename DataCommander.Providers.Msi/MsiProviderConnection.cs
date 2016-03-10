@@ -41,41 +41,17 @@
 			}
 		}
 
-		public override string Caption
-		{
-			get
-			{
-				return this.msiConnection.Database.FilePath;
-			}
-		}
+		public override string Caption => this.msiConnection.Database.FilePath;
 
-		public override string DataSource
-		{
-			get
-			{
-				return this.msiConnection.Database.FilePath;
-			}
-		}
+        public override string DataSource => this.msiConnection.Database.FilePath;
 
-		protected override void SetDatabase( string database )
+        protected override void SetDatabase( string database )
 		{
 			throw new NotImplementedException();
 		}
 
-		public override string ServerVersion
-		{
-			get
-			{
-				return null;
-			}
-		}
+		public override string ServerVersion => null;
 
-        public override int TransactionCount
-        {
-            get
-            {
-                return 0;
-            }
-        }
+        public override int TransactionCount => 0;
 	}
 }

@@ -23,21 +23,9 @@
             this.defaultValue = defaultValue;
         }
 
-        public Type Type
-        {
-            get
-            {
-                return this.type;
-            }
-        }
+        public Type Type => this.type;
 
-        public object DefaultValue
-        {
-            get
-            {
-                return this.defaultValue;
-            }
-        }
+        public object DefaultValue => this.defaultValue;
 
         #region IDataParameter Members
 
@@ -67,13 +55,7 @@
             }
         }
 
-        public bool IsNullable
-        {
-            get
-            {
-                return this.isNullable;
-            }
-        }
+        public bool IsNullable => this.isNullable;
 
         public string ParameterName
         {

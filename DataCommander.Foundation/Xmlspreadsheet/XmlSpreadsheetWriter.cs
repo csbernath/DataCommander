@@ -35,13 +35,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public XmlWriter XmlWriter
-        {
-            get
-            {
-                return this.xmlWriter;
-            }
-        }
+        public XmlWriter XmlWriter => this.xmlWriter;
 
         /// <summary>
         /// 

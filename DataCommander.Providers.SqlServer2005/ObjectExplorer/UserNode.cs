@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.SqlServer2005
+namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Windows.Forms;
@@ -11,35 +11,17 @@ namespace DataCommander.Providers.SqlServer2005
             this.name = name;
         }
 
-        public string Name    
-        {
-            get
-            {
-                return this.name;
-            }
-        }
-    
-        public bool IsLeaf    
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public string Name => this.name;
+
+        public bool IsLeaf => true;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             return null;
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
-    
+        public bool Sortable => false;
+
         public string Query
         {
             get
@@ -57,13 +39,7 @@ group by u.name", this.database.Name, this.name);
             }
         }
 
-        public ContextMenuStrip ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public ContextMenuStrip ContextMenu => null;
 
         readonly DatabaseNode database;
         readonly string       name;

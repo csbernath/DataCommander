@@ -37,45 +37,21 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.count;
-            }
-        }
+        public int Count => this.count;
 
         /// <summary>
         /// 
         /// </summary>
-        public int WhereCount
-        {
-            get
-            {
-                return this.whereCount;
-            }
-        }
+        public int WhereCount => this.whereCount;
 
         /// <summary>
         /// 
         /// </summary>
-        public IndexedItem<T> Min
-        {
-            get
-            {
-                return this.min;
-            }
-        }
+        public IndexedItem<T> Min => this.min;
 
         /// <summary>
         /// 
         /// </summary>
-        public IndexedItem<T> Max
-        {
-            get
-            {
-                return this.max;
-            }
-        }
+        public IndexedItem<T> Max => this.max;
     }
 }

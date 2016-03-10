@@ -1,10 +1,10 @@
-namespace DataCommander.Providers.SqlServer2005
+namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
+    using Foundation.Data;
 
     internal sealed class SchemaCollectionNode : ITreeNode
     {
@@ -15,21 +15,9 @@ namespace DataCommander.Providers.SqlServer2005
             this.database = database;
         }
 
-        public string Name
-        {
-            get
-            {
-                return "Schemas";
-            }
-        }
-    
-        public bool IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public string Name => "Schemas";
+
+        public bool IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -60,28 +48,10 @@ order by s.name";
             return treeNodes;
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
-    
-        public string Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public bool Sortable => false;
 
-        public ContextMenuStrip ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public string Query => null;
+
+        public ContextMenuStrip ContextMenu => null;
     }
 }

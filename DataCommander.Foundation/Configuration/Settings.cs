@@ -83,13 +83,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public static ConfigurationNode RootNode
-        {
-            get
-            {
-                return Section.RootNode;
-            }
-        }
+        public static ConfigurationNode RootNode => Section.RootNode;
 
         /// <summary>
         /// Gets the <see cref="ConfigurationSection" /> instance.

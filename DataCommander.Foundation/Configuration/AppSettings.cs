@@ -23,13 +23,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public static NameValueCollectionReader Instance
-        {
-            get
-            {
-                return instance.Value;
-            }
-        }
+        public static NameValueCollectionReader Instance => instance.Value;
 
         /// <summary>
         /// 

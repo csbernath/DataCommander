@@ -110,13 +110,7 @@
                 }
             }
 
-            int IReadOnlyCollection<T>.Count
-            {
-                get
-                {
-                    return this.count;
-                }
-            }
+            int IReadOnlyCollection<T>.Count => this.count;
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator()
             {

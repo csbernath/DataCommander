@@ -27,23 +27,11 @@ namespace DataCommander.Foundation.Linq
         /// <summary>
         /// 
         /// </summary>
-        public int Index
-        {
-            get
-            {
-                return this.index;
-            }
-        }
+        public int Index => this.index;
 
         /// <summary>
         /// 
         /// </summary>
-        public T Value
-        {
-            get
-            {
-                return this.value;
-            }
-        }
+        public T Value => this.value;
     }
 }

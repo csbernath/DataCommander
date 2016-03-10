@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.Odp
+namespace DataCommander.Providers.Odp.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data;
@@ -12,34 +12,16 @@ namespace DataCommander.Providers.Odp
         private OracleConnection connection;
         private SchemaCollectionNode schemasNode;
 
-        public OracleConnection OracleConnection
-        {
-            get
-            {
-                return connection;
-            }
-        }
+        public OracleConnection OracleConnection => connection;
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             return new ITreeNode[] { schemasNode };
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
-        public SchemaCollectionNode SchemasNode
-        {
-            get
-            {
-                return schemasNode;
-            }
-        }
+        public SchemaCollectionNode SchemasNode => schemasNode;
 
         #region IObjectExplorer Members
 

@@ -12,6 +12,12 @@ namespace DataCommander.Providers
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         public string ConnectionName;
         public string ProviderName;
+
+        public string DataSource;
+        public string InitialCatalog;
+        public bool? IntegratedSecurity;
+        public string UserId;
+
         public IProvider Provider;
         public string ConnectionString;
         public ConnectionBase Connection;
@@ -48,6 +54,10 @@ namespace DataCommander.Providers
             ConfigurationAttributeCollection attributes = folder.Attributes;
             attributes.SetAttributeValue("ConnectionName", this.ConnectionName);
             attributes.SetAttributeValue("ProviderName", this.ProviderName);
+            attributes.SetAttributeValue(ConnectionStringKeyword.DataSource, this.DataSource);
+            attributes.SetAttributeValue(ConnectionStringKeyword.InitialCatalog,this.InitialCatalog);
+            attributes.SetAttributeValue(ConnectionStringKeyword.IntegratedSecurity,this.IntegratedSecurity);
+            attributes.SetAttributeValue(ConnectionStringKeyword.UserId,this.UserId);
             attributes.SetAttributeValue("ConnectionString", this.ConnectionString);
         }
 
@@ -57,6 +67,34 @@ namespace DataCommander.Providers
             this.ConnectionName = attributes["ConnectionName"].GetValue<string>();
             this.ProviderName = attributes["ProviderName"].GetValue<string>();
             this.ConnectionString = attributes["ConnectionString"].GetValue<string>();
+
+            ConfigurationAttribute attribute;
+            if (attributes.TryGetValue(ConnectionStringKeyword.DataSource, out attribute))
+            {
+                this.DataSource = attribute.GetValue<string>();
+            }
+
+            if (attributes.TryGetValue(ConnectionStringKeyword.InitialCatalog, out attribute))
+            {
+                this.InitialCatalog = attribute.GetValue<string>();
+            }
+
+            if (attributes.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out attribute))
+            {
+                if (attribute.Value != null)
+                {
+                    this.IntegratedSecurity = attribute.GetValue<bool>();
+                }
+                else
+                {
+                    this.IntegratedSecurity = null;
+                }
+            }
+
+            if (attributes.TryGetValue(ConnectionStringKeyword.UserId, out attribute))
+            {
+                this.UserId = attribute.GetValue<string>();
+            }
         }
 
         public void LoadProtectedPassword(ConfigurationNode node)
@@ -80,7 +118,7 @@ namespace DataCommander.Providers
                 {
                     var dbConnectionStringBuilder = new DbConnectionStringBuilder();
                     dbConnectionStringBuilder.ConnectionString = this.ConnectionString;
-                    dbConnectionStringBuilder["Password"] = password;
+                    dbConnectionStringBuilder[ConnectionStringKeyword.Password] = password;
                     this.ConnectionString = dbConnectionStringBuilder.ConnectionString;
                 }
             }

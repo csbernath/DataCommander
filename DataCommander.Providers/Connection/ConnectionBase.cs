@@ -44,13 +44,7 @@ namespace DataCommander.Providers
             set;
         }
 
-        public string ConnectionString
-        {
-            get
-            {
-                return this.connection.ConnectionString;
-            }
-        }
+        public string ConnectionString => this.connection.ConnectionString;
 
         public abstract string Caption
         {

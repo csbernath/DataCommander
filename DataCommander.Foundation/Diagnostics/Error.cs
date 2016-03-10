@@ -27,13 +27,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public ErrorType Type
-        {
-            get
-            {
-                return this.type;
-            }
-        }
+        public ErrorType Type => this.type;
 
         public override string ToString()
         {

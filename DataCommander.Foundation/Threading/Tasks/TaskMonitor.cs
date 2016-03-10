@@ -41,13 +41,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public static int Count
-        {
-            get
-            {
-                return tasks.Count;
-            }
-        }
+        public static int Count => tasks.Count;
 
         #endregion
 

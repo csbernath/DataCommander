@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Providers.SqlServer2005
+﻿namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Linq;
+    using Foundation.Linq;
 
     internal sealed class LinkedServerNode : ITreeNode
     {
@@ -19,68 +19,26 @@
             this.name = name;
         }
 
-        public LinkedServerCollectionNode LinkedServers
-        {
-            get
-            {
-                return this.linkedServers;
-            }
-        }
+        public LinkedServerCollectionNode LinkedServers => this.linkedServers;
 
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name => this.name;
 
         #region ITreeNode Members
 
-        string ITreeNode.Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        string ITreeNode.Name => this.name;
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
         {
             return new LinkedServerCatalogCollectionNode( this ).ItemAsEnumerable();
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        ContextMenuStrip ITreeNode.ContextMenu => null;
 
         #endregion
     }

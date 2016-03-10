@@ -1,11 +1,11 @@
-namespace DataCommander.Providers.Odp
+namespace DataCommander.Providers.Odp.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data;
     using System.Threading;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Configuration;
-    using DataCommander.Foundation.Data;
+    using Foundation.Configuration;
+    using Foundation.Data;
     using Oracle.ManagedDataAccess.Client;
 
     /// <summary>
@@ -18,23 +18,11 @@ namespace DataCommander.Providers.Odp
 			this.schema = schema;
 		}
 
-		public string Name
-		{
-			get
-			{
-				return "Tables";
-			}
-		}
+		public string Name => "Tables";
 
-		public bool IsLeaf
-		{
-			get
-			{
-				return false;
-			}
-		}
+        public bool IsLeaf => false;
 
-		public IEnumerable<ITreeNode> GetChildren( bool refresh )
+        public IEnumerable<ITreeNode> GetChildren( bool refresh )
 		{
 			ConfigurationNode folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
 			string key = schema.SchemasNode.Connection.DataSource + "." + schema.Name;
@@ -71,31 +59,13 @@ namespace DataCommander.Providers.Odp
 			return treeNodes;
 		}
 
-		public bool Sortable
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public bool Sortable => false;
 
-		public string Query
-		{
-			get
-			{
-				return null;
-			}
-		}
+        public string Query => null;
 
-		public ContextMenuStrip ContextMenu
-		{
-			get
-			{
-				return null;
-			}
-		}
+        public ContextMenuStrip ContextMenu => null;
 
-		public void BeforeExpand()
+        public void BeforeExpand()
 		{
 		}
 

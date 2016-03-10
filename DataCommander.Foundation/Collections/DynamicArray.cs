@@ -138,24 +138,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.count;
-            }
-        }
+        public int Count => this.count;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadOnly
-        {
-            get
-            {
-                return this.array.IsReadOnly;
-            }
-        }
+        public bool IsReadOnly => this.array.IsReadOnly;
 
         bool ICollection<T>.Remove(T item)
         {

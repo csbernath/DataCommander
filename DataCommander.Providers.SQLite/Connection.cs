@@ -53,42 +53,17 @@ namespace DataCommander.Providers.SQLite
             return this.sqliteConnection.CreateCommand();
         }
 
-        public override string Caption
-        {
-            get
-            {
-                return this.sqliteConnection.DataSource;
-            }
-        }
+        public override string Caption => this.sqliteConnection.DataSource;
 
-        public override string DataSource
-        {
-            get
-            {
-                return this.sqliteConnection.DataSource;
-            }
-        }
+        public override string DataSource => this.sqliteConnection.DataSource;
 
         protected override void SetDatabase(string database)
         {
             throw new Exception("The method or operation is not implemented.");
         }
 
-        public override string ServerVersion
-        {
-            get
-            {
-                return this.sqliteConnection.ServerVersion;
-            }
-        }
+        public override string ServerVersion => this.sqliteConnection.ServerVersion;
 
-        public override int TransactionCount
-        {
-            get
-            {
-                // TODO
-                return 0;
-            }
-        }
+        public override int TransactionCount => 0;
     }
 }

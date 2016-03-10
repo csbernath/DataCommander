@@ -107,13 +107,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <summary>
         /// Gets the logger thread.
         /// </summary>
-        public WorkerThread Thread
-        {
-            get
-            {
-                return this.thread;
-            }
-        }
+        public WorkerThread Thread => this.thread;
 
         private void Flush()
         {

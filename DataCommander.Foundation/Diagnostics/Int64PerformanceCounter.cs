@@ -88,46 +88,22 @@
         /// <summary>
         /// 
         /// </summary>
-        public long Count
-        {
-            get
-            {
-                return this.count;
-            }
-        }
+        public long Count => this.count;
 
         /// <summary>
         /// 
         /// </summary>
-        public long Sum
-        {
-            get
-            {
-                return this.sum;
-            }
-        }
+        public long Sum => this.sum;
 
         /// <summary>
         /// 
         /// </summary>
-        public long Min
-        {
-            get
-            {
-                return this.min;
-            }
-        }
+        public long Min => this.min;
 
         /// <summary>
         /// 
         /// </summary>
-        public long Max
-        {
-            get
-            {
-                return this.max;
-            }
-        }
+        public long Max => this.max;
 
         /// <summary>
         /// 

@@ -35,21 +35,9 @@ namespace DataCommander.Providers
 
         #region Public Properties
 
-        public IDictionary<string, string> Tables
-        {
-            get
-            {
-                return this.tables;
-            }
-        }
+        public IDictionary<string, string> Tables => this.tables;
 
-        public Token[] Tokens
-        {
-            get
-            {
-                return this.tokens;
-            }
-        }
+        public Token[] Tokens => this.tokens;
 
         #endregion
 
@@ -828,21 +816,9 @@ namespace DataCommander.Providers
                 this.alias = alias;
             }
 
-            public int Index
-            {
-                get
-                {
-                    return this.index;
-                }
-            }
+            public int Index => this.index;
 
-            public string Name
-            {
-                get
-                {
-                    return this.name;
-                }
-            }
+            public string Name => this.name;
         }
 
         private sealed class Parameter
@@ -856,21 +832,9 @@ namespace DataCommander.Providers
                 this.value = value;
             }
 
-            public string Name
-            {
-                get
-                {
-                    return this.name;
-                }
-            }
+            public string Name => this.name;
 
-            public object Value
-            {
-                get
-                {
-                    return this.value;
-                }
-            }
+            public object Value => this.value;
         }
 
         #endregion

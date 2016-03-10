@@ -9,13 +9,7 @@ namespace DataCommander.Providers
             this.width = width;
         }
 
-        public int Width
-        {
-            get
-            {
-                return this.width;
-            }
-        }
+        public int Width => this.width;
 
         public abstract string ToString( object value );
     }

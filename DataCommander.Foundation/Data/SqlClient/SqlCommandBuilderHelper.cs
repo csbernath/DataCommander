@@ -18,13 +18,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public static SqlCommandBuilderHelper Instance
-        {
-            get
-            {
-                return instance;
-            }
-        }
+        public static SqlCommandBuilderHelper Instance => instance;
 
         #region IDbCommandBuilder Members
 

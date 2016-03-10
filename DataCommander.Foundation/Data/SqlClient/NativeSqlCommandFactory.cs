@@ -9,13 +9,7 @@ namespace DataCommander.Foundation.Data.SqlClient
     /// </summary>
     public class NativeSqlCommandFactory : IDbConnectionFactory
     {
-        WorkerThread IDbConnectionFactory.Thread
-        {
-            get
-            {
-                return null;
-            }
-        }
+        WorkerThread IDbConnectionFactory.Thread => null;
 
         /// <summary>
         /// 

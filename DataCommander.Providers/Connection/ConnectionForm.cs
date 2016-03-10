@@ -13,7 +13,7 @@ namespace DataCommander.Providers
     using DataCommander.Foundation.Configuration;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Windows.Forms;
-
+    using Foundation.Linq;
     internal sealed class ConnectionForm : Form
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
@@ -39,10 +39,10 @@ namespace DataCommander.Providers
 
             this.dataTable.Columns.Add("ConnectionName", typeof(string));
             this.dataTable.Columns.Add("ProviderName", typeof(string));
-            this.dataTable.Columns.Add("Data Source");
-            this.dataTable.Columns.Add("Initial Catalog");
-            this.dataTable.Columns.Add("Integrated Security");
-            this.dataTable.Columns.Add("User ID");
+            this.dataTable.Columns.Add(ConnectionStringKeyword.DataSource);
+            this.dataTable.Columns.Add(ConnectionStringKeyword.InitialCatalog);
+            this.dataTable.Columns.Add(ConnectionStringKeyword.IntegratedSecurity);
+            this.dataTable.Columns.Add(ConnectionStringKeyword.UserId);
             this.dataTable.Columns.Add("Persist Security Info");
             this.dataTable.Columns.Add("Enlist");
             this.dataTable.Columns.Add("Pooling");
@@ -61,10 +61,7 @@ namespace DataCommander.Providers
                 this.dataTable.Rows.Add(dataRow);
             }
 
-            //DataGridTableStyle tableStyle = new DataGridTableStyle();
-            //tableStyle.MappingName = dataTable.TableName;
-            //dataGrid.TableStyles.Add(tableStyle);
-            Graphics graphics = this.CreateGraphics();
+            var graphics = this.CreateGraphics();
 
             foreach (DataColumn column in this.dataTable.Columns)
             {
@@ -102,13 +99,7 @@ namespace DataCommander.Providers
             this.dataGrid.DataSource = this.dataTable;
         }
 
-        public ConnectionProperties ConnectionProperties
-        {
-            get
-            {
-                return this.connectionProperties;
-            }
-        }
+        public ConnectionProperties ConnectionProperties => this.connectionProperties;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -211,13 +202,7 @@ namespace DataCommander.Providers
         }
         #endregion
 
-        public long Duration
-        {
-            get
-            {
-                return this.duration;
-            }
-        }
+        public long Duration => this.duration;
 
         private void LoadConnection(ConfigurationNode folder, DataRow row)
         {
@@ -225,43 +210,23 @@ namespace DataCommander.Providers
             connectionProperties.Load(folder);
             row["ConnectionName"] = connectionProperties.ConnectionName;
             row["ProviderName"] = connectionProperties.ProviderName;
-            var dbConnectionStringBuilder = new DbConnectionStringBuilder();
-            dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
+            row[ConnectionStringKeyword.DataSource] = connectionProperties.DataSource;
+            row[ConnectionStringKeyword.InitialCatalog] = connectionProperties.InitialCatalog;
+            row[ConnectionStringKeyword.IntegratedSecurity] = connectionProperties.IntegratedSecurity;
+            row[ConnectionStringKeyword.UserId] = connectionProperties.UserId;
 
-            string dataSource = null;
-            string initialCatalog = null;
+            //var provider = ProviderFactory.CreateProvider(connectionProperties.ProviderName);
+            //var connectionStringBuilder = provider.CreateConnectionStringBuilder();
+            //connectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
 
-            foreach (string key in dbConnectionStringBuilder.Keys)
-            {
-                DataColumn column = this.dataTable.Columns[key];
-
-                if (column != null)
-                {
-                    object value = dbConnectionStringBuilder[key];
-                    row[column] = value;
-
-                    if (string.Equals(key, ConnectionStringProperty.DataSource, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        dataSource = (string)value;
-                    }
-                    else if (string.Equals(key, ConnectionStringProperty.InitialCatalog, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        initialCatalog = (string)value;
-                    }
-                }
-            }
-
-            if (dataSource == null)
-            {
-                row[ConnectionStringProperty.DataSource] =
-                    dbConnectionStringBuilder.GetValue(ConnectionStringProperty.Server)
-                    ?? dbConnectionStringBuilder.GetValue(ConnectionStringProperty.Host);
-            }
-
-            if (initialCatalog == null)
-            {
-                row[ConnectionStringProperty.InitialCatalog] = dbConnectionStringBuilder.GetValue(ConnectionStringProperty.Database);
-            }
+            //foreach (DataColumn dataColumn in this.dataTable.Columns.Cast<DataColumn>().Skip(2))
+            //{
+            //    object value;
+            //    if (connectionStringBuilder.TryGetValue(dataColumn.ColumnName, out value))
+            //    {
+            //        row[dataColumn.ColumnName] = value;
+            //    }
+            //}
         }
 
         private void btnOK_Click(object sender, EventArgs e)
@@ -278,16 +243,6 @@ namespace DataCommander.Providers
 
         private void Copy_Click(object sender, EventArgs e)
         {
-            //ConfigurationNode folder = this.SelectedConfigurationNode;
-            //ConnectionProperties connectionProperties = new ConnectionProperties();
-            //connectionProperties.Load(folder);
-            //StringWriter stringWriter = new StringWriter();
-            //XmlTextWriter xmlTextWriter = new XmlTextWriter(stringWriter);
-            //xmlTextWriter.Formatting = Formatting.Indented;
-            //ConfigurationWriter.WriteFolder(xmlTextWriter, folder);
-            //string s = stringWriter.ToString();
-            //Clipboard.SetText(s);
-
             StringWriter stringWriter = new StringWriter();
             XmlTextWriter xmlTextWriter = new XmlTextWriter(stringWriter);
             xmlTextWriter.Formatting = Formatting.Indented;
@@ -308,9 +263,9 @@ namespace DataCommander.Providers
             try
             {
                 string s = Clipboard.GetText();
-                StringReader stringReader = new StringReader(s);
-                XmlTextReader xmlTextReader = new XmlTextReader(stringReader);
-                ConfigurationReader configurationReader = new ConfigurationReader();
+                var stringReader = new StringReader(s);
+                var xmlTextReader = new XmlTextReader(stringReader);
+                var configurationReader = new ConfigurationReader();
                 ConfigurationNode propertyFolder = configurationReader.Read(xmlTextReader);
                 propertyFolder.Write(TraceWriter.Instance);
                 IEnumerable<ConfigurationNode> configurationNodes;
@@ -321,12 +276,12 @@ namespace DataCommander.Providers
                 }
                 else
                 {
-                    configurationNodes = new ConfigurationNode[] { propertyFolder };
+                    configurationNodes = new ConfigurationNode[] {propertyFolder};
                 }
 
                 foreach (ConfigurationNode configurationNode in configurationNodes)
                 {
-                    ConnectionProperties connectionProperties = new ConnectionProperties();
+                    var connectionProperties = new ConnectionProperties();
                     connectionProperties.Load(configurationNode);
                     this.Add(connectionProperties);
                 }
@@ -360,11 +315,9 @@ namespace DataCommander.Providers
             ConfigurationNode folder = this.SelectedConfigurationNode;
             ConnectionProperties connectionProperties = new ConnectionProperties();
             connectionProperties.Load(folder);
-            DbConnectionStringBuilder dbConnectionStringBuilder = new DbConnectionStringBuilder();
-            ConnectionStringBuilderForm form = new ConnectionStringBuilderForm();
+            var form = new ConnectionStringBuilderForm();
             form.ConnectionProperties = connectionProperties;
-            DialogResult dialogResult = form.ShowDialog();
-
+            var dialogResult = form.ShowDialog();
             if (dialogResult == DialogResult.OK)
             {
                 connectionProperties = form.ConnectionProperties;

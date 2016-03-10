@@ -29,24 +29,12 @@ namespace DataCommander.Foundation.Text
         /// <summary>
         /// 
         /// </summary>
-        public StringTableColumnCollection Columns
-        {
-            get
-            {
-                return this.columns;
-            }
-        }
+        public StringTableColumnCollection Columns => this.columns;
 
         /// <summary>
         /// 
         /// </summary>
-        public StringTableRowCollection Rows
-        {
-            get
-            {
-                return this.rows;
-            }
-        }
+        public StringTableRowCollection Rows => this.rows;
 
         /// <summary>
         /// 

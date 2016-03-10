@@ -105,21 +105,9 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.count;
-            }
-        }
+        public int Count => this.count;
 
-        bool ICollection<T>.IsReadOnly
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ICollection<T>.IsReadOnly => false;
 
         bool ICollection<T>.Remove(T item)
         {
@@ -172,21 +160,9 @@
                 this.array = new T[size];
             }
 
-            public int Count
-            {
-                get
-                {
-                    return this.count;
-                }
-            }
+            public int Count => this.count;
 
-            public T this[int index]
-            {
-                get
-                {
-                    return this.array[index];
-                }
-            }
+            public T this[int index] => this.array[index];
 
             public Segment Next
             {

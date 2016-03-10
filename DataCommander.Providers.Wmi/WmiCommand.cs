@@ -91,23 +91,11 @@ namespace DataCommander.Providers.Wmi
       }
     }
 
-    public WmiConnection Connection
-    {
-      get
-      {
-        return this.connection;
-      }
-    }
-    
-    public IDataParameterCollection Parameters
-    {
-      get
-      {
-        return null;
-      }
-    }
-    
-    public IDbTransaction Transaction
+    public WmiConnection Connection => this.connection;
+
+        public IDataParameterCollection Parameters => null;
+
+        public IDbTransaction Transaction
     {
       get
       {
@@ -129,15 +117,9 @@ namespace DataCommander.Providers.Wmi
       }
     }
     
-    internal bool Cancelled
-    {
-      get
-      {
-        return this.cancelled;
-      }
-    }
+    internal bool Cancelled => this.cancelled;
 
-      readonly WmiConnection connection;
+        readonly WmiConnection connection;
     string        commandText;
     bool          cancelled = false;
   }

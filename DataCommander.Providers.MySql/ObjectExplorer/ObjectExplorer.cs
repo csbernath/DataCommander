@@ -1,22 +1,16 @@
-﻿namespace DataCommander.Providers.MySql
+﻿namespace DataCommander.Providers.MySql.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data;
-    using DataCommander.Foundation.Data;
-    using DataCommander.Providers;
+    using Foundation.Data;
     using global::MySql.Data.MySqlClient;
+    using Providers;
 
     internal sealed class ObjectExplorer : IObjectExplorer
     {
         private string connectionString;
 
-        public string ConnectionString
-        {
-            get
-            {
-                return this.connectionString;
-            }
-        }
+        public string ConnectionString => this.connectionString;
 
         void IObjectExplorer.SetConnection(string connectionString, System.Data.IDbConnection connection)
         {
@@ -40,12 +34,6 @@ order by SCHEMA_NAME";
                 });
         }
 
-        bool IObjectExplorer.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IObjectExplorer.Sortable => false;
     }
 }

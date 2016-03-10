@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Connection.cs" />
+    <Compile Include="ConnectionStringBuilder.cs" />
     <Compile Include="DatabaseObjectMultipartName.cs" />
     <Compile Include="IdentifierParser.cs" />
     <Compile Include="MySqlDataReaderHelper.cs" />

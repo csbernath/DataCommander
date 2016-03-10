@@ -17,13 +17,7 @@
             dictionary.Add(name, info);
         }
 
-        public static SortedDictionary<string, DataReaderInfo> Dictionary
-        {
-            get
-            {
-                return dictionary;
-            }
-        }
+        public static SortedDictionary<string, DataReaderInfo> Dictionary => dictionary;
 
         public sealed class DataReaderInfo
         {
@@ -41,21 +35,9 @@
                 this.createDataReader = createDataReader;
             }
 
-            public TfsParameterCollection Parameters
-            {
-                get
-                {
-                    return this.parameters;
-                }
-            }
+            public TfsParameterCollection Parameters => this.parameters;
 
-            public CreateDataReader CreateDataReader
-            {
-                get
-                {
-                    return this.createDataReader;
-                }
-            }
+            public CreateDataReader CreateDataReader => this.createDataReader;
         }
     }
 }

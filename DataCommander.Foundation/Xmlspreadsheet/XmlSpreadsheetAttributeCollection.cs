@@ -26,13 +26,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public UniqueIndex<string, XmlSpreadsheetAttribute> NameIndex
-        {
-            get
-            {
-                return this.nameIndex;
-            }
-        }
+        public UniqueIndex<string, XmlSpreadsheetAttribute> NameIndex => this.nameIndex;
 
         #region ICollection<XmlSpreadsheetAttribute> Members
 
@@ -60,13 +54,7 @@
             throw new NotImplementedException();
         }
 
-        int ICollection<XmlSpreadsheetAttribute>.Count
-        {
-            get
-            {
-                return this.items.Count;
-            }
-        }
+        int ICollection<XmlSpreadsheetAttribute>.Count => this.items.Count;
 
         bool ICollection<XmlSpreadsheetAttribute>.IsReadOnly
         {

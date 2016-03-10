@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.Odp
+namespace DataCommander.Providers.Odp.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Windows.Forms;
@@ -13,54 +13,23 @@ namespace DataCommander.Providers.Odp
             this.name = name;
         }
 
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-        }
+        public string Name => name;
 
-        public bool IsLeaf
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public bool IsLeaf => true;
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             return null;
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
-        public string Query
-        {
-            get
-            {
-                return
-                    $@"select column_name from SYS.ALL_IND_COLUMNS
+        public string Query => $@"select column_name from SYS.ALL_IND_COLUMNS
 where table_owner = '{table.Schema.Name}' and table_name = '{table.Name
-                        }' and index_name = '{name}'
+            }' and index_name = '{name}'
 order by column_position";
-            }
-        }
 
-        public ContextMenuStrip ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public ContextMenuStrip ContextMenu => null;
 
         public void BeforeExpand()
         {

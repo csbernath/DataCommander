@@ -28,24 +28,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public WorkerThread Thread
-        {
-            get
-            {
-                return this.thread;
-            }
-        }
+        public WorkerThread Thread => this.thread;
 
         /// <summary>
         /// 
         /// </summary>
-        public int QueuedItemCount
-        {
-            get
-            {
-                return this.queuedItemCount;
-            }
-        }
+        public int QueuedItemCount => this.queuedItemCount;
 
         /// <summary>
         /// 

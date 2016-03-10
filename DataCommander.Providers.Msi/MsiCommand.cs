@@ -22,13 +22,7 @@
             this.connection = connection;
         }
 
-        public MsiConnection Connection
-        {
-            get
-            {
-                return this.connection;
-            }
-        }
+        public MsiConnection Connection => this.connection;
 
         #region IDbCommand Members
 
@@ -113,13 +107,7 @@
             throw new NotImplementedException();
         }
 
-        IDataParameterCollection IDbCommand.Parameters
-        {
-            get
-            {
-                return this.parameters;
-            }
-        }
+        IDataParameterCollection IDbCommand.Parameters => this.parameters;
 
         void IDbCommand.Prepare()
         {

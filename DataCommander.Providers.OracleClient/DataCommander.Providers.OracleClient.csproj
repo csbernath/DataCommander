@@ -80,6 +80,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Connection.cs" />
+    <Compile Include="ConnectionStringBuilder.cs" />
+    <Compile Include="DataParameterImp.cs" />
     <Compile Include="OracleDataReaderHelper.cs" />
     <Compile Include="OracleProvider.cs" />
   </ItemGroup>

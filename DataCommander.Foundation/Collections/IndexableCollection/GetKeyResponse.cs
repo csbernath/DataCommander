@@ -23,24 +23,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public bool HasKey
-        {
-            get
-            {
-                return this.hasKey;
-            }
-        }
+        public bool HasKey => this.hasKey;
 
         /// <summary>
         /// 
         /// </summary>
-        public T Key
-        {
-            get
-            {
-                return this.key;
-            }
-        }
+        public T Key => this.key;
     }
 
     /// <summary>

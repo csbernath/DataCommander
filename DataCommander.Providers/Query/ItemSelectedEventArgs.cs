@@ -15,28 +15,10 @@ namespace DataCommander.Providers
             this.objectName = objectName;
         }
 
-        public int StartIndex
-        {
-            get
-            {
-                return this.startIndex;
-            }
-        }
+        public int StartIndex => this.startIndex;
 
-        public int Length
-        {
-            get
-            {
-                return this.length;
-            }
-        }
+        public int Length => this.length;
 
-        public IObjectName ObjectName
-        {
-            get
-            {
-                return this.objectName;
-            }
-        }
+        public IObjectName ObjectName => this.objectName;
     }
 }

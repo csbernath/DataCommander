@@ -56,100 +56,46 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public long Id
-        {
-            get
-            {
-                return this.id;
-            }
-        }
+        public long Id => this.id;
 
         /// <summary>
         /// 
         /// </summary>
-        public string LogName
-        {
-            get
-            {
-                return this.logName;
-            }
-        }
+        public string LogName => this.logName;
 
         /// <summary>
         /// 
         /// </summary>
-        public DateTime CreationTime
-        {
-            get
-            {
-                return this.creationTime;
-            }
-        }
+        public DateTime CreationTime => this.creationTime;
 
         /// <summary>
         /// 
         /// </summary>
-        public int ManagedThreadId
-        {
-            get
-            {
-                return this.managedThreadId;
-            }
-        }
+        public int ManagedThreadId => this.managedThreadId;
 
         /// <summary>
         /// 
         /// </summary>
-        public string ThreadName
-        {
-            get
-            {
-                return this.threadName;
-            }
-        }
+        public string ThreadName => this.threadName;
 
         /// <summary>
         /// 
         /// </summary>
-        public string HostName
-        {
-            get
-            {
-                return this.hostName;
-            }
-        }
+        public string HostName => this.hostName;
 
         /// <summary>
         /// 
         /// </summary>
-        public string UserName
-        {
-            get
-            {
-                return this.userName;
-            }
-        }
+        public string UserName => this.userName;
 
         /// <summary>
         /// 
         /// </summary>
-        public string Message
-        {
-            get
-            {
-                return this.message;
-            }
-        }
+        public string Message => this.message;
 
         /// <summary>
         /// 
         /// </summary>
-        public LogLevel LogLevel
-        {
-            get
-            {
-                return this.logLevel;
-            }
-        }
+        public LogLevel LogLevel => this.logLevel;
     }
 }

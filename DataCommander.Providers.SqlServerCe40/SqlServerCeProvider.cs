@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Providers.SqlServerCe
+﻿namespace DataCommander.Providers.SqlServerCe40
 {
     using System;
     using System.Collections.Generic;
@@ -8,48 +8,25 @@
     using System.Diagnostics;
     using System.Text;
     using System.Xml;
-    using DataCommander.Foundation.Data;
+    using Foundation.Data;
+    using ObjectExplorer;
 
     public sealed class SqlServerCeProvider : IProvider
     {
         #region IProvider Members
 
-        string IProvider.Name
-        {
-            get
-            {
-                return "SqlServerCe40";
-            }
-        }
+        string IProvider.Name => "SqlServerCe40";
 
-        DbProviderFactory IProvider.DbProviderFactory
-        {
-            get
-            {
-                return SqlCeProviderFactory.Instance;
-            }
-        }
+        DbProviderFactory IProvider.DbProviderFactory => SqlCeProviderFactory.Instance;
 
         ConnectionBase IProvider.CreateConnection(string connectionString)
         {
             return new Connection(connectionString);
         }
 
-        string[] IProvider.KeyWords
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string[] IProvider.KeyWords => null;
 
-        bool IProvider.IsCommandCancelable
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool IProvider.IsCommandCancelable => true;
 
         void IProvider.DeriveParameters(IDbCommand command)
         {
@@ -114,13 +91,7 @@
             throw new NotImplementedException();
         }
 
-        IObjectExplorer IProvider.ObjectExplorer
-        {
-            get
-            {
-                return new SqlCeObjectExplorer();
-            }
-        }
+        IObjectExplorer IProvider.ObjectExplorer => new SqlCeObjectExplorer();
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {
@@ -502,17 +473,16 @@ ORDER BY ORDINAL_POSITION";
         #region IProvider Members
 
 
-        bool IProvider.CanConvertCommandToString
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IProvider.CanConvertCommandToString => false;
 
         string IProvider.CommandToString(IDbCommand command)
         {
             throw new NotImplementedException();
+        }
+
+        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder()
+        {
+            return new ConnectionStringBuilder();
         }
 
         #endregion

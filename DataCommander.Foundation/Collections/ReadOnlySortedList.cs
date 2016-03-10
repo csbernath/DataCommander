@@ -108,13 +108,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public IEnumerable<TValue> Values
-        {
-            get
-            {
-                return this.values;
-            }
-        }
+        public IEnumerable<TValue> Values => this.values;
 
         /// <summary>
         /// 
@@ -139,13 +133,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.values.Count;
-            }
-        }
+        public int Count => this.values.Count;
 
         /// <summary>
         /// 

@@ -36,24 +36,12 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public bool HasName
-        {
-            get
-            {
-                return this.hasName;
-            }
-        }
+        public bool HasName => this.hasName;
 
         /// <summary>
         /// Gets the name of the node.
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name => this.name;
 
         /// <summary>
         /// Gets/sets the description of the node.
@@ -74,13 +62,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// Gets the parent node.
         /// </summary>
-        public ConfigurationNode Parent
-        {
-            get
-            {
-                return this.parent;
-            }
-        }
+        public ConfigurationNode Parent => this.parent;
 
         /// <summary>
         /// Gets the full path of the node.
@@ -256,24 +238,12 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// Gets the attributes stored in this node.
         /// </summary>
-        public ConfigurationAttributeCollection Attributes
-        {
-            get
-            {
-                return this.attributes;
-            }
-        }
+        public ConfigurationAttributeCollection Attributes => this.attributes;
 
         /// <summary>
         /// Gets the child nodes of this node.
         /// </summary>
-        public ConfigurationNodeCollection ChildNodes
-        {
-            get
-            {
-                return this.childNodes;
-            }
-        }
+        public ConfigurationNodeCollection ChildNodes => this.childNodes;
 
         /// <summary>
         /// Writes the content of this node (attributes and child nodes)

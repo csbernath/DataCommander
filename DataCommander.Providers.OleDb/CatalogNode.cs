@@ -30,14 +30,8 @@ namespace DataCommander.Providers.OleDb
             }
         }
     
-        public bool IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
-    
+        public bool IsLeaf => false;
+
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             ITreeNode[] treeNodes;
@@ -65,45 +59,15 @@ namespace DataCommander.Providers.OleDb
             return treeNodes;
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
-        public string Query
-        {
-            get
-            {
-                return null;
-            }
-        }  
+        public string Query => null;
 
-        public OleDbConnection Connection
-        {
-            get
-            {
-                return this.connection;
-            }
-        }
+        public OleDbConnection Connection => this.connection;
 
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name => this.name;
 
-        public ContextMenuStrip ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public ContextMenuStrip ContextMenu => null;
 
         public void BeforeExpand()
         {

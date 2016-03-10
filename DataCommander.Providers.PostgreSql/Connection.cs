@@ -47,42 +47,17 @@
             }
         }
 
-        public override string Caption
-        {
-            get
-            {
-                return this.npgsqlConnection.Database;
-            }
-        }
+        public override string Caption => this.npgsqlConnection.Database;
 
-        public override string DataSource
-        {
-            get
-            {
-                return this.npgsqlConnection.DataSource;
-            }
-        }
+        public override string DataSource => this.npgsqlConnection.DataSource;
 
         protected override void SetDatabase(string database)
         {
             throw new NotImplementedException();
         }
 
-        public override string ServerVersion
-        {
-            get
-            {
-                return this.npgsqlConnection.ServerVersion;
-            }
-        }
+        public override string ServerVersion => this.npgsqlConnection.ServerVersion;
 
-        public override int TransactionCount
-        {
-            get
-            {
-                // TODO
-                return 0;
-            }
-        }
+        public override int TransactionCount => 0;
     }
 }

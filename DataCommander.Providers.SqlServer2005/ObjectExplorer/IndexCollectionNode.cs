@@ -1,12 +1,12 @@
-namespace DataCommander.Providers.SqlServer2005
+namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
     using System.Linq;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
-    using DataCommander.Foundation.Data.SqlClient;
+    using Foundation.Data;
+    using Foundation.Data.SqlClient;
 
     internal sealed class IndexCollectionNode : ITreeNode
     {
@@ -21,27 +21,15 @@ namespace DataCommander.Providers.SqlServer2005
             this.objectName = objectName;
         }
 
-        public string Name
-        {
-            get
-            {
-                return "Indexes";
-            }
-        }
+        public string Name => "Indexes";
 
-        public bool IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             var cb = new SqlCommandBuilder();
             var tableName = new DatabaseObjectMultipartName(null, this.tableNode.Database.Name, this.schema, this.objectName);
-            //string commandText = "select o1.name,o2.name from {0}..sysobjects o1 left join {0}..sysobjects o2 on o1.parent_obj = o2.id where o1.type = 'TR' and o2.name = '{1}'";
+
             string commandText = string.Format(@"select
      i.name
     ,i.type
@@ -77,28 +65,10 @@ order by i.name",
             }
         }
 
-        public bool Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool Sortable => false;
 
-        public string Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public string Query => null;
 
-        public ContextMenuStrip ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public ContextMenuStrip ContextMenu => null;
     }
 }

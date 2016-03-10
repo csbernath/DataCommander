@@ -21,35 +21,17 @@
         /// <summary>
         /// 
         /// </summary>
-        public string CallerMemberName
-        {
-            get
-            {
-                return this.callerMemberName;
-            }
-        }
+        public string CallerMemberName => this.callerMemberName;
 
         /// <summary>
         /// 
         /// </summary>
-        public string CallerFilePath
-        {
-            get
-            {
-                return this.callerFilePath;
-            }
-        }
+        public string CallerFilePath => this.callerFilePath;
 
         /// <summary>
         /// 
         /// </summary>
-        public int CallerLineNumber
-        {
-            get
-            {
-                return this.callerLineNumber;
-            }
-        }
+        public int CallerLineNumber => this.callerLineNumber;
 
         /// <summary>
         /// 

@@ -40,13 +40,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public new TextDataParameterCollection Parameters
-        {
-            get
-            {
-                return this.parameters;
-            }
-        }
+        public new TextDataParameterCollection Parameters => this.parameters;
 
         /// <summary>
         /// 
@@ -155,13 +149,7 @@
         /// <summary>
         /// 
         /// </summary>
-        protected override DbParameterCollection DbParameterCollection
-        {
-            get
-            {
-                return this.parameters;
-            }
-        }
+        protected override DbParameterCollection DbParameterCollection => this.parameters;
 
         /// <summary>
         /// 

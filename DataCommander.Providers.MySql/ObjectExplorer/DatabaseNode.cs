@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Providers.MySql
+﻿namespace DataCommander.Providers.MySql.ObjectExplorer
 {
     using System.Collections.Generic;
 
@@ -13,29 +13,11 @@
             this.name = name;
         }
 
-        public ObjectExplorer ObjectExplorer
-        {
-            get
-            {
-                return this.objectExplorer;
-            }
-        }
+        public ObjectExplorer ObjectExplorer => this.objectExplorer;
 
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name => this.name;
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -48,28 +30,10 @@
             };
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ITreeNode.Query => null;
 
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu => null;
     }
 }

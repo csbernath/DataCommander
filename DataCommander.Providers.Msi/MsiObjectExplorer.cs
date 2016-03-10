@@ -19,14 +19,8 @@
 			return new ITreeNode[] { new MsiTableCollectionNode( this.connection ) };
 		}
 
-		bool IObjectExplorer.Sortable
-		{
-			get
-			{
-				return false;
-			}
-		}
+		bool IObjectExplorer.Sortable => false;
 
-		#endregion
+        #endregion
 	}
 }

@@ -56,89 +56,41 @@
         /// <summary>
         /// 
         /// </summary>
-        public Type DataType
-        {
-            get
-            {
-                return this.dataType;
-            }
-        }
+        public Type DataType => this.dataType;
 
         /// <summary>
         /// 
         /// </summary>
-        public string Format
-        {
-            get
-            {
-                return this.format;
-            }
-        }
+        public string Format => this.format;
 
         /// <summary>
         /// 
         /// </summary>
-        public IFormatProvider FormatProvider
-        {
-            get
-            {
-                return this.formatProvider;
-            }
-        }
+        public IFormatProvider FormatProvider => this.formatProvider;
 
         /// <summary>
         /// 
         /// </summary>
-        public int MaxLength
-        {
-            get
-            {
-                return this.maxLength;
-            }
-        }
+        public int MaxLength => this.maxLength;
 
         /// <summary>
         /// 
         /// </summary>
-        public string ColumnName
-        {
-            get
-            {
-                return this.columnName;
-            }
-        }
+        public string ColumnName => this.columnName;
 
         /// <summary>
         /// 
         /// </summary>
-        public string Caption
-        {
-            get
-            {
-                return this.caption;
-            }
-        }
+        public string Caption => this.caption;
 
         /// <summary>
         /// 
         /// </summary>
-        public byte? NumericPrecision
-        {
-            get
-            {
-                return this.numericPrecision;
-            }
-        }
+        public byte? NumericPrecision => this.numericPrecision;
 
         /// <summary>
         /// 
         /// </summary>
-        public byte? NumericScale
-        {
-            get
-            {
-                return this.numericScale;
-            }
-        }
+        public byte? NumericScale => this.numericScale;
     }
 }

@@ -12,13 +12,7 @@ namespace DataCommander.Providers
             this.value = value;
         }
 
-        public DateTimeOffset Value
-        {
-            get
-            {
-                return this.value;
-            }
-        }
+        public DateTimeOffset Value => this.value;
 
         private static string ToString(DateTimeOffset value)
         {

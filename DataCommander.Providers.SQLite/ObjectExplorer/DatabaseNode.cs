@@ -12,30 +12,12 @@ namespace DataCommander.Providers.SQLite
             this.name = name;
         }
 
-        public SQLiteConnection Connection
-        {
-            get
-            {
-                return this.connection;
-            }
-        }
+        public SQLiteConnection Connection => this.connection;
 
         #region ITreeNode Members
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name => this.name;
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -45,29 +27,12 @@ namespace DataCommander.Providers.SQLite
             };
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        ContextMenuStrip ITreeNode.ContextMenu => null;
+
         #endregion
 
         readonly SQLiteConnection connection;

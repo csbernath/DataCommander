@@ -214,46 +214,22 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public PValueType ValueType
-        {
-            get
-            {
-                return this.type;
-            }
-        }
+        public PValueType ValueType => this.type;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsNull
-        {
-            get
-            {
-                return this.type == PValueType.Null;
-            }
-        }
+        public bool IsNull => this.type == PValueType.Null;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsValue
-        {
-            get
-            {
-                return this.type == PValueType.Value;
-            }
-        }
+        public bool IsValue => this.type == PValueType.Value;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsEmpty
-        {
-            get
-            {
-                return this.type == PValueType.Empty;
-            }
-        }
+        public bool IsEmpty => this.type == PValueType.Empty;
 
         /// <summary>
         /// 
@@ -302,24 +278,12 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public bool IsTrue
-        {
-            get
-            {
-                return this.sql.IsTrue;
-            }
-        }
+        public bool IsTrue => this.sql.IsTrue;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsFalse
-        {
-            get
-            {
-                return this.sql.IsFalse;
-            }
-        }
+        public bool IsFalse => this.sql.IsFalse;
 
         /// <summary>
         /// 

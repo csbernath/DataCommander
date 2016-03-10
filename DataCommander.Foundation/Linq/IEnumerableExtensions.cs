@@ -68,23 +68,20 @@ namespace DataCommander.Foundation.Linq
         {
             IReadOnlyList<TSource> readOnlyList = null;
 
-            Selection.CreateArgumentIsSelection(source)
-                .IfArgumentIsNull(delegate
-                {
-                    readOnlyList = EmptyReadOnlyList<TSource>.Instance;
-                })
-                .IfArgumentIs(delegate(IList<TSource> list)
-                {
-                    readOnlyList = new ReadOnlyCollection<TSource>(list);
-                })
-                .IfArgumentIs(delegate(IReadOnlyList<TSource> list)
-                {
-                    readOnlyList = list;
-                })
-                .Else(delegate
-                {
-                    throw new ArgumentException();
-                });
+            if (source == null)
+            {
+                readOnlyList = EmptyReadOnlyList<TSource>.Instance;
+            }
+            else if (source.IfAsNotNull(delegate(IList<TSource> list) { readOnlyList = new ReadOnlyCollection<TSource>(list); }))
+            {
+            }
+            else if (source.IfAsNotNull(delegate(IReadOnlyList<TSource> list) { readOnlyList = list; }))
+            {
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
 
             return readOnlyList;
         }

@@ -29,23 +29,11 @@
         /// <summary>
         /// 
         /// </summary>
-        public long Timestamp
-        {
-            get
-            {
-                return this.timestamp;
-            }
-        }
+        public long Timestamp => this.timestamp;
 
         /// <summary>
         /// 
         /// </summary>
-        public DateTime DateTime
-        {
-            get
-            {
-                return this.dateTime;
-            }
-        }
+        public DateTime DateTime => this.dateTime;
     }
 }

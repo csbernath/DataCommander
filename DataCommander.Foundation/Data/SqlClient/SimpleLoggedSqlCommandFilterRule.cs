@@ -43,12 +43,6 @@ namespace DataCommander.Foundation.Data.SqlClient
             return match;
         }
 
-        public bool Include
-        {
-            get
-            {
-                return this.include;
-            }
-        }
+        public bool Include => this.include;
     }
 }

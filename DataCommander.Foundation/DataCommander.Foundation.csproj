@@ -650,6 +650,7 @@
     <Compile Include="Diagnostics\Assert\CollectionAssert.cs" />
     <Compile Include="Diagnostics\Assert\StringAssert.cs" />
     <Compile Include="Diagnostics\Contracts\FoundationContract.cs" />
+    <Compile Include="Collections\TypeDictionary.cs" />
     <Compile Include="Diagnostics\DebugWriter.cs">
       <SubType>Code</SubType>
     </Compile>

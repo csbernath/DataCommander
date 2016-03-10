@@ -115,12 +115,6 @@ namespace DataCommander
         }
         #endregion
 
-        public string Password
-        {
-            get
-            {
-                return this.tbPassword.Text;
-            }
-        }
+        public string Password => this.tbPassword.Text;
     }
 }
