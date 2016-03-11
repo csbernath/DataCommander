@@ -193,7 +193,7 @@ How to refresh the root node of the object explorer
   1.	Click Tools/Refresh Object Explorer’s root menu item.
 
 How to find text in object explorer nodes
-  1.	Click Ctrl+F.
+  1.	Press Ctrl+F.
 
 Result tab pages – Messages tab page
 
@@ -347,6 +347,7 @@ exec workspaces null,'bernath'
 Changes:
 
 * 2015-02-06: Upgrading to .NET Framework 4.5.
+* 2014-10-10: Moving to Github
 * 2014-05-29: [DataTableEditor] Saving data table into Excel 2007 .xlsx file.
 * 2014-04-04: [CompletionForm] Adding quote handling to multipart identitifers (use [Foo.UnitTest])
 * 2014-03-03: [SqlServer2005] “Adding User-Defined Table Types” node to object explorer.
