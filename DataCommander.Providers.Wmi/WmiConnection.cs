@@ -64,7 +64,6 @@ namespace DataCommander.Providers.Wmi
             //path.Server = dataSource;
             //scope = new ManagementScope( path );
             
-            //string path = @"\\binarit-srv06\root\virtualization";
             string path = this.dataSource;
             this.scope = new ManagementScope( path );
         }
