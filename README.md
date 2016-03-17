@@ -412,6 +412,7 @@ http://msdn.microsoft.com/en-us/library/office/aa140066(v=office.10).aspx.
 References
 ----------
   * [Microsoft SQL Server Management Studio](https://msdn.microsoft.com/en-us/library/hh213248.aspx)
+  * [pgAdmin: {PostgreSQL Tools](http://www.pgadmin.org/)
   * [TOAD for SQL Server](http://www.quest.com/toad-for-sql-server/)
   * [PL/SQL Developer](http://www.allroundautomations.com/plsqldev.html)
   * [Query Express](http://www.albahari.com/queryexpress.html)
