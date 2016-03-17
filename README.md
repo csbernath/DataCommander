@@ -3,38 +3,38 @@ Data Commander
 
 This program is freeware and released under the [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.txt).
 
-Data Commander is a front-end for SQL databases and other data sources.
+Data Commander is a front-end for SQL and other databases.
 The program has a plugin architecture for adding arbitrary data providers.
 
 The following plugins are already implemented:
 
-Relational database servers:
+SQL databases:
   * iDB2
   * Microsoft SQL Server
   * MySQL
   * Oracle
   * PostgreSQL
 
-Relational file databases:
+File databases:
   * SQLite
   * Microsoft SQL Server Compact
   * Microsoft Access
   * Microsoft Excel 
   
-Special data sources:
+Special databases:
   * COM
   * GAC
   * MSI (Windows Installer)
   * TFS (Team Foundation Server)
-  * WMI
+  * WMI (Windows Management Instrumentation)
 
 Features:
   * The editor has syntax highlighting, code completion for SQL statements.
   * The output of a query can be displayed as data grid, text, html.
-  * The data grid can be exported into Excel.
+  * The data grid can be exported into Excel file.
 
 Development environment:
-  * .NET Framework 4.6
+  * .NET Framework 4.6.1
   * C# 6.0
   * Visual Studio 2015 Community Edition
 
@@ -60,19 +60,19 @@ Main Form
 Connection Form
 ---------------
 
-How to connect to a data source
+How to connect to a database
   1. Click Database\Connect menu item or press Ctrl+N.
   2. Click the New button.
   3. Enter the connection string paramateres of the new connection.
   4. Click Test button to test the connection.
   5. Click OK button to save the connection string.
   
-How to create a new file based data source
+How to create a new file based database
   1. Click Database\New menu item.
   2. Type the file name of the new database file (SQL Server Compact, SQLite).
   3. Click Save button.
 
-How to open a file based data source
+How to open a file based database
   1. Click Database\Open menu item or press Ctrl+O.
   2. Select the required file type (Access, Excel, MSI, SQLite, SQL Server Compact)
   3. Enter the file name.
@@ -117,8 +117,8 @@ Query TextBox
 
 |Function|Hotkey|
 |--------|------|
-|Database/Connect to data source|Ctrl+N|
-|Database/Open file based data source|Ctrl+O|
+|Database/Connect to database|Ctrl+N|
+|Database/Open file database|Ctrl+O|
 |Database/Save all|Ctrl+Shift+S|
 |Database/Exit|Alt+F4|
 |Edit/Paste|Ctrl+V|
