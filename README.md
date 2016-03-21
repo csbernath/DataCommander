@@ -301,6 +301,7 @@ Object Explorer
 		Server Objects
 			Linked Servers
 		Jobs
+	
 
 Query textbox – code completion
 
