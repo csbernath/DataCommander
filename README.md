@@ -327,6 +327,7 @@ PostgreSQL
 ----------
 
 Object Explorer
+
 	Schemas
 		Sequences
 		Tables
