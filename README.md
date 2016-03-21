@@ -336,7 +336,7 @@ Object Explorer
 
 Team Foundation Server
 ----------------------
-
+```
 Available TFS commands (and samples):
 
 exec dir '<path>','recursion'
@@ -357,7 +357,7 @@ exec status '$/',null,null,'bernath'
 exec workspaces 'workspace','owner','computer'
 exec workspaces
 exec workspaces null,'bernath'
-
+```
 Changes
 -------
 
