@@ -275,7 +275,8 @@ How to edit data in a table
 Available providers
 
 Microsoft SQL Server 2005
- -------------------------
+-------------------------
+
 Object Explorer
 
 	Server
@@ -322,7 +323,19 @@ How to list global variables
 How to list local variables
   1.	Type select @ and press Ctrl+J
 
+PostgreSQL
+----------
+
+Object Explorer
+	Schemas
+		Sequences
+		Tables
+			Columns
+		Views
+
 Team Foundation Server
+----------------------
+
 Available TFS commands (and samples):
 exec dir '<path>','recursion'
 	exec dir '$/','OneLevel'
