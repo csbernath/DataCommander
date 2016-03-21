@@ -323,6 +323,7 @@ How to list global variables
 How to list local variables
   1.	Type select @ and press Ctrl+J
 
+
 PostgreSQL
 ----------
 
