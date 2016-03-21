@@ -9,21 +9,20 @@ The program has a plugin architecture for adding arbitrary data providers.
 The following plugins are already implemented:
 
 SQL databases:
-  * iDB2
   * Microsoft SQL Server
   * MySQL
   * Oracle
   * PostgreSQL
 
 File databases:
-  * SQLite
   * Microsoft SQL Server Compact
   * Microsoft Access
   * Microsoft Excel 
+  * SQLite
   
 Special databases:
-  * COM
-  * GAC
+  * COM (Component Object Model)
+  * GAC (Global Assembly Cache)
   * MSI (Windows Installer)
   * TFS (Team Foundation Server)
   * WMI (Windows Management Instrumentation)
