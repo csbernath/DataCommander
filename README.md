@@ -323,7 +323,6 @@ How to list global variables
 How to list local variables
   1.	Type select @ and press Ctrl+J
 
-
 PostgreSQL
 ----------
 
@@ -339,6 +338,7 @@ Team Foundation Server
 ----------------------
 
 Available TFS commands (and samples):
+
 exec dir '<path>','recursion'
 	exec dir '$/','OneLevel'
 
@@ -358,7 +358,8 @@ exec workspaces 'workspace','owner','computer'
 exec workspaces
 exec workspaces null,'bernath'
 
-Changes:
+Changes
+-------
 
 * 2015-02-06: Upgrading to .NET Framework 4.5.
 * 2014-10-10: Moving to Github
