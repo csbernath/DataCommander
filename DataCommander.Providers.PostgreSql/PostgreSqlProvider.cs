@@ -32,21 +32,9 @@
             }
         }
 
-        bool IProvider.IsCommandCancelable
-        {
-            get
-            {
-                return true;
-            }
-        }
+        bool IProvider.IsCommandCancelable => true;
 
-        IObjectExplorer IProvider.ObjectExplorer
-        {
-            get
-            {
-                return new ObjectExplorer.ObjectExplorer();
-            }
-        }
+        IObjectExplorer IProvider.ObjectExplorer => new ObjectExplorer.ObjectExplorer();
 
         void IProvider.ClearCompletionCache()
         {
@@ -243,28 +231,13 @@
                                 sb.AppendFormat("'{0}'", owners[i]);
                             }
                             string ownersString = sb.ToString();
-                            commandText = string.Format(@"declare @schema_id int
-select  top 1 @schema_id = s.schema_id
-from    [{0}].sys.schemas s
-where   s.name  in({1})
-
-if @schema_id is not null
-begin
-    declare @object_id int
-    select  @object_id = o.object_id
-    from    [{0}].sys.all_objects o
-    where   o.name = '{2}'
-            and o.schema_id = @schema_id
-            and o.type in('S','U','TF','V')
-
-    if @object_id is not null
-    begin
-        select  name
-        from [{0}].sys.all_columns c
-        where c.object_id = @object_id
-        order by column_id
-    end
-end", name.Database, ownersString, name.Name);
+                            commandText =
+                                $@"select c.column_name
+from information_schema.columns c
+where
+    c.table_schema = '{name.Schema}'
+    and c.table_name = '{name.Name}'
+order by c.ordinal_position";
                             break;
 
                         case SqlObjectTypes.Procedure:

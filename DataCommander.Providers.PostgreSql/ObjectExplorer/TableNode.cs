@@ -14,49 +14,24 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
             this.name = name;
         }
 
-        string ITreeNode.Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public TableCollectionNode TableCollectionNode => this.tableCollectionNode;
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public string Name => this.name;
+
+        bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            return null;
+            return new ITreeNode[]
+            {
+                new ColumnCollectionNode(this)
+            };
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        ContextMenuStrip ITreeNode.ContextMenu => null;
     }
 }

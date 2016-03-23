@@ -15,21 +15,9 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
             this.schemaNode = schemaNode;
         }
 
-        string ITreeNode.Name
-        {
-            get
-            {
-                return "Views";
-            }
-        }
+        string ITreeNode.Name => "Views";
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -39,49 +27,27 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
             {
                 connection.Open();
                 var transactionScope = new DbTransactionScope(connection, null);
-                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition
+                transactionScope.ExecuteReader(new CommandDefinition
                 {
                     CommandText = $@"select table_name
 from information_schema.views
 where table_schema = '{this.schemaNode.Name}'
 order by table_name"
-                }, CommandBehavior.Default))
+                }, CommandBehavior.Default, dataRecord =>
                 {
-                    dataReader.Read(dataRecord =>
-                    {
-                        string name = dataRecord.GetString(0);
-                        var schemaNode = new ViewNode(this, name);
-                        nodes.Add(schemaNode);
-                        return true;
-                    });
-                }
+                    string name = dataRecord.GetString(0);
+                    var viewNode = new ViewNode(this, name);
+                    nodes.Add(viewNode);
+                });
             }
 
             return nodes;
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        ContextMenuStrip ITreeNode.ContextMenu => null;
     }
 }

@@ -10,6 +10,7 @@ namespace DataCommander.Foundation.Diagnostics
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Linq;
     using DataCommander.Foundation.Text;
+    using Microsoft.Win32;
 
     /// <summary>
     /// 
@@ -29,24 +30,57 @@ namespace DataCommander.Foundation.Diagnostics
             {
                 string dotNetFrameworkVersion;
 
-                switch (Environment.Version.ToString())
+                using (var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full"))
                 {
-                    case "4.0.30319.18063":
-                        dotNetFrameworkVersion = "4.5";
-                        break;
+                    int release = (int)key.GetValue("Release");
 
-                    case "4.0.30319.34209":
-                        dotNetFrameworkVersion = "4.5.2";
-                        break;
+                    switch (release)
+                    {
+                        case 378389:
+                            dotNetFrameworkVersion = "4.5";
+                            break;
 
-                    case "4.0.30319.42000":
-                        dotNetFrameworkVersion = "4.6";
-                        break;
+                        case 378675:
+                        case 378758:
+                            dotNetFrameworkVersion = "4.5.1";
+                            break;
 
-                    default:
-                        dotNetFrameworkVersion = null;
-                        break;
+                        case 379893:
+                            dotNetFrameworkVersion = "4.5.2";
+                            break;
+
+                        case 394254:
+                            dotNetFrameworkVersion = "4.6.1 (Windows 10 November Update)";
+                            break;
+
+                        case 394271:
+                            dotNetFrameworkVersion = "4.6.1";
+                            break;
+
+                        default:
+                            dotNetFrameworkVersion = null;
+                            break;
+                    }
                 }
+
+                //switch (Environment.Version.ToString())
+                //{
+                //    case "4.0.30319.18063":
+                //        dotNetFrameworkVersion = "4.5";
+                //        break;
+
+                //    case "4.0.30319.34209":
+                //        dotNetFrameworkVersion = "4.5.2";
+                //        break;
+
+                //    case "4.0.30319.42000":
+                //        dotNetFrameworkVersion = "4.6";
+                //        break;
+
+                //    default:
+                //        dotNetFrameworkVersion = null;
+                //        break;
+                //}
 
                 return dotNetFrameworkVersion;
             }

@@ -207,7 +207,7 @@ namespace DataCommander
             this.menuItem1.MergeIndex = 1;
             this.menuItem1.Name = "menuItem1";
             this.menuItem1.Size = new System.Drawing.Size(79, 20);
-            this.menuItem1.Text = "&DataSource";
+            this.menuItem1.Text = "&Database";
             // 
             // NewToolStripMenuItem
             // 
@@ -355,7 +355,7 @@ namespace DataCommander
             this.btnConnect.Image = ((System.Drawing.Image)(resources.GetObject("btnConnect.Image")));
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(23, 22);
-            this.btnConnect.ToolTipText = "Connect to data source";
+            this.btnConnect.ToolTipText = "Connect to database";
             this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
             // openButton
@@ -366,7 +366,7 @@ namespace DataCommander
             this.openButton.Name = "openButton";
             this.openButton.Size = new System.Drawing.Size(23, 22);
             this.openButton.Text = "toolStripButton1";
-            this.openButton.ToolTipText = "Open data source";
+            this.openButton.ToolTipText = "Open database";
             this.openButton.Click += new System.EventHandler(this.openButton_Click);
             // 
             // saveButton

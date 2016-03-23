@@ -95,6 +95,8 @@
     <Compile Include="DatabaseObjectMultipartName.cs" />
     <Compile Include="IdentifierParser.cs" />
     <Compile Include="NonSqlObjectName.cs" />
+    <Compile Include="ObjectExplorer\ColumnCollectionNode.cs" />
+    <Compile Include="ObjectExplorer\ColumnNode.cs" />
     <Compile Include="ObjectExplorer\ObjectExplorer.cs" />
     <Compile Include="ObjectExplorer\SchemaCollectionNode.cs" />
     <Compile Include="ObjectExplorer\SchemaNode.cs" />

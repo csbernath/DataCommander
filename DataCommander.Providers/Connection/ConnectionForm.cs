@@ -195,7 +195,7 @@ namespace DataCommander.Providers
             this.Name = "ConnectionForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Connect to data source";
+            this.Text = "Connect to database";
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).EndInit();
             this.ResumeLayout(false);
 

@@ -14,29 +14,11 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
             this.name = name;
         }
 
-        public SchemaCollectionNode SchemaCollectionNode
-        {
-            get
-            {
-                return this.schemaCollectionNode;
-            }
-        }
+        public SchemaCollectionNode SchemaCollectionNode => this.schemaCollectionNode;
 
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-        }
+        public string Name => name;
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -48,28 +30,10 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
             };
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        ContextMenuStrip ITreeNode.ContextMenu => null;
     }
 }

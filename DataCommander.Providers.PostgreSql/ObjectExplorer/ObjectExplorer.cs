@@ -19,12 +19,6 @@
             return new[] {new SchemaCollectionNode(this)};
         }
 
-        bool IObjectExplorer.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IObjectExplorer.Sortable => false;
     }
 }

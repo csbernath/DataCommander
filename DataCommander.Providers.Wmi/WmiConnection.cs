@@ -63,7 +63,7 @@ namespace DataCommander.Providers.Wmi
             //ManagementPath path = ManagementPath.DefaultPath;
             //path.Server = dataSource;
             //scope = new ManagementScope( path );
-            
+
             string path = this.dataSource;
             this.scope = new ManagementScope( path );
         }

@@ -15,53 +15,17 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
             this.objectExplorer = objectExplorer;
         }
 
-        public ObjectExplorer ObjectExplorer
-        {
-            get
-            {
-                return this.objectExplorer;
-            }
-        }
+        public ObjectExplorer ObjectExplorer => this.objectExplorer;
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        ContextMenuStrip ITreeNode.ContextMenu => null;
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.IsLeaf => false;
 
-        string ITreeNode.Name
-        {
-            get
-            {
-                return "Schemas";
-            }
-        }
+        string ITreeNode.Name => "Schemas";
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ITreeNode.Query => null;
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {

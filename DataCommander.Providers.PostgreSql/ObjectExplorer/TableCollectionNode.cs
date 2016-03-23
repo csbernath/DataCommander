@@ -15,21 +15,11 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
             this.schemaNode = schemaNode;
         }
 
-        string ITreeNode.Name
-        {
-            get
-            {
-                return "Tables";
-            }
-        }
+        public SchemaNode SchemaNode => this.schemaNode;
 
-        bool ITreeNode.IsLeaf
-        {
-            get
-            {
-                return false;
-            }
-        }
+        string ITreeNode.Name => "Tables";
+
+        bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
@@ -62,28 +52,10 @@ order by table_name"
             return nodes;
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                return null;
-            }
-        }
+        string ITreeNode.Query => null;
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                return null;
-            }
-        }
+        ContextMenuStrip ITreeNode.ContextMenu => null;
     }
 }

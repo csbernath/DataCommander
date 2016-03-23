@@ -3,18 +3,20 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
     using System.Collections.Generic;
     using System.Windows.Forms;
 
-    internal sealed class SequenceNode : ITreeNode
+    internal sealed class ColumnNode : ITreeNode
     {
-        private readonly SequenceCollectionNode sequenceCollectionNode;
+        private readonly ColumnCollectionNode columnCollectionNode;
         private readonly string name;
+        private readonly string dataType;
 
-        public SequenceNode(SequenceCollectionNode sequenceCollectionNode, string name)
+        public ColumnNode(ColumnCollectionNode columnCollectionNode, string name, string dataType)
         {
-            this.sequenceCollectionNode = sequenceCollectionNode;
+            this.columnCollectionNode = columnCollectionNode;
             this.name = name;
+            this.dataType = dataType;
         }
 
-        string ITreeNode.Name => this.name;
+        string ITreeNode.Name => $"{this.name} {this.dataType}";
 
         bool ITreeNode.IsLeaf => true;
 
