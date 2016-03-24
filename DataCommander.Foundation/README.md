@@ -16,5 +16,7 @@ How to create memory indexes
 How to created large (segmented) collections
 
 SegmentedArrayBuilder - build an array of segments
+
 SegmentedCollection - build a linked list of segments
+
 SegmentedListBuilder - build a list of segments
