@@ -20,3 +20,10 @@ SegmentedArrayBuilder - build an array of segments
 SegmentedCollection - build a linked list of segments
 
 SegmentedListBuilder - build a list of segments
+
+|Method|SegmentedArrayBuilder|SegmentedCollection|SegmentedListBuilder|
+|------|---------------------|-------------------|--------------------|
+|number of items is known|yes|no|no|
+|Add|yes|yes|yes|
+|IEnumerable|no|yes|no|
+|ToReadOnlyList|yes|no|yes|
