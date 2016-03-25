@@ -4,6 +4,9 @@
 
 ###How to create memory indexes
 
+Input: an enumerable item collection
+Output: a read only index of the input (sorted/not sorted, unique/not unique)
+
 |Unique|Sorted|Create index method|Class implementing the index|
 |------|------|-------------------|----------------------------|
 |true|false|[`ToDictionary`](https://msdn.microsoft.com/en-us/library/system.linq.enumerable.todictionary(v=vs.110).aspx) |[`Dictionary<TKey,TValue>`](https://msdn.microsoft.com/en-us/library/xfhwa508(v=vs.110).aspx)
