@@ -6,7 +6,7 @@
 
 |Unique|Sorted|Create index method|Class implementing the index|
 |------|------|-------------------|----------------------------|
-|true|false|ToDictionary (Framework)|[System.Collections.Generic.Dictionary<TKey,TValue>](https://msdn.microsoft.com/en-us/library/xfhwa508(v=vs.110).aspx)
+|true|false|[System.Linq.Enumerable.ToDictionary](https://msdn.microsoft.com/en-us/library/system.linq.enumerable.todictionary(v=vs.110).aspx) |[System.Collections.Generic.Dictionary<TKey,TValue>](https://msdn.microsoft.com/en-us/library/xfhwa508(v=vs.110).aspx)
 |false|false|ToLookup (Framework)|
 |true|true|AsReadOnlySortedList (Foundation)|
 |false|true|AsReadOnlyNonUniqueSortedList (Foundation)|
