@@ -4,12 +4,12 @@
 
 ###How to create memory indexes
 
-|Unique|Sorted|Method|
-|------|------|------|
-|true|false|ToDictionary|
-|false|false|ToLookup|
-|true|true|AsReadOnlyDictionary|
-|false|true|AsReadOnlyNonUniqueSortedList|
+|Unique|Sorted|Create index method|Class implementing the index|
+|------|------|-------------------|----------------------------|
+|true|false|ToDictionary (Framework)|[System.Collections.Generic.Dictionary<TKey,TValue>](https://msdn.microsoft.com/en-us/library/xfhwa508(v=vs.110).aspx)
+|false|false|ToLookup (Framework)|
+|true|true|AsReadOnlySortedList (Foundation)|
+|false|true|AsReadOnlyNonUniqueSortedList (Foundation)|
 
 ###How to created large (segmented) collections
 
