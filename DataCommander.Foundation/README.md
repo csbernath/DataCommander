@@ -15,7 +15,7 @@ Output: a read only index of the input by a key
 |true|true|[`AsReadOnlySortedList`](Linq/IEnumerableExtensions.cs)|[`ReadOnlySortedList<TKey,TValue>`](Collections/ReadOnlySortedList.cs)|
 |false|true|[`AsReadOnlyNonUniqueSortedList`](Linq/IEnumerableExtensions.cs)|[`ReadOnlyNonUniqueSortedList<TKey,TValue>`](Collections/ReadOnlyNonUniqueSortedList.cs)
 
-###How to created large (segmented) collections
+###How to create large (large object heap friendly, segmented) collections
 
 SegmentedArrayBuilder - build an array of segments
 
