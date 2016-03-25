@@ -5,6 +5,7 @@
 ###How to create memory indexes
 
 Input: an enumerable item collection
+
 Output: a read only index of the input (sorted/not sorted, unique/not unique)
 
 |Unique|Sorted|Create index method|Class implementing the index|
