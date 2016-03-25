@@ -1,10 +1,8 @@
-Foundation Class Library
-========================
+#Foundation Class Library
 
-Collections
------------
+##Collections
 
-How to create memory indexes
+###How to create memory indexes
 
 |Unique|Sorted|Method|
 |------|------|------|
@@ -13,7 +11,7 @@ How to create memory indexes
 |true|true|AsReadOnlyDictionary|
 |false|true|AsReadOnlyNonUniqueSortedList|
 
-How to created large (segmented) collections
+###How to created large (segmented) collections
 
 SegmentedArrayBuilder - build an array of segments
 
