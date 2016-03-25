@@ -8,8 +8,8 @@
 |------|------|-------------------|----------------------------|
 |true|false|[`ToDictionary`](https://msdn.microsoft.com/en-us/library/system.linq.enumerable.todictionary(v=vs.110).aspx) |[`Dictionary<TKey,TValue>`](https://msdn.microsoft.com/en-us/library/xfhwa508(v=vs.110).aspx)
 |false|false|[`ToLookup`](https://msdn.microsoft.com/en-us/library/system.linq.enumerable.tolookup(v=vs.110).aspx)|[Lookup<TKey,TElement>](https://msdn.microsoft.com/en-us/library/bb460184(v=vs.110).aspx)|
-|true|true|`AsReadOnlySortedList` (Foundation)|[`ReadOnlySortedList`](Collections/ReadOnlySortedlist.cs)|
-|false|true|`AsReadOnlyNonUniqueSortedList` (Foundation)|
+|true|true|`AsReadOnlySortedList`|[`ReadOnlySortedList`](Collections/ReadOnlySortedList.cs)|
+|false|true|`AsReadOnlyNonUniqueSortedList`|[`ReadOnlyNonUniqueSortedList`](Collections/ReadOnlyNonUniqueSortedList.cs)
 
 ###How to created large (segmented) collections
 
