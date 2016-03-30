@@ -8,18 +8,18 @@ The program has a plugin architecture for adding arbitrary data providers.
 
 The following plugins are already implemented:
 
-SQL databases:
+SQL databases (client/server):
   * Microsoft SQL Server
   * MySQL
   * Oracle
   * PostgreSQL
 
-File databases:
+SQL databases (file):
   * Microsoft SQL Server Compact
   * Microsoft Access
   * Microsoft Excel 
   * SQLite
-  
+
 Special databases:
   * COM (Component Object Model)
   * GAC (Global Assembly Cache)
