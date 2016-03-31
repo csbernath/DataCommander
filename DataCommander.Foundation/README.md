@@ -45,5 +45,26 @@ The library contains an implementation of the interfaces:
   - [`FoundationLogFactory`](Diagnostics/Log/FoundationLogFactory.cs)
 
 The built-in implementation can be replaced with NLog,log4net etc. The application configuration file can be used for that.
-
+See the default configuration in Data Commander as an example:
+```
+<Diagnostics>
+	<LogFactory>
+		<attribute name="TypeName" value="DataCommander.Foundation.Diagnostics.FoundationLogFactory, DataCommander.Foundation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+	</LogFactory>
+	<FoundationLogFactory>
+		<attribute name="DateTimeKind" type="System.DateTimeKind" value="Local"/>
+		<LogWriters>
+			<node>
+				<attribute name="Type" value="FileLogWriter"/>
+				<attribute name="Enabled" type="bool" value="true"/>
+				<attribute name="LogLevel" type="DataCommander.Foundation.Diagnostics.LogLevel" value="Debug"/>
+				<attribute name="DateTimeKind" type="System.DateTimeKind" value="Local"/>
+				<attribute name="Path" value="%TEMP%\DataCommander[{date}]({time}) {guid}.log"/>
+				<attribute name="Async" type="bool" value="true"/>
+				<attribute name="FileAttributes" type="System.IO.FileAttributes" value="ReadOnly,Hidden"/>
+			</node>
+		</LogWriters>
+	</FoundationLogFactory>
+</Diagnostics>
+```
  
