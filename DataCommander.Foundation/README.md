@@ -67,4 +67,6 @@ See the default configuration in Data Commander as an example:
 	</FoundationLogFactory>
 </Diagnostics>
 ```
+The log factory class is the built-in FoundationLogFactory. The configuration of this class is in the FoundationLogFactory xml element. The factory creates a file log writer. The log files will be written into the %TEMP% directory. One file per application start.
+
  
