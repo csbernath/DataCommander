@@ -49,7 +49,7 @@ See the default configuration in Data Commander as an example:
 ```
 <Diagnostics>
 	<LogFactory>
-		<attribute name="TypeName" value="DataCommander.Foundation.Diagnostics.FoundationLogFactory, DataCommander.Foundation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+		<attribute name="TypeName" value="DataCommander.Foundation.Diagnostics.FoundationLogFactory"/>
 	</LogFactory>
 	<FoundationLogFactory>
 		<attribute name="DateTimeKind" type="System.DateTimeKind" value="Local"/>
