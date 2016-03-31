@@ -34,3 +34,16 @@ SegmentedListBuilder - build a list of segments
 This is the unified abstract version of retrieving the current date and time.
 The concrete implementations are using the [`DateTime.Now`](https://msdn.microsoft.com/en-us/library/system.datetime.now(v=vs.110).aspx) and `DateTime.UtcNow` properties.
 The implementation uses the idea from [NLog's cached time source](https://github.com/NLog/NLog/blob/master/src/NLog/Time/CachedTimeSource.cs). The idea is that the Environment.TickCount is much faster then DateTime.(Utc)Now.
+
+###Logging
+The library defines interfaces for logging:
+  - [`ILog`](Diagnostics/Log/ILog.cs)
+  - [`ILogFactory`](Diagnostics/Log/ILogFactory.cs)
+
+The library contains an implementation of the interfaces:
+  - [`FoundationLog`](Diagnostics/Log/FoundationLog.cs)
+  - [`FoundationLogFactory`](Diagnostics/Log/FoundationLogFactory.cs)
+
+The built-in implementation can be replaced with NLog,log4net etc. The application configuration file can be used for that.
+
+ 
