@@ -15,7 +15,7 @@ See [```IndexableCollection<T>```](Collections/IndexableCollection/IndexableColl
 |[```LinkedListIndex<T>```](Collections/IndexableCollection/LinkedListIndex.cs)|LinkedList<T>|false|false|true|false|
 |[```ListIndex<T>```](Collections/IndexableCollection/LinkedListIndex.cs)|[```IList<T>```](https://msdn.microsoft.com/en-us/library/5y536ey6(v=vs.110).aspx)|false|false|true|true|
 |[```NonUniqueIndex<TKey,T>```](Collections/IndexableCollection/NonUniqueIndex.cs)|IDictionary<TKey, ICollection<T>>|false|true/false|false|false|
-|[```SequenceIndex```](Collections/IndexableCollection/SequenceIndex.cs)|IDictionary<>|true|true/false|false|false|
+|[```SequenceIndex```](Collections/IndexableCollection/SequenceIndex.cs)|[```IDictionary<TKey,TValue>```](https://msdn.microsoft.com/en-us/library/s4ys34ea(v=vs.110).aspx)|true|true/false|false|false|
 |[```UniqueIndex<TKey,T>```](Collections/IndexableCollection/UniqueIndex.cs)|Dictionary<>|false|false|false|false|
 |```UniqueIndex<TKey,T>```|SortedDictionary<>|false|true|false|false|
 |[```UniqueListIndex<T>```](Collections/IndexableCollection/UniqueListIndex.cs)|[```IList<T>```](https://msdn.microsoft.com/en-us/library/5y536ey6(v=vs.110).aspx)|true|true/false|true|false|
