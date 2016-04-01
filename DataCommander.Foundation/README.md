@@ -2,7 +2,25 @@
 
 ##Collections
 
-###How to create memory indexes
+###How to create memory indexes for dynamic (not read only) collections
+
+Input: a collection
+
+Output: an indexable collection which follows add/remove operations in the indexes
+
+See [```IndexableCollection<T>```](Collections/IndexableCollection/IndexableCollection-1.cs).
+
+|Index class|Class implementing the index|Unique|Sorted|
+|-----------|----------------------------|------|------|
+|```LinkedListIndex```|LinkedList<T>|false|false|
+|```ListIndex```|List<T>|false|false|
+|```NonUniqueIndex```|IDictionary<TKey, ICollection<T>>|false|-|
+|```SequenceIndex```|IDictionary<>|true|-|
+|```UniqueIndex```|Dictionary<>|false|false|
+|```UniqueIndex```|SortedDictionary<>|false|true|
+|```UniqueListIndex```|IList<T>|true|-|
+
+###How to create memory indexes for read only collections
 
 Input: an enumerable item collection (sorted/not sorted, unique/not unique)
 
