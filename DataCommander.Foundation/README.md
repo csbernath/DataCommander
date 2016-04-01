@@ -93,6 +93,19 @@ If the name of the xml element is not node or attribute then the type of the ele
 </attribute>
 ```
 
+#####Byte array value
+
+```xml
+<attribute name="EncryptedPassword" type="byte[]">
+DQoNClBlcnNvbkZ1bGxNZXNzYWdlUHJvY2Vzc29yLkRvUHJvY2Vzc01lc3NhZ2UNClBlcnNvbkZ1
+bGxNZXNzYWdlUHJvY2Vzc29ySW50ZWdyYXRpb25Mb2dpYy5VcGRhdGVDbGFzc2lmaWNhdGlvbnNE
+YXRhDQpQZXJzb25EYXRhcGFja2V0TWFuaXB1bGF0aW9uU2VydmljZS5VcGRhdGVDbGFzc2lmaWNh
+dGlvbkRhdGFEYXRhcGFja2V0cw0KUGVyc29uRGF0YXBhY2tldE1hbmlwdWxhdGlvblNlcnZpY2Uu
+VXBkYXRlTmV4b240RGF0YXBhY2tldHNCeUNsYXNzaWZpY2F0aW9uRGF0YUNoYW5nZXMJDQpHZXRD
+bGFzc2lmaWNhdGlvbkRhdGFJbnRlcnZhbEJ5Q29weWluZ0RpY3Rpb25hcnlJdGVtcw==
+</attribute>
+```
+
 ####Simplified syntax
 
 |Full syntax|Simplified syntax|
