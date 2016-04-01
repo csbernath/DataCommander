@@ -12,13 +12,13 @@ See [```IndexableCollection<T>```](Collections/IndexableCollection/IndexableColl
 
 |Index class|Class implementing the index|Unique|Sorted|
 |-----------|----------------------------|------|------|
-|```LinkedListIndex```|LinkedList<T>|false|false|
-|```ListIndex```|List<T>|false|false|
-|```NonUniqueIndex```|IDictionary<TKey, ICollection<T>>|false|-|
-|```SequenceIndex```|IDictionary<>|true|-|
-|```UniqueIndex```|Dictionary<>|false|false|
+|[```LinkedListIndex```](Collections/IndexableCollection/LinkedListIndex.cs)|LinkedList<T>|false|false|
+|[```ListIndex```](Collections/IndexableCollection/LinkedListIndex.cs)|List<T>|false|false|
+|[```NonUniqueIndex```](Collections/IndexableCollection/NonUniqueIndex.cs)|IDictionary<TKey, ICollection<T>>|false|-|
+|[```SequenceIndex```](Collections/IndexableCollection/SequenceIndex.cs)|IDictionary<>|true|-|
+|[```UniqueIndex```](Collections/IndexableCollection/UniqueIndex.cs)|Dictionary<>|false|false|
 |```UniqueIndex```|SortedDictionary<>|false|true|
-|```UniqueListIndex```|IList<T>|true|-|
+|[```UniqueListIndex```](Collections/IndexableCollection/UniqueListIndex.cs)|IList<T>|true|-|
 
 ###How to create memory indexes for read only collections
 
