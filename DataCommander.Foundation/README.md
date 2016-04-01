@@ -152,7 +152,7 @@ The library contains an implementation of the interfaces:
 
 The built-in implementation can be replaced with NLog,log4net etc. The application configuration file can be used for that.
 See the default configuration in Data Commander as an example:
-```
+```xml
 <Diagnostics>
 	<LogFactory>
 		<attribute name="TypeName" value="DataCommander.Foundation.Diagnostics.FoundationLogFactory"/>
