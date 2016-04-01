@@ -14,7 +14,7 @@ See [```IndexableCollection<T>```](Collections/IndexableCollection/IndexableColl
 |-----------|----------------------------|------|------|----------|-----------------|
 |[```LinkedListIndex```](Collections/IndexableCollection/LinkedListIndex.cs)|LinkedList<T>|false|false|true|false|
 |[```ListIndex```](Collections/IndexableCollection/LinkedListIndex.cs)|List<T>|false|false|true|true|
-|[```NonUniqueIndex```](Collections/IndexableCollection/NonUniqueIndex.cs)|IDictionary<TKey, ICollection<T>>|false|-|false|false|
+|[```NonUniqueIndex```](Collections/IndexableCollection/NonUniqueIndex.cs)|IDictionary<TKey, ICollection<T>>|false|true/false|false|false|
 |[```SequenceIndex```](Collections/IndexableCollection/SequenceIndex.cs)|IDictionary<>|true|true/false|false|false|
 |[```UniqueIndex```](Collections/IndexableCollection/UniqueIndex.cs)|Dictionary<>|false|false|false|false|
 |```UniqueIndex```|SortedDictionary<>|false|true|false|false|
