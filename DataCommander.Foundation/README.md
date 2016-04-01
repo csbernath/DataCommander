@@ -77,14 +77,17 @@ If the name of the xml element is not node or attribute then the type of the ele
 ```
 
 - name: required
-- type: optional (bool,char,string,object,sbyte,short,int,long,byte,ushort,uint,ulong,float,double,decimal,datetime,xmlnode,...)
+- type: optional (the full type name of the .NET type)
 - isNull: optional (true,false)
 - description: optional
 
 ####Simplified syntax
 
-- ```<node name="Name1">``` is equivalent to ```<Name1>```
-- ```<attribute name="Name1" value="Hello">``` is equivalent to ```<attribute name="Name1" value="Hello">```
+|Full syntax|Simplified syntax|
+|-----------|-----------------|
+|```<node name="Name1">```|```<Name1>```|
+|```<attribute name="Count" type="System.Int32"``` value="1"/>```|```<attribute name="Count" type="int" value="1"/>``` bool,char,string,object,sbyte,short,int,long,byte,ushort,uint,ulong,float,double,decimal,datetime|
+|```<attribute name="Name1" type="string" value="Hello">```|```<attribute name="Name1" value="Hello">```|
 
 ###[IDateTimeProvider](IDateTimeProvider.cs)
 This is the unified abstract version of retrieving the current date and time.
