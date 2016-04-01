@@ -60,14 +60,31 @@ The schema of the configuration section is a tree of nodes. The node can contain
 Reserved xml element names: node, attribute.
 If the name of the xml element is not node or attribute then the type of the element is node and the name of the node is the name of the xml element.
 
-```<node name="Name1">``` is equivalent to ```<Name1>```
-
-Unnamed node:
+####Nodes
 
 ```
-<node>
+<node name="<name>" description="<description>">
 </node>
 ```
+
+name: optional
+description: optional
+
+####Attributes
+
+```
+<attribute name="<name>" type="<type>" isNull="<true/false>" description="<description>"/>
+```
+
+name: required
+type: optional (available types (C# types): bool,char,string,object,sbyte,short,int,long,byte,ushort,uint,ulong,float,double,decimal,datetime) 
+isNull: optional
+description: optional
+
+####Simplified syntax
+
+```<node name="Name1">``` is equivalent to ```<Name1>```
+```<attribute name="Name1" value="Hello">``` is equivalent to ```<attribute name="Name1" value="Hello">```
 
 ###[IDateTimeProvider](IDateTimeProvider.cs)
 This is the unified abstract version of retrieving the current date and time.
