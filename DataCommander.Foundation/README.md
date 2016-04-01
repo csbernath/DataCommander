@@ -73,13 +73,25 @@ If the name of the xml element is not node or attribute then the type of the ele
 ####Attributes
 
 ```xml
-<attribute name="<name>" type="<type>" isNull="<isNull>" description="<description>"/>
+<attribute name="<name>" type="<type>" isNull="<isNull>" description="<description>" value="<value>"/>
 ```
 
 - name: required
 - type: optional (the full type name of the .NET type)
 - isNull: optional (true,false)
 - description: optional
+- value: required
+
+#####Array value
+
+```xml
+<attribute name="MyArray" type="int[]">
+	<a value="3"/>
+	<a value="5"/>
+	<a value="7"/>
+	<a value="9"/>
+</attribute>
+```
 
 ####Simplified syntax
 
