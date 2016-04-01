@@ -83,8 +83,8 @@ If the name of the xml element is not node or attribute then the type of the ele
 
 ####Simplified syntax
 
-```<node name="Name1">``` is equivalent to ```<Name1>```
-```<attribute name="Name1" value="Hello">``` is equivalent to ```<attribute name="Name1" value="Hello">```
+- ```<node name="Name1">``` is equivalent to ```<Name1>```
+- ```<attribute name="Name1" value="Hello">``` is equivalent to ```<attribute name="Name1" value="Hello">```
 
 ###[IDateTimeProvider](IDateTimeProvider.cs)
 This is the unified abstract version of retrieving the current date and time.
