@@ -86,7 +86,15 @@ If the name of the xml element is not node or attribute then the type of the ele
 |Full syntax|Simplified syntax|
 |-----------|-----------------|
 |```<node name="Name1">```|```<Name1>```|
-|```xml <attribute name="Count" type="System.Int32" value="1"/>```|```<attribute name="Count" type="int" value="1"/>``` bool,char,string,object,sbyte,short,int,long,byte,ushort,uint,ulong,float,double,decimal,datetime|
+|
+```xml
+<attribute name="Count" type="System.Int32" value="1"/>
+```
+|
+```xml
+<attribute name="Count" type="int" value="1"/>
+```
+bool,char,string,object,sbyte,short,int,long,byte,ushort,uint,ulong,float,double,decimal,datetime|
 |```<attribute name="Name1" type="string" value="Hello">```|```<attribute name="Name1" value="Hello">```|
 
 ###[IDateTimeProvider](IDateTimeProvider.cs)
