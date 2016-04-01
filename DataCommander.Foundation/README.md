@@ -13,12 +13,12 @@ See [```IndexableCollection<T>```](Collections/IndexableCollection/IndexableColl
 |Index class|Class implementing the index|Unique|Sorted|Enumerable|T this[int index]|
 |-----------|----------------------------|------|------|----------|-----------------|
 |[```LinkedListIndex<T>```](Collections/IndexableCollection/LinkedListIndex.cs)|LinkedList<T>|false|false|true|false|
-|[```ListIndex<T>```](Collections/IndexableCollection/LinkedListIndex.cs)|List<T>|false|false|true|true|
+|[```ListIndex<T>```](Collections/IndexableCollection/LinkedListIndex.cs)|[```IList<T>```](https://msdn.microsoft.com/en-us/library/5y536ey6(v=vs.110).aspx)|false|false|true|true|
 |[```NonUniqueIndex<TKey,T>```](Collections/IndexableCollection/NonUniqueIndex.cs)|IDictionary<TKey, ICollection<T>>|false|true/false|false|false|
 |[```SequenceIndex```](Collections/IndexableCollection/SequenceIndex.cs)|IDictionary<>|true|true/false|false|false|
 |[```UniqueIndex<TKey,T>```](Collections/IndexableCollection/UniqueIndex.cs)|Dictionary<>|false|false|false|false|
 |```UniqueIndex<TKey,T>```|SortedDictionary<>|false|true|false|false|
-|[```UniqueListIndex<T>```](Collections/IndexableCollection/UniqueListIndex.cs)|IList<T>|true|true/false|true|false|
+|[```UniqueListIndex<T>```](Collections/IndexableCollection/UniqueListIndex.cs)|[```IList<T>```](https://msdn.microsoft.com/en-us/library/5y536ey6(v=vs.110).aspx)|true|true/false|true|false|
 
 ###How to create memory indexes for static (read only) collections
 
