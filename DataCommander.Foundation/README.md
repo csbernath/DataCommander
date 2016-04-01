@@ -33,7 +33,7 @@ SegmentedListBuilder - build a list of segments
 ###Configuration
 
 The library defines a configuration section handler.
-```
+```xml
 <configuration>
 	<configSections>
 		<section name="DataCommander.Foundation.Configuration" type="DataCommander.Foundation.Configuration.SectionHandler, DataCommander.Foundation"/>
@@ -45,7 +45,7 @@ The library defines a configuration section handler.
 
 The schema of the configuration section is a tree of nodes. The node can contain child nodes and attributes.
 
-```
+```xml
 <DataCommander.Foundation.Configuration>
 	<node name="Node1">
 		<attribute name="Enabled" type="bool" value="true"/>
@@ -62,7 +62,7 @@ If the name of the xml element is not node or attribute then the type of the ele
 
 ####Nodes
 
-```
+```xml
 <node name="<name>" description="<description>">
 </node>
 ```
@@ -72,7 +72,7 @@ If the name of the xml element is not node or attribute then the type of the ele
 
 ####Attributes
 
-```
+```xml
 <attribute name="<name>" type="<type>" isNull="<isNull>" description="<description>"/>
 ```
 
