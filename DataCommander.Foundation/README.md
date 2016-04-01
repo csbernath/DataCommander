@@ -67,19 +67,19 @@ If the name of the xml element is not node or attribute then the type of the ele
 </node>
 ```
 
-name: optional
-description: optional
+- name: optional
+- description: optional
 
 ####Attributes
 
 ```
-<attribute name="<name>" type="<type>" isNull="<true/false>" description="<description>"/>
+<attribute name="<name>" type="<type>" isNull="<isNull>" description="<description>"/>
 ```
 
-name: required
-type: optional (available types (C# types): bool,char,string,object,sbyte,short,int,long,byte,ushort,uint,ulong,float,double,decimal,datetime) 
-isNull: optional
-description: optional
+- name: required
+- type: optional (bool,char,string,object,sbyte,short,int,long,byte,ushort,uint,ulong,float,double,decimal,datetime,xmlnode,...)
+- isNull: optional (true,false)
+- description: optional
 
 ####Simplified syntax
 
