@@ -10,15 +10,15 @@ Output: an indexable collection which follows add/remove operations in the index
 
 See [```IndexableCollection<T>```](Collections/IndexableCollection/IndexableCollection-1.cs).
 
-|Index class|Class implementing the index|Unique|Sorted|
-|-----------|----------------------------|------|------|
-|[```LinkedListIndex```](Collections/IndexableCollection/LinkedListIndex.cs)|LinkedList<T>|false|false|
-|[```ListIndex```](Collections/IndexableCollection/LinkedListIndex.cs)|List<T>|false|false|
-|[```NonUniqueIndex```](Collections/IndexableCollection/NonUniqueIndex.cs)|IDictionary<TKey, ICollection<T>>|false|-|
-|[```SequenceIndex```](Collections/IndexableCollection/SequenceIndex.cs)|IDictionary<>|true|-|
-|[```UniqueIndex```](Collections/IndexableCollection/UniqueIndex.cs)|Dictionary<>|false|false|
-|```UniqueIndex```|SortedDictionary<>|false|true|
-|[```UniqueListIndex```](Collections/IndexableCollection/UniqueListIndex.cs)|IList<T>|true|-|
+|Index class|Class implementing the index|Unique|Sorted|Enumerable|T this[int index]|
+|-----------|----------------------------|------|------|----------|-----------------|
+|[```LinkedListIndex```](Collections/IndexableCollection/LinkedListIndex.cs)|LinkedList<T>|false|false|true|false|
+|[```ListIndex```](Collections/IndexableCollection/LinkedListIndex.cs)|List<T>|false|false|true|true|
+|[```NonUniqueIndex```](Collections/IndexableCollection/NonUniqueIndex.cs)|IDictionary<TKey, ICollection<T>>|false|-|false|
+|[```SequenceIndex```](Collections/IndexableCollection/SequenceIndex.cs)|IDictionary<>|true|-|false|
+|[```UniqueIndex```](Collections/IndexableCollection/UniqueIndex.cs)|Dictionary<>|false|false|false|
+|```UniqueIndex```|SortedDictionary<>|false|true|false|
+|[```UniqueListIndex```](Collections/IndexableCollection/UniqueListIndex.cs)|IList<T>|true|-|true|
 
 ###How to create memory indexes for read only collections
 
