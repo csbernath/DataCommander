@@ -30,6 +30,43 @@ SegmentedListBuilder - build a list of segments
 |IEnumerable|no|yes|no|
 |ToReadOnlyList|yes|no|yes|
 
+###Configuration
+
+The library defines a configuration section handler.
+```
+<configuration>
+	<configSections>
+		<section name="DataCommander.Foundation.Configuration" type="DataCommander.Foundation.Configuration.SectionHandler, DataCommander.Foundation"/>
+	</configSections>
+	<DataCommander.Foundation.Configuration>
+	</DataCommander.Foundation.Configuration>
+</configuration>
+```
+
+The schema of the configuration section is a tree of nodes. The node can contain child nodes and attributes.
+
+```
+<DataCommander.Foundation.Configuration>
+	<node name="Node1">
+		<attribute name="Enabled" type="bool" value="true"/>
+		<attribute name="Path" value="%TEMP%"/>
+	</node>
+	<Node2>
+	</Node2>
+</DataCommander.Foundation.Configuration>
+</configuration>
+```
+
+Reserved xml element names: node, attribute.
+If the name of the xml element is not node or attribute then the type of the element is node and the name of the node is the name of the xml element.
+
+<node name="Name1"> is equivalent to <Name1>
+
+Unnamed node:
+
+<node>
+</node>
+
 ###[IDateTimeProvider](IDateTimeProvider.cs)
 This is the unified abstract version of retrieving the current date and time.
 The concrete implementations are using the [`DateTime.Now`](https://msdn.microsoft.com/en-us/library/system.datetime.now(v=vs.110).aspx) and `DateTime.UtcNow` properties.
