@@ -8,13 +8,11 @@
 
     internal sealed class ObjectExplorer : IObjectExplorer
     {
-        private string connectionString;
-
-        public string ConnectionString => this.connectionString;
+        public string ConnectionString { get; private set; }
 
         void IObjectExplorer.SetConnection(string connectionString, System.Data.IDbConnection connection)
         {
-            this.connectionString = connectionString;
+            this.ConnectionString = connectionString;
         }
 
         IEnumerable<ITreeNode> IObjectExplorer.GetChildren(bool refresh)
@@ -24,7 +22,7 @@ from INFORMATION_SCHEMA.SCHEMATA
 order by SCHEMA_NAME";
 
             return MySqlClientFactory.Instance.ExecuteReader(
-                this.connectionString,
+                this.ConnectionString,
                 new CommandDefinition {CommandText = commandText},
                 CommandBehavior.Default,
                 dataRecord =>

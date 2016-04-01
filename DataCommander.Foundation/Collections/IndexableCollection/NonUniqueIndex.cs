@@ -15,7 +15,6 @@
     {
         #region Private Fields
 
-        private string name;
         private IDictionary<TKey, ICollection<T>> dictionary;
         private Func<T, GetKeyResponse<TKey>> getKey;
         private Func<ICollection<T>> createCollection;
@@ -85,7 +84,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public string Name => this.name;
+        public string Name { get; private set; }
 
         /// <summary>
         /// 
@@ -273,7 +272,7 @@
             Contract.Requires<ArgumentNullException>(dictionary != null);
             Contract.Requires<ArgumentNullException>(createCollection != null);
 
-            this.name = name;
+            this.Name = name;
             this.getKey = getKey;
             this.dictionary = dictionary;
             this.createCollection = createCollection;

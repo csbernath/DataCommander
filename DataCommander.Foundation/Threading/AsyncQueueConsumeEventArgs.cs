@@ -9,14 +9,12 @@ namespace DataCommander.Foundation.Threading
     {
         internal AsyncQueueConsumeEventArgs(object item)
         {
-            this.item = item;
+            this.Item = item;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public object Item => this.item;
-
-        private readonly object item;
+        public object Item { get; }
     }
 }

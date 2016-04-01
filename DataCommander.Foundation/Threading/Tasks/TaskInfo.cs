@@ -4,6 +4,7 @@ namespace DataCommander.Foundation.Threading.Tasks
 #if FOUNDATION_3_5
 #else
     using System.Threading.Tasks;
+
 #endif
 
     /// <summary>
@@ -12,84 +13,44 @@ namespace DataCommander.Foundation.Threading.Tasks
     public sealed class TaskInfo
     {
         private readonly WeakReference weakReference;
-        private readonly int id;
-        private readonly string name;
-        private int? managedThreadId;
-        private bool? isThreadPoolThread;
-        private readonly DateTime creationTime = LocalTime.Default.Now;
-        private DateTime? startTime;
         private bool isCompleted;
-        private DateTime? completedTime;
 
-        internal TaskInfo( Task task, string name )
+        internal TaskInfo(Task task, string name)
         {
-            this.weakReference = new WeakReference( task );
-            this.id = task.Id;
-            this.name = name;
+            this.weakReference = new WeakReference(task);
+            this.Id = task.Id;
+            this.Name = name;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int Id => this.id;
+        public int Id { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Name => this.name;
+        public string Name { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public int? ManagedThreadId
-        {
-            get
-            {
-                return this.managedThreadId;
-            }
-
-            internal set
-            {
-                this.managedThreadId = value;
-            }
-        }
+        public int? ManagedThreadId { get; internal set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public bool? IsThreadPoolThread
-        {
-            get
-            {
-                return this.isThreadPoolThread;
-            }
-
-            internal set
-            {
-                this.isThreadPoolThread = value;
-            }
-        }
+        public bool? IsThreadPoolThread { get; internal set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public DateTime CreationTime => this.creationTime;
+        public DateTime CreationTime { get; } = LocalTime.Default.Now;
 
         /// <summary>
         /// 
         /// </summary>
-        public DateTime? StartTime
-        {
-            get
-            {
-                return this.startTime;
-            }
-
-            internal set
-            {
-                this.startTime = value;
-            }
-        }
+        public DateTime? StartTime { get; internal set; }
 
         /// <summary>
         /// 
@@ -110,23 +71,12 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public DateTime? CompletedTime
-        {
-            get
-            {
-                return this.completedTime;
-            }
-
-            internal set
-            {
-                this.completedTime = value;
-            }
-        }
+        public DateTime? CompletedTime { get; internal set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public TimeSpan? CompletedTimeSpan => this.completedTime - this.startTime;
+        public TimeSpan? CompletedTimeSpan => this.CompletedTime - this.StartTime;
 
         /// <summary>
         /// 

@@ -7,10 +7,6 @@
     /// </summary>
     public sealed class TextDataSetTable
     {
-        private readonly string name;
-        private readonly int rowCount;
-        private readonly TextDataTable table;
-
         /// <summary>
         /// 
         /// </summary>
@@ -21,24 +17,24 @@
         {
             Contract.Requires(rowCount >= 0);
 
-            this.name = name;
-            this.rowCount = rowCount;
-            this.table = table;
+            this.Name = name;
+            this.RowCount = rowCount;
+            this.Table = table;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Name => this.name;
+        public string Name { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public int RowCount => this.rowCount;
+        public int RowCount { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public TextDataTable Table => this.table;
+        public TextDataTable Table { get; }
     }
 }

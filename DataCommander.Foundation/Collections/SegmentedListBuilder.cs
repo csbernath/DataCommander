@@ -76,7 +76,7 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        public IReadOnlyList<T> ToReadOnlySegmentedList()
+        public IReadOnlyList<T> ToReadOnlyList()
         {
             int count = this.Count;
             return new ReadOnlySegmentedList(this.segments, count);

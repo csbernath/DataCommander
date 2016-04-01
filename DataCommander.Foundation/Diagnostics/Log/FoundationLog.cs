@@ -9,7 +9,6 @@
 
         private readonly FoundationLogFactory applicationLog;
         private string name;
-        private string loggedName;
 
         #endregion
 
@@ -19,21 +18,10 @@
 
             this.applicationLog = applicationLog;
             this.name = name;
-            this.loggedName = name;
+            this.LoggedName = name;
         }
 
-        public string LoggedName
-        {
-            get
-            {
-                return this.loggedName;
-            }
-
-            set
-            {
-                this.loggedName = value;
-            }
-        }
+        public string LoggedName { get; set; }
 
         #region ILog Members
 

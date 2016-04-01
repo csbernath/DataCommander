@@ -8,15 +8,7 @@ namespace DataCommander.Foundation.Diagnostics
     public class LogEntry
     {
         #region Private Fields
-        private readonly long id;
-        private readonly string logName;
-        private readonly DateTime creationTime;
-        private readonly int managedThreadId;
-        private readonly string threadName;
-        private readonly string userName;
-        private readonly string hostName;
-        private readonly string message;
-        private readonly LogLevel logLevel;
+
         #endregion
 
         /// <summary>
@@ -42,60 +34,60 @@ namespace DataCommander.Foundation.Diagnostics
             string message,
             LogLevel logLevel)
         {
-            this.id = id;
-            this.logName = logName;
-            this.creationTime = creationTime;
-            this.managedThreadId = managedThreadId;
-            this.threadName = threadName;
-            this.userName = userName;
-            this.hostName = hostName;
-            this.message = message;
-            this.logLevel = logLevel;
+            this.Id = id;
+            this.LogName = logName;
+            this.CreationTime = creationTime;
+            this.ManagedThreadId = managedThreadId;
+            this.ThreadName = threadName;
+            this.UserName = userName;
+            this.HostName = hostName;
+            this.Message = message;
+            this.LogLevel = logLevel;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public long Id => this.id;
+        public long Id { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string LogName => this.logName;
+        public string LogName { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public DateTime CreationTime => this.creationTime;
+        public DateTime CreationTime { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public int ManagedThreadId => this.managedThreadId;
+        public int ManagedThreadId { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string ThreadName => this.threadName;
+        public string ThreadName { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string HostName => this.hostName;
+        public string HostName { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string UserName => this.userName;
+        public string UserName { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Message => this.message;
+        public string Message { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public LogLevel LogLevel => this.logLevel;
+        public LogLevel LogLevel { get; }
     }
 }

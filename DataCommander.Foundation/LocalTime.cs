@@ -16,8 +16,6 @@
         private int incrementedTickCount;
         private DateTime incrementedDateTime;
 
-        private static readonly LocalTime DefaultLocalTime = new LocalTime(increment: 16, adjustment: 1000);
-
         static LocalTime()
         {
             sharedDateTime = DateTime.Now;
@@ -45,7 +43,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public static LocalTime Default => DefaultLocalTime;
+        public static LocalTime Default { get; } = new LocalTime(increment: 16, adjustment: 1000);
 
         /// <summary>
         /// Gets the current date and time on this computer, expressed as the local time.

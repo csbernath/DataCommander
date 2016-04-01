@@ -11,15 +11,15 @@ namespace DataCommander.Providers.OleDb
             OleDbConnection connection,
             string          name)
         {
-            this.connection = connection;
-            this.name = name;
+            this.Connection = connection;
+            this.Name = name;
         }
 
         string ITreeNode.Name
         {
             get
             {
-                string name = this.name;
+                string name = this.Name;
 
                 if (name == null)
                     name = "[No catalogs found]";
@@ -38,8 +38,8 @@ namespace DataCommander.Providers.OleDb
 
             try
             {
-                object [] restrictions = new object[] {this.name};
-                DataTable dataTable = this.connection.GetOleDbSchemaTable(OleDbSchemaGuid.Schemata,restrictions);
+                object [] restrictions = new object[] {this.Name};
+                DataTable dataTable = this.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Schemata,restrictions);
                 int count = dataTable.Rows.Count;
                 DataColumn nameColumn = dataTable.Columns["SCHEMA_NAME"];        
                 treeNodes = new ITreeNode[count];
@@ -63,17 +63,14 @@ namespace DataCommander.Providers.OleDb
 
         public string Query => null;
 
-        public OleDbConnection Connection => this.connection;
+        public OleDbConnection Connection { get; }
 
-        public string Name => this.name;
+        public string Name { get; }
 
         public ContextMenuStrip ContextMenu => null;
 
         public void BeforeExpand()
         {
         }
-
-        readonly OleDbConnection connection;
-        readonly string          name;
     }
 }

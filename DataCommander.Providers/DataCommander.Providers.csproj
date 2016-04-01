@@ -28,7 +28,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -256,7 +256,7 @@
     <Compile Include="Connection\ConnectionStringKeyword.cs" />
     <Compile Include="DataCommanderApplication.cs">
       <SubType>Code</SubType>
-    </Compile>    
+    </Compile>
     <Compile Include="Connection\DatabaseChangedEventArgs.cs" />
     <Compile Include="Connection\DataRowSelector.cs" />
     <Compile Include="Connection\InfoMessage.cs" />

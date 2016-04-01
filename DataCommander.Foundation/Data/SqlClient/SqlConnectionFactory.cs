@@ -20,10 +20,7 @@ namespace DataCommander.Foundation.Data.SqlClient
 
         private void InfoMessageEvent(object sender, SqlInfoMessageEventArgs e)
         {
-            if (this.InfoMessage != null)
-            {
-                this.InfoMessage(this.connection, e);
-            }
+            this.InfoMessage?.Invoke(this.connection, e);
         }
     }
 }

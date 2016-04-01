@@ -123,7 +123,7 @@
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType(DataColumnSchema dataColumnSchema)
+        Type IProvider.GetColumnType(DbColumn dataColumnSchema)
         {
             return typeof (object);
         }

@@ -9,15 +9,13 @@
 
     internal sealed class DatabaseCollectionNode : ITreeNode
     {
-        private readonly ServerNode server;
-
         public DatabaseCollectionNode(ServerNode server)
         {
             Contract.Requires(server != null);
-            this.server = server;
+            this.Server = server;
         }
 
-        public ServerNode Server => this.server;
+        public ServerNode Server { get; }
 
         #region ITreeNode Members
 
@@ -30,7 +28,7 @@
             var list = new List<ITreeNode>();
             list.Add(new SystemDatabaseCollectionNode(this));
 
-            string connectionString = this.server.ConnectionString;
+            string connectionString = this.Server.ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 const string commandText = @"select d.name

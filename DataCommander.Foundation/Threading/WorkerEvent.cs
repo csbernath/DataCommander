@@ -6,16 +6,15 @@
     internal class WorkerEvent : WaitHandle
     {
         private readonly EventWaitHandle eventWaitHandle;
-        private WorkerEventState state;
 
         public WorkerEvent(WorkerEventState initialState)
         {
             this.eventWaitHandle = new EventWaitHandle(initialState == WorkerEventState.Signaled, EventResetMode.ManualReset);
-            this.state = initialState;
+            this.State = initialState;
             this.SafeWaitHandle = this.eventWaitHandle.SafeWaitHandle;
         }
 
-        public WorkerEventState State => this.state;
+        public WorkerEventState State { get; private set; }
 
         /// <summary>
         /// 
@@ -23,7 +22,7 @@
         /// <returns></returns>
         public bool Reset()
         {
-            this.state = WorkerEventState.NonSignaled;
+            this.State = WorkerEventState.NonSignaled;
             return this.eventWaitHandle.Reset();
         }
 
@@ -33,7 +32,7 @@
         /// <returns></returns>
         public bool Set()
         {
-            this.state = WorkerEventState.Signaled;
+            this.State = WorkerEventState.Signaled;
             return this.eventWaitHandle.Set();
         }
 

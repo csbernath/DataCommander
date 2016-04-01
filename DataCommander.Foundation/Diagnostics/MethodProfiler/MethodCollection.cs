@@ -1,6 +1,7 @@
-﻿namespace DataCommander.Foundation.Diagnostics
+﻿namespace DataCommander.Foundation.Diagnostics.MethodProfiler
 {
     using System.Collections;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Reflection;
     using System.Threading;
@@ -8,7 +9,7 @@
     internal sealed class MethodCollection : IEnumerable<MethodBase>
     {
         private int idSequence;
-        private readonly Dictionary<MethodBase, int> methods = new Dictionary<MethodBase, int>();
+        private readonly ConcurrentDictionary<MethodBase, int> methods = new ConcurrentDictionary<MethodBase, int>();
 
         public bool TryGetValue(MethodBase method, out int methodId)
         {
@@ -17,14 +18,8 @@
 
         public int Add(MethodBase method)
         {
-            int id;
-
-            lock (this.methods)
-            {
-                id = Interlocked.Increment(ref this.idSequence);
-                this.methods.Add(method, id);
-            }
-
+            int id = Interlocked.Increment(ref this.idSequence);
+            this.methods.TryAdd(method, id);
             return id;
         }
 

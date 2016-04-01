@@ -8,6 +8,7 @@ namespace DataCommander.Providers
     using System.Drawing;
     using System.Windows.Forms;
     using DataCommander.Foundation.Diagnostics;
+    using Foundation.Diagnostics.MethodProfiler;
 
     public sealed class QueryTextBox : UserControl
     {
@@ -18,13 +19,9 @@ namespace DataCommander.Providers
         private int prevSelectionLength;
         private bool changeEventEnabled = true;
         private ToolStripStatusLabel sbPanel;
-        private IKeyboardHandler keyboardHandler;
-        private int tabSize = 4;
         private int columnIndex;
 
-        private RichTextBox richTextBox;
-
-        public RichTextBox RichTextBox => this.richTextBox;
+        public RichTextBox RichTextBox { get; private set; }
 
         /// <summary> 
         /// Required designer variable.
@@ -37,9 +34,9 @@ namespace DataCommander.Providers
             this.InitializeComponent();
 
             // TODO: Add any initialization after the InitForm call
-            this.richTextBox.SelectionChanged += new EventHandler(this.richTextBox_SelectionChanged);
-            this.richTextBox.DragEnter += new DragEventHandler(this.richTextBox_DragEnter);
-            this.richTextBox.DragDrop += new DragEventHandler(this.richTextBox_DragDrop);
+            this.RichTextBox.SelectionChanged += new EventHandler(this.richTextBox_SelectionChanged);
+            this.RichTextBox.DragEnter += new DragEventHandler(this.richTextBox_DragEnter);
+            this.RichTextBox.DragDrop += new DragEventHandler(this.richTextBox_DragDrop);
         }
 
         public void AddKeyWords(string[] keyWords, Color color)
@@ -72,17 +69,17 @@ namespace DataCommander.Providers
         {
             get
             {
-                return this.richTextBox.Text;
+                return this.RichTextBox.Text;
             }
 
             set
             {
                 this.changeEventEnabled = false;
-                this.richTextBox.Text = value;
+                this.RichTextBox.Text = value;
 
                 if (value != null)
                 {
-                    string text = this.richTextBox.Text;
+                    string text = this.RichTextBox.Text;
                     this.Colorize(text, 0, text.Length - 1);
                 }
 
@@ -90,12 +87,12 @@ namespace DataCommander.Providers
             }
         }
 
-        public string SelectedText => this.richTextBox.SelectedText;
+        public string SelectedText => this.RichTextBox.SelectedText;
 
         public void Paste()
         {
             var format = DataFormats.GetFormat(DataFormats.UnicodeText);
-            this.richTextBox.Paste(format);
+            this.RichTextBox.Paste(format);
         }
 
         /// <summary> 
@@ -122,29 +119,29 @@ namespace DataCommander.Providers
         /// </summary>
         private void InitializeComponent()
         {
-            this.richTextBox = new System.Windows.Forms.RichTextBox();
+            this.RichTextBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // richTextBox
             // 
-            this.richTextBox.AcceptsTab = true;
-            this.richTextBox.AllowDrop = true;
-            this.richTextBox.AutoWordSelection = true;
-            this.richTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox.Location = new System.Drawing.Point(0, 0);
-            this.richTextBox.Name = "richTextBox";
-            this.richTextBox.Size = new System.Drawing.Size(408, 150);
-            this.richTextBox.TabIndex = 0;
-            this.richTextBox.Text = "";
-            this.richTextBox.WordWrap = false;
-            this.richTextBox.TextChanged += new System.EventHandler(this.richTextBox_TextChanged);
-            this.richTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.richTextBox_KeyDown);
-            this.richTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.richTextBox_KeyPress);
-            this.richTextBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.richTextBox_MouseUp);
+            this.RichTextBox.AcceptsTab = true;
+            this.RichTextBox.AllowDrop = true;
+            this.RichTextBox.AutoWordSelection = true;
+            this.RichTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.RichTextBox.Location = new System.Drawing.Point(0, 0);
+            this.RichTextBox.Name = "RichTextBox";
+            this.RichTextBox.Size = new System.Drawing.Size(408, 150);
+            this.RichTextBox.TabIndex = 0;
+            this.RichTextBox.Text = "";
+            this.RichTextBox.WordWrap = false;
+            this.RichTextBox.TextChanged += new System.EventHandler(this.richTextBox_TextChanged);
+            this.RichTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.richTextBox_KeyDown);
+            this.RichTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.richTextBox_KeyPress);
+            this.RichTextBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.richTextBox_MouseUp);
             // 
             // QueryTextBox
             // 
-            this.Controls.Add(this.richTextBox);
+            this.Controls.Add(this.RichTextBox);
             this.Name = "QueryTextBox";
             this.Size = new System.Drawing.Size(408, 150);
             this.ResumeLayout(false);
@@ -159,8 +156,8 @@ namespace DataCommander.Providers
 
             try
             {
-                this.richTextBox.Select(startWord, length);
-                this.richTextBox.SelectionColor = color;
+                this.RichTextBox.Select(startWord, length);
+                this.RichTextBox.SelectionColor = color;
             }
             finally
             {
@@ -178,7 +175,7 @@ namespace DataCommander.Providers
 
         private int LineIndex(int i)
         {
-            return GetLineIndex(this.richTextBox, i);
+            return GetLineIndex(this.RichTextBox, i);
         }
 
         private void richTextBox_SelectionChanged(object sender, EventArgs e)
@@ -188,12 +185,12 @@ namespace DataCommander.Providers
             try
             {
                 this.prevSelectionStart = this.selectionStart;
-                this.selectionStart = this.richTextBox.SelectionStart;
+                this.selectionStart = this.RichTextBox.SelectionStart;
                 this.prevSelectionLength = this.selectionLength;
-                this.selectionLength = this.richTextBox.SelectionLength;
+                this.selectionLength = this.RichTextBox.SelectionLength;
 
                 int charIndex = this.selectionStart;
-                int line = this.richTextBox.GetLineFromCharIndex(charIndex) + 1;
+                int line = this.RichTextBox.GetLineFromCharIndex(charIndex) + 1;
                 int lineIndex = this.LineIndex(-1);
                 int col = charIndex - lineIndex + 1;
                 this.sbPanel.Text = "Ln " + line + " Col " + col;
@@ -318,10 +315,10 @@ namespace DataCommander.Providers
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                int orgSelectionStart = Math.Max(this.richTextBox.SelectionStart, 0);
-                int orgSelectionLength = Math.Max(this.richTextBox.SelectionLength, 0);
+                int orgSelectionStart = Math.Max(this.RichTextBox.SelectionStart, 0);
+                int orgSelectionLength = Math.Max(this.RichTextBox.SelectionLength, 0);
 
-                IntPtr intPtr = this.richTextBox.Handle;
+                IntPtr intPtr = this.RichTextBox.Handle;
                 int hWnd = intPtr.ToInt32();
                 NativeMethods.SendMessage(hWnd, (int) NativeMethods.Message.Gdi.SetRedraw, 0, 0);
 
@@ -329,9 +326,9 @@ namespace DataCommander.Providers
 
                 try
                 {
-                    this.richTextBox.SelectionStart = startIndex;
-                    this.richTextBox.SelectionLength = endIndex - startIndex + 1;
-                    this.richTextBox.SelectionColor = SystemColors.ControlText;
+                    this.RichTextBox.SelectionStart = startIndex;
+                    this.RichTextBox.SelectionLength = endIndex - startIndex + 1;
+                    this.RichTextBox.SelectionColor = SystemColors.ControlText;
                 }
                 finally
                 {
@@ -430,10 +427,10 @@ namespace DataCommander.Providers
 
                 try
                 {
-                    this.richTextBox.SelectionStart = orgSelectionStart;
-                    this.richTextBox.SelectionLength = orgSelectionLength;
+                    this.RichTextBox.SelectionStart = orgSelectionStart;
+                    this.RichTextBox.SelectionLength = orgSelectionLength;
                     NativeMethods.SendMessage(hWnd, (int) NativeMethods.Message.Gdi.SetRedraw, 1, 0);
-                    this.richTextBox.Refresh();
+                    this.RichTextBox.Refresh();
                 }
                 finally
                 {
@@ -454,9 +451,9 @@ namespace DataCommander.Providers
             {
                 if (this.changeEventEnabled)
                 {
-                    this.richTextBox.SelectionChanged -= new EventHandler(this.richTextBox_SelectionChanged);
+                    this.RichTextBox.SelectionChanged -= new EventHandler(this.richTextBox_SelectionChanged);
 
-                    string text = this.richTextBox.Text;
+                    string text = this.RichTextBox.Text;
 
                     if (text.Length > 0)
                     {
@@ -528,7 +525,7 @@ namespace DataCommander.Providers
                         }
                     }
 
-                    this.richTextBox.SelectionChanged += new EventHandler(this.richTextBox_SelectionChanged);
+                    this.RichTextBox.SelectionChanged += new EventHandler(this.richTextBox_SelectionChanged);
                 }
             }
             catch (Exception ex)
@@ -563,9 +560,9 @@ namespace DataCommander.Providers
 
             try
             {
-                if (this.keyboardHandler != null)
+                if (this.KeyboardHandler != null)
                 {
-                    e.Handled = this.keyboardHandler.HandleKeyDown(e);
+                    e.Handled = this.KeyboardHandler.HandleKeyDown(e);
                 }
                 else
                 {
@@ -578,13 +575,13 @@ namespace DataCommander.Providers
                     {
                         e.Handled = true;
 
-                        int length = -((this.columnIndex - 1)%this.tabSize) + this.tabSize;
+                        int length = -((this.columnIndex - 1)%this.TabSize) + this.TabSize;
                         string text = new string(' ', length);
-                        length = this.richTextBox.SelectionLength;
+                        length = this.RichTextBox.SelectionLength;
 
                         if (length == 0)
                         {
-                            this.richTextBox.SelectedText = text;
+                            this.RichTextBox.SelectedText = text;
                         }
                     }
                     else if (e.KeyCode == Keys.E && e.Control)
@@ -605,9 +602,9 @@ namespace DataCommander.Providers
 
         private void richTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (this.keyboardHandler != null)
+            if (this.KeyboardHandler != null)
             {
-                e.Handled = this.keyboardHandler.HandleKeyPress(e);
+                e.Handled = this.KeyboardHandler.HandleKeyPress(e);
             }
             else
             {
@@ -644,11 +641,11 @@ namespace DataCommander.Providers
             if (GetDataPresent(dataObject, DataFormats.UnicodeText))
             {
                 string text = (string) GetData(dataObject, DataFormats.UnicodeText);
-                int startIndex = this.richTextBox.SelectionStart;
-                this.richTextBox.SelectionLength = 0;
-                this.richTextBox.SelectedText = text;
-                this.richTextBox.SelectionStart = startIndex + text.Length;
-                this.richTextBox.Focus();
+                int startIndex = this.RichTextBox.SelectionStart;
+                this.RichTextBox.SelectionLength = 0;
+                this.RichTextBox.SelectedText = text;
+                this.RichTextBox.SelectionStart = startIndex + text.Length;
+                this.RichTextBox.Focus();
             }
             else if (GetDataPresent(dataObject, DataFormats.FileDrop))
             {
@@ -657,31 +654,9 @@ namespace DataCommander.Providers
             }
         }
 
-        internal IKeyboardHandler KeyboardHandler
-        {
-            get
-            {
-                return this.keyboardHandler;
-            }
+        internal IKeyboardHandler KeyboardHandler { get; set; }
 
-            set
-            {
-                this.keyboardHandler = value;
-            }
-        }
-
-        public int TabSize
-        {
-            get
-            {
-                return this.tabSize;
-            }
-
-            set
-            {
-                this.tabSize = value;
-            }
-        }
+        public int TabSize { get; set; } = 4;
 
         private void CreateTable_Click(object sender, EventArgs e)
         {

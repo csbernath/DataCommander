@@ -8,14 +8,12 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 
     internal sealed class TableCollectionNode : ITreeNode
     {
-        private readonly SchemaNode schemaNode;
-
         public TableCollectionNode(SchemaNode schemaNode)
         {
-            this.schemaNode = schemaNode;
+            this.SchemaNode = schemaNode;
         }
 
-        public SchemaNode SchemaNode => this.schemaNode;
+        public SchemaNode SchemaNode { get; }
 
         string ITreeNode.Name => "Tables";
 
@@ -25,7 +23,7 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
         {
             var nodes = new List<ITreeNode>();
 
-            using (var connection = new NpgsqlConnection(this.schemaNode.SchemaCollectionNode.ObjectExplorer.ConnectionString))
+            using (var connection = new NpgsqlConnection(this.SchemaNode.SchemaCollectionNode.ObjectExplorer.ConnectionString))
             {
                 connection.Open();
                 var transactionScope = new DbTransactionScope(connection, null);
@@ -34,7 +32,7 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
                     CommandText = $@"select table_name
 from information_schema.tables
 where
-    table_schema = '{this.schemaNode.Name}'
+    table_schema = '{this.SchemaNode.Name}'
     and table_type = 'BASE TABLE'
 order by table_name"
                 }, CommandBehavior.Default))

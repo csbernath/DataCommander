@@ -5,23 +5,20 @@
     /// </summary>
     public sealed class DocumentProperty
     {
-        private readonly DocumentPropertyId id;
-        private readonly object value;
-
         internal DocumentProperty( DocumentPropertyId id, object value )
         {
-            this.id = id;
-            this.value = value;
+            this.Id = id;
+            this.Value = value;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public DocumentPropertyId Id => this.id;
+        public DocumentPropertyId Id { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public object Value => this.value;
+        public object Value { get; }
     }
 }

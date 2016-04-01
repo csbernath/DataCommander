@@ -9,20 +9,7 @@ namespace DataCommander.Providers
 
     public abstract class ConnectionBase
     {
-		private IDbConnection connection;
-
-		public IDbConnection Connection
-		{
-            get
-            {
-                return this.connection;
-            }
-
-			protected set
-			{
-				this.connection = value;
-			}
-		}
+        public IDbConnection Connection { get; protected set; }
 
         //public abstract void Open();
 
@@ -30,9 +17,9 @@ namespace DataCommander.Providers
 
         public void Close()
         {
-            if (this.connection != null)
+            if (this.Connection != null)
             {
-                this.connection.Close();
+                this.Connection.Close();
             }
         }
 
@@ -44,7 +31,7 @@ namespace DataCommander.Providers
             set;
         }
 
-        public string ConnectionString => this.connection.ConnectionString;
+        public string ConnectionString => this.Connection.ConnectionString;
 
         public abstract string Caption
         {
@@ -64,9 +51,9 @@ namespace DataCommander.Providers
             {
                 string database;
 
-                if (this.connection != null)
+                if (this.Connection != null)
                 {
-                    database = this.connection.Database;
+                    database = this.Connection.Database;
                 }
                 else
                 {
@@ -91,8 +78,8 @@ namespace DataCommander.Providers
         {
             get
             {
-                Contract.Assert(this.connection != null);
-                return this.connection.State;
+                Contract.Assert(this.Connection != null);
+                return this.Connection.State;
             }
         }
 

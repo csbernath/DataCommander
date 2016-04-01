@@ -23,14 +23,12 @@ namespace DataCommander.Providers.SqlServer2005.FieldReader
 
                 for (int i = 0; i < count; i++)
                 {
-                    this.dataFieldReaders[i] = CreateDataFieldReader(dataReader, new DataColumnSchema(rows[i]));
+                    this.dataFieldReaders[i] = CreateDataFieldReader(dataReader, new DbColumn(rows[i]));
                 }
             }
         }
 
-        private static IDataFieldReader CreateDataFieldReader(
-            IDataRecord dataRecord,
-            DataColumnSchema dataColumnSchema)
+        private static IDataFieldReader CreateDataFieldReader(IDataRecord dataRecord, DbColumn dataColumnSchema)
         {
             int columnOrdinal = dataColumnSchema.ColumnOrdinal;
             SqlDbType providerType = (SqlDbType)dataColumnSchema.ProviderType;

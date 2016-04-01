@@ -13,8 +13,7 @@
     {
         #region Private Fields
 
-        private readonly int segmentSize;
-        private int count;
+        private readonly int segmentLength;
         private Segment first;
         private Segment last;
 
@@ -23,12 +22,12 @@
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="segmentSize"></param>
-        public SegmentedCollection(int segmentSize)
+        /// <param name="segmentLength"></param>
+        public SegmentedCollection(int segmentLength)
         {
-            Contract.Requires<ArgumentOutOfRangeException>(segmentSize > 0);
+            Contract.Requires<ArgumentOutOfRangeException>(segmentLength > 0);
 
-            this.segmentSize = segmentSize;
+            this.segmentLength = segmentLength;
         }
 
         #region ICollection<T> Members
@@ -39,21 +38,29 @@
         /// <param name="item"></param>
         public void Add(T item)
         {
-            if (this.count == 0)
+            int index = this.Count%this.segmentLength;
+
+            if (index == 0)
             {
-                this.first = new Segment(this.segmentSize);
-                this.last = this.first;
+                var newSegment = new Segment
+                {
+                    Items = new T[this.segmentLength]
+                };
+
+                if (this.Count == 0)
+                {
+                    this.first = newSegment;
+                    this.last = newSegment;
+                }
+                else
+                {
+                    this.last.Next = newSegment;
+                    this.last = newSegment;
+                }
             }
 
-            if (this.last.Count == this.segmentSize)
-            {
-                var newSegment = new Segment(this.segmentSize);
-                this.last.Next = newSegment;
-                this.last = newSegment;
-            }
-
-            this.last.Add(item);
-            this.count++;
+            this.last.Items[index] = item;
+            this.Count++;
         }
 
         /// <summary>
@@ -61,7 +68,7 @@
         /// </summary>
         public void Clear()
         {
-            this.count = 0;
+            this.Count = 0;
             this.first = null;
             this.last = null;
         }
@@ -73,28 +80,7 @@
         /// <returns></returns>
         public bool Contains(T item)
         {
-            var comparer = EqualityComparer<T>.Default;
-            bool contains = false;
-            var segment = this.first;
-
-            while (segment != null)
-            {
-                int count = segment.Count;
-
-                for (int i = 0; i < count; i++)
-                {
-                    var current = segment[i];
-                    if (comparer.Equals(current, item))
-                    {
-                        contains = true;
-                        break;
-                    }
-                }
-
-                segment = segment.Next;
-            }
-
-            return contains;
+            throw new NotSupportedException();
         }
 
         void ICollection<T>.CopyTo(T[] array, int arrayIndex)
@@ -105,7 +91,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.count;
+        public int Count { get; private set; }
 
         bool ICollection<T>.IsReadOnly => false;
 
@@ -124,11 +110,13 @@
 
             while (segment != null)
             {
-                int count = segment.Count;
+                int count = segment != this.last
+                    ? this.segmentLength
+                    : this.Count%this.segmentLength;
 
                 for (int i = 0; i < count; i++)
                 {
-                    yield return segment[i];
+                    yield return segment.Items[i];
                 }
 
                 segment = segment.Next;
@@ -151,37 +139,8 @@
 
         private sealed class Segment
         {
-            private readonly T[] array;
-            private int count;
-            private Segment next;
-
-            public Segment(int size)
-            {
-                this.array = new T[size];
-            }
-
-            public int Count => this.count;
-
-            public T this[int index] => this.array[index];
-
-            public Segment Next
-            {
-                get
-                {
-                    return this.next;
-                }
-
-                set
-                {
-                    this.next = value;
-                }
-            }
-
-            public void Add(T item)
-            {
-                this.array[this.count] = item;
-                this.count++;
-            }
+            public T[] Items;
+            public Segment Next;
         }
 
         #endregion

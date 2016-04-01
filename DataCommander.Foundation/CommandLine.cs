@@ -14,8 +14,6 @@
     public sealed class CommandLine
     {
         private readonly IndexableCollection<CommandLineArgument> arguments;
-        private readonly ListIndex<CommandLineArgument> listIndex = new ListIndex<CommandLineArgument>("listIndex");
-        private readonly NonUniqueIndex<string, CommandLineArgument> nameIndex;
 
         /// <summary>
         /// 
@@ -25,14 +23,14 @@
         {
             Contract.Requires<ArgumentNullException>(commandLine != null);
 
-            this.arguments = new IndexableCollection<CommandLineArgument>(this.listIndex);
+            this.arguments = new IndexableCollection<CommandLineArgument>(this.ListIndex);
             var dictionary = new Dictionary<string, ICollection<CommandLineArgument>>(StringComparer.InvariantCultureIgnoreCase);
-            this.nameIndex = new NonUniqueIndex<string, CommandLineArgument>(
+            this.NameIndex = new NonUniqueIndex<string, CommandLineArgument>(
                 "nameIndex",
                 argument => GetKeyResponse.Create(argument.Name != null, argument.Name),
                 dictionary,
                 () => new List<CommandLineArgument>());
-            this.arguments.Indexes.Add(this.nameIndex);
+            this.arguments.Indexes.Add(this.NameIndex);
             var stringReader = new StringReader(commandLine);
             var arguments = Parse(stringReader);
             this.arguments.Add(arguments);
@@ -41,12 +39,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public ListIndex<CommandLineArgument> ListIndex => this.listIndex;
+        public ListIndex<CommandLineArgument> ListIndex { get; } = new ListIndex<CommandLineArgument>("listIndex");
 
         /// <summary>
         /// 
         /// </summary>
-        public NonUniqueIndex<string, CommandLineArgument> NameIndex => this.nameIndex;
+        public NonUniqueIndex<string, CommandLineArgument> NameIndex { get; }
 
         #region Private Methods
 

@@ -8,9 +8,7 @@
     /// </summary>
     public sealed class TextDataRow
     {
-        private readonly TextDataColumnCollection columns;
         private readonly Convert convert;
-        private readonly object[] values;
 
         /// <summary>
         /// 
@@ -22,13 +20,13 @@
             Contract.Requires(columns != null);
             Contract.Requires(convert != null);
 
-            this.columns = columns;
+            this.Columns = columns;
             this.convert = convert;
-            this.values = new object[columns.Count];
+            this.ItemArray = new object[columns.Count];
 
-            for (int i = 0; i < this.values.Length; i++)
+            for (int i = 0; i < this.ItemArray.Length; i++)
             {
-                this.values[i] = DBNull.Value;
+                this.ItemArray[i] = DBNull.Value;
             }
         }
 
@@ -49,28 +47,28 @@
         {
             get
             {
-                int index = this.columns.IndexOf(columnName, true);
-                return this.values[index];
+                int index = this.Columns.IndexOf(columnName, true);
+                return this.ItemArray[index];
             }
 
             set
             {
-                int index = this.columns.IndexOf(columnName, true);
-                TextDataColumn column = this.columns[index];
+                int index = this.Columns.IndexOf(columnName, true);
+                TextDataColumn column = this.Columns[index];
                 object convertedValue = this.convert(value, column);
-                this.values[index] = convertedValue;
+                this.ItemArray[index] = convertedValue;
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public object[] ItemArray => this.values;
+        public object[] ItemArray { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public TextDataColumnCollection Columns => this.columns;
+        public TextDataColumnCollection Columns { get; }
 
         /// <summary>
         /// 
@@ -81,15 +79,15 @@
         {
             get
             {
-                int index = this.columns.IndexOf(column, true);
-                return this.values[index];
+                int index = this.Columns.IndexOf(column, true);
+                return this.ItemArray[index];
             }
 
             set
             {
-                int index = this.columns.IndexOf(column, true);
+                int index = this.Columns.IndexOf(column, true);
                 object convertedValue = this.convert(value, column);
-                this.values[index] = convertedValue;
+                this.ItemArray[index] = convertedValue;
             }
         }
     }

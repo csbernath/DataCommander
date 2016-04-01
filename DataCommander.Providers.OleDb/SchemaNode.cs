@@ -8,20 +8,17 @@ namespace DataCommander.Providers.OleDb
     /// </summary>
     sealed class SchemaNode : ITreeNode
     {
-        private readonly CatalogNode catalog;
-        private readonly string name;
-
         public SchemaNode(CatalogNode catalog,string name)
         {
-            this.catalog = catalog;
-            this.name = name;
+            this.Catalog = catalog;
+            this.Name = name;
         }
 
         string ITreeNode.Name
         {
             get
             {
-                string name = this.name;
+                string name = this.Name;
         
                 if (name == null)
                     name = "[No schemas found]";
@@ -45,9 +42,9 @@ namespace DataCommander.Providers.OleDb
 
         public string Query => null;
 
-        public CatalogNode Catalog => this.catalog;
+        public CatalogNode Catalog { get; }
 
-        public string Name => this.name;
+        public string Name { get; }
 
         public ContextMenuStrip ContextMenu => null;
 

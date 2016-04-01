@@ -348,10 +348,10 @@ namespace DataCommander.Providers.OracleClient
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType(DataColumnSchema dataColumnSchema)
+        Type IProvider.GetColumnType(DbColumn column)
         {
-            OracleType oracleType = (OracleType) dataColumnSchema[SchemaTableColumn.ProviderType];
-            Type type = (Type) dataColumnSchema[SchemaTableColumn.DataType];
+            var oracleType = (OracleType)column.ProviderType;
+            var type = column.DataType;
             return type;
         }
 
@@ -462,12 +462,12 @@ namespace DataCommander.Providers.OracleClient
                     values.Append(',');
                 }
 
-                var schemaRow = new DataColumnSchema(schemaRows[i]);
-                insertInto.Append(schemaRow.ColumnName);
+                var column = new DbColumn(schemaRows[i]);
+                insertInto.Append(column.ColumnName);
                 values.AppendFormat(":p{0}", i + 1);
 
-                int columnSize = schemaRow.ColumnSize;
-                OracleType oracleType = (OracleType) schemaRow.ProviderType;
+                int columnSize = column.ColumnSize;
+                var oracleType = (OracleType)column.ProviderType;
                 OracleParameter parameter = new OracleParameter($"p{i + 1}", oracleType);
                 insertCommand.Parameters.Add(parameter);
                 Converter<object, object> converter;

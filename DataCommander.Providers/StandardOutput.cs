@@ -12,18 +12,17 @@ namespace DataCommander.Providers
     /// </summary>
     internal sealed class StandardOutput : IStandardOutput
     {
-        private readonly TextWriter textWriter;
         private readonly QueryForm queryForm;
 
         public StandardOutput(
             TextWriter textWriter,
             QueryForm queryForm)
         {
-            this.textWriter = textWriter;
+            this.TextWriter = textWriter;
             this.queryForm = queryForm;
         }
 
-        public TextWriter TextWriter => this.textWriter;
+        public TextWriter TextWriter { get; }
 
         public void WriteLine(params object[] args)
         {
@@ -43,7 +42,7 @@ namespace DataCommander.Providers
                 }
             }
 
-            this.textWriter.WriteLine(sb.ToString());
+            this.TextWriter.WriteLine(sb.ToString());
         }
 
         public void Write(object arg)
@@ -66,7 +65,7 @@ namespace DataCommander.Providers
                     try
                     {
                         objRS = rs.NextRecordset(out recordsAffected);
-                        this.textWriter.WriteLine(recordsAffected + " row(s) affected.");
+                        this.TextWriter.WriteLine(recordsAffected + " row(s) affected.");
                     }
                     catch
                     {
@@ -80,7 +79,7 @@ namespace DataCommander.Providers
             else
             {
                 string s = arg.ToString();
-                this.textWriter.Write(s);
+                this.TextWriter.Write(s);
             }
         }
     }

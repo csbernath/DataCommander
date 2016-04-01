@@ -16,12 +16,11 @@ namespace DataCommander.Foundation.Configuration
     {
         private string fileName;
         private string sectionName;
-        private ConfigurationNode rootNode;
 
         /// <summary>
         /// 
         /// </summary>
-        public ConfigurationNode RootNode => this.rootNode;
+        public ConfigurationNode RootNode { get; private set; }
 
         /// <summary>
         /// 
@@ -130,11 +129,11 @@ namespace DataCommander.Foundation.Configuration
         public void Load(XmlReader xmlReader)
         {
             ConfigurationReader reader = new ConfigurationReader();
-            this.rootNode = reader.Read(xmlReader, this.sectionName, null, null);
+            this.RootNode = reader.Read(xmlReader, this.sectionName, null, null);
 
-            if (this.rootNode == null)
+            if (this.RootNode == null)
             {
-                this.rootNode = new ConfigurationNode(null);
+                this.RootNode = new ConfigurationNode(null);
             }
         }
 
@@ -152,11 +151,11 @@ namespace DataCommander.Foundation.Configuration
             {
                 var reader = new ConfigurationReader();
                 StringCollection fileNames = new StringCollection();
-                this.rootNode = reader.Read(fileName, sectionName, fileNames);
+                this.RootNode = reader.Read(fileName, sectionName, fileNames);
             }
             else
             {
-                this.rootNode = new ConfigurationNode(null);
+                this.RootNode = new ConfigurationNode(null);
             }
         }
 
@@ -171,9 +170,9 @@ namespace DataCommander.Foundation.Configuration
             Contract.Requires<ArgumentNullException>(sectionName != null);
 
             xmlWriter.WriteStartElement(sectionName);
-            ConfigurationWriter.Write(xmlWriter, this.rootNode.Attributes);
+            ConfigurationWriter.Write(xmlWriter, this.RootNode.Attributes);
 
-            foreach (ConfigurationNode childNode in this.rootNode.ChildNodes)
+            foreach (ConfigurationNode childNode in this.RootNode.ChildNodes)
             {
                 ConfigurationWriter.WriteNode(xmlWriter, childNode);
             }
@@ -224,7 +223,7 @@ namespace DataCommander.Foundation.Configuration
         /// <returns></returns>
         public ConfigurationNode CreateNode(string nodeName)
         {
-            return this.rootNode.CreateNode(nodeName);
+            return this.RootNode.CreateNode(nodeName);
         }
     }
 }

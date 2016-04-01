@@ -8,9 +8,8 @@ namespace DataCommander.Foundation.Diagnostics
     {
         #region Private Fields
 
-        private static readonly ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = InternalLogFactory.Instance.GetTypeLog(typeof (LogFile));
         private string path;
-        private string fileName;
         private DateTime date;
         private FileStream fileStream;
         private readonly Encoding encoding;
@@ -44,11 +43,11 @@ namespace DataCommander.Foundation.Diagnostics
         {
             this.date = dateTime.Date;
 
-            this.fileName = fileName.Replace("{date}", dateTime.ToString("yyyy.MM.dd"));
-            this.fileName = this.fileName.Replace("{time}", dateTime.ToString("HH.mm.ss.fff"));
-            this.fileName = this.fileName.Replace("{guid}", Guid.NewGuid().ToString());
+            this.FileName = fileName.Replace("{date}", dateTime.ToString("yyyy.MM.dd"));
+            this.FileName = this.FileName.Replace("{time}", dateTime.ToString("HH.mm.ss.fff"));
+            this.FileName = this.FileName.Replace("{guid}", Guid.NewGuid().ToString());
 
-            return new FileStream(this.fileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read, this.bufferSize);
+            return new FileStream(this.FileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read, this.bufferSize);
         }
 
         private void Open(DateTime dateTime)
@@ -66,7 +65,7 @@ namespace DataCommander.Foundation.Diagnostics
                 this.path = Path.Combine(directory, fileName);
                 this.fileStream = this.Open(this.path, dateTime);
 
-                log.Write(LogLevel.Error, $"LogFile path: {this.fileName}");
+                log.Write(LogLevel.Error, $"LogFile path: {this.FileName}");
             }
 
             if (this.fileStream.Length == 0)
@@ -99,7 +98,7 @@ namespace DataCommander.Foundation.Diagnostics
 
         #region ILogFile Members
 
-        public string FileName => this.fileName;
+        public string FileName { get; private set; }
 
         void ILogFile.Open()
         {

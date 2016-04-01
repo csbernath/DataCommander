@@ -6,12 +6,11 @@ namespace DataCommander.Providers
 
     public sealed class BinaryField : IConvertible
     {
-        private readonly byte[] bytes;
         private readonly string s;
 
         public BinaryField(byte[] bytes)
         {
-            this.bytes = bytes;
+            this.Value = bytes;
             int length = Math.Min(bytes.Length, 16);
             char[] chars = Hex.Encode(bytes, length, true);
 
@@ -34,7 +33,7 @@ namespace DataCommander.Providers
             return this.s;
         }
 
-        public byte[] Value => this.bytes;
+        public byte[] Value { get; }
 
         #region IConvertible Members
 
@@ -100,7 +99,7 @@ namespace DataCommander.Providers
 
         string IConvertible.ToString(IFormatProvider provider)
         {
-            return Hex.GetString(this.bytes, true);
+            return Hex.GetString(this.Value, true);
         }
 
         object IConvertible.ToType(Type conversionType, IFormatProvider provider)

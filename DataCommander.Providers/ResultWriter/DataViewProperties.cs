@@ -2,31 +2,8 @@
 {
     internal sealed class DataViewProperties
     {
-        private string rowFilter;
-        private string sort;
+        public string RowFilter { get; set; }
 
-        public string RowFilter
-        {
-            get
-            {
-                return this.rowFilter;
-            }
-            set
-            {
-                this.rowFilter = value;
-            }
-        }
-
-        public string Sort
-        {
-            get
-            {
-                return this.sort;
-            }
-            set
-            {
-                this.sort = value;
-            }
-        }
+        public string Sort { get; set; }
     }
 }

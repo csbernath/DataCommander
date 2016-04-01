@@ -146,7 +146,8 @@ namespace DataCommander.Providers.OleDb
             {
                 DataRow row = schemaTable.Rows[i];
                 int columnOrdinal = (int) row["ColumnOrdinal"] + 1;
-                bool isKey = Database.GetValueOrDefault<bool>(row["IsKey"]);
+                bool isKey = row.GetValueOrDefault<bool>("IsKey");
+
                 string pk = string.Empty;
 
                 if (isKey)
@@ -210,7 +211,7 @@ namespace DataCommander.Providers.OleDb
             return null;
         }
 
-        Type IProvider.GetColumnType(DataColumnSchema dataColumnSchema)
+        Type IProvider.GetColumnType(DbColumn dataColumnSchema)
         {
             var dbType = (OleDbType) dataColumnSchema.ProviderType;
             Type type;

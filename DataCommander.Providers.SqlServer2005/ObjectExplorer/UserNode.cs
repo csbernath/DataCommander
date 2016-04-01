@@ -8,10 +8,10 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
         public UserNode(DatabaseNode database,string name)
         {
             this.database = database;
-            this.name = name;
+            this.Name = name;
         }
 
-        public string Name => this.name;
+        public string Name { get; }
 
         public bool IsLeaf => true;
 
@@ -33,7 +33,7 @@ select u.name from {0}..sysmembers m
 join {0}..sysusers u
 on m.groupuid = u.uid
 where memberuid = @uid
-group by u.name", this.database.Name, this.name);
+group by u.name", this.database.Name, this.Name);
 
                 return query;
             }
@@ -42,6 +42,5 @@ group by u.name", this.database.Name, this.name);
         public ContextMenuStrip ContextMenu => null;
 
         readonly DatabaseNode database;
-        readonly string       name;
     }
 }

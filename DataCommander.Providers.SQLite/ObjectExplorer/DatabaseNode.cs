@@ -8,14 +8,14 @@ namespace DataCommander.Providers.SQLite
     {
         public DatabaseNode(SQLiteConnection connection, string name)
         {
-            this.connection = connection;
-            this.name = name;
+            this.Connection = connection;
+            this.Name = name;
         }
 
-        public SQLiteConnection Connection => this.connection;
+        public SQLiteConnection Connection { get; }
 
         #region ITreeNode Members
-        public string Name => this.name;
+        public string Name { get; }
 
         bool ITreeNode.IsLeaf => false;
 
@@ -34,8 +34,5 @@ namespace DataCommander.Providers.SQLite
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
         #endregion
-
-        readonly SQLiteConnection connection;
-        readonly string name;
     }
 }

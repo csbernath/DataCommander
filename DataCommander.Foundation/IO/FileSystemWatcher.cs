@@ -20,7 +20,6 @@ namespace DataCommander.Foundation.IO
         private string shortFileName;
         private int count;
         private readonly Timer timer;
-        private FileSystemEventHandler changed;
 
         /// <summary>
         /// Creates a new instance to watch NTFS events.
@@ -73,18 +72,7 @@ namespace DataCommander.Foundation.IO
         /// <summary>
         /// 
         /// </summary>
-        public FileSystemEventHandler Changed
-        {
-            get
-            {
-                return this.changed;
-            }
-
-            set
-            {
-                this.changed = value;
-            }
-        }
+        public FileSystemEventHandler Changed { get; set; }
 
         /// <summary>
         /// Gets the Int16 version of the fileName

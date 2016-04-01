@@ -5,20 +5,18 @@
     /// </summary>
     public sealed class BeforeOpenDbConnectionEventArgs : LoggedEventArgs
     {
-        private readonly string connectionString;
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="connectionString"></param>
         public BeforeOpenDbConnectionEventArgs(string connectionString)
         {
-            this.connectionString = connectionString;
+            this.ConnectionString = connectionString;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public string ConnectionString => this.connectionString;
+        public string ConnectionString { get; }
     }
 }

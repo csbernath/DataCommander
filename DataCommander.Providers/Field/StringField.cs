@@ -4,28 +4,27 @@ namespace DataCommander.Providers
 
     public sealed class StringField : IConvertible
     {
-        private readonly string value;
         private readonly int length;
 
         public StringField(string value, int length)
         {
-            this.value = value;
+            this.Value = value;
             this.length = length;
         }
 
-        public string Value => this.value;
+        public string Value { get; }
 
         public override string ToString()
         {
             string s;
 
-            if (this.value.Length > this.length)
+            if (this.Value.Length > this.length)
             {
-                s = this.value.Substring(0, this.length);
+                s = this.Value.Substring(0, this.length);
             }
             else
             {
-                s = this.value;
+                s = this.Value;
             }
 
             return s;
@@ -95,7 +94,7 @@ namespace DataCommander.Providers
 
         string IConvertible.ToString(IFormatProvider provider)
         {
-            return this.value;
+            return this.Value;
         }
 
         object IConvertible.ToType(Type conversionType, IFormatProvider provider)

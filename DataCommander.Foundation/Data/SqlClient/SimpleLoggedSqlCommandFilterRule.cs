@@ -7,7 +7,6 @@ namespace DataCommander.Foundation.Data.SqlClient
     /// </summary>
     internal sealed class SimpleLoggedSqlCommandFilterRule
     {
-        private readonly bool include;
         private readonly string userName;
         private readonly string hostName;
         private readonly string database;
@@ -20,7 +19,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             string database,
             string commandText)
         {
-            this.include = include;
+            this.Include = include;
             this.userName = userName;
             this.hostName = hostName;
             this.database = database;
@@ -43,6 +42,6 @@ namespace DataCommander.Foundation.Data.SqlClient
             return match;
         }
 
-        public bool Include => this.include;
+        public bool Include { get; }
     }
 }

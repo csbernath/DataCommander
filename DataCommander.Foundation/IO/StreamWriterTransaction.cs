@@ -12,7 +12,6 @@
     {
         #region Private Fields
 
-        private readonly StreamWriter streamWriter;
         private readonly string path;
         private readonly string tempPath;
         private bool commited;
@@ -30,7 +29,7 @@
         {
             this.path = path;
             this.tempPath = tempPath;
-            this.streamWriter = new StreamWriter(tempPath, false);
+            this.Writer = new StreamWriter(tempPath, false);
         }
 
         /// <summary>
@@ -46,20 +45,20 @@
         {
             this.path = path;
             this.tempPath = tempPath;
-            this.streamWriter = new StreamWriter(tempPath, false, encoding);
+            this.Writer = new StreamWriter(tempPath, false, encoding);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public StreamWriter Writer => this.streamWriter;
+        public StreamWriter Writer { get; }
 
         /// <summary>
         /// 
         /// </summary>
         public void Commit()
         {
-            this.streamWriter.Close();
+            this.Writer.Close();
             const NativeMethods.MoveFileExFlags flags = NativeMethods.MoveFileExFlags.ReplaceExisiting;
             bool succeeded = NativeMethods.MoveFileEx(this.tempPath, this.path, flags);
 
@@ -76,7 +75,7 @@
         /// </summary>
         void IDisposable.Dispose()
         {
-            this.streamWriter.Dispose();
+            this.Writer.Dispose();
 
             if (!this.commited)
             {

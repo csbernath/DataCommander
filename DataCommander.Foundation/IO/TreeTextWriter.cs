@@ -14,7 +14,6 @@ namespace DataCommander.Foundation.IO
         private int level;
         private State state;
         private readonly ConsoleColor originalForegroundColor;
-        private ConsoleColor foregroundColor;
 
         /// <summary>
         /// 
@@ -27,24 +26,13 @@ namespace DataCommander.Foundation.IO
             this.indentation = indentation;
             this.state = State.WriteEndElement;
             this.originalForegroundColor = Console.ForegroundColor;
-            this.foregroundColor = this.originalForegroundColor;
+            this.ForegroundColor = this.originalForegroundColor;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public ConsoleColor ForegroundColor
-        {
-            get
-            {
-                return this.foregroundColor;
-            }
-
-            set
-            {
-                this.foregroundColor = value;
-            }
-        }
+        public ConsoleColor ForegroundColor { get; set; }
 
         private enum State
         {
@@ -139,14 +127,14 @@ namespace DataCommander.Foundation.IO
 
             this.WritePrefix(this.level);
 
-            if (this.originalForegroundColor != this.foregroundColor)
+            if (this.originalForegroundColor != this.ForegroundColor)
             {
-                Console.ForegroundColor = this.foregroundColor;
+                Console.ForegroundColor = this.ForegroundColor;
             }
 
             this.textWriter.WriteLine(value);
 
-            if (this.originalForegroundColor != this.foregroundColor)
+            if (this.originalForegroundColor != this.ForegroundColor)
             {
                 Console.ForegroundColor = this.originalForegroundColor;
             }

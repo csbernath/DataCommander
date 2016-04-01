@@ -18,7 +18,6 @@ namespace DataCommander.Providers
         private readonly QueryTextBox textBox;
         private GetCompletionResponse response;
         private string prefix = string.Empty;
-        private ListBox listBox;
 
         /// <summary> 
         /// Required designer variable.
@@ -42,7 +41,7 @@ namespace DataCommander.Providers
 
         private void LoadItems()
         {
-            this.listBox.Items.Clear();
+            this.ListBox.Items.Clear();
 
             foreach (var item in this.response.Items)
             {
@@ -107,23 +106,23 @@ namespace DataCommander.Providers
         /// </summary>
         private void InitializeComponent()
         {
-            this.listBox = new System.Windows.Forms.ListBox();
+            this.ListBox = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // listBox
             // 
-            this.listBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(238)));
-            this.listBox.Name = "listBox";
-            this.listBox.Size = new System.Drawing.Size(180, 134);
-            this.listBox.TabIndex = 0;
-            this.listBox.DoubleClick += new System.EventHandler(this.listBox_DoubleClick);
+            this.ListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ListBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(238)));
+            this.ListBox.Name = "ListBox";
+            this.ListBox.Size = new System.Drawing.Size(180, 134);
+            this.ListBox.TabIndex = 0;
+            this.ListBox.DoubleClick += new System.EventHandler(this.listBox_DoubleClick);
             // 
             // MemberListBox
             // 
             this.Controls.AddRange(new System.Windows.Forms.Control[]
             {
-                this.listBox
+                this.ListBox
             });
             this.Name = "MemberListBox";
             this.Size = new System.Drawing.Size(180, 142);
@@ -143,7 +142,7 @@ namespace DataCommander.Providers
 
         private void SelectItem()
         {
-            var listBoxItem = (ListBoxItem<IObjectName>)this.listBox.SelectedItem;
+            var listBoxItem = (ListBoxItem<IObjectName>)this.ListBox.SelectedItem;
 
             if (listBoxItem != null)
             {
@@ -206,12 +205,12 @@ namespace DataCommander.Providers
             this.Close();
         }
 
-        public ListBox ListBox => this.listBox;
+        public ListBox ListBox { get; private set; }
 
         public bool HandleKeyDown(KeyEventArgs e)
         {
             bool handled;
-            int hWnd = this.listBox.Handle.ToInt32();
+            int hWnd = this.ListBox.Handle.ToInt32();
             NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.Keyboard.KeyDown, (int)e.KeyCode, 0);
 
             if (
@@ -226,15 +225,15 @@ namespace DataCommander.Providers
 
                 if (e.KeyCode == Keys.Down && e.Shift)
                 {
-                    int startIndex = this.listBox.SelectedIndex + 1;
-                    if (startIndex < this.listBox.Items.Count - 1)
+                    int startIndex = this.ListBox.SelectedIndex + 1;
+                    if (startIndex < this.ListBox.Items.Count - 1)
                     {
                         this.FindNext(startIndex);
                     }
                 }
                 else if (e.KeyCode == Keys.Up && e.Shift)
                 {
-                    int startIndex = this.listBox.SelectedIndex - 1;
+                    int startIndex = this.ListBox.SelectedIndex - 1;
                     if (startIndex > 0)
                     {
                         this.FindPrevious(startIndex);
@@ -244,9 +243,9 @@ namespace DataCommander.Providers
             else if (e.KeyCode.In(Keys.Subtract, Keys.OemMinus) && e.Control)
             {
                 handled = true;
-                var filteredItems = this.listBox.Items.Cast<ListBoxItem<IObjectName>>().Where(item => IndexOf(item.Item.UnquotedName, this.prefix) >= 0).ToArray();
-                this.listBox.Items.Clear();
-                this.listBox.Items.AddRange(filteredItems);
+                var filteredItems = this.ListBox.Items.Cast<ListBoxItem<IObjectName>>().Where(item => IndexOf(item.Item.UnquotedName, this.prefix) >= 0).ToArray();
+                this.ListBox.Items.Clear();
+                this.ListBox.Items.AddRange(filteredItems);
             }
             else if (e.KeyCode == Keys.Enter)
             {
@@ -262,22 +261,25 @@ namespace DataCommander.Providers
 
         private void Find(string prefix, int startIndex)
         {
-            int index = -1;
-            // bool found = false;
             var filteredItems =
-                this.listBox.Items.Cast<ListBoxItem<IObjectName>>()
-                    .Select((listBoxItem, i) => Tuple.Create(i, IndexOf(listBoxItem.Item.UnquotedName, prefix)))
-                    .Where(item => item.Item2 >= 0).ToArray();
+                this.ListBox.Items.Cast<ListBoxItem<IObjectName>>()
+                    .Select((listBoxItem, i) => new
+                    {
+                        Index = i,
+                        IndexOf = IndexOf(listBoxItem.Item.UnquotedName, prefix)
+                    })
+                    .Where(item => item.IndexOf >= 0).ToList();
 
-            if (filteredItems.Length > 0)
+            int index = -1;
+
+            if (filteredItems.Count > 0)
             {
-                var item = filteredItems.MinMax(null, i => i.Item2).Min;
-                index = item.Value.Item1;
+                index = filteredItems.MinIndexedItem(i => i.IndexOf).Index;
             }
 
             if (index >= 0)
             {
-                this.listBox.SelectedIndex = index;
+                this.ListBox.SelectedIndex = index;
 
                 if (index >= 3)
                 {
@@ -285,7 +287,7 @@ namespace DataCommander.Providers
                     int wParam = (int)NativeMethods.Message.ScrollBarParameter.ThumbPosition;
                     int pos = (index - 3) << 16;
                     wParam += pos;
-                    int hWnd = this.listBox.Handle.ToInt32();
+                    int hWnd = this.ListBox.Handle.ToInt32();
                     NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.ScrollBar.VScroll, wParam, 0);
                 }
             }
@@ -329,7 +331,7 @@ namespace DataCommander.Providers
 
         private void FindNext(int startIndex)
         {
-            var items = this.listBox.Items.Cast<ListBoxItem<IObjectName>>();
+            var items = this.ListBox.Items.Cast<ListBoxItem<IObjectName>>().ToList();
 
             int index = LinearSearch.IndexOf(startIndex, items.Count - 1, currentIndex =>
             {
@@ -340,13 +342,13 @@ namespace DataCommander.Providers
 
             if (index >= 0)
             {
-                this.listBox.SelectedIndex = index;
+                this.ListBox.SelectedIndex = index;
             }
         }
 
         private void FindPrevious(int startIndex)
         {
-            var items = this.listBox.Items.Cast<ListBoxItem<IObjectName>>().ToList();
+            var items = this.ListBox.Items.Cast<ListBoxItem<IObjectName>>().ToList();
             int index = LinearSearch.LastIndexOf(startIndex, items.Count - 1, currentIndex =>
             {
                 var item = items[currentIndex];
@@ -356,7 +358,7 @@ namespace DataCommander.Providers
 
             if (index >= 0)
             {
-                this.listBox.SelectedIndex = index;
+                this.ListBox.SelectedIndex = index;
             }
         }
 

@@ -24,9 +24,8 @@ namespace DataCommander.Providers
         private readonly EventWaitHandle handleCreatedEvent = new EventWaitHandle(false, EventResetMode.ManualReset);
         private readonly CancellationTokenSource cancellationTokenSource;
         private readonly Task task;
-        private long duration;
 
-        public long Duration => this.duration;
+        public long Duration { get; private set; }
 
         private void EndConnectionOpenInvoke(Exception exception)
         {
@@ -121,7 +120,7 @@ namespace DataCommander.Providers
                 var task = connection.OpenAsync(this.cancellationTokenSource.Token);
                 task.ContinueWith(t =>
                 {
-                    this.duration = stopwatch.ElapsedTicks;
+                    this.Duration = stopwatch.ElapsedTicks;
 
                     if (!cancellationTokenSource.IsCancellationRequested)
                     {

@@ -7,8 +7,6 @@
     /// </summary>
     public struct SmallTimeSpan
     {
-        private readonly short value;
-
         /// <summary>
         /// 
         /// </summary>
@@ -21,7 +19,7 @@
 
         private SmallTimeSpan(short value)
         {
-            this.value = value;
+            this.TotalMinutes = value;
         }
 
         /// <summary>
@@ -30,13 +28,13 @@
         /// <param name="timeSpan"></param>
         public SmallTimeSpan(TimeSpan timeSpan)
         {
-            this.value = ToSmallTimeSpanValue(timeSpan);
+            this.TotalMinutes = ToSmallTimeSpanValue(timeSpan);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public short TotalMinutes => this.value;
+        public short TotalMinutes { get; }
 
         /// <summary>
         /// 
@@ -44,7 +42,7 @@
         /// <returns></returns>
         public override string ToString()
         {
-            return ToTimeSpan(this.value).ToString();
+            return ToTimeSpan(this.TotalMinutes).ToString();
         }
 
         private static TimeSpan ToTimeSpan(short value)

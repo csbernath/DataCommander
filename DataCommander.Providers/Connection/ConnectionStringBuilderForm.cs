@@ -164,18 +164,18 @@ namespace DataCommander.Providers
             if (!contains || refresh)
             {
                 this.Cursor = Cursors.WaitCursor;
-                DbDataSourceEnumerator dbDataSourceEnumerator = this.dbProviderFactory.CreateDataSourceEnumerator();
+                var dbDataSourceEnumerator = this.dbProviderFactory.CreateDataSourceEnumerator();
 
                 if (dbDataSourceEnumerator != null)
                 {
                     this.dataSources = dbDataSourceEnumerator.GetDataSources();
-                    List<string> dataSourceList = new List<string>();
+                    var dataSourceList = new List<string>();
 
                     foreach (DataRow row in this.dataSources.Rows)
                     {
-                        string serverName = Database.GetValueOrDefault<string>(row["ServerName"]);
-                        string instanceName = Database.GetValueOrDefault<string>(row["InstanceName"]);
-                        StringBuilder sb = new StringBuilder();
+                        string serverName = row.GetValueOrDefault<string>("ServerName");
+                        string instanceName = row.GetValueOrDefault<string>("InstanceName");
+                        var sb = new StringBuilder();
 
                         if (serverName != null)
                         {

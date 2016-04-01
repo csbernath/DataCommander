@@ -5,47 +5,21 @@ namespace DataCommander.Providers
     public sealed class SqlObject
     {
         private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private string parentName;
-        private readonly string parentAlias;
-        private readonly SqlObjectTypes type;
-        private string name;
 
         public SqlObject(string parentName, string parentAlias, SqlObjectTypes type, string name)
         {
-            this.parentName = parentName;
-            this.parentAlias = parentAlias;
-            this.type = type;
-            this.name = name;
+            this.ParentName = parentName;
+            this.ParentAlias = parentAlias;
+            this.Type = type;
+            this.Name = name;
         }
 
-        public string ParentName
-        {
-            get
-            {
-                return this.parentName;
-            }
+        public string ParentName { get; set; }
 
-            set
-            {
-                this.parentName = value;
-            }
-        }
+        public string ParentAlias { get; }
 
-        public string ParentAlias => this.parentAlias;
+        public SqlObjectTypes Type { get; }
 
-        public SqlObjectTypes Type => this.type;
-
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-
-            set
-            {
-                this.name = value;
-            }
-        }
+        public string Name { get; set; }
     }
 }

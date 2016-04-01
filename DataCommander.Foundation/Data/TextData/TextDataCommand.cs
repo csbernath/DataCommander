@@ -27,10 +27,6 @@
     public sealed class TextDataCommand : DbCommand
     {
         private TextDataConnection connection;
-        private CommandType commandType;
-        private int commandTimeout;
-        private string commandText;
-        private readonly TextDataParameterCollection parameters = new TextDataParameterCollection();
 
         #region Constructors
         #endregion
@@ -40,55 +36,22 @@
         /// <summary>
         /// 
         /// </summary>
-        public new TextDataParameterCollection Parameters => this.parameters;
+        public new TextDataParameterCollection Parameters { get; } = new TextDataParameterCollection();
 
         /// <summary>
         /// 
         /// </summary>
-        public override string CommandText
-        {
-            get
-            {
-                return this.commandText;
-            }
-
-            set
-            {
-                this.commandText = value;
-            }
-        }
+        public override string CommandText { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public override int CommandTimeout
-        {
-            get
-            {
-                return this.commandTimeout;
-            }
-
-            set
-            {
-                this.commandTimeout = value;
-            }
-        }
+        public override int CommandTimeout { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public override CommandType CommandType
-        {
-            get
-            {
-                return this.commandType;
-            }
-
-            set
-            {
-                this.commandType = value;
-            }
-        }
+        public override CommandType CommandType { get; set; }
 
         #endregion
 
@@ -149,7 +112,7 @@
         /// <summary>
         /// 
         /// </summary>
-        protected override DbParameterCollection DbParameterCollection => this.parameters;
+        protected override DbParameterCollection DbParameterCollection => this.Parameters;
 
         /// <summary>
         /// 
@@ -199,10 +162,10 @@
         /// <returns></returns>
         public override int ExecuteNonQuery()
         {
-            IList<TextDataColumn> columns = this.parameters.GetParameterValue<IList<TextDataColumn>>( "columns" );
-            IList<ITextDataConverter> converters = this.parameters.GetParameterValue<IList<ITextDataConverter>>( "converters" );
-            IEnumerable<object[]> rows = this.parameters.GetParameterValue<IEnumerable<object[]>>( "rows" );
-            IConverter<TextDataCommand, TextWriter> getTextWriter = this.parameters.GetParameterValue<IConverter<TextDataCommand, TextWriter>>( "getTextWriter" );
+            IList<TextDataColumn> columns = this.Parameters.GetParameterValue<IList<TextDataColumn>>( "columns" );
+            IList<ITextDataConverter> converters = this.Parameters.GetParameterValue<IList<ITextDataConverter>>( "converters" );
+            IEnumerable<object[]> rows = this.Parameters.GetParameterValue<IEnumerable<object[]>>( "rows" );
+            IConverter<TextDataCommand, TextWriter> getTextWriter = this.Parameters.GetParameterValue<IConverter<TextDataCommand, TextWriter>>( "getTextWriter" );
             TextWriter textWriter = getTextWriter.Convert( this );
             TextDataStreamWriter textDataStreamWriter = new TextDataStreamWriter( textWriter, columns, converters );
             int count = 0;

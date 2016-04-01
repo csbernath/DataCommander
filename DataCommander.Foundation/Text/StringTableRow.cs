@@ -2,13 +2,13 @@ namespace DataCommander.Foundation.Text
 {
     using System;
     using System.Diagnostics.Contracts;
+    using System.Text;
 
     /// <summary>
     /// Represents a row in the <see cref="StringTable"/>.
     /// </summary>
     public sealed class StringTableRow
     {
-        private readonly StringTable table;
         private readonly string[] cells;
 
         /// <summary>
@@ -19,14 +19,14 @@ namespace DataCommander.Foundation.Text
         {
             Contract.Requires<ArgumentNullException>(table != null);
 
-            this.table = table;
+            this.Table = table;
             this.cells = new string[table.Columns.Count];
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public StringTable Table => this.table;
+        public StringTable Table { get; }
 
         /// <summary>
         /// 

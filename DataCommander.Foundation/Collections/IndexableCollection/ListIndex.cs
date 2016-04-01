@@ -11,7 +11,6 @@
     /// <typeparam name="T"></typeparam>
     public class ListIndex<T> : ICollectionIndex<T>, IList<T>
     {
-        private string name;
         private IList<T> list;
 
         /// <summary>
@@ -44,7 +43,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public string Name => this.name;
+        public string Name { get; private set; }
 
         /// <summary>
         /// 
@@ -190,7 +189,7 @@
             Contract.Requires<ArgumentNullException>(name != null);
             Contract.Requires<ArgumentNullException>(list != null);
 
-            this.name = name;
+            this.Name = name;
             this.list = list;
         }
     }

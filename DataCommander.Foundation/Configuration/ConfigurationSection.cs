@@ -88,12 +88,8 @@ namespace DataCommander.Foundation.Configuration
     /// </remarks>
     public sealed class ConfigurationSection
     {
-        private static readonly ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
-        private readonly string configFileName;
-        private readonly string sectionName;
-        private ConfigurationNode rootNode;
+        private static readonly ILog log = InternalLogFactory.Instance.GetTypeLog(typeof (ConfigurationSection));
         private int changed;
-        private bool isFileSystemWatcherEnabled;
 
         /// <summary>
         /// Reads configuration settings from the specified <paramref name="configFileName"/>.
@@ -102,8 +98,8 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="sectionName"></param>
         public ConfigurationSection(string configFileName, string sectionName)
         {
-            this.configFileName = configFileName;
-            this.sectionName = sectionName;
+            this.ConfigFileName = configFileName;
+            this.SectionName = sectionName;
             this.Initialize();
         }
 
@@ -113,8 +109,8 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="configFileName"></param>
         public ConfigurationSection(string configFileName)
         {
-            this.configFileName = configFileName;
-            this.sectionName = DefaultSectionName;
+            this.ConfigFileName = configFileName;
+            this.SectionName = DefaultSectionName;
             this.Initialize();
         }
 
@@ -138,7 +134,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public ConfigurationNode RootNode => this.rootNode;
+        public ConfigurationNode RootNode { get; private set; }
 
         /// <summary>
         /// 
@@ -185,29 +181,29 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// Gets the name of file which the config is loaded from.
         /// </summary>
-        public string ConfigFileName => this.configFileName;
+        public string ConfigFileName { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string SectionName => this.sectionName;
+        public string SectionName { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsFileSystemWatcherEnabled => this.isFileSystemWatcherEnabled;
+        public bool IsFileSystemWatcherEnabled { get; private set; }
 
         private void Check(string nodeName, ConfigurationNode node)
         {
             if (node == null)
             {
-                if (!File.Exists(this.configFileName))
+                if (!File.Exists(this.ConfigFileName))
                 {
-                    throw new FileNotFoundException("Configuration file not found.", this.configFileName);
+                    throw new FileNotFoundException("Configuration file not found.", this.ConfigFileName);
                 }
                 else
                 {
-                    throw new ArgumentException($"Configuration node not found.\r\nNodeName: {nodeName}\r\nConfigFileName: {this.configFileName}");
+                    throw new ArgumentException($"Configuration node not found.\r\nNodeName: {nodeName}\r\nConfigFileName: {this.ConfigFileName}");
                 }
             }
         }
@@ -227,7 +223,7 @@ namespace DataCommander.Foundation.Configuration
                     ConfigurationNode rootNode;
                     StringCollection fileNames;
                     this.Load(out rootNode, out fileNames);
-                    this.rootNode = rootNode;
+                    this.RootNode = rootNode;
                 }
 
                 Interlocked.Exchange(ref this.changed, 0);
@@ -235,9 +231,9 @@ namespace DataCommander.Foundation.Configuration
 
             ConfigurationNode node;
 
-            if (this.rootNode != null)
+            if (this.RootNode != null)
             {
-                node = this.rootNode.SelectNode(nodeName);
+                node = this.RootNode.SelectNode(nodeName);
             }
             else
             {
@@ -260,7 +256,7 @@ namespace DataCommander.Foundation.Configuration
             try
             {
                 this.Load(out rootNode, out fileNames);
-                this.rootNode = rootNode;
+                this.RootNode = rootNode;
             }
             catch (Exception e)
             {
@@ -279,7 +275,7 @@ namespace DataCommander.Foundation.Configuration
                         watcher.EnableRaisingEvents = true;
                     }
 
-                    this.isFileSystemWatcherEnabled = fileNames.Count > 0;
+                    this.IsFileSystemWatcherEnabled = fileNames.Count > 0;
                 }
                 catch (Exception e)
                 {
@@ -303,7 +299,7 @@ namespace DataCommander.Foundation.Configuration
         {
             ConfigurationReader reader = new ConfigurationReader();
             fileNames = new StringCollection();
-            rootNode = reader.Read(this.configFileName, this.sectionName, fileNames);
+            rootNode = reader.Read(this.ConfigFileName, this.SectionName, fileNames);
         }
     }
 }

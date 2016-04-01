@@ -194,7 +194,7 @@
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType(DataColumnSchema dataColumnSchema)
+        Type IProvider.GetColumnType(DbColumn dataColumnSchema)
         {
             DbType dbType = (DbType)dataColumnSchema.ProviderType;
             Type type;

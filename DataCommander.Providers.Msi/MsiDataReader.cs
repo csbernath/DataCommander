@@ -10,8 +10,7 @@
 	{
 		private MsiCommand command;
 		private CommandBehavior behavior;
-		private View view;
-		private IEnumerator<Record> enumerator;
+        private IEnumerator<Record> enumerator;
 		private int recordsAffected;
 
 		public MsiDataReader( MsiCommand command, CommandBehavior behavior )
@@ -19,18 +18,18 @@
             Contract.Requires( command != null );
 			this.command = command;
 			this.behavior = behavior;
-			this.view = this.command.Connection.Database.OpenView( this.command.CommandText );
+			this.View = this.command.Connection.Database.OpenView( this.command.CommandText );
 		}
 
-		public View View => this.view;
+		public View View { get; }
 
         #region IDataReader Members
 
 		void IDataReader.Close()
 		{
-			if (this.view != null)
+			if (this.View != null)
 			{
-				this.view.Close();
+				this.View.Close();
 			}
 		}
 
@@ -52,7 +51,7 @@
 			columns.Add( "ProviderType", typeof( int ) );
 			columns.Add( "Definition", typeof( string ) );
 
-			foreach (ColumnInfo column in this.view.Columns)
+			foreach (ColumnInfo column in this.View.Columns)
 			{
 				table.Rows.Add( new object[]
 				{
@@ -84,8 +83,8 @@
 		{
 			if (this.enumerator == null)
 			{
-				this.view.Execute();
-				this.enumerator = this.view.GetEnumerator();
+				this.View.Execute();
+				this.enumerator = this.View.GetEnumerator();
 			}
 
 			bool read = this.enumerator.MoveNext();
@@ -111,9 +110,9 @@
 				this.enumerator.Dispose();
 			}
 
-			if (this.view != null)
+			if (this.View != null)
 			{
-				this.view.Dispose();
+				this.View.Dispose();
 			}
 		}
 
@@ -121,7 +120,7 @@
 
 		#region IDataRecord Members
 
-		int IDataRecord.FieldCount => this.view.Columns.Count;
+		int IDataRecord.FieldCount => this.View.Columns.Count;
 
         bool IDataRecord.GetBoolean( int i )
 		{
@@ -155,7 +154,7 @@
 
 		string IDataRecord.GetDataTypeName( int i )
 		{
-            var column = this.view.Columns[ i ];
+            var column = this.View.Columns[ i ];
             DbType dbType = (DbType)column.DBType;
             string dataTypeName = dbType.ToString();
             return dataTypeName;

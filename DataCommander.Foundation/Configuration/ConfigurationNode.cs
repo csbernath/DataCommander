@@ -15,12 +15,6 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         public const Char Delimiter = '/';
 
-        private string name;
-        private readonly bool hasName;
-        private string description;
-        private ConfigurationNode parent;
-        private readonly ConfigurationNodeCollection childNodes = new ConfigurationNodeCollection();
-        private readonly ConfigurationAttributeCollection attributes = new ConfigurationAttributeCollection();
         private int index;
 
         /// <summary>
@@ -29,40 +23,29 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="name"></param>
         public ConfigurationNode(string name)
         {
-            this.name = name;
-            this.hasName = name != null;
+            this.Name = name;
+            this.HasName = name != null;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public bool HasName => this.hasName;
+        public bool HasName { get; }
 
         /// <summary>
         /// Gets the name of the node.
         /// </summary>
-        public string Name => this.name;
+        public string Name { get; private set; }
 
         /// <summary>
         /// Gets/sets the description of the node.
         /// </summary>
-        public string Description
-        {
-            get
-            {
-                return this.description;
-            }
-
-            set
-            {
-                this.description = value;
-            }
-        }
+        public string Description { get; set; }
 
         /// <summary>
         /// Gets the parent node.
         /// </summary>
-        public ConfigurationNode Parent => this.parent;
+        public ConfigurationNode Parent { get; private set; }
 
         /// <summary>
         /// Gets the full path of the node.
@@ -73,16 +56,16 @@ namespace DataCommander.Foundation.Configuration
             {
                 string fullName;
 
-                if (this.parent != null)
+                if (this.Parent != null)
                 {
-                    fullName = this.parent.FullName;
+                    fullName = this.Parent.FullName;
 
                     if (fullName != null)
                     {
                         fullName += Delimiter;
                     }
 
-                    fullName += this.name;
+                    fullName += this.Name;
                 }
                 else
                 {
@@ -101,14 +84,14 @@ namespace DataCommander.Foundation.Configuration
         {
             Contract.Requires<ArgumentException>(childNode.Parent == null);
 
-            if (childNode.name == null)
+            if (childNode.Name == null)
             {
-                childNode.name = ConfigurationElementName.Node + "[" + this.index + ']';
+                childNode.Name = ConfigurationElementName.Node + "[" + this.index + ']';
                 this.index++;
             }
 
-            this.childNodes.Add(childNode);
-            childNode.parent = this;
+            this.ChildNodes.Add(childNode);
+            childNode.Parent = this;
         }
 
         /// <summary>
@@ -120,14 +103,14 @@ namespace DataCommander.Foundation.Configuration
         {
             Contract.Requires<ArgumentException>(childNode.Parent == null);
 
-            if (childNode.name == null)
+            if (childNode.Name == null)
             {
-                childNode.name = ConfigurationElementName.Node + "[" + index + ']';
+                childNode.Name = ConfigurationElementName.Node + "[" + index + ']';
                 index++;
             }
 
-            this.childNodes.Insert(index, childNode);
-            childNode.parent = this;
+            this.ChildNodes.Insert(index, childNode);
+            childNode.Parent = this;
         }
 
         /// <summary>
@@ -139,8 +122,8 @@ namespace DataCommander.Foundation.Configuration
             Contract.Requires(childNode != null);
             Contract.Requires(this == childNode.Parent);
 
-            this.childNodes.Remove(childNode);
-            childNode.parent = null;
+            this.ChildNodes.Remove(childNode);
+            childNode.Parent = null;
         }
 
         /// <summary>
@@ -149,15 +132,15 @@ namespace DataCommander.Foundation.Configuration
         /// <returns></returns>
         public ConfigurationNode Clone()
         {
-            ConfigurationNode clone = new ConfigurationNode(this.name);
+            ConfigurationNode clone = new ConfigurationNode(this.Name);
 
-            foreach (ConfigurationAttribute attribute in this.attributes)
+            foreach (ConfigurationAttribute attribute in this.Attributes)
             {
                 ConfigurationAttribute attributeClone = attribute.Clone();
                 clone.Attributes.Add(attributeClone);
             }
 
-            foreach (ConfigurationNode childNode in this.childNodes)
+            foreach (ConfigurationNode childNode in this.ChildNodes)
             {
                 ConfigurationNode childNodeClone = childNode.Clone();
                 clone.AddChildNode(childNodeClone);
@@ -213,7 +196,7 @@ namespace DataCommander.Foundation.Configuration
                 foreach (string childNodeName in childNodeNames)
                 {
                     ConfigurationNode childNode;
-                    bool contains = node.childNodes.TryGetValue(childNodeName, out childNode);
+                    bool contains = node.ChildNodes.TryGetValue(childNodeName, out childNode);
 
                     if (contains)
                     {
@@ -238,12 +221,12 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// Gets the attributes stored in this node.
         /// </summary>
-        public ConfigurationAttributeCollection Attributes => this.attributes;
+        public ConfigurationAttributeCollection Attributes { get; } = new ConfigurationAttributeCollection();
 
         /// <summary>
         /// Gets the child nodes of this node.
         /// </summary>
-        public ConfigurationNodeCollection ChildNodes => this.childNodes;
+        public ConfigurationNodeCollection ChildNodes { get; } = new ConfigurationNodeCollection();
 
         /// <summary>
         /// Writes the content of this node (attributes and child nodes)
@@ -254,14 +237,14 @@ namespace DataCommander.Foundation.Configuration
         {
             textWriter.WriteLine("[" + this.FullName + "]");
 
-            foreach (ConfigurationAttribute attribute in this.attributes)
+            foreach (ConfigurationAttribute attribute in this.Attributes)
             {
                 attribute.Write(textWriter);
             }
 
             textWriter.WriteLine();
 
-            foreach (ConfigurationNode childNode in this.childNodes)
+            foreach (ConfigurationNode childNode in this.ChildNodes)
             {
                 childNode.Write(textWriter);
             }
@@ -279,13 +262,13 @@ namespace DataCommander.Foundation.Configuration
             StringBuilder sb = new StringBuilder();
             string indent = new string(' ', level * 2);
             sb.Append(indent);
-            sb.Append(this.name);
+            sb.Append(this.Name);
             sb.Append("\t\t");
-            sb.AppendLine(this.description);
+            sb.AppendLine(this.Description);
 
-            if (this.attributes.Count > 0)
+            if (this.Attributes.Count > 0)
             {
-                foreach (ConfigurationAttribute attribute in this.attributes)
+                foreach (ConfigurationAttribute attribute in this.Attributes)
                 {
                     sb.Append('\t');
                     sb.Append(attribute.Name);
@@ -317,7 +300,7 @@ namespace DataCommander.Foundation.Configuration
 
             textWriter.Write(sb);
 
-            foreach (ConfigurationNode childNode in this.childNodes)
+            foreach (ConfigurationNode childNode in this.ChildNodes)
             {
                 childNode.WriteDocumentation(textWriter, level + 1);
             }

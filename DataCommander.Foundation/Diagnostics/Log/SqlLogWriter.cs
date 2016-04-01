@@ -16,7 +16,7 @@ namespace DataCommander.Foundation.Diagnostics
     {
         #region Private Fields
 
-        private static readonly ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = InternalLogFactory.Instance.GetTypeLog(typeof (SqlLogWriter));
         private const int Period = 10000;
         private readonly Func<IDbConnection> createConnection;
         private readonly Func<LogEntry, string> logEntryToCommandText;
@@ -25,7 +25,6 @@ namespace DataCommander.Foundation.Diagnostics
         private readonly List<LogEntry> entryQueue = new List<LogEntry>();
         private readonly object lockObject = new object();
         private Timer timer;
-        private int pooledItemCount;
 
         #endregion
 
@@ -121,7 +120,6 @@ namespace DataCommander.Foundation.Diagnostics
                     }
 
                     this.singleThreadPool.QueueUserWorkItem(this.WaitCallback, array);
-                    this.pooledItemCount++;
 
                     if (this.timer != null)
                     {
@@ -147,10 +145,10 @@ namespace DataCommander.Foundation.Diagnostics
 
                 commandText = sb.ToString();
 
-                using (IDbConnection connection = this.createConnection())
+                using (var connection = this.createConnection())
                 {
                     connection.Open();
-                    IDbCommand command = connection.CreateCommand();
+                    var command = connection.CreateCommand();
                     command.CommandType = CommandType.Text;
                     command.CommandText = commandText;
                     command.CommandTimeout = this.commandTimeout;
@@ -161,8 +159,6 @@ namespace DataCommander.Foundation.Diagnostics
             {
                 log.Error(e.ToLogString());
             }
-
-            this.pooledItemCount--;
         }
     }
 }

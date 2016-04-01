@@ -13,7 +13,6 @@ namespace DataCommander.Providers.SqlServer2005
     {
         #region Private Fields
 
-        private string connectionName;
         private readonly SqlConnectionStringBuilder sqlConnectionStringBuilder;
         private SqlConnection sqlConnection;
         private string serverName;
@@ -32,17 +31,7 @@ namespace DataCommander.Providers.SqlServer2005
             this.CreateConnection();
         }
 
-        public override string ConnectionName
-        {
-            get
-            {
-                return this.connectionName;
-            }
-            set
-            {
-                this.connectionName = value;
-            }
-        }
+        public override string ConnectionName { get; set; }
 
         private void CreateConnection()
         {
@@ -124,8 +113,7 @@ set arithabort on";
             {
                 var transactionScope = new DbTransactionScope(this.sqlConnection, null);
                 string commandText = "select @@version";
-                object scalar = transactionScope.ExecuteScalar(new CommandDefinition {CommandText = commandText});
-                string version = Foundation.Data.Database.GetValueOrDefault<string>(scalar);
+                string version = transactionScope.ExecuteScalar<string>(new CommandDefinition {CommandText = commandText});
 
                 /* select
           serverproperty('Collation') as Collation,

@@ -9,9 +9,7 @@ namespace DataCommander.Foundation.Threading
     public class WorkerThreadPoolDequeuer
     {
         private WorkerThreadPool pool;
-        private readonly WorkerThread thread;
         private readonly WaitCallback callback;
-        private long lastActivityTimestamp;
 
         /// <summary>
         /// 
@@ -20,20 +18,20 @@ namespace DataCommander.Foundation.Threading
         public WorkerThreadPoolDequeuer(WaitCallback callback)
         {
             this.callback = callback;
-            this.thread = new WorkerThread(this.Start);
+            this.Thread = new WorkerThread(this.Start);
         }
 
         private void Start()
         {
-            WaitHandle[] waitHandles = { this.thread.StopRequest, this.pool.EnqueueEvent };
+            WaitHandle[] waitHandles = { this.Thread.StopRequest, this.pool.EnqueueEvent };
 
-            while (!this.thread.IsStopRequested)
+            while (!this.Thread.IsStopRequested)
             {
                 bool dequeued = this.pool.Dequeue(this.callback, waitHandles);
 
                 if (dequeued)
                 {
-                    this.lastActivityTimestamp = Stopwatch.GetTimestamp();
+                    this.LastActivityTimestamp = Stopwatch.GetTimestamp();
                 }
             }
         }
@@ -41,7 +39,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public WorkerThread Thread => this.thread;
+        public WorkerThread Thread { get; }
 
         internal WorkerThreadPool Pool
         {
@@ -51,6 +49,6 @@ namespace DataCommander.Foundation.Threading
             }
         }
 
-        internal long LastActivityTimestamp => this.lastActivityTimestamp;
+        internal long LastActivityTimestamp { get; private set; }
     }
 }

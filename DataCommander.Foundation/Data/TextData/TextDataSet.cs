@@ -5,29 +5,26 @@
     /// <summary>
     /// 
     /// </summary>
-    [DebuggerDisplay("Name = {name}")]
+    [DebuggerDisplay("Name = {Name}")]
     public sealed class TextDataSet
     {
-        private readonly string name;
-        private readonly TextDataSetTableCollection tables = new TextDataSetTableCollection();
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="name"></param>
         public TextDataSet(string name)
         {
-            this.name = name;
+            this.Name = name;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Name => this.name;
+        public string Name { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public TextDataSetTableCollection Tables => this.tables;
+        public TextDataSetTableCollection Tables { get; } = new TextDataSetTableCollection();
     }
 }

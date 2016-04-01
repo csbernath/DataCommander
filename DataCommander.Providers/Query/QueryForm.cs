@@ -42,7 +42,6 @@ namespace DataCommander
         #region Private Fields
 
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private static readonly NumberFormatInfo numberFormatInfo;
 
         private readonly MainForm mainForm;
         private MenuStrip mainMenu;
@@ -65,7 +64,6 @@ namespace DataCommander
         private TreeView tvObjectExplorer;
         private Splitter splitterObjectExplorer;
         private ToolStripMenuItem menuItem3;
-        private QueryTextBox queryTextBox;
         private Splitter splitterQuery;
         private TabControl tabControl;
         private ToolStripMenuItem menuItem8;
@@ -98,9 +96,7 @@ namespace DataCommander
         private ToolStripMenuItem mnuCreateInsertSelect;
         private ToolStripMenuItem mnuOpenTable;
         private readonly IContainer components = new Container();
-        private readonly IProvider provider;
         private readonly string connectionString;
-        private ConnectionBase connection;
         private IDbTransaction transaction;
         private SqlStatement sqlStatement;
         private IDbCommand command;
@@ -109,7 +105,6 @@ namespace DataCommander
         private bool cancel;
         private readonly Timer timer = new Timer();
         private readonly Stopwatch stopwatch = new Stopwatch();
-        private ResultWriterType resultWriterType;
         private readonly int htmlMaxRecords;
         private readonly int wordMaxRecords;
         private DataSetResultWriter dataSetResultWriter;
@@ -120,7 +115,6 @@ namespace DataCommander
         private readonly int rowBlockSize;
         private readonly StandardOutput standardOutput;
         private string database;
-        private CommandState buttonState;
         private string fileName;
         private int commandTimeout;
         private Font font;
@@ -152,7 +146,6 @@ namespace DataCommander
         private ToolStripMenuItem executeQueryToolStripMenuItem;
         private ToolStripMenuItem openTableToolStripMenuItem;
         private ToolStripMenuItem parseToolStripMenuItem;
-        private int resultSetCount;
 
         private readonly ConcurrentQueue<InfoMessage> infoMessages = new ConcurrentQueue<InfoMessage>();
         private int errorCount;
@@ -166,8 +159,7 @@ namespace DataCommander
 
         static QueryForm()
         {
-            numberFormatInfo = new NumberFormatInfo();
-            numberFormatInfo.NumberDecimalSeparator = ".";
+            NumberFormat = new NumberFormatInfo {NumberDecimalSeparator = "."};
         }
 
         public QueryForm(
@@ -181,9 +173,9 @@ namespace DataCommander
             GarbageMonitor.Add("QueryForm", this);
 
             this.mainForm = mainForm;
-            this.provider = provider;
+            this.Provider = provider;
             this.connectionString = connectionString;
-            this.connection = connection;
+            this.Connection = connection;
             this.parentStatusBar = parentStatusBar;
             connection.InfoMessage += this.Connection_InfoMessage;
             connection.DatabaseChanged += this.Connection_DatabaseChanged;
@@ -214,11 +206,11 @@ namespace DataCommander
             string[] sqlKeyWords = Settings.CurrentType.Attributes["Sql92ReservedWords"].GetValue<string[]>();
             string[] providerKeyWords = provider.KeyWords;
 
-            this.queryTextBox.AddKeyWords(new string[] {"exec"}, Color.Green);
-            this.queryTextBox.AddKeyWords(sqlKeyWords, Color.Blue);
-            this.queryTextBox.AddKeyWords(providerKeyWords, Color.Red);
+            this.QueryTextBox.AddKeyWords(new string[] {"exec"}, Color.Green);
+            this.QueryTextBox.AddKeyWords(sqlKeyWords, Color.Blue);
+            this.QueryTextBox.AddKeyWords(providerKeyWords, Color.Red);
 
-            this.queryTextBox.CaretPositionPanel = this.sbPanelCaretPosition;
+            this.QueryTextBox.CaretPositionPanel = this.sbPanelCaretPosition;
 
             this.SetText();
 
@@ -237,8 +229,7 @@ namespace DataCommander
 
             this.textBoxWriter = new TextBoxWriter(this.messagesTextBox);
 
-            IObjectExplorer objectExplorer = provider.ObjectExplorer;
-
+            var objectExplorer = provider.ObjectExplorer;
             if (objectExplorer != null)
             {
                 objectExplorer.SetConnection(connectionString, connection.Connection);
@@ -257,7 +248,7 @@ namespace DataCommander
             this.SetResultWriterType(ResultWriterType.DataGrid);
 
             ConfigurationNode node = Settings.CurrentType;
-            ConfigurationAttributeCollection attributes = node.Attributes;
+            var attributes = node.Attributes;
             this.rowBlockSize = attributes["RowBlockSize"].GetValue<int>();
             this.htmlMaxRecords = attributes["HtmlMaxRecords"].GetValue<int>();
             this.wordMaxRecords = attributes["WordMaxRecords"].GetValue<int>();
@@ -267,16 +258,6 @@ namespace DataCommander
 
         private void CloseResultTabPage(TabPage tabPage)
         {
-            //var control = tabPage.Controls[0];
-            //var dataTableEditor = control as DataTableEditor;
-            //if (dataTableEditor != null)
-            //{
-            //    var dataTable = dataTableEditor.DataTable;
-            //    dataTableEditor.DataTable = null;
-            //    dataTable.Clear();
-            //    dataTable.AcceptChanges();
-            //}
-
             foreach (Control control in tabPage.Controls)
             {
                 control.Dispose();
@@ -356,19 +337,19 @@ namespace DataCommander
 
         #region Properties
 
-        public CommandState ButtonState => this.buttonState;
+        public CommandState ButtonState { get; private set; }
 
-        public ConnectionBase Connection => this.connection;
+        public ConnectionBase Connection { get; private set; }
 
         public override Font Font
         {
             set
             {
                 this.font = value;
-                this.queryTextBox.Font = value;
+                this.QueryTextBox.Font = value;
                 Size size1 = TextRenderer.MeasureText("1", value);
                 Size size2 = TextRenderer.MeasureText("12", value);
-                int width = this.queryTextBox.TabSize*(size2.Width - size1.Width);
+                int width = this.QueryTextBox.TabSize*(size2.Width - size1.Width);
                 int[] tabs = new int[12];
 
                 for (int i = 0; i < tabs.Length; i++)
@@ -376,27 +357,27 @@ namespace DataCommander
                     tabs[i] = (i + 1)*width;
                 }
 
-                this.queryTextBox.RichTextBox.Font = value;
-                this.queryTextBox.RichTextBox.SelectionTabs = tabs;
+                this.QueryTextBox.RichTextBox.Font = value;
+                this.QueryTextBox.RichTextBox.SelectionTabs = tabs;
 
                 this.messagesTextBox.Font = value;
                 this.messagesTextBox.SelectionTabs = tabs;
             }
         }
 
-        public static NumberFormatInfo NumberFormat => numberFormatInfo;
+        public static NumberFormatInfo NumberFormat { get; }
 
-        public IProvider Provider => this.provider;
+        public IProvider Provider { get; }
 
         private string Query
         {
             get
             {
-                string query = this.queryTextBox.SelectedText;
+                string query = this.QueryTextBox.SelectedText;
 
                 if (query.Length == 0)
                 {
-                    query = this.queryTextBox.Text;
+                    query = this.QueryTextBox.Text;
                 }
 
                 query = query.Replace("\n", "\r\n");
@@ -404,11 +385,11 @@ namespace DataCommander
             }
         }
 
-        public QueryTextBox QueryTextBox => this.queryTextBox;
+        public QueryTextBox QueryTextBox { get; private set; }
 
-        internal int ResultSetCount => this.resultSetCount;
+        internal int ResultSetCount { get; private set; }
 
-        public ResultWriterType TableStyle => this.resultWriterType;
+        public ResultWriterType TableStyle { get; private set; }
 
         internal ToolStrip ToolStrip => this.toolStrip;
 
@@ -448,7 +429,7 @@ namespace DataCommander
 
         public void AppendQueryText(string text)
         {
-            this.queryTextBox.RichTextBox.AppendText(text);
+            this.QueryTextBox.RichTextBox.AppendText(text);
         }
 
         public void ShowDataSet(DataSet dataSet)
@@ -464,12 +445,12 @@ namespace DataCommander
                         string tableName = this.sqlStatement.FindTableName();
                         text = tableName;
                         dataSet.Tables[0].TableName = tableName;
-                        tableSchema = this.provider.GetTableSchema(this.connection.Connection, tableName);
+                        tableSchema = this.Provider.GetTableSchema(this.Connection.Connection, tableName);
                     }
                     else
                     {
-                        this.resultSetCount++;
-                        text = $"Set {this.resultSetCount}";
+                        this.ResultSetCount++;
+                        text = $"Set {this.ResultSetCount}";
                     }
                     var resultSetTabPage = new TabPage(text);
                     GarbageMonitor.Add("resultSetTabPage", resultSetTabPage);
@@ -482,8 +463,9 @@ namespace DataCommander
                         int index = 0;
                         foreach (DataTable dataTable in dataSet.Tables)
                         {
-                            var commandBuilder = this.provider.DbProviderFactory.CreateCommandBuilder();
-                            var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataTable, tableSchema, this.resultWriterType, !this.openTableMode,
+                            var commandBuilder = this.Provider.DbProviderFactory.CreateCommandBuilder();
+                            var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataTable, tableSchema, this.TableStyle,
+                                !this.openTableMode,
                                 this.sbPanelText);
                             control.Dock = DockStyle.Fill;
                             text = dataTable.TableName;
@@ -497,8 +479,9 @@ namespace DataCommander
                     }
                     else
                     {
-                        var commandBuilder = this.provider.DbProviderFactory.CreateCommandBuilder();
-                        var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataSet.Tables[0], tableSchema, this.resultWriterType, !this.openTableMode,
+                        var commandBuilder = this.Provider.DbProviderFactory.CreateCommandBuilder();
+                        var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataSet.Tables[0], tableSchema, this.TableStyle,
+                            !this.openTableMode,
                             this.sbPanelText);
                         control.Dock = DockStyle.Fill;
                         resultSetTabPage.Controls.Add(control);
@@ -507,9 +490,7 @@ namespace DataCommander
             }
         }
 
-        public void ShowXml(
-            string tabPageName,
-            string xml)
+        public void ShowXml(string tabPageName, string xml)
         {
             var htmlTextBox = new HtmlTextBox();
             htmlTextBox.Dock = DockStyle.Fill;
@@ -534,7 +515,7 @@ namespace DataCommander
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QueryForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof (QueryForm));
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.menuItem9 = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuSave = new System.Windows.Forms.ToolStripMenuItem();
@@ -607,7 +588,7 @@ namespace DataCommander
             this.cToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cancelQueryButton = new System.Windows.Forms.ToolStripButton();
-            this.queryTextBox = new DataCommander.Providers.QueryTextBox();
+            this.QueryTextBox = new DataCommander.Providers.QueryTextBox();
             this.mainMenu.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.toolStrip.SuspendLayout();
@@ -615,11 +596,13 @@ namespace DataCommander
             // 
             // mainMenu
             // 
-            this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuItem9,
-            this.menuItem8,
-            this.menuItem1,
-            this.menuItem3});
+            this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this.menuItem9,
+                this.menuItem8,
+                this.menuItem1,
+                this.menuItem3
+            });
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.Size = new System.Drawing.Size(1016, 24);
@@ -628,10 +611,12 @@ namespace DataCommander
             // 
             // menuItem9
             // 
-            this.menuItem9.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuSave,
-            this.mnuSaveAs,
-            this.mnuDuplicateConnection});
+            this.menuItem9.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this.mnuSave,
+                this.mnuSaveAs,
+                this.mnuDuplicateConnection
+            });
             this.menuItem9.MergeAction = System.Windows.Forms.MergeAction.MatchOnly;
             this.menuItem9.MergeIndex = 0;
             this.menuItem9.Name = "menuItem9";
@@ -669,12 +654,14 @@ namespace DataCommander
             // 
             // menuItem8
             // 
-            this.menuItem8.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuPaste,
-            this.mnuFind,
-            this.mnuFindNext,
-            this.mnuCodeCompletion,
-            this.mnuGoTo});
+            this.menuItem8.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this.mnuPaste,
+                this.mnuFind,
+                this.mnuFindNext,
+                this.mnuCodeCompletion,
+                this.mnuGoTo
+            });
             this.menuItem8.MergeAction = System.Windows.Forms.MergeAction.Insert;
             this.menuItem8.MergeIndex = 2;
             this.menuItem8.Name = "menuItem8";
@@ -709,9 +696,11 @@ namespace DataCommander
             // 
             // mnuCodeCompletion
             // 
-            this.mnuCodeCompletion.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuListMembers,
-            this.mnuClearCache});
+            this.mnuCodeCompletion.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this.mnuListMembers,
+                this.mnuClearCache
+            });
             this.mnuCodeCompletion.MergeIndex = 3;
             this.mnuCodeCompletion.Name = "mnuCodeCompletion";
             this.mnuCodeCompletion.Size = new System.Drawing.Size(166, 22);
@@ -730,8 +719,8 @@ namespace DataCommander
             // 
             this.mnuClearCache.MergeIndex = 1;
             this.mnuClearCache.Name = "mnuClearCache";
-            this.mnuClearCache.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.C)));
+            this.mnuClearCache.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                                                                            | System.Windows.Forms.Keys.C)));
             this.mnuClearCache.Size = new System.Drawing.Size(211, 22);
             this.mnuClearCache.Text = "&Clear Cache";
             // 
@@ -745,33 +734,35 @@ namespace DataCommander
             // 
             // menuItem1
             // 
-            this.menuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuItem7,
-            this.mnuDescribeParameters,
-            this.toolStripSeparator2,
-            this.mnuShowShemaTable,
-            this.executeQueryToolStripMenuItem,
-            this.mnuExecuteQuerySingleRow,
-            this.mnuExecuteQuerySchemaOnly,
-            this.mnuExecuteQueryKeyInfo,
-            this.mnuExecuteQueryXml,
-            this.mnuOpenTable,
-            this.mnuCancel,
-            this.parseToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.menuItem2,
-            this.toolStripSeparator3,
-            this.mnuGotoQueryEditor,
-            this.mnuGotoMessageTabPage,
-            this.mnuCloseTabPage,
-            this.mnuCloseAllTabPages,
-            this.mnuCreateInsert,
-            this.mnuCreateInsertSelect,
-            this.createSqlCeDatabaseToolStripMenuItem,
-            this.exportToolStripMenuItem,
-            this.beginTransactionToolStripMenuItem,
-            this.commitTransactionToolStripMenuItem,
-            this.rollbackTransactionToolStripMenuItem});
+            this.menuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this.menuItem7,
+                this.mnuDescribeParameters,
+                this.toolStripSeparator2,
+                this.mnuShowShemaTable,
+                this.executeQueryToolStripMenuItem,
+                this.mnuExecuteQuerySingleRow,
+                this.mnuExecuteQuerySchemaOnly,
+                this.mnuExecuteQueryKeyInfo,
+                this.mnuExecuteQueryXml,
+                this.mnuOpenTable,
+                this.mnuCancel,
+                this.parseToolStripMenuItem,
+                this.toolStripSeparator1,
+                this.menuItem2,
+                this.toolStripSeparator3,
+                this.mnuGotoQueryEditor,
+                this.mnuGotoMessageTabPage,
+                this.mnuCloseTabPage,
+                this.mnuCloseAllTabPages,
+                this.mnuCreateInsert,
+                this.mnuCreateInsertSelect,
+                this.createSqlCeDatabaseToolStripMenuItem,
+                this.exportToolStripMenuItem,
+                this.beginTransactionToolStripMenuItem,
+                this.commitTransactionToolStripMenuItem,
+                this.rollbackTransactionToolStripMenuItem
+            });
             this.menuItem1.MergeAction = System.Windows.Forms.MergeAction.Insert;
             this.menuItem1.MergeIndex = 3;
             this.menuItem1.Name = "menuItem1";
@@ -780,9 +771,11 @@ namespace DataCommander
             // 
             // menuItem7
             // 
-            this.menuItem7.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuCommandTypeText,
-            this.mnuCommandTypeStoredProcedure});
+            this.menuItem7.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this.mnuCommandTypeText,
+                this.mnuCommandTypeStoredProcedure
+            });
             this.menuItem7.MergeIndex = 0;
             this.menuItem7.Name = "menuItem7";
             this.menuItem7.Size = new System.Drawing.Size(269, 22);
@@ -867,8 +860,8 @@ namespace DataCommander
             // 
             this.mnuExecuteQueryXml.MergeIndex = 9;
             this.mnuExecuteQueryXml.Name = "mnuExecuteQueryXml";
-            this.mnuExecuteQueryXml.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.X)));
+            this.mnuExecuteQueryXml.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                                                                                 | System.Windows.Forms.Keys.X)));
             this.mnuExecuteQueryXml.Size = new System.Drawing.Size(269, 22);
             this.mnuExecuteQueryXml.Text = "Execute Query (XML)";
             this.mnuExecuteQueryXml.Click += new System.EventHandler(this.mnuXml_Click);
@@ -877,8 +870,8 @@ namespace DataCommander
             // 
             this.mnuOpenTable.MergeIndex = 10;
             this.mnuOpenTable.Name = "mnuOpenTable";
-            this.mnuOpenTable.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.O)));
+            this.mnuOpenTable.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                                                                           | System.Windows.Forms.Keys.O)));
             this.mnuOpenTable.Size = new System.Drawing.Size(269, 22);
             this.mnuOpenTable.Text = "Open Table";
             this.mnuOpenTable.Click += new System.EventHandler(this.mnuOpenTable_Click);
@@ -908,16 +901,18 @@ namespace DataCommander
             // 
             // menuItem2
             // 
-            this.menuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuText,
-            this.mnuDataGrid,
-            this.mnuHtml,
-            this.mnuRtf,
-            this.mnuListView,
-            this.mnuExcel,
-            this.menuResultModeFile,
-            this.sQLiteDatabaseToolStripMenuItem,
-            this.insertScriptFileToolStripMenuItem});
+            this.menuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this.mnuText,
+                this.mnuDataGrid,
+                this.mnuHtml,
+                this.mnuRtf,
+                this.mnuListView,
+                this.mnuExcel,
+                this.menuResultModeFile,
+                this.sQLiteDatabaseToolStripMenuItem,
+                this.insertScriptFileToolStripMenuItem
+            });
             this.menuItem2.MergeIndex = 13;
             this.menuItem2.Name = "menuItem2";
             this.menuItem2.Size = new System.Drawing.Size(269, 22);
@@ -1004,8 +999,8 @@ namespace DataCommander
             // 
             this.mnuGotoQueryEditor.MergeIndex = 15;
             this.mnuGotoQueryEditor.Name = "mnuGotoQueryEditor";
-            this.mnuGotoQueryEditor.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.Q)));
+            this.mnuGotoQueryEditor.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                                                                                 | System.Windows.Forms.Keys.Q)));
             this.mnuGotoQueryEditor.Size = new System.Drawing.Size(269, 22);
             this.mnuGotoQueryEditor.Text = "Goto &Query Editor";
             this.mnuGotoQueryEditor.Click += new System.EventHandler(this.mnuGotoQueryEditor_Click);
@@ -1032,8 +1027,8 @@ namespace DataCommander
             // 
             this.mnuCloseAllTabPages.MergeIndex = 18;
             this.mnuCloseAllTabPages.Name = "mnuCloseAllTabPages";
-            this.mnuCloseAllTabPages.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.F4)));
+            this.mnuCloseAllTabPages.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                                                                                  | System.Windows.Forms.Keys.F4)));
             this.mnuCloseAllTabPages.Size = new System.Drawing.Size(269, 22);
             this.mnuCloseAllTabPages.Text = "Close &All TabPages";
             this.mnuCloseAllTabPages.Click += new System.EventHandler(this.mnuCloseAllTabPages_Click);
@@ -1092,9 +1087,11 @@ namespace DataCommander
             // 
             // menuItem3
             // 
-            this.menuItem3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuObjectExplorer,
-            this.mnuRefreshObjectExplorer});
+            this.menuItem3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this.mnuObjectExplorer,
+                this.mnuRefreshObjectExplorer
+            });
             this.menuItem3.MergeAction = System.Windows.Forms.MergeAction.Insert;
             this.menuItem3.MergeIndex = 4;
             this.menuItem3.Name = "menuItem3";
@@ -1120,12 +1117,14 @@ namespace DataCommander
             // 
             // statusBar
             // 
-            this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sbPanelText,
-            this.sbPanelTableStyle,
-            this.sbPanelTimer,
-            this.sbPanelRows,
-            this.sbPanelCaretPosition});
+            this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this.sbPanelText,
+                this.sbPanelTableStyle,
+                this.sbPanelTimer,
+                this.sbPanelRows,
+                this.sbPanelCaretPosition
+            });
             this.statusBar.Location = new System.Drawing.Point(300, 543);
             this.statusBar.Name = "statusBar";
             this.statusBar.Size = new System.Drawing.Size(716, 22);
@@ -1177,7 +1176,8 @@ namespace DataCommander
             // tvObjectExplorer
             // 
             this.tvObjectExplorer.Dock = System.Windows.Forms.DockStyle.Left;
-            this.tvObjectExplorer.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.tvObjectExplorer.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point,
+                ((byte)(238)));
             this.tvObjectExplorer.Location = new System.Drawing.Point(0, 0);
             this.tvObjectExplorer.Name = "tvObjectExplorer";
             this.tvObjectExplorer.Size = new System.Drawing.Size(300, 565);
@@ -1218,10 +1218,12 @@ namespace DataCommander
             // toolStrip
             // 
             this.toolStrip.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripSeparator4,
-            this.executeQuerySplitButton,
-            this.cancelQueryButton});
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this.toolStripSeparator4,
+                this.executeQuerySplitButton,
+                this.cancelQueryButton
+            });
             this.toolStrip.Location = new System.Drawing.Point(303, 281);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(73, 25);
@@ -1236,11 +1238,13 @@ namespace DataCommander
             // executeQuerySplitButton
             // 
             this.executeQuerySplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.executeQuerySplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.executeQueryMenuItem,
-            this.executeQuerySingleRowToolStripMenuItem,
-            this.cToolStripMenuItem,
-            this.openTableToolStripMenuItem});
+            this.executeQuerySplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this.executeQueryMenuItem,
+                this.executeQuerySingleRowToolStripMenuItem,
+                this.cToolStripMenuItem,
+                this.openTableToolStripMenuItem
+            });
             this.executeQuerySplitButton.Image = ((System.Drawing.Image)(resources.GetObject("executeQuerySplitButton.Image")));
             this.executeQuerySplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.executeQuerySplitButton.Name = "executeQuerySplitButton";
@@ -1289,13 +1293,13 @@ namespace DataCommander
             // 
             // queryTextBox
             // 
-            this.queryTextBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.queryTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.queryTextBox.Location = new System.Drawing.Point(303, 0);
-            this.queryTextBox.Name = "queryTextBox";
-            this.queryTextBox.Size = new System.Drawing.Size(713, 279);
-            this.queryTextBox.TabIndex = 1;
-            this.queryTextBox.TabSize = 4;
+            this.QueryTextBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.QueryTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.QueryTextBox.Location = new System.Drawing.Point(303, 0);
+            this.QueryTextBox.Name = "QueryTextBox";
+            this.QueryTextBox.Size = new System.Drawing.Size(713, 279);
+            this.QueryTextBox.TabIndex = 1;
+            this.QueryTextBox.TabSize = 4;
             // 
             // QueryForm
             // 
@@ -1304,7 +1308,7 @@ namespace DataCommander
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.splitterQuery);
-            this.Controls.Add(this.queryTextBox);
+            this.Controls.Add(this.QueryTextBox);
             this.Controls.Add(this.splitterObjectExplorer);
             this.Controls.Add(this.statusBar);
             this.Controls.Add(this.tvObjectExplorer);
@@ -1328,10 +1332,7 @@ namespace DataCommander
 
         #region Private Methods
 
-        private void AddNodes(
-            TreeNodeCollection parent,
-            IEnumerable<ITreeNode> children,
-            bool sortable)
+        private void AddNodes(TreeNodeCollection parent, IEnumerable<ITreeNode> children, bool sortable)
         {
             long ticks = Stopwatch.GetTimestamp();
             IEnumerable<ITreeNode> enumerableChildren;
@@ -1398,7 +1399,11 @@ namespace DataCommander
                     select infoMessage).Count();
             this.errorCount += errorCount;
 
-            this.infoMessages.TryAddRange(infoMessages);
+            foreach (var infoMessage in infoMessages)
+            {
+                this.infoMessages.Enqueue(infoMessage);
+            }
+
             this.enqueueEvent.Set();
         }
 
@@ -1478,9 +1483,9 @@ namespace DataCommander
         private void SetText()
         {
             var sb = new StringBuilder();
-            sb.Append(this.connection.ConnectionName);
+            sb.Append(this.Connection.ConnectionName);
             sb.Append(" - ");
-            sb.Append(this.connection.Caption);
+            sb.Append(this.Connection.Caption);
 
             if (this.fileName != null)
             {
@@ -1535,7 +1540,7 @@ namespace DataCommander
 
             Contract.Assert(this.dataAdapter == null);
 
-            log.Trace("ThreadMonitor:\r\n{0}", ThreadMonitor.ToStringTable());
+            log.Trace("ThreadMonitor:\r\n{0}", ThreadMonitor.ToStringTableString());
             ThreadMonitor.Join(0);
             log.Write(LogLevel.Trace, GarbageMonitor.State);
             this.openTableMode = false;
@@ -1547,14 +1552,14 @@ namespace DataCommander
                 this.sbPanelText.Text = "Executing query...";
                 this.sbPanelText.ForeColor = SystemColors.ControlText;
                 string query = this.Query;
-                var statements = this.provider.GetStatements(query);
+                var statements = this.Provider.GetStatements(query);
                 log.Write(LogLevel.Trace, "Query:\r\n{0}", query);
                 IEnumerable<AsyncDataAdapterCommand> commands;
 
                 if (statements.Count == 1)
                 {
                     this.sqlStatement = new SqlStatement(statements[0].CommandText);
-                    var command = this.sqlStatement.CreateCommand(this.provider, this.connection, this.commandType, this.commandTimeout);
+                    var command = this.sqlStatement.CreateCommand(this.Provider, this.Connection, this.commandType, this.commandTimeout);
                     command.Transaction = this.transaction;
                     commands = new[]
                     {
@@ -1567,7 +1572,7 @@ namespace DataCommander
                 }
                 else
                 {
-                    var transactionScope = new DbTransactionScope(this.connection.Connection, this.transaction);
+                    var transactionScope = new DbTransactionScope(this.Connection.Connection, this.transaction);
                     commands =
                         from statement in statements
                         select new AsyncDataAdapterCommand
@@ -1584,7 +1589,7 @@ namespace DataCommander
                 int maxRecords;
                 IResultWriter resultWriter = null;
 
-                switch (this.resultWriterType)
+                switch (this.TableStyle)
                 {
                     case ResultWriterType.DataGrid:
                     case ResultWriterType.ListView:
@@ -1632,7 +1637,7 @@ namespace DataCommander
 
                     case ResultWriterType.Excel:
                         maxRecords = int.MaxValue;
-                        resultWriter = new ExcelResultWriter(this.provider, this.AddInfoMessage);
+                        resultWriter = new ExcelResultWriter(this.Provider, this.AddInfoMessage);
                         this.tabControl.SelectedTab = this.messagesTabPage;
                         break;
 
@@ -1669,7 +1674,7 @@ namespace DataCommander
                 this.ShowTimer();
 
                 this.errorCount = 0;
-                this.dataAdapter.BeginFill(this.provider, commands, maxRecords, this.rowBlockSize, resultWriter, this.EndFillInvoker, this.WriteEndInvoker);
+                this.dataAdapter.BeginFill(this.Provider, commands, maxRecords, this.rowBlockSize, resultWriter, this.EndFillInvoker, this.WriteEndInvoker);
             }
             catch (Exception ex)
             {
@@ -1692,7 +1697,7 @@ namespace DataCommander
             TextWriter textWriter = new TextBoxWriter(textBox);
             var resultWriter = (IResultWriter)new TextResultWriter(this.AddInfoMessage, textWriter, this);
 
-            resultWriter.Begin(this.provider);
+            resultWriter.Begin(this.Provider);
 
             var schemaTable = new DataTable();
 
@@ -1765,7 +1770,7 @@ namespace DataCommander
 
         private void ShowDataTableDataGrid(DataTable dataTable)
         {
-            var commandBuilder = this.provider.DbProviderFactory.CreateCommandBuilder();
+            var commandBuilder = this.Provider.DbProviderFactory.CreateCommandBuilder();
             var dataTableEditor = new DataTableEditor(commandBuilder);
             dataTableEditor.StatusBarPanel = this.sbPanelText;
             dataTableEditor.ReadOnly = !this.openTableMode;
@@ -1774,11 +1779,11 @@ namespace DataCommander
             {
                 string tableName = this.sqlStatement.FindTableName();
                 dataTableEditor.TableName = tableName;
-                DataSet dataSet = this.provider.GetTableSchema(this.connection.Connection, tableName);
+                DataSet dataSet = this.Provider.GetTableSchema(this.Connection.Connection, tableName);
 
                 foreach (DataTable schemaTable in dataSet.Tables)
                 {
-                    log.Write(LogLevel.Trace, "tableSchema:\r\n{0}", schemaTable.ToStringTable());
+                    log.Write(LogLevel.Trace, "tableSchema:\r\n{0}", schemaTable.ToStringTableString());
                 }
 
                 dataTableEditor.TableSchema = dataSet;
@@ -1925,7 +1930,7 @@ namespace DataCommander
 
         public void ShowMessage(Exception e)
         {
-            string message = this.provider.GetExceptionMessage(e);
+            string message = this.Provider.GetExceptionMessage(e);
             var infoMessage = new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Error, message);
             this.AddInfoMessage(infoMessage);
 
@@ -2007,13 +2012,13 @@ namespace DataCommander
                     this.ShowMessage(e);
                 }
 
-                if (this.connection.State == ConnectionState.Open && this.connection.Database != this.database)
+                if (this.Connection.State == ConnectionState.Open && this.Connection.Database != this.database)
                 {
-                    this.database = this.connection.Database;
+                    this.database = this.Connection.Database;
                     this.SetText();
                 }
 
-                switch (this.resultWriterType)
+                switch (this.TableStyle)
                 {
                     case ResultWriterType.Text:
                     default:
@@ -2052,7 +2057,7 @@ namespace DataCommander
 
                 if (e != null)
                 {
-                    if (this.connection.State == ConnectionState.Closed)
+                    if (this.Connection.State == ConnectionState.Closed)
                     {
                         this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information,
                             "Connection is closed. Opening connection..."));
@@ -2062,14 +2067,14 @@ namespace DataCommander
 
                         var connectionProperties = new ConnectionProperties
                         {
-                            Provider = this.provider,
+                            Provider = this.Provider,
                             ConnectionString = csb.ConnectionString
                         };
                         var openConnectionForm = new OpenConnectionForm(connectionProperties);
                         if (openConnectionForm.ShowDialog() == DialogResult.OK)
                         {
-                            this.connection.Connection.Dispose();
-                            this.connection = connectionProperties.Connection;
+                            this.Connection.Connection.Dispose();
+                            this.Connection = connectionProperties.Connection;
                             this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Opening connection succeeded."));
                         }
                         else
@@ -2085,7 +2090,7 @@ namespace DataCommander
                 }
                 else
                 {
-                    switch (this.resultWriterType)
+                    switch (this.TableStyle)
                     {
                         case ResultWriterType.DataGrid:
                         case ResultWriterType.DataGridView:
@@ -2136,7 +2141,7 @@ namespace DataCommander
             this.dataSetResultWriter = null;
 
             this.SetGui(CommandState.Execute);
-            this.FocusControl(this.queryTextBox);
+            this.FocusControl(this.QueryTextBox);
             this.Cursor = Cursors.Default;
 
             this.Invoke(() => this.mainForm.UpdateTotalMemory());
@@ -2154,7 +2159,7 @@ namespace DataCommander
 
         private void EndFillHandleException(Exception ex)
         {
-            this.queryTextBox.Focus();
+            this.QueryTextBox.Focus();
             this.Cursor = Cursors.Default;
             MessageBox.Show(ex.ToString());
         }
@@ -2166,7 +2171,7 @@ namespace DataCommander
 
             this.mnuCancel.Enabled = cancel;
 
-            this.buttonState = buttonState;
+            this.ButtonState = buttonState;
 
             this.executeQueryToolStripMenuItem.Enabled = ok;
             this.executeQueryMenuItem.Enabled = ok;
@@ -2311,7 +2316,7 @@ namespace DataCommander
             {
                 this.Cursor = Cursors.WaitCursor;
 
-                var oldDbConnection = this.connection.Connection as OleDbConnection;
+                var oldDbConnection = this.Connection.Connection as OleDbConnection;
 
                 if (oldDbConnection != null && string.IsNullOrEmpty(this.Query))
                 {
@@ -2332,12 +2337,12 @@ namespace DataCommander
                 else
                 {
                     this.sqlStatement = new SqlStatement(this.Query);
-                    this.command = this.sqlStatement.CreateCommand(this.provider, this.connection, this.commandType, this.commandTimeout);
+                    this.command = this.sqlStatement.CreateCommand(this.Provider, this.Connection, this.commandType, this.commandTimeout);
 
                     if (this.command != null)
                     {
                         this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, this.command.ToLogString()));
-                        DataTable dataTable = this.provider.GetParameterTable(this.command.Parameters);
+                        DataTable dataTable = this.Provider.GetParameterTable(this.command.Parameters);
 
                         if (dataTable != null)
                         {
@@ -2361,7 +2366,7 @@ namespace DataCommander
                                         DateTime dateTime = (DateTime)value;
                                         long ticks = dateTime.Ticks;
 
-                                        if (ticks/TicksPerDay*TicksPerDay == ticks)
+                                        if (ticks%TicksPerDay == 0)
                                         {
                                             row["Value"] = dateTime.ToString("yyyy-MM-dd");
                                         }
@@ -2409,7 +2414,7 @@ namespace DataCommander
             {
                 this.CloseResultSetTabPage(tabPage);
             }
-            this.resultSetCount = 0;
+            this.ResultSetCount = 0;
         }
 
         private void mnuCloseAllTabPages_Click(object sender, EventArgs e)
@@ -2427,15 +2432,15 @@ namespace DataCommander
                 this.sbPanelTimer.Text = null;
             }
 
-            this.Invoke(() => this.FocusControl(this.queryTextBox));
+            this.Invoke(() => this.FocusControl(this.QueryTextBox));
         }
 
-        public void CancelQuery()
+        public void CancelCommandQuery()
         {
-            log.Trace(ThreadMonitor.ToStringTable().ToString());
+            log.Trace(ThreadMonitor.ToStringTableString());
             const string message = "Cancelling command...";
             this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, message));
-            this.sbPanelText.Text = "Cancel Executing Query...";
+            this.sbPanelText.Text = "Cancel Executing Command/Query...";
             this.sbPanelText.ForeColor = SystemColors.ControlText;
             this.cancel = true;
             this.SetGui(CommandState.None);
@@ -2444,7 +2449,7 @@ namespace DataCommander
 
         private void mnuCancel_Click(object sender, EventArgs e)
         {
-            this.CancelQuery();
+            this.CancelCommandQuery();
         }
 
         private void WriteRows(long rowCount, int scale)
@@ -2456,9 +2461,9 @@ namespace DataCommander
 
             if (rowCount > 0)
             {
-                double seconds = (double)ticks / Stopwatch.Frequency;
+                double seconds = (double)ticks/Stopwatch.Frequency;
 
-                text += " (" + Math.Round(rowCount / seconds, 0) + " rows/sec)";
+                text += " (" + Math.Round(rowCount/seconds, 0) + " rows/sec)";
             }
 
             this.sbPanelRows.Text = text;
@@ -2475,15 +2480,15 @@ namespace DataCommander
 
         private void Timer_Tick(object o, EventArgs e)
         {
-            this.Invoke(() => this.ShowTimer());
+            this.Invoke(this.ShowTimer);
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            string text = this.queryTextBox.RichTextBox.Text;
-            if (this.connection != null)
+            string text = this.QueryTextBox.RichTextBox.Text;
+            if (this.Connection != null)
             {
-                log.Write(LogLevel.Trace, "Saving text before closing form(connectionName: {0}):\r\n{1}", this.connection.ConnectionName, text);
+                log.Write(LogLevel.Trace, "Saving text before closing form(connectionName: {0}):\r\n{1}", this.Connection.ConnectionName, text);
             }
 
             if (this.dataAdapter == null)
@@ -2493,15 +2498,15 @@ namespace DataCommander
                 {
                     hasTransactions = true;
                 }
-                else if (this.connection != null && this.connection.State == ConnectionState.Open)
+                else if (this.Connection != null && this.Connection.State == ConnectionState.Open)
                 {
                     try
                     {
-                        hasTransactions = this.connection.TransactionCount > 0;
+                        hasTransactions = this.Connection.TransactionCount > 0;
                     }
                     catch (Exception ex)
                     {
-                        string message = this.provider.GetExceptionMessage(ex);
+                        string message = this.Provider.GetExceptionMessage(ex);
                         Color color = this.messagesTextBox.SelectionColor;
                         this.messagesTextBox.SelectionColor = Color.Red;
                         this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, message));
@@ -2538,7 +2543,7 @@ namespace DataCommander
 
                 if (!e.Cancel)
                 {
-                    int length = this.queryTextBox.Text.Length;
+                    int length = this.QueryTextBox.Text.Length;
 
                     if (length > 0)
                     {
@@ -2578,7 +2583,7 @@ namespace DataCommander
 
                 if (result == DialogResult.Yes)
                 {
-                    this.CancelQuery();
+                    this.CancelCommandQuery();
                     this.timer.Enabled = false;
                 }
                 else
@@ -2589,19 +2594,16 @@ namespace DataCommander
 
             if (!e.Cancel)
             {
-                // this.CloseResultSetTabPages();
-                // this.tabControl.TabPages.Clear();
-
                 this.cancellationTokenSource.Cancel();
 
-                if (this.connection != null)
+                if (this.Connection != null)
                 {
-                    string dataSource = this.connection.DataSource;
-                    this.parentStatusBar.Items[0].Text = "Closing connection to DataSource " + dataSource + "....";
-                    this.connection.Close();
-                    this.parentStatusBar.Items[0].Text = "Connection to DataSource " + dataSource + " closed.";
-                    this.connection.Connection.Dispose();
-                    this.connection = null;
+                    string dataSource = this.Connection.DataSource;
+                    this.parentStatusBar.Items[0].Text = "Closing connection to database " + dataSource + "....";
+                    this.Connection.Close();
+                    this.parentStatusBar.Items[0].Text = "Connection to database " + dataSource + " closed.";
+                    this.Connection.Connection.Dispose();
+                    this.Connection = null;
                 }
 
                 if (this.toolStrip != null)
@@ -2614,7 +2616,7 @@ namespace DataCommander
 
         private void SetResultWriterType(ResultWriterType tableStyle)
         {
-            this.resultWriterType = tableStyle;
+            this.TableStyle = tableStyle;
             this.sbPanelTableStyle.Text = tableStyle.ToString();
         }
 
@@ -2726,8 +2728,7 @@ namespace DataCommander
             {
                 case MouseButtons.Left:
                 case MouseButtons.Right:
-                    TreeNode treeNode = this.tvObjectExplorer.GetNodeAt(e.X, e.Y);
-
+                    var treeNode = this.tvObjectExplorer.GetNodeAt(e.X, e.Y);
                     if (treeNode != null)
                     {
                         var treeNode2 = (ITreeNode)treeNode.Tag;
@@ -2739,7 +2740,6 @@ namespace DataCommander
 
                         string text = treeNode.Text;
                     }
-
                     break;
 
                 default:
@@ -2749,8 +2749,7 @@ namespace DataCommander
 
         private void mnuRefresh_Click(object sender, EventArgs e)
         {
-            TreeNode treeNodeV = this.tvObjectExplorer.SelectedNode;
-
+            var treeNodeV = this.tvObjectExplorer.SelectedNode;
             if (treeNodeV != null)
             {
                 var treeNode = (ITreeNode)treeNodeV.Tag;
@@ -2761,8 +2760,7 @@ namespace DataCommander
 
         private void mnuRefreshObjectExplorer_Click(object sender, EventArgs e)
         {
-            IObjectExplorer objectExplorer = this.provider.ObjectExplorer;
-
+            var objectExplorer = this.Provider.ObjectExplorer;
             if (objectExplorer != null)
             {
                 using (new CursorManager(Cursors.WaitCursor))
@@ -2820,8 +2818,7 @@ namespace DataCommander
 
         private void tvObjectBrowser_DoubleClick(object sender, EventArgs e)
         {
-            TreeNode selectedNode = this.tvObjectExplorer.SelectedNode;
-
+            var selectedNode = this.tvObjectExplorer.SelectedNode;
             if (selectedNode != null)
             {
                 var treeNode = (ITreeNode)selectedNode.Tag;
@@ -2830,12 +2827,11 @@ namespace DataCommander
                 {
                     this.Cursor = Cursors.WaitCursor;
                     string query = treeNode.Query;
-
                     if (query != null)
                     {
-                        string text0 = this.queryTextBox.Text;
+                        string text0 = this.QueryTextBox.Text;
                         string append = null;
-                        int selectionStart = this.queryTextBox.RichTextBox.TextLength;
+                        int selectionStart = this.QueryTextBox.RichTextBox.TextLength;
 
                         if (!string.IsNullOrEmpty(text0))
                         {
@@ -2845,11 +2841,11 @@ namespace DataCommander
 
                         append += query;
 
-                        this.queryTextBox.RichTextBox.AppendText(append);
-                        this.queryTextBox.RichTextBox.SelectionStart = selectionStart;
-                        this.queryTextBox.RichTextBox.SelectionLength = query.Length;
+                        this.QueryTextBox.RichTextBox.AppendText(append);
+                        this.QueryTextBox.RichTextBox.SelectionStart = selectionStart;
+                        this.QueryTextBox.RichTextBox.SelectionLength = query.Length;
 
-                        this.queryTextBox.Focus();
+                        this.QueryTextBox.Focus();
                     }
                 }
                 finally
@@ -2861,17 +2857,16 @@ namespace DataCommander
 
         private void mnuPaste_Click(object sender, EventArgs e)
         {
-            this.queryTextBox.Paste();
+            this.QueryTextBox.Paste();
         }
 
         private void mnuGoTo_Click(object sender, EventArgs e)
         {
-            Control control = this.ActiveControl;
+            var control = this.ActiveControl;
             var richTextBox = control as RichTextBox;
-
             if (richTextBox == null)
             {
-                richTextBox = this.queryTextBox.RichTextBox;
+                richTextBox = this.QueryTextBox.RichTextBox;
             }
 
             int charIndex = richTextBox.SelectionStart;
@@ -2888,9 +2883,7 @@ namespace DataCommander
             }
         }
 
-        private TreeNode FindTreeNode(
-            TreeNode parent,
-            IStringMatcher matcher)
+        private TreeNode FindTreeNode(TreeNode parent, IStringMatcher matcher)
         {
             TreeNode found = null;
 
@@ -3031,7 +3024,7 @@ namespace DataCommander
 
                         if (richTextBox == null)
                         {
-                            richTextBox = this.queryTextBox.RichTextBox;
+                            richTextBox = this.QueryTextBox.RichTextBox;
                         }
 
                         int start = richTextBox.SelectionStart + richTextBox.SelectionLength;
@@ -3123,7 +3116,7 @@ namespace DataCommander
                 {
                     byte[] preamble = encoding.GetPreamble();
                     stream.Write(preamble, 0, preamble.Length);
-                    this.queryTextBox.RichTextBox.SaveFile(stream, type);
+                    this.QueryTextBox.RichTextBox.SaveFile(stream, type);
                 }
 
                 this.fileName = fileName;
@@ -3179,8 +3172,7 @@ namespace DataCommander
 
         private void mnuGotoQueryEditor_Click(object sender, EventArgs e)
         {
-            log.Write(LogLevel.Trace, "GarbageMonitor.State:\r\n" + GarbageMonitor.State);
-            this.queryTextBox.Select();
+            this.QueryTextBox.Select();
         }
 
         private void mnuGotoMessageTabPage_Click(object sender, EventArgs e)
@@ -3190,12 +3182,12 @@ namespace DataCommander
 
         private GetCompletionResponse GetCompletion()
         {
-            RichTextBox textBox = this.queryTextBox.RichTextBox;
+            RichTextBox textBox = this.QueryTextBox.RichTextBox;
             string text = textBox.Text;
             int position = textBox.SelectionStart;
 
             long ticks = Stopwatch.GetTimestamp();
-            var response = this.provider.GetCompletion(this.connection, this.transaction, text, position);
+            var response = this.Provider.GetCompletion(this.Connection, this.transaction, text, position);
             string from = response.FromCache ? "cache" : "data source";
             ticks = Stopwatch.GetTimestamp() - ticks;
             int length = response.Items != null ? response.Items.Count : 0;
@@ -3206,7 +3198,7 @@ namespace DataCommander
 
         private void mnuListMembers_Click(object sender, EventArgs e)
         {
-            if (this.queryTextBox.KeyboardHandler == null)
+            if (this.QueryTextBox.KeyboardHandler == null)
             {
                 using (new CursorManager(Cursors.WaitCursor))
                 {
@@ -3214,10 +3206,10 @@ namespace DataCommander
                     if (response.Items != null)
                     {
                         var completionForm = new CompletionForm(this);
-                        completionForm.Initialize(this.queryTextBox, response);
+                        completionForm.Initialize(this.QueryTextBox, response);
                         completionForm.ItemSelected += new EventHandler<ItemSelectedEventArgs>(this.completionForm_ItemSelected);
                         completionForm.Show(this);
-                        this.queryTextBox.RichTextBox.Focus();
+                        this.QueryTextBox.RichTextBox.Focus();
                     }
                 }
             }
@@ -3225,7 +3217,7 @@ namespace DataCommander
 
         private void completionForm_ItemSelected(object sender, ItemSelectedEventArgs e)
         {
-            var textBox = this.queryTextBox;
+            var textBox = this.QueryTextBox;
 
             IntPtr intPtr = textBox.RichTextBox.Handle;
             int hWnd = intPtr.ToInt32();
@@ -3243,7 +3235,7 @@ namespace DataCommander
 
         private void mnuClearCache_Click(object sender, EventArgs e)
         {
-            this.provider.ClearCompletionCache();
+            this.Provider.ClearCompletionCache();
         }
 
         private async void ExecuteReader(CommandBehavior commandBehavior)
@@ -3252,7 +3244,7 @@ namespace DataCommander
             {
                 this.Cursor = Cursors.WaitCursor;
                 this.sqlStatement = new SqlStatement(this.Query);
-                this.command = this.sqlStatement.CreateCommand(this.provider, this.connection, this.commandType, this.commandTimeout);
+                this.command = this.sqlStatement.CreateCommand(this.Provider, this.Connection, this.commandType, this.commandTimeout);
 
                 if (this.command != null)
                 {
@@ -3269,10 +3261,10 @@ namespace DataCommander
                             }
                             catch
                             {
-                                if (this.connection.State != ConnectionState.Open)
+                                if (this.Connection.State != ConnectionState.Open)
                                 {
                                     this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Opening connection..."));
-                                    await this.connection.OpenAsync(CancellationToken.None);
+                                    await this.Connection.OpenAsync(CancellationToken.None);
                                     this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information,
                                         "Connection opened successfully."));
                                 }
@@ -3288,7 +3280,7 @@ namespace DataCommander
 
                         do
                         {
-                            DataTable dataTable = this.provider.GetSchemaTable(dataReader);
+                            DataTable dataTable = this.Provider.GetSchemaTable(dataReader);
 
                             if (dataTable != null)
                             {
@@ -3339,14 +3331,14 @@ namespace DataCommander
             try
             {
                 this.sqlStatement = new SqlStatement(this.Query);
-                this.command = this.sqlStatement.CreateCommand(this.provider, this.connection, this.commandType, this.commandTimeout);
+                this.command = this.sqlStatement.CreateCommand(this.Provider, this.Connection, this.commandType, this.commandTimeout);
                 var dataSet = new DataSet();
                 using (var dataReader = this.command.ExecuteReader())
                 {
                     do
                     {
-                        var schemaTable = this.provider.GetSchemaTable(dataReader);
-                        var dataReaderHelper = this.provider.CreateDataReaderHelper(dataReader);
+                        var schemaTable = this.Provider.GetSchemaTable(dataReader);
+                        var dataReaderHelper = this.Provider.CreateDataReaderHelper(dataReader);
                         int rowCount = 0;
 
                         while (dataReader.Read())
@@ -3411,7 +3403,7 @@ namespace DataCommander
             try
             {
                 this.sqlStatement = new SqlStatement(this.Query);
-                this.command = this.sqlStatement.CreateCommand(this.provider, this.connection, this.commandType, this.commandTimeout);
+                this.command = this.sqlStatement.CreateCommand(this.Provider, this.Connection, this.commandType, this.commandTimeout);
 
                 using (var dataReader = this.command.ExecuteReader())
                 {
@@ -3484,7 +3476,7 @@ namespace DataCommander
                 var textWriter = this.standardOutput.TextWriter;
 
                 this.sqlStatement = new SqlStatement(this.Query);
-                this.command = this.sqlStatement.CreateCommand(this.provider, this.connection, CommandType.Text, this.commandTimeout);
+                this.command = this.sqlStatement.CreateCommand(this.Provider, this.Connection, CommandType.Text, this.commandTimeout);
                 string tableName = this.sqlStatement.FindTableName();
                 int tableIndex = 0;
 
@@ -3497,7 +3489,7 @@ namespace DataCommander
                             tableName = $"Table{tableIndex}";
                         }
 
-                        var dataReaderHelper = this.provider.CreateDataReaderHelper(dataReader);
+                        var dataReaderHelper = this.Provider.CreateDataReaderHelper(dataReader);
                         DataTable schemaTable = dataReader.GetSchemaTable();
                         var sb = new StringBuilder();
 
@@ -3591,14 +3583,14 @@ namespace DataCommander
             try
             {
                 this.sqlStatement = new SqlStatement(this.Query);
-                this.command = this.sqlStatement.CreateCommand(this.provider, this.connection, CommandType.Text, this.commandTimeout);
+                this.command = this.sqlStatement.CreateCommand(this.Provider, this.Connection, CommandType.Text, this.commandTimeout);
                 string tableName = this.sqlStatement.FindTableName();
 
                 if (tableName != null)
                 {
                     using (IDataReader dataReader = this.command.ExecuteReader())
                     {
-                        IDataReaderHelper dataReaderHelper = this.provider.CreateDataReaderHelper(dataReader);
+                        IDataReaderHelper dataReaderHelper = this.Provider.CreateDataReaderHelper(dataReader);
                         DataTable schemaTable = dataReader.GetSchemaTable();
                         DataRowCollection schemaRows = schemaTable.Rows;
                         int columnCount = schemaRows.Count;
@@ -3665,7 +3657,7 @@ namespace DataCommander
                 text = reader.ReadToEnd();
             }
 
-            this.queryTextBox.Text = text;
+            this.QueryTextBox.Text = text;
             this.fileName = path;
             this.SetText();
             this.sbPanelText.Text = $"File {this.fileName} loaded successfully.";
@@ -3685,8 +3677,8 @@ namespace DataCommander
             var mainForm = DataCommanderApplication.Instance.MainForm;
             int index = mainForm.MdiChildren.Length;
 
-            var connection = this.provider.CreateConnection(this.connectionString);
-            connection.ConnectionName = this.connection.ConnectionName;
+            var connection = this.Provider.CreateConnection(this.connectionString);
+            connection.ConnectionName = this.Connection.ConnectionName;
             await connection.OpenAsync(CancellationToken.None);
             string database = this.Connection.Database;
 
@@ -3695,7 +3687,7 @@ namespace DataCommander
                 connection.Connection.ChangeDatabase(database);
             }
 
-            var queryForm = new QueryForm(this.mainForm, index, this.provider, this.connectionString, connection, mainForm.StatusBar);
+            var queryForm = new QueryForm(this.mainForm, index, this.Provider, this.connectionString, connection, mainForm.StatusBar);
             queryForm.Font = mainForm.SelectedFont;
             queryForm.MdiParent = mainForm;
             queryForm.WindowState = this.WindowState;
@@ -3710,7 +3702,7 @@ namespace DataCommander
                 this.sqlStatement = new SqlStatement(query);
                 this.commandType = CommandType.Text;
                 this.openTableMode = true;
-                this.command = this.sqlStatement.CreateCommand(this.provider, this.connection, this.commandType, this.commandTimeout);
+                this.command = this.sqlStatement.CreateCommand(this.Provider, this.Connection, this.commandType, this.commandTimeout);
                 this.dataAdapter = new AsyncDataAdapter();
                 this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Executing query..."));
                 this.stopwatch.Start();
@@ -3719,7 +3711,7 @@ namespace DataCommander
                 this.dataSetResultWriter = new DataSetResultWriter(this.AddInfoMessage, this, this.showSchemaTable);
                 IResultWriter resultWriter = this.dataSetResultWriter;
                 this.dataAdapter.BeginFill(
-                    this.provider,
+                    this.Provider,
                     new[]
                     {
                         new AsyncDataAdapterCommand
@@ -3744,13 +3736,13 @@ namespace DataCommander
         private void createSqlCeDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var sqlStatement = new SqlStatement(this.Query);
-            this.command = sqlStatement.CreateCommand(this.provider, this.connection, this.commandType, this.commandTimeout);
+            this.command = sqlStatement.CreateCommand(this.Provider, this.Connection, this.commandType, this.commandTimeout);
             IAsyncDataAdapter asyncDataAdatper = new AsyncDataAdapter();
             int maxRecords = int.MaxValue;
             string tableName = sqlStatement.FindTableName();
             var sqlCeResultWriter = new SqlCeResultWriter(this.textBoxWriter, tableName);
             asyncDataAdatper.BeginFill(
-                this.provider,
+                this.Provider,
                 new[]
                 {
                     new AsyncDataAdapterCommand
@@ -3784,7 +3776,7 @@ namespace DataCommander
         {
             if (this.transaction == null)
             {
-                IDbTransaction transaction = this.connection.Connection.BeginTransaction();
+                IDbTransaction transaction = this.Connection.Connection.BeginTransaction();
                 this.SetTransaction(transaction);
             }
         }
@@ -3833,7 +3825,7 @@ namespace DataCommander
         internal void ScriptQueryAsCreateTable()
         {
             SqlStatement sqlStatement = new SqlStatement(this.Query);
-            IDbCommand command = sqlStatement.CreateCommand(this.provider, this.connection, this.commandType, this.commandTimeout);
+            IDbCommand command = sqlStatement.CreateCommand(this.Provider, this.Connection, this.commandType, this.commandTimeout);
 
             Form[] forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
             int index = Array.IndexOf(forms, this);
@@ -3842,11 +3834,11 @@ namespace DataCommander
             if (index < forms.Length - 1)
             {
                 QueryForm nextQueryForm = (QueryForm)forms[index + 1];
-                destinationProvider = nextQueryForm.provider;
+                destinationProvider = nextQueryForm.Provider;
             }
             else
             {
-                destinationProvider = this.provider;
+                destinationProvider = this.Provider;
             }
 
             DataTable schemaTable;
@@ -3879,9 +3871,9 @@ namespace DataCommander
             for (int i = 0; i <= last; i++)
             {
                 DataRow dataRow = schemaTable.Rows[i];
-                DataColumnSchema schemaRow = new DataColumnSchema(dataRow);
+                DbColumn schemaRow = new DbColumn(dataRow);
                 StringTableRow row = stringTable.NewRow();
-                string typeName = destinationProvider.GetColumnTypeName(this.provider, dataRow, dataTypeNames[i]);
+                string typeName = destinationProvider.GetColumnTypeName(this.Provider, dataRow, dataTypeNames[i]);
                 row[1] = schemaRow.ColumnName;
                 row[2] = typeName;
                 bool? allowDBNull = schemaRow.AllowDBNull;
@@ -3899,9 +3891,10 @@ namespace DataCommander
                 stringTable.Rows.Add(row);
             }
 
-            StringWriter stringWriter = new StringWriter();
-            stringTable.Write(stringWriter, 4);
-            createTable.Append(stringWriter.ToString());
+
+
+            createTable.Append(stringTable.ToString(4));
+
             createTable.Append(')');
             string commandText = createTable.ToString();
 
@@ -3915,10 +3908,10 @@ namespace DataCommander
             if (index < forms.Length - 1)
             {
                 var nextQueryForm = (QueryForm)forms[index + 1];
-                var destinationProvider = nextQueryForm.provider;
-                var destinationConnection = nextQueryForm.connection;
+                var destinationProvider = nextQueryForm.Provider;
+                var destinationConnection = nextQueryForm.Connection;
                 var sqlStatement = new SqlStatement(this.Query);
-                this.command = sqlStatement.CreateCommand(this.provider, this.connection, this.commandType, this.commandTimeout);
+                this.command = sqlStatement.CreateCommand(this.Provider, this.Connection, this.commandType, this.commandTimeout);
                 string tableName;
                 if (this.command.CommandType == CommandType.StoredProcedure)
                 {
@@ -3947,7 +3940,7 @@ namespace DataCommander
                 this.timer.Start();
                 this.dataAdapter = new AsyncDataAdapter();
                 this.dataAdapter.BeginFill(
-                    this.provider,
+                    this.Provider,
                     new[]
                     {
                         new AsyncDataAdapterCommand
@@ -3971,11 +3964,11 @@ namespace DataCommander
             if (index < forms.Length - 1)
             {
                 var nextQueryForm = (QueryForm)forms[index + 1];
-                var destinationProvider = nextQueryForm.provider;
-                var destinationConnection = (SqlConnection)nextQueryForm.connection.Connection;
+                var destinationProvider = nextQueryForm.Provider;
+                var destinationConnection = (SqlConnection)nextQueryForm.Connection.Connection;
                 var destionationTransaction = (SqlTransaction)nextQueryForm.transaction;
                 var sqlStatement = new SqlStatement(this.Query);
-                this.command = sqlStatement.CreateCommand(this.provider, this.connection, this.commandType, this.commandTimeout);
+                this.command = sqlStatement.CreateCommand(this.Provider, this.Connection, this.commandType, this.commandTimeout);
                 string tableName;
                 if (this.command.CommandType == CommandType.StoredProcedure)
                 {
@@ -3998,7 +3991,7 @@ namespace DataCommander
                 this.timer.Start();
                 this.dataAdapter = new SqlBulkCopyAsyncDataAdapter(destinationConnection, destionationTransaction, tableName, this.AddInfoMessage);
                 this.dataAdapter.BeginFill(
-                    this.provider,
+                    this.Provider,
                     new[]
                     {
                         new AsyncDataAdapterCommand
@@ -4093,21 +4086,12 @@ namespace DataCommander
 
         private void cancelExecutingQueryButton_Click(object sender, EventArgs e)
         {
-            this.CancelQuery();
+            this.CancelCommandQuery();
         }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
             this.ExecuteQuery();
-        }
-
-        internal void OnDeactivate()
-        {
-            //if (this.completionForm != null)
-            //{
-            //    this.completionForm.Close();
-            //    this.completionForm = null;
-            //}
         }
 
         private void openTableToolStripMenuItem_Click(object sender, EventArgs e)
@@ -4117,7 +4101,7 @@ namespace DataCommander
 
         private void parseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var transactionScope = new DbTransactionScope(this.connection.Connection, null);
+            var transactionScope = new DbTransactionScope(this.Connection.Connection, null);
             bool on = false;
             try
             {
@@ -4134,7 +4118,7 @@ namespace DataCommander
                 catch (Exception exception)
                 {
                     succeeded = false;
-                    var infoMessages = this.provider.ToInfoMessages(exception);
+                    var infoMessages = this.Provider.ToInfoMessages(exception);
                     this.AddInfoMessages(infoMessages);
                 }
 
@@ -4145,7 +4129,7 @@ namespace DataCommander
             }
             catch (Exception exception)
             {
-                var infoMessages = this.provider.ToInfoMessages(exception);
+                var infoMessages = this.Provider.ToInfoMessages(exception);
                 this.AddInfoMessages(infoMessages);
             }
 
@@ -4153,8 +4137,6 @@ namespace DataCommander
             {
                 transactionScope.ExecuteNonQuery(new CommandDefinition {CommandText = "SET PARSEONLY OFF"});
             }
-
-            // TODO why? this.infoMessages.Clear();
         }
 
         public void SetStatusbarPanelText(string text, Color color)

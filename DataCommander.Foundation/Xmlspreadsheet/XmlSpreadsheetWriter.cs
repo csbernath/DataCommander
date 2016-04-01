@@ -12,7 +12,6 @@
     public sealed class XmlSpreadsheetWriter
     {
         private XmlSpreadsheetTable table;
-        private readonly XmlWriter xmlWriter;
         private int tableIndex = -1;
 
         /// <summary>
@@ -23,19 +22,19 @@
         {
             Contract.Requires(xmlWriter != null);
 
-            this.xmlWriter = xmlWriter;
+            this.XmlWriter = xmlWriter;
 
-            this.xmlWriter.WriteStartDocument();
-            this.xmlWriter.WriteProcessingInstruction("mso-application", "progid=\"Excel.Sheet\"");
-            this.xmlWriter.WriteStartElement("Workbook");
-            this.xmlWriter.WriteAttributeString("xmlns", "urn:schemas-microsoft-com:office:spreadsheet");
-            this.xmlWriter.WriteAttributeString("xmlns:ss", "urn:schemas-microsoft-com:office:spreadsheet");
+            this.XmlWriter.WriteStartDocument();
+            this.XmlWriter.WriteProcessingInstruction("mso-application", "progid=\"Excel.Sheet\"");
+            this.XmlWriter.WriteStartElement("Workbook");
+            this.XmlWriter.WriteAttributeString("xmlns", "urn:schemas-microsoft-com:office:spreadsheet");
+            this.XmlWriter.WriteAttributeString("xmlns:ss", "urn:schemas-microsoft-com:office:spreadsheet");
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public XmlWriter XmlWriter => this.xmlWriter;
+        public XmlWriter XmlWriter { get; }
 
         /// <summary>
         /// 
@@ -43,31 +42,31 @@
         /// <param name="tables"></param>
         public void WriteStyles(IEnumerable<XmlSpreadsheetTable> tables)
         {
-            using (this.xmlWriter.WriteElement("Styles"))
+            using (this.XmlWriter.WriteElement("Styles"))
             {
-                using (this.xmlWriter.WriteElement("Style"))
+                using (this.XmlWriter.WriteElement("Style"))
                 {
-                    this.xmlWriter.WriteAttributeString("ss:ID", "ColumnHeader");
+                    this.XmlWriter.WriteAttributeString("ss:ID", "ColumnHeader");
 
-                    using (this.xmlWriter.WriteElement("Alignment"))
+                    using (this.XmlWriter.WriteElement("Alignment"))
                     {
-                        this.xmlWriter.WriteAttributeString("ss:Vertical", "Top");
-                        this.xmlWriter.WriteAttributeString("ss:WrapText", "1");
+                        this.XmlWriter.WriteAttributeString("ss:Vertical", "Top");
+                        this.XmlWriter.WriteAttributeString("ss:WrapText", "1");
                     }
 
-                    using (this.xmlWriter.WriteElement("Borders"))
+                    using (this.XmlWriter.WriteElement("Borders"))
                     {
-                        using (this.xmlWriter.WriteElement("Border"))
+                        using (this.XmlWriter.WriteElement("Border"))
                         {
-                            this.xmlWriter.WriteAttributeString("ss:Position", "Bottom");
-                            this.xmlWriter.WriteAttributeString("ss:LineStyle", "Continuous");
-                            this.xmlWriter.WriteAttributeString("ss:Weight", "1");
+                            this.XmlWriter.WriteAttributeString("ss:Position", "Bottom");
+                            this.XmlWriter.WriteAttributeString("ss:LineStyle", "Continuous");
+                            this.XmlWriter.WriteAttributeString("ss:Weight", "1");
                         }
                     }
 
-                    using (this.xmlWriter.WriteElement("Font"))
+                    using (this.XmlWriter.WriteElement("Font"))
                     {
-                        this.xmlWriter.WriteAttributeString("ss:Bold", "1");
+                        this.XmlWriter.WriteAttributeString("ss:Bold", "1");
                     }
                 }
 
@@ -77,16 +76,16 @@
                     int columnIndex = 0;
                     foreach (var column in tableSchema.Columns)
                     {
-                        using (this.xmlWriter.WriteElement("Style"))
+                        using (this.XmlWriter.WriteElement("Style"))
                         {
                             string id = $"{tableIndex},{columnIndex}";
-                            this.xmlWriter.WriteAttributeString("ss:ID", id);
+                            this.XmlWriter.WriteAttributeString("ss:ID", id);
 
                             if (column.NumberFormat != null)
                             {
-                                using (this.xmlWriter.WriteElement("NumberFormat"))
+                                using (this.XmlWriter.WriteElement("NumberFormat"))
                                 {
-                                    this.xmlWriter.WriteAttributeString("ss:Format", column.NumberFormat);
+                                    this.XmlWriter.WriteAttributeString("ss:Format", column.NumberFormat);
                                 }
                             }
                         }
@@ -109,27 +108,27 @@
             this.table = table;
             int columnIndex;
 
-            this.xmlWriter.WriteStartElement("Worksheet");
-            this.xmlWriter.WriteAttributeString("ss:Name", this.table.TableName);
+            this.XmlWriter.WriteStartElement("Worksheet");
+            this.XmlWriter.WriteAttributeString("ss:Name", this.table.TableName);
 
-            this.xmlWriter.WriteStartElement("Table");
+            this.XmlWriter.WriteStartElement("Table");
 
             columnIndex = 1;
             foreach (var column in this.table.Columns)
             {
-                using (this.xmlWriter.WriteElement("Column"))
+                using (this.XmlWriter.WriteElement("Column"))
                 {
-                    this.xmlWriter.WriteAttributeString("ss:Index", columnIndex.ToString());
+                    this.XmlWriter.WriteAttributeString("ss:Index", columnIndex.ToString());
 
                     if (column.Width != null)
                     {
-                        this.xmlWriter.WriteAttributeString("ss:Width", column.Width);
+                        this.XmlWriter.WriteAttributeString("ss:Width", column.Width);
                     }
                 }
                 columnIndex++;
             }
 
-            using (this.xmlWriter.WriteElement("Row"))
+            using (this.XmlWriter.WriteElement("Row"))
             {
                 foreach (var column in this.table.Columns)
                 {
@@ -138,7 +137,7 @@
                         {
                             StyleId = "ColumnHeader"
                         };
-                    cell.Write(this.xmlWriter);
+                    cell.Write(this.XmlWriter);
                 }
             }
         }
@@ -149,22 +148,22 @@
         public void WriteEndTable()
         {
             // Table
-            this.xmlWriter.WriteEndElement();
+            this.XmlWriter.WriteEndElement();
 
-            using (this.xmlWriter.WriteElement("WorksheetOptions"))
+            using (this.XmlWriter.WriteElement("WorksheetOptions"))
             {
-                this.xmlWriter.WriteAttributeString("xmlns", "urn:schemas-microsoft-com:office:excel");
+                this.XmlWriter.WriteAttributeString("xmlns", "urn:schemas-microsoft-com:office:excel");
 
-                this.xmlWriter.WriteElementString("Selected", null);
-                this.xmlWriter.WriteElementString("FreezePanes", null);
-                this.xmlWriter.WriteElementString("FrozenNoSplit", null);
-                this.xmlWriter.WriteElementString("SplitHorizontal", "1");
-                this.xmlWriter.WriteElementString("TopRowBottomPane", "1");
-                this.xmlWriter.WriteElementString("ActivePane", "2");
+                this.XmlWriter.WriteElementString("Selected", null);
+                this.XmlWriter.WriteElementString("FreezePanes", null);
+                this.XmlWriter.WriteElementString("FrozenNoSplit", null);
+                this.XmlWriter.WriteElementString("SplitHorizontal", "1");
+                this.XmlWriter.WriteElementString("TopRowBottomPane", "1");
+                this.XmlWriter.WriteElementString("ActivePane", "2");
             }
 
             // Worksheet
-            this.xmlWriter.WriteEndElement();
+            this.XmlWriter.WriteEndElement();
         }
 
         /// <summary>
@@ -172,7 +171,7 @@
         /// </summary>
         public void WriteStartRow()
         {
-            this.xmlWriter.WriteStartElement("Row");
+            this.XmlWriter.WriteStartElement("Row");
         }
 
         /// <summary>
@@ -180,7 +179,7 @@
         /// </summary>
         public void WriteEndRow()
         {
-            this.xmlWriter.WriteEndElement();
+            this.XmlWriter.WriteEndElement();
         }
 
         /// <summary>
@@ -217,7 +216,7 @@
 
                 var cell = new XmlSpreadsheetCell(type, xmlValue);
                 cell.StyleId = $"{this.tableIndex},{columnIndex}";
-                cell.Write(this.xmlWriter);
+                cell.Write(this.XmlWriter);
             }
 
             this.WriteEndRow();

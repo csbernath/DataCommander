@@ -107,7 +107,7 @@
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType(Foundation.Data.DataColumnSchema dataColumnSchema)
+        Type IProvider.GetColumnType(Foundation.Data.DbColumn dataColumnSchema)
         {
             // TODO
 
@@ -244,7 +244,7 @@
 
             if (schemaTable != null)
             {
-                log.Trace("\r\n" + schemaTable.ToStringTable().ToString());
+                log.Trace("\r\n" + schemaTable.ToStringTableString().ToString());
 
                 table = new DataTable("SchemaTable");
                 var columns = table.Columns;
@@ -259,7 +259,7 @@
 
                 foreach (DataRow dataRow in schemaTable.Rows)
                 {
-                    var dataColumnSchema = new DataColumnSchema(dataRow);
+                    var dataColumnSchema = new DbColumn(dataRow);
                     int columnOrdinal = dataColumnSchema.ColumnOrdinal;
 
                     if (columnOrdinalAddition == null)

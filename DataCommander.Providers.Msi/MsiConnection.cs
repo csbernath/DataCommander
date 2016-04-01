@@ -11,7 +11,6 @@
         #region Private Fields
 
         private readonly string connectionString;
-        private Database database;
         private ConnectionState state;
 
         #endregion
@@ -29,7 +28,7 @@
             object dataSourceObject = sb["Data Source"];
             Contract.Assert(dataSourceObject is string);
             string path = (string)dataSourceObject;
-            this.database = new Database(path, DatabaseOpenMode.ReadOnly);
+            this.Database = new Database(path, DatabaseOpenMode.ReadOnly);
             this.state = ConnectionState.Open;
         }
 
@@ -38,7 +37,7 @@
             return new MsiCommand(this);
         }
 
-        internal Database Database => this.database;
+        internal Database Database { get; private set; }
 
         #region IDbConnection Members
 
@@ -59,7 +58,7 @@
 
         void IDbConnection.Close()
         {
-            this.database.Close();
+            this.Database.Close();
         }
 
         string IDbConnection.ConnectionString
@@ -87,7 +86,7 @@
             throw new NotImplementedException();
         }
 
-        string IDbConnection.Database => this.database.FilePath;
+        string IDbConnection.Database => this.Database.FilePath;
 
         void IDbConnection.Open()
         {
@@ -102,7 +101,7 @@
 
         void IDisposable.Dispose()
         {
-            database.Dispose();
+            Database.Dispose();
         }
 
         #endregion

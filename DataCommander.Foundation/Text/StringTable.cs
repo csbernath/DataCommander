@@ -1,8 +1,9 @@
 namespace DataCommander.Foundation.Text
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using System.IO;
+    using System.Linq;
     using System.Text;
 
     /// <summary>
@@ -10,9 +11,6 @@ namespace DataCommander.Foundation.Text
     /// </summary>
     public class StringTable
     {
-        private readonly StringTableColumnCollection columns = new StringTableColumnCollection();
-        private readonly StringTableRowCollection rows = new StringTableRowCollection();
-
         /// <summary>
         /// 
         /// </summary>
@@ -23,19 +21,19 @@ namespace DataCommander.Foundation.Text
 
             for (int i = 0; i < columnCount; i++)
             {
-                this.columns.Add(new StringTableColumn());
+                this.Columns.Add(new StringTableColumn());
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public StringTableColumnCollection Columns => this.columns;
+        public StringTableColumnCollection Columns { get; } = new StringTableColumnCollection();
 
         /// <summary>
         /// 
         /// </summary>
-        public StringTableRowCollection Rows => this.rows;
+        public StringTableRowCollection Rows { get; } = new StringTableRowCollection();
 
         /// <summary>
         /// 
@@ -46,23 +44,19 @@ namespace DataCommander.Foundation.Text
             return new StringTableRow(this);
         }
 
-        internal int GetMaxColumnWidth(int columnIndex)
+        private int GetMaxColumnWidth(int columnIndex)
         {
-            int rowCount = this.rows.Count;
-            int max = 0;
+            int rowCount = this.Rows.Count;
 
-            for (int i = 0; i < rowCount; i++)
-            {
-                string s = this.rows[i][columnIndex];
-                int width = s == null ? 0 : s.Length;
-
-                if (width > max)
+            int maxColumnWidth = rowCount > 0
+                ? this.Rows.Max(row =>
                 {
-                    max = width;
-                }
-            }
+                    string value = row[columnIndex];
+                    return value?.Length ?? 0;
+                })
+                : 0;
 
-            return max;
+            return maxColumnWidth;
         }
 
         /// <summary>
@@ -71,62 +65,26 @@ namespace DataCommander.Foundation.Text
         /// <returns></returns>
         public override string ToString()
         {
-            var stringBuilder = new StringBuilder();
-            int count = this.columns.Count;
+            int count = this.Columns.Count;
+            var columnWidths = new int[count];
 
             for (int i = 0; i < count; i++)
             {
-                int maxColumnWidth = this.GetMaxColumnWidth(i);
-                this.columns[i].Width = maxColumnWidth;
+                columnWidths[i] = this.GetMaxColumnWidth(i);
             }
 
-            int last = count - 1;
-
-            for (int i = 0; i < this.rows.Count; i++)
-            {
-                if (i > 0)
-                {
-                    stringBuilder.AppendLine();
-                }
-
-                this.WriteRow(i, stringBuilder);
-            }
-
-            return stringBuilder.ToString();
+            return this.ToString(columnWidths, " ");
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="textWriter"></param>
-        public void Write(TextWriter textWriter)
-        {
-            Contract.Requires<ArgumentNullException>(textWriter != null);
-
-            for (int i = 0; i < this.columns.Count; i++)
-            {
-                int maxColumnWidth = this.GetMaxColumnWidth(i);
-                this.columns[i].Width = maxColumnWidth;
-            }
-
-            for (int i = 0; i < this.rows.Count; i++)
-            {
-                var sb = new StringBuilder();
-                this.WriteRow(i, sb);
-                textWriter.WriteLine(sb);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="textWriter"></param>
         /// <param name="indent"></param>
-        public void Write(TextWriter textWriter, int indent)
+        /// <returns></returns>
+        public string ToString(int indent)
         {
-            Contract.Requires<ArgumentNullException>(textWriter != null);
-
-            int last = this.columns.Count - 1;
+            var columnWidths = new int[this.Columns.Count];
+            int last = this.Columns.Count - 1;
 
             for (int i = 0; i <= last; i++)
             {
@@ -142,49 +100,65 @@ namespace DataCommander.Foundation.Text
                     }
                 }
 
-                this.columns[i].Width = width;
+                columnWidths[i] = width;
             }
 
-            for (int i = 0; i < this.rows.Count; i++)
-            {
-                var sb = new StringBuilder();
-
-                if (i > 0)
-                {
-                    textWriter.WriteLine(sb);
-                }
-
-                this.WriteRow(i, sb);
-            }
+            return this.ToString(columnWidths, " ");
         }
 
-        private void WriteRow(int rowIndex, StringBuilder stringBuilder)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="columnWidths"></param>
+        /// <param name="columnSeparator"></param>
+        /// <returns></returns>
+        public string ToString(IReadOnlyList<int> columnWidths, string columnSeparator)
         {
-            var row = this.rows[rowIndex];
-            int last = this.columns.Count - 1;
+            Contract.Requires<ArgumentNullException>(columnWidths != null);
 
-            for (int j = 0; j <= last; j++)
+            var stringBuilder = new StringBuilder();
+            bool first = true;
+
+            foreach (var row in this.Rows)
             {
-                var column = this.columns[j];
-                bool alignRight = column.Align == StringTableColumnAlign.Right;
-                if (j < last)
+                if (first)
                 {
-                    string s = StringHelper.FormatColumn(row[j], column.Width, alignRight);
-                    stringBuilder.Append(s);
-                    stringBuilder.Append(' ');
+                    first = false;
                 }
                 else
                 {
-                    if (alignRight)
-                    {
-                        string s = StringHelper.FormatColumn(row[j], column.Width, alignRight);
-                        stringBuilder.Append(s);
-                    }
-                    else
-                    {
-                        stringBuilder.Append(row[j]);
-                    }
+                    stringBuilder.AppendLine();
                 }
+
+                this.WriteRow(row, columnWidths, columnSeparator, stringBuilder);
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        private void WriteRow(
+            StringTableRow row,
+            IReadOnlyList<int> columnWidths,
+            string columnSeparator,
+            StringBuilder stringBuilder)
+        {
+            Contract.Requires<ArgumentNullException>(row != null);
+            Contract.Requires<ArgumentNullException>(columnWidths != null);
+            Contract.Requires<ArgumentNullException>(stringBuilder != null);
+
+            int count = this.Columns.Count;
+
+            for (int j = 0; j < count; ++j)
+            {
+                if (j > 0)
+                {
+                    stringBuilder.Append(columnSeparator);
+                }
+
+                var column = this.Columns[j];
+                bool alignRight = column.Align == StringTableColumnAlign.Right;
+                string text = StringHelper.FormatColumn(row[j], columnWidths[j], alignRight);
+                stringBuilder.Append(text);
             }
         }
     }

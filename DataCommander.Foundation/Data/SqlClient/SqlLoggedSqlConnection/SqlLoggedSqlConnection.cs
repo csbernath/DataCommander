@@ -11,13 +11,9 @@ namespace DataCommander.Foundation.Data.SqlClient
     /// </summary>
     public sealed class SqlLoggedSqlConnection : IDbConnection
     {
-        private readonly SqlConnection connection;
         private readonly int applicationId;
         private int connectionNo;
-        private readonly string userName;
-        private readonly string hostName;
         private readonly SqlLog sqlLog;
-        private readonly ISqlLoggedSqlCommandFilter filter;
 
         /// <summary>
         /// 
@@ -40,10 +36,10 @@ namespace DataCommander.Foundation.Data.SqlClient
 
             this.sqlLog = sqlLog;
             this.applicationId = applicationId;
-            this.userName = userName;
-            this.hostName = hostName;
-            this.filter = filter;
-            this.connection = new SqlConnection(connectionString);
+            this.UserName = userName;
+            this.HostName = hostName;
+            this.Filter = filter;
+            this.Connection = new SqlConnection(connectionString);
         }
 
         /// <summary>
@@ -63,13 +59,13 @@ namespace DataCommander.Foundation.Data.SqlClient
         {
             if (disposing)
             {
-                this.sqlLog.DisposeConnection(this.connection);
+                this.sqlLog.DisposeConnection(this.Connection);
             }
         }
 
         IDbTransaction IDbConnection.BeginTransaction()
         {
-            return this.connection.BeginTransaction();
+            return this.Connection.BeginTransaction();
         }
 
         /// <summary>
@@ -79,12 +75,12 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <returns></returns>
         public IDbTransaction BeginTransaction(IsolationLevel il)
         {
-            return this.connection.BeginTransaction(il);
+            return this.Connection.BeginTransaction(il);
         }
 
         void IDbConnection.ChangeDatabase(string databaseName)
         {
-            this.connection.ChangeDatabase(databaseName);
+            this.Connection.ChangeDatabase(databaseName);
         }
 
         /// <summary>
@@ -92,12 +88,12 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// </summary>
         public void Close()
         {
-            this.sqlLog.CloseConnection(this.connection);
+            this.sqlLog.CloseConnection(this.Connection);
         }
 
         IDbCommand IDbConnection.CreateCommand()
         {
-            IDbCommand command = this.connection.CreateCommand();
+            IDbCommand command = this.Connection.CreateCommand();
             return new SqlLoggedSqlCommand(this, command);
         }
 
@@ -112,7 +108,7 @@ namespace DataCommander.Foundation.Data.SqlClient
 
             try
             {
-                this.connection.Open();
+                this.Connection.Open();
             }
             catch (Exception e)
             {
@@ -122,7 +118,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             finally
             {
                 duration = Stopwatch.GetTimestamp() - duration;
-                this.connectionNo = this.sqlLog.ConnectionOpen(this.applicationId, this.connection, this.userName, this.hostName, startDate, duration, exception);
+                this.connectionNo = this.sqlLog.ConnectionOpen(this.applicationId, this.Connection, this.UserName, this.HostName, startDate, duration, exception);
             }
         }
 
@@ -133,29 +129,29 @@ namespace DataCommander.Foundation.Data.SqlClient
         {
             get
             {
-                return this.connection.ConnectionString;
+                return this.Connection.ConnectionString;
             }
 
             set
             {
-                this.connection.ConnectionString = value;
+                this.Connection.ConnectionString = value;
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int ConnectionTimeout => this.connection.ConnectionTimeout;
+        public int ConnectionTimeout => this.Connection.ConnectionTimeout;
 
         /// <summary>
         /// 
         /// </summary>
-        public string Database => this.connection.Database;
+        public string Database => this.Connection.Database;
 
         /// <summary>
         /// 
         /// </summary>
-        public ConnectionState State => this.connection.State;
+        public ConnectionState State => this.Connection.State;
 
         internal void CommandExeucte(
             IDbCommand command,
@@ -185,7 +181,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             finally
             {
                 duration = Stopwatch.GetTimestamp() - duration;
-                bool contains = exception != null || this.filter == null || this.filter.Contains(this.userName, this.hostName, command);
+                bool contains = exception != null || this.Filter == null || this.Filter.Contains(this.UserName, this.HostName, command);
 
                 if (contains)
                 {
@@ -216,7 +212,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             finally
             {
                 duration = Stopwatch.GetTimestamp() - duration;
-                bool contains = exception != null || this.filter == null || this.filter.Contains(this.userName, this.hostName, command);
+                bool contains = exception != null || this.Filter == null || this.Filter.Contains(this.UserName, this.HostName, command);
 
                 if (contains)
                 {
@@ -230,18 +226,18 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <summary>
         /// 
         /// </summary>
-        public ISqlLoggedSqlCommandFilter Filter => this.filter;
+        public ISqlLoggedSqlCommandFilter Filter { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string UserName => this.userName;
+        public string UserName { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string HostName => this.hostName;
+        public string HostName { get; }
 
-        internal SqlConnection Connection => this.connection;
+        internal SqlConnection Connection { get; }
     }
 }

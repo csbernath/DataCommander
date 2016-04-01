@@ -10,11 +10,9 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 
     internal sealed class TableCollectionNode : ITreeNode
     {
-        private readonly DatabaseNode databaseNode;
-
         public TableCollectionNode( DatabaseNode databaseNode )
         {
-            this.databaseNode = databaseNode;
+            this.DatabaseNode = databaseNode;
         }
 
         public string Name => "Tables";
@@ -47,7 +45,7 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 //            return treeNodes;
 
             List<ITreeNode> childNodes = new List<ITreeNode>();
-            childNodes.Add( new SystemTableCollectionNode( this.databaseNode ) );
+            childNodes.Add( new SystemTableCollectionNode( this.DatabaseNode ) );
 
             string commandText = string.Format(@"select
     s.name as [Schema],
@@ -74,8 +72,8 @@ where
 end          
              AS bit)=0)
 order by
-[Schema] ASC,[Name] ASC", this.databaseNode.Name);
-            string connectionString = this.databaseNode.Databases.Server.ConnectionString;
+[Schema] ASC,[Name] ASC", this.DatabaseNode.Name);
+            string connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -86,7 +84,7 @@ order by
             {
                 String schema = (String) dataRow[ "Schema" ];
                 String name = (String) dataRow[ "Name" ];
-                TableNode tableNode = new TableNode( this.databaseNode, schema, name );
+                TableNode tableNode = new TableNode( this.DatabaseNode, schema, name );
                 childNodes.Add( tableNode );
             }
             return childNodes;
@@ -96,7 +94,7 @@ order by
 
         public string Query => null;
 
-        public DatabaseNode DatabaseNode => this.databaseNode;
+        public DatabaseNode DatabaseNode { get; }
 
         public ContextMenuStrip ContextMenu => null;
     }

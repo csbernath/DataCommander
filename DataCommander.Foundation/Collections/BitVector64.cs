@@ -8,8 +8,6 @@ namespace DataCommander.Foundation.Collections
     /// </summary>
     public struct BitVector64
     {
-        private UInt64 data;
-
         /// <summary>
         /// 
         /// </summary>
@@ -17,14 +15,14 @@ namespace DataCommander.Foundation.Collections
         [CLSCompliant(false)]
         public BitVector64(UInt64 data)
         {
-            this.data = data;
+            this.Value = data;
         }
 
         /// <summary>
         /// 
         /// </summary>
         [CLSCompliant(false)]
-        public UInt64 Value => this.data;
+        public UInt64 Value { get; private set; }
 
         /// <summary>
         /// 
@@ -34,7 +32,7 @@ namespace DataCommander.Foundation.Collections
             get
             {
                 UInt64 bit = 1UL << index;
-                return (this.data & bit) == bit;
+                return (this.Value & bit) == bit;
             }
 
             set
@@ -43,11 +41,11 @@ namespace DataCommander.Foundation.Collections
 
                 if (value)
                 {
-                    this.data |= bit;
+                    this.Value |= bit;
                 }
                 else
                 {
-                    this.data &= ~bit;
+                    this.Value &= ~bit;
                 }
             }
         }
@@ -58,7 +56,7 @@ namespace DataCommander.Foundation.Collections
         /// <returns></returns>
         public override string ToString()
         {
-            string value = this.data.ToString("X");
+            string value = this.Value.ToString("X");
             value = value.PadLeft(16, '0');
             return value;
         }

@@ -16,10 +16,10 @@ namespace DataCommander.Foundation.Data
 
         #endregion
 
-        internal AsyncDbCommand( AsyncDbConnection connection, IDbCommand command )
+        internal AsyncDbCommand(AsyncDbConnection connection, IDbCommand command)
         {
-            Contract.Requires<ArgumentNullException>( connection != null );
-            Contract.Requires<ArgumentNullException>( command != null );
+            Contract.Requires<ArgumentNullException>(connection != null);
+            Contract.Requires<ArgumentNullException>(command != null);
 
             this.connection = connection;
             this.command = command;
@@ -50,7 +50,7 @@ namespace DataCommander.Foundation.Data
         {
             get
             {
-                Contract.Assert( this.command != null );
+                Contract.Assert(this.command != null);
 
                 return this.command.CommandType;
             }
@@ -66,7 +66,7 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="behavior"></param>
         /// <returns></returns>
-        public IDataReader ExecuteReader( CommandBehavior behavior )
+        public IDataReader ExecuteReader(CommandBehavior behavior)
         {
             // TODO:  Add AsyncDbCommand.ExecuteReader implementation
             return null;
@@ -94,9 +94,9 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public int ExecuteNonQuery()
         {
-            Contract.Assert( this.connection != null );
+            Contract.Assert(this.connection != null);
 
-            return this.connection.ExecuteNonQuery( this );
+            return this.connection.ExecuteNonQuery(this);
         }
 
         /// <summary>
@@ -167,13 +167,13 @@ namespace DataCommander.Foundation.Data
         {
             get
             {
-                Contract.Assert( this.command != null );
+                Contract.Assert(this.command != null);
                 return this.command.CommandText;
             }
 
             set
             {
-                Contract.Assert( this.command != null );
+                Contract.Assert(this.command != null);
                 this.command.CommandText = value;
             }
         }
@@ -185,7 +185,7 @@ namespace DataCommander.Foundation.Data
         {
             get
             {
-                Contract.Assert( this.command != null );
+                Contract.Assert(this.command != null);
                 return this.command.Parameters;
             }
         }
@@ -197,14 +197,14 @@ namespace DataCommander.Foundation.Data
         {
             get
             {
-                Contract.Assert( this.command != null );
+                Contract.Assert(this.command != null);
 
                 return this.command.Transaction;
             }
 
             set
             {
-                Contract.Assert( this.command != null );
+                Contract.Assert(this.command != null);
 
                 this.command.Transaction = value;
             }
@@ -227,8 +227,8 @@ namespace DataCommander.Foundation.Data
         [ContractInvariantMethod]
         private void ObjectInvariant()
         {
-            Contract.Invariant( this.connection != null );
-            Contract.Invariant( this.command != null );
+            Contract.Invariant(this.connection != null);
+            Contract.Invariant(this.command != null);
         }
     }
 }

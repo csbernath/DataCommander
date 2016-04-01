@@ -8,24 +8,20 @@ namespace DataCommander.Foundation.Collections
     /// <typeparam name="T"></typeparam>
     internal sealed class ObjectPoolItem<T>
     {
-        private readonly int key;
-        private readonly T value;
-        private readonly DateTime creationDate;
-
         public ObjectPoolItem(
             int key,
             T value,
             DateTime creationDate)
         {
-            this.key = key;
-            this.value = value;
-            this.creationDate = creationDate;
+            this.Key = key;
+            this.Value = value;
+            this.CreationDate = creationDate;
         }
 
-        public int Key => this.key;
+        public int Key { get; }
 
-        public T Value => this.value;
+        public T Value { get; }
 
-        public DateTime CreationDate => this.creationDate;
+        public DateTime CreationDate { get; }
     }
 }

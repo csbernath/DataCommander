@@ -15,7 +15,7 @@ namespace DataCommander.Foundation.Data.SqlClient
     /// </summary>
     public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
     {
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = LogFactory.Instance.GetTypeLog(typeof (SafeSqlConnection));
         private readonly CancellationToken cancellationToken = CancellationToken.None;
         private Int16 id;
 

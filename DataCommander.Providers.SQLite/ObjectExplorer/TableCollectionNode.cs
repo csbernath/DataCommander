@@ -29,14 +29,13 @@ select	name
 from
 (
 	select	name
-	from	{this.databaseNode.Name
-                    }.sqlite_master
+	from	{this.databaseNode.Name}.sqlite_master
 	where	type	= 'table'
 	union
 	select	'sqlite_master'
 ) t
 order by name collate nocase";
-            Database database = new Database(this.databaseNode.Connection);
+            var database = new Database(this.databaseNode.Connection);
             DataTable table = database.ExecuteDataTable(commandText, CancellationToken.None);
             DataRowCollection rows = table.Rows;
             int count = rows.Count;

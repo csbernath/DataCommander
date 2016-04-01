@@ -9,8 +9,6 @@
     /// </summary>
     public sealed class SqlCommandBuilderHelper : IDbCommandBuilderHelper
     {
-        private static readonly SqlCommandBuilderHelper instance = new SqlCommandBuilderHelper();
-
         private SqlCommandBuilderHelper()
         {
         }
@@ -18,7 +16,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public static SqlCommandBuilderHelper Instance => instance;
+        public static SqlCommandBuilderHelper Instance { get; } = new SqlCommandBuilderHelper();
 
         #region IDbCommandBuilder Members
 

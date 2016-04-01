@@ -50,7 +50,7 @@
 
         void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
-            Trace.WriteLine(schemaTable.ToStringTable());
+            Trace.WriteLine(schemaTable.ToStringTableString());
             StringBuilder sb = new StringBuilder();
             DataRowCollection schemaRows = schemaTable.Rows;
             int schemaRowCount = schemaRows.Count;
@@ -61,7 +61,7 @@
 
             for (int i = 0; i < schemaRowCount; i++)
             {
-                var schemaRow = new DataColumnSchema(schemaRows[i]);
+                var schemaRow = new DbColumn(schemaRows[i]);
                 StringTableRow stringTableRow = st.NewRow();
 
                 if (i == 0)
@@ -173,9 +173,7 @@
                 this.insertCommand.Parameters.Add(parameter);
             }
 
-            StringWriter stringWriter = new StringWriter();
-            st.Write(stringWriter, 4);
-            sb.Append(stringWriter);
+            sb.Append(st.ToString(4));
             sb.Append(')');
             insertValues.Append(')');
             insertStatement += ") " + insertValues;

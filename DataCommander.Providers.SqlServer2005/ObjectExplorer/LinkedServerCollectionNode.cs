@@ -10,15 +10,13 @@
 
     internal sealed class LinkedServerCollectionNode : ITreeNode
     {
-        private readonly ServerNode server;
-
         public LinkedServerCollectionNode( ServerNode serverNode )
         {
             Contract.Requires( serverNode != null );
-            this.server = serverNode;
+            this.Server = serverNode;
         }
 
-        public ServerNode Server => this.server;
+        public ServerNode Server { get; }
 
         #region ITreeNode Members
 
@@ -35,7 +33,7 @@ order by s.name";
 
             List<ITreeNode> treeNodes;
 
-            using (var connection = new SqlConnection(this.server.ConnectionString))
+            using (var connection = new SqlConnection(this.Server.ConnectionString))
             {
                 connection.Open();
                 var transactionScope = new DbTransactionScope(connection, null);

@@ -77,7 +77,7 @@
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType(DataColumnSchema dataColumnSchema)
+        Type IProvider.GetColumnType(DbColumn dataColumnSchema)
         {
             // TODO
             return typeof (object);

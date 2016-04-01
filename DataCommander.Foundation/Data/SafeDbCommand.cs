@@ -9,14 +9,13 @@ namespace DataCommander.Foundation.Data
     public class SafeDbCommand : IDbCommand
     {
         private readonly SafeDbConnection connection;
-        private readonly IDbCommand command;
 
         internal SafeDbCommand(
             SafeDbConnection connection,
             IDbCommand command )
         {
             this.connection = connection;
-            this.command = command;
+            this.Command = command;
         }
 
         /// <summary>
@@ -24,7 +23,7 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public void Dispose()
         {
-            this.command.Dispose();
+            this.Command.Dispose();
         }
 
         /// <summary>
@@ -32,7 +31,7 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public void Cancel()
         {
-            this.command.Cancel();
+            this.Command.Cancel();
         }
 
         /// <summary>
@@ -41,7 +40,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public IDbDataParameter CreateParameter()
         {
-            return this.command.CreateParameter();
+            return this.Command.CreateParameter();
         }
 
         /// <summary>
@@ -50,7 +49,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public int ExecuteNonQuery()
         {
-            return this.connection.ExecuteNonQuery( this.command );
+            return this.connection.ExecuteNonQuery( this.Command );
         }
 
         /// <summary>
@@ -59,7 +58,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public IDataReader ExecuteReader()
         {
-            return this.connection.ExecuteReader( this.command, CommandBehavior.Default );
+            return this.connection.ExecuteReader( this.Command, CommandBehavior.Default );
         }
 
         /// <summary>
@@ -69,7 +68,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public IDataReader ExecuteReader( CommandBehavior behavior )
         {
-            return this.connection.ExecuteReader( this.command, behavior );
+            return this.connection.ExecuteReader( this.Command, behavior );
         }
 
         /// <summary>
@@ -78,7 +77,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public object ExecuteScalar()
         {
-            return this.connection.ExecuteScalar( this.command );
+            return this.connection.ExecuteScalar( this.Command );
         }
 
         /// <summary>
@@ -86,7 +85,7 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public void Prepare()
         {
-            this.command.Prepare();
+            this.Command.Prepare();
         }
 
         /// <summary>
@@ -96,12 +95,12 @@ namespace DataCommander.Foundation.Data
         {
             get
             {
-                return this.command.CommandText;
+                return this.Command.CommandText;
             }
 
             set
             {
-                this.command.CommandText = value;
+                this.Command.CommandText = value;
             }
         }
 
@@ -112,12 +111,12 @@ namespace DataCommander.Foundation.Data
         {
             get
             {
-                return this.command.CommandTimeout;
+                return this.Command.CommandTimeout;
             }
 
             set
             {
-                this.command.CommandTimeout = value;
+                this.Command.CommandTimeout = value;
             }
         }
 
@@ -128,12 +127,12 @@ namespace DataCommander.Foundation.Data
         {
             get
             {
-                return this.command.CommandType;
+                return this.Command.CommandType;
             }
 
             set
             {
-                this.command.CommandType = value;
+                this.Command.CommandType = value;
             }
         }
 
@@ -156,7 +155,7 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public IDataParameterCollection Parameters => this.command.Parameters;
+        public IDataParameterCollection Parameters => this.Command.Parameters;
 
         /// <summary>
         /// 
@@ -165,12 +164,12 @@ namespace DataCommander.Foundation.Data
         {
             get
             {
-                return this.command.Transaction;
+                return this.Command.Transaction;
             }
 
             set
             {
-                this.command.Transaction = value;
+                this.Command.Transaction = value;
             }
         }
 
@@ -181,18 +180,18 @@ namespace DataCommander.Foundation.Data
         {
             get
             {
-                return this.command.UpdatedRowSource;
+                return this.Command.UpdatedRowSource;
             }
 
             set
             {
-                this.command.UpdatedRowSource = value;
+                this.Command.UpdatedRowSource = value;
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public IDbCommand Command => this.command;
+        public IDbCommand Command { get; }
     }
 }

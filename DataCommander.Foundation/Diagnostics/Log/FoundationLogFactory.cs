@@ -214,22 +214,20 @@
 
         private sealed class MultipleLog : IDisposable
         {
-            private readonly LogWriter[] logWriters;
-
             public MultipleLog(IEnumerable<LogWriter> logWriters)
             {
                 Contract.Requires<ArgumentNullException>(logWriters != null);
 
-                this.logWriters = logWriters.ToArray();
+                this.LogWriters = logWriters.ToArray();
             }
 
-            public LogWriter[] LogWriters => this.logWriters;
+            public LogWriter[] LogWriters { get; }
 
             #region IDisposable Members
 
             public void Dispose()
             {
-                foreach (var logWriter in this.logWriters)
+                foreach (var logWriter in this.LogWriters)
                 {
                     logWriter.logWriter.Dispose();
                 }
@@ -240,9 +238,9 @@
             public void Write(LogEntry logEntry)
             {
                 var logLevel = logEntry.LogLevel;
-                for (int i = 0; i < this.logWriters.Length; i++)
+                for (int i = 0; i < this.LogWriters.Length; i++)
                 {
-                    var logWriter = this.logWriters[i];
+                    var logWriter = this.LogWriters[i];
                     if (logWriter.logLevel >= logLevel)
                     {
                         logWriter.logWriter.Write(logEntry);

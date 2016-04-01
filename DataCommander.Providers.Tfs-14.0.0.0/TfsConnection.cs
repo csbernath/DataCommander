@@ -10,28 +10,23 @@
 
     internal sealed class TfsConnection : ConnectionBase
     {
-        private readonly TfsTeamProjectCollection tfsTeamProjectCollection;
-        private readonly VersionControlServer versionControlServer;
-        private string connectionName;
-        private ConnectionState state;
-
         public TfsConnection(Uri uri)
         {
-            this.tfsTeamProjectCollection = new TfsTeamProjectCollection(uri);
-            this.versionControlServer = (VersionControlServer)this.tfsTeamProjectCollection.GetService(typeof (VersionControlServer));
+            this.TfsTeamProjectCollection = new TfsTeamProjectCollection(uri);
+            this.VersionControlServer = (VersionControlServer)this.TfsTeamProjectCollection.GetService(typeof (VersionControlServer));
             this.Connection = new TfsDbConnection(this);
         }
 
-        internal TfsTeamProjectCollection TfsTeamProjectCollection => this.tfsTeamProjectCollection;
+        internal TfsTeamProjectCollection TfsTeamProjectCollection { get; }
 
-        internal VersionControlServer VersionControlServer => this.versionControlServer;
+        internal VersionControlServer VersionControlServer { get; }
 
         public override Task OpenAsync(CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(() =>
             {
-                this.tfsTeamProjectCollection.Authenticate();
-                this.state = ConnectionState.Open;
+                this.TfsTeamProjectCollection.Authenticate();
+                this.ConnectionState = ConnectionState.Open;
             });
         }
 
@@ -40,18 +35,7 @@
             return new TfsCommand(this);
         }
 
-        public override string ConnectionName
-        {
-            get
-            {
-                return this.connectionName;
-            }
-
-            set
-            {
-                this.connectionName = value;
-            }
-        }
+        public override string ConnectionName { get; set; }
 
         public override string Caption => "Team Foundation Server";
 
@@ -66,7 +50,7 @@
         {
             get
             {
-                int supportedFeatures = this.versionControlServer.SupportedFeatures;
+                int supportedFeatures = this.VersionControlServer.SupportedFeatures;
                 SupportedFeatures supportedFeaturesEnum = (SupportedFeatures)supportedFeatures;
                 return $"versionControlServer.SupportedFeatures: {supportedFeaturesEnum.ToString("G")}";
             }
@@ -74,6 +58,6 @@
 
         public override int TransactionCount => 0;
 
-        public ConnectionState ConnectionState => this.state;
+        public ConnectionState ConnectionState { get; private set; }
     }
 }

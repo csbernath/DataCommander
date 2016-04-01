@@ -11,16 +11,13 @@ namespace DataCommander.Providers.SqlServer2005
     internal sealed class DatabaseObjectMultipartName
     {
         private string server;
-        private string database;
-        private string schema;
-        private readonly string name;
 
         public DatabaseObjectMultipartName(string server, string database, string schema, string name)
         {
             this.server = server;
-            this.database = database;
-            this.schema = schema;
-            this.name = name;
+            this.Database = database;
+            this.Schema = schema;
+            this.Name = name;
         }
 
         public DatabaseObjectMultipartName(string currentDatabase, string name)
@@ -35,17 +32,17 @@ namespace DataCommander.Providers.SqlServer2005
 
                 if (i >= 0)
                 {
-                    this.name = parts[i];
+                    this.Name = parts[i];
                     i--;
 
                     if (i >= 0)
                     {
-                        this.schema = parts[i];
+                        this.Schema = parts[i];
                         i--;
 
                         if (i >= 0)
                         {
-                            this.database = parts[i];
+                            this.Database = parts[i];
                             i--;
 
                             if (i >= 0)
@@ -57,76 +54,54 @@ namespace DataCommander.Providers.SqlServer2005
                 }
             }
 
-            if (this.database == null)
+            if (this.Database == null)
             {
-                this.database = currentDatabase;
+                this.Database = currentDatabase;
             }
 
-            if (string.IsNullOrEmpty(this.schema))
+            if (string.IsNullOrEmpty(this.Schema))
             {
-                this.schema = null;
+                this.Schema = null;
             }
 
-            if (this.name != null)
+            if (this.Name != null)
             {
-                int length = this.name.Length;
+                int length = this.Name.Length;
 
-                if (length > 0 && this.name[0] == '[')
+                if (length > 0 && this.Name[0] == '[')
                 {
-                    this.name = this.name.Substring(1);
+                    this.Name = this.Name.Substring(1);
                     length--;
                 }
 
-                if (length > 0 && this.name[length - 1] == ']')
+                if (length > 0 && this.Name[length - 1] == ']')
                 {
-                    this.name = this.name.Substring(0, length - 1);
+                    this.Name = this.Name.Substring(0, length - 1);
                 }
             }
         }
 
-        public string Database
-        {
-            get
-            {
-                return this.database;
-            }
+        public string Database { get; set; }
 
-            set
-            {
-                this.database = value;
-            }
-        }
+        public string Schema { get; set; }
 
-        public string Schema
-        {
-            get
-            {
-                return this.schema;
-            }
-
-            set
-            {
-                this.schema = value;
-            }
-        }
-
-        public string Name => this.name;
+        public string Name { get; }
 
         public override string ToString()
         {
             var sb = new StringBuilder();
-            if (this.database != null)
+            if (this.Database != null)
             {
-                sb.Append(this.database);
+                sb.Append(this.Database);
             }
 
-            if (this.schema != null)
+            if (this.Schema != null)
             {
                 if (sb.Length > 0)
                 {
                     sb.Append('.');
                 }
-                sb.Append(this.schema);
+                sb.Append(this.Schema);
             }
 
             if (sb.Length > 0)
@@ -134,7 +109,7 @@ namespace DataCommander.Providers.SqlServer2005
                 sb.Append('.');
             }
 
-            sb.Append(this.name);
+            sb.Append(this.Name);
             return sb.ToString();
         }
     }

@@ -63,19 +63,13 @@
 
         #endregion
 
-        #region Private Fields
-
-        private readonly long ticks;
-
-        #endregion
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="ticks"></param>
         public StopwatchTimeSpan(long ticks)
         {
-            this.ticks = ticks;
+            this.Ticks = ticks;
         }
 
         /// <summary>
@@ -84,48 +78,48 @@
         /// <param name="timeSpan"></param>
         public StopwatchTimeSpan(TimeSpan timeSpan)
         {
-            this.ticks = ToTicks(timeSpan);
+            this.Ticks = ToTicks(timeSpan);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public long Ticks => this.ticks;
+        public long Ticks { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public TimeSpan Elapsed => ToTimeSpan(this.ticks);
+        public TimeSpan Elapsed => ToTimeSpan(this.Ticks);
 
         /// <summary>
         /// 
         /// </summary>
-        public double TotalHours => (double)this.ticks/TicksPerHour;
+        public double TotalHours => (double)this.Ticks/TicksPerHour;
 
         /// <summary>
         /// 
         /// </summary>
-        public double TotalMinutes => (double)this.ticks/TicksPerMinute;
+        public double TotalMinutes => (double)this.Ticks/TicksPerMinute;
 
         /// <summary>
         /// 
         /// </summary>
-        public double TotalSeconds => (double)this.ticks/TicksPerSecond;
+        public double TotalSeconds => (double)this.Ticks/TicksPerSecond;
 
         /// <summary>
         /// 
         /// </summary>
-        public double TotalMilliseconds => (double)this.ticks*1000/TicksPerSecond;
+        public double TotalMilliseconds => (double)this.Ticks*1000/TicksPerSecond;
 
         /// <summary>
         /// 
         /// </summary>
-        public double TotalMicroseconds => (double)this.ticks*1000000/TicksPerSecond;
+        public double TotalMicroseconds => (double)this.Ticks*1000000/TicksPerSecond;
 
         /// <summary>
         /// 
         /// </summary>
-        public double TotalNanoseconds => (double)this.ticks*1000000000/TicksPerSecond;
+        public double TotalNanoseconds => (double)this.Ticks*1000000000/TicksPerSecond;
 
         /// <summary>
         /// 
@@ -153,6 +147,31 @@
             return int64;
         }
 
+        private static readonly long[] power10 = new [] 
+        {
+            1,
+            10,
+            100,
+            1000,
+            10000,
+            100000,
+            1000000,
+            10000000,
+            100000000,
+            1000000000,
+            10000000000,
+            100000000000,
+            1000000000000,
+            10000000000000,
+            100000000000000,
+            1000000000000000
+        };
+
+        private static long Pow10(int pow)
+        {
+            return power10[pow];
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -166,20 +185,18 @@
 
             if (scale > 0)
             {
-                string multiplierString = "1" + new string('0', scale);
-                long multiplier = long.Parse(multiplierString);
                 long fractionTicks = ticks - (totalSeconds*TicksPerSecond);
+                long multiplier = Pow10(scale);
                 double fraction = (double)multiplier*fractionTicks/TicksPerSecond;
                 fraction = Math.Round(fraction);
                 long fractionInt64 = (long)fraction;
-                if (fractionInt64 < multiplier)
+                if (fractionInt64 == multiplier)
                 {
-                    fractionString = $".{fractionInt64.ToString().PadLeft(scale, '0')}";
-                }
-                else
-                {
+                    fractionInt64 = 0;
                     totalSeconds++;
+
                 }
+                fractionString = $".{fractionInt64.ToString().PadLeft(scale, '0')}";
             }
 
             var sb = new StringBuilder();
@@ -230,8 +247,7 @@
         public static TimeSpan ToTimeSpan(long elapsed)
         {
             long ticks = (long)(elapsed*TicksPerTick);
-            TimeSpan timeSpan = new TimeSpan(ticks);
-            return timeSpan;
+            return new TimeSpan(ticks);
         }
 
         /// <summary>
@@ -241,7 +257,7 @@
         /// <returns></returns>
         public string ToString(int scale)
         {
-            return ToString(this.ticks, scale);
+            return ToString(this.Ticks, scale);
         }
 
         /// <summary>
@@ -250,7 +266,7 @@
         /// <returns></returns>
         public override string ToString()
         {
-            return ToString(this.ticks, 9);
+            return ToString(this.Ticks, 9);
         }
     }
 }

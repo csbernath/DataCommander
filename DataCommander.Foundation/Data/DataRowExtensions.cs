@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation.Data
 {
     using System;
-    using System.Collections.Generic;
     using System.Data;
     using System.Diagnostics.Contracts;
     using DataCommander.Foundation.Text;
@@ -24,7 +23,7 @@
             object valueObject = dataRow[name];
             Contract.Assert(valueObject is T);
 
-            return (T) valueObject;
+            return (T)valueObject;
         }
 
         /// <summary>
@@ -81,55 +80,16 @@
         public static StringTable ToStringTable(this DataRow dataRow)
         {
             Contract.Requires<ArgumentNullException>(dataRow != null);
-            var st = new StringTable(2);
+            var stringTable = new StringTable(2);
             DataTable dataTable = dataRow.Table;
             object[] itemArray = dataRow.ItemArray;
 
             for (int i = 0; i < itemArray.Length; i++)
             {
-                StringTableRow row = st.NewRow();
+                StringTableRow row = stringTable.NewRow();
                 row[0] = dataTable.Columns[i].ColumnName;
                 row[1] = itemArray[i].ToString();
-                st.Rows.Add(row);
-            }
-
-            return st;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataRows"></param>
-        /// <returns></returns>
-        public static StringTable ToStringTable(this IEnumerable<DataRow> dataRows)
-        {
-            StringTable stringTable = null;
-
-            if (dataRows != null)
-            {
-                bool first = true;
-
-                foreach (var dataRow in dataRows)
-                {
-                    if (first)
-                    {
-                        first = false;
-                        DataTable dataTable = dataRow.Table;
-                        int columnCount = dataTable.Columns.Count;
-                        stringTable = new StringTable(columnCount);
-                        DataTableExtensions.WriteHeader(dataTable.Columns, stringTable);
-                    }
-
-                    object[] itemArray = dataRow.ItemArray;
-                    StringTableRow row = stringTable.NewRow();
-
-                    for (int j = 0; j < itemArray.Length; j++)
-                    {
-                        row[j] = itemArray[j].ToString();
-                    }
-
-                    stringTable.Rows.Add(row);
-                }
+                stringTable.Rows.Add(row);
             }
 
             return stringTable;

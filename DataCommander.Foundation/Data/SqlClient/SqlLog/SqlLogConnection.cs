@@ -6,8 +6,6 @@ namespace DataCommander.Foundation.Data.SqlClient
 
     internal sealed class SqlLogConnection : ISqlLogItem
     {
-        private readonly int applicationId;
-        private readonly int connectionNo;
         private readonly string name;
         private readonly string userName;
         private readonly string hostName;
@@ -25,8 +23,8 @@ namespace DataCommander.Foundation.Data.SqlClient
             long duration,
             Exception exception )
         {
-            this.applicationId = applicationId;
-            this.connectionNo = connectionNo;
+            this.ApplicationId = applicationId;
+            this.ConnectionNo = connectionNo;
             this.name = name;
             this.userName = userName;
             this.hostName = hostName;
@@ -43,8 +41,8 @@ namespace DataCommander.Foundation.Data.SqlClient
                 var sb = new StringBuilder();
                 sb.AppendFormat(
                     "exec LogConnectionOpen {0},{1},{2},{3},{4},{5},{6}",
-                    this.applicationId,
-                    this.connectionNo,
+                    this.ApplicationId,
+                    this.ConnectionNo,
                     this.name.ToTSqlVarChar(),
                     this.userName.ToTSqlVarChar(),
                     this.hostName.ToTSqlVarChar(),
@@ -53,7 +51,7 @@ namespace DataCommander.Foundation.Data.SqlClient
 
                 if (this.exception != null)
                 {
-                    SqlLogError error = new SqlLogError( this.applicationId, this.connectionNo, 0, 0, this.exception );
+                    SqlLogError error = new SqlLogError( this.ApplicationId, this.ConnectionNo, 0, 0, this.exception );
                     string commandText = error.CommandText;
                     sb.Append( commandText );
                 }
@@ -62,8 +60,8 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
         }
 
-        public int ApplicationId => this.applicationId;
+        public int ApplicationId { get; }
 
-        public int ConnectionNo => this.connectionNo;
+        public int ConnectionNo { get; }
     }
 }

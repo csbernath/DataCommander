@@ -5,20 +5,18 @@
     /// </summary>
     public sealed class BeforeExecuteCommandEventArgs : LoggedEventArgs
     {
-        private readonly LoggedDbCommandInfo command;
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="command"></param>
         public BeforeExecuteCommandEventArgs(LoggedDbCommandInfo command)
         {
-            this.command = command;
+            this.Command = command;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public LoggedDbCommandInfo Command => this.command;
+        public LoggedDbCommandInfo Command { get; }
     }
 }

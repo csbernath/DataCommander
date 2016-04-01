@@ -10,7 +10,7 @@ namespace DataCommander.Foundation.Diagnostics
     /// </summary>
     public class FileLogWriter : ILogWriter
     {
-        private static readonly ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = InternalLogFactory.Instance.GetTypeLog(typeof (FileLogWriter));
         private readonly bool async;
         private readonly ILogFile logFile;
 

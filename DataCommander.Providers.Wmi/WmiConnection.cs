@@ -7,8 +7,6 @@ namespace DataCommander.Providers.Wmi
     internal sealed class WmiConnection : IDbConnection
     {
         private readonly string connectionString;
-        private string dataSource;
-        private ManagementScope scope;
 
         public WmiConnection( string connectionString )
         {
@@ -59,13 +57,13 @@ namespace DataCommander.Providers.Wmi
                 dataSource = null;
             }
 
-            this.dataSource = dataSource;
+            this.DataSource = dataSource;
             //ManagementPath path = ManagementPath.DefaultPath;
             //path.Server = dataSource;
             //scope = new ManagementScope( path );
 
-            string path = this.dataSource;
-            this.scope = new ManagementScope( path );
+            string path = this.DataSource;
+            this.Scope = new ManagementScope( path );
         }
 
         public string ConnectionString
@@ -86,8 +84,8 @@ namespace DataCommander.Providers.Wmi
 
         public ConnectionState State => ConnectionState.Closed;
 
-        public ManagementScope Scope => this.scope;
+        public ManagementScope Scope { get; private set; }
 
-        public string DataSource => this.dataSource;
+        public string DataSource { get; private set; }
     }
 }

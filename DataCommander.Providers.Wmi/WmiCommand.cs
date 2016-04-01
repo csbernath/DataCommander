@@ -6,7 +6,7 @@ namespace DataCommander.Providers.Wmi
   {
     public WmiCommand(WmiConnection connection)
     {
-      this.connection = connection;
+      this.Connection = connection;
     }
 
     public void Dispose()
@@ -15,7 +15,7 @@ namespace DataCommander.Providers.Wmi
 
     public void Cancel()
     {
-        this.cancelled = true;
+        this.Cancelled = true;
     }
 
     public IDbDataParameter CreateParameter()
@@ -47,18 +47,9 @@ namespace DataCommander.Providers.Wmi
     {
     }
 
-    public string CommandText
-    {
-      get
-      {
-        return this.commandText;
-      }
-      set
-      {
-          this.commandText = value;
-      }
-    }
-    public int CommandTimeout
+    public string CommandText { get; set; }
+
+        public int CommandTimeout
     {
       get
       {
@@ -84,14 +75,14 @@ namespace DataCommander.Providers.Wmi
     {
       get
       {
-        return this.connection;
+        return this.Connection;
       }
       set
       {
       }
     }
 
-    public WmiConnection Connection => this.connection;
+    public WmiConnection Connection { get; }
 
         public IDataParameterCollection Parameters => null;
 
@@ -117,10 +108,6 @@ namespace DataCommander.Providers.Wmi
       }
     }
     
-    internal bool Cancelled => this.cancelled;
-
-        readonly WmiConnection connection;
-    string        commandText;
-    bool          cancelled = false;
+    internal bool Cancelled { get; private set; } = false;
   }
 }

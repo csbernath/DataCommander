@@ -9,7 +9,7 @@
         private readonly TableNode tableNode;
         private readonly string name;
 
-        public IndexNode( TableNode tableNode, string name )
+        public IndexNode(TableNode tableNode, string name)
         {
             this.tableNode = tableNode;
             this.name = name;
@@ -21,7 +21,7 @@
 
         bool ITreeNode.IsLeaf => true;
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             return null;
         }
@@ -32,14 +32,14 @@
         {
             get
             {
-                string commandText = $@"select	sql
-from	main.sqlite_master
-where	type = 'index'
-	and name = '{this.name}'";
+                string commandText = $@"select sql
+from main.sqlite_master
+where
+    type = 'index'
+    and name = '{this.name}'";
                 var transactionScope = new DbTransactionScope(this.tableNode.Database.Connection, null);
 
-                object scalar = transactionScope.ExecuteScalar(new CommandDefinition {CommandText = commandText});
-                string sql = Database.GetValueOrDefault<string>(scalar);
+                string sql = transactionScope.ExecuteScalar<string>(new CommandDefinition {CommandText = commandText});
                 return sql;
             }
         }

@@ -5,70 +5,29 @@
 
     internal sealed class TfsParameter : IDataParameter
     {
-        private string name;
-        private readonly Type type;
-        private DbType dbType;
-        private ParameterDirection direction;
-        private readonly bool isNullable;
-        private readonly object defaultValue;
-        private object value;
-
         public TfsParameter(string name, Type type, DbType dbType, ParameterDirection direction, bool isNullable, object defaultValue)
         {
-            this.name = name;
-            this.type = type;
-            this.dbType = dbType;
-            this.direction = direction;
-            this.isNullable = isNullable;
-            this.defaultValue = defaultValue;
+            this.ParameterName = name;
+            this.Type = type;
+            this.DbType = dbType;
+            this.Direction = direction;
+            this.IsNullable = isNullable;
+            this.DefaultValue = defaultValue;
         }
 
-        public Type Type => this.type;
+        public Type Type { get; }
 
-        public object DefaultValue => this.defaultValue;
+        public object DefaultValue { get; }
 
         #region IDataParameter Members
 
-        public DbType DbType
-        {
-            get
-            {
-                return this.dbType;
-            }
+        public DbType DbType { get; set; }
 
-            set
-            {
-                this.dbType = value;
-            }
-        }
+        public ParameterDirection Direction { get; set; }
 
-        public ParameterDirection Direction
-        {
-            get
-            {
-                return this.direction;
-            }
+        public bool IsNullable { get; }
 
-            set
-            {
-                this.direction = value;
-            }
-        }
-
-        public bool IsNullable => this.isNullable;
-
-        public string ParameterName
-        {
-            get
-            {
-                return this.name;
-            }
-
-            set
-            {
-                this.name = value;
-            }
-        }
+        public string ParameterName { get; set; }
 
         string IDataParameter.SourceColumn
         {
@@ -96,18 +55,7 @@
             }
         }
 
-        public object Value
-        {
-            get
-            {
-                return this.value;
-            }
-
-            set
-            {
-                this.value = value;
-            }
-        }
+        public object Value { get; set; }
 
         #endregion
     }

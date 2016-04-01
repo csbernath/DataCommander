@@ -11,8 +11,6 @@
     /// <typeparam name="T"></typeparam>
     public class ReadOnlyArray<T> : IList<T>
     {
-        private T[] items;
-
         /// <summary>
         /// 
         /// </summary>
@@ -23,24 +21,13 @@
         /// <summary>
         /// 
         /// </summary>
-        protected T[] Items
-        {
-            get
-            {
-                return this.items;
-            }
-
-            set
-            {
-                this.items = value;
-            }
-        }
+        protected T[] Items { get; set; }
 
         #region IList<T> Members
 
         int IList<T>.IndexOf(T item)
         {
-            return Array.IndexOf(this.items, item);
+            return Array.IndexOf(this.Items, item);
         }
 
         void IList<T>.Insert(int index, T item)
@@ -62,7 +49,7 @@
         {
             get
             {
-                return this.items[index];
+                return this.Items[index];
             }
 
             set
@@ -87,20 +74,20 @@
 
         bool ICollection<T>.Contains(T item)
         {
-            int index = Array.IndexOf(this.items, item);
+            int index = Array.IndexOf(this.Items, item);
             bool contains = index >= 0;
             return contains;
         }
 
         void ICollection<T>.CopyTo(T[] array, int arrayIndex)
         {
-            this.items.CopyTo(array, arrayIndex);
+            this.Items.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.items.Length;
+        public int Count => this.Items.Length;
 
         bool ICollection<T>.IsReadOnly => true;
 
@@ -115,7 +102,7 @@
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            IEnumerable<T> enumerable = this.items;
+            IEnumerable<T> enumerable = this.Items;
             return enumerable.GetEnumerator();
         }
 
@@ -125,7 +112,7 @@
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.items.GetEnumerator();
+            return this.Items.GetEnumerator();
         }
 
         #endregion
@@ -133,7 +120,7 @@
         [ContractInvariantMethod]
         private void ObjectInvariant()
         {
-            Contract.Invariant(this.items != null);
+            Contract.Invariant(this.Items != null);
         }
     }
 }

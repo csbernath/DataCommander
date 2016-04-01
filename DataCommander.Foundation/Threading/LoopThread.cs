@@ -26,7 +26,6 @@ namespace DataCommander.Foundation.Threading
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private ILoopable loopable;
-        private WorkerThread thread;
 
         /// <summary>
         /// Inherited class must call this constructor.
@@ -47,7 +46,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// Gets the underlying <see cref="WorkerThread"/>.
         /// </summary>
-        public WorkerThread Thread => this.thread;
+        public WorkerThread Thread { get; private set; }
 
         /// <summary>
         /// Inherited class must initialize the base class with this method.
@@ -56,23 +55,23 @@ namespace DataCommander.Foundation.Threading
         protected void Initialize(ILoopable loopable)
         {
             this.loopable = loopable;
-            this.thread = new WorkerThread(this.Start);
+            this.Thread = new WorkerThread(this.Start);
         }
 
         private void Start()
         {
             Exception exception = null;
 
-            while (!this.thread.IsStopRequested)
+            while (!this.Thread.IsStopRequested)
             {
                 try
                 {
-                    if (!this.thread.IsStopRequested)
+                    if (!this.Thread.IsStopRequested)
                     {
                         this.loopable.First(exception);
                         exception = null;
 
-                        while (!this.thread.IsStopRequested)
+                        while (!this.Thread.IsStopRequested)
                         {
                             this.loopable.Next();
                         }
@@ -81,8 +80,8 @@ namespace DataCommander.Foundation.Threading
                 catch (Exception e)
                 {
                     exception = e;
-                    log.Write(LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", this.thread.Name,
-                        this.thread.ManagedThreadId, e.ToLogString());
+                    log.Write(LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", this.Thread.Name,
+                        this.Thread.ManagedThreadId, e.ToLogString());
                 }
             }
 
@@ -92,8 +91,8 @@ namespace DataCommander.Foundation.Threading
             }
             catch (Exception e)
             {
-                log.Write(LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", this.thread.Name,
-                    this.thread.ManagedThreadId, e.ToLogString());
+                log.Write(LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", this.Thread.Name,
+                    this.Thread.ManagedThreadId, e.ToLogString());
             }
         }
     }

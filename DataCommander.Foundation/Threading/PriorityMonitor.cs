@@ -14,8 +14,6 @@
     public sealed class PriorityMonitor<T>
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private readonly T monitoredObject;
-        private LockRequest currentLockRequest;
         private readonly IndexableCollection<LockRequest> lockRequests;
         private readonly NonUniqueIndex<int, LockRequest> priorityIndex;
 
@@ -25,7 +23,7 @@
         /// <param name="monitoredObject"></param>
         public PriorityMonitor(T monitoredObject)
         {
-            this.monitoredObject = monitoredObject;
+            this.MonitoredObject = monitoredObject;
             this.priorityIndex = new NonUniqueIndex<int, LockRequest>(
                 "priorityIndex",
                 item => GetKeyResponse.Create(true, item.Priority),
@@ -37,12 +35,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public T MonitoredObject => this.monitoredObject;
+        public T MonitoredObject { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public LockRequest CurrentLockRequest => this.currentLockRequest;
+        public LockRequest CurrentLockRequest { get; private set; }
 
         /// <summary>
         /// 
@@ -57,9 +55,9 @@
             {
                 bool isCompleted;
 
-                if (this.currentLockRequest == null)
+                if (this.CurrentLockRequest == null)
                 {
-                    this.currentLockRequest = lockRequest;
+                    this.CurrentLockRequest = lockRequest;
                     isCompleted = true;
                 }
                 else
@@ -85,11 +83,11 @@
 
             lock (this.lockRequests)
             {
-                if (this.currentLockRequest == null)
+                if (this.CurrentLockRequest == null)
                 {
                     lockRequest = new LockRequest(this, priority);
                     lockRequest.Initialize(true);
-                    this.currentLockRequest = lockRequest;
+                    this.CurrentLockRequest = lockRequest;
                 }
                 else
                 {
@@ -106,20 +104,20 @@
             Contract.Requires(lockRequest.Monitor == this);
             Contract.Requires(lockRequest == this.CurrentLockRequest);
 
-            log.Write(LogLevel.Trace, "Exiting lockRequest... monitoredObject: {0}, priority: {1}", this.monitoredObject,
+            log.Write(LogLevel.Trace, "Exiting lockRequest... monitoredObject: {0}, priority: {1}", this.MonitoredObject,
                 lockRequest.Priority);
 
             lock (this.lockRequests)
             {
                 if (this.lockRequests.Count == 0)
                 {
-                    this.currentLockRequest = null;
+                    this.CurrentLockRequest = null;
                 }
                 else
                 {
                     LockRequest first = this.lockRequests.First();
                     this.lockRequests.Remove(first);
-                    this.currentLockRequest = first;
+                    this.CurrentLockRequest = first;
                     first.Complete();
                 }
             }
@@ -130,28 +128,25 @@
         /// </summary>
         public sealed class LockRequest : IDisposable
         {
-            private PriorityMonitor<T> monitor;
-            private readonly int priority;
-            private bool isCompleted;
             private EventWaitHandle asyncWaitHandle;
 
             internal LockRequest(PriorityMonitor<T> monitor, int priority)
             {
                 Contract.Requires(monitor != null);
 
-                this.monitor = monitor;
-                this.priority = priority;
+                this.Monitor = monitor;
+                this.Priority = priority;
             }
 
             /// <summary>
             /// 
             /// </summary>
-            public PriorityMonitor<T> Monitor => this.monitor;
+            public PriorityMonitor<T> Monitor { get; private set; }
 
             /// <summary>
             /// 
             /// </summary>
-            public int Priority => this.priority;
+            public int Priority { get; }
 
             /// <summary>
             /// 
@@ -161,18 +156,18 @@
             /// <summary>
             /// 
             /// </summary>
-            public bool IsCompleted => this.isCompleted;
+            public bool IsCompleted { get; private set; }
 
             internal void Initialize(bool isCompleted)
             {
                 log.Write(LogLevel.Trace,
                     "Initializing lockRequest... monitoredObject: {0}, priority: {1}, isCompleted: {2}",
-                    this.monitor.MonitoredObject, this.priority,
+                    this.Monitor.MonitoredObject, this.Priority,
                     isCompleted);
 
                 if (isCompleted)
                 {
-                    this.isCompleted = true;
+                    this.IsCompleted = true;
                 }
                 else
                 {
@@ -184,9 +179,9 @@
             {
                 log.Write(LogLevel.Trace,
                     "Completing lockRequest... monitoredObject: {0}, priority:{1}, asyncWaitHandle != null: {2}",
-                    this.monitor.MonitoredObject, this.priority,
+                    this.Monitor.MonitoredObject, this.Priority,
                     this.asyncWaitHandle != null);
-                this.isCompleted = true;
+                this.IsCompleted = true;
 
                 if (this.asyncWaitHandle != null)
                 {
@@ -198,11 +193,11 @@
 
             void IDisposable.Dispose()
             {
-                if (this.monitor != null)
+                if (this.Monitor != null)
                 {
-                    PriorityMonitor<T> monitor = this.monitor;
+                    PriorityMonitor<T> monitor = this.Monitor;
                     monitor.Exit(this);
-                    this.monitor = null;
+                    this.Monitor = null;
                 }
             }
 

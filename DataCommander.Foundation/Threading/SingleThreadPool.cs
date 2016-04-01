@@ -12,7 +12,6 @@
     public sealed class SingleThreadPool
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private readonly WorkerThread thread;
         private readonly Queue<Tuple<WaitCallback, object>> workItems = new Queue<Tuple<WaitCallback, object>>();
         private readonly EventWaitHandle enqueueEvent = new EventWaitHandle(false, EventResetMode.AutoReset);
         private int queuedItemCount;
@@ -22,13 +21,13 @@
         /// </summary>
         public SingleThreadPool()
         {
-            this.thread = new WorkerThread(this.Start);
+            this.Thread = new WorkerThread(this.Start);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public WorkerThread Thread => this.thread;
+        public WorkerThread Thread { get; }
 
         /// <summary>
         /// 
@@ -89,7 +88,7 @@
         {
             var waitHandles = new WaitHandle[]
             {
-                this.thread.StopRequest,
+                this.Thread.StopRequest,
                 this.enqueueEvent
             };
 
@@ -97,7 +96,7 @@
             {
                 WaitHandle.WaitAny(waitHandles);
 
-                if (this.thread.IsStopRequested)
+                if (this.Thread.IsStopRequested)
                 {
                     break;
                 }
@@ -111,8 +110,8 @@
         /// </summary>
         public void Stop()
         {
-            this.thread.Stop();
-            this.thread.Join();
+            this.Thread.Stop();
+            this.Thread.Join();
             this.Dequeue();
         }
     }

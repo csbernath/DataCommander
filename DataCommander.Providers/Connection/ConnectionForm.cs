@@ -22,9 +22,7 @@ namespace DataCommander.Providers
         private Button btnCancel;
         private Button newButton;
         private StatusStrip statusBar;
-        private ConnectionProperties connectionProperties;
         private readonly DataTable dataTable = new DataTable();
-        private long duration;
         private bool isDirty;
 
         /// <summary>
@@ -99,7 +97,7 @@ namespace DataCommander.Providers
             this.dataGrid.DataSource = this.dataTable;
         }
 
-        public ConnectionProperties ConnectionProperties => this.connectionProperties;
+        public ConnectionProperties ConnectionProperties { get; private set; }
 
         /// <summary>
         /// Clean up any resources being used.
@@ -202,7 +200,7 @@ namespace DataCommander.Providers
         }
         #endregion
 
-        public long Duration => this.duration;
+        public long Duration { get; private set; }
 
         private void LoadConnection(ConfigurationNode folder, DataRow row)
         {
@@ -513,9 +511,9 @@ namespace DataCommander.Providers
                 var form = new OpenConnectionForm(connectionProperties);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    this.connectionProperties = connectionProperties;
+                    this.ConnectionProperties = connectionProperties;
                     this.DialogResult = DialogResult.OK;
-                    this.duration = form.Duration;
+                    this.Duration = form.Duration;
                 }
             }
         }

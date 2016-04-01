@@ -7,7 +7,7 @@
     using DataCommander.Foundation.Linq;
 
     /// <summary>
-    /// 
+    /// https://en.wikipedia.org/wiki/Dynamic_array
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class DynamicArray<T> : IList<T>
@@ -15,8 +15,6 @@
         private readonly int maxSize;
 
         private T[] array;
-
-        private int count;
 
         /// <summary>
         /// 
@@ -84,18 +82,18 @@
         /// <param name="item"></param>
         public void Add(T item)
         {
-            Contract.Assert(this.count < this.maxSize);
+            Contract.Assert(this.Count < this.maxSize);
 
-            if (this.count == this.array.Length)
+            if (this.Count == this.array.Length)
             {
-                int newSize = this.count == 0 ? 1 : 2*this.count;
+                int newSize = this.Count == 0 ? 1 : 2*this.Count;
 
                 if (newSize > this.maxSize)
                 {
                     newSize = this.maxSize;
                 }
 
-                if (newSize > this.count)
+                if (newSize > this.Count)
                 {
                     var newArray = new T[newSize];
                     Array.Copy(this.array, newArray, this.array.Length);
@@ -103,8 +101,8 @@
                 }
             }
 
-            this.array[this.count] = item;
-            this.count++;
+            this.array[this.Count] = item;
+            this.Count++;
         }
 
         /// <summary>
@@ -112,12 +110,12 @@
         /// </summary>
         public void Clear()
         {
-            if (this.count > 0)
+            if (this.Count > 0)
             {
-                Array.Clear(this.array, 0, this.count);
+                Array.Clear(this.array, 0, this.Count);
             }
 
-            this.count = 0;
+            this.Count = 0;
         }
 
         /// <summary>
@@ -138,7 +136,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.count;
+        public int Count { get; private set; }
 
         /// <summary>
         /// 
@@ -160,7 +158,7 @@
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            for (int i = 0; i < this.count; i++)
+            for (int i = 0; i < this.Count; i++)
             {
                 yield return this.array[i];
             }

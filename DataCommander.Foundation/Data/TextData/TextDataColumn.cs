@@ -6,19 +6,10 @@
     /// <summary>
     /// 
     /// </summary>
-    [DebuggerDisplay("ColumnName: {columnName}, DataType: {dataType}")]
+    [DebuggerDisplay("ColumnName: {ColumnName}, DataType: {DataType}")]
     public class TextDataColumn
     {
         #region Private Fields
-
-        private readonly string columnName;
-        private readonly string caption;
-        private readonly int maxLength;
-        private readonly Type dataType;
-        private readonly byte? numericPrecision;
-        private readonly byte? numericScale;
-        private readonly string format;
-        private readonly IFormatProvider formatProvider;
 
         #endregion
 
@@ -43,54 +34,54 @@
             string format,
             IFormatProvider formatProvider)
         {
-            this.columnName = columnName;
-            this.caption = caption;
-            this.maxLength = maxLength;
-            this.dataType = dataType;
-            this.numericPrecision = numericPrecision;
-            this.numericScale = numericScale;
-            this.format = format;
-            this.formatProvider = formatProvider;
+            this.ColumnName = columnName;
+            this.Caption = caption;
+            this.MaxLength = maxLength;
+            this.DataType = dataType;
+            this.NumericPrecision = numericPrecision;
+            this.NumericScale = numericScale;
+            this.Format = format;
+            this.FormatProvider = formatProvider;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public Type DataType => this.dataType;
+        public Type DataType { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Format => this.format;
+        public string Format { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public IFormatProvider FormatProvider => this.formatProvider;
+        public IFormatProvider FormatProvider { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public int MaxLength => this.maxLength;
+        public int MaxLength { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string ColumnName => this.columnName;
+        public string ColumnName { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Caption => this.caption;
+        public string Caption { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public byte? NumericPrecision => this.numericPrecision;
+        public byte? NumericPrecision { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public byte? NumericScale => this.numericScale;
+        public byte? NumericScale { get; }
     }
 }

@@ -4,6 +4,7 @@ namespace DataCommander.Providers
     using System.Data;
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Diagnostics;
+    using Foundation.Diagnostics.MethodProfiler;
 
     /// <summary>
     /// Summary description for DataSetResultWriter.
@@ -16,7 +17,6 @@ namespace DataCommander.Providers
         private QueryForm queryForm;
         private readonly bool showShemaTable;
         private IProvider provider;
-        private DataSet dataSet;
         private DataTable dataTable;
         private int rowIndex;
 
@@ -34,7 +34,7 @@ namespace DataCommander.Providers
 
         #region Public Properties
 
-        public DataSet DataSet => this.dataSet;
+        public DataSet DataSet { get; private set; }
 
         #endregion
 
@@ -54,7 +54,7 @@ namespace DataCommander.Providers
         void IResultWriter.AfterExecuteReader(int fieldCount)
         {
             this.logResultWriter.AfterExecuteReader(fieldCount);
-            this.dataSet = new DataSet();
+            this.DataSet = new DataSet();
         }
 
         void IResultWriter.AfterCloseReader(int affectedRows)
@@ -131,7 +131,7 @@ namespace DataCommander.Providers
 
         private void CreateTable(DataTable schemaTable)
         {
-            int tableIndex = this.dataSet.Tables.Count;
+            int tableIndex = this.DataSet.Tables.Count;
             string tableName = schemaTable.TableName;
             if (tableName == "SchemaTable")
             {
@@ -140,16 +140,16 @@ namespace DataCommander.Providers
             if (this.showShemaTable)
             {
                 schemaTable.TableName = $"Schema {tableIndex}";
-                this.dataSet.Tables.Add(schemaTable);
+                this.DataSet.Tables.Add(schemaTable);
             }
-            this.dataTable = this.dataSet.Tables.Add();
+            this.dataTable = this.DataSet.Tables.Add();
             if (!string.IsNullOrEmpty(tableName))
             {
                 this.dataTable.TableName = tableName;
             }
             foreach (DataRow schemaRow in schemaTable.Rows)
             {
-                var dataColumnSchema = new DataColumnSchema(schemaRow);
+                var dataColumnSchema = new DbColumn(schemaRow);
                 string columnName = dataColumnSchema.ColumnName;
                 int columnSize = dataColumnSchema.ColumnSize;
                 Type dataType = this.provider.GetColumnType(dataColumnSchema);

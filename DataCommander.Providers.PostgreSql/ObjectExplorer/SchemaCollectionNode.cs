@@ -8,14 +8,12 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 
     internal sealed class SchemaCollectionNode : ITreeNode
     {
-        private readonly ObjectExplorer objectExplorer;
-
         public SchemaCollectionNode(ObjectExplorer objectExplorer)
         {
-            this.objectExplorer = objectExplorer;
+            this.ObjectExplorer = objectExplorer;
         }
 
-        public ObjectExplorer ObjectExplorer => this.objectExplorer;
+        public ObjectExplorer ObjectExplorer { get; }
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
@@ -31,7 +29,7 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
         {
             var nodes = new List<ITreeNode>();
 
-            using (var connection = new NpgsqlConnection(this.objectExplorer.ConnectionString))
+            using (var connection = new NpgsqlConnection(this.ObjectExplorer.ConnectionString))
             {
                 connection.Open();
                 var transactionScope = new DbTransactionScope(connection, null);

@@ -26,7 +26,7 @@
 
                 for (int i = 0; i < count; i++)
                 {
-                    DataColumnSchema schemaRow = new DataColumnSchema(schemaRows[i]);
+                    DbColumn schemaRow = new DbColumn(schemaRows[i]);
                     SqlCeType sqlCeType = (SqlCeType) schemaRows[ i ][ SchemaTableColumn.ProviderType ];
                     SqlDbType sqlDbType = sqlCeType.SqlDbType;
                     IDataFieldReader dataFieldReader;

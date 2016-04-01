@@ -6,9 +6,6 @@
     /// <typeparam name="T"></typeparam>
     public struct GetKeyResponse<T>
     {
-        private readonly bool hasKey;
-        private readonly T key;
-
         /// <summary>
         /// 
         /// </summary>
@@ -16,19 +13,19 @@
         /// <param name="key"></param>
         public GetKeyResponse(bool hasKey, T key)
         {
-            this.hasKey = hasKey;
-            this.key = key;
+            this.HasKey = hasKey;
+            this.Key = key;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public bool HasKey => this.hasKey;
+        public bool HasKey { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public T Key => this.key;
+        public T Key { get; }
     }
 
     /// <summary>

@@ -4,8 +4,6 @@
 
     internal static class TfsDataReaderFactory
     {
-        private static readonly SortedDictionary<string, DataReaderInfo> dictionary = new SortedDictionary<string, DataReaderInfo>();
-        
         public delegate TfsDataReader CreateDataReader(TfsCommand command);
 
         public static void Add(
@@ -14,16 +12,14 @@
             CreateDataReader createDataReader)
         {
             DataReaderInfo info = new DataReaderInfo(name, parameters, createDataReader);
-            dictionary.Add(name, info);
+            Dictionary.Add(name, info);
         }
 
-        public static SortedDictionary<string, DataReaderInfo> Dictionary => dictionary;
+        public static SortedDictionary<string, DataReaderInfo> Dictionary { get; } = new SortedDictionary<string, DataReaderInfo>();
 
         public sealed class DataReaderInfo
         {
             private string name;
-            private readonly TfsParameterCollection parameters;
-            private readonly CreateDataReader createDataReader;
 
             public DataReaderInfo(
                 string name,
@@ -31,13 +27,13 @@
                 CreateDataReader createDataReader)
             {
                 this.name = name;
-                this.parameters = parameters;
-                this.createDataReader = createDataReader;
+                this.Parameters = parameters;
+                this.CreateDataReader = createDataReader;
             }
 
-            public TfsParameterCollection Parameters => this.parameters;
+            public TfsParameterCollection Parameters { get; }
 
-            public CreateDataReader CreateDataReader => this.createDataReader;
+            public CreateDataReader CreateDataReader { get; }
         }
     }
 }

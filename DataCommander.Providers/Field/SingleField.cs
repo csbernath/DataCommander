@@ -4,18 +4,16 @@
 
     public sealed class SingleField
     {
-        private readonly Single value;
-
         public SingleField(Single value)
         {
-            this.value = value;
+            this.Value = value;
         }
 
-        public Single Value => this.value;
+        public Single Value { get; }
 
         public override string ToString()
         {
-            return this.value.ToString("N16");
+            return this.Value.ToString("N16");
         }
     }
 }

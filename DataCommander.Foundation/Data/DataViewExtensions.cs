@@ -3,7 +3,9 @@
     using System;
     using System.Data;
     using System.Diagnostics.Contracts;
+    using System.Linq;
     using DataCommander.Foundation.Text;
+    using DataCommander.Foundation.Linq;
 
     /// <summary>
     /// 
@@ -15,37 +17,13 @@
         /// </summary>
         /// <param name="dataView"></param>
         /// <returns></returns>
-        public static StringTable ToStringTable(this DataView dataView)
+        public static string ToStringTableString(this DataView dataView)
         {
             Contract.Requires<ArgumentNullException>(dataView != null);
 
-            DataTable dataTable = dataView.Table;
-            int columnCount = dataTable.Columns.Count;
-            var st = new StringTable(columnCount);
-            int count = dataView.Count;
-
-            if (count > 0)
-            {
-                DataTableExtensions.SetAlign(dataTable.Columns, st.Columns);
-                DataTableExtensions.WriteHeader(dataTable.Columns, st);
-
-                for (int i = 0; i < count; i++)
-                {
-                    object[] itemArray = dataView[i].Row.ItemArray;
-                    StringTableRow row = st.NewRow();
-
-                    for (int j = 0; j < itemArray.Length; j++)
-                    {
-                        row[j] = itemArray[j].ToString();
-                    }
-
-                    st.Rows.Add(row);
-                }
-
-                DataTableExtensions.WriteHeaderSeparator(st);
-            }
-
-            return st;
+            var rows = dataView.Cast<DataRowView>().Select((dataRowView, rowIndex) => dataRowView.Row);
+            var columns = dataView.Table.Columns.Cast<DataColumn>().Select(DataTableExtensions.ToStringTableColumnInfo).ToArray();
+            return rows.ToString(columns);
         }
     }
 }

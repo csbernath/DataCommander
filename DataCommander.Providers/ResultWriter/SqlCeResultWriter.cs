@@ -66,7 +66,7 @@
             for (int i = 0; i <= last; i++)
             {
                 DataRow dataRow = schemaTable.Rows[i];
-                var schemaRow = new DataColumnSchema(dataRow);
+                var schemaRow = new DbColumn(dataRow);
                 string columnName = schemaRow.ColumnName;
                 int columnSize = schemaRow.ColumnSize;
                 bool? allowDBNull = schemaRow.AllowDBNull;
@@ -212,9 +212,7 @@
                 this.insertCommand.Parameters.Add(parameter);
             }
 
-            StringWriter stringWriter = new StringWriter();
-            stringTable.Write(stringWriter, 4);
-            createTable.AppendLine(stringWriter.ToString());
+            createTable.AppendLine(stringTable.ToString(4));
             createTable.Append(')');
             string commandText = createTable.ToString();
             this.messageWriter.WriteLine(commandText);

@@ -76,9 +76,9 @@ namespace DataCommander.Providers.SQLite
                 for (int i = 0; i < schemaTable.Rows.Count; i++)
                 {
                     DataRow row = schemaTable.Rows[i];
-                    DataColumnSchema dataColumnSchema = new DataColumnSchema(row);
+                    DbColumn dataColumnSchema = new DbColumn(row);
                     int columnOrdinal = dataColumnSchema.ColumnOrdinal + 1;
-                    bool isKey = Database.GetValue(row["isKey"], false);
+                    bool isKey = row.GetValueOrDefault<bool>("isKey");
                     string pk = string.Empty;
 
                     if (isKey)
@@ -90,7 +90,8 @@ namespace DataCommander.Providers.SQLite
                     DbType dbType = (DbType)row["ProviderType"];
                     bool allowDBNull = (bool)row["AllowDBNull"];
                     var sb = new StringBuilder();
-                    string dataTypeName = (string)dataColumnSchema["DataTypeName"];
+
+                    string dataTypeName = dataReader.GetDataTypeName(i);
                     sb.Append(dataTypeName);
 
                     if (!allowDBNull)
@@ -114,7 +115,7 @@ namespace DataCommander.Providers.SQLite
             return table;
         }
 
-        Type IProvider.GetColumnType(DataColumnSchema dataColumnSchema)
+        Type IProvider.GetColumnType(DbColumn dataColumnSchema)
         {
             // 11   INT     int
             // 12	BIGINT	long
@@ -241,7 +242,7 @@ order by name collate nocase";
 
         string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
         {
-            var schemaRow = new DataColumnSchema(sourceSchemaRow);
+            var schemaRow = new DbColumn(sourceSchemaRow);
             int columnSize = schemaRow.ColumnSize;
             bool? allowDBNull = schemaRow.AllowDBNull;
             string typeName;
@@ -370,7 +371,7 @@ order by name collate nocase";
                     values.Append(',');
                 }
 
-                DataColumnSchema columnSchema = new DataColumnSchema(schemaRows[i]);
+                DbColumn columnSchema = new DbColumn(schemaRows[i]);
                 insertInto.AppendFormat("[{0}]", columnSchema.ColumnName);
                 values.Append('?');
 

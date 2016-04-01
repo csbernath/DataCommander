@@ -2,7 +2,6 @@ namespace DataCommander.Foundation.Linq
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Text;
@@ -14,127 +13,6 @@ namespace DataCommander.Foundation.Linq
     /// </summary>
     public static class IEnumerableExtensions
     {
-        #region Public Static Methods
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="comparer"></param>
-        /// <returns></returns>
-        [Pure]
-        public static bool AllAreEqual<TSource>(this IEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
-        {
-            Contract.Requires<ArgumentNullException>(comparer != null);
-
-            bool allAreEqual = true;
-
-            if (source != null)
-            {
-                bool first = true;
-                TSource firstItem = default(TSource);
-
-                foreach (TSource item in source)
-                {
-                    if (first)
-                    {
-                        first = false;
-                        firstItem = item;
-                    }
-                    else
-                    {
-                        if (!comparer.Equals(firstItem, item))
-                        {
-                            allAreEqual = false;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return allAreEqual;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <typeparam name="TSource"></typeparam>
-        /// <exception cref="ArgumentException"></exception>
-        /// <returns></returns>
-        [Pure]
-        public static IReadOnlyList<TSource> AsReadOnlyList<TSource>(this IEnumerable<TSource> source)
-        {
-            IReadOnlyList<TSource> readOnlyList = null;
-
-            if (source == null)
-            {
-                readOnlyList = EmptyReadOnlyList<TSource>.Instance;
-            }
-            else if (source.IfAsNotNull(delegate(IList<TSource> list) { readOnlyList = new ReadOnlyCollection<TSource>(list); }))
-            {
-            }
-            else if (source.IfAsNotNull(delegate(IReadOnlyList<TSource> list) { readOnlyList = list; }))
-            {
-            }
-            else
-            {
-                throw new ArgumentException();
-            }
-
-            return readOnlyList;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        [Pure]
-        public static List<TResult> CreateList<TSource, TResult>(this IEnumerable<TSource> source)
-        {
-            Contract.Requires<ArgumentNullException>(source != null);
-
-            var collection = source as ICollection<TSource>;
-            List<TResult> list;
-
-            if (collection != null)
-            {
-                int count = collection.Count;
-
-                if (count > 0)
-                {
-                    list = new List<TResult>(collection.Count);
-                }
-                else
-                {
-                    list = null;
-                }
-            }
-            else
-            {
-                list = new List<TResult>();
-            }
-
-            return list;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        [Pure]
-        public static IEnumerable<TSource> Clone<TSource>(this IEnumerable<TSource> source)
-        {
-            Contract.Requires<ArgumentNullException>(source != null);
-            return source.Select<TSource, TSource>(Clone);
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -198,44 +76,6 @@ namespace DataCommander.Foundation.Linq
         /// </summary>
         /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
-        /// <param name="action"></param>
-        public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource> action)
-        {
-            Contract.Requires<ArgumentNullException>(source != null);
-            Contract.Requires<ArgumentNullException>(action != null);
-
-            foreach (var item in source)
-            {
-                action(item);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="action"></param>
-        public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource, int> action)
-        {
-            Contract.Requires<ArgumentNullException>(action != null);
-
-            if (source != null)
-            {
-                int index = 0;
-                foreach (var item in source)
-                {
-                    action(item, index);
-                    index++;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
         /// <param name="count"></param>
         /// <param name="partitionCount"></param>
         /// <returns></returns>
@@ -290,201 +130,10 @@ namespace DataCommander.Foundation.Linq
         /// </summary>
         /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        public static IndexedItem<TSource> IndexOf<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
-        {
-            Contract.Requires<ArgumentNullException>(predicate != null);
-
-            int index = -1;
-            var result = default(TSource);
-
-            if (source != null)
-            {
-                foreach (var item in source)
-                {
-                    index++;
-                    if (predicate(item))
-                    {
-                        result = item;
-                        break;
-                    }
-                }
-            }
-
-            return IndexedItem.Create(index, result);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="firstArgumentIsExtremum"></param>
-        /// <returns></returns>
-        [Pure]
-        public static IndexedItem<TSource> IndexOfExtremum<TSource>(this IEnumerable<TSource> source, Func<TSource, TSource, bool> firstArgumentIsExtremum)
-        {
-            int indexOfExtremum = -1;
-            var extremum = default(TSource);
-
-            if (source != null)
-            {
-                int currentIndex = 0;
-
-                foreach (var item in source)
-                {
-                    if (currentIndex == 0)
-                    {
-                        extremum = item;
-                        indexOfExtremum = 0;
-                    }
-                    else if (firstArgumentIsExtremum(item, extremum))
-                    {
-                        extremum = item;
-                        indexOfExtremum = currentIndex;
-                    }
-
-                    currentIndex++;
-                }
-            }
-
-            return IndexedItem.Create(indexOfExtremum, extremum);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static bool IsNotNullAndAny<TSource>(this IEnumerable<TSource> source)
-        {
-            bool any;
-
-            if (source != null)
-            {
-                var collection = source as ICollection<TSource>;
-                if (collection != null)
-                {
-                    any = collection.Count > 0;
-                }
-                else
-                {
-                    var readOnlyCollection = source as IReadOnlyCollection<TSource>;
-                    if (readOnlyCollection != null)
-                    {
-                        any = readOnlyCollection.Count > 0;
-                    }
-                    else
-                    {
-                        any = source.Any();
-                    }
-                }
-            }
-            else
-            {
-                any = false;
-            }
-
-            return any;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
         /// <returns></returns>
         public static bool IsNullOrEmpty<TSource>(this IEnumerable<TSource> source)
         {
             return source == null || !source.Any();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="where"></param>
-        /// <param name="select"></param>
-        /// <param name="comparer"></param>
-        /// <returns></returns>
-        public static MinMaxResult<TSource> MinMax<TSource, TResult>(
-            this IEnumerable<TSource> source,
-            Func<TSource, bool> where,
-            Func<TSource, TResult> select,
-            IComparer<TResult> comparer)
-        {
-            MinMaxResult<TSource> minMaxResult;
-            if (source != null)
-            {
-                Contract.Assert(select != null);
-
-                int count = 0;
-                int whereCount = 0;
-                int minIndex = -1;
-                TSource minItem = default(TSource);
-                TResult minSelected = default(TResult);
-                int maxIndex = -1;
-                TSource maxItem = default(TSource);
-                TResult maxSelected = default(TResult);
-
-                foreach (var currentItem in source)
-                {
-                    if (where == null || where(currentItem))
-                    {
-                        var currentSelected = select(currentItem);
-                        if (minIndex == -1 || comparer.Compare(currentSelected, minSelected) < 0)
-                        {
-                            minIndex = count;
-                            minItem = currentItem;
-                            minSelected = currentSelected;
-                        }
-
-                        if (maxIndex == -1 || comparer.Compare(currentSelected, maxSelected) > 0)
-                        {
-                            maxIndex = count;
-                            maxItem = currentItem;
-                            maxSelected = currentSelected;
-                        }
-
-                        whereCount++;
-                    }
-
-                    count++;
-                }
-
-                minMaxResult = new MinMaxResult<TSource>(
-                    count,
-                    whereCount,
-                    new IndexedItem<TSource>(minIndex, minItem),
-                    new IndexedItem<TSource>(maxIndex, maxItem));
-            }
-            else
-            {
-                minMaxResult = new MinMaxResult<TSource>(0, 0, new IndexedItem<TSource>(-1, default(TSource)), new IndexedItem<TSource>(-1, default(TSource)));
-            }
-
-            return minMaxResult;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="where"></param>
-        /// <param name="select"></param>
-        /// <returns></returns>
-        public static MinMaxResult<TSource> MinMax<TSource, TResult>(
-            this IEnumerable<TSource> source,
-            Func<TSource, bool> where,
-            Func<TSource, TResult> select) where TResult : IComparable<TResult>
-        {
-            return source.MinMax(where, select, Comparer<TResult>.Default);
         }
 
         /// <summary>
@@ -496,24 +145,6 @@ namespace DataCommander.Foundation.Linq
         public static IOrderedEnumerable<TSource> OrderBy<TSource>(this IEnumerable<TSource> source)
         {
             return source.OrderBy(IdentityFunction<TSource>.Instance);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static IEnumerable<IndexedItem<TSource>> SelectIndexedItem<TSource>(this IEnumerable<TSource> source)
-        {
-            Contract.Requires<ArgumentNullException>(source != null);
-
-            int index = 0;
-
-            foreach (var item in source)
-            {
-                yield return new IndexedItem<TSource>(index, item);
-                index++;
-            }
         }
 
         /// <summary>
@@ -543,72 +174,6 @@ namespace DataCommander.Foundation.Linq
             {
                 yield return list.ToArray();
             }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <typeparam name="TCollection"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="createCollection"></param>
-        /// <returns></returns>
-        public static TCollection ToCollection<TSource, TCollection>(
-            this IEnumerable<TSource> source,
-            Func<TCollection> createCollection) where TCollection : ICollection<TSource>
-        {
-            Contract.Requires<ArgumentNullException>(createCollection != null);
-
-            TCollection collection = default(TCollection);
-            if (source != null)
-            {
-                collection = createCollection();
-                collection.Add(source);
-            }
-            return collection;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <typeparam name="TCollection"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="createCollection"></param>
-        /// <param name="add"></param>
-        /// <returns></returns>
-        public static TCollection ToCollection<TSource, TCollection>(
-            this IEnumerable<TSource> source,
-            Func<TCollection> createCollection,
-            Action<TCollection, TSource> add)
-        {
-            Contract.Requires<ArgumentNullException>(createCollection != null);
-            Contract.Requires<ArgumentNullException>(add != null);
-
-            TCollection collection = default(TCollection);
-            if (source != null)
-            {
-                collection = createCollection();
-                foreach (var item in source)
-                {
-                    add(collection, item);
-                }
-            }
-            return collection;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> source)
-        {
-            var dictionary = new Dictionary<TKey, TValue>();
-            dictionary.Add(source);
-            return dictionary;
         }
 
         /// <summary>
@@ -739,92 +304,62 @@ namespace DataCommander.Foundation.Linq
         /// <param name="source"></param>
         /// <param name="columns"></param>
         /// <returns></returns>
-        public static StringTable ToStringTable<TSource>(this IEnumerable<TSource> source, params StringTableColumnInfo<TSource>[] columns)
+        public static string ToString<TSource>(this IEnumerable<TSource> source, IReadOnlyCollection<StringTableColumnInfo<TSource>> columns)
         {
-            var table = new StringTable(columns.Length);
+            Contract.Requires<ArgumentNullException>(source != null);
+            Contract.Requires<ArgumentNullException>(columns != null);
+
+            var table = new StringTable(columns.Count);
 
             #region First row: column names
 
             var row = table.NewRow();
-            for (int i = 0; i < columns.Length; i++)
+            int columnIndex = 0;
+            foreach (var column in columns)
             {
-                row[i] = columns[i].ColumnName;
-                table.Columns[i].Align = columns[i].Align;
+                row[columnIndex] = column.ColumnName;
+                table.Columns[columnIndex].Align = column.Align;
+                ++columnIndex;
             }
             table.Rows.Add(row);
 
             #endregion
 
-            int rowIndex = 0;
-            foreach (TSource item in source)
-            {
-                row = table.NewRow();
-                for (int i = 0; i < columns.Length; i++)
-                {
-                    row[i] = columns[i].ToString(item, rowIndex);
-                }
-                table.Rows.Add(row);
-                rowIndex++;
-            }
-
             #region Second row: underline first row
 
-            row = table.NewRow();
-            for (int i = 0; i < columns.Length; i++)
-            {
-                int max = table.Rows.Select(r => r[i] == null ? 0 : r[i].Length).Max();
-                row[i] = new string('-', max);
-            }
-            table.Rows.Insert(1, row);
+            var secondRow = table.NewRow();
+            table.Rows.Add(secondRow);
 
             #endregion
 
-            return table;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="where"></param>
-        /// <param name="select"></param>
-        /// <returns></returns>
-        public static IEnumerable<TResult> Where<TSource, TResult>(
-            this IEnumerable<TSource> source,
-            Func<TSource, int, bool> where,
-            Func<TSource, int, TResult> select)
-        {
-            Contract.Requires<ArgumentNullException>(source != null);
-            Contract.Requires<ArgumentNullException>(where != null);
-            Contract.Requires<ArgumentNullException>(select != null);
-
-            int index = 0;
-
             foreach (var item in source)
             {
-                if (where(item, index))
+                row = table.NewRow();
+                columnIndex = 0;
+                foreach (var column in columns)
                 {
-                    yield return select(item, index);
+                    row[columnIndex] = column.ToStringFunction(item);
+                    ++columnIndex;
                 }
-
-                index++;
+                table.Rows.Add(row);
             }
+
+            #region Fill second row
+
+            var columnWidths = new int[columns.Count];
+
+            columnIndex = 0;
+            foreach (var column in columns)
+            {
+                int max = table.Rows.Select(r => r[columnIndex] == null ? 0 : r[columnIndex].Length).Max();
+                secondRow[columnIndex] = new string('-', max);
+                columnWidths[columnIndex] = max;
+                ++columnIndex;
+            }
+
+            #endregion
+
+            return table.ToString(columnWidths, " ");
         }
-
-        #endregion
-
-        #region Private Static Methods
-
-        private static T Clone<T>(T source)
-        {
-            var cloneable = (ICloneable)source;
-            object cloneObject = cloneable.Clone();
-            T clone = (T)cloneObject;
-            return clone;
-        }
-
-        #endregion
     }
 }

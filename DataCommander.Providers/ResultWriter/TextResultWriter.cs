@@ -8,6 +8,7 @@ namespace DataCommander.Providers
     using DataCommander.Foundation.Data.SqlClient;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Text;
+    using Foundation.Diagnostics.MethodProfiler;
 
     internal sealed class TextResultWriter : IResultWriter
     {

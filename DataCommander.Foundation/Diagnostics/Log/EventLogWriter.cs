@@ -8,7 +8,7 @@ namespace DataCommander.Foundation.Diagnostics
     /// </summary>
     public class EventLogWriter : ILogWriter
     {
-        private static readonly ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = InternalLogFactory.Instance.GetTypeLog(typeof (EventLogWriter));
         private readonly EventLog eventLog;
 
         /// <summary>

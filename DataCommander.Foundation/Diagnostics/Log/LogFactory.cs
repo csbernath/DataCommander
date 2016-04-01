@@ -9,24 +9,12 @@
     /// </summary>
     public static class LogFactory
     {
-        private static readonly ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
-        private static ILogFactory instance = NullApplicationLog.Instance;
+        private static readonly ILog log = InternalLogFactory.Instance.GetTypeLog(typeof (LogFactory));
 
         /// <summary>
         /// 
         /// </summary>
-        public static ILogFactory Instance
-        {
-            get
-            {
-                return instance;
-            }
-
-            set
-            {
-                instance = value;
-            }
-        }
+        public static ILogFactory Instance { get; set; } = NullApplicationLog.Instance;
 
         /// <summary>
         /// 
@@ -41,7 +29,7 @@
                 var type = Type.GetType(typeName, true);
                 object instance = Activator.CreateInstance(type);
                 Contract.Assert(instance is ILogFactory);
-                var applicationLog = (ILogFactory) instance;
+                var applicationLog = (ILogFactory)instance;
                 instance = applicationLog;
             }
 

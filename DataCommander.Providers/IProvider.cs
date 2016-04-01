@@ -42,7 +42,7 @@
         void DeriveParameters(IDbCommand command);
         XmlReader ExecuteXmlReader(IDbCommand command);
 
-        Type GetColumnType(DataColumnSchema dataColumnSchema);
+        Type GetColumnType(DbColumn dataColumnSchema);
         string GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName);
         GetCompletionResponse GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position);
         DataParameterBase GetDataParameter(IDataParameter parameter);

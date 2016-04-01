@@ -7,7 +7,6 @@
     /// </summary>
     internal sealed class Error
     {
-        private readonly ErrorType type;
         private readonly string message;
         private readonly Exception exception;
 
@@ -19,7 +18,7 @@
         /// <param name="exception"></param>
         public Error( ErrorType type, string message, Exception exception )
         {
-            this.type = type;
+            this.Type = type;
             this.message = message;
             this.exception = exception;
         }
@@ -27,11 +26,11 @@
         /// <summary>
         /// 
         /// </summary>
-        public ErrorType Type => this.type;
+        public ErrorType Type { get; }
 
         public override string ToString()
         {
-            return $"{this.type}\r\n{this.message}\r\n{this.exception}";
+            return $"{this.Type}\r\n{this.message}\r\n{this.exception}";
         }
     }
 }

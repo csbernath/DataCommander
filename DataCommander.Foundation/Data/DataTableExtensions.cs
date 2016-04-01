@@ -1,10 +1,11 @@
 ﻿namespace DataCommander.Foundation.Data
 {
     using System;
-    using System.Collections;
     using System.Data;
     using System.Diagnostics.Contracts;
+    using System.Linq;
     using DataCommander.Foundation.Text;
+    using Linq;
 
     /// <summary>
     /// 
@@ -16,131 +17,53 @@
         /// </summary>
         /// <param name="dataTable"></param>
         /// <returns></returns>
-        public static StringTable ToStringTable(this DataTable dataTable)
+        public static string ToStringTableString(this DataTable dataTable)
         {
             Contract.Requires<ArgumentNullException>(dataTable != null);
 
-            var dataColumns = dataTable.Columns;
-            int columnCount = dataColumns.Count;
-            var stringTable = new StringTable(columnCount);
-            SetAlign(dataColumns, stringTable.Columns);
-            WriteHeader(dataTable.Columns, stringTable);
+            var rows = dataTable.AsEnumerable().Where(dataRow => dataRow.RowState != DataRowState.Deleted);
+            var columns = dataTable.Columns.Cast<DataColumn>().Select(ToStringTableColumnInfo).ToArray();
+            return rows.ToString(columns);
+        }
 
-            foreach (DataRow dataRow in dataTable.Rows)
+        internal static StringTableColumnInfo<DataRow> ToStringTableColumnInfo(DataColumn dataColumn)
+        {
+            int columnIndex = dataColumn.Ordinal;
+            var align = GetStringTableColumnAlign(dataColumn.DataType);
+
+            return new StringTableColumnInfo<DataRow>(
+                dataColumn.ColumnName,
+                align,
+                dataRow => dataRow[columnIndex].ToString());
+        }
+
+        private static StringTableColumnAlign GetStringTableColumnAlign(Type dataType)
+        {
+            var typeCode = Type.GetTypeCode(dataType);
+            var stringTableColumnAlign = StringTableColumnAlign.Left;
+
+            switch (typeCode)
             {
-                DataRowState rowState = dataRow.RowState;
+                case TypeCode.Byte:
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Int64:
+                case TypeCode.Single:
+                case TypeCode.Double:
+                case TypeCode.Decimal:
+                    stringTableColumnAlign = StringTableColumnAlign.Right;
+                    break;
 
-                if (rowState != DataRowState.Deleted)
-                {
-                    StringTableRow stringTableRow = stringTable.NewRow();
-                    object[] itemArray = dataRow.ItemArray;
-
-                    for (int i = 0; i < itemArray.Length; i++)
+                case TypeCode.Object:
+                    if (dataType == typeof (TimeSpan))
                     {
-                        object value = itemArray[i];
-
-                        string valueString = value == DBNull.Value
-                            ? Database.NullString
-                            : value.ToString();
-
-                        stringTableRow[i] = valueString;
+                        stringTableColumnAlign = StringTableColumnAlign.Right;
                     }
 
-                    stringTable.Rows.Add(stringTableRow);
-                }
+                    break;
             }
 
-            WriteHeaderSeparator(stringTable);
-            return stringTable;
-        }
-
-        internal static void SetAlign(IEnumerable dataColumns, StringTableColumnCollection columns)
-        {
-            int i = 0;
-
-            foreach (DataColumn dataColumn in dataColumns)
-            {
-                Type type = dataColumn.DataType;
-                TypeCode typeCode = Type.GetTypeCode(type);
-
-                switch (typeCode)
-                {
-                    case TypeCode.Byte:
-                    case TypeCode.Int16:
-                    case TypeCode.Int32:
-                    case TypeCode.Int64:
-                    case TypeCode.Single:
-                    case TypeCode.Double:
-                    case TypeCode.Decimal:
-                        columns[i].Align = StringTableColumnAlign.Right;
-                        break;
-
-                    case TypeCode.Object:
-                        if (type == typeof (TimeSpan))
-                        {
-                            columns[i].Align = StringTableColumnAlign.Right;
-                        }
-
-                        break;
-
-                    default:
-                        break;
-                }
-
-                i++;
-            }
-        }
-
-        internal static void WriteHeader(
-            DataColumnCollection dataColumns,
-            StringTable stringTable)
-        {
-            StringTableRow row = stringTable.NewRow();
-            int count = dataColumns.Count;
-
-            for (int i = 0; i < count; i++)
-            {
-                string columnName = dataColumns[i].ColumnName;
-                row[i] = columnName;
-            }
-
-            stringTable.Rows.Add(row);
-        }
-
-        internal static void WriteHeaderSeparator(StringTable stringTable)
-        {
-            int columnCount = stringTable.Columns.Count;
-            StringTableRow row = stringTable.NewRow();
-
-            for (int i = 0; i < columnCount; i++)
-            {
-                StringTableColumn column = stringTable.Columns[i];
-                int width = stringTable.GetMaxColumnWidth(i);
-                row[i] = new string('-', width);
-            }
-
-            stringTable.Rows.Insert(1, row);
-        }
-
-        internal static void WriteHeader(
-            DataColumn[] dataColumns,
-            StringTable stringTable)
-        {
-            Contract.Requires<ArgumentNullException>(dataColumns != null);
-            Contract.Requires<ArgumentNullException>(stringTable != null);
-
-            StringTableRow row1 = stringTable.NewRow();
-            StringTableRow row2 = stringTable.NewRow();
-
-            for (int i = 0; i < dataColumns.Length; i++)
-            {
-                string columnName = dataColumns[i].ColumnName;
-                row1[i] = columnName;
-                row2[i] = new string('-', columnName.Length);
-            }
-
-            stringTable.Rows.Add(row1);
-            stringTable.Rows.Add(row2);
+            return stringTableColumnAlign;
         }
     }
 }

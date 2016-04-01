@@ -6,23 +6,20 @@ namespace DataCommander.Foundation.Linq
     /// <typeparam name="T"></typeparam>
     public struct PreviousAndCurrent<T>
     {
-        private readonly T previous;
-        private readonly T current;
-
         internal PreviousAndCurrent(T previous, T current)
         {
-            this.previous = previous;
-            this.current = current;
+            this.Previous = previous;
+            this.Current = current;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public T Previous => this.previous;
+        public T Previous { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public T Current => this.current;
+        public T Current { get; }
     }
 }

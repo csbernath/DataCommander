@@ -7,7 +7,6 @@ namespace DataCommander.Providers.Wmi
     internal sealed class WmiProviderConnection : ConnectionBase
     {
         private readonly WmiConnection wmiConnection;
-        private string connectionName;
 
         public WmiProviderConnection(string connectionString)
         {
@@ -15,17 +14,7 @@ namespace DataCommander.Providers.Wmi
             this.Connection = this.wmiConnection;
         }
 
-        public override string ConnectionName
-        {
-            get
-            {
-                return this.connectionName;
-            }
-            set
-            {
-                this.connectionName = value;
-            }
-        }
+        public override string ConnectionName { get; set; }
 
         public override Task OpenAsync(CancellationToken cancellationToken)
         {

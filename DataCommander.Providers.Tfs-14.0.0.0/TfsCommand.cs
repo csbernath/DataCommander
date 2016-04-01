@@ -6,80 +6,40 @@
 
     internal class TfsCommand : IDbCommand
     {
-        private TfsConnection connection;
-        private int commandTimeout;
-        private string commandText;
-        private CommandType commandType;
-        private readonly TfsParameterCollection parameters = new TfsParameterCollection();
-        private bool cancelled;
-
         public TfsCommand(TfsConnection connection)
         {
             Contract.Requires(connection != null);
-            this.connection = connection;
+            this.Connection = connection;
         }
 
-        public TfsConnection Connection => this.connection;
+        public TfsConnection Connection { get; private set; }
 
         #region IDbCommand Members
 
         public void Cancel()
         {
-            this.cancelled = true;
+            this.Cancelled = true;
         }
 
-        internal bool Cancelled => this.cancelled;
+        internal bool Cancelled { get; private set; }
 
-        public string CommandText
-        {
-            get
-            {
-                return this.commandText;
-            }
+        public string CommandText { get; set; }
 
-            set
-            {
-                this.commandText = value;
-            }
-        }
+        public int CommandTimeout { get; set; }
 
-        public int CommandTimeout
-        {
-            get
-            {
-                return this.commandTimeout;
-            }
-
-            set
-            {
-                this.commandTimeout = value;
-            }
-        }
-
-        public CommandType CommandType
-        {
-            get
-            {
-                return this.commandType;
-            }
-
-            set
-            {
-                this.commandType = value;
-            }
-        }
+        public CommandType CommandType { get; set; }
 
         IDbConnection IDbCommand.Connection
         {
             get
             {
-                return this.connection.Connection;
+                return this.Connection.Connection;
             }
 
             set
             {
                 var tfsDbConnection = (TfsDbConnection)value;
-                this.connection = tfsDbConnection.Connection;
+                this.Connection = tfsDbConnection.Connection;
             }
         }
 
@@ -97,7 +57,7 @@
         {
             IDataReader dataReader;
 
-            switch (this.commandType)
+            switch (this.CommandType)
             {
                 case CommandType.StoredProcedure:
                     dataReader = this.ExecuteStoredProcedure(behavior);
@@ -120,9 +80,9 @@
             throw new NotSupportedException();
         }
 
-        IDataParameterCollection IDbCommand.Parameters => this.parameters;
+        IDataParameterCollection IDbCommand.Parameters => this.Parameters;
 
-        public TfsParameterCollection Parameters => this.parameters;
+        public TfsParameterCollection Parameters { get; } = new TfsParameterCollection();
 
         void IDbCommand.Prepare()
         {
@@ -168,7 +128,7 @@
         {
             IDataReader dataReader;
             TfsDataReaderFactory.DataReaderInfo info;
-            bool contains = TfsDataReaderFactory.Dictionary.TryGetValue(this.commandText, out info);
+            bool contains = TfsDataReaderFactory.Dictionary.TryGetValue(this.CommandText, out info);
 
             if (contains)
             {

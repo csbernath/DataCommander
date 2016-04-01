@@ -26,20 +26,18 @@
 
     internal static class FieldTypeDictionary
     {
-        private static readonly TypeDictionary<FieldType> typeDictionary = new TypeDictionary<FieldType>();
-
         static FieldTypeDictionary()
         {
-            typeDictionary.Add<Guid>(FieldType.Guid);
-            typeDictionary.Add<string>(FieldType.String);
-            typeDictionary.Add<string[]>(FieldType.StringArray);
-            typeDictionary.Add<BinaryField>(FieldType.BinaryField);
-            typeDictionary.Add<DateTimeField>(FieldType.DateTimeField);
-            typeDictionary.Add<StreamField>(FieldType.StreamField);
-            typeDictionary.Add<StringField>(FieldType.StringField);
+            Instance.Add<Guid>(FieldType.Guid);
+            Instance.Add<string>(FieldType.String);
+            Instance.Add<string[]>(FieldType.StringArray);
+            Instance.Add<BinaryField>(FieldType.BinaryField);
+            Instance.Add<DateTimeField>(FieldType.DateTimeField);
+            Instance.Add<StreamField>(FieldType.StreamField);
+            Instance.Add<StringField>(FieldType.StringField);
         }
 
-        public static TypeDictionary<FieldType> Instance => typeDictionary;
+        public static TypeDictionary<FieldType> Instance { get; } = new TypeDictionary<FieldType>();
     }
 
     internal sealed class InsertScriptFileWriter : IResultWriter
@@ -114,7 +112,7 @@
 
             foreach (DataRow schemaRow in schemaTable.Rows)
             {
-                var dataColumnSchema = new DataColumnSchema(schemaRow);
+                var dataColumnSchema = new DbColumn(schemaRow);
 
                 if (first)
                 {

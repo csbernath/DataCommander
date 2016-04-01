@@ -7,11 +7,6 @@
     /// </summary>
     public class TextDataFormatException : FormatException
     {
-        private readonly string message;
-        private readonly TextDataColumn column;
-        private readonly ITextDataConverter converter;
-        private readonly string fieldValue;
-
         /// <summary>
         /// 
         /// </summary>
@@ -22,30 +17,30 @@
         public TextDataFormatException( TextDataColumn column, ITextDataConverter converter, string fieldValue, Exception innerException )
             : base( null, innerException )
         {
-            this.column = column;
-            this.converter = converter;
-            this.fieldValue = fieldValue;
-            this.message = $"Conversion ({converter}) of string value '{fieldValue}' to type {column.DataType} failed. ";
+            this.Column = column;
+            this.Converter = converter;
+            this.Fieldvalue = fieldValue;
+            this.Message = $"Conversion ({converter}) of string value '{fieldValue}' to type {column.DataType} failed. ";
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public override string Message => this.message;
+        public override string Message { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public TextDataColumn Column => this.column;
+        public TextDataColumn Column { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public ITextDataConverter Converter => this.converter;
+        public ITextDataConverter Converter { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Fieldvalue => this.fieldValue;
+        public string Fieldvalue { get; }
     }
 }

@@ -92,7 +92,7 @@
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType(DataColumnSchema dataColumnSchema)
+        Type IProvider.GetColumnType(DbColumn dataColumnSchema)
         {
             Contract.Requires(dataColumnSchema != null);
             return null;

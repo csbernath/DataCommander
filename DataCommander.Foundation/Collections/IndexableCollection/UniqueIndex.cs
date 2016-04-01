@@ -12,7 +12,6 @@
     /// <typeparam name="T"></typeparam>
     public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, T>
     {
-        private string name;
         private Func<T, GetKeyResponse<TKey>> getKey;
         private IDictionary<TKey, T> dictionary;
 
@@ -67,7 +66,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public string Name => this.name;
+        public string Name { get; private set; }
 
         /// <summary>
         /// 
@@ -332,7 +331,7 @@
             Contract.Requires<ArgumentNullException>(getKey != null);
             Contract.Requires<ArgumentNullException>(dictionary != null);
 
-            this.name = name;
+            this.Name = name;
             this.getKey = getKey;
             this.dictionary = dictionary;
         }

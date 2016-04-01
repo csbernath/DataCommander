@@ -6,8 +6,6 @@
 
     internal abstract class TfsDataReader : IDataReader
     {
-        private object[] values;
-
         #region IDataReader Members
 
         public void Close()
@@ -157,8 +155,8 @@
 
         public int GetValues(object[] values)
         {
-            this.values.CopyTo(values, 0);
-            return this.values.Length;
+            this.Values.CopyTo(values, 0);
+            return this.Values.Length;
         }
 
         public bool IsDBNull(int i)
@@ -178,18 +176,7 @@
 
         #endregion
 
-        internal object[] Values
-        {
-            get
-            {
-                return this.values;
-            }
-
-            set
-            {
-                this.values = value;
-            }
-        }
+        internal object[] Values { get; set; }
 
         internal static DataTable CreateSchemaTable()
         {

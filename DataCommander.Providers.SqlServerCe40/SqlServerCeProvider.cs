@@ -58,7 +58,7 @@
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType(DataColumnSchema dataColumnSchema)
+        Type IProvider.GetColumnType(DbColumn dataColumnSchema)
         {
             throw new NotImplementedException();
             // System.Data.SqlServerCe.SqlCeType
@@ -205,7 +205,7 @@ ORDER BY ORDINAL_POSITION";
 
         string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
         {
-            var schemaRow = new DataColumnSchema(sourceSchemaRow);
+            var schemaRow = new DbColumn(sourceSchemaRow);
             int columnSize = schemaRow.ColumnSize;
             bool? allowDBNull = schemaRow.AllowDBNull;
             Type dataType = schemaRow.DataType;
@@ -428,7 +428,7 @@ ORDER BY ORDINAL_POSITION";
                     values.Append(',');
                 }
 
-                DataColumnSchema columnSchema = new DataColumnSchema(schemaRows[i]);
+                DbColumn columnSchema = new DbColumn(schemaRows[i]);
                 insertInto.AppendFormat("[{0}]", columnSchema.ColumnName);
                 values.Append('?');
 

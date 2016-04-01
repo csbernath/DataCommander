@@ -17,8 +17,6 @@
         private int incrementedTickCount;
         private DateTime incrementedDateTime;
 
-        private static readonly UniversalTime defaultUniversalTime = new UniversalTime(increment: 16, adjustment: 60*1000);
-
         static UniversalTime()
         {
             sharedTickCount = Environment.TickCount;
@@ -52,7 +50,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public static UniversalTime Default => defaultUniversalTime;
+        public static UniversalTime Default { get; } = new UniversalTime(increment: 16, adjustment: 60*1000);
 
         /// <summary>
         /// 

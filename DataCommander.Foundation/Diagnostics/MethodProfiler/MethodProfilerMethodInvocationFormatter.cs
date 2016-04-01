@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Diagnostics
+﻿namespace DataCommander.Foundation.Diagnostics.MethodProfiler
 {
     using System.Text;
     using DataCommander.Foundation.Data.SqlClient;
@@ -6,17 +6,17 @@
 
     internal sealed class MethodProfilerMethodInvocationFormatter : IFormatter
     {
-        void IFormatter.AppendTo( StringBuilder sb, object[] args )
+        void IFormatter.AppendTo(StringBuilder sb, object[] args)
         {
-            var item = (MethodInvocation) args[ 0 ];
+            var item = (MethodInvocation)args[0];
             MethodInvocation parent = item.Parent;
-            int? parentId = parent != null ? parent.Id : (int?) null;
-            sb.AppendFormat( "exec MethodProfilerMethodInvocation_Add @applicationId,{0},{1},{2},{3},{4}\r\n",
+            int? parentId = parent != null ? parent.Id : (int?)null;
+            sb.AppendFormat("exec MethodProfilerMethodInvocation_Add @applicationId,{0},{1},{2},{3},{4}\r\n",
                 item.Id,
                 parentId.ToTSqlInt(),
                 item.MethodId,
                 item.BeginTime,
-                item.EndTime );
+                item.EndTime);
         }
     }
 }

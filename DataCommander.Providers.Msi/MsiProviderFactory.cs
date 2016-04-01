@@ -4,13 +4,11 @@
 
     internal sealed class MsiProviderFactory : DbProviderFactory
 	{
-		private static MsiProviderFactory instance = new MsiProviderFactory();
-
-		private MsiProviderFactory()
+        private MsiProviderFactory()
 		{
 		}
 
-		public static MsiProviderFactory Instance => instance;
+		public static MsiProviderFactory Instance { get; } = new MsiProviderFactory();
 
         public override DbConnectionStringBuilder CreateConnectionStringBuilder()
 		{

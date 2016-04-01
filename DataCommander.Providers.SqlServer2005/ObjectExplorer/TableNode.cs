@@ -22,7 +22,6 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
     internal sealed class TableNode : ITreeNode
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private readonly DatabaseNode database;
         private readonly string owner;
         private readonly string name;
 
@@ -31,7 +30,7 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
             string owner,
             string name)
         {
-            this.database = database;
+            this.Database = database;
             this.owner = owner;
             this.name = name;
         }
@@ -44,8 +43,8 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
         {
             return new ITreeNode[]
             {
-                new ColumnCollectionNode(this.database, this.owner, this.name),
-                new TriggerCollectionNode(this.database, this.owner, this.name),
+                new ColumnCollectionNode(this.Database, this.owner, this.name),
+                new TriggerCollectionNode(this.Database, this.owner, this.name),
                 new IndexCollectionNode(this, this.owner, this.name)
             };
         }
@@ -113,8 +112,8 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
         {
             get
             {
-                var name = new DatabaseObjectMultipartName(null, this.database.Name, this.owner, this.name);
-                string connectionString = this.database.Databases.Server.ConnectionString;
+                var name = new DatabaseObjectMultipartName(null, this.Database.Name, this.owner, this.name);
+                string connectionString = this.Database.Databases.Server.ConnectionString;
                 string text;
                 using (var connection = new SqlConnection(connectionString))
                 {
@@ -129,7 +128,7 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
         {
             MainForm mainForm = DataCommanderApplication.Instance.MainForm;
             var queryForm = (QueryForm)mainForm.ActiveMdiChild;
-            string name = this.database.Name + "." + this.owner + "." + this.name;
+            string name = this.Database.Name + "." + this.owner + "." + this.name;
             string query = "select * from " + name;
             queryForm.OpenTable(query);
         }
@@ -142,7 +141,7 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
                     @"use [{0}]
 exec sp_MShelpcolumns N'{1}.[{2}]', @orderby = 'id'
 exec sp_MStablekeys N'{1}.[{2}]', null, 14
-exec sp_MStablechecks N'{1}.[{2}]'", this.database.Name, this.owner, this.name);
+exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
 
                 log.Write(LogLevel.Trace, commandText);
                 string connectionString = this.Database.Databases.Server.ConnectionString;
@@ -297,7 +296,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.database.Name, this.owner, this.name);
                 queryForm.SetStatusbarPanelText("Copying table script to clipboard...", SystemColors.ControlText);
                 var stopwatch = Stopwatch.StartNew();
 
-                string connectionString = this.database.Databases.Server.ConnectionString;
+                string connectionString = this.Database.Databases.Server.ConnectionString;
                 var csb = new SqlConnectionStringBuilder(connectionString);
 
                 var connectionInfo = new SqlConnectionInfo();
@@ -320,7 +319,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.database.Name, this.owner, this.name);
                 var connection = new ServerConnection(connectionInfo);
                 connection.Connect();
                 var server = new Server(connection);
-                var database = server.Databases[this.database.Name];
+                var database = server.Databases[this.Database.Name];
                 var table = database.Tables[this.name, this.owner];
 
                 var options = new ScriptingOptions();
@@ -353,8 +352,8 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.database.Name, this.owner, this.name);
 
         private void Indexes_Click(object sender, EventArgs e)
         {
-            string cmdText = $"use [{this.database.Name}] exec sp_helpindex [{this.owner}.{this.name}]";
-            string connectionString = this.database.Databases.Server.ConnectionString;
+            string cmdText = $"use [{this.Database.Name}] exec sp_helpindex [{this.owner}.{this.name}]";
+            string connectionString = this.Database.Databases.Server.ConnectionString;
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -371,8 +370,8 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.database.Name, this.owner, this.name);
 
         private void SelectScript_Click(object sender, EventArgs e)
         {
-            var name = new DatabaseObjectMultipartName(null, this.database.Name, this.owner, this.name);
-            string connectionString = this.database.Databases.Server.ConnectionString;
+            var name = new DatabaseObjectMultipartName(null, this.Database.Name, this.owner, this.name);
+            string connectionString = this.Database.Databases.Server.ConnectionString;
             string selectStatement;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -399,9 +398,9 @@ join [{0}].sys.types t (nolock)
 where
 	s.name = '{1}'
 	and o.name = '{2}'
-order by c.column_id", this.database.Name, this.owner, this.name);
+order by c.column_id", this.Database.Name, this.owner, this.name);
             log.Write(LogLevel.Trace, commandText);
-            string connectionString = this.database.Databases.Server.ConnectionString;
+            string connectionString = this.Database.Databases.Server.ConnectionString;
             DataTable table;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -494,9 +493,7 @@ order by c.column_id", this.database.Name, this.owner, this.name);
                 st.Rows.Add(stringTableRow);
             }
 
-            var stringWriter = new StringWriter();
-            st.Write(stringWriter, 4);
-            sb.Append(stringWriter);
+            sb.Append(st.ToString(4));
 
             Clipboard.SetText(sb.ToString());
             var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
@@ -530,6 +527,6 @@ order by c.column_id", this.database.Name, this.owner, this.name);
             }
         }
 
-        public DatabaseNode Database => this.database;
+        public DatabaseNode Database { get; }
     }
 }

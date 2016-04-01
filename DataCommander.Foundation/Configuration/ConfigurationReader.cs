@@ -20,7 +20,7 @@ namespace DataCommander.Foundation.Configuration
     /// </summary>
     public sealed class ConfigurationReader
     {
-        private static readonly ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = InternalLogFactory.Instance.GetTypeLog(typeof (ConfigurationReader));
         private string fileName;
         private string sectionName;
         private XmlReader xmlReader;
@@ -70,12 +70,6 @@ namespace DataCommander.Foundation.Configuration
                     }
                 }
             }
-            ////else
-            ////{
-            ////    WebClient webClient = new WebClient();
-            ////    webClient.Credentials = CredentialCache.DefaultCredentials;
-            ////    stream = webClient.OpenRead(configFileName);
-            ////}
 
             return stream;
         }

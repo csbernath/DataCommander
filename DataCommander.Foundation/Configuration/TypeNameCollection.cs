@@ -152,18 +152,15 @@ namespace DataCommander.Foundation.Configuration
 
         private sealed class TypeCollectionItem
         {
-            private readonly string name;
-            private readonly Type type;
-
             public TypeCollectionItem(string name, Type type)
             {
-                this.name = name;
-                this.type = type;
+                this.Name = name;
+                this.Type = type;
             }
 
-            public string Name => this.name;
+            public string Name { get; }
 
-            public Type Type => this.type;
+            public Type Type { get; }
         }
 
         private static class TypeName
@@ -192,13 +189,11 @@ namespace DataCommander.Foundation.Configuration
 
         private sealed class TypeEqualityComparer : IEqualityComparer<Type>
         {
-            private static readonly TypeEqualityComparer instance = new TypeEqualityComparer();
-
             private TypeEqualityComparer()
             {
             }
 
-            public static TypeEqualityComparer Instance => instance;
+            public static TypeEqualityComparer Instance { get; } = new TypeEqualityComparer();
 
             #region IEqualityComparer<Type> Members
 

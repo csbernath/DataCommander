@@ -62,9 +62,8 @@ namespace DataCommander.Foundation.Data.SqlClient
     {
         #region Private Fields
 
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = LogFactory.Instance.GetTypeLog(typeof (SqlLog));
         private static readonly IInternalConnectionHelper internalConnectionHelper;
-        private readonly WorkerThread thread;
         private int connectionCounter;
         private readonly SafeSqlConnection connection;
         private readonly Dictionary<int, Dictionary<string, SqLoglCommandExecution>> applications = new Dictionary<int, Dictionary<string, SqLoglCommandExecution>>();
@@ -95,7 +94,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="connectionString"></param>
         public SqlLog(string connectionString)
         {
-            this.thread = new WorkerThread(this.Start)
+            this.Thread = new WorkerThread(this.Start)
             {
                 Name = typeof (SqlLog).Name,
                 Priority = ThreadPriority.Lowest
@@ -107,7 +106,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <summary>
         /// Gets the logger thread.
         /// </summary>
-        public WorkerThread Thread => this.thread;
+        public WorkerThread Thread { get; }
 
         private void Flush()
         {
@@ -165,9 +164,9 @@ namespace DataCommander.Foundation.Data.SqlClient
 
         private void Start()
         {
-            WaitHandle[] waitHandles = {this.thread.StopRequest, this.queueEvent};
+            WaitHandle[] waitHandles = {this.Thread.StopRequest, this.queueEvent};
 
-            while (!this.thread.IsStopRequested)
+            while (!this.Thread.IsStopRequested)
             {
                 int i = WaitHandle.WaitAny(waitHandles);
                 this.CheckConnections();

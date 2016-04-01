@@ -5,10 +5,6 @@
     /// </summary>
     public sealed class CommandLineArgument
     {
-        private readonly int index;
-        private readonly string name;
-        private readonly string value;
-
         /// <summary>
         /// 
         /// </summary>
@@ -20,24 +16,24 @@
             string name,
             string value)
         {
-            this.index = index;
-            this.name = name;
-            this.value = value;
+            this.Index = index;
+            this.Name = name;
+            this.Value = value;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int Index => this.index;
+        public int Index { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Name => this.name;
+        public string Name { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Value => this.value;
+        public string Value { get; }
     }
 }

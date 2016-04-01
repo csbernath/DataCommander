@@ -4,18 +4,15 @@
 
     internal sealed class DatabaseNode : ITreeNode
     {
-        private readonly ObjectExplorer objectExplorer;
-        private readonly string name;
-
         public DatabaseNode(ObjectExplorer objectExplorer, string name)
         {
-            this.objectExplorer = objectExplorer;
-            this.name = name;
+            this.ObjectExplorer = objectExplorer;
+            this.Name = name;
         }
 
-        public ObjectExplorer ObjectExplorer => this.objectExplorer;
+        public ObjectExplorer ObjectExplorer { get; }
 
-        public string Name => this.name;
+        public string Name { get; }
 
         bool ITreeNode.IsLeaf => false;
 

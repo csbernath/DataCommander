@@ -2,28 +2,14 @@
 {
     internal sealed class SqLoglCommandExecution
     {
-        private readonly int commandNo;
-        private int executionNo;
-
         public SqLoglCommandExecution(int commandNo)
         {
-            this.commandNo = commandNo;
-            this.executionNo = 1;
+            this.CommandNo = commandNo;
+            this.ExecutionNo = 1;
         }
 
-        public int CommandNo => this.commandNo;
+        public int CommandNo { get; }
 
-        public int ExecutionNo
-        {
-            get
-            {
-                return this.executionNo;
-            }
-
-            set
-            {
-                this.executionNo = value;
-            }
-        }
+        public int ExecutionNo { get; set; }
     }
 }

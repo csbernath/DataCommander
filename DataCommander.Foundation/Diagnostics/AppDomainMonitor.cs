@@ -1,9 +1,8 @@
 namespace DataCommander.Foundation.Diagnostics
 {
     using System;
-    using System.Data;
+    using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Globalization;
     using System.IO;
     using System.Reflection;
     using System.Text;
@@ -17,7 +16,26 @@ namespace DataCommander.Foundation.Diagnostics
     /// </summary>
     public static class AppDomainMonitor
     {
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = LogFactory.Instance.GetTypeLog(typeof (AppDomainMonitor));
+        private static readonly StringTableColumnInfo<AssemblyInfo>[] columns;
+
+        static AppDomainMonitor()
+        {
+            columns = new StringTableColumnInfo<AssemblyInfo>[]
+            {
+                new StringTableColumnInfo<AssemblyInfo>("Name", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Name),
+                StringTableColumnInfo.Create<AssemblyInfo, Version>("FileVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.FileVersion),
+                StringTableColumnInfo.Create<AssemblyInfo, Version>("Version", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Version),
+                StringTableColumnInfo.Create<AssemblyInfo, ProcessorArchitecture>("ProcessorArchitecture", StringTableColumnAlign.Left,
+                    assemblyInfo => assemblyInfo.ProcessorArchitecture),
+                new StringTableColumnInfo<AssemblyInfo>("Date", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Date?.ToString("yyyy-MM-dd HH:mm:ss")),
+                new StringTableColumnInfo<AssemblyInfo>("PublicKeyToken", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.PublicKeyToken),
+                new StringTableColumnInfo<AssemblyInfo>("ImageRuntimeVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.ImageRuntimeVersion),
+                StringTableColumnInfo.Create<AssemblyInfo, bool>("GlobalAssemblyCache", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.GlobalAssemblyCache),
+                new StringTableColumnInfo<AssemblyInfo>("CodeBase", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.CodeBase),
+                new StringTableColumnInfo<AssemblyInfo>("Location", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Location)
+            };
+        }
 
         #region Public Properties
 
@@ -63,25 +81,6 @@ namespace DataCommander.Foundation.Diagnostics
                     }
                 }
 
-                //switch (Environment.Version.ToString())
-                //{
-                //    case "4.0.30319.18063":
-                //        dotNetFrameworkVersion = "4.5";
-                //        break;
-
-                //    case "4.0.30319.34209":
-                //        dotNetFrameworkVersion = "4.5.2";
-                //        break;
-
-                //    case "4.0.30319.42000":
-                //        dotNetFrameworkVersion = "4.6";
-                //        break;
-
-                //    default:
-                //        dotNetFrameworkVersion = null;
-                //        break;
-                //}
-
                 return dotNetFrameworkVersion;
             }
         }
@@ -98,31 +97,25 @@ namespace DataCommander.Foundation.Diagnostics
                 double totalDays = (double)tickCount/milliSecondsPerDay;
                 DateTime zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
                 string tickCountString = $"{tickCount} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";
+                long workingSet = Environment.WorkingSet;
 
-                string message =
-                    $@"Environment information
-Environment.MachineName:            {Environment.MachineName}
-Environment.ProcessorCount:         {
-                        Environment.ProcessorCount}
-Environment.OSVersion:              {Environment.OSVersion}
-Environment.Is64BitOperatingSystem: {
-                        Environment.Is64BitOperatingSystem}
-Environment.Is64BitProcess:         {Environment.Is64BitProcess
-                        }
-IntPtr.Size:                        {IntPtr.Size} ({IntPtr.Size*8} bit)
-CLR version:                        {Environment.Version
-                        }
-.NET Framework version:             {DotNetFrameworkVersion}
-Environment.UserDomainName:         {Environment.UserDomainName
-                        }
-Environment.UserName:               {Environment.UserName}
-Environment.UserInteractive:        {Environment.UserInteractive
-                        }
-Environment.CurrentDirectory:       {Environment.CurrentDirectory}
-Environment.CommandLine:            {Environment.CommandLine
-                        },
-Environment.TickCount:              {tickCountString}
-Stopwatch.Frequency:                {Stopwatch.Frequency}";
+                string message = $@"Environment information
+MachineName:            {Environment.MachineName}
+ProcessorCount:         {Environment.ProcessorCount}
+OSVersion:              {Environment.OSVersion}
+Is64BitOperatingSystem: {Environment.Is64BitOperatingSystem}
+Is64BitProcess:         {Environment.Is64BitProcess}
+IntPtr.Size:            {IntPtr.Size} ({IntPtr.Size*8} bit)
+CLR version:            {Environment.Version}
+.NET Framework version: {DotNetFrameworkVersion}
+UserDomainName:         {Environment.UserDomainName}
+UserName:               {Environment.UserName}
+UserInteractive:        {Environment.UserInteractive}
+CurrentDirectory:       {Environment.CurrentDirectory}
+CommandLine:            {Environment.CommandLine},
+WorkingSet:             {(double)workingSet/(1024*1024):N} MB ({workingSet} bytes)
+TickCount:              {tickCountString}
+Stopwatch.Frequency:    {Stopwatch.Frequency}";
                 return message;
             }
         }
@@ -134,11 +127,11 @@ Stopwatch.Frequency:                {Stopwatch.Frequency}";
         {
             get
             {
-                var sb = new StringBuilder();
-                sb.Append("CurrentDomainState:\r\n");
-                AppDomain appDomain = AppDomain.CurrentDomain;
-                AppendAppDomainState(appDomain, sb);
-                return sb.ToString();
+                var stringBuilder = new StringBuilder();
+                stringBuilder.Append("CurrentDomainState:\r\n");
+                var appDomain = AppDomain.CurrentDomain;
+                AppendAppDomainState(appDomain, stringBuilder);
+                return stringBuilder.ToString();
             }
         }
 
@@ -153,8 +146,12 @@ Stopwatch.Frequency:                {Stopwatch.Frequency}";
             try
             {
                 var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-                fileVersion = new Version(fileVersionInfo.FileMajorPart, fileVersionInfo.FileMinorPart,
-                    fileVersionInfo.FileBuildPart, fileVersionInfo.FilePrivatePart);
+
+                fileVersion = new Version(
+                    fileVersionInfo.FileMajorPart,
+                    fileVersionInfo.FileMinorPart,
+                    fileVersionInfo.FileBuildPart,
+                    fileVersionInfo.FilePrivatePart);
             }
             catch (Exception e)
             {
@@ -177,68 +174,16 @@ Stopwatch.Frequency:                {Stopwatch.Frequency}";
                 sb.AppendFormat("FriendlyName: {0}\r\n", friendlyName);
                 var assemblies = appDomain.GetAssemblies();
                 sb.AppendLine("Assemblies:");
-                var table = new DataTable
-                {
-                    Locale = CultureInfo.InvariantCulture
-                };
-                var columns = table.Columns;
-                columns.Add("Name");
-                columns.Add("FileVersion");
-                columns.Add("Version");
-                columns.Add("ProcessArchitecture");
-                columns.Add("Date");
-                columns.Add("PublicKeyToken");
-                columns.Add("ImageRuntimeVersion");
-                columns.Add("GlobalAssemblyCache");
-                columns.Add("CodeBase");
-                columns.Add("Location");
+
+                var assemblyInfos = new List<AssemblyInfo>();
 
                 for (int i = 0; i < assemblies.Length; i++)
                 {
                     try
                     {
-                        Assembly assembly = assemblies[i];
-                        string location = null;
-                        try
-                        {
-                            location = assembly.Location;
-                        }
-                        catch
-                        {
-                        }
-
-                        Version fileVersion = !string.IsNullOrEmpty(location) ? GetFileVersion(assembly) : null;
-                        DateTime? date = !string.IsNullOrEmpty(location)
-                            ? File.GetLastWriteTime(location)
-                            : (DateTime?) null;
-                        AssemblyName name = assembly.GetName();
-                        string publicKeyTokenString;
-                        byte[] publicKeyToken = name.GetPublicKeyToken();
-
-                        if (publicKeyToken != null)
-                        {
-                            publicKeyTokenString = Hex.GetString(publicKeyToken, false);
-                        }
-                        else
-                        {
-                            publicKeyTokenString = null;
-                        }
-
-                        object[] values =
-                        {
-                            name.Name,
-                            fileVersion,
-                            name.Version,
-                            name.ProcessorArchitecture,
-                            date != null ? date.Value.ToString("yyyy-MM-dd HH:mm:ss") : null,
-                            publicKeyTokenString,
-                            assembly.ImageRuntimeVersion,
-                            assembly.GlobalAssemblyCache,
-                            name.CodeBase,
-                            location
-                        };
-
-                        table.Rows.Add(values);
+                        var assembly = assemblies[i];
+                        var assemblyInfo = GetAssemblyInfo(assembly);
+                        assemblyInfos.Add(assemblyInfo);
                     }
                     catch (Exception e)
                     {
@@ -246,10 +191,9 @@ Stopwatch.Frequency:                {Stopwatch.Frequency}";
                     }
                 }
 
-                DataView view = table.DefaultView;
-                view.Sort = "Name";
+                assemblyInfos.Sort((info, assemblyInfo) => string.Compare(info.Name, assemblyInfo.Name, StringComparison.InvariantCulture));
 
-                sb.Append(view.ToStringTable());
+                sb.Append(assemblyInfos.ToString(columns));
             }
             catch (Exception e)
             {
@@ -258,5 +202,55 @@ Stopwatch.Frequency:                {Stopwatch.Frequency}";
         }
 
         #endregion
+
+        private static AssemblyInfo GetAssemblyInfo(Assembly assembly)
+        {
+            string location = null;
+            try
+            {
+                location = assembly.Location;
+            }
+            catch
+            {
+            }
+
+            Version fileVersion = !string.IsNullOrEmpty(location) ? GetFileVersion(assembly) : null;
+            DateTime? date = !string.IsNullOrEmpty(location)
+                ? File.GetLastWriteTime(location)
+                : (DateTime?)null;
+
+            AssemblyName name = assembly.GetName();
+
+            byte[] publicKeyToken = name.GetPublicKeyToken();
+            string publicKeyTokenString = publicKeyToken != null ? Hex.GetString(publicKeyToken, false) : null;
+
+            return new AssemblyInfo
+            {
+                Name = name.Name,
+                FileVersion = fileVersion,
+                Version = name.Version,
+                ProcessorArchitecture = name.ProcessorArchitecture,
+                Date = date,
+                PublicKeyToken = publicKeyTokenString,
+                ImageRuntimeVersion = assembly.ImageRuntimeVersion,
+                GlobalAssemblyCache = assembly.GlobalAssemblyCache,
+                CodeBase = name.CodeBase,
+                Location = location
+            };
+        }
+
+        private sealed class AssemblyInfo
+        {
+            public string Name;
+            public Version FileVersion;
+            public Version Version;
+            public ProcessorArchitecture ProcessorArchitecture;
+            public DateTime? Date;
+            public string PublicKeyToken;
+            public string ImageRuntimeVersion;
+            public bool GlobalAssemblyCache;
+            public string CodeBase;
+            public string Location;
+        }
     }
 }

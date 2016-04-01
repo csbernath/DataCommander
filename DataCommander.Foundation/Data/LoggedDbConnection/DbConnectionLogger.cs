@@ -10,7 +10,7 @@
     {
         #region Private Fields
 
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = LogFactory.Instance.GetTypeLog(typeof (DbConnectionLogger));
         private LoggedDbConnection connection;
         private BeforeOpenDbConnectionEventArgs beforeOpen;
         private BeforeExecuteCommandEventArgs beforeExecuteReader;

@@ -4,13 +4,11 @@
 
     public sealed class StreamField
 	{
-		private readonly Stream stream;
-
-		public StreamField( Stream stream )
+        public StreamField( Stream stream )
 		{
-			this.stream = stream;
+			this.Stream = stream;
 		}
 
-		public Stream Stream => this.stream;
+		public Stream Stream { get; }
 	}
 }

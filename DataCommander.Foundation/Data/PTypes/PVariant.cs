@@ -9,7 +9,6 @@ namespace DataCommander.Foundation.Data.PTypes
     public struct PVariant : INullable
     {
         private object sql;
-        private PValueType type;
 
         /// <summary>
         /// 
@@ -32,7 +31,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="type"></param>
         private PVariant( PValueType type )
         {
-            this.type = type;
+            this.ValueType = type;
             this.sql = null;
         }
 
@@ -44,15 +43,15 @@ namespace DataCommander.Foundation.Data.PTypes
         {
             if (value == null)
             {
-                this.type = PValueType.Default;
+                this.ValueType = PValueType.Default;
             }
             else if (value == DBNull.Value)
             {
-                this.type = PValueType.Null;
+                this.ValueType = PValueType.Null;
             }
             else
             {
-                this.type = PValueType.Value;
+                this.ValueType = PValueType.Value;
             }
 
             this.sql = value;
@@ -61,22 +60,22 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public PValueType ValueType => this.type;
+        public PValueType ValueType { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsNull => this.type == PValueType.Null;
+        public bool IsNull => this.ValueType == PValueType.Null;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsValue => this.type == PValueType.Value;
+        public bool IsValue => this.ValueType == PValueType.Value;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsEmpty => this.type == PValueType.Empty;
+        public bool IsEmpty => this.ValueType == PValueType.Empty;
 
         /// <summary>
         /// 
@@ -87,7 +86,7 @@ namespace DataCommander.Foundation.Data.PTypes
             {
                 object value;
 
-                switch (this.type)
+                switch (this.ValueType)
                 {
                     case PValueType.Value:
                     case PValueType.Null:
@@ -106,15 +105,15 @@ namespace DataCommander.Foundation.Data.PTypes
             {
                 if (value == null)
                 {
-                    this.type = PValueType.Default;
+                    this.ValueType = PValueType.Default;
                 }
                 else if (value == DBNull.Value)
                 {
-                    this.type = PValueType.Null;
+                    this.ValueType = PValueType.Null;
                 }
                 else
                 {
-                    this.type = PValueType.Value;
+                    this.ValueType = PValueType.Value;
                 }
 
                 this.sql = value;

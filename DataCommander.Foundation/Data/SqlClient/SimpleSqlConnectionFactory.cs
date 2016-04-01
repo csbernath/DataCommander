@@ -19,8 +19,6 @@ namespace DataCommander.Foundation.Data.SqlClient
     public sealed class SimpleSqlConnectionFactory
     {
         private readonly string connectionString;
-        private readonly int commandTimeout;
-        private readonly IDbConnectionFactory factory;
 
         /// <summary>
         /// 
@@ -39,11 +37,11 @@ namespace DataCommander.Foundation.Data.SqlClient
 
             if (contains)
             {
-                this.commandTimeout = (int)timeSpan.TotalSeconds;
+                this.CommandTimeout = (int)timeSpan.TotalSeconds;
             }
             else
             {
-                this.commandTimeout = 259200; // 3 days
+                this.CommandTimeout = 259200; // 3 days
             }
 
             bool isSafe;
@@ -89,25 +87,25 @@ namespace DataCommander.Foundation.Data.SqlClient
 
                 if (isSafe)
                 {
-                    this.factory = new SafeLoggedSqlConnectionFactory( logConnectionString, applicationName, filter );
+                    this.Factory = new SafeLoggedSqlConnectionFactory( logConnectionString, applicationName, filter );
                 }
                 else
                 {
-                    this.factory = new SqlLoggedSqlConnectionFactory( logConnectionString, applicationName, filter );
+                    this.Factory = new SqlLoggedSqlConnectionFactory( logConnectionString, applicationName, filter );
                 }
 
-                WorkerThread thread = this.factory.Thread;
+                WorkerThread thread = this.Factory.Thread;
                 thread.Start();
             }
             else
             {
                 if (isSafe)
                 {
-                    this.factory = new SafeSqlConnectionFactory();
+                    this.Factory = new SafeSqlConnectionFactory();
                 }
                 else
                 {
-                    this.factory = new NativeSqlCommandFactory();
+                    this.Factory = new NativeSqlCommandFactory();
                 }
             }
         }
@@ -115,12 +113,12 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <summary>
         /// 
         /// </summary>
-        public int CommandTimeout => this.commandTimeout;
+        public int CommandTimeout { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public IDbConnectionFactory Factory => this.factory;
+        public IDbConnectionFactory Factory { get; }
 
         /// <summary>
         /// 
@@ -183,7 +181,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                 connectionString = this.connectionString;
             }
 
-            return this.factory.CreateConnection( connectionString, userName, hostName );
+            return this.Factory.CreateConnection( connectionString, userName, hostName );
         }
     }
 }

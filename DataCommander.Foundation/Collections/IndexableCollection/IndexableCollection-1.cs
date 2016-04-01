@@ -43,7 +43,6 @@
     public partial class IndexableCollection<T>
     {
         private readonly ICollectionIndex<T> defaultIndex;
-        private readonly IndexCollection<T> indexes = new IndexCollection<T>();
 
         /// <summary>
         /// 
@@ -52,23 +51,23 @@
         public IndexableCollection(ICollectionIndex<T> defaultIndex)
         {
             Contract.Requires<ArgumentNullException>(defaultIndex != null);
-            Contract.Ensures(this.indexes.Count == 1);
+            Contract.Ensures(this.Indexes.Count == 1);
 
             this.defaultIndex = defaultIndex;
-            this.indexes.Add(defaultIndex);
+            this.Indexes.Add(defaultIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public IndexCollection<T> Indexes => this.indexes;
+        public IndexCollection<T> Indexes { get; } = new IndexCollection<T>();
 
         [ContractInvariantMethod]
         private void ContractInvariant()
         {
-            Contract.Invariant(this.indexes != null);
+            Contract.Invariant(this.Indexes != null);
             Contract.Invariant(this.defaultIndex != null);
-            Contract.Invariant(this.indexes.Count > 0);
+            Contract.Invariant(this.Indexes.Count > 0);
         }
     }
 }

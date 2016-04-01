@@ -729,7 +729,7 @@ namespace DataCommander.Providers
                             case 2:
                                 using (var streamWriter = new StreamWriter(path, false, Encoding.UTF8))
                                 {
-                                    streamWriter.Write(this.dataTable.DefaultView.ToStringTable());
+                                    streamWriter.Write(this.dataTable.DefaultView.ToStringTableString());
                                 }
                                 break;
 

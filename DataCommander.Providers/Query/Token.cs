@@ -2,13 +2,6 @@ namespace DataCommander.Providers
 {
     public sealed class Token
     {
-        private readonly int index;
-        private readonly int startPosition;
-        private readonly int endPosition;
-        private readonly int lineIndex;
-        private readonly TokenType type;
-        private readonly string value;
-
         public Token(
             int index,
             int startPosition,
@@ -17,24 +10,24 @@ namespace DataCommander.Providers
             TokenType type,
             string value)
         {
-            this.index = index;
-            this.startPosition = startPosition;
-            this.endPosition = endPosition;
-            this.lineIndex = lineIndex;
-            this.type = type;
-            this.value = value;
+            this.Index = index;
+            this.StartPosition = startPosition;
+            this.EndPosition = endPosition;
+            this.LineIndex = lineIndex;
+            this.Type = type;
+            this.Value = value;
         }
 
-        public int Index => this.index;
+        public int Index { get; }
 
-        public int StartPosition => this.startPosition;
+        public int StartPosition { get; }
 
-        public int EndPosition => this.endPosition;
+        public int EndPosition { get; }
 
-        public int LineIndex => this.lineIndex;
+        public int LineIndex { get; }
 
-        public TokenType Type => this.type;
+        public TokenType Type { get; }
 
-        public string Value => this.value;
+        public string Value { get; }
     }
 }

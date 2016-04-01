@@ -5,14 +5,12 @@ namespace DataCommander.Providers
 
     public sealed class DateTimeField : IComparable, IConvertible
     {
-        private DateTime value;
-
         public DateTimeField(DateTime value)
         {
-            this.value = value;
+            this.Value = value;
         }
 
-        public DateTime Value => this.value;
+        public DateTime Value { get; }
 
         public static bool TryParse(string s, out DateTime dateTime)
         {
@@ -50,7 +48,7 @@ namespace DataCommander.Providers
 
         public override string ToString()
         {
-            return ToString(this.value);
+            return ToString(this.Value);
         }
 
         #region IComparable Members
@@ -70,7 +68,7 @@ namespace DataCommander.Providers
 
                     if (succeeded)
                     {
-                        result = this.value.CompareTo(dateTime);
+                        result = this.Value.CompareTo(dateTime);
                     }
                     else
                     {
@@ -81,7 +79,7 @@ namespace DataCommander.Providers
 
                 case TypeCode.Object:
                     DateTimeField dateTimeField = (DateTimeField)obj;
-                    result = this.value.CompareTo(dateTimeField.value);
+                    result = this.Value.CompareTo(dateTimeField.Value);
                     break;
 
                 default:
@@ -117,7 +115,7 @@ namespace DataCommander.Providers
 
         DateTime IConvertible.ToDateTime(IFormatProvider provider)
         {
-            return this.value;
+            return this.Value;
         }
 
         decimal IConvertible.ToDecimal(IFormatProvider provider)

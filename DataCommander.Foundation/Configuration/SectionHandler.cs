@@ -6,17 +6,15 @@ namespace DataCommander.Foundation.Configuration
     /// <exclude/>
     public sealed class SectionHandler : IConfigurationSectionHandler
     {
-        private readonly XmlNode section;
-
         private SectionHandler(XmlNode section)
         {
-            this.section = section;
+            this.Section = section;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public XmlNode Section => this.section;
+        public XmlNode Section { get; }
 
         object IConfigurationSectionHandler.Create(
             object parent,

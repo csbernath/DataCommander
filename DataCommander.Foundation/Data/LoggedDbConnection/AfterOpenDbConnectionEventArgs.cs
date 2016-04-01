@@ -7,20 +7,18 @@
     /// </summary>
     public sealed class AfterOpenDbConnectionEventArgs : LoggedEventArgs
     {
-        private readonly Exception exception;
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="exception"></param>
         public AfterOpenDbConnectionEventArgs(Exception exception)
         {
-            this.exception = exception;
+            this.Exception = exception;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public Exception Exception => this.exception;
+        public Exception Exception { get; }
     }
 }

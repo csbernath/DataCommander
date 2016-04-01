@@ -12,7 +12,6 @@
     /// <typeparam name="T"></typeparam>
     public class UniqueListIndex<TKey, T> : ICollectionIndex<T>
     {
-        private readonly string name;
         private Func<T, TKey> keySelector;
         private readonly IList<T> list;
 
@@ -31,7 +30,7 @@
             Contract.Requires<ArgumentNullException>(keySelector != null);
             Contract.Requires<ArgumentNullException>(list != null);
 
-            this.name = name;
+            this.Name = name;
             this.keySelector = keySelector;
             this.list = list;
         }
@@ -41,7 +40,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public string Name => this.name;
+        public string Name { get; }
 
         #endregion
 

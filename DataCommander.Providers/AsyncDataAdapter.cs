@@ -245,7 +245,7 @@ namespace DataCommander.Providers
                             DataTable schemaTable = dataReader.GetSchemaTable();
                             if (schemaTable != null)
                             {
-                                log.Trace("schemaTable:\r\n{0}", schemaTable.ToStringTable());
+                                log.Trace("schemaTable:\r\n{0}", schemaTable.ToStringTableString());
                             }
 
                             this.ReadTable(dataReader, schemaTable, tableIndex);

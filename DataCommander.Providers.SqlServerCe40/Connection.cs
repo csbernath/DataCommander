@@ -9,7 +9,6 @@
     internal sealed class Connection : ConnectionBase
     {
         private readonly SqlCeConnection sqlCeConnection;
-        private string connectionName;
 
         public Connection(string connectionString)
         {
@@ -27,18 +26,7 @@
             return this.sqlCeConnection.CreateCommand();
         }
 
-        public override string ConnectionName
-        {
-            get
-            {
-                return this.connectionName;
-            }
-
-            set
-            {
-                this.connectionName = value;
-            }
-        }
+        public override string ConnectionName { get; set; }
 
         public override string Caption => this.sqlCeConnection.DataSource;
 

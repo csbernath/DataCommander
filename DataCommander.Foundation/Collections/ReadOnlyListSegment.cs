@@ -15,7 +15,6 @@
 
         private readonly IReadOnlyList<T> list;
         private readonly int offset;
-        private readonly int count;
 
         #endregion
 
@@ -35,7 +34,7 @@
 
             this.list = list;
             this.offset = offset;
-            this.count = count;
+            this.Count = count;
         }
 
         /// <summary>
@@ -48,7 +47,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.count;
+        public int Count { get; }
 
         /// <summary>
         /// 
@@ -56,7 +55,7 @@
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            int end = offset + count;
+            int end = offset + Count;
 
             for (int i = offset; i < end; i++)
             {

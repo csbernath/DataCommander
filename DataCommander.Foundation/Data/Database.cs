@@ -11,7 +11,6 @@ namespace DataCommander.Foundation.Data
     using System.Text;
     using System.Threading;
     using System.Xml;
-    using DataCommander.Foundation.Text;
 
     /// <summary>
     /// Helper base class for ADO.NET.
@@ -20,14 +19,7 @@ namespace DataCommander.Foundation.Data
     {
         #region Private Fields
 
-        private IDbConnection connection;
-        private IDbTransaction transaction;
         private IDbProviderFactoryHelper providerFactoryHelper;
-        private IDbCommandHelper commandHelper;
-        private IDbCommandBuilderHelper commandBuilderHelper;
-        private int commandTimeout;
-        private int rowCount;
-        private IDbCommand command;
         internal const string NullString = "null";
 
         #endregion
@@ -47,7 +39,7 @@ namespace DataCommander.Foundation.Data
         /// <param name="connection"></param>
         public Database(IDbConnection connection)
         {
-            this.connection = connection;
+            this.Connection = connection;
         }
 
         #endregion
@@ -60,16 +52,10 @@ namespace DataCommander.Foundation.Data
         public IDbConnection Connection
         {
             [DebuggerStepThrough]
-            get
-            {
-                return this.connection;
-            }
+            get;
 
             [DebuggerStepThrough]
-            set
-            {
-                this.connection = value;
-            }
+            set;
         }
 
         /// <summary>
@@ -85,25 +71,25 @@ namespace DataCommander.Foundation.Data
             set
             {
                 this.providerFactoryHelper = value;
-                this.commandHelper = this.providerFactoryHelper.DbCommandHelper;
-                this.commandBuilderHelper = this.providerFactoryHelper.DbCommandBuilderHelper;
+                this.CommandHelper = this.providerFactoryHelper.DbCommandHelper;
+                this.CommandBuilderHelper = this.providerFactoryHelper.DbCommandBuilderHelper;
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public IDbCommandHelper CommandHelper => this.commandHelper;
+        public IDbCommandHelper CommandHelper { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public IDbCommandBuilderHelper CommandBuilderHelper => this.commandBuilderHelper;
+        public IDbCommandBuilderHelper CommandBuilderHelper { get; private set; }
 
         /// <summary>
         /// Gets the underlying <see cref="IDbConnection.State"/>.
         /// </summary>
-        public ConnectionState State => this.connection.State;
+        public ConnectionState State => this.Connection.State;
 
         /// <summary>
         /// Gets or sets the transaction.
@@ -112,16 +98,10 @@ namespace DataCommander.Foundation.Data
         public IDbTransaction Transaction
         {
             [DebuggerStepThrough]
-            get
-            {
-                return this.transaction;
-            }
+            get;
 
             [DebuggerStepThrough]
-            set
-            {
-                this.transaction = value;
-            }
+            set;
         }
 
         /// <summary>
@@ -131,16 +111,10 @@ namespace DataCommander.Foundation.Data
         public int CommandTimeout
         {
             [DebuggerStepThrough]
-            get
-            {
-                return this.commandTimeout;
-            }
+            get;
 
             [DebuggerStepThrough]
-            set
-            {
-                this.commandTimeout = value;
-            }
+            set;
         }
 
         /// <summary>
@@ -158,12 +132,12 @@ namespace DataCommander.Foundation.Data
         /// </item>
         /// </list>
         /// </remarks>
-        public int RowCount => this.rowCount;
+        public int RowCount { get; private set; }
 
         /// <summary>
         /// Gets the last executed <see cref="System.Data.IDbCommand"/>.
         /// </summary>
-        public IDbCommand Command => this.command;
+        public IDbCommand Command { get; private set; }
 
         /// <summary>
         /// Gets the return value (int) of the last executed <see cref="System.Data.IDbCommand"/>.
@@ -182,7 +156,7 @@ namespace DataCommander.Foundation.Data
                 Contract.Requires<ArgumentException>(((IDataParameter)this.Command.Parameters[0]).Direction == ParameterDirection.ReturnValue);
                 Contract.Requires<ArgumentException>(((IDataParameter)this.Command.Parameters[0]).Value is int);
 
-                IDataParameterCollection parameters = this.command.Parameters;
+                IDataParameterCollection parameters = this.Command.Parameters;
                 object parameterObject = parameters[0];
                 var parameter = (IDataParameter)parameterObject;
                 object valueObject = parameter.Value;
@@ -273,7 +247,7 @@ namespace DataCommander.Foundation.Data
         /// <param name="textWriter"></param>
         public static void Write(
             DataView dataView,
-            Char columnSeparator,
+            char columnSeparator,
             string lineSeparator,
             TextWriter textWriter)
         {
@@ -441,47 +415,6 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="dataView"></param>
-        /// <param name="columns"></param>
-        /// <returns></returns>
-        public static string ToString(
-            DataView dataView,
-            DataColumn[] columns)
-        {
-            Contract.Requires<ArgumentNullException>(dataView != null);
-
-            string s = null;
-            int count = dataView.Count;
-
-            if (count > 0)
-            {
-                int columnCount = columns.Length;
-                StringTable st = new StringTable(columnCount);
-                DataTableExtensions.SetAlign(columns, st.Columns);
-                DataTableExtensions.WriteHeader(columns, st);
-
-                for (int i = 0; i < count; i++)
-                {
-                    DataRow dataRow = dataView[i].Row;
-                    StringTableRow row = st.NewRow();
-
-                    for (int j = 0; j < columns.Length; j++)
-                    {
-                        row[j] = dataRow[columns[j]].ToString();
-                    }
-
-                    st.Rows.Add(row);
-                }
-
-                s = st.ToString();
-            }
-
-            return s;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="dataTable"></param>
         /// <param name="columnNumber"></param>
         /// <param name="rowNumber"></param>
@@ -530,7 +463,7 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public void Open()
         {
-            this.connection.Open();
+            this.Connection.Open();
         }
 
         /// <summary>
@@ -538,7 +471,7 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public void Close()
         {
-            this.connection.Close();
+            this.Connection.Close();
         }
 
         /// <summary>
@@ -546,7 +479,7 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public void Dispose()
         {
-            this.connection.Dispose();
+            this.Connection.Dispose();
         }
 
         /// <summary>
@@ -557,7 +490,7 @@ namespace DataCommander.Foundation.Data
         {
             Contract.Requires(this.Connection != null);
 
-            return this.connection.BeginTransaction();
+            return this.Connection.BeginTransaction();
         }
 
         /// <summary>
@@ -569,7 +502,7 @@ namespace DataCommander.Foundation.Data
         {
             Contract.Requires(this.Connection != null);
 
-            return this.connection.BeginTransaction(il);
+            return this.Connection.BeginTransaction(il);
         }
 
         /// <summary>
@@ -585,10 +518,10 @@ namespace DataCommander.Foundation.Data
         {
             Contract.Requires(this.Connection != null);
 
-            this.command = this.connection.CreateCommand();
-            this.command.Transaction = this.transaction;
-            this.command.CommandTimeout = this.commandTimeout;
-            return this.command;
+            this.Command = this.Connection.CreateCommand();
+            this.Command.Transaction = this.Transaction;
+            this.Command.CommandTimeout = this.CommandTimeout;
+            return this.Command;
         }
 
         /// <summary>
@@ -598,9 +531,9 @@ namespace DataCommander.Foundation.Data
         /// <returns>A <see cref="System.Data.IDbCommand"/> object associated with the connection.</returns>
         public IDbCommand CreateCommand(string commandText)
         {
-            this.command = this.CreateCommand();
-            this.command.CommandText = commandText;
-            return this.command;
+            this.Command = this.CreateCommand();
+            this.Command.CommandText = commandText;
+            return this.Command;
         }
 
         /// <summary>
@@ -611,9 +544,9 @@ namespace DataCommander.Foundation.Data
         /// <returns>A Command object associated with the connection.</returns>
         public IDbCommand CreateCommand(string commandText, CommandType commandType)
         {
-            this.command = this.CreateCommand(commandText);
-            this.command.CommandType = commandType;
-            return this.command;
+            this.Command = this.CreateCommand(commandText);
+            this.Command.CommandType = commandType;
+            return this.Command;
         }
 
         /// <summary>
@@ -624,7 +557,7 @@ namespace DataCommander.Foundation.Data
         {
             Contract.Requires(this.CommandBuilderHelper != null);
 
-            this.commandBuilderHelper.DeriveParameters(command);
+            this.CommandBuilderHelper.DeriveParameters(command);
         }
 
         /// <summary>
@@ -638,9 +571,9 @@ namespace DataCommander.Foundation.Data
         {
             Contract.Requires(command != null);
 
-            this.command = command;
-            this.rowCount = command.ExecuteNonQuery();
-            return this.rowCount;
+            this.Command = command;
+            this.RowCount = command.ExecuteNonQuery();
+            return this.RowCount;
         }
 
         /// <summary>
@@ -656,17 +589,17 @@ namespace DataCommander.Foundation.Data
             //this.rowCount = this.command.ExecuteNonQuery();
             //return this.rowCount;
 
-            this.command = this.CreateCommand(commandText);
+            this.Command = this.CreateCommand(commandText);
             try
             {
-                this.rowCount = this.command.ExecuteNonQuery();
+                this.RowCount = this.Command.ExecuteNonQuery();
             }
             catch (Exception exception)
             {
-                throw new DbCommandExecutionException("Database.ExecuteNonQuery failed.", exception, this.command);
+                throw new DbCommandExecutionException("Database.ExecuteNonQuery failed.", exception, this.Command);
             }
 
-            return this.rowCount;
+            return this.RowCount;
         }
 
         /// <summary>
@@ -678,7 +611,7 @@ namespace DataCommander.Foundation.Data
         {
             Contract.Requires<ArgumentNullException>(command != null);
 
-            this.command = command;
+            this.Command = command;
             object scalar = command.ExecuteScalar();
             return scalar;
         }
@@ -690,8 +623,8 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public object ExecuteScalar(string commandText)
         {
-            this.command = this.CreateCommand(commandText);
-            object scalar = this.command.ExecuteScalar();
+            this.Command = this.CreateCommand(commandText);
+            object scalar = this.Command.ExecuteScalar();
             return scalar;
         }
 
@@ -702,8 +635,8 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public IDataReader ExecuteReader(string commandText)
         {
-            this.command = this.CreateCommand(commandText);
-            return this.command.ExecuteReader();
+            this.Command = this.CreateCommand(commandText);
+            return this.Command.ExecuteReader();
         }
 
         /// <summary>
@@ -714,8 +647,8 @@ namespace DataCommander.Foundation.Data
         /// <returns>An <see cref="IDataReader"/> object.</returns>
         public IDataReader ExecuteReader(string commandText, CommandBehavior behavior)
         {
-            this.command = this.CreateCommand(commandText);
-            return this.command.ExecuteReader(behavior);
+            this.Command = this.CreateCommand(commandText);
+            return this.Command.ExecuteReader(behavior);
         }
 
         /// <summary>
@@ -726,8 +659,8 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public DataTable ExecuteDataTable(string commandText, CancellationToken cancellationToken)
         {
-            this.command = this.CreateCommand(commandText);
-            return this.command.ExecuteDataTable(cancellationToken);
+            this.Command = this.CreateCommand(commandText);
+            return this.Command.ExecuteDataTable(cancellationToken);
         }
 
         /// <summary>
@@ -740,9 +673,9 @@ namespace DataCommander.Foundation.Data
         {
             Contract.Requires<ArgumentNullException>(command != null);
 
-            this.command = command;
+            this.Command = command;
             var dataTable = new DataTable();
-            this.rowCount = command.Fill(dataTable,cancellationToken);
+            this.RowCount = command.Fill(dataTable, cancellationToken);
             return dataTable;
         }
 
@@ -754,10 +687,10 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public DataSet ExecuteDataSet(IDbCommand command, CancellationToken cancellationToken)
         {
-            this.command = command;
+            this.Command = command;
             var dataSet = new DataSet();
             dataSet.Locale = CultureInfo.InvariantCulture;
-            this.rowCount = command.Fill(dataSet, cancellationToken);
+            this.RowCount = command.Fill(dataSet, cancellationToken);
             return dataSet;
         }
 
@@ -769,8 +702,8 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public DataSet ExecuteDataSet(string commandText, CancellationToken cancellationToken)
         {
-            this.command = this.CreateCommand(commandText);
-            return this.ExecuteDataSet(this.command, cancellationToken);
+            this.Command = this.CreateCommand(commandText);
+            return this.ExecuteDataSet(this.Command, cancellationToken);
         }
 
         /// <summary>
@@ -783,7 +716,7 @@ namespace DataCommander.Foundation.Data
             Contract.Requires<ArgumentNullException>(command != null);
             Contract.Requires<ArgumentNullException>(this.CommandHelper != null);
 
-            return this.commandHelper.ExecuteXmlDocument(command);
+            return this.CommandHelper.ExecuteXmlDocument(command);
         }
 
         /// <summary>
@@ -793,8 +726,8 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public XmlDocument ExecuteXmlDocument(string commandText)
         {
-            this.command = this.CreateCommand(commandText);
-            return this.ExecuteXmlDocument(this.command);
+            this.Command = this.CreateCommand(commandText);
+            return this.ExecuteXmlDocument(this.Command);
         }
 
         /// <summary>
@@ -807,7 +740,7 @@ namespace DataCommander.Foundation.Data
         {
             Contract.Requires<ArgumentNullException>(command != null);
 
-            this.command = command;
+            this.Command = command;
             DataTable schemaTable;
 
             using (IDataReader dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly | CommandBehavior.KeyInfo))
@@ -850,9 +783,9 @@ namespace DataCommander.Foundation.Data
         {
             Contract.Requires<ArgumentNullException>(dataSet != null);
 
-            this.command = this.CreateCommand(commandText);
-            this.rowCount = this.command.Fill(dataSet, cancellationToken);
-            return this.rowCount;
+            this.Command = this.CreateCommand(commandText);
+            this.RowCount = this.Command.Fill(dataSet, cancellationToken);
+            return this.RowCount;
         }
 
         #endregion
@@ -872,10 +805,10 @@ namespace DataCommander.Foundation.Data
             IDbCommandHelper commandHelper,
             int commandTimeout)
         {
-            this.connection = connection;
-            this.transaction = transaction;
-            this.commandHelper = commandHelper;
-            this.commandTimeout = commandTimeout;
+            this.Connection = connection;
+            this.Transaction = transaction;
+            this.CommandHelper = commandHelper;
+            this.CommandTimeout = commandTimeout;
         }
 
         #endregion

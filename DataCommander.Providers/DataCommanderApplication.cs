@@ -14,12 +14,7 @@ namespace DataCommander.Providers
         #region Private Fields
 
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private static readonly DataCommanderApplication dataCommanderApplication = new DataCommanderApplication();
-        private readonly ApplicationData applicationData = new ApplicationData();
-        private string fileName;
         private string sectionName;
-        private readonly string name;
-        private MainForm mainForm;
 
         #endregion
 
@@ -27,7 +22,7 @@ namespace DataCommander.Providers
         {
             string fileName = Assembly.GetEntryAssembly().Location;
             FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(fileName);
-            this.name = versionInfo.ProductName;
+            this.Name = versionInfo.ProductName;
 
             Settings.Section.SelectNode(null, true);
 
@@ -37,27 +32,27 @@ namespace DataCommander.Providers
         private static void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
         {
             log.Write(LogLevel.Trace, "Reason: {0}", e.Reason);
-            var mainForm = dataCommanderApplication.mainForm;
+            var mainForm = Instance.MainForm;
             mainForm.SaveAll();
         }
 
         #region Public Properties
 
-        public static DataCommanderApplication Instance => dataCommanderApplication;
+        public static DataCommanderApplication Instance { get; } = new DataCommanderApplication();
 
-        public string Name => this.name;
+        public string Name { get; }
 
-        public ApplicationData ApplicationData => this.applicationData;
+        public ApplicationData ApplicationData { get; } = new ApplicationData();
 
-        public string FileName => this.fileName;
+        public string FileName { get; private set; }
 
-        public MainForm MainForm => this.mainForm;
+        public MainForm MainForm { get; private set; }
 
         public ConfigurationNode ConnectionsConfigurationNode
         {
             get
             {
-                ConfigurationNode folder = this.applicationData.CreateNode("DataCommander/Connections");
+                ConfigurationNode folder = this.ApplicationData.CreateNode("DataCommander/Connections");
                 return folder;
             }
         }
@@ -73,8 +68,8 @@ namespace DataCommander.Providers
                 log.Write(LogLevel.Trace, "{0}\r\n{1}", AppDomainMonitor.EnvironmentInfo, AppDomainMonitor.CurrentDomainState);
             });
 
-            this.mainForm = new MainForm();
-            Application.Run(this.mainForm);
+            this.MainForm = new MainForm();
+            Application.Run(this.MainForm);
         }
 
         public void SaveApplicationData()
@@ -103,16 +98,16 @@ namespace DataCommander.Providers
                 connectionProperties.Save(subFolder);
             }
 
-            string tempFileName = this.fileName + ".temp";
-            this.applicationData.Save(tempFileName, this.sectionName);
-            bool succeeded = NativeMethods.MoveFileEx(tempFileName, this.fileName,
+            string tempFileName = this.FileName + ".temp";
+            this.ApplicationData.Save(tempFileName, this.sectionName);
+            bool succeeded = NativeMethods.MoveFileEx(tempFileName, this.FileName,
                 NativeMethods.MoveFileExFlags.ReplaceExisiting);
             log.Write(LogLevel.Trace, "MoveFileEx succeeded: {0}", succeeded);
         }
 
         public void LoadApplicationData(string fileName, string sectionName)
         {
-            this.applicationData.Load(fileName, sectionName);
+            this.ApplicationData.Load(fileName, sectionName);
             ConfigurationNode folder = this.ConnectionsConfigurationNode;
 
             foreach (ConfigurationNode subFolder in folder.ChildNodes)
@@ -123,7 +118,7 @@ namespace DataCommander.Providers
                 //connectionProperties.Save(subFolder);
             }
 
-            this.fileName = fileName;
+            this.FileName = fileName;
             this.sectionName = sectionName;
         }
 

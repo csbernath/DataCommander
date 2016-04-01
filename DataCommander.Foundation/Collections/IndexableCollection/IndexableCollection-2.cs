@@ -23,7 +23,7 @@
         /// <param name="item"></param>
         public void Add(T item)
         {
-            foreach (ICollectionIndex<T> index in this.indexes)
+            foreach (ICollectionIndex<T> index in this.Indexes)
             {
                 index.Add(item);
             }
@@ -34,7 +34,7 @@
         /// </summary>
         public void Clear()
         {
-            foreach (ICollectionIndex<T> index in this.indexes)
+            foreach (ICollectionIndex<T> index in this.Indexes)
             {
                 index.Clear();
             }
@@ -68,7 +68,7 @@
         /// <returns></returns>
         public bool Remove(T item)
         {
-            return this.indexes.All(index => index.Remove(item));
+            return this.Indexes.All(index => index.Remove(item));
         }
 
         /// <summary>

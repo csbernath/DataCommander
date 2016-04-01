@@ -11,22 +11,21 @@
     public sealed class XmlSpreadsheetAttributeCollection : ICollection<XmlSpreadsheetAttribute>
     {
         private readonly IndexableCollection<XmlSpreadsheetAttribute> items;
-        private readonly UniqueIndex<string, XmlSpreadsheetAttribute> nameIndex;
 
         internal XmlSpreadsheetAttributeCollection()
         {
-            this.nameIndex = new UniqueIndex<string, XmlSpreadsheetAttribute>(
+            this.NameIndex = new UniqueIndex<string, XmlSpreadsheetAttribute>(
                 "NameIndex",
                 item => GetKeyResponse.Create(true, item.LocalName),
                 SortOrder.None);
 
-            this.items = new IndexableCollection<XmlSpreadsheetAttribute>(this.nameIndex);
+            this.items = new IndexableCollection<XmlSpreadsheetAttribute>(this.NameIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public UniqueIndex<string, XmlSpreadsheetAttribute> NameIndex => this.nameIndex;
+        public UniqueIndex<string, XmlSpreadsheetAttribute> NameIndex { get; }
 
         #region ICollection<XmlSpreadsheetAttribute> Members
 

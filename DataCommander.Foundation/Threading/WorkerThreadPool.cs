@@ -9,9 +9,6 @@ namespace DataCommander.Foundation.Threading
     public class WorkerThreadPool
     {
         private readonly Queue<object> queue = new Queue<object>();
-        private readonly AutoResetEvent enqueueEvent = new AutoResetEvent( false );
-        private readonly WorkerThreadPoolDequeuerCollection dequeuers;
-        private readonly int maxThreadCount;
         private int activeThreadCount;
 
         /// <summary>
@@ -20,8 +17,8 @@ namespace DataCommander.Foundation.Threading
         /// <param name="maxThreadCount"></param>
         public WorkerThreadPool( int maxThreadCount )
         {
-            this.maxThreadCount = maxThreadCount;
-            this.dequeuers = new WorkerThreadPoolDequeuerCollection( this );
+            this.MaxThreadCount = maxThreadCount;
+            this.Dequeuers = new WorkerThreadPoolDequeuerCollection( this );
         }
 
         /// <summary>
@@ -35,7 +32,7 @@ namespace DataCommander.Foundation.Threading
                 this.queue.Enqueue( item );
             }
 
-            this.enqueueEvent.Set();
+            this.EnqueueEvent.Set();
         }
 
         /// <summary>
@@ -78,18 +75,18 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public WorkerThreadPoolDequeuerCollection Dequeuers => this.dequeuers;
+        public WorkerThreadPoolDequeuerCollection Dequeuers { get; }
 
         /// <summary>
         /// 
         /// </summary>
         public int ActiveThreadCount => this.activeThreadCount;
 
-        internal AutoResetEvent EnqueueEvent => this.enqueueEvent;
+        internal AutoResetEvent EnqueueEvent { get; } = new AutoResetEvent( false );
 
         /// <summary>
         /// 
         /// </summary>
-        public int MaxThreadCount => this.maxThreadCount;
+        public int MaxThreadCount { get; }
     }
 }

@@ -10,11 +10,9 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 
     internal sealed class SystemTableCollectionNode : ITreeNode
     {
-        private readonly DatabaseNode databaseNode;
-
         public SystemTableCollectionNode(DatabaseNode databaseNode)
         {
-            this.databaseNode = databaseNode;
+            this.DatabaseNode = databaseNode;
         }
 
         string ITreeNode.Name => "System Tables";
@@ -48,7 +46,7 @@ where
     else 0
 end          
              AS bit)=1)
-order by [Schema],[Name]", this.databaseNode.Name);
+order by [Schema],[Name]", this.DatabaseNode.Name);
             string connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
@@ -60,7 +58,7 @@ order by [Schema],[Name]", this.databaseNode.Name);
             {
                 String schema = (String)dataRow["Schema"];
                 String name = (String)dataRow["Name"];
-                TableNode tableNode = new TableNode(this.databaseNode, schema, name);
+                TableNode tableNode = new TableNode(this.DatabaseNode, schema, name);
                 childNodes.Add(tableNode);
             }
 
@@ -71,7 +69,7 @@ order by [Schema],[Name]", this.databaseNode.Name);
 
         string ITreeNode.Query => null;
 
-        public DatabaseNode DatabaseNode => this.databaseNode;
+        public DatabaseNode DatabaseNode { get; }
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
     }

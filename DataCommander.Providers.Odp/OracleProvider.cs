@@ -26,18 +26,6 @@ namespace DataCommander.Providers.Odp
         {
             get
             {
-                //        if (keyWords == null)
-                //        {
-                ////          string connectionString = "Provider=MSDAORA.1;" + this.connectionString;
-                ////          keyWords = Provider.GetKeyWords(connectionString);
-                ////          Application.Instance.ApplicationData.CurrentType.Properties.Add("OracleKeyWords",keyWords);
-                ////          Application.Instance.ApplicationData.Save(@"c:\a.xml");
-                //
-                //          keyWords = 
-                //        }
-                //        
-                //        return keyWords;
-
                 string[] keyWords = Settings.CurrentType.Attributes["OracleKeyWords"].GetValue<string[]>();
                 return keyWords;
             }
@@ -280,9 +268,9 @@ namespace DataCommander.Providers.Odp
             return null;
         }
 
-        Type IProvider.GetColumnType(DataColumnSchema dataColumnSchema)
+        Type IProvider.GetColumnType(DbColumn column)
         {
-            OracleDbType oracleDbType = (OracleDbType) dataColumnSchema[SchemaTableColumn.ProviderType];
+            var oracleDbType = (OracleDbType)column.ProviderType;
             Type type;
 
             switch (oracleDbType)
@@ -318,7 +306,7 @@ namespace DataCommander.Providers.Odp
 
         XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
         {
-            OracleCommand oracleCommand = (OracleCommand) command;
+            var oracleCommand = (OracleCommand)command;
             return oracleCommand.ExecuteXmlReader();
         }
 

@@ -8,9 +8,6 @@ namespace DataCommander.Foundation.Linq
     {
         #region Private Fields
 
-        private readonly int index;
-        private readonly T value;
-
         #endregion
 
         /// <summary>
@@ -20,18 +17,18 @@ namespace DataCommander.Foundation.Linq
         /// <param name="value"></param>
         public IndexedItem(int index, T value)
         {
-            this.index = index;
-            this.value = value;
+            this.Index = index;
+            this.Value = value;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int Index => this.index;
+        public int Index { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public T Value => this.value;
+        public T Value { get; }
     }
 }

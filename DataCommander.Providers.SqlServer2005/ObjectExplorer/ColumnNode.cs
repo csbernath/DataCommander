@@ -36,7 +36,6 @@
 
     internal sealed class ColumnNode : ITreeNode
     {
-        private readonly int id;
         private readonly string columnName;
         private readonly byte systemTypeId;
         private readonly short maxLength;
@@ -57,7 +56,7 @@
             bool isNullable,
             string userTypeName )
         {
-            this.id = id;
+            this.Id = id;
             this.columnName = columnName;
             this.systemTypeId = systemTypeId;
             this.maxLength = maxLength;
@@ -67,7 +66,7 @@
             this.userTypeName = userTypeName;
         }
 
-        public int Id => this.id;
+        public int Id { get; }
 
         public bool IsPrimaryKey
         {

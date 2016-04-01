@@ -13,19 +13,17 @@
     /// </summary>
     public sealed class Document
     {
-        private readonly DocumentPropertyCollection properties;
-
         internal Document( DocumentPropertyCollection properties )
         {
             Contract.Requires(properties != null);
 
-            this.properties = properties;
+            this.Properties = properties;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public DocumentPropertyCollection Properties => this.properties;
+        public DocumentPropertyCollection Properties { get; }
 
         /// <summary>
         /// 

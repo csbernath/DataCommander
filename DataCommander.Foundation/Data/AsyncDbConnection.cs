@@ -18,11 +18,11 @@ namespace DataCommander.Foundation.Data
     {
         #region Private Fields
 
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = LogFactory.Instance.GetTypeLog(typeof (AsyncDbConnection));
         private readonly IDbConnection cloneableConnection;
         private readonly ICloneable cloneable;
         private readonly List<string> commands = new List<string>();
-        private readonly AutoResetEvent queueEvent = new AutoResetEvent( false );
+        private readonly AutoResetEvent queueEvent = new AutoResetEvent(false);
         private readonly WorkerThread thread;
 
         #endregion
@@ -32,21 +32,22 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="cloneableConnection"></param>
         /// <param name="threadName"></param>
-        public AsyncDbConnection( IDbConnection cloneableConnection, string threadName )
+        public AsyncDbConnection(IDbConnection cloneableConnection, string threadName)
         {
             this.cloneableConnection = cloneableConnection;
-            this.cloneable = (ICloneable) cloneableConnection;
-            this.thread = new WorkerThread( this.Start );
+            this.cloneable = (ICloneable)cloneableConnection;
+            this.thread = new WorkerThread(this.Start);
             this.thread.Name = threadName;
             this.thread.Start();
         }
 
         #region IDbConnection Members
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="databaseName"></param>
-        public void ChangeDatabase( string databaseName )
+        public void ChangeDatabase(string databaseName)
         {
             // TODO:  Add AsyncSqlConnection.ChangeDatabase implementation
         }
@@ -56,7 +57,7 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         /// <param name="il"></param>
         /// <returns></returns>
-        public IDbTransaction BeginTransaction( IsolationLevel il )
+        public IDbTransaction BeginTransaction(IsolationLevel il)
         {
             // TODO:  Add AsyncSqlConnection.BeginTransaction implementation
             return null;
@@ -96,7 +97,7 @@ namespace DataCommander.Foundation.Data
         public IDbCommand CreateCommand()
         {
             IDbCommand command = this.cloneableConnection.CreateCommand();
-            return new AsyncDbCommand( this, command );
+            return new AsyncDbCommand(this, command);
         }
 
         /// <summary>
@@ -142,13 +143,13 @@ namespace DataCommander.Foundation.Data
 
         #region Internal Methods
 
-        internal int ExecuteNonQuery( AsyncDbCommand command )
+        internal int ExecuteNonQuery(AsyncDbCommand command)
         {
-            string commandText = ToString( command );
+            string commandText = ToString(command);
 
             lock (this.commands)
             {
-                this.commands.Add( commandText );
+                this.commands.Add(commandText);
             }
 
             this.queueEvent.Set();
@@ -160,7 +161,7 @@ namespace DataCommander.Foundation.Data
 
         #region Private Methods
 
-        private static string ToString( IDbCommand command )
+        private static string ToString(IDbCommand command)
         {
             string commandText;
 
@@ -168,14 +169,14 @@ namespace DataCommander.Foundation.Data
             {
                 case CommandType.StoredProcedure:
                     StringBuilder sb = new StringBuilder();
-                    sb.AppendFormat( "exec {0}", command.CommandText );
-                    SqlParameterCollection parameters = (SqlParameterCollection) command.Parameters;
+                    sb.AppendFormat("exec {0}", command.CommandText);
+                    SqlParameterCollection parameters = (SqlParameterCollection)command.Parameters;
                     string parametersString = parameters.ToLogString();
 
                     if (parametersString.Length > 0)
                     {
-                        sb.Append( ' ' );
-                        sb.Append( parametersString );
+                        sb.Append(' ');
+                        sb.Append(parametersString);
                     }
 
                     commandText = sb.ToString();
@@ -195,12 +196,12 @@ namespace DataCommander.Foundation.Data
         private void Start()
         {
             WaitHandle[] waitHandles =
-                {
-                    this.thread.StopRequest,
-                    this.queueEvent
-                };
+            {
+                this.thread.StopRequest,
+                this.queueEvent
+            };
 
-            const int Timeout = 10000;// 10 sec
+            const int Timeout = 10000; // 10 sec
 
             while (true)
             {
@@ -211,7 +212,7 @@ namespace DataCommander.Foundation.Data
                     break;
                 }
 
-                WaitHandle.WaitAny( waitHandles, Timeout, false );
+                WaitHandle.WaitAny(waitHandles, Timeout, false);
             }
         }
 
@@ -225,8 +226,8 @@ namespace DataCommander.Foundation.Data
 
                     lock (this.commands)
                     {
-                        commandTextArray = new string[ this.commands.Count ];
-                        this.commands.CopyTo( commandTextArray );
+                        commandTextArray = new string[this.commands.Count];
+                        this.commands.CopyTo(commandTextArray);
                         this.commands.Clear();
                     }
 
@@ -236,16 +237,16 @@ namespace DataCommander.Foundation.Data
                     {
                         if (i > 0)
                         {
-                            sb.Append( Environment.NewLine );
+                            sb.Append(Environment.NewLine);
                         }
 
-                        sb.Append( commandTextArray[ i ] );
+                        sb.Append(commandTextArray[i]);
                     }
 
                     string commandText = sb.ToString();
                     Exception exception = null;
 
-                    using (var connection = (IDbConnection) this.cloneable.Clone())
+                    using (var connection = (IDbConnection)this.cloneable.Clone())
                     {
                         var command = connection.CreateCommand();
                         command.CommandText = commandText;
@@ -276,7 +277,7 @@ namespace DataCommander.Foundation.Data
                             message = exception.ToLogString();
                         }
 
-                        log.Write( LogLevel.Error, message );
+                        log.Write(LogLevel.Error, message);
                     }
                 }
             }

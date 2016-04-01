@@ -41,7 +41,7 @@ This program is freeware and released under the <a href=""https://www.gnu.org/li
 Target Framework: {targetFrameworkAttribute.FrameworkDisplayName}
 <br/>
 <br/>
-<a href=""localfile://{HttpUtility.HtmlEncode(DataCommanderApplication.Instance.FileName)}"">Application Data file</a>
+<a href=""applicationdatafile://"">Application Data file</a>
 <br/>
 <a href=""logfile://"">Log file</a>
 <br/>
@@ -90,12 +90,11 @@ Credits:
                 string url = null;
                 bool exists = false;
 
-                if (e.Url.Scheme == "localfile")
+                if (e.Url.Scheme == "applicationdatafile")
                 {
-                    var uriBuilder = new UriBuilder(e.Url);
-                    uriBuilder.Scheme = "file";
-                    url = HttpUtility.UrlDecode(uriBuilder.Path);
-                    exists = File.Exists(url);
+                    string applicationDataFileName = DataCommanderApplication.Instance.FileName;
+                    exists = true;
+                    url = applicationDataFileName;
                 }
                 else if (e.Url.Scheme == "logfile")
                 {

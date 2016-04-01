@@ -8,10 +8,6 @@
     /// <typeparam name="T"></typeparam>
     public struct DataParameterValue<T> : IDataParameterValue<T>
     {
-        private static readonly DataParameterValue<T> defaultInstance = new DataParameterValue<T>( DataParameterValueType.Default );
-        private static readonly DataParameterValue<T> nullInstance = new DataParameterValue<T>( DataParameterValueType.Null );
-        private static readonly DataParameterValue<T> voidInstance = new DataParameterValue<T>( DataParameterValueType.Void );
-        private readonly DataParameterValueType type;
         private readonly T value;
 
         /// <summary>
@@ -20,30 +16,30 @@
         /// <param name="value"></param>
         public DataParameterValue( T value )
         {
-            this.type = DataParameterValueType.Value;
+            this.Type = DataParameterValueType.Value;
             this.value = value;
         }
 
         private DataParameterValue( DataParameterValueType type )
         {
-            this.type = type;
+            this.Type = type;
             this.value = default( T );
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static DataParameterValue<T> Default => defaultInstance;
+        public static DataParameterValue<T> Default { get; } = new DataParameterValue<T>( DataParameterValueType.Default );
 
         /// <summary>
         /// 
         /// </summary>
-        public static DataParameterValue<T> Null => nullInstance;
+        public static DataParameterValue<T> Null { get; } = new DataParameterValue<T>( DataParameterValueType.Null );
 
         /// <summary>
         /// 
         /// </summary>
-        public static DataParameterValue<T> Void => voidInstance;
+        public static DataParameterValue<T> Void { get; } = new DataParameterValue<T>( DataParameterValueType.Void );
 
         /// <summary>
         /// 
@@ -68,7 +64,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public DataParameterValueType Type => this.type;
+        public DataParameterValueType Type { get; }
 
         /// <summary>
         /// 

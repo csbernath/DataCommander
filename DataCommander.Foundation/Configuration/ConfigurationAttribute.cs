@@ -15,10 +15,6 @@ namespace DataCommander.Foundation.Configuration
     [DebuggerDisplay("Name = {Name}, Value = {Value}, Description = {Description}")]
     public sealed class ConfigurationAttribute
     {
-        private readonly string name;
-        private object value;
-        private readonly string description;
-
         /// <summary>
         /// 
         /// </summary>
@@ -30,36 +26,25 @@ namespace DataCommander.Foundation.Configuration
             object value,
             string description)
         {
-            this.name = name;
-            this.value = value;
-            this.description = description;
+            this.Name = name;
+            this.Value = value;
+            this.Description = description;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Name => this.name;
+        public string Name { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public object Value
-        {
-            get
-            {
-                return this.value;
-            }
-
-            set
-            {
-                this.value = value;
-            }
-        }
+        public object Value { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Description => this.description;
+        public string Description { get; }
 
         /// <summary>
         /// 
@@ -70,7 +55,7 @@ namespace DataCommander.Foundation.Configuration
         {
             Contract.Requires((this.Value == null && typeof (T).IsClass) || this.Value is T);
 
-            T value = (T)this.value;
+            T value = (T)this.Value;
             return value;
         }
 
@@ -80,7 +65,7 @@ namespace DataCommander.Foundation.Configuration
         /// <returns></returns>
         public ConfigurationAttribute Clone()
         {
-            var clone = new ConfigurationAttribute(this.name, this.value, this.description);
+            var clone = new ConfigurationAttribute(this.Name, this.Value, this.Description);
             return clone;
         }
 
@@ -93,9 +78,9 @@ namespace DataCommander.Foundation.Configuration
             string typeName;
             Type type = null;
 
-            if (this.value != null)
+            if (this.Value != null)
             {
-                type = this.value.GetType();
+                type = this.Value.GetType();
                 typeName = TypeNameCollection.GetTypeName(type);
             }
             else
@@ -103,7 +88,7 @@ namespace DataCommander.Foundation.Configuration
                 typeName = "object";
             }
 
-            textWriter.Write("  " + typeName + " " + this.name + " = ");
+            textWriter.Write("  " + typeName + " " + this.Name + " = ");
 
             if (type != null)
             {
@@ -113,13 +98,13 @@ namespace DataCommander.Foundation.Configuration
 
                     if (elementType == typeof (byte))
                     {
-                        byte[] inArray = (byte[])this.value;
+                        byte[] inArray = (byte[])this.Value;
                         string base64 = System.Convert.ToBase64String(inArray);
                         textWriter.WriteLine(base64);
                     }
                     else
                     {
-                        Array array = (Array)this.value;
+                        Array array = (Array)this.Value;
 
                         if (array.Length > 0)
                         {
@@ -138,12 +123,12 @@ namespace DataCommander.Foundation.Configuration
                 }
                 else
                 {
-                    Write(this.value, textWriter);
+                    Write(this.Value, textWriter);
                 }
             }
             else
             {
-                Write(this.value, textWriter);
+                Write(this.Value, textWriter);
             }
         }
 

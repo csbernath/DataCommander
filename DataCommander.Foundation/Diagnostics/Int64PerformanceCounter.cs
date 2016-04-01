@@ -111,8 +111,12 @@
         /// <returns></returns>
         public string ToLogString()
         {
-            return
-                $"Int64PerformanceCounter '{this.name}'\r\ncount: {this.count}\r\nmin: {this.toString(this.min)}\r\navg: {this.toString((long)((Double)this.Sum/this.Count))}\r\nmax: {this.toString(this.max)}\r\nsum: {this.toString(this.sum)}";
+            return $@"Int64PerformanceCounter '{this.name}'
+count: {this.count}
+min: {this.toString(this.min)}
+avg: {this.toString((long)((double)this.Sum/this.Count))}
+max: {this.toString(this.max)}
+sum: {this.toString(this.sum)}";
         }
     }
 }

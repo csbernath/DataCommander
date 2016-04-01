@@ -9,15 +9,13 @@
 
     internal sealed class JobCollectionNode : ITreeNode
     {
-        private readonly ServerNode server;
-
         public JobCollectionNode( ServerNode server )
         {
             Contract.Requires( server != null );
-            this.server = server;
+            this.Server = server;
         }
 
-        public ServerNode Server => this.server;
+        public ServerNode Server { get; }
 
         #region ITreeNode Members
 

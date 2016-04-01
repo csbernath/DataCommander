@@ -120,7 +120,7 @@
 
             foreach (DataRow schemaRow in schemaTable.Rows)
             {
-                var dataColumnSchema = new DataColumnSchema(schemaRow);
+                var dataColumnSchema = new DbColumn(schemaRow);
                 string columnName = dataColumnSchema.ColumnName;
                 int columnSize = dataColumnSchema.ColumnSize;
                 Type dataType = this.provider.GetColumnType(dataColumnSchema);

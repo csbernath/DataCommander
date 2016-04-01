@@ -12,7 +12,6 @@ namespace DataCommander.Foundation.Threading
     {
         private readonly List<WorkerThreadPoolDequeuer> list = new List<WorkerThreadPoolDequeuer>();
         private readonly WorkerThreadPool pool;
-        private readonly WorkerThreadCollection threads = new WorkerThreadCollection();
 
         internal WorkerThreadPoolDequeuerCollection(WorkerThreadPool pool)
         {
@@ -22,7 +21,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public WorkerThreadCollection Threads => this.threads;
+        public WorkerThreadCollection Threads { get; } = new WorkerThreadCollection();
 
         /// <summary>
         /// 
@@ -32,7 +31,7 @@ namespace DataCommander.Foundation.Threading
         {
             Contract.Assert(dequeuer != null);
 
-            this.threads.Add(dequeuer.Thread);
+            this.Threads.Add(dequeuer.Thread);
             this.list.Add(dequeuer);
             dequeuer.Pool = this.pool;
         }

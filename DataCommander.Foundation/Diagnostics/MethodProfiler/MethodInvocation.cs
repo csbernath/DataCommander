@@ -1,46 +1,30 @@
-﻿namespace DataCommander.Foundation.Diagnostics
+﻿namespace DataCommander.Foundation.Diagnostics.MethodProfiler
 {
     using System.Threading;
 
     internal sealed class MethodInvocation
     {
         private static int idSequence;
-        private readonly MethodInvocation parent;
-        private readonly int id;
-        private readonly int methodId;
-        private readonly long beginTime;
-        private long endTime;
 
         public MethodInvocation(
             MethodInvocation parent,
             int methodId,
             long beginTime)
         {
-            this.parent = parent;
-            this.id = Interlocked.Increment(ref idSequence);
-            this.methodId = methodId;
-            this.beginTime = beginTime;
+            this.Parent = parent;
+            this.Id = Interlocked.Increment(ref idSequence);
+            this.MethodId = methodId;
+            this.BeginTime = beginTime;
         }
 
-        public MethodInvocation Parent => this.parent;
+        public MethodInvocation Parent { get; }
 
-        public int Id => this.id;
+        public int Id { get; }
 
-        public int MethodId => this.methodId;
+        public int MethodId { get; }
 
-        public long BeginTime => this.beginTime;
+        public long BeginTime { get; }
 
-        public long EndTime
-        {
-            get
-            {
-                return this.endTime;
-            }
-
-            set
-            {
-                this.endTime = value;
-            }
-        }
+        public long EndTime { get; set; }
     }
 }

@@ -7,13 +7,12 @@
     {
         private readonly object lockObject = new object();
         private int counter;
-        private int threadId;
 
         public IDisposable Enter()
         {
             Monitor.Enter(this.lockObject);
             Interlocked.Increment(ref this.counter);
-            this.threadId = Thread.CurrentThread.ManagedThreadId;
+            this.ThreadId = Thread.CurrentThread.ManagedThreadId;
             return new Disposer(this.Exit);
         }
 
@@ -23,7 +22,7 @@
             if (entered)
             {
                 Interlocked.Increment(ref this.counter);
-                this.threadId = Thread.CurrentThread.ManagedThreadId;
+                this.ThreadId = Thread.CurrentThread.ManagedThreadId;
             }
 
             return entered;
@@ -31,13 +30,13 @@
 
         public void Exit()
         {
-            this.threadId = 0;
+            this.ThreadId = 0;
             Interlocked.Decrement(ref this.counter);
             Monitor.Exit(this.lockObject);
         }
 
         public bool Locked => this.counter > 0;
 
-        public int ThreadId => this.threadId;
+        public int ThreadId { get; private set; }
     }
 }

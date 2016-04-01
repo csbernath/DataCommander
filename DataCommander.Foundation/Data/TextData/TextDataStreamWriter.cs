@@ -8,8 +8,6 @@
     {
         private readonly TextWriter textWriter;
 
-        private readonly IList<TextDataColumn> columns;
-
         private readonly IList<ITextDataConverter> converters;
 
         public TextDataStreamWriter( TextWriter textWriter, IList<TextDataColumn> columns, IList<ITextDataConverter> converters )
@@ -19,11 +17,11 @@
             Contract.Requires( converters != null );
 
             this.textWriter = textWriter;
-            this.columns = columns;
+            this.Columns = columns;
             this.converters = converters;
         }
 
-        public IList<TextDataColumn> Columns => this.columns;
+        public IList<TextDataColumn> Columns { get; }
 
         public void WriteRow( object[] values )
         {
@@ -34,7 +32,7 @@
             {
                 object value = values[ i ];
                 ITextDataConverter converter = this.converters[ i ];
-                TextDataColumn column = this.columns[ i ];
+                TextDataColumn column = this.Columns[ i ];
                 string valueString = converter.ToString( value, column );
                 Contract.Assert( !string.IsNullOrEmpty( valueString ) );
                 Contract.Assert( column.MaxLength == valueString.Length );

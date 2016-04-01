@@ -109,7 +109,7 @@ namespace DataCommander.Foundation.Data
                 dataReader.Read(read);
             }
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -133,7 +133,7 @@ namespace DataCommander.Foundation.Data
 
             return dataSet;
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -198,6 +198,27 @@ namespace DataCommander.Foundation.Data
             }
 
             return scalar;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="transactionScope"></param>
+        /// <param name="commandDefinition"></param>
+        /// <returns></returns>
+        public static T ExecuteScalar<T>(
+            this IDbTransactionScope transactionScope,
+            CommandDefinition commandDefinition)
+        {
+            object scalar;
+
+            using (var command = transactionScope.CreateCommand(commandDefinition))
+            {
+                scalar = command.ExecuteScalar();
+            }
+
+            return Database.GetValueOrDefault<T>(scalar);
         }
     }
 }

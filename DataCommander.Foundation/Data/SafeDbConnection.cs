@@ -12,8 +12,7 @@ namespace DataCommander.Foundation.Data
     /// </summary>
     public class SafeDbConnection : IDbConnection
     {
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private IDbConnection connection;
+        private static readonly ILog log = LogFactory.Instance.GetTypeLog(typeof (SafeDbConnection));
         private ISafeDbConnection safeDbConnection;
 
         /// <summary>
@@ -26,7 +25,7 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public IDbConnection Connection => this.connection;
+        public IDbConnection Connection { get; private set; }
 
         /// <summary>
         /// 
@@ -40,7 +39,7 @@ namespace DataCommander.Foundation.Data
             Contract.Requires<ArgumentNullException>(connection != null);
             Contract.Requires<ArgumentNullException>(safeDbConnection != null);
 
-            this.connection = connection;
+            this.Connection = connection;
             this.safeDbConnection = safeDbConnection;
         }
 
@@ -61,10 +60,10 @@ namespace DataCommander.Foundation.Data
         {
             if (disposing)
             {
-                if (this.connection != null)
+                if (this.Connection != null)
                 {
-                    this.connection.Dispose();
-                    this.connection = null;
+                    this.Connection.Dispose();
+                    this.Connection = null;
                 }
             }
         }
@@ -75,7 +74,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public IDbTransaction BeginTransaction()
         {
-            return this.connection.BeginTransaction();
+            return this.Connection.BeginTransaction();
         }
 
         /// <summary>
@@ -83,7 +82,7 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         IDbTransaction IDbConnection.BeginTransaction(IsolationLevel il)
         {
-            return this.connection.BeginTransaction(il);
+            return this.Connection.BeginTransaction(il);
         }
 
         /// <summary>
@@ -92,7 +91,7 @@ namespace DataCommander.Foundation.Data
         /// <param name="databaseName"></param>
         public void ChangeDatabase(string databaseName)
         {
-            this.connection.ChangeDatabase(databaseName);
+            this.Connection.ChangeDatabase(databaseName);
         }
 
         /// <summary>
@@ -100,7 +99,7 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public void Close()
         {
-            this.connection.Close();
+            this.Connection.Close();
         }
 
         /// <summary>
@@ -109,7 +108,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public IDbCommand CreateCommand()
         {
-            IDbCommand command = this.connection.CreateCommand();
+            IDbCommand command = this.Connection.CreateCommand();
             return new SafeDbCommand(this, command);
         }
 
@@ -128,12 +127,12 @@ namespace DataCommander.Foundation.Data
                 try
                 {
                     stopwatch.Start();
-                    this.connection.Open();
+                    this.Connection.Open();
                     stopwatch.Stop();
                     if (stopwatch.ElapsedMilliseconds >= 100)
                     {
                         log.Trace("SafeDbConnection.Open() finished. {0}, count: {1}, elapsed: {2}",
-                            this.connection.ConnectionString, count, stopwatch.Elapsed);
+                            this.Connection.ConnectionString, count, stopwatch.Elapsed);
                     }
 
                     break;
@@ -150,25 +149,25 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public string ConnectionString
         {
-            get { return this.connection.ConnectionString; }
+            get { return this.Connection.ConnectionString; }
 
-            set { this.connection.ConnectionString = value; }
+            set { this.Connection.ConnectionString = value; }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int ConnectionTimeout => this.connection.ConnectionTimeout;
+        public int ConnectionTimeout => this.Connection.ConnectionTimeout;
 
         /// <summary>
         /// 
         /// </summary>
-        public string Database => this.connection.Database;
+        public string Database => this.Connection.Database;
 
         /// <summary>
         /// 
         /// </summary>
-        public ConnectionState State => this.connection.State;
+        public ConnectionState State => this.Connection.State;
 
         /// <summary>
         /// 
@@ -180,7 +179,7 @@ namespace DataCommander.Foundation.Data
         {
             Contract.Requires<ArgumentNullException>(command != null);
 
-            if (this.connection.State != ConnectionState.Open)
+            if (this.Connection.State != ConnectionState.Open)
             {
                 this.Open();
             }
@@ -205,7 +204,7 @@ namespace DataCommander.Foundation.Data
                         reader.Dispose();
                     }
 
-                    ConnectionState state = this.connection.State;
+                    ConnectionState state = this.Connection.State;
 
                     log.Write(
                         LogLevel.Error,
@@ -241,7 +240,7 @@ namespace DataCommander.Foundation.Data
 
             object scalar = null;
 
-            if (this.connection.State != ConnectionState.Open)
+            if (this.Connection.State != ConnectionState.Open)
             {
                 this.Open();
             }
@@ -257,7 +256,7 @@ namespace DataCommander.Foundation.Data
                 {
                     log.Write(LogLevel.Error, e.ToLogString());
 
-                    if (this.connection.State == ConnectionState.Open)
+                    if (this.Connection.State == ConnectionState.Open)
                     {
                         this.safeDbConnection.HandleException(e, command);
                     }
@@ -278,7 +277,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         internal int ExecuteNonQuery(IDbCommand command)
         {
-            if (this.connection.State != ConnectionState.Open)
+            if (this.Connection.State != ConnectionState.Open)
             {
                 this.Open();
             }
@@ -297,7 +296,7 @@ namespace DataCommander.Foundation.Data
                 {
                     log.Write(LogLevel.Error, e.ToLogString());
 
-                    if (this.connection.State == ConnectionState.Open)
+                    if (this.Connection.State == ConnectionState.Open)
                     {
                         this.safeDbConnection.HandleException(e, command);
                     }
@@ -316,7 +315,7 @@ namespace DataCommander.Foundation.Data
         [ContractInvariantMethod]
         private void ContractInvariant()
         {
-            Contract.Invariant(this.connection != null);
+            Contract.Invariant(this.Connection != null);
         }
     }
 }

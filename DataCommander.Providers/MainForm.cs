@@ -21,7 +21,6 @@ namespace DataCommander
     using DataCommander.Foundation.Threading;
     using DataCommander.Foundation.Windows.Forms;
     using DataCommander.Providers;
-    using Timer = System.Windows.Forms.Timer;
 
     /// <summary>
     /// Summary description for MainForm.
@@ -29,7 +28,6 @@ namespace DataCommander
     public class MainForm : Form
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private Font font;
         private readonly StringCollection recentFileList = new StringCollection();
 
         private MenuStrip mainMenu;
@@ -58,12 +56,11 @@ namespace DataCommander
         private IContainer components;
         private ToolStripStatusLabel toolStripStatusLabel;
         private ToolStripMenuItem saveAllToolStripMenuItem;
-        private ToolStripTextBox activeMdiChildToolStripTextBox;
         private ToolStripMenuItem recentConnectionsToolStripMenuItem;
         private ToolStripMenuItem checkForToolStripMenuItem;
         private ToolStripStatusLabel managedMemoryToolStripStatusLabel;
         private ToolStrip queryFormToolStrip;
-        private Timer timer;
+        private System.Windows.Forms.Timer timer;
 
         /// <summary>
         /// 
@@ -93,7 +90,7 @@ namespace DataCommander
 
             this.UpdateTotalMemory();
 
-            this.timer = new Timer(this.components)
+            this.timer = new System.Windows.Forms.Timer(this.components)
             {
                 Interval = 10000, // 10 seconds
             };
@@ -169,7 +166,7 @@ namespace DataCommander
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.helpButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.activeMdiChildToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
+            this.ActiveMdiChildToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.managedMemoryToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -335,7 +332,7 @@ namespace DataCommander
             this.toolStripSeparator1,
             this.helpButton,
             this.toolStripSeparator2,
-            this.activeMdiChildToolStripTextBox});
+            this.ActiveMdiChildToolStripTextBox});
             this.toolStrip.Location = new System.Drawing.Point(3, 24);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(518, 25);
@@ -401,9 +398,9 @@ namespace DataCommander
             // 
             // activeMdiChildToolStripTextBox
             // 
-            this.activeMdiChildToolStripTextBox.Name = "activeMdiChildToolStripTextBox";
-            this.activeMdiChildToolStripTextBox.ReadOnly = true;
-            this.activeMdiChildToolStripTextBox.Size = new System.Drawing.Size(400, 25);
+            this.ActiveMdiChildToolStripTextBox.Name = "ActiveMdiChildToolStripTextBox";
+            this.ActiveMdiChildToolStripTextBox.ReadOnly = true;
+            this.ActiveMdiChildToolStripTextBox.Size = new System.Drawing.Size(400, 25);
             // 
             // statusBar
             // 
@@ -488,9 +485,9 @@ namespace DataCommander
                     connectionProperties.Connection, this.statusBar);
 
                 queryForm.MdiParent = this;
-                if (this.font != null)
+                if (this.SelectedFont != null)
                 {
-                    queryForm.Font = this.font;
+                    queryForm.Font = this.SelectedFont;
                 }
                 queryForm.FormClosing += new FormClosingEventHandler(this.queryForm_FormClosing);
 
@@ -615,7 +612,7 @@ namespace DataCommander
 
             if (contains)
             {
-                this.font = DeserializeFont(base64);
+                this.SelectedFont = DeserializeFont(base64);
             }
         }
 
@@ -729,7 +726,7 @@ namespace DataCommander
                             connection, this.statusBar);
 
                         queryForm.MdiParent = this;
-                        queryForm.Font = this.font;
+                        queryForm.Font = this.SelectedFont;
                         queryForm.Show();
                     }
                 }
@@ -789,19 +786,19 @@ namespace DataCommander
         private void mnuFont_Click(object sender, EventArgs e)
         {
             var fontDialog = new FontDialog();
-            fontDialog.Font = this.font;
+            fontDialog.Font = this.SelectedFont;
             var dialogResult = fontDialog.ShowDialog();
 
             if (dialogResult == DialogResult.OK)
             {
-                this.font = fontDialog.Font;
+                this.SelectedFont = fontDialog.Font;
                 ApplicationData applicationData = DataCommanderApplication.Instance.ApplicationData;
                 ConfigurationNode propertyFolder = applicationData.CurrentType;
-                propertyFolder.Attributes.SetAttributeValue("Font", Serialize(this.font));
+                propertyFolder.Attributes.SetAttributeValue("Font", Serialize(this.SelectedFont));
             }
         }
 
-        public Font SelectedFont => this.font;
+        public Font SelectedFont { get; private set; }
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
@@ -875,7 +872,7 @@ namespace DataCommander
                     connection, this.statusBar);
 
                 queryForm.MdiParent = this;
-                queryForm.Font = this.font;
+                queryForm.Font = this.SelectedFont;
                 queryForm.Show();
             }
         }
@@ -895,7 +892,7 @@ namespace DataCommander
         {
             base.OnMdiChildActivate(e);
 
-            this.activeMdiChildToolStripTextBox.Text = this.ActiveMdiChild != null ? this.ActiveMdiChild.Text : null;
+            this.ActiveMdiChildToolStripTextBox.Text = this.ActiveMdiChild != null ? this.ActiveMdiChild.Text : null;
             this.saveButton.Enabled = this.ActiveMdiChild != null;
 
             if (this.ActiveMdiChild != null)
@@ -945,18 +942,6 @@ namespace DataCommander
             }
         }
 
-        protected override void OnDeactivate(EventArgs e)
-        {
-            base.OnDeactivate(e);
-
-            var queryForm = (QueryForm)this.ActiveMdiChild;
-
-            if (queryForm != null)
-            {
-                queryForm.OnDeactivate();
-            }
-        }
-
         internal void SaveAll()
         {
             this.Cursor = Cursors.WaitCursor;
@@ -989,7 +974,7 @@ namespace DataCommander
             this.SaveAll();
         }
 
-        public ToolStripTextBox ActiveMdiChildToolStripTextBox => this.activeMdiChildToolStripTextBox;
+        public ToolStripTextBox ActiveMdiChildToolStripTextBox { get; private set; }
 
         private void checkForToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1021,7 +1006,7 @@ namespace DataCommander
             sb.AppendLine();
             sb.Append(GarbageMonitor.State);
             sb.AppendLine();
-            sb.Append(ThreadMonitor.ToStringTable().ToString());
+            sb.Append(ThreadMonitor.ToStringTableString());
             sb.AppendLine();
             sb.Append(AppDomainMonitor.CurrentDomainState);
             log.Trace(sb.ToString());

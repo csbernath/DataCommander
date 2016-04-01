@@ -7,25 +7,22 @@
 
     internal sealed class LinkedServerNode : ITreeNode
     {
-        private readonly LinkedServerCollectionNode linkedServers;
-        private readonly string name;
-
         public LinkedServerNode(
             LinkedServerCollectionNode linkedServers,
             string name )
         {
             Contract.Requires( linkedServers != null );
-            this.linkedServers = linkedServers;
-            this.name = name;
+            this.LinkedServers = linkedServers;
+            this.Name = name;
         }
 
-        public LinkedServerCollectionNode LinkedServers => this.linkedServers;
+        public LinkedServerCollectionNode LinkedServers { get; }
 
-        public string Name => this.name;
+        public string Name { get; }
 
         #region ITreeNode Members
 
-        string ITreeNode.Name => this.name;
+        string ITreeNode.Name => this.Name;
 
         bool ITreeNode.IsLeaf => false;
 

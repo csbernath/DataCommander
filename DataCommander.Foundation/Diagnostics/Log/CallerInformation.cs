@@ -7,31 +7,27 @@
     /// </summary>
     public sealed class CallerInformation
     {
-        private readonly string callerMemberName;
-        private readonly string callerFilePath;
-        private readonly int callerLineNumber;
-
         private CallerInformation(string callerMemberName, string callerFilePath, int callerLineNumber)
         {
-            this.callerMemberName = callerMemberName;
-            this.callerFilePath = callerFilePath;
-            this.callerLineNumber = callerLineNumber;
+            this.CallerMemberName = callerMemberName;
+            this.CallerFilePath = callerFilePath;
+            this.CallerLineNumber = callerLineNumber;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public string CallerMemberName => this.callerMemberName;
+        public string CallerMemberName { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string CallerFilePath => this.callerFilePath;
+        public string CallerFilePath { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public int CallerLineNumber => this.callerLineNumber;
+        public int CallerLineNumber { get; }
 
         /// <summary>
         /// 

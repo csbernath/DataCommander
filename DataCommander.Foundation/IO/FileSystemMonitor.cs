@@ -21,7 +21,6 @@ namespace DataCommander.Foundation.IO
         private readonly string searchPattern;
         private readonly int period;
         private string[] last;
-        private FileSystemEventHandler created;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileSystemMonitor"/> class.
@@ -54,18 +53,7 @@ namespace DataCommander.Foundation.IO
         /// <summary>
         /// Occurs when a file or directory in the specified path is created.
         /// </summary>
-        public FileSystemEventHandler Created
-        {
-            get
-            {
-                return this.created;
-            }
-
-            set
-            {
-                this.created = value;
-            }
-        }
+        public FileSystemEventHandler Created { get; set; }
 
         void ILoopable.First(Exception exception)
         {
@@ -94,7 +82,7 @@ namespace DataCommander.Foundation.IO
                             string fileName = Path.GetFileName(file);
                             FileSystemEventArgs e = new FileSystemEventArgs(WatcherChangeTypes.Created, this.path,
                                 fileName);
-                            this.created(this, e);
+                            this.Created(this, e);
                         }
                     }
 

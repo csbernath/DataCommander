@@ -5,18 +5,15 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 
     internal sealed class TableNode : ITreeNode
     {
-        private readonly TableCollectionNode tableCollectionNode;
-        private readonly string name;
-
         public TableNode(TableCollectionNode tableCollectionNode, string name)
         {
-            this.tableCollectionNode = tableCollectionNode;
-            this.name = name;
+            this.TableCollectionNode = tableCollectionNode;
+            this.Name = name;
         }
 
-        public TableCollectionNode TableCollectionNode => this.tableCollectionNode;
+        public TableCollectionNode TableCollectionNode { get; }
 
-        public string Name => this.name;
+        public string Name { get; }
 
         bool ITreeNode.IsLeaf => false;
 

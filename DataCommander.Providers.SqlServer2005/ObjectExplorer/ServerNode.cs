@@ -5,18 +5,17 @@
     using System.Data.SqlClient;
     using System.Diagnostics.Contracts;
     using System.Windows.Forms;
+    using DataCommander.Foundation;
 
     internal sealed class ServerNode : ITreeNode
     {
-        private readonly string connectionString;
-
         public ServerNode(string connectionString)
         {
-            Contract.Requires(!string.IsNullOrWhiteSpace(connectionString));
-            this.connectionString = connectionString;
+            Contract.Requires(!connectionString.IsNullOrWhiteSpace());
+            this.ConnectionString = connectionString;
         }
 
-        public string ConnectionString => this.connectionString;
+        public string ConnectionString { get; }
 
         #region ITreeNode Members
 
@@ -25,13 +24,13 @@
             get
             {
                 string serverVersion;
-                using (var connection = new SqlConnection(this.connectionString))
+                using (var connection = new SqlConnection(this.ConnectionString))
                 {
                     connection.Open();
                     serverVersion = new Version(connection.ServerVersion).ToString();
                 }
 
-                var csb = new SqlConnectionStringBuilder(this.connectionString);
+                var csb = new SqlConnectionStringBuilder(this.ConnectionString);
                 string userName;
                 if (csb.IntegratedSecurity)
                 {

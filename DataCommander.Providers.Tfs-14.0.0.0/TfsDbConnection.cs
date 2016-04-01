@@ -5,14 +5,12 @@
 
     internal sealed class TfsDbConnection : IDbConnection
     {
-        private readonly TfsConnection connection;
-
         public TfsDbConnection(TfsConnection connection)
         {
-            this.connection = connection;
+            this.Connection = connection;
         }
 
-        public TfsConnection Connection => this.connection;
+        public TfsConnection Connection { get; }
 
         #region IDbConnection Members
 
@@ -39,7 +37,7 @@
         {
             get
             {
-                return $"Data Source={this.connection.TfsTeamProjectCollection.Uri}";
+                return $"Data Source={this.Connection.TfsTeamProjectCollection.Uri}";
             }
 
             set
@@ -65,7 +63,7 @@
             throw new NotImplementedException();
         }
 
-        ConnectionState IDbConnection.State => this.connection.ConnectionState;
+        ConnectionState IDbConnection.State => this.Connection.ConnectionState;
 
         #endregion
 

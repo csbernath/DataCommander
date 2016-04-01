@@ -14,26 +14,23 @@
     /// </summary>
     public class LoggedEventArgs : EventArgs
     {
-        private readonly long timestamp;
-        private readonly DateTime dateTime;
-
         /// <summary>
         /// 
         /// </summary>
         public LoggedEventArgs()
         {
-            this.timestamp = Stopwatch.GetTimestamp();
-            this.dateTime = LocalTime.Default.Now;
+            this.Timestamp = Stopwatch.GetTimestamp();
+            this.DateTime = LocalTime.Default.Now;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public long Timestamp => this.timestamp;
+        public long Timestamp { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public DateTime DateTime => this.dateTime;
+        public DateTime DateTime { get; }
     }
 }

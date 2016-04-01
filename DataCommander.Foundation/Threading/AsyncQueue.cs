@@ -11,14 +11,12 @@ namespace DataCommander.Foundation.Threading
     {
         private string name;
         private IAsyncQueue asyncQueue;
-        private readonly WorkerThreadCollection consumers = new WorkerThreadCollection();
         private readonly Queue queue = new Queue();
         private readonly AutoResetEvent queueEvent = new AutoResetEvent( false );
 
         private sealed class ConsumerThread
         {
             private readonly AsyncQueue queue;
-            private readonly WorkerThread thread;
             private readonly IConsumer consumer;
 
             public ConsumerThread(
@@ -27,10 +25,10 @@ namespace DataCommander.Foundation.Threading
                 ThreadPriority priority )
             {
                 this.queue = queue;
-                this.thread = new WorkerThread( this.ThreadStart );
-                this.thread.Name = $"Consumer({queue.name},{id})";
-                this.thread.Priority = priority;
-                this.consumer = this.queue.asyncQueue.CreateConsumer( this.thread, id );
+                this.Thread = new WorkerThread( this.ThreadStart );
+                this.Thread.Name = $"Consumer({queue.name},{id})";
+                this.Thread.Priority = priority;
+                this.consumer = this.queue.asyncQueue.CreateConsumer( this.Thread, id );
             }
 
             private void ThreadStart()
@@ -39,7 +37,7 @@ namespace DataCommander.Foundation.Threading
 
                 try
                 {
-                    while (!this.thread.IsStopRequested)
+                    while (!this.Thread.IsStopRequested)
                     {
                         this.queue.Dequeue( this );
                     }
@@ -55,7 +53,7 @@ namespace DataCommander.Foundation.Threading
                 this.consumer.Consume( item );
             }
 
-            public WorkerThread Thread => this.thread;
+            public WorkerThread Thread { get; }
         }
 
         /// <summary>
@@ -86,7 +84,7 @@ namespace DataCommander.Foundation.Threading
             for (int id = 0; id < consumerCount; id++)
             {
                 ConsumerThread consumerThread = new ConsumerThread( this, id, priority );
-                this.consumers.Add( consumerThread.Thread );
+                this.Consumers.Add( consumerThread.Thread );
             }
         }
 
@@ -190,6 +188,6 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// Gets the consumer thread list.
         /// </summary>
-        public WorkerThreadCollection Consumers => this.consumers;
+        public WorkerThreadCollection Consumers { get; } = new WorkerThreadCollection();
     }
 }

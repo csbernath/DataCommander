@@ -27,7 +27,6 @@ namespace DataCommander.Providers.SqlServer2005
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private ObjectExplorer.ObjectExplorer objectBrowser;
         private static string[] keyWords;
-        private static readonly int shortStringSize;
 
         #endregion
 
@@ -36,12 +35,12 @@ namespace DataCommander.Providers.SqlServer2005
         static SqlServerProvider()
         {
             var configurationNode = Settings.CurrentType;
-            shortStringSize = configurationNode.Attributes["ShortStringSize"].GetValue<int>();
+            ShortStringSize = configurationNode.Attributes["ShortStringSize"].GetValue<int>();
         }
 
         #endregion
 
-        public static int ShortStringSize => shortStringSize;
+        public static int ShortStringSize { get; }
 
         #region IProvider Members
 
@@ -131,7 +130,7 @@ namespace DataCommander.Providers.SqlServer2005
 
             var sourceColumnNames =
                 (from sourceSchemaRow in sourceSchemaTable.AsEnumerable()
-                    select new DataColumnSchema(sourceSchemaRow).ColumnName);
+                    select new DbColumn(sourceSchemaRow).ColumnName);
 
             using (IDbCommand command = destinationconnection.CreateCommand())
             {
@@ -168,7 +167,7 @@ namespace DataCommander.Providers.SqlServer2005
                     values.Append(',');
                 }
 
-                var columnSchema = new DataColumnSchema(schemaRows[i]);
+                var columnSchema = new DbColumn(schemaRows[i]);
                 insertInto.AppendFormat("[{0}]", columnSchema.ColumnName);
                 values.AppendFormat("@p{0}", i);
 
@@ -292,7 +291,7 @@ namespace DataCommander.Providers.SqlServer2005
 
         string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
         {
-            DataColumnSchema schemaRow = new DataColumnSchema(sourceSchemaRow);
+            DbColumn schemaRow = new DbColumn(sourceSchemaRow);
             int columnSize = schemaRow.ColumnSize;
             bool? allowDBNull = schemaRow.AllowDBNull;
             Type dataType = schemaRow.DataType;
@@ -326,7 +325,7 @@ namespace DataCommander.Providers.SqlServer2005
             return typeName;
         }
 
-        Type IProvider.GetColumnType(DataColumnSchema dataColumnSchema)
+        Type IProvider.GetColumnType(DbColumn dataColumnSchema)
         {
             SqlDbType dbType = (SqlDbType)dataColumnSchema.ProviderType;
             int columnSize = dataColumnSchema.ColumnSize;
@@ -776,7 +775,7 @@ order by 1", name.Database);
 
             if (schemaTable != null)
             {
-                log.Trace(CallerInformation.Get(), schemaTable.ToStringTable().ToString());
+                log.Trace(CallerInformation.Get(), schemaTable.ToStringTableString());
                 log.Trace(CallerInformation.Get(), "{0}", schemaTable.TableName);
 
                 table = new DataTable("SchemaTable");
@@ -792,7 +791,7 @@ order by 1", name.Database);
 
                 foreach (DataRow dataRow in schemaTable.Rows)
                 {
-                    var dataColumnSchema = new DataColumnSchema(dataRow);
+                    var dataColumnSchema = new DbColumn(dataRow);
                     int columnOrdinal = dataColumnSchema.ColumnOrdinal;
 
                     if (columnOrdinalAddition == null)

@@ -11,7 +11,6 @@ namespace DataCommander.Providers.SQLite
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private readonly SQLiteConnection sqliteConnection;
-        private string connectionName;
 
         public Connection( string connectionString )
         {
@@ -30,18 +29,7 @@ namespace DataCommander.Providers.SQLite
             log.Write( LogLevel.Trace,  e.Statement );
         }
 
-        public override string ConnectionName
-        {
-            get
-            {
-                return this.connectionName;
-            }
-
-            set
-            {
-                this.connectionName = value;
-            }
-        }
+        public override string ConnectionName { get; set; }
 
         public override Task OpenAsync(CancellationToken cancellationToken)
         {

@@ -11,17 +11,16 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
         private readonly DatabaseNode database;
         private string schema;
         private string objectName;
-        private readonly string name;
 
         public TriggerNode(DatabaseNode database, string schema, string objectName, string name)
         {
             this.database = database;
             this.schema = schema;
             this.objectName = objectName;
-            this.name = name;
+            this.Name = name;
         }
 
-        public string Name => this.name;
+        public string Name { get; }
 
         public bool IsLeaf => true;
 
@@ -41,7 +40,7 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                text = SqlDatabase.GetSysComments(connection, this.database.Name, this.schema, this.name);
+                text = SqlDatabase.GetSysComments(connection, this.database.Name, this.schema, this.Name);
             }
             QueryForm.ShowText(text);
         }

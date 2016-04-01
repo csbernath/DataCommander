@@ -13,10 +13,8 @@ namespace DataCommander.Foundation.Collections
     {
         #region Private Fields
 
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog log = LogFactory.Instance.GetTypeLog(typeof (ObjectPool<T>));
         private readonly IPoolableObjectFactory<T> factory;
-        private readonly int minSize;
-        private readonly int maxSize;
         private LinkedList<ObjectPoolItem<T>> idleItems = new LinkedList<ObjectPoolItem<T>>();
         private readonly Dictionary<int, ObjectPoolItem<T>> activeItems = new Dictionary<int, ObjectPoolItem<T>>();
         private readonly AutoResetEvent idleEvent = new AutoResetEvent( false );
@@ -44,8 +42,8 @@ namespace DataCommander.Foundation.Collections
             Contract.Requires(minSize <= maxSize);
 
             this.factory = factory;
-            this.minSize = minSize;
-            this.maxSize = maxSize;
+            this.MinSize = minSize;
+            this.MaxSize = maxSize;
             this.timer = new Timer( this.TimerCallback, null, 30000, 30000 );
         }
 
@@ -62,12 +60,12 @@ namespace DataCommander.Foundation.Collections
         /// <summary>
         /// 
         /// </summary>
-        public int MinSize => this.minSize;
+        public int MinSize { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public int MaxSize => this.maxSize;
+        public int MaxSize { get; }
 
         /// <summary>
         /// 
@@ -164,7 +162,7 @@ namespace DataCommander.Foundation.Collections
                 {
                     int count = this.idleItems.Count + this.activeItems.Count;
 
-                    if (count < this.maxSize)
+                    if (count < this.MaxSize)
                     {
                         DateTime creationDate = LocalTime.Default.Now;
                         T value = this.factory.CreateObject();
@@ -222,7 +220,7 @@ namespace DataCommander.Foundation.Collections
             lock (this.idleItems)
             {
                 int count = this.activeItems.Count + this.idleItems.Count;
-                idle = count < this.maxSize;
+                idle = count < this.MaxSize;
 
                 if (idle)
                 {

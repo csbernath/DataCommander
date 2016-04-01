@@ -22,16 +22,16 @@ namespace DataCommander.Foundation.Threading.Tasks
 
         private static readonly StringTableColumnInfo<TaskInfo>[] columns =
         {
-            new StringTableColumnInfo<TaskInfo>("Id", StringTableColumnAlign.Right, s => s.Id),
+            StringTableColumnInfo.Create<TaskInfo, int>("Id", StringTableColumnAlign.Right, s => s.Id),
             new StringTableColumnInfo<TaskInfo>("Name", StringTableColumnAlign.Left, s => s.Name),
-            new StringTableColumnInfo<TaskInfo>("ManagedThreadId", StringTableColumnAlign.Right, s => s.ManagedThreadId),
-            new StringTableColumnInfo<TaskInfo>("IsThreadPoolThread", StringTableColumnAlign.Left, s => s.IsThreadPoolThread),
+            StringTableColumnInfo.Create<TaskInfo, int?>("ManagedThreadId", StringTableColumnAlign.Right, s => s.ManagedThreadId),
+            StringTableColumnInfo.Create<TaskInfo, bool?>("IsThreadPoolThread", StringTableColumnAlign.Left, s => s.IsThreadPoolThread),
             new StringTableColumnInfo<TaskInfo>("CreationTime", StringTableColumnAlign.Left, s => ToString(s.CreationTime)),
             new StringTableColumnInfo<TaskInfo>("StartTime", StringTableColumnAlign.Left, s => ToString(s.StartTime)),
             new StringTableColumnInfo<TaskInfo>("CompletedTime", StringTableColumnAlign.Left, s => ToString(s.CompletedTime)),
-            new StringTableColumnInfo<TaskInfo>("CompletedTimeSpan", StringTableColumnAlign.Left, s => s.CompletedTimeSpan),
-            new StringTableColumnInfo<TaskInfo>("IsAlive", StringTableColumnAlign.Left, s => s.IsAlive),
-            new StringTableColumnInfo<TaskInfo>("IsCompleted", StringTableColumnAlign.Left, s => s.IsCompleted)
+            StringTableColumnInfo.Create<TaskInfo, TimeSpan?>("CompletedTimeSpan", StringTableColumnAlign.Left, s => s.CompletedTimeSpan),
+            StringTableColumnInfo.Create<TaskInfo, bool>("IsAlive", StringTableColumnAlign.Left, s => s.IsAlive),
+            StringTableColumnInfo.Create<TaskInfo, bool>("IsCompleted", StringTableColumnAlign.Left, s => s.IsCompleted)
         };
 
         #endregion
@@ -117,28 +117,27 @@ namespace DataCommander.Foundation.Threading.Tasks
                 tasks.Add(taskInfo);
             }
 
-            return
-                new CreateTaskResponse<TResult>
-                {
-                    Task = task,
-                    TaskInfo = taskInfo
-                };
+            return new CreateTaskResponse<TResult>
+            {
+                Task = task,
+                TaskInfo = taskInfo
+            };
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public static StringTable ToStringTable()
+        public static string ToStringTableString()
         {
-            StringTable stringTable = null;
+            string stringTableString;
 
             lock (tasks)
             {
-                stringTable = tasks.ToStringTable(columns);
+                stringTableString = tasks.ToString(columns);
             }
 
-            return stringTable;
+            return stringTableString;
         }
 
         /// <summary>

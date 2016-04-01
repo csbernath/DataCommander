@@ -6,8 +6,6 @@ namespace DataCommander.Providers
     {
         private readonly IDataParameter parameter;
         private readonly int size;
-        private readonly byte precision;
-        private readonly byte scale;
 
         public DataParameterBase(
             IDataParameter parameter,
@@ -17,8 +15,8 @@ namespace DataCommander.Providers
         {
             this.parameter = parameter;
             this.size = size;
-            this.precision = precision;
-            this.scale = scale;
+            this.Precision = precision;
+            this.Scale = scale;
         }
 
         public DbType DbType
@@ -49,8 +47,8 @@ namespace DataCommander.Providers
             }
         }
 
-        public byte Precision => this.precision;
+        public byte Precision { get; }
 
-        public byte Scale => this.scale;
+        public byte Scale { get; }
     }
 }

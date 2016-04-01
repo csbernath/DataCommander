@@ -498,42 +498,16 @@ namespace DataCommander.Foundation.Xml
 
         private sealed class StackItem
         {
-            private readonly string localName;
-            private bool hasAttributes;
-            private bool hasChildNodes;
-
             public StackItem(string localName)
             {
-                this.localName = localName;
+                this.LocalName = localName;
             }
 
-            public string LocalName => this.localName;
+            public string LocalName { get; }
 
-            public bool HasAttributes
-            {
-                get
-                {
-                    return this.hasAttributes;
-                }
+            public bool HasAttributes { get; set; }
 
-                set
-                {
-                    this.hasAttributes = value;
-                }
-            }
-
-            public bool HasChildNodes
-            {
-                get
-                {
-                    return this.hasChildNodes;
-                }
-
-                set
-                {
-                    this.hasChildNodes = value;
-                }
-            }
+            public bool HasChildNodes { get; set; }
         }
     }
 }

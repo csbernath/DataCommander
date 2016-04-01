@@ -9,7 +9,6 @@ namespace DataCommander.Foundation.Data.PTypes
     public struct PBoolean : INullable
     {
         private SqlBoolean sql;
-        private PValueType type;
 
         /// <summary>
         /// 
@@ -47,7 +46,7 @@ namespace DataCommander.Foundation.Data.PTypes
         public PBoolean( bool value )
         {
             this.sql = value;
-            this.type = PValueType.Value;
+            this.ValueType = PValueType.Value;
         }
 
         /// <summary>
@@ -57,12 +56,12 @@ namespace DataCommander.Foundation.Data.PTypes
         public PBoolean( SqlBoolean value )
         {
             this.sql = value;
-            this.type = value.IsNull ? PValueType.Null : PValueType.Value;
+            this.ValueType = value.IsNull ? PValueType.Null : PValueType.Value;
         }
 
         private PBoolean( PValueType type )
         {
-            this.type = type;
+            this.ValueType = type;
             this.sql = SqlBoolean.Null;
         }
 
@@ -133,11 +132,11 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </returns>
         public static bool operator ==( PBoolean x, PBoolean y )
         {
-            bool isEqual = x.type == y.type;
+            bool isEqual = x.ValueType == y.ValueType;
 
             if (isEqual)
             {
-                if (x.type == PValueType.Value)
+                if (x.ValueType == PValueType.Value)
                 {
                     isEqual = x.sql.Value == y.sql.Value;
                 }
@@ -214,22 +213,22 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public PValueType ValueType => this.type;
+        public PValueType ValueType { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsNull => this.type == PValueType.Null;
+        public bool IsNull => this.ValueType == PValueType.Null;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsValue => this.type == PValueType.Value;
+        public bool IsValue => this.ValueType == PValueType.Value;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsEmpty => this.type == PValueType.Empty;
+        public bool IsEmpty => this.ValueType == PValueType.Empty;
 
         /// <summary>
         /// 
@@ -240,7 +239,7 @@ namespace DataCommander.Foundation.Data.PTypes
             {
                 object value;
 
-                switch (this.type)
+                switch (this.ValueType)
                 {
                     case PValueType.Value:
                     case PValueType.Null:
@@ -259,18 +258,18 @@ namespace DataCommander.Foundation.Data.PTypes
             {
                 if (value == null)
                 {
-                    this.type = PValueType.Default;
+                    this.ValueType = PValueType.Default;
                     this.sql = SqlBoolean.Null;
                 }
                 else if (value == DBNull.Value)
                 {
-                    this.type = PValueType.Null;
+                    this.ValueType = PValueType.Null;
                     this.sql = SqlBoolean.Null;
                 }
                 else
                 {
                     this.sql = (SqlBoolean) value;
-                    this.type = this.sql.IsNull ? PValueType.Null : PValueType.Value;
+                    this.ValueType = this.sql.IsNull ? PValueType.Null : PValueType.Value;
                 }
             }
         }

@@ -5,13 +5,11 @@
 
     internal sealed class ObjectExplorer : IObjectExplorer
     {
-        private string connectionString;
-
-        public string ConnectionString => this.connectionString;
+        public string ConnectionString { get; private set; }
 
         void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
         {
-            this.connectionString = connectionString;
+            this.ConnectionString = connectionString;
         }
 
         IEnumerable<ITreeNode> IObjectExplorer.GetChildren(bool refresh)

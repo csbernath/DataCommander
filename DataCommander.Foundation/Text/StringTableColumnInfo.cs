@@ -1,85 +1,31 @@
+using System.Diagnostics;
+
 namespace DataCommander.Foundation.Text
 {
     using System;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public sealed class StringTableColumnInfo<T>
+    public static class StringTableColumnInfo
     {
-        private readonly string columnName;
-        private readonly StringTableColumnAlign align;
-        private readonly Func<T, int, string> toString;
-
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="columnName"></param>
-        /// <param name="align"></param>
-        /// <param name="toString"></param>
-        public StringTableColumnInfo(
-            string columnName,
-            StringTableColumnAlign align,
-            Func<T, int, string> toString)
-        {
-            Contract.Requires<ArgumentNullException>(toString != null);
-
-            this.columnName = columnName;
-            this.align = align;
-            this.toString = toString;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
         /// <param name="columnName"></param>
         /// <param name="align"></param>
         /// <param name="getValue"></param>
-        public StringTableColumnInfo(
-            string columnName,
-            StringTableColumnAlign align,
-            Func<T, object> getValue)
+        /// <returns></returns>
+        public static StringTableColumnInfo<TSource> Create<TSource, TResult>(string columnName, StringTableColumnAlign align, Func<TSource, TResult> getValue)
         {
-            Contract.Requires<ArgumentNullException>(getValue != null);
-
-            this.columnName = columnName;
-            this.align = align;
-            this.toString = delegate(T item, int index)
+            return new StringTableColumnInfo<TSource>(columnName, align, source =>
             {
-                object value = getValue(item);
-                return ToString(value);
-            };
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string ColumnName => this.columnName;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public StringTableColumnAlign Align => this.align;
-
-        internal string ToString(T item, int index)
-        {
-            return this.toString(item, index);
-        }
-
-        private static string ToString(object source)
-        {
-            string result;
-            if (source != null)
-            {
-                result = source.ToString();
-            }
-            else
-            {
-                result = "null";
-            }
-            return result;
+                var value = getValue(source);
+                string valueString = value != null ? value.ToString() : null;
+                return valueString;
+            });
         }
     }
 }

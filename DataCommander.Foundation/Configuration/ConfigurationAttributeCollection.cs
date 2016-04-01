@@ -16,7 +16,6 @@
         private readonly IndexableCollection<ConfigurationAttribute> collection;
         private readonly ListIndex<ConfigurationAttribute> listIndex;
         private readonly UniqueIndex<string, ConfigurationAttribute> nameIndex;
-        private string name;
 
         /// <summary>
         /// 
@@ -76,18 +75,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-
-            set
-            {
-                this.name = value;
-            }
-        }
+        public string Name { get; set; }
 
         /// <summary>
         /// 

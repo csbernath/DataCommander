@@ -9,9 +9,8 @@
 	{
 		private string connectionString;
 		private MsiConnection msiConnection;
-		private string connectionName;
 
-		public MsiProviderConnection( string connectionString )
+        public MsiProviderConnection( string connectionString )
 		{
 			this.connectionString = connectionString;
 			this.msiConnection = new MsiConnection( connectionString );
@@ -28,20 +27,9 @@
 			return this.msiConnection.CreateCommand();
 		}
 
-		public override string ConnectionName
-		{
-			get
-			{
-				return this.connectionName;
-			}
+		public override string ConnectionName { get; set; }
 
-			set
-			{
-				this.connectionName = value;
-			}
-		}
-
-		public override string Caption => this.msiConnection.Database.FilePath;
+        public override string Caption => this.msiConnection.Database.FilePath;
 
         public override string DataSource => this.msiConnection.Database.FilePath;
 

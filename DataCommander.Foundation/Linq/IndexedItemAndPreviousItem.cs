@@ -6,9 +6,6 @@ namespace DataCommander.Foundation.Linq
     /// <typeparam name="T"></typeparam>
     public sealed class IndexedItemAndPreviousItem<T>
     {
-        private readonly T previousItem;
-        private readonly IndexedItem<T> currentItem;
-
         /// <summary>
         /// 
         /// </summary>
@@ -16,18 +13,18 @@ namespace DataCommander.Foundation.Linq
         /// <param name="currentItem"></param>
         public IndexedItemAndPreviousItem(T previousItem, IndexedItem<T> currentItem)
         {
-            this.previousItem = previousItem;
-            this.currentItem = currentItem;
+            this.PreviousItem = previousItem;
+            this.CurrentItem = currentItem;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public T PreviousItem => this.previousItem;
+        public T PreviousItem { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public IndexedItem<T> CurrentItem => this.currentItem;
+        public IndexedItem<T> CurrentItem { get; }
     }
 }

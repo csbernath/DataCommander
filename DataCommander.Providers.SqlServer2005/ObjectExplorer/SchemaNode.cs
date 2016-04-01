@@ -6,15 +6,14 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
     internal sealed class SchemaNode : ITreeNode
     {
         private readonly DatabaseNode database;
-        private readonly string name;
 
         public SchemaNode(DatabaseNode database, string name)
         {
             this.database = database;
-            this.name = name;
+            this.Name = name;
         }
 
-        public string Name => this.name;
+        public string Name { get; }
 
         public bool IsLeaf => true;
 

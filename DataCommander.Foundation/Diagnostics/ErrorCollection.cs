@@ -12,7 +12,7 @@ namespace DataCommander.Foundation.Diagnostics
         {
             var sb = new StringBuilder();
 
-            foreach (Error error in this)
+            foreach (var error in this)
             {
                 sb.AppendLine(error.ToString());
             }

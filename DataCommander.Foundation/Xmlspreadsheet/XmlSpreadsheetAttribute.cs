@@ -9,9 +9,6 @@
     /// </summary>
     public sealed class XmlSpreadsheetAttribute
     {
-        private readonly string localName;
-        private readonly string value;
-
         /// <summary>
         /// 
         /// </summary>
@@ -19,19 +16,19 @@
         /// <param name="value"></param>
         public XmlSpreadsheetAttribute(string localName, string value)
         {
-            this.localName = localName;
-            this.value = value;
+            this.LocalName = localName;
+            this.Value = value;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public string LocalName => this.localName;
+        public string LocalName { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Value => this.value;
+        public string Value { get; }
 
         /// <summary>
         /// 
@@ -41,7 +38,7 @@
         {
             Contract.Requires<ArgumentNullException>(xmlWriter != null);
 
-            xmlWriter.WriteAttributeString(this.localName, this.value);
+            xmlWriter.WriteAttributeString(this.LocalName, this.Value);
         }
     }
 }

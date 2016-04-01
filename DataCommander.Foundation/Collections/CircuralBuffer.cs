@@ -6,7 +6,7 @@
     using System.Diagnostics.Contracts;
 
     /// <summary>
-    /// 
+    /// https://en.wikipedia.org/wiki/Circular_buffer
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public sealed class CircularBuffer<T> : IList<T>
@@ -16,7 +16,6 @@
         private T[] array;
         private int head;
         private int tail;
-        private int count;
 
         #endregion
 
@@ -54,7 +53,7 @@
             }
 
             this.array[this.head] = item;
-            this.count++;
+            this.Count++;
         }
 
         /// <summary>
@@ -64,7 +63,7 @@
         /// <returns></returns>
         public void AddTail(T item)
         {
-            Contract.Assert(this.count < this.array.Length);
+            Contract.Assert(this.Count < this.array.Length);
 
             if (this.head == -1)
             {
@@ -77,7 +76,7 @@
             }
 
             this.array[this.tail] = item;
-            this.count++;
+            this.Count++;
         }
 
         /// <summary>
@@ -115,7 +114,7 @@
             var item = this.array[this.head];
             this.array[this.head] = default(T);
             this.head = (this.head + 1) % this.array.Length;
-            this.count--;
+            this.Count--;
 
             return item;
         }
@@ -142,7 +141,7 @@
             var item = this.array[this.tail];
             this.array[this.tail] = default(T);
             this.tail = (this.tail - 1) % this.array.Length;
-            this.count--;
+            this.Count--;
             return item;
         }
 
@@ -155,11 +154,11 @@
             Contract.Requires<InvalidOperationException>(capacity >= this.Count);
 
             var target = new T[capacity];
-            if (this.count > 0)
+            if (this.Count > 0)
             {
                 if (this.head <= this.tail)
                 {
-                    Array.Copy(this.array, this.head, target, 0, this.count);
+                    Array.Copy(this.array, this.head, target, 0, this.Count);
                 }
                 else
                 {
@@ -169,7 +168,7 @@
                 }
 
                 this.head = 0;
-                this.tail = this.count - 1;
+                this.tail = this.Count - 1;
             }
             else
             {
@@ -244,7 +243,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.count;
+        public int Count { get; private set; }
 
         bool ICollection<T>.IsReadOnly => false;
 
@@ -259,7 +258,7 @@
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            if (this.count > 0)
+            if (this.Count > 0)
             {
                 int current = this.head;
                 while (true)

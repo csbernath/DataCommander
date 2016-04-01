@@ -2,14 +2,12 @@ namespace DataCommander.Providers
 {
     internal abstract class DataWriterBase
     {
-        private int width;
-
         public void Init( int width )
         {
-            this.width = width;
+            this.Width = width;
         }
 
-        public int Width => this.width;
+        public int Width { get; private set; }
 
         public abstract string ToString( object value );
     }

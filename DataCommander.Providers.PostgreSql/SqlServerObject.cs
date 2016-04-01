@@ -1,9 +1,11 @@
 namespace DataCommander.Providers.PostgreSql
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Linq;
-    using Foundation.Data.SqlClient;
+    using DataCommander.Foundation;
+    using DataCommander.Foundation.Data.SqlClient;
 
     internal static class SqlServerObject
     {
@@ -21,15 +23,14 @@ order by schema_name";
 from information_schema.tables
 where
     table_schema = '{schema}'
-    and table_type in({string.Join(",",
-                    tableTypes.Select(o => o.ToTSqlVarChar()))})
+    and table_type in({string.Join(",",tableTypes.Select(o => o.ToTSqlVarChar()))})
 order by table_name";
         }
 
         public static string GetObjects(string schema, IEnumerable<string> objectTypes)
         {
-            Contract.Requires(!string.IsNullOrWhiteSpace(schema));
-            Contract.Requires(objectTypes != null && objectTypes.Any());
+            Contract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());
+            Contract.Requires<ArgumentException>(objectTypes != null && objectTypes.Any());
 
             return
                 $@"declare @schema_id int
@@ -56,9 +57,9 @@ end";
             string schema,
             IEnumerable<string> objectTypes)
         {
-            Contract.Requires(!string.IsNullOrWhiteSpace(database));
-            Contract.Requires(!string.IsNullOrWhiteSpace(schema));
-            Contract.Requires(objectTypes!=null && objectTypes.Any());
+            Contract.Requires<ArgumentException>(!database.IsNullOrWhiteSpace());
+            Contract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());
+            Contract.Requires<ArgumentException>(objectTypes != null && objectTypes.Any());
 
             return string.Format(@"if exists(select * from sys.databases (nolock) where name = '{0}')
 begin

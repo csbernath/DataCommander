@@ -5,29 +5,26 @@
     /// <summary>
     /// 
     /// </summary>
-    [DebuggerDisplay("Name = {name}")]
+    [DebuggerDisplay("Name = {Name}")]
     public sealed class TextDataTable
     {
-        private readonly string name;
-        private readonly TextDataColumnCollection columns = new TextDataColumnCollection();
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="name"></param>
         public TextDataTable(string name)
         {
-            this.name = name;
+            this.Name = name;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Name => this.name;
+        public string Name { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public TextDataColumnCollection Columns => this.columns;
+        public TextDataColumnCollection Columns { get; } = new TextDataColumnCollection();
     }
 }

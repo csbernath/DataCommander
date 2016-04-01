@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics;
+    using System.Diagnostics.Contracts;
     using System.Text;
 
     /// <summary>
@@ -13,12 +14,15 @@
         /// 
         /// </summary>
         /// <param name="applicationLog"></param>
+        /// <param name="type"></param>
         /// <returns></returns>
-        public static ILog GetCurrentTypeLog(this ILogFactory applicationLog)
+        public static ILog GetTypeLog(this ILogFactory applicationLog, Type type)
         {
-            var stackFrame = new StackFrame(1, false);
-            Type type = stackFrame.GetMethod().DeclaringType;
+            Contract.Requires<ArgumentNullException>(applicationLog != null);
+            Contract.Requires<ArgumentNullException>(type != null);
+
             string name = type.FullName;
+
             var log = applicationLog.GetLog(name);
             var foundationLog = log as FoundationLog;
             if (foundationLog != null)
@@ -33,12 +37,24 @@
         /// 
         /// </summary>
         /// <param name="applicationLog"></param>
+        /// <returns></returns>
+        public static ILog GetCurrentTypeLog(this ILogFactory applicationLog)
+        {
+            var stackFrame = new StackFrame(1, false);
+            var type = stackFrame.GetMethod().DeclaringType;
+            return applicationLog.GetTypeLog(type);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="applicationLog"></param>
         /// <param name="sectionName"></param>
         /// <returns></returns>
         public static ILog GetCurrentTypeSectionLog(this ILogFactory applicationLog, string sectionName)
         {
             var stackFrame = new StackFrame(1, false);
-            Type type = stackFrame.GetMethod().DeclaringType;
+            var type = stackFrame.GetMethod().DeclaringType;
             string name = $"{type.FullName}.{sectionName}";
             var log = applicationLog.GetLog(name);
             var foundationLog = log as FoundationLog;

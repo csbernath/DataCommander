@@ -8,20 +8,17 @@ namespace DataCommander.Providers.SQLite
 
     internal sealed class TableNode : ITreeNode
     {
-        private readonly DatabaseNode databaseNode;
-        private readonly string name;
-
         public TableNode(DatabaseNode databaseNode, string name)
         {
-            this.databaseNode = databaseNode;
-            this.name = name;
+            this.Database = databaseNode;
+            this.Name = name;
         }
 
-        public DatabaseNode Database => this.databaseNode;
+        public DatabaseNode Database { get; }
 
         #region ITreeNode Members
 
-        public string Name => this.name;
+        public string Name { get; }
 
         bool ITreeNode.IsLeaf => false;
 
@@ -34,7 +31,7 @@ namespace DataCommander.Providers.SQLite
 
         bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query => $"select\t*\r\nfrom\t{this.databaseNode.Name}.{this.name}";
+        string ITreeNode.Query => $"select\t*\r\nfrom\t{this.Database.Name}.{this.Name}";
 
         private static string GetScript(
             SQLiteConnection connection,
@@ -53,7 +50,7 @@ where	name	= '{name}'";
 
         private void Script_Click(object sender, EventArgs e)
         {
-            string script = GetScript(this.databaseNode.Connection, this.databaseNode.Name, this.name);
+            string script = GetScript(this.Database.Connection, this.Database.Name, this.Name);
             QueryForm.ShowText(script);
         }
 
@@ -63,7 +60,7 @@ where	name	= '{name}'";
             {
                 ContextMenuStrip contextMenu = null;
 
-                if (this.name != "sqlite_master")
+                if (this.Name != "sqlite_master")
                 {
                     contextMenu = new ContextMenuStrip();
                     contextMenu.Items.Add("Script", null, new EventHandler(this.Script_Click));

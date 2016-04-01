@@ -8,10 +8,6 @@
     {
         #region Private Fields
 
-        private MsiConnection connection;
-        private CommandType commandType;
-        private int commandTimeout;
-        private string commandText;
         private MsiParameterCollection parameters = new MsiParameterCollection();
 
         #endregion
@@ -19,10 +15,10 @@
         public MsiCommand(MsiConnection connection)
         {
             Contract.Requires(connection != null);
-            this.connection = connection;
+            this.Connection = connection;
         }
 
-        public MsiConnection Connection => this.connection;
+        public MsiConnection Connection { get; }
 
         #region IDbCommand Members
 
@@ -31,44 +27,11 @@
             throw new NotImplementedException();
         }
 
-        public string CommandText
-        {
-            get
-            {
-                return this.commandText;
-            }
+        public string CommandText { get; set; }
 
-            set
-            {
-                this.commandText = value;
-            }
-        }
+        int IDbCommand.CommandTimeout { get; set; }
 
-        int IDbCommand.CommandTimeout
-        {
-            get
-            {
-                return this.commandTimeout;
-            }
-
-            set
-            {
-                this.commandTimeout = value;
-            }
-        }
-
-        CommandType IDbCommand.CommandType
-        {
-            get
-            {
-                return this.commandType;
-            }
-
-            set
-            {
-                this.commandType = value;
-            }
-        }
+        CommandType IDbCommand.CommandType { get; set; }
 
         IDbConnection IDbCommand.Connection
         {

@@ -37,7 +37,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -434,7 +434,7 @@
     <Compile Include="Data\Database.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data\DataColumnSchema.cs" />
+    <Compile Include="Data\DbColumn.cs" />
     <Compile Include="Data\DataParameterValue.cs" />
     <Compile Include="Data\DataParameterValueType.cs" />
     <Compile Include="Data\DataReader.cs" />
@@ -663,7 +663,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Diagnostics\Int64PerformanceCounter.cs" />
-    <Compile Include="Diagnostics\IsErrorTypePredicate.cs" />
     <Compile Include="Diagnostics\Log\AsyncLogFile.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -784,6 +783,7 @@
     <Compile Include="Linq\IdentityFunction.cs" />
     <Compile Include="Linq\IDictionaryExtensions.cs" />
     <Compile Include="Linq\IEnumerableExtensions.cs" />
+    <Compile Include="Linq\IEnumerableIndexedItemExtensions.cs" />
     <Compile Include="Linq\IEnumeratorExtensions.cs" />
     <Compile Include="Linq\IListExtensions.cs" />
     <Compile Include="Linq\IndexedItem.cs" />
@@ -803,13 +803,6 @@
     <Compile Include="Management\MsvmComputerSystemEnabledState.cs" />
     <Compile Include="Management\MsvmComputerSystemRequestedState.cs" />
     <Compile Include="Management\MsvmComputerSystemRequestStateChangeReturnValue.cs" />
-    <Compile Include="Predicate\Conjunction.cs" />
-    <Compile Include="Predicate\Disjunction.cs" />
-    <Compile Include="Predicate\EnumerableExistentialQuantifier.cs" />
-    <Compile Include="Predicate\EnumerableUniversalQuantifier.cs" />
-    <Compile Include="Predicate\Negation.cs" />
-    <Compile Include="Predicate\PredicateClass.cs" />
-    <Compile Include="Predicate\SystemPredicate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -834,6 +827,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Text\StringTableColumnInfo.cs" />
+    <Compile Include="Text\StringTableColumnInfoGeneric.cs" />
     <Compile Include="Text\StringTableRow.cs">
       <SubType>Code</SubType>
     </Compile>

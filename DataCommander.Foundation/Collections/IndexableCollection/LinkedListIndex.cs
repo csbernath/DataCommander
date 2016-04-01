@@ -9,7 +9,6 @@
     /// <typeparam name="T"></typeparam>
     public class LinkedListIndex<T> : ICollectionIndex<T>
     {
-        private readonly string name;
         private readonly LinkedList<T> linkedList = new LinkedList<T>();
 
         /// <summary>
@@ -18,13 +17,13 @@
         /// <param name="name"></param>
         public LinkedListIndex(string name)
         {
-            this.name = name;
+            this.Name = name;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Name => this.name;
+        public string Name { get; }
 
         /// <summary>
         /// 

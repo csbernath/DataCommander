@@ -10,18 +10,15 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 
     internal sealed class DatabaseNode : ITreeNode
     {
-        private readonly DatabaseCollectionNode databaseCollectionNode;
-        private readonly string name;
-
         public DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string name)
         {
-            this.databaseCollectionNode = databaseCollectionNode;
-            this.name = name;
+            this.Databases = databaseCollectionNode;
+            this.Name = name;
         }
 
-        public DatabaseCollectionNode Databases => this.databaseCollectionNode;
+        public DatabaseCollectionNode Databases { get; }
 
-        public string Name => this.name;
+        public string Name { get; }
 
         bool ITreeNode.IsLeaf => false;
 
@@ -63,8 +60,8 @@ select
 	convert(decimal(15,4),fileproperty(f.name, 'SpaceUsed') * 8096.0 / 1000000)		as [Used (MB)],
 	convert(decimal(15,2),convert(float,fileproperty(name, 'SpaceUsed')) * 100.0 / size)	as [Used%],
 	convert(decimal(15,4),(f.size-fileproperty(name, 'SpaceUsed')) * 8096.0 / 1000000)	as [Free (MB)]
-from	[{0}].sys.database_files f", this.name);
-            string connectionString = this.databaseCollectionNode.Server.ConnectionString;
+from	[{0}].sys.database_files f", this.Name);
+            string connectionString = this.Databases.Server.ConnectionString;
             MainForm mainForm = DataCommanderApplication.Instance.MainForm;
             var queryForm = (QueryForm) mainForm.ActiveMdiChild;
             DataSet dataSet = null;

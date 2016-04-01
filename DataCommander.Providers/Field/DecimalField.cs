@@ -9,8 +9,6 @@ namespace DataCommander.Providers
     public sealed class DecimalField : IComparable
     {
         private readonly NumberFormatInfo numberFormatInfo;
-        private readonly decimal decimalValue;
-        private readonly string stringValue;
 
         public DecimalField(
             NumberFormatInfo numberFormatInfo,
@@ -18,17 +16,17 @@ namespace DataCommander.Providers
             string stringValue )
         {
             this.numberFormatInfo = numberFormatInfo;
-            this.decimalValue = decimalValue;
-            this.stringValue = stringValue;
+            this.DecimalValue = decimalValue;
+            this.StringValue = stringValue;
         }
 
-        public decimal DecimalValue => this.decimalValue;
+        public decimal DecimalValue { get; }
 
-        public string StringValue => this.stringValue;
+        public string StringValue { get; }
 
         public override string ToString()
         {
-            return this.decimalValue.ToString( "N", this.numberFormatInfo );
+            return this.DecimalValue.ToString( "N", this.numberFormatInfo );
         }
 
         #region IComparable Members
@@ -36,7 +34,7 @@ namespace DataCommander.Providers
         int IComparable.CompareTo( object obj )
         {
             var other = (DecimalField) obj;
-            return this.decimalValue.CompareTo( other.decimalValue );
+            return this.DecimalValue.CompareTo( other.DecimalValue );
         }
 
         #endregion

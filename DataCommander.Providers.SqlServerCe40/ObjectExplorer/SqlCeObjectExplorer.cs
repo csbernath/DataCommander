@@ -6,16 +6,15 @@
 
     internal sealed class SqlCeObjectExplorer : IObjectExplorer
     {
-        private string connectionString;
         private SqlCeConnection connection;
 
-        public string ConnectionString => this.connectionString;
+        public string ConnectionString { get; private set; }
 
         #region IObjectExplorer Members
 
         void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
         {
-            this.connectionString = connectionString;
+            this.ConnectionString = connectionString;
             this.connection = (SqlCeConnection)connection;
         }
 

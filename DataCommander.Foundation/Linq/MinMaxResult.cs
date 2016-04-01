@@ -8,11 +8,6 @@
     {
         #region Private Fields
 
-        private readonly int count;
-        private readonly int whereCount;
-        private readonly IndexedItem<T> min;
-        private readonly IndexedItem<T> max;
-
         #endregion
 
         /// <summary>
@@ -28,30 +23,30 @@
             IndexedItem<T> min,
             IndexedItem<T> max)
         {
-            this.count = count;
-            this.whereCount = whereCount;
-            this.min = min;
-            this.max = max;
+            this.Count = count;
+            this.WhereCount = whereCount;
+            this.Min = min;
+            this.Max = max;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.count;
+        public int Count { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public int WhereCount => this.whereCount;
+        public int WhereCount { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public IndexedItem<T> Min => this.min;
+        public IndexedItem<T> Min { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public IndexedItem<T> Max => this.max;
+        public IndexedItem<T> Max { get; }
     }
 }

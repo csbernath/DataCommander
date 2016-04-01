@@ -11,13 +11,11 @@
     /// </summary>
     internal sealed class DataGridViewResultWriter : IResultWriter
     {
-        private readonly List<DoubleBufferedDataGridView> dataGridViews = new List<DoubleBufferedDataGridView>();
-
         public DataGridViewResultWriter()
         {
         }
 
-        public List<DoubleBufferedDataGridView> DataGridViews => this.dataGridViews;
+        public List<DoubleBufferedDataGridView> DataGridViews { get; } = new List<DoubleBufferedDataGridView>();
 
         #region IResultWriter Members
 
@@ -39,7 +37,7 @@
 
         private static DataGridViewColumn ToDataGridViewColumn(DataRow schemaDataRow)
         {
-            DataColumnSchema schema = new DataColumnSchema(schemaDataRow);
+            DbColumn schema = new DbColumn(schemaDataRow);
             var column = new DataGridViewTextBoxColumn()
             {
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
@@ -59,7 +57,7 @@
                 (from schemaRow in schemaTable.AsEnumerable()
                     select ToDataGridViewColumn(schemaRow)).ToArray();
             dataGridView.Columns.AddRange(columns);
-            this.dataGridViews.Add(dataGridView);
+            this.DataGridViews.Add(dataGridView);
         }
 
         void IResultWriter.FirstRowReadBegin()
@@ -72,7 +70,7 @@
 
         void IResultWriter.WriteRows(object[][] rows, int rowCount)
         {
-            var dataGridView = this.dataGridViews[this.dataGridViews.Count - 1];
+            var dataGridView = this.DataGridViews[this.DataGridViews.Count - 1];
             var targetRows = dataGridView.Rows;
             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {

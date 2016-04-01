@@ -4,9 +4,7 @@
 
     internal sealed class DefaultFormatter : IFormatter
     {
-        private static readonly DefaultFormatter instance = new DefaultFormatter();
-
-        public static DefaultFormatter Instance => instance;
+        public static DefaultFormatter Instance { get; } = new DefaultFormatter();
 
         void IFormatter.AppendTo(StringBuilder sb, object[] args)
         {

@@ -6,9 +6,6 @@ namespace DataCommander.Providers.MySql
 
     internal sealed class DatabaseObjectMultipartName
     {
-        private string database;
-        private readonly string name;
-
         public DatabaseObjectMultipartName(string currentDatabase, List<string> nameParts)
         {
             if (nameParts != null)
@@ -18,60 +15,49 @@ namespace DataCommander.Providers.MySql
 
                 if (i >= 0)
                 {
-                    this.name = nameParts[i];
+                    this.Name = nameParts[i];
                     i--;
 
 
                     if (i >= 0)
                     {
-                        this.database = nameParts[i];
+                        this.Database = nameParts[i];
                     }
                 }
             }
 
-            if (this.database == null)
+            if (this.Database == null)
             {
-                this.database = currentDatabase;
+                this.Database = currentDatabase;
             }
 
-            if (this.name != null)
+            if (this.Name != null)
             {
-                int length = this.name.Length;
+                int length = this.Name.Length;
 
-                if (length > 0 && this.name[0] == '[')
+                if (length > 0 && this.Name[0] == '[')
                 {
-                    this.name = this.name.Substring(1);
+                    this.Name = this.Name.Substring(1);
                     length--;
                 }
 
-                if (length > 0 && this.name[length - 1] == ']')
+                if (length > 0 && this.Name[length - 1] == ']')
                 {
-                    this.name = this.name.Substring(0, length - 1);
+                    this.Name = this.Name.Substring(0, length - 1);
                 }
             }
         }
 
-        public string Database
-        {
-            get
-            {
-                return this.database;
-            }
+        public string Database { get; set; }
 
-            set
-            {
-                this.database = value;
-            }
-        }
-
-        public string Name => this.name;
+        public string Name { get; }
 
         public override string ToString()
         {
             var sb = new StringBuilder();
-            if (this.database != null)
+            if (this.Database != null)
             {
-                sb.Append(this.database);
+                sb.Append(this.Database);
             }
 
             if (sb.Length > 0)
@@ -79,7 +65,7 @@ namespace DataCommander.Providers.MySql
                 sb.Append('.');
             }
 
-            sb.Append(this.name);
+            sb.Append(this.Name);
             return sb.ToString();
         }
     }

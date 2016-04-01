@@ -7,15 +7,6 @@
     /// </summary>
     public sealed class LoggedDbCommandInfo
     {
-        private readonly int commandId;
-        private readonly ConnectionState connectionState;
-        private readonly LoggedDbCommandExecutionType executionType;
-        private readonly CommandType commandType;
-        private readonly string database;
-        private readonly int commandTimeout;
-        private readonly string commandText;
-        private readonly string parameters;
-
         /// <summary>
         /// 
         /// </summary>
@@ -37,54 +28,54 @@
             string commandText,
             string parameters )
         {
-            this.commandId = commandId;
-            this.connectionState = connectionState;
-            this.database = database;
-            this.executionType = executionType;
-            this.commandType = commandType;
-            this.commandText = commandText;
-            this.commandTimeout = commandTimeout;
-            this.parameters = parameters;
+            this.CommandId = commandId;
+            this.ConnectionState = connectionState;
+            this.Database = database;
+            this.ExecutionType = executionType;
+            this.CommandType = commandType;
+            this.CommandText = commandText;
+            this.CommandTimeout = commandTimeout;
+            this.Parameters = parameters;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int CommandId => this.commandId;
+        public int CommandId { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public ConnectionState ConnectionState => this.connectionState;
+        public ConnectionState ConnectionState { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Database => this.database;
+        public string Database { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public LoggedDbCommandExecutionType ExecutionType => this.executionType;
+        public LoggedDbCommandExecutionType ExecutionType { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public CommandType CommandType => this.commandType;
+        public CommandType CommandType { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public int CommandTimeout => this.commandTimeout;
+        public int CommandTimeout { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string CommandText => this.commandText;
+        public string CommandText { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Parameters => this.parameters;
+        public string Parameters { get; }
     }
 }

@@ -10,7 +10,6 @@ namespace DataCommander.Providers.Wmi
     {
         private readonly WmiCommand command;
         private readonly ManagementObjectCollection.ManagementObjectEnumerator enumerator;
-        private int fieldCount;
         private ManagementBaseObject firstObject;
         private bool firstRead;
 
@@ -200,7 +199,7 @@ namespace DataCommander.Providers.Wmi
             return true;
         }
 
-        public int FieldCount => this.fieldCount;
+        public int FieldCount { get; private set; }
 
         public object this[string name] => null;
 
@@ -346,7 +345,7 @@ namespace DataCommander.Providers.Wmi
                 schemaTable.Rows.Add(values);
             }
 
-            this.fieldCount = schemaTable.Rows.Count;
+            this.FieldCount = schemaTable.Rows.Count;
 
             return schemaTable;
         }

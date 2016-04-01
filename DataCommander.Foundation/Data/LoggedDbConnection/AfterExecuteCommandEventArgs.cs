@@ -7,9 +7,6 @@
     /// </summary>
     public sealed class AfterExecuteCommandEventArgs : LoggedEventArgs
     {
-        private readonly LoggedDbCommandInfo command;
-        private readonly Exception exception;
-
         /// <summary>
         /// 
         /// </summary>
@@ -19,19 +16,19 @@
             LoggedDbCommandInfo command,
             Exception exception)
         {
-            this.command = command;
-            this.exception = exception;
+            this.Command = command;
+            this.Exception = exception;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public LoggedDbCommandInfo Command => this.command;
+        public LoggedDbCommandInfo Command { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public Exception Exception => this.exception;
+        public Exception Exception { get; }
     }
 
 }

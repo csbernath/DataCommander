@@ -5,14 +5,12 @@ namespace DataCommander.Providers
 
     public sealed class DateTimeOffsetField : IComparable, IConvertible
     {
-        private DateTimeOffset value;
-
         public DateTimeOffsetField(DateTimeOffset value)
         {
-            this.value = value;
+            this.Value = value;
         }
 
-        public DateTimeOffset Value => this.value;
+        public DateTimeOffset Value { get; }
 
         private static string ToString(DateTimeOffset value)
         {
@@ -39,7 +37,7 @@ namespace DataCommander.Providers
 
         public override string ToString()
         {
-            return ToString(this.value);
+            return ToString(this.Value);
         }
 
         #region IComparable Members
@@ -108,7 +106,7 @@ namespace DataCommander.Providers
 
         DateTime IConvertible.ToDateTime(IFormatProvider provider)
         {
-            return this.value.LocalDateTime;
+            return this.Value.LocalDateTime;
         }
 
         decimal IConvertible.ToDecimal(IFormatProvider provider)

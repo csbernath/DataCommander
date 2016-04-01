@@ -4,24 +4,20 @@ namespace DataCommander.Providers
 
     public sealed class InfoMessage
     {
-        private readonly DateTime creationTime;
-        private readonly InfoMessageSeverity severity;
-        private readonly string message;
-
         public InfoMessage(
             DateTime creationTime,
             InfoMessageSeverity severity,
             string message)
         {
-            this.creationTime = creationTime;
-            this.severity = severity;
-            this.message = message;
+            this.CreationTime = creationTime;
+            this.Severity = severity;
+            this.Message = message;
         }
 
-        public DateTime CreationTime => this.creationTime;
+        public DateTime CreationTime { get; }
 
-        public InfoMessageSeverity Severity => this.severity;
+        public InfoMessageSeverity Severity { get; }
 
-        public String Message => this.message;
+        public String Message { get; }
     }
 }

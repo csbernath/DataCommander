@@ -10,7 +10,6 @@ namespace DataCommander.Providers.OleDb
     internal sealed class Connection : ConnectionBase
     {
         private readonly OleDbConnection oledbConnection;
-        private string connectionName;
 
         public Connection(string connectionString)
         {
@@ -20,17 +19,7 @@ namespace DataCommander.Providers.OleDb
             this.oledbConnection.InfoMessage += new OleDbInfoMessageEventHandler(this.OnInfoMessage);
         }
 
-        public override string ConnectionName
-        {
-            get
-            {
-                return this.connectionName;
-            }
-            set
-            {
-                this.connectionName = value;
-            }
-        }
+        public override string ConnectionName { get; set; }
 
         public override Task OpenAsync(CancellationToken cancellationToken)
         {

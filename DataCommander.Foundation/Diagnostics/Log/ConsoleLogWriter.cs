@@ -7,7 +7,6 @@
     /// </summary>
     public sealed class ConsoleLogWriter : ILogWriter
     {
-        private static readonly ConsoleLogWriter instance;
         private static readonly object lockObject = new object();
 
         private ConsoleLogWriter()
@@ -16,13 +15,13 @@
 
         static ConsoleLogWriter()
         {
-            instance = new ConsoleLogWriter();
+            Instance = new ConsoleLogWriter();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static ConsoleLogWriter Instance => instance;
+        public static ConsoleLogWriter Instance { get; }
 
         #region ILogWriter Members
 
