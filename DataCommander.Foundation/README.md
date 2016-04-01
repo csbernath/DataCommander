@@ -86,8 +86,28 @@ If the name of the xml element is not node or attribute then the type of the ele
 |Full syntax|Simplified syntax|
 |-----------|-----------------|
 |```<node name="Name1">```|```<Name1>```|
-|```<attribute name="Count" type="System.Int32" value="1"/>```|```<attribute name="Count" type="int" value="1"/>``` bool,char,string,object,sbyte,short,int,long,byte,ushort,uint,ulong,float,double,decimal,datetime|
+|```<attribute name="Count" type="System.Int32" value="1"/>```|```<attribute name="Count" type="int" value="1"/>``` |
 |```<attribute name="Name1" type="string" value="Hello">```|```<attribute name="Name1" value="Hello">```|
+
+C# type names:
+  - bool
+  - char
+  - string
+  - sbyte
+  - short
+  - int
+  - long
+  - byte
+  - ushort
+  - uint
+  - ulong
+  - float
+  - double
+  - decimal
+
+Additional reserved type names:
+   - datetime
+   - xmlnode
 
 ###[IDateTimeProvider](IDateTimeProvider.cs)
 This is the unified abstract version of retrieving the current date and time.
