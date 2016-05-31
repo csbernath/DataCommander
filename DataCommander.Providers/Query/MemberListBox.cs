@@ -261,20 +261,19 @@ namespace DataCommander.Providers
 
         private void Find(string prefix, int startIndex)
         {
-            var filteredItems =
-                this.ListBox.Items.Cast<ListBoxItem<IObjectName>>()
-                    .Select((listBoxItem, i) => new
-                    {
-                        Index = i,
-                        IndexOf = IndexOf(listBoxItem.Item.UnquotedName, prefix)
-                    })
-                    .Where(item => item.IndexOf >= 0).ToList();
+            var filteredItems = this.ListBox.Items.Cast<ListBoxItem<IObjectName>>()
+                .Select((listBoxItem, i) => new
+                {
+                    Index = i,
+                    IndexOf = IndexOf(listBoxItem.Item.UnquotedName, prefix)
+                })
+                .Where(item => item.IndexOf >= 0).ToList();
 
             int index = -1;
 
             if (filteredItems.Count > 0)
             {
-                index = filteredItems.MinIndexedItem(i => i.IndexOf).Index;
+                index = filteredItems.MinIndexedItem(i => i.IndexOf).Value.Index;
             }
 
             if (index >= 0)

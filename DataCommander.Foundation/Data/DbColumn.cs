@@ -18,42 +18,59 @@
         {
             Contract.Requires<ArgumentNullException>(schemaTableRow != null);
 
-            this.AllowDBNull = schemaTableRow.Field<bool?>(SchemaTableColumn.AllowDBNull);
-            this.BaseColumnName = schemaTableRow.Field<string>(SchemaTableColumn.BaseColumnName);
-            this.BaseSchemaName = schemaTableRow.Field<string>(SchemaTableColumn.BaseSchemaName);
-            this.BaseTableName = schemaTableRow.Field<string>(SchemaTableColumn.BaseTableName);
             this.ColumnName = schemaTableRow.Field<string>(SchemaTableColumn.ColumnName);
             this.ColumnOrdinal = (int)schemaTableRow[SchemaTableColumn.ColumnOrdinal];
             this.ColumnSize = (int)schemaTableRow[SchemaTableColumn.ColumnSize];
-            this.DataType = (Type)schemaTableRow[SchemaTableColumn.DataType];
-            this.IsAliased = schemaTableRow.Field<bool?>(SchemaTableColumn.IsAliased);
-            this.IsExpression = schemaTableRow.Field<bool?>(SchemaTableColumn.IsExpression);
-            this.IsKey = schemaTableRow.Field<bool?>(SchemaTableColumn.IsKey);
 
             var columns = schemaTableRow.Table.Columns;
-            int columnIndex = columns.IndexOf("IsIdentity");
-            if (columnIndex >= 0)
+            var column = columns[SchemaTableColumn.NumericPrecision];
+            if (column != null)
             {
-                this.IsIdentity = schemaTableRow.Field<bool?>(columnIndex);
+                this.NumericPrecision = schemaTableRow.IsNull(column)
+                    ? (short?)null
+                    : Convert.ToInt16(schemaTableRow[column]);
             }
 
-            this.IsLong = schemaTableRow.Field<bool?>(SchemaTableColumn.IsLong);
+            column = columns[SchemaTableColumn.NumericScale];
+            if (column != null)
+            {
+                this.NumericScale = schemaTableRow.IsNull(column)
+                    ? (short?)null
+                    : Convert.ToInt16(schemaTableRow[column]);
+            }
+
             this.IsUnique = schemaTableRow.Field<bool?>(SchemaTableColumn.IsUnique);
-
-            columnIndex = columns.IndexOf(SchemaTableColumn.NonVersionedProviderType);
-            if (columnIndex >= 0)
-            {
-                this.NonVersionedProviderType = (int)schemaTableRow[columnIndex];
-            }
-
-            columnIndex = columns.IndexOf(SchemaTableColumn.NumericPrecision);
-            if (columnIndex >= 0)
-            {
-                this.NumericPrecision = schemaTableRow.Field<short?>(columnIndex);
-            }
-
-            this.NumericScale = schemaTableRow.Field<short?>(SchemaTableColumn.NumericScale);
+            this.IsKey = schemaTableRow.Field<bool?>(SchemaTableColumn.IsKey);
+            //BaseServerName
+            //BaseCatalogName
+            this.BaseColumnName = schemaTableRow.Field<string>(SchemaTableColumn.BaseColumnName);
+            this.BaseSchemaName = schemaTableRow.Field<string>(SchemaTableColumn.BaseSchemaName);
+            this.BaseTableName = schemaTableRow.Field<string>(SchemaTableColumn.BaseTableName);
+            this.DataType = (Type)schemaTableRow[SchemaTableColumn.DataType];
+            this.AllowDBNull = schemaTableRow.Field<bool?>(SchemaTableColumn.AllowDBNull);
             this.ProviderType = schemaTableRow.Field<int>(SchemaTableColumn.ProviderType);
+            this.IsAliased = schemaTableRow.Field<bool?>(SchemaTableColumn.IsAliased);
+            this.IsExpression = schemaTableRow.Field<bool?>(SchemaTableColumn.IsExpression);
+
+            column = columns["IsIdentity"];
+            if (column != null)
+            {
+                this.IsIdentity = schemaTableRow.Field<bool?>(column);
+            }
+
+            //IsAutoIncrement
+            //IsRowVersion
+            //IsHidden
+            this.IsLong = schemaTableRow.Field<bool?>(SchemaTableColumn.IsLong);
+            //IsReadOnly
+            //ProviderSpecificDataType
+            //DataTypeName XmlSchemaCollectionDatabase XmlSchemaCollectionOwningSchema XmlSchemaCollectionName UdtAssemblyQualifiedName
+            column = columns[SchemaTableColumn.NonVersionedProviderType];
+            if (column != null)
+            {
+                this.NonVersionedProviderType = (int)schemaTableRow[column];
+            }
+            //IsColumnSet
         }
 
         /// <summary>

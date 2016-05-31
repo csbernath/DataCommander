@@ -51,7 +51,7 @@ namespace DataCommander.Providers
 
         public void Save(ConfigurationNode folder)
         {
-            ConfigurationAttributeCollection attributes = folder.Attributes;
+            var attributes = folder.Attributes;
             attributes.SetAttributeValue("ConnectionName", this.ConnectionName);
             attributes.SetAttributeValue("ProviderName", this.ProviderName);
             attributes.SetAttributeValue(ConnectionStringKeyword.DataSource, this.DataSource);
@@ -122,27 +122,6 @@ namespace DataCommander.Providers
                     this.ConnectionString = dbConnectionStringBuilder.ConnectionString;
                 }
             }
-        }
-    }
-
-    internal static class DbConnectionStringBuilderExtensions
-    {
-        public static string GetValue(this DbConnectionStringBuilder dbConnectionStringBuilder, string keyword)
-        {
-            object obj;
-            bool contains = dbConnectionStringBuilder.TryGetValue(keyword, out obj);
-            string value;
-
-            if (contains)
-            {
-                value = (string)obj;
-            }
-            else
-            {
-                value = null;
-            }
-
-            return value;
         }
     }
 }

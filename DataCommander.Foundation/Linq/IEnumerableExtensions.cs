@@ -2,6 +2,7 @@ namespace DataCommander.Foundation.Linq
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Text;
@@ -347,7 +348,6 @@ namespace DataCommander.Foundation.Linq
             #region Fill second row
 
             var columnWidths = new int[columns.Count];
-
             columnIndex = 0;
             foreach (var column in columns)
             {

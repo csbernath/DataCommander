@@ -475,13 +475,9 @@ namespace DataCommander
 
             if (connectionForm.ShowDialog() == DialogResult.OK)
             {
-                ConnectionProperties connectionProperties = connectionForm.ConnectionProperties;
+                var connectionProperties = connectionForm.ConnectionProperties;
 
-                var queryForm = new QueryForm(
-                    this,
-                    this.MdiChildren.Length,
-                    connectionProperties.Provider,
-                    connectionProperties.ConnectionString,
+                var queryForm = new QueryForm(this, this.MdiChildren.Length, connectionProperties.Provider, connectionProperties.ConnectionString,
                     connectionProperties.Connection, this.statusBar);
 
                 queryForm.MdiParent = this;
@@ -489,7 +485,7 @@ namespace DataCommander
                 {
                     queryForm.Font = this.SelectedFont;
                 }
-                queryForm.FormClosing += new FormClosingEventHandler(this.queryForm_FormClosing);
+                queryForm.FormClosing += this.queryForm_FormClosing;
 
                 switch (this.WindowState)
                 {
@@ -507,8 +503,9 @@ namespace DataCommander
                         break;
                 }
 
-                string message =
-                    $"Connection opened in {StopwatchTimeSpan.ToString(connectionForm.Duration, 3)} seconds.\r\nServerVersion: {connectionProperties.Connection.ServerVersion}";
+                string message = $@"Connection opened in {StopwatchTimeSpan.ToString(connectionForm.Duration, 3)} seconds.
+ServerVersion: {connectionProperties.Connection.ServerVersion}";
+
                 var infoMessage = new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message);
                 queryForm.AddInfoMessage(infoMessage);
 
@@ -697,7 +694,7 @@ namespace DataCommander
 
                         case 8:
                             connectionString = $"Data Source={fileName}";
-                            provider = ProviderFactory.CreateProvider("SqlServerCe40");
+                            provider = ProviderFactory.CreateProvider(ProviderName.SqlServerCe40);
                             break;
 
                         default:
@@ -709,10 +706,13 @@ namespace DataCommander
                         ConnectionBase connection = provider.CreateConnection(connectionString);
                         await connection.OpenAsync(CancellationToken.None);
 
-                        var connectionProperties = new ConnectionProperties();
-                        connectionProperties.ConnectionName = null;
-                        connectionProperties.ProviderName = provider.Name;
-                        connectionProperties.ConnectionString = connectionString;
+                        var connectionProperties = new ConnectionProperties
+                        {
+                            ConnectionName = null,
+                            ProviderName = provider.Name,
+                            ConnectionString = connectionString
+                        };
+
                         var node = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
                         var subNode = new ConfigurationNode(null);
                         node.AddChildNode(subNode);
@@ -844,7 +844,7 @@ namespace DataCommander
                 switch (dialog.FilterIndex)
                 {
                     case 1:
-                        providerName = "SqlServerCe40";
+                        providerName = ProviderName.SqlServerCe40;
                         connectionString = sb.ConnectionString;
                         var engine = new SqlCeEngine(connectionString);
                         engine.CreateDatabase();
@@ -864,13 +864,7 @@ namespace DataCommander
                 var connection = provider.CreateConnection(connectionString);
                 await connection.OpenAsync(CancellationToken.None);
 
-                var queryForm = new QueryForm(
-                    this,
-                    this.MdiChildren.Length,
-                    provider,
-                    connectionString,
-                    connection, this.statusBar);
-
+                var queryForm = new QueryForm(this, this.MdiChildren.Length, provider, connectionString, connection, this.statusBar);
                 queryForm.MdiParent = this;
                 queryForm.Font = this.SelectedFont;
                 queryForm.Show();

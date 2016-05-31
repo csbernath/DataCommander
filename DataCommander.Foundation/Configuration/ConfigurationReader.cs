@@ -145,8 +145,8 @@ namespace DataCommander.Foundation.Configuration
                 }
             }
 
-            Array array = Array.CreateInstance(elementType, list.Count);
-            object[] values = (object[])array;
+            var array = Array.CreateInstance(elementType, list.Count);
+            var values = (object[])array;
             list.CopyTo(values);
 
             return array;
@@ -154,13 +154,13 @@ namespace DataCommander.Foundation.Configuration
 
         private object ReadAttributeValue(Type type)
         {
-            TypeCode typeCode = Type.GetTypeCode(type);
+            var typeCode = Type.GetTypeCode(type);
             object value = null;
             this.xmlReader.MoveToContent();
 
             if (type.IsArray)
             {
-                Type elementType = type.GetElementType();
+                var elementType = type.GetElementType();
                 typeCode = Type.GetTypeCode(elementType);
 
                 if (typeCode == TypeCode.Byte)

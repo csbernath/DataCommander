@@ -14,14 +14,20 @@
 
         public int Depth
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public abstract DataTable GetSchemaTable();
 
         public bool IsClosed
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public bool NextResult()
@@ -31,10 +37,7 @@
 
         public abstract bool Read();
 
-        public abstract int RecordsAffected
-        {
-            get;
-        }
+        public abstract int RecordsAffected { get; }
 
         #endregion
 
@@ -48,10 +51,7 @@
 
         #region IDataRecord Members
 
-        public abstract int FieldCount
-        {
-            get;
-        }
+        public abstract int FieldCount { get; }
 
         public bool GetBoolean(int i)
         {
@@ -166,12 +166,18 @@
 
         public object this[string name]
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public object this[int i]
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         #endregion
@@ -183,71 +189,80 @@
             DataTable table = new DataTable();
             DataColumnCollection columns = table.Columns;
             columns.Add(SchemaTableColumn.ColumnName, typeof(string));
-            columns.Add("ColumnSize", typeof(int));
-            columns.Add("DataType", typeof(Type));
-            columns.Add("ProviderType", typeof(int));
-            columns.Add("AllowDBNull", typeof(bool));
+            columns.Add(SchemaTableColumn.ColumnOrdinal, typeof(int));
+            columns.Add(SchemaTableColumn.ColumnSize, typeof(int));
+            columns.Add(SchemaTableColumn.NumericPrecision, typeof(short));
+            columns.Add(SchemaTableColumn.NumericScale, typeof(short));
+            columns.Add(SchemaTableColumn.IsUnique, typeof(bool));
+            columns.Add(SchemaTableColumn.IsKey, typeof(bool));
+            //BaseServerName
+            //BaseCatalogName
+            columns.Add(SchemaTableColumn.BaseColumnName, typeof(string));
+            columns.Add(SchemaTableColumn.BaseSchemaName, typeof(string));
+            columns.Add(SchemaTableColumn.BaseTableName, typeof(string));
+            columns.Add(SchemaTableColumn.DataType, typeof(Type));
+            columns.Add(SchemaTableColumn.AllowDBNull, typeof(bool));
+            columns.Add(SchemaTableColumn.ProviderType, typeof(int));
+            columns.Add(SchemaTableColumn.IsAliased, typeof(bool));
+            columns.Add(SchemaTableColumn.IsExpression, typeof(bool));
+            //IsIdentity
+            //IsAutoIncrement
+            //IsRowVersion
+            //IsHidden
+            columns.Add(SchemaTableColumn.IsLong, typeof(bool));
+            //IsReadOnly
+            //ProviderSpecificDataType
+            //DataTypeName XmlSchemaCollectionDatabase XmlSchemaCollectionOwningSchema XmlSchemaCollectionName UdtAssemblyQualifiedName NonVersionedProviderType IsColumnSet
+
             return table;
+        }
+
+        private static object[] CreateDataRowValues(string columnName, int columnSize, Type dataType, DbType providerType, bool allowDBNull)
+        {
+            return new object[]
+            {
+                columnName,
+                0,
+                columnSize,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                dataType,
+                allowDBNull,
+                providerType,
+                null,
+                null,
+                null
+            };
         }
 
         internal static void AddSchemaRowBoolean(DataTable schemaTable, string name, bool allowDBNull)
         {
-            schemaTable.Rows.Add(new object[]
-            {
-                name,
-                sizeof(bool),
-                typeof(bool),
-                DbType.Boolean,
-                allowDBNull,
-            });
+            schemaTable.Rows.Add(CreateDataRowValues(name, sizeof(bool), typeof(bool), DbType.Boolean, allowDBNull));
         }
 
         internal static void AddSchemaRowDateTime(DataTable schemaTable, string name, bool allowDBNull)
         {
-            schemaTable.Rows.Add(new object[]
-            {
-                name,
-                8,
-                typeof(DateTime),
-                DbType.DateTime,
-                allowDBNull
-            });
+            schemaTable.Rows.Add(CreateDataRowValues(name, 8, typeof(DateTime), DbType.DateTime, allowDBNull));
         }
 
         internal static void AddSchemaRowString(DataTable schemaTable, string name, bool allowDBNull)
         {
-            schemaTable.Rows.Add(new object[]
-            {
-                name,
-                8096,
-                typeof(string),
-                DbType.String,
-                allowDBNull
-            });
+            schemaTable.Rows.Add(CreateDataRowValues(name, 8096, typeof(string), DbType.String, allowDBNull));
         }
 
         internal static void AddSchemaRowInt32(DataTable schemaTable, string name, bool allowDBNull)
         {
-            schemaTable.Rows.Add(new object[]
-            {
-                name,
-                sizeof(int),
-                typeof(int),
-                DbType.Int32,
-                allowDBNull
-            });
+            schemaTable.Rows.Add(CreateDataRowValues(name, sizeof(int), typeof(int), DbType.Int32, allowDBNull));
         }
 
         internal static void AddSchemaRowInt64(DataTable schemaTable, string name, bool allowDBNull)
         {
-            schemaTable.Rows.Add(new object[]
-            {
-                name,
-                sizeof(long),
-                typeof(long),
-                DbType.Int64,
-                allowDBNull
-            });
+            schemaTable.Rows.Add(CreateDataRowValues(name, sizeof(long), typeof(long), DbType.Int64, allowDBNull));
         }
     }
 }

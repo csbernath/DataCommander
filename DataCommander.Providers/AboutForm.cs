@@ -27,7 +27,10 @@
     a {{text-decoration:none}}
 </style>
 <div style=""font-family:verdana;font-size:9pt"">
-<a href=""https://github.com/csbernath/DataCommander"">Data Commander on GitHub</a>
+<a href=""https://github.com/csbernath/DataCommander"">Data Commander</a>
+<br/>
+<br/>
+Inlcuding <a href=""https://github.com/csbernath/DataCommander/blob/master/DataCommander.Foundation/README.md"">Foundation Class Library</a>
 <br/>
 <br/>
 Build date: {lastWriteTime.ToString("yyyy-MM-dd")}
@@ -56,11 +59,11 @@ Credits:
 </br>
 <ul style=""list-style-type:none"">
     <li><a href=""https://www.visualstudio.com/products/visual-studio-community-vs"">Visual Studio 2015 Community Edition</a></li>                  
-    <li><a href=""https://www.jetbrains.com/resharper/"">JetBrains R# ReSharper Ultimate Free Open Source License</a></li>
-    <li><a href=""http://epplus.codeplex.com"">EPPlus-Create advanced Excel spreadsheets on the server</a></li>
-    <li><a href=""https://system.data.sqlite.org"">System.Data.SQLite</a></li>
-    <li><a href=""https://www.nuget.org/packages/MySql.Data/"">ADO.NET driver for MySQL</a></li>
-    <li><a href=""http://npgsql.projects.pgfoundry.org/"">Npgsql - .Net Data Provider for PostgreSQL</a></li>
+    <li><a href=""https://www.jetbrains.com/resharper/"">JetBrains R# ReSharper</a></li>
+    <li><a href=""http://epplus.codeplex.com"">EPPlus Excel generator</a></li>
+    <li><a href=""https://system.data.sqlite.org"">SQLite provider</a></li>
+    <li><a href=""https://www.nuget.org/packages/MySql.Data/"">MySQL provider</a></li>
+    <li><a href=""http://npgsql.projects.pgfoundry.org/"">PostgreSQL provider</a></li>    
 </ul>
 </div>";
 

@@ -11,6 +11,7 @@
         private enum ExceptionType
         {
             None,
+            ArgumentException,
             ArgumentNullException,
             ArgumentOutOfRangeException
         }
@@ -19,6 +20,7 @@
 
         static FoundationContract()
         {
+            typeDictionary.Add<ArgumentException>(ExceptionType.ArgumentException);
             typeDictionary.Add<ArgumentNullException>(ExceptionType.ArgumentNullException);
             typeDictionary.Add<ArgumentOutOfRangeException>(ExceptionType.ArgumentOutOfRangeException);
         }
@@ -69,6 +71,9 @@
                 var exceptionType = typeDictionary.GetValueOrDefault<TException>();
                 switch (exceptionType)
                 {
+                    case ExceptionType.ArgumentException:
+                        throw new ArgumentException(userMessage);
+
                     case ExceptionType.ArgumentNullException:
                         throw new ArgumentNullException(userMessage, (Exception)null);
 

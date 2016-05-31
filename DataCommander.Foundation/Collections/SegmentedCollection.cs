@@ -110,9 +110,11 @@
 
             while (segment != null)
             {
-                int count = segment != this.last
-                    ? this.segmentLength
-                    : this.Count%this.segmentLength;
+                int count;
+                if (segment != this.last)
+                    count = this.segmentLength;
+                else
+                    count = this.Count <= this.segmentLength ? this.Count : this.Count%segmentLength;
 
                 for (int i = 0; i < count; i++)
                 {

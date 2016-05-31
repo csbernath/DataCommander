@@ -254,6 +254,7 @@
     </Compile>
     <Compile Include="AsyncDataAdapterCommand.cs" />
     <Compile Include="Connection\ConnectionStringKeyword.cs" />
+    <Compile Include="Connection\DbConnectionStringBuilderExtensions.cs" />
     <Compile Include="DataCommanderApplication.cs">
       <SubType>Code</SubType>
     </Compile>
