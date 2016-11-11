@@ -336,14 +336,14 @@ namespace DataCommander.Providers
                             //
                             if (currentToken != null)
                             {
-                                sqlObject = this.GetSqlObject( currentToken.Value );
+                                sqlObject = this.GetSqlObject(currentToken.Value);
                             }
                             if (sqlObject == null)
                             {
-                                int index = this.allTables.LastIndexOf( t => t.Index < previousToken.Index - 1 );
+                                int index = this.allTables.LastIndexOf(t => t.Index < previousToken.Index - 1);
                                 if (index >= 0)
                                 {
-                                    Table table = this.allTables[ index ];
+                                    Table table = this.allTables[index];
                                     sqlObject = new SqlObject(table.Name, null, SqlObjectTypes.Column, name);
                                 }
                             }
@@ -355,24 +355,45 @@ namespace DataCommander.Providers
 
                     if (sqlObject == null && currentToken != null)
                     {
-                        sqlObject = this.GetSqlObject( currentToken.Value );
+                        sqlObject = this.GetSqlObject(currentToken.Value);
                     }
                 }
                 else if (previousToken.Type == TokenType.OperatorOrPunctuator)
                 {
-                    if (currentToken != null && currentToken.Value.Contains( '.' ))
+                    if (previousToken.Value == "=" && previousToken.Index > 0)
                     {
-                        sqlObject = this.GetSqlObject( currentToken.Value );
+                        if (currentToken != null)
+                        {
+                            switch (currentToken.Type)
+                            {
+                                case TokenType.KeyWord:
+                                    sqlObject = this.GetSqlObject(currentToken.Value);
+                                    break;
+
+                                default:
+                                    sqlObject = this.GetValue(previousToken);
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            sqlObject = GetValue(previousToken);
+                        }
                     }
-                    else if (previousToken.Value == "=" && previousToken.Index > 0)
+                    else if (currentToken != null && currentToken.Type == TokenType.KeyWord && currentToken.Value.Contains('.'))
                     {
-                        var tokenBeforeOperator = this.Tokens[ previousToken.Index - 1 ];
-                        sqlObject = new SqlObject(tokenBeforeOperator.Value, null, SqlObjectTypes.Value, null);
+                        sqlObject = this.GetSqlObject(currentToken.Value);
                     }
                 }
             }
 
             return sqlObject;
+        }
+
+        private SqlObject GetValue(Token previousToken)
+        {
+            var tokenBeforeOperator = this.Tokens[previousToken.Index - 1];
+            return new SqlObject(tokenBeforeOperator.Value, null, SqlObjectTypes.Value, null);
         }
 
         public string FindTableName()

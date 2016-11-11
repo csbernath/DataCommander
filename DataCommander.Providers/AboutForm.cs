@@ -30,7 +30,7 @@
 <a href=""https://github.com/csbernath/DataCommander"">Data Commander</a>
 <br/>
 <br/>
-Inlcuding <a href=""https://github.com/csbernath/DataCommander/blob/master/DataCommander.Foundation/README.md"">Foundation Class Library</a>
+Including <a href=""https://github.com/csbernath/DataCommander/blob/master/DataCommander.Foundation/README.md"">Foundation Class Library</a>
 <br/>
 <br/>
 Build date: {lastWriteTime.ToString("yyyy-MM-dd")}

@@ -20,8 +20,8 @@ namespace DataCommander.Providers
 
         private DataCommanderApplication()
         {
-            string fileName = Assembly.GetEntryAssembly().Location;
-            FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(fileName);
+            var fileName = Assembly.GetEntryAssembly().Location;
+            var versionInfo = FileVersionInfo.GetVersionInfo(fileName);
             this.Name = versionInfo.ProductName;
 
             Settings.Section.SelectNode(null, true);
@@ -52,7 +52,7 @@ namespace DataCommander.Providers
         {
             get
             {
-                ConfigurationNode folder = this.ApplicationData.CreateNode("DataCommander/Connections");
+                var folder = this.ApplicationData.CreateNode("DataCommander/Connections");
                 return folder;
             }
         }
@@ -63,20 +63,21 @@ namespace DataCommander.Providers
 
         public void Run()
         {
-            Task.Run(() =>
+            this.MainForm = new MainForm();
+
+            Task.Delay(1000).ContinueWith(task =>
             {
                 log.Write(LogLevel.Trace, "{0}\r\n{1}", AppDomainMonitor.EnvironmentInfo, AppDomainMonitor.CurrentDomainState);
             });
 
-            this.MainForm = new MainForm();
             Application.Run(this.MainForm);
         }
 
         public void SaveApplicationData()
         {
-            ConfigurationNode folder = this.ConnectionsConfigurationNode;
+            var folder = this.ConnectionsConfigurationNode;
 
-            foreach (ConfigurationNode subFolder in folder.ChildNodes)
+            foreach (var subFolder in folder.ChildNodes)
             {
                 var connectionProperties = new ConnectionProperties();
                 connectionProperties.Load(subFolder);
@@ -84,11 +85,11 @@ namespace DataCommander.Providers
                 var dbConnectionStringBuilder = new DbConnectionStringBuilder();
                 dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
                 object obj;
-                bool contains = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out obj);
+                var contains = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out obj);
 
                 if (contains)
                 {
-                    string password = dbConnectionStringBuilder.GetValue(ConnectionStringKeyword.Password);
+                    var password = dbConnectionStringBuilder.GetValue(ConnectionStringKeyword.Password);
                     dbConnectionStringBuilder.Remove(ConnectionStringKeyword.Password);
                     connectionProperties.ConnectionString = dbConnectionStringBuilder.ConnectionString;
                     password = ConnectionProperties.ProtectPassword(password);
@@ -98,9 +99,9 @@ namespace DataCommander.Providers
                 connectionProperties.Save(subFolder);
             }
 
-            string tempFileName = this.FileName + ".temp";
+            var tempFileName = this.FileName + ".temp";
             this.ApplicationData.Save(tempFileName, this.sectionName);
-            bool succeeded = NativeMethods.MoveFileEx(tempFileName, this.FileName,
+            var succeeded = NativeMethods.MoveFileEx(tempFileName, this.FileName,
                 NativeMethods.MoveFileExFlags.ReplaceExisiting);
             log.Write(LogLevel.Trace, "MoveFileEx succeeded: {0}", succeeded);
         }
@@ -108,14 +109,17 @@ namespace DataCommander.Providers
         public void LoadApplicationData(string fileName, string sectionName)
         {
             this.ApplicationData.Load(fileName, sectionName);
-            ConfigurationNode folder = this.ConnectionsConfigurationNode;
 
-            foreach (ConfigurationNode subFolder in folder.ChildNodes)
+            //var writer = new ConfigurationJsonWriter();
+            //writer.Write(this.ApplicationData.RootNode);
+
+            var folder = this.ConnectionsConfigurationNode;
+
+            foreach (var subFolder in folder.ChildNodes)
             {
                 var connectionProperties = new ConnectionProperties();
                 connectionProperties.Load(subFolder);
                 connectionProperties.LoadProtectedPassword(subFolder);
-                //connectionProperties.Save(subFolder);
             }
 
             this.FileName = fileName;

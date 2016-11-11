@@ -2,6 +2,7 @@ namespace DataCommander.Foundation.Linq
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Linq;

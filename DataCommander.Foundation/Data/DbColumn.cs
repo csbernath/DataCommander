@@ -49,8 +49,18 @@
             this.DataType = (Type)schemaTableRow[SchemaTableColumn.DataType];
             this.AllowDBNull = schemaTableRow.Field<bool?>(SchemaTableColumn.AllowDBNull);
             this.ProviderType = schemaTableRow.Field<int>(SchemaTableColumn.ProviderType);
-            this.IsAliased = schemaTableRow.Field<bool?>(SchemaTableColumn.IsAliased);
-            this.IsExpression = schemaTableRow.Field<bool?>(SchemaTableColumn.IsExpression);
+
+            column = columns[SchemaTableColumn.IsAliased];
+            if (column != null)
+            {
+                this.IsAliased = schemaTableRow.Field<bool?>(column);
+            }
+
+            column = columns[SchemaTableColumn.IsExpression];
+            if (column != null)
+            {
+                this.IsExpression = schemaTableRow.Field<bool?>(column);
+            }
 
             column = columns["IsIdentity"];
             if (column != null)

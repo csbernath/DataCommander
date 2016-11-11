@@ -39,7 +39,7 @@ namespace DataCommander.Foundation.Configuration
             xmlWriter.WriteStartElement(sectionName);
             ConfigurationWriter.Write(xmlWriter, this.rootNode.Attributes);
 
-            foreach (ConfigurationNode childNode in this.rootNode.ChildNodes)
+            foreach (var childNode in this.rootNode.ChildNodes)
             {
                 ConfigurationWriter.WriteNode(xmlWriter, childNode);
             }
@@ -79,17 +79,17 @@ namespace DataCommander.Foundation.Configuration
                 this.rootNode = new ConfigurationNode(null);
             }
 
-            ConfigurationNode node = this.rootNode;
+            var node = this.rootNode;
 
             if (path != null)
             {
-                string[] nodeNames = path.Split(ConfigurationNode.Delimiter);
+                var nodeNames = path.Split(ConfigurationNode.Delimiter);
 
-                for (int i = 0; i < nodeNames.Length; i++)
+                for (var i = 0; i < nodeNames.Length; i++)
                 {
-                    string childNodeName = nodeNames[i];
+                    var childNodeName = nodeNames[i];
                     ConfigurationNode childNode;
-                    bool contains = node.ChildNodes.TryGetValue(childNodeName, out childNode);
+                    var contains = node.ChildNodes.TryGetValue(childNodeName, out childNode);
 
                     if (!contains)
                     {

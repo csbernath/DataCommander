@@ -121,7 +121,7 @@ namespace DataCommander.Foundation.Configuration
         {
             get
             {
-                string sectionName = typeof(ConfigurationSection).Namespace;
+                var sectionName = typeof(ConfigurationSection).Namespace;
                 return sectionName;
             }
         }
@@ -144,8 +144,8 @@ namespace DataCommander.Foundation.Configuration
             get
             {
                 var trace = new StackTrace(1);
-                string nodeName = ConfigurationNodeName.FromNamespace(trace, 0);
-                ConfigurationNode node = this.SelectNode(nodeName, true);
+                var nodeName = ConfigurationNodeName.FromNamespace(trace, 0);
+                var node = this.SelectNode(nodeName, true);
                 return node;
             }
         }
@@ -158,8 +158,8 @@ namespace DataCommander.Foundation.Configuration
             get
             {
                 var trace = new StackTrace(1);
-                string nodeName = ConfigurationNodeName.FromType(trace, 0);
-                ConfigurationNode node = this.SelectNode(nodeName, true);
+                var nodeName = ConfigurationNodeName.FromType(trace, 0);
+                var node = this.SelectNode(nodeName, true);
                 return node;
             }
         }
@@ -172,8 +172,8 @@ namespace DataCommander.Foundation.Configuration
             get
             {
                 var trace = new StackTrace(1);
-                string nodeName = ConfigurationNodeName.FromMethod(trace, 0);
-                ConfigurationNode node = this.SelectNode(nodeName, true);
+                var nodeName = ConfigurationNodeName.FromMethod(trace, 0);
+                var node = this.SelectNode(nodeName, true);
                 return node;
             }
         }
@@ -267,7 +267,7 @@ namespace DataCommander.Foundation.Configuration
             {
                 try
                 {
-                    foreach (string fileName in fileNames)
+                    foreach (var fileName in fileNames)
                     {
                         var watcher = new FileSystemWatcher(fileName);
                         watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
@@ -297,7 +297,7 @@ namespace DataCommander.Foundation.Configuration
 
         private void Load(out ConfigurationNode rootNode, out StringCollection fileNames)
         {
-            ConfigurationReader reader = new ConfigurationReader();
+            var reader = new ConfigurationReader();
             fileNames = new StringCollection();
             rootNode = reader.Read(this.ConfigFileName, this.SectionName, fileNames);
         }

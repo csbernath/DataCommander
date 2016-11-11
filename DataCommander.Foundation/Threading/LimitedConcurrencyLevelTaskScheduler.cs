@@ -304,6 +304,22 @@
         /// <summary>Gets the maximum concurrency level supported by this scheduler.</summary>
         public override sealed int MaximumConcurrencyLevel => this._maxDegreeOfParallelism;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public int QueuedItemCount
+        {
+            get { return this._tasks.Count; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int ThreadCount
+        {
+            get { return this._delegatesQueuedOrRunning; }
+        }
+
         /// <summary>Gets an enumerable of the tasks currently scheduled on this scheduler.</summary>
         /// <returns>An enumerable of the tasks currently scheduled.</returns>
         protected override sealed IEnumerable<Task> GetScheduledTasks()

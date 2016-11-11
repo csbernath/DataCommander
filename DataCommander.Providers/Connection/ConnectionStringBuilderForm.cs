@@ -325,6 +325,9 @@ namespace DataCommander.Providers
 
         private void SaveTo(ConnectionProperties connectionProperties)
         {
+            string providerName = this.providersComboBox.Text;
+            var provider = ProviderFactory.CreateProvider(providerName);
+            this.dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
             this.SaveTo(this.dbConnectionStringBuilder);
 
             //var keywords = new List<string>();

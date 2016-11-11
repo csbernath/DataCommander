@@ -69,7 +69,7 @@
         /// 
         /// </summary>
         [Pure]
-        public int Count => this.groups != null ? this.groups.Count : 0;
+        public int Count => this.groups?.Count ?? 0;
 
         /// <summary>
         /// 
@@ -103,6 +103,22 @@
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IReadOnlyList<TValue>> GetGroups()
+        {
+            int lastGroupIndex = this.groups.Count - 1;
+            for (int groupIndex = 0; groupIndex <= lastGroupIndex; ++groupIndex)
+            {
+                int valueStartIndex = this.groups[groupIndex];
+                int valueNextStartIndex = groupIndex < lastGroupIndex ? this.groups[groupIndex + 1] : this.values.Count;
+                int valueCount = valueNextStartIndex - valueStartIndex;
+                yield return new ReadOnlyListSegment<TValue>(this.values, valueStartIndex, valueCount);
+            }
+        }
+
         #endregion
 
         #region Public Methods
@@ -129,7 +145,7 @@
                 #region Create
 
                 int notEqualsCount = this.values.SelectPreviousAndCurrentKey(this.keySelector).Count(k => comparison(k.Previous, k.Current) != 0);
-                int smallArrayMaxLength = LargeObjectHeap.GetSmallArrayMaxLength(sizeof (int));
+                int smallArrayMaxLength = LargeObjectHeap.GetSmallArrayMaxLength(sizeof(int));
                 int itemCount = notEqualsCount + 1;
                 var segmentedArrayBuilder = new SegmentedArrayBuilder<int>(itemCount, smallArrayMaxLength);
 

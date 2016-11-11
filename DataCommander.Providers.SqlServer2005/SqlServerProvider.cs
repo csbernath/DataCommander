@@ -655,7 +655,7 @@ order by 1", name.Database);
                                     if (fieldCount == 1)
                                     {
                                         schemaName = null;
-                                        objectName = dataRecord.GetString(0);
+                                        objectName = dataRecord[0].ToString();
                                     }
                                     else
                                     {

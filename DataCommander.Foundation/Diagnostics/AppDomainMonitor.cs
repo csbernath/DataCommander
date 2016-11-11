@@ -50,7 +50,7 @@ namespace DataCommander.Foundation.Diagnostics
 
                 using (var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full"))
                 {
-                    int release = (int)key.GetValue("Release");
+                    int release = (int) key.GetValue("Release");
 
                     switch (release)
                     {
@@ -59,8 +59,11 @@ namespace DataCommander.Foundation.Diagnostics
                             break;
 
                         case 378675:
+                            dotNetFrameworkVersion = "4.5.1 (server)";
+                            break;
+
                         case 378758:
-                            dotNetFrameworkVersion = "4.5.1";
+                            dotNetFrameworkVersion = "4.5.1 (client)";
                             break;
 
                         case 379893:
@@ -68,11 +71,19 @@ namespace DataCommander.Foundation.Diagnostics
                             break;
 
                         case 394254:
-                            dotNetFrameworkVersion = "4.6.1 (Windows 10 November Update)";
+                            dotNetFrameworkVersion = "4.6.1 (Windows 10)";
                             break;
 
                         case 394271:
                             dotNetFrameworkVersion = "4.6.1";
+                            break;
+
+                        case 394802:
+                            dotNetFrameworkVersion = "4.6.2 (Windows 10 Anniversary Update)";
+                            break;
+
+                        case 394806:
+                            dotNetFrameworkVersion = "4.6.2";
                             break;
 
                         default:
