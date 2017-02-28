@@ -74,7 +74,7 @@
         /// <returns></returns>
         public override int Read(char[] buffer, int index, int count)
         {
-            int result = Math.Min(count, this.stringBuilder.Length - this.index);
+            var result = Math.Min(count, this.stringBuilder.Length - this.index);
 
             if (result > 0)
             {

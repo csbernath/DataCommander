@@ -45,7 +45,7 @@ namespace DataCommander.Foundation.Data.PTypes
             }
             else
             {
-                SqlDateTime sql = (SqlDateTime) sqlDateTime;
+                var sql = (SqlDateTime) sqlDateTime;
                 sp = sql;
             }
 
@@ -67,7 +67,7 @@ namespace DataCommander.Foundation.Data.PTypes
             }
             else
             {
-                SqlDecimal sql = (SqlDecimal) sqlDecimal;
+                var sql = (SqlDecimal) sqlDecimal;
                 sp = sql;
             }
 
@@ -89,7 +89,7 @@ namespace DataCommander.Foundation.Data.PTypes
             }
             else
             {
-                SqlDouble sql = (SqlDouble) sqlDouble;
+                var sql = (SqlDouble) sqlDouble;
                 sp = sql;
             }
 
@@ -111,7 +111,7 @@ namespace DataCommander.Foundation.Data.PTypes
             }
             else
             {
-                SqlInt16 sql = (SqlInt16) value;
+                var sql = (SqlInt16) value;
                 sp = sql;
             }
 
@@ -133,7 +133,7 @@ namespace DataCommander.Foundation.Data.PTypes
             }
             else
             {
-                SqlInt32 sql = (SqlInt32) value;
+                var sql = (SqlInt32) value;
                 sp = sql;
             }
 
@@ -155,7 +155,7 @@ namespace DataCommander.Foundation.Data.PTypes
             }
             else
             {
-                SqlMoney sql = (SqlMoney) sqlMoney;
+                var sql = (SqlMoney) sqlMoney;
                 sp = sql;
             }
 
@@ -177,7 +177,7 @@ namespace DataCommander.Foundation.Data.PTypes
             }
             else
             {
-                SqlString sql = (SqlString) sqlString;
+                var sql = (SqlString) sqlString;
                 sp = sql;
             }
 

@@ -52,7 +52,7 @@
         /// <param name="item"></param>
         public void Add(T item)
         {
-            bool contains = this.list.Contains(item);
+            var contains = this.list.Contains(item);
 
             if (contains)
             {

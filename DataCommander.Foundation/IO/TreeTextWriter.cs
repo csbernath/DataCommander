@@ -44,9 +44,9 @@ namespace DataCommander.Foundation.IO
         {
             if (level > 0)
             {
-                string prefix = '|' + new string(' ', this.indentation - 1);
+                var prefix = '|' + new string(' ', this.indentation - 1);
 
-                for (int i = 0; i < level; i++)
+                for (var i = 0; i < level; i++)
                 {
                     this.textWriter.Write(prefix);
                 }
@@ -77,7 +77,7 @@ namespace DataCommander.Foundation.IO
         /// <param name="arguments"></param>
         public void WriteStartElement(string format, params object[] arguments)
         {
-            string value = string.Format(CultureInfo.InvariantCulture, format, arguments);
+            var value = string.Format(CultureInfo.InvariantCulture, format, arguments);
             this.WriteStartElement(value);
         }
 
@@ -110,7 +110,7 @@ namespace DataCommander.Foundation.IO
         /// <param name="arguments"></param>
         public void WriteEndElement(string format, params object[] arguments)
         {
-            string value = string.Format(CultureInfo.InvariantCulture, format, arguments);
+            var value = string.Format(CultureInfo.InvariantCulture, format, arguments);
             this.WriteEndElement(value);
         }
 
@@ -149,7 +149,7 @@ namespace DataCommander.Foundation.IO
         /// <param name="arguments"></param>
         public void WriteElement(string format, params object[] arguments)
         {
-            string value = string.Format(CultureInfo.InvariantCulture, format, arguments);
+            var value = string.Format(CultureInfo.InvariantCulture, format, arguments);
             this.WriteElement(value);
         }
 
@@ -159,7 +159,7 @@ namespace DataCommander.Foundation.IO
         /// <param name="value"></param>
         public void WriteElement(object value)
         {
-            string s = value != null ? value.ToString() : null;
+            var s = value != null ? value.ToString() : null;
             this.WriteElement(s);
         }
     }

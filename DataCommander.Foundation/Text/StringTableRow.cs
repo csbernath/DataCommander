@@ -2,7 +2,6 @@ namespace DataCommander.Foundation.Text
 {
     using System;
     using System.Diagnostics.Contracts;
-    using System.Text;
 
     /// <summary>
     /// Represents a row in the <see cref="StringTable"/>.

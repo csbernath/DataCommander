@@ -40,9 +40,9 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
             finally
             {
-                long ticks = Stopwatch.GetTimestamp() - this.startTick;
-                int duration = StopwatchTimeSpan.ToInt32(ticks, 1000);
-                ISqlLoggedSqlCommandFilter filter = this.connection.Filter;
+                var ticks = Stopwatch.GetTimestamp() - this.startTick;
+                var duration = StopwatchTimeSpan.ToInt32(ticks, 1000);
+                var filter = this.connection.Filter;
                 this.contains = exception != null || filter == null ||
                                 filter.Contains(this.connection.UserName, this.connection.HostName, this.command);
 
@@ -73,9 +73,9 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
             finally
             {
-                long ticks = Stopwatch.GetTimestamp() - this.startTick;
-                int duration = StopwatchTimeSpan.ToInt32(ticks, 1000);
-                ISqlLoggedSqlCommandFilter filter = this.connection.Filter;
+                var ticks = Stopwatch.GetTimestamp() - this.startTick;
+                var duration = StopwatchTimeSpan.ToInt32(ticks, 1000);
+                var filter = this.connection.Filter;
                 this.contains = exception != null || filter == null ||
                                 filter.Contains(this.connection.UserName, this.connection.HostName, this.command);
 
@@ -95,7 +95,7 @@ namespace DataCommander.Foundation.Data.SqlClient
 
             if (this.contains && !this.logged)
             {
-                long duration = Stopwatch.GetTimestamp() - this.startTick;
+                var duration = Stopwatch.GetTimestamp() - this.startTick;
                 this.connection.CommandExeucte(this.command, this.startDate, duration, null);
             }
         }
@@ -231,7 +231,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
             finally
             {
-                long duration = Stopwatch.GetTimestamp() - this.startTick;
+                var duration = Stopwatch.GetTimestamp() - this.startTick;
                 this.contains |= exception != null;
 
                 if (this.contains && !this.logged)
@@ -259,7 +259,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                 }
                 catch (Exception e)
                 {
-                    long duration = Stopwatch.GetTimestamp() - this.startTick;
+                    var duration = Stopwatch.GetTimestamp() - this.startTick;
                     this.connection.CommandExeucte(this.command, this.startDate, duration, e);
                     this.logged = true;
                     throw;
@@ -275,7 +275,7 @@ namespace DataCommander.Foundation.Data.SqlClient
 
         public bool Read()
         {
-            bool read = false;
+            var read = false;
 
             try
             {
@@ -283,7 +283,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
             catch (Exception e)
             {
-                long duration = Stopwatch.GetTimestamp() - this.startTick;
+                var duration = Stopwatch.GetTimestamp() - this.startTick;
                 this.connection.CommandExeucte(this.command, this.startDate, duration, e);
                 this.logged = true;
                 throw;

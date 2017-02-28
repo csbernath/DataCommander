@@ -6,9 +6,13 @@ namespace DataCommander.Providers
     using System.Data.SqlClient;
     using System.Diagnostics;
     using System.Drawing;
+    using System.IO;
+    using System.Text;
     using System.Windows.Forms;
     using DataCommander.Foundation.Diagnostics;
     using Foundation.Diagnostics.MethodProfiler;
+    using Foundation.Linq;
+    using Foundation.Text;
 
     public sealed class QueryTextBox : UserControl
     {
@@ -640,7 +644,7 @@ namespace DataCommander.Providers
 
             if (GetDataPresent(dataObject, DataFormats.UnicodeText))
             {
-                string text = (string) GetData(dataObject, DataFormats.UnicodeText);
+                string text = (string)GetData(dataObject, DataFormats.UnicodeText);
                 int startIndex = this.RichTextBox.SelectionStart;
                 this.RichTextBox.SelectionLength = 0;
                 this.RichTextBox.SelectedText = text;
@@ -649,8 +653,25 @@ namespace DataCommander.Providers
             }
             else if (GetDataPresent(dataObject, DataFormats.FileDrop))
             {
-                string[] fileNames = (string[]) dataObject.GetData(DataFormats.FileDrop);
-                DataCommanderApplication.Instance.MainForm.LoadFiles(fileNames);
+                string[] fileNames = (string[])dataObject.GetData(DataFormats.FileDrop);
+                var fileName = fileNames[0];
+                var extension = Path.GetExtension(fileName);
+                if (extension.In(".sql", ".txt"))
+                    DataCommanderApplication.Instance.MainForm.LoadFiles(fileNames);
+                else
+                {
+                    var bytes = File.ReadAllBytes(fileNames[0]);
+                    var chars = Hex.Encode(bytes, true);
+                    var stringBuilder = new StringBuilder();
+                    stringBuilder.Append("0x");
+                    stringBuilder.Append(chars);
+                    var text = stringBuilder.ToString();
+                    int startIndex = this.RichTextBox.SelectionStart;
+                    this.RichTextBox.SelectionLength = 0;
+                    this.RichTextBox.SelectedText = text;
+                    this.RichTextBox.SelectionStart = startIndex + text.Length;
+                    this.RichTextBox.Focus();
+                }
             }
         }
 

@@ -84,7 +84,7 @@
         public bool Remove(ICollectionIndex<T> item)
         {
             bool succeeded;
-            bool contains = this.dictionary.ContainsValue(item);
+            var contains = this.dictionary.ContainsValue(item);
 
             if (contains)
             {

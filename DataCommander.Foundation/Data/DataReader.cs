@@ -105,7 +105,7 @@ namespace DataCommander.Foundation.Data
 
             while (this.dataReader.Read())
             {
-                bool succeeded = read(this.dataReader);
+                var succeeded = read(this.dataReader);
                 if (!succeeded)
                 {
                     break;
@@ -122,7 +122,7 @@ namespace DataCommander.Foundation.Data
             Contract.Assert(this.dataReader != null);
             Contract.Assert(!this.nextResultCalled);
 
-            bool nextResult = this.dataReader.NextResult();
+            var nextResult = this.dataReader.NextResult();
             this.nextResultCalled = true;
 
             return nextResult;
@@ -144,7 +144,7 @@ namespace DataCommander.Foundation.Data
             }
             else
             {
-                bool nextResult = this.dataReader.NextResult();
+                var nextResult = this.dataReader.NextResult();
                 this.nextResultCalled = true;
 
                 if (!nextResult)

@@ -23,7 +23,7 @@
         /// <param name="item"></param>
         public void Add(T item)
         {
-            foreach (ICollectionIndex<T> index in this.Indexes)
+            foreach (var index in this.Indexes)
             {
                 index.Add(item);
             }
@@ -34,7 +34,7 @@
         /// </summary>
         public void Clear()
         {
-            foreach (ICollectionIndex<T> index in this.Indexes)
+            foreach (var index in this.Indexes)
             {
                 index.Clear();
             }

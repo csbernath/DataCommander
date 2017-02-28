@@ -46,14 +46,14 @@
         {
             Contract.Requires( parameters != null );
 
-            StringBuilder sb = new StringBuilder();
-            bool first = true;
+            var sb = new StringBuilder();
+            var first = true;
             string s;
             var numberFormatInfo = NumberFormatInfo.InvariantInfo;
 
             foreach (SqlParameter parameter in parameters)
             {
-                object value = parameter.Value;
+                var value = parameter.Value;
 
                 if (value != null)
                 {
@@ -78,8 +78,8 @@
                             }
                             else
                             {
-                                Type type = value.GetType();
-                                INullable nullable = value as INullable;
+                                var type = value.GetType();
+                                var nullable = value as INullable;
 
                                 if (nullable != null)
                                 {
@@ -92,7 +92,7 @@
                                         switch (parameter.SqlDbType)
                                         {
                                             case SqlDbType.Bit:
-                                                SqlBoolean sqlBoolean = (SqlBoolean) value;
+                                                var sqlBoolean = (SqlBoolean) value;
                                                 s = sqlBoolean.ByteValue.ToString();
                                                 break;
 
@@ -108,15 +108,15 @@
                                                 break;
 
                                             case SqlDbType.DateTime:
-                                                SqlDateTime sqlDateTime = (SqlDateTime) value;
-                                                DateTime dateTime = sqlDateTime.Value;
+                                                var sqlDateTime = (SqlDateTime) value;
+                                                var dateTime = sqlDateTime.Value;
                                                 s = dateTime.ToTSqlDateTime();
                                                 break;
 
                                             case SqlDbType.Float:
-                                                SqlDouble sqlDouble = (SqlDouble) value;
-                                                Double d = sqlDouble.Value;
-                                                long i = (long) d;
+                                                var sqlDouble = (SqlDouble) value;
+                                                var d = sqlDouble.Value;
+                                                var i = (long) d;
 
                                                 if (i == d)
                                                     s = i.ToString( numberFormatInfo );
@@ -126,18 +126,18 @@
                                                 break;
 
                                             case SqlDbType.Real:
-                                                SqlSingle sqlSingle = (SqlSingle) value;
+                                                var sqlSingle = (SqlSingle) value;
                                                 s = sqlSingle.ToString();
                                                 break;
 
                                             case SqlDbType.Decimal:
-                                                SqlDecimal sqlDecimal = (SqlDecimal) value;
+                                                var sqlDecimal = (SqlDecimal) value;
                                                 s = sqlDecimal.ToString();
                                                 break;
 
                                             case SqlDbType.Money:
-                                                SqlMoney sqlMoney = (SqlMoney) value;
-                                                decimal dec = sqlMoney.Value;
+                                                var sqlMoney = (SqlMoney) value;
+                                                var dec = sqlMoney.Value;
                                                 i = (long) dec;
 
                                                 if (i == dec)
@@ -163,13 +163,13 @@
                                 {
                                     if (type.IsArray)
                                     {
-                                        Type elementType = type.GetElementType();
-                                        TypeCode elementTypeCode = Type.GetTypeCode( elementType );
+                                        var elementType = type.GetElementType();
+                                        var elementTypeCode = Type.GetTypeCode( elementType );
 
                                         switch (elementTypeCode)
                                         {
                                             case TypeCode.Byte:
-                                                byte[] bytes = (byte[]) value;
+                                                var bytes = (byte[]) value;
                                                 s = "0x" + Hex.GetString( bytes, true );
                                                 break;
 
@@ -180,12 +180,12 @@
                                     }
                                     else
                                     {
-                                        TypeCode typeCode = Type.GetTypeCode( type );
+                                        var typeCode = Type.GetTypeCode( type );
 
                                         switch (typeCode)
                                         {
                                             case TypeCode.Boolean:
-                                                bool b = (bool) value;
+                                                var b = (bool) value;
                                                 s = b ? "1" : "0";
                                                 break;
 
@@ -196,12 +196,12 @@
                                                 break;
 
                                             case TypeCode.DateTime:
-                                                DateTime dateTime = (DateTime) value;
+                                                var dateTime = (DateTime) value;
                                                 s = dateTime.ToTSqlDateTime();
                                                 break;
 
                                             case TypeCode.Decimal:
-                                                decimal decimalValue = (decimal) value;
+                                                var decimalValue = (decimal) value;
                                                 s = decimalValue.ToString( numberFormatInfo );
                                                 break;
 

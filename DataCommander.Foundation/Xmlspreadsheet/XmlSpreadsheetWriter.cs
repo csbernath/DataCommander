@@ -70,10 +70,10 @@
                     }
                 }
 
-                int tableIndex = 0;
+                var tableIndex = 0;
                 foreach (var tableSchema in tables)
                 {
-                    int columnIndex = 0;
+                    var columnIndex = 0;
                     foreach (var column in tableSchema.Columns)
                     {
                         using (this.XmlWriter.WriteElement("Style"))
@@ -196,9 +196,9 @@
 
             this.WriteStartRow();
 
-            for (int columnIndex = 0; columnIndex < values.Length; columnIndex++)
+            for (var columnIndex = 0; columnIndex < values.Length; columnIndex++)
             {
-                object value = values[columnIndex];
+                var value = values[columnIndex];
                 XmlSpreadsheetDataType type;
                 string xmlValue;
 

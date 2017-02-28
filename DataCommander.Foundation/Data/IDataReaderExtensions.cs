@@ -39,7 +39,7 @@
             Contract.Requires<ArgumentNullException>(dataReader != null);
             Contract.Requires<ArgumentNullException>(dataSet != null);
 
-            int rowCount = 0;
+            var rowCount = 0;
 
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -49,7 +49,7 @@
                         Locale = CultureInfo.InvariantCulture
                     };
 
-                int count = dataReader.Fill(table, cancellationToken);
+                var count = dataReader.Fill(table, cancellationToken);
                 rowCount += count;
                 dataSet.Tables.Add(table);
 
@@ -74,11 +74,11 @@
             Contract.Requires<ArgumentNullException>(dataReader != null);
             Contract.Requires<ArgumentNullException>(dataTable != null);
 
-            DataTable schemaTable = dataReader.GetSchemaTable();
+            var schemaTable = dataReader.GetSchemaTable();
 
             if (schemaTable != null)
             {
-                DataColumnCollection columns = dataTable.Columns;
+                var columns = dataTable.Columns;
 
                 if (columns.Count == 0)
                 {
@@ -86,15 +86,15 @@
                 }
             }
 
-            int fieldCount = dataReader.FieldCount;
-            DataRowCollection rows = dataTable.Rows;
-            int rowCount = 0;
+            var fieldCount = dataReader.FieldCount;
+            var rows = dataTable.Rows;
+            var rowCount = 0;
 
             while (!cancellationToken.IsCancellationRequested && dataReader.Read())
             {
                 var values = new object[fieldCount];
                 dataReader.GetValues(values);
-                DataRow row = rows.Add(values);
+                var row = rows.Add(values);
                 row.AcceptChanges();
                 rowCount++;
             }

@@ -38,7 +38,7 @@
         /// <param name="item"></param>
         public void Add(T item)
         {
-            int index = this.Count%this.segmentLength;
+            var index = this.Count%this.segmentLength;
 
             if (index == 0)
             {
@@ -116,7 +116,7 @@
                 else
                     count = this.Count <= this.segmentLength ? this.Count : this.Count%segmentLength;
 
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     yield return segment.Items[i];
                 }

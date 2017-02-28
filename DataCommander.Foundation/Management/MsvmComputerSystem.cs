@@ -37,7 +37,7 @@
             Contract.Requires(managementScope != null);
 
             string query = $"SELECT * FROM Msvm_ComputerSystem WHERE Name='{name}'";
-            List<MsvmComputerSystem> list = managementScope.ExecuteQuery(query, mo => new MsvmComputerSystem(mo));
+            var list = managementScope.ExecuteQuery(query, mo => new MsvmComputerSystem(mo));
             Contract.Assert(list.Count > 0);
             MsvmComputerSystem item;
 
@@ -64,7 +64,7 @@
             Contract.Requires(managementScope != null);
 
             string query = $"SELECT * FROM Msvm_ComputerSystem WHERE ElementName='{elementName}'";
-            List<MsvmComputerSystem> list = managementScope.ExecuteQuery(query, mo => new MsvmComputerSystem(mo));
+            var list = managementScope.ExecuteQuery(query, mo => new MsvmComputerSystem(mo));
             return list;
         }
 
@@ -80,11 +80,11 @@
             Contract.Requires(managementScope != null);
             Contract.Requires(elementNames != null);
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendFormat("SELECT * FROM Msvm_ComputerSystem WHERE");
-            bool first = true;
+            var first = true;
 
-            foreach (string elementName in elementNames)
+            foreach (var elementName in elementNames)
             {
                 if (first)
                 {
@@ -98,8 +98,8 @@
                 sb.AppendFormat(" ElementName = '{0}'", elementName);
             }
 
-            string query = sb.ToString();
-            List<MsvmComputerSystem> list = managementScope.ExecuteQuery(query, mo => new MsvmComputerSystem(mo));
+            var query = sb.ToString();
+            var list = managementScope.ExecuteQuery(query, mo => new MsvmComputerSystem(mo));
             return list;
         }
 
@@ -110,8 +110,8 @@
         {
             get
             {
-                object elementNameObject = this.managementObject["ElementName"];
-                string elementName = (string) elementNameObject;
+                var elementNameObject = this.managementObject["ElementName"];
+                var elementName = (string) elementNameObject;
                 return elementName;
             }
         }
@@ -123,9 +123,9 @@
         {
             get
             {
-                object enabledStateObject = this.managementObject["EnabledState"];
-                UInt16 enabledStateUint16 = (UInt16) enabledStateObject;
-                MsvmComputerSystemEnabledState enabledState = (MsvmComputerSystemEnabledState) enabledStateUint16;
+                var enabledStateObject = this.managementObject["EnabledState"];
+                var enabledStateUint16 = (UInt16) enabledStateObject;
+                var enabledState = (MsvmComputerSystemEnabledState) enabledStateUint16;
                 return enabledState;
             }
         }
@@ -137,8 +137,8 @@
         {
             get
             {
-                object nameObject = this.managementObject["Name"];
-                string name = (string) nameObject;
+                var nameObject = this.managementObject["Name"];
+                var name = (string) nameObject;
                 return name;
             }
         }
@@ -150,8 +150,8 @@
         {
             get
             {
-                object onTimeObject = this.managementObject["OnTimeInMilliseconds"];
-                UInt64 onTimeUInt64 = (UInt64) onTimeObject;
+                var onTimeObject = this.managementObject["OnTimeInMilliseconds"];
+                var onTimeUInt64 = (UInt64) onTimeObject;
                 TimeSpan? onTime;
 
                 if (onTimeUInt64 != 0)
@@ -177,12 +177,12 @@
         public InitiateShutdownReturnValue InitiateShutdown(bool force, string reason)
         {
             string query = $"SELECT * FROM Msvm_ShutdownComponent WHERE SystemName='{this.Name}'";
-            ObjectQuery objectQuery = new ObjectQuery(query);
-            ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher(
+            var objectQuery = new ObjectQuery(query);
+            var managementObjectSearcher = new ManagementObjectSearcher(
                 this.managementObject.Scope, objectQuery);
-            ManagementObjectCollection managementObjectCollection = managementObjectSearcher.Get();
-            ManagementObject shutdownComponent = managementObjectCollection.Cast<ManagementObject>().First();
-            object resultObject = shutdownComponent.InvokeMethod(
+            var managementObjectCollection = managementObjectSearcher.Get();
+            var shutdownComponent = managementObjectCollection.Cast<ManagementObject>().First();
+            var resultObject = shutdownComponent.InvokeMethod(
                 "InitiateShutdown",
                 new object[]
                 {
@@ -190,7 +190,7 @@
                     reason
                 });
 
-            UInt32 result = (UInt32) resultObject;
+            var result = (UInt32) resultObject;
             return (InitiateShutdownReturnValue) result;
         }
 
@@ -204,16 +204,16 @@
             MsvmComputerSystemRequestedState requestedState, out ManagementJob job)
         {
             const string methodName = "RequestStateChange";
-            ushort requestedStateuInt16 = (ushort) requestedState;
-            ManagementBaseObject inParams = this.managementObject.GetMethodParameters(methodName);
+            var requestedStateuInt16 = (ushort) requestedState;
+            var inParams = this.managementObject.GetMethodParameters(methodName);
             inParams["RequestedState"] = requestedStateuInt16;
-            ManagementBaseObject outParams = this.managementObject.InvokeMethod(methodName, inParams, null);
+            var outParams = this.managementObject.InvokeMethod(methodName, inParams, null);
             var returnValue = (MsvmComputerSystemRequestStateChangeReturnValue) (uint) outParams["Returnvalue"];
-            string jobPath = (string) outParams["Job"];
+            var jobPath = (string) outParams["Job"];
 
             if (jobPath != null)
             {
-                ManagementObject jobObject = new ManagementObject(this.managementObject.Scope,
+                var jobObject = new ManagementObject(this.managementObject.Scope,
                     new ManagementPath(jobPath), null);
                 jobObject.Get();
                 job = new ManagementJob(jobObject);

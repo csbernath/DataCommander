@@ -2,8 +2,6 @@ namespace DataCommander.Foundation.Linq
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Text;
@@ -93,14 +91,14 @@ namespace DataCommander.Foundation.Linq
             Contract.Ensures(Contract.Result<IEnumerable<List<TSource>>>().Count() <= partitionCount);
             Contract.Ensures(Contract.ForAll(Contract.Result<IEnumerable<List<TSource>>>().ToList(), partition => partition.Count > 0));
 
-            int partitionSize = count/partitionCount;
-            int remainder = count%partitionCount;
+            var partitionSize = count/partitionCount;
+            var remainder = count%partitionCount;
 
             using (var enumerator = source.GetEnumerator())
             {
-                for (int partitionIndex = 0; partitionIndex < partitionCount; partitionIndex++)
+                for (var partitionIndex = 0; partitionIndex < partitionCount; partitionIndex++)
                 {
-                    int currentPartitionSize = partitionSize;
+                    var currentPartitionSize = partitionSize;
                     if (remainder > 0)
                     {
                         currentPartitionSize++;
@@ -203,7 +201,7 @@ namespace DataCommander.Foundation.Linq
         public static string ToLogString<TSource>(this IEnumerable<TSource> source, Func<TSource, string> toString)
         {
             var sb = new StringBuilder();
-            int index = 0;
+            var index = 0;
             foreach (var item in source)
             {
                 if (sb.Length > 0)
@@ -285,7 +283,7 @@ namespace DataCommander.Foundation.Linq
                         sb.Append(separator);
                     }
 
-                    string itemString = toString(item);
+                    var itemString = toString(item);
                     sb.Append(itemString);
                 }
 
@@ -316,7 +314,7 @@ namespace DataCommander.Foundation.Linq
             #region First row: column names
 
             var row = table.NewRow();
-            int columnIndex = 0;
+            var columnIndex = 0;
             foreach (var column in columns)
             {
                 row[columnIndex] = column.ColumnName;
@@ -352,7 +350,7 @@ namespace DataCommander.Foundation.Linq
             columnIndex = 0;
             foreach (var column in columns)
             {
-                int max = table.Rows.Select(r => r[columnIndex] == null ? 0 : r[columnIndex].Length).Max();
+                var max = table.Rows.Select(r => r[columnIndex] == null ? 0 : r[columnIndex].Length).Max();
                 secondRow[columnIndex] = new string('-', max);
                 columnWidths[columnIndex] = max;
                 ++columnIndex;

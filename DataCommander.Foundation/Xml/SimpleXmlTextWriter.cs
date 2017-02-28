@@ -195,7 +195,7 @@ namespace DataCommander.Foundation.Xml
         /// <exception cref="T:System.InvalidOperationException">This results in an invalid XML document.</exception>
         public override void WriteEndElement()
         {
-            StackItem stackItem = this.stack.Pop();
+            var stackItem = this.stack.Pop();
 
             if (stackItem.HasChildNodes)
             {
@@ -343,7 +343,7 @@ namespace DataCommander.Foundation.Xml
         /// <param name="ns"></param>
         public override void WriteStartAttribute(string prefix, string localName, string ns)
         {
-            StackItem stackItem = this.stack.Peek();
+            var stackItem = this.stack.Peek();
             stackItem.HasAttributes = true;
 
             this.textWriter.WriteLine();
@@ -381,7 +381,7 @@ namespace DataCommander.Foundation.Xml
         /// <exception cref="T:System.InvalidOperationException">The writer is closed.</exception>
         public override void WriteStartElement(string prefix, string localName, string ns)
         {
-            StackItem parent = this.stack.Count > 0 ? this.stack.Peek() : null;
+            var parent = this.stack.Count > 0 ? this.stack.Peek() : null;
 
             if (parent != null)
             {
@@ -402,7 +402,7 @@ namespace DataCommander.Foundation.Xml
             this.textWriter.Write('<');
             this.textWriter.Write(localName);
 
-            StackItem stackItem = new StackItem(localName);
+            var stackItem = new StackItem(localName);
             this.stack.Push(stackItem);
         }
 
@@ -414,8 +414,8 @@ namespace DataCommander.Foundation.Xml
 
         private static string Encode(Char c)
         {
-            UInt16 charCode = (UInt16)c;
-            string encoded = "&#x" + charCode.ToString("x", CultureInfo.InvariantCulture) + ';';
+            var charCode = (UInt16)c;
+            var encoded = "&#x" + charCode.ToString("x", CultureInfo.InvariantCulture) + ';';
             return encoded;
         }
 
@@ -428,16 +428,16 @@ namespace DataCommander.Foundation.Xml
         {
             this.textWriter.Write('"');
 
-            for (int i = 0; i < text.Length; i++)
+            for (var i = 0; i < text.Length; i++)
             {
-                Char c = text[i];
+                var c = text[i];
 
                 switch (c)
                 {
                     case '"':
                     case '\r':
                     case '\n':
-                        string encoded = Encode(c);
+                        var encoded = Encode(c);
                         this.textWriter.Write(encoded);
                         break;
 

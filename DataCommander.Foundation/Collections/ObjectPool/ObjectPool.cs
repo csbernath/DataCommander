@@ -94,18 +94,18 @@ namespace DataCommander.Foundation.Collections
         /// </summary>
         public void Clear()
         {
-            DateTime now = LocalTime.Default.Now;
-            List<ObjectPoolItem<T>> obsoleteList = new List<ObjectPoolItem<T>>();
+            var now = LocalTime.Default.Now;
+            var obsoleteList = new List<ObjectPoolItem<T>>();
 
             lock (this.idleItems)
             {
-                LinkedListNode<ObjectPoolItem<T>> listNode = this.idleItems.First;
+                var listNode = this.idleItems.First;
 
                 while (listNode != null)
                 {
-                    LinkedListNode<ObjectPoolItem<T>> next = listNode.Next;
-                    ObjectPoolItem<T> item = listNode.Value;
-                    TimeSpan timeSpan = now - item.CreationDate;
+                    var next = listNode.Next;
+                    var item = listNode.Value;
+                    var timeSpan = now - item.CreationDate;
 
                     if (timeSpan.TotalSeconds >= 10.0)
                     {
@@ -117,7 +117,7 @@ namespace DataCommander.Foundation.Collections
                 }
             }
 
-            foreach (ObjectPoolItem<T> item in obsoleteList)
+            foreach (var item in obsoleteList)
             {
                 this.FactoryDestroyObject( item );
             }
@@ -143,7 +143,7 @@ namespace DataCommander.Foundation.Collections
                     {
                         if (this.idleItems.Count > 0)
                         {
-                            LinkedListNode<ObjectPoolItem<T>> last = this.idleItems.Last;
+                            var last = this.idleItems.Last;
                             this.idleItems.RemoveLast();
                             item = last.Value;
                             log.Trace("Item(key:{0}) reused from object pool. idle: {1}, active: {2}.", item.Key, this.idleItems.Count, this.activeItems.Count );
@@ -160,13 +160,13 @@ namespace DataCommander.Foundation.Collections
                 }
                 else
                 {
-                    int count = this.idleItems.Count + this.activeItems.Count;
+                    var count = this.idleItems.Count + this.activeItems.Count;
 
                     if (count < this.MaxSize)
                     {
-                        DateTime creationDate = LocalTime.Default.Now;
-                        T value = this.factory.CreateObject();
-                        int key = Interlocked.Increment( ref this.key );
+                        var creationDate = LocalTime.Default.Now;
+                        var value = this.factory.CreateObject();
+                        var key = Interlocked.Increment( ref this.key );
                         item = new ObjectPoolItem<T>( key, value, creationDate );
 
                         lock (this.activeItems)
@@ -188,7 +188,7 @@ namespace DataCommander.Foundation.Collections
                             this.idleEvent
                         };
 
-                        int i = WaitHandle.WaitAny( waitHandles, 30000, false );
+                        var i = WaitHandle.WaitAny( waitHandles, 30000, false );
 
                         if (i == 0)
                         {
@@ -219,7 +219,7 @@ namespace DataCommander.Foundation.Collections
 
             lock (this.idleItems)
             {
-                int count = this.activeItems.Count + this.idleItems.Count;
+                var count = this.activeItems.Count + this.idleItems.Count;
                 idle = count < this.MaxSize;
 
                 if (idle)
@@ -256,7 +256,7 @@ namespace DataCommander.Foundation.Collections
 
                     lock (this.idleItems)
                     {
-                        foreach (ObjectPoolItem<T> item in this.idleItems)
+                        foreach (var item in this.idleItems)
                         {
                             this.FactoryDestroyObject( item );
                         }
@@ -267,7 +267,7 @@ namespace DataCommander.Foundation.Collections
 
                     lock (this.activeItems)
                     {
-                        foreach (ObjectPoolItem<T> item in this.activeItems.Values)
+                        foreach (var item in this.activeItems.Values)
                         {
                             log.Trace("object pool item(key:{0}) is active.", item.Key );
                         }

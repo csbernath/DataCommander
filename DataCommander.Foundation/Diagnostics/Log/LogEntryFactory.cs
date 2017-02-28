@@ -17,10 +17,10 @@ namespace DataCommander.Foundation.Diagnostics
             string message,
             LogLevel logLevel)
         {
-            long id = Interlocked.Increment(ref LogEntryFactory.id);
+            var id = Interlocked.Increment(ref LogEntryFactory.id);
             var thread = Thread.CurrentThread;
-            int threadId = thread.ManagedThreadId;
-            string threadName = thread.Name;
+            var threadId = thread.ManagedThreadId;
+            var threadName = thread.Name;
             string userName = null;
             string hostName = null;
 

@@ -66,12 +66,12 @@ namespace DataCommander.Foundation.Threading
         {
             if (this.pool.QueuedItemCount > 0)
             {
-                int addableThreadCount = this.pool.MaxThreadCount - this.pool.Dequeuers.Count;
-                int count = Math.Min( addableThreadCount, 5 );
+                var addableThreadCount = this.pool.MaxThreadCount - this.pool.Dequeuers.Count;
+                var count = Math.Min( addableThreadCount, 5 );
 
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
-                    WaitCallback callback = this.waitCallbackFactory.CreateWaitCallback();
+                    var callback = this.waitCallbackFactory.CreateWaitCallback();
                     var dequeuer = new WorkerThreadPoolDequeuer( callback );
                     this.pool.Dequeuers.Add( dequeuer );
                     dequeuer.Thread.Start();
@@ -79,13 +79,13 @@ namespace DataCommander.Foundation.Threading
             }
             else
             {
-                long timestamp = Stopwatch.GetTimestamp();
-                List<WorkerThreadPoolDequeuer> dequeuers = new List<WorkerThreadPoolDequeuer>();
-                WorkerThreadCollection threads = new WorkerThreadCollection();
+                var timestamp = Stopwatch.GetTimestamp();
+                var dequeuers = new List<WorkerThreadPoolDequeuer>();
+                var threads = new WorkerThreadCollection();
 
-                foreach (WorkerThreadPoolDequeuer dequeuer in this.pool.Dequeuers)
+                foreach (var dequeuer in this.pool.Dequeuers)
                 {
-                    int milliseconds = StopwatchTimeSpan.ToInt32( timestamp - dequeuer.LastActivityTimestamp, 1000 );
+                    var milliseconds = StopwatchTimeSpan.ToInt32( timestamp - dequeuer.LastActivityTimestamp, 1000 );
 
                     if (milliseconds >= 10000)
                     {
@@ -94,12 +94,12 @@ namespace DataCommander.Foundation.Threading
                     }
                 }
 
-                foreach (WorkerThreadPoolDequeuer dequeuer in dequeuers)
+                foreach (var dequeuer in dequeuers)
                 {
                     this.pool.Dequeuers.Remove( dequeuer );
                 }
 
-                ManualResetEvent stopEvent = new ManualResetEvent( false );
+                var stopEvent = new ManualResetEvent( false );
                 threads.Stop( stopEvent );
                 stopEvent.WaitOne();
             }

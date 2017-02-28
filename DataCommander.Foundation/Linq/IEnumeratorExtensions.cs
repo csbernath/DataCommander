@@ -38,7 +38,7 @@
 
             var list = new List<T>(count);
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 if (enumerator.MoveNext())
                 {

@@ -156,11 +156,11 @@ namespace DataCommander.Foundation.Data
                 Contract.Requires<ArgumentException>(((IDataParameter)this.Command.Parameters[0]).Direction == ParameterDirection.ReturnValue);
                 Contract.Requires<ArgumentException>(((IDataParameter)this.Command.Parameters[0]).Value is int);
 
-                IDataParameterCollection parameters = this.Command.Parameters;
-                object parameterObject = parameters[0];
+                var parameters = this.Command.Parameters;
+                var parameterObject = parameters[0];
                 var parameter = (IDataParameter)parameterObject;
-                object valueObject = parameter.Value;
-                int returnValue = (int)valueObject;
+                var valueObject = parameter.Value;
+                var returnValue = (int)valueObject;
                 return returnValue;
             }
         }
@@ -206,11 +206,11 @@ namespace DataCommander.Foundation.Data
             Contract.Requires<ArgumentNullException>(dataTable != null);
             Contract.Requires<ArgumentNullException>(textWriter != null);
 
-            DataColumnCollection columns = dataTable.Columns;
+            var columns = dataTable.Columns;
 
             if (columns.Count > 0)
             {
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
 
                 foreach (DataColumn column in columns)
                 {
@@ -223,10 +223,10 @@ namespace DataCommander.Foundation.Data
                 foreach (DataRow row in dataTable.Rows)
                 {
                     sb.Length = 0;
-                    object[] itemArray = row.ItemArray;
-                    int last = itemArray.Length - 1;
+                    var itemArray = row.ItemArray;
+                    var last = itemArray.Length - 1;
 
-                    for (int i = 0; i < last; i++)
+                    for (var i = 0; i < last; i++)
                     {
                         sb.Append(itemArray[i]);
                         sb.Append('\t');
@@ -256,13 +256,13 @@ namespace DataCommander.Foundation.Data
 
             if (dataView != null)
             {
-                int rowCount = dataView.Count;
-                DataTable dataTable = dataView.Table;
-                int last = dataTable.Columns.Count - 1;
+                var rowCount = dataView.Count;
+                var dataTable = dataView.Table;
+                var last = dataTable.Columns.Count - 1;
 
-                for (int i = 0; i <= last; i++)
+                for (var i = 0; i <= last; i++)
                 {
-                    DataColumn dataColumn = dataTable.Columns[i];
+                    var dataColumn = dataTable.Columns[i];
                     textWriter.Write(dataColumn.ColumnName);
 
                     if (i < last)
@@ -275,12 +275,12 @@ namespace DataCommander.Foundation.Data
                     }
                 }
 
-                for (int i = 0; i < rowCount; i++)
+                for (var i = 0; i < rowCount; i++)
                 {
-                    DataRow dataRow = dataView[i].Row;
-                    object[] itemArray = dataRow.ItemArray;
+                    var dataRow = dataView[i].Row;
+                    var itemArray = dataRow.ItemArray;
 
-                    for (int j = 0; j <= last; j++)
+                    for (var j = 0; j <= last; j++)
                     {
                         textWriter.Write(itemArray[j]);
 
@@ -309,9 +309,9 @@ namespace DataCommander.Foundation.Data
             Char columnSeparator,
             string lineSeparator)
         {
-            StringWriter textWriter = new StringWriter();
+            var textWriter = new StringWriter();
             Write(dataView, columnSeparator, lineSeparator, textWriter);
-            string s = textWriter.ToString();
+            var s = textWriter.ToString();
             return s;
         }
 
@@ -330,7 +330,7 @@ namespace DataCommander.Foundation.Data
             Contract.Requires<ArgumentNullException>(dataRows != null);
             Contract.Requires<ArgumentNullException>(textWriter != null);
 
-            DataColumnCollection columns = dataTable.Columns;
+            var columns = dataTable.Columns;
 
             if (columns.Count > 0)
             {
@@ -344,13 +344,13 @@ namespace DataCommander.Foundation.Data
 
                 textWriter.WriteLine(sb);
 
-                foreach (DataRow row in dataRows)
+                foreach (var row in dataRows)
                 {
                     sb.Length = 0;
-                    object[] itemArray = row.ItemArray;
-                    int last = itemArray.Length - 1;
+                    var itemArray = row.ItemArray;
+                    var last = itemArray.Length - 1;
 
-                    for (int i = 0; i < last; i++)
+                    for (var i = 0; i < last; i++)
                     {
                         sb.Append(itemArray[i]);
                         sb.Append('\t');
@@ -408,7 +408,7 @@ namespace DataCommander.Foundation.Data
         public static TResult GetValueOrDefault<TResult>(object value)
         {
             object inputNullValue = DBNull.Value;
-            TResult outputNullValue = default(TResult);
+            var outputNullValue = default(TResult);
             return GetValue(value, inputNullValue, outputNullValue);
         }
 
@@ -426,10 +426,10 @@ namespace DataCommander.Foundation.Data
         {
             Contract.Requires<ArgumentNullException>(dataTable != null);
 
-            DataColumn dataColumn = dataTable.Columns[columnNumber];
-            Type type = dataColumn.DataType;
-            TypeCode typeCode = Type.GetTypeCode(type);
-            object value = dataTable.Rows[rowNumber][columnNumber];
+            var dataColumn = dataTable.Columns[columnNumber];
+            var type = dataColumn.DataType;
+            var typeCode = Type.GetTypeCode(type);
+            var value = dataTable.Rows[rowNumber][columnNumber];
             string s;
 
             if (value == DBNull.Value)
@@ -612,7 +612,7 @@ namespace DataCommander.Foundation.Data
             Contract.Requires<ArgumentNullException>(command != null);
 
             this.Command = command;
-            object scalar = command.ExecuteScalar();
+            var scalar = command.ExecuteScalar();
             return scalar;
         }
 
@@ -624,7 +624,7 @@ namespace DataCommander.Foundation.Data
         public object ExecuteScalar(string commandText)
         {
             this.Command = this.CreateCommand(commandText);
-            object scalar = this.Command.ExecuteScalar();
+            var scalar = this.Command.ExecuteScalar();
             return scalar;
         }
 
@@ -743,7 +743,7 @@ namespace DataCommander.Foundation.Data
             this.Command = command;
             DataTable schemaTable;
 
-            using (IDataReader dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly | CommandBehavior.KeyInfo))
+            using (var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly | CommandBehavior.KeyInfo))
             {
                 schemaTable = FillSchema(dataReader, dataTable);
             }
@@ -764,7 +764,7 @@ namespace DataCommander.Foundation.Data
 
             DataTable[] schemaTables;
 
-            using (IDataReader dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly | CommandBehavior.KeyInfo))
+            using (var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly | CommandBehavior.KeyInfo))
             {
                 schemaTables = FillSchema(dataReader, dataSet, cancellationToken);
             }
@@ -817,17 +817,17 @@ namespace DataCommander.Foundation.Data
 
         internal static void FillSchema(DataTable schemaTable, DataTable dataTable)
         {
-            List<DataColumn> primaryKey = new List<DataColumn>();
-            DataColumnCollection columns = dataTable.Columns;
-            DataColumn isKeyColumn = columns["IsKey"];
+            var primaryKey = new List<DataColumn>();
+            var columns = dataTable.Columns;
+            var isKeyColumn = columns["IsKey"];
 
             foreach (DataRow row in schemaTable.Rows)
             {
-                string columnName = (string)row["ColumnName"];
-                Type dataType = (Type)row["DataType"];
-                bool isKey = isKeyColumn != null && row.Field<bool?>(isKeyColumn) == true;
-                string columnNameAdd = columnName;
-                int index = 2;
+                var columnName = (string)row["ColumnName"];
+                var dataType = (Type)row["DataType"];
+                var isKey = isKeyColumn != null && row.Field<bool?>(isKeyColumn) == true;
+                var columnNameAdd = columnName;
+                var index = 2;
 
                 while (true)
                 {
@@ -842,7 +842,7 @@ namespace DataCommander.Foundation.Data
                     }
                 }
 
-                DataColumn column = new DataColumn(columnNameAdd, dataType);
+                var column = new DataColumn(columnNameAdd, dataType);
                 columns.Add(column);
 
                 if (isKey)
@@ -851,7 +851,7 @@ namespace DataCommander.Foundation.Data
                 }
             }
 
-            DataColumn[] array = primaryKey.ToArray();
+            var array = primaryKey.ToArray();
             dataTable.PrimaryKey = array;
         }
 
@@ -859,7 +859,7 @@ namespace DataCommander.Foundation.Data
             IDataReader dataReader,
             DataTable dataTable)
         {
-            DataTable schemaTable = dataReader.GetSchemaTable();
+            var schemaTable = dataReader.GetSchemaTable();
             FillSchema(schemaTable, dataTable);
             return schemaTable;
         }
@@ -874,7 +874,7 @@ namespace DataCommander.Foundation.Data
             while (!cancellationToken.IsCancellationRequested)
             {
                 var dataTable = new DataTable {Locale = CultureInfo.InvariantCulture};
-                DataTable schemaTable = FillSchema(dataReader, dataTable);
+                var schemaTable = FillSchema(dataReader, dataTable);
                 dataSet.Tables.Add(dataTable);
                 schemaTables.Add(schemaTable);
 
@@ -884,7 +884,7 @@ namespace DataCommander.Foundation.Data
                 }
             }
 
-            DataTable[] array = schemaTables.ToArray();
+            var array = schemaTables.ToArray();
             return array;
         }
 

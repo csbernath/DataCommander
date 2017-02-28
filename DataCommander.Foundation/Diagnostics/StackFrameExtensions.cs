@@ -7,44 +7,45 @@
 
     internal static class StackFrameExtensions
     {
-        public static string ToLogString( this StackFrame frame )
+        public static string ToLogString(this StackFrame frame)
         {
-            Contract.Requires( frame != null );
+            Contract.Requires<ArgumentNullException>(frame != null);
 
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             var method = frame.GetMethod();
-            Type type = method.DeclaringType;
-            string typeName = type.FullName;
-            string name = method.Name;
-            sb.AppendFormat( "   at {0}.{1}(", typeName, name );
+            var type = method.DeclaringType;
+            var typeName = type.FullName;
+            var name = method.Name;
+            stringBuilder.AppendFormat("   at {0}.{1}(", typeName, name);
             var parameters = method.GetParameters();
 
-            for (int j = 0; j < parameters.Length; j++)
+            for (var j = 0; j < parameters.Length; j++)
             {
                 if (j > 0)
                 {
-                    sb.Append( ',' );
+                    stringBuilder.Append(',');
                 }
 
-                var parameter = parameters[ j ];
+                var parameter = parameters[j];
                 type = parameter.ParameterType;
                 typeName = type.Name;
                 name = parameter.Name;
 
-                sb.AppendFormat( "{0} {1}", typeName, name );
+                stringBuilder.AppendFormat("{0} {1}", typeName, name);
             }
 
-            sb.Append( ')' );
+            stringBuilder.Append(')');
 
-            string fileName = frame.GetFileName();
+            var fileName = frame.GetFileName();
 
             if (fileName != null)
             {
-                int fileLineNumber = frame.GetFileLineNumber();
-                sb.AppendFormat( " in {0}:line {1}", fileName, fileLineNumber );
+                var fileLineNumber = frame.GetFileLineNumber();
+                var fileColumnNumber = frame.GetFileColumnNumber();
+                stringBuilder.AppendFormat(" in {0}:line {1},column {2}", fileName, fileLineNumber, fileColumnNumber);
             }
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
     }
 }

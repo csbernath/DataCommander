@@ -60,7 +60,7 @@
         {
             this.Writer.Close();
             const NativeMethods.MoveFileExFlags flags = NativeMethods.MoveFileExFlags.ReplaceExisiting;
-            bool succeeded = NativeMethods.MoveFileEx(this.tempPath, this.path, flags);
+            var succeeded = NativeMethods.MoveFileEx(this.tempPath, this.path, flags);
 
             if (!succeeded)
             {

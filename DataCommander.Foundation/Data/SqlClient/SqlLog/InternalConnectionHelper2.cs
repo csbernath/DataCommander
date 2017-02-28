@@ -18,16 +18,16 @@ namespace DataCommander.Foundation.Data.SqlClient
 
         object IInternalConnectionHelper.GetInternalConnection(IDbConnection connection)
         {
-            object internalConnection = internalConnectionField.GetValue(connection);
+            var internalConnection = internalConnectionField.GetValue(connection);
             return internalConnection;
         }
 
         bool IInternalConnectionHelper.IsOpen(object internalConnection)
         {
-            Type type = internalConnection.GetType();
-            FieldInfo isOpenField = type.GetField("_fConnectionOpen", BindingFlags.Instance | BindingFlags.NonPublic);
-            object value = isOpenField.GetValue(internalConnection);
-            bool isOpen = (bool)value;
+            var type = internalConnection.GetType();
+            var isOpenField = type.GetField("_fConnectionOpen", BindingFlags.Instance | BindingFlags.NonPublic);
+            var value = isOpenField.GetValue(internalConnection);
+            var isOpen = (bool)value;
             return isOpen;
         }
     }

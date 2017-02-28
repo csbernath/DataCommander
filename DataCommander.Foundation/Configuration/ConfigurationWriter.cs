@@ -22,8 +22,8 @@ namespace DataCommander.Foundation.Configuration
 
             if (node.HasName)
             {
-                string nodeName = node.Name;
-                string encodedName = XmlConvert.EncodeName(nodeName);
+                var nodeName = node.Name;
+                var encodedName = XmlConvert.EncodeName(nodeName);
 
                 if (nodeName == encodedName)
                 {
@@ -52,7 +52,7 @@ namespace DataCommander.Foundation.Configuration
 
                 Write(xmlWriter, node.Attributes);
 
-                foreach (ConfigurationNode childNode in node.ChildNodes)
+                foreach (var childNode in node.ChildNodes)
                 {
                     WriteNode(xmlWriter, childNode);
                 }
@@ -66,24 +66,24 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="attributes"></param>
         public static void Write(XmlWriter xmlWriter, ConfigurationAttributeCollection attributes)
         {
-            foreach (ConfigurationAttribute attribute in attributes)
+            foreach (var attribute in attributes)
             {
                 using (xmlWriter.WriteElement(ConfigurationElementName.Attribute))
                 {
                     xmlWriter.WriteAttributeString("name", attribute.Name);
-                    object value = attribute.Value;
+                    var value = attribute.Value;
 
                     if (value != null)
                     {
-                        Type type = value.GetType();
+                        var type = value.GetType();
 
                         if (type != typeof (string))
                         {
-                            string typeName = TypeNameCollection.GetTypeName(type);
+                            var typeName = TypeNameCollection.GetTypeName(type);
                             xmlWriter.WriteAttributeString("type", typeName);
                         }
 
-                        TypeCode typeCode = Type.GetTypeCode(type);
+                        var typeCode = Type.GetTypeCode(type);
                         string strValue;
 
                         switch (typeCode)
@@ -91,15 +91,15 @@ namespace DataCommander.Foundation.Configuration
                             case TypeCode.Object:
                                 if (type == typeof (TimeSpan))
                                 {
-                                    TimeSpan timeSpan = (TimeSpan) value;
+                                    var timeSpan = (TimeSpan) value;
                                     strValue = timeSpan.ToString();
                                     xmlWriter.WriteAttributeString("value", strValue);
                                 }
                                 else if (type.IsArray)
                                 {
-                                    Array array = (Array) value;
+                                    var array = (Array) value;
 
-                                    for (int j = 0; j < array.Length; j++)
+                                    for (var j = 0; j < array.Length; j++)
                                     {
                                         using (xmlWriter.WriteElement("a"))
                                         {

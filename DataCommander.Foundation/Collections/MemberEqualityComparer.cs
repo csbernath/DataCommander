@@ -41,7 +41,7 @@
         {
             var x1 = this.get(x);
             var y1 = this.get(y);
-            bool equals = this.equalityComparer.Equals(x1, y1);
+            var equals = this.equalityComparer.Equals(x1, y1);
             return equals;
         }
 

@@ -53,7 +53,7 @@
                     throw new ArgumentException();
             }
 
-            Document document = new Document( properties );
+            var document = new Document( properties );
             return document;
         }
 
@@ -84,15 +84,15 @@
             properties.Add( DocumentPropertyId.Title, packageProperties.Title );
             properties.Add( DocumentPropertyId.Version, packageProperties.Version );
 
-            PackagePart extendedFilePropertiesPart = package.GetPart( new Uri( "/docProps/app.xml", UriKind.Relative ) );
+            var extendedFilePropertiesPart = package.GetPart( new Uri( "/docProps/app.xml", UriKind.Relative ) );
 
-            using (XmlReader xmlReader = XmlReader.Create( extendedFilePropertiesPart.GetStream() ))
+            using (var xmlReader = XmlReader.Create( extendedFilePropertiesPart.GetStream() ))
             {
-                XDocument xDocument = XDocument.Load( xmlReader );
+                var xDocument = XDocument.Load( xmlReader );
                 XNamespace x = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties";
-                XElement xProperties = xDocument.Element( x + "Properties" );
+                var xProperties = xDocument.Element( x + "Properties" );
 
-                foreach (XElement xProperty in xProperties.Elements())
+                foreach (var xProperty in xProperties.Elements())
                 {
                     DocumentPropertyId? id;
                     object value = null;
@@ -214,37 +214,37 @@
         private static DocumentPropertyCollection ReadFromStructuredStorage( string path )
         {
             IStorage storage;
-            int result = NativeMethods.StgOpenStorage( path, null, STGM.READ | STGM.SHARE_DENY_WRITE, IntPtr.Zero, 0, out storage );
+            var result = NativeMethods.StgOpenStorage( path, null, STGM.READ | STGM.SHARE_DENY_WRITE, IntPtr.Zero, 0, out storage );
 
             if (result != 0)
             {
-                Exception e = Marshal.GetExceptionForHR( result );
+                var e = Marshal.GetExceptionForHR( result );
                 throw e;
             }
 
-            IPropertySetStorage propertySetStorage = storage as IPropertySetStorage;
-            DocumentPropertyCollection properties = new DocumentPropertyCollection();
+            var propertySetStorage = storage as IPropertySetStorage;
+            var properties = new DocumentPropertyCollection();
 
-            foreach (STATPROPSETSTG statPropSetStg in propertySetStorage.AsEnumerable())
+            foreach (var statPropSetStg in propertySetStorage.AsEnumerable())
             {
                 IPropertyStorage propertyStorage;
-                Guid fmtid = statPropSetStg.fmtid;
+                var fmtid = statPropSetStg.fmtid;
                 propertySetStorage.Open( ref fmtid, (uint) ( STGM.READ | STGM.SHARE_EXCLUSIVE ), out propertyStorage );
 
-                foreach (STATPROPSTG statPropStg in propertyStorage.AsEnumerable())
+                foreach (var statPropStg in propertyStorage.AsEnumerable())
                 {
-                    PROPSPEC[] propSpecArray = new PROPSPEC[1];
+                    var propSpecArray = new PROPSPEC[1];
                     const UInt32 PRSPEC_PROPID = 1;
                     propSpecArray[ 0 ].ulKind = PRSPEC_PROPID;
                     propSpecArray[ 0 ].unionmember = new IntPtr( statPropStg.PROPID );
-                    PropVariant[] propVariantArray = new PropVariant[1];
+                    var propVariantArray = new PropVariant[1];
                     propertyStorage.ReadMultiple( 1, propSpecArray, propVariantArray );
-                    PropVariant propVariant = propVariantArray[ 0 ];
+                    var propVariant = propVariantArray[ 0 ];
                     DocumentPropertyId id;
 
                     try
                     {
-                        object value = propVariant.Value;
+                        var value = propVariant.Value;
 
                         if (statPropSetStg.fmtid == PropertySetId.Summary)
                         {
@@ -312,8 +312,8 @@
 
                                 case StgSummaryPropertyId.TotalEditingTime:
                                     id = DocumentPropertyId.TotalTime;
-                                    DateTime dateTime = (DateTime) value;
-                                    TimeSpan timeSpan = dateTime - DateTime.FromFileTimeUtc( 0 );
+                                    var dateTime = (DateTime) value;
+                                    var timeSpan = dateTime - DateTime.FromFileTimeUtc( 0 );
                                     value = timeSpan;
                                     break;
 

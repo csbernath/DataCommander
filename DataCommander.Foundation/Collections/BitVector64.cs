@@ -31,13 +31,13 @@ namespace DataCommander.Foundation.Collections
         {
             get
             {
-                UInt64 bit = 1UL << index;
+                var bit = 1UL << index;
                 return (this.Value & bit) == bit;
             }
 
             set
             {
-                UInt64 bit = 1UL << index;
+                var bit = 1UL << index;
 
                 if (value)
                 {
@@ -56,7 +56,7 @@ namespace DataCommander.Foundation.Collections
         /// <returns></returns>
         public override string ToString()
         {
-            string value = this.Value.ToString("X");
+            var value = this.Value.ToString("X");
             value = value.PadLeft(16, '0');
             return value;
         }

@@ -102,7 +102,7 @@ namespace DataCommander.Foundation.Diagnostics
 
             try
             {
-                string message = TextLogFormatter.Format(entry);
+                var message = TextLogFormatter.Format(entry);
                 this.eventLog.WriteEntry(message, eventLogEntryType);
             }
             catch (Exception e)

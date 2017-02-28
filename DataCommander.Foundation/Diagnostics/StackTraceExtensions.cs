@@ -5,25 +5,32 @@ namespace DataCommander.Foundation.Diagnostics
     using System.Diagnostics.Contracts;
     using System.Text;
 
-    internal static class StackTraceExtensions
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class StackTraceExtensions
     {
         private static readonly ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="trace"></param>
+        /// <returns></returns>
         public static string ToLogString(this StackTrace trace)
         {
-            Contract.Requires(trace != null);
+            Contract.Requires<ArgumentNullException>(trace != null);
 
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
             try
             {
-                int count = trace.FrameCount;
+                var count = trace.FrameCount;
 
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; ++i)
                 {
-                    StackFrame frame = trace.GetFrame(i);
-                    sb.Append(frame.ToLogString());
-                    sb.Append(Environment.NewLine);
+                    var frame = trace.GetFrame(i);
+                    stringBuilder.AppendLine(frame.ToLogString());
                 }
             }
             catch (Exception e)
@@ -31,9 +38,14 @@ namespace DataCommander.Foundation.Diagnostics
                 log.Write(LogLevel.Error, e.ToString());
             }
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="skipFrames"></param>
+        /// <returns></returns>
         public static string GetTrace(int skipFrames)
         {
             var trace = new StackTrace(skipFrames, true);

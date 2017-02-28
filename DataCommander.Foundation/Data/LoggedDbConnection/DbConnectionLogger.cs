@@ -46,7 +46,7 @@
 
         private void ConnectionAfterOpen(object sender, AfterOpenDbConnectionEventArgs e)
         {
-            long duration = e.Timestamp - this.beforeOpen.Timestamp;
+            var duration = e.Timestamp - this.beforeOpen.Timestamp;
             if (e.Exception != null)
             {
                 log.Write(LogLevel.Error, "Opening connection finished in {0} seconds. Exception:\r\n{1}", StopwatchTimeSpan.ToString(duration, 3), e.Exception.ToLogString());
@@ -72,7 +72,7 @@
 
         private void ConnectionAfterExecuteReader(object sender, AfterExecuteCommandEventArgs e)
         {
-            long duration = e.Timestamp - this.beforeExecuteReader.Timestamp;
+            var duration = e.Timestamp - this.beforeExecuteReader.Timestamp;
             if (e.Exception != null)
             {
                 log.Write(LogLevel.Error, "{0}\r\nException:\r\n{1}", ToString(e.Command, duration), e.Exception.ToLogString());
@@ -86,7 +86,7 @@
 
         private void ConnectionAfterRead(object sender, AfterReadEventArgs e)
         {
-            long duration = e.Timestamp - this.beforeExecuteReader.Timestamp;
+            var duration = e.Timestamp - this.beforeExecuteReader.Timestamp;
             log.Trace("{0} row(s) read in {1} seconds.", e.RowCount, StopwatchTimeSpan.ToString(duration, 3));
         }
     }

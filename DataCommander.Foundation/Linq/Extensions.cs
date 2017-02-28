@@ -61,7 +61,7 @@
         public static bool IfAsNotNull<TSource, TTarget>(this TSource source, Action<TTarget> action) where TTarget : class
         {
             var target = source as TTarget;
-            bool selected = target != null;
+            var selected = target != null;
             if (selected)
             {
                 action(target);
@@ -144,7 +144,7 @@
         /// <returns></returns>
         public static string SerializeToXmlString(this object source)
         {
-            Type type = source.GetType();
+            var type = source.GetType();
             var xmlSerializer = new XmlSerializer(type);
 
             var settings = new XmlWriterSettings

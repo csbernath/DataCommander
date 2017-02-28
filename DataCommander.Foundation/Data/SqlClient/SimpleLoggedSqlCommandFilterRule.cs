@@ -31,9 +31,9 @@ namespace DataCommander.Foundation.Data.SqlClient
             string hostName,
             IDbCommand command)
         {
-            string database = command.Connection.Database;
-            string commandText = command.CommandText;
-            bool match =
+            var database = command.Connection.Database;
+            var commandText = command.CommandText;
+            var match =
                 (this.userName == null || this.userName == userName) &&
                 (this.hostName == null || this.hostName == hostName) &&
                 (this.database == null || this.database == database) &&

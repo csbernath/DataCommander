@@ -93,7 +93,7 @@ namespace DataCommander.Foundation.Threading
         {
             get
             {
-                bool isStopRequested = this.stopRequest.State == WorkerEventState.Signaled;
+                var isStopRequested = this.stopRequest.State == WorkerEventState.Signaled;
 
                 if (isStopRequested)
                 {
@@ -244,9 +244,9 @@ namespace DataCommander.Foundation.Threading
         {
             log.Write(LogLevel.Error, "WorkerThread({0},{1}) is waiting for stop or continue request...",
                 this.Thread.Name, this.Thread.ManagedThreadId);
-            long ticks = Stopwatch.GetTimestamp();
+            var ticks = Stopwatch.GetTimestamp();
             WaitHandle[] waitHandles = {this.stopRequest, this.continueRequest};
-            int index = WaitHandle.WaitAny(waitHandles);
+            var index = WaitHandle.WaitAny(waitHandles);
             ticks = Stopwatch.GetTimestamp() - ticks;
             string request;
 
@@ -294,7 +294,7 @@ namespace DataCommander.Foundation.Threading
         /// <returns></returns>
         public bool WaitForStop(TimeSpan timeout)
         {
-            bool signaled = this.stopRequest.WaitOne(timeout, false);
+            var signaled = this.stopRequest.WaitOne(timeout, false);
             return signaled;
         }
 
@@ -305,7 +305,7 @@ namespace DataCommander.Foundation.Threading
         /// <returns></returns>
         public bool WaitForStop(int timeout)
         {
-            bool signaled = this.stopRequest.WaitOne(timeout, false);
+            var signaled = this.stopRequest.WaitOne(timeout, false);
             return signaled;
         }
 
@@ -324,8 +324,8 @@ namespace DataCommander.Foundation.Threading
         private void PrivateStart()
         {
             var now = LocalTime.Default.Now;
-            TimeSpan elapsed = now - this.StartTime;
-            UInt32 win32threadId = NativeMethods.GetCurrentThreadId();
+            var elapsed = now - this.StartTime;
+            var win32threadId = NativeMethods.GetCurrentThreadId();
 
             log.Write(
                 LogLevel.Trace,

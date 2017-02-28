@@ -47,7 +47,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             string schema,
             string name)
         {
-            string commandText = string.Format(
+            var commandText = string.Format(
                 CultureInfo.InvariantCulture,
                 @"declare
     @schema     sysname,
@@ -98,7 +98,7 @@ end",
             {
                 gridReader.Read(dataRecord =>
                 {
-                    string s = dataRecord.GetString(0);
+                    var s = dataRecord.GetString(0);
                     sb.Append(s);
                     return true;
                 });

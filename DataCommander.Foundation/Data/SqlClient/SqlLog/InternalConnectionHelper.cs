@@ -16,7 +16,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             internalConnectionField = typeof(SqlConnection).GetField(
                 "_internalConnection",
                 BindingFlags.Instance | BindingFlags.NonPublic);
-            Type internalConnectionType = internalConnectionField.FieldType;
+            var internalConnectionType = internalConnectionField.FieldType;
             isOpenField = internalConnectionType.GetField(
                 "_fConnectionOpen",
                 BindingFlags.Instance | BindingFlags.NonPublic);
@@ -24,14 +24,14 @@ namespace DataCommander.Foundation.Data.SqlClient
 
         object IInternalConnectionHelper.GetInternalConnection(IDbConnection connection)
         {
-            object internalConnection = internalConnectionField.GetValue(connection);
+            var internalConnection = internalConnectionField.GetValue(connection);
             return internalConnection;
         }
 
         bool IInternalConnectionHelper.IsOpen(object internalConnection)
         {
-            object value = isOpenField.GetValue(internalConnection);
-            bool isOpen = (bool)value;
+            var value = isOpenField.GetValue(internalConnection);
+            var isOpen = (bool)value;
             return isOpen;
         }
     }

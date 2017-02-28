@@ -59,14 +59,14 @@ namespace DataCommander.Foundation.Diagnostics
 
                 lock (items)
                 {
-                    long timestamp = Stopwatch.GetTimestamp();
+                    var timestamp = Stopwatch.GetTimestamp();
                     var listItemStates = items.Select(i => new ListItemState(i, timestamp)).ToList();
-                    string stringTable = listItemStates.ToString(columns);
+                    var stringTable = listItemStates.ToString(columns);
                     var totalSize = listItemStates.Sum(s => s.ListItem.Size);
                     state = string.Format(CultureInfo.InvariantCulture, "GarbageMonitor.State:\r\ntotalSize: {0}\r\n{1}", totalSize, stringTable);
                 }
 
-                bool entered = Monitor.TryEnter(items);
+                var entered = Monitor.TryEnter(items);
                 if (entered)
                 {
                     RemoveGarbageCollectedItems();
@@ -109,15 +109,15 @@ namespace DataCommander.Foundation.Diagnostics
             Contract.Requires<ArgumentNullException>(target != null);
 
             string typeName = null;
-            int size = 0;
+            var size = 0;
 
-            Type type = target.GetType();
+            var type = target.GetType();
             typeName = TypeNameCollection.GetTypeName(type);
 
-            string targetString = target as string;
+            var targetString = target as string;
             if (targetString != null)
             {
-                int length = targetString.Length;
+                var length = targetString.Length;
                 size = length << 1;
             }
 
@@ -135,7 +135,7 @@ namespace DataCommander.Foundation.Diagnostics
         {
             Contract.Requires<ArgumentNullException>(target != null);
 
-            long id = Interlocked.Increment(ref GarbageMonitor.id);
+            var id = Interlocked.Increment(ref GarbageMonitor.id);
             var item = new ListItem(id, name, typeName, size, target);
 
             lock (items)

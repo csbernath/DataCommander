@@ -25,11 +25,11 @@ namespace DataCommander.Foundation.Text
         /// <returns></returns>
         public static Char[] Encode(byte value, bool isUpper)
         {
-            int d1 = (value & 0xF0) >> 4;
-            int d0 = value & 0x0F;
+            var d1 = (value & 0xF0) >> 4;
+            var d0 = value & 0x0F;
 
-            Char[] digits = new Char[2];
-            Char[] hexChars = isUpper ? hexCharsUpper : hexCharsLower;
+            var digits = new Char[2];
+            var hexChars = isUpper ? hexCharsUpper : hexCharsLower;
 
             digits[0] = hexChars[d1];
             digits[1] = hexChars[d0];
@@ -46,13 +46,13 @@ namespace DataCommander.Foundation.Text
         [CLSCompliant(false)]
         public static Char[] Encode(UInt16 value, bool isUpper)
         {
-            int d3 = value >> 12;
-            int d2 = (value & 0x0F00) >> 8;
-            int d1 = (value & 0x00F0) >> 4;
-            int d0 = value & 0x000F;
+            var d3 = value >> 12;
+            var d2 = (value & 0x0F00) >> 8;
+            var d1 = (value & 0x00F0) >> 4;
+            var d0 = value & 0x000F;
 
-            Char[] digits = new Char[4];
-            Char[] hexChars = isUpper ? hexCharsUpper : hexCharsLower;
+            var digits = new Char[4];
+            var hexChars = isUpper ? hexCharsUpper : hexCharsLower;
 
             digits[0] = hexChars[d3];
             digits[1] = hexChars[d2];
@@ -70,17 +70,17 @@ namespace DataCommander.Foundation.Text
         /// <returns></returns>
         public static Char[] Encode(int value, bool isUpper)
         {
-            int d7 = value >> 28;
-            int d6 = (value & 0x0F000000) >> 24;
-            int d5 = (value & 0x00F00000) >> 20;
-            int d4 = (value & 0x000F0000) >> 16;
-            int d3 = (value & 0x0000F000) >> 12;
-            int d2 = (value & 0x00000F00) >> 8;
-            int d1 = (value & 0x000000F0) >> 4;
-            int d0 = value & 0x0000000F;
+            var d7 = value >> 28;
+            var d6 = (value & 0x0F000000) >> 24;
+            var d5 = (value & 0x00F00000) >> 20;
+            var d4 = (value & 0x000F0000) >> 16;
+            var d3 = (value & 0x0000F000) >> 12;
+            var d2 = (value & 0x00000F00) >> 8;
+            var d1 = (value & 0x000000F0) >> 4;
+            var d0 = value & 0x0000000F;
 
-            Char[] digits = new Char[8];
-            Char[] hexChars = isUpper ? hexCharsUpper : hexCharsLower;
+            var digits = new Char[8];
+            var hexChars = isUpper ? hexCharsUpper : hexCharsLower;
             digits[0] = hexChars[d7];
             digits[1] = hexChars[d6];
             digits[2] = hexChars[d5];
@@ -101,7 +101,7 @@ namespace DataCommander.Foundation.Text
         /// <returns></returns>
         public static Char[] Encode(byte[] bytes, bool isUpper)
         {
-            int length = bytes.Length;
+            var length = bytes.Length;
             return Encode(bytes, length, isUpper);
         }
 
@@ -114,15 +114,15 @@ namespace DataCommander.Foundation.Text
         /// <returns></returns>
         public static Char[] Encode(byte[] bytes, int length, bool isUpper)
         {
-            Char[] chars = new Char[length << 1];
-            int j = 0;
-            Char[] hexChars = isUpper ? hexCharsUpper : hexCharsLower;
+            var chars = new Char[length << 1];
+            var j = 0;
+            var hexChars = isUpper ? hexCharsUpper : hexCharsLower;
 
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
-                byte value = bytes[i];
-                int d1 = (value & 0xF0) >> 4;
-                int d0 = value & 0x0F;
+                var value = bytes[i];
+                var d1 = (value & 0xF0) >> 4;
+                var d0 = value & 0x0F;
 
                 chars[j] = hexChars[d1];
                 j++;
@@ -142,8 +142,8 @@ namespace DataCommander.Foundation.Text
         [CLSCompliant(false)]
         public static string GetString(UInt16 value, bool isUpper)
         {
-            Char[] chars = Encode(value, isUpper);
-            string s = new string(chars);
+            var chars = Encode(value, isUpper);
+            var s = new string(chars);
             return s;
         }
 
@@ -155,8 +155,8 @@ namespace DataCommander.Foundation.Text
         /// <returns></returns>
         public static string GetString(int value, bool isUpper)
         {
-            Char[] chars = Encode(value, isUpper);
-            string s = new string(chars);
+            var chars = Encode(value, isUpper);
+            var s = new string(chars);
             return s;
         }
 
@@ -180,7 +180,7 @@ namespace DataCommander.Foundation.Text
                 format = "x";
             }
 
-            string s = value.ToString(format).PadLeft(16, '0');
+            var s = value.ToString(format).PadLeft(16, '0');
             return s;
         }
 
@@ -192,8 +192,8 @@ namespace DataCommander.Foundation.Text
         /// <returns></returns>
         public static string GetString(byte[] bytes, bool isUpper)
         {
-            Char[] chars = Encode(bytes, isUpper);
-            string s = new string(chars);
+            var chars = Encode(bytes, isUpper);
+            var s = new string(chars);
             return s;
         }
     }

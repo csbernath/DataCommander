@@ -41,8 +41,8 @@
 
         IDbConnectionHelper IDbConnectionFactory.CreateConnectionHelper(IDbConnection connection)
         {
-            SqlLoggedSqlConnection loggedSqlConnection = (SqlLoggedSqlConnection)connection;
-            SqlConnection sqlConnection = loggedSqlConnection.Connection;
+            var loggedSqlConnection = (SqlLoggedSqlConnection)connection;
+            var sqlConnection = loggedSqlConnection.Connection;
             return new SqlConnectionFactory(sqlConnection, connection);
         }
     }

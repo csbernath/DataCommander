@@ -12,7 +12,7 @@ namespace DataCommander.Foundation.Configuration
             Type conversionType)
         {
             object value;
-            TypeCode typeCode = Type.GetTypeCode(conversionType);
+            var typeCode = Type.GetTypeCode(conversionType);
 
             switch (typeCode)
             {
@@ -87,7 +87,7 @@ namespace DataCommander.Foundation.Configuration
             }
             else
             {
-                TypeCode typeCode = Type.GetTypeCode(conversionType);
+                var typeCode = Type.GetTypeCode(conversionType);
 
                 switch (typeCode)
                 {
@@ -114,7 +114,7 @@ namespace DataCommander.Foundation.Configuration
                         else if (conversionType == typeof (Encoding))
                         {
                             bool isInt32;
-                            int codepage = 0;
+                            var codepage = 0;
 
                             try
                             {

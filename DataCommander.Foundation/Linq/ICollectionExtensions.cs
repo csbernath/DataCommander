@@ -18,7 +18,7 @@
         /// <returns></returns>
         public static bool IsNullOrEmpty(this ICollection collection)
         {
-            bool isNullOrEmpty = collection == null || collection.Count == 0;
+            var isNullOrEmpty = collection == null || collection.Count == 0;
             return isNullOrEmpty;
         }
 
@@ -30,7 +30,7 @@
         /// <returns></returns>
         public static bool IsNullOrEmpty<T>(this ICollection<T> collection)
         {
-            bool isNullOrEmpty = collection == null || collection.Count == 0;
+            var isNullOrEmpty = collection == null || collection.Count == 0;
             return isNullOrEmpty;
         }
 
@@ -46,7 +46,7 @@
 
             if (items != null)
             {
-                foreach (T item in items)
+                foreach (var item in items)
                 {
                     collection.Add(item);
                 }
@@ -64,13 +64,13 @@
         {
             Contract.Requires<ArgumentException>(collection != null || items == null);
 
-            int count = 0;
+            var count = 0;
 
             if (items != null)
             {
-                foreach (T item in items)
+                foreach (var item in items)
                 {
-                    bool removed = collection.Remove(item);
+                    var removed = collection.Remove(item);
 
                     if (removed)
                     {

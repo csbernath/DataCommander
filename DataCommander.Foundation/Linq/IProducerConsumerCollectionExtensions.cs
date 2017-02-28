@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation.Linq
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
 #if FOUNDATION_3_5
     using DataCommander.Foundation.Collections;
@@ -27,11 +26,11 @@
             Contract.Requires<ArgumentNullException>(collection != null);
             Contract.Requires<ArgumentNullException>(target != null);
 
-            int i = 0;
+            var i = 0;
             while (i < target.Length)
             {
                 T item;
-                bool succeeded = collection.TryTake(out item);
+                var succeeded = collection.TryTake(out item);
                 if (succeeded)
                 {
                     target[i] = item;

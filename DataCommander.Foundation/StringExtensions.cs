@@ -212,7 +212,7 @@
             Contract.Requires<ArgumentNullException>(value != null);
             Contract.Requires<ArgumentOutOfRangeException>(value.Length >= length);
 
-            int startIndex = value.Length - length;
+            var startIndex = value.Length - length;
             return value.Substring(startIndex);
         }
 

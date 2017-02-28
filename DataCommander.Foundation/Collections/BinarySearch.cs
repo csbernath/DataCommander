@@ -26,12 +26,12 @@ namespace DataCommander.Foundation.Collections
             Contract.Requires<ArgumentOutOfRangeException>(minIndex <= maxIndex);
             Contract.Requires<ArgumentNullException>(compareTo != null);
 
-            int result = -1;
+            var result = -1;
 
             while (minIndex <= maxIndex)
             {
-                int midIndex = minIndex + (maxIndex - minIndex)/2;
-                int comparisonResult = compareTo(midIndex);
+                var midIndex = minIndex + (maxIndex - minIndex)/2;
+                var comparisonResult = compareTo(midIndex);
                 if (comparisonResult == 0)
                 {
                     result = midIndex;
@@ -61,12 +61,12 @@ namespace DataCommander.Foundation.Collections
             Func<int, bool> lessThan,
             Func<int, bool> equals)
         {
-            int currentMinIndex = minIndex;
-            int currentMaxIndex = maxIndex;
+            var currentMinIndex = minIndex;
+            var currentMaxIndex = maxIndex;
 
             while (currentMinIndex < currentMaxIndex)
             {
-                int midIndex = currentMinIndex + (currentMaxIndex - currentMinIndex)/2;
+                var midIndex = currentMinIndex + (currentMaxIndex - currentMinIndex)/2;
 
                 if (lessThan(midIndex))
                 {

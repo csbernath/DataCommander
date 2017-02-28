@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Diagnostics.Contracts;
 
     /// <summary>
@@ -23,7 +22,7 @@
             Contract.Requires<ArgumentNullException>(source != null);
             Contract.Requires<ArgumentNullException>(predicate != null);
 
-            int firstIndex = -1;
+            var firstIndex = -1;
             var firstItem = default(TSource);
 
             foreach (var item in source)
@@ -52,9 +51,9 @@
             Contract.Requires<ArgumentNullException>(source != null);
             Contract.Requires<ArgumentNullException>(firstArgumentIsExtremum != null);
 
-            int extremumIndex = -1;
+            var extremumIndex = -1;
             var extremumItem = default(TSource);
-            int itemIndex = 0;
+            var itemIndex = 0;
 
             foreach (var item in source)
             {
@@ -82,14 +81,14 @@
             Contract.Requires<ArgumentNullException>(source != null);
             Contract.Requires<ArgumentNullException>(selector != null);
 
-            int minIndex = -1;
+            var minIndex = -1;
             var minItem = default(TSource);
-            int minValue = default(int);
-            int itemIndex = 0;
+            var minValue = default(int);
+            var itemIndex = 0;
 
             foreach (var item in source)
             {
-                int value = selector(item);
+                var value = selector(item);
 
                 if (itemIndex == 0 || value < minValue)
                 {

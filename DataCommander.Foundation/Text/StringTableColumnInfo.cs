@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace DataCommander.Foundation.Text
 {
     using System;
@@ -23,7 +21,7 @@ namespace DataCommander.Foundation.Text
             return new StringTableColumnInfo<TSource>(columnName, align, source =>
             {
                 var value = getValue(source);
-                string valueString = value != null ? value.ToString() : null;
+                var valueString = value != null ? value.ToString() : null;
                 return valueString;
             });
         }

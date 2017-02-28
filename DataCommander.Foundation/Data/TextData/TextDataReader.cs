@@ -33,12 +33,12 @@
 
             this.command = command;
             this.behavior = behavior;
-            TextDataParameterCollection parameters = command.Parameters;
+            var parameters = command.Parameters;
             Contract.Assert(parameters != null);
 
             this.columns = parameters.GetParameterValue<TextDataColumnCollection>( "columns" );
-            IList<ITextDataConverter> converters = parameters.GetParameterValue<IList<ITextDataConverter>>( "converters" );
-            IConverter<TextDataCommand, TextReader> getTextReader = parameters.GetParameterValue<IConverter<TextDataCommand, TextReader>>( "getTextReader" );
+            var converters = parameters.GetParameterValue<IList<ITextDataConverter>>( "converters" );
+            var getTextReader = parameters.GetParameterValue<IConverter<TextDataCommand, TextReader>>( "getTextReader" );
             this.textReader = getTextReader.Convert( command );
             this.textDataStreamReader = new TextDataStreamReader( this.textReader, this.columns, converters );
         }
@@ -240,7 +240,7 @@
         /// <returns></returns>
         public override string GetName( int ordinal )
         {
-            TextDataColumn column = this.columns[ ordinal ];
+            var column = this.columns[ ordinal ];
             return column.ColumnName;
         }
 
@@ -268,7 +268,7 @@
                 this.schemaTable.Columns.Add( "DataType", typeof( Type ) );
                 this.schemaTable.Columns.Add( "IsKey", typeof( bool ) );
 
-                foreach (TextDataColumn column in this.columns)
+                foreach (var column in this.columns)
                 {
                     object[] values =
                     {
@@ -396,7 +396,7 @@
         {
             get
             {
-                int index = this.columns.IndexOf( name, true );
+                var index = this.columns.IndexOf( name, true );
                 return this.values[ index ];
             }
         }

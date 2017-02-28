@@ -19,7 +19,7 @@ namespace DataCommander.Foundation.Text
         {
             Contract.Requires<ArgumentOutOfRangeException>(columnCount >= 0);
 
-            for (int i = 0; i < columnCount; i++)
+            for (var i = 0; i < columnCount; i++)
             {
                 this.Columns.Add(new StringTableColumn());
             }
@@ -46,12 +46,12 @@ namespace DataCommander.Foundation.Text
 
         private int GetMaxColumnWidth(int columnIndex)
         {
-            int rowCount = this.Rows.Count;
+            var rowCount = this.Rows.Count;
 
-            int maxColumnWidth = rowCount > 0
+            var maxColumnWidth = rowCount > 0
                 ? this.Rows.Max(row =>
                 {
-                    string value = row[columnIndex];
+                    var value = row[columnIndex];
                     return value?.Length ?? 0;
                 })
                 : 0;
@@ -65,10 +65,10 @@ namespace DataCommander.Foundation.Text
         /// <returns></returns>
         public override string ToString()
         {
-            int count = this.Columns.Count;
+            var count = this.Columns.Count;
             var columnWidths = new int[count];
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 columnWidths[i] = this.GetMaxColumnWidth(i);
             }
@@ -84,15 +84,15 @@ namespace DataCommander.Foundation.Text
         public string ToString(int indent)
         {
             var columnWidths = new int[this.Columns.Count];
-            int last = this.Columns.Count - 1;
+            var last = this.Columns.Count - 1;
 
-            for (int i = 0; i <= last; i++)
+            for (var i = 0; i <= last; i++)
             {
-                int width = this.GetMaxColumnWidth(i);
+                var width = this.GetMaxColumnWidth(i);
 
                 if (i < last)
                 {
-                    int remainder = (width + 1)%indent;
+                    var remainder = (width + 1)%indent;
 
                     if (remainder != 0)
                     {
@@ -117,7 +117,7 @@ namespace DataCommander.Foundation.Text
             Contract.Requires<ArgumentNullException>(columnWidths != null);
 
             var stringBuilder = new StringBuilder();
-            bool first = true;
+            var first = true;
 
             foreach (var row in this.Rows)
             {
@@ -146,9 +146,9 @@ namespace DataCommander.Foundation.Text
             Contract.Requires<ArgumentNullException>(columnWidths != null);
             Contract.Requires<ArgumentNullException>(stringBuilder != null);
 
-            int count = this.Columns.Count;
+            var count = this.Columns.Count;
 
-            for (int j = 0; j < count; ++j)
+            for (var j = 0; j < count; ++j)
             {
                 if (j > 0)
                 {
@@ -156,8 +156,8 @@ namespace DataCommander.Foundation.Text
                 }
 
                 var column = this.Columns[j];
-                bool alignRight = column.Align == StringTableColumnAlign.Right;
-                string text = StringHelper.FormatColumn(row[j], columnWidths[j], alignRight);
+                var alignRight = column.Align == StringTableColumnAlign.Right;
+                var text = StringHelper.FormatColumn(row[j], columnWidths[j], alignRight);
                 stringBuilder.Append(text);
             }
         }

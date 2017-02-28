@@ -18,7 +18,7 @@
 
         public int Add(MethodBase method)
         {
-            int id = Interlocked.Increment(ref this.idSequence);
+            var id = Interlocked.Increment(ref this.idSequence);
             this.methods.TryAdd(method, id);
             return id;
         }

@@ -42,7 +42,7 @@ namespace DataCommander.Foundation.Data.SqlClient
 
         object ICloneable.Clone()
         {
-            string connectionString = this.ConnectionString;
+            var connectionString = this.ConnectionString;
             var connection = new SafeSqlConnection(connectionString);
             return connection;
         }
@@ -87,12 +87,12 @@ namespace DataCommander.Foundation.Data.SqlClient
             TimeSpan elapsed,
             CancellationToken cancellationToken)
         {
-            string separator = new string('-', 80);
+            var separator = new string('-', 80);
             var sb = new StringBuilder();
             sb.AppendFormat("SafeSqlConnection.HandleException(connection), elapsed: {0}, exception:\r\n{1}", elapsed, exception.ToLogString());
             var sqlException = exception as SqlException;
-            bool handled = false;
-            int timeout = 1*60*1000; // 1 minutes
+            var handled = false;
+            var timeout = 1*60*1000; // 1 minutes
 
             if (sqlException != null)
             {
@@ -165,18 +165,18 @@ namespace DataCommander.Foundation.Data.SqlClient
         {
             Contract.Requires<ArgumentNullException>(command != null);
 
-            string separator = new string('-', 80);
-            StringBuilder sb = new StringBuilder();
+            var separator = new string('-', 80);
+            var sb = new StringBuilder();
             sb.AppendLine("SafeSqlConnection.HandleException(command):\r\n");
-            SqlParameterCollection parameters = (SqlParameterCollection)command.Parameters;
-            string p = parameters.ToLogString();
-            string database = command.Connection.Database;
+            var parameters = (SqlParameterCollection)command.Parameters;
+            var p = parameters.ToLogString();
+            var database = command.Connection.Database;
 
             sb.AppendFormat("Database: {0}\r\n", database);
             sb.AppendFormat("Command: {0}\r\n{1}\r\n{2}\r\n", command.CommandText, p, separator);
             sb.AppendFormat("Exception:{0}\r\n{1}\r\n", exception, separator);
-            SqlException sqlEx = exception as SqlException;
-            bool handled = false;
+            var sqlEx = exception as SqlException;
+            var handled = false;
 
             if (sqlEx != null)
             {

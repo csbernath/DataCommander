@@ -44,7 +44,7 @@
 
         bool IDataReader.Read()
         {
-            bool read = this.dataReader.Read();
+            var read = this.dataReader.Read();
             if (read)
             {
                 this.rowCount++;

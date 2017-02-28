@@ -60,8 +60,8 @@ namespace DataCommander.Foundation.Diagnostics
             {
                 log.Write(LogLevel.Error, e.ToString());
 
-                string directory = Path.GetTempPath();
-                string fileName = Path.GetFileName(this.path);
+                var directory = Path.GetTempPath();
+                var fileName = Path.GetFileName(this.path);
                 this.path = Path.Combine(directory, fileName);
                 this.fileStream = this.Open(this.path, dateTime);
 
@@ -70,7 +70,7 @@ namespace DataCommander.Foundation.Diagnostics
 
             if (this.fileStream.Length == 0)
             {
-                byte[] preamble = this.encoding.GetPreamble();
+                var preamble = this.encoding.GetPreamble();
                 this.fileStream.Write(preamble, 0, preamble.Length);
             }
         }
@@ -87,7 +87,7 @@ namespace DataCommander.Foundation.Diagnostics
                 this.Open(dateTime);
             }
 
-            byte[] array = this.encoding.GetBytes(text);
+            var array = this.encoding.GetBytes(text);
             this.fileStream.Write(array, 0, array.Length);
 
             if (this.autoFlush)
@@ -102,7 +102,7 @@ namespace DataCommander.Foundation.Diagnostics
 
         void ILogFile.Open()
         {
-            string begin = this.formatter.Begin();
+            var begin = this.formatter.Begin();
 
             if (begin != null)
             {
@@ -112,7 +112,7 @@ namespace DataCommander.Foundation.Diagnostics
 
         void ILogFile.Write(LogEntry entry)
         {
-            string text = this.formatter.Format(entry);
+            var text = this.formatter.Format(entry);
             this.Write(entry.CreationTime, text);
         }
 
@@ -125,7 +125,7 @@ namespace DataCommander.Foundation.Diagnostics
         {
             if (this.fileStream != null)
             {
-                string end = this.formatter.End();
+                var end = this.formatter.End();
 
                 if (end != null)
                 {
@@ -133,12 +133,12 @@ namespace DataCommander.Foundation.Diagnostics
                 }
 
                 this.fileStream.Close();
-                string name = this.fileStream.Name;
+                var name = this.fileStream.Name;
                 this.fileStream = null;
 
                 if (this.fileAttributes != default(FileAttributes))
                 {
-                    FileAttributes attributes = File.GetAttributes(name);
+                    var attributes = File.GetAttributes(name);
                     attributes |= this.fileAttributes; // FileAttributes.ReadOnly | FileAttributes.Hidden;
                     File.SetAttributes(name, attributes);
                 }

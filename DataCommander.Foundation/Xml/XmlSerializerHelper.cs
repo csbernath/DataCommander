@@ -23,7 +23,7 @@ namespace DataCommander.Foundation.Xml
 
             var stringReader = new StringReader( xml );
             var xmlSerializer = new XmlSerializer( type );
-            object obj = xmlSerializer.Deserialize( stringReader );
+            var obj = xmlSerializer.Deserialize( stringReader );
             return obj;
         }
 
@@ -39,7 +39,7 @@ namespace DataCommander.Foundation.Xml
             Contract.Requires(type != null);
 
             var xmlSerializer = new XmlSerializer( type );
-            object obj = xmlSerializer.Deserialize( xmlReader );
+            var obj = xmlSerializer.Deserialize( xmlReader );
             return obj;
         }
 
@@ -51,7 +51,7 @@ namespace DataCommander.Foundation.Xml
         /// <returns></returns>
         public static T Deserialize<T>( string xml )
         {
-            object obj = Deserialize( xml, typeof (T) );
+            var obj = Deserialize( xml, typeof (T) );
             return (T) obj;
         }
 
@@ -63,7 +63,7 @@ namespace DataCommander.Foundation.Xml
         /// <returns></returns>
         public static T Deserialize<T>( XmlReader xmlReader )
         {
-            object obj = Deserialize( xmlReader, typeof (T) );
+            var obj = Deserialize( xmlReader, typeof (T) );
             return (T) obj;
         }
     }

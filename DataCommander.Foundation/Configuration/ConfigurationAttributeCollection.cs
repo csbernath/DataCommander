@@ -49,7 +49,7 @@
 
             set
             {
-                ConfigurationAttribute originalItem = this.listIndex[index];
+                var originalItem = this.listIndex[index];
                 ICollection<ConfigurationAttribute> collection = this.nameIndex;
                 collection.Remove(originalItem);
                 this.listIndex[index] = value;
@@ -86,7 +86,7 @@
         public void Add(string name, object value, string description)
         {
             Contract.Requires(!this.ContainsKey(name));
-            ConfigurationAttribute attribute = new ConfigurationAttribute(name, value, description);
+            var attribute = new ConfigurationAttribute(name, value, description);
             this.collection.Add(attribute);
         }
 
@@ -131,7 +131,7 @@
         public bool Remove(string name)
         {
             ConfigurationAttribute attribute;
-            bool contains = this.nameIndex.TryGetValue(name, out attribute);
+            var contains = this.nameIndex.TryGetValue(name, out attribute);
             bool succeeded;
 
             if (contains)
@@ -152,7 +152,7 @@
         /// <param name="index"></param>
         public void RemoveAt(int index)
         {
-            ConfigurationAttribute item = this.listIndex[index];
+            var item = this.listIndex[index];
             this.listIndex.RemoveAt(index);
             ICollection<ConfigurationAttribute> collection = this.nameIndex;
             collection.Remove(item);
@@ -192,7 +192,7 @@
         public bool TryGetAttributeValue<T>(string name, T defaultValue, out T value)
         {
             ConfigurationAttribute attribute;
-            bool contains = this.nameIndex.TryGetValue(name, out attribute);
+            var contains = this.nameIndex.TryGetValue(name, out attribute);
 
             if (contains)
             {
@@ -214,7 +214,7 @@
         public void SetAttributeValue(string name, object value)
         {
             ConfigurationAttribute attribute;
-            bool contains = this.nameIndex.TryGetValue(name, out attribute);
+            var contains = this.nameIndex.TryGetValue(name, out attribute);
 
             if (contains)
             {

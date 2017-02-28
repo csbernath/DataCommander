@@ -862,6 +862,14 @@ namespace DataCommander.Providers
             }
         }
 
+        private void OpenAsExcelFile_Click(object sender, EventArgs e)
+        {
+            var binaryField = (BinaryField)this.cellValue;
+            var path = Path.Combine(Path.GetTempPath(), Path.GetTempFileName() + ".zip");
+            File.WriteAllBytes(path, binaryField.Value);
+            Process.Start(path);
+        }
+
         private void SaveStreamField_Click(object sender, EventArgs e)
         {
             var saveFileDialog = new SaveFileDialog();
@@ -1304,6 +1312,8 @@ namespace DataCommander.Providers
                             {
                                 case FieldType.BinaryField:
                                     menuItem = new ToolStripMenuItem("Save binary field as", null, this.SaveBinaryField_Click);
+                                    menu.Items.Add(menuItem);
+                                    menuItem = new ToolStripMenuItem("Open as Excel file", null, this.OpenAsExcelFile_Click);
                                     menu.Items.Add(menuItem);
                                     break;
 

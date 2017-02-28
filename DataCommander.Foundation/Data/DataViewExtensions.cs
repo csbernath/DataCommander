@@ -4,7 +4,6 @@
     using System.Data;
     using System.Diagnostics.Contracts;
     using System.Linq;
-    using DataCommander.Foundation.Text;
     using DataCommander.Foundation.Linq;
 
     /// <summary>

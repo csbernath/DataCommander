@@ -59,7 +59,7 @@ namespace DataCommander.Foundation.Diagnostics
             LogEntry logEntry;
             while (this.queue.TryDequeue(out logEntry))
             {
-                string text = this.formatter.Format(logEntry);
+                var text = this.formatter.Format(logEntry);
                 this.logFile.Write(logEntry.CreationTime, text);
             }
         }

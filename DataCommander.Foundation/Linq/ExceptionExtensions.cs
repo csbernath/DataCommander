@@ -17,31 +17,31 @@
         /// </summary>
         /// <param name="e"></param>
         /// <returns></returns>
-        public static string ToLogString( this Exception e )
+        public static string ToLogString(this Exception e)
         {
             var sb = new StringBuilder();
-            Append( sb, e );
+            Append(sb, e);
             return sb.ToString();
         }
 
-        private static void Append( StringBuilder sb, Win32Exception win32Exception )
+        private static void Append(StringBuilder sb, Win32Exception win32Exception)
         {
-            sb.AppendLine( win32Exception.ToString() );
-            sb.AppendFormat( "Win32Excpetion.NativeErrorCode: {0}", win32Exception.NativeErrorCode );
+            sb.AppendLine(win32Exception.ToString());
+            sb.AppendFormat("Win32Excpetion.NativeErrorCode: {0}", win32Exception.NativeErrorCode);
         }
 
-        private static void Append( StringBuilder sb, SocketException socketException )
+        private static void Append(StringBuilder sb, SocketException socketException)
         {
             Win32Exception win32Exception = socketException;
-            Append( sb, win32Exception );
-            sb.AppendFormat( "\r\nSocketException.SocketErrorCode: {0}", socketException.SocketErrorCode );
+            Append(sb, win32Exception);
+            sb.AppendFormat("\r\nSocketException.SocketErrorCode: {0}", socketException.SocketErrorCode);
         }
 
-        private static void Append( StringBuilder sb, SqlException sqlException )
+        private static void Append(StringBuilder sb, SqlException sqlException)
         {
-            sb.AppendLine( sqlException.ToString() );
-            string errors = sqlException.Errors.ToLogString();
-            sb.Append( errors );
+            sb.AppendLine(sqlException.ToString());
+            var errors = sqlException.Errors.ToLogString();
+            sb.Append(errors);
         }
 
         /// <summary>
@@ -49,10 +49,10 @@
         /// </summary>
         /// <param name="exception"></param>
         /// <param name="sb"></param>
-        private static void Append( StringBuilder sb, Exception exception )
+        private static void Append(StringBuilder sb, Exception exception)
         {
-            Exception current = exception;
-            bool first = true;
+            var current = exception;
+            var first = true;
 
             while (current != null)
             {
@@ -63,31 +63,31 @@
                 else
                 {
                     sb.AppendLine();
-                    sb.AppendLine( new string( '/', 80 ) );
+                    sb.AppendLine(new string('/', 80));
                 }
 
                 var socketException = current as SocketException;
                 if (socketException != null)
                 {
-                    Append( sb, socketException );
+                    Append(sb, socketException);
                 }
                 else
                 {
                     var win32Exception = current as Win32Exception;
                     if (win32Exception != null)
                     {
-                        Append( sb, win32Exception );
+                        Append(sb, win32Exception);
                     }
                     else
                     {
-                        SqlException sqlException = current as SqlException;
+                        var sqlException = current as SqlException;
                         if (sqlException != null)
                         {
-                            Append( sb, sqlException );
+                            Append(sb, sqlException);
                         }
                         else
                         {
-                            sb.Append( current );
+                            sb.Append(current);
                         }
                     }
                 }

@@ -55,7 +55,7 @@
         /// <param name="day"></param>
         public SmallDate(int year, int month, int day)
         {
-            DateTime dateTime = new DateTime(year, month, day);
+            var dateTime = new DateTime(year, month, day);
             this.value = ToSmallDateValue(dateTime);
         }
 
@@ -64,7 +64,7 @@
         /// </summary>
         public static SmallDate Today(IDateTimeProvider dateTimeProvider)
         {
-            DateTime today = dateTimeProvider.Today();
+            var today = dateTimeProvider.Today();
             return new SmallDate(today);
         }
 
@@ -90,7 +90,7 @@
         /// <returns></returns>
         public static explicit operator SmallDate(DateTime dateTime)
         {
-            ushort value = ToSmallDateValue(dateTime);
+            var value = ToSmallDateValue(dateTime);
             return new SmallDate(value);
         }
 
@@ -102,7 +102,7 @@
         /// <returns></returns>
         public static SmallDate operator +(SmallDate smallDate, int value)
         {
-            int result = smallDate.value + value;
+            var result = smallDate.value + value;
             if (result < ushort.MinValue || ushort.MaxValue < result)
             {
                 throw new OverflowException();
@@ -139,7 +139,7 @@
         [Pure]
         public SmallDate AddDays(short value)
         {
-            int valueInt32 = this.value + value;
+            var valueInt32 = this.value + value;
             ushort valueUInt16;
 
             if (valueInt32 < ushort.MinValue)
@@ -173,7 +173,7 @@
         /// <returns></returns>
         public override string ToString()
         {
-            DateTime dateTime = ToDateTime(this.value);
+            var dateTime = ToDateTime(this.value);
             return dateTime.ToShortDateString();
         }
 
@@ -192,9 +192,9 @@
             Contract.Requires<ArgumentOutOfRangeException>(MinDateTime <= dateTime);
             Contract.Requires<ArgumentOutOfRangeException>(dateTime < MaxDateTime);
 
-            TimeSpan timeSpan = dateTime - MinDateTime;
-            double totalDays = timeSpan.TotalDays;
-            ushort value = (ushort)totalDays;
+            var timeSpan = dateTime - MinDateTime;
+            var totalDays = timeSpan.TotalDays;
+            var value = (ushort)totalDays;
             return value;
         }
 

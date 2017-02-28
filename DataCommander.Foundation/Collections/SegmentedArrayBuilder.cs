@@ -33,16 +33,16 @@
 
             if (length > 0)
             {
-                int segmentArrayLength = (length + segmentLength - 1)/segmentLength;
+                var segmentArrayLength = (length + segmentLength - 1)/segmentLength;
                 this.segments = new T[segmentArrayLength][];
-                int lastSegmentArrayIndex = segmentArrayLength - 1;
+                var lastSegmentArrayIndex = segmentArrayLength - 1;
 
-                for (int i = 0; i < lastSegmentArrayIndex; i++)
+                for (var i = 0; i < lastSegmentArrayIndex; i++)
                 {
                     this.segments[i] = new T[segmentLength];
                 }
 
-                int lastSegmentLength = length - lastSegmentArrayIndex*segmentLength;
+                var lastSegmentLength = length - lastSegmentArrayIndex*segmentLength;
                 this.segments[lastSegmentArrayIndex] = new T[lastSegmentLength];
             }
         }
@@ -89,10 +89,10 @@
             {
                 get
                 {
-                    int segmentLength = this.segments[0].Length;
-                    int segmentArrayIndex = index/segmentLength;
+                    var segmentLength = this.segments[0].Length;
+                    var segmentArrayIndex = index/segmentLength;
                     var segment = this.segments[segmentArrayIndex];
-                    int segmentIndex = index%segmentLength;
+                    var segmentIndex = index%segmentLength;
                     var value = segment[segmentIndex];
                     return value;
                 }
@@ -102,18 +102,18 @@
             {
                 get
                 {
-                    int lastSegmentArrayIndex = segments.Length - 1;
-                    int count = lastSegmentArrayIndex * segments[0].Length + segments[lastSegmentArrayIndex].Length;
+                    var lastSegmentArrayIndex = segments.Length - 1;
+                    var count = lastSegmentArrayIndex * segments[0].Length + segments[lastSegmentArrayIndex].Length;
                     return count;
                 }
             }
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator()
             {
-                for (int segmentArrayIndex = 0; segmentArrayIndex < this.segments.Length; segmentArrayIndex++)
+                for (var segmentArrayIndex = 0; segmentArrayIndex < this.segments.Length; segmentArrayIndex++)
                 {
                     var segment = this.segments[segmentArrayIndex];
-                    for (int segmentIndex = 0; segmentIndex < segment.Length; segmentIndex++)
+                    for (var segmentIndex = 0; segmentIndex < segment.Length; segmentIndex++)
                     {
                         yield return segment[segmentIndex];
                     }

@@ -36,13 +36,13 @@ namespace DataCommander.Foundation.Data
 
                 if (sqlEx != null)
                 {
-                    SqlErrorCollection errors = sqlEx.Errors;
-                    int count = errors.Count;
+                    var errors = sqlEx.Errors;
+                    var count = errors.Count;
 
-                    for (int i = 0; i < count; i++)
+                    for (var i = 0; i < count; i++)
                     {
-                        SqlError error = errors[ i ];
-                        string procedure = error.Procedure;
+                        var error = errors[ i ];
+                        var procedure = error.Procedure;
 
                         if (procedure.Length == 0)
                         {
@@ -54,7 +54,7 @@ namespace DataCommander.Foundation.Data
                 }
                 else
                 {
-                    string text = this.exception.ToString();
+                    var text = this.exception.ToString();
                     sb.AppendFormat( "exec LogException {0},{1},{2},{3},{4}", this.applicationId, this.connectionNo, this.commandNo, this.executionNo, text.ToTSqlVarChar() );
                 }
 

@@ -96,7 +96,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public IDbCommand CreateCommand()
         {
-            IDbCommand command = this.cloneableConnection.CreateCommand();
+            var command = this.cloneableConnection.CreateCommand();
             return new AsyncDbCommand(this, command);
         }
 
@@ -145,7 +145,7 @@ namespace DataCommander.Foundation.Data
 
         internal int ExecuteNonQuery(AsyncDbCommand command)
         {
-            string commandText = ToString(command);
+            var commandText = ToString(command);
 
             lock (this.commands)
             {
@@ -168,10 +168,10 @@ namespace DataCommander.Foundation.Data
             switch (command.CommandType)
             {
                 case CommandType.StoredProcedure:
-                    StringBuilder sb = new StringBuilder();
+                    var sb = new StringBuilder();
                     sb.AppendFormat("exec {0}", command.CommandText);
-                    SqlParameterCollection parameters = (SqlParameterCollection)command.Parameters;
-                    string parametersString = parameters.ToLogString();
+                    var parameters = (SqlParameterCollection)command.Parameters;
+                    var parametersString = parameters.ToLogString();
 
                     if (parametersString.Length > 0)
                     {
@@ -231,9 +231,9 @@ namespace DataCommander.Foundation.Data
                         this.commands.Clear();
                     }
 
-                    StringBuilder sb = new StringBuilder();
+                    var sb = new StringBuilder();
 
-                    for (int i = 0; i < commandTextArray.Length; i++)
+                    for (var i = 0; i < commandTextArray.Length; i++)
                     {
                         if (i > 0)
                         {
@@ -243,7 +243,7 @@ namespace DataCommander.Foundation.Data
                         sb.Append(commandTextArray[i]);
                     }
 
-                    string commandText = sb.ToString();
+                    var commandText = sb.ToString();
                     Exception exception = null;
 
                     using (var connection = (IDbConnection)this.cloneable.Clone())
@@ -266,7 +266,7 @@ namespace DataCommander.Foundation.Data
                     if (exception != null)
                     {
                         string message;
-                        SqlException sqlException = exception as SqlException;
+                        var sqlException = exception as SqlException;
 
                         if (sqlException != null)
                         {

@@ -30,7 +30,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <returns></returns>
         public IDbConnectionHelper CreateConnectionHelper(IDbConnection connection)
         {
-            SqlConnection sqlConnection = (SqlConnection)connection;
+            var sqlConnection = (SqlConnection)connection;
             return new SqlConnectionFactory(sqlConnection, connection);
         }
     }

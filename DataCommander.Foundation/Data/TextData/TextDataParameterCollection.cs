@@ -41,7 +41,7 @@
             Contract.Requires( value != null );
             Contract.Requires( value is TextDataParameter );
 
-            TextDataParameter parameter = (TextDataParameter)value;
+            var parameter = (TextDataParameter)value;
             this.collection.Add( parameter );
             return this.collection.Count - 1;
         }
@@ -289,8 +289,8 @@
         public TResult GetParameterValue<TResult>( string parameterName )
         {
             Contract.Assert( this.Contains( parameterName ) );
-            TextDataParameter parameter = this.nameIndex[ parameterName ];
-            object value = parameter.Value;
+            var parameter = this.nameIndex[ parameterName ];
+            var value = parameter.Value;
             Contract.Assert( value is TResult );
             return (TResult)value;
         }
@@ -322,7 +322,7 @@
 
         void IList<TextDataParameter>.RemoveAt( int index )
         {
-            TextDataParameter parameter = this.listIndex[ index ];
+            var parameter = this.listIndex[ index ];
             this.collection.Remove( parameter );
         }
 

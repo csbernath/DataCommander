@@ -20,7 +20,7 @@
         public static T GetValue<T>(this DataRow dataRow, string name)
         {
             Contract.Requires<ArgumentNullException>(dataRow != null);
-            object valueObject = dataRow[name];
+            var valueObject = dataRow[name];
             Contract.Assert(valueObject is T);
 
             return (T)valueObject;
@@ -40,7 +40,7 @@
             T outputNullValue)
         {
             Contract.Requires<ArgumentNullException>(dataRow != null);
-            object valueObject = dataRow[name];
+            var valueObject = dataRow[name];
             return Database.GetValue(valueObject, outputNullValue);
         }
 
@@ -54,7 +54,7 @@
         public static T GetValueOrDefault<T>(this DataRow dataRow, int columnIndex)
         {
             Contract.Requires<ArgumentNullException>(dataRow != null);
-            object value = dataRow[columnIndex];
+            var value = dataRow[columnIndex];
             return Database.GetValueOrDefault<T>(value);
         }
 
@@ -68,7 +68,7 @@
         public static T GetValueOrDefault<T>(this DataRow dataRow, string name)
         {
             Contract.Requires<ArgumentNullException>(dataRow != null);
-            object value = dataRow[name];
+            var value = dataRow[name];
             return Database.GetValueOrDefault<T>(value);
         }
 
@@ -81,12 +81,12 @@
         {
             Contract.Requires<ArgumentNullException>(dataRow != null);
             var stringTable = new StringTable(2);
-            DataTable dataTable = dataRow.Table;
-            object[] itemArray = dataRow.ItemArray;
+            var dataTable = dataRow.Table;
+            var itemArray = dataRow.ItemArray;
 
-            for (int i = 0; i < itemArray.Length; i++)
+            for (var i = 0; i < itemArray.Length; i++)
             {
-                StringTableRow row = stringTable.NewRow();
+                var row = stringTable.NewRow();
                 row[0] = dataTable.Columns[i].ColumnName;
                 row[1] = itemArray[i].ToString();
                 stringTable.Rows.Add(row);

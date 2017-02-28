@@ -86,7 +86,7 @@
 
             if (this.Count == this.array.Length)
             {
-                int newSize = this.Count == 0 ? 1 : 2*this.Count;
+                var newSize = this.Count == 0 ? 1 : 2*this.Count;
 
                 if (newSize > this.maxSize)
                 {
@@ -158,7 +158,7 @@
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            for (int i = 0; i < this.Count; i++)
+            for (var i = 0; i < this.Count; i++)
             {
                 yield return this.array[i];
             }

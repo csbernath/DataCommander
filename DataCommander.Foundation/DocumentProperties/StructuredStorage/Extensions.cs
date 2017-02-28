@@ -15,7 +15,7 @@
 
             while (true)
             {
-                STATPROPSETSTG[] statPropSetStgArray = new STATPROPSETSTG[ 1 ];
+                var statPropSetStgArray = new STATPROPSETSTG[ 1 ];
                 UInt32 fetched;
                 enumStatPropSetStg.Next( 1, statPropSetStgArray, out fetched );
 
@@ -37,7 +37,7 @@
 
             while (true)
             {
-                STATPROPSTG[] statPropStgArray = new STATPROPSTG[ 1 ];
+                var statPropStgArray = new STATPROPSTG[ 1 ];
                 UInt32 fetched;
                 enumStatPropStg.Next( 1, statPropStgArray, out fetched );
 

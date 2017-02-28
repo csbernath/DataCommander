@@ -120,7 +120,7 @@ namespace DataCommander.Foundation.Threading
                 currentThreads = threads.Values.ToArray();
             }
 
-            TimeSpan remaining = TimeSpan.FromMilliseconds(millisecondsTimout);
+            var remaining = TimeSpan.FromMilliseconds(millisecondsTimout);
 
             foreach (var thread in currentThreads)
             {
@@ -131,7 +131,7 @@ namespace DataCommander.Foundation.Threading
                 else
                 {
                     var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-                    bool joined = thread.Thread.Join(remaining);
+                    var joined = thread.Thread.Join(remaining);
                     stopwatch.Stop();
 
                     if (remaining >= stopwatch.Elapsed)

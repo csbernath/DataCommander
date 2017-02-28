@@ -97,7 +97,7 @@ namespace DataCommander.Foundation.DocumentProperties
         /// <returns>A byte array that is the combined size of the data bits.</returns>
         private byte[] GetDataBytes()
         {
-            byte[] ret = new byte[IntPtr.Size + sizeof(int)];
+            var ret = new byte[IntPtr.Size + sizeof(int)];
             if (IntPtr.Size == 4)
             {
                 BitConverter.GetBytes(this.p.ToInt32()).CopyTo(ret, 0);
@@ -125,7 +125,7 @@ namespace DataCommander.Foundation.DocumentProperties
         public void Clear()
         {
             // Can't pass "this" by ref, so make a copy to call PropVariantClear with
-            PropVariant var = this;
+            var var = this;
             PropVariantClear(ref var);
 
             // Since we couldn't pass "this" by ref, we need to clear the member fields manually
@@ -189,7 +189,7 @@ namespace DataCommander.Foundation.DocumentProperties
                     case VarEnum.VT_BSTR:
                         return Marshal.PtrToStringBSTR(this.p);
                     case VarEnum.VT_BLOB:
-                        byte[] blobData = new byte[this.lVal];
+                        var blobData = new byte[this.lVal];
                         IntPtr pBlobData;
                         if (IntPtr.Size == 4)
                         {

@@ -36,7 +36,7 @@
         /// <returns></returns>
         public static string ToTSqlDateTime(this DateTime source)
         {
-            TimeSpan timeOfDay = source.TimeOfDay;
+            var timeOfDay = source.TimeOfDay;
             string format;
 
             if (timeOfDay.TotalMilliseconds == 0)

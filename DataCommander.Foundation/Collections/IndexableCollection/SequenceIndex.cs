@@ -50,7 +50,7 @@
 
         void ICollection<T>.Add(T item)
         {
-            TKey key = this.getNextKey();
+            var key = this.getNextKey();
             this.dictionary.Add(key, item);
         }
 
@@ -79,8 +79,8 @@
 
         bool ICollection<T>.Remove(T item)
         {
-            TKey key = this.getKey(item);
-            bool removed = this.dictionary.Remove(key);
+            var key = this.getKey(item);
+            var removed = this.dictionary.Remove(key);
             return removed;
         }
 

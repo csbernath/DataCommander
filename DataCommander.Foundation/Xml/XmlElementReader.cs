@@ -27,13 +27,13 @@ namespace DataCommander.Foundation.Xml
             XmlDocument xmlDocument,
             XmlAttributeCollection attributes )
         {
-            bool exists = xmlReader.MoveToFirstAttribute();
+            var exists = xmlReader.MoveToFirstAttribute();
 
             while (exists)
             {
-                string name = xmlReader.Name;
-                string value = xmlReader.Value;
-                XmlAttribute xmlAttribute = xmlDocument.CreateAttribute( name );
+                var name = xmlReader.Name;
+                var value = xmlReader.Value;
+                var xmlAttribute = xmlDocument.CreateAttribute( name );
                 xmlAttribute.Value = value;
                 attributes.Append( xmlAttribute );
                 exists = xmlReader.MoveToNextAttribute();
@@ -42,11 +42,11 @@ namespace DataCommander.Foundation.Xml
 
         private static bool MoveToElement( XmlReader xmlReader )
         {
-            bool found = false;
+            var found = false;
 
             while (xmlReader.Read())
             {
-                XmlNodeType nodeType = xmlReader.NodeType;
+                var nodeType = xmlReader.NodeType;
 
                 if (nodeType == XmlNodeType.Element)
                 {
@@ -65,14 +65,14 @@ namespace DataCommander.Foundation.Xml
         public XmlElement ReadStartElement()
         {
             XmlElement xmlElement = null;
-            bool found = MoveToElement( this.xmlReader );
+            var found = MoveToElement( this.xmlReader );
 
             if (found)
             {
-                XmlDocument xmlDocument = new XmlDocument();
-                string name = this.xmlReader.Name;
+                var xmlDocument = new XmlDocument();
+                var name = this.xmlReader.Name;
                 xmlElement = xmlDocument.CreateElement( name );
-                XmlAttributeCollection attributes = xmlElement.Attributes;
+                var attributes = xmlElement.Attributes;
                 ReadAttributes( this.xmlReader, xmlDocument, attributes );
             }
 
@@ -82,7 +82,7 @@ namespace DataCommander.Foundation.Xml
         private static XmlElement ReadElement( XmlReader xmlReader, XmlDocument xmlDocument, int level )
         {
 #if DEBUG
-            IXmlLineInfo xmlLineInfo = xmlReader as IXmlLineInfo;
+            var xmlLineInfo = xmlReader as IXmlLineInfo;
 
             if (xmlLineInfo != null)
             {
@@ -90,9 +90,9 @@ namespace DataCommander.Foundation.Xml
             }
 #endif
 
-            string name = xmlReader.Name;
-            bool isEmptyElement = xmlReader.IsEmptyElement;
-            XmlElement xmlElement = xmlDocument.CreateElement( name );
+            var name = xmlReader.Name;
+            var isEmptyElement = xmlReader.IsEmptyElement;
+            var xmlElement = xmlDocument.CreateElement( name );
 
             if (xmlReader.HasAttributes)
             {
@@ -103,32 +103,32 @@ namespace DataCommander.Foundation.Xml
             {
                 while (true)
                 {
-                    bool read = xmlReader.Read();
+                    var read = xmlReader.Read();
 
                     if (!read)
                     {
                         break;
                     }
 
-                    XmlNodeType nodeType = xmlReader.NodeType;
-                    bool breakable = false;
+                    var nodeType = xmlReader.NodeType;
+                    var breakable = false;
 
                     switch (nodeType)
                     {
                         case XmlNodeType.Text:
-                            string value = xmlReader.Value;
-                            XmlText xmlText = xmlDocument.CreateTextNode( value );
+                            var value = xmlReader.Value;
+                            var xmlText = xmlDocument.CreateTextNode( value );
                             xmlElement.AppendChild( xmlText );
                             break;
 
                         case XmlNodeType.CDATA:
-                            string data = xmlReader.Value;
-                            XmlCDataSection xmlCDataSection = xmlDocument.CreateCDataSection( data );
+                            var data = xmlReader.Value;
+                            var xmlCDataSection = xmlDocument.CreateCDataSection( data );
                             xmlElement.AppendChild( xmlCDataSection );
                             break;
 
                         case XmlNodeType.Element:
-                            XmlElement childElement = ReadElement( xmlReader, xmlDocument, level + 1 );
+                            var childElement = ReadElement( xmlReader, xmlDocument, level + 1 );
                             xmlElement.AppendChild( childElement );
                             break;
 
@@ -164,7 +164,7 @@ namespace DataCommander.Foundation.Xml
         public XmlElement ReadElement()
         {
 #if DEBUG
-            IXmlLineInfo xmlLineInfo = this.xmlReader as IXmlLineInfo;
+            var xmlLineInfo = this.xmlReader as IXmlLineInfo;
 
             if (xmlLineInfo != null)
             {
@@ -179,8 +179,8 @@ namespace DataCommander.Foundation.Xml
 #if DEBUG
                 Trace.WriteLine($"{this.xmlReader.Name},{this.xmlReader.NodeType}");
 #endif
-                XmlNodeType nodeType = this.xmlReader.NodeType;
-                bool breakable = false;
+                var nodeType = this.xmlReader.NodeType;
+                var breakable = false;
 
                 switch (nodeType)
                 {

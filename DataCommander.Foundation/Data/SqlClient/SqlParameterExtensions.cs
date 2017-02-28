@@ -36,7 +36,7 @@
                 case SqlDbType.NChar:
                 case SqlDbType.VarChar:
                 case SqlDbType.NVarChar:
-                    int size = parameter.Size;
+                    var size = parameter.Size;
                     string sizeString;
 
                     if (size == -1 || size == int.MaxValue)

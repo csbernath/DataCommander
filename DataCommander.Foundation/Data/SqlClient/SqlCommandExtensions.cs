@@ -33,7 +33,7 @@
                     var parameters = command.Parameters;
                     if (parameters.Count > 0)
                     {
-                        string parametersString = GetSpExecuteSqlParameters(parameters);
+                        var parametersString = GetSpExecuteSqlParameters(parameters);
                         sb.AppendFormat(
                             "exec sp_executesql {0},{1}",
                             command.CommandText.ToTSqlNVarChar(),
@@ -55,7 +55,7 @@
         private static string GetSpExecuteSqlParameters(SqlParameterCollection parameters)
         {
             var sb = new StringBuilder();
-            bool first = true;
+            var first = true;
             foreach (SqlParameter parameter in parameters)
             {
                 if (first)
@@ -67,7 +67,7 @@
                     sb.Append(',');
                 }
 
-                string dataTypeName = parameter.GetDataTypeName();
+                var dataTypeName = parameter.GetDataTypeName();
                 sb.AppendFormat("{0} {1}", parameter.ParameterName, dataTypeName);
             }
             return sb.ToString();

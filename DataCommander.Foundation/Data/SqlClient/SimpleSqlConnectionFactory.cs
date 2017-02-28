@@ -29,11 +29,11 @@ namespace DataCommander.Foundation.Data.SqlClient
         {
             Contract.Requires(section != null);
 
-            ConfigurationNode node = section.SelectNode( nodeName, true );
+            var node = section.SelectNode( nodeName, true );
             this.connectionString = node.Attributes["ConnectionString"].GetValue<string>();
             TimeSpan timeSpan;
 
-            bool contains = node.Attributes.TryGetAttributeValue( "CommandTimeout", out timeSpan );
+            var contains = node.Attributes.TryGetAttributeValue( "CommandTimeout", out timeSpan );
 
             if (contains)
             {
@@ -46,14 +46,14 @@ namespace DataCommander.Foundation.Data.SqlClient
 
             bool isSafe;
             node.Attributes.TryGetAttributeValue( "IsSafe", out isSafe );
-            ConfigurationNode sqlLogNode = node.ChildNodes["SqlLog"];
+            var sqlLogNode = node.ChildNodes["SqlLog"];
             bool enabled;
             sqlLogNode.Attributes.TryGetAttributeValue( "Enabled", out enabled );
 
             if (enabled)
             {
                 var sqlConnectionStringBuilder = new SqlConnectionStringBuilder( this.connectionString );
-                string applicationName = sqlConnectionStringBuilder.ApplicationName;
+                var applicationName = sqlConnectionStringBuilder.ApplicationName;
                 string logConnectionString;
                 contains = sqlLogNode.Attributes.TryGetAttributeValue( "ConnectionString", null, out logConnectionString );
 
@@ -67,7 +67,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                         dataSource = sqlConnectionStringBuilder.DataSource;
                     }
 
-                    string initialCatalog = sqlLogNode.Attributes["Initial Catalog"].GetValue<string>();
+                    var initialCatalog = sqlLogNode.Attributes["Initial Catalog"].GetValue<string>();
 
                     sqlConnectionStringBuilder =
                         new SqlConnectionStringBuilder
@@ -82,8 +82,8 @@ namespace DataCommander.Foundation.Data.SqlClient
                     logConnectionString = sqlConnectionStringBuilder.ConnectionString;
                 }
 
-                string loggedSqlCommandFilterNodeName = sqlLogNode.FullName + ConfigurationNode.Delimiter + "LoggedSqlCommandFilter";
-                SimpleLoggedSqlCommandFilter filter = new SimpleLoggedSqlCommandFilter( section, loggedSqlCommandFilterNodeName );
+                var loggedSqlCommandFilterNodeName = sqlLogNode.FullName + ConfigurationNode.Delimiter + "LoggedSqlCommandFilter";
+                var filter = new SimpleLoggedSqlCommandFilter( section, loggedSqlCommandFilterNodeName );
 
                 if (isSafe)
                 {
@@ -94,7 +94,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                     this.Factory = new SqlLoggedSqlConnectionFactory( logConnectionString, applicationName, filter );
                 }
 
-                WorkerThread thread = this.Factory.Thread;
+                var thread = this.Factory.Thread;
                 thread.Start();
             }
             else
@@ -172,7 +172,7 @@ namespace DataCommander.Foundation.Data.SqlClient
 
             if (name != null)
             {
-                SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder( this.connectionString );
+                var sqlConnectionStringBuilder = new SqlConnectionStringBuilder( this.connectionString );
                 sqlConnectionStringBuilder.ApplicationName = string.Format( CultureInfo.InvariantCulture, "{0} {1}", sqlConnectionStringBuilder.ApplicationName, name );
                 connectionString = sqlConnectionStringBuilder.ConnectionString;
             }

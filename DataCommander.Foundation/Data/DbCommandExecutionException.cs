@@ -34,14 +34,14 @@
         /// <returns></returns>
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendFormat("DbCommandExecutionException: {0}\r\ninnerException:\r\n{1}\r\ndatabase: {2}\r\ncommandTimeout: {3}\r\ncommandText: {4}",
                 this.Message,
                 this.InnerException.ToLogString(),
                 this.database,
                 this.commandTimeout,
                 this.commandText);
-            string s = sb.ToString();
+            var s = sb.ToString();
             return s;
         }
     }

@@ -23,7 +23,7 @@
 
                 foreach (SqlError error in errors)
                 {
-                    string s = error.ToLogString();
+                    var s = error.ToLogString();
                     sb.AppendLine( s );
                 }
 

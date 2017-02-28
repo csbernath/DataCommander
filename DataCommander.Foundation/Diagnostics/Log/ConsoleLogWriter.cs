@@ -33,7 +33,7 @@
         {
             lock (lockObject)
             {
-                ConsoleColor color = Console.ForegroundColor;
+                var color = Console.ForegroundColor;
 
                 switch (logEntry.LogLevel)
                 {

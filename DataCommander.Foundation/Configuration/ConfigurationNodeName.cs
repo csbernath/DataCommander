@@ -14,7 +14,7 @@ namespace DataCommander.Foundation.Configuration
         {
             Contract.Requires<ArgumentNullException>(name != null);
 
-            string nodeName = name.Replace(Type.Delimiter, ConfigurationNode.Delimiter);
+            var nodeName = name.Replace(Type.Delimiter, ConfigurationNode.Delimiter);
             return nodeName;
         }
 
@@ -22,8 +22,8 @@ namespace DataCommander.Foundation.Configuration
         {
             Contract.Requires<ArgumentNullException>(trace != null);
 
-            StackFrame frame = trace.GetFrame(frameIndex);
-            MethodBase method = frame.GetMethod();
+            var frame = trace.GetFrame(frameIndex);
+            var method = frame.GetMethod();
             return method;
         }
 
@@ -37,9 +37,9 @@ namespace DataCommander.Foundation.Configuration
         {
             Contract.Requires<ArgumentNullException>(trace != null);
 
-            MethodBase method = GetMethod(trace, frameIndex);
-            string name = method.DeclaringType.Namespace;
-            string nodeName = FromTypeDelimitedName(name);
+            var method = GetMethod(trace, frameIndex);
+            var name = method.DeclaringType.Namespace;
+            var nodeName = FromTypeDelimitedName(name);
             return nodeName;
         }
 
@@ -52,8 +52,8 @@ namespace DataCommander.Foundation.Configuration
         {
             Contract.Requires<ArgumentNullException>(type != null);
 
-            string name = type.FullName;
-            string nodeName = FromTypeDelimitedName(name);
+            var name = type.FullName;
+            var nodeName = FromTypeDelimitedName(name);
             return nodeName;
         }
 
@@ -61,9 +61,9 @@ namespace DataCommander.Foundation.Configuration
         {
             Contract.Requires<ArgumentNullException>(trace != null);
 
-            MethodBase method = GetMethod(trace, frameIndex);
-            Type type = method.DeclaringType;
-            string nodeName = FromType(type);
+            var method = GetMethod(trace, frameIndex);
+            var type = method.DeclaringType;
+            var nodeName = FromType(type);
             return nodeName;
         }
 
@@ -71,8 +71,8 @@ namespace DataCommander.Foundation.Configuration
         {
             Contract.Requires<ArgumentNullException>(method != null);
 
-            string name = method.DeclaringType.FullName + Type.Delimiter + method.Name;
-            string nodeName = FromTypeDelimitedName(name);
+            var name = method.DeclaringType.FullName + Type.Delimiter + method.Name;
+            var nodeName = FromTypeDelimitedName(name);
             return nodeName;
         }
 
@@ -80,8 +80,8 @@ namespace DataCommander.Foundation.Configuration
         {
             Contract.Requires<ArgumentNullException>(trace != null);
 
-            MethodBase method = GetMethod(trace, frameIndex);
-            string nodeName = FromMethod(method);
+            var method = GetMethod(trace, frameIndex);
+            var nodeName = FromMethod(method);
             return nodeName;
         }
     }

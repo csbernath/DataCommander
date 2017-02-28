@@ -138,10 +138,10 @@
 
         internal void Insert(int index, ConfigurationNode item)
         {
-            IEnumerable<ICollectionIndex<ConfigurationNode>> where = this.collection.Indexes.Where(current => current != this.listIndex);
+            var where = this.collection.Indexes.Where(current => current != this.listIndex);
             this.listIndex.Insert(index, item);
 
-            foreach (ICollectionIndex<ConfigurationNode> current in where)
+            foreach (var current in where)
             {
                 current.Add(item);
             }

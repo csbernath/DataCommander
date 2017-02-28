@@ -22,11 +22,11 @@
             if (arrays != null)
             {
                 Contract.ForAll(arrays, a => a != null);
-                int resultLength = arrays.Sum(a => a.Length);
+                var resultLength = arrays.Sum(a => a.Length);
                 result = new T[resultLength];
-                int index = 0;
+                var index = 0;
 
-                foreach (T[] array in arrays)
+                foreach (var array in arrays)
                 {
                     array.CopyTo(result, index);
                     index += array.Length;
@@ -65,8 +65,8 @@
             T item,
             IEqualityComparer<T> comparer)
         {
-            int index = array.IndexOf(item, comparer);
-            bool contains = index >= 0;
+            var index = array.IndexOf(item, comparer);
+            var contains = index >= 0;
             return contains;
         }
 
@@ -93,13 +93,13 @@
         /// <returns></returns>
         public static int IndexOf<T>(this T[] array, T item, IEqualityComparer<T> comparer)
         {
-            int index = -1;
+            var index = -1;
 
             if (array != null)
             {
                 Contract.Assert(comparer != null);
 
-                for (int i = 0; i < array.Length; i++)
+                for (var i = 0; i < array.Length; i++)
                 {
                     if (comparer.Equals(array[i], item))
                     {

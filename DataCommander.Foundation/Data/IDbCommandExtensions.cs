@@ -74,7 +74,7 @@
         {
             Contract.Requires<ArgumentNullException>(command != null);
 
-            object scalar = command.ExecuteScalar();
+            var scalar = command.ExecuteScalar();
             Contract.Assert(scalar is T);
 
             return (T)scalar;
@@ -90,7 +90,7 @@
         {
             Contract.Requires<ArgumentNullException>(command != null);
 
-            object scalar = command.ExecuteScalar();
+            var scalar = command.ExecuteScalar();
             return Database.GetValueOrDefault<T>(scalar);
         }
 
@@ -109,23 +109,23 @@
             Contract.Requires<ArgumentNullException>(command != null);
             Contract.Requires<ArgumentNullException>(dataSet != null);
 
-            int rowCount = 0;
-            int resultIndex = 0;
-            DataTableCollection dataTables = dataSet.Tables;
+            var rowCount = 0;
+            var resultIndex = 0;
+            var dataTables = dataSet.Tables;
 
             if (!cancellationToken.IsCancellationRequested)
             {
-                IDbConnection connection = command.Connection;
+                var connection = command.Connection;
 
                 using (var connectionStateManager = new ConnectionStateManager(connection))
                 {
                     connectionStateManager.Open();
 
-                    using (IDataReader reader = command.ExecuteReader())
+                    using (var reader = command.ExecuteReader())
                     {
                         while (true)
                         {
-                            int fieldCount = reader.FieldCount;
+                            var fieldCount = reader.FieldCount;
 
                             if (fieldCount > 0)
                             {
@@ -144,13 +144,13 @@
                                     dataSet.Tables.Add(table);
                                 }
 
-                                int count = reader.Fill(table, cancellationToken);
+                                var count = reader.Fill(table, cancellationToken);
                                 rowCount += count;
                             }
 
                             if (!cancellationToken.IsCancellationRequested)
                             {
-                                bool nextResult = reader.NextResult();
+                                var nextResult = reader.NextResult();
 
                                 if (!nextResult)
                                 {
@@ -185,11 +185,11 @@
         {
             Contract.Requires<ArgumentNullException>(command != null);
 
-            int rowCount = 0;
+            var rowCount = 0;
 
             if (!cancellationToken.IsCancellationRequested)
             {
-                IDbConnection connection = command.Connection;
+                var connection = command.Connection;
 
                 using (var connectionStateManager = new ConnectionStateManager(connection))
                 {

@@ -25,7 +25,7 @@ namespace DataCommander.Foundation.Data
         /// <param name="connection"></param>
         public static void CreateSchema(IDbConnection connection)
         {
-            string commandText = @"create table dbo.Sequence
+            var commandText = @"create table dbo.Sequence
 (
     Id int not null,
     Name varchar(128) collate Latin1_General_CI_AS not null,
@@ -78,13 +78,13 @@ end";
         /// <returns></returns>
         public int GetNextSequenceValue( IDbConnection connection )
         {
-            IDbCommand command = connection.CreateCommand();
+            var command = connection.CreateCommand();
             command.CommandType = CommandType.StoredProcedure;
             command.CommandText = "GetNextSequenceValue";
-            SqlParameter parameter = new SqlParameter( "@id", SqlDbType.Int ) { Value = this.id };
+            var parameter = new SqlParameter( "@id", SqlDbType.Int ) { Value = this.id };
             command.Parameters.Add( parameter );
-            object scalar = command.ExecuteScalar();
-            int value = (int) scalar;
+            var scalar = command.ExecuteScalar();
+            var value = (int) scalar;
             return value;
         }
     }

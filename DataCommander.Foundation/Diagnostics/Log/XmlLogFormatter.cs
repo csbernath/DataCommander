@@ -45,7 +45,7 @@ namespace DataCommander.Foundation.Diagnostics
 
         string ILogFormatter.Format(LogEntry entry)
         {
-            StringWriter textWriter = new StringWriter();
+            var textWriter = new StringWriter();
             var xmlTextWriter = new XmlTextWriter(textWriter) { Formatting = Formatting.Indented, Indentation = 2, IndentChar = ' ' };
             WriteTo(entry, xmlTextWriter);
             return textWriter.ToString();

@@ -63,9 +63,9 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <returns></returns>
         public IDbConnectionHelper CreateConnectionHelper(IDbConnection connection)
         {
-            SafeLoggedSqlConnection safeLoggedSqlConnection = (SafeLoggedSqlConnection)connection;
-            SqlLoggedSqlConnection loggedSqlConnection = (SqlLoggedSqlConnection)safeLoggedSqlConnection.Connection;
-            SqlConnection sqlConnection = loggedSqlConnection.Connection;
+            var safeLoggedSqlConnection = (SafeLoggedSqlConnection)connection;
+            var loggedSqlConnection = (SqlLoggedSqlConnection)safeLoggedSqlConnection.Connection;
+            var sqlConnection = loggedSqlConnection.Connection;
             return new SqlConnectionFactory(sqlConnection, connection);
         }
     }

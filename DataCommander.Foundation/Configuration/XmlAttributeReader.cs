@@ -33,8 +33,8 @@
         {
             Contract.Requires<ArgumentNullException>(attributes != null);
 
-            XmlAttribute attribute = attributes[name];
-            bool contains = attribute != null;
+            var attribute = attributes[name];
+            var contains = attribute != null;
 
             if (contains)
             {

@@ -21,7 +21,7 @@
             Contract.Requires<ArgumentNullException>(applicationLog != null);
             Contract.Requires<ArgumentNullException>(type != null);
 
-            string name = type.FullName;
+            var name = type.FullName;
 
             var log = applicationLog.GetLog(name);
             var foundationLog = log as FoundationLog;
@@ -76,7 +76,7 @@
         {
             var stackFrame = new StackFrame(1, false);
             var method = stackFrame.GetMethod();
-            Type type = method.DeclaringType;
+            var type = method.DeclaringType;
             string name = $"{type.FullName}.{method.Name}";
             var log = applicationLog.GetLog(name);
             var foundationLog = log as FoundationLog;
@@ -90,16 +90,16 @@
                 var parameterInfos = method.GetParameters();
                 var sb = new StringBuilder();
                 sb.AppendFormat("Entering method {0}(", method.Name);
-                int count = Math.Min(parameterInfos.Length, parameters.Length);
+                var count = Math.Min(parameterInfos.Length, parameters.Length);
 
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     var parameterInfo = parameterInfos[i];
                     sb.AppendFormat("\r\n{0} {1}", parameterInfo.ParameterType.Name, parameterInfo.Name);
                     if (i < parameters.Length)
                     {
                         sb.Append(" = ");
-                        string parameterString = ParameterValueToString(parameters[i]);
+                        var parameterString = ParameterValueToString(parameters[i]);
                         sb.Append(parameterString);
                     }
 
@@ -110,7 +110,7 @@
                 }
 
                 sb.Append(')');
-                string message = sb.ToString();
+                var message = sb.ToString();
                 log.Trace(message);
             }
 

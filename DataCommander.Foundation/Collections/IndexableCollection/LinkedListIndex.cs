@@ -41,7 +41,7 @@
         /// <param name="item"></param>
         void ICollection<T>.Add( T item )
         {
-            LinkedListNode<T> node = this.linkedList.AddLast(item);
+            var node = this.linkedList.AddLast(item);
         }
 
         /// <summary>

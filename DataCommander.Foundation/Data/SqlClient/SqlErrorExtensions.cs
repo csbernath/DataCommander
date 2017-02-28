@@ -21,7 +21,7 @@
 
             var sb = new StringBuilder();
 
-            bool hasProcedure = !string.IsNullOrEmpty(error.Procedure);
+            var hasProcedure = !string.IsNullOrEmpty(error.Procedure);
 
             if (error.Number == 0 && error.Class == 0 && error.State == 1)
             {

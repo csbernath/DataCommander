@@ -50,8 +50,8 @@
 
         private static string ReadString(TextReader textReader)
         {
-            int read = textReader.Read();
-            Char c = (Char) read;
+            var read = textReader.Read();
+            var c = (Char) read;
             Contract.Assert(c == '"');
             var sb = new StringBuilder();
 
@@ -71,20 +71,20 @@
                 }
             }
 
-            string value = sb.ToString();
+            var value = sb.ToString();
             return value;
         }
 
         private static string ReadName(TextReader textReader)
         {
-            int read = textReader.Read();
-            Char c = (Char) read;
+            var read = textReader.Read();
+            var c = (Char) read;
             Contract.Assert(c == '/' || c == '-');
             var sb = new StringBuilder();
 
             while (true)
             {
-                int peek = textReader.Peek();
+                var peek = textReader.Peek();
 
                 if (peek == -1)
                 {
@@ -120,18 +120,18 @@
 
         private static string ReadValue(TextReader textReader)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             while (true)
             {
-                int peek = textReader.Peek();
+                var peek = textReader.Peek();
 
                 if (peek == -1)
                 {
                     break;
                 }
 
-                Char c = (Char) peek;
+                var c = (Char) peek;
 
                 if (Char.IsWhiteSpace(c))
                 {
@@ -145,19 +145,19 @@
                 textReader.Read();
             }
 
-            string value = sb.ToString();
+            var value = sb.ToString();
             return value;
         }
 
         private static Tuple<string, string> ReadNameValue(TextReader textReader)
         {
-            string name = ReadName(textReader);
+            var name = ReadName(textReader);
             string value;
-            int peek = textReader.Peek();
+            var peek = textReader.Peek();
 
             if (peek >= 0)
             {
-                Char c = (Char) peek;
+                var c = (Char) peek;
 
                 if (c == ':' || c == '=')
                 {
@@ -189,22 +189,22 @@
 
         private static IEnumerable<CommandLineArgument> Parse(TextReader textReader)
         {
-            int index = 0;
+            var index = 0;
 
             while (true)
             {
-                int peek = textReader.Peek();
+                var peek = textReader.Peek();
 
                 if (peek == -1)
                 {
                     break;
                 }
 
-                Char c = (Char) peek;
+                var c = (Char) peek;
 
                 if (c == '"')
                 {
-                    string value = ReadString(textReader);
+                    var value = ReadString(textReader);
                     var argument = new CommandLineArgument(index, null, value);
                     index++;
                     yield return argument;
@@ -222,7 +222,7 @@
                 }
                 else
                 {
-                    string value = ReadValue(textReader);
+                    var value = ReadValue(textReader);
                     var argument = new CommandLineArgument(index, null, value);
                     index++;
                     yield return argument;

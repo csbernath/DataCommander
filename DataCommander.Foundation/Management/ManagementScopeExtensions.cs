@@ -25,12 +25,12 @@
         {
             Contract.Requires<ArgumentNullException>(managementScope != null);
 
-            ObjectQuery objectQuery = new ObjectQuery(query);
+            var objectQuery = new ObjectQuery(query);
             List<T> list;
 
             using (var managementObjectSearcher = new ManagementObjectSearcher(managementScope, objectQuery))
             {
-                ManagementObjectCollection managementObjectCollection = managementObjectSearcher.Get();
+                var managementObjectCollection = managementObjectSearcher.Get();
                 var enumerable = managementObjectCollection.Cast<ManagementObject>().Select(selector);
                 list = new List<T>(enumerable);
             }

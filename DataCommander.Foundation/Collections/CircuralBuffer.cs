@@ -162,7 +162,7 @@
                 }
                 else
                 {
-                    int headCount = this.array.Length - this.head;
+                    var headCount = this.array.Length - this.head;
                     Array.Copy(this.array, this.head, target, 0, headCount);
                     Array.Copy(this.array, 0, target, headCount, this.tail + 1);
                 }
@@ -260,7 +260,7 @@
         {
             if (this.Count > 0)
             {
-                int current = this.head;
+                var current = this.head;
                 while (true)
                 {
                     var item = this.array[current];

@@ -42,13 +42,13 @@ namespace DataCommander.Foundation.IO
                 AsyncTextWriterListItem[] items;
                 lock (this.list)
                 {
-                    int count = this.list.Count;
+                    var count = this.list.Count;
                     items = new AsyncTextWriterListItem[count];
                     this.list.CopyTo(items);
                     this.list.Clear();
                 }
 
-                for (int i = 0; i < items.Length; i++)
+                for (var i = 0; i < items.Length; i++)
                 {
                     items[i].AppendTo(sb);
                 }
@@ -65,7 +65,7 @@ namespace DataCommander.Foundation.IO
                 if (this.registeredWaitHandle != null)
                 {
                     ////log.Write(LogLevel.Trace,"Unregister...");
-                    bool succeeded = this.registeredWaitHandle.Unregister(null);
+                    var succeeded = this.registeredWaitHandle.Unregister(null);
                     this.registeredWaitHandle = null;
                     ////log.Write(LogLevel.Trace,"Unregister succeeded.");
                 }

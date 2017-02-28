@@ -59,19 +59,19 @@ namespace DataCommander.Foundation.Data.SqlClient
                 switch (this.commandType)
                 {
                     case CommandType.Text:
-                        int index = this.commandText.IndexOf(' ');
+                        var index = this.commandText.IndexOf(' ');
 
                         if (index >= 0)
                         {
-                            string word = this.commandText.Substring(0, index);
+                            var word = this.commandText.Substring(0, index);
                             word = word.ToLower();
 
                             switch (word)
                             {
                                 case "exec":
                                 case "execute":
-                                    int startIndex = word.Length + 1;
-                                    int endIndex = this.commandText.IndexOf(' ', startIndex);
+                                    var startIndex = word.Length + 1;
+                                    var endIndex = this.commandText.IndexOf(' ', startIndex);
 
                                     if (endIndex >= 0)
                                     {
@@ -91,8 +91,8 @@ namespace DataCommander.Foundation.Data.SqlClient
                 }
 
                 bool isNew;
-                SqLoglCommandExecution command = this.GetCommandExecution(this.database, this.commandText, out isNew);
-                StringBuilder sb = new StringBuilder();
+                var command = this.GetCommandExecution(this.database, this.commandText, out isNew);
+                var sb = new StringBuilder();
 
                 if (isNew)
                 {
@@ -111,12 +111,12 @@ namespace DataCommander.Foundation.Data.SqlClient
                 sb.Append(',');
                 sb.Append( this.startDate.ToTSqlDateTime() );
 
-                int microseconds = StopwatchTimeSpan.ToInt32(this.duration, 1000000);
+                var microseconds = StopwatchTimeSpan.ToInt32(this.duration, 1000000);
                 sb.AppendFormat(",{0}\r\n", microseconds);
 
                 if (this.exception != null)
                 {
-                    SqlLogError error = new SqlLogError(this.applicationId, this.connectionNo, command.CommandNo, command.ExecutionNo, this.exception);
+                    var error = new SqlLogError(this.applicationId, this.connectionNo, command.CommandNo, command.ExecutionNo, this.exception);
                     sb.Append(error.CommandText);
                 }
 
@@ -131,7 +131,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         {
             SqLoglCommandExecution command;
             isNew = false;
-            string key = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", database, commandText);
+            var key = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", database, commandText);
 
             lock (this.commands)
             {
@@ -141,7 +141,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                 }
                 else
                 {
-                    int commandNo = this.commands.Count + 1;
+                    var commandNo = this.commands.Count + 1;
                     command = new SqLoglCommandExecution( commandNo );
                     this.commands.Add( key, command );
                     isNew = true;

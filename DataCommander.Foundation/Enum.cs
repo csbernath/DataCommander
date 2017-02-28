@@ -19,8 +19,8 @@
         {
             Contract.Requires<ArgumentException>(typeof (T).IsEnum);
 
-            Type type = typeof (T);
-            T t = (T)Enum.Parse(type, value);
+            var type = typeof (T);
+            var t = (T)Enum.Parse(type, value);
             return t;
         }
 

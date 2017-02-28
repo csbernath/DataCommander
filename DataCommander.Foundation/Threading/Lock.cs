@@ -18,7 +18,7 @@
 
         public bool TryEnter()
         {
-            bool entered = Monitor.TryEnter(this.lockObject);
+            var entered = Monitor.TryEnter(this.lockObject);
             if (entered)
             {
                 Interlocked.Increment(ref this.counter);

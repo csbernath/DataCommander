@@ -80,11 +80,11 @@ namespace DataCommander.Foundation.IO
             Contract.Assert(count >= 0);
 
             int read;
-            long position = this.stream.Position;
+            var position = this.stream.Position;
 
             if (position < this.length)
             {
-                int min = (int) Math.Min(this.length - position, count);
+                var min = (int) Math.Min(this.length - position, count);
                 read = this.stream.Read(buffer, offset, min);
             }
             else

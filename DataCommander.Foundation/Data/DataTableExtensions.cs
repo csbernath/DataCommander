@@ -28,7 +28,7 @@
 
         internal static StringTableColumnInfo<DataRow> ToStringTableColumnInfo(DataColumn dataColumn)
         {
-            int columnIndex = dataColumn.Ordinal;
+            var columnIndex = dataColumn.Ordinal;
             var align = GetStringTableColumnAlign(dataColumn.DataType);
 
             return new StringTableColumnInfo<DataRow>(

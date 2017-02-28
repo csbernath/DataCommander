@@ -94,14 +94,14 @@
                 switch (sqlDbType)
                 {
                     case SqlDbType.Bit:
-                        bool b = (bool)value;
-                        int i = b ? 1 : 0;
+                        var b = (bool)value;
+                        var i = b ? 1 : 0;
                         sb.Append(i);
                         break;
 
                     case SqlDbType.Binary:
-                        byte[] bytes = (byte[])value;
-                        Char[] chars = Hex.Encode(bytes, true);
+                        var bytes = (byte[])value;
+                        var chars = Hex.Encode(bytes, true);
                         sb.Append("0x");
                         sb.Append(chars);
                         break;
@@ -109,7 +109,7 @@
                     case SqlDbType.Char:
                     case SqlDbType.VarChar:
                         sb.Append('\'');
-                        string s = value.ToString();
+                        var s = value.ToString();
 
                         if (s.IndexOf('\'') >= 0)
                         {
@@ -142,15 +142,15 @@
 
                     case SqlDbType.DateTime:
                     case SqlDbType.SmallDateTime:
-                        DateTime dateTime = (DateTime)value;
-                        string dateTimeStr = ToString(dateTime);
+                        var dateTime = (DateTime)value;
+                        var dateTimeStr = ToString(dateTime);
                         sb.Append('\'');
                         sb.Append(dateTimeStr);
                         sb.Append('\'');
                         break;
 
                     case SqlDbType.Decimal:
-                        decimal d = (decimal)value;
+                        var d = (decimal)value;
                         sb.Append(d.ToTSqlDecimal());
                         break;
 
@@ -173,7 +173,7 @@
             string value)
         {
             Contract.Requires(commandText != null);
-            string s = value.ToTSqlNVarChar();
+            var s = value.ToTSqlNVarChar();
             commandText.Append(s);
         }
 
@@ -190,7 +190,7 @@
         {
             Contract.Requires(commandText != null);
 
-            string s = ToString(value, sqlDbType);
+            var s = ToString(value, sqlDbType);
             commandText.Append(s);
         }
 
@@ -214,7 +214,7 @@
                 obj = sqlBoolean.Value;
             }
 
-            string s = ToString(obj, SqlDbType.Bit);
+            var s = ToString(obj, SqlDbType.Bit);
             commandText.Append(s);
         }
 
@@ -238,7 +238,7 @@
                 obj = value.Value;
             }
 
-            string s = ToString(obj, SqlDbType.SmallInt);
+            var s = ToString(obj, SqlDbType.SmallInt);
             commandText.Append(s);
         }
 
@@ -262,7 +262,7 @@
                 obj = sqlDateTime.Value;
             }
 
-            string s = ToString(obj, SqlDbType.DateTime);
+            var s = ToString(obj, SqlDbType.DateTime);
             commandText.Append(s);
         }
     }

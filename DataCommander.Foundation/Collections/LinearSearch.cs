@@ -19,7 +19,7 @@
         {
             Contract.Requires<ArgumentNullException>(predicate != null);
 
-            int index = -1;
+            var index = -1;
 
             while (minIndex <= maxIndex)
             {
@@ -46,7 +46,7 @@
         {
             Contract.Requires<ArgumentNullException>(predicate != null);
 
-            int index = -1;
+            var index = -1;
 
             while (minIndex <= maxIndex)
             {

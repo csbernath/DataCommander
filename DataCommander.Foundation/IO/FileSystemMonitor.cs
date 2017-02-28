@@ -46,7 +46,7 @@ namespace DataCommander.Foundation.IO
             this.period = period;
 
             this.Initialize(this);
-            string name = string.Format(CultureInfo.InvariantCulture, "FileSystemMonitor({0},{1})", path, searchPattern);
+            var name = string.Format(CultureInfo.InvariantCulture, "FileSystemMonitor({0},{1})", path, searchPattern);
             this.Thread.Name = name;
         }
 
@@ -63,33 +63,33 @@ namespace DataCommander.Foundation.IO
         {
             try
             {
-                string[] current = Directory.GetFiles(this.path, this.searchPattern);
+                var current = Directory.GetFiles(this.path, this.searchPattern);
                 Array.Sort(current);
 
                 if (this.last != null)
                 {
-                    for (int i = 0; i < current.Length; i++)
+                    for (var i = 0; i < current.Length; i++)
                     {
-                        string file = current[i];
-                        int index = Array.BinarySearch(this.last, file);
+                        var file = current[i];
+                        var index = Array.BinarySearch(this.last, file);
 
                         if (index < 0 && this.Created != null)
                         {
-                            string message = string.Format(CultureInfo.InvariantCulture,
+                            var message = string.Format(CultureInfo.InvariantCulture,
                                 "FileSystemMonitor({0}).Created: {1}", this.Thread.ManagedThreadId, file);
                             log.Trace(message);
 
-                            string fileName = Path.GetFileName(file);
-                            FileSystemEventArgs e = new FileSystemEventArgs(WatcherChangeTypes.Created, this.path,
+                            var fileName = Path.GetFileName(file);
+                            var e = new FileSystemEventArgs(WatcherChangeTypes.Created, this.path,
                                 fileName);
                             this.Created(this, e);
                         }
                     }
 
-                    for (int i = 0; i < this.last.Length; i++)
+                    for (var i = 0; i < this.last.Length; i++)
                     {
-                        string file = this.last[i];
-                        int index = Array.BinarySearch(current, file);
+                        var file = this.last[i];
+                        var index = Array.BinarySearch(current, file);
 
                         if (index < 0)
                         {
@@ -99,7 +99,7 @@ namespace DataCommander.Foundation.IO
                 }
                 else
                 {
-                    for (int i = 0; i < current.Length; i++)
+                    for (var i = 0; i < current.Length; i++)
                     {
                         log.Trace("FileSystemMonitor.current[{0}]: {1}", i, current[i]);
                     }

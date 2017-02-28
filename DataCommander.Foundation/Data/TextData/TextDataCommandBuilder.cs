@@ -22,8 +22,8 @@
             IEnumerable<object[]> rows,
             IConverter<TextDataCommand, TextWriter> getTextWriter)
         {
-            TextDataCommand command = new TextDataCommand();
-            TextDataParameterCollection parameters = command.Parameters;
+            var command = new TextDataCommand();
+            var parameters = command.Parameters;
             parameters.Add(new TextDataParameter("columns", columns));
             parameters.Add(new TextDataParameter("converters", converters));
             parameters.Add(new TextDataParameter("rows", rows));
@@ -43,8 +43,8 @@
             IList<ITextDataConverter> converters,
             IConverter<TextDataCommand, TextReader> getTextReader)
         {
-            TextDataCommand command = new TextDataCommand();
-            TextDataParameterCollection parameters = command.Parameters;
+            var command = new TextDataCommand();
+            var parameters = command.Parameters;
             parameters.Add(new TextDataParameter("columns", columns));
             parameters.Add(new TextDataParameter("converters", converters));
             parameters.Add(new TextDataParameter("getTextReader", getTextReader));

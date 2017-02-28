@@ -34,7 +34,7 @@
         /// <param name="value"></param>
         public override void Write(char value)
         {
-            foreach (TextWriter textWriter in this.textWriters)
+            foreach (var textWriter in this.textWriters)
             {
                 textWriter.Write(value);
             }
@@ -48,7 +48,7 @@
         /// <param name="count"></param>
         public override void Write(Char[] buffer, int index, int count)
         {
-            string value = new string(buffer, index, count);
+            var value = new string(buffer, index, count);
             this.Write(value);
         }
 
@@ -58,7 +58,7 @@
         /// <param name="value"></param>
         public override void Write(string value)
         {
-            foreach (TextWriter textWriter in this.textWriters)
+            foreach (var textWriter in this.textWriters)
             {
                 textWriter.Write(value);
             }

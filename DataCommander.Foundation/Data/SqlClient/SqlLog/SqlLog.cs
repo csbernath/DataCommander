@@ -75,8 +75,8 @@ namespace DataCommander.Foundation.Data.SqlClient
 
         static SqlLog()
         {
-            Version version = Environment.Version;
-            int major = version.Major;
+            var version = Environment.Version;
+            var major = version.Major;
 
             if (major == 1)
             {
@@ -121,21 +121,21 @@ namespace DataCommander.Foundation.Data.SqlClient
                     this.queue.Clear();
                 }
 
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
 
-                for (int i = 0; i < array.Length; i++)
+                for (var i = 0; i < array.Length; i++)
                 {
-                    ISqlLogItem item = array[i];
-                    string commandText = item.CommandText;
+                    var item = array[i];
+                    var commandText = item.CommandText;
                     sb.Append(commandText);
                 }
 
-                string cmdText = sb.ToString();
+                var cmdText = sb.ToString();
                 long ticks = 0;
 
                 try
                 {
-                    IDbCommand command = this.connection.CreateCommand();
+                    var command = this.connection.CreateCommand();
                     command.CommandText = cmdText;
                     command.CommandTimeout = 259200;
                     ticks = Stopwatch.GetTimestamp();
@@ -148,8 +148,8 @@ namespace DataCommander.Foundation.Data.SqlClient
                 }
                 finally
                 {
-                    Double seconds = (Double)ticks/Stopwatch.Frequency;
-                    int speed = (int)(array.Length/seconds);
+                    var seconds = (Double)ticks/Stopwatch.Frequency;
+                    var speed = (int)(array.Length/seconds);
 
                     log.Write(
                         LogLevel.Trace,
@@ -168,7 +168,7 @@ namespace DataCommander.Foundation.Data.SqlClient
 
             while (!this.Thread.IsStopRequested)
             {
-                int i = WaitHandle.WaitAny(waitHandles);
+                var i = WaitHandle.WaitAny(waitHandles);
                 this.CheckConnections();
 
                 if (i == 0)
@@ -186,13 +186,13 @@ namespace DataCommander.Foundation.Data.SqlClient
                 this.Flush();
             }
 
-            DateTime endDate = LocalTime.Default.Now;
+            var endDate = LocalTime.Default.Now;
 
             lock (this.applications)
             {
-                foreach (int applicationId in this.applications.Keys)
+                foreach (var applicationId in this.applications.Keys)
                 {
-                    SqlLogApplicationEnd item = new SqlLogApplicationEnd(applicationId, endDate);
+                    var item = new SqlLogApplicationEnd(applicationId, endDate);
                     this.Enqueue(item);
                 }
             }
@@ -216,7 +216,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             sb.Append(name.ToTSqlVarChar());
             sb.Append(',');
             sb.Append(startDate.ToTSqlDateTime());
-            string commandText = sb.ToString();
+            var commandText = sb.ToString();
             int applicationId;
 
             if (this.connection.State != ConnectionState.Open)
@@ -264,7 +264,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             object internalConnection,
             DateTime endDate)
         {
-            SqlLogConnection sqlLogConnection = this.connections[internalConnection];
+            var sqlLogConnection = this.connections[internalConnection];
 
             lock (this.connections)
             {
@@ -273,22 +273,22 @@ namespace DataCommander.Foundation.Data.SqlClient
 
             if (sqlLogConnection != null)
             {
-                int applicationId = sqlLogConnection.ApplicationId;
-                int connectionNo = sqlLogConnection.ConnectionNo;
-                SqlLogConnectionClose item = new SqlLogConnectionClose(applicationId, connectionNo, endDate);
+                var applicationId = sqlLogConnection.ApplicationId;
+                var connectionNo = sqlLogConnection.ConnectionNo;
+                var item = new SqlLogConnectionClose(applicationId, connectionNo, endDate);
                 this.Enqueue(item);
             }
         }
 
         private void CheckConnections()
         {
-            List<object> list = new List<object>();
+            var list = new List<object>();
 
             lock (this.connections)
             {
-                foreach (object connection in this.connections.Keys)
+                foreach (var connection in this.connections.Keys)
                 {
-                    bool isOpen = internalConnectionHelper.IsOpen(connection);
+                    var isOpen = internalConnectionHelper.IsOpen(connection);
 
                     if (!isOpen)
                     {
@@ -305,7 +305,7 @@ namespace DataCommander.Foundation.Data.SqlClient
 
         private void CloseConnections(IEnumerable<object> connections, DateTime endDate)
         {
-            foreach (object connection in connections)
+            foreach (var connection in connections)
             {
                 this.ConnectionClosed(connection, endDate);
             }
@@ -341,7 +341,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             long duration,
             Exception exception)
         {
-            object internalConnection = internalConnectionHelper.GetInternalConnection(connection);
+            var internalConnection = internalConnectionHelper.GetInternalConnection(connection);
             SqlLogConnection sqlLogConnection = null;
 
             if (internalConnection != null)
@@ -349,7 +349,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                 this.connections.TryGetValue(internalConnection, out sqlLogConnection);
             }
 
-            bool isNew = sqlLogConnection == null;
+            var isNew = sqlLogConnection == null;
             int connectionNo;
 
             if (sqlLogConnection != null)
@@ -359,8 +359,8 @@ namespace DataCommander.Foundation.Data.SqlClient
             else
             {
                 connectionNo = Interlocked.Increment(ref this.connectionCounter);
-                SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connection.ConnectionString);
-                string name = sqlConnectionStringBuilder.ApplicationName;
+                var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connection.ConnectionString);
+                var name = sqlConnectionStringBuilder.ApplicationName;
                 sqlLogConnection = new SqlLogConnection(applicationId, connectionNo, name, userName, hostName, startDate, duration, exception);
 
                 if (internalConnection != null)
@@ -371,7 +371,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                     }
                 }
 
-                string trace = new StackTrace(2, true).ToString();
+                var trace = new StackTrace(2, true).ToString();
                 log.Trace("LoggedSqlConnection.Open() succeeded. ConnectionNo: {0}\r\n{1}", connectionNo, trace);
 
                 this.Enqueue(sqlLogConnection);
@@ -387,16 +387,16 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="connection"></param>
         public void CloseConnection(IDbConnection connection)
         {
-            object internalConnection = internalConnectionHelper.GetInternalConnection(connection);
+            var internalConnection = internalConnectionHelper.GetInternalConnection(connection);
             connection.Close();
 
             if (internalConnection != null)
             {
-                bool isOpen = internalConnectionHelper.IsOpen(internalConnection);
+                var isOpen = internalConnectionHelper.IsOpen(internalConnection);
 
                 if (!isOpen)
                 {
-                    DateTime endDate = LocalTime.Default.Now;
+                    var endDate = LocalTime.Default.Now;
                     this.ConnectionClosed(internalConnection, endDate);
                 }
             }
@@ -409,16 +409,16 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="connection"></param>
         public void DisposeConnection(IDbConnection connection)
         {
-            object internalConnection = internalConnectionHelper.GetInternalConnection(connection);
+            var internalConnection = internalConnectionHelper.GetInternalConnection(connection);
             connection.Dispose();
 
             if (internalConnection != null)
             {
-                bool isOpen = internalConnectionHelper.IsOpen(internalConnection);
+                var isOpen = internalConnectionHelper.IsOpen(internalConnection);
 
                 if (!isOpen)
                 {
-                    DateTime endDate = LocalTime.Default.Now;
+                    var endDate = LocalTime.Default.Now;
                     this.ConnectionClosed(internalConnection, endDate);
                 }
             }
@@ -441,7 +441,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             long duration,
             Exception exception)
         {
-            Dictionary<string, SqLoglCommandExecution> commands = this.applications[applicationId];
+            var commands = this.applications[applicationId];
             var item = new SqlLogCommand(applicationId, commands, connectionNo, command, startDate, duration, exception);
             this.Enqueue(item);
         }

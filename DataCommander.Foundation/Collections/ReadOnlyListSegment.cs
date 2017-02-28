@@ -55,9 +55,9 @@
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            int end = offset + Count;
+            var end = offset + Count;
 
-            for (int i = offset; i < end; i++)
+            for (var i = offset; i < end; i++)
             {
                 yield return this.list[i];
             }

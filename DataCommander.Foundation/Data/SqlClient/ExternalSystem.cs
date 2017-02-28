@@ -28,11 +28,11 @@ namespace DataCommander.Foundation.Data.SqlClient
             Contract.Requires<ArgumentNullException>(connection != null);
 
             var properties = new ConfigurationAttributeCollection { Name = name };
-            DataSet dataSet = ExternalSystem_GetProperties( connection, name );
-            DataTable table = dataSet.Tables[ 0 ];
-            DataRow row = table.Rows[ 0 ];
-            string loginame = row.Field<string>( 0 );
-            string currentUser = WindowsIdentity.GetCurrent().Name;
+            var dataSet = ExternalSystem_GetProperties( connection, name );
+            var table = dataSet.Tables[ 0 ];
+            var row = table.Rows[ 0 ];
+            var loginame = row.Field<string>( 0 );
+            var currentUser = WindowsIdentity.GetCurrent().Name;
             DataProtectionScope scope;
 
             if (loginame == currentUser)
@@ -48,10 +48,10 @@ namespace DataCommander.Foundation.Data.SqlClient
 
             foreach (DataRow dataRow in table.Rows)
             {
-                string propertyName = (string) dataRow[ 0 ];
-                ExternalSystemPropertyTypes type = (ExternalSystemPropertyTypes) (byte) dataRow[ 1 ];
-                object value = dataRow[ 2 ];
-                bool encrypted = (type & ExternalSystemPropertyTypes.Encrypted) != 0;
+                var propertyName = (string) dataRow[ 0 ];
+                var type = (ExternalSystemPropertyTypes) (byte) dataRow[ 1 ];
+                var value = dataRow[ 2 ];
+                var encrypted = (type & ExternalSystemPropertyTypes.Encrypted) != 0;
 
                 if (encrypted)
                 {
@@ -61,7 +61,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                     }
                     else
                     {
-                        byte[] bytes = (byte[]) value;
+                        var bytes = (byte[]) value;
                         value = ProtectedData.Unprotect( bytes, optionalEntropy, scope );
                     }
                 }
@@ -88,8 +88,8 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <returns></returns>
         public static byte[] Encrypt( DataProtectionScope scope, string text )
         {
-            byte[] bytes = Encoding.UTF8.GetBytes( text );
-            byte[] protectedBytes = ProtectedData.Protect( bytes, optionalEntropy, scope );
+            var bytes = Encoding.UTF8.GetBytes( text );
+            var protectedBytes = ProtectedData.Protect( bytes, optionalEntropy, scope );
             return protectedBytes;
         }
 
@@ -101,8 +101,8 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <returns></returns>
         public static string Decrypt( DataProtectionScope scope, byte[] bytes )
         {
-            byte[] unprotectedBytes = ProtectedData.Unprotect( bytes, optionalEntropy, scope );
-            string text = Encoding.UTF8.GetString( unprotectedBytes );
+            var unprotectedBytes = ProtectedData.Unprotect( bytes, optionalEntropy, scope );
+            var text = Encoding.UTF8.GetString( unprotectedBytes );
             return text;
         }
 
@@ -115,7 +115,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <returns></returns>
         public static bool Check( DataProtectionScope scope, byte[] bytes, string text )
         {
-            string s = Decrypt( scope, bytes );
+            var s = Decrypt( scope, bytes );
             return s == text;
         }
 
@@ -127,14 +127,14 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <returns></returns>
         private static DataSet ExternalSystem_GetProperties( IDbConnection connection, string systemName )
         {
-            IDbCommand command = connection.CreateCommand();
+            var command = connection.CreateCommand();
             command.CommandType = CommandType.StoredProcedure;
             command.CommandText = "icCore.dbo.ExternalSystem_GetProperties";
-            SqlParameterCollection parameters = (SqlParameterCollection) command.Parameters;
+            var parameters = (SqlParameterCollection) command.Parameters;
             parameters.Add( new SqlParameter( "@returnValue", SqlDbType.Int, 4, ParameterDirection.ReturnValue, true, 0, 0, null, DataRowVersion.Current, null ) );
             parameters.Add( new SqlParameter( "@systemName", SqlDbType.VarChar, 64, ParameterDirection.Input, true, 0, 0, null, DataRowVersion.Current, null ) );
             parameters[ 1 ].Value = systemName;
-            DataSet dataSet = command.ExecuteDataSet(CancellationToken.None);
+            var dataSet = command.ExecuteDataSet(CancellationToken.None);
             return dataSet;
         }
     }

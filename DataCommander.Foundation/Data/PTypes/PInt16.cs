@@ -77,7 +77,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns></returns>
         public static bool operator ==( PInt16 x, PInt16 y )
         {
-            bool isEqual = x.ValueType == y.ValueType;
+            var isEqual = x.ValueType == y.ValueType;
 
             if (isEqual)
             {
@@ -130,7 +130,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns></returns>
         public override bool Equals( object y )
         {
-            bool equals = y is PInt16;
+            var equals = y is PInt16;
 
             if (equals)
             {
@@ -146,7 +146,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns></returns>
         public override int GetHashCode()
         {
-            int hashCode = this.sql.GetHashCode();
+            var hashCode = this.sql.GetHashCode();
             return hashCode;
         }
 

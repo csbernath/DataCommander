@@ -34,13 +34,13 @@ namespace DataCommander.Foundation
         /// <returns></returns>
         public string LoadString( int id )
         {
-            byte[] buffer = new byte[ 1024 ];
-            int n = NativeMethods.LoadString( this.moduleHandle, id, buffer, buffer.Length );
+            var buffer = new byte[ 1024 ];
+            var n = NativeMethods.LoadString( this.moduleHandle, id, buffer, buffer.Length );
             string value = null;
 
             if (n > 0)
             {
-                char[] chars = Encoding.Default.GetChars( buffer, 0, n );
+                var chars = Encoding.Default.GetChars( buffer, 0, n );
                 value = new string( chars );
             }
 

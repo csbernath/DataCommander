@@ -108,7 +108,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public IDbCommand CreateCommand()
         {
-            IDbCommand command = this.Connection.CreateCommand();
+            var command = this.Connection.CreateCommand();
             return new SafeDbCommand(this, command);
         }
 
@@ -117,7 +117,7 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public void Open()
         {
-            int count = 0;
+            var count = 0;
 
             while (!this.safeDbConnection.CancellationToken.IsCancellationRequested)
             {
@@ -188,7 +188,7 @@ namespace DataCommander.Foundation.Data
 
             while (!this.safeDbConnection.CancellationToken.IsCancellationRequested)
             {
-                long ticks = Stopwatch.GetTimestamp();
+                var ticks = Stopwatch.GetTimestamp();
 
                 try
                 {
@@ -204,7 +204,7 @@ namespace DataCommander.Foundation.Data
                         reader.Dispose();
                     }
 
-                    ConnectionState state = this.Connection.State;
+                    var state = this.Connection.State;
 
                     log.Write(
                         LogLevel.Error,
@@ -282,8 +282,8 @@ namespace DataCommander.Foundation.Data
                 this.Open();
             }
 
-            int count = 0;
-            int tryCount = 0;
+            var count = 0;
+            var tryCount = 0;
 
             while (tryCount == 0 || !this.safeDbConnection.CancellationToken.IsCancellationRequested)
             {

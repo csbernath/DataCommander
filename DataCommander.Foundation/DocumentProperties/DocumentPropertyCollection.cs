@@ -203,7 +203,7 @@
 
         internal void Add( DocumentPropertyId id, object value )
         {
-            DocumentProperty property = new DocumentProperty( id, value );
+            var property = new DocumentProperty( id, value );
             this.dictionary.Add( id, property );
         }
 

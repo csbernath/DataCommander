@@ -122,13 +122,13 @@ namespace DataCommander.Foundation.Data.SqlClient
 
         public IDataReader ExecuteReader()
         {
-            SqlLoggedSqlDataReader loggedSqlDataReader = new SqlLoggedSqlDataReader(this.connection, this.command);
+            var loggedSqlDataReader = new SqlLoggedSqlDataReader(this.connection, this.command);
             return loggedSqlDataReader.Execute();
         }
 
         public IDataReader ExecuteReader(CommandBehavior behavior)
         {
-            SqlLoggedSqlDataReader loggedSqlDataReader = new SqlLoggedSqlDataReader(this.connection, this.command);
+            var loggedSqlDataReader = new SqlLoggedSqlDataReader(this.connection, this.command);
             return loggedSqlDataReader.Execute(behavior);
         }
 

@@ -102,7 +102,7 @@
         public bool TryGetFirstValue(TKey key, out T value)
         {
             ICollection<T> collection;
-            bool contains = this.dictionary.TryGetValue(key, out collection);
+            var contains = this.dictionary.TryGetValue(key, out collection);
 
             if (contains)
             {
@@ -130,7 +130,7 @@
         /// 
         /// </summary>
         /// <param name="item"></param>
-        void ICollection<T>.Add(T item)
+        public void Add(T item)
         {
             var response = this.getKey(item);
 
@@ -138,7 +138,7 @@
             {
                 var key = response.Key;
                 ICollection<T> collection;
-                bool contains = this.dictionary.TryGetValue(key, out collection);
+                var contains = this.dictionary.TryGetValue(key, out collection);
 
                 if (!contains)
                 {
@@ -202,20 +202,20 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        bool ICollection<T>.Remove(T item)
+        public bool Remove(T item)
         {
             var response = this.getKey(item);
-            bool removed = false;
+            var removed = false;
 
             if (response.HasKey)
             {
                 var key = response.Key;
                 ICollection<T> collection;
-                bool contains = this.dictionary.TryGetValue(key, out collection);
+                var contains = this.dictionary.TryGetValue(key, out collection);
 
                 if (contains)
                 {
-                    bool succeeded = collection.Remove(item);
+                    var succeeded = collection.Remove(item);
                     Contract.Assert(succeeded, "collection.Remove");
 
                     if (collection.Count == 0)
@@ -239,11 +239,11 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
-            foreach (ICollection<T> collection in this.dictionary.Values)
+            foreach (var collection in this.dictionary.Values)
             {
-                foreach (T item in collection)
+                foreach (var item in collection)
                 {
                     yield return item;
                 }

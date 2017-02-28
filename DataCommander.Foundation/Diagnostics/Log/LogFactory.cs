@@ -27,7 +27,7 @@
             {
                 var typeName = node.Attributes["TypeName"].GetValue<string>();
                 var type = Type.GetType(typeName, true);
-                object instance = Activator.CreateInstance(type);
+                var instance = Activator.CreateInstance(type);
                 Contract.Assert(instance is ILogFactory);
                 var applicationLog = (ILogFactory)instance;
                 instance = applicationLog;

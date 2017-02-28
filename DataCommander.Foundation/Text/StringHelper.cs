@@ -22,8 +22,8 @@ namespace DataCommander.Foundation.Text
             int colWidth,
             bool alignRight )
         {
-            int length = col != null ? col.Length : 0;
-            int spaceLen = colWidth - length;
+            var length = col != null ? col.Length : 0;
+            var spaceLen = colWidth - length;
             string formatted;
 
             if (spaceLen >= 0)
@@ -72,7 +72,7 @@ namespace DataCommander.Foundation.Text
         {
             fixed (Char* pfixed = s)
             {
-                for (Char* p = pfixed; *p != 0; p++)
+                for (var p = pfixed; *p != 0; p++)
                 {
                     *p = Char.ToLower( *p, CultureInfo.CurrentCulture );
                 }
@@ -87,7 +87,7 @@ namespace DataCommander.Foundation.Text
         {
             fixed (Char* pfixed = s)
             {
-                for (Char* p = pfixed; *p != 0; p++)
+                for (var p = pfixed; *p != 0; p++)
                 {
                     *p = Char.ToUpper( *p, CultureInfo.CurrentCulture );
                 }
@@ -110,17 +110,17 @@ namespace DataCommander.Foundation.Text
             Contract.Requires( textWriter != null );
             Contract.Requires( obj != null );
 
-            Type type = obj.GetType();
-            MethodInfo methodInfo = type.GetMethod( methodName );
-            ParameterInfo[] parameterInfos = methodInfo.GetParameters();
+            var type = obj.GetType();
+            var methodInfo = type.GetMethod( methodName );
+            var parameterInfos = methodInfo.GetParameters();
 
-            string typeName = TypeNameCollection.GetTypeName( methodInfo.ReturnType );
+            var typeName = TypeNameCollection.GetTypeName( methodInfo.ReturnType );
 
-            string line = typeName + " " + methodName + "(" + Environment.NewLine;
+            var line = typeName + " " + methodName + "(" + Environment.NewLine;
 
-            int length = Math.Min( parameters.Length, parameterInfos.Length );
+            var length = Math.Min( parameters.Length, parameterInfos.Length );
 
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
                 typeName = TypeNameCollection.GetTypeName( parameterInfos[ i ].ParameterType );
 
@@ -148,7 +148,7 @@ namespace DataCommander.Foundation.Text
         /// <returns></returns>
         public static bool ParseBoolean( string value, bool nullValue )
         {
-            bool b = value != null && value.Length > 0 ? bool.Parse( value ) : nullValue;
+            var b = value != null && value.Length > 0 ? bool.Parse( value ) : nullValue;
             return b;
         }
     }

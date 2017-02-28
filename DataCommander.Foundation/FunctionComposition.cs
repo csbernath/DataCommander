@@ -39,8 +39,8 @@
 
             public Z Evaluate(X x)
             {
-                Y y = this.func1(x);
-                Z z = this.func2(y);
+                var y = this.func1(x);
+                var z = this.func2(y);
                 return z;
             }
         }

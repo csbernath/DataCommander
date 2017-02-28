@@ -27,7 +27,7 @@ namespace DataCommander.Foundation.Threading
 
             while (!this.Thread.IsStopRequested)
             {
-                bool dequeued = this.pool.Dequeue(this.callback, waitHandles);
+                var dequeued = this.pool.Dequeue(this.callback, waitHandles);
 
                 if (dequeued)
                 {

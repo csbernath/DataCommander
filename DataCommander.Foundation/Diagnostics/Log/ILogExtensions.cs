@@ -43,7 +43,7 @@ namespace DataCommander.Foundation.Diagnostics
             string format,
             params object[] args)
         {
-            string message = string.Format(format, args);
+            var message = string.Format(format, args);
             log.Trace(callerInformation, message);
         }
     }

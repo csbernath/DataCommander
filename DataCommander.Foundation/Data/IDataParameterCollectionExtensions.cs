@@ -46,13 +46,13 @@ namespace DataCommander.Foundation.Data
             else
             {
                 var sb = new StringBuilder();
-                bool first = true;
+                var first = true;
 
                 foreach (IDataParameter parameter in parameters)
                 {
                     if (parameter.Direction != ParameterDirection.ReturnValue)
                     {
-                        object value = parameter.Value;
+                        var value = parameter.Value;
 
                         if (value != null)
                         {
@@ -64,12 +64,12 @@ namespace DataCommander.Foundation.Data
                             }
                             else
                             {
-                                DbType dbType = parameter.DbType;
+                                var dbType = parameter.DbType;
 
                                 switch (dbType)
                                 {
                                     case DbType.DateTime:
-                                        DateTime dateTime = (DateTime) value;
+                                        var dateTime = (DateTime) value;
                                         valueString = dateTime.ToTSqlDateTime();
                                         break;
 

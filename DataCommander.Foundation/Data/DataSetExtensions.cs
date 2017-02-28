@@ -21,15 +21,15 @@
             Contract.Requires<ArgumentNullException>(dataTableNames != null);
 
             var dataTables = dataSet.Tables;
-            int count = dataTables.Count;
-            int i = 0;
+            var count = dataTables.Count;
+            var i = 0;
 
             using (var enumerator = dataTableNames.GetEnumerator())
             {
                 while (i < count && enumerator.MoveNext())
                 {
-                    DataTable dataTable = dataTables[i];
-                    string dataTableName = enumerator.Current;
+                    var dataTable = dataTables[i];
+                    var dataTableName = enumerator.Current;
                     dataTable.TableName = dataTableName;
                     i++;
                 }

@@ -43,7 +43,7 @@ namespace DataCommander.Foundation.Diagnostics
 
         void ILogWriter.Write(LogEntry entry)
         {
-            string s = this.formatter.Format(entry);
+            var s = this.formatter.Format(entry);
             this.textWriter.Write(s);
         }
 

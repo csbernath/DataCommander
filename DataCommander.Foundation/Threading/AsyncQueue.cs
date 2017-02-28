@@ -33,7 +33,7 @@ namespace DataCommander.Foundation.Threading
 
             private void ThreadStart()
             {
-                object state = this.consumer.Enter();
+                var state = this.consumer.Enter();
 
                 try
                 {
@@ -81,9 +81,9 @@ namespace DataCommander.Foundation.Threading
             this.name = name;
             this.asyncQueue = asyncQueue;
 
-            for (int id = 0; id < consumerCount; id++)
+            for (var id = 0; id < consumerCount; id++)
             {
-                ConsumerThread consumerThread = new ConsumerThread( this, id, priority );
+                var consumerThread = new ConsumerThread( this, id, priority );
                 this.Consumers.Add( consumerThread.Thread );
             }
         }
@@ -142,7 +142,7 @@ namespace DataCommander.Foundation.Threading
         {
             Contract.Requires( consumerThread != null );
 
-            AsyncQueueConsumeEventArgs args = new AsyncQueueConsumeEventArgs( item );
+            var args = new AsyncQueueConsumeEventArgs( item );
             var eventHandler = this.asyncQueue.BeforeConsume;
 
             if (eventHandler != null)
@@ -162,12 +162,12 @@ namespace DataCommander.Foundation.Threading
 
         private void Dequeue( ConsumerThread consumerThread )
         {
-            WorkerThread thread = consumerThread.Thread;
+            var thread = consumerThread.Thread;
             WaitHandle[] waitHandles = { thread.StopRequest, this.queueEvent };
 
             while (!thread.IsStopRequested)
             {
-                object item = this.Dequeue();
+                var item = this.Dequeue();
 
                 if (item != null)
                 {

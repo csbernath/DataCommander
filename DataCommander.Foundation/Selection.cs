@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.Contracts;
-using System.Net;
 
 namespace DataCommander.Foundation
 {
@@ -52,12 +51,12 @@ namespace DataCommander.Foundation
         {
             Contract.Requires<ArgumentNullException>(selections != null);
 
-            int selectedIndex = -1;
+            var selectedIndex = -1;
 
-            for (int i = 0; i < selections.Length; ++i)
+            for (var i = 0; i < selections.Length; ++i)
             {
                 var selection = selections[i];
-                bool selected = selection();
+                var selected = selection();
 
                 if (selected)
                 {
@@ -141,7 +140,7 @@ namespace DataCommander.Foundation
         private static bool ExecuteIfArgumentAsNotNull<TArgument, TArgumentAs>(TArgument argument, Action<TArgumentAs> action) where TArgumentAs : class
         {
             var argumentAs = argument as TArgumentAs;
-            bool selected = argumentAs != null;
+            var selected = argumentAs != null;
 
             if (selected)
             {
@@ -160,7 +159,7 @@ namespace DataCommander.Foundation
         /// <returns></returns>
         public static bool ExecuteIfArgumentTypeEquals<TArgument>(Type type, Action action)
         {
-            bool selected = typeof (TArgument) == type;
+            var selected = typeof (TArgument) == type;
 
             if (selected)
             {
@@ -206,12 +205,12 @@ namespace DataCommander.Foundation
         /// <returns></returns>
         public int Select(TArgument argument)
         {
-            int selectedIndex = -1;
+            var selectedIndex = -1;
 
-            for (int i = 0; i < this.selections.Length; ++i)
+            for (var i = 0; i < this.selections.Length; ++i)
             {
                 var selection = this.selections[i];
-                bool selected = selection(argument);
+                var selected = selection(argument);
                 if (selected)
                 {
                     selectedIndex = i;

@@ -53,12 +53,12 @@
         {
             get
             {
-                int elapsed = UniversalTime.GetTickCount() - this.incrementedTickCount;
+                var elapsed = UniversalTime.GetTickCount() - this.incrementedTickCount;
                 if (this.increment <= elapsed)
                 {
                     if (elapsed < this.adjustment)
                     {
-                        DateTime calculatedDateTime = this.incrementedDateTime.AddMilliseconds(elapsed);
+                        var calculatedDateTime = this.incrementedDateTime.AddMilliseconds(elapsed);
                         if (sharedDateTime < calculatedDateTime)
                         {
                             sharedDateTime = calculatedDateTime;

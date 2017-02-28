@@ -17,7 +17,7 @@ namespace DataCommander.Foundation.Threading
 
         int IList<WorkerThread>.IndexOf(WorkerThread item)
         {
-            int index = this.threads.IndexOf(item);
+            var index = this.threads.IndexOf(item);
             return index;
         }
 
@@ -135,7 +135,7 @@ namespace DataCommander.Foundation.Threading
         {
             lock (this.threads)
             {
-                foreach (WorkerThread thread in this.threads)
+                foreach (var thread in this.threads)
                 {
                     thread.Start();
                 }
@@ -149,7 +149,7 @@ namespace DataCommander.Foundation.Threading
         {
             lock (this.threads)
             {
-                foreach (WorkerThread thread in this.threads)
+                foreach (var thread in this.threads)
                 {
                     thread.Stop();
                 }
@@ -183,7 +183,7 @@ namespace DataCommander.Foundation.Threading
             {
                 lock (this.threads)
                 {
-                    foreach (WorkerThread thread in this.threads)
+                    foreach (var thread in this.threads)
                     {
                         thread.Stopped += this.Thread_Stopped;
                         thread.Stop();

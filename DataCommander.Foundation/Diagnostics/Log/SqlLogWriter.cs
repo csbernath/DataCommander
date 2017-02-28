@@ -113,7 +113,7 @@ namespace DataCommander.Foundation.Diagnostics
 
                     lock (this.entryQueue)
                     {
-                        int count = this.entryQueue.Count;
+                        var count = this.entryQueue.Count;
                         array = new LogEntry[count];
                         this.entryQueue.CopyTo(array);
                         this.entryQueue.Clear();
@@ -137,7 +137,7 @@ namespace DataCommander.Foundation.Diagnostics
                 var sb = new StringBuilder();
                 string commandText;
 
-                for (int i = 0; i < array.Length; i++)
+                for (var i = 0; i < array.Length; i++)
                 {
                     commandText = this.logEntryToCommandText(array[i]);
                     sb.AppendLine(commandText);

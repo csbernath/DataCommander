@@ -129,8 +129,8 @@
         /// <returns></returns>
         public static int ToInt32(long ticks, int multiplier)
         {
-            double d = (double)multiplier*ticks/TicksPerSecond;
-            int int32 = (int)Math.Round(d);
+            var d = (double)multiplier*ticks/TicksPerSecond;
+            var int32 = (int)Math.Round(d);
             return int32;
         }
 
@@ -142,8 +142,8 @@
         /// <returns></returns>
         public static long ToInt64(long ticks, long multiplier)
         {
-            double d = (double)multiplier*ticks/Stopwatch.Frequency;
-            long int64 = (long)Math.Round(d);
+            var d = (double)multiplier*ticks/Stopwatch.Frequency;
+            var int64 = (long)Math.Round(d);
             return int64;
         }
 
@@ -180,16 +180,16 @@
         /// <returns></returns>
         public static string ToString(long ticks, int scale)
         {
-            long totalSeconds = ticks/TicksPerSecond;
+            var totalSeconds = ticks/TicksPerSecond;
             string fractionString = null;
 
             if (scale > 0)
             {
-                long fractionTicks = ticks - (totalSeconds*TicksPerSecond);
-                long multiplier = Pow10(scale);
-                double fraction = (double)multiplier*fractionTicks/TicksPerSecond;
+                var fractionTicks = ticks - (totalSeconds*TicksPerSecond);
+                var multiplier = Pow10(scale);
+                var fraction = (double)multiplier*fractionTicks/TicksPerSecond;
                 fraction = Math.Round(fraction);
-                long fractionInt64 = (long)fraction;
+                var fractionInt64 = (long)fraction;
                 if (fractionInt64 == multiplier)
                 {
                     fractionInt64 = 0;
@@ -200,7 +200,7 @@
             }
 
             var sb = new StringBuilder();
-            long days = ticks/TicksPerDay;
+            var days = ticks/TicksPerDay;
 
             if (days != 0)
             {
@@ -210,9 +210,9 @@
                 sb.Append('.');
             }
 
-            long hours = totalSeconds/3600;
-            int seconds = (int)(totalSeconds - (hours*3600));
-            int minutes = seconds/60;
+            var hours = totalSeconds/3600;
+            var seconds = (int)(totalSeconds - (hours*3600));
+            var minutes = seconds/60;
             seconds -= minutes*60;
 
             if (sb.Length > 0 || hours > 0)
@@ -246,7 +246,7 @@
         /// <returns></returns>
         public static TimeSpan ToTimeSpan(long elapsed)
         {
-            long ticks = (long)(elapsed*TicksPerTick);
+            var ticks = (long)(elapsed*TicksPerTick);
             return new TimeSpan(ticks);
         }
 

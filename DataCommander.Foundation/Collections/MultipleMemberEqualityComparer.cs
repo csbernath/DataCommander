@@ -44,7 +44,7 @@
         int IEqualityComparer<T>.GetHashCode(T obj)
         {
             var hashCodes = this.equalityComparers.Select(c => c.GetHashCode(obj));
-            int hashCode = hashCodes.Aggregate(CombineHashCodes);
+            var hashCode = hashCodes.Aggregate(CombineHashCodes);
             return hashCode;
         }
 

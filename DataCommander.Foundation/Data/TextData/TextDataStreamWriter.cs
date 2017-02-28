@@ -28,12 +28,12 @@
             Contract.Requires( values != null );
             Contract.Requires( this.Columns.Count == values.Length );
 
-            for (int i = 0; i < values.Length; i++)
+            for (var i = 0; i < values.Length; i++)
             {
-                object value = values[ i ];
-                ITextDataConverter converter = this.converters[ i ];
-                TextDataColumn column = this.Columns[ i ];
-                string valueString = converter.ToString( value, column );
+                var value = values[ i ];
+                var converter = this.converters[ i ];
+                var column = this.Columns[ i ];
+                var valueString = converter.ToString( value, column );
                 Contract.Assert( !string.IsNullOrEmpty( valueString ) );
                 Contract.Assert( column.MaxLength == valueString.Length );
                 this.textWriter.Write( valueString );

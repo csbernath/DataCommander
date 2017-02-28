@@ -57,15 +57,15 @@ namespace DataCommander.Foundation.Configuration
 
         private static void Add(string name, Type type)
         {
-            TypeCollectionItem item = new TypeCollectionItem(name, type);
+            var item = new TypeCollectionItem(name, type);
             collection.Add(item);
         }
 
         public static Type GetType(string typeName)
         {
             Type type;
-            bool isArray = false;
-            int length = typeName.Length - 2;
+            var isArray = false;
+            var length = typeName.Length - 2;
             isArray = typeName != null && typeName.IndexOf("[]") == length;
 
             string typeName2;
@@ -80,7 +80,7 @@ namespace DataCommander.Foundation.Configuration
             }
 
             TypeCollectionItem item;
-            bool contains = nameIndex.TryGetValue(typeName2, out item);
+            var contains = nameIndex.TryGetValue(typeName2, out item);
 
             if (contains)
             {
@@ -114,12 +114,12 @@ namespace DataCommander.Foundation.Configuration
 
             if (type.IsArray)
             {
-                Type elementType = type.GetElementType();
+                var elementType = type.GetElementType();
                 typeName = GetTypeName(elementType) + "[]";
             }
             else if (type.IsEnum)
             {
-                Assembly assembly = type.Assembly;
+                var assembly = type.Assembly;
 
                 if (assembly == systemAssembly)
                 {
@@ -135,7 +135,7 @@ namespace DataCommander.Foundation.Configuration
             else
             {
                 TypeCollectionItem item;
-                bool contains = typeIndex.TryGetValue(type, out item);
+                var contains = typeIndex.TryGetValue(type, out item);
 
                 if (contains)
                 {

@@ -324,7 +324,7 @@
         /// <returns>An enumerable of the tasks currently scheduled.</returns>
         protected override sealed IEnumerable<Task> GetScheduledTasks()
         {
-            bool lockTaken = false;
+            var lockTaken = false;
             try
             {
                 Monitor.TryEnter(this._tasks, ref lockTaken);

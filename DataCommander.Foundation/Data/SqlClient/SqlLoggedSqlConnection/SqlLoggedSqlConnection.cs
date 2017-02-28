@@ -103,8 +103,8 @@ namespace DataCommander.Foundation.Data.SqlClient
         public void Open()
         {
             Exception exception = null;
-            DateTime startDate = LocalTime.Default.Now;
-            long duration = Stopwatch.GetTimestamp();
+            var startDate = LocalTime.Default.Now;
+            var duration = Stopwatch.GetTimestamp();
 
             try
             {
@@ -166,8 +166,8 @@ namespace DataCommander.Foundation.Data.SqlClient
         {
             int count;
             Exception exception = null;
-            DateTime startDate = LocalTime.Default.Now;
-            long duration = Stopwatch.GetTimestamp();
+            var startDate = LocalTime.Default.Now;
+            var duration = Stopwatch.GetTimestamp();
 
             try
             {
@@ -181,7 +181,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             finally
             {
                 duration = Stopwatch.GetTimestamp() - duration;
-                bool contains = exception != null || this.Filter == null || this.Filter.Contains(this.UserName, this.HostName, command);
+                var contains = exception != null || this.Filter == null || this.Filter.Contains(this.UserName, this.HostName, command);
 
                 if (contains)
                 {
@@ -197,8 +197,8 @@ namespace DataCommander.Foundation.Data.SqlClient
             object scalar = null;
 
             Exception exception = null;
-            DateTime startDate = LocalTime.Default.Now;
-            long duration = Stopwatch.GetTimestamp();
+            var startDate = LocalTime.Default.Now;
+            var duration = Stopwatch.GetTimestamp();
 
             try
             {
@@ -212,7 +212,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             finally
             {
                 duration = Stopwatch.GetTimestamp() - duration;
-                bool contains = exception != null || this.Filter == null || this.Filter.Contains(this.UserName, this.HostName, command);
+                var contains = exception != null || this.Filter == null || this.Filter.Contains(this.UserName, this.HostName, command);
 
                 if (contains)
                 {

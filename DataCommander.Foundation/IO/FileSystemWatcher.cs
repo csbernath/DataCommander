@@ -29,8 +29,8 @@ namespace DataCommander.Foundation.IO
         {
             this.fullFileName = fileName;
             this.shortFileName = this.ShortFileName;
-            FileInfo fileInfo = new FileInfo(fileName);
-            string path = fileInfo.DirectoryName;
+            var fileInfo = new FileInfo(fileName);
+            var path = fileInfo.DirectoryName;
             this.fileName = fileInfo.Name.ToUpper(CultureInfo.InvariantCulture);
             this.watcher = new System.IO.FileSystemWatcher(path);
             this.watcher.Changed += this.OnChanged;
@@ -84,12 +84,12 @@ namespace DataCommander.Foundation.IO
                 if (this.shortFileName == null)
                 {
                     var sb = new StringBuilder(255);
-                    UInt32 i = NativeMethods.GetShortPathName(this.fullFileName, sb, (UInt32) sb.Capacity);
+                    var i = NativeMethods.GetShortPathName(this.fullFileName, sb, (UInt32) sb.Capacity);
 
                     if (i > 0)
                     {
                         this.shortFileName = sb.ToString().ToUpper(CultureInfo.InvariantCulture);
-                        FileInfo fileInfo = new FileInfo(this.shortFileName);
+                        var fileInfo = new FileInfo(this.shortFileName);
                         this.shortFileName = fileInfo.Name;
                     }
                 }
@@ -109,7 +109,7 @@ namespace DataCommander.Foundation.IO
         {
             if (this.Changed != null)
             {
-                string name = e.Name;
+                var name = e.Name;
 
                 if (name == this.fileName || name == this.ShortFileName)
                 {

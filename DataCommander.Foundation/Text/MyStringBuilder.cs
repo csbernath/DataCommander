@@ -25,9 +25,9 @@
             {
                 throw new ArgumentNullException((format == null) ? "format" : "args");
             }
-            int num = 0;
-            int length = format.Length;
-            char c = '\0';
+            var num = 0;
+            var length = format.Length;
+            var c = '\0';
             ICustomFormatter customFormatter = null;
             if (provider != null)
             {
@@ -74,7 +74,7 @@
                     //StringBuilder.FormatError();
                     throw new FormatException();
                 }
-                int num2 = 0;
+                var num2 = 0;
                 do
                 {
                     num2 = num2 * 10 + (int)c - 48;
@@ -96,8 +96,8 @@
                 {
                     num++;
                 }
-                bool flag = false;
-                int num3 = 0;
+                var flag = false;
+                var num3 = 0;
                 if (c == ',')
                 {
                     num++;
@@ -211,7 +211,7 @@
                 }
                 if (text2 == null)
                 {
-                    IFormattable formattable = obj as IFormattable;
+                    var formattable = obj as IFormattable;
                     if (formattable != null)
                     {
                         if (text == null && stringBuilder != null)
@@ -232,7 +232,7 @@
                 {
                     text2 = string.Empty;
                 }
-                int num4 = num3 - text2.Length;
+                var num4 = num3 - text2.Length;
                 if (!flag && num4 > 0)
                 {
                     source.Append(' ', num4);

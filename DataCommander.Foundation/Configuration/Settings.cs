@@ -49,7 +49,7 @@ namespace DataCommander.Foundation.Configuration
             {
                 if (configFileName == null)
                 {
-                    AppDomainSetup setup = AppDomain.CurrentDomain.SetupInformation;
+                    var setup = AppDomain.CurrentDomain.SetupInformation;
                     bool contains;
 
                     try
@@ -95,8 +95,8 @@ namespace DataCommander.Foundation.Configuration
             {
                 if (section == null)
                 {
-                    string configFileName = ConfigFileName;
-                    string sectionName = SectionName;
+                    var configFileName = ConfigFileName;
+                    var sectionName = SectionName;
                     section = new ConfigurationSection(configFileName, sectionName);
                 }
 
@@ -134,8 +134,8 @@ namespace DataCommander.Foundation.Configuration
             get
             {
                 var trace = new StackTrace(1);
-                string nodeName = ConfigurationNodeName.FromMethod(trace, 0);
-                ConfigurationNode node = Section.SelectNode(nodeName, true);
+                var nodeName = ConfigurationNodeName.FromMethod(trace, 0);
+                var node = Section.SelectNode(nodeName, true);
                 return node;
             }
         }
@@ -149,8 +149,8 @@ namespace DataCommander.Foundation.Configuration
             get
             {
                 var trace = new StackTrace(1);
-                string nodeName = ConfigurationNodeName.FromType(trace, 0);
-                ConfigurationNode node = Section.SelectNode(nodeName, true);
+                var nodeName = ConfigurationNodeName.FromType(trace, 0);
+                var node = Section.SelectNode(nodeName, true);
                 return node;
             }
         }
@@ -164,8 +164,8 @@ namespace DataCommander.Foundation.Configuration
             get
             {
                 var trace = new StackTrace(1);
-                string nodeName = ConfigurationNodeName.FromNamespace(trace, 0);
-                ConfigurationNode node = Section.SelectNode(nodeName, true);
+                var nodeName = ConfigurationNodeName.FromNamespace(trace, 0);
+                var node = Section.SelectNode(nodeName, true);
                 return node;
             }
         }
@@ -179,12 +179,12 @@ namespace DataCommander.Foundation.Configuration
         {
             Contract.Requires<ArgumentNullException>(assembly != null);
 
-            string codeBase = assembly.CodeBase;
-            Uri uri = new Uri(codeBase);
-            string fileName = uri.LocalPath;
-            FileInfo fileInfo = new FileInfo(fileName);
+            var codeBase = assembly.CodeBase;
+            var uri = new Uri(codeBase);
+            var fileName = uri.LocalPath;
+            var fileInfo = new FileInfo(fileName);
             fileName = fileInfo.FullName;
-            string configFilename = fileName + ".config";
+            var configFilename = fileName + ".config";
             return configFilename;
         }
 
@@ -201,8 +201,8 @@ namespace DataCommander.Foundation.Configuration
 
         internal static ConfigurationNode SelectNode(Type type, bool throwOnError)
         {
-            string nodeName = ConfigurationNodeName.FromType(type);
-            ConfigurationNode node = Section.SelectNode(nodeName, throwOnError);
+            var nodeName = ConfigurationNodeName.FromType(type);
+            var node = Section.SelectNode(nodeName, throwOnError);
             return node;
         }
 
@@ -214,9 +214,9 @@ namespace DataCommander.Foundation.Configuration
         public static ConfigurationNode SelectCurrentType()
         {
             var trace = new StackTrace(1);
-            string nodeName = ConfigurationNodeName.FromType(trace, 0);
+            var nodeName = ConfigurationNodeName.FromType(trace, 0);
             //log.Trace( "SelectCurrentType, nodeName={0}", nodeName );
-            ConfigurationNode node = Section.SelectNode(nodeName, false);
+            var node = Section.SelectNode(nodeName, false);
             return node;
         }
     }

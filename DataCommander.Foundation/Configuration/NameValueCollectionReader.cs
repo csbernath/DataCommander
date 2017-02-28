@@ -51,7 +51,7 @@
         public T GetValue<T>(string name, TryParse<T> tryParse, T defaultValue)
         {
             T value;
-            bool contains = this.TryGetValue(name, tryParse, out value);
+            var contains = this.TryGetValue(name, tryParse, out value);
 
             if (!contains)
             {
@@ -114,7 +114,7 @@
         /// <returns></returns>
         public bool TryGetBoolean(string name, out bool value)
         {
-            bool contains = this.TryGetValue(name, bool.TryParse, out value);
+            var contains = this.TryGetValue(name, bool.TryParse, out value);
             return contains;
         }
 
@@ -129,11 +129,11 @@
         public bool TryGetDateTime(string name, IFormatProvider provider, DateTimeStyles styles, out DateTime value)
         {
             string s;
-            bool contains = this.tryGetValue(name, out s);
+            var contains = this.tryGetValue(name, out s);
 
             if (contains)
             {
-                bool succeeded = DateTime.TryParse(s, provider, styles, out value);
+                var succeeded = DateTime.TryParse(s, provider, styles, out value);
                 Contract.Assert(succeeded);
             }
             else
@@ -153,11 +153,11 @@
         public bool TryGetDouble(string name, out double value)
         {
             string s;
-            bool contains = this.tryGetValue(name, out s);
+            var contains = this.tryGetValue(name, out s);
 
             if (contains)
             {
-                bool succeeded = double.TryParse(s, out value);
+                var succeeded = double.TryParse(s, out value);
                 Contract.Assert(succeeded);
             }
             else
@@ -179,11 +179,11 @@
         public bool TryGetDouble(string name, NumberStyles style, IFormatProvider provider, out double value)
         {
             string s;
-            bool contains = this.tryGetValue(name, out s);
+            var contains = this.tryGetValue(name, out s);
 
             if (contains)
             {
-                bool succeeded = double.TryParse(s, style, provider, out value);
+                var succeeded = double.TryParse(s, style, provider, out value);
                 Contract.Assert(succeeded);
             }
             else
@@ -204,12 +204,12 @@
         public bool TryGetEnum<T>(string name, out T value)
         {
             string s;
-            bool contains = this.tryGetValue(name, out s);
+            var contains = this.tryGetValue(name, out s);
 
             if (contains)
             {
-                Type enumType = typeof(T);
-                object valueObject = Enum.Parse(enumType, s);
+                var enumType = typeof(T);
+                var valueObject = Enum.Parse(enumType, s);
                 value = (T)valueObject;
             }
             else
@@ -228,7 +228,7 @@
         /// <returns></returns>
         public bool TryGetInt16(string name, out Int16 value)
         {
-            bool contains = this.TryGetValue(name, Int16.TryParse, out value);
+            var contains = this.TryGetValue(name, Int16.TryParse, out value);
             return contains;
         }
 
@@ -240,7 +240,7 @@
         /// <returns></returns>
         public bool TryGetInt32(string name, out int value)
         {
-            bool contains = this.TryGetValue(name, int.TryParse, out value);
+            var contains = this.TryGetValue(name, int.TryParse, out value);
             return contains;
         }
 
@@ -252,7 +252,7 @@
         /// <returns></returns>
         public bool TryGetInt64(string name, out long value)
         {
-            bool contains = this.TryGetValue(name, long.TryParse, out value);
+            var contains = this.TryGetValue(name, long.TryParse, out value);
             return contains;
         }
 
@@ -267,11 +267,11 @@
         public bool TryGetSingle(string name, NumberStyles style, IFormatProvider provider, out Single value)
         {
             string s;
-            bool contains = this.tryGetValue(name, out s);
+            var contains = this.tryGetValue(name, out s);
 
             if (contains)
             {
-                bool succeeded = Single.TryParse(s, style, provider, out value);
+                var succeeded = Single.TryParse(s, style, provider, out value);
                 Contract.Assert(succeeded);
             }
             else
@@ -291,7 +291,7 @@
         public bool TryGetString(string name, out string value)
         {
             string s;
-            bool contains = this.tryGetValue(name, out s);
+            var contains = this.tryGetValue(name, out s);
 
             value = contains
                 ? s
@@ -309,7 +309,7 @@
         public bool TryGetTimeSpan(string name, out TimeSpan value)
         {
             string s;
-            bool contains = this.tryGetValue(name, out s);
+            var contains = this.tryGetValue(name, out s);
 
             value = contains
                 ? TimeSpan.Parse(s)
@@ -330,11 +330,11 @@
         {
             Contract.Requires(tryParse != null);
             string s;
-            bool contains = this.tryGetValue(name, out s);
+            var contains = this.tryGetValue(name, out s);
 
             if (contains)
             {
-                bool succeeded = tryParse(s, out value);
+                var succeeded = tryParse(s, out value);
                 Contract.Assert(succeeded);
             }
             else

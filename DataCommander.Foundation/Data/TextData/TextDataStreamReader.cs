@@ -44,13 +44,13 @@
         public object[] ReadRow()
         {
             object[] values = null;
-            int index = 0;
+            var index = 0;
 
-            foreach (TextDataColumn column in this.columns)
+            foreach (var column in this.columns)
             {
-                int maxLength = column.MaxLength;
-                Char[] buffer = new Char[maxLength];
-                int count = this.textReader.Read( buffer, 0, maxLength );
+                var maxLength = column.MaxLength;
+                var buffer = new Char[maxLength];
+                var count = this.textReader.Read( buffer, 0, maxLength );
 
                 if (count == 0)
                 {
@@ -64,8 +64,8 @@
                     values = new object[this.columns.Count];
                 }
 
-                string source = new string( buffer );
-                ITextDataConverter converter = this.converters[ index ];
+                var source = new string( buffer );
+                var converter = this.converters[ index ];
                 Contract.Assert( converter != null );
                 object value;
 

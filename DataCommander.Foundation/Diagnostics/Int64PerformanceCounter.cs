@@ -44,10 +44,10 @@
 
             while (true)
             {
-                long min = this.min;
+                var min = this.min;
                 if (item < min)
                 {
-                    long originalMin = Interlocked.CompareExchange(ref this.min, item, min);
+                    var originalMin = Interlocked.CompareExchange(ref this.min, item, min);
                     if (originalMin == min)
                     {
                         break;
@@ -65,10 +65,10 @@
 
             while (true)
             {
-                long max = this.max;
+                var max = this.max;
                 if (item > max)
                 {
-                    long originalMax = Interlocked.CompareExchange(ref this.max, item, max);
+                    var originalMax = Interlocked.CompareExchange(ref this.max, item, max);
                     if (originalMax == max)
                     {
                         break;

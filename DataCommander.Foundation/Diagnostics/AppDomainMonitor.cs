@@ -50,7 +50,7 @@ namespace DataCommander.Foundation.Diagnostics
 
                 using (var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full"))
                 {
-                    int release = (int) key.GetValue("Release");
+                    var release = (int) key.GetValue("Release");
 
                     switch (release)
                     {
@@ -103,12 +103,12 @@ namespace DataCommander.Foundation.Diagnostics
         {
             get
             {
-                int tickCount = UniversalTime.GetTickCount();
-                int milliSecondsPerDay = StopwatchTimeSpan.SecondsPerDay*1000;
-                double totalDays = (double)tickCount/milliSecondsPerDay;
-                DateTime zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
+                var tickCount = UniversalTime.GetTickCount();
+                var milliSecondsPerDay = StopwatchTimeSpan.SecondsPerDay*1000;
+                var totalDays = (double)tickCount/milliSecondsPerDay;
+                var zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
                 string tickCountString = $"{tickCount} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";
-                long workingSet = Environment.WorkingSet;
+                var workingSet = Environment.WorkingSet;
 
                 string message = $@"Environment information
 MachineName:            {Environment.MachineName}
@@ -181,14 +181,14 @@ Stopwatch.Frequency:    {Stopwatch.Frequency}";
         {
             try
             {
-                string friendlyName = appDomain.FriendlyName;
+                var friendlyName = appDomain.FriendlyName;
                 sb.AppendFormat("FriendlyName: {0}\r\n", friendlyName);
                 var assemblies = appDomain.GetAssemblies();
                 sb.AppendLine("Assemblies:");
 
                 var assemblyInfos = new List<AssemblyInfo>();
 
-                for (int i = 0; i < assemblies.Length; i++)
+                for (var i = 0; i < assemblies.Length; i++)
                 {
                     try
                     {
@@ -225,15 +225,15 @@ Stopwatch.Frequency:    {Stopwatch.Frequency}";
             {
             }
 
-            Version fileVersion = !string.IsNullOrEmpty(location) ? GetFileVersion(assembly) : null;
-            DateTime? date = !string.IsNullOrEmpty(location)
+            var fileVersion = !string.IsNullOrEmpty(location) ? GetFileVersion(assembly) : null;
+            var date = !string.IsNullOrEmpty(location)
                 ? File.GetLastWriteTime(location)
                 : (DateTime?)null;
 
-            AssemblyName name = assembly.GetName();
+            var name = assembly.GetName();
 
-            byte[] publicKeyToken = name.GetPublicKeyToken();
-            string publicKeyTokenString = publicKeyToken != null ? Hex.GetString(publicKeyToken, false) : null;
+            var publicKeyToken = name.GetPublicKeyToken();
+            var publicKeyTokenString = publicKeyToken != null ? Hex.GetString(publicKeyToken, false) : null;
 
             return new AssemblyInfo
             {

@@ -37,7 +37,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         {
             get
             {
-                int microseconds = StopwatchTimeSpan.ToInt32( this.duration, 1000000 );
+                var microseconds = StopwatchTimeSpan.ToInt32( this.duration, 1000000 );
                 var sb = new StringBuilder();
                 sb.AppendFormat(
                     "exec LogConnectionOpen {0},{1},{2},{3},{4},{5},{6}",
@@ -51,8 +51,8 @@ namespace DataCommander.Foundation.Data.SqlClient
 
                 if (this.exception != null)
                 {
-                    SqlLogError error = new SqlLogError( this.ApplicationId, this.ConnectionNo, 0, 0, this.exception );
-                    string commandText = error.CommandText;
+                    var error = new SqlLogError( this.ApplicationId, this.ConnectionNo, 0, 0, this.exception );
+                    var commandText = error.CommandText;
                     sb.Append( commandText );
                 }
 

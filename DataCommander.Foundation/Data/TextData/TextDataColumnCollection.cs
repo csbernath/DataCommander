@@ -65,7 +65,7 @@
         public int IndexOf( string columnName )
         {
             TextDataColumn column;
-            bool contains = this.nameIndex.TryGetValue( columnName, out column );
+            var contains = this.nameIndex.TryGetValue( columnName, out column );
             int index;
 
             if (contains)
@@ -82,11 +82,11 @@
 
         internal int IndexOf( string columnName, bool throwException )
         {
-            int index = this.IndexOf( columnName );
+            var index = this.IndexOf( columnName );
 
             if (index < 0)
             {
-                string message = string.Format( CultureInfo.InvariantCulture, "Column '{0} not found.", columnName );
+                var message = string.Format( CultureInfo.InvariantCulture, "Column '{0} not found.", columnName );
                 throw new IndexOutOfRangeException( message );
             }
 
@@ -95,7 +95,7 @@
 
         internal int IndexOf( TextDataColumn column, bool throwException )
         {
-            int index = this.IndexOf( column );
+            var index = this.IndexOf( column );
 
             if (index < 0)
             {

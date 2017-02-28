@@ -74,8 +74,8 @@
 
         bool ICollection<T>.Contains(T item)
         {
-            int index = Array.IndexOf(this.Items, item);
-            bool contains = index >= 0;
+            var index = Array.IndexOf(this.Items, item);
+            var contains = index >= 0;
             return contains;
         }
 

@@ -85,12 +85,12 @@
 
                 IReadOnlyList<TValue> readOnlyList;
 
-                int index = this.IndexOf(key);
+                var index = this.IndexOf(key);
                 if (index >= 0)
                 {
-                    int currentGroupIndex = this.groups[index];
-                    int nextGroupIndex = index < this.groups.Count - 1 ? this.groups[index + 1] : this.values.Count;
-                    int count = nextGroupIndex - currentGroupIndex;
+                    var currentGroupIndex = this.groups[index];
+                    var nextGroupIndex = index < this.groups.Count - 1 ? this.groups[index + 1] : this.values.Count;
+                    var count = nextGroupIndex - currentGroupIndex;
 
                     readOnlyList = new ReadOnlyListSegment<TValue>(this.values, currentGroupIndex, count);
                 }
@@ -109,12 +109,12 @@
         /// <returns></returns>
         public IEnumerable<IReadOnlyList<TValue>> GetGroups()
         {
-            int lastGroupIndex = this.groups.Count - 1;
-            for (int groupIndex = 0; groupIndex <= lastGroupIndex; ++groupIndex)
+            var lastGroupIndex = this.groups.Count - 1;
+            for (var groupIndex = 0; groupIndex <= lastGroupIndex; ++groupIndex)
             {
-                int valueStartIndex = this.groups[groupIndex];
-                int valueNextStartIndex = groupIndex < lastGroupIndex ? this.groups[groupIndex + 1] : this.values.Count;
-                int valueCount = valueNextStartIndex - valueStartIndex;
+                var valueStartIndex = this.groups[groupIndex];
+                var valueNextStartIndex = groupIndex < lastGroupIndex ? this.groups[groupIndex + 1] : this.values.Count;
+                var valueCount = valueNextStartIndex - valueStartIndex;
                 yield return new ReadOnlyListSegment<TValue>(this.values, valueStartIndex, valueCount);
             }
         }
@@ -144,9 +144,9 @@
             {
                 #region Create
 
-                int notEqualsCount = this.values.SelectPreviousAndCurrentKey(this.keySelector).Count(k => comparison(k.Previous, k.Current) != 0);
-                int smallArrayMaxLength = LargeObjectHeap.GetSmallArrayMaxLength(sizeof(int));
-                int itemCount = notEqualsCount + 1;
+                var notEqualsCount = this.values.SelectPreviousAndCurrentKey(this.keySelector).Count(k => comparison(k.Previous, k.Current) != 0);
+                var smallArrayMaxLength = LargeObjectHeap.GetSmallArrayMaxLength(sizeof(int));
+                var itemCount = notEqualsCount + 1;
                 var segmentedArrayBuilder = new SegmentedArrayBuilder<int>(itemCount, smallArrayMaxLength);
 
                 #endregion
@@ -154,7 +154,7 @@
                 #region Fill
 
                 segmentedArrayBuilder.Add(0);
-                int index = 0;
+                var index = 0;
 
                 foreach (var key in this.values.SelectPreviousAndCurrentKey(this.keySelector))
                 {
@@ -181,7 +181,7 @@
             {
                 index = BinarySearch.IndexOf(0, this.groups.Count - 1, currentIndex =>
                 {
-                    int valueIndex = this.groups[currentIndex];
+                    var valueIndex = this.groups[currentIndex];
                     var otherValue = this.values[valueIndex];
                     var otherKey = this.keySelector(otherValue);
                     return this.comparison(key, otherKey);

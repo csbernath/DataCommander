@@ -22,7 +22,7 @@
             Contract.Requires<ArgumentNullException>(source != null);
 
             const int minIndex = 0;
-            int maxIndex = source.Count - 1;
+            var maxIndex = source.Count - 1;
             return LinearSearch.IndexOf(minIndex, maxIndex, index => predicate(source[index]));
         }
 
@@ -38,7 +38,7 @@
             Contract.Requires<ArgumentNullException>(source != null);
 
             const int minIndex = 0;
-            int maxIndex = source.Count - 1;
+            var maxIndex = source.Count - 1;
             return LinearSearch.LastIndexOf(minIndex, maxIndex, index => predicate(source[index]));
         }
 
@@ -53,8 +53,8 @@
             Contract.Requires<ArgumentNullException>(source != null);
             Contract.Requires<ArgumentException>(source.Count > 0);
 
-            int lastIndex = source.Count - 1;
-            T last = source[lastIndex];
+            var lastIndex = source.Count - 1;
+            var last = source[lastIndex];
             return last;
         }
     }

@@ -58,7 +58,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns></returns>
         public static bool operator ==( PBinary x, PBinary y )
         {
-            bool isEqual = x.ValueType == y.ValueType;
+            var isEqual = x.ValueType == y.ValueType;
 
             if (isEqual)
             {
@@ -89,7 +89,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns></returns>
         public override bool Equals( object y )
         {
-            bool equals = y is PBinary;
+            var equals = y is PBinary;
 
             if (equals)
             {
@@ -105,7 +105,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns></returns>
         public override int GetHashCode()
         {
-            int hashCode = this.sql.GetHashCode();
+            var hashCode = this.sql.GetHashCode();
             return hashCode;
         }
 

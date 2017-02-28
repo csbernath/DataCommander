@@ -49,7 +49,7 @@
         /// <returns></returns>
         public LockRequest Enter(int priority)
         {
-            LockRequest lockRequest = new LockRequest(this, priority);
+            var lockRequest = new LockRequest(this, priority);
 
             lock (this.lockRequests)
             {
@@ -115,7 +115,7 @@
                 }
                 else
                 {
-                    LockRequest first = this.lockRequests.First();
+                    var first = this.lockRequests.First();
                     this.lockRequests.Remove(first);
                     this.CurrentLockRequest = first;
                     first.Complete();
@@ -195,7 +195,7 @@
             {
                 if (this.Monitor != null)
                 {
-                    PriorityMonitor<T> monitor = this.Monitor;
+                    var monitor = this.Monitor;
                     monitor.Exit(this);
                     this.Monitor = null;
                 }

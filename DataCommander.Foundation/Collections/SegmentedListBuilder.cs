@@ -39,7 +39,7 @@
 
             if (this.segments.Count > 0 && this.nextSegmentItemIndex < this.segmentItemCapacity)
             {
-                int lastSegmentIndex = this.segments.Count - 1;
+                var lastSegmentIndex = this.segments.Count - 1;
                 currentSegment = this.segments[lastSegmentIndex];
             }
             else
@@ -60,8 +60,8 @@
         {
             get
             {
-                int count = 0;
-                int segmentCount = this.segments.Count;
+                var count = 0;
+                var segmentCount = this.segments.Count;
                 if (segmentCount > 0)
                 {
                     count += (segmentCount - 1)*this.segmentItemCapacity;
@@ -78,7 +78,7 @@
         /// <returns></returns>
         public IReadOnlyList<T> ToReadOnlyList()
         {
-            int count = this.Count;
+            var count = this.Count;
             return new ReadOnlySegmentedList(this.segments, count);
         }
 
@@ -99,12 +99,12 @@
             {
                 get
                 {
-                    int segmentLength = segments[0].Length;
+                    var segmentLength = segments[0].Length;
 
-                    int segmentIndex = index/segmentLength;
+                    var segmentIndex = index/segmentLength;
                     var segment = this.segments[segmentIndex];
 
-                    int segmentItemIndex = index%segmentLength;
+                    var segmentItemIndex = index%segmentLength;
                     var value = segment[segmentItemIndex];
                     return value;
                 }
@@ -114,15 +114,15 @@
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator()
             {
-                int segmentIndex = 0;
-                int lastSegmentIndex = this.segments.Count - 1;
+                var segmentIndex = 0;
+                var lastSegmentIndex = this.segments.Count - 1;
 
                 foreach (var segment in this.segments)
                 {
-                    int segmentLength = segment.Length;
-                    int segmentItemCount = segmentIndex < lastSegmentIndex ? segmentLength : this.count%segmentLength;
+                    var segmentLength = segment.Length;
+                    var segmentItemCount = segmentIndex < lastSegmentIndex ? segmentLength : this.count%segmentLength;
 
-                    for (int i = 0; i < segmentItemCount; i++)
+                    for (var i = 0; i < segmentItemCount; i++)
                     {
                         yield return segment[i];
                     }

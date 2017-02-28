@@ -24,7 +24,7 @@
             this.convert = convert;
             this.ItemArray = new object[columns.Count];
 
-            for (int i = 0; i < this.ItemArray.Length; i++)
+            for (var i = 0; i < this.ItemArray.Length; i++)
             {
                 this.ItemArray[i] = DBNull.Value;
             }
@@ -47,15 +47,15 @@
         {
             get
             {
-                int index = this.Columns.IndexOf(columnName, true);
+                var index = this.Columns.IndexOf(columnName, true);
                 return this.ItemArray[index];
             }
 
             set
             {
-                int index = this.Columns.IndexOf(columnName, true);
-                TextDataColumn column = this.Columns[index];
-                object convertedValue = this.convert(value, column);
+                var index = this.Columns.IndexOf(columnName, true);
+                var column = this.Columns[index];
+                var convertedValue = this.convert(value, column);
                 this.ItemArray[index] = convertedValue;
             }
         }
@@ -79,14 +79,14 @@
         {
             get
             {
-                int index = this.Columns.IndexOf(column, true);
+                var index = this.Columns.IndexOf(column, true);
                 return this.ItemArray[index];
             }
 
             set
             {
-                int index = this.Columns.IndexOf(column, true);
-                object convertedValue = this.convert(value, column);
+                var index = this.Columns.IndexOf(column, true);
+                var convertedValue = this.convert(value, column);
                 this.ItemArray[index] = convertedValue;
             }
         }

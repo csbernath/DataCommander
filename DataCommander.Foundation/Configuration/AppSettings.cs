@@ -32,13 +32,13 @@ namespace DataCommander.Foundation.Configuration
         {
             get
             {
-                NameValueCollection nameValueCollection = ConfigurationManager.AppSettings;
+                var nameValueCollection = ConfigurationManager.AppSettings;
 
                 var stackTrace = new StackTrace(1);
-                StackFrame stackFrame = stackTrace.GetFrame(0);
-                MethodBase methodBase = stackFrame.GetMethod();
-                string typeName = methodBase.DeclaringType.FullName;
-                string prefix = typeName + Type.Delimiter;
+                var stackFrame = stackTrace.GetFrame(0);
+                var methodBase = stackFrame.GetMethod();
+                var typeName = methodBase.DeclaringType.FullName;
+                var prefix = typeName + Type.Delimiter;
 
                 var reader = new PrefixedReader(nameValueCollection, prefix);
                 return new NameValueCollectionReader(reader.TryGetValue);
@@ -62,7 +62,7 @@ namespace DataCommander.Foundation.Configuration
             public bool TryGetValue(string name, out string value)
             {
                 value = this.nameValueCollection[name];
-                bool contains = value != null;
+                var contains = value != null;
                 return contains;
             }
         }
@@ -98,7 +98,7 @@ namespace DataCommander.Foundation.Configuration
                 }
 
                 value = this.nameValueCollection[prefixedName];
-                bool contains = value != null;
+                var contains = value != null;
                 return contains;
             }
         }

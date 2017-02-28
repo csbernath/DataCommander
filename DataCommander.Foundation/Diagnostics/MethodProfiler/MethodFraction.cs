@@ -19,7 +19,7 @@
 
         public static string GetKey(MethodBase method, string name)
         {
-            string fullName = method.MethodHandle.Value.ToInt32().ToString("x") + "[" + name + "]";
+            var fullName = method.MethodHandle.Value.ToInt32().ToString("x") + "[" + name + "]";
             return fullName;
         }
 
