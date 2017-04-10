@@ -7,12 +7,12 @@ namespace DataCommander.Foundation.Text
     /// </summary>
     public static class Hex
     {
-        private static readonly Char[] hexCharsUpper =
+        private static readonly char[] hexCharsUpper =
         {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
         };
 
-        private static readonly Char[] hexCharsLower =
+        private static readonly char[] hexCharsLower =
         {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
         };
@@ -23,12 +23,12 @@ namespace DataCommander.Foundation.Text
         /// <param name="value"></param>
         /// <param name="isUpper"></param>
         /// <returns></returns>
-        public static Char[] Encode(byte value, bool isUpper)
+        public static char[] Encode(byte value, bool isUpper)
         {
             var d1 = (value & 0xF0) >> 4;
             var d0 = value & 0x0F;
 
-            var digits = new Char[2];
+            var digits = new char[2];
             var hexChars = isUpper ? hexCharsUpper : hexCharsLower;
 
             digits[0] = hexChars[d1];
@@ -44,14 +44,14 @@ namespace DataCommander.Foundation.Text
         /// <param name="isUpper"></param>
         /// <returns></returns>
         [CLSCompliant(false)]
-        public static Char[] Encode(UInt16 value, bool isUpper)
+        public static char[] Encode(ushort value, bool isUpper)
         {
             var d3 = value >> 12;
             var d2 = (value & 0x0F00) >> 8;
             var d1 = (value & 0x00F0) >> 4;
             var d0 = value & 0x000F;
 
-            var digits = new Char[4];
+            var digits = new char[4];
             var hexChars = isUpper ? hexCharsUpper : hexCharsLower;
 
             digits[0] = hexChars[d3];
@@ -68,7 +68,7 @@ namespace DataCommander.Foundation.Text
         /// <param name="value"></param>
         /// <param name="isUpper"></param>
         /// <returns></returns>
-        public static Char[] Encode(int value, bool isUpper)
+        public static char[] Encode(int value, bool isUpper)
         {
             var d7 = value >> 28;
             var d6 = (value & 0x0F000000) >> 24;
@@ -79,7 +79,7 @@ namespace DataCommander.Foundation.Text
             var d1 = (value & 0x000000F0) >> 4;
             var d0 = value & 0x0000000F;
 
-            var digits = new Char[8];
+            var digits = new char[8];
             var hexChars = isUpper ? hexCharsUpper : hexCharsLower;
             digits[0] = hexChars[d7];
             digits[1] = hexChars[d6];
@@ -99,7 +99,7 @@ namespace DataCommander.Foundation.Text
         /// <param name="bytes"></param>
         /// <param name="isUpper"></param>
         /// <returns></returns>
-        public static Char[] Encode(byte[] bytes, bool isUpper)
+        public static char[] Encode(byte[] bytes, bool isUpper)
         {
             var length = bytes.Length;
             return Encode(bytes, length, isUpper);
@@ -112,9 +112,9 @@ namespace DataCommander.Foundation.Text
         /// <param name="length"></param>
         /// <param name="isUpper"></param>
         /// <returns></returns>
-        public static Char[] Encode(byte[] bytes, int length, bool isUpper)
+        public static char[] Encode(byte[] bytes, int length, bool isUpper)
         {
-            var chars = new Char[length << 1];
+            var chars = new char[length << 1];
             var j = 0;
             var hexChars = isUpper ? hexCharsUpper : hexCharsLower;
 
@@ -140,7 +140,7 @@ namespace DataCommander.Foundation.Text
         /// <param name="isUpper"></param>
         /// <returns></returns>
         [CLSCompliant(false)]
-        public static string GetString(UInt16 value, bool isUpper)
+        public static string GetString(ushort value, bool isUpper)
         {
             var chars = Encode(value, isUpper);
             var s = new string(chars);
@@ -167,7 +167,7 @@ namespace DataCommander.Foundation.Text
         /// <param name="isUpper"></param>
         /// <returns></returns>
         [CLSCompliant(false)]
-        public static string GetString(UInt64 value, bool isUpper)
+        public static string GetString(ulong value, bool isUpper)
         {
             string format;
 

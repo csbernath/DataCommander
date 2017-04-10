@@ -19,8 +19,10 @@
         [Pure]
         public static IndexedItem<TSource> FirstIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(source != null);
             Contract.Requires<ArgumentNullException>(predicate != null);
+#endif
 
             var firstIndex = -1;
             var firstItem = default(TSource);
@@ -48,8 +50,10 @@
         [Pure]
         public static IndexedItem<TSource> ExtremumIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, TSource, bool> firstArgumentIsExtremum)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(source != null);
             Contract.Requires<ArgumentNullException>(firstArgumentIsExtremum != null);
+#endif
 
             var extremumIndex = -1;
             var extremumItem = default(TSource);
@@ -78,8 +82,10 @@
         /// <returns></returns>
         public static IndexedItem<TSource> MinIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, int> selector)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(source != null);
             Contract.Requires<ArgumentNullException>(selector != null);
+#endif
 
             var minIndex = -1;
             var minItem = default(TSource);

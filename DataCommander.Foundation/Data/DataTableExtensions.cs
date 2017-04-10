@@ -2,7 +2,6 @@
 {
     using System;
     using System.Data;
-    using System.Diagnostics.Contracts;
     using System.Linq;
     using DataCommander.Foundation.Text;
     using Linq;
@@ -19,7 +18,9 @@
         /// <returns></returns>
         public static string ToStringTableString(this DataTable dataTable)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dataTable != null);
+#endif
 
             var rows = dataTable.AsEnumerable().Where(dataRow => dataRow.RowState != DataRowState.Deleted);
             var columns = dataTable.Columns.Cast<DataColumn>().Select(ToStringTableColumnInfo).ToArray();

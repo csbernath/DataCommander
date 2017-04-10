@@ -7,14 +7,14 @@ namespace DataCommander
 		{
 			//string separator = CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator;
 			const char separator = '.';
-			int index = str.IndexOf( separator );
+			var index = str.IndexOf( separator );
 
 			string intValue;
 
 			if (index >= 0)
 			{
 				intValue = str.Substring( 0, index );
-				string fracValue = str.Substring( index + 1 );
+				var fracValue = str.Substring( index + 1 );
 			    this.Scale = (byte) fracValue.Length;
 			}
 			else

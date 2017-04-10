@@ -23,7 +23,7 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText = string.Format( @"
+            var commandText = string.Format( @"
 select  s.name as Owner,
         o.name as Name        
 from    [{0}].sys.all_objects o (readpast)
@@ -38,25 +38,25 @@ where
 order by s.name,o.name", this.database.Name, this.isMSShipped ? 1 : 0 );
 
             DataTable dataTable;
-            string connectionString = this.database.Databases.Server.ConnectionString;
+            var connectionString = this.database.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 var transactionScope = new DbTransactionScope(connection, null);
                 dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
             }
-            DataRowCollection dataRows = dataTable.Rows;
-            int count = dataRows.Count;
-            List<ITreeNode> treeNodes = new List<ITreeNode>();
+            var dataRows = dataTable.Rows;
+            var count = dataRows.Count;
+            var treeNodes = new List<ITreeNode>();
             if (!this.isMSShipped)
             {
                 treeNodes.Add(new StoredProcedureCollectionNode(this.database, true));
             }
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
-                DataRow row = dataRows[i];
-                string owner = (string)row["Owner"];
-                string name = (string)row["Name"];
+                var row = dataRows[i];
+                var owner = (string)row["Owner"];
+                var name = (string)row["Name"];
 
                 treeNodes.Add(new StoredProcedureNode(this.database, owner, name));
             }

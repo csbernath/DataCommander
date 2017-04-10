@@ -2,7 +2,6 @@
 {
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Linq;
 
     public partial class IndexableCollection<T> : ICollection<T>
@@ -47,7 +46,9 @@
         /// <returns></returns>
         public bool Contains(T item)
         {
+#if CONTRACTS_FULL
             Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
+#endif
             return this.defaultIndex.Contains(item);
         }
 

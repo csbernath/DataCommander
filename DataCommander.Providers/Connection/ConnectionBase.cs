@@ -3,7 +3,6 @@ namespace DataCommander.Providers
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using System.Diagnostics.Contracts;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -78,7 +77,9 @@ namespace DataCommander.Providers
         {
             get
             {
+#if CONTRACTS_FULL
                 Contract.Assert(this.Connection != null);
+#endif
                 return this.Connection.State;
             }
         }

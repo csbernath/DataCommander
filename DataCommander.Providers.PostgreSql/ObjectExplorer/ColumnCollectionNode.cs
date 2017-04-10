@@ -46,8 +46,8 @@ where
 order by c.ordinal_position"
                 }, CommandBehavior.Default, dataRecord =>
                 {
-                    string columnName = dataRecord.GetString(0);
-                    string dataType = dataRecord.GetString(2);
+                    var columnName = dataRecord.GetString(0);
+                    var dataType = dataRecord.GetString(2);
                     var columnNode = new ColumnNode(this, columnName, dataType);
                     nodes.Add(columnNode);
                 });

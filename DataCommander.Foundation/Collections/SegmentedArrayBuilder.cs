@@ -1,9 +1,7 @@
 ﻿namespace DataCommander.Foundation.Collections
 {
-    using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -28,8 +26,10 @@
             int length,
             int segmentLength)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentOutOfRangeException>(length >= 0);
             Contract.Requires<ArgumentOutOfRangeException>(segmentLength >= 0);
+#endif
 
             if (length > 0)
             {

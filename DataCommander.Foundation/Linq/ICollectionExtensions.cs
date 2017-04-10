@@ -3,7 +3,6 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Linq;
 
     /// <summary>
@@ -42,7 +41,9 @@
         /// <param name="items"></param>
         public static void Add<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentException>(collection != null || items == null);
+#endif
 
             if (items != null)
             {
@@ -62,7 +63,9 @@
         /// <returns></returns>
         public static int Remove<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentException>(collection != null || items == null);
+#endif
 
             var count = 0;
 
@@ -90,7 +93,9 @@
         /// <returns></returns>
         public static ICollection<T> AsReadOnly<T>(this ICollection<T> collection)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(collection != null);
+#endif
             return new ReadOnlyCollection<T>(collection);
         }
 
@@ -135,7 +140,9 @@
         /// <returns></returns>
         public static T[] ToArray<T>(ICollection<T> source)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(source != null);
+#endif
 
             var target = new T[source.Count];
             source.CopyTo(target, 0);
@@ -148,7 +155,7 @@
         /// <typeparam name="TResult"></typeparam>
         private sealed class CastedCollection<TResult> : ICollection<TResult>
         {
-            #region Private Fields
+#region Private Fields
 
             /// <summary>
             /// 
@@ -157,7 +164,7 @@
 
             private readonly IList sourceAsList;
 
-            #endregion
+#endregion
 
             /// <summary>
             /// 
@@ -165,12 +172,14 @@
             /// <param name="source"></param>
             public CastedCollection(ICollection source)
             {
+#if CONTRACTS_FULL
                 Contract.Requires<ArgumentNullException>(source != null);
+#endif
                 this.source = source;
                 this.sourceAsList = source as IList;
             }
 
-            #region ICollection<TResult> Members
+#region ICollection<TResult> Members
 
             /// <summary>
             /// 
@@ -178,7 +187,9 @@
             /// <param name="item"></param>
             void ICollection<TResult>.Add(TResult item)
             {
+#if CONTRACTS_FULL
                 Contract.Assert(this.sourceAsList != null);
+#endif
 
                 this.sourceAsList.Add(item);
             }
@@ -188,7 +199,9 @@
             /// </summary>
             void ICollection<TResult>.Clear()
             {
+#if CONTRACTS_FULL
                 Contract.Assert(this.sourceAsList != null);
+#endif
 
                 this.sourceAsList.Clear();
             }
@@ -251,9 +264,9 @@
                 throw new NotImplementedException();
             }
 
-            #endregion
+#endregion
 
-            #region IEnumerable<TResult> Members
+#region IEnumerable<TResult> Members
 
             /// <summary>
             /// 
@@ -267,9 +280,9 @@
                 }
             }
 
-            #endregion
+#endregion
 
-            #region IEnumerable Members
+#region IEnumerable Members
 
             /// <summary>
             /// 
@@ -280,7 +293,7 @@
                 return this.GetEnumerator();
             }
 
-            #endregion
+#endregion
         }
 
         /// <summary>
@@ -300,12 +313,14 @@
             /// <param name="collection"></param>
             public ReadOnlyCollection(ICollection<T> collection)
             {
+#if CONTRACTS_FULL
                 Contract.Requires(collection != null);
+#endif
 
                 this.collection = collection;
             }
 
-            #region ICollection<T> Members
+#region ICollection<T> Members
 
             /// <summary>
             /// 
@@ -331,8 +346,7 @@
             /// <returns></returns>
             bool ICollection<T>.Contains(T item)
             {
-#if FOUNDATION_3_5
-#else
+#if CONTRACTS_FULL
                 Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
 #endif
                 return this.collection.Contains(item);
@@ -368,9 +382,9 @@
                 throw new NotSupportedException();
             }
 
-            #endregion
+#endregion
 
-            #region IEnumerable<T> Members
+#region IEnumerable<T> Members
 
             /// <summary>
             /// 
@@ -381,9 +395,9 @@
                 return this.collection.GetEnumerator();
             }
 
-            #endregion
+#endregion
 
-            #region IEnumerable Members
+#region IEnumerable Members
 
             /// <summary>
             /// 
@@ -394,7 +408,7 @@
                 return this.collection.GetEnumerator();
             }
 
-            #endregion
+#endregion
         }
     }
 }

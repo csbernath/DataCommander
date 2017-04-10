@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Reflection;
 
@@ -38,7 +37,9 @@
         /// <returns></returns>
         public static T SetFlag<T>(this T container, T flag)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentException>(typeof (T).IsEnum);
+#endif
             var type = typeof (T);
 
             var containerUInt64 = Convert.ToUInt64(container, CultureInfo.InvariantCulture);
@@ -57,7 +58,9 @@
         /// <returns></returns>
         public static T SetFlag<T>(this T container, T flag, bool set)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentException>(typeof (T).IsEnum);
+#endif
             var type = typeof (T);
 
             var containerUInt64 = Convert.ToUInt64(container);
@@ -84,7 +87,9 @@
         /// <returns></returns>
         public static T ResetFlag<T>(this T container, T flag)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(typeof (T).IsEnum);
+#endif
             var type = typeof (T);
             var containerUInt64 = Convert.ToUInt64(container);
             var flagUInt64 = Convert.ToUInt64(flag);

@@ -1,15 +1,15 @@
 ﻿namespace DataCommander.Foundation.Diagnostics
 {
-    using System;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
     using System.Text;
 
     internal static class StackFrameExtensions
     {
         public static string ToLogString(this StackFrame frame)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(frame != null);
+#endif
 
             var stringBuilder = new StringBuilder();
             var method = frame.GetMethod();

@@ -2,7 +2,6 @@
 {
     using System.Data;
     using System.Data.SqlClient;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -24,14 +23,16 @@
         /// 
         /// </summary>
         /// <param name="command"></param>
-        public void DeriveParameters( IDbCommand command )
+        public void DeriveParameters(IDbCommand command)
         {
-            Contract.Assert( command != null );
+#if CONTRACTS_FULL
+            Contract.Assert(command != null);
+#endif
 
             var sqlCommand = (SqlCommand)command;
-            SqlCommandBuilder.DeriveParameters( sqlCommand );
+            SqlCommandBuilder.DeriveParameters(sqlCommand);
         }
 
-        #endregion
+#endregion
     }
 }

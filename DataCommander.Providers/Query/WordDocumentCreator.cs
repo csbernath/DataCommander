@@ -11,25 +11,25 @@
         public static string CreateWordDocument(DataTable dataTable)
         {
             var application = new ApplicationClass();
-            object template = Type.Missing;
-            object newTemplate = Type.Missing;
-            object documentType = Type.Missing;
-            object visible = Type.Missing;
-            Document document = application.Documents.Add(ref template, ref newTemplate, ref documentType, ref visible);
+            var template = Type.Missing;
+            var newTemplate = Type.Missing;
+            var documentType = Type.Missing;
+            var visible = Type.Missing;
+            var document = application.Documents.Add(ref template, ref newTemplate, ref documentType, ref visible);
             application.Selection.Font.Name = "Tahoma";
             application.Selection.Font.Size = 8;
 
-            Range range = application.Selection.Range;
-            object defaultTableBehaviour = Type.Missing;
+            var range = application.Selection.Range;
+            var defaultTableBehaviour = Type.Missing;
             object autoFitBehaviour = WdAutoFitBehavior.wdAutoFitContent;
 
-            int numOfRows = dataTable.Rows.Count + 1;
-            int numOfColumns = Math.Min(dataTable.Columns.Count, 63);
+            var numOfRows = dataTable.Rows.Count + 1;
+            var numOfColumns = Math.Min(dataTable.Columns.Count, 63);
 
             string text = null;
             const string separator = "\t";
 
-            for (int i = 0; i < numOfColumns - 1; i++)
+            for (var i = 0; i < numOfColumns - 1; i++)
             {
                 text += dataTable.Columns[i].ColumnName + separator;
             }
@@ -38,7 +38,7 @@
 
             foreach (DataRow dataRow in dataTable.Rows)
             {
-                for (int i = 0; i < numOfColumns - 1; i++)
+                for (var i = 0; i < numOfColumns - 1; i++)
                 {
                     text += QueryForm.DBValue(dataRow[i]) + separator;
                 }
@@ -47,9 +47,9 @@
             }
 
             application.Selection.InsertAfter(text);
-            object missing = Type.Missing;
+            var missing = Type.Missing;
             object format = WdTableFormat.wdTableFormatList4;
-            Table table = application.Selection.Range.ConvertToTable(ref missing, ref missing, ref missing, ref missing,
+            var table = application.Selection.Range.ConvertToTable(ref missing, ref missing, ref missing, ref missing,
                 ref format, ref missing, ref missing, ref missing,
                 ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing);
 
@@ -62,7 +62,7 @@
                 column.AutoFit();
             }
 
-            string fileName = Path.GetTempFileName();
+            var fileName = Path.GetTempFileName();
             object fileNameObj = fileName;
             object fileFormat = WdSaveFormat.wdFormatRTF;
 

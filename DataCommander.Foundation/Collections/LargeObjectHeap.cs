@@ -1,8 +1,5 @@
 ﻿namespace DataCommander.Foundation.Collections
 {
-    using System;
-    using System.Diagnostics.Contracts;
-
     /// <summary>
     /// 
     /// </summary>
@@ -18,7 +15,9 @@
         /// <returns></returns>
         public static int GetSmallArrayMaxLength(int itemSize)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentOutOfRangeException>(itemSize > 0);
+#endif
 
             return (maxSmallObjectSize - 16)/itemSize;
         }

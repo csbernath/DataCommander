@@ -1,9 +1,7 @@
 ﻿namespace DataCommander.Foundation.Linq
 {
-    using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -20,7 +18,9 @@
         /// <returns></returns>
         public static IEnumerable<T> AsEnumerable<T>(this IEnumerator<T> enumerator)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(enumerator != null);
+#endif
 
             return new Enumerable<T>(enumerator);
         }
@@ -33,8 +33,10 @@
         /// <returns></returns>
         public static List<T> Take<T>(this IEnumerator<T> enumerator, int count)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(enumerator != null);
             Contract.Requires<ArgumentOutOfRangeException>(count >= 0);
+#endif
 
             var list = new List<T>(count);
 
@@ -54,9 +56,9 @@
             return list;
         }
 
-        #endregion
+#endregion
 
-        #region Private Classes
+#region Private Classes
 
         private sealed class Enumerable<T> : IEnumerable<T>
         {
@@ -64,7 +66,9 @@
 
             public Enumerable(IEnumerator<T> enumerator)
             {
+#if CONTRACTS_FULL
                 Contract.Requires(enumerator != null);
+#endif
 
                 this.enumerator = enumerator;
             }
@@ -80,6 +84,6 @@
             }
         }
 
-        #endregion
+#endregion
     }
 }

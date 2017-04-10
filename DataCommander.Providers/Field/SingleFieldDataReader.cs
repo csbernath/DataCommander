@@ -6,9 +6,9 @@
     public sealed class SingleFieldDataReader : IDataFieldReader
     {
         private readonly IDataRecord dataRecord;
-        private readonly Int32 columnOrdinal;
+        private readonly int columnOrdinal;
 
-        public SingleFieldDataReader(IDataRecord dataRecord, Int32 columnOrdinal)
+        public SingleFieldDataReader(IDataRecord dataRecord, int columnOrdinal)
         {
             this.dataRecord = dataRecord;
             this.columnOrdinal = columnOrdinal;
@@ -28,7 +28,7 @@
                 }
                 else
                 {
-                    Single singleValue = (Single)this.dataRecord[this.columnOrdinal];
+                    var singleValue = (float)this.dataRecord[this.columnOrdinal];
                     value = new SingleField(singleValue);
                 }
 

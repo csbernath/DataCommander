@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation
 {
     using System;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -28,8 +27,10 @@
         /// <param name="adjustment"></param>
         public LocalTime(int increment, int adjustment)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentOutOfRangeException>(increment >= 0);
             Contract.Requires<ArgumentOutOfRangeException>(increment <= adjustment);
+#endif
 
             this.increment = increment;
             this.adjustment = adjustment;

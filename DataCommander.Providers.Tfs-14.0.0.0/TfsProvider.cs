@@ -102,7 +102,7 @@
 
             object value;
             connectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out value);
-            string uriString = (string)value;
+            var uriString = (string)value;
             var uri = new Uri(uriString);
             return new TfsConnection(uri);
         }
@@ -113,7 +113,7 @@
             {
                 var names = new List<string>();
 
-                foreach (string name in TfsDataReaderFactory.Dictionary.Keys)
+                foreach (var name in TfsDataReaderFactory.Dictionary.Keys)
                 {
                     names.Add(name);
                 }
@@ -128,16 +128,16 @@
 
         void IProvider.DeriveParameters(IDbCommand command)
         {
-            TfsCommand tfsCommand = (TfsCommand)command;
+            var tfsCommand = (TfsCommand)command;
 
             TfsDataReaderFactory.DataReaderInfo info;
-            bool contains = TfsDataReaderFactory.Dictionary.TryGetValue(tfsCommand.CommandText, out info);
+            var contains = TfsDataReaderFactory.Dictionary.TryGetValue(tfsCommand.CommandText, out info);
 
             if (contains)
             {
-                foreach (TfsParameter parameter in info.Parameters)
+                foreach (var parameter in info.Parameters)
                 {
-                    TfsParameter clone = new TfsParameter(parameter.ParameterName, parameter.Type, parameter.DbType, parameter.Direction, parameter.IsNullable,
+                    var clone = new TfsParameter(parameter.ParameterName, parameter.Type, parameter.DbType, parameter.Direction, parameter.IsNullable,
                         parameter.DefaultValue);
                     tfsCommand.Parameters.Add(clone);
                 }
@@ -146,24 +146,24 @@
 
         DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
         {
-            TfsParameter tfsParameter = (TfsParameter)parameter;
+            var tfsParameter = (TfsParameter)parameter;
             return new TfsDataParameter(tfsParameter);
         }
 
         DataTable IProvider.GetParameterTable(IDataParameterCollection parameters)
         {
-            TfsParameterCollection tfsParameters = (TfsParameterCollection)parameters;
-            DataTable table = new DataTable();
-            DataColumnCollection columns = table.Columns;
+            var tfsParameters = (TfsParameterCollection)parameters;
+            var table = new DataTable();
+            var columns = table.Columns;
             columns.Add("ParameterName", typeof (string));
             columns.Add("DbType", typeof (DbType));
             columns.Add("Direction", typeof (ParameterDirection));
             columns.Add("IsNullable", typeof (bool));
             columns.Add("DefaultValue");
             columns.Add("Value");
-            DataRowCollection rows = table.Rows;
+            var rows = table.Rows;
 
-            foreach (TfsParameter tfsParameter in tfsParameters)
+            foreach (var tfsParameter in tfsParameters)
             {
                 rows.Add(new object[]
                 {
@@ -196,7 +196,7 @@
 
         Type IProvider.GetColumnType(DbColumn dataColumnSchema)
         {
-            DbType dbType = (DbType)dataColumnSchema.ProviderType;
+            var dbType = (DbType)dataColumnSchema.ProviderType;
             Type type;
 
             switch (dbType)
@@ -223,7 +223,7 @@
 
         IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
         {
-            TfsDataReader tfsDataReader = (TfsDataReader)dataReader;
+            var tfsDataReader = (TfsDataReader)dataReader;
             return new TfsDataReaderHelper(tfsDataReader);
         }
 
@@ -249,8 +249,8 @@
         {
             var response = new GetCompletionResponse();
             string[] values = null;
-            SqlStatement sqlStatement = new SqlStatement(text);
-            Token[] tokens = sqlStatement.Tokens;
+            var sqlStatement = new SqlStatement(text);
+            var tokens = sqlStatement.Tokens;
 
             if (tokens.Length > 0)
             {
@@ -269,13 +269,13 @@
 
                 if (previousToken != null)
                 {
-                    Token token = previousToken;
+                    var token = previousToken;
 
                     if (token.Type == TokenType.KeyWord && string.Compare(token.Value, "exec", StringComparison.InvariantCultureIgnoreCase) == 0)
                     {
-                        List<string> names = new List<string>();
+                        var names = new List<string>();
 
-                        foreach (string name in TfsDataReaderFactory.Dictionary.Keys)
+                        foreach (var name in TfsDataReaderFactory.Dictionary.Keys)
                         {
                             names.Add(name);
                         }
@@ -306,18 +306,18 @@
                             //}
                             var command = sqlStatement.CreateCommand(this, connection, CommandType.StoredProcedure, 0);
                             TfsDataReaderFactory.DataReaderInfo info;
-                            bool contains = TfsDataReaderFactory.Dictionary.TryGetValue(command.CommandText, out info);
+                            var contains = TfsDataReaderFactory.Dictionary.TryGetValue(command.CommandText, out info);
                             if (contains)
                             {
-                                TfsParameterCollection parameters = info.Parameters;
-                                int parameterIndex = previousToken.Index/2;
+                                var parameters = info.Parameters;
+                                var parameterIndex = previousToken.Index/2;
                                 if (parameterIndex < parameters.Count)
                                 {
-                                    TfsParameter parameter = parameters[parameterIndex];
-                                    Type type = parameter.Type;
+                                    var parameter = parameters[parameterIndex];
+                                    var type = parameter.Type;
                                     if (type.IsEnum)
                                     {
-                                        string[] names = Enum.GetNames(type);
+                                        var names = Enum.GetNames(type);
                                         values = names;
                                     }
                                 }

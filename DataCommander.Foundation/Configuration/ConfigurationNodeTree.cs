@@ -1,7 +1,5 @@
 namespace DataCommander.Foundation.Configuration
 {
-    using System;
-    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.IO;
     using System.Xml;
@@ -33,8 +31,10 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="sectionName"></param>
         public void Save(XmlWriter xmlWriter, string sectionName)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(xmlWriter != null);
             Contract.Requires<ArgumentNullException>(sectionName != null);
+#endif
 
             xmlWriter.WriteStartElement(sectionName);
             ConfigurationWriter.Write(xmlWriter, this.rootNode.Attributes);

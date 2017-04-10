@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation.IO
 {
     using System;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Text;
 
@@ -19,7 +18,9 @@
         /// <param name="stringBuilder"></param>
         public StringBuilderReader(StringBuilder stringBuilder)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(stringBuilder != null);
+#endif
 
             this.stringBuilder = stringBuilder;
         }

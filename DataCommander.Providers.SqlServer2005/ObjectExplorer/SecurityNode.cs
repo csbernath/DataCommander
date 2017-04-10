@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Windows.Forms;
     using Foundation.Linq;
 
@@ -11,11 +10,13 @@
 
         public SecurityNode(ServerNode serverNode)
         {
+#if CONTRACTS_FULL
             Contract.Requires( serverNode != null );
+#endif
             this.server = serverNode;
         }
 
-        #region ITreeNode Members
+#region ITreeNode Members
 
         string ITreeNode.Name => "Security";
 
@@ -32,6 +33,6 @@
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-        #endregion
+#endregion
     }
 }

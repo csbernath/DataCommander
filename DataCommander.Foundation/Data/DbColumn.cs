@@ -3,7 +3,6 @@
     using System;
     using System.Data;
     using System.Data.Common;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -16,7 +15,9 @@
         /// <param name="schemaTableRow"></param>
         public DbColumn(DataRow schemaTableRow)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(schemaTableRow != null);
+#endif
 
             this.ColumnName = schemaTableRow.Field<string>(SchemaTableColumn.ColumnName);
             this.ColumnOrdinal = (int)schemaTableRow[SchemaTableColumn.ColumnOrdinal];

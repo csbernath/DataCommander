@@ -6,7 +6,6 @@ namespace DataCommander.Providers
     using System.IO;
     using System.Text;
     using DataCommander.Foundation.Data.SqlClient;
-    using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Text;
     using Foundation.Diagnostics.MethodProfiler;
 
@@ -55,7 +54,7 @@ namespace DataCommander.Providers
             string text,
             int width)
         {
-            int length = width - text.Length;
+            var length = width - text.Length;
 
             if (length > 0)
             {
@@ -80,21 +79,21 @@ namespace DataCommander.Providers
 
             if (schemaTable != null)
             {
-                DataColumn columnNameColumn = schemaTable.Columns[SchemaTableColumn.ColumnName];
-                DataColumn columnSizeColumn = schemaTable.Columns["ColumnSize"];
-                DataColumn dataTypeColumn = schemaTable.Columns["DataType"];
+                var columnNameColumn = schemaTable.Columns[SchemaTableColumn.ColumnName];
+                var columnSizeColumn = schemaTable.Columns["ColumnSize"];
+                var dataTypeColumn = schemaTable.Columns["DataType"];
 
-                int fieldCount = schemaTable.Rows.Count;
+                var fieldCount = schemaTable.Rows.Count;
                 this.columnSize = new int[fieldCount];
 
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
 
-                for (int i = 0; i < fieldCount; i++)
+                for (var i = 0; i < fieldCount; i++)
                 {
-                    DataRow schemaRow = schemaTable.Rows[i];
-                    string columnName = (string)schemaRow[columnNameColumn];
-                    Type type = (Type)schemaRow[dataTypeColumn];
-                    int numOfBytes = (int)schemaRow[columnSizeColumn];
+                    var schemaRow = schemaTable.Rows[i];
+                    var columnName = (string)schemaRow[columnNameColumn];
+                    var type = (Type)schemaRow[dataTypeColumn];
+                    var numOfBytes = (int)schemaRow[columnSizeColumn];
 
                     Type elementType;
 
@@ -112,7 +111,7 @@ namespace DataCommander.Providers
                         elementType = type;
                     }
 
-                    TypeCode typeCode = Type.GetTypeCode(elementType);
+                    var typeCode = Type.GetTypeCode(elementType);
 
                     int numOfChars;
 
@@ -148,8 +147,8 @@ namespace DataCommander.Providers
 
                         case TypeCode.Decimal:
                             //numOfChars = numOfBytes;
-                            short precision = (short)schemaRow["NumericPrecision"];
-                            short scale = schemaRow.Field<short>("NumericScale");
+                            var precision = (short)schemaRow["NumericPrecision"];
+                            var scale = schemaRow.Field<short>("NumericScale");
                             numOfChars = precision + 3;
                             break;
 
@@ -184,9 +183,9 @@ namespace DataCommander.Providers
                 if (fieldCount > 0)
                 {
                     sb = new StringBuilder();
-                    int last = fieldCount - 1;
+                    var last = fieldCount - 1;
 
-                    for (int i = 0; i < last; i++)
+                    for (var i = 0; i < last; i++)
                     {
                         sb.Append('-', this.columnSize[i]);
                         sb.Append(' ');
@@ -213,21 +212,21 @@ namespace DataCommander.Providers
             }
             else
             {
-                Type type = value.GetType();
-                TypeCode typeCode = Type.GetTypeCode(type);
-                bool isArray = type.IsArray;
+                var type = value.GetType();
+                var typeCode = Type.GetTypeCode(type);
+                var isArray = type.IsArray;
 
                 if (isArray)
                 {
                     if (typeCode == TypeCode.Byte)
                     {
-                        byte[] bytes = (byte[])value;
-                        StringBuilder sb = new StringBuilder();
+                        var bytes = (byte[])value;
+                        var sb = new StringBuilder();
                         sb.Append("0x");
 
-                        for (int i = 0; i < bytes.Length; i++)
+                        for (var i = 0; i < bytes.Length; i++)
                         {
-                            string s = bytes[i].ToString("x");
+                            var s = bytes[i].ToString("x");
 
                             if (s.Length == 1)
                             {
@@ -249,7 +248,7 @@ namespace DataCommander.Providers
                             break;
 
                         case TypeCode.DateTime:
-                            DateTime dateTime = (DateTime)value;
+                            var dateTime = (DateTime)value;
                             stringValue = dateTime.ToString("yyyy.MM.dd HH:mm:ss.fff");
                             break;
 
@@ -281,14 +280,14 @@ namespace DataCommander.Providers
 
             try
             {
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
 
-                for (int i = 0; i < rowCount; i++)
+                for (var i = 0; i < rowCount; i++)
                 {
-                    object[] row = rows[i];
-                    int last = row.Length - 1;
+                    var row = rows[i];
+                    var last = row.Length - 1;
 
-                    for (int j = 0; j < last; j++)
+                    for (var j = 0; j < last; j++)
                     {
                         this.Write(sb, StringValue(row[j], this.columnSize[j]), this.columnSize[j]);
                         sb.Append(' ');
@@ -320,12 +319,12 @@ namespace DataCommander.Providers
         {
             if (parameters.Count > 0)
             {
-                StringTable stringTable = new StringTable(4);
+                var stringTable = new StringTable(4);
 
                 foreach (IDataParameter parameter in parameters)
                 {
-                    string name = parameter.ParameterName;
-                    object value = parameter.Value;
+                    var name = parameter.ParameterName;
+                    var value = parameter.Value;
                     string valueString;
 
                     if (value == null)
@@ -341,7 +340,7 @@ namespace DataCommander.Providers
                         switch (parameter.DbType)
                         {
                             case DbType.DateTime:
-                                DateTime dateTime = (DateTime)value;
+                                var dateTime = (DateTime)value;
                                 valueString = dateTime.ToTSqlDateTime();
                                 break;
 

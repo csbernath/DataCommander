@@ -1,15 +1,13 @@
 ﻿namespace DataCommander.Providers
 {
-    using System;
-
     public sealed class SingleField
     {
-        public SingleField(Single value)
+        public SingleField(float value)
         {
             this.Value = value;
         }
 
-        public Single Value { get; }
+        public float Value { get; }
 
         public override string ToString()
         {

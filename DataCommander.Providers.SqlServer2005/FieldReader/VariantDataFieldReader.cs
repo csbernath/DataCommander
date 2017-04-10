@@ -27,29 +27,29 @@ namespace DataCommander.Providers.SqlServer2005.FieldReader
                 else
                 {
                     value = this.sqlDataReader.GetValue(this.columnOrdinal);
-                    Type type = value.GetType();
+                    var type = value.GetType();
 
                     if (type.IsArray)
                     {
-                        Type elementType = type.GetElementType();
-                        TypeCode elementTypeCode = Type.GetTypeCode(elementType);
+                        var elementType = type.GetElementType();
+                        var elementTypeCode = Type.GetTypeCode(elementType);
 
                         switch (elementTypeCode)
                         {
                             case TypeCode.Byte:
-                                byte[] bytes = (byte[])value;
+                                var bytes = (byte[])value;
                                 value = new BinaryField(bytes);
                                 break;
                         }
                     }
                     else
                     {
-                        TypeCode typeCode = Type.GetTypeCode(type);
+                        var typeCode = Type.GetTypeCode(type);
 
                         switch (typeCode)
                         {
                             case TypeCode.DateTime:
-                                DateTime dateTime = (DateTime)value;
+                                var dateTime = (DateTime)value;
                                 value = DateTimeField.ToString(dateTime);
                                 break;
                         }

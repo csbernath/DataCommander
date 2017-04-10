@@ -29,7 +29,7 @@
                 else
                 {
                     value = this.dataRecord[this.columnOrdinal];
-                    DateTimeOffset dateTimeOffset = (DateTimeOffset)value;
+                    var dateTimeOffset = (DateTimeOffset)value;
                     value = new DateTimeOffsetField(dateTimeOffset);
                 }
 

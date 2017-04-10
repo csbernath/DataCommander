@@ -6,7 +6,6 @@ namespace DataCommander
     using System.Data.Common;
     using System.Data.SqlServerCe;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
     using System.Drawing;
     using System.IO;
     using System.Runtime.Serialization.Formatters.Binary;
@@ -80,9 +79,9 @@ namespace DataCommander
             //
             this.LoadLayout();
 
-            DateTime start = Process.GetCurrentProcess().StartTime;
-            DateTime end = DateTime.Now;
-            TimeSpan elapsed = end - start;
+            var start = Process.GetCurrentProcess().StartTime;
+            var end = DateTime.Now;
+            var elapsed = end - start;
 
             string message = $"Current user: {WindowsIdentity.GetCurrent().Name}. Application loaded in {new StopwatchTimeSpan(elapsed).ToString(3)} seconds.";
             this.toolStripStatusLabel.Text = message;
@@ -100,8 +99,8 @@ namespace DataCommander
 
         public void UpdateTotalMemory()
         {
-            long totalMemory = GC.GetTotalMemory(false);
-            double totalMemoryMB = (double)totalMemory/1024.0/1024.0;
+            var totalMemory = GC.GetTotalMemory(false);
+            var totalMemoryMB = (double)totalMemory/1024.0/1024.0;
             string text = $"{Math.Round(totalMemoryMB, 0)} MB";
 
             this.managedMemoryToolStripStatusLabel.Text = text;
@@ -141,7 +140,7 @@ namespace DataCommander
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.menuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.NewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -471,7 +470,7 @@ namespace DataCommander
 
         private void Connect()
         {
-            ConnectionForm connectionForm = new ConnectionForm(this.statusBar);
+            var connectionForm = new ConnectionForm(this.statusBar);
 
             if (connectionForm.ShowDialog() == DialogResult.OK)
             {
@@ -490,8 +489,8 @@ namespace DataCommander
                 switch (this.WindowState)
                 {
                     case FormWindowState.Normal:
-                        int width = Math.Max(this.ClientSize.Width + 70, 100);
-                        int height = Math.Max(this.ClientSize.Height - 120, 50);
+                        var width = Math.Max(this.ClientSize.Width + 70, 100);
+                        var height = Math.Max(this.ClientSize.Height - 120, 50);
                         queryForm.ClientSize = new Size(width, height);
                         break;
 
@@ -553,33 +552,33 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
         private void SaveLayout()
         {
-            ApplicationData applicationData = DataCommanderApplication.Instance.ApplicationData;
+            var applicationData = DataCommanderApplication.Instance.ApplicationData;
             FormPosition.Save(this, applicationData);
-            ConfigurationNode folder = applicationData.CurrentType;
-            string[] array = new string[this.recentFileList.Count];
+            var folder = applicationData.CurrentType;
+            var array = new string[this.recentFileList.Count];
             this.recentFileList.CopyTo(array, 0);
             folder.Attributes.SetAttributeValue("RecentFileList", array);
         }
 
         private void mnuRecentFile_Click(object sender, EventArgs e)
         {
-            ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
-            int index = this.mnuRecentFileList.DropDownItems.IndexOf(menuItem);
-            int count = this.recentFileList.Count;
-            string path = this.recentFileList[count - index - 1];
+            var menuItem = (ToolStripMenuItem)sender;
+            var index = this.mnuRecentFileList.DropDownItems.IndexOf(menuItem);
+            var count = this.recentFileList.Count;
+            var path = this.recentFileList[count - index - 1];
             this.LoadFiles(new string[] {path});
         }
 
         private void CreateRecentFileListMenu()
         {
-            ToolStripItemCollection menuItems = this.mnuRecentFileList.DropDownItems;
+            var menuItems = this.mnuRecentFileList.DropDownItems;
             menuItems.Clear();
 
-            int count = this.recentFileList.Count;
+            var count = this.recentFileList.Count;
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
-                string path = this.recentFileList[count - i - 1];
+                var path = this.recentFileList[count - i - 1];
                 string text = $"{i + 1} {path}";
                 var menuItem = new ToolStripMenuItem(text, null, this.mnuRecentFile_Click);
                 menuItems.Add(menuItem);
@@ -588,11 +587,11 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
         private void LoadLayout()
         {
-            ApplicationData applicationData = DataCommanderApplication.Instance.ApplicationData;
+            var applicationData = DataCommanderApplication.Instance.ApplicationData;
             FormPosition.Load(applicationData, this);
-            ConfigurationNode folder = applicationData.CurrentType;
+            var folder = applicationData.CurrentType;
             string[] array;
-            bool contains = folder.Attributes.TryGetAttributeValue("RecentFileList", out array);
+            var contains = folder.Attributes.TryGetAttributeValue("RecentFileList", out array);
 
             if (contains && array != null)
             {
@@ -627,7 +626,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                 fileDialog.Filter =
                     "SQL script files(*.sql)|*.sql|Access Files(*.mdb)|*.mdb|Access 2007 Files(*.accdb)|*.accdb|Excel files (*.xls;*.xlsx)|*.xls;*.xlsx|MSI files (*.msi)|*.msi|SQLite files (*.*)|*.*|SQL Server Compact files (*.sdf)|*.sdf|SQL Server Compact 4.0 files (*.sdf)|*.sdf";
                 fileDialog.RestoreDirectory = true;
-                string currentDirectory = Environment.CurrentDirectory;
+                var currentDirectory = Environment.CurrentDirectory;
 
                 if (fileDialog.ShowDialog(this) == DialogResult.OK)
                 {
@@ -636,8 +635,8 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                         Environment.CurrentDirectory = currentDirectory;
                     }
 
-                    string fileName = fileDialog.FileName;
-                    string extension = Path.GetExtension(fileName).ToLower();
+                    var fileName = fileDialog.FileName;
+                    var extension = Path.GetExtension(fileName).ToLower();
                     string connectionString = null;
                     IProvider provider = null;
 
@@ -703,7 +702,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
                     if (provider != null)
                     {
-                        ConnectionBase connection = provider.CreateConnection(connectionString);
+                        var connection = provider.CreateConnection(connectionString);
                         await connection.OpenAsync(CancellationToken.None);
 
                         var connectionProperties = new ConnectionProperties
@@ -745,12 +744,12 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
         public void LoadFiles(string[] fileNames)
         {
-            int i = fileNames.Length - 1;
-            string path = fileNames[i];
-            QueryForm queryForm = (QueryForm) this.ActiveMdiChild;
+            var i = fileNames.Length - 1;
+            var path = fileNames[i];
+            var queryForm = (QueryForm) this.ActiveMdiChild;
             queryForm.LoadFile(path);
 
-            int index = this.recentFileList.IndexOf(path);
+            var index = this.recentFileList.IndexOf(path);
 
             if (index >= 0)
             {
@@ -768,17 +767,17 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             var binaryFormatter = new BinaryFormatter();
             var memoryStream = new MemoryStream();
             binaryFormatter.Serialize(memoryStream, font);
-            byte[] bytes = memoryStream.ToArray();
-            string base64 = Convert.ToBase64String(bytes);
+            var bytes = memoryStream.ToArray();
+            var base64 = Convert.ToBase64String(bytes);
             return base64;
         }
 
         private static Font DeserializeFont(string base64)
         {
-            byte[] bytes = Convert.FromBase64String(base64);
+            var bytes = Convert.FromBase64String(base64);
             var memoryStream = new MemoryStream(bytes);
             var binaryFormatter = new BinaryFormatter();
-            object obj = binaryFormatter.Deserialize(memoryStream);
+            var obj = binaryFormatter.Deserialize(memoryStream);
             var font = (Font)obj;
             return font;
         }
@@ -792,8 +791,8 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             if (dialogResult == DialogResult.OK)
             {
                 this.SelectedFont = fontDialog.Font;
-                ApplicationData applicationData = DataCommanderApplication.Instance.ApplicationData;
-                ConfigurationNode propertyFolder = applicationData.CurrentType;
+                var applicationData = DataCommanderApplication.Instance.ApplicationData;
+                var propertyFolder = applicationData.CurrentType;
                 propertyFolder.Attributes.SetAttributeValue("Font", Serialize(this.SelectedFont));
             }
         }
@@ -860,7 +859,9 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                 }
 
                 var provider = ProviderFactory.CreateProvider(providerName);
+#if CONTRACTS_FULL
                 Contract.Assert(provider != null);
+#endif
                 var connection = provider.CreateConnection(connectionString);
                 await connection.OpenAsync(CancellationToken.None);
 
@@ -921,7 +922,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             while (true)
             {
                 var mdiChildren = this.MdiChildren;
-                int length = mdiChildren.Length;
+                var length = mdiChildren.Length;
                 if (length == 0)
                 {
                     break;
@@ -942,17 +943,17 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             this.toolStripStatusLabel.Text = "Saving all items...";
             log.Write(LogLevel.Trace, "Saving all items...");
 
-            string fileNamePrefix = Path.GetTempPath() + "DataCommander.SaveAll." + '[' + DateTime.Now.ToString("yyyyMMddHHmmss.fff") + ']';
-            int index = 1;
-            foreach (Form mdiChild in this.MdiChildren)
+            var fileNamePrefix = Path.GetTempPath() + "DataCommander.SaveAll." + '[' + DateTime.Now.ToString("yyyyMMddHHmmss.fff") + ']';
+            var index = 1;
+            foreach (var mdiChild in this.MdiChildren)
             {
                 var queryForm = mdiChild as QueryForm;
                 if (queryForm != null)
                 {
-                    string text = queryForm.QueryTextBox.Text;
+                    var text = queryForm.QueryTextBox.Text;
                     if (!string.IsNullOrEmpty(text))
                     {
-                        string fileName = fileNamePrefix + '[' + index.ToString().PadLeft(3, '0') + "].sql";
+                        var fileName = fileNamePrefix + '[' + index.ToString().PadLeft(3, '0') + "].sql";
                         text = text.Replace("\n", "\r\n");
                         File.WriteAllText(fileName, text, Encoding.UTF8);
                         index++;
@@ -972,7 +973,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
         private void checkForToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string url = "https://github.com/csbernath/DataCommander/releases";
+            var url = "https://github.com/csbernath/DataCommander/releases";
             Process.Start(url);
         }
 

@@ -4,7 +4,6 @@ namespace DataCommander.Foundation.Data.SqlClient
     using System.ComponentModel;
     using System.Data;
     using System.Data.SqlClient;
-    using System.Diagnostics.Contracts;
     using System.Text;
     using System.Threading;
     using DataCommander.Foundation.Diagnostics;
@@ -15,9 +14,9 @@ namespace DataCommander.Foundation.Data.SqlClient
     /// </summary>
     public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
     {
-        private static readonly ILog log = LogFactory.Instance.GetTypeLog(typeof (SafeSqlConnection));
+        private static readonly ILog log = LogFactory.Instance.GetTypeLog(typeof(SafeSqlConnection));
         private readonly CancellationToken cancellationToken = CancellationToken.None;
-        private Int16 id;
+        private short id;
 
         /// <summary>
         /// 
@@ -49,14 +48,14 @@ namespace DataCommander.Foundation.Data.SqlClient
 
         #endregion
 
-        internal static Int16 GetId(IDbConnection connection)
+        internal static short GetId(IDbConnection connection)
         {
             var transactionScope = new DbTransactionScope(connection, null);
-            Int16 id = 0;
+            short id = 0;
 
             try
             {
-                id = (Int16)transactionScope.ExecuteScalar(new CommandDefinition {CommandText = "select @@spid"});
+                id = (short)transactionScope.ExecuteScalar(new CommandDefinition {CommandText = "select @@spid"});
             }
             catch (Exception e)
             {
@@ -92,7 +91,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             sb.AppendFormat("SafeSqlConnection.HandleException(connection), elapsed: {0}, exception:\r\n{1}", elapsed, exception.ToLogString());
             var sqlException = exception as SqlException;
             var handled = false;
-            var timeout = 1*60*1000; // 1 minutes
+            var timeout = 1 * 60 * 1000; // 1 minutes
 
             if (sqlException != null)
             {
@@ -106,12 +105,12 @@ namespace DataCommander.Foundation.Data.SqlClient
                     case 2:
                         // A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections
                         handled = true;
-                        timeout = 5*1000; // 5 seconds
+                        timeout = 5 * 1000; // 5 seconds
                         break;
 
                     case 4060: // Cannot open database requested in login '%.*ls'. Login fails.
                         handled = true;
-                        timeout = 5*1000; // 5 seconds;
+                        timeout = 5 * 1000; // 5 seconds;
                         break;
 
                     default:
@@ -163,7 +162,9 @@ namespace DataCommander.Foundation.Data.SqlClient
 
         internal static void HandleException(Exception exception, IDbCommand command, CancellationToken cancellationToken)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
 
             var separator = new string('-', 80);
             var sb = new StringBuilder();
@@ -203,7 +204,7 @@ namespace DataCommander.Foundation.Data.SqlClient
 
             if (handled)
             {
-                cancellationToken.WaitHandle.WaitOne(1*60*1000); // 1 minutes
+                cancellationToken.WaitHandle.WaitOne(1 * 60 * 1000); // 1 minutes
             }
             else
             {

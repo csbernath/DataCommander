@@ -2,7 +2,6 @@ namespace DataCommander.Providers.Wmi
 {
     using System;
     using System.Data;
-    using System.Diagnostics.Contracts;
     using System.Management;
     using System.Text;
 
@@ -15,13 +14,15 @@ namespace DataCommander.Providers.Wmi
 
         public WmiDataReader(WmiCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires(command != null);
+#endif
 
             this.command = command;
 
             var query = new ObjectQuery(command.CommandText);
             var searcher = new ManagementObjectSearcher(command.Connection.Scope, query);
-            ManagementObjectCollection objects = searcher.Get();
+            var objects = searcher.Get();
             this.enumerator = objects.GetEnumerator();
         }
 
@@ -131,14 +132,14 @@ namespace DataCommander.Providers.Wmi
 
         public int GetValues(object[] values)
         {
-            ManagementBaseObject baseObject = this.enumerator.Current;
-            PropertyDataCollection.PropertyDataEnumerator enumerator = baseObject.Properties.GetEnumerator();
-            int i = 0;
+            var baseObject = this.enumerator.Current;
+            var enumerator = baseObject.Properties.GetEnumerator();
+            var i = 0;
 
             while (i < values.Length && enumerator.MoveNext())
             {
-                PropertyData propertyData = enumerator.Current;
-                object value = propertyData.Value;
+                var propertyData = enumerator.Current;
+                var value = propertyData.Value;
 
                 if (value == null)
                 {
@@ -149,7 +150,7 @@ namespace DataCommander.Providers.Wmi
                     switch (propertyData.Type)
                     {
                         case CimType.DateTime:
-                            string dmtfDate = value.ToString();
+                            var dmtfDate = value.ToString();
                             var sb = new StringBuilder();
                             sb.Append( dmtfDate.Substring( 0, 4 ) );
                             sb.Append( '-' );
@@ -215,7 +216,7 @@ namespace DataCommander.Providers.Wmi
 
             if (this.firstObject == null)
             {
-                bool moveNext = this.enumerator.MoveNext();
+                var moveNext = this.enumerator.MoveNext();
                 this.firstRead = true;
 
                 if (moveNext)
@@ -225,16 +226,16 @@ namespace DataCommander.Providers.Wmi
                 }
                 else
                 {
-                    string query = this.command.CommandText;
-                    int index = 0;
-                    bool fromFound = false;
+                    var query = this.command.CommandText;
+                    var index = 0;
+                    var fromFound = false;
                     string className = null;
 
                     while (true)
                     {
-                        int wordStart = QueryTextBox.NextWordStart(query, index);
-                        int wordEnd = QueryTextBox.WordEnd(query, wordStart);
-                        string word = query.Substring(wordStart, wordEnd - wordStart + 1);
+                        var wordStart = QueryTextBox.NextWordStart(query, index);
+                        var wordEnd = QueryTextBox.WordEnd(query, wordStart);
+                        var word = query.Substring(wordStart, wordEnd - wordStart + 1);
 
                         if (fromFound)
                         {
@@ -251,16 +252,16 @@ namespace DataCommander.Providers.Wmi
                     }
 
                     query = $"SELECT * FROM meta_class WHERE __this ISA '{className}'";
-                    ObjectQuery objectQuery = new ObjectQuery(query);
-                    ManagementObjectSearcher searcher = new ManagementObjectSearcher(this.command.Connection.Scope, objectQuery);
-                    ManagementObjectCollection objects = searcher.Get();
-                    ManagementObjectCollection.ManagementObjectEnumerator enumerator2 = objects.GetEnumerator();
+                    var objectQuery = new ObjectQuery(query);
+                    var searcher = new ManagementObjectSearcher(this.command.Connection.Scope, objectQuery);
+                    var objects = searcher.Get();
+                    var enumerator2 = objects.GetEnumerator();
                     enumerator2.MoveNext();
                     properties = enumerator2.Current.Properties;
                 }
             }
 
-            DataTable schemaTable = new DataTable();
+            var schemaTable = new DataTable();
             schemaTable.Columns.Add("ColumnName", typeof(string));
             schemaTable.Columns.Add("ColumnSize", typeof(int));
             schemaTable.Columns.Add("DataType", typeof(Type));
@@ -269,11 +270,11 @@ namespace DataCommander.Providers.Wmi
             schemaTable.Columns.Add("NumericPrecision", typeof(int));
             schemaTable.Columns.Add("NumericScale", typeof(int));
             schemaTable.Columns.Add("IsArray", typeof(bool));
-            object[] values = new object[8];
+            var values = new object[8];
 
-            foreach (PropertyData propertyData in properties)
+            foreach (var propertyData in properties)
             {
-                CimType cimType = propertyData.Type;
+                var cimType = propertyData.Type;
                 Type dataType;
                 int size;
 
@@ -326,7 +327,7 @@ namespace DataCommander.Providers.Wmi
                 if (propertyData.IsArray)
                 {
                     providerType = (int)cimType | 0x1000;
-                    string typeName = dataType.FullName + "[]";
+                    var typeName = dataType.FullName + "[]";
                     dataType = Type.GetType(typeName);
                     providerTypeStr = cimType.ToString() + "[]";
                 }

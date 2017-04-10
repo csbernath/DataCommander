@@ -1,7 +1,6 @@
 namespace DataCommander.Foundation
 {
     using System;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -15,7 +14,9 @@ namespace DataCommander.Foundation
         /// <returns></returns>
         public static DateTime Today(this IDateTimeProvider dateTimeProvider)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dateTimeProvider != null);
+#endif
 
             return dateTimeProvider.Now.Date;
         }

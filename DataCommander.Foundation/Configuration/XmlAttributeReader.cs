@@ -1,7 +1,5 @@
 ﻿namespace DataCommander.Foundation.Configuration
 {
-    using System;
-    using System.Diagnostics.Contracts;
     using System.Xml;
 
     /// <summary>
@@ -17,8 +15,9 @@
         /// <param name="attributes"></param>
         public XmlAttributeReader(XmlAttributeCollection attributes)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(attributes != null);
-
+#endif
             this.attributes = attributes;
         }
 
@@ -31,7 +30,9 @@
         /// <returns></returns>
         public static bool TryGetValue(XmlAttributeCollection attributes, string name, out string value)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(attributes != null);
+#endif
 
             var attribute = attributes[name];
             var contains = attribute != null;

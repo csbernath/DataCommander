@@ -3,7 +3,6 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using DataCommander.Foundation.Linq;
 
     /// <summary>
@@ -82,7 +81,9 @@
         /// <param name="item"></param>
         public void Add(T item)
         {
+#if CONTRACTS_FULL
             Contract.Assert(this.Count < this.maxSize);
+#endif
 
             if (this.Count == this.array.Length)
             {
@@ -148,9 +149,9 @@
             throw new NotSupportedException();
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable<T> Members
+#region IEnumerable<T> Members
 
         /// <summary>
         /// 
@@ -164,15 +165,15 @@
             }
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable Members
+#region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
         }
 
-        #endregion
+#endregion
     }
 }

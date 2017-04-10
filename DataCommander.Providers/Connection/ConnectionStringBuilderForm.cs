@@ -7,7 +7,6 @@ namespace DataCommander.Providers
     using System.Data.OleDb;
     using System.Text;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Configuration;
     using DataCommander.Foundation.Data;
     using Foundation;
 
@@ -29,11 +28,11 @@ namespace DataCommander.Providers
             this.oleDbProviderLabel.Visible = false;
             this.oleDbProvidersComboBox.Visible = false;
 
-            List<string> list = ProviderFactory.Providers;
+            var list = ProviderFactory.Providers;
             list.Sort();
             this.providers = list;
 
-            foreach (string provider in this.providers)
+            foreach (var provider in this.providers)
             {
                 this.providersComboBox.Items.Add(provider);
             }
@@ -61,7 +60,7 @@ namespace DataCommander.Providers
             {
                 this.connectionProperties = value;
                 this.connectionNameTextBox.Text = this.connectionProperties.ConnectionName;
-                string providerName = this.connectionProperties.ProviderName;
+                var providerName = this.connectionProperties.ProviderName;
                 this.providersComboBox.Text = providerName;
                 var provider = ProviderFactory.CreateProvider(providerName);
                 this.dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
@@ -101,13 +100,13 @@ namespace DataCommander.Providers
 
             using (IDataReader dataReader = OleDbEnumerator.GetRootEnumerator())
             {
-                int sourceName = dataReader.GetOrdinal("SOURCES_NAME");
-                int sourceDescription = dataReader.GetOrdinal("SOURCES_DESCRIPTION");
+                var sourceName = dataReader.GetOrdinal("SOURCES_NAME");
+                var sourceDescription = dataReader.GetOrdinal("SOURCES_DESCRIPTION");
 
                 while (dataReader.Read())
                 {
-                    string name = dataReader.GetString(sourceName);
-                    string description = dataReader.GetString(sourceDescription);
+                    var name = dataReader.GetString(sourceName);
+                    var description = dataReader.GetString(sourceDescription);
                     var item = new OleDbProviderInfo(name, description);
                     this.oleDbProviders.Add(item);
                     this.oleDbProvidersComboBox.Items.Add(description);
@@ -119,8 +118,8 @@ namespace DataCommander.Providers
         {
             try
             {
-                int index = this.providersComboBox.SelectedIndex;
-                string providerName = this.providers[index];
+                var index = this.providersComboBox.SelectedIndex;
+                var providerName = this.providers[index];
                 var provider = ProviderFactory.CreateProvider(providerName);
                 this.tempConnectionProperties.Provider = provider;
                 this.dbProviderFactory = provider.DbProviderFactory;
@@ -146,7 +145,7 @@ namespace DataCommander.Providers
 
             if (dataSourceArray != null)
             {
-                for (int i = 0; i < dataSourceArray.Length; i++)
+                for (var i = 0; i < dataSourceArray.Length; i++)
                 {
                     this.dataSourcesComboBox.Items.Add(dataSourceArray[i]);
                 }
@@ -155,11 +154,11 @@ namespace DataCommander.Providers
 
         private void GetDataSources(bool refresh)
         {
-            ApplicationData applicationData = DataCommanderApplication.Instance.ApplicationData;
-            ConfigurationNode folder = applicationData.CurrentType;
+            var applicationData = DataCommanderApplication.Instance.ApplicationData;
+            var folder = applicationData.CurrentType;
             folder = folder.CreateNode(this.tempConnectionProperties.Provider.Name);
             string[] dataSourceArray;
-            bool contains = folder.Attributes.TryGetAttributeValue("Data Sources", out dataSourceArray);
+            var contains = folder.Attributes.TryGetAttributeValue("Data Sources", out dataSourceArray);
 
             if (!contains || refresh)
             {
@@ -173,8 +172,8 @@ namespace DataCommander.Providers
 
                     foreach (DataRow row in this.dataSources.Rows)
                     {
-                        string serverName = row.GetValueOrDefault<string>("ServerName");
-                        string instanceName = row.GetValueOrDefault<string>("InstanceName");
+                        var serverName = row.GetValueOrDefault<string>("ServerName");
+                        var instanceName = row.GetValueOrDefault<string>("InstanceName");
                         var sb = new StringBuilder();
 
                         if (serverName != null)
@@ -188,7 +187,7 @@ namespace DataCommander.Providers
                             sb.Append(instanceName);
                         }
 
-                        string dataSource = sb.ToString();
+                        var dataSource = sb.ToString();
                         dataSourceList.Add(dataSource);
                     }
 
@@ -212,12 +211,12 @@ namespace DataCommander.Providers
 
         private void dataSourcesComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string dataSource = this.dataSourcesComboBox.Text;
+            var dataSource = this.dataSourcesComboBox.Text;
         }
 
         private void refreshButton_Click(object sender, EventArgs e)
         {
-            string provider = this.providersComboBox.Text;
+            var provider = this.providersComboBox.Text;
 
             if (provider.Length > 0)
             {
@@ -229,7 +228,7 @@ namespace DataCommander.Providers
         {
             if (this.dataSources == null)
             {
-                string provider = this.providersComboBox.Text;
+                var provider = this.providersComboBox.Text;
 
                 if (provider.Length > 0)
                 {
@@ -240,7 +239,7 @@ namespace DataCommander.Providers
 
         private DbConnection CreateConnection()
         {
-            string dataSource = this.dataSourcesComboBox.Text;
+            var dataSource = this.dataSourcesComboBox.Text;
             this.SaveTo(this.dbConnectionStringBuilder);
             var connection = this.dbProviderFactory.CreateConnection();
             connection.ConnectionString = this.dbConnectionStringBuilder.ConnectionString;
@@ -249,27 +248,27 @@ namespace DataCommander.Providers
 
         private void initialCatalogComboBox_DropDown(object sender, EventArgs e)
         {
-            string dataSource = this.dataSourcesComboBox.Text;
+            var dataSource = this.dataSourcesComboBox.Text;
 
             if (!string.IsNullOrWhiteSpace(dataSource) && this.initialCatalogs == null)
             {
                 try
                 {
-                    using (DbConnection connection = this.CreateConnection())
+                    using (var connection = this.CreateConnection())
                     {
                         connection.Open();
-                        DataTable schema = connection.GetSchema("Databases");
+                        var schema = connection.GetSchema("Databases");
                         this.initialCatalogs = new List<string>();
 
                         foreach (DataRow row in schema.Rows)
                         {
-                            string database = (string)row["database_name"];
+                            var database = (string)row["database_name"];
                             this.initialCatalogs.Add(database);
                         }
 
                         this.initialCatalogs.Sort();
 
-                        foreach (string database in this.initialCatalogs)
+                        foreach (var database in this.initialCatalogs)
                         {
                             this.initialCatalogComboBox.Items.Add(database);
                         }
@@ -325,7 +324,7 @@ namespace DataCommander.Providers
 
         private void SaveTo(ConnectionProperties connectionProperties)
         {
-            string providerName = this.providersComboBox.Text;
+            var providerName = this.providersComboBox.Text;
             var provider = ProviderFactory.CreateProvider(providerName);
             this.dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
             this.SaveTo(this.dbConnectionStringBuilder);

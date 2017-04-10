@@ -1,9 +1,7 @@
 ﻿namespace DataCommander.Foundation.Collections
 {
-    using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -25,7 +23,9 @@
         /// <param name="segmentItemCapacity"></param>
         public SegmentedListBuilder(int segmentItemCapacity)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentOutOfRangeException>(segmentItemCapacity > 0);
+#endif
             this.segmentItemCapacity = segmentItemCapacity;
         }
 
@@ -93,7 +93,7 @@
                 this.count = count;
             }
 
-            #region IReadOnlyList<T> Members
+#region IReadOnlyList<T> Members
 
             T IReadOnlyList<T>.this[int index]
             {
@@ -136,7 +136,7 @@
                 return ((IEnumerable<T>)this).GetEnumerator();
             }
 
-            #endregion
+#endregion
         }
     }
 }

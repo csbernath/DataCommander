@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Linq;
     using DataCommander.Foundation;
@@ -23,7 +22,9 @@
 
         public TfsDownloadDataReader(TfsCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
             this.command = command;
         }
 
@@ -33,7 +34,7 @@
 
         public override DataTable GetSchemaTable()
         {
-            DataTable table = CreateSchemaTable();
+            var table = CreateSchemaTable();
             AddSchemaRowString(table, "ServerItem", false);
             AddSchemaRowInt32(table, "ItemType", false);
             AddSchemaRowDateTime(table, "CheckinDate", false);
@@ -54,7 +55,7 @@
                 if (this.first)
                 {
                     this.first = false;
-                    string serverPath = (string)this.command.Parameters["serverPath"].Value;
+                    var serverPath = (string)this.command.Parameters["serverPath"].Value;
                     this.item = this.command.Connection.VersionControlServer.GetItem(serverPath);
                     this.localPath = Database.GetValueOrDefault<string>(this.command.Parameters["localPath"].Value);
 
@@ -67,7 +68,7 @@
                         {
                             case ItemType.File:
                             case ItemType.Folder:
-                                string name = VersionControlPath.GetFileName(this.item.ServerItem);
+                                var name = VersionControlPath.GetFileName(this.item.ServerItem);
                                 this.localPath = Path.Combine(this.localPath, name);
                                 break;
 
@@ -90,19 +91,19 @@
 
                 if (this.queue.Count > 0)
                 {
-                    Item current = this.queue.Dequeue();
-                    object[] values = new object[4];
+                    var current = this.queue.Dequeue();
+                    var values = new object[4];
                     values[0] = current.ServerItem;
                     values[1] = current.ItemType;
                     values[2] = current.CheckinDate;
                     values[3] = current.ContentLength;
                     this.Values = values;
-                    string name = VersionControlPath.GetFileName(current.ServerItem);
+                    var name = VersionControlPath.GetFileName(current.ServerItem);
                     string path;
 
                     if (this.item.ServerItem.Length + 1 <= current.ServerItem.Length)
                     {
-                        string secondPath = current.ServerItem.Substring(this.item.ServerItem.Length + 1);
+                        var secondPath = current.ServerItem.Substring(this.item.ServerItem.Length + 1);
                         secondPath = secondPath.Replace(VersionControlPath.Separator, Path.DirectorySeparatorChar);
                         path = Path.Combine(this.localPath, secondPath);
                     }
@@ -116,8 +117,8 @@
                         case ItemType.File:
                             log.Write(LogLevel.Trace, "Downloading {0}...", current.ServerItem);
                             current.DownloadFile(path);
-                            DateTime checkingDate = current.CheckinDate;
-                            FileInfo fileInfo = new FileInfo(path);
+                            var checkingDate = current.CheckinDate;
+                            var fileInfo = new FileInfo(path);
                             fileInfo.LastWriteTime = checkingDate;
                             fileInfo.Attributes = FileAttributes.ReadOnly;
                             break;
@@ -125,7 +126,7 @@
                         case ItemType.Folder:
                             if (!Directory.Exists(path))
                             {
-                                DirectoryInfo directoryInfo = Directory.CreateDirectory(path);
+                                var directoryInfo = Directory.CreateDirectory(path);
 
                                 if (!directoryInfo.Exists)
                                 {
@@ -133,9 +134,9 @@
                                 }
                             }
 
-                            ItemSet itemSet = current.VersionControlServer.GetItems(current.ServerItem, RecursionType.OneLevel);
+                            var itemSet = current.VersionControlServer.GetItems(current.ServerItem, RecursionType.OneLevel);
 
-                            foreach (Item childItem in itemSet.Items.Skip(1))
+                            foreach (var childItem in itemSet.Items.Skip(1))
                             {
                                 this.queue.Enqueue(childItem);
                             }

@@ -1,6 +1,5 @@
 namespace DataCommander.Providers.Odp.DataFieldReader
 {
-    using System;
     using Oracle.ManagedDataAccess.Types;
 
     internal sealed class OracleTimeStampLTZField
@@ -14,7 +13,7 @@ namespace DataCommander.Providers.Odp.DataFieldReader
 
         public override string ToString()
         {
-            DateTime dateTime = this.value.Value;
+            var dateTime = this.value.Value;
             return dateTime.ToString( "yyyy-MM-dd HH:mm:ss.ffffff" );
         }
     }

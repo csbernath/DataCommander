@@ -1,9 +1,7 @@
 ﻿namespace DataCommander.Foundation.Collections
 {
-    using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -26,11 +24,13 @@
         /// <param name="count"></param>
         public ReadOnlyListSegment(IReadOnlyList<T> list, int offset, int count)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(list != null);
             Contract.Requires<ArgumentOutOfRangeException>(offset >= 0);
             Contract.Requires<ArgumentOutOfRangeException>(count >= 0);
             Contract.Requires<ArgumentOutOfRangeException>(0 <= offset && offset < list.Count);
             Contract.Requires<ArgumentOutOfRangeException>(0 <= offset + count && offset + count <= list.Count);
+#endif
 
             this.list = list;
             this.offset = offset;

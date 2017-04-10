@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation.Configuration
 {
     using System;
-    using System.Diagnostics.Contracts;
     using System.Globalization;
 
     /// <summary>
@@ -36,7 +35,9 @@
         /// <param name="tryGetValue"></param>
         public NameValueCollectionReader(TryGetValue<string, string> tryGetValue)
         {
+#if CONTRACTS_FULL
             Contract.Requires(tryGetValue != null);
+#endif
             this.tryGetValue = tryGetValue;
         }
 
@@ -134,7 +135,9 @@
             if (contains)
             {
                 var succeeded = DateTime.TryParse(s, provider, styles, out value);
+#if CONTRACTS_FULL
                 Contract.Assert(succeeded);
+#endif
             }
             else
             {
@@ -158,7 +161,9 @@
             if (contains)
             {
                 var succeeded = double.TryParse(s, out value);
+#if CONTRACTS_FULL
                 Contract.Assert(succeeded);
+#endif
             }
             else
             {
@@ -184,7 +189,9 @@
             if (contains)
             {
                 var succeeded = double.TryParse(s, style, provider, out value);
+#if CONTRACTS_FULL
                 Contract.Assert(succeeded);
+#endif
             }
             else
             {
@@ -226,9 +233,9 @@
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetInt16(string name, out Int16 value)
+        public bool TryGetInt16(string name, out short value)
         {
-            var contains = this.TryGetValue(name, Int16.TryParse, out value);
+            var contains = this.TryGetValue(name, short.TryParse, out value);
             return contains;
         }
 
@@ -264,19 +271,21 @@
         /// <param name="provider"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetSingle(string name, NumberStyles style, IFormatProvider provider, out Single value)
+        public bool TryGetSingle(string name, NumberStyles style, IFormatProvider provider, out float value)
         {
             string s;
             var contains = this.tryGetValue(name, out s);
 
             if (contains)
             {
-                var succeeded = Single.TryParse(s, style, provider, out value);
+                var succeeded = float.TryParse(s, style, provider, out value);
+#if CONTRACTS_FULL
                 Contract.Assert(succeeded);
+#endif
             }
             else
             {
-                value = default(Single);
+                value = default(float);
             }
 
             return contains;
@@ -328,14 +337,18 @@
         /// <returns></returns>
         public bool TryGetValue<T>(string name, TryParse<T> tryParse, out T value)
         {
+#if CONTRACTS_FULL
             Contract.Requires(tryParse != null);
+#endif
             string s;
             var contains = this.tryGetValue(name, out s);
 
             if (contains)
             {
                 var succeeded = tryParse(s, out value);
+#if CONTRACTS_FULL
                 Contract.Assert(succeeded);
+#endif
             }
             else
             {

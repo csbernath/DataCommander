@@ -10,7 +10,7 @@ namespace DataCommander.Foundation.Data.SqlClient
     public class SafeLoggedSqlConnection : SafeDbConnection, ISafeDbConnection
     {
         private readonly CancellationToken cancellationToken;
-        private Int16 id;
+        private short id;
 
         /// <summary>
         /// 

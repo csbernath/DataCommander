@@ -1,7 +1,6 @@
 namespace DataCommander.Foundation
 {
     using System;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -29,7 +28,9 @@ namespace DataCommander.Foundation
         /// <returns></returns>
         public ArgumentIsSelection<TArgument> IfArgumentIs<TArgumentAs>(Action<TArgumentAs> action) where TArgumentAs : class
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(action != null);
+#endif
 
             if (!this.selected)
             {
@@ -51,7 +52,9 @@ namespace DataCommander.Foundation
         /// <returns></returns>
         public ArgumentIsSelection<TArgument> IfArgumentIsNull(Action action)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(action != null);
+#endif
 
             if (!this.selected)
             {
@@ -73,7 +76,9 @@ namespace DataCommander.Foundation
         /// <returns></returns>
         public ArgumentIsSelection<TArgument> If(Func<bool> condition, Action action)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(action != null);
+#endif
 
             if (!this.selected)
             {
@@ -93,7 +98,9 @@ namespace DataCommander.Foundation
         /// <param name="action"></param>
         public void Else(Action action)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(action != null);
+#endif
 
             if (!this.selected)
             {

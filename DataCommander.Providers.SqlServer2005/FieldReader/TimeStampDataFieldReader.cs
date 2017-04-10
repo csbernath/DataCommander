@@ -17,7 +17,7 @@ namespace DataCommander.Providers.SqlServer2005.FieldReader
         {
             get
             {
-                object o = this.sqlDataReader.GetValue(this.columnOrdinal);
+                var o = this.sqlDataReader.GetValue(this.columnOrdinal);
                 return o;
             }
         }

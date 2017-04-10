@@ -2,7 +2,6 @@ namespace DataCommander.Foundation.Threading
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Linq;
     using System.Threading;
@@ -99,7 +98,9 @@ namespace DataCommander.Foundation.Threading
 
         internal static void Add(WorkerThread thread)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(thread != null);
+#endif
 
             lock (threads)
             {

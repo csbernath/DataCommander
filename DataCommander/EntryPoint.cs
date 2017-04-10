@@ -23,15 +23,15 @@ namespace DataCommander
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 
-                string path = Path.GetTempPath();
+                var path = Path.GetTempPath();
                 using (var methodLog = LogFactory.Instance.GetCurrentMethodLog())
                 {
                     try
                     {
-                        string applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(false);
-                        string fileName = applicationDataFolderPath + Path.DirectorySeparatorChar + "ApplicationData.xml";
+                        var applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(false);
+                        var fileName = applicationDataFolderPath + Path.DirectorySeparatorChar + "ApplicationData.xml";
                         methodLog.Write(LogLevel.Trace, "fileName: {0}", fileName);
-                        string sectionName = Settings.SectionName;
+                        var sectionName = Settings.SectionName;
                         var dataCommanderApplication = DataCommanderApplication.Instance;
                         dataCommanderApplication.LoadApplicationData(fileName, sectionName);
                         dataCommanderApplication.Run();

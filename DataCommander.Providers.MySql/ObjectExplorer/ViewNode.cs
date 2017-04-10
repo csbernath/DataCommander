@@ -56,7 +56,7 @@ from {this.databaseNode.Name}.{this.name}";
         private void ShowCreateTable_Click(object sender, EventArgs e)
         {
             string commandText = $"show create table {this.databaseNode.Name}.{this.name}";
-            string createTableStatement = MySqlClientFactory.Instance.ExecuteReader(
+            var createTableStatement = MySqlClientFactory.Instance.ExecuteReader(
                 this.databaseNode.ObjectExplorer.ConnectionString,
                 new CommandDefinition {CommandText = commandText},
                 CommandBehavior.Default,

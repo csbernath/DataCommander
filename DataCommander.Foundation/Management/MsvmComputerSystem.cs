@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Management;
     using System.Text;
@@ -21,7 +20,9 @@
         /// <param name="managementObject"></param>
         public MsvmComputerSystem(ManagementObject managementObject)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(managementObject != null);
+#endif
 
             this.managementObject = managementObject;
         }
@@ -34,11 +35,15 @@
         /// <returns></returns>
         public static MsvmComputerSystem GetByName(ManagementScope managementScope, string name)
         {
+#if CONTRACTS_FULL
             Contract.Requires(managementScope != null);
+#endif
 
             string query = $"SELECT * FROM Msvm_ComputerSystem WHERE Name='{name}'";
             var list = managementScope.ExecuteQuery(query, mo => new MsvmComputerSystem(mo));
+#if CONTRACTS_FULL
             Contract.Assert(list.Count > 0);
+#endif
             MsvmComputerSystem item;
 
             if (list.Count == 0)
@@ -61,7 +66,9 @@
         /// <returns></returns>
         public static List<MsvmComputerSystem> GetByElementName(ManagementScope managementScope, string elementName)
         {
+#if CONTRACTS_FULL
             Contract.Requires(managementScope != null);
+#endif
 
             string query = $"SELECT * FROM Msvm_ComputerSystem WHERE ElementName='{elementName}'";
             var list = managementScope.ExecuteQuery(query, mo => new MsvmComputerSystem(mo));
@@ -77,8 +84,10 @@
         public static List<MsvmComputerSystem> GetByElementNames(ManagementScope managementScope,
             IEnumerable<string> elementNames)
         {
+#if CONTRACTS_FULL
             Contract.Requires(managementScope != null);
             Contract.Requires(elementNames != null);
+#endif
 
             var sb = new StringBuilder();
             sb.AppendFormat("SELECT * FROM Msvm_ComputerSystem WHERE");
@@ -124,7 +133,7 @@
             get
             {
                 var enabledStateObject = this.managementObject["EnabledState"];
-                var enabledStateUint16 = (UInt16) enabledStateObject;
+                var enabledStateUint16 = (ushort) enabledStateObject;
                 var enabledState = (MsvmComputerSystemEnabledState) enabledStateUint16;
                 return enabledState;
             }
@@ -151,7 +160,7 @@
             get
             {
                 var onTimeObject = this.managementObject["OnTimeInMilliseconds"];
-                var onTimeUInt64 = (UInt64) onTimeObject;
+                var onTimeUInt64 = (ulong) onTimeObject;
                 TimeSpan? onTime;
 
                 if (onTimeUInt64 != 0)
@@ -190,7 +199,7 @@
                     reason
                 });
 
-            var result = (UInt32) resultObject;
+            var result = (uint) resultObject;
             return (InitiateShutdownReturnValue) result;
         }
 

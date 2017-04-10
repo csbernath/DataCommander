@@ -278,7 +278,7 @@ namespace DataCommander.Foundation.Data.PTypes
             }
             else
             {
-                sp = (Double) scalar;
+                sp = (double) scalar;
             }
 
             return sp;
@@ -303,7 +303,7 @@ namespace DataCommander.Foundation.Data.PTypes
             }
             else
             {
-                sp = (Int16) scalar;
+                sp = (short) scalar;
             }
 
             return sp;

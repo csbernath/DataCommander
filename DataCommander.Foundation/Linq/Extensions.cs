@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Xml;
     using System.Xml.Serialization;
@@ -78,7 +77,9 @@
         /// <returns></returns>
         public static bool In<T>(this T item, params T[] collection)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(collection != null);
+#endif
             return collection.Contains(item);
         }
 

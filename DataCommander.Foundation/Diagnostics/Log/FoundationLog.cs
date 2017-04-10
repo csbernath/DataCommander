@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation.Diagnostics
 {
     using System;
-    using System.Diagnostics.Contracts;
 
     internal sealed class FoundationLog : ILog
     {
@@ -14,7 +13,9 @@
 
         public FoundationLog(FoundationLogFactory applicationLog, string name)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(applicationLog != null);
+#endif
 
             this.applicationLog = applicationLog;
             this.name = name;
@@ -23,7 +24,7 @@
 
         public string LoggedName { get; set; }
 
-        #region ILog Members
+#region ILog Members
 
         bool ILog.IsErrorEnabled => true;
 
@@ -125,14 +126,14 @@
             this.applicationLog.Write(this, logLevel, getMessage);
         }
 
-        #endregion
+#endregion
 
-        #region IDisposable Members
+#region IDisposable Members
 
         void IDisposable.Dispose()
         {
         }
 
-        #endregion
+#endregion
     }
 }

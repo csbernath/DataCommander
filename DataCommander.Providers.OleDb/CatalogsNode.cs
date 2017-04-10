@@ -1,7 +1,6 @@
 namespace DataCommander.Providers.OleDb
 {
     using System.Collections.Generic;
-    using System.Data;
     using System.Data.OleDb;
     using System.Windows.Forms;
 
@@ -25,14 +24,14 @@ namespace DataCommander.Providers.OleDb
 
             try
             {
-                DataTable dataTable = this.connection.GetOleDbSchemaTable(OleDbSchemaGuid.Catalogs, null);
-                int count = dataTable.Rows.Count;
-                DataColumn nameColumn = dataTable.Columns["CATALOG_NAME"];
+                var dataTable = this.connection.GetOleDbSchemaTable(OleDbSchemaGuid.Catalogs, null);
+                var count = dataTable.Rows.Count;
+                var nameColumn = dataTable.Columns["CATALOG_NAME"];
                 treeNodes = new ITreeNode[count];
 
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
-                    string name = (string)dataTable.Rows[i][nameColumn];
+                    var name = (string)dataTable.Rows[i][nameColumn];
                     treeNodes[i] = new CatalogNode(this.connection, name);
                 }
             }

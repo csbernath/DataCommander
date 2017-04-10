@@ -186,8 +186,8 @@
 
         internal static DataTable CreateSchemaTable()
         {
-            DataTable table = new DataTable();
-            DataColumnCollection columns = table.Columns;
+            var table = new DataTable();
+            var columns = table.Columns;
             columns.Add(SchemaTableColumn.ColumnName, typeof(string));
             columns.Add(SchemaTableColumn.ColumnOrdinal, typeof(int));
             columns.Add(SchemaTableColumn.ColumnSize, typeof(int));

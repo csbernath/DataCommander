@@ -5,7 +5,6 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
-    using System.Diagnostics.Contracts;
     using System.Threading;
     using System.Threading.Tasks;
     using DataCommander.Foundation;
@@ -44,7 +43,9 @@
             Action<IDbTransaction> setTransaction,
             CancellationToken cancellationToken)
         {
+#if CONTRACTS_FULL
             Contract.Requires(destinationProvider.DbProviderFactory == SqlClientFactory.Instance);
+#endif
             this.destinationSqlConnection = (SqlConnection)destinationConnection.Connection;
 
             this.logResultWriter = new LogResultWriter(addInfoMessage);
@@ -57,7 +58,7 @@
             this.cancellationToken = cancellationToken;
         }
 
-        #region IResultWriter Members
+#region IResultWriter Members
 
         void IResultWriter.Begin(IProvider provider)
         {
@@ -114,14 +115,14 @@
                 var rows = item.Rows;
                 var dataTable = new DataTable();
 
-                for (int rowIndex = 0; rowIndex < rows.Length; rowIndex++)
+                for (var rowIndex = 0; rowIndex < rows.Length; rowIndex++)
                 {
                     var row = rows[rowIndex];
                     var dataRow = dataTable.NewRow();
-                    for (int columnIndex = 0; columnIndex < row.Length; columnIndex++)
+                    for (var columnIndex = 0; columnIndex < row.Length; columnIndex++)
                     {
-                        object sourceValue = row[columnIndex];
-                        Converter<object, object> converter = this.converters[columnIndex];
+                        var sourceValue = row[columnIndex];
+                        var converter = this.converters[columnIndex];
                         object destinationValue;
 
                         if (converter != null)
@@ -162,7 +163,7 @@
                             while (true)
                             {
                                 QueueItem item;
-                                bool succeeded = this.queue.TryDequeue(out item);
+                                var succeeded = this.queue.TryDequeue(out item);
                                 if (succeeded)
                                 {
                                     items.Add(item);
@@ -222,11 +223,11 @@
             this.readRowCount += rowCount;
             string message = $"{this.readRowCount} row(s) read.";
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
-            object[][] targetRows = new object[rowCount][];
-            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            var targetRows = new object[rowCount][];
+            for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {
-                object[] sourceRow = rows[rowIndex];
-                int columnCount = sourceRow.Length;
+                var sourceRow = rows[rowIndex];
+                var columnCount = sourceRow.Length;
                 var targetRow = new object[columnCount];
                 Array.Copy(sourceRow, targetRow, columnCount);
                 targetRows[rowIndex] = targetRow;
@@ -269,7 +270,7 @@
             }
         }
 
-        #endregion
+#endregion
 
         private sealed class QueueItem
         {

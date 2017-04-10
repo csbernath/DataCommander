@@ -1,7 +1,6 @@
 namespace DataCommander.Providers.Odp.ObjectExplorer
 {
     using System.Collections.Generic;
-    using System.Data;
     using System.Threading;
     using System.Windows.Forms;
     using Foundation.Data;
@@ -22,23 +21,23 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
         public IEnumerable<ITreeNode> GetChildren( bool refresh )
 		{
-			string commandText = "select index_name from sys.all_indexes where owner = '{0}' and table_name = '{1}' order by index_name";
+			var commandText = "select index_name from sys.all_indexes where owner = '{0}' and table_name = '{1}' order by index_name";
 			commandText = string.Format( commandText, table.Schema.Name, table.Name );
-			OracleCommand command = new OracleCommand( commandText, table.Schema.SchemasNode.Connection );
+			var command = new OracleCommand( commandText, table.Schema.SchemasNode.Connection );
 			command.FetchSize = 256 * 1024;
-			DataTable dataTable = command.ExecuteDataTable(CancellationToken.None);
-			int count = dataTable.Rows.Count;
-			string[] indexes = new string[ count ];
+			var dataTable = command.ExecuteDataTable(CancellationToken.None);
+			var count = dataTable.Rows.Count;
+			var indexes = new string[ count ];
 
-			for (int i = 0; i < count; i++)
+			for (var i = 0; i < count; i++)
 			{
-				string name = (string) dataTable.Rows[ i ][ 0 ];
+				var name = (string) dataTable.Rows[ i ][ 0 ];
 				indexes[ i ] = name;
 			}
 
-			ITreeNode[] treeNodes = new ITreeNode[ indexes.Length ];
+			var treeNodes = new ITreeNode[ indexes.Length ];
 
-			for (int i = 0; i < indexes.Length; i++)
+			for (var i = 0; i < indexes.Length; i++)
 			{
 				treeNodes[ i ] = new IndexNode( this.table, indexes[ i ] );
 			}

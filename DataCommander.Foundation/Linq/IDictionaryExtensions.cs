@@ -3,7 +3,6 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -23,9 +22,11 @@
             IEnumerable<TValue> items,
             Func<TValue, TKey> keySelector)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dictionary != null);
             Contract.Requires<ArgumentNullException>(items != null);
             Contract.Requires<ArgumentNullException>(keySelector != null);
+#endif
 
             foreach (var item in items)
             {
@@ -43,16 +44,9 @@
         /// <returns></returns>
         public static IDictionary<TKey, TValue> AsReadOnly<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
         {
-            ReadOnlyDictionary<TKey, TValue> readOnlyDictionary;
-
-            if (dictionary != null)
-            {
-                readOnlyDictionary = new ReadOnlyDictionary<TKey, TValue>(dictionary);
-            }
-            else
-            {
-                readOnlyDictionary = null;
-            }
+            var readOnlyDictionary = dictionary != null
+                ? new ReadOnlyDictionary<TKey, TValue>(dictionary)
+                : null;
 
             return readOnlyDictionary;
         }
@@ -71,8 +65,10 @@
             TKey key,
             Func<TKey, TValue> valueFactory)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dictionary != null);
             Contract.Requires<ArgumentNullException>(valueFactory != null);
+#endif
 
             TValue value;
 
@@ -95,7 +91,9 @@
         /// <returns></returns>
         public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dictionary != null);
+#endif
 
             TValue value;
             dictionary.TryGetValue(key, out value);
@@ -120,11 +118,13 @@
             /// <param name="dictionary"></param>
             public ReadOnlyDictionary(IDictionary<TKey, TValue> dictionary)
             {
+#if CONTRACTS_FULL
                 Contract.Requires<ArgumentNullException>(dictionary != null);
+#endif
                 this.dictionary = dictionary;
             }
 
-            #region IDictionary<TKey,TValue> Members
+#region IDictionary<TKey,TValue> Members
 
             void IDictionary<TKey, TValue>.Add(TKey key, TValue value)
             {
@@ -163,9 +163,9 @@
                 }
             }
 
-            #endregion
+#endregion
 
-            #region ICollection<KeyValuePair<TKey,TValue>> Members
+#region ICollection<KeyValuePair<TKey,TValue>> Members
 
             void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
             {
@@ -196,25 +196,25 @@
                 throw new NotSupportedException();
             }
 
-            #endregion
+#endregion
 
-            #region IEnumerable<KeyValuePair<TKey,TValue>> Members
+#region IEnumerable<KeyValuePair<TKey,TValue>> Members
 
             IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
             {
                 return this.dictionary.GetEnumerator();
             }
 
-            #endregion
+#endregion
 
-            #region IEnumerable Members
+#region IEnumerable Members
 
             IEnumerator IEnumerable.GetEnumerator()
             {
                 return this.dictionary.GetEnumerator();
             }
 
-            #endregion
+#endregion
         }
     }
 }

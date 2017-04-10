@@ -2,7 +2,6 @@
 {
     using System;
     using System.Data;
-    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Text;
     using System.Threading;
@@ -20,7 +19,9 @@
         /// <param name="value"></param>
         public static void AddParameterIfNotNull(this IDbCommand command, string parameterName, object value)
         {
+#if CONTRACTS_FULL
             Contract.Requires(command != null);
+#endif
 
             if (value != null)
             {
@@ -53,7 +54,9 @@
         /// <returns></returns>
         public static DataTable ExecuteDataTable(this IDbCommand command, CancellationToken cancellationToken)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
 
             var dataTable = new DataTable
             {
@@ -72,10 +75,14 @@
         /// <returns></returns>
         public static T ExecuteScalarValue<T>(this IDbCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
 
             var scalar = command.ExecuteScalar();
+#if CONTRACTS_FULL
             Contract.Assert(scalar is T);
+#endif
 
             return (T)scalar;
         }
@@ -88,7 +95,9 @@
         /// <returns></returns>
         public static T ExecuteScalarValueOrDefault<T>(this IDbCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
 
             var scalar = command.ExecuteScalar();
             return Database.GetValueOrDefault<T>(scalar);
@@ -106,8 +115,10 @@
             DataSet dataSet,
             CancellationToken cancellationToken)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
             Contract.Requires<ArgumentNullException>(dataSet != null);
+#endif
 
             var rowCount = 0;
             var resultIndex = 0;
@@ -183,7 +194,9 @@
             DataTable dataTable,
             CancellationToken cancellationToken)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
 
             var rowCount = 0;
 
@@ -219,7 +232,9 @@
         /// <returns></returns>
         public static string ToLogString(this IDbCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
 
             var sb = new StringBuilder();
 

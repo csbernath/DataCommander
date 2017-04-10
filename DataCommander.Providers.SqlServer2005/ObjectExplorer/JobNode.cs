@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
-    using System.Diagnostics.Contracts;
     using System.Threading;
     using System.Windows.Forms;
     using Foundation.Data;
@@ -22,12 +21,14 @@
             JobCollectionNode jobs,
             string name)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(jobs != null);
+#endif
             this.jobs = jobs;
             this.name = name;
         }
 
-        #region ITreeNode Members
+#region ITreeNode Members
 
         string ITreeNode.Name => this.name;
 
@@ -61,6 +62,6 @@
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-        #endregion
+#endregion
     }
 }

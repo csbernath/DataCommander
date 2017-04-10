@@ -4,8 +4,6 @@ namespace DataCommander.Providers
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Data;
-    using System.Data.Common;
-    using System.Drawing;
     using System.IO;
     using System.Linq;
     using System.Windows.Forms;
@@ -50,11 +48,11 @@ namespace DataCommander.Providers
             this.dataTable.Columns.Add("Extended Properties");
             this.dataTable.Columns.Add("Naming");
 
-            ConfigurationNode folder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
+            var folder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
 
-            foreach (ConfigurationNode subFolder in folder.ChildNodes)
+            foreach (var subFolder in folder.ChildNodes)
             {
-                DataRow dataRow = this.dataTable.NewRow();
+                var dataRow = this.dataTable.NewRow();
                 this.LoadConnection(subFolder, dataRow);
                 this.dataTable.Rows.Add(dataRow);
             }
@@ -63,8 +61,8 @@ namespace DataCommander.Providers
 
             foreach (DataColumn column in this.dataTable.Columns)
             {
-                DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-                string columnName = column.ColumnName;
+                var dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+                var columnName = column.ColumnName;
                 dataGridViewTextBoxColumn.DataPropertyName = columnName;
                 dataGridViewTextBoxColumn.HeaderText = columnName;
 
@@ -78,8 +76,8 @@ namespace DataCommander.Providers
                     if (this.dataTable.Rows.Count > 0)
                     {
                         IEnumerable<DataRow> enumerableDataRow = this.dataTable.Rows.Cast<DataRow>();
-                        DataRowSelector dataRowSelector = new DataRowSelector(column, graphics, this.Font);
-                        IEnumerable<float> enumerableDataRowWidth = enumerableDataRow.Select(dataRowSelector.GetWidth);
+                        var dataRowSelector = new DataRowSelector(column, graphics, this.Font);
+                        var enumerableDataRowWidth = enumerableDataRow.Select(dataRowSelector.GetWidth);
                         dataRowMaxWidth = enumerableDataRowWidth.Max();
                     }
                     else
@@ -229,30 +227,30 @@ namespace DataCommander.Providers
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            ConfigurationNode folder = this.SelectedConfigurationNode;
+            var folder = this.SelectedConfigurationNode;
             this.Connect(folder);
         }
 
         private void Connect_Click(object sender, EventArgs e)
         {
-            ConfigurationNode folder = this.SelectedConfigurationNode;
+            var folder = this.SelectedConfigurationNode;
             this.Connect(folder);
         }
 
         private void Copy_Click(object sender, EventArgs e)
         {
-            StringWriter stringWriter = new StringWriter();
-            XmlTextWriter xmlTextWriter = new XmlTextWriter(stringWriter);
+            var stringWriter = new StringWriter();
+            var xmlTextWriter = new XmlTextWriter(stringWriter);
             xmlTextWriter.Formatting = Formatting.Indented;
 
-            foreach (ConfigurationNode node in this.SelectedConfigurationNodes)
+            foreach (var node in this.SelectedConfigurationNodes)
             {
-                ConnectionProperties connectionProperties = new ConnectionProperties();
+                var connectionProperties = new ConnectionProperties();
                 connectionProperties.Load(node);
                 ConfigurationWriter.WriteNode(xmlTextWriter, node);
             }
 
-            string s = stringWriter.ToString();
+            var s = stringWriter.ToString();
             Clipboard.SetText(s);
         }
 
@@ -260,11 +258,11 @@ namespace DataCommander.Providers
         {
             try
             {
-                string s = Clipboard.GetText();
+                var s = Clipboard.GetText();
                 var stringReader = new StringReader(s);
                 var xmlTextReader = new XmlTextReader(stringReader);
                 var configurationReader = new ConfigurationReader();
-                ConfigurationNode propertyFolder = configurationReader.Read(xmlTextReader);
+                var propertyFolder = configurationReader.Read(xmlTextReader);
                 propertyFolder.Write(TraceWriter.Instance);
                 IEnumerable<ConfigurationNode> configurationNodes;
 
@@ -277,7 +275,7 @@ namespace DataCommander.Providers
                     configurationNodes = new ConfigurationNode[] {propertyFolder};
                 }
 
-                foreach (ConfigurationNode configurationNode in configurationNodes)
+                foreach (var configurationNode in configurationNodes)
                 {
                     var connectionProperties = new ConnectionProperties();
                     connectionProperties.Load(configurationNode);
@@ -294,9 +292,9 @@ namespace DataCommander.Providers
         {
             if (MessageBox.Show(this, "Do you want to delete the selected item(s)?", DataCommanderApplication.Instance.Name, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
-                ConfigurationNode connectionsFolder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
-                int index = this.SelectedIndex;
-                ConfigurationNode selectedFolder = connectionsFolder.ChildNodes[index];
+                var connectionsFolder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
+                var index = this.SelectedIndex;
+                var selectedFolder = connectionsFolder.ChildNodes[index];
                 connectionsFolder.RemoveChildNode(selectedFolder);
                 this.dataTable.Rows.RemoveAt(index);
                 this.isDirty = true;
@@ -310,8 +308,8 @@ namespace DataCommander.Providers
 
         private void Edit_Click(object sender, EventArgs e)
         {
-            ConfigurationNode folder = this.SelectedConfigurationNode;
-            ConnectionProperties connectionProperties = new ConnectionProperties();
+            var folder = this.SelectedConfigurationNode;
+            var connectionProperties = new ConnectionProperties();
             connectionProperties.Load(folder);
             var form = new ConnectionStringBuilderForm();
             form.ConnectionProperties = connectionProperties;
@@ -320,24 +318,24 @@ namespace DataCommander.Providers
             {
                 connectionProperties = form.ConnectionProperties;
                 connectionProperties.Save(folder);
-                DataRow row = this.dataTable.DefaultView[this.dataGrid.CurrentCell.RowIndex].Row;
+                var row = this.dataTable.DefaultView[this.dataGrid.CurrentCell.RowIndex].Row;
                 this.LoadConnection(folder, row);
             }
         }
 
         private void MoveDown()
         {
-            int index = this.SelectedIndex;
-            ConfigurationNode connectionsFolder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
+            var index = this.SelectedIndex;
+            var connectionsFolder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
 
             if (index < connectionsFolder.ChildNodes.Count - 1)
             {
-                ConfigurationNode folder = connectionsFolder.ChildNodes[index];
+                var folder = connectionsFolder.ChildNodes[index];
                 connectionsFolder.RemoveChildNode(folder);
                 connectionsFolder.InsertChildNode(index + 1, folder);
 
                 this.dataTable.Rows.RemoveAt(index);
-                DataRow row = this.dataTable.NewRow();
+                var row = this.dataTable.NewRow();
                 this.LoadConnection(folder, row);
                 this.dataTable.Rows.InsertAt(row, index + 1);
                 this.dataGrid.CurrentCell = this.dataGrid[0, index + 1];
@@ -351,17 +349,17 @@ namespace DataCommander.Providers
 
         private void MoveUp()
         {
-            int index = this.SelectedIndex;
+            var index = this.SelectedIndex;
 
             if (index > 0)
             {
-                ConfigurationNode connectionsFolder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
-                ConfigurationNode folder = connectionsFolder.ChildNodes[index];
+                var connectionsFolder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
+                var folder = connectionsFolder.ChildNodes[index];
                 connectionsFolder.RemoveChildNode(folder);
                 connectionsFolder.InsertChildNode(index - 1, folder);
 
                 this.dataTable.Rows.RemoveAt(index);
-                DataRow row = this.dataTable.NewRow();
+                var row = this.dataTable.NewRow();
                 this.LoadConnection(folder, row);
                 this.dataTable.Rows.InsertAt(row, index - 1);
                 this.dataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -378,9 +376,9 @@ namespace DataCommander.Providers
         {
             if (e.Button == MouseButtons.Right)
             {
-                DataGridView.HitTestInfo hitTestInfo = this.dataGrid.HitTest(e.X, e.Y);
-                int rowIndex = hitTestInfo.RowIndex;
-                ContextMenuStrip contextMenu = new ContextMenuStrip( this.components );
+                var hitTestInfo = this.dataGrid.HitTest(e.X, e.Y);
+                var rowIndex = hitTestInfo.RowIndex;
+                var contextMenu = new ContextMenuStrip( this.components );
                 ToolStripMenuItem menuItem;
 
                 if (rowIndex >= 0)
@@ -415,13 +413,13 @@ namespace DataCommander.Providers
         {
             get
             {
-                int index = this.dataGrid.CurrentCell.RowIndex;
+                var index = this.dataGrid.CurrentCell.RowIndex;
 
                 if (index >= 0)
                 {
-                    DataView dataView = this.dataTable.DefaultView;
-                    DataRowView rowView = dataView[index];
-                    DataRow row = rowView.Row;
+                    var dataView = this.dataTable.DefaultView;
+                    var rowView = dataView[index];
+                    var row = rowView.Row;
                     index = this.dataTable.Rows.IndexOf(row);
                 }
 
@@ -433,15 +431,15 @@ namespace DataCommander.Providers
         {
             get
             {
-                int count = this.dataTable.Rows.Count;
-                DataView dataView = this.dataTable.DefaultView;
-                int selectedCount = 0;
+                var count = this.dataTable.Rows.Count;
+                var dataView = this.dataTable.DefaultView;
+                var selectedCount = 0;
 
                 foreach (DataGridViewRow dataGridViewRow in this.dataGrid.SelectedRows)
                 {
-                    DataRowView dataRowView = (DataRowView)dataGridViewRow.DataBoundItem;
-                    DataRow row = dataRowView.Row;
-                    int index = this.dataTable.Rows.IndexOf(row);
+                    var dataRowView = (DataRowView)dataGridViewRow.DataBoundItem;
+                    var row = dataRowView.Row;
+                    var index = this.dataTable.Rows.IndexOf(row);
                     selectedCount++;
                     yield return index;
                 }
@@ -458,7 +456,7 @@ namespace DataCommander.Providers
             get
             {
                 ConfigurationNode folder;
-                int index = this.SelectedIndex;
+                var index = this.SelectedIndex;
 
                 if (index >= 0)
                 {
@@ -476,7 +474,7 @@ namespace DataCommander.Providers
 
         private ConfigurationNode ToConfigurationNode(int index)
         {
-            ConfigurationNode node = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
+            var node = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
             node = node.ChildNodes[index];
             return node;
         }
@@ -485,7 +483,7 @@ namespace DataCommander.Providers
         {
             get
             {
-                IEnumerable<ConfigurationNode> configurationNodes =
+                var configurationNodes =
                     from index in this.SelectedIndexes
                     select this.ToConfigurationNode(index);
 
@@ -520,8 +518,8 @@ namespace DataCommander.Providers
 
         private void dataGrid_DoubleClick(object sender, EventArgs e)
         {
-            Point position = this.dataGrid.PointToClient(Cursor.Position);
-            DataGridView.HitTestInfo hitTestInfo = this.dataGrid.HitTest(position.X, position.Y);
+            var position = this.dataGrid.PointToClient(Cursor.Position);
+            var hitTestInfo = this.dataGrid.HitTest(position.X, position.Y);
 
             switch (hitTestInfo.Type)
             {
@@ -529,7 +527,7 @@ namespace DataCommander.Providers
                     break;
 
                 default:
-                    ConfigurationNode folder = this.SelectedConfigurationNode;
+                    var folder = this.SelectedConfigurationNode;
 
                     if (folder != null)
                     {
@@ -582,11 +580,11 @@ namespace DataCommander.Providers
 
         private void Add(ConnectionProperties connectionProperties)
         {
-            ConfigurationNode node = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
-            ConfigurationNode subFolder = new ConfigurationNode(null);
+            var node = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
+            var subFolder = new ConfigurationNode(null);
             node.AddChildNode(subFolder);
             connectionProperties.Save(subFolder);
-            DataRow row = this.dataTable.NewRow();
+            var row = this.dataTable.NewRow();
             this.LoadConnection(subFolder, row);
             this.dataTable.Rows.Add(row);
             this.isDirty = true;
@@ -594,11 +592,11 @@ namespace DataCommander.Providers
 
         private void newButton_Click(object sender, EventArgs e)
         {
-            ConnectionStringBuilderForm form = new ConnectionStringBuilderForm();
+            var form = new ConnectionStringBuilderForm();
 
             if (form.ShowDialog() == DialogResult.OK)
             {
-                ConnectionProperties connectionProperties = form.ConnectionProperties;
+                var connectionProperties = form.ConnectionProperties;
                 this.Add(connectionProperties);
             }
         }

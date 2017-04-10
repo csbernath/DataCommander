@@ -12,18 +12,18 @@
     {
         private static HtmlTextBox CreateHtmlTextBoxFromDataTable(DataTable dataTable)
         {
-            string fileName = Path.GetTempFileName();
+            var fileName = Path.GetTempFileName();
             var fileStream = new FileStream(fileName, FileMode.OpenOrCreate);
-            using (StreamWriter streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
+            using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
             {
-                int[] columnIndexes = new int[dataTable.Columns.Count];
-                for (int i = 0; i < columnIndexes.Length; i++)
+                var columnIndexes = new int[dataTable.Columns.Count];
+                for (var i = 0; i < columnIndexes.Length; i++)
                 {
                     columnIndexes[i] = i;
                 }
                 HtmlFormatter.Write(dataTable.DefaultView, columnIndexes, streamWriter);
             }
-            HtmlTextBox htmlTextBox = new HtmlTextBox();
+            var htmlTextBox = new HtmlTextBox();
             htmlTextBox.Navigate(fileName);
 
             //while (webBrowser.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
@@ -100,7 +100,7 @@
                     Width = -2
                 };
 
-                Type type = (Type)dataColumn.ExtendedProperties[0];
+                var type = (Type)dataColumn.ExtendedProperties[0];
 
                 if (type == null)
                 {
@@ -112,14 +112,14 @@
                 listView.Columns.Add(columnHeader);
             }
 
-            int count = dataTable.Columns.Count;
+            var count = dataTable.Columns.Count;
             var items = new string[count];
 
             foreach (DataRow dataRow in dataTable.Rows)
             {
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
-                    object value = dataRow[i];
+                    var value = dataRow[i];
 
                     if (value == DBNull.Value)
                     {
@@ -142,7 +142,7 @@
         {
             HorizontalAlignment align;
 
-            TypeCode typeCode = Type.GetTypeCode(type);
+            var typeCode = Type.GetTypeCode(type);
 
             switch (typeCode)
             {
@@ -172,12 +172,12 @@
             ref int rowIndex,
             ref int columnIndex)
         {
-            bool found = false;
+            var found = false;
             var dataTable = dataView.Table;
             var dataRows = dataTable.Rows;
-            int rowCount = dataView.Count;
-            int columnCount = dataTable.Columns.Count;
-            object currentValueObject = dataTable.DefaultView[rowIndex][columnIndex];
+            var rowCount = dataView.Count;
+            var columnCount = dataTable.Columns.Count;
+            var currentValueObject = dataTable.DefaultView[rowIndex][columnIndex];
             string currentValue;
             if (currentValueObject is StringField)
             {
@@ -203,9 +203,9 @@
 
             if (rowIndex == 0)
             {
-                for (int i = columnIndex + 1; i < dataTable.Columns.Count; i++)
+                for (var i = columnIndex + 1; i < dataTable.Columns.Count; i++)
                 {
-                    DataColumn dataColumn = dataTable.Columns[i];
+                    var dataColumn = dataTable.Columns[i];
                     found = matcher.IsMatch(dataColumn.ColumnName);
 
                     if (found)
@@ -218,7 +218,7 @@
 
             if (!found)
             {
-                DataRow dataRow = dataTable.DefaultView[rowIndex].Row;
+                var dataRow = dataTable.DefaultView[rowIndex].Row;
 
                 while (true)
                 {

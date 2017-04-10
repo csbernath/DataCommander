@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using System.Diagnostics.Contracts;
     using Microsoft.Deployment.WindowsInstaller;
 
     internal sealed class MsiDataReader : IDataReader
@@ -15,7 +14,9 @@
 
 		public MsiDataReader( MsiCommand command, CommandBehavior behavior )
 		{
+#if CONTRACTS_FULL
             Contract.Requires( command != null );
+#endif
 			this.command = command;
 			this.behavior = behavior;
 			this.View = this.command.Connection.Database.OpenView( this.command.CommandText );
@@ -23,7 +24,7 @@
 
 		public View View { get; }
 
-        #region IDataReader Members
+#region IDataReader Members
 
 		void IDataReader.Close()
 		{
@@ -43,15 +44,15 @@
 
 		public DataTable GetSchemaTable()
 		{
-			DataTable table = new DataTable();
-			DataColumnCollection columns = table.Columns;
+			var table = new DataTable();
+			var columns = table.Columns;
 			columns.Add( "ColumnName", typeof( string ) );
 			columns.Add( "ColumnSize", typeof( int ) );
 			columns.Add( "DataType", typeof( Type ) );
 			columns.Add( "ProviderType", typeof( int ) );
 			columns.Add( "Definition", typeof( string ) );
 
-			foreach (ColumnInfo column in this.View.Columns)
+			foreach (var column in this.View.Columns)
 			{
 				table.Rows.Add( new object[]
 				{
@@ -87,7 +88,7 @@
 				this.enumerator = this.View.GetEnumerator();
 			}
 
-			bool read = this.enumerator.MoveNext();
+			var read = this.enumerator.MoveNext();
 
 			if (read)
 			{
@@ -99,9 +100,9 @@
 
 		int IDataReader.RecordsAffected => this.recordsAffected;
 
-        #endregion
+#endregion
 
-		#region IDisposable Members
+#region IDisposable Members
 
 		void IDisposable.Dispose()
 		{
@@ -116,9 +117,9 @@
 			}
 		}
 
-		#endregion
+#endregion
 
-		#region IDataRecord Members
+#region IDataRecord Members
 
 		int IDataRecord.FieldCount => this.View.Columns.Count;
 
@@ -155,8 +156,8 @@
 		string IDataRecord.GetDataTypeName( int i )
 		{
             var column = this.View.Columns[ i ];
-            DbType dbType = (DbType)column.DBType;
-            string dataTypeName = dbType.ToString();
+            var dbType = (DbType)column.DBType;
+            var dataTypeName = dbType.ToString();
             return dataTypeName;
 		}
 
@@ -222,7 +223,7 @@
 
 		public object GetValue( int i )
 		{
-			Record record = this.enumerator.Current;
+			var record = this.enumerator.Current;
 			return record[ i + 1 ];
 		}
 
@@ -232,10 +233,10 @@
 
 			if (values != null)
 			{
-				Record record = this.enumerator.Current;
+				var record = this.enumerator.Current;
 				count = Math.Min( values.Length, record.FieldCount );
 
-				for (int i = 0; i < count; i++)
+				for (var i = 0; i < count; i++)
 				{
 					values[ i ] = record[ i + 1 ];
 				}
@@ -263,6 +264,6 @@
 
 		object IDataRecord.this[ int i ] => this.GetValue( i );
 
-        #endregion
+#endregion
 	}
 }

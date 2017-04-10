@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Management;
     using DataCommander.Foundation.Linq;
@@ -23,7 +22,9 @@
         public static List<T> ExecuteQuery<T>(this ManagementScope managementScope, string query,
             Func<ManagementObject, T> selector)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(managementScope != null);
+#endif
 
             var objectQuery = new ObjectQuery(query);
             List<T> list;

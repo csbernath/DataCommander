@@ -1,7 +1,6 @@
 namespace DataCommander.Providers.OracleBase
 {
     using System.Collections.Generic;
-    using System.Data;
     using System.Threading;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
@@ -22,20 +21,20 @@ namespace DataCommander.Providers.OracleBase
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
-			string commandText = @"select	s.SYNONYM_NAME
+			var commandText = @"select	s.SYNONYM_NAME
 from	SYS.ALL_SYNONYMS s
 where	s.OWNER	= '{0}'
 order by s.SYNONYM_NAME";
             var transactionScope = new DbTransactionScope(schema.SchemasNode.Connection, null);
             commandText = string.Format(commandText, schema.Name);
-            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
-            int count = dataTable.Rows.Count;
+            var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
+            var count = dataTable.Rows.Count;
 
             var treeNodes = new ITreeNode[count];
 
-			for (int i = 0; i < count; i++)
+			for (var i = 0; i < count; i++)
 			{
-				string name = (string) dataTable.Rows[ i ][ 0 ];
+				var name = (string) dataTable.Rows[ i ][ 0 ];
 				treeNodes[ i ] = new SynonymNode( schema, name );
 			}
 

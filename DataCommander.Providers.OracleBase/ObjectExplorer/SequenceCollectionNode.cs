@@ -33,7 +33,7 @@ order by s.SEQUENCE_NAME
 
             return transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default, dataRecord =>
             {
-                string name = dataRecord.GetString(0);
+                var name = dataRecord.GetString(0);
                 return (ITreeNode)new SequenceNode(this.schemaNode, name);
             });
         }

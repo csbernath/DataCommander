@@ -9,7 +9,6 @@ namespace DataCommander
     using System.Data.OleDb;
     using System.Data.SqlClient;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
     using System.Drawing;
     using System.Globalization;
     using System.IO;
@@ -203,8 +202,8 @@ namespace DataCommander
             this.mnuGoTo.Click += this.mnuGoTo_Click;
             this.mnuClearCache.Click += this.mnuClearCache_Click;
 
-            string[] sqlKeyWords = Settings.CurrentType.Attributes["Sql92ReservedWords"].GetValue<string[]>();
-            string[] providerKeyWords = provider.KeyWords;
+            var sqlKeyWords = Settings.CurrentType.Attributes["Sql92ReservedWords"].GetValue<string[]>();
+            var providerKeyWords = provider.KeyWords;
 
             this.QueryTextBox.AddKeyWords(new string[] {"exec"}, Color.Green);
             this.QueryTextBox.AddKeyWords(sqlKeyWords, Color.Blue);
@@ -247,13 +246,16 @@ namespace DataCommander
             this.database = connection.Database;
             this.SetResultWriterType(ResultWriterType.DataGrid);
 
-            ConfigurationNode node = Settings.CurrentType;
+            var node = Settings.CurrentType;
             var attributes = node.Attributes;
             this.rowBlockSize = attributes["RowBlockSize"].GetValue<int>();
             this.htmlMaxRecords = attributes["HtmlMaxRecords"].GetValue<int>();
             this.wordMaxRecords = attributes["WordMaxRecords"].GetValue<int>();
             this.rowBlockSize = attributes["RowBlockSize"].GetValue<int>();
             this.timer.Interval = attributes["TimerInterval"].GetValue<int>();
+
+            this.SettingsChanged(null, null);
+            Settings.Changed += this.SettingsChanged;
         }
 
         private void CloseResultTabPage(TabPage tabPage)
@@ -306,7 +308,7 @@ namespace DataCommander
         private void resultSetsTabControl_MouseUp(object sender, MouseEventArgs e)
         {
             var hitTestInfo = new TCHITTESTINFO(e.X, e.Y);
-            int index = SendMessage(this.resultSetsTabControl.Handle, TCM_HITTEST, IntPtr.Zero, ref hitTestInfo);
+            var index = SendMessage(this.resultSetsTabControl.Handle, TCM_HITTEST, IntPtr.Zero, ref hitTestInfo);
             var hotTab = index >= 0 ? this.resultSetsTabControl.TabPages[index] : null;
 
             switch (e.Button)
@@ -347,12 +349,12 @@ namespace DataCommander
             {
                 this.font = value;
                 this.QueryTextBox.Font = value;
-                Size size1 = TextRenderer.MeasureText("1", value);
-                Size size2 = TextRenderer.MeasureText("12", value);
-                int width = this.QueryTextBox.TabSize*(size2.Width - size1.Width);
-                int[] tabs = new int[12];
+                var size1 = TextRenderer.MeasureText("1", value);
+                var size2 = TextRenderer.MeasureText("12", value);
+                var width = this.QueryTextBox.TabSize*(size2.Width - size1.Width);
+                var tabs = new int[12];
 
-                for (int i = 0; i < tabs.Length; i++)
+                for (var i = 0; i < tabs.Length; i++)
                 {
                     tabs[i] = (i + 1)*width;
                 }
@@ -373,7 +375,7 @@ namespace DataCommander
         {
             get
             {
-                string query = this.QueryTextBox.SelectedText;
+                var query = this.QueryTextBox.SelectedText;
 
                 if (query.Length == 0)
                 {
@@ -442,7 +444,7 @@ namespace DataCommander
                     string text;
                     if (this.openTableMode)
                     {
-                        string tableName = this.sqlStatement.FindTableName();
+                        var tableName = this.sqlStatement.FindTableName();
                         text = tableName;
                         dataSet.Tables[0].TableName = tableName;
                         tableSchema = this.Provider.GetTableSchema(this.Connection.Connection, tableName);
@@ -460,7 +462,7 @@ namespace DataCommander
                     if (dataSet.Tables.Count > 1)
                     {
                         var tabControl = new TabControl {Dock = DockStyle.Fill};
-                        int index = 0;
+                        var index = 0;
                         foreach (DataTable dataTable in dataSet.Tables)
                         {
                             var commandBuilder = this.Provider.DbProviderFactory.CreateCommandBuilder();
@@ -500,9 +502,6 @@ namespace DataCommander
             tabPage.Controls.Add(htmlTextBox);
 
             htmlTextBox.Xml = xml;
-
-            this.SettingsChanged(null, null);
-            Settings.Changed += this.SettingsChanged;
         }
 
         #endregion
@@ -515,7 +514,7 @@ namespace DataCommander
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof (QueryForm));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof (QueryForm));
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.menuItem9 = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuSave = new System.Windows.Forms.ToolStripMenuItem();
@@ -1334,7 +1333,7 @@ namespace DataCommander
 
         private void AddNodes(TreeNodeCollection parent, IEnumerable<ITreeNode> children, bool sortable)
         {
-            long ticks = Stopwatch.GetTimestamp();
+            var ticks = Stopwatch.GetTimestamp();
             IEnumerable<ITreeNode> enumerableChildren;
 
             if (sortable)
@@ -1348,11 +1347,11 @@ namespace DataCommander
                 enumerableChildren = children;
             }
 
-            int count = 0;
+            var count = 0;
 
             if (children != null)
             {
-                foreach (ITreeNode child in children)
+                foreach (var child in children)
                 {
                     var treeNode = new TreeNode(child.Name);
                     treeNode.Tag = child;
@@ -1393,7 +1392,7 @@ namespace DataCommander
                 WriteInfoMessageToLog(infoMessage);
             }
 
-            int errorCount =
+            var errorCount =
                 (from infoMessage in infoMessages
                     where infoMessage.Severity == InfoMessageSeverity.Error
                     select infoMessage).Count();
@@ -1412,7 +1411,7 @@ namespace DataCommander
             InfoMessageSeverity severity,
             string text)
         {
-            string s = "[" + dateTime.ToString("HH:mm:ss.fff");
+            var s = "[" + dateTime.ToString("HH:mm:ss.fff");
 
             if (severity == InfoMessageSeverity.Error)
             {
@@ -1429,7 +1428,7 @@ namespace DataCommander
             string tooltipText,
             Control control)
         {
-            TabPage tabPage = new TabPage(tabPageName);
+            var tabPage = new TabPage(tabPageName);
             tabPage.ToolTipText = tooltipText;
             tabPage.Controls.Add(control);
             control.Dock = DockStyle.Fill;
@@ -1476,7 +1475,7 @@ namespace DataCommander
 
         private void SettingsChanged(object sender, EventArgs e)
         {
-            ConfigurationNode folder = Settings.CurrentType;
+            var folder = Settings.CurrentType;
             this.commandTimeout = folder.Attributes["CommandTimeout"].GetValue<int>();
         }
 
@@ -1503,9 +1502,9 @@ namespace DataCommander
             if (e.Button == MouseButtons.Right)
             {
                 var contextMenu = new ContextMenuStrip(this.components);
-                Array values = Enum.GetValues(typeof (ResultWriterType));
+                var values = Enum.GetValues(typeof (ResultWriterType));
 
-                for (int i = 0; i < values.Length; i++)
+                for (var i = 0; i < values.Length; i++)
                 {
                     var tableStyle = (ResultWriterType)values.GetValue(i);
                     var item = new ToolStripMenuItem();
@@ -1538,7 +1537,9 @@ namespace DataCommander
                 log.Write(LogLevel.Error, "this.dataAdapter == null failed");
             }
 
+#if CONTRACTS_FULL
             Contract.Assert(this.dataAdapter == null);
+#endif
 
             log.Trace("ThreadMonitor:\r\n{0}", ThreadMonitor.ToStringTableString());
             ThreadMonitor.Join(0);
@@ -1551,7 +1552,7 @@ namespace DataCommander
             {
                 this.sbPanelText.Text = "Executing query...";
                 this.sbPanelText.ForeColor = SystemColors.ControlText;
-                string query = this.Query;
+                var query = this.Query;
                 var statements = this.Provider.GetStatements(query);
                 log.Write(LogLevel.Trace, "Query:\r\n{0}", query);
                 IEnumerable<AsyncDataAdapterCommand> commands;
@@ -1623,7 +1624,7 @@ namespace DataCommander
 
                     case ResultWriterType.SqLite:
                         maxRecords = int.MaxValue;
-                        string tableName = this.sqlStatement.FindTableName();
+                        var tableName = this.sqlStatement.FindTableName();
                         resultWriter = new SQLiteResultWriter(this.textBoxWriter, tableName);
                         this.tabControl.SelectedTab = this.messagesTabPage;
                         break;
@@ -1709,8 +1710,8 @@ namespace DataCommander
 
             foreach (DataColumn column in dataTable.Columns)
             {
-                Type type = column.DataType;
-                TypeCode typeCode = Type.GetTypeCode(type);
+                var type = column.DataType;
+                var typeCode = Type.GetTypeCode(type);
                 int columnSize;
                 const short numericPrecision = 0;
                 const short numericScale = 0;
@@ -1718,10 +1719,10 @@ namespace DataCommander
                 switch (typeCode)
                 {
                     case TypeCode.String:
-                        int maxLength = 0;
+                        var maxLength = 0;
                         foreach (DataRow dataRow in dataTable.Rows)
                         {
-                            int length = dataRow[column].ToString().Length;
+                            var length = dataRow[column].ToString().Length;
 
                             if (length > maxLength)
                             {
@@ -1748,14 +1749,14 @@ namespace DataCommander
 
             resultWriter.WriteTableBegin(schemaTable);
 
-            int colCount = dataTable.Columns.Count;
+            var colCount = dataTable.Columns.Count;
 
-            for (int i = 0; i < dataTable.Rows.Count; i++)
+            for (var i = 0; i < dataTable.Rows.Count; i++)
             {
-                DataRow dataRow = dataTable.Rows[i];
-                object[] values = new object[colCount];
+                var dataRow = dataTable.Rows[i];
+                var values = new object[colCount];
 
-                for (int j = 0; j < colCount; j++)
+                for (var j = 0; j < colCount; j++)
                 {
                     values[j] = dataRow[j];
                 }
@@ -1777,9 +1778,9 @@ namespace DataCommander
 
             if (this.openTableMode)
             {
-                string tableName = this.sqlStatement.FindTableName();
+                var tableName = this.sqlStatement.FindTableName();
                 dataTableEditor.TableName = tableName;
-                DataSet dataSet = this.Provider.GetTableSchema(this.Connection.Connection, tableName);
+                var dataSet = this.Provider.GetTableSchema(this.Connection.Connection, tableName);
 
                 foreach (DataTable schemaTable in dataSet.Tables)
                 {
@@ -1797,13 +1798,13 @@ namespace DataCommander
 
         private void ShowDataViewHtml(DataView dataView)
         {
-            string fileName = Path.GetTempFileName();
+            var fileName = Path.GetTempFileName();
             using (var fileStream = new FileStream(fileName, FileMode.OpenOrCreate))
             {
                 using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
                 {
-                    int[] columnIndexes = new int[dataView.Table.Columns.Count];
-                    for (int i = 0; i < columnIndexes.Length; i++)
+                    var columnIndexes = new int[dataView.Table.Columns.Count];
+                    for (var i = 0; i < columnIndexes.Length; i++)
                     {
                         columnIndexes[i] = i;
                     }
@@ -1811,7 +1812,7 @@ namespace DataCommander
                 }
             }
 
-            DataTable dataTable = dataView.Table;
+            var dataTable = dataView.Table;
             var tabPage = new TabPage(dataTable.TableName);
             tabPage.ToolTipText = this.GetToolTipText(dataTable);
             this.tabControl.TabPages.Add(tabPage);
@@ -1837,7 +1838,7 @@ namespace DataCommander
                 this.sbPanelText.Text = "Word document created.";
                 this.sbPanelText.ForeColor = SystemColors.ControlText;
 
-                string fileName = WordDocumentCreator.CreateWordDocument(dataTable);
+                var fileName = WordDocumentCreator.CreateWordDocument(dataTable);
 
                 var richTextBox = new RichTextBox();
                 GarbageMonitor.Add("ShowDataTableRtf.richTextBox", richTextBox);
@@ -1876,7 +1877,7 @@ namespace DataCommander
                     Width = -2
                 };
 
-                Type type = (Type)dataColumn.ExtendedProperties[0];
+                var type = (Type)dataColumn.ExtendedProperties[0];
 
                 if (type == null)
                 {
@@ -1888,14 +1889,14 @@ namespace DataCommander
                 listView.Columns.Add(columnHeader);
             }
 
-            int count = dataTable.Columns.Count;
-            string[] items = new string[count];
+            var count = dataTable.Columns.Count;
+            var items = new string[count];
 
             foreach (DataRow dataRow in dataTable.Rows)
             {
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
-                    object value = dataRow[i];
+                    var value = dataRow[i];
 
                     if (value == DBNull.Value)
                     {
@@ -1930,7 +1931,7 @@ namespace DataCommander
 
         public void ShowMessage(Exception e)
         {
-            string message = this.Provider.GetExceptionMessage(e);
+            var message = this.Provider.GetExceptionMessage(e);
             var infoMessage = new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Error, message);
             this.AddInfoMessage(infoMessage);
 
@@ -1976,7 +1977,7 @@ namespace DataCommander
             {
                 if (this.components != null)
                 {
-                    DateTime now = LocalTime.Default.Now;
+                    var now = LocalTime.Default.Now;
                     foreach (IComponent component in this.components.Components)
                     {
                         GarbageMonitor.SetDisposeTime(component, now);
@@ -1998,7 +1999,7 @@ namespace DataCommander
         {
             if (this.dataSetResultWriter != null)
             {
-                DataSet dataSet = this.dataSetResultWriter.DataSet;
+                var dataSet = this.dataSetResultWriter.DataSet;
                 this.ShowDataSet(dataSet);
             }
         }
@@ -2040,7 +2041,7 @@ namespace DataCommander
                         this.resultSetsTabControl.SelectedTab = resultSetTabPage;
                         var tabControl = new TabControl();
                         tabControl.Dock = DockStyle.Fill;
-                        int index = 0;
+                        var index = 0;
                         foreach (var dataGridView in dataGridViewResultWriter.DataGridViews)
                         {
                             dataGridView.Dock = DockStyle.Fill;
@@ -2166,8 +2167,8 @@ namespace DataCommander
 
         private void SetGui(CommandState buttonState)
         {
-            bool ok = (buttonState & CommandState.Execute) != 0;
-            bool cancel = (buttonState & CommandState.Cancel) != 0;
+            var ok = (buttonState & CommandState.Execute) != 0;
+            var cancel = (buttonState & CommandState.Cancel) != 0;
 
             this.mnuCancel.Enabled = cancel;
 
@@ -2224,19 +2225,19 @@ namespace DataCommander
 
             while (true)
             {
-                bool hasElements = false;
+                var hasElements = false;
                 while (this.infoMessages.Count > 0 && this.IsHandleCreated)
                 {
                     hasElements = true;
                     var infoMessages = new InfoMessage[this.infoMessages.Count];
-                    int count = this.infoMessages.Take(infoMessages);
+                    var count = this.infoMessages.Take(infoMessages);
                     var sb = new StringBuilder();
-                    for (int i = 0; i < count; i++)
+                    for (var i = 0; i < count; i++)
                     {
                         this.Invoke(() =>
                         {
                             var message = infoMessages[i];
-                            Color color = this.messagesTextBox.SelectionColor;
+                            var color = this.messagesTextBox.SelectionColor;
 
                             switch (message.Severity)
                             {
@@ -2273,7 +2274,7 @@ namespace DataCommander
 
                 if (this.infoMessages.Count == 0)
                 {
-                    int w = WaitHandle.WaitAny(waitHandles, 1000);
+                    var w = WaitHandle.WaitAny(waitHandles, 1000);
                     if (w == 1)
                     {
                         break;
@@ -2285,10 +2286,10 @@ namespace DataCommander
         private void textBox_SelectionChanged(object sender, EventArgs e)
         {
             var richTextBox = (RichTextBox)sender;
-            int charIndex = richTextBox.SelectionStart;
-            int line = richTextBox.GetLineFromCharIndex(charIndex) + 1;
-            int lineIndex = QueryTextBox.GetLineIndex(richTextBox, -1);
-            int col = charIndex - lineIndex + 1;
+            var charIndex = richTextBox.SelectionStart;
+            var line = richTextBox.GetLineFromCharIndex(charIndex) + 1;
+            var lineIndex = QueryTextBox.GetLineIndex(richTextBox, -1);
+            var col = charIndex - lineIndex + 1;
             this.sbPanelCaretPosition.Text = "Ln " + line + " Col " + col;
         }
 
@@ -2300,7 +2301,7 @@ namespace DataCommander
         {
             try
             {
-                DataTable dataTable = oleDbConnection.GetOleDbSchemaTable(guid, null);
+                var dataTable = oleDbConnection.GetOleDbSchemaTable(guid, null);
                 dataTable.TableName = name;
                 dataSet.Tables.Add(dataTable);
             }
@@ -2326,8 +2327,8 @@ namespace DataCommander
 
                     var c2 = new ConnectionClass();
                     c2.Open(this.connectionString, null, null, 0);
-                    Recordset rs = c2.OpenSchema(SchemaEnum.adSchemaDBInfoKeywords, Type.Missing, Type.Missing);
-                    DataTable dataTable = OleDbHelper.Convert(rs);
+                    var rs = c2.OpenSchema(SchemaEnum.adSchemaDBInfoKeywords, Type.Missing, Type.Missing);
+                    var dataTable = OleDbHelper.Convert(rs);
                     c2.Close();
                     dataSet.Tables.Add(dataTable);
 
@@ -2342,7 +2343,7 @@ namespace DataCommander
                     if (this.command != null)
                     {
                         this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, this.command.ToLogString()));
-                        DataTable dataTable = this.Provider.GetParameterTable(this.command.Parameters);
+                        var dataTable = this.Provider.GetParameterTable(this.command.Parameters);
 
                         if (dataTable != null)
                         {
@@ -2350,9 +2351,9 @@ namespace DataCommander
 
                             foreach (DataRow row in dataTable.Rows)
                             {
-                                object value = row["Value"];
-                                Type type = value.GetType();
-                                TypeCode typeCode = Type.GetTypeCode(type);
+                                var value = row["Value"];
+                                var type = value.GetType();
+                                var typeCode = Type.GetTypeCode(type);
 
                                 switch (typeCode)
                                 {
@@ -2363,8 +2364,8 @@ namespace DataCommander
                                         const long TicksPerHour = TicksPerMinute*60;
                                         const long TicksPerDay = TicksPerHour*24;
 
-                                        DateTime dateTime = (DateTime)value;
-                                        long ticks = dateTime.Ticks;
+                                        var dateTime = (DateTime)value;
+                                        var ticks = dateTime.Ticks;
 
                                         if (ticks%TicksPerDay == 0)
                                         {
@@ -2454,14 +2455,14 @@ namespace DataCommander
 
         private void WriteRows(long rowCount, int scale)
         {
-            long ticks = this.stopwatch.ElapsedTicks;
+            var ticks = this.stopwatch.ElapsedTicks;
             this.sbPanelTimer.Text = StopwatchTimeSpan.ToString(ticks, scale);
 
-            string text = rowCount.ToString() + " row(s).";
+            var text = rowCount.ToString() + " row(s).";
 
             if (rowCount > 0)
             {
-                double seconds = (double)ticks/Stopwatch.Frequency;
+                var seconds = (double)ticks/Stopwatch.Frequency;
 
                 text += " (" + Math.Round(rowCount/seconds, 0) + " rows/sec)";
             }
@@ -2473,7 +2474,7 @@ namespace DataCommander
         {
             if (this.dataAdapter != null)
             {
-                long rowCount = this.dataAdapter.RowCount;
+                var rowCount = this.dataAdapter.RowCount;
                 this.WriteRows(rowCount, 0);
             }
         }
@@ -2485,7 +2486,7 @@ namespace DataCommander
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            string text = this.QueryTextBox.RichTextBox.Text;
+            var text = this.QueryTextBox.RichTextBox.Text;
             if (this.Connection != null)
             {
                 log.Write(LogLevel.Trace, "Saving text before closing form(connectionName: {0}):\r\n{1}", this.Connection.ConnectionName, text);
@@ -2506,8 +2507,8 @@ namespace DataCommander
                     }
                     catch (Exception ex)
                     {
-                        string message = this.Provider.GetExceptionMessage(ex);
-                        Color color = this.messagesTextBox.SelectionColor;
+                        var message = this.Provider.GetExceptionMessage(ex);
+                        var color = this.messagesTextBox.SelectionColor;
                         this.messagesTextBox.SelectionColor = Color.Red;
                         this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, message));
                         this.messagesTextBox.SelectionColor = color;
@@ -2522,7 +2523,7 @@ namespace DataCommander
                 if (hasTransactions)
                 {
                     text = "There are uncommitted transactions. Do you wish to commit these transactions before closing the window?";
-                    string caption = DataCommanderApplication.Instance.Name;
+                    var caption = DataCommanderApplication.Instance.Name;
                     var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
                     switch (result)
                     {
@@ -2543,13 +2544,13 @@ namespace DataCommander
 
                 if (!e.Cancel)
                 {
-                    int length = this.QueryTextBox.Text.Length;
+                    var length = this.QueryTextBox.Text.Length;
 
                     if (length > 0)
                     {
                         text = $"The text in {this.Text} has been changed.\r\nDo you want to save the changes?";
-                        string caption = DataCommanderApplication.Instance.Name;
-                        DialogResult result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                        var caption = DataCommanderApplication.Instance.Name;
+                        var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 
                         switch (result)
                         {
@@ -2578,8 +2579,8 @@ namespace DataCommander
             else
             {
                 text = "Are you sure you wish to cancel this query?";
-                string caption = DataCommanderApplication.Instance.Name;
-                DialogResult result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                var caption = DataCommanderApplication.Instance.Name;
+                var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 
                 if (result == DialogResult.Yes)
                 {
@@ -2598,7 +2599,7 @@ namespace DataCommander
 
                 if (this.Connection != null)
                 {
-                    string dataSource = this.Connection.DataSource;
+                    var dataSource = this.Connection.DataSource;
                     this.parentStatusBar.Items[0].Text = "Closing connection to database " + dataSource + "....";
                     this.Connection.Close();
                     this.parentStatusBar.Items[0].Text = "Connection to database " + dataSource + " closed.";
@@ -2671,14 +2672,14 @@ namespace DataCommander
 
         private void menuObjectExplorer_Click(object sender, EventArgs e)
         {
-            bool visible = !this.tvObjectExplorer.Visible;
+            var visible = !this.tvObjectExplorer.Visible;
             this.tvObjectExplorer.Visible = visible;
             this.splitterObjectExplorer.Visible = visible;
         }
 
         private void tvObjectBrowser_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            TreeNode treeNode = e.Node;
+            var treeNode = e.Node;
 
             if (treeNode.Nodes.Count > 0)
             {
@@ -2715,7 +2716,7 @@ namespace DataCommander
                 }
                 else
                 {
-                    int count = treeNode.GetNodeCount(false);
+                    var count = treeNode.GetNodeCount(false);
                     this.sbPanelText.Text = treeNode.Text + " node has " + count + " children.";
                     this.sbPanelText.ForeColor = SystemColors.ControlText;
                 }
@@ -2738,7 +2739,7 @@ namespace DataCommander
                             this.tvObjectExplorer.SelectedNode = treeNode;
                         }
 
-                        string text = treeNode.Text;
+                        var text = treeNode.Text;
                     }
                     break;
 
@@ -2765,9 +2766,9 @@ namespace DataCommander
             {
                 using (new CursorManager(Cursors.WaitCursor))
                 {
-                    TreeNodeCollection rootNodes = this.tvObjectExplorer.Nodes;
+                    var rootNodes = this.tvObjectExplorer.Nodes;
                     rootNodes.Clear();
-                    IEnumerable<ITreeNode> treeNodes = objectExplorer.GetChildren(true);
+                    var treeNodes = objectExplorer.GetChildren(true);
                     this.AddNodes(rootNodes, treeNodes, objectExplorer.Sortable);
                 }
             }
@@ -2779,7 +2780,7 @@ namespace DataCommander
             {
                 if (e.Button == MouseButtons.Right)
                 {
-                    TreeNode treeNodeV = this.tvObjectExplorer.SelectedNode;
+                    var treeNodeV = this.tvObjectExplorer.SelectedNode;
 
                     if (treeNodeV != null)
                     {
@@ -2798,7 +2799,7 @@ namespace DataCommander
 
                         if (contextMenu != null)
                         {
-                            bool contains = this.components.Components.Cast<IComponent>().Contains(contextMenu);
+                            var contains = this.components.Components.Cast<IComponent>().Contains(contextMenu);
                             if (!contains)
                             {
                                 this.components.Add(contextMenu);
@@ -2826,12 +2827,12 @@ namespace DataCommander
                 try
                 {
                     this.Cursor = Cursors.WaitCursor;
-                    string query = treeNode.Query;
+                    var query = treeNode.Query;
                     if (query != null)
                     {
-                        string text0 = this.QueryTextBox.Text;
+                        var text0 = this.QueryTextBox.Text;
                         string append = null;
-                        int selectionStart = this.QueryTextBox.RichTextBox.TextLength;
+                        var selectionStart = this.QueryTextBox.RichTextBox.TextLength;
 
                         if (!string.IsNullOrEmpty(text0))
                         {
@@ -2869,15 +2870,15 @@ namespace DataCommander
                 richTextBox = this.QueryTextBox.RichTextBox;
             }
 
-            int charIndex = richTextBox.SelectionStart;
-            int currentLineNumber = richTextBox.GetLineFromCharIndex(charIndex) + 1;
+            var charIndex = richTextBox.SelectionStart;
+            var currentLineNumber = richTextBox.GetLineFromCharIndex(charIndex) + 1;
             var form = new GotoLineForm();
-            int maxLineNumber = richTextBox.Lines.Length;
+            var maxLineNumber = richTextBox.Lines.Length;
             form.Init(currentLineNumber, maxLineNumber);
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
-                int lineNumber = form.LineNumber;
+                var lineNumber = form.LineNumber;
                 charIndex = NativeMethods.SendMessage(richTextBox.Handle.ToInt32(), (int)NativeMethods.Message.EditBox.LineIndex, lineNumber - 1, 0);
                 richTextBox.SelectionStart = charIndex;
             }
@@ -2909,8 +2910,8 @@ namespace DataCommander
 
         private void FindText(string text)
         {
-            bool found = false;
-            Control control = this.ActiveControl;
+            var found = false;
+            var control = this.ActiveControl;
 
             try
             {
@@ -2941,14 +2942,14 @@ namespace DataCommander
 
                 if (treeView != null)
                 {
-                    TreeNode treeNode2 = treeView.SelectedNode.FirstNode;
+                    var treeNode2 = treeView.SelectedNode.FirstNode;
 
                     if (treeNode2 == null || treeNode2.Tag == null)
                     {
                         treeNode2 = treeView.SelectedNode.NextNode;
                     }
 
-                    TreeNode treeNode = treeNode2;
+                    var treeNode = treeNode2;
 
                     while (treeNode != null)
                     {
@@ -2977,34 +2978,34 @@ namespace DataCommander
 
                     if (dataTableViewer != null)
                     {
-                        DataTable dataTable = dataTableViewer.DataTable;
+                        var dataTable = dataTableViewer.DataTable;
 
                         if (dataTable != null)
                         {
                             if (text.StartsWith("RowFilter="))
                             {
-                                string rowFilter = text.Substring(5);
-                                DataView dataView = dataTable.DefaultView;
+                                var rowFilter = text.Substring(5);
+                                var dataView = dataTable.DefaultView;
                                 dataView.RowFilter = rowFilter;
-                                int count = dataView.Count;
+                                var count = dataView.Count;
                                 found = count > 0;
                                 this.sbPanelText.Text = $"{count} rows found. RowFilter: {rowFilter}";
                                 this.sbPanelText.ForeColor = SystemColors.ControlText;
                             }
                             else if (text.StartsWith("Sort="))
                             {
-                                string sort = text.Substring(5);
-                                DataView dataView = dataTable.DefaultView;
+                                var sort = text.Substring(5);
+                                var dataView = dataTable.DefaultView;
                                 dataView.Sort = sort;
                                 this.sbPanelText.Text = $"Rows sorted by {sort}.";
                                 this.sbPanelText.ForeColor = SystemColors.ControlText;
                             }
                             else
                             {
-                                DataGridView dataGrid = dataTableViewer.DataGrid;
-                                DataGridViewCell cell = dataGrid.CurrentCell;
-                                int rowIndex = cell.RowIndex;
-                                int columnIndex = cell.ColumnIndex;
+                                var dataGrid = dataTableViewer.DataGrid;
+                                var cell = dataGrid.CurrentCell;
+                                var rowIndex = cell.RowIndex;
+                                var columnIndex = cell.ColumnIndex;
                                 found = QueryFormStaticMethods.FindText(dataTable.DefaultView, matcher, ref rowIndex, ref columnIndex);
 
                                 if (found)
@@ -3027,8 +3028,8 @@ namespace DataCommander
                             richTextBox = this.QueryTextBox.RichTextBox;
                         }
 
-                        int start = richTextBox.SelectionStart + richTextBox.SelectionLength;
-                        int location = richTextBox.Find(text, start, options);
+                        var start = richTextBox.SelectionStart + richTextBox.SelectionLength;
+                        var location = richTextBox.Find(text, start, options);
                         found = location >= 0;
                     }
                 }
@@ -3056,7 +3057,7 @@ namespace DataCommander
                     this.findTextForm = new FindTextForm();
                 }
 
-                Control control = this.ActiveControl;
+                var control = this.ActiveControl;
                 var dataTableViewer = control as DataTableEditor;
 
                 if (dataTableViewer == null)
@@ -3068,7 +3069,7 @@ namespace DataCommander
                 if (dataTableViewer != null)
                 {
                     var dataTable = dataTableViewer.DataTable;
-                    string name = dataTable.TableName;
+                    var name = dataTable.TableName;
                     this.findTextForm.Text = $"Find (DataTable: {name})";
                 }
                 else
@@ -3091,7 +3092,7 @@ namespace DataCommander
         {
             if (this.findTextForm != null)
             {
-                string text = this.findTextForm.FindText;
+                var text = this.findTextForm.FindText;
 
                 if (text != null)
                 {
@@ -3110,11 +3111,11 @@ namespace DataCommander
                 this.sbPanelText.ForeColor = SystemColors.ControlText;
 
                 const RichTextBoxStreamType type = RichTextBoxStreamType.UnicodePlainText;
-                Encoding encoding = Encoding.Unicode;
+                var encoding = Encoding.Unicode;
 
-                using (FileStream stream = File.Create(fileName))
+                using (var stream = File.Create(fileName))
                 {
-                    byte[] preamble = encoding.GetPreamble();
+                    var preamble = encoding.GetPreamble();
                     stream.Write(preamble, 0, preamble.Length);
                     this.QueryTextBox.RichTextBox.SaveFile(stream, type);
                 }
@@ -3143,7 +3144,7 @@ namespace DataCommander
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                string fileName = saveFileDialog.FileName;
+                var fileName = saveFileDialog.FileName;
                 this.Save(fileName);
             }
         }
@@ -3182,15 +3183,15 @@ namespace DataCommander
 
         private GetCompletionResponse GetCompletion()
         {
-            RichTextBox textBox = this.QueryTextBox.RichTextBox;
-            string text = textBox.Text;
-            int position = textBox.SelectionStart;
+            var textBox = this.QueryTextBox.RichTextBox;
+            var text = textBox.Text;
+            var position = textBox.SelectionStart;
 
-            long ticks = Stopwatch.GetTimestamp();
+            var ticks = Stopwatch.GetTimestamp();
             var response = this.Provider.GetCompletion(this.Connection, this.transaction, text, position);
-            string from = response.FromCache ? "cache" : "data source";
+            var from = response.FromCache ? "cache" : "data source";
             ticks = Stopwatch.GetTimestamp() - ticks;
-            int length = response.Items != null ? response.Items.Count : 0;
+            var length = response.Items != null ? response.Items.Count : 0;
             this.sbPanelText.Text = $"GetCompletion returned {length} items from {@from} in {StopwatchTimeSpan.ToString(ticks, 3)} seconds.";
             this.sbPanelText.ForeColor = SystemColors.ControlText;
             return response;
@@ -3219,11 +3220,11 @@ namespace DataCommander
         {
             var textBox = this.QueryTextBox;
 
-            IntPtr intPtr = textBox.RichTextBox.Handle;
-            int hWnd = intPtr.ToInt32();
+            var intPtr = textBox.RichTextBox.Handle;
+            var hWnd = intPtr.ToInt32();
             NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.Gdi.SetRedraw, 0, 0);
 
-            string objectName = e.ObjectName.QuotedName;
+            var objectName = e.ObjectName.QuotedName;
 
             textBox.RichTextBox.SelectionStart = e.StartIndex;
             textBox.RichTextBox.SelectionLength = e.Length;
@@ -3276,11 +3277,11 @@ namespace DataCommander
                         }
 
                         DataSet dataSet = null;
-                        int i = 1;
+                        var i = 1;
 
                         do
                         {
-                            DataTable dataTable = this.Provider.GetSchemaTable(dataReader);
+                            var dataTable = this.Provider.GetSchemaTable(dataReader);
 
                             if (dataTable != null)
                             {
@@ -3339,7 +3340,7 @@ namespace DataCommander
                     {
                         var schemaTable = this.Provider.GetSchemaTable(dataReader);
                         var dataReaderHelper = this.Provider.CreateDataReaderHelper(dataReader);
-                        int rowCount = 0;
+                        var rowCount = 0;
 
                         while (dataReader.Read())
                         {
@@ -3351,14 +3352,14 @@ namespace DataCommander
                             dataTable.Columns.Add(" ", typeof (int));
                             dataTable.Columns.Add("Name", typeof (string));
                             dataTable.Columns.Add("Value");
-                            int count = schemaTable.Rows.Count;
+                            var count = schemaTable.Rows.Count;
 
-                            for (int i = 0; i < count; i++)
+                            for (var i = 0; i < count; i++)
                             {
-                                DataRow schemaRow = schemaTable.Rows[i];
-                                string columnName = schemaRow["Name"].ToString();
+                                var schemaRow = schemaTable.Rows[i];
+                                var columnName = schemaRow["Name"].ToString();
 
-                                DataRow dataRow = dataTable.NewRow();
+                                var dataRow = dataTable.NewRow();
                                 dataRow[0] = i + 1;
                                 dataRow[1] = columnName;
                                 dataRow[2] = values[i];
@@ -3410,7 +3411,7 @@ namespace DataCommander
                     while (true)
                     {
                         var writer = new StringWriter();
-                        bool read = false;
+                        var read = false;
 
                         while (dataReader.Read())
                         {
@@ -3419,15 +3420,15 @@ namespace DataCommander
                                 read = true;
                             }
 
-                            string fragment = (string)dataReader[0];
+                            var fragment = (string)dataReader[0];
                             writer.Write(fragment);
                         }
 
                         if (read)
                         {
-                            string xml = writer.ToString();
+                            var xml = writer.ToString();
                             var xmlDocument = new XmlDocument();
-                            string path = Path.GetTempFileName() + ".xml";
+                            var path = Path.GetTempFileName() + ".xml";
 
                             try
                             {
@@ -3477,8 +3478,8 @@ namespace DataCommander
 
                 this.sqlStatement = new SqlStatement(this.Query);
                 this.command = this.sqlStatement.CreateCommand(this.Provider, this.Connection, CommandType.Text, this.commandTimeout);
-                string tableName = this.sqlStatement.FindTableName();
-                int tableIndex = 0;
+                var tableName = this.sqlStatement.FindTableName();
+                var tableIndex = 0;
 
                 using (var dataReader = this.command.ExecuteReader())
                 {
@@ -3490,7 +3491,7 @@ namespace DataCommander
                         }
 
                         var dataReaderHelper = this.Provider.CreateDataReaderHelper(dataReader);
-                        DataTable schemaTable = dataReader.GetSchemaTable();
+                        var schemaTable = dataReader.GetSchemaTable();
                         var sb = new StringBuilder();
 
                         if (schemaTable != null)
@@ -3505,43 +3506,43 @@ namespace DataCommander
                             }
 
                             this.standardOutput.WriteLine(InsertScriptFileWriter.GetCreateTableStatement(schemaTable));
-                            DataRowCollection schemaRows = schemaTable.Rows;
-                            int columnCount = schemaRows.Count;
+                            var schemaRows = schemaTable.Rows;
+                            var columnCount = schemaRows.Count;
                             sb.AppendFormat("insert into {0}(", tableName);
 
-                            for (int i = 0; i < columnCount; i++)
+                            for (var i = 0; i < columnCount; i++)
                             {
                                 if (i > 0)
                                 {
                                     sb.Append(',');
                                 }
 
-                                DataRow schemaRow = schemaRows[i];
-                                string columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
+                                var schemaRow = schemaRows[i];
+                                var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
                                 sb.Append(columnName);
                             }
                         }
 
                         sb.Append(") values(");
-                        string insertInto = sb.ToString();
-                        int fieldCount = dataReader.FieldCount;
+                        var insertInto = sb.ToString();
+                        var fieldCount = dataReader.FieldCount;
                         sb.Length = 0;
-                        int statementCount = 0;
+                        var statementCount = 0;
 
                         while (dataReader.Read())
                         {
-                            object[] values = new object[fieldCount];
+                            var values = new object[fieldCount];
                             dataReaderHelper.GetValues(values);
                             sb.Append(insertInto);
 
-                            for (int i = 0; i < fieldCount; i++)
+                            for (var i = 0; i < fieldCount; i++)
                             {
                                 if (i > 0)
                                 {
                                     sb.Append(',');
                                 }
 
-                                string s = InsertScriptFileWriter.ToString(values[i]);
+                                var s = InsertScriptFileWriter.ToString(values[i]);
                                 sb.Append(s);
                             }
 
@@ -3584,34 +3585,34 @@ namespace DataCommander
             {
                 this.sqlStatement = new SqlStatement(this.Query);
                 this.command = this.sqlStatement.CreateCommand(this.Provider, this.Connection, CommandType.Text, this.commandTimeout);
-                string tableName = this.sqlStatement.FindTableName();
+                var tableName = this.sqlStatement.FindTableName();
 
                 if (tableName != null)
                 {
-                    using (IDataReader dataReader = this.command.ExecuteReader())
+                    using (var dataReader = this.command.ExecuteReader())
                     {
-                        IDataReaderHelper dataReaderHelper = this.Provider.CreateDataReaderHelper(dataReader);
-                        DataTable schemaTable = dataReader.GetSchemaTable();
-                        DataRowCollection schemaRows = schemaTable.Rows;
-                        int columnCount = schemaRows.Count;
-                        StringBuilder sb = new StringBuilder();
+                        var dataReaderHelper = this.Provider.CreateDataReaderHelper(dataReader);
+                        var schemaTable = dataReader.GetSchemaTable();
+                        var schemaRows = schemaTable.Rows;
+                        var columnCount = schemaRows.Count;
+                        var sb = new StringBuilder();
                         sb.AppendFormat("insert into {0}(", tableName);
 
-                        for (int i = 0; i < columnCount; i++)
+                        for (var i = 0; i < columnCount; i++)
                         {
                             if (i > 0)
                             {
                                 sb.Append(',');
                             }
 
-                            DataRow schemaRow = schemaRows[i];
-                            string columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
+                            var schemaRow = schemaRows[i];
+                            var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
                             sb.Append(columnName);
                         }
 
                         sb.Append(")\r\nselect");
-                        string insertInto = sb.ToString();
-                        int fieldCount = dataReader.FieldCount;
+                        var insertInto = sb.ToString();
+                        var fieldCount = dataReader.FieldCount;
 
                         while (dataReader.Read())
                         {
@@ -3620,7 +3621,7 @@ namespace DataCommander
                             sb = new StringBuilder();
                             sb.Append(insertInto);
 
-                            for (int i = 0; i < fieldCount; i++)
+                            for (var i = 0; i < fieldCount; i++)
                             {
                                 sb.Append('\t');
 
@@ -3632,7 +3633,7 @@ namespace DataCommander
                                     sb.Append(',');
                                 }
 
-                                string s = InsertScriptFileWriter.ToString(values[i]);
+                                var s = InsertScriptFileWriter.ToString(values[i]);
                                 sb.AppendFormat("{0}\t\tas {1}", s, dataReader.GetName(i));
                             }
 
@@ -3668,19 +3669,19 @@ namespace DataCommander
         {
             var treeNode = (TreeNode)e.Item;
             var treeNode2 = (ITreeNode)treeNode.Tag;
-            string text = treeNode.Text;
+            var text = treeNode.Text;
             this.tvObjectExplorer.DoDragDrop(text, DragDropEffects.All);
         }
 
         private async void mnuDuplicateConnection_Click(object sender, EventArgs e)
         {
             var mainForm = DataCommanderApplication.Instance.MainForm;
-            int index = mainForm.MdiChildren.Length;
+            var index = mainForm.MdiChildren.Length;
 
             var connection = this.Provider.CreateConnection(this.connectionString);
             connection.ConnectionName = this.Connection.ConnectionName;
             await connection.OpenAsync(CancellationToken.None);
-            string database = this.Connection.Database;
+            var database = this.Connection.Database;
 
             if (connection.Database != this.Connection.Database)
             {
@@ -3738,8 +3739,8 @@ namespace DataCommander
             var sqlStatement = new SqlStatement(this.Query);
             this.command = sqlStatement.CreateCommand(this.Provider, this.Connection, this.commandType, this.commandTimeout);
             IAsyncDataAdapter asyncDataAdatper = new AsyncDataAdapter();
-            int maxRecords = int.MaxValue;
-            string tableName = sqlStatement.FindTableName();
+            var maxRecords = int.MaxValue;
+            var tableName = sqlStatement.FindTableName();
             var sqlCeResultWriter = new SqlCeResultWriter(this.textBoxWriter, tableName);
             asyncDataAdatper.BeginFill(
                 this.Provider,
@@ -3776,7 +3777,7 @@ namespace DataCommander
         {
             if (this.transaction == null)
             {
-                IDbTransaction transaction = this.Connection.Connection.BeginTransaction();
+                var transaction = this.Connection.Connection.BeginTransaction();
                 this.SetTransaction(transaction);
             }
         }
@@ -3824,16 +3825,16 @@ namespace DataCommander
 
         internal void ScriptQueryAsCreateTable()
         {
-            SqlStatement sqlStatement = new SqlStatement(this.Query);
-            IDbCommand command = sqlStatement.CreateCommand(this.Provider, this.Connection, this.commandType, this.commandTimeout);
+            var sqlStatement = new SqlStatement(this.Query);
+            var command = sqlStatement.CreateCommand(this.Provider, this.Connection, this.commandType, this.commandTimeout);
 
-            Form[] forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
-            int index = Array.IndexOf(forms, this);
+            var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
+            var index = Array.IndexOf(forms, this);
             IProvider destinationProvider;
 
             if (index < forms.Length - 1)
             {
-                QueryForm nextQueryForm = (QueryForm)forms[index + 1];
+                var nextQueryForm = (QueryForm)forms[index + 1];
                 destinationProvider = nextQueryForm.Provider;
             }
             else
@@ -3844,12 +3845,12 @@ namespace DataCommander
             DataTable schemaTable;
             string[] dataTypeNames;
 
-            using (IDataReader dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
+            using (var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
             {
                 schemaTable = dataReader.GetSchemaTable();
                 dataTypeNames = new string[dataReader.FieldCount];
 
-                for (int i = 0; i < dataReader.FieldCount; i++)
+                for (var i = 0; i < dataReader.FieldCount; i++)
                 {
                     dataTypeNames[i] = dataReader.GetDataTypeName(i);
                 }
@@ -3863,20 +3864,20 @@ namespace DataCommander
             {
                 tableName = sqlStatement.FindTableName();
             }
-            StringBuilder createTable = new StringBuilder();
+            var createTable = new StringBuilder();
             createTable.AppendFormat("create table [{0}]\r\n(\r\n", tableName);
-            StringTable stringTable = new StringTable(3);
-            int last = schemaTable.Rows.Count - 1;
+            var stringTable = new StringTable(3);
+            var last = schemaTable.Rows.Count - 1;
 
-            for (int i = 0; i <= last; i++)
+            for (var i = 0; i <= last; i++)
             {
-                DataRow dataRow = schemaTable.Rows[i];
-                DbColumn schemaRow = new DbColumn(dataRow);
-                StringTableRow row = stringTable.NewRow();
-                string typeName = destinationProvider.GetColumnTypeName(this.Provider, dataRow, dataTypeNames[i]);
+                var dataRow = schemaTable.Rows[i];
+                var schemaRow = new DbColumn(dataRow);
+                var row = stringTable.NewRow();
+                var typeName = destinationProvider.GetColumnTypeName(this.Provider, dataRow, dataTypeNames[i]);
                 row[1] = schemaRow.ColumnName;
                 row[2] = typeName;
-                bool? allowDBNull = schemaRow.AllowDBNull;
+                var allowDBNull = schemaRow.AllowDBNull;
 
                 if (allowDBNull == false)
                 {
@@ -3896,7 +3897,7 @@ namespace DataCommander
             createTable.Append(stringTable.ToString(4));
 
             createTable.Append(')');
-            string commandText = createTable.ToString();
+            var commandText = createTable.ToString();
 
             this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "\r\n" + commandText));
         }
@@ -3904,7 +3905,7 @@ namespace DataCommander
         internal void CopyTable()
         {
             var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
-            int index = Array.IndexOf(forms, this);
+            var index = Array.IndexOf(forms, this);
             if (index < forms.Length - 1)
             {
                 var nextQueryForm = (QueryForm)forms[index + 1];
@@ -3929,8 +3930,8 @@ namespace DataCommander
 
                 IResultWriter resultWriter = new CopyResultWriter(this.AddInfoMessage, destinationProvider, destinationConnection, tableName,
                     nextQueryForm.InvokeSetTransaction, CancellationToken.None);
-                int maxRecords = int.MaxValue;
-                int rowBlockSize = 10000;
+                var maxRecords = int.MaxValue;
+                var rowBlockSize = 10000;
                 this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, "Copying table..."));
                 this.sbPanelText.Text = "Copying table...";
                 this.sbPanelText.ForeColor = SystemColors.ControlText;
@@ -3960,7 +3961,7 @@ namespace DataCommander
         internal void CopyTableWithSqlBulkCopy()
         {
             var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
-            int index = Array.IndexOf(forms, this);
+            var index = Array.IndexOf(forms, this);
             if (index < forms.Length - 1)
             {
                 var nextQueryForm = (QueryForm)forms[index + 1];
@@ -3980,8 +3981,8 @@ namespace DataCommander
                 }
 
                 //IResultWriter resultWriter = new SqlBulkCopyResultWriter( this.AddInfoMessage, destinationProvider, destinationConnection, tableName, nextQueryForm.InvokeSetTransaction );
-                int maxRecords = int.MaxValue;
-                int rowBlockSize = 10000;
+                var maxRecords = int.MaxValue;
+                var rowBlockSize = 10000;
                 this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, "Copying table..."));
                 this.sbPanelText.Text = "Copying table...";
                 this.sbPanelText.ForeColor = SystemColors.ControlText;
@@ -4016,7 +4017,7 @@ namespace DataCommander
         private void TableStyleMenuItem_Click(object sender, EventArgs e)
         {
             var item = (ToolStripMenuItem)sender;
-            ResultWriterType tableStyle = (ResultWriterType)item.Tag;
+            var tableStyle = (ResultWriterType)item.Tag;
             this.SetResultWriterType(tableStyle);
         }
 
@@ -4029,8 +4030,8 @@ namespace DataCommander
             try
             {
                 var queryTextBox = queryForm.QueryTextBox;
-                int selectionStart = queryTextBox.RichTextBox.TextLength;
-                string append = text;
+                var selectionStart = queryTextBox.RichTextBox.TextLength;
+                var append = text;
                 queryTextBox.RichTextBox.AppendText(append);
                 queryTextBox.RichTextBox.SelectionStart = selectionStart;
                 queryTextBox.RichTextBox.SelectionLength = append.Length;
@@ -4102,12 +4103,12 @@ namespace DataCommander
         private void parseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var transactionScope = new DbTransactionScope(this.Connection.Connection, null);
-            bool on = false;
+            var on = false;
             try
             {
                 transactionScope.ExecuteNonQuery(new CommandDefinition {CommandText = "SET PARSEONLY ON"});
                 on = true;
-                string query = this.Query;
+                var query = this.Query;
                 bool succeeded;
 
                 try
@@ -4146,6 +4147,6 @@ namespace DataCommander
             this.Refresh();
         }
 
-        #endregion
+#endregion
     }
 }

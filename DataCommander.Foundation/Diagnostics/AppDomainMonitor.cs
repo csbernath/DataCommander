@@ -6,7 +6,6 @@ namespace DataCommander.Foundation.Diagnostics
     using System.IO;
     using System.Reflection;
     using System.Text;
-    using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Linq;
     using DataCommander.Foundation.Text;
     using Microsoft.Win32;

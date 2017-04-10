@@ -46,7 +46,7 @@
         /// <param name="buffer"></param>
         /// <param name="index"></param>
         /// <param name="count"></param>
-        public override void Write(Char[] buffer, int index, int count)
+        public override void Write(char[] buffer, int index, int count)
         {
             var value = new string(buffer, index, count);
             this.Write(value);

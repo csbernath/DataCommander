@@ -1,8 +1,6 @@
 namespace DataCommander.Foundation.Data
 {
-    using System;
     using System.Data;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -18,14 +16,16 @@ namespace DataCommander.Foundation.Data
 
         internal AsyncDbCommand(AsyncDbConnection connection, IDbCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(connection != null);
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
 
             this.connection = connection;
             this.command = command;
         }
 
-        #region IDbCommand Members
+#region IDbCommand Members
 
         /// <summary>
         /// 
@@ -50,7 +50,9 @@ namespace DataCommander.Foundation.Data
         {
             get
             {
+#if CONTRACTS_FULL
                 Contract.Assert(this.command != null);
+#endif
 
                 return this.command.CommandType;
             }
@@ -94,7 +96,9 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public int ExecuteNonQuery()
         {
+#if CONTRACTS_FULL
             Contract.Assert(this.connection != null);
+#endif
 
             return this.connection.ExecuteNonQuery(this);
         }
@@ -167,13 +171,17 @@ namespace DataCommander.Foundation.Data
         {
             get
             {
+#if CONTRACTS_FULL
                 Contract.Assert(this.command != null);
+#endif
                 return this.command.CommandText;
             }
 
             set
             {
+#if CONTRACTS_FULL
                 Contract.Assert(this.command != null);
+#endif
                 this.command.CommandText = value;
             }
         }
@@ -185,7 +193,9 @@ namespace DataCommander.Foundation.Data
         {
             get
             {
+#if CONTRACTS_FULL
                 Contract.Assert(this.command != null);
+#endif
                 return this.command.Parameters;
             }
         }
@@ -197,22 +207,26 @@ namespace DataCommander.Foundation.Data
         {
             get
             {
+#if CONTRACTS_FULL
                 Contract.Assert(this.command != null);
+#endif
 
                 return this.command.Transaction;
             }
 
             set
             {
+#if CONTRACTS_FULL
                 Contract.Assert(this.command != null);
+#endif
 
                 this.command.Transaction = value;
             }
         }
 
-        #endregion
+#endregion
 
-        #region IDisposable Members
+#region IDisposable Members
 
         /// <summary>
         /// 
@@ -222,13 +236,15 @@ namespace DataCommander.Foundation.Data
             // TODO:  Add AsyncDbCommand.Dispose implementation
         }
 
-        #endregion
+#endregion
 
-        [ContractInvariantMethod]
+        //[ContractInvariantMethod]
         private void ObjectInvariant()
         {
+#if CONTRACTS_FULL
             Contract.Invariant(this.connection != null);
             Contract.Invariant(this.command != null);
+#endif
         }
     }
 }

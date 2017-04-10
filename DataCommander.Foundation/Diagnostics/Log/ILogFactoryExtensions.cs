@@ -2,7 +2,6 @@
 {
     using System;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
     using System.Text;
 
     /// <summary>
@@ -18,8 +17,10 @@
         /// <returns></returns>
         public static ILog GetTypeLog(this ILogFactory applicationLog, Type type)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(applicationLog != null);
             Contract.Requires<ArgumentNullException>(type != null);
+#endif
 
             var name = type.FullName;
 

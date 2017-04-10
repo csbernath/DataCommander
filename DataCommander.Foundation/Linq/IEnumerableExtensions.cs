@@ -65,8 +65,10 @@ namespace DataCommander.Foundation.Linq
             this IEnumerable<TSource> source,
             Func<TSource, TKey> keySelector)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(source != null);
             Contract.Requires<ArgumentNullException>(keySelector != null);
+#endif
 
             return source.Select(keySelector).SelectPreviousAndCurrent();
         }
@@ -84,12 +86,14 @@ namespace DataCommander.Foundation.Linq
             int count,
             int partitionCount)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(source != null);
             Contract.Requires<ArgumentOutOfRangeException>(count >= 0);
             Contract.Requires<ArgumentOutOfRangeException>(partitionCount > 0);
 
             Contract.Ensures(Contract.Result<IEnumerable<List<TSource>>>().Count() <= partitionCount);
             Contract.Ensures(Contract.ForAll(Contract.Result<IEnumerable<List<TSource>>>().ToList(), partition => partition.Count > 0));
+#endif
 
             var partitionSize = count/partitionCount;
             var remainder = count%partitionCount;
@@ -240,8 +244,10 @@ namespace DataCommander.Foundation.Linq
         /// <returns></returns>
         public static SortedDictionary<TKey, TValue> ToSortedDictionary<TKey, TValue>(this IEnumerable<TValue> source, Func<TValue, TKey> keySelector)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(source != null);
             Contract.Requires<ArgumentNullException>(keySelector != null);
+#endif
 
             var dictionary = new SortedDictionary<TKey, TValue>();
             dictionary.Add(source, keySelector);
@@ -270,7 +276,9 @@ namespace DataCommander.Foundation.Linq
         /// <returns></returns>
         public static string ToString<T>(this IEnumerable<T> source, string separator, Func<T, string> toString)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(toString != null);
+#endif
 
             string result;
             if (source != null)
@@ -306,12 +314,14 @@ namespace DataCommander.Foundation.Linq
         /// <returns></returns>
         public static string ToString<TSource>(this IEnumerable<TSource> source, IReadOnlyCollection<StringTableColumnInfo<TSource>> columns)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(source != null);
             Contract.Requires<ArgumentNullException>(columns != null);
+#endif
 
             var table = new StringTable(columns.Count);
 
-            #region First row: column names
+#region First row: column names
 
             var row = table.NewRow();
             var columnIndex = 0;
@@ -323,14 +333,14 @@ namespace DataCommander.Foundation.Linq
             }
             table.Rows.Add(row);
 
-            #endregion
+#endregion
 
-            #region Second row: underline first row
+#region Second row: underline first row
 
             var secondRow = table.NewRow();
             table.Rows.Add(secondRow);
 
-            #endregion
+#endregion
 
             foreach (var item in source)
             {
@@ -344,7 +354,7 @@ namespace DataCommander.Foundation.Linq
                 table.Rows.Add(row);
             }
 
-            #region Fill second row
+#region Fill second row
 
             var columnWidths = new int[columns.Count];
             columnIndex = 0;
@@ -356,7 +366,7 @@ namespace DataCommander.Foundation.Linq
                 ++columnIndex;
             }
 
-            #endregion
+#endregion
 
             return table.ToString(columnWidths, " ");
         }

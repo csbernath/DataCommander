@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Linq;
 
     /// <summary>
@@ -21,7 +20,9 @@
 
             if (arrays != null)
             {
+#if CONTRACTS_FULL
                 Contract.ForAll(arrays, a => a != null);
+#endif
                 var resultLength = arrays.Sum(a => a.Length);
                 result = new T[resultLength];
                 var index = 0;
@@ -97,7 +98,9 @@
 
             if (array != null)
             {
+#if CONTRACTS_FULL
                 Contract.Assert(comparer != null);
+#endif
 
                 for (var i = 0; i < array.Length; i++)
                 {

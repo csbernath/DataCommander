@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation.Data.SqlClient
 {
     using System.Data;
-    using System.Data.SqlClient;
     using DataCommander.Foundation.Threading;
 
     /// <summary>

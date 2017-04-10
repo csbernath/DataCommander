@@ -1,7 +1,5 @@
 ﻿namespace DataCommander.Foundation.Data
 {
-    using System.Diagnostics.Contracts;
-
     /// <summary>
     /// 
     /// </summary>
@@ -73,7 +71,9 @@
         {
             get
             {
+#if CONTRACTS_FULL
                 Contract.Assert( this.Type == DataParameterValueType.Value );
+#endif
 
                 return this.value;
             }

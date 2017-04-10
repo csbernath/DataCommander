@@ -2,6 +2,7 @@
 {
     using System.Data.Common;
     using System.Data.SqlClient;
+    using DataCommander.Providers;
 
     internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
     {

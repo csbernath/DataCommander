@@ -11,7 +11,7 @@ namespace DataCommander.Providers.OleDb
     {
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
-            ITreeNode[] treeNodes = new ITreeNode[1];
+            var treeNodes = new ITreeNode[1];
             treeNodes[0] = new CatalogsNode(this.connection);
             return treeNodes;
         }

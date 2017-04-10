@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
-    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Linq;
 
@@ -25,8 +24,10 @@
             DbConnection connection,
             string commandText)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(factory != null);
             Contract.Requires<ArgumentNullException>(connection != null);
+#endif
 
             var command = connection.CreateCommand();
             command.CommandText = commandText;
@@ -57,9 +58,11 @@
             CommandBehavior commandBehavior,
             Func<IDataRecord, T> read)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dbProviderFactory != null);
             Contract.Requires<ArgumentNullException>(commandDefinition != null);
             Contract.Requires<ArgumentNullException>(read != null);
+#endif
 
             using (var connection = dbProviderFactory.CreateConnection())
             {

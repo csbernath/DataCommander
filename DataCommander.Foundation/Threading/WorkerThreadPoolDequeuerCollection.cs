@@ -3,7 +3,6 @@ namespace DataCommander.Foundation.Threading
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -29,7 +28,9 @@ namespace DataCommander.Foundation.Threading
         /// <param name="dequeuer"></param>
         public void Add(WorkerThreadPoolDequeuer dequeuer)
         {
+#if CONTRACTS_FULL
             Contract.Assert(dequeuer != null);
+#endif
 
             this.Threads.Add(dequeuer.Thread);
             this.list.Add(dequeuer);
@@ -45,7 +46,7 @@ namespace DataCommander.Foundation.Threading
             this.list.Remove(dequeuer);
         }
 
-        #region IList<WorkingThreadPoolDequeuer> Members
+#region IList<WorkingThreadPoolDequeuer> Members
 
         /// <summary>
         /// 
@@ -94,9 +95,9 @@ namespace DataCommander.Foundation.Threading
             }
         }
 
-        #endregion
+#endregion
 
-        #region ICollection<WorkingThreadPoolDequeuer> Members
+#region ICollection<WorkingThreadPoolDequeuer> Members
 
         /// <summary>
         /// 
@@ -153,9 +154,9 @@ namespace DataCommander.Foundation.Threading
             throw new NotImplementedException();
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable<WorkingThreadPoolDequeuer> Members
+#region IEnumerable<WorkingThreadPoolDequeuer> Members
 
         /// <summary>
         /// 
@@ -166,9 +167,9 @@ namespace DataCommander.Foundation.Threading
             throw new NotImplementedException();
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable Members
+#region IEnumerable Members
 
         /// <summary>
         /// 
@@ -179,6 +180,6 @@ namespace DataCommander.Foundation.Threading
             throw new NotImplementedException();
         }
 
-        #endregion
+#endregion
     }
 }

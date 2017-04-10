@@ -4,11 +4,10 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
-    using System.Diagnostics.Contracts;
     using System.Xml;
     using DataCommander.Foundation.Data;
 
-    [ContractClassFor(typeof (IProvider))]
+    //[ContractClassFor(typeof (IProvider))]
     internal abstract class IProviderContract : IProvider
     {
         #region IProvider Members
@@ -60,30 +59,40 @@
 
         void IProvider.DeriveParameters(IDbCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires(command != null);
+#endif
         }
 
         DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
         {
+#if CONTRACTS_FULL
             Contract.Requires(parameter != null);
+#endif
             return null;
         }
 
         DataTable IProvider.GetParameterTable(IDataParameterCollection parameters)
         {
+#if CONTRACTS_FULL
             Contract.Requires(parameters != null);
+#endif
             return null;
         }
 
         XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires(command != null);
+#endif
             return null;
         }
 
         DataTable IProvider.GetSchemaTable(IDataReader dataReader)
         {
+#if CONTRACTS_FULL
             Contract.Requires(dataReader != null);
+#endif
             return null;
         }
 
@@ -94,13 +103,17 @@
 
         Type IProvider.GetColumnType(DbColumn dataColumnSchema)
         {
+#if CONTRACTS_FULL
             Contract.Requires(dataColumnSchema != null);
+#endif
             return null;
         }
 
         IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
         {
+#if CONTRACTS_FULL
             Contract.Requires(dataReader != null);
+#endif
             return null;
         }
 
@@ -113,8 +126,9 @@
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {
+#if CONTRACTS_FULL
             Contract.Requires(connection != null);
-
+#endif
             return null;
         }
 
@@ -124,8 +138,9 @@
 
         string IProvider.GetExceptionMessage(Exception exception)
         {
+#if CONTRACTS_FULL
             Contract.Requires(exception != null);
-
+#endif
             return null;
         }
 
@@ -142,7 +157,9 @@
         void IProvider.CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationconnection, string destinationTableName,
             out IDbCommand insertCommand, out Converter<object, object>[] converters)
         {
+#if CONTRACTS_FULL
             Contract.Ensures(Contract.ValueAtReturn(out insertCommand) != null);
+#endif
             insertCommand = null;
             converters = null;
         }
@@ -162,6 +179,6 @@
             throw new NotImplementedException();
         }
 
-        #endregion
+#endregion
     }
 }

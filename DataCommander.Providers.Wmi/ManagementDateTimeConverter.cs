@@ -7,21 +7,21 @@ namespace DataCommander.Providers.Wmi
         public static DateTime ToDateTime( string dmtfDate )
         {
             string text2;
-            DateTime time2 = DateTime.MinValue;
-            int num1 = time2.Year;
+            var time2 = DateTime.MinValue;
+            var num1 = time2.Year;
             time2 = DateTime.MinValue;
-            int num2 = time2.Month;
+            var num2 = time2.Month;
             time2 = DateTime.MinValue;
-            int num3 = time2.Day;
+            var num3 = time2.Day;
             time2 = DateTime.MinValue;
-            int num4 = time2.Hour;
+            var num4 = time2.Hour;
             time2 = DateTime.MinValue;
-            int num5 = time2.Minute;
+            var num5 = time2.Minute;
             time2 = DateTime.MinValue;
-            int num6 = time2.Second;
-            int num7 = 0;
-            string text1 = dmtfDate;
-            DateTime time1 = DateTime.MinValue;
+            var num6 = time2.Second;
+            var num7 = 0;
+            var text1 = dmtfDate;
+            var time1 = DateTime.MinValue;
             if (text1 == null)
             {
                 throw new ArgumentOutOfRangeException();
@@ -37,7 +37,7 @@ namespace DataCommander.Providers.Wmi
                 throw new ArgumentOutOfRangeException();
 
             }
-            long num8 = ((long) 0);
+            var num8 = ((long) 0);
             try
             {
                 text2 = string.Empty;
@@ -100,12 +100,12 @@ namespace DataCommander.Providers.Wmi
 Label_01BE:
             time1 = new DateTime( num1, num2, num3, num4, num5, num6, num7 );
             time1 = time1.AddTicks( num8 );
-            TimeZone zone1 = TimeZone.CurrentTimeZone;
-            TimeSpan span1 = zone1.GetUtcOffset( time1 );
-            long num9 = (span1.Ticks / ((long) 600000000));
-            int num10 = 0;
-            string text3 = text1.Substring( 22, 3 );
-            long num11 = ((long) 0);
+            var zone1 = TimeZone.CurrentTimeZone;
+            var span1 = zone1.GetUtcOffset( time1 );
+            var num9 = (span1.Ticks / ((long) 600000000));
+            var num10 = 0;
+            var text3 = text1.Substring( 22, 3 );
+            var num11 = ((long) 0);
 
             if ("***" == text3)
             {

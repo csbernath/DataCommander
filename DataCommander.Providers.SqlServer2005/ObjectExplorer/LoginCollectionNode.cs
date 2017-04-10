@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
-    using System.Diagnostics.Contracts;
     using System.Windows.Forms;
     using Foundation.Data;
 
@@ -13,11 +12,13 @@
 
         public LoginCollectionNode(ServerNode server)
         {
+#if CONTRACTS_FULL
             Contract.Requires(server != null);
+#endif
             this.server = server;
         }
 
-        #region ITreeNode Members
+#region ITreeNode Members
 
         string ITreeNode.Name => "Logins";
 
@@ -47,6 +48,6 @@ order by name";
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-        #endregion
+#endregion
     }
 }

@@ -2,7 +2,6 @@
 {
     using System;
     using System.CodeDom.Compiler;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -26,11 +25,13 @@
 
         void IDisposable.Dispose()
         {
+#if CONTRACTS_FULL
             Contract.Assert( this.textWriter.Indent == this.indent );
+#endif
 
             this.textWriter.Indent--;
         }
 
-        #endregion
+#endregion
     }
 }

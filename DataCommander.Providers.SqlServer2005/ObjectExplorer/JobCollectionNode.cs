@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
-    using System.Diagnostics.Contracts;
     using System.Windows.Forms;
     using Foundation.Data;
 
@@ -11,13 +10,15 @@
     {
         public JobCollectionNode( ServerNode server )
         {
+#if CONTRACTS_FULL
             Contract.Requires( server != null );
+#endif
             this.Server = server;
         }
 
         public ServerNode Server { get; }
 
-        #region ITreeNode Members
+#region ITreeNode Members
 
         string ITreeNode.Name => "Jobs";
 
@@ -36,7 +37,7 @@ order by j.name";
                 {
                     return dataReader.Read(dataRecord =>
                     {
-                        string name = dataRecord.GetString(0);
+                        var name = dataRecord.GetString(0);
                         return (ITreeNode)new JobNode(this, name);
                     });
                 }
@@ -49,6 +50,6 @@ order by j.name";
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-        #endregion
+#endregion
     }
 }

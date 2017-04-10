@@ -1,8 +1,6 @@
 ﻿namespace DataCommander.Foundation.Collections
 {
-    using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Linq;
 
     /// <summary>
@@ -25,16 +23,18 @@
         /// <param name="equalityComparers"></param>
         public MultipleMemberEqualityComparer(params IEqualityComparer<T>[] equalityComparers)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(equalityComparers != null);
             Contract.Requires<ArgumentOutOfRangeException>(equalityComparers.Length > 0);
             Contract.Requires<ArgumentNullException>(Contract.ForAll(equalityComparers, c => c != null));
+#endif
 
             this.equalityComparers = equalityComparers;
         }
 
-        #endregion
+#endregion
 
-        #region IEqualityComparer<T> Members
+#region IEqualityComparer<T> Members
 
         bool IEqualityComparer<T>.Equals(T x, T y)
         {
@@ -48,15 +48,15 @@
             return hashCode;
         }
 
-        #endregion
+#endregion
 
-        #region Private Methods
+#region Private Methods
 
         private static int CombineHashCodes(int h1, int h2)
         {
             return (h1 << 5) + h1 ^ h2;
         }
 
-        #endregion
+#endregion
     }
 }

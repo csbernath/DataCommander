@@ -24,7 +24,7 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            ITreeNode[] children = new ITreeNode[]
+            var children = new ITreeNode[]
             {
                 new TableCollectionNode(this),
                 new ViewCollectionNode(this),
@@ -41,7 +41,7 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 
         private void menuItemGetInformation_Click(object sender, EventArgs e)
         {
-            string commandText = string.Format(@"select
+            var commandText = string.Format(@"select
     d.dbid,
     d.filename,
     DATABASEPROPERTYEX('{0}','Collation')         as [Collation],
@@ -61,8 +61,8 @@ select
 	convert(decimal(15,2),convert(float,fileproperty(name, 'SpaceUsed')) * 100.0 / size)	as [Used%],
 	convert(decimal(15,4),(f.size-fileproperty(name, 'SpaceUsed')) * 8096.0 / 1000000)	as [Free (MB)]
 from	[{0}].sys.database_files f", this.Name);
-            string connectionString = this.Databases.Server.ConnectionString;
-            MainForm mainForm = DataCommanderApplication.Instance.MainForm;
+            var connectionString = this.Databases.Server.ConnectionString;
+            var mainForm = DataCommanderApplication.Instance.MainForm;
             var queryForm = (QueryForm) mainForm.ActiveMdiChild;
             DataSet dataSet = null;
             using (var connection = new SqlConnection(connectionString))
@@ -87,9 +87,9 @@ from	[{0}].sys.database_files f", this.Name);
         {
             get
             {
-                ToolStripMenuItem menuItemGetInformation = new ToolStripMenuItem("Get information", null,
+                var menuItemGetInformation = new ToolStripMenuItem("Get information", null,
                     new EventHandler(this.menuItemGetInformation_Click));
-                ContextMenuStrip contextMenu = new ContextMenuStrip();
+                var contextMenu = new ContextMenuStrip();
                 contextMenu.Items.Add(menuItemGetInformation);
                 return contextMenu;
             }

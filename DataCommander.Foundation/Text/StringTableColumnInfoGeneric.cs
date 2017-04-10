@@ -1,7 +1,6 @@
 namespace DataCommander.Foundation.Text
 {
     using System;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -20,7 +19,9 @@ namespace DataCommander.Foundation.Text
             StringTableColumnAlign align,
             Func<T, string> toStringFunction)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(toStringFunction != null);
+#endif
 
             this.ColumnName = columnName;
             this.Align = align;

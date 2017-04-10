@@ -28,7 +28,7 @@ namespace DataCommander.Providers.Odp.DataFieldReader
                 }
                 else
                 {
-                    string s = dataRecord.GetString( columnOrdinal );
+                    var s = dataRecord.GetString( columnOrdinal );
                     value = new StringField( s, 1024 );
                 }
 

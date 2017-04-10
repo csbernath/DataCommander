@@ -26,19 +26,19 @@ namespace DataCommander.Providers.OleDb
             try
             {
                 object [] restrictions = null;
-                string catalog = this.schema.Catalog.Name;
+                var catalog = this.schema.Catalog.Name;
 
                 if (catalog != null)
                     restrictions = new object[] {catalog, this.schema.Name};
 
                 DataTable dataTable =  dataTable = this.schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables,restrictions);
-                int count = dataTable.Rows.Count;
-                DataColumn nameColumn = dataTable.Columns["TABLE_NAME"];        
+                var count = dataTable.Rows.Count;
+                var nameColumn = dataTable.Columns["TABLE_NAME"];        
                 treeNodes = new ITreeNode[count];
 
-                for (int i=0;i<count;i++)
+                for (var i=0;i<count;i++)
                 {
-                    string name = (string)dataTable.Rows[i][nameColumn];
+                    var name = (string)dataTable.Rows[i][nameColumn];
                     treeNodes[i] = new TableNode(this.schema,name);
                 }
             }

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Windows.Forms;
     using Microsoft.TeamFoundation.VersionControl.Client;
@@ -23,7 +22,7 @@
         {
             get
             {
-                string name = VersionControlPath.GetFileName(this.item.ServerItem);
+                var name = VersionControlPath.GetFileName(this.item.ServerItem);
                 return name;
             }
         }
@@ -31,13 +30,15 @@
         bool ITreeNode.IsLeaf => false;
 
         internal static IEnumerable<ITreeNode> GetChildren( Item item )
-		{			
+		{
+#if CONTRACTS_FULL
             Contract.Requires(item != null);
-			ItemSet itemSet = item.VersionControlServer.GetItems( item.ServerItem, RecursionType.OneLevel );
-			List<ITreeNode> folders = new List<ITreeNode>();
-			List<ITreeNode> files = new List<ITreeNode>();
+#endif
+			var itemSet = item.VersionControlServer.GetItems( item.ServerItem, RecursionType.OneLevel );
+			var folders = new List<ITreeNode>();
+			var files = new List<ITreeNode>();
 
-			foreach (Item current in itemSet.Items.Skip( 1 ))
+			foreach (var current in itemSet.Items.Skip( 1 ))
 			{
 				switch (current.ItemType)
 				{
@@ -72,7 +73,7 @@
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-        #endregion
+#endregion
 
         private static ITreeNode ToTreeNode(Item item)
         {

@@ -18,6 +18,6 @@ namespace DataCommander.Providers
 
         public InfoMessageSeverity Severity { get; }
 
-        public String Message { get; }
+        public string Message { get; }
     }
 }

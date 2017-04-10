@@ -21,7 +21,7 @@ namespace DataCommander.Providers
             string commandText,
             OleDbConnection connection )
         {
-            OleDbCommand command = connection.CreateCommand();
+            var command = connection.CreateCommand();
             command.CommandText = commandText;
             return command.ExecuteNonQuery();
         }
@@ -33,8 +33,8 @@ namespace DataCommander.Providers
         /// <returns></returns>
         public static DataTable Convert( object ADODBRecordset )
         {
-            OleDbDataAdapter adapter = new OleDbDataAdapter();
-            DataTable dataTable = new DataTable();
+            var adapter = new OleDbDataAdapter();
+            var dataTable = new DataTable();
             adapter.Fill( dataTable, ADODBRecordset );
             return dataTable;
         }
@@ -50,20 +50,20 @@ namespace DataCommander.Providers
             _Recordset rs,
             out OleDbParameter[] columns )
         {
-            OleDbDataAdapter adapter = new OleDbDataAdapter();
-            DataTable dataTable = new DataTable();
+            var adapter = new OleDbDataAdapter();
+            var dataTable = new DataTable();
             adapter.Fill( dataTable, rs );
             columns = new OleDbParameter[ rs.Fields.Count ];
-            int index = 0;
+            var index = 0;
 
             foreach (Field field in rs.Fields)
             {
-                OleDbParameter param = new OleDbParameter();
+                var param = new OleDbParameter();
                 param.SourceColumn = field.Name;
                 param.OleDbType = (OleDbType) field.Type;
 
-                int size = field.DefinedSize;
-                byte precision = field.Precision;
+                var size = field.DefinedSize;
+                var precision = field.Precision;
 
                 if (size == 0)
                 {
@@ -92,7 +92,7 @@ namespace DataCommander.Providers
             string tableName,
             OleDbConnection connection )
         {
-            OleDbCommand command = connection.CreateCommand();
+            var command = connection.CreateCommand();
             command.CommandText = "drop table " + tableName;
 
             try
@@ -115,11 +115,11 @@ namespace DataCommander.Providers
             OleDbParameter[] columns,
             OleDbConnection connection )
         {
-            string cmdText = "create table " + tableName + "(";
-            int i = 0;
-            int count = columns.Length;
+            var cmdText = "create table " + tableName + "(";
+            var i = 0;
+            var count = columns.Length;
 
-            foreach (OleDbParameter column in columns)
+            foreach (var column in columns)
             {
                 string sqlType;
 
@@ -186,7 +186,7 @@ namespace DataCommander.Providers
 
             cmdText += ")";
 
-            OleDbCommand command = connection.CreateCommand();
+            var command = connection.CreateCommand();
             command.CommandText = cmdText;
             command.ExecuteNonQuery();
         }
@@ -202,11 +202,11 @@ namespace DataCommander.Providers
             OleDbParameter[] columns,
             OleDbConnection connection )
         {
-            string cmdText = "create table " + tableName + "(";
-            int i = 0;
-            int count = columns.Length;
+            var cmdText = "create table " + tableName + "(";
+            var i = 0;
+            var count = columns.Length;
 
-            foreach (OleDbParameter column in columns)
+            foreach (var column in columns)
             {
                 string sqlType;
 
@@ -275,7 +275,7 @@ namespace DataCommander.Providers
 
             cmdText += ")";
 
-            OleDbCommand command = connection.CreateCommand();
+            var command = connection.CreateCommand();
             command.CommandText = cmdText;
             command.ExecuteNonQuery();
         }
@@ -341,7 +341,7 @@ namespace DataCommander.Providers
         {
             var rs = (Recordset) adodbRecordset;
             OleDbParameter[] columns;
-            DataTable sourceTable = Convert( rs, out columns );
+            var sourceTable = Convert( rs, out columns );
             sourceTable.TableName = tableName;
             DropTable( tableName, connection );
             CreateTable( tableName, columns, connection );

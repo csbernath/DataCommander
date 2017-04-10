@@ -2,7 +2,6 @@
 {
     using System;
     using System.Data;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -20,29 +19,25 @@
         /// 
         /// </summary>
         /// <param name="connection"></param>
-        public LoggedDbConnection( IDbConnection connection )
+        public LoggedDbConnection(IDbConnection connection)
         {
-            Contract.Requires( connection != null );
+#if CONTRACTS_FULL
+            Contract.Requires(connection != null);
+#endif
 
             this.connection = connection;
         }
 
-        #region Public Events
+#region Public Events
 
         /// <summary>
         /// 
         /// </summary>
         public event EventHandler<BeforeOpenDbConnectionEventArgs> BeforeOpen
         {
-            add
-            {
-                this.beforeOpen += value;
-            }
+            add { this.beforeOpen += value; }
 
-            remove
-            {
-                this.beforeOpen -= value;
-            }
+            remove { this.beforeOpen -= value; }
         }
 
         /// <summary>
@@ -50,15 +45,9 @@
         /// </summary>
         public event EventHandler<AfterOpenDbConnectionEventArgs> AfterOpen
         {
-            add
-            {
-                this.afterOpen += value;
-            }
+            add { this.afterOpen += value; }
 
-            remove
-            {
-                this.afterOpen -= value;
-            }
+            remove { this.afterOpen -= value; }
         }
 
         /// <summary>
@@ -66,15 +55,9 @@
         /// </summary>
         public event EventHandler<BeforeExecuteCommandEventArgs> BeforeExecuteReader
         {
-            add
-            {
-                this.beforeExecuteCommand += value;
-            }
+            add { this.beforeExecuteCommand += value; }
 
-            remove
-            {
-                this.beforeExecuteCommand -= value;
-            }
+            remove { this.beforeExecuteCommand -= value; }
         }
 
         /// <summary>
@@ -82,15 +65,9 @@
         /// </summary>
         public event EventHandler<AfterExecuteCommandEventArgs> AfterExecuteReader
         {
-            add
-            {
-                this.afterExecuteCommand += value;
-            }
+            add { this.afterExecuteCommand += value; }
 
-            remove
-            {
-                this.afterExecuteCommand -= value;
-            }
+            remove { this.afterExecuteCommand -= value; }
         }
 
         /// <summary>
@@ -98,24 +75,18 @@
         /// </summary>
         public event EventHandler<AfterReadEventArgs> AfterRead
         {
-            add
-            {
-                this.afterRead += value;
-            }
+            add { this.afterRead += value; }
 
-            remove
-            {
-                this.afterRead -= value;
-            }
+            remove { this.afterRead -= value; }
         }
 
-        #endregion
+#endregion
 
-        #region IDbConnection Members
+#region IDbConnection Members
 
-        IDbTransaction IDbConnection.BeginTransaction( IsolationLevel il )
+        IDbTransaction IDbConnection.BeginTransaction(IsolationLevel il)
         {
-            return this.connection.BeginTransaction( il );
+            return this.connection.BeginTransaction(il);
         }
 
         IDbTransaction IDbConnection.BeginTransaction()
@@ -123,9 +94,9 @@
             return this.connection.BeginTransaction();
         }
 
-        void IDbConnection.ChangeDatabase( string databaseName )
+        void IDbConnection.ChangeDatabase(string databaseName)
         {
-            this.connection.ChangeDatabase( databaseName );
+            this.connection.ChangeDatabase(databaseName);
         }
 
         void IDbConnection.Close()
@@ -135,15 +106,9 @@
 
         string IDbConnection.ConnectionString
         {
-            get
-            {
-                return this.connection.ConnectionString;
-            }
+            get { return this.connection.ConnectionString; }
 
-            set
-            {
-                this.connection.ConnectionString = value;
-            }
+            set { this.connection.ConnectionString = value; }
         }
 
         int IDbConnection.ConnectionTimeout => this.connection.ConnectionTimeout;
@@ -151,7 +116,7 @@
         IDbCommand IDbConnection.CreateCommand()
         {
             var command = this.connection.CreateCommand();
-            return new LoggedDbCommand( command, this.beforeExecuteCommand, this.afterExecuteCommand, this.afterRead );
+            return new LoggedDbCommand(command, this.beforeExecuteCommand, this.afterExecuteCommand, this.afterRead);
         }
 
         string IDbConnection.Database => this.connection.Database;
@@ -160,8 +125,8 @@
         {
             if (this.beforeOpen != null)
             {
-                var eventArgs = new BeforeOpenDbConnectionEventArgs( this.connection.ConnectionString );
-                this.beforeOpen( this, eventArgs );
+                var eventArgs = new BeforeOpenDbConnectionEventArgs(this.connection.ConnectionString);
+                this.beforeOpen(this, eventArgs);
             }
 
             if (this.afterOpen != null)
@@ -178,8 +143,8 @@
                 }
                 finally
                 {
-                    var eventArgs = new AfterOpenDbConnectionEventArgs( exception );
-                    this.afterOpen( this, eventArgs );
+                    var eventArgs = new AfterOpenDbConnectionEventArgs(exception);
+                    this.afterOpen(this, eventArgs);
                 }
             }
             else
@@ -190,15 +155,15 @@
 
         ConnectionState IDbConnection.State => this.connection.State;
 
-        #endregion
+#endregion
 
-        #region IDisposable Members
+#region IDisposable Members
 
         void IDisposable.Dispose()
         {
             this.connection.Dispose();
         }
 
-        #endregion
+#endregion
     }
 }

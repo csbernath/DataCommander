@@ -50,8 +50,10 @@
         /// <returns></returns>
         public static TSource First<TSource>(this IReadOnlyList<TSource> source)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(source != null);
             Contract.Requires<ArgumentException>(source.Count > 0);
+#endif
 
             return source[0];
         }

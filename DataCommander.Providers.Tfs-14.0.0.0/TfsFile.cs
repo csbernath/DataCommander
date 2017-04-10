@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Windows.Forms;
     using DataCommander.Foundation.Configuration;
@@ -16,11 +15,13 @@
 
         public TfsFile(Item item)
         {
+#if CONTRACTS_FULL
             Contract.Requires(item != null);
+#endif
             this.item = item;
         }
 
-        #region ITreeNode Members
+#region ITreeNode Members
 
         string ITreeNode.Name => TfsObjectExplorer.GetName(this.item);
 
@@ -40,13 +41,13 @@
             get
             {
                 var contextMenu = new ContextMenuStrip();
-                ToolStripItemCollection items = contextMenu.Items;
+                var items = contextMenu.Items;
                 var menuItem = new ToolStripMenuItem("Open", null, this.Open_Click);
                 items.Add(menuItem);
 
-                ConfigurationNode node = Settings.CurrentType;
-                ConfigurationAttributeCollection attributes = node.Attributes;
-                string name = attributes["Name"].GetValue<string>();
+                var node = Settings.CurrentType;
+                var attributes = node.Attributes;
+                var name = attributes["Name"].GetValue<string>();
 
                 menuItem = new ToolStripMenuItem(name, null, this.View_Click);
                 items.Add(menuItem);
@@ -54,12 +55,12 @@
             }
         }
 
-        #endregion
+#endregion
 
         private void Open_Click(object sender, EventArgs e)
         {
-            string name = VersionControlPath.GetFileName(this.item.ServerItem);
-            string localFileName = Path.GetTempPath();
+            var name = VersionControlPath.GetFileName(this.item.ServerItem);
+            var localFileName = Path.GetTempPath();
             localFileName = Path.Combine(localFileName, name);
             this.item.DownloadFile(localFileName);
             var startInfo = new ProcessStartInfo(localFileName);
@@ -68,16 +69,16 @@
 
         private void View_Click(object sender, EventArgs e)
         {
-            string name = VersionControlPath.GetFileName(this.item.ServerItem);
-            string localFileName = Path.GetTempPath();
+            var name = VersionControlPath.GetFileName(this.item.ServerItem);
+            var localFileName = Path.GetTempPath();
             localFileName = Path.Combine(localFileName, name);
             this.item.DownloadFile(localFileName);
 
-            ConfigurationNode node = Settings.CurrentType;
-            ConfigurationAttributeCollection attributes = node.Attributes;
+            var node = Settings.CurrentType;
+            var attributes = node.Attributes;
             string fileName;
-            bool contains = attributes.TryGetAttributeValue("FileName", out fileName);
-            string arguments = '"' + localFileName + '"';
+            var contains = attributes.TryGetAttributeValue("FileName", out fileName);
+            var arguments = '"' + localFileName + '"';
             var startInfo = new ProcessStartInfo(fileName, arguments);
             Process.Start(startInfo);
         }

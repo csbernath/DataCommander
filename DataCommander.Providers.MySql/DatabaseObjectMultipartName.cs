@@ -10,7 +10,7 @@ namespace DataCommander.Providers.MySql
         {
             if (nameParts != null)
             {
-                int i = nameParts.Count - 1;
+                var i = nameParts.Count - 1;
                 var commandBuilder = new SqlCommandBuilder();
 
                 if (i >= 0)
@@ -33,7 +33,7 @@ namespace DataCommander.Providers.MySql
 
             if (this.Name != null)
             {
-                int length = this.Name.Length;
+                var length = this.Name.Length;
 
                 if (length > 0 && this.Name[0] == '[')
                 {

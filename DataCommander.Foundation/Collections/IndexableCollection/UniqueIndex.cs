@@ -154,7 +154,9 @@
             if (response.HasKey)
             {
                 var key = response.Key;
+#if CONTRACTS_FULL
                 Contract.Assert(!this.dictionary.ContainsKey(key));
+#endif
                 this.dictionary.Add(key, item);
             }
         }
@@ -174,7 +176,9 @@
         /// <returns></returns>
         public bool Contains(T item)
         {
+#if CONTRACTS_FULL
             Contract.Assert(item != null);
+#endif
 
             var response = this.getKey(item);
             bool contains;
@@ -198,7 +202,9 @@
         /// <returns></returns>
         bool ICollection<T>.Remove(T item)
         {
+#if CONTRACTS_FULL
             Contract.Assert(item != null);
+#endif
 
             var response = this.getKey(item);
             bool succeeded;
@@ -215,9 +221,9 @@
             return succeeded;
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable<T> Members
+#region IEnumerable<T> Members
 
         /// <summary>
         /// 
@@ -228,9 +234,9 @@
             return this.dictionary.Values.GetEnumerator();
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable Members
+#region IEnumerable Members
 
         /// <summary>
         /// 
@@ -241,9 +247,9 @@
             return this.dictionary.Values.GetEnumerator();
         }
 
-        #endregion
+#endregion
 
-        #region IDictionary<TKey,T> Members
+#region IDictionary<TKey,T> Members
 
         /// <summary>
         /// 
@@ -275,9 +281,9 @@
         /// </summary>
         public ICollection<T> Values => this.dictionary.Values;
 
-        #endregion
+#endregion
 
-        #region ICollection<KeyValuePair<TKey,T>> Members
+#region ICollection<KeyValuePair<TKey,T>> Members
 
         /// <summary>
         /// 
@@ -323,13 +329,15 @@
             throw new NotSupportedException();
         }
 
-        #endregion
+#endregion
 
         private void Initialize(string name, Func<T, GetKeyResponse<TKey>> getKey, IDictionary<TKey, T> dictionary)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(name != null);
             Contract.Requires<ArgumentNullException>(getKey != null);
             Contract.Requires<ArgumentNullException>(dictionary != null);
+#endif
 
             this.Name = name;
             this.getKey = getKey;

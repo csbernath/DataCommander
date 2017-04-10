@@ -42,7 +42,9 @@
         {
             get
             {
+#if CONTRACTS_FULL
                 Contract.Assert(0 <= index && index < this.Count);
+#endif
 
                 return this.listIndex[index];
             }
@@ -66,7 +68,9 @@
         {
             get
             {
+#if CONTRACTS_FULL
                 Contract.Requires(this.ContainsKey(name));
+#endif
 
                 return this.nameIndex[name];
             }
@@ -85,7 +89,9 @@
         /// <param name="description"></param>
         public void Add(string name, object value, string description)
         {
+#if CONTRACTS_FULL
             Contract.Requires(!this.ContainsKey(name));
+#endif
             var attribute = new ConfigurationAttribute(name, value, description);
             this.collection.Add(attribute);
         }
@@ -227,7 +233,7 @@
             }
         }
 
-        #region ICollection<Attribute> Members
+#region ICollection<Attribute> Members
 
         /// <summary>
         /// 
@@ -286,9 +292,9 @@
             return this.collection.Remove(item);
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable<Attribute> Members
+#region IEnumerable<Attribute> Members
 
         /// <summary>
         /// 
@@ -299,15 +305,15 @@
             return this.collection.GetEnumerator();
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable Members
+#region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.collection.GetEnumerator();
         }
 
-        #endregion
+#endregion
     }
 }

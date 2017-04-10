@@ -26,7 +26,7 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
         {
             get
             {
-                string query = string.Format(@"declare @uid smallint
+                var query = string.Format(@"declare @uid smallint
 select @uid = uid from {0}..sysusers where name = '{1}'
 
 select u.name from {0}..sysmembers m

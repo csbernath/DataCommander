@@ -18,7 +18,7 @@ namespace DataCommander.Providers.OleDb
         {
             get
             {
-                string name = this.Name;
+                var name = this.Name;
         
                 if (name == null)
                     name = "[No schemas found]";
@@ -31,7 +31,7 @@ namespace DataCommander.Providers.OleDb
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
-            ITreeNode[] treeNodes = new ITreeNode[2];
+            var treeNodes = new ITreeNode[2];
             treeNodes[0] = new TableCollectionNode(this);
             treeNodes[1] = new ProcedureCollectionNode(this);
 

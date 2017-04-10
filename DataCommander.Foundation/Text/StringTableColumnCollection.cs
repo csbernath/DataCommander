@@ -3,7 +3,6 @@ namespace DataCommander.Foundation.Text
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -58,7 +57,9 @@ namespace DataCommander.Foundation.Text
 
         internal void Add(StringTableColumn item)
         {
+#if CONTRACTS_FULL
             Contract.Requires(item != null);
+#endif
 
             this.columns.Add(item);
         }
@@ -109,9 +110,9 @@ namespace DataCommander.Foundation.Text
             throw new Exception("The method or operation is not implemented.");
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable<StringTableColumn> Members
+#region IEnumerable<StringTableColumn> Members
 
         /// <summary>
         /// 
@@ -122,15 +123,15 @@ namespace DataCommander.Foundation.Text
             return this.columns.GetEnumerator();
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable Members
+#region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
         }
 
-        #endregion
+#endregion
     }
 }

@@ -2,7 +2,6 @@ namespace DataCommander.Foundation.Threading
 {
     using System;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Threading;
     using DataCommander.Foundation.Diagnostics;
@@ -34,16 +33,18 @@ namespace DataCommander.Foundation.Threading
         /// <param name="start"></param>
         public WorkerThread(ThreadStart start)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(start != null);
+#endif
 
             this.start = start;
             this.Thread = new Thread(this.PrivateStart);
             ThreadMonitor.Add(this);
         }
 
-        #endregion
+#endregion
 
-        #region Public Events
+#region Public Events
 
         /// <summary>
         /// 
@@ -77,9 +78,9 @@ namespace DataCommander.Foundation.Threading
             }
         }
 
-        #endregion
+#endregion
 
-        #region Public Properties
+#region Public Properties
 
         /// <summary>
         /// 
@@ -186,17 +187,17 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public Thread Thread { get; }
 
-        #endregion
+#endregion
 
-        #region Internal Properties
+#region Internal Properties
 
         internal DateTime StartTime { get; private set; }
 
         internal DateTime StopTime { get; private set; }
 
-        #endregion
+#endregion
 
-        #region Public Methods
+#region Public Methods
 
         /// <summary>
         /// 
@@ -317,9 +318,9 @@ namespace DataCommander.Foundation.Threading
             this.Thread.Abort();
         }
 
-        #endregion
+#endregion
 
-        #region Private Methods
+#region Private Methods
 
         private void PrivateStart()
         {
@@ -378,6 +379,6 @@ namespace DataCommander.Foundation.Threading
             this.start = null;
         }
 
-        #endregion
+#endregion
     }
 }

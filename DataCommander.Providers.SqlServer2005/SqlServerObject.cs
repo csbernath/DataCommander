@@ -1,10 +1,7 @@
 namespace DataCommander.Providers.SqlServer2005
 {
-    using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Linq;
-    using DataCommander.Foundation;
     using DataCommander.Foundation.Data.SqlClient;
 
     internal static class SqlServerObject
@@ -21,7 +18,9 @@ namespace DataCommander.Providers.SqlServer2005
 
         public static string GetSchemas(string database)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentOutOfRangeException>(!database.IsNullOrWhiteSpace());
+#endif
 
             return string.Format(@"if exists(select * from sys.databases (nolock) where name = '{0}')
 begin
@@ -33,8 +32,10 @@ end", database);
 
         public static string GetObjects(string schema, IEnumerable<string> objectTypes)
         {
+#if CONTRACTS_FULL
             Contract.Requires(!schema.IsNullOrWhiteSpace());
             Contract.Requires(objectTypes != null && objectTypes.Any());
+#endif
 
             return
                 $@"declare @schema_id int
@@ -61,9 +62,11 @@ end";
             string schema,
             IEnumerable<string> objectTypes)
         {
+#if CONTRACTS_FULL
             Contract.Requires(!database.IsNullOrWhiteSpace());
             Contract.Requires(!schema.IsNullOrWhiteSpace());
             Contract.Requires(objectTypes!=null && objectTypes.Any());
+#endif
 
             return string.Format(@"if exists(select * from sys.databases (nolock) where name = '{0}')
 begin

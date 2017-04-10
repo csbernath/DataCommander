@@ -1,9 +1,7 @@
 ﻿namespace DataCommander.Foundation.Data
 {
-    using System;
     using System.Collections.Generic;
     using System.Data;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -17,8 +15,10 @@
         /// <param name="dataTableNames"></param>
         public static void SetDataTableNames(this DataSet dataSet, IEnumerable<string> dataTableNames)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dataSet != null);
             Contract.Requires<ArgumentNullException>(dataTableNames != null);
+#endif
 
             var dataTables = dataSet.Tables;
             var count = dataTables.Count;

@@ -56,7 +56,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PSingle( Single value )
+        public static implicit operator PSingle( float value )
         {
             return new PSingle( value );
         }
@@ -76,9 +76,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator Single( PSingle value )
+        public static implicit operator float( PSingle value )
         {
-            return (Single) value.sql;
+            return (float) value.sql;
         }
 
         /// <summary>

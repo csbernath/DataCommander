@@ -29,7 +29,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public PDouble( Double value )
+        public PDouble( double value )
         {
             this.sql = value;
             this.ValueType = this.sql.IsNull ? PValueType.Null : PValueType.Value;
@@ -56,7 +56,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PDouble( Double value )
+        public static implicit operator PDouble( double value )
         {
             return new PDouble( value );
         }
@@ -76,9 +76,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator Double( PDouble value )
+        public static implicit operator double( PDouble value )
         {
-            return (Double) value.sql;
+            return (double) value.sql;
         }
 
         /// <summary>

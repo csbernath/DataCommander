@@ -90,8 +90,8 @@ namespace DataCommander.Providers
                     // TODO
                     // dataGrid.TableStyles.Add(ts);                    
 
-                    Graphics graphics = this.CreateGraphics();
-                    Font font = this.dataGrid.Font;
+                    var graphics = this.CreateGraphics();
+                    var font = this.dataGrid.Font;
 
                     foreach (DataColumn dataColumn in this.dataTable.Columns)
                     {
@@ -113,15 +113,15 @@ namespace DataCommander.Providers
                         }
 
                         textBoxColumn.HeaderText = columnName;
-                        float maxWidth = graphics.MeasureString(columnName, font).Width;
-                        Type type = (Type)dataColumn.ExtendedProperties[0];
+                        var maxWidth = graphics.MeasureString(columnName, font).Width;
+                        var type = (Type)dataColumn.ExtendedProperties[0];
 
                         if (type == null)
                         {
                             type = (Type)dataColumn.DataType;
                         }
 
-                        TypeCode typeCode = Type.GetTypeCode(type);
+                        var typeCode = Type.GetTypeCode(type);
 
                         if (typeCode == TypeCode.Byte ||
                             typeCode == TypeCode.SByte ||
@@ -144,16 +144,16 @@ namespace DataCommander.Providers
 
                         if (true)
                         {
-                            int rowIndex = 0;
+                            var rowIndex = 0;
 
                             foreach (DataRow dataRow in this.dataTable.Rows)
                             {
-                                string s = dataRow[dataColumn].ToString();
-                                int length = s.Length;
+                                var s = dataRow[dataColumn].ToString();
+                                var length = s.Length;
 
                                 if (length <= 256)
                                 {
-                                    float width = graphics.MeasureString(s, font).Width;
+                                    var width = graphics.MeasureString(s, font).Width;
 
 
                                     if (width > maxWidth)
@@ -259,8 +259,8 @@ namespace DataCommander.Providers
             {
                 foreach (DataRow dataRow in this.tableSchema.Tables[1].Rows)
                 {
-                    int columnOrdinal = dataRow.Field<int>(0);
-                    DataRow column = this.tableSchema.Tables[0].Rows[columnOrdinal - 1];
+                    var columnOrdinal = dataRow.Field<int>(0);
+                    var column = this.tableSchema.Tables[0].Rows[columnOrdinal - 1];
                     yield return column;
                 }
             }
@@ -270,11 +270,11 @@ namespace DataCommander.Providers
         {
             get
             {
-                DataGridViewCell cell = this.dataGrid.CurrentCell;
-                int rowNumber = cell.RowIndex;
-                int columnNumber = cell.ColumnIndex;
-                DataRow dataRow = this.dataTable.DefaultView[rowNumber].Row;
-                object value = dataRow[columnNumber];
+                var cell = this.dataGrid.CurrentCell;
+                var rowNumber = cell.RowIndex;
+                var columnNumber = cell.ColumnIndex;
+                var dataRow = this.dataTable.DefaultView[rowNumber].Row;
+                var value = dataRow[columnNumber];
                 return value;
             }
         }
@@ -311,7 +311,7 @@ namespace DataCommander.Providers
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            var dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGrid = new DoubleBufferedDataGridView();
             GarbageMonitor.Add("dataGrid", "DoubleBufferedDataGridView", 0, this.dataGrid);
             this.dataGrid.PublicDoubleBuffered = true;
@@ -361,26 +361,26 @@ namespace DataCommander.Providers
             }
             else
             {
-                Type type = (Type)column.ExtendedProperties[0];
+                var type = (Type)column.ExtendedProperties[0];
 
                 if (type == null)
                 {
                     type = column.DataType;
                 }
 
-                TypeCode typeCode = Type.GetTypeCode(type);
+                var typeCode = Type.GetTypeCode(type);
 
                 switch (typeCode)
                 {
                     case TypeCode.Boolean:
-                        bool boolValue = (bool)Convert.ChangeType(value, typeof (bool));
+                        var boolValue = (bool)Convert.ChangeType(value, typeof (bool));
                         valueString = boolValue ? "1" : "0";
                         break;
 
                     case TypeCode.DateTime:
                         valueString = (string)value;
                         DateTime dateTime;
-                        bool succeeded = DateTimeField.TryParse(valueString, out dateTime);
+                        var succeeded = DateTimeField.TryParse(valueString, out dateTime);
 
                         if (succeeded)
                         {
@@ -390,14 +390,14 @@ namespace DataCommander.Providers
                         break;
 
                     case TypeCode.String:
-                        string stringValue = (string)value;
+                        var stringValue = (string)value;
                         valueString = stringValue.ToTSqlNVarChar();
                         break;
 
                     default:
                         if (type == typeof (Guid))
                         {
-                            Guid guid = (Guid)value;
+                            var guid = (Guid)value;
                             valueString = guid.ToString().ToTSqlVarChar();
                         }
                         else
@@ -414,20 +414,20 @@ namespace DataCommander.Providers
 
         private string GetWhere(DataRow row)
         {
-            DataTable columns = this.tableSchema.Tables[0];
+            var columns = this.tableSchema.Tables[0];
             var sb = new StringBuilder();
-            bool first = true;
+            var first = true;
             var uniqueIndexColumns = this.UniqueIndexColumns.ToArray();
 
             var schema = uniqueIndexColumns.Length > 0
                 ? uniqueIndexColumns
                 : this.tableSchema.Tables[0].Rows.Cast<DataRow>().ToArray();
 
-            foreach (DataRow uniqueIndexColumn in schema)
+            foreach (var uniqueIndexColumn in schema)
             {
-                short columnOrdinal = (short)uniqueIndexColumn["Columnordinal"];
-                DataRow column = columns.Rows[columnOrdinal - 1];
-                string columnName = (string)column[SchemaTableColumn.ColumnName];
+                var columnOrdinal = (short)uniqueIndexColumn["Columnordinal"];
+                var column = columns.Rows[columnOrdinal - 1];
+                var columnName = (string)column[SchemaTableColumn.ColumnName];
 
                 if (first)
                 {
@@ -439,15 +439,15 @@ namespace DataCommander.Providers
                     sb.Append(" and ");
                 }
 
-                bool contains = row.Table.Columns.Contains(columnName);
+                var contains = row.Table.Columns.Contains(columnName);
 
                 if (contains)
                 {
-                    DataColumn dataColumn = this.dataTable.Columns[columnName];
-                    object value = row[dataColumn, DataRowVersion.Current];
-                    string valueString = this.ToString(dataColumn, value);
-                    string operatorString = value == DBNull.Value ? "is" : "=";
-                    string quotedColumnName = this.commandBuilder.QuoteIdentifier(columnName);
+                    var dataColumn = this.dataTable.Columns[columnName];
+                    var value = row[dataColumn, DataRowVersion.Current];
+                    var valueString = this.ToString(dataColumn, value);
+                    var operatorString = value == DBNull.Value ? "is" : "=";
+                    var quotedColumnName = this.commandBuilder.QuoteIdentifier(columnName);
                     sb.AppendFormat("{0} {1} {2}", quotedColumnName, operatorString, valueString);
                 }
                 else
@@ -463,15 +463,15 @@ namespace DataCommander.Providers
         {
             var sb = new StringBuilder();
             sb.AppendLine();
-            bool valid = true;
+            var valid = true;
 
             foreach (DataRow schemaRow in this.tableSchema.Tables[0].Rows)
             {
-                string columnName = (string)schemaRow["ColumnName"];
-                bool hasDefault = schemaRow.Field<bool>("HasDefault");
-                bool isNullable = schemaRow.Field<bool>("IsNullable");
-                bool hasAutomaticValue = schemaRow.Field<bool>("HasAutomaticValue");
-                object value = dataRow[columnName];
+                var columnName = (string)schemaRow["ColumnName"];
+                var hasDefault = schemaRow.Field<bool>("HasDefault");
+                var isNullable = schemaRow.Field<bool>("IsNullable");
+                var hasAutomaticValue = schemaRow.Field<bool>("HasAutomaticValue");
+                var value = dataRow[columnName];
 
                 if (value == DBNull.Value && !isNullable && !hasDefault && !hasAutomaticValue)
                 {
@@ -482,16 +482,16 @@ namespace DataCommander.Providers
 
             if (valid)
             {
-                DataTable table = dataRow.Table;
+                var table = dataRow.Table;
                 sb = new StringBuilder();
                 sb.AppendFormat("\r\ninsert into {0}(", this.tableName);
-                bool first = true;
-                DataRowCollection schemaRows = this.tableSchema.Tables[0].Rows;
+                var first = true;
+                var schemaRows = this.tableSchema.Tables[0].Rows;
 
                 foreach (DataColumn column in table.Columns)
                 {
-                    DataRow schemaRow = schemaRows[column.Ordinal];
-                    bool hasAutomaticValue = schemaRow.Field<bool>("HasAutomaticValue");
+                    var schemaRow = schemaRows[column.Ordinal];
+                    var hasAutomaticValue = schemaRow.Field<bool>("HasAutomaticValue");
 
                     if (!hasAutomaticValue)
                     {
@@ -513,12 +513,12 @@ namespace DataCommander.Providers
 
                 foreach (DataColumn column in table.Columns)
                 {
-                    DataRow schemaRow = schemaRows[column.Ordinal];
-                    bool hasAutomaticValue = schemaRow.Field<bool>("HasAutomaticValue");
+                    var schemaRow = schemaRows[column.Ordinal];
+                    var hasAutomaticValue = schemaRow.Field<bool>("HasAutomaticValue");
 
                     if (!hasAutomaticValue)
                     {
-                        bool hasDeafult = schemaRow.Field<bool>("HasDefault");
+                        var hasDeafult = schemaRow.Field<bool>("HasDefault");
 
                         if (first)
                         {
@@ -529,7 +529,7 @@ namespace DataCommander.Providers
                             sb.Append(',');
                         }
 
-                        object value = dataRow[column];
+                        var value = dataRow[column];
                         string valueString;
 
                         if (value == DBNull.Value && hasDeafult)
@@ -560,13 +560,13 @@ namespace DataCommander.Providers
 
             var sb = new StringBuilder();
             sb.AppendFormat("\r\nupdate {0}", this.tableName);
-            bool first = true;
-            bool changed = false;
+            var first = true;
+            var changed = false;
 
             foreach (DataColumn column in dataRow.Table.Columns)
             {
-                object currentValue = dataRow[column, DataRowVersion.Current];
-                object proposedValue = dataRow[column, DataRowVersion.Proposed];
+                var currentValue = dataRow[column, DataRowVersion.Current];
+                var proposedValue = dataRow[column, DataRowVersion.Proposed];
                 var comparable = currentValue as IComparable;
                 bool equals;
 
@@ -578,8 +578,8 @@ namespace DataCommander.Providers
                     }
                     else
                     {
-                        Type currentType = currentValue.GetType();
-                        Type proposedType = proposedValue.GetType();
+                        var currentType = currentValue.GetType();
+                        var proposedType = proposedValue.GetType();
                         int c;
 
                         try
@@ -588,7 +588,7 @@ namespace DataCommander.Providers
                         }
                         catch
                         {
-                            object convertedValue = Convert.ChangeType(proposedValue, currentType);
+                            var convertedValue = Convert.ChangeType(proposedValue, currentType);
                             c = comparable.CompareTo(convertedValue);
                         }
 
@@ -614,18 +614,18 @@ namespace DataCommander.Providers
                         sb.Append(", ");
                     }
 
-                    string valueString = this.ToString(column, proposedValue);
-                    string quotedColumnName = this.commandBuilder.QuoteIdentifier(column.ColumnName);
+                    var valueString = this.ToString(column, proposedValue);
+                    var quotedColumnName = this.commandBuilder.QuoteIdentifier(column.ColumnName);
                     sb.AppendFormat("{0} = {1}", quotedColumnName, valueString);
                 }
             }
 
             if (changed)
             {
-                string where = this.GetWhere(dataRow);
+                var where = this.GetWhere(dataRow);
                 sb.Append(@where);
                 var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-                string text = sb.ToString();
+                var text = sb.ToString();
                 queryForm.AppendQueryText(text);
             }
         }
@@ -655,13 +655,13 @@ namespace DataCommander.Providers
             }
 
             this.statementStringBuilder.AppendFormat("\r\ndelete from {0}", this.tableName);
-            string where = this.GetWhere(e.Row);
+            var where = this.GetWhere(e.Row);
             this.statementStringBuilder.Append(@where);
 
             if (this.dataGrid.SelectedRows.Count == 1)
             {
                 var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-                string text = this.statementStringBuilder.ToString();
+                var text = this.statementStringBuilder.ToString();
                 this.statementStringBuilder = null;
                 queryForm.AppendQueryText(text);
             }
@@ -674,7 +674,7 @@ namespace DataCommander.Providers
                     where c.Visible
                     orderby c.DisplayIndex
                     select c.DataPropertyName);
-            string s = string.Join(",", columnNames);
+            var s = string.Join(",", columnNames);
             Clipboard.SetDataObject(s, true, 5, 200);
         }
 
@@ -706,7 +706,7 @@ namespace DataCommander.Providers
             {
                 this.Cursor = Cursors.WaitCursor;
 
-                string path = saveFileDialog.FileName;
+                var path = saveFileDialog.FileName;
 
                 this.statusBarPanel.Text = "Saving table...";
 
@@ -719,7 +719,7 @@ namespace DataCommander.Providers
                         switch (saveFileDialog.FilterIndex)
                         {
                             case 1:
-                                int[] columnIndexes = this.GetColumnIndexes();
+                                var columnIndexes = this.GetColumnIndexes();
                                 using (var streamWriter = new StreamWriter(path, false, Encoding.UTF8))
                                 {
                                     HtmlFormatter.Write(this.dataTable.DefaultView, columnIndexes, streamWriter);
@@ -748,10 +748,10 @@ namespace DataCommander.Providers
                                     worksheet.View.FreezePanes(2, 1);
 
                                     var dataView = this.dataTable.DefaultView;
-                                    int rowCount = dataView.Count;
-                                    int columnCount = this.dataTable.Columns.Count;
+                                    var rowCount = dataView.Count;
+                                    var columnCount = this.dataTable.Columns.Count;
 
-                                    for (int columnIndex = 0; columnIndex < columnCount; columnIndex++)
+                                    for (var columnIndex = 0; columnIndex < columnCount; columnIndex++)
                                     {
                                         var cell = worksheet.Cells[1, columnIndex + 1];
                                         cell.Value = this.dataTable.Columns[columnIndex].ColumnName;
@@ -759,12 +759,12 @@ namespace DataCommander.Providers
                                         // cell.Style.Border.Bottom.Style = ExcelBorderStyle.Medium;
                                     }
 
-                                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                                    for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
                                     {
                                         var dataRow = dataView[rowIndex];
-                                        for (int columnIndex = 0; columnIndex < columnCount; columnIndex++)
+                                        for (var columnIndex = 0; columnIndex < columnCount; columnIndex++)
                                         {
-                                            object value = dataRow[columnIndex];
+                                            var value = dataRow[columnIndex];
                                             var cell = worksheet.Cells[rowIndex + 2, columnIndex + 1];
                                             cell.Value = value;
 
@@ -852,11 +852,11 @@ namespace DataCommander.Providers
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 var binaryField = (BinaryField)this.cellValue;
-                string path = saveFileDialog.FileName;
+                var path = saveFileDialog.FileName;
 
-                using (FileStream fileStream = File.Create(path))
+                using (var fileStream = File.Create(path))
                 {
-                    byte[] bytes = binaryField.Value;
+                    var bytes = binaryField.Value;
                     fileStream.Write(bytes, 0, bytes.Length);
                 }
             }
@@ -882,16 +882,16 @@ namespace DataCommander.Providers
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 var streamField = (StreamField)this.cellValue;
-                string path = saveFileDialog.FileName;
-                Stream source = streamField.Stream;
+                var path = saveFileDialog.FileName;
+                var source = streamField.Stream;
 
-                using (FileStream target = File.Create(path))
+                using (var target = File.Create(path))
                 {
-                    byte[] buffer = new byte[4096];
+                    var buffer = new byte[4096];
 
                     while (true)
                     {
-                        int readCount = source.Read(buffer, 0, buffer.Length);
+                        var readCount = source.Read(buffer, 0, buffer.Length);
 
                         if (readCount == 0)
                         {
@@ -906,11 +906,11 @@ namespace DataCommander.Providers
 
         private void CopyStringField_Click(object sender, EventArgs e)
         {
-            string s = this.cellValue as string;
+            var s = this.cellValue as string;
 
             if (s == null)
             {
-                StringField stringField = (StringField)this.cellValue;
+                var stringField = (StringField)this.cellValue;
                 s = stringField.Value;
             }
 
@@ -935,7 +935,7 @@ namespace DataCommander.Providers
 
                 try
                 {
-                    bool read = xmlTextReader.Read();
+                    var read = xmlTextReader.Read();
                     isXml = true;
                 }
                 catch
@@ -963,7 +963,7 @@ namespace DataCommander.Providers
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                string path = saveFileDialog.FileName;
+                var path = saveFileDialog.FileName;
                 using (var streamWriter = new StreamWriter(path, false, encoding))
                 {
                     streamWriter.Write(value);
@@ -980,7 +980,7 @@ namespace DataCommander.Providers
         {
             try
             {
-                DataView dataView = this.dataTable.DefaultView;
+                var dataView = this.dataTable.DefaultView;
                 dataView.RowFilter = rowFilter;
 
                 if (this.statusBarPanel != null)
@@ -997,7 +997,7 @@ namespace DataCommander.Providers
         private void RowFilter_Click(object sender, EventArgs e)
         {
             var menuItem = (ToolStripMenuItem)sender;
-            string rowFilter = menuItem.Text;
+            var rowFilter = menuItem.Text;
             this.ApplyRowFilter(rowFilter);
         }
 
@@ -1018,9 +1018,9 @@ namespace DataCommander.Providers
             var sb = new StringBuilder();
             var array = (Array)this.cellValue;
 
-            for (int i = 0; i < array.Length; i++)
+            for (var i = 0; i < array.Length; i++)
             {
-                object obj = array.GetValue(i);
+                var obj = array.GetValue(i);
                 sb.AppendLine(obj.ToString());
             }
 
@@ -1046,31 +1046,31 @@ namespace DataCommander.Providers
             using (new CursorManager(Cursors.WaitCursor))
             {
                 this.statusBarPanel.Text = "Copying table to clipboard as XML...";
-                StringWriter textWriter = new StringWriter();
-                XmlTextWriter xmlWriter = new XmlTextWriter(textWriter);
+                var textWriter = new StringWriter();
+                var xmlWriter = new XmlTextWriter(textWriter);
                 xmlWriter.Formatting = Formatting.Indented;
                 xmlWriter.Indentation = 2;
                 xmlWriter.IndentChar = ' ';
                 xmlWriter.WriteStartElement("table");
 
                 var columns = this.dataTable.Columns;
-                int columnCount = columns.Count;
+                var columnCount = columns.Count;
 
-                foreach (DataGridViewRow row in this.dataGrid.Rows.Cast<DataGridViewRow>().Where(r => r.Visible))
+                foreach (var row in this.dataGrid.Rows.Cast<DataGridViewRow>().Where(r => r.Visible))
                 {
                     xmlWriter.WriteStartElement("row");
-                    for (int columnIndex = 0; columnIndex < columnCount; columnIndex++)
+                    for (var columnIndex = 0; columnIndex < columnCount; columnIndex++)
                     {
                         if (this.dataGrid.Columns[this.columnIndex].Visible)
                         {
                             var column = columns[columnIndex];
                             var dataRowView = (DataRowView)row.DataBoundItem;
-                            object value = dataRowView[columnIndex];
+                            var value = dataRowView[columnIndex];
                             if (value != DBNull.Value)
                             {
                                 xmlWriter.WriteStartElement(column.ColumnName);
                                 string valueString;
-                                IConvertible convertible = value as IConvertible;
+                                var convertible = value as IConvertible;
                                 if (convertible != null)
                                 {
                                     valueString = convertible.ToString(null);
@@ -1124,7 +1124,7 @@ namespace DataCommander.Providers
 
                 xmlWriter.WriteEndElement();
                 xmlWriter.Close();
-                string xml = textWriter.ToString();
+                var xml = textWriter.ToString();
                 Clipboard.SetDataObject(xml, true, 5, 200);
                 this.statusBarPanel.Text = "Table succesfully copied to clipboard as XML.";
             }
@@ -1155,7 +1155,7 @@ namespace DataCommander.Providers
 
         private void UnhideRows_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow row in this.dataGrid.Rows.Cast<DataGridViewRow>().Where(r => !r.Visible))
+            foreach (var row in this.dataGrid.Rows.Cast<DataGridViewRow>().Where(r => !r.Visible))
             {
                 row.Visible = true;
             }
@@ -1165,8 +1165,8 @@ namespace DataCommander.Providers
         {
             if (e.Button == MouseButtons.Right)
             {
-                ContextMenuStrip menu = new ContextMenuStrip(this.components);
-                string rowFilter = this.dataTable.DefaultView.RowFilter;
+                var menu = new ContextMenuStrip(this.components);
+                var rowFilter = this.dataTable.DefaultView.RowFilter;
                 ToolStripMenuItem menuItem;
                 if (rowFilter != null && rowFilter.Length > 0)
                 {
@@ -1174,7 +1174,7 @@ namespace DataCommander.Providers
                     menu.Items.Add(menuItem);
                 }
 
-                DataGridView.HitTestInfo hitTestInfo = this.dataGrid.HitTest(e.X, e.Y);
+                var hitTestInfo = this.dataGrid.HitTest(e.X, e.Y);
                 switch (hitTestInfo.Type)
                 {
                     case DataGridViewHitTestType.TopLeftHeader:
@@ -1193,7 +1193,7 @@ namespace DataCommander.Providers
                         menuItem = new ToolStripMenuItem("Edit dataview properties", null, this.EditDataViewProperties_Click);
                         menu.Items.Add(menuItem);
 
-                        bool any = this.dataGrid.Columns.Cast<DataGridViewColumn>().Any(c => !c.Visible);
+                        var any = this.dataGrid.Columns.Cast<DataGridViewColumn>().Any(c => !c.Visible);
                         if (any)
                         {
                             menuItem = new ToolStripMenuItem("Unhide all columns", null, this.UnhideAllColumns_Click);
@@ -1222,10 +1222,10 @@ namespace DataCommander.Providers
                     case DataGridViewHitTestType.Cell:
                     {
                         rowFilter = null;
-                        int rowNumber = hitTestInfo.RowIndex;
-                        int columnNumber = hitTestInfo.ColumnIndex;
+                        var rowNumber = hitTestInfo.RowIndex;
+                        var columnNumber = hitTestInfo.ColumnIndex;
 
-                        DataRow dataRow = this.dataTable.DefaultView[rowNumber].Row;
+                        var dataRow = this.dataTable.DefaultView[rowNumber].Row;
                         this.columnName = this.dataTable.Columns[columnNumber].ColumnName;
 
                         if (this.columnName.IndexOf('!') >= 0)
@@ -1237,13 +1237,13 @@ namespace DataCommander.Providers
                         menu.Items.Add(menuItem);
 
                         this.cellValue = dataRow[columnNumber];
-                        Type type = this.cellValue.GetType();
+                        var type = this.cellValue.GetType();
                         var fieldType = FieldTypeDictionary.Instance.GetValueOrDefault(type);
 
                         switch (fieldType)
                         {
                             case FieldType.StringField:
-                                string value = ((StringField)this.cellValue).Value;
+                                var value = ((StringField)this.cellValue).Value;
 
                                 if (value != null && value.Length < 256)
                                 {
@@ -1262,7 +1262,7 @@ namespace DataCommander.Providers
                                 }
                                 else
                                 {
-                                    TypeCode typeCode = Type.GetTypeCode(type);
+                                    var typeCode = Type.GetTypeCode(type);
                                     string valueStr;
 
                                     switch (typeCode)
@@ -1325,8 +1325,8 @@ namespace DataCommander.Providers
                                 case FieldType.StringField:
                                 {
                                     var stringField = (StringField)this.cellValue;
-                                    string value = stringField.Value;
-                                    int length = value != null ? value.Length : 0;
+                                    var value = stringField.Value;
+                                    var length = value != null ? value.Length : 0;
                                     menuItem = new ToolStripMenuItem("Copy string field", null, new EventHandler(this.CopyStringField_Click));
                                     menu.Items.Add(menuItem);
 
@@ -1341,8 +1341,8 @@ namespace DataCommander.Providers
 
                                 case FieldType.String:
                                 {
-                                    string value = (string)this.cellValue;
-                                    int length = value.Length;
+                                    var value = (string)this.cellValue;
+                                    var length = value.Length;
 
                                     menuItem = new ToolStripMenuItem("Copy string field", null, new EventHandler(this.CopyStringField_Click));
                                     menu.Items.Add(menuItem);

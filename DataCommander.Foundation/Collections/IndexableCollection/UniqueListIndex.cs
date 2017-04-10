@@ -3,7 +3,6 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -26,25 +25,27 @@
             Func<T, TKey> keySelector,
             IList<T> list)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(name != null);
             Contract.Requires<ArgumentNullException>(keySelector != null);
             Contract.Requires<ArgumentNullException>(list != null);
+#endif
 
             this.Name = name;
             this.keySelector = keySelector;
             this.list = list;
         }
 
-        #region ICollectionIndex<T> Members
+#region ICollectionIndex<T> Members
 
         /// <summary>
         /// 
         /// </summary>
         public string Name { get; }
 
-        #endregion
+#endregion
 
-        #region ICollection<T> Members
+#region ICollection<T> Members
 
         /// <summary>
         /// 
@@ -67,8 +68,7 @@
         /// </summary>
         public void Clear()
         {
-#if FOUNDATION_3_5
-#else
+#if CONTRACTS_FULL
             Contract.Ensures(this.Count == 0);
 #endif
             this.list.Clear();
@@ -81,8 +81,7 @@
         /// <returns></returns>
         public bool Contains(T item)
         {
-#if FOUNDATION_3_5
-#else
+#if CONTRACTS_FULL
             Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
 #endif
             return this.list.Contains(item);
@@ -118,9 +117,9 @@
             return this.list.Remove(item);
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable<T> Members
+#region IEnumerable<T> Members
 
         /// <summary>
         /// 
@@ -131,15 +130,15 @@
             return this.list.GetEnumerator();
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable Members
+#region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.list.GetEnumerator();
         }
 
-        #endregion
+#endregion
     }
 }

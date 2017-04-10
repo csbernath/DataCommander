@@ -40,7 +40,9 @@
         {
             get
             {
+#if CONTRACTS_FULL
                 Contract.Requires( this.Contains( columnName ) );
+#endif
 
                 return this.nameIndex[ columnName ];
             }
@@ -114,8 +116,10 @@
         {
             get
             {
+#if CONTRACTS_FULL
                 Contract.Assert( index >= 0 );
                 Contract.Assert( index < this.collection.Count );
+#endif
 
                 return this.listIndex[ index ];
             }
@@ -126,7 +130,7 @@
             }
         }
 
-        #region ICollection<TextDataColumn> Members
+#region ICollection<TextDataColumn> Members
 
         /// <summary>
         /// 
@@ -170,27 +174,27 @@
             throw new NotImplementedException();
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable<TextDataColumn> Members
+#region IEnumerable<TextDataColumn> Members
 
         IEnumerator<TextDataColumn> IEnumerable<TextDataColumn>.GetEnumerator()
         {
             return this.collection.GetEnumerator();
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable Members
+#region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.collection.GetEnumerator();
         }
 
-        #endregion
+#endregion
 
-        #region IList<TextDataColumn> Members
+#region IList<TextDataColumn> Members
 
         /// <summary>
         /// 
@@ -221,6 +225,6 @@
             throw new NotImplementedException();
         }
 
-        #endregion
+#endregion
     }
 }

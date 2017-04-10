@@ -4,8 +4,6 @@ namespace DataCommander.Foundation.Configuration
     using System.Collections.Specialized;
     using System.Configuration;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
-    using System.Reflection;
 
     /// <summary>
     /// 
@@ -54,7 +52,9 @@ namespace DataCommander.Foundation.Configuration
 
             public Reader(NameValueCollection nameValueCollection)
             {
+#if CONTRACTS_FULL
                 Contract.Requires<ArgumentNullException>(nameValueCollection != null);
+#endif
 
                 this.nameValueCollection = nameValueCollection;
             }
@@ -77,8 +77,10 @@ namespace DataCommander.Foundation.Configuration
 
             public PrefixedReader(NameValueCollection nameValueCollection, string prefix)
             {
+#if CONTRACTS_FULL
                 Contract.Requires<ArgumentNullException>(nameValueCollection != null);
                 Contract.Requires<ArgumentNullException>(prefix != null);
+#endif
 
                 this.nameValueCollection = nameValueCollection;
                 this.prefix = prefix;

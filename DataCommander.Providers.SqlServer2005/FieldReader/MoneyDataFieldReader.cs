@@ -45,7 +45,7 @@ namespace DataCommander.Providers.SqlServer2005.FieldReader
                 }
                 else
                 {
-                    decimal d = this.dataRecord.GetDecimal(this.columnOrdinal);
+                    var d = this.dataRecord.GetDecimal(this.columnOrdinal);
                     value = new DecimalField(numberFormatInfo, d, null);
                 }
 

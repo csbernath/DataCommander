@@ -26,7 +26,7 @@ namespace DataCommander.Providers
                 }
                 else
                 {
-                    bool booleanValue = this.dataRecord.GetBoolean(this.columnOrdinal);
+                    var booleanValue = this.dataRecord.GetBoolean(this.columnOrdinal);
                     value = new BooleanField(booleanValue);
                 }
 

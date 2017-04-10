@@ -21,14 +21,14 @@
         /// </summary>
         public TextDataParameterCollection()
         {
-            this.listIndex = new ListIndex<TextDataParameter>( "List" );
+            this.listIndex = new ListIndex<TextDataParameter>("List");
             this.nameIndex = new UniqueIndex<string, TextDataParameter>(
                 "Name",
-                parameter => GetKeyResponse.Create( true, parameter.ParameterName ),
-                SortOrder.None );
+                parameter => GetKeyResponse.Create(true, parameter.ParameterName),
+                SortOrder.None);
 
-            this.collection = new IndexableCollection<TextDataParameter>( this.listIndex );
-            this.collection.Indexes.Add( this.nameIndex );
+            this.collection = new IndexableCollection<TextDataParameter>(this.listIndex);
+            this.collection.Indexes.Add(this.nameIndex);
         }
 
         /// <summary>
@@ -36,13 +36,15 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public override int Add( object value )
+        public override int Add(object value)
         {
+#if CONTRACTS_FULL
             Contract.Requires( value != null );
             Contract.Requires( value is TextDataParameter );
+#endif
 
             var parameter = (TextDataParameter)value;
-            this.collection.Add( parameter );
+            this.collection.Add(parameter);
             return this.collection.Count - 1;
         }
 
@@ -51,11 +53,13 @@
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public TextDataParameter Add( TextDataParameter parameter )
+        public TextDataParameter Add(TextDataParameter parameter)
         {
-            Contract.Assert( parameter != null );
+#if CONTRACTS_FULL
+            Contract.Assert(parameter != null);
+#endif
 
-            this.collection.Add( parameter );
+            this.collection.Add(parameter);
             return parameter;
         }
 
@@ -63,7 +67,7 @@
         /// 
         /// </summary>
         /// <param name="values"></param>
-        public override void AddRange( Array values )
+        public override void AddRange(Array values)
         {
             throw new NotImplementedException();
         }
@@ -82,18 +86,18 @@
         /// <param name="value"></param>
         /// <returns></returns>
         [Pure]
-        public override bool Contains( string value )
+        public override bool Contains(string value)
         {
-            return this.nameIndex.ContainsKey( value );
+            return this.nameIndex.ContainsKey(value);
         }
 
 #if FOUNDATION_3_5
 #else
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [Pure]
         public bool PureContains(string value)
         {
@@ -110,7 +114,7 @@
 #else
         [Pure]
 #endif
-        public override bool Contains( object value )
+        public override bool Contains(object value)
         {
             throw new NotImplementedException();
         }
@@ -120,7 +124,7 @@
         /// </summary>
         /// <param name="array"></param>
         /// <param name="index"></param>
-        public override void CopyTo( Array array, int index )
+        public override void CopyTo(Array array, int index)
         {
             throw new NotImplementedException();
         }
@@ -144,7 +148,7 @@
         /// </summary>
         /// <param name="parameterName"></param>
         /// <returns></returns>
-        protected override DbParameter GetParameter( string parameterName )
+        protected override DbParameter GetParameter(string parameterName)
         {
             throw new NotImplementedException();
         }
@@ -154,7 +158,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        protected override DbParameter GetParameter( int index )
+        protected override DbParameter GetParameter(int index)
         {
             throw new NotImplementedException();
         }
@@ -164,7 +168,7 @@
         /// </summary>
         /// <param name="parameterName"></param>
         /// <returns></returns>
-        public override int IndexOf( string parameterName )
+        public override int IndexOf(string parameterName)
         {
             throw new NotImplementedException();
         }
@@ -174,7 +178,7 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public override int IndexOf( object value )
+        public override int IndexOf(object value)
         {
             throw new NotImplementedException();
         }
@@ -184,7 +188,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <param name="value"></param>
-        public override void Insert( int index, object value )
+        public override void Insert(int index, object value)
         {
             throw new NotImplementedException();
         }
@@ -194,10 +198,7 @@
         /// </summary>
         public override bool IsFixedSize
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         /// <summary>
@@ -205,10 +206,7 @@
         /// </summary>
         public override bool IsReadOnly
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         /// <summary>
@@ -216,17 +214,14 @@
         /// </summary>
         public override bool IsSynchronized
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public override void Remove( object value )
+        public override void Remove(object value)
         {
             throw new NotImplementedException();
         }
@@ -235,7 +230,7 @@
         /// 
         /// </summary>
         /// <param name="parameterName"></param>
-        public override void RemoveAt( string parameterName )
+        public override void RemoveAt(string parameterName)
         {
             throw new NotImplementedException();
         }
@@ -244,7 +239,7 @@
         /// 
         /// </summary>
         /// <param name="index"></param>
-        public override void RemoveAt( int index )
+        public override void RemoveAt(int index)
         {
             throw new NotImplementedException();
         }
@@ -254,7 +249,7 @@
         /// </summary>
         /// <param name="parameterName"></param>
         /// <param name="value"></param>
-        protected override void SetParameter( string parameterName, DbParameter value )
+        protected override void SetParameter(string parameterName, DbParameter value)
         {
             throw new NotImplementedException();
         }
@@ -264,7 +259,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <param name="value"></param>
-        protected override void SetParameter( int index, DbParameter value )
+        protected override void SetParameter(int index, DbParameter value)
         {
             throw new NotImplementedException();
         }
@@ -274,10 +269,7 @@
         /// </summary>
         public override object SyncRoot
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
         }
 
         /// <summary>
@@ -286,12 +278,16 @@
         /// <typeparam name="TResult"></typeparam>
         /// <param name="parameterName"></param>
         /// <returns></returns>
-        public TResult GetParameterValue<TResult>( string parameterName )
+        public TResult GetParameterValue<TResult>(string parameterName)
         {
-            Contract.Assert( this.Contains( parameterName ) );
-            var parameter = this.nameIndex[ parameterName ];
+#if CONTRACTS_FULL
+            Contract.Assert(this.Contains(parameterName));
+#endif
+            var parameter = this.nameIndex[parameterName];
             var value = parameter.Value;
-            Contract.Assert( value is TResult );
+#if CONTRACTS_FULL
+            Contract.Assert(value is TResult);
+#endif
             return (TResult)value;
         }
 
@@ -301,52 +297,50 @@
         /// <param name="parameterName"></param>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool TryGetValue( string parameterName, out TextDataParameter parameter )
+        public bool TryGetValue(string parameterName, out TextDataParameter parameter)
         {
-            return this.nameIndex.TryGetValue( parameterName, out parameter );
+            return this.nameIndex.TryGetValue(parameterName, out parameter);
         }
 
-        #region IList<TextDataParameter> Members
+#region IList<TextDataParameter> Members
 
-        int IList<TextDataParameter>.IndexOf( TextDataParameter item )
+        int IList<TextDataParameter>.IndexOf(TextDataParameter item)
         {
-            Contract.Assert( item != null );
+#if CONTRACTS_FULL
+            Contract.Assert(item != null);
+#endif
 
-            return this.listIndex.IndexOf( item );
+            return this.listIndex.IndexOf(item);
         }
 
-        void IList<TextDataParameter>.Insert( int index, TextDataParameter item )
+        void IList<TextDataParameter>.Insert(int index, TextDataParameter item)
         {
             throw new NotImplementedException();
         }
 
-        void IList<TextDataParameter>.RemoveAt( int index )
+        void IList<TextDataParameter>.RemoveAt(int index)
         {
-            var parameter = this.listIndex[ index ];
-            this.collection.Remove( parameter );
+            var parameter = this.listIndex[index];
+            this.collection.Remove(parameter);
         }
 
-        TextDataParameter IList<TextDataParameter>.this[ int index ]
+        TextDataParameter IList<TextDataParameter>.this[int index]
         {
-            get
-            {
-                return this.listIndex[ index ];
-            }
+            get { return this.listIndex[index]; }
 
-            set
-            {
-                throw new NotSupportedException();
-            }
+            set { throw new NotSupportedException(); }
         }
 
-        #endregion
+#endregion
 
-        #region ICollection<TextDataParameter> Members
+#region ICollection<TextDataParameter> Members
 
-        void ICollection<TextDataParameter>.Add( TextDataParameter item )
+        void ICollection<TextDataParameter>.Add(TextDataParameter item)
         {
-            Contract.Assert( item != null );
-            this.collection.Add( item );
+#if CONTRACTS_FULL
+            Contract.Assert(item != null);
+#endif
+            this.collection.Add(item);
         }
 
         void ICollection<TextDataParameter>.Clear()
@@ -354,12 +348,12 @@
             this.collection.Clear();
         }
 
-        bool ICollection<TextDataParameter>.Contains( TextDataParameter item )
+        bool ICollection<TextDataParameter>.Contains(TextDataParameter item)
         {
             throw new NotImplementedException();
         }
 
-        void ICollection<TextDataParameter>.CopyTo( TextDataParameter[] array, int arrayIndex )
+        void ICollection<TextDataParameter>.CopyTo(TextDataParameter[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
@@ -368,30 +362,32 @@
 
         bool ICollection<TextDataParameter>.IsReadOnly => this.collection.IsReadOnly;
 
-        bool ICollection<TextDataParameter>.Remove( TextDataParameter item )
+        bool ICollection<TextDataParameter>.Remove(TextDataParameter item)
         {
-            Contract.Assert( item != null );
-            return this.collection.Remove( item );
+#if CONTRACTS_FULL
+            Contract.Assert(item != null);
+#endif
+            return this.collection.Remove(item);
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable<TextDataParameter> Members
+#region IEnumerable<TextDataParameter> Members
 
         IEnumerator<TextDataParameter> IEnumerable<TextDataParameter>.GetEnumerator()
         {
             return this.collection.GetEnumerator();
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable Members
+#region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.collection.GetEnumerator();
         }
 
-        #endregion
+#endregion
     }
 }

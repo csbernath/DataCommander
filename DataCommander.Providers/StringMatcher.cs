@@ -2,11 +2,6 @@ namespace DataCommander
 {
     using System;
 
-    internal interface IStringMatcher
-    {
-        bool IsMatch(string text);
-    }
-
     internal sealed class StringMatcher : IStringMatcher
     {
         private readonly string subString;
@@ -20,7 +15,7 @@ namespace DataCommander
 
         public bool IsMatch(string text)
         {
-            int index = text.IndexOf(this.subString, this.comparison);
+            var index = text.IndexOf(this.subString, this.comparison);
             return index >= 0;
         }
     }

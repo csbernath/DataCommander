@@ -3,7 +3,6 @@ namespace DataCommander.Foundation.Data.SqlClient
     using System;
     using System.Data;
     using System.Data.SqlClient;
-    using System.Diagnostics.Contracts;
     using System.Security.Cryptography;
     using System.Security.Principal;
     using System.Text;
@@ -25,7 +24,9 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <returns></returns>
         public static ConfigurationAttributeCollection GetProperties( string name, IDbConnection connection )
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(connection != null);
+#endif
 
             var properties = new ConfigurationAttributeCollection { Name = name };
             var dataSet = ExternalSystem_GetProperties( connection, name );

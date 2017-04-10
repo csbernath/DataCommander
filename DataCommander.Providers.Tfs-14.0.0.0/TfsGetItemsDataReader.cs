@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Text;
     using DataCommander.Foundation.Data;
@@ -18,13 +17,15 @@
 
         public TfsGetItemsDataReader(TfsCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
             this.command = command;
         }
 
         public override DataTable GetSchemaTable()
         {
-            DataTable table = CreateSchemaTable();
+            var table = CreateSchemaTable();
             AddSchemaRowString(table, "Name", false);
             AddSchemaRowInt32(table, "ChangesetId", false);
             AddSchemaRowDateTime(table, "CheckinDate", false);
@@ -47,9 +48,9 @@
                 if (this.first)
                 {
                     this.first = false;
-                    TfsParameterCollection parameters = this.command.Parameters;
-                    string path = parameters["path"].GetValueOrDefault<string>();
-                    string recursionString = Database.GetValueOrDefault<string>(parameters["recursion"].Value);
+                    var parameters = this.command.Parameters;
+                    var path = parameters["path"].GetValueOrDefault<string>();
+                    var recursionString = Database.GetValueOrDefault<string>(parameters["recursion"].Value);
                     RecursionType recursion;
 
                     if (recursionString != null)
@@ -61,11 +62,11 @@
                         recursion = RecursionType.OneLevel;
                     }
 
-                    ItemSet itemSet = this.command.Connection.VersionControlServer.GetItems(path, recursion);
-                    List<Item> folders = new List<Item>();
-                    List<Item> files = new List<Item>();
+                    var itemSet = this.command.Connection.VersionControlServer.GetItems(path, recursion);
+                    var folders = new List<Item>();
+                    var files = new List<Item>();
 
-                    foreach (Item item in itemSet.Items.Skip(1))
+                    foreach (var item in itemSet.Items.Skip(1))
                     {
                         switch (item.ItemType)
                         {
@@ -88,13 +89,13 @@
 
                 if (this.index < this.items.Count)
                 {
-                    Item item = this.items[this.index];
-                    int itemEncoding = item.Encoding;
+                    var item = this.items[this.index];
+                    var itemEncoding = item.Encoding;
                     string encodingString;
 
                     if (itemEncoding >= 0)
                     {
-                        Encoding encoding = Encoding.GetEncoding(item.Encoding);
+                        var encoding = Encoding.GetEncoding(item.Encoding);
                         encodingString = encoding.EncodingName;
                     }
                     else
@@ -102,7 +103,7 @@
                         encodingString = null;
                     }
 
-                    object[] values = new object[]
+                    var values = new object[]
                     {
                         item.ServerItem,
                         item.ChangesetId,

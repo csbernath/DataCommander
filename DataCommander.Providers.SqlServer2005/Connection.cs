@@ -1,6 +1,5 @@
 namespace DataCommander.Providers.SqlServer2005
 {
-    using System;
     using System.Data;
     using System.Data.SqlClient;
     using System.Security.Principal;
@@ -44,7 +43,7 @@ namespace DataCommander.Providers.SqlServer2005
 
         private void OnStateChange(object sender, StateChangeEventArgs e)
         {
-            DateTime now = LocalTime.Default.Now;
+            var now = LocalTime.Default.Now;
             string text = $"Connection.State changed. OriginalState: {e.OriginalState}, CurrentState: {e.CurrentState}";
             this.InvokeInfoMessage
                 (
@@ -112,8 +111,8 @@ set arithabort on";
             get
             {
                 var transactionScope = new DbTransactionScope(this.sqlConnection, null);
-                string commandText = "select @@version";
-                string version = transactionScope.ExecuteScalar<string>(new CommandDefinition {CommandText = commandText});
+                var commandText = "select @@version";
+                var version = transactionScope.ExecuteScalar<string>(new CommandDefinition {CommandText = commandText});
 
                 /* select
           serverproperty('Collation') as Collation,
@@ -133,7 +132,7 @@ set arithabort on";
           serverproperty('ProductLevel') as ProductLevel,
           serverproperty('ServerName') as ServerName
           */
-                string serverVersion = this.sqlConnection.ServerVersion;
+                var serverVersion = this.sqlConnection.ServerVersion;
                 string description;
 
                 switch (serverVersion)
@@ -266,8 +265,8 @@ set arithabort on";
             get
             {
                 var transactionScope = new DbTransactionScope(this.sqlConnection, null);
-                object scalar = transactionScope.ExecuteScalar(new CommandDefinition {CommandText = "select @@trancount"});
-                int transactionCount = (int)scalar;
+                var scalar = transactionScope.ExecuteScalar(new CommandDefinition {CommandText = "select @@trancount"});
+                var transactionCount = (int)scalar;
                 return transactionCount;
             }
         }

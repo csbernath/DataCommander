@@ -66,7 +66,7 @@
 
         private TfsParameter GetParameter(string parameterName)
         {
-            TfsParameter parameter = this.list.First(p => p.ParameterName == parameterName);
+            var parameter = this.list.First(p => p.ParameterName == parameterName);
             return parameter;
         }
 

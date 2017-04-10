@@ -1,8 +1,6 @@
 namespace DataCommander.Foundation.Data
 {
-    using System;
     using System.Data;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -19,7 +17,9 @@ namespace DataCommander.Foundation.Data
         /// <param name="transaction"></param>
         public DbTransactionScope(IDbConnection connection, IDbTransaction transaction)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(connection != null);
+#endif
             this.connection = connection;
             this.transaction = transaction;
         }

@@ -35,7 +35,7 @@ where table_schema = '{this.schemaNode.Name}'
 order by table_name"
                 }, CommandBehavior.Default, dataRecord =>
                 {
-                    string name = dataRecord.GetString(0);
+                    var name = dataRecord.GetString(0);
                     var viewNode = new ViewNode(this, name);
                     nodes.Add(viewNode);
                 });

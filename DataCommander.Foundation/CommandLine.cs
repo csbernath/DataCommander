@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Text;
     using DataCommander.Foundation.Collections;
@@ -21,7 +20,9 @@
         /// <param name="commandLine"></param>
         public CommandLine(string commandLine)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(commandLine != null);
+#endif
 
             this.arguments = new IndexableCollection<CommandLineArgument>(this.ListIndex);
             var dictionary = new Dictionary<string, ICollection<CommandLineArgument>>(StringComparer.InvariantCultureIgnoreCase);
@@ -46,20 +47,24 @@
         /// </summary>
         public NonUniqueIndex<string, CommandLineArgument> NameIndex { get; }
 
-        #region Private Methods
+#region Private Methods
 
         private static string ReadString(TextReader textReader)
         {
             var read = textReader.Read();
-            var c = (Char) read;
+            var c = (char) read;
+#if CONTRACTS_FULL
             Contract.Assert(c == '"');
+#endif
             var sb = new StringBuilder();
 
             while (true)
             {
                 read = textReader.Read();
+#if CONTRACTS_FULL
                 Contract.Assert(read >= 0);
-                c = (Char) read;
+#endif
+                c = (char) read;
 
                 if (c == '"')
                 {
@@ -78,8 +83,10 @@
         private static string ReadName(TextReader textReader)
         {
             var read = textReader.Read();
-            var c = (Char) read;
+            var c = (char) read;
+#if CONTRACTS_FULL
             Contract.Assert(c == '/' || c == '-');
+#endif
             var sb = new StringBuilder();
 
             while (true)
@@ -91,9 +98,9 @@
                     break;
                 }
 
-                c = (Char) peek;
+                c = (char) peek;
 
-                if (c == ':' || c == '=' || Char.IsWhiteSpace(c))
+                if (c == ':' || c == '=' || char.IsWhiteSpace(c))
                 {
                     break;
                 }
@@ -131,9 +138,9 @@
                     break;
                 }
 
-                var c = (Char) peek;
+                var c = (char) peek;
 
-                if (Char.IsWhiteSpace(c))
+                if (char.IsWhiteSpace(c))
                 {
                     break;
                 }
@@ -157,13 +164,13 @@
 
             if (peek >= 0)
             {
-                var c = (Char) peek;
+                var c = (char) peek;
 
                 if (c == ':' || c == '=')
                 {
                     textReader.Read();
                     peek = textReader.Peek();
-                    c = (Char) peek;
+                    c = (char) peek;
 
                     if (peek == '"')
                     {
@@ -200,7 +207,7 @@
                     break;
                 }
 
-                var c = (Char) peek;
+                var c = (char) peek;
 
                 if (c == '"')
                 {
@@ -216,7 +223,7 @@
                     index++;
                     yield return argument;
                 }
-                else if (Char.IsWhiteSpace(c))
+                else if (char.IsWhiteSpace(c))
                 {
                     textReader.Read();
                 }
@@ -230,6 +237,6 @@
             }
         }
 
-        #endregion
+#endregion
     }
 }

@@ -1,7 +1,6 @@
 namespace DataCommander.Providers.SQLite
 {
     using System.Collections.Generic;
-    using System.Data;
     using System.Threading;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
@@ -36,15 +35,15 @@ from
 ) t
 order by name collate nocase";
             var database = new Database(this.databaseNode.Connection);
-            DataTable table = database.ExecuteDataTable(commandText, CancellationToken.None);
-            DataRowCollection rows = table.Rows;
-            int count = rows.Count;
-            ITreeNode[] nodes = new ITreeNode[count];
+            var table = database.ExecuteDataTable(commandText, CancellationToken.None);
+            var rows = table.Rows;
+            var count = rows.Count;
+            var nodes = new ITreeNode[count];
 
-            for (int i=0;i<count;i++)
+            for (var i=0;i<count;i++)
             {
-                DataRow row = rows[i];
-                string name = (string)row["name"];
+                var row = rows[i];
+                var name = (string)row["name"];
                 nodes[i] = new TableNode(this.databaseNode, name);
             }
 

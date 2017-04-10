@@ -7,7 +7,7 @@ namespace DataCommander.Providers
         private readonly IDataParameter parameter;
         private readonly int size;
 
-        public DataParameterBase(
+        protected DataParameterBase(
             IDataParameter parameter,
             int size,
             byte precision,

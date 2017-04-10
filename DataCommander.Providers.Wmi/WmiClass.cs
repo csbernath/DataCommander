@@ -18,8 +18,8 @@ namespace DataCommander.Providers.Wmi
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
-            ManagementObjectCollection objects = this.manClass.GetSubclasses();
-            ArrayList list = new ArrayList();
+            var objects = this.manClass.GetSubclasses();
+            var list = new ArrayList();
 
             foreach (ManagementClass subClass in objects)
             {
@@ -27,7 +27,7 @@ namespace DataCommander.Providers.Wmi
                 list.Add(treeNode);
             }
 
-            ITreeNode[] array = new ITreeNode[list.Count];
+            var array = new ITreeNode[list.Count];
             list.CopyTo(array);
 
             return array;

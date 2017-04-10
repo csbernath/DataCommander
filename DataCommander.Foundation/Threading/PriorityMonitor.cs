@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation.Threading
 {
     using System;
-    using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Threading;
     using DataCommander.Foundation.Collections;
@@ -100,9 +99,11 @@
 
         internal void Exit(LockRequest lockRequest)
         {
+#if CONTRACTS_FULL
             Contract.Requires(lockRequest != null);
             Contract.Requires(lockRequest.Monitor == this);
             Contract.Requires(lockRequest == this.CurrentLockRequest);
+#endif
 
             log.Write(LogLevel.Trace, "Exiting lockRequest... monitoredObject: {0}, priority: {1}", this.MonitoredObject,
                 lockRequest.Priority);
@@ -132,7 +133,9 @@
 
             internal LockRequest(PriorityMonitor<T> monitor, int priority)
             {
+#if CONTRACTS_FULL
                 Contract.Requires(monitor != null);
+#endif
 
                 this.Monitor = monitor;
                 this.Priority = priority;
@@ -189,7 +192,7 @@
                 }
             }
 
-            #region IDisposable Members
+#region IDisposable Members
 
             void IDisposable.Dispose()
             {
@@ -201,7 +204,7 @@
                 }
             }
 
-            #endregion
+#endregion
         }
     }
 }

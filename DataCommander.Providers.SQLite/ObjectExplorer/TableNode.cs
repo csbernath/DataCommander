@@ -24,7 +24,7 @@ namespace DataCommander.Providers.SQLite
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            ITreeNode[] treeNodes = new ITreeNode[1];
+            var treeNodes = new ITreeNode[1];
             treeNodes[0] = new IndexCollectionNode(this);
             return treeNodes;
         }
@@ -43,14 +43,14 @@ select  sql
 from	{databaseName}.sqlite_master
 where	name	= '{name}'";
             var transactionScope = new DbTransactionScope(connection, null);
-            object scalar = transactionScope.ExecuteScalar(new CommandDefinition {CommandText = commandText});
-            string script = Foundation.Data.Database.GetValueOrDefault<string>(scalar);
+            var scalar = transactionScope.ExecuteScalar(new CommandDefinition {CommandText = commandText});
+            var script = Foundation.Data.Database.GetValueOrDefault<string>(scalar);
             return script;
         }
 
         private void Script_Click(object sender, EventArgs e)
         {
-            string script = GetScript(this.Database.Connection, this.Database.Name, this.Name);
+            var script = GetScript(this.Database.Connection, this.Database.Name, this.Name);
             QueryForm.ShowText(script);
         }
 

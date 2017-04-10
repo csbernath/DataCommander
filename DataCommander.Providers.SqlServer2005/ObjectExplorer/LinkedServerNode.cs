@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Windows.Forms;
     using Foundation.Linq;
 
@@ -11,7 +10,9 @@
             LinkedServerCollectionNode linkedServers,
             string name )
         {
+#if CONTRACTS_FULL
             Contract.Requires( linkedServers != null );
+#endif
             this.LinkedServers = linkedServers;
             this.Name = name;
         }
@@ -20,7 +21,7 @@
 
         public string Name { get; }
 
-        #region ITreeNode Members
+#region ITreeNode Members
 
         string ITreeNode.Name => this.Name;
 
@@ -37,6 +38,6 @@
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-        #endregion
+#endregion
     }
 }

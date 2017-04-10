@@ -26,13 +26,13 @@ namespace DataCommander.Providers
 
         public void WriteLine(params object[] args)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            for (int i = 0; i < args.Length; i++)
+            for (var i = 0; i < args.Length; i++)
             {
                 if (args[i] != null)
                 {
-                    string s = args[i].ToString();
+                    var s = args[i].ToString();
                     sb.Append(s);
 
                     if (i != args.Length - 1)
@@ -47,17 +47,17 @@ namespace DataCommander.Providers
 
         public void Write(object arg)
         {
-            Recordset rs = arg as Recordset;
+            var rs = arg as Recordset;
 
             if (rs != null)
             {
-                DataSet dataSet = new DataSet();
-                OleDbDataAdapter adapter = new OleDbDataAdapter();
-                object objRS = arg;
+                var dataSet = new DataSet();
+                var adapter = new OleDbDataAdapter();
+                var objRS = arg;
 
                 while (objRS != null)
                 {
-                    DataTable dataTable = new DataTable();
+                    var dataTable = new DataTable();
                     adapter.Fill(dataTable, objRS);
                     dataSet.Tables.Add(dataTable);
                     object recordsAffected;
@@ -78,7 +78,7 @@ namespace DataCommander.Providers
             }
             else
             {
-                string s = arg.ToString();
+                var s = arg.ToString();
                 this.TextWriter.Write(s);
             }
         }

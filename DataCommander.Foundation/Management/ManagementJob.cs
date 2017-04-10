@@ -1,7 +1,5 @@
 ﻿namespace DataCommander.Foundation.Management
 {
-    using System;
-    using System.Diagnostics.Contracts;
     using System.Management;
 
     /// <summary>
@@ -17,7 +15,9 @@
         /// <param name="managementObject"></param>
         public ManagementJob(ManagementObject managementObject)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(managementObject != null);
+#endif
 
             this.managementObject = managementObject;
         }

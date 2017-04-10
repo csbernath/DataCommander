@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation.IO
 {
     using System;
-    using System.Diagnostics.Contracts;
     using System.IO;
 
     /// <summary>
@@ -17,7 +16,9 @@
         /// <param name="stream"></param>
         public EventableStream(Stream stream)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(stream != null);
+#endif
             this.stream = stream;
         }
 
@@ -138,11 +139,13 @@
             Contract.Invariant( this.stream != null );
         }
 #else
-        [ContractInvariantMethod]
+        //[ContractInvariantMethod]
         private new void ObjectInvariant()
         {
+#if CONTRACTS_FULL
             Contract.Invariant(this.stream != null);
+#endif
         }
 #endif
+        }
     }
-}

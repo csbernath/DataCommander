@@ -2,7 +2,6 @@ namespace DataCommander.Foundation.Diagnostics
 {
     using System;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
     using System.Text;
 
     /// <summary>
@@ -19,7 +18,9 @@ namespace DataCommander.Foundation.Diagnostics
         /// <returns></returns>
         public static string ToLogString(this StackTrace trace)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(trace != null);
+#endif
 
             var stringBuilder = new StringBuilder();
 

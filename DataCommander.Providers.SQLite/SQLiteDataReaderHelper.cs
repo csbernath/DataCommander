@@ -23,7 +23,7 @@ namespace DataCommander.Providers.SQLite
             get
             {
                 object value;
-                bool isDBNull = this.dataReader.IsDBNull(this.columnOrdinal );
+                var isDBNull = this.dataReader.IsDBNull(this.columnOrdinal );
 
                 if (isDBNull)
                 {
@@ -42,7 +42,7 @@ namespace DataCommander.Providers.SQLite
                     //    value = new DecimalField( null, decimalValue, null );
                     //}
 
-                    decimal decimalValue = this.dataReader.GetDecimal(this.columnOrdinal );
+                    var decimalValue = this.dataReader.GetDecimal(this.columnOrdinal );
                     value = new DecimalField( null, decimalValue, null );
                 }
 
@@ -61,15 +61,15 @@ namespace DataCommander.Providers.SQLite
         public SQLiteDataReaderHelper( IDataReader dataReader )
         {
             this.sqLiteDataReader = (SQLiteDataReader) dataReader;
-            DataTable schemaTable = dataReader.GetSchemaTable();
+            var schemaTable = dataReader.GetSchemaTable();
 
             if (schemaTable != null)
             {
-                DataRowCollection rows = schemaTable.Rows;
-                int count = rows.Count;
+                var rows = schemaTable.Rows;
+                var count = rows.Count;
                 this.dataFieldReaders = new IDataFieldReader[ count ];
 
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     this.dataFieldReaders[ i ] = CreateDataFieldReader( dataReader, rows[ i ] );
                 }
@@ -80,9 +80,9 @@ namespace DataCommander.Providers.SQLite
             IDataRecord dataRecord,
             DataRow schemaRow )
         {
-            SQLiteDataReader sqLiteDataReader = (SQLiteDataReader) dataRecord;
-            int columnOrdinal = (int) schemaRow[ "ColumnOrdinal" ];
-            DbType dbType = (DbType) schemaRow[ SchemaTableColumn.ProviderType ];
+            var sqLiteDataReader = (SQLiteDataReader) dataRecord;
+            var columnOrdinal = (int) schemaRow[ "ColumnOrdinal" ];
+            var dbType = (DbType) schemaRow[ SchemaTableColumn.ProviderType ];
             IDataFieldReader dataFieldReader;
 
             switch (dbType)
@@ -120,7 +120,7 @@ namespace DataCommander.Providers.SQLite
 
         int IDataReaderHelper.GetValues( object[] values )
         {
-            for (int i = 0; i < this.dataFieldReaders.Length; i++)
+            for (var i = 0; i < this.dataFieldReaders.Length; i++)
             {
                 values[ i ] = this.dataFieldReaders[ i ].Value;
             }

@@ -2,8 +2,6 @@ namespace DataCommander.Providers
 {
     using System;
     using System.Collections.Generic;
-    using System.Data;
-    using System.Diagnostics.Contracts;
     using ADODB;
     using DataCommander.Foundation.Configuration;
 
@@ -14,7 +12,7 @@ namespace DataCommander.Providers
             get
             {
                 var providers = new List<string>();
-                ConfigurationNode node = Settings.CurrentNamespace;
+                var node = Settings.CurrentNamespace;
 
                 foreach (var childNode in node.ChildNodes)
                 {
@@ -33,17 +31,21 @@ namespace DataCommander.Providers
 
         public static IProvider CreateProvider(string name)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(name != null);
             Contract.Ensures(Contract.Result<IProvider>() != null);
+#endif
 
-            ConfigurationNode folder = Settings.CurrentNamespace;
+            var folder = Settings.CurrentNamespace;
             folder = folder.ChildNodes[name];
             var attributes = folder.Attributes;
-            string typeName = attributes["TypeName"].GetValue<string>();
-            Type type = Type.GetType(typeName, true);
-            object instance = Activator.CreateInstance(type);
+            var typeName = attributes["TypeName"].GetValue<string>();
+            var type = Type.GetType(typeName, true);
+            var instance = Activator.CreateInstance(type);
+#if CONTRACTS_FULL
             Contract.Assert(instance != null);
             Contract.Assert(instance is IProvider);
+#endif
             var provider = (IProvider)instance;
 
             return provider;
@@ -58,14 +60,14 @@ namespace DataCommander.Providers
                 var c = new ConnectionClass();
 
                 c.Open(connectionString, null, null, 0);
-                Recordset rs = c.OpenSchema(SchemaEnum.adSchemaDBInfoKeywords, Type.Missing, Type.Missing);
-                DataTable dataTable = OleDbHelper.Convert(rs);
+                var rs = c.OpenSchema(SchemaEnum.adSchemaDBInfoKeywords, Type.Missing, Type.Missing);
+                var dataTable = OleDbHelper.Convert(rs);
                 rs.Close();
                 c.Close();
 
                 keyWords = new string[dataTable.Rows.Count];
 
-                for (int i = 0; i < dataTable.Rows.Count; i++)
+                for (var i = 0; i < dataTable.Rows.Count; i++)
                 {
                     keyWords[i] = (string)dataTable.Rows[i][0];
                 }

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Threading;
     using DataCommander.Foundation.Diagnostics;
 
@@ -41,7 +40,9 @@
         /// <param name="state"></param>
         public void QueueUserWorkItem(WaitCallback callback, object state)
         {
+#if CONTRACTS_FULL
             Contract.Requires(callback != null);
+#endif
 
             var tuple = Tuple.Create(callback, state);
 

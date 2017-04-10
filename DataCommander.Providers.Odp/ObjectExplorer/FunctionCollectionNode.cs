@@ -35,7 +35,7 @@ order by OBJECT_NAME";
                 CommandBehavior.Default,
                 dataRecord =>
                 {
-                    string procedureName = dataRecord.GetString(0);
+                    var procedureName = dataRecord.GetString(0);
                     return new FunctionNode(schemaNode, null, procedureName);
                 });
         }

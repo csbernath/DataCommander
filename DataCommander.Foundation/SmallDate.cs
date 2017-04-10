@@ -189,8 +189,10 @@
 
         private static ushort ToSmallDateValue(DateTime dateTime)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentOutOfRangeException>(MinDateTime <= dateTime);
             Contract.Requires<ArgumentOutOfRangeException>(dateTime < MaxDateTime);
+#endif
 
             var timeSpan = dateTime - MinDateTime;
             var totalDays = timeSpan.TotalDays;

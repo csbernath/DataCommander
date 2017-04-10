@@ -43,7 +43,7 @@ namespace DataCommander.Providers
                 int startPosition;
                 int endPosition;
                 string value;
-                char c = this.text[this.index];
+                var c = this.text[this.index];
 
                 if (c == 'N')
                 {
@@ -122,7 +122,7 @@ namespace DataCommander.Providers
 
             while (this.index < this.length)
             {
-                char c = this.text[this.index];
+                var c = this.text[this.index];
                 if (char.IsWhiteSpace(c) || c == ',' || c == '(' || c == ')' || c == '=' || c == '+')
                 {
                     break;
@@ -134,7 +134,7 @@ namespace DataCommander.Providers
                 sb.Append(c);
             }
 
-            string keyWord = sb.ToString();
+            var keyWord = sb.ToString();
             return keyWord;
         }
 
@@ -142,11 +142,11 @@ namespace DataCommander.Providers
         {
             var sb = new StringBuilder();
             this.index++;
-            bool escape = false;
+            var escape = false;
 
             while (this.index < this.length)
             {
-                char c = this.text[this.index];
+                var c = this.text[this.index];
                 this.index++;
 
                 if (escape)
@@ -191,7 +191,7 @@ namespace DataCommander.Providers
 
             while (this.index < this.length)
             {
-                char c = this.text[this.index];
+                var c = this.text[this.index];
                 if (char.IsWhiteSpace(c) || c == ',')
                 {
                     break;

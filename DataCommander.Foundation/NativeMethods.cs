@@ -49,16 +49,16 @@ namespace DataCommander.Foundation
         }
 
         [DllImport("kernel32")]
-        public static extern Int16 FreeLibrary(int hModule);
+        public static extern short FreeLibrary(int hModule);
 
         [DllImport( "kernel32" )]
-        public static extern UInt32 GetCurrentThreadId();
+        public static extern uint GetCurrentThreadId();
 
         [DllImport("kernel32", CharSet = CharSet.Auto)]
-        public static extern UInt32 GetShortPathName(
+        public static extern uint GetShortPathName(
             string lpszLongPath,
             StringBuilder lpszShortPath,
-            UInt32 cchBuffer);
+            uint cchBuffer);
 
         [DllImport("kernel32")]
         public static extern int LoadLibrary(string fileName);

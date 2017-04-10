@@ -97,7 +97,7 @@
                     case SqlServerSystemType.Char:
                     case SqlServerSystemType.VarBinary:
                     case SqlServerSystemType.VarChar:
-                        string maxLengthString = this.maxLength >= 0 ? this.maxLength.ToString() : "max";
+                        var maxLengthString = this.maxLength >= 0 ? this.maxLength.ToString() : "max";
                         typeName = $"{this.userTypeName}({maxLengthString})";
                         break;
 

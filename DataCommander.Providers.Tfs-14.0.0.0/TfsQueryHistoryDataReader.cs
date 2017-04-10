@@ -4,7 +4,6 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Data;
-    using System.Diagnostics.Contracts;
     using System.Linq;
     using DataCommander.Foundation.Data;
     using Foundation;
@@ -23,13 +22,15 @@
 
         public TfsQueryHistoryDataReader(TfsCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
             this.command = command;
         }
 
         public override DataTable GetSchemaTable()
         {
-            DataTable table = CreateSchemaTable();
+            var table = CreateSchemaTable();
             AddSchemaRowInt32(table, "ChangesetId", false);
             AddSchemaRowString(table, "Committer", false);
             AddSchemaRowDateTime(table, "CreationDate", false);
@@ -46,11 +47,11 @@
             if (this.first)
             {
                 this.first = false;
-                TfsParameterCollection parameters = this.command.Parameters;
-                string path = (string)parameters["path"].Value;
-                VersionSpec version = VersionSpec.Latest;
-                int deletionId = 0;
-                TfsParameter parameter = parameters.FirstOrDefault(p => p.ParameterName == "recursion");
+                var parameters = this.command.Parameters;
+                var path = (string)parameters["path"].Value;
+                var version = VersionSpec.Latest;
+                var deletionId = 0;
+                var parameter = parameters.FirstOrDefault(p => p.ParameterName == "recursion");
                 RecursionType recursion;
                 if (parameter != null && parameter.Value != null && parameter.Value != DBNull.Value)
                 {
@@ -62,7 +63,7 @@
                 }
 
                 parameter = parameters.FirstOrDefault(p=>p.ParameterName == "user");
-                string user = parameter != null ? Database.GetValueOrDefault<string>(parameter.Value) : null;
+                var user = parameter != null ? Database.GetValueOrDefault<string>(parameter.Value) : null;
                 VersionSpec versionFrom = null;
                 VersionSpec versionTo = null;
                 parameter = parameters.FirstOrDefault( p => p.ParameterName == "maxCount" );
@@ -81,20 +82,20 @@
                 }
 
                 parameter = parameters.FirstOrDefault(p => p.ParameterName == "includeChanges");
-                bool includeChanges = parameter != null ? Database.GetValueOrDefault<bool>(parameters["includeChanges"].Value) : false;
-                bool slotMode = Database.GetValueOrDefault<bool>(parameters["slotMode"].Value);
-                IEnumerable changesets = this.command.Connection.VersionControlServer.QueryHistory(path, version, deletionId, recursion, user, versionFrom, versionTo, maxCount, includeChanges, slotMode);
+                var includeChanges = parameter != null ? Database.GetValueOrDefault<bool>(parameters["includeChanges"].Value) : false;
+                var slotMode = Database.GetValueOrDefault<bool>(parameters["slotMode"].Value);
+                var changesets = this.command.Connection.VersionControlServer.QueryHistory(path, version, deletionId, recursion, user, versionFrom, versionTo, maxCount, includeChanges, slotMode);
                 this.enumerator = this.AsEnumerable(changesets).GetEnumerator();
             }
 
-            bool moveNext = this.enumerator.MoveNext();
+            var moveNext = this.enumerator.MoveNext();
 
             if (moveNext)
             {
-                Tuple<Changeset, int> pair = this.enumerator.Current;
-                Changeset changeset = pair.Item1;
+                var pair = this.enumerator.Current;
+                var changeset = pair.Item1;
 
-                object[] values = new object[]
+                var values = new object[]
                 {
                     changeset.ChangesetId,
                     changeset.Committer,
@@ -104,11 +105,11 @@
                     null
                 };
 
-                int changeIndex = pair.Item2;
+                var changeIndex = pair.Item2;
 
                 if (changeIndex >= 0)
                 {
-                    Change change = changeset.Changes[changeIndex];
+                    var change = changeset.Changes[changeIndex];
                     values[4] = change.ChangeType;
                     values[5] = change.Item.ServerItem;
                 }
@@ -133,11 +134,11 @@
         {
             foreach (Changeset changeset in changesets)
             {
-                Change[] changes = changeset.Changes;
+                var changes = changeset.Changes;
 
                 if (changes.Length > 0)
                 {
-                    for (int i = 0; i < changes.Length; i++)
+                    for (var i = 0; i < changes.Length; i++)
                     {
                         yield return new Tuple<Changeset, int>(changeset, i);
                     }

@@ -24,7 +24,7 @@ namespace DataCommander.Providers
             int[] columnIndexes,
             TextWriter textWriter)
         {
-            HtmlTable htmlTable = new HtmlTable();
+            var htmlTable = new HtmlTable();
             htmlTable.Border = 1;
             htmlTable.CellPadding = 1;
             htmlTable.CellSpacing = 0;
@@ -36,15 +36,15 @@ namespace DataCommander.Providers
             htmlTable.Style["font-size"] = "8pt";
 
             var row = new HtmlTableRow();
-            DataTable dataTable = dataView.Table;
+            var dataTable = dataView.Table;
             var columns = dataTable.Columns;
 
-            for (int i = 0; i < columnIndexes.Length; i++)
+            for (var i = 0; i < columnIndexes.Length; i++)
             {
                 var cell = new HtmlTableCell("TH");
-                int columnIndex = columnIndexes[i];
+                var columnIndex = columnIndexes[i];
                 var column = columns[columnIndex];
-                string columnName = column.ColumnName;
+                var columnName = column.ColumnName;
                 string html;
 
                 if (columnName.Length > 0)
@@ -68,24 +68,24 @@ namespace DataCommander.Providers
 
             htmlTable.Rows.Add(row);
 
-            int count = dataTable.Columns.Count;
+            var count = dataTable.Columns.Count;
 
             foreach (DataRowView dataRowView in dataView)
             {
                 row = new HtmlTableRow();
 
-                for (int i = 0; i < columnIndexes.Length; i++)
+                for (var i = 0; i < columnIndexes.Length; i++)
                 {
                     var cell = new HtmlTableCell();
-                    int columnIndex = columnIndexes[i];
+                    var columnIndex = columnIndexes[i];
                     var dataColumn = columns[columnIndex];
-                    Type type = (Type)dataColumn.ExtendedProperties[0];
+                    var type = (Type)dataColumn.ExtendedProperties[0];
                     if (type == null)
                     {
                         type = (Type)dataColumn.DataType;
                     }
 
-                    TypeCode typeCode = Type.GetTypeCode(type);
+                    var typeCode = Type.GetTypeCode(type);
 
                     if (typeCode == TypeCode.Byte ||
                         typeCode == TypeCode.SByte ||
@@ -98,7 +98,7 @@ namespace DataCommander.Providers
                         cell.Align = "right";
                     }
 
-                    object value = dataRowView[i];
+                    var value = dataRowView[i];
                     string valueStr;
 
                     if (value == DBNull.Value)
@@ -115,7 +115,7 @@ namespace DataCommander.Providers
                             {
                                 var sb = new StringBuilder();
                                 sb.Append("<pre>");
-                                string s = HttpUtility.HtmlEncode(valueStr);
+                                var s = HttpUtility.HtmlEncode(valueStr);
                                 sb.Append(s);
                                 sb.Append("</pre>");
 

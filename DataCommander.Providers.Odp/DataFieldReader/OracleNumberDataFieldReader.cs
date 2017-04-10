@@ -2,7 +2,6 @@ namespace DataCommander.Providers.Odp.DataFieldReader
 {
     using System;
     using Oracle.ManagedDataAccess.Client;
-    using Oracle.ManagedDataAccess.Types;
 
     internal sealed class OracleNumberDataFieldReader : IDataFieldReader
     {
@@ -29,7 +28,7 @@ namespace DataCommander.Providers.Odp.DataFieldReader
                 }
                 else
                 {
-                    OracleDecimal oracleDecimal = this.oracleDataReader.GetOracleDecimal( this.columnOrdinal );
+                    var oracleDecimal = this.oracleDataReader.GetOracleDecimal( this.columnOrdinal );
                     value = new OracleDecimalField( oracleDecimal );
                 }
 

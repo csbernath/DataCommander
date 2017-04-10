@@ -63,11 +63,11 @@ namespace DataCommander.Providers
                 this.prefix = this.textBox.Text.Substring(response.StartPosition, response.Length);
                 if (this.prefix.Length > 0)
                 {
-                    string[] items = this.prefix.Split('.');
+                    var items = this.prefix.Split('.');
 
-                    int count = response.Items[0].UnquotedName.Count(c => c == '.') + 1;
+                    var count = response.Items[0].UnquotedName.Count(c => c == '.') + 1;
                     var sb = new StringBuilder();
-                    for (int i = Math.Max(items.Length - count, 0); i < items.Length; i++)
+                    for (var i = Math.Max(items.Length - count, 0); i < items.Length; i++)
                     {
                         if (sb.Length > 0)
                         {
@@ -148,7 +148,7 @@ namespace DataCommander.Providers
             {
                 var selectedItem = listBoxItem.Item.UnquotedName;
 
-                int startIndex = this.response.StartPosition;
+                var startIndex = this.response.StartPosition;
                 var tokenIterator = new TokenIterator(this.textBox.Text.Substring(startIndex));
                 var token = tokenIterator.Next();
                 int length;
@@ -161,11 +161,11 @@ namespace DataCommander.Providers
                     length = 0;
                 }
 
-                string originalText = this.textBox.Text.Substring(startIndex, length);
-                string[] originalItems = originalText.Split('.');
-                string[] newItems = selectedItem.Split('.');
+                var originalText = this.textBox.Text.Substring(startIndex, length);
+                var originalItems = originalText.Split('.');
+                var newItems = selectedItem.Split('.');
                 var sb = new StringBuilder();
-                for (int i = 0; i < originalItems.Length - newItems.Length; i++)
+                for (var i = 0; i < originalItems.Length - newItems.Length; i++)
                 {
                     if (sb.Length > 0)
                     {
@@ -173,7 +173,7 @@ namespace DataCommander.Providers
                     }
                     sb.Append(originalItems[i]);
                 }
-                for (int i = 0; i < newItems.Length; i++)
+                for (var i = 0; i < newItems.Length; i++)
                 {
                     if (sb.Length > 0)
                     {
@@ -181,7 +181,7 @@ namespace DataCommander.Providers
                     }
                     sb.Append(newItems[i]);
                 }
-                string newText = sb.ToString();
+                var newText = sb.ToString();
 
                 // TODO
                 this.completionForm.SelectItem(startIndex, length, listBoxItem.Item);
@@ -210,7 +210,7 @@ namespace DataCommander.Providers
         public bool HandleKeyDown(KeyEventArgs e)
         {
             bool handled;
-            int hWnd = this.ListBox.Handle.ToInt32();
+            var hWnd = this.ListBox.Handle.ToInt32();
             NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.Keyboard.KeyDown, (int)e.KeyCode, 0);
 
             if (
@@ -225,7 +225,7 @@ namespace DataCommander.Providers
 
                 if (e.KeyCode == Keys.Down && e.Shift)
                 {
-                    int startIndex = this.ListBox.SelectedIndex + 1;
+                    var startIndex = this.ListBox.SelectedIndex + 1;
                     if (startIndex < this.ListBox.Items.Count - 1)
                     {
                         this.FindNext(startIndex);
@@ -233,7 +233,7 @@ namespace DataCommander.Providers
                 }
                 else if (e.KeyCode == Keys.Up && e.Shift)
                 {
-                    int startIndex = this.ListBox.SelectedIndex - 1;
+                    var startIndex = this.ListBox.SelectedIndex - 1;
                     if (startIndex > 0)
                     {
                         this.FindPrevious(startIndex);
@@ -269,7 +269,7 @@ namespace DataCommander.Providers
                 })
                 .Where(item => item.IndexOf >= 0).ToList();
 
-            int index = -1;
+            var index = -1;
 
             if (filteredItems.Count > 0)
             {
@@ -283,10 +283,10 @@ namespace DataCommander.Providers
                 if (index >= 3)
                 {
                     // scrolling 3 items up
-                    int wParam = (int)NativeMethods.Message.ScrollBarParameter.ThumbPosition;
-                    int pos = (index - 3) << 16;
+                    var wParam = (int)NativeMethods.Message.ScrollBarParameter.ThumbPosition;
+                    var pos = (index - 3) << 16;
                     wParam += pos;
-                    int hWnd = this.ListBox.Handle.ToInt32();
+                    var hWnd = this.ListBox.Handle.ToInt32();
                     NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.ScrollBar.VScroll, wParam, 0);
                 }
             }
@@ -294,10 +294,10 @@ namespace DataCommander.Providers
 
         private static int IndexOf(string item, string searchPattern)
         {
-            int index = item.IndexOf(searchPattern, StringComparison.InvariantCultureIgnoreCase);
+            var index = item.IndexOf(searchPattern, StringComparison.InvariantCultureIgnoreCase);
             if (index < 0)
             {
-                string camelCase = GetCamelCase(item);
+                var camelCase = GetCamelCase(item);
                 index = camelCase.IndexOf(searchPattern, StringComparison.InvariantCultureIgnoreCase);
             }
 
@@ -308,9 +308,9 @@ namespace DataCommander.Providers
         {
             var sb = new StringBuilder();
 
-            for (int i = 0; i < source.Length; i++)
+            for (var i = 0; i < source.Length; i++)
             {
-                char c = source[i];
+                var c = source[i];
 
                 if (i == 0)
                 {
@@ -318,7 +318,7 @@ namespace DataCommander.Providers
                 }
                 else
                 {
-                    if (Char.GetUnicodeCategory(c) == UnicodeCategory.UppercaseLetter)
+                    if (char.GetUnicodeCategory(c) == UnicodeCategory.UppercaseLetter)
                     {
                         sb.Append(c);
                     }
@@ -332,10 +332,10 @@ namespace DataCommander.Providers
         {
             var items = this.ListBox.Items.Cast<ListBoxItem<IObjectName>>().ToList();
 
-            int index = LinearSearch.IndexOf(startIndex, items.Count - 1, currentIndex =>
+            var index = LinearSearch.IndexOf(startIndex, items.Count - 1, currentIndex =>
             {
                 var item = items[currentIndex];
-                string name = item.Item.UnquotedName;
+                var name = item.Item.UnquotedName;
                 return name.IndexOf(this.prefix) >= 0;
             });
 
@@ -348,10 +348,10 @@ namespace DataCommander.Providers
         private void FindPrevious(int startIndex)
         {
             var items = this.ListBox.Items.Cast<ListBoxItem<IObjectName>>().ToList();
-            int index = LinearSearch.LastIndexOf(startIndex, items.Count - 1, currentIndex =>
+            var index = LinearSearch.LastIndexOf(startIndex, items.Count - 1, currentIndex =>
             {
                 var item = items[currentIndex];
-                string name = item.Item.UnquotedName;
+                var name = item.Item.UnquotedName;
                 return name.IndexOf(this.prefix) >= 0;
             });
 
@@ -363,7 +363,7 @@ namespace DataCommander.Providers
 
         public bool HandleKeyPress(KeyPressEventArgs e)
         {
-            bool handled = false;
+            var handled = false;
 
             if (e.KeyChar == '\r' || e.KeyChar == '\n')
             {
@@ -383,7 +383,7 @@ namespace DataCommander.Providers
                 if (e.KeyChar == '\x08')
                 {
                     // Backspace
-                    int length = this.prefix.Length;
+                    var length = this.prefix.Length;
 
                     if (length > 0)
                     {

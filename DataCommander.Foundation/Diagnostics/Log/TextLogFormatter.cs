@@ -1,12 +1,10 @@
 namespace DataCommander.Foundation.Diagnostics
 {
-    using System;
-
     internal sealed class TextLogFormatter : ILogFormatter
     {
         internal static string Format(LogEntry entry)
         {
-            Char logLevelChar;
+            char logLevelChar;
             switch (entry.LogLevel)
             {
                 case LogLevel.Debug:

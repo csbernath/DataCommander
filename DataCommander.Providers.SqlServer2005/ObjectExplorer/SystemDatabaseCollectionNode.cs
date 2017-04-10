@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
-    using System.Diagnostics.Contracts;
     using System.Threading;
     using System.Windows.Forms;
     using Foundation.Data;
@@ -14,11 +13,13 @@
 
         public SystemDatabaseCollectionNode(DatabaseCollectionNode databaseCollectionNode)
         {
+#if CONTRACTS_FULL
             Contract.Requires(databaseCollectionNode != null);
+#endif
             this.databaseCollectionNode = databaseCollectionNode;
         }
 
-        #region ITreeNode Members
+#region ITreeNode Members
 
         string ITreeNode.Name => "System Databases";
 
@@ -26,7 +27,7 @@
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string connectionString = this.databaseCollectionNode.Server.ConnectionString;
+            var connectionString = this.databaseCollectionNode.Server.ConnectionString;
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -38,11 +39,11 @@ order by d.name";
                 dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
             }
 
-            List<ITreeNode> list = new List<ITreeNode>();
+            var list = new List<ITreeNode>();
             foreach (DataRow dataRow in dataTable.Rows)
             {
-                string name = (string)dataRow[0];
-                DatabaseNode node = new DatabaseNode(this.databaseCollectionNode, name);
+                var name = (string)dataRow[0];
+                var node = new DatabaseNode(this.databaseCollectionNode, name);
                 list.Add(node);
             }
 
@@ -55,6 +56,6 @@ order by d.name";
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-        #endregion
+#endregion
     }
 }

@@ -1,8 +1,6 @@
 ﻿namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
-    using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Windows.Forms;
 
     internal sealed class DatabaseSecurityNode : ITreeNode
@@ -11,11 +9,13 @@
 
         public DatabaseSecurityNode(DatabaseNode databaseNode)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(databaseNode != null);
+#endif
             this.databaseNode = databaseNode;
         }
 
-        #region ITreeNode Members
+#region ITreeNode Members
 
         string ITreeNode.Name => "Security";
 
@@ -37,6 +37,6 @@
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-        #endregion
+#endregion
     }
 }

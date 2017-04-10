@@ -2,7 +2,6 @@
 {
     using System;
     using System.Data;
-    using System.Diagnostics.Contracts;
     using System.Linq;
     using DataCommander.Foundation;
     using DataCommander.Foundation.Data;
@@ -17,13 +16,15 @@
 
         public TfsGetExtendedItemsDataReader(TfsCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
             this.command = command;
         }
 
         public override DataTable GetSchemaTable()
         {
-            DataTable table = CreateSchemaTable();
+            var table = CreateSchemaTable();
             AddSchemaRowString( table, "SourceServerItem", false );
             AddSchemaRowString( table, "ChangeType", false );
             AddSchemaRowString( table, "LockOwner", false );
@@ -42,13 +43,13 @@
             if (this.first)
             {
                 this.first = false;
-                TfsParameterCollection parameters = this.command.Parameters;
-                string path = (string) parameters[ "path" ].Value;
+                var parameters = this.command.Parameters;
+                var path = (string) parameters[ "path" ].Value;
                 RecursionType recursion;
-                TfsParameter parameter = parameters.FirstOrDefault( p => p.ParameterName == "recursion" );
+                var parameter = parameters.FirstOrDefault( p => p.ParameterName == "recursion" );
                 if (parameter != null)
                 {
-                    string recursionString = Database.GetValueOrDefault<string>( parameter.Value );
+                    var recursionString = Database.GetValueOrDefault<string>( parameter.Value );
                     recursion = Enum<RecursionType>.Parse( recursionString );
                     
                 }
@@ -57,20 +58,20 @@
                     recursion = RecursionType.Full;
                 }
 
-                VersionControlServer versionControlServer = this.command.Connection.VersionControlServer;
-                Workspace[] workspaces = versionControlServer.QueryWorkspaces( null, null, Environment.MachineName );
+                var versionControlServer = this.command.Connection.VersionControlServer;
+                var workspaces = versionControlServer.QueryWorkspaces( null, null, Environment.MachineName );
                 Workspace workspace = null;
                 WorkingFolder workingFolder = null;
 
-                foreach (Workspace currentWorkspace in workspaces)
+                foreach (var currentWorkspace in workspaces)
                 {
                     workingFolder = currentWorkspace.TryGetWorkingFolderForServerItem( path );
 
                     if (workingFolder != null)
                     {
                         workspace = currentWorkspace;
-                        ItemSpec itemSpec = new ItemSpec( path, recursion );
-                        ExtendedItem[][] extendedItems = currentWorkspace.GetExtendedItems( new ItemSpec[] { itemSpec }, DeletedState.Any, ItemType.Any );
+                        var itemSpec = new ItemSpec( path, recursion );
+                        var extendedItems = currentWorkspace.GetExtendedItems( new ItemSpec[] { itemSpec }, DeletedState.Any, ItemType.Any );
                         this.items = extendedItems[ 0 ];
                     }
                 }
@@ -98,9 +99,9 @@
 
             if (this.items != null && this.index < this.items.Length)
             {
-                ExtendedItem item = this.items[this.index ];
+                var item = this.items[this.index ];
 
-                object[] values = new object[]
+                var values = new object[]
                 {
                     item.SourceServerItem,
                     item.ChangeType.ToString(),

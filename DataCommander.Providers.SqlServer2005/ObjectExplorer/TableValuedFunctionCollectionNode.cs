@@ -19,7 +19,7 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText = @"select
+            var commandText = @"select
     s.name	as SchemaName,
 	o.name	as Name,
 	o.type
@@ -29,7 +29,7 @@ on	s.schema_id = o.schema_id
 where o.type in('IF','TF')
 order by 1,2";
             commandText = string.Format(commandText, this.database.Name);
-            string connectionString = this.database.Databases.Server.ConnectionString;
+            var connectionString = this.database.Databases.Server.ConnectionString;
 
             return SqlClientFactory.Instance.ExecuteReader(
                 this.database.Databases.Server.ConnectionString,
@@ -37,9 +37,9 @@ order by 1,2";
                 CommandBehavior.Default,
                 dataRecord =>
                 {
-                    string owner = dataRecord.GetString(0);
-                    string name = dataRecord.GetString(1);
-                    string xtype = dataRecord.GetString(2);
+                    var owner = dataRecord.GetString(0);
+                    var name = dataRecord.GetString(1);
+                    var xtype = dataRecord.GetString(2);
                     return new FunctionNode(this.database, owner, name, xtype);
                 });
         }

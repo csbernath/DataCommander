@@ -28,7 +28,7 @@ namespace DataCommander.Providers.SqlServer2005.FieldReader
                 }
                 else
                 {
-                    DateTime dateTime = this.dataRecord.GetDateTime(this.columnOrdinal);
+                    var dateTime = this.dataRecord.GetDateTime(this.columnOrdinal);
                     string format;
 
                     if (dateTime.TimeOfDay.Ticks == 0)

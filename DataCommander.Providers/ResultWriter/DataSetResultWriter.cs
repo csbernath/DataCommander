@@ -87,7 +87,7 @@ namespace DataCommander.Providers
             {
                 var targetRows = this.dataTable.Rows;
 
-                for (int i = 0; i < rowCount; i++)
+                for (var i = 0; i < rowCount; i++)
                 {
                     targetRows.Add(rows[i]);
                 }
@@ -131,8 +131,8 @@ namespace DataCommander.Providers
 
         private void CreateTable(DataTable schemaTable)
         {
-            int tableIndex = this.DataSet.Tables.Count;
-            string tableName = schemaTable.TableName;
+            var tableIndex = this.DataSet.Tables.Count;
+            var tableName = schemaTable.TableName;
             if (tableName == "SchemaTable")
             {
                 tableName = $"Table {tableIndex}";
@@ -150,13 +150,13 @@ namespace DataCommander.Providers
             foreach (DataRow schemaRow in schemaTable.Rows)
             {
                 var dataColumnSchema = new DbColumn(schemaRow);
-                string columnName = dataColumnSchema.ColumnName;
-                int columnSize = dataColumnSchema.ColumnSize;
-                Type dataType = this.provider.GetColumnType(dataColumnSchema);
+                var columnName = dataColumnSchema.ColumnName;
+                var columnSize = dataColumnSchema.ColumnSize;
+                var dataType = this.provider.GetColumnType(dataColumnSchema);
 
                 DataColumn dataColumn;
-                int n = 2;
-                string columnName2 = columnName;
+                var n = 2;
+                var columnName2 = columnName;
 
                 while (true)
                 {

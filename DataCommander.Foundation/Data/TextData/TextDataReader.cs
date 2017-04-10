@@ -5,7 +5,6 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
-    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.IO;
 
@@ -29,12 +28,16 @@
 
         internal TextDataReader( TextDataCommand command, CommandBehavior behavior )
         {
+#if CONTRACTS_FULL
             Contract.Requires(command != null);
+#endif
 
             this.command = command;
             this.behavior = behavior;
             var parameters = command.Parameters;
+#if CONTRACTS_FULL
             Contract.Assert(parameters != null);
+#endif
 
             this.columns = parameters.GetParameterValue<TextDataColumnCollection>( "columns" );
             var converters = parameters.GetParameterValue<IList<ITextDataConverter>>( "converters" );
@@ -105,9 +108,9 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Char GetChar( int ordinal )
+        public override char GetChar( int ordinal )
         {
-            return (Char) this.values[ ordinal ];
+            return (char) this.values[ ordinal ];
         }
 
         /// <summary>
@@ -119,7 +122,7 @@
         /// <param name="bufferOffset"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public override long GetChars( int ordinal, long dataOffset, Char[] buffer, int bufferOffset, int length )
+        public override long GetChars( int ordinal, long dataOffset, char[] buffer, int bufferOffset, int length )
         {
             throw new NotImplementedException();
         }
@@ -159,9 +162,9 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Double GetDouble( int ordinal )
+        public override double GetDouble( int ordinal )
         {
-            return (Double) this.values[ ordinal ];
+            return (double) this.values[ ordinal ];
         }
 
         /// <summary>
@@ -188,9 +191,9 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Single GetFloat( int ordinal )
+        public override float GetFloat( int ordinal )
         {
-            return (Single) this.values[ ordinal ];
+            return (float) this.values[ ordinal ];
         }
 
         /// <summary>
@@ -208,9 +211,9 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Int16 GetInt16( int ordinal )
+        public override short GetInt16( int ordinal )
         {
-            return (Int16) this.values[ ordinal ];
+            return (short) this.values[ ordinal ];
         }
 
         /// <summary>

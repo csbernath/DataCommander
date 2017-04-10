@@ -38,7 +38,7 @@ namespace DataCommander.Providers.OracleBase
         {
             get
             {
-                string query = "EXEC " + schemaNode.Name + '.';
+                var query = "EXEC " + schemaNode.Name + '.';
 
 				if (packageNode != null)
 				{
@@ -64,7 +64,7 @@ order by line";
 
             transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default, dataRecord =>
             {
-                string text = dataRecord.GetString(0);
+                var text = dataRecord.GetString(0);
                 sb.Append(text);
             });
 
@@ -83,7 +83,7 @@ order by line";
                 }
                 else
                 {
-                    ToolStripMenuItem menuItem = new ToolStripMenuItem("Script Object", null, ScriptObject_Click);
+                    var menuItem = new ToolStripMenuItem("Script Object", null, ScriptObject_Click);
                     contextMenu = new ContextMenuStrip();
                     contextMenu.Items.Add(menuItem);
                 }

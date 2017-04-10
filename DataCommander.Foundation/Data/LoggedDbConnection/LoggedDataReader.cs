@@ -2,7 +2,6 @@
 {
     using System;
     using System.Data;
-    using System.Diagnostics.Contracts;
 
     internal sealed class LoggedDataReader : IDataReader
     {
@@ -12,16 +11,18 @@
 
         public LoggedDataReader(
             IDataReader dataReader,
-            EventHandler<AfterReadEventArgs> afterRead )
+            EventHandler<AfterReadEventArgs> afterRead)
         {
-            Contract.Requires( dataReader != null );
-            Contract.Requires( afterRead != null );
+#if CONTRACTS_FULL
+            Contract.Requires(dataReader != null);
+            Contract.Requires(afterRead != null);
+#endif
 
             this.dataReader = dataReader;
             this.afterRead = afterRead;
         }
 
-        #region IDataReader Members
+#region IDataReader Members
 
         void IDataReader.Close()
         {
@@ -51,8 +52,8 @@
             }
             else if (this.afterRead != null)
             {
-                var eventArgs = new AfterReadEventArgs( this.rowCount );
-                this.afterRead( this, eventArgs );
+                var eventArgs = new AfterReadEventArgs(this.rowCount);
+                this.afterRead(this, eventArgs);
             }
 
             return read;
@@ -60,135 +61,135 @@
 
         int IDataReader.RecordsAffected => this.dataReader.RecordsAffected;
 
-        #endregion
+#endregion
 
-        #region IDisposable Members
+#region IDisposable Members
 
         void IDisposable.Dispose()
         {
             this.dataReader.Dispose();
         }
 
-        #endregion
+#endregion
 
-        #region IDataRecord Members
+#region IDataRecord Members
 
         int IDataRecord.FieldCount => this.dataReader.FieldCount;
 
-        bool IDataRecord.GetBoolean( int i )
+        bool IDataRecord.GetBoolean(int i)
         {
-            return this.dataReader.GetBoolean( i );
+            return this.dataReader.GetBoolean(i);
         }
 
-        byte IDataRecord.GetByte( int i )
+        byte IDataRecord.GetByte(int i)
         {
-            return this.dataReader.GetByte( i );
+            return this.dataReader.GetByte(i);
         }
 
-        long IDataRecord.GetBytes( int i, long fieldOffset, byte[] buffer, int bufferoffset, int length )
+        long IDataRecord.GetBytes(int i, long fieldOffset, byte[] buffer, int bufferoffset, int length)
         {
-            return this.dataReader.GetBytes( i, fieldOffset, buffer, bufferoffset, length );
+            return this.dataReader.GetBytes(i, fieldOffset, buffer, bufferoffset, length);
         }
 
-        char IDataRecord.GetChar( int i )
+        char IDataRecord.GetChar(int i)
         {
-            return this.dataReader.GetChar( i );
+            return this.dataReader.GetChar(i);
         }
 
-        long IDataRecord.GetChars( int i, long fieldoffset, char[] buffer, int bufferoffset, int length )
+        long IDataRecord.GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length)
         {
-            return this.dataReader.GetChars( i, fieldoffset, buffer, bufferoffset, length );
+            return this.dataReader.GetChars(i, fieldoffset, buffer, bufferoffset, length);
         }
 
-        IDataReader IDataRecord.GetData( int i )
+        IDataReader IDataRecord.GetData(int i)
         {
-            return this.dataReader.GetData( i );
+            return this.dataReader.GetData(i);
         }
 
-        string IDataRecord.GetDataTypeName( int i )
+        string IDataRecord.GetDataTypeName(int i)
         {
-            return this.dataReader.GetDataTypeName( i );
+            return this.dataReader.GetDataTypeName(i);
         }
 
-        DateTime IDataRecord.GetDateTime( int i )
+        DateTime IDataRecord.GetDateTime(int i)
         {
-            return this.dataReader.GetDateTime( i );
+            return this.dataReader.GetDateTime(i);
         }
 
-        decimal IDataRecord.GetDecimal( int i )
+        decimal IDataRecord.GetDecimal(int i)
         {
-            return this.dataReader.GetDecimal( i );
+            return this.dataReader.GetDecimal(i);
         }
 
-        double IDataRecord.GetDouble( int i )
+        double IDataRecord.GetDouble(int i)
         {
-            return this.dataReader.GetDouble( i );
+            return this.dataReader.GetDouble(i);
         }
 
-        Type IDataRecord.GetFieldType( int i )
+        Type IDataRecord.GetFieldType(int i)
         {
-            return this.dataReader.GetFieldType( i );
+            return this.dataReader.GetFieldType(i);
         }
 
-        float IDataRecord.GetFloat( int i )
+        float IDataRecord.GetFloat(int i)
         {
-            return this.dataReader.GetFloat( i );
+            return this.dataReader.GetFloat(i);
         }
 
-        Guid IDataRecord.GetGuid( int i )
+        Guid IDataRecord.GetGuid(int i)
         {
-            return this.dataReader.GetGuid( i );
+            return this.dataReader.GetGuid(i);
         }
 
-        short IDataRecord.GetInt16( int i )
+        short IDataRecord.GetInt16(int i)
         {
-            return this.dataReader.GetInt16( i );
+            return this.dataReader.GetInt16(i);
         }
 
-        int IDataRecord.GetInt32( int i )
+        int IDataRecord.GetInt32(int i)
         {
-            return this.dataReader.GetInt32( i );
+            return this.dataReader.GetInt32(i);
         }
 
-        long IDataRecord.GetInt64( int i )
+        long IDataRecord.GetInt64(int i)
         {
-            return this.dataReader.GetInt64( i );
+            return this.dataReader.GetInt64(i);
         }
 
-        string IDataRecord.GetName( int i )
+        string IDataRecord.GetName(int i)
         {
-            return this.dataReader.GetName( i );
+            return this.dataReader.GetName(i);
         }
 
-        int IDataRecord.GetOrdinal( string name )
+        int IDataRecord.GetOrdinal(string name)
         {
-            return this.dataReader.GetOrdinal( name );
+            return this.dataReader.GetOrdinal(name);
         }
 
-        string IDataRecord.GetString( int i )
+        string IDataRecord.GetString(int i)
         {
-            return this.dataReader.GetString( i );
+            return this.dataReader.GetString(i);
         }
 
-        object IDataRecord.GetValue( int i )
+        object IDataRecord.GetValue(int i)
         {
-            return this.dataReader.GetValue( i );
+            return this.dataReader.GetValue(i);
         }
 
-        int IDataRecord.GetValues( object[] values )
+        int IDataRecord.GetValues(object[] values)
         {
-            return this.dataReader.GetValues( values );
+            return this.dataReader.GetValues(values);
         }
 
-        bool IDataRecord.IsDBNull( int i )
+        bool IDataRecord.IsDBNull(int i)
         {
-            return this.dataReader.IsDBNull( i );
+            return this.dataReader.IsDBNull(i);
         }
 
-        object IDataRecord.this[ string name ] => this.dataReader[ name ];
+        object IDataRecord.this[string name] => this.dataReader[name];
 
-        object IDataRecord.this[ int i ] => this.dataReader[ i ];
+        object IDataRecord.this[int i] => this.dataReader[i];
 
-        #endregion
+#endregion
     }
 }

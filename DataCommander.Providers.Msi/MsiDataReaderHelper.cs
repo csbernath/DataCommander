@@ -1,8 +1,6 @@
 ﻿namespace DataCommander.Providers.Msi
 {
     using System.Data;
-    using System.Diagnostics.Contracts;
-    using Microsoft.Deployment.WindowsInstaller;
 
     internal sealed class MsiDataReaderHelper : IDataReaderHelper
     {
@@ -10,14 +8,16 @@
 
         public MsiDataReaderHelper( MsiDataReader dataReader )
         {
+#if CONTRACTS_FULL
             Contract.Requires( dataReader != null );
-            View view = dataReader.View;
-            int index = 0;
+#endif
+            var view = dataReader.View;
+            var index = 0;
             dataFieldReaders = new IDataFieldReader[ view.Columns.Count ];
 
-            foreach (ColumnInfo column in view.Columns)
+            foreach (var column in view.Columns)
             {
-                DbType dbType = (DbType) column.DBType;
+                var dbType = (DbType) column.DBType;
                 switch (dbType)
                 {
                     case DbType.Int16:
@@ -38,13 +38,13 @@
             }
         }
 
-        #region IDataReaderHelper Members
+#region IDataReaderHelper Members
 
         int IDataReaderHelper.GetValues( object[] values )
         {
-            int count = dataFieldReaders.Length;
+            var count = dataFieldReaders.Length;
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 values[ i ] = dataFieldReaders[ i ].Value;
             }
@@ -52,6 +52,6 @@
             return count;
         }
 
-        #endregion
+#endregion
     }
 }

@@ -3,7 +3,6 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Linq;
 
     /// <summary>
@@ -34,8 +33,7 @@
             IDictionary<TKey, ICollection<T>> dictionary,
             Func<ICollection<T>> createCollection)
         {
-#if FOUNDATION_3_5
-#else
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(getKey != null);
             Contract.Requires<ArgumentNullException>(dictionary != null);
             Contract.Requires<ArgumentNullException>(createCollection != null);
@@ -106,7 +104,9 @@
 
             if (contains)
             {
+#if CONTRACTS_FULL
                 Contract.Assert(collection != null);
+#endif
                 value = collection.First();
             }
             else
@@ -117,7 +117,7 @@
             return contains;
         }
 
-        #region ICollectionIndex<T> Members
+#region ICollectionIndex<T> Members
 
         /// <summary>
         /// 
@@ -216,12 +216,16 @@
                 if (contains)
                 {
                     var succeeded = collection.Remove(item);
+#if CONTRACTS_FULL
                     Contract.Assert(succeeded, "collection.Remove");
+#endif
 
                     if (collection.Count == 0)
                     {
                         succeeded = this.dictionary.Remove(key);
+#if CONTRACTS_FULL
                         Contract.Assert(succeeded, "dictionary.Remove");
+#endif
                     }
 
                     removed = true;
@@ -231,9 +235,9 @@
             return removed;
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable<T> Members
+#region IEnumerable<T> Members
 
         /// <summary>
         /// 
@@ -250,9 +254,9 @@
             }
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable Members
+#region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -260,7 +264,7 @@
             return enumerable.GetEnumerator();
         }
 
-        #endregion
+#endregion
 
         private void Initialize(
             string name,
@@ -268,9 +272,11 @@
             IDictionary<TKey, ICollection<T>> dictionary,
             Func<ICollection<T>> createCollection)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(getKey != null);
             Contract.Requires<ArgumentNullException>(dictionary != null);
             Contract.Requires<ArgumentNullException>(createCollection != null);
+#endif
 
             this.Name = name;
             this.getKey = getKey;
@@ -278,7 +284,7 @@
             this.createCollection = createCollection;
         }
 
-        #region IDictionary<TKey,ICollection<T>> Members
+#region IDictionary<TKey,ICollection<T>> Members
 
         void IDictionary<TKey, ICollection<T>>.Add(TKey key, ICollection<T> value)
         {
@@ -328,9 +334,9 @@
             }
         }
 
-        #endregion
+#endregion
 
-        #region ICollection<KeyValuePair<TKey,ICollection<T>>> Members
+#region ICollection<KeyValuePair<TKey,ICollection<T>>> Members
 
         void ICollection<KeyValuePair<TKey, ICollection<T>>>.Add(KeyValuePair<TKey, ICollection<T>> item)
         {
@@ -361,15 +367,15 @@
             throw new NotSupportedException();
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable<KeyValuePair<TKey,ICollection<T>>> Members
+#region IEnumerable<KeyValuePair<TKey,ICollection<T>>> Members
 
         IEnumerator<KeyValuePair<TKey, ICollection<T>>> IEnumerable<KeyValuePair<TKey, ICollection<T>>>.GetEnumerator()
         {
             return this.dictionary.GetEnumerator();
         }
 
-        #endregion
+#endregion
     }
 }

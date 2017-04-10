@@ -3,7 +3,6 @@ namespace DataCommander.Foundation.Configuration
     using System;
     using System.Collections.Specialized;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Reflection;
     using System.Text;
@@ -166,8 +165,10 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="sectionName"></param>
         public void Save(XmlWriter xmlWriter, string sectionName)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(xmlWriter != null);
             Contract.Requires<ArgumentNullException>(sectionName != null);
+#endif
 
             xmlWriter.WriteStartElement(sectionName);
             ConfigurationWriter.Write(xmlWriter, this.RootNode.Attributes);

@@ -3,21 +3,21 @@
     using System;
     using System.Collections.Generic;
     using System.Data.SqlClient;
-    using System.Diagnostics.Contracts;
     using System.Windows.Forms;
-    using DataCommander.Foundation;
 
     internal sealed class ServerNode : ITreeNode
     {
         public ServerNode(string connectionString)
         {
+#if CONTRACTS_FULL
             Contract.Requires(!connectionString.IsNullOrWhiteSpace());
+#endif
             this.ConnectionString = connectionString;
         }
 
         public string ConnectionString { get; }
 
-        #region ITreeNode Members
+#region ITreeNode Members
 
         string ITreeNode.Name
         {
@@ -62,6 +62,6 @@
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-        #endregion
+#endregion
     }
 }

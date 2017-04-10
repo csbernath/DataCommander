@@ -4,7 +4,6 @@
     using System.Collections;
     using System.Data;
     using System.Data.Common;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -28,8 +27,10 @@
         /// <param name="getValues"></param>
         public MappedDataReader(IDataReader dataReader, GetValues getValues)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dataReader != null);
             Contract.Requires<ArgumentNullException>(getValues != null);
+#endif
 
             this.dataReader = dataReader;
             this.getValues = getValues;
@@ -92,7 +93,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Char GetChar(int ordinal)
+        public override char GetChar(int ordinal)
         {
             throw new NotImplementedException();
         }
@@ -106,7 +107,7 @@
         /// <param name="bufferOffset"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public override long GetChars(int ordinal, long dataOffset, Char[] buffer, int bufferOffset, int length)
+        public override long GetChars(int ordinal, long dataOffset, char[] buffer, int bufferOffset, int length)
         {
             throw new NotImplementedException();
         }
@@ -195,7 +196,7 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override Int16 GetInt16(int ordinal)
+        public override short GetInt16(int ordinal)
         {
             throw new NotImplementedException();
         }

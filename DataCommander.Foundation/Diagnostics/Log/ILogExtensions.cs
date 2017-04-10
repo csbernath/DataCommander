@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-
-namespace DataCommander.Foundation.Diagnostics
+﻿namespace DataCommander.Foundation.Diagnostics
 {
     using Log;
 
@@ -21,8 +18,10 @@ namespace DataCommander.Foundation.Diagnostics
             CallerInformation callerInformation,
             string message)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(log != null);
             Contract.Requires<ArgumentNullException>(callerInformation != null);
+#endif
 
             string messageWithCallerInformation =
                 $"CallerInformation: {callerInformation.CallerMemberName},{callerInformation.CallerFilePath},{callerInformation.CallerLineNumber}\r\n{message}";

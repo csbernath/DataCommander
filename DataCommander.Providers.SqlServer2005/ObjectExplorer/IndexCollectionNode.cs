@@ -30,7 +30,7 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
             var cb = new SqlCommandBuilder();
             var tableName = new DatabaseObjectMultipartName(null, this.tableNode.Database.Name, this.schema, this.objectName);
 
-            string commandText = string.Format(@"select
+            var commandText = string.Format(@"select
      i.name
     ,i.type
     ,i.is_unique    
@@ -47,7 +47,7 @@ order by i.name",
                 tableName.Schema.ToTSqlNVarChar(),
                 tableName.Name.ToTSqlNVarChar());
 
-            string connectionString = this.tableNode.Database.Databases.Server.ConnectionString;
+            var connectionString = this.tableNode.Database.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -56,9 +56,9 @@ order by i.name",
                 {
                     return dataReader.Read(dataRecord =>
                     {
-                        string name = dataRecord.GetString(0);
-                        byte type = dataRecord.GetByte(1);
-                        bool isUnique = dataRecord.GetBoolean(2);
+                        var name = dataRecord.GetString(0);
+                        var type = dataRecord.GetByte(1);
+                        var isUnique = dataRecord.GetBoolean(2);
                         return new IndexNode(this.tableNode, name, type, isUnique);
                     }).ToList();
                 }

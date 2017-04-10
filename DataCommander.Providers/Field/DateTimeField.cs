@@ -14,7 +14,7 @@ namespace DataCommander.Providers
 
         public static bool TryParse(string s, out DateTime dateTime)
         {
-            string[] formats = new string[]
+            var formats = new string[]
                     {
                         "yyyyMMdd",
                         "yyyy-MM-dd",
@@ -22,7 +22,7 @@ namespace DataCommander.Providers
                         "yyyy-MM-dd HH:mm:ss.fff"
                     };
 
-            bool succeeded = DateTime.TryParseExact(s, formats, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out dateTime);
+            var succeeded = DateTime.TryParseExact(s, formats, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out dateTime);
             return succeeded;
         }
 
@@ -56,15 +56,15 @@ namespace DataCommander.Providers
         public int CompareTo(object obj)
         {
             int result;
-            Type type = obj.GetType();
-            TypeCode typeCode = Type.GetTypeCode(type);
+            var type = obj.GetType();
+            var typeCode = Type.GetTypeCode(type);
 
             switch (typeCode)
             {
                 case TypeCode.String:
-                    string s = (string)obj;
+                    var s = (string)obj;
                     DateTime dateTime;
-                    bool succeeded = TryParse(s, out dateTime);
+                    var succeeded = TryParse(s, out dateTime);
 
                     if (succeeded)
                     {
@@ -78,7 +78,7 @@ namespace DataCommander.Providers
                     break;
 
                 case TypeCode.Object:
-                    DateTimeField dateTimeField = (DateTimeField)obj;
+                    var dateTimeField = (DateTimeField)obj;
                     result = this.Value.CompareTo(dateTimeField.Value);
                     break;
 

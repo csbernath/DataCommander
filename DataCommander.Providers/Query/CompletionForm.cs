@@ -2,7 +2,6 @@ namespace DataCommander.Providers
 {
     using System;
     using System.ComponentModel;
-    using System.Drawing;
     using System.Windows.Forms;
 
     /// <summary>
@@ -52,9 +51,9 @@ namespace DataCommander.Providers
 
             this.Controls.Add(listBox);
 
-            int charIndex = textBox.RichTextBox.SelectionStart;
-            Point pos = textBox.RichTextBox.GetPositionFromCharIndex(charIndex);
-            Point location = textBox.RichTextBox.PointToScreen(pos);
+            var charIndex = textBox.RichTextBox.SelectionStart;
+            var pos = textBox.RichTextBox.GetPositionFromCharIndex(charIndex);
+            var location = textBox.RichTextBox.PointToScreen(pos);
             location.Y += 20;
             this.Location = location;
         }

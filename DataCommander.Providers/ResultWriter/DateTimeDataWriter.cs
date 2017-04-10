@@ -14,7 +14,7 @@ namespace DataCommander.Providers
             }
             else
             {
-                DateTimeField field = (DateTimeField) value;
+                var field = (DateTimeField) value;
                 s = field.ToString().PadLeft(this.Width, ' ');
             }
 

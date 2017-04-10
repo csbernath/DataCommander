@@ -10,7 +10,7 @@
         {
             if (name != null)
             {
-                string[] items = name.Split( '.' );
+                var items = name.Split( '.' );
 
                 if (items.Length > 1)
                 {

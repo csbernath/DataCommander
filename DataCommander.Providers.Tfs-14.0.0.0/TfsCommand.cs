@@ -2,19 +2,20 @@
 {
     using System;
     using System.Data;
-    using System.Diagnostics.Contracts;
 
     internal class TfsCommand : IDbCommand
     {
         public TfsCommand(TfsConnection connection)
         {
+#if CONTRACTS_FULL
             Contract.Requires(connection != null);
+#endif
             this.Connection = connection;
         }
 
         public TfsConnection Connection { get; private set; }
 
-        #region IDbCommand Members
+#region IDbCommand Members
 
         public void Cancel()
         {
@@ -114,21 +115,21 @@
             }
         }
 
-        #endregion
+#endregion
 
-        #region IDisposable Members
+#region IDisposable Members
 
         public void Dispose()
         {
         }
 
-        #endregion
+#endregion
 
         private IDataReader ExecuteStoredProcedure(CommandBehavior behavior)
         {
             IDataReader dataReader;
             TfsDataReaderFactory.DataReaderInfo info;
-            bool contains = TfsDataReaderFactory.Dictionary.TryGetValue(this.CommandText, out info);
+            var contains = TfsDataReaderFactory.Dictionary.TryGetValue(this.CommandText, out info);
 
             if (contains)
             {

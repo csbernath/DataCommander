@@ -5,7 +5,6 @@ namespace DataCommander.Foundation.Data
     using System.Data;
     using System.Data.Common;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.IO;
     using System.Text;
@@ -150,11 +149,13 @@ namespace DataCommander.Foundation.Data
         {
             get
             {
+#if CONTRACTS_FULL
                 Contract.Requires<ArgumentNullException>(this.Command != null);
                 Contract.Requires<ArgumentException>(this.Command.Parameters.Count > 0);
                 Contract.Requires<ArgumentException>(this.Command.Parameters[0] is IDataParameter);
                 Contract.Requires<ArgumentException>(((IDataParameter)this.Command.Parameters[0]).Direction == ParameterDirection.ReturnValue);
                 Contract.Requires<ArgumentException>(((IDataParameter)this.Command.Parameters[0]).Value is int);
+#endif
 
                 var parameters = this.Command.Parameters;
                 var parameterObject = parameters[0];
@@ -165,9 +166,9 @@ namespace DataCommander.Foundation.Data
             }
         }
 
-        #endregion
+#endregion
 
-        #region Public Static Methods
+#region Public Static Methods
 
         /// <summary>
         /// 
@@ -181,13 +182,17 @@ namespace DataCommander.Foundation.Data
             DbConnection connection,
             string commandText)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(factory != null);
             Contract.Requires<ArgumentNullException>(connection != null);
+#endif
 
             var command = connection.CreateCommand();
             command.CommandText = commandText;
             var adapter = factory.CreateDataAdapter();
+#if CONTRACTS_FULL
             Contract.Assert(adapter != null);
+#endif
             adapter.SelectCommand = command;
             var table = new DataTable();
             adapter.Fill(table);
@@ -203,8 +208,10 @@ namespace DataCommander.Foundation.Data
             DataTable dataTable,
             TextWriter textWriter)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dataTable != null);
             Contract.Requires<ArgumentNullException>(textWriter != null);
+#endif
 
             var columns = dataTable.Columns;
 
@@ -251,8 +258,10 @@ namespace DataCommander.Foundation.Data
             string lineSeparator,
             TextWriter textWriter)
         {
+#if CONTRACTS_FULL
             Contract.Requires(!string.IsNullOrEmpty(lineSeparator));
             Contract.Requires(textWriter != null);
+#endif
 
             if (dataView != null)
             {
@@ -306,7 +315,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public static string ToString(
             DataView dataView,
-            Char columnSeparator,
+            char columnSeparator,
             string lineSeparator)
         {
             var textWriter = new StringWriter();
@@ -326,9 +335,11 @@ namespace DataCommander.Foundation.Data
             DataRow[] dataRows,
             TextWriter textWriter)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dataTable != null);
             Contract.Requires<ArgumentNullException>(dataRows != null);
             Contract.Requires<ArgumentNullException>(textWriter != null);
+#endif
 
             var columns = dataTable.Columns;
 
@@ -424,7 +435,9 @@ namespace DataCommander.Foundation.Data
             int columnNumber,
             int rowNumber)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dataTable != null);
+#endif
 
             var dataColumn = dataTable.Columns[columnNumber];
             var type = dataColumn.DataType;
@@ -454,9 +467,9 @@ namespace DataCommander.Foundation.Data
             return s;
         }
 
-        #endregion
+#endregion
 
-        #region Public Instance Methods
+#region Public Instance Methods
 
         /// <summary>
         /// Opens the underlying <see cref="System.Data.IDbConnection"/>
@@ -488,7 +501,9 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public IDbTransaction BeginTransaction()
         {
+#if CONTRACTS_FULL
             Contract.Requires(this.Connection != null);
+#endif
 
             return this.Connection.BeginTransaction();
         }
@@ -500,7 +515,9 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public IDbTransaction BeginTransaction(IsolationLevel il)
         {
+#if CONTRACTS_FULL
             Contract.Requires(this.Connection != null);
+#endif
 
             return this.Connection.BeginTransaction(il);
         }
@@ -516,7 +533,9 @@ namespace DataCommander.Foundation.Data
         /// </returns>
         public IDbCommand CreateCommand()
         {
+#if CONTRACTS_FULL
             Contract.Requires(this.Connection != null);
+#endif
 
             this.Command = this.Connection.CreateCommand();
             this.Command.Transaction = this.Transaction;
@@ -555,7 +574,9 @@ namespace DataCommander.Foundation.Data
         /// <param name="command"></param>
         public void DeriveParameters(IDbCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires(this.CommandBuilderHelper != null);
+#endif
 
             this.CommandBuilderHelper.DeriveParameters(command);
         }
@@ -569,7 +590,9 @@ namespace DataCommander.Foundation.Data
         /// </returns>
         public int ExecuteNonQuery(IDbCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires(command != null);
+#endif
 
             this.Command = command;
             this.RowCount = command.ExecuteNonQuery();
@@ -609,7 +632,9 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public object ExecuteScalar(IDbCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
 
             this.Command = command;
             var scalar = command.ExecuteScalar();
@@ -671,7 +696,9 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public DataTable ExecuteDataTable(IDbCommand command, CancellationToken cancellationToken)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
 
             this.Command = command;
             var dataTable = new DataTable();
@@ -713,8 +740,10 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public XmlDocument ExecuteXmlDocument(IDbCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
             Contract.Requires<ArgumentNullException>(this.CommandHelper != null);
+#endif
 
             return this.CommandHelper.ExecuteXmlDocument(command);
         }
@@ -738,7 +767,9 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public DataTable FillSchema(IDbCommand command, DataTable dataTable)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
 
             this.Command = command;
             DataTable schemaTable;
@@ -760,7 +791,9 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public static DataTable[] FillSchema(IDbCommand command, DataSet dataSet, CancellationToken cancellationToken)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
 
             DataTable[] schemaTables;
 
@@ -781,16 +814,18 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public int Fill(string commandText, DataSet dataSet, CancellationToken cancellationToken)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dataSet != null);
+#endif
 
             this.Command = this.CreateCommand(commandText);
             this.RowCount = this.Command.Fill(dataSet, cancellationToken);
             return this.RowCount;
         }
 
-        #endregion
+#endregion
 
-        #region Protected Methods
+#region Protected Methods
 
         /// <summary>
         /// Inherited class must call this method first.
@@ -811,9 +846,9 @@ namespace DataCommander.Foundation.Data
             this.CommandTimeout = commandTimeout;
         }
 
-        #endregion
+#endregion
 
-        #region Private Methods
+#region Private Methods
 
         internal static void FillSchema(DataTable schemaTable, DataTable dataTable)
         {
@@ -888,6 +923,6 @@ namespace DataCommander.Foundation.Data
             return array;
         }
 
-        #endregion
+#endregion
     }
 }

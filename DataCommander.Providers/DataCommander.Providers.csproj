@@ -28,7 +28,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -313,6 +313,7 @@
     <Compile Include="IDbConnectionStringBuilder.cs" />
     <Compile Include="IObjectName.cs" />
     <Compile Include="IProviderContract.cs" />
+    <Compile Include="IStringMatcher.cs" />
     <Compile Include="ITreeNode.cs" />
     <Compile Include="ObjectName.cs" />
     <Compile Include="ProviderName.cs" />

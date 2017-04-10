@@ -3,7 +3,6 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -117,10 +116,12 @@
 
         #endregion
 
-        [ContractInvariantMethod]
+        //[ContractInvariantMethod]
         private void ObjectInvariant()
         {
+#if CONTRACTS_FULL
             Contract.Invariant(this.Items != null);
+#endif
         }
     }
 }

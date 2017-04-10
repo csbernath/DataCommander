@@ -1,9 +1,7 @@
 ﻿namespace DataCommander.Foundation.Collections
 {
-    using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -18,8 +16,7 @@
         /// </summary>
         public ListIndex(string name)
         {
-#if FOUNDATION_35_
-#else
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(name != null);
 #endif
             this.Initialize(name, new List<T>());
@@ -32,8 +29,7 @@
         /// <param name="list"></param>
         public ListIndex(string name, IList<T> list)
         {
-#if FOUNDATION_3_5
-#else
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(name != null);
             Contract.Requires<ArgumentNullException>(list != null);
 #endif
@@ -61,8 +57,7 @@
         {
             get
             {
-#if FOUNDATION_3_5
-#else
+#if CONTRACTS_FULL
                 Contract.Assert(index < this.Count);
 #endif
                 return this.list[index];
@@ -70,8 +65,7 @@
 
             set
             {
-#if FOUNDATION_3_5
-#else
+#if CONTRACTS_FULL
                 Contract.Assert(index < this.Count);
 #endif
                 this.list[index] = value;
@@ -143,8 +137,7 @@
         /// <returns></returns>
         public bool Contains(T item)
         {
-#if FOUNDATION_3_5
-#else
+#if CONTRACTS_FULL
             Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
 #endif
             return this.list.Contains(item);
@@ -186,8 +179,10 @@
 
         private void Initialize(string name, IList<T> list)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(name != null);
             Contract.Requires<ArgumentNullException>(list != null);
+#endif
 
             this.Name = name;
             this.list = list;

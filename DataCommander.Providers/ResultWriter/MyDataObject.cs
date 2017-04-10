@@ -36,22 +36,22 @@
 
             if (format == DataFormats.CommaSeparatedValue)
             {
-                StringWriter stringWriter = new StringWriter();
+                var stringWriter = new StringWriter();
                 Database.Write(this.dataView, ',', "\r\n", stringWriter);
-                char c = (char)0;
+                var c = (char)0;
                 stringWriter.Write(c);
-                string s = stringWriter.ToString();
+                var s = stringWriter.ToString();
                 data = new MemoryStream(Encoding.Default.GetBytes(s));
             }
             else if (format == DataFormats.Html)
             {
-                StringWriter stringWriter = new StringWriter();
+                var stringWriter = new StringWriter();
                 HtmlFormatter.Write(this.dataView, this.columnIndexes, stringWriter);
-                string htmlFragment = stringWriter.ToString();
+                var htmlFragment = stringWriter.ToString();
                 stringWriter = new StringWriter();
                 WriteHtmlFragment(htmlFragment, stringWriter);
-                string s = stringWriter.ToString();
-                byte[] bytes = Encoding.UTF8.GetBytes(s);
+                var s = stringWriter.ToString();
+                var bytes = Encoding.UTF8.GetBytes(s);
                 data = new MemoryStream(bytes);
             }
             else if (format == DataFormats.Text || format == DataFormats.UnicodeText)
@@ -142,19 +142,19 @@
 
         private static void WriteHtmlFragment(string htmlFragment, TextWriter textWriter)
         {
-            string header = @"Version:0.9
+            var header = @"Version:0.9
 StartHTML:{000000}
 EndHTML:{111111}
 StartFragment:{222222}
 EndFragment:{333333}
 ";
-            string startHtmlString = "<html><body><!--StartFragment-->";
-            string endHtmlString = "<!--EndFragment--></body></html>";
-            int startHtml = header.Length;
-            int startFragment = startHtml + startHtmlString.Length;
-            int htmlFragmentLength = Encoding.UTF8.GetByteCount(htmlFragment);
-            int endFragment = startFragment + htmlFragmentLength;
-            int endHtml = endFragment + endHtmlString.Length;
+            var startHtmlString = "<html><body><!--StartFragment-->";
+            var endHtmlString = "<!--EndFragment--></body></html>";
+            var startHtml = header.Length;
+            var startFragment = startHtml + startHtmlString.Length;
+            var htmlFragmentLength = Encoding.UTF8.GetByteCount(htmlFragment);
+            var endFragment = startFragment + htmlFragmentLength;
+            var endHtml = endFragment + endHtmlString.Length;
 
             header = header.Replace("{000000}", startHtml.ToString().PadLeft(8));
             header = header.Replace("{111111}", endHtml.ToString().PadLeft(8));

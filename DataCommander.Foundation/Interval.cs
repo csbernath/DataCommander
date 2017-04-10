@@ -1,61 +1,40 @@
-﻿namespace DataCommander.Foundation
-{
-    using System;
-    using System.Diagnostics.Contracts;
+﻿//namespace DataCommander.Foundation
+//{
+//    using System;
+//    using System.Diagnostics.Contracts;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="TIntervalComparer"></typeparam>
-    public struct Interval<T, TIntervalComparer> where TIntervalComparer : IIntervalComparer<T>, new()
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly TIntervalComparer IntervalComparer = new TIntervalComparer();
+//    /// <summary>
+//    /// 
+//    /// </summary>
+//    /// <typeparam name="T"></typeparam>
+//    public struct Interval<T, TIntervalRelation> where TIntervalRelation : IIntervalRelation<T>, new()
+//    {
+//        /// <summary>
+//        /// 
+//        /// </summary>
+//        public static readonly TIntervalRelation IntervalRelation = new TIntervalRelation();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public readonly T Left;
+//        /// <summary>
+//        /// 
+//        /// </summary>
+//        public readonly T Left;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public readonly T Right;
+//        /// <summary>
+//        /// 
+//        /// </summary>
+//        public readonly T Right;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        public Interval(T left, T right)
-        {
-            Contract.Requires<ArgumentException>(IntervalComparer.IsValid(left, right));
+//        /// <summary>
+//        /// 
+//        /// </summary>
+//        /// <param name="left"></param>
+//        /// <param name="right"></param>
+//        public Interval(T left, T right)
+//        {
+//            //Contract.Requires<ArgumentException>(IntervalRelation.IsValid(left, right));
 
-            this.Left = left;
-            this.Right = right;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public bool Contains(T value)
-        {
-            return IntervalComparer.Contains(this.Left, value, this.Right);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Intersects(Interval<T, TIntervalComparer> other)
-        {
-            return IntervalComparer.Intersects(this.Left, this.Right, other.Left, other.Right);
-        }
-    }
-}
+//            this.Left = left;
+//            this.Right = right;
+//        }
+//    }
+//}

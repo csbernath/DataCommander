@@ -3,11 +3,9 @@ namespace DataCommander.Foundation.Data.SqlClient
     using System;
     using System.Data;
     using System.Data.SqlClient;
-    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Security.Principal;
     using DataCommander.Foundation.Configuration;
-    using DataCommander.Foundation.Threading;
 
 #if FOUNDATION_3_5
     using System.Web;
@@ -27,7 +25,9 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="nodeName"></param>
         public SimpleSqlConnectionFactory( ConfigurationSection section, string nodeName )
         {
+#if CONTRACTS_FULL
             Contract.Requires(section != null);
+#endif
 
             var node = section.SelectNode( nodeName, true );
             this.connectionString = node.Attributes["ConnectionString"].GetValue<string>();

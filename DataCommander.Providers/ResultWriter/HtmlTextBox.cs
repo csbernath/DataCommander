@@ -100,7 +100,7 @@ namespace DataCommander.Providers
         /// </summary>
         private void InitializeComponent()
         {
-            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (HtmlTextBox));
+            var resources = new System.Resources.ResourceManager(typeof (HtmlTextBox));
             this.webBrowser = new WebBrowser();
             GarbageMonitor.Add("webBrowser", this.webBrowser);
             // ((System.ComponentModel.ISupportInitialize)(this.webBrowser)).BeginInit();

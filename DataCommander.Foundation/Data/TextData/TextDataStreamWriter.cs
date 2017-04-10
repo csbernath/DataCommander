@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation.Data
 {
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.IO;
 
     internal sealed class TextDataStreamWriter
@@ -10,11 +9,13 @@
 
         private readonly IList<ITextDataConverter> converters;
 
-        public TextDataStreamWriter( TextWriter textWriter, IList<TextDataColumn> columns, IList<ITextDataConverter> converters )
+        public TextDataStreamWriter(TextWriter textWriter, IList<TextDataColumn> columns, IList<ITextDataConverter> converters)
         {
-            Contract.Requires( textWriter != null );
-            Contract.Requires( columns != null );
-            Contract.Requires( converters != null );
+#if CONTRACTS_FULL
+            Contract.Requires(textWriter != null);
+            Contract.Requires(columns != null);
+            Contract.Requires(converters != null);
+#endif
 
             this.textWriter = textWriter;
             this.Columns = columns;
@@ -23,20 +24,24 @@
 
         public IList<TextDataColumn> Columns { get; }
 
-        public void WriteRow( object[] values )
+        public void WriteRow(object[] values)
         {
-            Contract.Requires( values != null );
-            Contract.Requires( this.Columns.Count == values.Length );
+#if CONTRACTS_FULL
+            Contract.Requires(values != null);
+            Contract.Requires(this.Columns.Count == values.Length);
+#endif
 
             for (var i = 0; i < values.Length; i++)
             {
-                var value = values[ i ];
-                var converter = this.converters[ i ];
-                var column = this.Columns[ i ];
-                var valueString = converter.ToString( value, column );
-                Contract.Assert( !string.IsNullOrEmpty( valueString ) );
-                Contract.Assert( column.MaxLength == valueString.Length );
-                this.textWriter.Write( valueString );
+                var value = values[i];
+                var converter = this.converters[i];
+                var column = this.Columns[i];
+                var valueString = converter.ToString(value, column);
+#if CONTRACTS_FULL
+                Contract.Assert(!string.IsNullOrEmpty(valueString));
+                Contract.Assert(column.MaxLength == valueString.Length);
+#endif
+                this.textWriter.Write(valueString);
             }
         }
     }

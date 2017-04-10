@@ -37,7 +37,7 @@
 
         private static DataGridViewColumn ToDataGridViewColumn(DataRow schemaDataRow)
         {
-            DbColumn schema = new DbColumn(schemaDataRow);
+            var schema = new DbColumn(schemaDataRow);
             var column = new DataGridViewTextBoxColumn()
             {
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
@@ -72,14 +72,14 @@
         {
             var dataGridView = this.DataGridViews[this.DataGridViews.Count - 1];
             var targetRows = dataGridView.Rows;
-            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {
                 var sourceRow = rows[rowIndex];
                 var targetRow = new DataGridViewRow();
                 var cells = targetRow.Cells;
-                for (int columnIndex = 0; columnIndex < sourceRow.Length; columnIndex++)
+                for (var columnIndex = 0; columnIndex < sourceRow.Length; columnIndex++)
                 {
-                    object sourceValue = sourceRow[columnIndex];
+                    var sourceValue = sourceRow[columnIndex];
                     var cell = new DataGridViewTextBoxCell();
                     cell.Value = sourceValue;
                     cells.Add(cell);

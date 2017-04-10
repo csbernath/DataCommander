@@ -13,7 +13,7 @@ namespace DataCommander.Foundation.Collections
         /// </summary>
         /// <param name="data"></param>
         [CLSCompliant(false)]
-        public BitVector64(UInt64 data)
+        public BitVector64(ulong data)
         {
             this.Value = data;
         }
@@ -22,7 +22,7 @@ namespace DataCommander.Foundation.Collections
         /// 
         /// </summary>
         [CLSCompliant(false)]
-        public UInt64 Value { get; private set; }
+        public ulong Value { get; private set; }
 
         /// <summary>
         /// 

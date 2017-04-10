@@ -22,22 +22,22 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText = "select name from {0}..sysusers where islogin = 1 order by name";
+            var commandText = "select name from {0}..sysusers where islogin = 1 order by name";
             commandText = string.Format(commandText, this.database.Name);
-            string connectionString = this.database.Databases.Server.ConnectionString;
+            var connectionString = this.database.Databases.Server.ConnectionString;
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
                 var transactionScope = new DbTransactionScope(connection, null);
                 dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
             }
-            DataRowCollection dataRows = dataTable.Rows;
-            int count = dataRows.Count;
-            ITreeNode[] treeNodes = new ITreeNode[count];
+            var dataRows = dataTable.Rows;
+            var count = dataRows.Count;
+            var treeNodes = new ITreeNode[count];
 
-            for (int i=0;i<count;i++)
+            for (var i=0;i<count;i++)
             {
-                string name = (string)dataRows[i][0];
+                var name = (string)dataRows[i][0];
                 treeNodes[i] = new UserNode(this.database,name);
             }
 

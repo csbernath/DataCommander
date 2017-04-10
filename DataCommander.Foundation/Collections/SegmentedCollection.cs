@@ -3,7 +3,6 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -25,12 +24,14 @@
         /// <param name="segmentLength"></param>
         public SegmentedCollection(int segmentLength)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentOutOfRangeException>(segmentLength > 0);
+#endif
 
             this.segmentLength = segmentLength;
         }
 
-        #region ICollection<T> Members
+#region ICollection<T> Members
 
         /// <summary>
         /// 
@@ -100,9 +101,9 @@
             throw new NotSupportedException();
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable<T> Members
+#region IEnumerable<T> Members
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
@@ -125,9 +126,9 @@
             }
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable Members
+#region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -135,9 +136,9 @@
             return enumerable.GetEnumerator();
         }
 
-        #endregion
+#endregion
 
-        #region Private Classes
+#region Private Classes
 
         private sealed class Segment
         {
@@ -145,6 +146,6 @@
             public Segment Next;
         }
 
-        #endregion
+#endregion
     }
 }

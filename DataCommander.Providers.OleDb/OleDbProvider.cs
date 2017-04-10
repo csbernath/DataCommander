@@ -41,19 +41,19 @@ namespace DataCommander.Providers.OleDb
 
         public void DeriveParameters(IDbCommand command)
         {
-            OleDbCommand command2 = (OleDbCommand) command;
+            var command2 = (OleDbCommand) command;
             OleDbCommandBuilder.DeriveParameters(command2);
         }
 
         public DataParameterBase GetDataParameter(IDataParameter parameter)
         {
-            OleDbParameter oleDbParameter = (OleDbParameter) parameter;
+            var oleDbParameter = (OleDbParameter) parameter;
             return new DataParameterImp(oleDbParameter);
         }
 
         public DataTable GetParameterTable(IDataParameterCollection parameters)
         {
-            DataTable dataTable = new DataTable();
+            var dataTable = new DataTable();
             dataTable.Columns.Add("ParameterName");
             dataTable.Columns.Add("DbType");
             dataTable.Columns.Add("OleDbType");
@@ -65,7 +65,7 @@ namespace DataCommander.Providers.OleDb
 
             foreach (OleDbParameter p in parameters)
             {
-                DataRow row = dataTable.NewRow();
+                var row = dataTable.NewRow();
 
                 row[0] = p.ParameterName;
                 row[1] = p.DbType.ToString("G");
@@ -130,8 +130,8 @@ namespace DataCommander.Providers.OleDb
             //
             //      return dataTable;
 
-            DataTable table = new DataTable("SchemaTable");
-            DataColumnCollection columns = table.Columns;
+            var table = new DataTable("SchemaTable");
+            var columns = table.Columns;
             columns.Add(" ", typeof (int));
             columns.Add("  ", typeof (string));
             columns.Add("Name", typeof (string));
@@ -140,26 +140,26 @@ namespace DataCommander.Providers.OleDb
             columns.Add("DataType", typeof (Type));
             columns.Add("ProviderType", typeof (int));
 
-            DataTable schemaTable = dataReader.GetSchemaTable();
+            var schemaTable = dataReader.GetSchemaTable();
 
-            for (int i = 0; i < schemaTable.Rows.Count; i++)
+            for (var i = 0; i < schemaTable.Rows.Count; i++)
             {
-                DataRow row = schemaTable.Rows[i];
-                int columnOrdinal = (int) row["ColumnOrdinal"] + 1;
-                bool isKey = row.GetValueOrDefault<bool>("IsKey");
+                var row = schemaTable.Rows[i];
+                var columnOrdinal = (int) row["ColumnOrdinal"] + 1;
+                var isKey = row.GetValueOrDefault<bool>("IsKey");
 
-                string pk = string.Empty;
+                var pk = string.Empty;
 
                 if (isKey)
                 {
                     pk = "PKEY";
                 }
 
-                int columnSize = (int) row["ColumnSize"];
-                OleDbType dbType = (OleDbType) row["ProviderType"];
-                bool allowDBNull = (bool) row["AllowDBNull"];
+                var columnSize = (int) row["ColumnSize"];
+                var dbType = (OleDbType) row["ProviderType"];
+                var allowDBNull = (bool) row["AllowDBNull"];
 
-                string dataTypeName = dataReader.GetDataTypeName(i);
+                var dataTypeName = dataReader.GetDataTypeName(i);
                 var sb = new StringBuilder();
                 sb.Append(dataReader.GetDataTypeName(i));
 
@@ -175,8 +175,8 @@ namespace DataCommander.Providers.OleDb
                         break;
 
                     case OleDbType.Decimal:
-                        short precision = (short) row["NumericPrecision"];
-                        short scale = (short) row["NumericScale"];
+                        var precision = (short) row["NumericPrecision"];
+                        var scale = (short) row["NumericScale"];
 
                         if (scale == 0)
                             sb.AppendFormat("({0})", precision);
@@ -228,7 +228,7 @@ namespace DataCommander.Providers.OleDb
 
         IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
         {
-            OleDbDataReader oleDbDataReader = (OleDbDataReader) dataReader;
+            var oleDbDataReader = (OleDbDataReader) dataReader;
             return new OleDbDataReaderHelper(oleDbDataReader);
         }
 

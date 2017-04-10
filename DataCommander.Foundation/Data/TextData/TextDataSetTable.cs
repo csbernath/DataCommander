@@ -1,7 +1,5 @@
 ﻿namespace DataCommander.Foundation.Data
 {
-    using System.Diagnostics.Contracts;
-
     /// <summary>
     /// 
     /// </summary>
@@ -15,7 +13,9 @@
         /// <param name="table"></param>
         public TextDataSetTable( string name, int rowCount, TextDataTable table )
         {
+#if CONTRACTS_FULL
             Contract.Requires(rowCount >= 0);
+#endif
 
             this.Name = name;
             this.RowCount = rowCount;

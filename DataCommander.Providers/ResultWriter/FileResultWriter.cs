@@ -3,7 +3,6 @@ namespace DataCommander.Providers
     using System;
     using System.Data;
     using System.Data.Common;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Text;
     using DataCommander.Foundation.Text;
@@ -16,12 +15,14 @@ namespace DataCommander.Providers
 
         public FileResultWriter(TextWriter messageWriter)
         {
+#if CONTRACTS_FULL
             Contract.Requires(messageWriter != null);
+#endif
 
             this.messageWriter = messageWriter;
         }
 
-        #region IResultWriter Members
+#region IResultWriter Members
 
         void IResultWriter.Begin(IProvider provider)
         {
@@ -41,22 +42,22 @@ namespace DataCommander.Providers
 
         void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
-            string path = Path.GetTempFileName();
+            var path = Path.GetTempFileName();
             this.messageWriter.WriteLine("fileName: {0}", path);
-            Encoding encoding = Encoding.UTF8;
+            var encoding = Encoding.UTF8;
             this.streamWriter = new StreamWriter(path, false, encoding, 4096);
             this.streamWriter.AutoFlush = true;
-            int count = schemaTable.Rows.Count;
+            var count = schemaTable.Rows.Count;
             this.dataWriters = new DataWriterBase[count];
-            StringTable st = new StringTable(3);
+            var st = new StringTable(3);
             st.Columns[2].Align = StringTableColumnAlign.Right;
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 DataWriterBase dataWriter = null;
-                DataRow column = schemaTable.Rows[i];
-                Type dataType = (Type)column["DataType"];
-                TypeCode typeCode = Type.GetTypeCode(dataType);
+                var column = schemaTable.Rows[i];
+                var dataType = (Type)column["DataType"];
+                var typeCode = Type.GetTypeCode(dataType);
                 string dataTypeName;
                 int length;
 
@@ -77,8 +78,8 @@ namespace DataCommander.Providers
                         break;
 
                     case TypeCode.Decimal:
-                        short precision = (short)column["NumericPrecision"];
-                        short scale = (short)column["NumericScale"];
+                        var precision = (short)column["NumericPrecision"];
+                        var scale = (short)column["NumericScale"];
                         length = precision + 1; // +/- sign
 
                         // decimal separator
@@ -137,7 +138,7 @@ namespace DataCommander.Providers
 
                 this.dataWriters[i] = dataWriter;
 
-                StringTableRow row = st.NewRow();
+                var row = st.NewRow();
                 row[0] = (string)column[SchemaTableColumn.ColumnName];
                 row[1] = dataTypeName;
                 row[2] = length.ToString();
@@ -161,13 +162,13 @@ namespace DataCommander.Providers
         {
             var sb = new StringBuilder();
 
-            for (int i = 0; i < rowCount; i++)
+            for (var i = 0; i < rowCount; i++)
             {
-                object[] row = rows[i];
+                var row = rows[i];
 
-                for (int j = 0; j < row.Length; j++)
+                for (var j = 0; j < row.Length; j++)
                 {
-                    string s = this.dataWriters[j].ToString(row[j]);
+                    var s = this.dataWriters[j].ToString(row[j]);
                     sb.Append(s);
                 }
 
@@ -198,6 +199,6 @@ namespace DataCommander.Providers
         {
         }
 
-        #endregion
+#endregion
     }
 }

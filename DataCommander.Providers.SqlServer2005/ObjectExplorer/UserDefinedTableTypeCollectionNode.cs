@@ -21,7 +21,7 @@
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText = string.Format(@"select
+            var commandText = string.Format(@"select
      s.name
     ,t.name
 from [{0}].sys.schemas s (nolock)
@@ -30,7 +30,7 @@ join [{0}].sys.table_types t (nolock)
 order by 1,2", this.database.Name);
 
             var tableTypeNodes = new List<UserDefinedTableTypeNode>();
-            string connectionString = this.database.Databases.Server.ConnectionString;
+            var connectionString = this.database.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -39,8 +39,8 @@ order by 1,2", this.database.Name);
                 {
                     reader.Read(dataRecord =>
                     {
-                        string schema = dataRecord.GetString(0);
-                        string name = dataRecord.GetString(1);
+                        var schema = dataRecord.GetString(0);
+                        var name = dataRecord.GetString(1);
                         var tableTypeNode = new UserDefinedTableTypeNode(this.database, schema, name);
                         tableTypeNodes.Add(tableTypeNode);
                     });

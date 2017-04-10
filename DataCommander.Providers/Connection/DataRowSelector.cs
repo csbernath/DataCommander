@@ -18,8 +18,8 @@ namespace DataCommander.Providers
 
         public float GetWidth(DataRow row)
         {
-            string s = row[this.column].ToString();
-            int length = s.Length;
+            var s = row[this.column].ToString();
+            var length = s.Length;
             float width;
 
             if (length <= 256)

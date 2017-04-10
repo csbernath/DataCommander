@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Windows.Forms;
 
     internal sealed class LinkedServerCatalogNode : ITreeNode
@@ -11,11 +10,13 @@
 
         public LinkedServerCatalogNode(LinkedServerNode linkedServer, string name)
         {
+#if CONTRACTS_FULL
             Contract.Requires(linkedServer != null);
+#endif
             this.name = name;
         }
 
-        #region ITreeNode Members
+#region ITreeNode Members
 
         string ITreeNode.Name => this.name;
 
@@ -32,6 +33,6 @@
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-        #endregion
+#endregion
     }
 }

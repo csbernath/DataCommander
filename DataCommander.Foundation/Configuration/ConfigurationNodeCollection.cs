@@ -2,7 +2,6 @@
 {
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Linq;
     using DataCommander.Foundation.Collections;
 
@@ -60,7 +59,9 @@
         /// <param name="item"></param>
         public void Add(ConfigurationNode item)
         {
+#if CONTRACTS_FULL
             Contract.Assert(item != null);
+#endif
             this.collection.Add(item);
         }
 
@@ -112,9 +113,9 @@
             return this.collection.Remove(item);
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable<ConfigurationNode> Members
+#region IEnumerable<ConfigurationNode> Members
 
         /// <summary>
         /// 
@@ -125,16 +126,16 @@
             return this.collection.GetEnumerator();
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable Members
+#region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.collection.GetEnumerator();
         }
 
-        #endregion
+#endregion
 
         internal void Insert(int index, ConfigurationNode item)
         {

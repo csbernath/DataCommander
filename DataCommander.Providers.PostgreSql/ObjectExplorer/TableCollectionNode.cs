@@ -39,7 +39,7 @@ order by table_name"
                 {
                     dataReader.Read(dataRecord =>
                     {
-                        string name = dataRecord.GetString(0);
+                        var name = dataRecord.GetString(0);
                         var schemaNode = new TableNode(this, name);
                         nodes.Add(schemaNode);
                         return true;

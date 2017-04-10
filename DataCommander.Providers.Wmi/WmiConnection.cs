@@ -42,10 +42,10 @@ namespace DataCommander.Providers.Wmi
 
         public void Open()
         {
-            DbConnectionStringBuilder sb = new DbConnectionStringBuilder();
+            var sb = new DbConnectionStringBuilder();
             sb.ConnectionString = this.connectionString;
             object value;            
-            bool contains = sb.TryGetValue( ConnectionStringKeyword.DataSource, out value );
+            var contains = sb.TryGetValue( ConnectionStringKeyword.DataSource, out value );
             string dataSource;
 
             if (contains)
@@ -62,7 +62,7 @@ namespace DataCommander.Providers.Wmi
             //path.Server = dataSource;
             //scope = new ManagementScope( path );
 
-            string path = this.DataSource;
+            var path = this.DataSource;
             this.Scope = new ManagementScope( path );
         }
 

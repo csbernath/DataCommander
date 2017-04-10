@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation.XmlSpreadsheet
 {
-    using System.Diagnostics.Contracts;
     using System.Xml;
     using DataCommander.Foundation.Xml;
 
@@ -54,7 +53,9 @@
         /// <param name="xmlWriter"></param>
         public void Write(XmlWriter xmlWriter)
         {
+#if CONTRACTS_FULL
             Contract.Requires(xmlWriter != null);
+#endif
 
             using (xmlWriter.WriteElement("Cell"))
             {

@@ -38,7 +38,7 @@ namespace DataCommander.Providers
             else
             {
                 log.Write(LogLevel.Error, exception.ToString());
-                IProvider provider = this.connectionProperties.Provider;
+                var provider = this.connectionProperties.Provider;
                 string message;
 
                 if (provider != null)
@@ -96,10 +96,10 @@ namespace DataCommander.Providers
             var dbConnectionStringBuilder = new DbConnectionStringBuilder();
             dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
             object dataSourceObject;
-            bool contains = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out dataSourceObject);
+            var contains = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out dataSourceObject);
             object userId;
             dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out userId);
-            string dataSource = (string)dataSourceObject;
+            var dataSource = (string)dataSourceObject;
             this.textBox.Text =
                 $"Connection name: {connectionProperties.ConnectionName}\r\nProvider name: {connectionProperties.ProviderName}\r\nData Source: {dataSource}\r\nUserId: {userId}";
             this.connectionProperties = connectionProperties;
@@ -229,7 +229,7 @@ namespace DataCommander.Providers
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            long ticks = this.stopwatch.ElapsedTicks;
+            var ticks = this.stopwatch.ElapsedTicks;
             this.tbTimer.Text = StopwatchTimeSpan.ToString(ticks, 0);
         }
     }

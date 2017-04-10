@@ -39,7 +39,7 @@
                 {
                     var cb = new SqlCommandBuilder();
                     connection.ConnectionString = this.database.Databases.Server.ConnectionString;
-                    string commandText = string.Format(@"declare @object_id int
+                    var commandText = string.Format(@"declare @object_id int
 
 select  @object_id = o.object_id
 from    {0}.sys.schemas s
@@ -93,14 +93,14 @@ order by fkc.parent_column_id",
 
                         reader.Read(dataRecord =>
                         {
-                            int columnId = dataRecord.GetInt32(0);
+                            var columnId = dataRecord.GetInt32(0);
                             var columnNode = columnNodes[columnId];
                             columnNode.IsPrimaryKey = true;
                         });
 
                         reader.Read(dataRecord =>
                         {
-                            int columnId = dataRecord.GetInt32(0);
+                            var columnId = dataRecord.GetInt32(0);
                             var columnNode = columnNodes[columnId];
                             columnNode.IsForeignKey = true;
                         });
@@ -123,14 +123,14 @@ order by fkc.parent_column_id",
 
         private static ColumnNode ToColumnNode(IDataRecord dataRecord)
         {
-            int id = dataRecord.GetInt32(0);
-            string columnName = dataRecord.GetString(1);
-            byte systemTypeId = dataRecord.GetByte(2);
-            short maxLength = dataRecord.GetInt16(3);
-            byte precision = dataRecord.GetByte(4);
-            byte scale = dataRecord.GetByte(5);
-            bool isNullable = dataRecord.GetBoolean(6);
-            string userTypeName = dataRecord.GetString(7);
+            var id = dataRecord.GetInt32(0);
+            var columnName = dataRecord.GetString(1);
+            var systemTypeId = dataRecord.GetByte(2);
+            var maxLength = dataRecord.GetInt16(3);
+            var precision = dataRecord.GetByte(4);
+            var scale = dataRecord.GetByte(5);
+            var isNullable = dataRecord.GetBoolean(6);
+            var userTypeName = dataRecord.GetString(7);
 
             return new ColumnNode(id, columnName, systemTypeId, maxLength, precision, scale, isNullable, userTypeName);
         }

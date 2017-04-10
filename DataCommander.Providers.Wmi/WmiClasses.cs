@@ -21,7 +21,7 @@ namespace DataCommander.Providers.Wmi
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             var manClass = new ManagementClass(this.scope.Path);
-            ManagementObjectCollection objects = manClass.GetSubclasses();
+            var objects = manClass.GetSubclasses();
             var list = new List<ITreeNode>();
 
             foreach (ManagementClass subClass in objects)

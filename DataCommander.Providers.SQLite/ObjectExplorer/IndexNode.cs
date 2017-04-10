@@ -39,7 +39,7 @@ where
     and name = '{this.name}'";
                 var transactionScope = new DbTransactionScope(this.tableNode.Database.Connection, null);
 
-                string sql = transactionScope.ExecuteScalar<string>(new CommandDefinition {CommandText = commandText});
+                var sql = transactionScope.ExecuteScalar<string>(new CommandDefinition {CommandText = commandText});
                 return sql;
             }
         }

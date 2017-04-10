@@ -9,7 +9,6 @@ namespace DataCommander.Providers
     using System.IO;
     using System.Text;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Diagnostics;
     using Foundation.Diagnostics.MethodProfiler;
     using Foundation.Linq;
     using Foundation.Text;
@@ -47,10 +46,10 @@ namespace DataCommander.Providers
         {
             if (keyWords != null)
             {
-                KeyWordList keyWordList = new KeyWordList();
+                var keyWordList = new KeyWordList();
                 keyWordList.KeyWords = new string[keyWords.Length];
 
-                for (int i = 0; i < keyWords.Length; i++)
+                for (var i = 0; i < keyWords.Length; i++)
                 {
                     keyWordList.KeyWords[i] = keyWords[i].ToUpper();
                 }
@@ -83,7 +82,7 @@ namespace DataCommander.Providers
 
                 if (value != null)
                 {
-                    string text = this.RichTextBox.Text;
+                    var text = this.RichTextBox.Text;
                     this.Colorize(text, 0, text.Length - 1);
                 }
 
@@ -193,10 +192,10 @@ namespace DataCommander.Providers
                 this.prevSelectionLength = this.selectionLength;
                 this.selectionLength = this.RichTextBox.SelectionLength;
 
-                int charIndex = this.selectionStart;
-                int line = this.RichTextBox.GetLineFromCharIndex(charIndex) + 1;
-                int lineIndex = this.LineIndex(-1);
-                int col = charIndex - lineIndex + 1;
+                var charIndex = this.selectionStart;
+                var line = this.RichTextBox.GetLineFromCharIndex(charIndex) + 1;
+                var lineIndex = this.LineIndex(-1);
+                var col = charIndex - lineIndex + 1;
                 this.sbPanel.Text = "Ln " + line + " Col " + col;
                 this.columnIndex = col;
             }
@@ -212,12 +211,12 @@ namespace DataCommander.Providers
 
         public int WordStart(string text, int index)
         {
-            int i = index;
-            bool wordFound = false;
+            var i = index;
+            var wordFound = false;
 
             while (i >= 0)
             {
-                char c = text[i];
+                var c = text[i];
 
                 if (wordFound && IsSeparator(c))
                 {
@@ -238,13 +237,13 @@ namespace DataCommander.Providers
 
         public static string PrevWord(string text, ref int index)
         {
-            int wordEnd = -1;
+            var wordEnd = -1;
             string word = null;
 
             while (index >= 0)
             {
-                char c = text[index];
-                bool isSeparator = IsSeparator(c) || index == 0;
+                var c = text[index];
+                var isSeparator = IsSeparator(c) || index == 0;
 
                 if (wordEnd != -1 && isSeparator)
                 {
@@ -269,12 +268,12 @@ namespace DataCommander.Providers
 
         public static int WordEnd(string text, int index)
         {
-            int length = text.Length;
-            int i = index;
+            var length = text.Length;
+            var i = index;
 
             while (i < length)
             {
-                char c = text[i];
+                var c = text[i];
 
                 if (IsSeparator(c))
                 {
@@ -291,12 +290,12 @@ namespace DataCommander.Providers
 
         public static int NextWordStart(string text, int index)
         {
-            int length = text.Length;
-            int i = index;
+            var length = text.Length;
+            var i = index;
 
             while (i < length)
             {
-                char c = text[i];
+                var c = text[i];
 
                 if (!IsSeparator(c))
                 {
@@ -315,15 +314,15 @@ namespace DataCommander.Providers
 
             try
             {
-                long maxTicks = Stopwatch.Frequency*5; // max. 5 seconds
-                Stopwatch stopwatch = new Stopwatch();
+                var maxTicks = Stopwatch.Frequency*5; // max. 5 seconds
+                var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                int orgSelectionStart = Math.Max(this.RichTextBox.SelectionStart, 0);
-                int orgSelectionLength = Math.Max(this.RichTextBox.SelectionLength, 0);
+                var orgSelectionStart = Math.Max(this.RichTextBox.SelectionStart, 0);
+                var orgSelectionLength = Math.Max(this.RichTextBox.SelectionLength, 0);
 
-                IntPtr intPtr = this.RichTextBox.Handle;
-                int hWnd = intPtr.ToInt32();
+                var intPtr = this.RichTextBox.Handle;
+                var hWnd = intPtr.ToInt32();
                 NativeMethods.SendMessage(hWnd, (int) NativeMethods.Message.Gdi.SetRedraw, 0, 0);
 
                 MethodProfiler.BeginMethodFraction("ControlText");
@@ -360,8 +359,8 @@ namespace DataCommander.Providers
                     {
                         case TokenType.KeyWord:
                             color = Color.Black;
-                            string keyWord = token.Value.ToUpper();
-                            foreach (KeyWordList keyWordList in this.keyWordLists)
+                            var keyWord = token.Value.ToUpper();
+                            foreach (var keyWordList in this.keyWordLists)
                             {
                                 if (Array.BinarySearch(keyWordList.KeyWords, keyWord) >= 0)
                                 {
@@ -457,7 +456,7 @@ namespace DataCommander.Providers
                 {
                     this.RichTextBox.SelectionChanged -= new EventHandler(this.richTextBox_SelectionChanged);
 
-                    string text = this.RichTextBox.Text;
+                    var text = this.RichTextBox.Text;
 
                     if (text.Length > 0)
                     {
@@ -501,13 +500,13 @@ namespace DataCommander.Providers
                             // colorizing next word if necessary
                             if (this.selectionStart > 0)
                             {
-                                char c = text[this.selectionStart - 1];
+                                var c = text[this.selectionStart - 1];
 
                                 if (IsSeparator(c))
                                 {
                                     if (this.selectionStart < text.Length)
                                     {
-                                        char c2 = text[this.selectionStart];
+                                        var c2 = text[this.selectionStart];
 
                                         if (!IsSeparator(c2))
                                         {
@@ -517,14 +516,14 @@ namespace DataCommander.Providers
                                 }
                             }
 
-                            int length = endIndex - startIndex;
+                            var length = endIndex - startIndex;
 
                             if (endIndex < text.Length - 1)
                             {
                                 length++;
                             }
 
-                            string s = text.Substring(startIndex, length);
+                            var s = text.Substring(startIndex, length);
                             this.Colorize(text, startIndex, endIndex);
                         }
                     }
@@ -544,7 +543,7 @@ namespace DataCommander.Providers
 
         public static bool IsSeparator(char c)
         {
-            bool isSeparator =
+            var isSeparator =
                 c == ' ' ||
                 c == '.' || c == ',' || c == ';' ||
                 c == '=' ||
@@ -579,8 +578,8 @@ namespace DataCommander.Providers
                     {
                         e.Handled = true;
 
-                        int length = -((this.columnIndex - 1)%this.TabSize) + this.TabSize;
-                        string text = new string(' ', length);
+                        var length = -((this.columnIndex - 1)%this.TabSize) + this.TabSize;
+                        var text = new string(' ', length);
                         length = this.RichTextBox.SelectionLength;
 
                         if (length == 0)
@@ -621,15 +620,15 @@ namespace DataCommander.Providers
 
         private static bool GetDataPresent(IDataObject dataObject, string format)
         {
-            DataFormats.Format dataFormat = DataFormats.GetFormat(format);
-            string name = dataFormat.Name;
+            var dataFormat = DataFormats.GetFormat(format);
+            var name = dataFormat.Name;
             return dataObject.GetDataPresent(name);
         }
 
         private static object GetData(IDataObject dataObject, string format)
         {
-            DataFormats.Format dataFormat = DataFormats.GetFormat(format);
-            string name = dataFormat.Name;
+            var dataFormat = DataFormats.GetFormat(format);
+            var name = dataFormat.Name;
             return dataObject.GetData(name);
         }
 
@@ -640,12 +639,12 @@ namespace DataCommander.Providers
 
         private void richTextBox_DragDrop(object sender, DragEventArgs e)
         {
-            IDataObject dataObject = e.Data;
+            var dataObject = e.Data;
 
             if (GetDataPresent(dataObject, DataFormats.UnicodeText))
             {
-                string text = (string)GetData(dataObject, DataFormats.UnicodeText);
-                int startIndex = this.RichTextBox.SelectionStart;
+                var text = (string)GetData(dataObject, DataFormats.UnicodeText);
+                var startIndex = this.RichTextBox.SelectionStart;
                 this.RichTextBox.SelectionLength = 0;
                 this.RichTextBox.SelectedText = text;
                 this.RichTextBox.SelectionStart = startIndex + text.Length;
@@ -653,7 +652,7 @@ namespace DataCommander.Providers
             }
             else if (GetDataPresent(dataObject, DataFormats.FileDrop))
             {
-                string[] fileNames = (string[])dataObject.GetData(DataFormats.FileDrop);
+                var fileNames = (string[])dataObject.GetData(DataFormats.FileDrop);
                 var fileName = fileNames[0];
                 var extension = Path.GetExtension(fileName);
                 if (extension.In(".sql", ".txt"))
@@ -666,7 +665,7 @@ namespace DataCommander.Providers
                     stringBuilder.Append("0x");
                     stringBuilder.Append(chars);
                     var text = stringBuilder.ToString();
-                    int startIndex = this.RichTextBox.SelectionStart;
+                    var startIndex = this.RichTextBox.SelectionStart;
                     this.RichTextBox.SelectionLength = 0;
                     this.RichTextBox.SelectedText = text;
                     this.RichTextBox.SelectionStart = startIndex + text.Length;
@@ -708,14 +707,14 @@ namespace DataCommander.Providers
             if (e.Button == MouseButtons.Right)
             {
                 var contextMenu = new ContextMenuStrip(this.components);
-                ToolStripItemCollection items = contextMenu.Items;
+                var items = contextMenu.Items;
                 var menuItem = new ToolStripMenuItem("Create table", null, this.CreateTable_Click);
                 items.Add(menuItem);
                 menuItem = new ToolStripMenuItem("Copy table", null, this.CopyTable_Click);
                 items.Add(menuItem);
 
-                Form[] forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
-                int index = Array.IndexOf(forms, (QueryForm) this.Parent);
+                var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
+                var index = Array.IndexOf(forms, (QueryForm) this.Parent);
                 if (index < forms.Length - 1)
                 {
                     var nextQueryForm = (QueryForm) forms[index + 1];

@@ -36,7 +36,7 @@ order by s.SEQUENCE_NAME
                 CommandBehavior.Default,
                 dataRecord =>
                 {
-                    string name = dataRecord.GetString(0);
+                    var name = dataRecord.GetString(0);
                     return new SequenceNode(this.schemaNode, name);
                 });
         }

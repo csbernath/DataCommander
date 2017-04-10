@@ -1,7 +1,5 @@
 ﻿namespace DataCommander.Foundation.Xml
 {
-    using System;
-    using System.Diagnostics.Contracts;
     using System.Text;
     using System.Xml;
     using System.Xml.Serialization;
@@ -20,7 +18,9 @@
         /// <returns></returns>
         public static string SerializeToXmlString(this XmlSerializer xmlSerializer, XmlWriterSettings xmlWriterSettings, object o)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(xmlSerializer != null);
+#endif
 
             var sb = new StringBuilder();
 

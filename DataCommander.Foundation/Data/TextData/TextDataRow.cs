@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation.Data
 {
     using System;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -17,8 +16,10 @@
         /// <param name="convert"></param>
         public TextDataRow(TextDataColumnCollection columns, Convert convert)
         {
+#if CONTRACTS_FULL
             Contract.Requires(columns != null);
             Contract.Requires(convert != null);
+#endif
 
             this.Columns = columns;
             this.convert = convert;

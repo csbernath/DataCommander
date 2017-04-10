@@ -35,7 +35,7 @@
             {
                 if (keyWords == null)
                 {
-                    ConfigurationNode folder = Settings.CurrentType;
+                    var folder = Settings.CurrentType;
                     keyWords = folder.Attributes["MySqlKeyWords"].GetValue<string[]>();
                 }
 
@@ -131,7 +131,7 @@
             };
 
             var sqlStatement = new SqlStatement(text);
-            Token[] tokens = sqlStatement.Tokens;
+            var tokens = sqlStatement.Tokens;
             Token previousToken, currentToken;
             sqlStatement.FindToken(position, out previousToken, out currentToken);
 
@@ -139,7 +139,7 @@
             {
                 var parts = new IdentifierParser(new StringReader(currentToken.Value)).Parse();
                 var lastPart = parts.Last();
-                int lastPartLength = lastPart != null ? lastPart.Length : 0;
+                var lastPartLength = lastPart != null ? lastPart.Length : 0;
                 response.StartPosition = currentToken.EndPosition - lastPartLength + 1;
                 response.Length = lastPartLength;
             }
@@ -192,13 +192,13 @@
                 var objectNames = new List<IObjectName>();
                 var transactionScope = new DbTransactionScope(connection.Connection, null);
 
-                foreach (string statement in statements)
+                foreach (var statement in statements)
                 {
                     using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = statement}, CommandBehavior.Default))
                     {
                         dataReader.Read(dataRecord =>
                         {
-                            string objectName = dataRecord.GetString(0);
+                            var objectName = dataRecord.GetString(0);
                             objectNames.Add(new ObjectName(null, objectName));
                         });
                     }
@@ -240,7 +240,7 @@
         DataTable IProvider.GetSchemaTable(IDataReader dataReader)
         {
             DataTable table = null;
-            DataTable schemaTable = dataReader.GetSchemaTable();
+            var schemaTable = dataReader.GetSchemaTable();
 
             if (schemaTable != null)
             {
@@ -254,13 +254,13 @@
                 columns.Add("Size", typeof (int));
                 columns.Add("DbType", typeof (string));
                 columns.Add("DataType", typeof (Type));
-                int columnIndex = 0;
+                var columnIndex = 0;
                 int? columnOrdinalAddition = null;
 
                 foreach (DataRow dataRow in schemaTable.Rows)
                 {
                     var dataColumnSchema = new DbColumn(dataRow);
-                    int columnOrdinal = dataColumnSchema.ColumnOrdinal;
+                    var columnOrdinal = dataColumnSchema.ColumnOrdinal;
 
                     if (columnOrdinalAddition == null)
                     {
@@ -274,7 +274,7 @@
                         }
                     }
 
-                    string pk = string.Empty;
+                    var pk = string.Empty;
 
                     if (dataColumnSchema.IsKey == true)
                     {
@@ -291,9 +291,9 @@
                         pk += "IDENTITY";
                     }
 
-                    int columnSize = dataColumnSchema.ColumnSize;
+                    var columnSize = dataColumnSchema.ColumnSize;
                     var dbType = (MySqlDbType)dataColumnSchema.ProviderType;
-                    string dataTypeName = dataReader.GetDataTypeName(columnIndex).ToLowerInvariant();
+                    var dataTypeName = dataReader.GetDataTypeName(columnIndex).ToLowerInvariant();
                     var sb = new StringBuilder();
                     sb.Append(dataTypeName);
 
@@ -318,8 +318,8 @@
                             break;
 
                         case MySqlDbType.Decimal:
-                            short precision = dataColumnSchema.NumericPrecision.GetValueOrDefault();
-                            short scale = dataColumnSchema.NumericScale.GetValueOrDefault();
+                            var precision = dataColumnSchema.NumericPrecision.GetValueOrDefault();
+                            var scale = dataColumnSchema.NumericScale.GetValueOrDefault();
 
                             if (scale == 0)
                                 sb.AppendFormat("({0})", precision);
@@ -351,7 +351,7 @@
                             break;
                     }
 
-                    bool allowDBNull = dataColumnSchema.AllowDBNull.GetValueOrDefault();
+                    var allowDBNull = dataColumnSchema.AllowDBNull.GetValueOrDefault();
                     if (!allowDBNull)
                     {
                         sb.Append(" not null");

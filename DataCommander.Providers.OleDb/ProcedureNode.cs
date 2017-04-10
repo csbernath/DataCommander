@@ -16,7 +16,7 @@ namespace DataCommander.Providers.OleDb
         {
             get
             {
-                string name = this.name;
+                var name = this.name;
 
                 if (name == null)
                     name = "[No procedures found]";

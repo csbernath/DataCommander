@@ -12,15 +12,15 @@ namespace DataCommander.Providers.Odp.DataFieldReader
 		public OracleDataReaderHelper( IDataReader dataReader )
 		{
 			this.oracleDataReader = (OracleDataReader) dataReader;
-			DataTable schemaTable = dataReader.GetSchemaTable();
+			var schemaTable = dataReader.GetSchemaTable();
 
 			if (schemaTable != null)
 			{
-				DataRowCollection rows = schemaTable.Rows;
-				int count = rows.Count;
+				var rows = schemaTable.Rows;
+				var count = rows.Count;
 				dataFieldReaders = new IDataFieldReader[ count ];
 
-				for (int i = 0; i < count; i++)
+				for (var i = 0; i < count; i++)
 				{
 					dataFieldReaders[ i ] = CreateDataFieldReader( dataReader, rows[ i ] );
 				}
@@ -31,9 +31,9 @@ namespace DataCommander.Providers.Odp.DataFieldReader
 			IDataRecord dataRecord,
 			DataRow schemaRow )
 		{
-			OracleDataReader oracleDataReader = (OracleDataReader) dataRecord;
-			int columnOrdinal = (int) schemaRow[ "ColumnOrdinal" ];
-			OracleDbType providerType = (OracleDbType) schemaRow[ "ProviderType" ];
+			var oracleDataReader = (OracleDataReader) dataRecord;
+			var columnOrdinal = (int) schemaRow[ "ColumnOrdinal" ];
+			var providerType = (OracleDbType) schemaRow[ "ProviderType" ];
 			IDataFieldReader dataFieldReader;
 
 			switch (providerType)
@@ -98,9 +98,9 @@ namespace DataCommander.Providers.Odp.DataFieldReader
 
 		int IDataReaderHelper.GetValues( object[] values )
 		{
-			int count = dataFieldReaders.Length;
+			var count = dataFieldReaders.Length;
 
-			for (int i = 0; i < count; i++)
+			for (var i = 0; i < count; i++)
 			{
 				values[ i ] = dataFieldReaders[ i ].Value;
 			}

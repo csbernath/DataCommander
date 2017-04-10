@@ -25,7 +25,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
-            ITreeNode[] treeNodes = new ITreeNode[]
+            var treeNodes = new ITreeNode[]
         {
           new TableCollectionNode(this),
           new ViewCollectionNode(this),

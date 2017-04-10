@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation
 {
     using System;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -17,7 +16,9 @@
         /// <returns></returns>
         public static T Parse(string value)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentException>(typeof (T).IsEnum);
+#endif
 
             var type = typeof (T);
             var t = (T)Enum.Parse(type, value);
@@ -31,7 +32,9 @@
         /// <returns></returns>
         public static T? ToNullableEnum(int? source)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentException>(typeof (T).IsEnum);
+#endif
 
             T? target;
             if (source != null)

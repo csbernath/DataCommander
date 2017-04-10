@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Data;
-    using System.Diagnostics.Contracts;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
 
@@ -12,12 +11,14 @@
 
         public IndexCollectionNode(TableNode tableNode)
         {
+#if CONTRACTS_FULL
             Contract.Requires(tableNode != null);
+#endif
 
             this.tableNode = tableNode;
         }
 
-        #region ITreeNode Members
+#region ITreeNode Members
 
         string ITreeNode.Name => "Indexes";
 
@@ -37,8 +38,8 @@
             {
                 dataReader.Read(dataRecord =>
                 {
-                    string name = dataRecord.GetString(0);
-                    IndexNode indexNode = new IndexNode(this.tableNode, name);
+                    var name = dataRecord.GetString(0);
+                    var indexNode = new IndexNode(this.tableNode, name);
                     children.Add(indexNode);
                 });
             }
@@ -52,6 +53,6 @@
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-        #endregion
+#endregion
     }
 }

@@ -1,7 +1,6 @@
 namespace DataCommander.Foundation
 {
     using System;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -29,7 +28,9 @@ namespace DataCommander.Foundation
         /// <returns></returns>
         public ArgumentEqualsSelection<TArgument> IfArgumentEquals(TArgument other, Action action)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(action != null);
+#endif
 
             if (!this.selected)
             {
@@ -49,7 +50,9 @@ namespace DataCommander.Foundation
         /// <param name="action"></param>
         public void Else(Action action)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(action != null);
+#endif
 
             if (!this.selected)
             {

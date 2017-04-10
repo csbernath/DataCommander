@@ -2,7 +2,6 @@
 {
     using System;
     using System.Data;
-    using System.Diagnostics.Contracts;
     using System.Threading;
 
     internal sealed class LoggedDbCommand : IDbCommand
@@ -24,12 +23,14 @@
             EventHandler<AfterExecuteCommandEventArgs> afterExecuteCommand,
             EventHandler<AfterReadEventArgs> afterRead)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
             Contract.Requires<ArgumentNullException>(beforeExecuteCommand != null);
             Contract.Requires<ArgumentNullException>(afterExecuteCommand != null);
             Contract.Requires<ArgumentNullException>(afterRead != null);
 
             Contract.Ensures(this.command != null);
+#endif
 
             this.commandId = Interlocked.Increment(ref commandIdCounter);
             this.command = command;
@@ -38,7 +39,7 @@
             this.afterRead = afterRead;
         }
 
-        #region IDbCommand Members
+#region IDbCommand Members
 
         void IDbCommand.Cancel()
         {
@@ -254,18 +255,18 @@
             }
         }
 
-        #endregion
+#endregion
 
-        #region IDisposable Members
+#region IDisposable Members
 
         void IDisposable.Dispose()
         {
             this.command.Dispose();
         }
 
-        #endregion
+#endregion
 
-        #region Private Methods
+#region Private Methods
 
         private LoggedDbCommandInfo CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType executionType)
         {
@@ -282,6 +283,6 @@
                 this.command.Parameters.ToLogString());
         }
 
-        #endregion
+#endregion
     }
 }

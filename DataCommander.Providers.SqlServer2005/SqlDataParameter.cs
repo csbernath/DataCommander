@@ -1,8 +1,6 @@
 ﻿namespace DataCommander.Providers.SqlServer2005
 {
-    using System;
     using System.Data.SqlClient;
-    using System.Diagnostics.Contracts;
 
     internal sealed class SqlDataParameter : DataParameterBase
     {
@@ -11,7 +9,9 @@
         public SqlDataParameter(SqlParameter parameter)
             : base(parameter, parameter.Size, parameter.Precision, parameter.Scale)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(parameter != null);
+#endif
 
             this.parameter = parameter;
         }

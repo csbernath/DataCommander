@@ -1,6 +1,7 @@
 # git ignore file
 
 #Visual Studio files
+.vs/slnx.sqlite
 *.bak
 *.cache
 *.CodeAnalysisLog.xml
@@ -31,4 +32,4 @@ bin
 build.force
 obj
 packages
-.orig
+*.orig

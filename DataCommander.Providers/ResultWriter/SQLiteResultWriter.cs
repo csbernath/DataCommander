@@ -35,9 +35,9 @@
 
         void IResultWriter.AfterExecuteReader(int fieldCount)
         {
-            string fileName = Path.GetTempFileName() + ".sqlite";
+            var fileName = Path.GetTempFileName() + ".sqlite";
             this.messageWriter.WriteLine(fileName);
-            SQLiteConnectionStringBuilder sb = new SQLiteConnectionStringBuilder();
+            var sb = new SQLiteConnectionStringBuilder();
             sb.DataSource = fileName;
             sb.DateTimeFormat = SQLiteDateFormats.ISO8601;
             this.connection = new SQLiteConnection(sb.ConnectionString);
@@ -51,22 +51,22 @@
         void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
             Trace.WriteLine(schemaTable.ToStringTableString());
-            StringBuilder sb = new StringBuilder();
-            DataRowCollection schemaRows = schemaTable.Rows;
-            int schemaRowCount = schemaRows.Count;
+            var sb = new StringBuilder();
+            var schemaRows = schemaTable.Rows;
+            var schemaRowCount = schemaRows.Count;
             string insertStatement = null;
-            StringBuilder insertValues = new StringBuilder();
+            var insertValues = new StringBuilder();
             this.insertCommand = new SQLiteCommand();
-            StringTable st = new StringTable(3);
+            var st = new StringTable(3);
 
-            for (int i = 0; i < schemaRowCount; i++)
+            for (var i = 0; i < schemaRowCount; i++)
             {
                 var schemaRow = new DbColumn(schemaRows[i]);
-                StringTableRow stringTableRow = st.NewRow();
+                var stringTableRow = st.NewRow();
 
                 if (i == 0)
                 {
-                    string tableName = schemaRow.BaseTableName;
+                    var tableName = schemaRow.BaseTableName;
 
                     if (tableName != null)
                     {
@@ -87,13 +87,13 @@
                     insertValues.Append(',');
                 }
 
-                string columnName = schemaRow.ColumnName;
+                var columnName = schemaRow.ColumnName;
                 stringTableRow[1] = columnName;
                 insertStatement += columnName;
                 insertValues.Append('?');
-                int columnSize = (int)schemaRow.ColumnSize;
-                Type dataType = schemaRow.DataType;
-                TypeCode typeCode = Type.GetTypeCode(dataType);
+                var columnSize = (int)schemaRow.ColumnSize;
+                var dataType = schemaRow.DataType;
+                var typeCode = Type.GetTypeCode(dataType);
                 string typeName;
                 DbType dbType;
 
@@ -110,8 +110,8 @@
                         break;
 
                     case TypeCode.Decimal:
-                        short precision = schemaRow.NumericPrecision.Value;
-                        short scale = schemaRow.NumericPrecision.Value;
+                        var precision = schemaRow.NumericPrecision.Value;
+                        var scale = schemaRow.NumericPrecision.Value;
 
                         if (precision <= 28 && scale <= 28)
                         {
@@ -157,7 +157,7 @@
 
                 stringTableRow[2] = typeName;
                 st.Rows.Add(stringTableRow);
-                bool allowDBNull = schemaRow.AllowDBNull.Value;
+                var allowDBNull = schemaRow.AllowDBNull.Value;
 
                 if (!allowDBNull)
                 {
@@ -169,7 +169,7 @@
                     stringTableRow[2] += ',';
                 }
 
-                SQLiteParameter parameter = new SQLiteParameter(dbType);
+                var parameter = new SQLiteParameter(dbType);
                 this.insertCommand.Parameters.Add(parameter);
             }
 
@@ -177,7 +177,7 @@
             sb.Append(')');
             insertValues.Append(')');
             insertStatement += ") " + insertValues;
-            string commandText = sb.ToString();
+            var commandText = sb.ToString();
             Trace.WriteLine(commandText);
             Trace.WriteLine(insertStatement);
             var transactionScope = new DbTransactionScope(this.connection, null);
@@ -198,13 +198,13 @@
 
         void IResultWriter.WriteRows(object[][] rows, int rowCount)
         {
-            for (int i = 0; i < rowCount; i++)
+            for (var i = 0; i < rowCount; i++)
             {
-                object[] row = rows[i];
+                var row = rows[i];
 
-                for (int j = 0; j < row.Length; j++)
+                for (var j = 0; j < row.Length; j++)
                 {
-                    SQLiteParameter parameter = this.insertCommand.Parameters[j];
+                    var parameter = this.insertCommand.Parameters[j];
                     parameter.Value = row[j];
                 }
 

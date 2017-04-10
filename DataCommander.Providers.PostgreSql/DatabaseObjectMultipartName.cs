@@ -27,7 +27,7 @@ namespace DataCommander.Providers.PostgreSql
                 var parser = new IdentifierParser(new StringReader(name));
                 var parts = parser.Parse().ToArray();
 
-                int i = parts.Length - 1;
+                var i = parts.Length - 1;
                 var commandBuilder = new SqlCommandBuilder();
 
                 if (i >= 0)
@@ -66,7 +66,7 @@ namespace DataCommander.Providers.PostgreSql
 
             if (this.Name != null)
             {
-                int length = this.Name.Length;
+                var length = this.Name.Length;
 
                 if (length > 0 && this.Name[0] == '[')
                 {

@@ -34,7 +34,7 @@ order by OBJECT_NAME";
             {
                 return dataReader.Read(dataRecord =>
                 {
-                    string procedureName = dataRecord.GetString(0);
+                    var procedureName = dataRecord.GetString(0);
                     return new FunctionNode(schemaNode, null, procedureName);
                 });
             }

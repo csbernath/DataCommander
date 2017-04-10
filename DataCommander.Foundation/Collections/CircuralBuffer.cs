@@ -3,7 +3,6 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// https://en.wikipedia.org/wiki/Circular_buffer
@@ -40,7 +39,9 @@
         /// <returns></returns>
         public void AddHead(T item)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentException>(this.Count < this.Capacity);
+#endif
 
             if (this.head == -1)
             {
@@ -63,7 +64,9 @@
         /// <returns></returns>
         public void AddTail(T item)
         {
+#if CONTRACTS_FULL
             Contract.Assert(this.Count < this.array.Length);
+#endif
 
             if (this.head == -1)
             {
@@ -85,7 +88,9 @@
         /// <param name="items"></param>
         public void AddTail(IEnumerable<T> items)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(items != null);
+#endif
 
             foreach (var item in items)
             {
@@ -99,7 +104,9 @@
         /// <returns></returns>
         public T PeekHead()
         {
+#if CONTRACTS_FULL
             Contract.Requires<InvalidOperationException>(this.Count > 0);
+#endif
             return this.array[this.head];
         }
 
@@ -109,7 +116,9 @@
         /// <returns></returns>
         public T RemoveHead()
         {
+#if CONTRACTS_FULL
             Contract.Requires<InvalidOperationException>(this.Count > 0);
+#endif
 
             var item = this.array[this.head];
             this.array[this.head] = default(T);
@@ -125,7 +134,9 @@
         /// <returns></returns>
         public T PeekTail()
         {
+#if CONTRACTS_FULL
             Contract.Requires<InvalidOperationException>(this.Count > 0);
+#endif
 
             return this.array[this.tail];
         }
@@ -136,7 +147,9 @@
         /// <returns></returns>
         public T RemoveTail()
         {
+#if CONTRACTS_FULL
             Contract.Requires<InvalidOperationException>(this.Count > 0);
+#endif
 
             var item = this.array[this.tail];
             this.array[this.tail] = default(T);
@@ -151,7 +164,9 @@
         /// <param name="capacity"></param>
         public void SetCapacity(int capacity)
         {
+#if CONTRACTS_FULL
             Contract.Requires<InvalidOperationException>(capacity >= this.Count);
+#endif
 
             var target = new T[capacity];
             if (this.Count > 0)
@@ -179,7 +194,7 @@
             this.array = target;
         }
 
-        #region IList<T> Members
+#region IList<T> Members
 
         int IList<T>.IndexOf(T item)
         {
@@ -216,9 +231,9 @@
             }
         }
 
-        #endregion
+#endregion
 
-        #region ICollection<T> Members
+#region ICollection<T> Members
 
         void ICollection<T>.Add(T item)
         {
@@ -252,9 +267,9 @@
             throw new NotImplementedException();
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable<T> Members
+#region IEnumerable<T> Members
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
@@ -275,9 +290,9 @@
             }
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable Members
+#region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -285,6 +300,6 @@
             return enumerable.GetEnumerator();
         }
 
-        #endregion
+#endregion
     }
 }

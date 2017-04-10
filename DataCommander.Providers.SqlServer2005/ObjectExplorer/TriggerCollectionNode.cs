@@ -30,7 +30,7 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
             var cb = new SqlCommandBuilder();
             var tableName = new DatabaseObjectMultipartName(null, this.database.Name, this.schema, this.objectName);
             //string commandText = "select o1.name,o2.name from {0}..sysobjects o1 left join {0}..sysobjects o2 on o1.parent_obj = o2.id where o1.type = 'TR' and o2.name = '{1}'";
-            string commandText = string.Format(@"select  tr.name
+            var commandText = string.Format(@"select  tr.name
 from    {0}.sys.schemas s
 join    {0}.sys.objects o
 on      s.schema_id = o.schema_id
@@ -43,7 +43,7 @@ order by 1",
                 tableName.Schema.ToTSqlNVarChar(),
                 tableName.Name.ToTSqlNVarChar());
 
-            string connectionString = this.database.Databases.Server.ConnectionString;
+            var connectionString = this.database.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -52,7 +52,7 @@ order by 1",
                 {
                     return dataReader.Read(dataRecord =>
                     {
-                        string name = dataRecord.GetString(0);
+                        var name = dataRecord.GetString(0);
                         return new TriggerNode(this.database, this.schema, this.objectName, name);
                     }).ToList();
                 }

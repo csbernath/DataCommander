@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -18,9 +17,11 @@
         /// <param name="action"></param>
         public static void ForEach<T>(T rootNode, Func<T, IEnumerable<T>> getChildNodes, Action<T> action)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(rootNode != null);
             Contract.Requires<ArgumentNullException>(getChildNodes != null);
             Contract.Requires<ArgumentNullException>(action != null);
+#endif
 
             action(rootNode);
 
@@ -40,9 +41,11 @@
         /// <returns></returns>
         public static T FirstOrDefault<T>(T rootNode, Func<T, IEnumerable<T>> getChildNodes, Func<T, bool> predicate) where T : class
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(rootNode != null);
             Contract.Requires<ArgumentNullException>(getChildNodes != null);
             Contract.Requires<ArgumentNullException>(predicate != null);
+#endif
 
             T firstOrDefault = null;
 

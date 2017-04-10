@@ -1,8 +1,6 @@
 namespace DataCommander.Foundation.Text
 {
-    using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Text;
 
@@ -17,7 +15,9 @@ namespace DataCommander.Foundation.Text
         /// <param name="columnCount"></param>
         public StringTable(int columnCount)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentOutOfRangeException>(columnCount >= 0);
+#endif
 
             for (var i = 0; i < columnCount; i++)
             {
@@ -114,7 +114,9 @@ namespace DataCommander.Foundation.Text
         /// <returns></returns>
         public string ToString(IReadOnlyList<int> columnWidths, string columnSeparator)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(columnWidths != null);
+#endif
 
             var stringBuilder = new StringBuilder();
             var first = true;
@@ -142,9 +144,11 @@ namespace DataCommander.Foundation.Text
             string columnSeparator,
             StringBuilder stringBuilder)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(row != null);
             Contract.Requires<ArgumentNullException>(columnWidths != null);
             Contract.Requires<ArgumentNullException>(stringBuilder != null);
+#endif
 
             var count = this.Columns.Count;
 

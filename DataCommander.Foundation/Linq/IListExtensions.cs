@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using DataCommander.Foundation.Collections;
 
     /// <summary>
@@ -19,7 +18,9 @@
         /// <returns></returns>
         public static int IndexOf<T>(this IList<T> source, Func<T, bool> predicate)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(source != null);
+#endif
 
             const int minIndex = 0;
             var maxIndex = source.Count - 1;
@@ -35,7 +36,9 @@
         /// <returns></returns>
         public static int LastIndexOf<T>(this IList<T> source, Func<T, bool> predicate)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(source != null);
+#endif
 
             const int minIndex = 0;
             var maxIndex = source.Count - 1;
@@ -50,8 +53,10 @@
         /// <returns></returns>
         public static T Last<T>(this IList<T> source)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(source != null);
             Contract.Requires<ArgumentException>(source.Count > 0);
+#endif
 
             var lastIndex = source.Count - 1;
             var last = source[lastIndex];

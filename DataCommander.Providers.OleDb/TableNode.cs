@@ -24,7 +24,7 @@ namespace DataCommander.Providers.OleDb
         {
             get
             {
-                string name = this.name;
+                var name = this.name;
 
                 if (name == null)
                     name = "[No tables found]";
@@ -72,12 +72,12 @@ namespace DataCommander.Providers.OleDb
 
         void Columns_Click(object sender, EventArgs e)
         {
-            object[] restrictions = new object[] {this.schema.Catalog.Name, this.schema.Name, this.name };
-            DataTable dataTable = this.schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, restrictions);
-            DataSet dataSet = new DataSet();
+            var restrictions = new object[] {this.schema.Catalog.Name, this.schema.Name, this.name };
+            var dataTable = this.schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, restrictions);
+            var dataSet = new DataSet();
             dataSet.Tables.Add(dataTable);
 
-            QueryForm queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
             queryForm.ShowDataSet(dataSet);
         }
 
@@ -85,8 +85,8 @@ namespace DataCommander.Providers.OleDb
         {
             get
             {
-                ContextMenuStrip contextMenu = new ContextMenuStrip();
-                ToolStripMenuItem menuItem = new ToolStripMenuItem("Columns", null, this.Columns_Click);
+                var contextMenu = new ContextMenuStrip();
+                var menuItem = new ToolStripMenuItem("Columns", null, this.Columns_Click);
                 contextMenu.Items.Add(menuItem);
                 return contextMenu;
             }

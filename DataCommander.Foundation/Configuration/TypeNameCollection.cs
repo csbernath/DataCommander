@@ -32,21 +32,21 @@ namespace DataCommander.Foundation.Configuration
             collection.Indexes.Add(typeIndex);
 
             Add(TypeName.Bool, typeof (bool));
-            Add(TypeName.Char, typeof (Char));
+            Add(TypeName.Char, typeof (char));
             Add(TypeName.String, typeof (string));
             Add(TypeName.Object, typeof (object));
 
-            Add(TypeName.SByte, typeof (SByte));
-            Add(TypeName.Int16, typeof (Int16));
+            Add(TypeName.SByte, typeof (sbyte));
+            Add(TypeName.Int16, typeof (short));
             Add(TypeName.Int32, typeof (int));
             Add(TypeName.Int64, typeof (long));
             Add(TypeName.Byte, typeof (byte));
-            Add(TypeName.UInt16, typeof (UInt16));
-            Add(TypeName.UInt32, typeof (UInt32));
-            Add(TypeName.UInt64, typeof (UInt64));
+            Add(TypeName.UInt16, typeof (ushort));
+            Add(TypeName.UInt32, typeof (uint));
+            Add(TypeName.UInt64, typeof (ulong));
 
-            Add(TypeName.Single, typeof (Single));
-            Add(TypeName.Double, typeof (Double));
+            Add(TypeName.Single, typeof (float));
+            Add(TypeName.Double, typeof (double));
             Add(TypeName.Decimal, typeof (decimal));
 
             Add(TypeName.DateTime, typeof (DateTime));

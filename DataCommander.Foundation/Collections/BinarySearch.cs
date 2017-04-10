@@ -3,7 +3,6 @@
 namespace DataCommander.Foundation.Collections
 {
     using System;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -22,9 +21,11 @@ namespace DataCommander.Foundation.Collections
             int maxIndex,
             Func<int, int> compareTo)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentOutOfRangeException>(minIndex >= 0);
             Contract.Requires<ArgumentOutOfRangeException>(minIndex <= maxIndex);
             Contract.Requires<ArgumentNullException>(compareTo != null);
+#endif
 
             var result = -1;
 

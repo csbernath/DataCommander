@@ -1,7 +1,6 @@
 namespace DataCommander.Foundation.Diagnostics
 {
     using System;
-    using System.Diagnostics.Contracts;
     using System.IO;
 
     /// <summary>
@@ -35,7 +34,9 @@ namespace DataCommander.Foundation.Diagnostics
         /// <param name="textWriter"></param>
         public TextLogWriter(TextWriter textWriter)
         {
+#if CONTRACTS_FULL
             Contract.Requires(textWriter != null);
+#endif
 
             this.textWriter = textWriter;
             this.formatter = new TextLogFormatter();
@@ -47,7 +48,7 @@ namespace DataCommander.Foundation.Diagnostics
             this.textWriter.Write(s);
         }
 
-        #region ILogWriter Members
+#region ILogWriter Members
 
         void ILogWriter.Open()
         {
@@ -63,15 +64,15 @@ namespace DataCommander.Foundation.Diagnostics
             this.textWriter.Close();
         }
 
-        #endregion
+#endregion
 
-        #region IDisposable Members
+#region IDisposable Members
 
         void IDisposable.Dispose()
         {
             this.textWriter.Dispose();
         }
 
-        #endregion
+#endregion
     }
 }

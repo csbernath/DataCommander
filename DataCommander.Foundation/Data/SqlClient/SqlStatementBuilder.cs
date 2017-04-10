@@ -3,7 +3,6 @@
     using System;
     using System.Data;
     using System.Data.SqlTypes;
-    using System.Diagnostics.Contracts;
     using System.Text;
     using DataCommander.Foundation.Text;
 
@@ -172,7 +171,9 @@
             StringBuilder commandText,
             string value)
         {
+#if CONTRACTS_FULL
             Contract.Requires(commandText != null);
+#endif
             var s = value.ToTSqlNVarChar();
             commandText.Append(s);
         }
@@ -188,7 +189,9 @@
             object value,
             SqlDbType sqlDbType)
         {
+#if CONTRACTS_FULL
             Contract.Requires(commandText != null);
+#endif
 
             var s = ToString(value, sqlDbType);
             commandText.Append(s);

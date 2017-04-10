@@ -3,7 +3,6 @@ namespace DataCommander.Foundation.Data
     using System;
     using System.Data;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Linq;
 
@@ -36,8 +35,10 @@ namespace DataCommander.Foundation.Data
             IDbConnection connection,
             ISafeDbConnection safeDbConnection)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(connection != null);
             Contract.Requires<ArgumentNullException>(safeDbConnection != null);
+#endif
 
             this.Connection = connection;
             this.safeDbConnection = safeDbConnection;
@@ -177,7 +178,9 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         internal IDataReader ExecuteReader(IDbCommand command, CommandBehavior behavior)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
 
             if (this.Connection.State != ConnectionState.Open)
             {
@@ -236,7 +239,9 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         internal object ExecuteScalar(IDbCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
 
             object scalar = null;
 
@@ -312,10 +317,12 @@ namespace DataCommander.Foundation.Data
             return count;
         }
 
-        [ContractInvariantMethod]
+        //[ContractInvariantMethod]
         private void ContractInvariant()
         {
+#if CONTRACTS_FULL
             Contract.Invariant(this.Connection != null);
+#endif
         }
     }
 }

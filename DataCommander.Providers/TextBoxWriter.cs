@@ -47,7 +47,7 @@ namespace DataCommander.Providers
         /// <param name="value"></param>
         public override void WriteLine(string value)
         {
-            string line = value + Environment.NewLine;
+            var line = value + Environment.NewLine;
             this.textBox.Invoke(new AppendTextDelegate(this.AppendText), line);
         }
 

@@ -1,7 +1,5 @@
 ﻿namespace DataCommander.Foundation.Linq
 {
-    using System;
-    using System.Diagnostics.Contracts;
 #if FOUNDATION_3_5
     using DataCommander.Foundation.Collections;
 #else
@@ -23,8 +21,10 @@
         /// <returns></returns>
         public static int Take<T>(this IProducerConsumerCollection<T> collection, T[] target)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(collection != null);
             Contract.Requires<ArgumentNullException>(target != null);
+#endif
 
             var i = 0;
             while (i < target.Length)

@@ -15,11 +15,11 @@ namespace DataCommander.Providers.PostgreSql
 
         public IEnumerable<string> Parse()
         {
-            char peekChar = default(char);
+            var peekChar = default(char);
 
             while (true)
             {
-                int peek = this.textReader.Peek();
+                var peek = this.textReader.Peek();
 
                 if (peek == -1)
                 {
@@ -57,12 +57,12 @@ namespace DataCommander.Providers.PostgreSql
 
             while (true)
             {
-                int peek = this.textReader.Peek();
+                var peek = this.textReader.Peek();
 
                 if (peek == -1)
                     break;
 
-                char peekChar = (char)peek;
+                var peekChar = (char)peek;
 
                 if (peekChar == ']')
                 {
@@ -85,12 +85,12 @@ namespace DataCommander.Providers.PostgreSql
 
             while (true)
             {
-                int peek = this.textReader.Peek();
+                var peek = this.textReader.Peek();
 
                 if (peek == -1)
                     break;
 
-                char peekChar = (char)peek;
+                var peekChar = (char)peek;
 
                 if (peekChar == '.')
                 {

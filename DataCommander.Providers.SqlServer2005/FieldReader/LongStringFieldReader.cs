@@ -28,7 +28,7 @@ namespace DataCommander.Providers.SqlServer2005.FieldReader
                 }
                 else
                 {
-                    string s = this.dataRecord.GetString(this.columnOrdinal);
+                    var s = this.dataRecord.GetString(this.columnOrdinal);
                     value = new StringField(s, SqlServerProvider.ShortStringSize);
                 }
 

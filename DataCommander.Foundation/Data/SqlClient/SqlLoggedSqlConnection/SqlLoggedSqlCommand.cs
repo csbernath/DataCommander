@@ -2,7 +2,6 @@ namespace DataCommander.Foundation.Data.SqlClient
 {
     using System;
     using System.Data;
-    using System.Diagnostics.Contracts;
 
     internal sealed class SqlLoggedSqlCommand : IDbCommand
     {
@@ -13,8 +12,10 @@ namespace DataCommander.Foundation.Data.SqlClient
             SqlLoggedSqlConnection connection,
             IDbCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires(connection != null);
             Contract.Requires(command != null);
+#endif
 
             this.connection = connection;
             this.command = command;

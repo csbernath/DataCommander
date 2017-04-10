@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation.Diagnostics
 {
     using System;
-    using System.Diagnostics.Contracts;
     using DataCommander.Foundation.Configuration;
 
     /// <summary>
@@ -28,7 +27,9 @@
                 var typeName = node.Attributes["TypeName"].GetValue<string>();
                 var type = Type.GetType(typeName, true);
                 var instance = Activator.CreateInstance(type);
+#if CONTRACTS_FULL
                 Contract.Assert(instance is ILogFactory);
+#endif
                 var applicationLog = (ILogFactory)instance;
                 instance = applicationLog;
             }

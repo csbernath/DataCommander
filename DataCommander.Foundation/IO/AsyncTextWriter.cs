@@ -1,8 +1,6 @@
 namespace DataCommander.Foundation.IO
 {
-    using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Text;
     using System.Threading;
@@ -28,7 +26,9 @@ namespace DataCommander.Foundation.IO
         /// <param name="textWriter"></param>
         public AsyncTextWriter(TextWriter textWriter)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(textWriter != null);
+#endif
 
             this.textWriter = textWriter;
         }

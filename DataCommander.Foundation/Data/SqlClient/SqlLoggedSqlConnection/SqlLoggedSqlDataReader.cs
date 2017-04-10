@@ -115,12 +115,12 @@ namespace DataCommander.Foundation.Data.SqlClient
             return this.reader.GetBytes(i, fieldOffset, buffer, bufferoffset, length);
         }
 
-        public Char GetChar(int i)
+        public char GetChar(int i)
         {
             return this.reader.GetChar(i);
         }
 
-        public long GetChars(int i, long fieldoffset, Char[] buffer, int bufferoffset, int length)
+        public long GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length)
         {
             return this.reader.GetChars(i, fieldoffset, buffer, bufferoffset, length);
         }
@@ -145,7 +145,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             return this.reader.GetDecimal(i);
         }
 
-        public Double GetDouble(int i)
+        public double GetDouble(int i)
         {
             return this.reader.GetDouble(i);
         }
@@ -155,7 +155,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             return this.reader.GetFieldType(i);
         }
 
-        public Single GetFloat(int i)
+        public float GetFloat(int i)
         {
             return this.reader.GetFloat(i);
         }
@@ -165,7 +165,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             return this.reader.GetGuid(i);
         }
 
-        public Int16 GetInt16(int i)
+        public short GetInt16(int i)
         {
             return this.reader.GetInt16(i);
         }

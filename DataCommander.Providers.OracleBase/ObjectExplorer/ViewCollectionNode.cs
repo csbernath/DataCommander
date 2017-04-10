@@ -1,7 +1,6 @@
 namespace DataCommander.Providers.OracleBase
 {
     using System.Collections.Generic;
-    using System.Data;
     using System.Threading;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
@@ -21,17 +20,17 @@ namespace DataCommander.Providers.OracleBase
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
-            string commandText = "select view_name from all_views where owner = '{0}' order by view_name";
+            var commandText = "select view_name from all_views where owner = '{0}' order by view_name";
             commandText = string.Format(commandText, schemaNode.Name);
             var transactionScope = new DbTransactionScope(schemaNode.SchemasNode.Connection, null);
-            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
-            DataRowCollection dataRows = dataTable.Rows;
-            int count = dataRows.Count;
+            var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
+            var dataRows = dataTable.Rows;
+            var count = dataRows.Count;
             var treeNodes = new ITreeNode[count];
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
-                string name = (string) dataRows[i][0];
+                var name = (string) dataRows[i][0];
                 treeNodes[i] = new ViewNode(this, name);
             }
 

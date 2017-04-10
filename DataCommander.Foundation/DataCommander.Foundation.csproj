@@ -37,7 +37,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -321,6 +321,11 @@
     <Compile Include="Collections\ConcurrentQueue.cs" />
     <Compile Include="Collections\EmptyArray.cs" />
     <Compile Include="Collections\LargeObjectHeap.cs" />
+    <Compile Include="Collections\MemberComparer.cs" />
+    <Compile Include="Collections\MultipleMemberComparer.cs" />
+    <Compile Include="Collections\ObjectPool2\ObjectPool2.cs" />
+    <Compile Include="Collections\ObjectPool2\ObjectPoolExtensions.cs" />
+    <Compile Include="Collections\ObjectPool2\PooledObject.cs" />
     <Compile Include="Collections\PreOrderTreeTraversal.cs" />
     <Compile Include="Collections\SegmentedArrayBuilder.cs" />
     <Compile Include="Collections\DisposableCollection.cs" />
@@ -370,6 +375,7 @@
     <Compile Include="Collections\ReadOnlySortedList.cs" />
     <Compile Include="Collections\SegmentedCollection.cs" />
     <Compile Include="Collections\SegmentedListBuilder.cs" />
+    <Compile Include="Collections\Variant.cs" />
     <Compile Include="Configuration\ApplicationData.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -731,6 +737,7 @@
     <Compile Include="Diagnostics\NamespaceDoc.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Diagnostics\Progress.cs" />
     <Compile Include="Diagnostics\StackFrameExtensions.cs" />
     <Compile Include="Diagnostics\StackTraceExtensions.cs" />
     <Compile Include="Diagnostics\StopwatchTimeSpan.cs" />
@@ -813,6 +820,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Text\MyStringBuilder.cs" />
+    <Compile Include="Text\StringBuilderExtensions.cs" />
     <Compile Include="Text\StringHelper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -925,8 +933,6 @@
     <Compile Include="Interval.cs" />
     <Compile Include="IStorage.cs" />
     <Compile Include="Lazy.cs" />
-    <Compile Include="LeftClosedRightClosedIntervalComparer.cs" />
-    <Compile Include="LeftClosedRightOpenIntervalComparer.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="LocalTime.cs" />
     <Compile Include="NamespaceDoc.cs">

@@ -11,8 +11,8 @@ namespace DataCommander.Providers
         public BinaryField(byte[] bytes)
         {
             this.Value = bytes;
-            int length = Math.Min(bytes.Length, 16);
-            char[] chars = Hex.Encode(bytes, length, true);
+            var length = Math.Min(bytes.Length, 16);
+            var chars = Hex.Encode(bytes, length, true);
 
             var sb = new StringBuilder();
             sb.Append("0x");

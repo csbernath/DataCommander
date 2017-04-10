@@ -5,7 +5,6 @@
     using System.IO;
     using System.Reflection;
     using System.Runtime.Versioning;
-    using System.Web;
     using System.Windows.Forms;
     using DataCommander.Foundation.Diagnostics;
 
@@ -16,9 +15,9 @@
         public AboutForm()
         {
             var assembly = Assembly.GetEntryAssembly();
-            string path = assembly.Location;
-            DateTime lastWriteTime = File.GetLastWriteTime(path);
-            string dotNetFrameworkVersion = AppDomainMonitor.DotNetFrameworkVersion;
+            var path = assembly.Location;
+            var lastWriteTime = File.GetLastWriteTime(path);
+            var dotNetFrameworkVersion = AppDomainMonitor.DotNetFrameworkVersion;
             var targetFrameworkAttribute = assembly.GetCustomAttribute<TargetFrameworkAttribute>();
 
             string text =
@@ -58,12 +57,12 @@ Target Framework: {targetFrameworkAttribute.FrameworkDisplayName}
 Credits:
 </br>
 <ul style=""list-style-type:none"">
-    <li><a href=""https://www.visualstudio.com/products/visual-studio-community-vs"">Visual Studio 2015 Community Edition</a></li>                  
+    <li><a href=""https://www.visualstudio.com/vs/community/"">Visual Studio Community 2017</a></li>                  
     <li><a href=""https://www.jetbrains.com/resharper/"">JetBrains R# ReSharper</a></li>
     <li><a href=""http://epplus.codeplex.com"">EPPlus Excel generator</a></li>
     <li><a href=""https://system.data.sqlite.org"">SQLite provider</a></li>
     <li><a href=""https://www.nuget.org/packages/MySql.Data/"">MySQL provider</a></li>
-    <li><a href=""http://npgsql.projects.pgfoundry.org/"">PostgreSQL provider</a></li>    
+    <li><a href=""http://npgsql.projects.pgfoundry.org/"">PostgreSQL provider</a></li>  
 </ul>
 </div>";
 
@@ -91,17 +90,17 @@ Credits:
             else
             {
                 string url = null;
-                bool exists = false;
+                var exists = false;
 
                 if (e.Url.Scheme == "applicationdatafile")
                 {
-                    string applicationDataFileName = DataCommanderApplication.Instance.FileName;
+                    var applicationDataFileName = DataCommanderApplication.Instance.FileName;
                     exists = true;
                     url = applicationDataFileName;
                 }
                 else if (e.Url.Scheme == "logfile")
                 {
-                    string logFileName = LogFactory.Instance.FileName;
+                    var logFileName = LogFactory.Instance.FileName;
                     if (logFileName != null)
                     {
                         exists = true;

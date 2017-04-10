@@ -28,7 +28,7 @@
 				}
 				else
 				{
-					DateTime dateTime = this.dataRecord.GetDateTime(this.columnOrdinal );
+					var dateTime = this.dataRecord.GetDateTime(this.columnOrdinal );
 					value = new DateTimeField( dateTime );
 				}
 

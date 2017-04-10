@@ -38,7 +38,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         {
             get
             {
-                string query = "EXEC " + schemaNode.Name + '.';
+                var query = "EXEC " + schemaNode.Name + '.';
 
 				if (packageNode != null)
 				{
@@ -88,7 +88,7 @@ order by line";
                 }
                 else
                 {
-                    ToolStripMenuItem menuItem = new ToolStripMenuItem("Script Object", null, ScriptObject_Click);
+                    var menuItem = new ToolStripMenuItem("Script Object", null, ScriptObject_Click);
                     contextMenu = new ContextMenuStrip();
                     contextMenu.Items.Add(menuItem);
                 }

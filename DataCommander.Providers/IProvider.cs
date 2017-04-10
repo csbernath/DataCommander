@@ -4,11 +4,10 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
-    using System.Diagnostics.Contracts;
     using System.Xml;
     using DataCommander.Foundation.Data;
 
-    [ContractClass(typeof (IProviderContract))]
+    //[ContractClass(typeof (IProviderContract))]
     public interface IProvider
     {
         #region Properties

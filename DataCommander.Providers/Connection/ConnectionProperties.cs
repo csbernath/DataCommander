@@ -36,16 +36,16 @@ namespace DataCommander.Providers
                 bytes = new byte[0];
             }
 
-            byte[] protectedBytes = ProtectedData.Protect(bytes, entropy, DataProtectionScope.CurrentUser);
-            string protectedPassword = Convert.ToBase64String(protectedBytes);
+            var protectedBytes = ProtectedData.Protect(bytes, entropy, DataProtectionScope.CurrentUser);
+            var protectedPassword = Convert.ToBase64String(protectedBytes);
             return protectedPassword;
         }
 
         public static string UnprotectPassword(string protectedPassword)
         {
-            byte[] protectedBytes = Convert.FromBase64String(protectedPassword);
-            byte[] bytes = ProtectedData.Unprotect(protectedBytes, entropy, DataProtectionScope.CurrentUser);
-            string password = Encoding.UTF8.GetString(bytes);
+            var protectedBytes = Convert.FromBase64String(protectedPassword);
+            var bytes = ProtectedData.Unprotect(protectedBytes, entropy, DataProtectionScope.CurrentUser);
+            var password = Encoding.UTF8.GetString(bytes);
             return password;
         }
 
@@ -63,7 +63,7 @@ namespace DataCommander.Providers
 
         public void Load(ConfigurationNode folder)
         {
-            ConfigurationAttributeCollection attributes = folder.Attributes;
+            var attributes = folder.Attributes;
             this.ConnectionName = attributes["ConnectionName"].GetValue<string>();
             this.ProviderName = attributes["ProviderName"].GetValue<string>();
             this.ConnectionString = attributes["ConnectionString"].GetValue<string>();
@@ -100,10 +100,10 @@ namespace DataCommander.Providers
         public void LoadProtectedPassword(ConfigurationNode node)
         {
             string password;
-            bool contains = node.Attributes.TryGetAttributeValue("Password", out password);
+            var contains = node.Attributes.TryGetAttributeValue("Password", out password);
             if (contains)
             {
-                bool succeeded = false;
+                var succeeded = false;
                 try
                 {
                     password = UnprotectPassword(password);

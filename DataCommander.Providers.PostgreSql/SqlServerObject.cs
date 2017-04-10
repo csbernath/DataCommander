@@ -1,10 +1,7 @@
 namespace DataCommander.Providers.PostgreSql
 {
-    using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Linq;
-    using DataCommander.Foundation;
     using DataCommander.Foundation.Data.SqlClient;
 
     internal static class SqlServerObject
@@ -29,8 +26,10 @@ order by table_name";
 
         public static string GetObjects(string schema, IEnumerable<string> objectTypes)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());
             Contract.Requires<ArgumentException>(objectTypes != null && objectTypes.Any());
+#endif
 
             return
                 $@"declare @schema_id int
@@ -57,9 +56,11 @@ end";
             string schema,
             IEnumerable<string> objectTypes)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentException>(!database.IsNullOrWhiteSpace());
             Contract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());
             Contract.Requires<ArgumentException>(objectTypes != null && objectTypes.Any());
+#endif
 
             return string.Format(@"if exists(select * from sys.databases (nolock) where name = '{0}')
 begin

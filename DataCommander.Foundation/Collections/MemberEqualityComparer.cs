@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -30,8 +29,10 @@
         /// <param name="equalityComparer"></param>
         public MemberEqualityComparer(Func<T, T1> get, IEqualityComparer<T1> equalityComparer)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(get != null);
             Contract.Requires<ArgumentNullException>(equalityComparer != null);
+#endif
 
             this.get = get;
             this.equalityComparer = equalityComparer;

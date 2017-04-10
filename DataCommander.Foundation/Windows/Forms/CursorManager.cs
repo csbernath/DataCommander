@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation.Windows.Forms
 {
     using System;
-    using System.Diagnostics.Contracts;
     using System.Windows.Forms;
 
     /// <summary>
@@ -17,7 +16,9 @@
         /// <param name="cursor"></param>
         public CursorManager(Cursor cursor)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(cursor != null);
+#endif
 
             this.originalCursor = Cursor.Current;
             Cursor.Current = cursor;

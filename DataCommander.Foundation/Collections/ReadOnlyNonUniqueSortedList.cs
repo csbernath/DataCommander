@@ -1,10 +1,10 @@
 ﻿namespace DataCommander.Foundation.Collections
 {
+    using Linq;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Linq;
-    using Linq;
 
     /// <summary>
     /// 
@@ -35,12 +35,14 @@
             Func<TValue, TKey> keySelector,
             Comparison<TKey> comparison)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(values != null);
             Contract.Requires<ArgumentNullException>(keySelector != null);
             Contract.Requires<ArgumentNullException>(comparison != null);
             Contract.Requires<ArgumentException>(
                 values.SelectPreviousAndCurrentKey(keySelector).All(key => comparison(key.Previous, key.Current) <= 0),
                 "keys must be ordered");
+#endif
 
             this.values = values;
             this.keySelector = keySelector;
@@ -61,9 +63,9 @@
         {
         }
 
-        #endregion
+#endregion
 
-        #region Public Properties
+#region Public Properties
 
         /// <summary>
         /// 
@@ -81,7 +83,9 @@
         {
             get
             {
+#if CONTRACTS_FULL
                 Contract.Ensures(Contract.Result<IReadOnlyList<TValue>>() != null);
+#endif
 
                 IReadOnlyList<TValue> readOnlyList;
 
@@ -119,9 +123,9 @@
             }
         }
 
-        #endregion
+#endregion
 
-        #region Public Methods
+#region Public Methods
 
         /// <summary>
         /// 
@@ -134,24 +138,24 @@
             return this.IndexOf(key) >= 0;
         }
 
-        #endregion
+#endregion
 
-        #region Private Methods
+#region Private Methods
 
         private void InitializeGroups()
         {
             if (this.values.Count > 0)
             {
-                #region Create
+#region Create
 
                 var notEqualsCount = this.values.SelectPreviousAndCurrentKey(this.keySelector).Count(k => comparison(k.Previous, k.Current) != 0);
                 var smallArrayMaxLength = LargeObjectHeap.GetSmallArrayMaxLength(sizeof(int));
                 var itemCount = notEqualsCount + 1;
                 var segmentedArrayBuilder = new SegmentedArrayBuilder<int>(itemCount, smallArrayMaxLength);
 
-                #endregion
+#endregion
 
-                #region Fill
+#region Fill
 
                 segmentedArrayBuilder.Add(0);
                 var index = 0;
@@ -168,7 +172,7 @@
 
                 this.groups = segmentedArrayBuilder.ToReadOnlyList();
 
-                #endregion
+#endregion
             }
         }
 
@@ -195,6 +199,6 @@
             return index;
         }
 
-        #endregion
+#endregion
     }
 }

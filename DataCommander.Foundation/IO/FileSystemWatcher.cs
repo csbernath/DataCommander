@@ -1,6 +1,5 @@
 namespace DataCommander.Foundation.IO
 {
-    using System;
     using System.Globalization;
     using System.IO;
     using System.Text;
@@ -84,7 +83,7 @@ namespace DataCommander.Foundation.IO
                 if (this.shortFileName == null)
                 {
                     var sb = new StringBuilder(255);
-                    var i = NativeMethods.GetShortPathName(this.fullFileName, sb, (UInt32) sb.Capacity);
+                    var i = NativeMethods.GetShortPathName(this.fullFileName, sb, (uint) sb.Capacity);
 
                     if (i > 0)
                     {

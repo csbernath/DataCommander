@@ -2,7 +2,6 @@ namespace DataCommander.Foundation.Configuration
 {
     using System;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Reflection;
     using System.Runtime.CompilerServices;
@@ -177,7 +176,9 @@ namespace DataCommander.Foundation.Configuration
         /// <returns></returns>
         public static string GetAssemblyConfigFileName(Assembly assembly)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(assembly != null);
+#endif
 
             var codeBase = assembly.CodeBase;
             var uri = new Uri(codeBase);

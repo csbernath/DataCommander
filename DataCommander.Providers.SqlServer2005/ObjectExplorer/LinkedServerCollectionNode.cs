@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
-    using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Windows.Forms;
     using Foundation.Data;
@@ -12,13 +11,15 @@
     {
         public LinkedServerCollectionNode( ServerNode serverNode )
         {
+#if CONTRACTS_FULL
             Contract.Requires( serverNode != null );
+#endif
             this.Server = serverNode;
         }
 
         public ServerNode Server { get; }
 
-        #region ITreeNode Members
+#region ITreeNode Members
 
         string ITreeNode.Name => "Linked Servers";
 
@@ -41,7 +42,7 @@ order by s.name";
                 {
                     treeNodes = dataReader.Read(dataRecord =>
                     {
-                        string name = dataRecord.GetString(0);
+                        var name = dataRecord.GetString(0);
                         return (ITreeNode)new LinkedServerNode(this, name);
                     }).ToList();
                 }
@@ -56,6 +57,6 @@ order by s.name";
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-        #endregion
+#endregion
     }
 }

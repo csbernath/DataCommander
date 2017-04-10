@@ -20,14 +20,14 @@
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
         {
-            string commandText = @"select  name,schema_id
+            var commandText = @"select  name,schema_id
 from    {0}.sys.schemas
 
 select  name,schema_id
 from    {0}.sys.system_views";
             commandText = string.Format( commandText, this.database.Name );
             var treeNodes = new List<ViewNode>();
-            string connectionString = this.database.Databases.Server.ConnectionString;
+            var connectionString = this.database.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection( connectionString ))
             {
                 connection.Open();
@@ -38,16 +38,16 @@ from    {0}.sys.system_views";
 
                     dataReader.Read(dataRecord =>
                     {
-                        string name = dataRecord.GetString(0);
-                        int id = dataRecord.GetInt32(1);
+                        var name = dataRecord.GetString(0);
+                        var id = dataRecord.GetInt32(1);
                         schemas.Add(id, name);
                     });
 
                     dataReader.Read(dataRecord =>
                     {
-                        string name = dataRecord.GetString(0);
-                        int schemaId = dataRecord.GetInt32(1);
-                        string schemaName = schemas[schemaId];
+                        var name = dataRecord.GetString(0);
+                        var schemaId = dataRecord.GetInt32(1);
+                        var schemaName = schemas[schemaId];
                         var viewNode = new ViewNode(this.database, schemaName, name);
                         treeNodes.Add(viewNode);
                     });

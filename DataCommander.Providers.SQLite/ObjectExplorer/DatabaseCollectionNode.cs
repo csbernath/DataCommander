@@ -3,7 +3,6 @@ namespace DataCommander.Providers.SQLite
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SQLite;
-    using System.Diagnostics.Contracts;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
 
@@ -13,11 +12,13 @@ namespace DataCommander.Providers.SQLite
 
         public DatabaseCollectionNode(SQLiteConnection connection)
         {
+#if CONTRACTS_FULL
             Contract.Requires(connection != null);
+#endif
             this.connection = connection;
         }
 
-        #region ITreeNode Members
+#region ITreeNode Members
 
         string ITreeNode.Name => "Databases";
 
@@ -33,7 +34,7 @@ namespace DataCommander.Providers.SQLite
             {
                 dataReader.Read(dataRecord =>
                 {
-                    string name = dataRecord.GetString(1);
+                    var name = dataRecord.GetString(1);
                     var databaseNode = new DatabaseNode(this.connection, name);
                     children.Add(databaseNode);
                 });
@@ -48,6 +49,6 @@ namespace DataCommander.Providers.SQLite
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-        #endregion
+#endregion
     }
 }

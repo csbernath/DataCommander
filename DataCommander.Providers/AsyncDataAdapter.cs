@@ -4,7 +4,6 @@ namespace DataCommander.Providers
     using System.Collections.Generic;
     using System.Data;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
     using System.Threading;
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Diagnostics;
@@ -85,7 +84,7 @@ namespace DataCommander.Providers
                     }
                     else
                     {
-                        bool joined = this.thread.Join(5000);
+                        var joined = this.thread.Join(5000);
 
                         if (!joined)
                         {
@@ -105,20 +104,22 @@ namespace DataCommander.Providers
             DataTable schemaTable,
             int tableIndex)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dataReader != null);
             Contract.Requires<ArgumentNullException>(schemaTable != null);
             Contract.Requires<ArgumentOutOfRangeException>(tableIndex >= 0);
+#endif
 
             using (LogFactory.Instance.GetCurrentMethodLog())
             {
                 Exception exception = null;
-                IDataReaderHelper dataReaderHelper = this.provider.CreateDataReaderHelper(dataReader);
-                DataRowCollection schemaRows = schemaTable.Rows;
-                int count = schemaRows.Count;
+                var dataReaderHelper = this.provider.CreateDataReaderHelper(dataReader);
+                var schemaRows = schemaTable.Rows;
+                var count = schemaRows.Count;
 
                 this.resultWriter.WriteTableBegin(schemaTable);
 
-                int fieldCount = dataReader.FieldCount;
+                var fieldCount = dataReader.FieldCount;
 
                 if (fieldCount < 0)
                 {
@@ -135,8 +136,8 @@ namespace DataCommander.Providers
 
                 this.rowCount = 0;
                 i = 0;
-                bool first = true;
-                bool exitFromWhile = false;
+                var first = true;
+                var exitFromWhile = false;
                 var stopwatch = Stopwatch.StartNew();
 
                 while (!this.isCommandCanceled && !this.thread.IsStopRequested && !exitFromWhile)
@@ -149,11 +150,11 @@ namespace DataCommander.Providers
                         this.resultWriter.FirstRowReadBegin();
                         read = dataReader.Read();
 
-                        string[] dataTypeNames = new string[count];
+                        var dataTypeNames = new string[count];
 
                         if (read)
                         {
-                            for (int j = 0; j < count; j++)
+                            for (var j = 0; j < count; j++)
                             {
                                 dataTypeNames[j] = dataReader.GetDataTypeName(j);
                             }
@@ -222,7 +223,9 @@ namespace DataCommander.Providers
 
         private void Fill(AsyncDataAdapterCommand asyncDataAdapterCommand)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(asyncDataAdapterCommand != null);
+#endif
             var command = asyncDataAdapterCommand.Command;
 
             Exception exception = null;
@@ -234,15 +237,15 @@ namespace DataCommander.Providers
                 try
                 {
                     dataReader = command.ExecuteReader();
-                    int fieldCount = dataReader.FieldCount;
+                    var fieldCount = dataReader.FieldCount;
                     this.resultWriter.AfterExecuteReader(fieldCount);
-                    int tableIndex = 0;
+                    var tableIndex = 0;
 
                     while (!this.thread.IsStopRequested)
                     {
                         if (fieldCount > 0)
                         {
-                            DataTable schemaTable = dataReader.GetSchemaTable();
+                            var schemaTable = dataReader.GetSchemaTable();
                             if (schemaTable != null)
                             {
                                 log.Trace("schemaTable:\r\n{0}", schemaTable.ToStringTableString());
@@ -264,7 +267,7 @@ namespace DataCommander.Providers
                     if (dataReader != null)
                     {
                         dataReader.Close();
-                        int recordsAffected = dataReader.RecordsAffected;
+                        var recordsAffected = dataReader.RecordsAffected;
                         this.resultWriter.AfterCloseReader(recordsAffected);
                     }
                 }
@@ -294,7 +297,7 @@ namespace DataCommander.Providers
                 {
                     this.resultWriter.WriteParameters(command.Parameters);
                 }
-                long ticks = Stopwatch.GetTimestamp();
+                var ticks = Stopwatch.GetTimestamp();
                 this.endFill(this, exception);
                 ticks = Stopwatch.GetTimestamp() - ticks;
                 log.Write(LogLevel.Trace, "this.endFill( this, exception ); completed in {0} seconds.", StopwatchTimeSpan.ToString(ticks, 3));
@@ -329,6 +332,6 @@ namespace DataCommander.Providers
             }
         }
 
-        #endregion
+#endregion
     }
 }

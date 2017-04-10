@@ -2,7 +2,6 @@
 {
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -18,7 +17,9 @@
         /// <param name="item"></param>
         public void Add(ICollectionIndex<T> item)
         {
-            Contract.Assert(item != null);           
+#if CONTRACTS_FULL
+            Contract.Assert(item != null);
+#endif
 
             this.dictionary.Add(item.Name, item);
         }
@@ -35,8 +36,7 @@
         /// </summary>
         public void Clear()
         {
-#if FOUNDATION_3_5
-#else
+#if CONTRACTS_FULL
             Contract.Ensures(this.Count == 0);
 #endif
             this.dictionary.Clear();
@@ -49,8 +49,7 @@
         /// <returns></returns>
         public bool Contains(ICollectionIndex<T> item)
         {
-#if FOUNDATION_3_5
-#else
+#if CONTRACTS_FULL
             Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
 #endif
             return this.dictionary.ContainsValue(item);
@@ -109,7 +108,7 @@
             return this.dictionary.TryGetValue(name, out item);
         }
 
-        #region IEnumerable<ICollectionIndex<T>> Members
+#region IEnumerable<ICollectionIndex<T>> Members
 
         /// <summary>
         /// 
@@ -120,15 +119,15 @@
             return this.dictionary.Values.GetEnumerator();
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable Members
+#region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.dictionary.Values.GetEnumerator();
         }
 
-        #endregion
+#endregion
     }
 }

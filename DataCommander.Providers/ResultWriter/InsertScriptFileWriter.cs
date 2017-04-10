@@ -3,10 +3,8 @@
     using System;
     using System.Data;
     using System.Data.Common;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Text;
-    using DataCommander.Foundation;
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Data.SqlClient;
     using Foundation.Collections;
@@ -51,7 +49,9 @@
 
         public InsertScriptFileWriter(string tableName, TextWriter messageWriter)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(messageWriter != null);
+#endif
 
             this.tableName = tableName;
             this.messageWriter = messageWriter;
@@ -60,7 +60,7 @@
         public static string GetDataTypeName(Type dataType)
         {
             string dataTypeName;
-            TypeCode typeCode = Type.GetTypeCode(dataType);
+            var typeCode = Type.GetTypeCode(dataType);
 
             switch (typeCode)
             {
@@ -108,7 +108,7 @@
         {
             var sb = new StringBuilder();
             sb.AppendFormat("create table {0}\r\n(\r\n", schemaTable.TableName);
-            bool first = true;
+            var first = true;
 
             foreach (DataRow schemaRow in schemaTable.Rows)
             {
@@ -123,11 +123,11 @@
                     sb.Append(",\r\n");
                 }
 
-                int columnSize = dataColumnSchema.ColumnSize;
-                string columnSizeString = columnSize == int.MaxValue ? "max" : columnSize.ToString();
-                Type dataType = dataColumnSchema.DataType;
+                var columnSize = dataColumnSchema.ColumnSize;
+                var columnSizeString = columnSize == int.MaxValue ? "max" : columnSize.ToString();
+                var dataType = dataColumnSchema.DataType;
                 string dataTypeName;
-                bool contains = schemaTable.Columns.Contains("DataTypeName");
+                var contains = schemaTable.Columns.Contains("DataTypeName");
 
                 if (contains)
                 {
@@ -173,7 +173,7 @@
 
             if (value != null)
             {
-                Type type = value.GetType();
+                var type = value.GetType();
                 var fieldType = FieldTypeDictionary.Instance.GetValueOrDefault(type);
 
                 switch (fieldType)
@@ -201,7 +201,7 @@
                         break;
 
                     default:
-                        TypeCode typeCode = Type.GetTypeCode(type);
+                        var typeCode = Type.GetTypeCode(type);
 
                         switch (typeCode)
                         {
@@ -210,12 +210,12 @@
                                 break;
 
                             case TypeCode.Boolean:
-                                bool b = (bool)value;
+                                var b = (bool)value;
                                 s = b ? "1" : "0";
                                 break;
 
                             case TypeCode.Decimal:
-                                decimal d = (decimal)value;
+                                var d = (decimal)value;
                                 s = d.ToString(QueryForm.NumberFormat);
                                 break;
 
@@ -247,19 +247,19 @@
                                 break;
 
                             default:
-                                DoubleField doubleField = value as DoubleField;
+                                var doubleField = value as DoubleField;
 
                                 if (doubleField != null)
                                 {
-                                    double doubleValue = doubleField.Value;
+                                    var doubleValue = doubleField.Value;
                                     s = doubleValue.ToString(QueryForm.NumberFormat);
                                 }
                                 else
                                 {
-                                    DecimalField decimalField = value as DecimalField;
+                                    var decimalField = value as DecimalField;
                                     if (decimalField != null)
                                     {
-                                        decimal decimalValue = decimalField.DecimalValue;
+                                        var decimalValue = decimalField.DecimalValue;
                                         s = decimalValue.ToString(QueryForm.NumberFormat);
                                     }
                                     else
@@ -280,7 +280,7 @@
             return s;
         }
 
-        #region IResultWriter Members
+#region IResultWriter Members
 
         void IResultWriter.Begin(IProvider provider)
         {
@@ -301,19 +301,19 @@
         private static string GetSqlStatementPrefix(string tableName, DataTable schemaTable)
         {
             var schemaRows = schemaTable.Rows;
-            int columnCount = schemaRows.Count;
+            var columnCount = schemaRows.Count;
             var sb = new StringBuilder();
             sb.AppendFormat("insert into {0}(", tableName);
 
-            for (int columnIndex = 0; columnIndex < columnCount; columnIndex++)
+            for (var columnIndex = 0; columnIndex < columnCount; columnIndex++)
             {
                 if (columnIndex > 0)
                 {
                     sb.Append(',');
                 }
 
-                DataRow schemaRow = schemaRows[columnIndex];
-                string columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
+                var schemaRow = schemaRows[columnIndex];
+                var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
                 sb.Append(columnName);
             }
 
@@ -327,7 +327,7 @@
             this.messageWriter.WriteLine(GetCreateTableStatement(schemaTable));
             this.sqlStatementPrefix = GetSqlStatementPrefix(this.tableName, this.schemaTable);
 
-            string path = Path.GetTempFileName();
+            var path = Path.GetTempFileName();
             this.messageWriter.WriteLine("fileName: {0}", path);
             var encoding = Encoding.UTF8;
             this.streamWriter = new StreamWriter(path, false, encoding, 4096);
@@ -343,10 +343,10 @@
 
         void IResultWriter.WriteRows(object[][] rows, int rowCount)
         {
-            int fieldCount = this.schemaTable.Rows.Count;
+            var fieldCount = this.schemaTable.Rows.Count;
             var sb = new StringBuilder();
 
-            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {
                 if (this.firstRow)
                 {
@@ -357,17 +357,17 @@
                     sb.AppendLine();
                 }
 
-                object[] values = rows[rowIndex];
+                var values = rows[rowIndex];
                 sb.Append(this.sqlStatementPrefix);
 
-                for (int i = 0; i < fieldCount; i++)
+                for (var i = 0; i < fieldCount; i++)
                 {
                     if (i > 0)
                     {
                         sb.Append(',');
                     }
 
-                    string s = ToString(values[i]);
+                    var s = ToString(values[i]);
                     sb.Append(s);
                 }
 
@@ -398,6 +398,6 @@
         {
         }
 
-        #endregion
+#endregion
     }
 }

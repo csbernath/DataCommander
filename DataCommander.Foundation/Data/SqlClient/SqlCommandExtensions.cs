@@ -3,7 +3,6 @@
     using System;
     using System.Data;
     using System.Data.SqlClient;
-    using System.Diagnostics.Contracts;
     using System.Text;
 
     /// <summary>
@@ -18,7 +17,9 @@
         /// <returns></returns>
         public static string ToLogString(this SqlCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires(command != null);
+#endif
 
             var sb = new StringBuilder();
             switch (command.CommandType)

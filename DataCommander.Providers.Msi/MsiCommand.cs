@@ -2,7 +2,6 @@
 {
     using System;
     using System.Data;
-    using System.Diagnostics.Contracts;
 
     internal sealed class MsiCommand : IDbCommand
     {
@@ -14,13 +13,15 @@
 
         public MsiCommand(MsiConnection connection)
         {
+#if CONTRACTS_FULL
             Contract.Requires(connection != null);
+#endif
             this.Connection = connection;
         }
 
         public MsiConnection Connection { get; }
 
-        #region IDbCommand Members
+#region IDbCommand Members
 
         void IDbCommand.Cancel()
         {
@@ -101,14 +102,14 @@
             }
         }
 
-        #endregion
+#endregion
 
-        #region IDisposable Members
+#region IDisposable Members
 
         void IDisposable.Dispose()
         {
         }
 
-        #endregion
+#endregion
     }
 }

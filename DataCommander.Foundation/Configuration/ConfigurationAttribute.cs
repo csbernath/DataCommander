@@ -2,10 +2,8 @@ namespace DataCommander.Foundation.Configuration
 {
     using System;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.IO;
-    using System.Text;
     using System.Xml;
     using System.Xml.Serialization;
 
@@ -53,7 +51,9 @@ namespace DataCommander.Foundation.Configuration
         /// <returns></returns>
         public T GetValue<T>()
         {
+#if CONTRACTS_FULL
             Contract.Requires((this.Value == null && typeof (T).IsClass) || this.Value is T);
+#endif
 
             var value = (T)this.Value;
             return value;
@@ -132,7 +132,7 @@ namespace DataCommander.Foundation.Configuration
             }
         }
 
-        [ContractVerification(false)]
+        //[ContractVerification(false)]
         private static void Write(object attributeValue, TextWriter textWriter)
         {
             string attibuteValueString;
@@ -197,7 +197,9 @@ namespace DataCommander.Foundation.Configuration
             /// <returns></returns>        
             public static XmlElement Serialize(object obj)
             {
+#if CONTRACTS_FULL
                 Contract.Requires<ArgumentNullException>(obj != null);
+#endif
 
                 var type = obj.GetType();
                 var xmlSerializer = new XmlSerializer(type);

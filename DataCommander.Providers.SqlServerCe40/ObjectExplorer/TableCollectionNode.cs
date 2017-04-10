@@ -27,15 +27,15 @@
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText = "SELECT * FROM INFORMATION_SCHEMA.TABLES";
+            var commandText = "SELECT * FROM INFORMATION_SCHEMA.TABLES";
             var transactionScope = new DbTransactionScope(this.connection, null);
-            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
+            var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
             var nodes = new List<ITreeNode>();
 
             foreach (DataRow dataRow in dataTable.Rows)
             {
-                string tableName = (string)dataRow["TABLE_NAME"];
-                TableNode tableNode = new TableNode(tableName);
+                var tableName = (string)dataRow["TABLE_NAME"];
+                var tableNode = new TableNode(tableName);
                 nodes.Add(tableNode);
             }
 
@@ -63,8 +63,8 @@
 
         private void ShrinkDatabase(object sender, EventArgs e)
         {
-            string connectionString = this.objectExplorer.ConnectionString;
-            SqlCeEngine engine = new SqlCeEngine(connectionString);
+            var connectionString = this.objectExplorer.ConnectionString;
+            var engine = new SqlCeEngine(connectionString);
             engine.Shrink();
         }
 
@@ -76,8 +76,8 @@
             {
                 form.Cursor = Cursors.WaitCursor;
                 this.connection.Close();
-                string connectionString = this.objectExplorer.ConnectionString;
-                SqlCeEngine engine = new SqlCeEngine(connectionString);
+                var connectionString = this.objectExplorer.ConnectionString;
+                var engine = new SqlCeEngine(connectionString);
                 engine.Compact(null);
                 this.connection.Open();
             }

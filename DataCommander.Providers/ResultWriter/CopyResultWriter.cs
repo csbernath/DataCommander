@@ -98,13 +98,13 @@
             foreach (var item in items)
             {
                 var rows = item.Rows;
-                for (int rowIndex = 0; rowIndex < rows.Length; rowIndex++)
+                for (var rowIndex = 0; rowIndex < rows.Length; rowIndex++)
                 {
                     var row = rows[rowIndex];
-                    for (int columnIndex = 0; columnIndex < row.Length; columnIndex++)
+                    for (var columnIndex = 0; columnIndex < row.Length; columnIndex++)
                     {
-                        object sourceValue = row[columnIndex];
-                        Converter<object, object> converter = this.converters[columnIndex];
+                        var sourceValue = row[columnIndex];
+                        var converter = this.converters[columnIndex];
                         object destinationValue;
 
                         if (converter != null)
@@ -126,7 +126,7 @@
                             sb.AppendLine();
                         }
 
-                        string commandText = this.destinationProvider.CommandToString(this.insertCommand);
+                        var commandText = this.destinationProvider.CommandToString(this.insertCommand);
                         sb.Append(commandText);
                     }
                     else
@@ -141,7 +141,7 @@
             if (sb.Length > 0)
             {
                 var stopwatch = new Stopwatch();
-                string commandText = sb.ToString();
+                var commandText = sb.ToString();
                 try
                 {
                     var transactionScope = new DbTransactionScope(this.destinationConnection.Connection, this.insertCommand.Transaction);
@@ -179,7 +179,7 @@
                             while (true)
                             {
                                 QueueItem item;
-                                bool succeeded = this.queue.TryDequeue(out item);
+                                var succeeded = this.queue.TryDequeue(out item);
                                 if (succeeded)
                                 {
                                     items.Add(item);
@@ -242,10 +242,10 @@
 
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
             var targetRows = new object[rowCount][];
-            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {
-                object[] sourceRow = rows[rowIndex];
-                int columnCount = sourceRow.Length;
+                var sourceRow = rows[rowIndex];
+                var columnCount = sourceRow.Length;
                 var targetRow = new object[columnCount];
                 Array.Copy(sourceRow, targetRow, columnCount);
                 targetRows[rowIndex] = targetRow;

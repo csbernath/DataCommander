@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation.DocumentProperties
 {
     using System;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.IO.Packaging;
     using System.Runtime.InteropServices;
@@ -15,7 +14,9 @@
     {
         internal Document( DocumentPropertyCollection properties )
         {
+#if CONTRACTS_FULL
             Contract.Requires(properties != null);
+#endif
 
             this.Properties = properties;
         }
@@ -234,7 +235,7 @@
                 foreach (var statPropStg in propertyStorage.AsEnumerable())
                 {
                     var propSpecArray = new PROPSPEC[1];
-                    const UInt32 PRSPEC_PROPID = 1;
+                    const uint PRSPEC_PROPID = 1;
                     propSpecArray[ 0 ].ulKind = PRSPEC_PROPID;
                     propSpecArray[ 0 ].unionmember = new IntPtr( statPropStg.PROPID );
                     var propVariantArray = new PropVariant[1];

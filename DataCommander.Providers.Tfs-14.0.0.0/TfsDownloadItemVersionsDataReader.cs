@@ -5,7 +5,6 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using DataCommander.Foundation.Data;
     using Microsoft.TeamFoundation.VersionControl.Client;
@@ -21,13 +20,15 @@
 
         public TfsDownloadItemVersionsDataReader(TfsCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
             this.command = command;
         }
 
         public override DataTable GetSchemaTable()
         {
-            DataTable table = CreateSchemaTable();
+            var table = CreateSchemaTable();
             AddSchemaRowInt32( table, "ChangesetId", false );
             AddSchemaRowString( table, "Committer", false );
             AddSchemaRowDateTime( table, "CreationDate", false );
@@ -58,17 +59,17 @@
             if (this.first)
             {
                 this.first = false;
-                TfsParameterCollection parameters = this.command.Parameters;
+                var parameters = this.command.Parameters;
                 this.path = (string) parameters[ "path" ].Value;
-                VersionSpec version = VersionSpec.Latest;
-                int deletionId = 0;
-                RecursionType recursion = RecursionType.None;
-                string user = Database.GetValueOrDefault<string>( parameters[ "user" ].Value );
+                var version = VersionSpec.Latest;
+                var deletionId = 0;
+                var recursion = RecursionType.None;
+                var user = Database.GetValueOrDefault<string>( parameters[ "user" ].Value );
                 VersionSpec versionFrom = null;
                 VersionSpec versionTo = null;
-                TfsParameter parameter = parameters[ "maxCount" ];
+                var parameter = parameters[ "maxCount" ];
 
-                int maxCount = Database.GetValueOrDefault<int>( parameter.Value );
+                var maxCount = Database.GetValueOrDefault<int>( parameter.Value );
 
                 if (maxCount == 0)
                 {
@@ -76,7 +77,7 @@
                 }
 
                 const bool includeChanges = true;
-                bool slotMode = Database.GetValueOrDefault<bool>( parameters[ "slotMode" ].Value );
+                var slotMode = Database.GetValueOrDefault<bool>( parameters[ "slotMode" ].Value );
                 this.localPath = Database.GetValueOrDefault<string>( parameters[ "localPath" ].Value );
 
                 if (string.IsNullOrEmpty(this.localPath ))
@@ -87,18 +88,18 @@
                     Directory.CreateDirectory(this.localPath );
                 }
 
-                IEnumerable changesets = this.command.Connection.VersionControlServer.QueryHistory(this.path, version, deletionId, recursion, user, versionFrom, versionTo, maxCount, includeChanges, slotMode );
+                var changesets = this.command.Connection.VersionControlServer.QueryHistory(this.path, version, deletionId, recursion, user, versionFrom, versionTo, maxCount, includeChanges, slotMode );
                 this.enumerator = this.AsEnumerable( changesets ).GetEnumerator();
             }
 
-            bool moveNext = this.enumerator.MoveNext();
+            var moveNext = this.enumerator.MoveNext();
 
             if (moveNext)
             {
                 var pair = this.enumerator.Current;
-                Changeset changeset = pair.Item1;
+                var changeset = pair.Item1;
 
-                object[] values = new object[]
+                var values = new object[]
                 {
                     changeset.ChangesetId,
                     changeset.Committer,
@@ -108,22 +109,22 @@
                     null
                 };
 
-                int changeIndex = pair.Item2;
+                var changeIndex = pair.Item2;
 
                 if (changeIndex >= 0)
                 {
-                    Change change = changeset.Changes[ changeIndex ];
+                    var change = changeset.Changes[ changeIndex ];
                     values[ 4 ] = change.ChangeType;
                     values[ 5 ] = change.Item.ServerItem;
                 }
 
                 this.Values = values;
-                int changesetId = changeset.ChangesetId;
-                String changeType = String.Empty;
+                var changesetId = changeset.ChangesetId;
+                var changeType = string.Empty;
 
-                for (Int32 i = 0; i < changeset.Changes.Length; i++)
+                for (var i = 0; i < changeset.Changes.Length; i++)
                 {
-                    Change change = changeset.Changes[ i ];
+                    var change = changeset.Changes[ i ];
                     Trace.WriteLine( change.ChangeType );
                     Trace.WriteLine( change.Item.ServerItem );
                     this.path = change.Item.ServerItem;
@@ -136,13 +137,13 @@
                     changeType += change.ChangeType;
                 }
 
-                DateTime creationDate = changeset.CreationDate;
-                int deletionId = 0;
-                ChangesetVersionSpec versionSpec = new ChangesetVersionSpec( changesetId );
-                string fileName = VersionControlPath.GetFileName( this.path );
-                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension( fileName );
-                string extension = VersionControlPath.GetExtension( this.path );
-                string localFileName = this.localPath + Path.DirectorySeparatorChar + changesetId.ToString().PadLeft( 5, '0' ) + ';' + changeType + ';' + changeset.Committer.Replace( '\\', ' ' ) + extension;
+                var creationDate = changeset.CreationDate;
+                var deletionId = 0;
+                var versionSpec = new ChangesetVersionSpec( changesetId );
+                var fileName = VersionControlPath.GetFileName( this.path );
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension( fileName );
+                var extension = VersionControlPath.GetExtension( this.path );
+                var localFileName = this.localPath + Path.DirectorySeparatorChar + changesetId.ToString().PadLeft( 5, '0' ) + ';' + changeType + ';' + changeset.Committer.Replace( '\\', ' ' ) + extension;
                 this.command.Connection.VersionControlServer.DownloadFile( this.path, deletionId, versionSpec, localFileName );
                 File.SetLastWriteTime( localFileName, creationDate );
                 File.SetAttributes( localFileName, FileAttributes.ReadOnly );
@@ -165,11 +166,11 @@
         {
             foreach (Changeset changeset in changesets)
             {
-                Change[] changes = changeset.Changes;
+                var changes = changeset.Changes;
 
                 if (changes.Length > 0)
                 {
-                    for (int i = 0; i < changes.Length; i++)
+                    for (var i = 0; i < changes.Length; i++)
                     {
                         yield return Tuple.Create( changeset, i );
                     }

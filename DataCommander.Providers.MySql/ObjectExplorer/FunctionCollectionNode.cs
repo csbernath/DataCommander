@@ -36,7 +36,7 @@ order by r.ROUTINE_NAME";
                 CommandBehavior.Default,
                 dataRecord =>
                 {
-                    string name = dataRecord.GetString(0);
+                    var name = dataRecord.GetString(0);
                     return new FunctionNode(this.databaseNode, name);
                 });
         }

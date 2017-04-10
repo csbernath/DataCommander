@@ -5,7 +5,6 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Data;
     using System.Data.Common;
     using System.Data.SqlClient;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -61,7 +60,7 @@ namespace DataCommander.Providers.SqlServer2005
             {
                 if (keyWords == null)
                 {
-                    ConfigurationNode folder = Settings.CurrentType;
+                    var folder = Settings.CurrentType;
                     keyWords = folder.Attributes["TSqlKeyWords"].GetValue<string[]>();
                 }
 
@@ -129,21 +128,21 @@ namespace DataCommander.Providers.SqlServer2005
             int count;
 
             var sourceColumnNames =
-                (from sourceSchemaRow in sourceSchemaTable.AsEnumerable()
-                    select new DbColumn(sourceSchemaRow).ColumnName);
+            (from sourceSchemaRow in sourceSchemaTable.AsEnumerable()
+                select new DbColumn(sourceSchemaRow).ColumnName);
 
-            using (IDbCommand command = destinationconnection.CreateCommand())
+            using (var command = destinationconnection.CreateCommand())
             {
                 command.CommandText = $"select {string.Join(",", sourceColumnNames)} from {destinationTableName}";
                 command.CommandType = CommandType.Text;
 
-                using (IDataReader dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
+                using (var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
                 {
                     schemaTable = dataReader.GetSchemaTable();
                     count = dataReader.FieldCount;
                     dataTypeNames = new string[count];
 
-                    for (int i = 0; i < count; i++)
+                    for (var i = 0; i < count; i++)
                     {
                         dataTypeNames[i] = dataReader.GetDataTypeName(i);
                     }
@@ -154,12 +153,12 @@ namespace DataCommander.Providers.SqlServer2005
             insertInto.AppendFormat("insert into [{0}](", destinationTableName);
             var values = new StringBuilder();
             values.Append("values(");
-            DataRowCollection schemaRows = schemaTable.Rows;
+            var schemaRows = schemaTable.Rows;
             count = schemaRows.Count;
             converters = new Converter<object, object>[count];
             insertCommand = destinationconnection.CreateCommand();
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 if (i > 0)
                 {
@@ -171,9 +170,9 @@ namespace DataCommander.Providers.SqlServer2005
                 insertInto.AppendFormat("[{0}]", columnSchema.ColumnName);
                 values.AppendFormat("@p{0}", i);
 
-                int columnSize = columnSchema.ColumnSize;
-                int providerType = columnSchema.ProviderType;
-                DbType dbType = (DbType)providerType;
+                var columnSize = columnSchema.ColumnSize;
+                var providerType = columnSchema.ProviderType;
+                var dbType = (DbType)providerType;
                 var parameter = new SqlParameter();
                 parameter.ParameterName = $"@p{i}";
                 //parameter.DbType = dbType;
@@ -269,7 +268,7 @@ namespace DataCommander.Providers.SqlServer2005
             }
             catch (Exception e)
             {
-                string message = ((IProvider)this).GetExceptionMessage(e);
+                var message = ((IProvider)this).GetExceptionMessage(e);
                 log.Write(LogLevel.Error, message);
             }
 
@@ -291,11 +290,11 @@ namespace DataCommander.Providers.SqlServer2005
 
         string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
         {
-            DbColumn schemaRow = new DbColumn(sourceSchemaRow);
-            int columnSize = schemaRow.ColumnSize;
-            bool? allowDBNull = schemaRow.AllowDBNull;
-            Type dataType = schemaRow.DataType;
-            TypeCode typeCode = Type.GetTypeCode(dataType);
+            var schemaRow = new DbColumn(sourceSchemaRow);
+            var columnSize = schemaRow.ColumnSize;
+            var allowDBNull = schemaRow.AllowDBNull;
+            var dataType = schemaRow.DataType;
+            var typeCode = Type.GetTypeCode(dataType);
             string typeName;
 
             switch (typeCode)
@@ -327,27 +326,27 @@ namespace DataCommander.Providers.SqlServer2005
 
         Type IProvider.GetColumnType(DbColumn dataColumnSchema)
         {
-            SqlDbType dbType = (SqlDbType)dataColumnSchema.ProviderType;
-            int columnSize = dataColumnSchema.ColumnSize;
+            var dbType = (SqlDbType)dataColumnSchema.ProviderType;
+            var columnSize = dataColumnSchema.ColumnSize;
             Type type;
 
             switch (dbType)
             {
                 case SqlDbType.BigInt:
-                    type = typeof (long);
+                    type = typeof(long);
                     break;
 
                 case SqlDbType.Bit:
-                    type = typeof (bool);
+                    type = typeof(bool);
                     break;
 
                 case SqlDbType.DateTime:
                     //type = typeof(DateTimeField); DataTableView does not work in edit mode
-                    type = typeof (object);
+                    type = typeof(object);
                     break;
 
                 case SqlDbType.Int:
-                    type = typeof (int);
+                    type = typeof(int);
                     break;
 
                 case SqlDbType.Char:
@@ -358,22 +357,22 @@ namespace DataCommander.Providers.SqlServer2005
                 case SqlDbType.NText:
                     if (columnSize <= 8000)
                     {
-                        type = typeof (string);
+                        type = typeof(string);
                     }
                     else
                     {
                         //type = typeof(StringField);
-                        type = typeof (object);
+                        type = typeof(object);
                     }
 
                     break;
 
                 case SqlDbType.SmallInt:
-                    type = typeof (short);
+                    type = typeof(short);
                     break;
 
                 default:
-                    type = typeof (object);
+                    type = typeof(object);
                     break;
             }
 
@@ -392,18 +391,22 @@ namespace DataCommander.Providers.SqlServer2005
             };
             List<IObjectName> array = null;
             var sqlStatement = new SqlStatement(text);
-            Token[] tokens = sqlStatement.Tokens;
+            var tokens = sqlStatement.Tokens;
             Token previousToken, currentToken;
             sqlStatement.FindToken(position, out previousToken, out currentToken);
 
             if (currentToken != null)
             {
                 var parts = new IdentifierParser(new StringReader(currentToken.Value)).Parse().ToList();
-                var lastPart = parts.Count > 0 ? parts.Last() : null;
-                int lastPartLength = lastPart != null ? lastPart.Length : 0;
+                var lastPart = parts.Count > 0
+                    ? parts.Last()
+                    : null;
+                var lastPartLength = lastPart != null
+                    ? lastPart.Length
+                    : 0;
                 response.StartPosition = currentToken.EndPosition - lastPartLength + 1;
                 response.Length = lastPartLength;
-                string value = currentToken.Value;
+                var value = currentToken.Value;
                 if (value.Length > 0 && value[0] == '@')
                 {
                     if (value.IndexOf("@@") == 0)
@@ -414,10 +417,10 @@ namespace DataCommander.Providers.SqlServer2005
                     {
                         var list = new SortedList<string, object>();
 
-                        for (int i = 0; i < tokens.Length; i++)
+                        for (var i = 0; i < tokens.Length; i++)
                         {
                             var token = tokens[i];
-                            string keyWord = token.Value;
+                            var keyWord = token.Value;
 
                             if (keyWord != null && keyWord.Length >= 2 && keyWord.IndexOf(value) == 0 && keyWord != value)
                             {
@@ -461,10 +464,12 @@ namespace DataCommander.Providers.SqlServer2005
                         case SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function:
                         {
                             name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
-                            List<string> nameParts = sqlObject.Name != null
+                            var nameParts = sqlObject.Name != null
                                 ? new IdentifierParser(new StringReader(sqlObject.Name)).Parse().ToList()
                                 : null;
-                            int namePartsCount = nameParts != null ? nameParts.Count : 0;
+                            var namePartsCount = nameParts != null
+                                ? nameParts.Count
+                                : 0;
                             var statements = new List<string>();
 
                             switch (namePartsCount)
@@ -501,7 +506,9 @@ namespace DataCommander.Providers.SqlServer2005
                                     break;
                             }
 
-                            commandText = statements.Count > 0 ? string.Join("\r\n", statements) : null;
+                            commandText = statements.Count > 0
+                                ? string.Join("\r\n", statements)
+                                : null;
                         }
                             break;
 
@@ -526,7 +533,7 @@ namespace DataCommander.Providers.SqlServer2005
                                 }
                                 sb.AppendFormat("'{0}'", owners[i]);
                             }
-                            string ownersString = sb.ToString();
+                            var ownersString = sb.ToString();
                             commandText = string.Format(@"declare @schema_id int
 select  top 1 @schema_id = s.schema_id
 from    [{0}].sys.schemas s
@@ -574,9 +581,9 @@ order by 1", name.Database);
                             break;
 
                         case SqlObjectTypes.Value:
-                            string[] items = sqlObject.ParentName.Split('.');
+                            var items = sqlObject.ParentName.Split('.');
                             i = items.Length - 1;
-                            string columnName = items[i];
+                            var columnName = items[i];
                             string tableNameOrAlias = null;
                             if (i > 0)
                             {
@@ -586,16 +593,16 @@ order by 1", name.Database);
                             if (tableNameOrAlias != null)
                             {
                                 string tableName;
-                                bool contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out tableName);
+                                var contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out tableName);
                                 if (contains)
                                 {
                                     string where;
-                                    int tokenIndex = previousToken.Index + 1;
+                                    var tokenIndex = previousToken.Index + 1;
                                     if (tokenIndex < tokens.Length)
                                     {
                                         var token = tokens[tokenIndex];
-                                        string tokenValue = token.Value;
-                                        int indexofAny = tokenValue.IndexOfAny(new char[] {'\r', '\n'});
+                                        var tokenValue = token.Value;
+                                        var indexofAny = tokenValue.IndexOfAny(new char[] {'\r', '\n'});
                                         if (indexofAny >= 0)
                                         {
                                             tokenValue = tokenValue.Substring(0, indexofAny);
@@ -647,7 +654,7 @@ order by 1", name.Database);
                             {
                                 reader.Read(dataRecord =>
                                 {
-                                    int fieldCount = dataRecord.FieldCount;
+                                    var fieldCount = dataRecord.FieldCount;
 
                                     string schemaName;
                                     string objectName;
@@ -715,23 +722,23 @@ order by 1", name.Database);
             dataTable.Columns.Add("ParameterName");
             dataTable.Columns.Add("DbType");
             dataTable.Columns.Add("SqlDbType");
-            dataTable.Columns.Add("Size", typeof (int));
-            dataTable.Columns.Add("Precision", typeof (int));
-            dataTable.Columns.Add("Scale", typeof (int));
+            dataTable.Columns.Add("Size", typeof(int));
+            dataTable.Columns.Add("Precision", typeof(int));
+            dataTable.Columns.Add("Scale", typeof(int));
             dataTable.Columns.Add("Direction");
-            dataTable.Columns.Add("Value", typeof (object));
-            int index = 0;
+            dataTable.Columns.Add("Value", typeof(object));
+            var index = 0;
 
             foreach (SqlParameter p in parameters)
             {
-                DataRow row = dataTable.NewRow();
+                var row = dataTable.NewRow();
 
                 row[0] = index;
                 row[1] = p.ParameterName;
                 row[2] = p.DbType.ToString("G");
                 row[3] = p.SqlDbType.ToString().ToLower();
 
-                byte precision = p.Precision;
+                var precision = p.Precision;
                 int size;
 
                 if (precision > 0)
@@ -771,7 +778,7 @@ order by 1", name.Database);
         DataTable IProvider.GetSchemaTable(IDataReader dataReader)
         {
             DataTable table = null;
-            DataTable schemaTable = dataReader.GetSchemaTable();
+            var schemaTable = dataReader.GetSchemaTable();
 
             if (schemaTable != null)
             {
@@ -780,19 +787,19 @@ order by 1", name.Database);
 
                 table = new DataTable("SchemaTable");
                 var columns = table.Columns;
-                columns.Add(" ", typeof (int));
-                columns.Add("  ", typeof (string));
-                columns.Add("Name", typeof (string));
-                columns.Add("Size", typeof (int));
-                columns.Add("DbType", typeof (string));
-                columns.Add("DataType", typeof (Type));
-                int columnIndex = 0;
+                columns.Add(" ", typeof(int));
+                columns.Add("  ", typeof(string));
+                columns.Add("Name", typeof(string));
+                columns.Add("Size", typeof(int));
+                columns.Add("DbType", typeof(string));
+                columns.Add("DataType", typeof(Type));
+                var columnIndex = 0;
                 int? columnOrdinalAddition = null;
 
                 foreach (DataRow dataRow in schemaTable.Rows)
                 {
                     var dataColumnSchema = new DbColumn(dataRow);
-                    int columnOrdinal = dataColumnSchema.ColumnOrdinal;
+                    var columnOrdinal = dataColumnSchema.ColumnOrdinal;
 
                     if (columnOrdinalAddition == null)
                     {
@@ -806,7 +813,7 @@ order by 1", name.Database);
                         }
                     }
 
-                    string pk = string.Empty;
+                    var pk = string.Empty;
 
                     if (dataColumnSchema.IsKey == true)
                     {
@@ -823,9 +830,9 @@ order by 1", name.Database);
                         pk += "IDENTITY";
                     }
 
-                    int columnSize = dataColumnSchema.ColumnSize;
+                    var columnSize = dataColumnSchema.ColumnSize;
                     var dbType = (SqlDbType)dataColumnSchema.ProviderType;
-                    string dataTypeName = dataReader.GetDataTypeName(columnIndex);
+                    var dataTypeName = dataReader.GetDataTypeName(columnIndex);
                     var sb = new StringBuilder();
                     sb.Append(dataTypeName);
 
@@ -852,8 +859,8 @@ order by 1", name.Database);
                             break;
 
                         case SqlDbType.Decimal:
-                            short precision = dataColumnSchema.NumericPrecision.GetValueOrDefault();
-                            short scale = dataColumnSchema.NumericScale.GetValueOrDefault();
+                            var precision = dataColumnSchema.NumericPrecision.GetValueOrDefault();
+                            var scale = dataColumnSchema.NumericScale.GetValueOrDefault();
 
                             if (scale == 0)
                                 sb.AppendFormat("({0})", precision);
@@ -874,7 +881,7 @@ order by 1", name.Database);
                             break;
                     }
 
-                    bool allowDBNull = dataColumnSchema.AllowDBNull.GetValueOrDefault();
+                    var allowDBNull = dataColumnSchema.AllowDBNull.GetValueOrDefault();
                     if (!allowDBNull)
                     {
                         sb.Append(" not null");
@@ -905,9 +912,9 @@ order by 1", name.Database);
 
             foreach (var statementTokens in tokens.Split(token => IsBatchSeparator(commandText, token)).Where(statementTokens => statementTokens.Length > 0))
             {
-                int startIndex = statementTokens[0].StartPosition;
-                int endIndex = statementTokens.Last().EndPosition;
-                int length = endIndex - startIndex + 1;
+                var startIndex = statementTokens[0].StartPosition;
+                var endIndex = statementTokens.Last().EndPosition;
+                var length = endIndex - startIndex + 1;
                 var statement = new Statement
                 {
                     LineIndex = statementTokens[0].LineIndex,
@@ -924,13 +931,13 @@ order by 1", name.Database);
             var sqlCommandBuilder = new SqlCommandBuilder();
 
             var fourPartName = new DatabaseObjectMultipartName(connection.Database, tableName);
-            string owner = fourPartName.Schema;
+            var owner = fourPartName.Schema;
             if (owner == null)
             {
                 owner = "dbo";
             }
 
-            string commandText = string.Format(@"declare @id int
+            var commandText = string.Format(@"declare @id int
 
 select  @id = o.object_id
 from    {0}.sys.objects o
@@ -990,13 +997,13 @@ order by ic.index_column_id
             log.Write(LogLevel.Trace, commandText);
 
             var transactionScope = new DbTransactionScope(connection, null);
-            DataSet dataSet = transactionScope.ExecuteDataSet(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+            var dataSet = transactionScope.ExecuteDataSet(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
             return dataSet;
         }
 
         List<InfoMessage> IProvider.ToInfoMessages(Exception exception)
         {
-            DateTime now = LocalTime.Default.Now;
+            var now = LocalTime.Default.Now;
             List<InfoMessage> infoMessages;
             var sqlException = exception as SqlException;
             if (sqlException != null)
@@ -1005,7 +1012,7 @@ order by ic.index_column_id
             }
             else
             {
-                string message = exception.ToLogString();
+                var message = exception.ToLogString();
                 var infoMessage = new InfoMessage(now, InfoMessageSeverity.Error, message);
                 infoMessages = new List<InfoMessage>
                 {
@@ -1022,15 +1029,19 @@ order by ic.index_column_id
 
         internal static List<InfoMessage> ToInfoMessages(SqlErrorCollection sqlErrors)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(sqlErrors != null);
-            DateTime now = LocalTime.Default.Now;
-            int count = sqlErrors.Count;
+#endif
+            var now = LocalTime.Default.Now;
+            var count = sqlErrors.Count;
             var messages = new List<InfoMessage>(sqlErrors.Count);
 
             foreach (SqlError sqlError in sqlErrors)
             {
-                var severity = sqlError.Class == 0 ? InfoMessageSeverity.Information : InfoMessageSeverity.Error;
-                string message = sqlError.ToLogString();
+                var severity = sqlError.Class == 0
+                    ? InfoMessageSeverity.Information
+                    : InfoMessageSeverity.Error;
+                var message = sqlError.ToLogString();
                 messages.Add(new InfoMessage(now, severity, message));
             }
 
@@ -1071,21 +1082,21 @@ order by ic.index_column_id
 
         private static bool IsBatchSeparator(string commandText, Token token)
         {
-            bool isBatchSeparator =
+            var isBatchSeparator =
                 token.Type == TokenType.KeyWord &&
                 string.Compare(token.Value, "GO", StringComparison.InvariantCultureIgnoreCase) == 0;
 
             if (isBatchSeparator)
             {
-                int lineStartIndex = commandText.LastIndexOf('\n', token.StartPosition);
+                var lineStartIndex = commandText.LastIndexOf('\n', token.StartPosition);
                 lineStartIndex++;
-                int lineEndIndex = commandText.IndexOf('\n', token.EndPosition + 1);
+                var lineEndIndex = commandText.IndexOf('\n', token.EndPosition + 1);
                 if (lineEndIndex == -1)
                 {
                     lineEndIndex = commandText.Length - 1;
                 }
-                int lineLength = lineEndIndex - lineStartIndex + 1;
-                string line = commandText.Substring(lineStartIndex, lineLength);
+                var lineLength = lineEndIndex - lineStartIndex + 1;
+                var line = commandText.Substring(lineStartIndex, lineLength);
                 line = line.Trim();
                 isBatchSeparator = string.Compare(line, "GO", StringComparison.InvariantCultureIgnoreCase) == 0;
             }

@@ -1,7 +1,6 @@
 namespace DataCommander.Foundation.Collections
 {
     using System;
-    using System.Diagnostics.Contracts;
     using System.Threading;
 
     /// <summary>
@@ -18,7 +17,9 @@ namespace DataCommander.Foundation.Collections
         /// <param name="pool"></param>
         public PooledObject(ObjectPool<T> pool)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(pool != null);
+#endif
 
             this.pool = pool;
             this.item = pool.CreateObject(CancellationToken.None);

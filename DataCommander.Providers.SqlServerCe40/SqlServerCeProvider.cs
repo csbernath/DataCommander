@@ -82,7 +82,7 @@
 
         IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
         {
-            SqlCeDataReader sqlCeDataReader = (SqlCeDataReader)dataReader;
+            var sqlCeDataReader = (SqlCeDataReader)dataReader;
             return new SqlCeDataReaderHelper(sqlCeDataReader);
         }
 
@@ -98,18 +98,18 @@
             var response = new GetCompletionResponse();
             string[] array = null;
             var sqlStatement = new SqlStatement(text);
-            Token[] tokens = sqlStatement.Tokens;
-            int index = sqlStatement.FindToken(position);
+            var tokens = sqlStatement.Tokens;
+            var index = sqlStatement.FindToken(position);
 
             if (index >= 0 && index < tokens.Length)
             {
-                Token token = sqlStatement.Tokens[index];
-                string value = token.Value;
+                var token = sqlStatement.Tokens[index];
+                var value = token.Value;
             }
 
             if (array == null)
             {
-                SqlObject sqlObject = sqlStatement.FindSqlObject(index);
+                var sqlObject = sqlStatement.FindSqlObject(index);
                 string commandText = null;
 
                 if (sqlObject != null)
@@ -137,9 +137,9 @@ ORDER BY ORDINAL_POSITION";
                             break;
 
                         case SqlObjectTypes.Value:
-                            string[] items = sqlObject.ParentName.Split('.');
-                            int i = items.Length - 1;
-                            string columnName = items[i];
+                            var items = sqlObject.ParentName.Split('.');
+                            var i = items.Length - 1;
+                            var columnName = items[i];
                             string tableNameOrAlias = null;
                             if (i > 0)
                             {
@@ -149,7 +149,7 @@ ORDER BY ORDINAL_POSITION";
                             if (tableNameOrAlias != null)
                             {
                                 string tableName;
-                                bool contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out tableName);
+                                var contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out tableName);
                                 if (contains)
                                 {
                                     commandText = $"select distinct top 10 {columnName} from {tableName} (nolock) order by 1";
@@ -206,10 +206,10 @@ ORDER BY ORDINAL_POSITION";
         string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
         {
             var schemaRow = new DbColumn(sourceSchemaRow);
-            int columnSize = schemaRow.ColumnSize;
-            bool? allowDBNull = schemaRow.AllowDBNull;
-            Type dataType = schemaRow.DataType;
-            TypeCode typeCode = Type.GetTypeCode(dataType);
+            var columnSize = schemaRow.ColumnSize;
+            var allowDBNull = schemaRow.AllowDBNull;
+            var dataType = schemaRow.DataType;
+            var typeCode = Type.GetTypeCode(dataType);
             string typeName;
 
             switch (typeCode)
@@ -227,8 +227,8 @@ ORDER BY ORDINAL_POSITION";
                     break;
 
                 case TypeCode.Decimal:
-                    short precision = schemaRow.NumericPrecision.Value;
-                    short scale = schemaRow.NumericScale.Value;
+                    var precision = schemaRow.NumericPrecision.Value;
+                    var scale = schemaRow.NumericScale.Value;
 
                     if (precision > 38)
                     {
@@ -304,7 +304,7 @@ ORDER BY ORDINAL_POSITION";
 
                 case TypeCode.String:
                     bool isFixedLength;
-                    string dataTypeNameUpper = sourceDataTypeName.ToUpper();
+                    var dataTypeNameUpper = sourceDataTypeName.ToUpper();
 
                     switch (sourceDataTypeName)
                     {
@@ -360,7 +360,7 @@ ORDER BY ORDINAL_POSITION";
             }
             else
             {
-                IConvertible convertible = (IConvertible)source;
+                var convertible = (IConvertible)source;
                 target = convertible.ToString(null);
             }
             return target;
@@ -375,7 +375,7 @@ ORDER BY ORDINAL_POSITION";
             }
             else
             {
-                BinaryField binaryField = (BinaryField)source;
+                var binaryField = (BinaryField)source;
                 target = binaryField.Value;
             }
             return target;
@@ -393,34 +393,34 @@ ORDER BY ORDINAL_POSITION";
             string[] dataTypeNames;
             int count;
 
-            using (IDbCommand command = destinationconnection.CreateCommand())
+            using (var command = destinationconnection.CreateCommand())
             {
                 command.CommandText = destinationTableName;
                 command.CommandType = CommandType.TableDirect;
 
-                using (IDataReader dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
+                using (var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
                 {
                     schemaTable = dataReader.GetSchemaTable();
                     count = dataReader.FieldCount;
                     dataTypeNames = new string[count];
 
-                    for (int i = 0; i < count; i++)
+                    for (var i = 0; i < count; i++)
                     {
                         dataTypeNames[i] = dataReader.GetDataTypeName(i);
                     }
                 }
             }
 
-            StringBuilder insertInto = new StringBuilder();
+            var insertInto = new StringBuilder();
             insertInto.AppendFormat("insert into [{0}](", destinationTableName);
-            StringBuilder values = new StringBuilder();
+            var values = new StringBuilder();
             values.Append("values(");
-            DataRowCollection schemaRows = schemaTable.Rows;
+            var schemaRows = schemaTable.Rows;
             count = schemaRows.Count;
             converters = new Converter<object, object>[count];
             insertCommand = destinationconnection.CreateCommand();
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 if (i > 0)
                 {
@@ -428,11 +428,11 @@ ORDER BY ORDINAL_POSITION";
                     values.Append(',');
                 }
 
-                DbColumn columnSchema = new DbColumn(schemaRows[i]);
+                var columnSchema = new DbColumn(schemaRows[i]);
                 insertInto.AppendFormat("[{0}]", columnSchema.ColumnName);
                 values.Append('?');
 
-                int columnSize = columnSchema.ColumnSize;
+                var columnSize = columnSchema.ColumnSize;
                 var sqlCeType = (SqlCeType)schemaRows[i]["ProviderType"];
                 var parameter = new SqlCeParameter(null, sqlCeType.SqlDbType);
                 insertCommand.Parameters.Add(parameter);

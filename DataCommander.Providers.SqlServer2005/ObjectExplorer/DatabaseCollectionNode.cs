@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
-    using System.Diagnostics.Contracts;
     using System.Windows.Forms;
     using Foundation.Data;
 
@@ -11,13 +10,15 @@
     {
         public DatabaseCollectionNode(ServerNode server)
         {
+#if CONTRACTS_FULL
             Contract.Requires(server != null);
+#endif
             this.Server = server;
         }
 
         public ServerNode Server { get; }
 
-        #region ITreeNode Members
+#region ITreeNode Members
 
         string ITreeNode.Name => "Databases";
 
@@ -28,7 +29,7 @@
             var list = new List<ITreeNode>();
             list.Add(new SystemDatabaseCollectionNode(this));
 
-            string connectionString = this.Server.ConnectionString;
+            var connectionString = this.Server.ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 const string commandText = @"select d.name
@@ -43,7 +44,7 @@ order by d.name";
                 {
                     dataReader.Read(dataRecord =>
                     {
-                        string name = dataRecord.GetString(0);
+                        var name = dataRecord.GetString(0);
                         var node = new DatabaseNode(this, name);
                         list.Add(node);
                     });
@@ -59,6 +60,6 @@ order by d.name";
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-        #endregion
+#endregion
     }
 }

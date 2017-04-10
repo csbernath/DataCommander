@@ -47,21 +47,21 @@ namespace DataCommander.Foundation.Data
         [CLSCompliant( false )]
         public static void WriteSchema( _Recordset rs, TextWriter writer )
         {
-            int index = 1;
-            double d = (double) rs.Fields.Count;
+            var index = 1;
+            var d = (double) rs.Fields.Count;
             d = Math.Log10( d );
-            int colWidth = (int) d;
+            var colWidth = (int) d;
             colWidth++;
 
             foreach (Field field in rs.Fields)
             {
-                DataTypeEnum fieldType = field.Type;
+                var fieldType = field.Type;
 
-                string line =
+                var line =
                     StringHelper.FormatColumn( index.ToString(), colWidth, false ) + ". " +
                     StringHelper.FormatColumn( field.Name, 30, false );
 
-                string fileTypeStr = Enum.Format( fieldType.GetType(), field.Type, "g" );
+                var fileTypeStr = Enum.Format( fieldType.GetType(), field.Type, "g" );
 
                 switch (fieldType)
                 {
@@ -115,12 +115,12 @@ namespace DataCommander.Foundation.Data
             int maxRowCount,
             TextWriter writer )
         {
-            int recordCount = rs.RecordCount;
+            var recordCount = rs.RecordCount;
             writer.WriteLine( "RecordCount: " + recordCount );
 
             if (!rs.EOF)
             {
-                string rsStr = rs.GetString( StringFormatEnum.adClipString, maxRowCount, "\t", "\r\n", "<NULL>" );
+                var rsStr = rs.GetString( StringFormatEnum.adClipString, maxRowCount, "\t", "\r\n", "<NULL>" );
                 writer.WriteLine( rsStr );
             }
         }
@@ -132,7 +132,7 @@ namespace DataCommander.Foundation.Data
         /// <param name="writer"></param>
         public static void WriteRows( object ADODBRecordset, TextWriter writer )
         {
-            WriteRows( (Recordset) ADODBRecordset, Int32.MaxValue, writer );
+            WriteRows( (Recordset) ADODBRecordset, int.MaxValue, writer );
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace DataCommander.Foundation.Data
         {
             if (ADODBRecordset != null)
             {
-                Recordset rs = (Recordset) ADODBRecordset;
+                var rs = (Recordset) ADODBRecordset;
                 WriteSchema( rs, writer );
                 WriteRows( rs, maxRowCount, writer );
             }
@@ -165,9 +165,9 @@ namespace DataCommander.Foundation.Data
         {
             if (ADODBRecordset != null)
             {
-                Recordset rs = (Recordset) ADODBRecordset;
+                var rs = (Recordset) ADODBRecordset;
                 WriteSchema( rs, writer );
-                WriteRows( rs, Int32.MaxValue, writer );
+                WriteRows( rs, int.MaxValue, writer );
             }
         }
     }

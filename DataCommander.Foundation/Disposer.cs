@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation
 {
     using System;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -17,7 +16,9 @@
         /// <param name="dispose"></param>
         public Disposer(Action dispose)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dispose != null);
+#endif
 
             this.dispose = dispose;
         }

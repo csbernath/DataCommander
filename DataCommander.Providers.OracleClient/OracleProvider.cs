@@ -308,7 +308,7 @@ namespace DataCommander.Providers.OracleClient
             {
                 if (keyWords == null && OracleProvider.connectionString != null)
                 {
-                    string connectionString = "Provider=MSDAORA.1;" + OracleProvider.connectionString;
+                    var connectionString = "Provider=MSDAORA.1;" + OracleProvider.connectionString;
                     keyWords = ProviderFactory.GetKeyWords(connectionString);
                 }
 
@@ -357,7 +357,7 @@ namespace DataCommander.Providers.OracleClient
 
         IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
         {
-            OracleDataReader oracleDataReader = (OracleDataReader) dataReader;
+            var oracleDataReader = (OracleDataReader) dataReader;
             return new OracleDataReaderHelper(oracleDataReader);
         }
 
@@ -392,8 +392,8 @@ namespace DataCommander.Providers.OracleClient
             }
             else
             {
-                DecimalField decimalField = (DecimalField) value;
-                string stringValue = decimalField.StringValue;
+                var decimalField = (DecimalField) value;
+                var stringValue = decimalField.StringValue;
                 OracleNumber oracleNumber;
 
                 if (stringValue != null)
@@ -423,7 +423,7 @@ namespace DataCommander.Providers.OracleClient
             string[] dataTypeNames;
             int count;
 
-            using (IDbCommand command = destinationconnection.CreateCommand())
+            using (var command = destinationconnection.CreateCommand())
             {
                 command.CommandText = $"select * from {destinationTableName}";
 
@@ -432,29 +432,29 @@ namespace DataCommander.Providers.OracleClient
                 //OracleCommandBuilder b = new OracleCommandBuilder( adapter );
                 //object o = b.GetInsertCommand();
 
-                using (IDataReader dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
+                using (var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
                 {
                     schemaTable = dataReader.GetSchemaTable();
                     count = dataReader.FieldCount;
                     dataTypeNames = new string[count];
 
-                    for (int i = 0; i < count; i++)
+                    for (var i = 0; i < count; i++)
                     {
                         dataTypeNames[i] = dataReader.GetDataTypeName(i);
                     }
                 }
             }
 
-            StringBuilder insertInto = new StringBuilder();
+            var insertInto = new StringBuilder();
             insertInto.AppendFormat("insert into {0}(", destinationTableName);
-            StringBuilder values = new StringBuilder();
+            var values = new StringBuilder();
             values.Append("values(");
-            DataRowCollection schemaRows = schemaTable.Rows;
+            var schemaRows = schemaTable.Rows;
             count = schemaRows.Count;
             converters = new Converter<object, object>[count];
             insertCommand = destinationconnection.CreateCommand();
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 if (i > 0)
                 {
@@ -466,9 +466,9 @@ namespace DataCommander.Providers.OracleClient
                 insertInto.Append(column.ColumnName);
                 values.AppendFormat(":p{0}", i + 1);
 
-                int columnSize = column.ColumnSize;
+                var columnSize = column.ColumnSize;
                 var oracleType = (OracleType)column.ProviderType;
-                OracleParameter parameter = new OracleParameter($"p{i + 1}", oracleType);
+                var parameter = new OracleParameter($"p{i + 1}", oracleType);
                 insertCommand.Parameters.Add(parameter);
                 Converter<object, object> converter;
 

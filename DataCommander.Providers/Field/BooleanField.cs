@@ -1,19 +1,17 @@
 ﻿namespace DataCommander.Providers
 {
-    using System;
-
     public sealed class BooleanField
     {
 		private readonly bool value;
 
-        public BooleanField(Boolean value)
+        public BooleanField(bool value)
         {
             this.value = value;
         }
 
         public override string ToString()
         {
-            Int32 int32value;
+            int int32value;
 
             if (this.value)
             {

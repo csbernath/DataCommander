@@ -1,9 +1,6 @@
 ﻿namespace DataCommander.Providers.Tfs
 {
-    using System;
-    using System.Configuration;
     using System.Data.Common;
-    using System.Data.SqlClient;
 
     internal sealed class TfsConnectionStringBuilder : IDbConnectionStringBuilder
     {

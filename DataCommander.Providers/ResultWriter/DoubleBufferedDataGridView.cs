@@ -28,7 +28,7 @@
         protected override void OnCursorChanged( EventArgs e )
         {
             base.OnCursorChanged( e );
-            bool bDefault = this.Cursor == Cursors.Default;
+            var bDefault = this.Cursor == Cursors.Default;
             this.DoubleBuffered = bDefault;
         }
 

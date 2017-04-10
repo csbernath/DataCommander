@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Xml;
     using DataCommander.Foundation.Xml;
 
@@ -20,7 +19,9 @@
         /// <param name="xmlWriter"></param>
         public XmlSpreadsheetWriter(XmlWriter xmlWriter)
         {
+#if CONTRACTS_FULL
             Contract.Requires(xmlWriter != null);
+#endif
 
             this.XmlWriter = xmlWriter;
 
@@ -103,7 +104,9 @@
         /// <param name="table"></param>
         public void WriteStartTable(XmlSpreadsheetTable table)
         {
+#if CONTRACTS_FULL
             Contract.Requires(table != null);
+#endif
             this.tableIndex++;
             this.table = table;
             int columnIndex;
@@ -188,9 +191,7 @@
         /// <param name="values"></param>
         public void WriteRow(object[] values)
         {
-#if FONDATION_2_0 || FOUNDATION_3_5
-    // TODO
-#else
+#if CONTRACTS_FULL
             Contract.Requires(values != null);
 #endif
 

@@ -59,7 +59,7 @@ namespace DataCommander
         {
             get
             {
-                RichTextBoxFinds richTextBoxFinds = RichTextBoxFinds.None;
+                var richTextBoxFinds = RichTextBoxFinds.None;
 
                 if (this.cbMatchCase.Checked)
                 {
@@ -181,7 +181,7 @@ namespace DataCommander
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            string text = this.cbText.Text;
+            var text = this.cbText.Text;
 
             if (text.Length > 0)
             {
@@ -189,7 +189,7 @@ namespace DataCommander
                 {
                     this.Cursor = Cursors.WaitCursor;
 
-                    int i = this.cbText.FindStringExact(text);
+                    var i = this.cbText.FindStringExact(text);
 
                     if (i < 0)
                     {

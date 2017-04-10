@@ -1,9 +1,7 @@
 ﻿namespace DataCommander.Foundation.Data
 {
-    using System;
     using System.Collections.Generic;
     using System.Data;
-    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Threading;
 
@@ -19,7 +17,9 @@
         /// <returns></returns>
         public static IEnumerable<IDataReader> AsEnumerable(this IDataReader dataReader)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dataReader != null);
+#endif
 
             while (dataReader.Read())
             {
@@ -36,8 +36,10 @@
         /// <returns></returns>
         public static int Fill(this IDataReader dataReader, DataSet dataSet, CancellationToken cancellationToken)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dataReader != null);
             Contract.Requires<ArgumentNullException>(dataSet != null);
+#endif
 
             var rowCount = 0;
 
@@ -71,8 +73,10 @@
         /// <returns></returns>
         public static int Fill(this IDataReader dataReader, DataTable dataTable, CancellationToken cancellationToken)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dataReader != null);
             Contract.Requires<ArgumentNullException>(dataTable != null);
+#endif
 
             var schemaTable = dataReader.GetSchemaTable();
 

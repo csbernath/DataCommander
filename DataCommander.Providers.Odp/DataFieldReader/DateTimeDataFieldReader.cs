@@ -2,7 +2,6 @@ namespace DataCommander.Providers.Odp.DataFieldReader
 {
     using System;
     using Oracle.ManagedDataAccess.Client;
-    using Oracle.ManagedDataAccess.Types;
 
     internal sealed class DateTimeDataFieldReader : IDataFieldReader
     {
@@ -29,9 +28,9 @@ namespace DataCommander.Providers.Odp.DataFieldReader
                 }
                 else
                 {
-                    OracleDate oracleDate = this.oracleDataReader.GetOracleDate( columnOrdinal );
-                    DateTime dateTime = oracleDate.Value;
-                    DateTimeField dateTimeField = new DateTimeField( dateTime );
+                    var oracleDate = this.oracleDataReader.GetOracleDate( columnOrdinal );
+                    var dateTime = oracleDate.Value;
+                    var dateTimeField = new DateTimeField( dateTime );
                     value = dateTimeField;
 
                     //string format;

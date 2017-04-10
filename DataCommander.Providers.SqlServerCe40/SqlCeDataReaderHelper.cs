@@ -4,7 +4,6 @@
     using System.Data;
     using System.Data.Common;
     using System.Data.SqlServerCe;
-    using System.Data.SqlTypes;
     using System.Globalization;
     using Foundation.Data;
 
@@ -16,19 +15,19 @@
         public SqlCeDataReaderHelper( SqlCeDataReader dataReader )
         {
             this.dataReader = dataReader;
-            DataTable schemaTable = dataReader.GetSchemaTable();
+            var schemaTable = dataReader.GetSchemaTable();
 
             if (schemaTable != null)
             {
-                DataRowCollection schemaRows = schemaTable.Rows;
-                int count = schemaRows.Count;
+                var schemaRows = schemaTable.Rows;
+                var count = schemaRows.Count;
                 this.dataFieldReaders = new IDataFieldReader[ count ];
 
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
-                    DbColumn schemaRow = new DbColumn(schemaRows[i]);
-                    SqlCeType sqlCeType = (SqlCeType) schemaRows[ i ][ SchemaTableColumn.ProviderType ];
-                    SqlDbType sqlDbType = sqlCeType.SqlDbType;
+                    var schemaRow = new DbColumn(schemaRows[i]);
+                    var sqlCeType = (SqlCeType) schemaRows[ i ][ SchemaTableColumn.ProviderType ];
+                    var sqlDbType = sqlCeType.SqlDbType;
                     IDataFieldReader dataFieldReader;
 
                     switch (sqlDbType)
@@ -51,7 +50,7 @@
 
         int IDataReaderHelper.GetValues( object[] values )
         {
-            for (int i = 0; i < values.Length; i++)
+            for (var i = 0; i < values.Length; i++)
             {
                 values[ i ] = this.dataFieldReaders[ i ].Value;
             }
@@ -85,7 +84,7 @@
                 get
                 {
                     object value;
-                    bool isDBNull = this.dataReader.IsDBNull( this.columnOrdinal );
+                    var isDBNull = this.dataReader.IsDBNull( this.columnOrdinal );
 
                     if (isDBNull)
                     {
@@ -93,7 +92,7 @@
                     }
                     else
                     {
-                        SqlDecimal sqlDecimal = this.dataReader.GetSqlDecimal( this.columnOrdinal );
+                        var sqlDecimal = this.dataReader.GetSqlDecimal( this.columnOrdinal );
                         decimal decimalValue;
                         string decimalString;
 
@@ -109,7 +108,7 @@
                         }
 
 
-                        DecimalField decimalField = new DecimalField( numberFormatInfo, decimalValue, decimalString );
+                        var decimalField = new DecimalField( numberFormatInfo, decimalValue, decimalString );
                         value = decimalField;
                     }
 

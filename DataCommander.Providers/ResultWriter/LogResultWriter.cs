@@ -3,7 +3,7 @@
     using System;
     using System.Data;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
+    using System.Text;
     using DataCommander.Foundation;
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Diagnostics;
@@ -22,11 +22,13 @@
 
         public LogResultWriter(Action<InfoMessage> addInfoMessage)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(addInfoMessage != null);
+#endif
             this.addInfoMessage = addInfoMessage;
         }
 
-        #region IResultWriter Members
+#region IResultWriter Members
 
         void IResultWriter.Begin(IProvider provider)
         {
@@ -74,10 +76,121 @@
             this.writeTableBeginTimestamp = Stopwatch.GetTimestamp();
 
             var now = LocalTime.Default.Now;
-            this.addInfoMessage(new InfoMessage(now, InfoMessageSeverity.Verbose, $"SchemaTable of table[{this.tableCount}]:\r\n{schemaTable.ToStringTableString()}"));
+
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append("\r\npublic class ");
+            stringBuilder.Append(schemaTable.TableName);
+            stringBuilder.Append("\r\n{\r\n");
+            var first = true;
+            foreach (DataRow dataRow in schemaTable.Rows)
+            {
+                if (first)
+                    first = false;
+                else
+                    stringBuilder.AppendLine();
+
+                var dbColumn = new DbColumn(dataRow);
+
+                stringBuilder.Append("    public ");
+                stringBuilder.Append(GetCSharpTypeName(dbColumn.DataType));
+
+                if (dbColumn.AllowDBNull == true && IsValueType(dbColumn.DataType))
+                    stringBuilder.Append('?');
+
+                stringBuilder.Append(' ');
+                stringBuilder.Append(dbColumn.ColumnName);
+                stringBuilder.Append(" { get; set; }");
+            }
+            stringBuilder.Append("\r\n}");
+
+            this.addInfoMessage(new InfoMessage(now, InfoMessageSeverity.Verbose,
+                $"SchemaTable of table[{this.tableCount}]:\r\n{schemaTable.ToStringTableString()}\r\n{stringBuilder}"));
 
             this.tableCount++;
             this.rowCount = 0;
+        }
+
+        private static string GetCSharpTypeName(Type dbColumnDataType)
+        {
+            var typeCode = Type.GetTypeCode(dbColumnDataType);
+            string csharpTypeName;
+            switch (typeCode)
+            {
+                case TypeCode.Boolean:
+                    csharpTypeName = "bool";
+                    break;
+                case TypeCode.Char:
+                    csharpTypeName = "char";
+                    break;
+                case TypeCode.SByte:
+                    csharpTypeName = "byte";
+                    break;
+                case TypeCode.Byte:
+                    csharpTypeName = "byte";
+                    break;
+                case TypeCode.Int16:
+                    csharpTypeName = "shorrt";
+                    break;
+                case TypeCode.UInt16:
+                    csharpTypeName = "ushort";
+                    break;
+                case TypeCode.Int32:
+                    csharpTypeName = "int";
+                    break;
+                case TypeCode.UInt32:
+                    csharpTypeName = "uint";
+                    break;
+                case TypeCode.Int64:
+                    csharpTypeName = "long";
+                    break;
+                case TypeCode.UInt64:
+                    csharpTypeName = "ulong";
+                    break;
+                case TypeCode.Single:
+                    csharpTypeName = "float";
+                    break;
+                case TypeCode.Double:
+                    csharpTypeName = "double";
+                    break;
+                case TypeCode.Decimal:
+                    csharpTypeName = "decimal";
+                    break;
+                case TypeCode.String:
+                    csharpTypeName = "string";
+                    break;
+                default:
+                    csharpTypeName = dbColumnDataType.Name;
+                    break;
+            }
+            return csharpTypeName;
+        }
+
+        private static bool IsValueType(Type dbColumnDataType)
+        {
+            var typeCode = Type.GetTypeCode(dbColumnDataType);
+            var isValueType = false;
+
+            switch (typeCode)
+            {
+                case TypeCode.Boolean:
+                case TypeCode.Char:
+                case TypeCode.SByte:
+                case TypeCode.Byte:
+                case TypeCode.Int16:
+                case TypeCode.UInt16:
+                case TypeCode.Int32:
+                case TypeCode.UInt32:
+                case TypeCode.Int64:
+                case TypeCode.UInt64:
+                case TypeCode.Single:
+                case TypeCode.Double:
+                case TypeCode.Decimal:
+                case TypeCode.DateTime:
+                    isValueType = true;
+                    break;
+            }
+
+            return isValueType;
         }
 
         void IResultWriter.FirstRowReadBegin()
@@ -116,6 +229,6 @@
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
 
-        #endregion
+#endregion
     }
 }

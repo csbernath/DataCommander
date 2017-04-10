@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation
 {
     using System;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -30,8 +29,10 @@
 
             public UnaryFunctionComposition(Func<X, Y> func1, Func<Y, Z> func2)
             {
+#if CONTRACTS_FULL
                 Contract.Requires(func1 != null);
                 Contract.Requires(func2 != null);
+#endif
 
                 this.func1 = func1;
                 this.func2 = func2;

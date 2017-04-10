@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using System.Diagnostics.Contracts;
     using DataCommander.Foundation.Data;
     using Microsoft.TeamFoundation.VersionControl.Client;
 
@@ -32,7 +31,9 @@
 
         public TfsQueryWorkspacesDataReader(TfsCommand command)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
+#endif
             this.command = command;
         }
 
@@ -48,21 +49,21 @@
             if (this.first)
             {
                 this.first = false;
-                TfsParameterCollection parameters = this.command.Parameters;
-                string workspace = Database.GetValueOrDefault<string>(parameters["workspace"].Value);
-                string owner = Database.GetValueOrDefault<string>(parameters["owner"].Value);
-                string computer = Database.GetValueOrDefault<string>(parameters["computer"].Value);
+                var parameters = this.command.Parameters;
+                var workspace = Database.GetValueOrDefault<string>(parameters["workspace"].Value);
+                var owner = Database.GetValueOrDefault<string>(parameters["owner"].Value);
+                var computer = Database.GetValueOrDefault<string>(parameters["computer"].Value);
                 this.workspaces = this.command.Connection.VersionControlServer.QueryWorkspaces(workspace, owner, computer);
                 this.enumerator = AsEnumerable(this.workspaces).GetEnumerator();
             }
 
-            bool moveNext = this.enumerator.MoveNext();
+            var moveNext = this.enumerator.MoveNext();
 
             if (moveNext)
             {
-                Tuple<int, int> pair = this.enumerator.Current;
-                Workspace workspace = this.workspaces[pair.Item1];
-                int folderIndex = pair.Item2;
+                var pair = this.enumerator.Current;
+                var workspace = this.workspaces[pair.Item1];
+                var folderIndex = pair.Item2;
 
                 var values = new object[]
                 {
@@ -79,7 +80,7 @@
 
                 if (folderIndex >= 0)
                 {
-                    WorkingFolder folder = workspace.Folders[folderIndex];
+                    var folder = workspace.Folders[folderIndex];
                     values[5] = folder.Type.ToString();
                     values[6] = folder.IsCloaked;
                     values[7] = folder.ServerItem;
@@ -104,14 +105,14 @@
 
         private static IEnumerable<Tuple<int, int>> AsEnumerable(Workspace[] workspaces)
         {
-            for (int i = 0; i < workspaces.Length; i++)
+            for (var i = 0; i < workspaces.Length; i++)
             {
-                Workspace workspace = workspaces[i];
-                WorkingFolder[] folders = workspace.Folders;
+                var workspace = workspaces[i];
+                var folders = workspace.Folders;
 
                 if (folders.Length > 0)
                 {
-                    for (int j = 0; j < folders.Length; j++)
+                    for (var j = 0; j < folders.Length; j++)
                     {
                         yield return Tuple.Create(i, j);
                     }

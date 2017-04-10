@@ -1,8 +1,6 @@
 ﻿namespace DataCommander.Foundation.Data
 {
-    using System;
     using System.Data;
-    using System.Diagnostics.Contracts;
     using DataCommander.Foundation.Text;
 
     /// <summary>
@@ -19,9 +17,13 @@
         /// <returns></returns>
         public static T GetValue<T>(this DataRow dataRow, string name)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dataRow != null);
+#endif
             var valueObject = dataRow[name];
+#if CONTRACTS_FULL
             Contract.Assert(valueObject is T);
+#endif
 
             return (T)valueObject;
         }
@@ -39,7 +41,9 @@
             string name,
             T outputNullValue)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dataRow != null);
+#endif
             var valueObject = dataRow[name];
             return Database.GetValue(valueObject, outputNullValue);
         }
@@ -53,7 +57,9 @@
         /// <returns></returns>
         public static T GetValueOrDefault<T>(this DataRow dataRow, int columnIndex)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dataRow != null);
+#endif
             var value = dataRow[columnIndex];
             return Database.GetValueOrDefault<T>(value);
         }
@@ -67,7 +73,9 @@
         /// <returns></returns>
         public static T GetValueOrDefault<T>(this DataRow dataRow, string name)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dataRow != null);
+#endif
             var value = dataRow[name];
             return Database.GetValueOrDefault<T>(value);
         }
@@ -79,7 +87,9 @@
         /// <returns></returns>
         public static StringTable ToStringTable(this DataRow dataRow)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(dataRow != null);
+#endif
             var stringTable = new StringTable(2);
             var dataTable = dataRow.Table;
             var itemArray = dataRow.ItemArray;

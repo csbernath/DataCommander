@@ -5,7 +5,6 @@ namespace DataCommander.Foundation.Data
     using System;
     using System.Data;
     using System.Data.SqlClient;
-    using System.Diagnostics.Contracts;
     using System.Text;
     using DataCommander.Foundation.Data.SqlClient;
 
@@ -34,7 +33,9 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public static string ToLogString( this IDataParameterCollection parameters )
         {
+#if CONTRACTS_FULL
             Contract.Requires( parameters != null );
+#endif
 
             var sqlParameters = parameters as SqlParameterCollection;
             string s;

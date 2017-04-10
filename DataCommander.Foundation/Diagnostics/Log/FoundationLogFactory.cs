@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -216,14 +215,16 @@
         {
             public MultipleLog(IEnumerable<LogWriter> logWriters)
             {
+#if CONTRACTS_FULL
                 Contract.Requires<ArgumentNullException>(logWriters != null);
+#endif
 
                 this.LogWriters = logWriters.ToArray();
             }
 
             public LogWriter[] LogWriters { get; }
 
-            #region IDisposable Members
+#region IDisposable Members
 
             public void Dispose()
             {
@@ -233,7 +234,7 @@
                 }
             }
 
-            #endregion
+#endregion
 
             public void Write(LogEntry logEntry)
             {

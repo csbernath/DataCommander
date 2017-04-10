@@ -1,7 +1,6 @@
 namespace DataCommander.Foundation.Configuration
 {
     using System;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Text;
 
@@ -13,7 +12,7 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// The path delimiter in the nodeName. E.g.: Node1/Node2/Node3.
         /// </summary>
-        public const Char Delimiter = '/';
+        public const char Delimiter = '/';
 
         private int index;
 
@@ -82,7 +81,9 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="childNode"></param>
         public void AddChildNode(ConfigurationNode childNode)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentException>(childNode.Parent == null);
+#endif
 
             if (childNode.Name == null)
             {
@@ -101,7 +102,9 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="childNode"></param>
         public void InsertChildNode(int index, ConfigurationNode childNode)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentException>(childNode.Parent == null);
+#endif
 
             if (childNode.Name == null)
             {
@@ -119,8 +122,10 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="childNode"></param>
         public void RemoveChildNode(ConfigurationNode childNode)
         {
+#if CONTRACTS_FULL
             Contract.Requires(childNode != null);
             Contract.Requires(this == childNode.Parent);
+#endif
 
             this.ChildNodes.Remove(childNode);
             childNode.Parent = null;
@@ -156,7 +161,9 @@ namespace DataCommander.Foundation.Configuration
         /// <returns></returns>
         public ConfigurationNode CreateNode(string nodeName)
         {
+#if CONTRACTS_FULL
             Contract.Requires(nodeName != null);
+#endif
             var node = this;
             var nodeNames = nodeName.Split(Delimiter);
 
@@ -257,7 +264,9 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="level">Recursion level</param>
         public void WriteDocumentation(TextWriter textWriter, int level)
         {
+#if CONTRACTS_FULL
             Contract.Requires(textWriter != null);
+#endif
 
             var sb = new StringBuilder();
             var indent = new string(' ', level * 2);

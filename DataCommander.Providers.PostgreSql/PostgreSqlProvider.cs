@@ -96,7 +96,7 @@
             };
             List<IObjectName> array = null;
             var sqlStatement = new SqlStatement(text);
-            Token[] tokens = sqlStatement.Tokens;
+            var tokens = sqlStatement.Tokens;
             Token previousToken, currentToken;
             sqlStatement.FindToken(position, out previousToken, out currentToken);
 
@@ -104,10 +104,10 @@
             {
                 var parts = new IdentifierParser(new StringReader(currentToken.Value)).Parse().ToList();
                 var lastPart = parts.Count > 0 ? parts.Last() : null;
-                int lastPartLength = lastPart != null ? lastPart.Length : 0;
+                var lastPartLength = lastPart != null ? lastPart.Length : 0;
                 response.StartPosition = currentToken.EndPosition - lastPartLength + 1;
                 response.Length = lastPartLength;
-                string value = currentToken.Value;
+                var value = currentToken.Value;
                 if (value.Length > 0 && value[0] == '@')
                 {
                     if (value.IndexOf("@@") == 0)
@@ -118,10 +118,10 @@
                     {
                         var list = new SortedList<string, object>();
 
-                        for (int i = 0; i < tokens.Length; i++)
+                        for (var i = 0; i < tokens.Length; i++)
                         {
                             var token = tokens[i];
-                            string keyWord = token.Value;
+                            var keyWord = token.Value;
 
                             if (keyWord != null && keyWord.Length >= 2 && keyWord.IndexOf(value) == 0 && keyWord != value)
                             {
@@ -165,10 +165,10 @@
                         case SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function:
                         {
                             name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
-                            List<string> nameParts = sqlObject.Name != null
+                            var nameParts = sqlObject.Name != null
                                 ? new IdentifierParser(new StringReader(sqlObject.Name)).Parse().ToList()
                                 : null;
-                            int namePartsCount = nameParts != null ? nameParts.Count : 0;
+                            var namePartsCount = nameParts != null ? nameParts.Count : 0;
                             var statements = new List<string>();
 
                             switch (namePartsCount)
@@ -230,7 +230,7 @@
                                 }
                                 sb.AppendFormat("'{0}'", owners[i]);
                             }
-                            string ownersString = sb.ToString();
+                            var ownersString = sb.ToString();
                             commandText =
                                 $@"select c.column_name
 from information_schema.columns c
@@ -263,9 +263,9 @@ order by 1", name.Database);
                             break;
 
                         case SqlObjectTypes.Value:
-                            string[] items = sqlObject.ParentName.Split('.');
+                            var items = sqlObject.ParentName.Split('.');
                             i = items.Length - 1;
-                            string columnName = items[i];
+                            var columnName = items[i];
                             string tableNameOrAlias = null;
                             if (i > 0)
                             {
@@ -275,16 +275,16 @@ order by 1", name.Database);
                             if (tableNameOrAlias != null)
                             {
                                 string tableName;
-                                bool contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out tableName);
+                                var contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out tableName);
                                 if (contains)
                                 {
                                     string where;
-                                    int tokenIndex = previousToken.Index + 1;
+                                    var tokenIndex = previousToken.Index + 1;
                                     if (tokenIndex < tokens.Length)
                                     {
                                         var token = tokens[tokenIndex];
-                                        string tokenValue = token.Value;
-                                        int indexofAny = tokenValue.IndexOfAny(new char[] {'\r', '\n'});
+                                        var tokenValue = token.Value;
+                                        var indexofAny = tokenValue.IndexOfAny(new char[] {'\r', '\n'});
                                         if (indexofAny >= 0)
                                         {
                                             tokenValue = tokenValue.Substring(0, indexofAny);
@@ -336,7 +336,7 @@ order by 1", name.Database);
                             {
                                 reader.Read(dataRecord =>
                                 {
-                                    int fieldCount = dataRecord.FieldCount;
+                                    var fieldCount = dataRecord.FieldCount;
 
                                     string schemaName;
                                     string objectName;

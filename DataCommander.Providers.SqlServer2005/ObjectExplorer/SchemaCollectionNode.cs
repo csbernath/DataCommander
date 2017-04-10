@@ -21,13 +21,13 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText = @"select s.name
+            var commandText = @"select s.name
 from {0}.sys.schemas s (nolock)
 order by s.name";
 
             var sqlCommandBuilder = new SqlCommandBuilder();
             commandText = string.Format(commandText, sqlCommandBuilder.QuoteIdentifier(this.database.Name));
-            string connectionString = this.database.Databases.Server.ConnectionString;
+            var connectionString = this.database.Databases.Server.ConnectionString;
             var treeNodes = new List<ITreeNode>();
 
             using (var connection = new SqlConnection(connectionString))
@@ -38,7 +38,7 @@ order by s.name";
                 {
                     dataReader.Read(dataRecord =>
                     {
-                        string name = dataRecord.GetString(0);
+                        var name = dataRecord.GetString(0);
                         var treeNode = new SchemaNode(this.database, name);
                         treeNodes.Add(treeNode);
                     });

@@ -26,7 +26,7 @@ namespace DataCommander.Providers.Odp
         {
             get
             {
-                string[] keyWords = Settings.CurrentType.Attributes["OracleKeyWords"].GetValue<string[]>();
+                var keyWords = Settings.CurrentType.Attributes["OracleKeyWords"].GetValue<string[]>();
                 return keyWords;
             }
         }
@@ -37,7 +37,7 @@ namespace DataCommander.Providers.Odp
 
         public void DeriveParameters(IDbCommand command)
         {
-            OracleCommand oracleCommand = (OracleCommand) command;
+            var oracleCommand = (OracleCommand) command;
             OracleCommandBuilder.DeriveParameters(oracleCommand);
             //OracleCommand oracleCommand = (OracleCommand)command;
             //oracleCommand.BindByName = true;
@@ -55,13 +55,13 @@ namespace DataCommander.Providers.Odp
 
         public DataParameterBase GetDataParameter(IDataParameter parameter)
         {
-            OracleParameter oracleParameter = (OracleParameter) parameter;
+            var oracleParameter = (OracleParameter) parameter;
             return new DataParameterImp(oracleParameter);
         }
 
         public DataTable GetParameterTable(IDataParameterCollection parameters)
         {
-            DataTable dataTable = new DataTable();
+            var dataTable = new DataTable();
             dataTable.Columns.Add("Direction");
             dataTable.Columns.Add("ParameterName");
             dataTable.Columns.Add("DbType");
@@ -73,7 +73,7 @@ namespace DataCommander.Providers.Odp
 
             foreach (OracleParameter p in parameters)
             {
-                DataRow row = dataTable.NewRow();
+                var row = dataTable.NewRow();
 
                 row[0] = p.Direction.ToString();
                 row[1] = p.ParameterName;
@@ -152,8 +152,8 @@ namespace DataCommander.Providers.Odp
 
         public DataTable GetSchemaTable(IDataReader dataReader)
         {
-            DataTable table = new DataTable("SchemaTable");
-            DataColumnCollection columns = table.Columns;
+            var table = new DataTable("SchemaTable");
+            var columns = table.Columns;
             columns.Add(" ", typeof (int));
             columns.Add("  ", typeof (string));
             columns.Add("Name", typeof (string));
@@ -162,15 +162,15 @@ namespace DataCommander.Providers.Odp
             columns.Add("DataType", typeof (Type));
             columns.Add("OracleDbType", typeof (OracleDbType));
 
-            DataTable schemaTable = dataReader.GetSchemaTable();
+            var schemaTable = dataReader.GetSchemaTable();
 
-            for (int i = 0; i < schemaTable.Rows.Count; i++)
+            for (var i = 0; i < schemaTable.Rows.Count; i++)
             {
-                DataRow row = schemaTable.Rows[i];
-                int columnOrdinal = (int) row["ColumnOrdinal"] + 1;
-                bool isKey = Database.GetValueOrDefault<bool>(row["IsKey"]);
-                bool isRowID = (bool) row["IsRowID"];
-                string pk = string.Empty;
+                var row = schemaTable.Rows[i];
+                var columnOrdinal = (int) row["ColumnOrdinal"] + 1;
+                var isKey = Database.GetValueOrDefault<bool>(row["IsKey"]);
+                var isRowID = (bool) row["IsRowID"];
+                var pk = string.Empty;
 
                 if (isKey)
                 {
@@ -187,8 +187,8 @@ namespace DataCommander.Providers.Odp
                     pk += "ROWID";
                 }
 
-                OracleDbType dbType = (OracleDbType) row["ProviderType"];
-                int columnSize = (int) row["ColumnSize"];
+                var dbType = (OracleDbType) row["ProviderType"];
+                var columnSize = (int) row["ColumnSize"];
                 object columnSizeObject;
 
                 switch (dbType)
@@ -203,10 +203,10 @@ namespace DataCommander.Providers.Odp
                         break;
                 }
 
-                bool allowDBNull = (bool) row["AllowDBNull"];
+                var allowDBNull = (bool) row["AllowDBNull"];
 
-                string dataTypeName = dataReader.GetDataTypeName(i);
-                StringBuilder sb = new StringBuilder();
+                var dataTypeName = dataReader.GetDataTypeName(i);
+                var sb = new StringBuilder();
                 sb.Append(this.ToName(dbType));
 
                 switch (dbType)
@@ -222,8 +222,8 @@ namespace DataCommander.Providers.Odp
                     case OracleDbType.Int64:
                     case OracleDbType.Decimal:
                     case OracleDbType.Single:
-                        short precision = (short) row["NumericPrecision"];
-                        short scale = (short) row["NumericScale"];
+                        var precision = (short) row["NumericPrecision"];
+                        var scale = (short) row["NumericScale"];
 
                         if (precision == 38 && scale == 127)
                         {
@@ -320,9 +320,9 @@ namespace DataCommander.Providers.Odp
 
         public DbDataAdapter CreateDataAdapter(string selectCommandText, IDbConnection connection)
         {
-            OracleConnection oracleConnection = (OracleConnection) connection;
-            OracleDataAdapter dataAdapter = new OracleDataAdapter(selectCommandText, oracleConnection);
-            OracleCommandBuilder commandBuilder = new OracleCommandBuilder(dataAdapter);
+            var oracleConnection = (OracleConnection) connection;
+            var dataAdapter = new OracleDataAdapter(selectCommandText, oracleConnection);
+            var commandBuilder = new OracleCommandBuilder(dataAdapter);
 
             try
             {
@@ -357,7 +357,7 @@ namespace DataCommander.Providers.Odp
         {
             var response = new GetCompletionResponse();
             string[] items = null;
-            SqlStatement sqlStatement = new SqlStatement(text);
+            var sqlStatement = new SqlStatement(text);
             Token previousToken, currentToken;
             sqlStatement.FindToken(position, out previousToken, out currentToken);
 
@@ -375,7 +375,7 @@ namespace DataCommander.Providers.Odp
             var sqlObject = sqlStatement.FindSqlObject(previousToken, currentToken);
             string commandText = null;
             var cs = new OracleConnectionStringBuilder(connection.ConnectionString);
-            string userId = cs.UserID;
+            var userId = cs.UserID;
 
             if (sqlObject != null)
             {
@@ -385,7 +385,7 @@ namespace DataCommander.Providers.Odp
                 switch (sqlObject.Type)
                 {
                     case SqlObjectTypes.Table:
-                        OracleName oracleName = new OracleName(userId, sqlObject.Name);
+                        var oracleName = new OracleName(userId, sqlObject.Name);
                         commandText = $@"select	TABLE_NAME
 from	SYS.ALL_TABLES
 where	OWNER	= '{oracleName.Owner}'	
@@ -394,7 +394,7 @@ order by TABLE_NAME";
                         break;
 
                     case SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function:
-                        string name = sqlObject.Name;
+                        var name = sqlObject.Name;
 
                         if (name != null)
                         {
@@ -429,7 +429,7 @@ order by OBJECT_NAME";
                         break;
 
                     case SqlObjectTypes.Column:
-                        string parentName = sqlObject.ParentName;
+                        var parentName = sqlObject.ParentName;
 
                         if (parentName != null)
                         {
@@ -481,19 +481,19 @@ order by OBJECT_NAME";
 
             if (commandText != null)
             {
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
                 sb.Append(objectExplorer.SchemasNode.Connection.DataSource);
                 sb.Append('.');
                 sb.Append(sqlObject.Type);
                 sb.Append('.');
-                string parentName = sqlObject.ParentName;
+                var parentName = sqlObject.ParentName;
 
                 if (parentName != null)
                 {
                     sb.Append(parentName.ToUpper());
                 }
 
-                string name = sqlObject.Name;
+                var name = sqlObject.Name;
 
                 if (!string.IsNullOrEmpty(name))
                 {
@@ -501,21 +501,21 @@ order by OBJECT_NAME";
                     sb.Append(name.ToUpper());
                 }
 
-                string key = sb.ToString();
-                ApplicationData applicationData = DataCommanderApplication.Instance.ApplicationData;
-                string folderName = ConfigurationNodeName.FromType(typeof (OracleProvider)) + ConfigurationNode.Delimiter + "CompletionCache";
-                ConfigurationNode folder = applicationData.CreateNode(folderName);
-                bool contains = folder.Attributes.TryGetAttributeValue(key, out items);
+                var key = sb.ToString();
+                var applicationData = DataCommanderApplication.Instance.ApplicationData;
+                var folderName = ConfigurationNodeName.FromType(typeof (OracleProvider)) + ConfigurationNode.Delimiter + "CompletionCache";
+                var folder = applicationData.CreateNode(folderName);
+                var contains = folder.Attributes.TryGetAttributeValue(key, out items);
                 response.FromCache = contains;
 
                 if (!contains)
                 {
                     var transactionScope = new DbTransactionScope(connection.Connection, null);
-                    DataTable table = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
-                    int count = table.Rows.Count;
+                    var table = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
+                    var count = table.Rows.Count;
                     items = new string[count];
 
-                    for (int i = 0; i < count; i++)
+                    for (var i = 0; i < count; i++)
                     {
                         items[i] = (string) table.Rows[i][0];
                     }
@@ -607,8 +607,8 @@ order by OBJECT_NAME";
 
         public void ClearCompletionCache()
         {
-            ConfigurationNode folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
-            ConfigurationNode folder2 = folder.ChildNodes["CompletionCache"];
+            var folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
+            var folder2 = folder.ChildNodes["CompletionCache"];
 
             if (folder2 != null)
             {
@@ -620,11 +620,11 @@ order by OBJECT_NAME";
         {
             string message;
 
-            OracleException oex = e as OracleException;
+            var oex = e as OracleException;
 
             if (oex != null)
             {
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
 
                 foreach (OracleError oe in oex.Errors)
                 {
@@ -658,12 +658,12 @@ order by OBJECT_NAME";
             }
             else
             {
-                Type type = value.GetType();
-                TypeCode typeCode = Type.GetTypeCode(type);
+                var type = value.GetType();
+                var typeCode = Type.GetTypeCode(type);
 
                 if (typeCode == TypeCode.String)
                 {
-                    string s = (string) value;
+                    var s = (string) value;
 
                     //OracleGlobalization oracleGlobalization = OracleGlobalization.GetThreadInfo();
                     //oracleGlobalization.NumericCharacters = ". ";

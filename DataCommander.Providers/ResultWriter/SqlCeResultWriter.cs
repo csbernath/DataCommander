@@ -36,12 +36,12 @@
 
         void IResultWriter.AfterExecuteReader(int fieldCount)
         {
-            string fileName = Path.GetTempFileName() + ".sdf";
+            var fileName = Path.GetTempFileName() + ".sdf";
             this.messageWriter.WriteLine(fileName);
-            DbConnectionStringBuilder sb = new DbConnectionStringBuilder();
+            var sb = new DbConnectionStringBuilder();
             sb.Add("Data Source", fileName);
-            string connectionString = sb.ConnectionString;
-            SqlCeEngine sqlCeEngine = new SqlCeEngine(connectionString);
+            var connectionString = sb.ConnectionString;
+            var sqlCeEngine = new SqlCeEngine(connectionString);
             sqlCeEngine.CreateDatabase();
             this.connection = new SqlCeConnection(connectionString);
             this.connection.Open();
@@ -53,26 +53,26 @@
 
         void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
-            StringBuilder createTable = new StringBuilder();
+            var createTable = new StringBuilder();
             createTable.AppendFormat("create table [{0}]\r\n(\r\n", this.tableName);
-            StringBuilder insertInto = new StringBuilder();
+            var insertInto = new StringBuilder();
             insertInto.AppendFormat("insert into [{0}](", this.tableName);
-            StringBuilder values = new StringBuilder();
+            var values = new StringBuilder();
             values.Append("values(");
-            StringTable stringTable = new StringTable(3);
+            var stringTable = new StringTable(3);
             this.insertCommand = this.connection.CreateCommand();
-            int last = schemaTable.Rows.Count - 1;
+            var last = schemaTable.Rows.Count - 1;
 
-            for (int i = 0; i <= last; i++)
+            for (var i = 0; i <= last; i++)
             {
-                DataRow dataRow = schemaTable.Rows[i];
+                var dataRow = schemaTable.Rows[i];
                 var schemaRow = new DbColumn(dataRow);
-                string columnName = schemaRow.ColumnName;
-                int columnSize = schemaRow.ColumnSize;
-                bool? allowDBNull = schemaRow.AllowDBNull;
-                Type dataType = schemaRow.DataType;
-                string dataTypeName = "???";
-                TypeCode typeCode = Type.GetTypeCode(dataType);
+                var columnName = schemaRow.ColumnName;
+                var columnSize = schemaRow.ColumnSize;
+                var allowDBNull = schemaRow.AllowDBNull;
+                var dataType = schemaRow.DataType;
+                var dataTypeName = "???";
+                var typeCode = Type.GetTypeCode(dataType);
                 string typeName;
                 SqlDbType sqlDbType;
 
@@ -90,8 +90,8 @@
 
                     case TypeCode.Decimal:
                         sqlDbType = SqlDbType.Decimal;
-                        short precision = schemaRow.NumericPrecision.Value;
-                        short scale = schemaRow.NumericScale.Value;
+                        var precision = schemaRow.NumericPrecision.Value;
+                        var scale = schemaRow.NumericScale.Value;
 
                         if (precision > 38)
                         {
@@ -146,7 +146,7 @@
 
                     case TypeCode.String:
                         bool isFixedLength;
-                        string dataTypeNameUpper = dataTypeName.ToUpper();
+                        var dataTypeNameUpper = dataTypeName.ToUpper();
 
                         switch (dataTypeName)
                         {
@@ -188,7 +188,7 @@
                         throw new NotImplementedException();
                 }
 
-                StringTableRow row = stringTable.NewRow();
+                var row = stringTable.NewRow();
                 row[1] = columnName;
                 row[2] = typeName;
 
@@ -208,20 +208,20 @@
                 }
 
                 stringTable.Rows.Add(row);
-                SqlCeParameter parameter = new SqlCeParameter(null, sqlDbType);
+                var parameter = new SqlCeParameter(null, sqlDbType);
                 this.insertCommand.Parameters.Add(parameter);
             }
 
             createTable.AppendLine(stringTable.ToString(4));
             createTable.Append(')');
-            string commandText = createTable.ToString();
+            var commandText = createTable.ToString();
             this.messageWriter.WriteLine(commandText);
             var transactionScope = new DbTransactionScope(this.connection, null);
             transactionScope.ExecuteNonQuery(new CommandDefinition {CommandText = commandText});
             insertInto.Append(") ");
             values.Append(')');
             insertInto.Append(values);
-            string insertCommandText = insertInto.ToString();
+            var insertCommandText = insertInto.ToString();
             this.messageWriter.WriteLine(insertCommandText);
             this.insertCommand.CommandText = insertInto.ToString();
         }
@@ -236,13 +236,13 @@
 
         void IResultWriter.WriteRows(object[][] rows, int rowCount)
         {
-            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {
-                object[] row = rows[rowIndex];
+                var row = rows[rowIndex];
 
-                for (int columnIndex = 0; columnIndex < row.Length; columnIndex++)
+                for (var columnIndex = 0; columnIndex < row.Length; columnIndex++)
                 {
-                    object value = row[columnIndex];
+                    var value = row[columnIndex];
                     this.insertCommand.Parameters[columnIndex].Value = value;
                 }
 

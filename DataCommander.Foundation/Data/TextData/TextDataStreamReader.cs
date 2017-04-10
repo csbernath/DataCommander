@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.IO;
 
     /// <summary>
@@ -26,11 +25,13 @@
         /// <param name="textReader"></param>
         /// <param name="columns"></param>
         /// <param name="converters"></param>
-        public TextDataStreamReader( TextReader textReader, IList<TextDataColumn> columns, IList<ITextDataConverter> converters )
+        public TextDataStreamReader(TextReader textReader, IList<TextDataColumn> columns, IList<ITextDataConverter> converters)
         {
-            Contract.Requires( textReader != null );
-            Contract.Requires( columns != null );
-            Contract.Requires( converters != null );
+#if CONTRACTS_FULL
+            Contract.Requires(textReader != null);
+            Contract.Requires(columns != null);
+            Contract.Requires(converters != null);
+#endif
 
             this.textReader = textReader;
             this.columns = columns;
@@ -49,36 +50,40 @@
             foreach (var column in this.columns)
             {
                 var maxLength = column.MaxLength;
-                var buffer = new Char[maxLength];
-                var count = this.textReader.Read( buffer, 0, maxLength );
+                var buffer = new char[maxLength];
+                var count = this.textReader.Read(buffer, 0, maxLength);
 
                 if (count == 0)
                 {
                     break;
                 }
 
-                Contract.Assert( count == maxLength );
+#if CONTRACTS_FULL
+                Contract.Assert(count == maxLength);
+#endif
 
                 if (index == 0)
                 {
                     values = new object[this.columns.Count];
                 }
 
-                var source = new string( buffer );
-                var converter = this.converters[ index ];
-                Contract.Assert( converter != null );
+                var source = new string(buffer);
+                var converter = this.converters[index];
+#if CONTRACTS_FULL
+                Contract.Assert(converter != null);
+#endif
                 object value;
 
                 try
                 {
-                    value = converter.FromString( source, column );
+                    value = converter.FromString(source, column);
                 }
                 catch (Exception e)
                 {
-                    throw new TextDataFormatException( column, converter, source, e );
+                    throw new TextDataFormatException(column, converter, source, e);
                 }
 
-                values[ index ] = value;
+                values[index] = value;
                 index++;
             }
 

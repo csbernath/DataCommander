@@ -3,7 +3,6 @@ namespace DataCommander.Foundation.Diagnostics
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using System.Diagnostics.Contracts;
     using System.Text;
     using System.Threading;
     using DataCommander.Foundation.Linq;
@@ -41,9 +40,11 @@ namespace DataCommander.Foundation.Diagnostics
             int commandTimeout,
             SingleThreadPool singleThreadPool)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(createConnection != null);
             Contract.Requires<ArgumentNullException>(logEntryToCommandText != null);
             Contract.Requires<ArgumentNullException>(singleThreadPool != null);
+#endif
 
             this.createConnection = createConnection;
             this.logEntryToCommandText = logEntryToCommandText;
@@ -51,7 +52,7 @@ namespace DataCommander.Foundation.Diagnostics
             this.commandTimeout = commandTimeout;
         }
 
-        #region ILogWriter Members
+#region ILogWriter Members
 
         void ILogWriter.Open()
         {
@@ -87,16 +88,16 @@ namespace DataCommander.Foundation.Diagnostics
             this.Flush();
         }
 
-        #endregion
+#endregion
 
-        #region IDisposable Members
+#region IDisposable Members
 
         void IDisposable.Dispose()
         {
             // TODO
         }
 
-        #endregion
+#endregion
 
         private void TimerCallback(object state)
         {

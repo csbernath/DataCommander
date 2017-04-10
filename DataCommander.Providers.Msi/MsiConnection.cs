@@ -3,7 +3,6 @@
     using System;
     using System.Data;
     using System.Data.Common;
-    using System.Diagnostics.Contracts;
     using Microsoft.Deployment.WindowsInstaller;
 
     internal sealed class MsiConnection : IDbConnection
@@ -24,10 +23,14 @@
         {
             var sb = new DbConnectionStringBuilder();
             sb.ConnectionString = this.connectionString;
+#if CONTRACTS_FULL
             Contract.Assert(sb.ContainsKey("Data Source"));
-            object dataSourceObject = sb["Data Source"];
+#endif
+            var dataSourceObject = sb["Data Source"];
+#if CONTRACTS_FULL
             Contract.Assert(dataSourceObject is string);
-            string path = (string)dataSourceObject;
+#endif
+            var path = (string)dataSourceObject;
             this.Database = new Database(path, DatabaseOpenMode.ReadOnly);
             this.state = ConnectionState.Open;
         }
@@ -39,7 +42,7 @@
 
         internal Database Database { get; private set; }
 
-        #region IDbConnection Members
+#region IDbConnection Members
 
         IDbTransaction IDbConnection.BeginTransaction(IsolationLevel il)
         {
@@ -95,15 +98,15 @@
 
         ConnectionState IDbConnection.State => this.state;
 
-        #endregion
+#endregion
 
-        #region IDisposable Members
+#region IDisposable Members
 
         void IDisposable.Dispose()
         {
             Database.Dispose();
         }
 
-        #endregion
+#endregion
     }
 }

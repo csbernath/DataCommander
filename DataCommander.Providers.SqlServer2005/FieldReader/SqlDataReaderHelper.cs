@@ -13,15 +13,15 @@ namespace DataCommander.Providers.SqlServer2005.FieldReader
         public SqlDataReaderHelper(IDataReader dataReader)
         {
             this.sqlDataReader = (SqlDataReader)dataReader;
-            DataTable schemaTable = dataReader.GetSchemaTable();
+            var schemaTable = dataReader.GetSchemaTable();
 
             if (schemaTable != null)
             {
-                DataRowCollection rows = schemaTable.Rows;
-                int count = rows.Count;
+                var rows = schemaTable.Rows;
+                var count = rows.Count;
                 this.dataFieldReaders = new IDataFieldReader[count];
 
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     this.dataFieldReaders[i] = CreateDataFieldReader(dataReader, new DbColumn(rows[i]));
                 }
@@ -30,8 +30,8 @@ namespace DataCommander.Providers.SqlServer2005.FieldReader
 
         private static IDataFieldReader CreateDataFieldReader(IDataRecord dataRecord, DbColumn dataColumnSchema)
         {
-            int columnOrdinal = dataColumnSchema.ColumnOrdinal;
-            SqlDbType providerType = (SqlDbType)dataColumnSchema.ProviderType;
+            var columnOrdinal = dataColumnSchema.ColumnOrdinal;
+            var providerType = (SqlDbType)dataColumnSchema.ProviderType;
             IDataFieldReader dataFieldReader;
 
             switch (providerType)
@@ -56,7 +56,7 @@ namespace DataCommander.Providers.SqlServer2005.FieldReader
                 case SqlDbType.NVarChar:
                 case SqlDbType.Text:
                 case SqlDbType.NText:
-                    int columnSize = dataColumnSchema.ColumnSize;
+                    var columnSize = dataColumnSchema.ColumnSize;
 
                     if (columnSize <= SqlServerProvider.ShortStringSize)
                     {
@@ -124,7 +124,7 @@ namespace DataCommander.Providers.SqlServer2005.FieldReader
 
         int IDataReaderHelper.GetValues(object[] values)
         {
-            for (int i = 0; i < this.dataFieldReaders.Length; i++)
+            for (var i = 0; i < this.dataFieldReaders.Length; i++)
             {
                 values[i] = this.dataFieldReaders[i].Value;
             }

@@ -38,23 +38,23 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
 		private void menuItemScriptObject_Click( object sender, EventArgs e )
 		{
-			string commandText = "select text from sys.all_views where owner = '{0}' and view_name = '{1}'";
+			var commandText = "select text from sys.all_views where owner = '{0}' and view_name = '{1}'";
 			commandText = string.Format( commandText, this.parent.SchemaNode.Name, name );
 
-			using (OracleCommand command = new OracleCommand( commandText, this.parent.SchemaNode.SchemasNode.Connection ))
+			using (var command = new OracleCommand( commandText, this.parent.SchemaNode.SchemasNode.Connection ))
 			{
 				command.InitialLONGFetchSize = 64 * 1024;
 
-				using (OracleDataReader dataReader = command.ExecuteReader())
+				using (var dataReader = command.ExecuteReader())
 				{
 					if (dataReader.Read())
 					{
-						string append = dataReader.GetString( 0 );
+						var append = dataReader.GetString( 0 );
 
-						MainForm mainForm = DataCommanderApplication.Instance.MainForm;
-						QueryForm queryForm = (QueryForm) mainForm.ActiveMdiChild;
-						QueryTextBox querytextBox = queryForm.QueryTextBox;
-						int selectionStart = querytextBox.RichTextBox.TextLength;
+						var mainForm = DataCommanderApplication.Instance.MainForm;
+						var queryForm = (QueryForm) mainForm.ActiveMdiChild;
+						var querytextBox = queryForm.QueryTextBox;
+						var selectionStart = querytextBox.RichTextBox.TextLength;
 
 						querytextBox.RichTextBox.AppendText( append );
 						querytextBox.RichTextBox.SelectionStart = selectionStart;
@@ -72,8 +72,8 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 		{
 			get
 			{
-				ToolStripMenuItem menuItemScriptObject = new ToolStripMenuItem( "Script Object", null, this.menuItemScriptObject_Click );
-				ContextMenuStrip contextMenu = new ContextMenuStrip();
+				var menuItemScriptObject = new ToolStripMenuItem( "Script Object", null, this.menuItemScriptObject_Click );
+				var contextMenu = new ContextMenuStrip();
 				contextMenu.Items.Add( menuItemScriptObject );
 				return contextMenu;
 			}

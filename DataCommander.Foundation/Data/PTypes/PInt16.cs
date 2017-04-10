@@ -16,7 +16,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         [DebuggerStepThrough]
-        public PInt16( Int16 value )
+        public PInt16( short value )
         {
             this.sql = value;
             this.ValueType = PValueType.Value;
@@ -44,7 +44,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="value"></param>
         /// <returns></returns>
         [DebuggerStepThrough]
-        public static implicit operator PInt16( Int16 value )
+        public static implicit operator PInt16( short value )
         {
             return new PInt16( value );
         }
@@ -64,9 +64,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator Int16( PInt16 value )
+        public static implicit operator short( PInt16 value )
         {
-            return (Int16) value.sql;
+            return (short) value.sql;
         }
 
         /// <summary>

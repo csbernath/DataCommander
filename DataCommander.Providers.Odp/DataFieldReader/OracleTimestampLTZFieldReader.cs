@@ -2,7 +2,6 @@ namespace DataCommander.Providers.Odp.DataFieldReader
 {
     using System;
     using Oracle.ManagedDataAccess.Client;
-    using Oracle.ManagedDataAccess.Types;
 
     internal sealed class OracleTimestampLTZFieldReader : IDataFieldReader
     {
@@ -31,7 +30,7 @@ namespace DataCommander.Providers.Odp.DataFieldReader
                 }
                 else
                 {
-                    OracleTimeStampLTZ oracleTimeStamp = this.dataReader.GetOracleTimeStampLTZ( this.columnOrdinal );
+                    var oracleTimeStamp = this.dataReader.GetOracleTimeStampLTZ( this.columnOrdinal );
                     value = new OracleTimeStampLTZField( oracleTimeStamp );
                 }
 

@@ -42,8 +42,8 @@ namespace DataCommander
         {
             get
             {
-                string s = this.lineNumberTextBox.Text;
-                int lineNumber = int.Parse(s);
+                var s = this.lineNumberTextBox.Text;
+                var lineNumber = int.Parse(s);
                 return lineNumber;
             }
         }
@@ -135,8 +135,8 @@ namespace DataCommander
         {
             try
             {
-                string s = this.lineNumberTextBox.Text;
-                int lineNumber = int.Parse(s);
+                var s = this.lineNumberTextBox.Text;
+                var lineNumber = int.Parse(s);
 
                 if (lineNumber >= 1 && lineNumber <= this.maxLineLineNumber)
                 {

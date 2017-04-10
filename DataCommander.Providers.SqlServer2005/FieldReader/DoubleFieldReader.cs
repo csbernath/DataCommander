@@ -25,7 +25,7 @@ namespace DataCommander.Providers.SqlServer2005.FieldReader
                 }
                 else
                 {
-                    double d = this.dataRecord.GetDouble(this.columnOrdinal);
+                    var d = this.dataRecord.GetDouble(this.columnOrdinal);
                     value = new DoubleField(d);
                 }
 

@@ -3,7 +3,6 @@ namespace DataCommander.Foundation.Data
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -20,8 +19,10 @@ namespace DataCommander.Foundation.Data
 
         private DataReader(IDbCommand command, IDataReader dataReader)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(command != null);
             Contract.Requires<ArgumentNullException>(dataReader != null);
+#endif
 
             this.command = command;
             this.dataReader = dataReader;
@@ -32,8 +33,10 @@ namespace DataCommander.Foundation.Data
             CommandDefinition commandDefinition,
             CommandBehavior commandBehavior)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(transactionScope != null);
             Contract.Requires<ArgumentNullException>(commandDefinition != null);
+#endif
 
             IDbCommand command = null;
             IDataReader dataReader = null;
@@ -60,7 +63,7 @@ namespace DataCommander.Foundation.Data
             }
         }
 
-        #region Public Methods
+#region Public Methods
 
         /// <summary>
         /// 
@@ -70,7 +73,9 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public IEnumerable<T> Read<T>(Func<IDataRecord, T> read)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(read != null);
+#endif
             this.PrivateNextResult();
 
             while (this.dataReader.Read())
@@ -85,7 +90,9 @@ namespace DataCommander.Foundation.Data
         /// <param name="read"></param>
         public void Read(Action<IDataRecord> read)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(read != null);
+#endif
             this.PrivateNextResult();
 
             while (this.dataReader.Read())
@@ -100,7 +107,9 @@ namespace DataCommander.Foundation.Data
         /// <param name="read"></param>
         public void Read(Func<IDataRecord, bool> read)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(read != null);
+#endif
             this.PrivateNextResult();
 
             while (this.dataReader.Read())
@@ -119,8 +128,10 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public bool NextResult()
         {
+#if CONTRACTS_FULL
             Contract.Assert(this.dataReader != null);
             Contract.Assert(!this.nextResultCalled);
+#endif
 
             var nextResult = this.dataReader.NextResult();
             this.nextResultCalled = true;
@@ -128,7 +139,7 @@ namespace DataCommander.Foundation.Data
             return nextResult;
         }
 
-        #endregion
+#endregion
 
         void IDisposable.Dispose()
         {

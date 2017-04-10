@@ -148,7 +148,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                 }
                 finally
                 {
-                    var seconds = (Double)ticks/Stopwatch.Frequency;
+                    var seconds = (double)ticks/Stopwatch.Frequency;
                     var speed = (int)(array.Length/seconds);
 
                     log.Write(

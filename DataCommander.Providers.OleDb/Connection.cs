@@ -1,6 +1,5 @@
 namespace DataCommander.Providers.OleDb
 {
-    using System;
     using System.Data;
     using System.Data.OleDb;
     using System.Threading;
@@ -30,8 +29,8 @@ namespace DataCommander.Providers.OleDb
 
         void OnInfoMessage( object sender, OleDbInfoMessageEventArgs e )
         {
-            DateTime now = LocalTime.Default.Now;
-            string text = e.Message;
+            var now = LocalTime.Default.Now;
+            var text = e.Message;
             this.InvokeInfoMessage( new InfoMessage[] { new InfoMessage( now, InfoMessageSeverity.Information, text ) } );
         }
 

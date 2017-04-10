@@ -7,7 +7,7 @@ namespace DataCommander.Providers
         public static string GetValue(this DbConnectionStringBuilder dbConnectionStringBuilder, string keyword)
         {
             object obj;
-            bool contains = dbConnectionStringBuilder.TryGetValue(keyword, out obj);
+            var contains = dbConnectionStringBuilder.TryGetValue(keyword, out obj);
             string value;
 
             if (contains)

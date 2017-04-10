@@ -3,7 +3,6 @@ namespace DataCommander.Foundation.Threading
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Threading;
 
     /// <summary>
@@ -48,15 +47,9 @@ namespace DataCommander.Foundation.Threading
 
         WorkerThread IList<WorkerThread>.this[int index]
         {
-            get
-            {
-                throw new Exception("The method or operation is not implemented.");
-            }
+            get { throw new Exception("The method or operation is not implemented."); }
 
-            set
-            {
-                throw new Exception("The method or operation is not implemented.");
-            }
+            set { throw new Exception("The method or operation is not implemented."); }
         }
 
         #endregion
@@ -97,10 +90,7 @@ namespace DataCommander.Foundation.Threading
 
         bool ICollection<WorkerThread>.IsReadOnly
         {
-            get
-            {
-                throw new Exception("The method or operation is not implemented.");
-            }
+            get { throw new Exception("The method or operation is not implemented."); }
         }
 
         bool ICollection<WorkerThread>.Remove(WorkerThread item)
@@ -162,7 +152,9 @@ namespace DataCommander.Foundation.Threading
         /// <param name="stopEvent"></param>
         public void Stop(EventWaitHandle stopEvent)
         {
-            Contract.Requires( stopEvent != null );
+#if CONTRACTS_FULL
+            Contract.Requires(stopEvent != null);
+#endif
             var stopper = new Stopper(this.threads, stopEvent);
             stopper.Stop();
         }

@@ -5,9 +5,7 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
     using System.Data;
     using System.Data.SqlClient;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
     using System.Drawing;
-    using System.IO;
     using System.Linq;
     using System.Text;
     using System.Threading;
@@ -55,10 +53,12 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
             IDbConnection connection,
             DatabaseObjectMultipartName databaseObjectMultipartName)
         {
+#if CONTRACTS_FULL
             Contract.Requires(connection != null);
             Contract.Requires(databaseObjectMultipartName != null);
+#endif
 
-            string commandText = string.Format(@"select  c.name
+            var commandText = string.Format(@"select  c.name
 from    [{0}].sys.schemas s (nolock)
 join    [{0}].sys.objects o (nolock)
     on s.schema_id = o.schema_id
@@ -73,7 +73,7 @@ order by c.column_id",
                 databaseObjectMultipartName.Name);
 
             var columnNames = new StringBuilder();
-            bool first = true;
+            var first = true;
 
             if (connection.State != ConnectionState.Open)
             {
@@ -113,7 +113,7 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
             get
             {
                 var name = new DatabaseObjectMultipartName(null, this.Database.Name, this.owner, this.name);
-                string connectionString = this.Database.Databases.Server.ConnectionString;
+                var connectionString = this.Database.Databases.Server.ConnectionString;
                 string text;
                 using (var connection = new SqlConnection(connectionString))
                 {
@@ -126,10 +126,10 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
 
         private void Open_Click(object sender, EventArgs e)
         {
-            MainForm mainForm = DataCommanderApplication.Instance.MainForm;
+            var mainForm = DataCommanderApplication.Instance.MainForm;
             var queryForm = (QueryForm)mainForm.ActiveMdiChild;
-            string name = this.Database.Name + "." + this.owner + "." + this.name;
-            string query = "select * from " + name;
+            var name = this.Database.Name + "." + this.owner + "." + this.name;
+            var query = "select * from " + name;
             queryForm.OpenTable(query);
         }
 
@@ -137,24 +137,24 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
         {
             using (new CursorManager(Cursors.WaitCursor))
             {
-                string commandText = string.Format(
+                var commandText = string.Format(
                     @"use [{0}]
 exec sp_MShelpcolumns N'{1}.[{2}]', @orderby = 'id'
 exec sp_MStablekeys N'{1}.[{2}]', null, 14
 exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
 
                 log.Write(LogLevel.Trace, commandText);
-                string connectionString = this.Database.Databases.Server.ConnectionString;
+                var connectionString = this.Database.Databases.Server.ConnectionString;
                 DataSet dataSet;
                 using (var connection = new SqlConnection(connectionString))
                 {
                     var transactionScope = new DbTransactionScope(connection, null);
                     dataSet = transactionScope.ExecuteDataSet(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
                 }
-                DataTable columns = dataSet.Tables[0];
-                DataTable keys = dataSet.Tables[1];
+                var columns = dataSet.Tables[0];
+                var keys = dataSet.Tables[1];
 
-                DataTable schema = new DataTable();
+                var schema = new DataTable();
                 schema.Columns.Add(" ", typeof (int));
                 schema.Columns.Add("  ", typeof (string));
                 schema.Columns.Add("Name", typeof (string));
@@ -175,16 +175,16 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
                         identity = string.Empty;
                     }
 
-                    StringBuilder sb = new StringBuilder();
-                    string dbType = column["col_typename"].ToString();
+                    var sb = new StringBuilder();
+                    var dbType = column["col_typename"].ToString();
                     sb.Append(dbType);
 
                     switch (dbType)
                     {
                         case "decimal":
                         case "numeric":
-                            int precision = Convert.ToInt32(column["col_prec"]);
-                            int scale = Convert.ToInt32(column["col_scale"]);
+                            var precision = Convert.ToInt32(column["col_prec"]);
+                            var scale = Convert.ToInt32(column["col_scale"]);
 
                             if (scale == 0)
                             {
@@ -202,7 +202,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
                         case "varchar":
                         case "nvarchar":
                         case "varbinary":
-                            int columnLength = (int)column["col_len"];
+                            var columnLength = (int)column["col_len"];
                             string columnlengthString;
 
                             if (columnLength == -1)
@@ -226,8 +226,8 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
                         sb.Append(" not null");
                     }
 
-                    string collation = Foundation.Data.Database.GetValue(column["collation"], string.Empty);
-                    string formula = string.Empty;
+                    var collation = Foundation.Data.Database.GetValue(column["collation"], string.Empty);
+                    var formula = string.Empty;
 
                     if (column["text"] != DBNull.Value)
                     {
@@ -247,26 +247,26 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
 
                 if (keys.Rows.Count > 0)
                 {
-                    DataRow pk = (from row in keys.AsEnumerable()
+                    var pk = (from row in keys.AsEnumerable()
                         where row.Field<byte>("cType") == 1
                         select row).FirstOrDefault();
 
                     if (pk != null)
                     {
-                        for (int i = 1; i <= 16; i++)
+                        for (var i = 1; i <= 16; i++)
                         {
-                            object keyColObj = pk["cKeyCol" + i];
+                            var keyColObj = pk["cKeyCol" + i];
 
                             if (keyColObj == DBNull.Value)
                             {
                                 break;
                             }
 
-                            string keyCol = keyColObj.ToString();
+                            var keyCol = keyColObj.ToString();
 
                             string filter = $"Name = '{keyCol}'";
-                            DataRow dataRow = schema.Select(filter)[0];
-                            string identity = dataRow[1].ToString();
+                            var dataRow = schema.Select(filter)[0];
+                            var identity = dataRow[1].ToString();
 
                             if (identity.Length > 0)
                             {
@@ -282,7 +282,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
 
                 dataSet.Tables.Add(schema);
 
-                MainForm mainForm = DataCommanderApplication.Instance.MainForm;
+                var mainForm = DataCommanderApplication.Instance.MainForm;
                 var queryForm = (QueryForm)mainForm.ActiveMdiChild;
                 queryForm.ShowDataSet(dataSet);
             }
@@ -296,7 +296,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
                 queryForm.SetStatusbarPanelText("Copying table script to clipboard...", SystemColors.ControlText);
                 var stopwatch = Stopwatch.StartNew();
 
-                string connectionString = this.Database.Databases.Server.ConnectionString;
+                var connectionString = this.Database.Databases.Server.ConnectionString;
                 var csb = new SqlConnectionStringBuilder(connectionString);
 
                 var connectionInfo = new SqlConnectionInfo();
@@ -336,7 +336,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
 
                 var stringCollection = table.Script(options);
                 var sb = new StringBuilder();
-                foreach (string s in stringCollection)
+                foreach (var s in stringCollection)
                 {
                     sb.AppendLine(s);
                     sb.AppendLine("GO");
@@ -353,7 +353,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
         private void Indexes_Click(object sender, EventArgs e)
         {
             string cmdText = $"use [{this.Database.Name}] exec sp_helpindex [{this.owner}.{this.name}]";
-            string connectionString = this.Database.Databases.Server.ConnectionString;
+            var connectionString = this.Database.Databases.Server.ConnectionString;
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -361,7 +361,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
                 dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = cmdText }, CancellationToken.None);
             }
             dataTable.TableName = $"{this.name} indexes";
-            MainForm mainForm = DataCommanderApplication.Instance.MainForm;
+            var mainForm = DataCommanderApplication.Instance.MainForm;
             var queryForm = (QueryForm)mainForm.ActiveMdiChild;
             var dataSet = new DataSet();
             dataSet.Tables.Add(dataTable);
@@ -371,7 +371,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
         private void SelectScript_Click(object sender, EventArgs e)
         {
             var name = new DatabaseObjectMultipartName(null, this.Database.Name, this.owner, this.name);
-            string connectionString = this.Database.Databases.Server.ConnectionString;
+            var connectionString = this.Database.Databases.Server.ConnectionString;
             string selectStatement;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -382,7 +382,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
 
         private void InsertScript_Click(object sender, EventArgs e)
         {
-            string commandText = string.Format(@"select
+            var commandText = string.Format(@"select
      c.name
     ,t.name as TypeName
     ,c.max_length
@@ -400,7 +400,7 @@ where
 	and o.name = '{2}'
 order by c.column_id", this.Database.Name, this.owner, this.name);
             log.Write(LogLevel.Trace, commandText);
-            string connectionString = this.Database.Databases.Server.ConnectionString;
+            var connectionString = this.Database.Databases.Server.ConnectionString;
             DataTable table;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -409,7 +409,7 @@ order by c.column_id", this.Database.Name, this.owner, this.name);
             }
             var sb = new StringBuilder();
 
-            bool first = true;
+            var first = true;
             foreach (DataRow row in table.Rows)
             {
                 char prefix;
@@ -426,9 +426,9 @@ order by c.column_id", this.Database.Name, this.owner, this.name);
                     prefix = ',';
                 }
 
-                string variableName = (string)row["name"];
+                var variableName = (string)row["name"];
                 variableName = char.ToLower(variableName[0]) + variableName.Substring(1);
-                string typeName = (string)row["TypeName"];
+                var typeName = (string)row["TypeName"];
 
                 switch (typeName)
                 {
@@ -436,13 +436,13 @@ order by c.column_id", this.Database.Name, this.owner, this.name);
                     case "nchar":
                     case "nvarchar":
                     case "varchar":
-                        short precision = row.Field<short>("max_length");
-                        string precisionString = precision >= 0 ? precision.ToString() : "max";
+                        var precision = row.Field<short>("max_length");
+                        var precisionString = precision >= 0 ? precision.ToString() : "max";
                         typeName += "(" + precisionString.ToString() + ")";
                         break;
 
                     case "decimal":
-                        byte scale = row.Field<byte>("scale");
+                        var scale = row.Field<byte>("scale");
                         if (scale == 0)
                         {
                             typeName += "(" + row["precision"].ToString() + ")";
@@ -477,15 +477,15 @@ order by c.column_id", this.Database.Name, this.owner, this.name);
             first = true;
 
             var st = new StringTable(3);
-            int last = table.Rows.Count - 1;
+            var last = table.Rows.Count - 1;
 
-            for (int i = 0; i < table.Rows.Count; i++)
+            for (var i = 0; i < table.Rows.Count; i++)
             {
-                DataRow dataRow = table.Rows[i];
-                StringTableRow stringTableRow = st.NewRow();
-                string variableName = (string)dataRow["name"];
+                var dataRow = table.Rows[i];
+                var stringTableRow = st.NewRow();
+                var variableName = (string)dataRow["name"];
                 variableName = char.ToLower(variableName[0]) + variableName.Substring(1);
-                char prefix = i == 0 ? ' ' : ',';
+                var prefix = i == 0 ? ' ' : ',';
                 stringTableRow[1] = $"{prefix}@{variableName}";
                 string s2 = $"as {dataRow["name"]}";
 

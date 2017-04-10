@@ -50,8 +50,8 @@
         {
             get
             {
-                int supportedFeatures = this.VersionControlServer.SupportedFeatures;
-                SupportedFeatures supportedFeaturesEnum = (SupportedFeatures)supportedFeatures;
+                var supportedFeatures = this.VersionControlServer.SupportedFeatures;
+                var supportedFeaturesEnum = (SupportedFeatures)supportedFeatures;
                 return $"versionControlServer.SupportedFeatures: {supportedFeaturesEnum.ToString("G")}";
             }
         }

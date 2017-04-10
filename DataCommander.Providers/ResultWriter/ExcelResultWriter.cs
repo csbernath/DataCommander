@@ -3,7 +3,6 @@
     using System;
     using System.Data;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using DataCommander.Foundation.Data;
     using OfficeOpenXml;
@@ -21,15 +20,17 @@
             IProvider provider,
             Action<InfoMessage> addInfoMessage)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(provider != null);
             Contract.Requires<ArgumentNullException>(addInfoMessage != null);
+#endif
 
             this.provider = provider;
             this.addInfoMessage = addInfoMessage;
             this.logResultWriter = new LogResultWriter(addInfoMessage);
         }
 
-        #region IResultWriter Members
+#region IResultWriter Members
 
         void IResultWriter.Begin(IProvider provider)
         {
@@ -46,7 +47,7 @@
         {
             this.logResultWriter.AfterExecuteReader(fieldCount);
 
-            string fileName = Path.GetTempFileName() + ".xlsx";
+            var fileName = Path.GetTempFileName() + ".xlsx";
             this.excelPackage = new ExcelPackage(new FileInfo(fileName));
         }
 
@@ -77,11 +78,11 @@
 
             var cells = this.excelWorksheet.Cells;
 
-            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {
                 var row = rows[rowIndex];
 
-                for (int columnIndex = 0; columnIndex < row.Length; columnIndex++)
+                for (var columnIndex = 0; columnIndex < row.Length; columnIndex++)
                 {
                     cells[this.rowCount + rowIndex, columnIndex + 1].Value = row[columnIndex];
                 }
@@ -108,7 +109,7 @@
             Process.Start(this.excelPackage.File.FullName);
         }
 
-        #endregion
+#endregion
 
         private void CreateTable(DataTable schemaTable)
         {
@@ -116,14 +117,14 @@
             string tableName = $"Table{worksheets.Count + 1}";
             this.excelWorksheet = worksheets.Add(tableName);
             var cells = this.excelWorksheet.Cells;
-            int columnIndex = 1;
+            var columnIndex = 1;
 
             foreach (DataRow schemaRow in schemaTable.Rows)
             {
                 var dataColumnSchema = new DbColumn(schemaRow);
-                string columnName = dataColumnSchema.ColumnName;
-                int columnSize = dataColumnSchema.ColumnSize;
-                Type dataType = this.provider.GetColumnType(dataColumnSchema);
+                var columnName = dataColumnSchema.ColumnName;
+                var columnSize = dataColumnSchema.ColumnSize;
+                var dataType = this.provider.GetColumnType(dataColumnSchema);
 
                 var cell = cells[1, columnIndex];
                 cell.Value = columnName;

@@ -1,7 +1,6 @@
 namespace DataCommander.Foundation.Xml
 {
     using System;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Xml;
     using System.Xml.Serialization;
@@ -19,7 +18,9 @@ namespace DataCommander.Foundation.Xml
         /// <returns></returns>
         public static object Deserialize( string xml, Type type )
         {
+#if CONTRACTS_FULL
             Contract.Requires(type != null);
+#endif
 
             var stringReader = new StringReader( xml );
             var xmlSerializer = new XmlSerializer( type );
@@ -35,8 +36,10 @@ namespace DataCommander.Foundation.Xml
         /// <returns></returns>
         public static object Deserialize( XmlReader xmlReader, Type type )
         {
+#if CONTRACTS_FULL
             Contract.Requires(xmlReader != null);
             Contract.Requires(type != null);
+#endif
 
             var xmlSerializer = new XmlSerializer( type );
             var obj = xmlSerializer.Deserialize( xmlReader );

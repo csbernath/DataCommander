@@ -3,7 +3,6 @@ namespace DataCommander.Foundation.Diagnostics
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Linq;
     using System.Threading;
@@ -32,7 +31,8 @@ namespace DataCommander.Foundation.Diagnostics
                 new StringTableColumnInfo<ListItemState>("Name", StringTableColumnAlign.Left, i => i.ListItem.Name),
                 new StringTableColumnInfo<ListItemState>("TypeName", StringTableColumnAlign.Left, i => i.ListItem.TypeName),
                 StringTableColumnInfo.Create<ListItemState, int>("Size", StringTableColumnAlign.Right, i => i.ListItem.Size),
-                new StringTableColumnInfo<ListItemState>("Time", StringTableColumnAlign.Right, i => i.ListItem.Time.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture)),
+                new StringTableColumnInfo<ListItemState>("Time", StringTableColumnAlign.Right,
+                    i => i.ListItem.Time.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture)),
                 new StringTableColumnInfo<ListItemState>("DisposeTime", StringTableColumnAlign.Right,
                     i => i.ListItem.DisposeTime?.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture)),
                 new StringTableColumnInfo<ListItemState>("Age", StringTableColumnAlign.Right, i => StopwatchTimeSpan.ToString(i.Age, 3)),
@@ -106,7 +106,9 @@ namespace DataCommander.Foundation.Diagnostics
         /// <param name="target"></param>
         public static void Add(string name, object target)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(target != null);
+#endif
 
             string typeName = null;
             var size = 0;
@@ -133,7 +135,9 @@ namespace DataCommander.Foundation.Diagnostics
         /// <param name="target"></param>
         public static void Add(string name, string typeName, int size, object target)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(target != null);
+#endif
 
             var id = Interlocked.Increment(ref GarbageMonitor.id);
             var item = new ListItem(id, name, typeName, size, target);
@@ -151,7 +155,9 @@ namespace DataCommander.Foundation.Diagnostics
         /// <param name="disposeTime"></param>
         public static void SetDisposeTime(object target, DateTime disposeTime)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(target != null);
+#endif
 
             lock (items)
             {

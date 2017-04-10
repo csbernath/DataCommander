@@ -30,9 +30,9 @@ namespace DataCommander.Providers.OracleClient
 
         private void OnInfoMessage(object sender, OracleInfoMessageEventArgs e)
         {
-            DateTime now = LocalTime.Default.Now;
+            var now = LocalTime.Default.Now;
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append(e.Message);
             sb.Append(Environment.NewLine);
             sb.Append("Code: ");

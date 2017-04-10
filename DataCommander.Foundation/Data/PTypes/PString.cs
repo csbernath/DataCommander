@@ -36,7 +36,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public PString( Char value )
+        public PString( char value )
         {
             this.sql = value.ToString();
             this.ValueType = PValueType.Value;
@@ -68,7 +68,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PString( Char value )
+        public static implicit operator PString( char value )
         {
             return new PString( value );
         }

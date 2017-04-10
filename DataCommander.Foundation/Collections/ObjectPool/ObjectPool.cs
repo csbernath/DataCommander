@@ -2,7 +2,6 @@ namespace DataCommander.Foundation.Collections
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Threading;
     using DataCommander.Foundation.Diagnostics;
 
@@ -37,9 +36,11 @@ namespace DataCommander.Foundation.Collections
             int minSize,
             int maxSize )
         {
+#if CONTRACTS_FULL
             Contract.Requires(factory != null);
             Contract.Requires(minSize >= 0);
             Contract.Requires(minSize <= maxSize);
+#endif
 
             this.factory = factory;
             this.MinSize = minSize;
@@ -54,9 +55,9 @@ namespace DataCommander.Foundation.Collections
         {
             this.Dispose( false );
         }
-        #endregion
+#endregion
 
-        #region Public Properties
+#region Public Properties
         /// <summary>
         /// 
         /// </summary>
@@ -77,9 +78,9 @@ namespace DataCommander.Foundation.Collections
         /// </summary>
         public int ActiveCount => this.activeItems.Count;
 
-        #endregion
+#endregion
 
-        #region Public Methods
+#region Public Methods
         /// <summary>
         /// 
         /// </summary>
@@ -127,9 +128,9 @@ namespace DataCommander.Foundation.Collections
                 log.Trace("{0} obsolete items destroyed from ObjectPool. idle: {1}, active: {2}.", obsoleteList.Count, this.idleItems.Count, this.activeItems.Count );
             }
         }
-        #endregion
+#endregion
 
-        #region Internal Methods
+#region Internal Methods
 
         internal ObjectPoolItem<T> CreateObject(CancellationToken cancellationToken)
         {
@@ -238,9 +239,9 @@ namespace DataCommander.Foundation.Collections
             }
         }
 
-        #endregion
+#endregion
 
-        #region Private Methods
+#region Private Methods
 
         private void Dispose( bool disposing )
         {
@@ -289,6 +290,6 @@ namespace DataCommander.Foundation.Collections
             log.Trace("ObjectPool item(key:{0}) destroyed.", item.Key );
         }
 
-        #endregion
+#endregion
     }
 }

@@ -21,7 +21,7 @@
 		{
 			get
 			{
-				Stream stream = (Stream) this.dataRecord[this.columnOrdinal ];
+				var stream = (Stream) this.dataRecord[this.columnOrdinal ];
 				object value;
 
 				if (stream != null)

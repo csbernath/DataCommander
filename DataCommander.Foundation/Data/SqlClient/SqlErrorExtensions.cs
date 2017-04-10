@@ -1,8 +1,6 @@
 ﻿namespace DataCommander.Foundation.Data.SqlClient
 {
-    using System;
     using System.Data.SqlClient;
-    using System.Diagnostics.Contracts;
     using System.Text;
 
     /// <summary>
@@ -17,7 +15,9 @@
         /// <returns></returns>
         public static string ToLogString(this SqlError error)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(error != null);
+#endif
 
             var sb = new StringBuilder();
 

@@ -3,7 +3,6 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using DataCommander.Foundation.Collections;
 
     /// <summary>
@@ -55,13 +54,15 @@
         {
             get
             {
+#if CONTRACTS_FULL
                 Contract.Assert( this.nameIndex.ContainsKey( name ) );
+#endif
 
                 return this.nameIndex[ name ];
             }
         }
 
-        #region IList<TextDataSetTable> Members
+#region IList<TextDataSetTable> Members
 
         int IList<TextDataSetTable>.IndexOf( TextDataSetTable item )
         {
@@ -91,9 +92,9 @@
             }
         }
 
-        #endregion
+#endregion
 
-        #region ICollection<TextDataSetTable> Members
+#region ICollection<TextDataSetTable> Members
 
         /// <summary>
         /// 
@@ -101,7 +102,9 @@
         /// <param name="item"></param>
         public void Add( TextDataSetTable item )
         {
+#if CONTRACTS_FULL
             Contract.Assert( item != null );
+#endif
             this.collection.Add( item );
         }
 
@@ -138,24 +141,24 @@
             throw new NotImplementedException();
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable<TextDataSetTable> Members
+#region IEnumerable<TextDataSetTable> Members
 
         IEnumerator<TextDataSetTable> IEnumerable<TextDataSetTable>.GetEnumerator()
         {
             return this.collection.GetEnumerator();
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable Members
+#region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.collection.GetEnumerator();
         }
 
-        #endregion
+#endregion
     }
 }

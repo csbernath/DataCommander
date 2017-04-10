@@ -123,7 +123,7 @@ namespace DataCommander.Foundation.Xml
         /// </summary>
         /// <param name="ch">The Unicode character for which to generate a character entity.</param>
         /// <exception cref="T:System.ArgumentException">The character is in the surrogate pair character range, <see langword="0xd800"/> - <see langword="0xdfff"/>. </exception>
-        public override void WriteCharEntity(Char ch)
+        public override void WriteCharEntity(char ch)
         {
             throw new NotImplementedException();
         }
@@ -139,7 +139,7 @@ namespace DataCommander.Foundation.Xml
         /// <exception cref="T:System.ArgumentException">The buffer length minus <paramref name="index"/> is less than <paramref name="count"/>;the call results in surrogate pair characters being split or an invalid surrogate pair being written.</exception>
         /// <exception cref="T:System.ArgumentOutOfRangeException">
         /// <paramref name="index"/> or <paramref name="count"/> is less than zero.</exception>
-        public override void WriteChars(Char[] buffer, int index, int count)
+        public override void WriteChars(char[] buffer, int index, int count)
         {
             throw new NotImplementedException();
         }
@@ -321,7 +321,7 @@ namespace DataCommander.Foundation.Xml
         /// <exception cref="T:System.ArgumentException">The buffer length minus <paramref name="index"/> is less than <paramref name="count"/>.</exception>
         /// <exception cref="T:System.ArgumentOutOfRangeException">
         /// <paramref name="index"/> or <paramref name="count"/> is less than zero.</exception>
-        public override void WriteRaw(Char[] buffer, int index, int count)
+        public override void WriteRaw(char[] buffer, int index, int count)
         {
             throw new NotImplementedException();
         }
@@ -412,9 +412,9 @@ namespace DataCommander.Foundation.Xml
         /// <value></value>
         public override WriteState WriteState => new WriteState();
 
-        private static string Encode(Char c)
+        private static string Encode(char c)
         {
-            var charCode = (UInt16)c;
+            var charCode = (ushort)c;
             var encoded = "&#x" + charCode.ToString("x", CultureInfo.InvariantCulture) + ';';
             return encoded;
         }
@@ -457,7 +457,7 @@ namespace DataCommander.Foundation.Xml
         /// <param name="lowChar">The low surrogate. This must be a value between 0xDC00 and 0xDFFF.</param>
         /// <param name="highChar"></param>
         /// <exception cref="T:System.Exception">An invalid surrogate character pair was passed.</exception>
-        public override void WriteSurrogateCharEntity(Char lowChar, Char highChar)
+        public override void WriteSurrogateCharEntity(char lowChar, char highChar)
         {
             throw new NotImplementedException();
         }

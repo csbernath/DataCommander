@@ -32,7 +32,7 @@ namespace DataCommander.Providers.SqlServer2005.FieldReader
                 }
                 else
                 {
-                    string s = this.dataRecord.GetString(this.columnOrdinal);
+                    var s = this.dataRecord.GetString(this.columnOrdinal);
 
                     if (this.sqlDbType == SqlDbType.Char ||
                         this.sqlDbType == SqlDbType.NChar)

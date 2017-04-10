@@ -2,7 +2,6 @@ namespace DataCommander.Foundation.Diagnostics
 {
     using System;
     using System.Collections.Concurrent;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Text;
     using System.Threading;
@@ -44,7 +43,9 @@ namespace DataCommander.Foundation.Diagnostics
 
         void ILogFile.Open()
         {
+#if CONTRACTS_FULL
             Contract.Assert(this.timer == null);
+#endif
 
             this.timer = new Timer(this.TimerCallback, null, this.timerPeriod, this.timerPeriod);
         }
@@ -77,9 +78,9 @@ namespace DataCommander.Foundation.Diagnostics
             this.logFile.Close();
         }
 
-        #endregion
+#endregion
 
-        #region Private Methods
+#region Private Methods
 
         private void TimerCallback(object state)
         {
@@ -89,15 +90,15 @@ namespace DataCommander.Foundation.Diagnostics
             this.Flush();
         }
 
-        #endregion
+#endregion
 
-        #region IDisposable Members
+#region IDisposable Members
 
         void IDisposable.Dispose()
         {
             this.Close();
         }
 
-        #endregion
+#endregion
     }
 }

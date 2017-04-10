@@ -16,7 +16,7 @@
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static IList<Char> AsList(this string source)
+        public static IList<char> AsList(this string source)
         {
             return new StringAsList(source);
         }
@@ -209,14 +209,16 @@
         /// <returns></returns>
         public static string Right(this string value, int length)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(value != null);
             Contract.Requires<ArgumentOutOfRangeException>(value.Length >= length);
+#endif
 
             var startIndex = value.Length - length;
             return value.Substring(startIndex);
         }
 
-        private sealed class StringAsList : IList<Char>
+        private sealed class StringAsList : IList<char>
         {
             private readonly string source;
 
@@ -225,24 +227,24 @@
                 this.source = source;
             }
 
-            #region IList<Char> Members
+#region IList<Char> Members
 
-            int IList<Char>.IndexOf(Char item)
+            int IList<char>.IndexOf(char item)
             {
                 throw new NotImplementedException();
             }
 
-            void IList<Char>.Insert(int index, Char item)
+            void IList<char>.Insert(int index, char item)
             {
                 throw new NotImplementedException();
             }
 
-            void IList<Char>.RemoveAt(int index)
+            void IList<char>.RemoveAt(int index)
             {
                 throw new NotImplementedException();
             }
 
-            Char IList<Char>.this[int index]
+            char IList<char>.this[int index]
             {
                 get
                 {
@@ -254,58 +256,58 @@
                 }
             }
 
-            #endregion
+#endregion
 
-            #region ICollection<Char> Members
+#region ICollection<Char> Members
 
-            void ICollection<Char>.Add(Char item)
+            void ICollection<char>.Add(char item)
             {
                 throw new NotImplementedException();
             }
 
-            void ICollection<Char>.Clear()
+            void ICollection<char>.Clear()
             {
                 throw new NotImplementedException();
             }
 
-            bool ICollection<Char>.Contains(Char item)
+            bool ICollection<char>.Contains(char item)
             {
                 throw new NotImplementedException();
             }
 
-            void ICollection<Char>.CopyTo(Char[] array, int arrayIndex)
+            void ICollection<char>.CopyTo(char[] array, int arrayIndex)
             {
                 throw new NotImplementedException();
             }
 
-            int ICollection<Char>.Count => this.source.Length;
+            int ICollection<char>.Count => this.source.Length;
 
-            bool ICollection<Char>.IsReadOnly => true;
+            bool ICollection<char>.IsReadOnly => true;
 
-            bool ICollection<Char>.Remove(Char item)
+            bool ICollection<char>.Remove(char item)
             {
                 throw new NotImplementedException();
             }
 
-            #endregion
+#endregion
 
-            #region IEnumerable<Char> Members
+#region IEnumerable<Char> Members
 
-            IEnumerator<Char> IEnumerable<Char>.GetEnumerator()
+            IEnumerator<char> IEnumerable<char>.GetEnumerator()
             {
                 throw new NotImplementedException();
             }
 
-            #endregion
+#endregion
 
-            #region IEnumerable Members
+#region IEnumerable Members
 
             IEnumerator IEnumerable.GetEnumerator()
             {
                 throw new NotImplementedException();
             }
 
-            #endregion
+#endregion
         }
     }
 }

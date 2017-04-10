@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Providers
 {
     using System;
-    using System.Diagnostics.Contracts;
     using System.Windows.Forms;
 
     internal partial class DataViewPropertiesForm : Form
@@ -10,7 +9,9 @@
 
         public DataViewPropertiesForm(DataViewProperties properties)
         {
+#if CONTRACTS_FULL
             Contract.Requires(properties != null);
+#endif
 
             this.properties = properties;
             this.InitializeComponent();

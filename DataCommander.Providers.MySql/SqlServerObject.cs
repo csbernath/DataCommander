@@ -1,9 +1,7 @@
 namespace DataCommander.Providers.MySql
 {
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Linq;
-    using Foundation;
     using Foundation.Data.SqlClient;
 
     internal static class SqlServerObject
@@ -15,8 +13,10 @@ namespace DataCommander.Providers.MySql
 
         public static string GetTables(string tableSchema, IEnumerable<string> tableTypes)
         {
+#if CONTRACTS_FULL
             Contract.Requires(!tableSchema.IsNullOrWhiteSpace());
             Contract.Requires(tableTypes != null && tableTypes.Any());
+#endif
 
             return $@"select TABLE_NAME
 from information_schema.TABLES

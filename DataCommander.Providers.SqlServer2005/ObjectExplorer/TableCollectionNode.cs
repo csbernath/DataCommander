@@ -1,6 +1,5 @@
 namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 {
-    using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
@@ -44,10 +43,10 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
 
 //            return treeNodes;
 
-            List<ITreeNode> childNodes = new List<ITreeNode>();
+            var childNodes = new List<ITreeNode>();
             childNodes.Add( new SystemTableCollectionNode( this.DatabaseNode ) );
 
-            string commandText = string.Format(@"select
+            var commandText = string.Format(@"select
     s.name as [Schema],
     tbl.name AS [Name]
 from [{0}].sys.tables as tbl (nolock)
@@ -73,7 +72,7 @@ end
              AS bit)=0)
 order by
 [Schema] ASC,[Name] ASC", this.DatabaseNode.Name);
-            string connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
+            var connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -82,9 +81,9 @@ order by
             }
             foreach (DataRow dataRow in dataTable.Rows)
             {
-                String schema = (String) dataRow[ "Schema" ];
-                String name = (String) dataRow[ "Name" ];
-                TableNode tableNode = new TableNode( this.DatabaseNode, schema, name );
+                var schema = (string) dataRow[ "Schema" ];
+                var name = (string) dataRow[ "Name" ];
+                var tableNode = new TableNode( this.DatabaseNode, schema, name );
                 childNodes.Add( tableNode );
             }
             return childNodes;

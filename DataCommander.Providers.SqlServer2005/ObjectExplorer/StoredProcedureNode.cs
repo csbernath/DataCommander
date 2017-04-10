@@ -40,7 +40,7 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
         {
             get
             {
-                string query = "exec " + this.name;
+                var query = "exec " + this.name;
                 return query;
             }
         }
@@ -48,7 +48,7 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
         private void menuItemScriptObject_Click(object sender, EventArgs e)
         {
             var stopwatch = Stopwatch.StartNew();
-            string connectionString = this.database.Databases.Server.ConnectionString;
+            var connectionString = this.database.Databases.Server.ConnectionString;
             string text;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -69,8 +69,8 @@ namespace DataCommander.Providers.SqlServer2005.ObjectExplorer
         {
             get
             {
-                ToolStripMenuItem menuItemScriptObject = new ToolStripMenuItem( "Script Object", null, new EventHandler(this.menuItemScriptObject_Click ) );
-                ContextMenuStrip contextMenu = new ContextMenuStrip();
+                var menuItemScriptObject = new ToolStripMenuItem( "Script Object", null, new EventHandler(this.menuItemScriptObject_Click ) );
+                var contextMenu = new ContextMenuStrip();
                 contextMenu.Items.Add( menuItemScriptObject );
                 return contextMenu;
             }

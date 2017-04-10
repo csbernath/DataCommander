@@ -23,8 +23,8 @@
                 }
                 else
                 {
-                    long length = this.dataRecord.GetBytes(this.columnOrdinal, 0, null, 0, 0 );
-                    byte[] buffer = new byte[ length ];
+                    var length = this.dataRecord.GetBytes(this.columnOrdinal, 0, null, 0, 0 );
+                    var buffer = new byte[ length ];
                     length = this.dataRecord.GetBytes(this.columnOrdinal, 0, buffer, 0, (int) length );
                     value = new BinaryField( buffer );
                 }

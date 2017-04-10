@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation
 {
     using System;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// 
@@ -17,7 +16,9 @@
         /// <param name="type"></param>
         public TypeIsSelection(Type type)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(type != null);
+#endif
             this.type = type;
         }
 
@@ -29,7 +30,9 @@
         /// <returns></returns>
         public TypeIsSelection IfTypeIs<T>(Action action)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(action != null);
+#endif
 
             if (!this.selected && this.type == typeof (T))
             {
@@ -46,7 +49,9 @@
         /// <param name="action"></param>
         public void Else(Action action)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(action != null);
+#endif
 
             if (!this.selected)
             {

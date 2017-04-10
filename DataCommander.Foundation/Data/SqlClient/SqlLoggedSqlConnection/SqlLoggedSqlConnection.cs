@@ -4,7 +4,6 @@ namespace DataCommander.Foundation.Data.SqlClient
     using System.Data;
     using System.Data.SqlClient;
     using System.Diagnostics;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Logged SqlConnection class.
@@ -32,7 +31,9 @@ namespace DataCommander.Foundation.Data.SqlClient
             string connectionString,
             ISqlLoggedSqlCommandFilter filter)
         {
+#if CONTRACTS_FULL
             Contract.Requires(sqlLog != null);
+#endif
 
             this.sqlLog = sqlLog;
             this.applicationId = applicationId;

@@ -1,7 +1,6 @@
 namespace DataCommander.Providers.OleDb
 {
     using System.Collections.Generic;
-    using System.Data;
     using System.Data.OleDb;
     using System.Windows.Forms;
 
@@ -19,7 +18,7 @@ namespace DataCommander.Providers.OleDb
         {
             get
             {
-                string name = this.Name;
+                var name = this.Name;
 
                 if (name == null)
                     name = "[No catalogs found]";
@@ -38,15 +37,15 @@ namespace DataCommander.Providers.OleDb
 
             try
             {
-                object [] restrictions = new object[] {this.Name};
-                DataTable dataTable = this.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Schemata,restrictions);
-                int count = dataTable.Rows.Count;
-                DataColumn nameColumn = dataTable.Columns["SCHEMA_NAME"];        
+                var restrictions = new object[] {this.Name};
+                var dataTable = this.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Schemata,restrictions);
+                var count = dataTable.Rows.Count;
+                var nameColumn = dataTable.Columns["SCHEMA_NAME"];        
                 treeNodes = new ITreeNode[count];
 
-                for (int i=0;i<count;i++)
+                for (var i=0;i<count;i++)
                 {
-                    string schemaName = (string)dataTable.Rows[i][nameColumn];
+                    var schemaName = (string)dataTable.Rows[i][nameColumn];
                     treeNodes[i] = new SchemaNode(this,schemaName);
                 }
             }

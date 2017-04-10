@@ -3,9 +3,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using System.Linq;
-    using DataCommander.Foundation.Linq;
 
     /// <summary>
     /// 
@@ -33,12 +31,14 @@
             Func<TValue, TKey> keySelector,
             Comparison<TKey> comparison)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(values != null);
             Contract.Requires<ArgumentNullException>(keySelector != null);
             Contract.Requires<ArgumentNullException>(comparison != null);
             Contract.Requires<ArgumentException>(
                 values.Select(keySelector).SelectPreviousAndCurrent().All(k => comparison(k.Previous, k.Current) < 0),
                 "keys must be unique and ordered");
+#endif
 
             this.values = values;
             this.keySelector = keySelector;
@@ -57,7 +57,7 @@
         {
         }
 
-        #region IReadOnlyDictionary Members
+#region IReadOnlyDictionary Members
 
         /// <summary>
         /// 
@@ -149,9 +149,9 @@
             return this.GetEnumerator();
         }
 
-        #endregion
+#endregion
 
-        #region Private Methods
+#region Private Methods
 
         private int IndexOfKey(TKey key)
         {
@@ -174,6 +174,6 @@
             return indexOfKey;
         }
 
-        #endregion
+#endregion
     }
 }

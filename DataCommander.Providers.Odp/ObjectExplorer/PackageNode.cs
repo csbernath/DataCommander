@@ -45,7 +45,7 @@ order by procedure_name";
                 CommandBehavior.Default,
                 dataRecord =>
                 {
-                    string procedureName = dataRecord.GetString(0);
+                    var procedureName = dataRecord.GetString(0);
                     return new ProcedureNode(schemaNode, this, procedureName);
                 });
         }
@@ -56,15 +56,15 @@ order by procedure_name";
         {
             get
             {
-                string commandText = "select text from all_source where owner = '{0}' and type = 'PACKAGE' and name = '{1}'";
-                commandText = String.Format(commandText, schemaNode.Name, name);
+                var commandText = "select text from all_source where owner = '{0}' and type = 'PACKAGE' and name = '{1}'";
+                commandText = string.Format(commandText, schemaNode.Name, name);
                 var transactionScope = new DbTransactionScope(this.schemaNode.SchemasNode.Connection, null);
-                DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+                var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
                 var sb = new StringBuilder();
 
-                for (int i = 0; i < dataTable.Rows.Count; i++)
+                for (var i = 0; i < dataTable.Rows.Count; i++)
                 {
-                    DataRow dataRow = dataTable.Rows[i];
+                    var dataRow = dataTable.Rows[i];
                     sb.Append(dataRow[0]);
                 }
 
@@ -78,27 +78,27 @@ order by procedure_name";
 
         private void ScriptPackageBody(object sender, EventArgs e)
         {
-            string commandText = "select text from all_source where owner = '{0}' and name = '{1}' and type = 'PACKAGE BODY'";
+            var commandText = "select text from all_source where owner = '{0}' and name = '{1}' and type = 'PACKAGE BODY'";
             commandText = string.Format(commandText, schemaNode.Name, name);
             var transactionScope = new DbTransactionScope(this.schemaNode.SchemasNode.Connection, null);
-            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
-            DataRowCollection dataRows = dataTable.Rows;
-            int count = dataRows.Count;
+            var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+            var dataRows = dataTable.Rows;
+            var count = dataRows.Count;
             var sb = new StringBuilder();
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
-                DataRow dataRow = dataRows[i];
-                string line = (string)dataRow[0];
+                var dataRow = dataRows[i];
+                var line = (string)dataRow[0];
                 sb.Append(line);
             }
 
-            MainForm mainForm = DataCommanderApplication.Instance.MainForm;
-            QueryForm queryForm = (QueryForm)mainForm.ActiveMdiChild;
-            QueryTextBox tbQuery = queryForm.QueryTextBox;
-            int selectionStart = tbQuery.RichTextBox.TextLength;
+            var mainForm = DataCommanderApplication.Instance.MainForm;
+            var queryForm = (QueryForm)mainForm.ActiveMdiChild;
+            var tbQuery = queryForm.QueryTextBox;
+            var selectionStart = tbQuery.RichTextBox.TextLength;
 
-            string append = sb.ToString();
+            var append = sb.ToString();
 
             tbQuery.RichTextBox.AppendText(append);
             tbQuery.RichTextBox.SelectionStart = selectionStart;
@@ -111,12 +111,12 @@ order by procedure_name";
         {
             get
             {
-                ContextMenuStrip contextMenu = new ContextMenuStrip();
+                var contextMenu = new ContextMenuStrip();
 
-                ToolStripMenuItem menuItemPackage = new ToolStripMenuItem("Script Package", null, ScriptPackage);
+                var menuItemPackage = new ToolStripMenuItem("Script Package", null, ScriptPackage);
                 contextMenu.Items.Add(menuItemPackage);
 
-                ToolStripMenuItem menuItemPackageBody = new ToolStripMenuItem("Script Package Body", null, ScriptPackageBody);
+                var menuItemPackageBody = new ToolStripMenuItem("Script Package Body", null, ScriptPackageBody);
                 contextMenu.Items.Add(menuItemPackageBody);
 
                 return contextMenu;

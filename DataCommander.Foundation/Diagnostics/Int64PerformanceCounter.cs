@@ -1,7 +1,6 @@
 ﻿namespace DataCommander.Foundation.Diagnostics
 {
     using System;
-    using System.Diagnostics.Contracts;
     using System.Threading;
 
     /// <summary>
@@ -27,7 +26,9 @@
         /// <param name="toString"></param>
         public Int64PerformanceCounter(string name, Func<long, string> toString)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(toString != null);
+#endif
 
             this.name = name;
             this.toString = toString;

@@ -1,6 +1,5 @@
 namespace DataCommander.Foundation.Diagnostics
 {
-    using System;
     using System.Diagnostics;
     using System.IO;
     using System.Text;
@@ -37,7 +36,7 @@ namespace DataCommander.Foundation.Diagnostics
         /// 
         /// </summary>
         /// <param name="c"></param>
-        public override void Write(Char c)
+        public override void Write(char c)
         {
             Trace.Write(c);
         }

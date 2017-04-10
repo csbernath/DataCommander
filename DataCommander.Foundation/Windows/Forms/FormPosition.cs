@@ -1,7 +1,5 @@
 namespace DataCommander.Foundation.Windows.Forms
 {
-    using System;
-    using System.Diagnostics.Contracts;
     using System.Drawing;
     using System.Windows.Forms;
     using DataCommander.Foundation.Configuration;
@@ -44,8 +42,10 @@ namespace DataCommander.Foundation.Windows.Forms
             ApplicationData applicationData,
             Form form )
         {
+#if CONTRACTS_FULL
             Contract.Requires(applicationData != null);
             Contract.Requires(form != null);
+#endif
 
             var type = form.GetType();
             var nodeName = ConfigurationNodeName.FromType( type );

@@ -2,9 +2,8 @@ namespace DataCommander.Providers
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
 
-    [ContractClass(typeof (IAsyncDataAdapterContract))]
+    //[ContractClass(typeof (IAsyncDataAdapterContract))]
     internal interface IAsyncDataAdapter
     {
         IResultWriter ResultWriter { get; }

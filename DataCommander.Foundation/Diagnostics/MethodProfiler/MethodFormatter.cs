@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Foundation.Diagnostics.MethodProfiler
 {
-    using System;
     using System.Reflection;
     using System.Text;
     using DataCommander.Foundation.Data.SqlClient;

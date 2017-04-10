@@ -18,7 +18,7 @@ namespace DataCommander.Providers.OracleBase
         public SchemaCollectionNode(IDbConnection connection)
         {
             this.connection = connection;
-            DbConnectionStringBuilder sb = new DbConnectionStringBuilder();
+            var sb = new DbConnectionStringBuilder();
             sb.ConnectionString = connection.ConnectionString;
             this.selectedSchema = (string) sb[ConnectionStringKeyword.UserId];
         }
@@ -29,15 +29,15 @@ namespace DataCommander.Providers.OracleBase
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
-            string commandText = "select username from all_users order by username";
+            var commandText = "select username from all_users order by username";
             var transactionScope = new DbTransactionScope(this.Connection, null);
-            DataTable dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
-            int count = dataTable.Rows.Count;
+            var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
+            var count = dataTable.Rows.Count;
             var treeNodes = new ITreeNode[count];
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
-                string name = (string) dataTable.Rows[i][0];
+                var name = (string) dataTable.Rows[i][0];
                 treeNodes[i] = new SchemaNode(this, name);
             }
 

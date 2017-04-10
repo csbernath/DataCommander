@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
-    using System.Diagnostics.Contracts;
     using System.Windows.Forms;
     using Foundation.Data;
 
@@ -13,11 +12,13 @@
 
         public LinkedServerCatalogCollectionNode( LinkedServerNode linkedServer )
         {
+#if CONTRACTS_FULL
             Contract.Requires( linkedServer != null );
+#endif
             this.linkedServer = linkedServer;
         }
 
-        #region ITreeNode Members
+#region ITreeNode Members
 
         string ITreeNode.Name => "Catalogs";
 
@@ -84,6 +85,6 @@ drop table #catalog";
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-        #endregion
+#endregion
     }
 }

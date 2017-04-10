@@ -42,21 +42,21 @@ where	owner			= '{0}'
     and overload		{3}
 	--and data_level = 0
 order by overload,position";
-		    string commandText = string.Format(format, owner, packageName, objectName, overload);
+		    var commandText = string.Format(format, owner, packageName, objectName, overload);
 		    var command = new OracleCommand(commandText, connection);
 
-			using (OracleDataReader dataReader = command.ExecuteReader())
+			using (var dataReader = command.ExecuteReader())
 			{
-				bool first = true;
+				var first = true;
 
 				while (dataReader.Read())
 				{
-					string argumentName = dataReader.GetStringOrDefault(0);
-					string dataType = dataReader.GetString(1);
-				    string inOut = dataReader.GetString(2);
-					decimal? dataLength = dataReader.GetNullableDecimal(3);
-				    decimal? precision = dataReader.GetNullableDecimal(4);
-				    decimal? scale = dataReader.GetNullableDecimal(5);
+					var argumentName = dataReader.GetStringOrDefault(0);
+					var dataType = dataReader.GetString(1);
+				    var inOut = dataReader.GetString(2);
+					var dataLength = dataReader.GetNullableDecimal(3);
+				    var precision = dataReader.GetNullableDecimal(4);
+				    var scale = dataReader.GetNullableDecimal(5);
 				    ParameterDirection direction;
 
 					switch (inOut)

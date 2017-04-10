@@ -1,8 +1,6 @@
 ﻿namespace DataCommander.Foundation.Data
 {
-    using System;
     using System.Data.Common;
-    using System.Diagnostics.Contracts;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Linq;
 
@@ -19,7 +17,9 @@
 
         public DbConnectionLogger(LoggedDbConnection connection)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(connection != null);
+#endif
 
             this.connection = connection;
 

@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Providers.OleDb
 {
-    using System;
     using System.Data.OleDb;
 
     internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder

@@ -7,7 +7,6 @@ namespace DataCommander.Providers.Wmi
     using System.Data.Common;
     using System.Management;
     using System.Xml;
-    using DataCommander.Foundation.Configuration;
     using DataCommander.Foundation.Data;
 
     internal sealed class WmiProvider : IProvider
@@ -51,21 +50,21 @@ namespace DataCommander.Providers.Wmi
         DataTable IProvider.GetSchemaTable(IDataReader dataReader)
         {
             DataTable table = null;
-            DataTable schemaTable = dataReader.GetSchemaTable();
+            var schemaTable = dataReader.GetSchemaTable();
 
             if (schemaTable != null)
             {
                 table = new DataTable("SchemaTable");
-                DataColumnCollection columns = table.Columns;
+                var columns = table.Columns;
                 columns.Add(" ", typeof (int));
                 columns.Add("Name", typeof (string));
                 columns.Add("CimType", typeof (string));
 
-                for (int i = 0; i < schemaTable.Rows.Count; i++)
+                for (var i = 0; i < schemaTable.Rows.Count; i++)
                 {
-                    DataRow row = schemaTable.Rows[i];
-                    int columnOrdinal = i + 1;
-                    int columnSize = (int)row["ColumnSize"];
+                    var row = schemaTable.Rows[i];
+                    var columnOrdinal = i + 1;
+                    var columnSize = (int)row["ColumnSize"];
 
                     table.Rows.Add(new object[]
                     {
@@ -134,10 +133,10 @@ namespace DataCommander.Providers.Wmi
 
         private static void AddClassNames(ManagementClass manClass, IList list)
         {
-            string className = manClass.ClassPath.ClassName;
+            var className = manClass.ClassPath.ClassName;
             list.Add(className);
 
-            ManagementObjectCollection objects = manClass.GetSubclasses();
+            var objects = manClass.GetSubclasses();
 
             foreach (ManagementClass subClass in objects)
             {
@@ -147,7 +146,7 @@ namespace DataCommander.Providers.Wmi
 
         void IProvider.ClearCompletionCache()
         {
-            ConfigurationNode node = DataCommanderApplication.Instance.ApplicationData.CurrentType;
+            var node = DataCommanderApplication.Instance.ApplicationData.CurrentType;
             const string key = "ClassNames";
             node.Attributes.Remove(key);
         }

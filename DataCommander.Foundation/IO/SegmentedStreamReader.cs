@@ -1,7 +1,6 @@
 namespace DataCommander.Foundation.IO
 {
     using System;
-    using System.Diagnostics.Contracts;
     using System.IO;
     using DataCommander.Foundation.Diagnostics;
 
@@ -21,7 +20,9 @@ namespace DataCommander.Foundation.IO
         /// <param name="length"></param>
         public SegmentedStreamReader(Stream stream, long length)
         {
+#if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(stream != null);
+#endif
 
             this.stream = stream;
             this.length = length;
@@ -77,7 +78,9 @@ namespace DataCommander.Foundation.IO
         /// <returns></returns>
         public override int Read(byte[] buffer, int offset, int count)
         {
+#if CONTRACTS_FULL
             Contract.Assert(count >= 0);
+#endif
 
             int read;
             var position = this.stream.Position;
