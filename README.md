@@ -33,9 +33,9 @@ Features:
   * The data grid can be exported into Excel file.
 
 Development environment:
-  * .NET Framework 4.6.1
-  * C# 6.0
-  * Visual Studio 2015 Community Edition
+  * .NET Framework 4.6.2
+  * C# 7.0
+  * Visual Studio Community 2017
 
 |Provider.Name|Description|
 |-------------|-----------|
