@@ -21,7 +21,7 @@
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText =
+            var commandText =
                 $@"select r.ROUTINE_NAME
 from information_schema.ROUTINES r
 where

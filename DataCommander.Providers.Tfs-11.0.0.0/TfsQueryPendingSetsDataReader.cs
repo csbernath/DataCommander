@@ -23,7 +23,7 @@
 
         public override DataTable GetSchemaTable()
         {
-            DataTable table = CreateSchemaTable();
+            var table = CreateSchemaTable();
             AddSchemaRowString(table, "Computer", false);
             AddSchemaRowString(table, "Name", false);
             AddSchemaRowString(table, "OwnerName", false);
@@ -71,15 +71,15 @@
                     this.enumerator = AsEnumerable(this.pendingSets).GetEnumerator();
                 }
 
-                bool moveNext = this.enumerator.MoveNext();
+                var moveNext = this.enumerator.MoveNext();
 
                 if (moveNext)
                 {
-                    Tuple<int, int> pair = this.enumerator.Current;
+                    var pair = this.enumerator.Current;
                     PendingSet pendingSet = this.pendingSets[pair.Item1];
                     PendingChange pendingChange = pendingSet.PendingChanges[pair.Item2];
 
-                    object[] values = new object[]
+                    var values = new object[]
                     {
                         pendingSet.Computer,
                         pendingSet.Name,
@@ -112,12 +112,12 @@
 
         private static IEnumerable<Tuple<int, int>> AsEnumerable(PendingSet[] pendingSets)
         {
-            for (int i = 0; i < pendingSets.Length; i++)
+            for (var i = 0; i < pendingSets.Length; i++)
             {
                 PendingSet pendingSet = pendingSets[i];
                 PendingChange[] pendingChanges = pendingSet.PendingChanges;
 
-                for (int j = 0; j < pendingChanges.Length; j++)
+                for (var j = 0; j < pendingChanges.Length; j++)
                 {
                     var pair = Tuple.Create(i, j);
                     yield return pair;

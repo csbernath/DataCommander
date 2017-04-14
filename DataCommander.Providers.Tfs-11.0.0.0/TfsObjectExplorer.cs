@@ -25,7 +25,7 @@
 
         void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
         {
-            TfsDbConnection tfsDbConnection = (TfsDbConnection)connection;
+            var tfsDbConnection = (TfsDbConnection)connection;
             this.connection = tfsDbConnection.Connection;
             var tfsTeamProjectCollection = this.connection.TfsTeamProjectCollection;
             this.versionControlServer = (VersionControlServer)tfsTeamProjectCollection.GetService(typeof(VersionControlServer));

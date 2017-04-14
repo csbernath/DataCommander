@@ -28,15 +28,9 @@
         /// </summary>
         public override DbType DbType
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
         /// <summary>
@@ -44,15 +38,9 @@
         /// </summary>
         public override ParameterDirection Direction
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
         /// <summary>
@@ -60,15 +48,9 @@
         /// </summary>
         public override bool IsNullable
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
         /// <summary>
@@ -76,15 +58,9 @@
         /// </summary>
         public override string ParameterName
         {
-            get
-            {
-                return this.name;
-            }
+            get => this.name;
 
-            set
-            {
-                this.name = value;
-            }
+            set => this.name = value;
         }
 
         /// <summary>
@@ -100,15 +76,9 @@
         /// </summary>
         public override int Size
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
         /// <summary>
@@ -116,15 +86,9 @@
         /// </summary>
         public override string SourceColumn
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
         /// <summary>
@@ -132,15 +96,9 @@
         /// </summary>
         public override bool SourceColumnNullMapping
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
         /// <summary>
@@ -148,15 +106,9 @@
         /// </summary>
         public override DataRowVersion SourceVersion
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
         /// <summary>
@@ -164,15 +116,9 @@
         /// </summary>
         public override object Value
         {
-            get
-            {
-                return this.value;
-            }
+            get => this.value;
 
-            set
-            {
-                this.value = value;
-            }
+            set => this.value = value;
         }
     }
 }

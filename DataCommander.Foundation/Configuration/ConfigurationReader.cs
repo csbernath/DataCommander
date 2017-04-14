@@ -20,7 +20,7 @@ namespace DataCommander.Foundation.Configuration
     /// </summary>
     public sealed class ConfigurationReader
     {
-        private static readonly ILog log = InternalLogFactory.Instance.GetTypeLog(typeof (ConfigurationReader));
+        private static readonly ILog log = InternalLogFactory.Instance.GetTypeLog(typeof(ConfigurationReader));
         private string fileName;
         private string sectionName;
         private XmlReader xmlReader;
@@ -42,13 +42,9 @@ namespace DataCommander.Foundation.Configuration
                     try
                     {
                         if (File.Exists(configFileName))
-                        {
                             stream = File.OpenRead(configFileName);
-                        }
                         else
-                        {
                             log.Trace("{0} not found.", configFileName);
-                        }
 
                         break;
                     }
@@ -60,9 +56,7 @@ namespace DataCommander.Foundation.Configuration
                     catch (Exception e)
                     {
                         if (count == 3)
-                        {
                             throw;
-                        }
 
                         log.Write(LogLevel.Warning, e.ToLogString());
                         Thread.Sleep(200);
@@ -79,17 +73,13 @@ namespace DataCommander.Foundation.Configuration
             Type type;
 
             if (typeName == null)
-            {
                 type = typeof(string);
-            }
             else
             {
                 type = Type.GetType(typeName);
 
                 if (type == null)
-                {
                     type = TypeNameCollection.GetType(typeName);
-                }
             }
 
             return type;
@@ -128,11 +118,11 @@ namespace DataCommander.Foundation.Configuration
                 switch (this.xmlReader.NodeType)
                 {
                     case XmlNodeType.Element:
-                        {
-                            var valueStr = this.xmlReader["value"];
-                            var value = Convert.ChangeType(valueStr, elementType, this.formatProvider);
-                            list.Add(value);
-                        }
+                    {
+                        var valueStr = this.xmlReader["value"];
+                        var value = Convert.ChangeType(valueStr, elementType, this.formatProvider);
+                        list.Add(value);
+                    }
 
                         break;
 
@@ -146,7 +136,7 @@ namespace DataCommander.Foundation.Configuration
             }
 
             var array = Array.CreateInstance(elementType, list.Count);
-            var values = (object[])array;
+            var values = (object[]) array;
             list.CopyTo(values);
 
             return array;
@@ -169,16 +159,12 @@ namespace DataCommander.Foundation.Configuration
                     value = System.Convert.FromBase64String(innerXml);
                 }
                 else
-                {
                     value = this.ReadAttributeValueArray(elementType);
-                }
             }
             else if (typeCode == TypeCode.String)
             {
                 if (this.xmlReader.IsEmptyElement)
-                {
                     this.AddError(ErrorType.Warning, "value attribute not found", null);
-                }
                 else
                 {
                     while (this.xmlReader.Read())
@@ -222,10 +208,7 @@ namespace DataCommander.Foundation.Configuration
             return value;
         }
 
-        private void AddError(
-            ErrorType errorType,
-            string message,
-            Exception e)
+        private void AddError(ErrorType errorType, string message, Exception e)
         {
             string message2 = null;
             var lineInfo = this.xmlReader as IXmlLineInfo;
@@ -251,9 +234,7 @@ namespace DataCommander.Foundation.Configuration
             try
             {
                 if (name == null)
-                {
                     this.AddError(ErrorType.Warning, "name attribute not found", null);
-                }
 
                 var typeName = this.xmlReader["type"];
                 var type = GetType(typeName);
@@ -283,13 +264,9 @@ namespace DataCommander.Foundation.Configuration
                         try
                         {
                             if (valueStr != null)
-                            {
                                 value = Convert.ChangeType(valueStr, type, this.formatProvider);
-                            }
                             else
-                            {
                                 value = this.ReadAttributeValue(type);
-                            }
                         }
                         catch (Exception e)
                         {
@@ -300,9 +277,7 @@ namespace DataCommander.Foundation.Configuration
                     attribute = new ConfigurationAttribute(name, value, description);
                 }
                 else
-                {
                     this.AddError(ErrorType.Warning, "Parsing attribute type failed.", null);
-                }
             }
             catch (Exception e)
             {
@@ -358,58 +333,58 @@ namespace DataCommander.Foundation.Configuration
                 switch (this.xmlReader.NodeType)
                 {
                     case XmlNodeType.Element:
+                    {
+                        var elementName = this.xmlReader.Name;
+
+                        switch (elementName)
                         {
-                            var elementName = this.xmlReader.Name;
+                            case ConfigurationElementName.Attribute:
+                                this.ReadAttribute(node);
+                                break;
 
-                            switch (elementName)
+                            case ConfigurationElementName.Node:
                             {
-                                case ConfigurationElementName.Attribute:
-                                    this.ReadAttribute(node);
-                                    break;
-
-                                case ConfigurationElementName.Node:
-                                    {
-                                        var nodeName = this.xmlReader.GetAttribute("name");
-                                        var childNode = new ConfigurationNode(nodeName);
-                                        node.AddChildNode(childNode);
-                                        this.Read(childNode, fileNames);
-                                    }
-
-                                    break;
-
-                                case "include":
-                                    {
-                                        var fileName = this.xmlReader.GetAttribute("fileName");
-                                        fileName = Environment.ExpandEnvironmentVariables(fileName);
-
-                                        var reader2 = new ConfigurationReader();
-                                        var includeNode = reader2.Read(fileName, this.sectionName, fileNames);
-                                        node.Attributes.Add(includeNode.Attributes);
-
-                                        foreach (var childNode in includeNode.ChildNodes)
-                                        {
-                                            node.AddChildNode(childNode);
-                                        }
-
-                                        if (this.enableFileSystemWatcher && !fileNames.Contains(fileName))
-                                        {
-                                            fileNames.Add(fileName);
-                                        }
-                                    }
-
-                                    break;
-
-                                default:
-                                    {
-                                        var nodeName = XmlConvert.DecodeName(elementName);
-                                        var childNode = new ConfigurationNode(nodeName);
-                                        node.AddChildNode(childNode);
-                                        this.Read(childNode, fileNames);
-                                    }
-
-                                    break;
+                                var nodeName = this.xmlReader.GetAttribute("name");
+                                var childNode = new ConfigurationNode(nodeName);
+                                node.AddChildNode(childNode);
+                                this.Read(childNode, fileNames);
                             }
+
+                                break;
+
+                            case "include":
+                            {
+                                var fileName = this.xmlReader.GetAttribute("fileName");
+                                fileName = Environment.ExpandEnvironmentVariables(fileName);
+
+                                var reader2 = new ConfigurationReader();
+                                var includeNode = reader2.Read(fileName, this.sectionName, fileNames);
+                                node.Attributes.Add(includeNode.Attributes);
+
+                                foreach (var childNode in includeNode.ChildNodes)
+                                {
+                                    node.AddChildNode(childNode);
+                                }
+
+                                if (this.enableFileSystemWatcher && !fileNames.Contains(fileName))
+                                {
+                                    fileNames.Add(fileName);
+                                }
+                            }
+
+                                break;
+
+                            default:
+                            {
+                                var nodeName = XmlConvert.DecodeName(elementName);
+                                var childNode = new ConfigurationNode(nodeName);
+                                node.AddChildNode(childNode);
+                                this.Read(childNode, fileNames);
+                            }
+
+                                break;
                         }
+                    }
 
                         break;
 
@@ -491,9 +466,7 @@ namespace DataCommander.Foundation.Configuration
                         this.Read(node, fileNames);
 
                         if (this.enableFileSystemWatcher && fileNames != null && !fileNames.Contains(configFilename))
-                        {
                             fileNames.Add(configFilename);
-                        }
                     }
                     else
                     {
@@ -518,21 +491,11 @@ namespace DataCommander.Foundation.Configuration
             var source = this.errors.Where(e => e.Type == ErrorType.Error);
 
             if (source.Any())
-            {
                 logLevel = LogLevel.Error;
-            }
             else
             {
                 var enumerable = this.errors.Where(e => e.Type == ErrorType.Warning);
-
-                if (enumerable.Any())
-                {
-                    logLevel = LogLevel.Warning;
-                }
-                else
-                {
-                    logLevel = LogLevel.Trace;
-                }
+                logLevel = enumerable.Any() ? LogLevel.Warning : LogLevel.Trace;
             }
 
             log.Write(logLevel, "ConfigurationReader.Read finished.\r\nthis.errors.Count: {0}\r\n{1}", this.errors.Count, this.errors.ToString());
@@ -546,10 +509,7 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="sectionName"></param>
         /// <param name="fileNames"></param>
         /// <returns></returns>
-        public ConfigurationNode Read(
-            string configFileName,
-            string sectionName,
-            StringCollection fileNames)
+        public ConfigurationNode Read(string configFileName, string sectionName, StringCollection fileNames)
         {
             ConfigurationNode node = null;
 

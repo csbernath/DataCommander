@@ -323,15 +323,9 @@
 
         ICollection<T> IDictionary<TKey, ICollection<T>>.this[TKey key]
         {
-            get
-            {
-                return this.dictionary[key];
-            }
+            get => this.dictionary[key];
 
-            set
-            {
-                throw new NotSupportedException();
-            }
+            set => throw new NotSupportedException();
         }
 
 #endregion

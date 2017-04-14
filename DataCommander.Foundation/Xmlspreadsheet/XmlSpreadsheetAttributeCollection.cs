@@ -55,13 +55,7 @@
 
         int ICollection<XmlSpreadsheetAttribute>.Count => this.items.Count;
 
-        bool ICollection<XmlSpreadsheetAttribute>.IsReadOnly
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        bool ICollection<XmlSpreadsheetAttribute>.IsReadOnly => throw new NotImplementedException();
 
         bool ICollection<XmlSpreadsheetAttribute>.Remove(XmlSpreadsheetAttribute item)
         {

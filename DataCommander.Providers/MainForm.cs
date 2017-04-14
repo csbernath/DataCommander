@@ -83,7 +83,7 @@ namespace DataCommander
             var end = DateTime.Now;
             var elapsed = end - start;
 
-            string message = $"Current user: {WindowsIdentity.GetCurrent().Name}. Application loaded in {new StopwatchTimeSpan(elapsed).ToString(3)} seconds.";
+            var message = $"Current user: {WindowsIdentity.GetCurrent().Name}. Application loaded in {new StopwatchTimeSpan(elapsed).ToString(3)} seconds.";
             this.toolStripStatusLabel.Text = message;
             log.Trace(message);
 
@@ -101,7 +101,7 @@ namespace DataCommander
         {
             var totalMemory = GC.GetTotalMemory(false);
             var totalMemoryMB = (double)totalMemory/1024.0/1024.0;
-            string text = $"{Math.Round(totalMemoryMB, 0)} MB";
+            var text = $"{Math.Round(totalMemoryMB, 0)} MB";
 
             this.managedMemoryToolStripStatusLabel.Text = text;
 
@@ -502,7 +502,7 @@ namespace DataCommander
                         break;
                 }
 
-                string message = $@"Connection opened in {StopwatchTimeSpan.ToString(connectionForm.Duration, 3)} seconds.
+                var message = $@"Connection opened in {StopwatchTimeSpan.ToString(connectionForm.Duration, 3)} seconds.
 ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
                 var infoMessage = new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message);
@@ -579,7 +579,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             for (var i = 0; i < count; i++)
             {
                 var path = this.recentFileList[count - i - 1];
-                string text = $"{i + 1} {path}";
+                var text = $"{i + 1} {path}";
                 var menuItem = new ToolStripMenuItem(text, null, this.mnuRecentFile_Click);
                 menuItems.Add(menuItem);
             }

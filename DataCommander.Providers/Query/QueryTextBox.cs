@@ -62,18 +62,12 @@ namespace DataCommander.Providers
 
         public ToolStripStatusLabel CaretPositionPanel
         {
-            set
-            {
-                this.sbPanel = value;
-            }
+            set => this.sbPanel = value;
         }
 
         public override string Text
         {
-            get
-            {
-                return this.RichTextBox.Text;
-            }
+            get => this.RichTextBox.Text;
 
             set
             {

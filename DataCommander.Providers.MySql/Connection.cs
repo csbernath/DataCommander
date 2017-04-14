@@ -31,15 +31,9 @@
 
         public override string ConnectionName
         {
-            get
-            {
-                return this.connectionName;
-            }
+            get => this.connectionName;
 
-            set
-            {
-                this.connectionName = value;
-            }
+            set => this.connectionName = value;
         }
 
         public override string Caption => this.connectionName;

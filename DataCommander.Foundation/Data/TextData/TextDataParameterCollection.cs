@@ -196,26 +196,17 @@
         /// <summary>
         /// 
         /// </summary>
-        public override bool IsFixedSize
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public override bool IsFixedSize => throw new NotImplementedException();
 
         /// <summary>
         /// 
         /// </summary>
-        public override bool IsReadOnly
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public override bool IsReadOnly => throw new NotImplementedException();
 
         /// <summary>
         /// 
         /// </summary>
-        public override bool IsSynchronized
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public override bool IsSynchronized => throw new NotImplementedException();
 
         /// <summary>
         /// 
@@ -267,10 +258,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override object SyncRoot
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public override object SyncRoot => throw new NotImplementedException();
 
         /// <summary>
         /// 
@@ -326,9 +314,9 @@
 
         TextDataParameter IList<TextDataParameter>.this[int index]
         {
-            get { return this.listIndex[index]; }
+            get => this.listIndex[index];
 
-            set { throw new NotSupportedException(); }
+            set => throw new NotSupportedException();
         }
 
 #endregion

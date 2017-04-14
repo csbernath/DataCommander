@@ -20,13 +20,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override Encoding Encoding
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public override Encoding Encoding => throw new NotImplementedException();
 
         /// <summary>
         /// 

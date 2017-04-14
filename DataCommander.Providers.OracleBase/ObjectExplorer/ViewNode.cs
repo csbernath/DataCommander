@@ -30,7 +30,7 @@ namespace DataCommander.Providers.OracleBase
         {
             get
             {
-                string query = $"select * from {this.parent.SchemaNode.Name}.{name}";
+                var query = $"select * from {this.parent.SchemaNode.Name}.{name}";
                 return query;
             }
         }

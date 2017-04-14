@@ -151,7 +151,7 @@ namespace DataCommander.Foundation.Data.PTypes
         {
             PInt32 sp;
 
-            if (s == null || s.Length == 0)
+            if (string.IsNullOrEmpty(s))
             {
                 sp = new PInt32( type );
             }

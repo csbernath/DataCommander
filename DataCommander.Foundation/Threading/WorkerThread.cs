@@ -51,15 +51,9 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public event EventHandler Started
         {
-            add
-            {
-                this.started += value;
-            }
+            add => this.started += value;
 
-            remove
-            {
-                this.started -= value;
-            }
+            remove => this.started -= value;
         }
 
         /// <summary>
@@ -67,15 +61,9 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public event EventHandler Stopped
         {
-            add
-            {
-                this.stopped += value;
-            }
+            add => this.stopped += value;
 
-            remove
-            {
-                this.stopped -= value;
-            }
+            remove => this.stopped -= value;
         }
 
 #endregion
@@ -139,15 +127,9 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public string Name
         {
-            get
-            {
-                return this.Thread.Name;
-            }
+            get => this.Thread.Name;
 
-            set
-            {
-                this.Thread.Name = value;
-            }
+            set => this.Thread.Name = value;
         }
 
         /// <summary>
@@ -155,15 +137,9 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public ThreadPriority Priority
         {
-            get
-            {
-                return this.Thread.Priority;
-            }
+            get => this.Thread.Priority;
 
-            set
-            {
-                this.Thread.Priority = value;
-            }
+            set => this.Thread.Priority = value;
         }
 
         /// <summary>
@@ -171,15 +147,9 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public bool IsBackground
         {
-            get
-            {
-                return this.Thread.IsBackground;
-            }
+            get => this.Thread.IsBackground;
 
-            set
-            {
-                this.Thread.IsBackground = value;
-            }
+            set => this.Thread.IsBackground = value;
         }
 
         /// <summary>

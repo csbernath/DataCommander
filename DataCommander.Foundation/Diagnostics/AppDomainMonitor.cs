@@ -106,10 +106,10 @@ namespace DataCommander.Foundation.Diagnostics
                 var milliSecondsPerDay = StopwatchTimeSpan.SecondsPerDay*1000;
                 var totalDays = (double)tickCount/milliSecondsPerDay;
                 var zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
-                string tickCountString = $"{tickCount} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";
+                var tickCountString = $"{tickCount} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";
                 var workingSet = Environment.WorkingSet;
 
-                string message = $@"Environment information
+                var message = $@"Environment information
 MachineName:            {Environment.MachineName}
 ProcessorCount:         {Environment.ProcessorCount}
 OSVersion:              {Environment.OSVersion}

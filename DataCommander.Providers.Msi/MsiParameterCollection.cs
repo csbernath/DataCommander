@@ -28,14 +28,8 @@
 
 		object IDataParameterCollection.this[ string parameterName ]
 		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-			set
-			{
-				throw new NotImplementedException();
-			}
+			get => throw new NotImplementedException();
+		    set => throw new NotImplementedException();
 		}
 
 		#endregion
@@ -67,23 +61,11 @@
 			throw new NotImplementedException();
 		}
 
-		bool IList.IsFixedSize
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
+		bool IList.IsFixedSize => throw new NotImplementedException();
 
-		bool IList.IsReadOnly
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
+	    bool IList.IsReadOnly => throw new NotImplementedException();
 
-		void IList.Remove( object value )
+	    void IList.Remove( object value )
 		{
 			throw new NotImplementedException();
 		}
@@ -95,14 +77,8 @@
 
 		object IList.this[ int index ]
 		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-			set
-			{
-				throw new NotImplementedException();
-			}
+			get => throw new NotImplementedException();
+		    set => throw new NotImplementedException();
 		}
 
 		#endregion
@@ -116,23 +92,11 @@
 
 		int ICollection.Count => this.parameters.Count;
 
-        bool ICollection.IsSynchronized
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
+        bool ICollection.IsSynchronized => throw new NotImplementedException();
 
-		object ICollection.SyncRoot
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
+	    object ICollection.SyncRoot => throw new NotImplementedException();
 
-		#endregion
+	    #endregion
 
 		#region IEnumerable Members
 

@@ -53,14 +53,8 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
         public string SelectedSchema
         {
-            get
-            {
-                return selectedSchema;
-            }
-            set
-            {
-                selectedSchema = value;
-            }
+            get => selectedSchema;
+            set => selectedSchema = value;
         }
 
         readonly OracleConnection connection;

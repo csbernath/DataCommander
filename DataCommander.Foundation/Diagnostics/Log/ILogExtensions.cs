@@ -13,17 +13,14 @@
         /// <param name="log"></param>
         /// <param name="callerInformation"></param>
         /// <param name="message"></param>
-        public static void Trace(
-            this ILog log,
-            CallerInformation callerInformation,
-            string message)
+        public static void Trace(this ILog log, CallerInformation callerInformation, string message)
         {
 #if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(log != null);
             Contract.Requires<ArgumentNullException>(callerInformation != null);
 #endif
 
-            string messageWithCallerInformation =
+            var messageWithCallerInformation =
                 $"CallerInformation: {callerInformation.CallerMemberName},{callerInformation.CallerFilePath},{callerInformation.CallerLineNumber}\r\n{message}";
 
             log.Trace(messageWithCallerInformation);

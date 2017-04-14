@@ -28,15 +28,9 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         public static event EventHandler Changed
         {
-            add
-            {
-                Section.Changed += value;
-            }
+            add => Section.Changed += value;
 
-            remove
-            {
-                Section.Changed -= value;
-            }
+            remove => Section.Changed -= value;
         }
 
         /// <summary>
@@ -73,10 +67,7 @@ namespace DataCommander.Foundation.Configuration
                 return configFileName;
             }
 
-            set
-            {
-                configFileName = value;
-            }
+            set => configFileName = value;
         }
 
         /// <summary>
@@ -118,10 +109,7 @@ namespace DataCommander.Foundation.Configuration
                 return sectionName;
             }
 
-            set
-            {
-                sectionName = value;
-            }
+            set => sectionName = value;
         }
 
         /// <summary>

@@ -55,15 +55,9 @@
         /// </summary>
         public override long Position
         {
-            get
-            {
-                return this.stream.Position;
-            }
+            get => this.stream.Position;
 
-            set
-            {
-                this.stream.Position = value;
-            }
+            set => this.stream.Position = value;
         }
 
         private EventHandler beforeRead;
@@ -73,15 +67,9 @@
         /// </summary>
         public event EventHandler BeforeRead
         {
-            add
-            {
-                this.beforeRead += value;
-            }
+            add => this.beforeRead += value;
 
-            remove
-            {
-                this.beforeRead -= value;
-            }
+            remove => this.beforeRead -= value;
         }
 
         /// <summary>

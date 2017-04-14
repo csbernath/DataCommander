@@ -20,7 +20,7 @@
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText =
+            var commandText =
                 $@"select TABLE_NAME
 from INFORMATION_SCHEMA.TABLES
 where

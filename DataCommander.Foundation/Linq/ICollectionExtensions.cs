@@ -246,13 +246,7 @@
             /// <summary>
             /// 
             /// </summary>
-            bool ICollection<TResult>.IsReadOnly
-            {
-                get
-                {
-                    throw new NotSupportedException();
-                }
-            }
+            bool ICollection<TResult>.IsReadOnly => throw new NotSupportedException();
 
             /// <summary>
             /// 

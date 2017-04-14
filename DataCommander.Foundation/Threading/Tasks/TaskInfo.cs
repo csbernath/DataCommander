@@ -57,15 +57,9 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// </summary>
         public bool IsCompleted
         {
-            get
-            {
-                return this.isCompleted;
-            }
+            get => this.isCompleted;
 
-            internal set
-            {
-                this.isCompleted = true;
-            }
+            internal set => this.isCompleted = true;
         }
 
         /// <summary>

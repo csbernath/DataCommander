@@ -48,7 +48,7 @@
             if (this.first)
             {
                 this.first = false;
-                TfsParameterCollection parameters = this.command.Parameters;
+                var parameters = this.command.Parameters;
                 string workspace = Database.GetValueOrDefault<string>(parameters["workspace"].Value);
                 string owner = Database.GetValueOrDefault<string>(parameters["owner"].Value);
                 string computer = Database.GetValueOrDefault<string>(parameters["computer"].Value);
@@ -56,13 +56,13 @@
                 this.enumerator = AsEnumerable(this.workspaces).GetEnumerator();
             }
 
-            bool moveNext = this.enumerator.MoveNext();
+            var moveNext = this.enumerator.MoveNext();
 
             if (moveNext)
             {
-                Tuple<int, int> pair = this.enumerator.Current;
+                var pair = this.enumerator.Current;
                 Workspace workspace = this.workspaces[pair.Item1];
-                int folderIndex = pair.Item2;
+                var folderIndex = pair.Item2;
 
                 var values = new object[]
                 {
@@ -104,14 +104,14 @@
 
         private static IEnumerable<Tuple<int, int>> AsEnumerable(Workspace[] workspaces)
         {
-            for (int i = 0; i < workspaces.Length; i++)
+            for (var i = 0; i < workspaces.Length; i++)
             {
                 Workspace workspace = workspaces[i];
                 WorkingFolder[] folders = workspace.Folders;
 
                 if (folders.Length > 0)
                 {
-                    for (int j = 0; j < folders.Length; j++)
+                    for (var j = 0; j < folders.Length; j++)
                     {
                         yield return Tuple.Create(i, j);
                     }

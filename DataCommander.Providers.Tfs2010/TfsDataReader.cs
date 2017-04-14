@@ -14,17 +14,11 @@
         {
         }
 
-        public int Depth
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public int Depth => throw new NotImplementedException();
 
         public abstract DataTable GetSchemaTable();
 
-        public bool IsClosed
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public bool IsClosed => throw new NotImplementedException();
 
         public bool NextResult()
         {
@@ -166,35 +160,23 @@
             throw new NotImplementedException();
         }
 
-        public object this[string name]
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public object this[string name] => throw new NotImplementedException();
 
-        public object this[int i]
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public object this[int i] => throw new NotImplementedException();
 
         #endregion
 
         internal object[] Values
         {
-            get
-            {
-                return this.values;
-            }
+            get => this.values;
 
-            set
-            {
-                this.values = value;
-            }
+            set => this.values = value;
         }
 
         internal static DataTable CreateSchemaTable()
         {
-            DataTable table = new DataTable();
-            DataColumnCollection columns = table.Columns;
+            var table = new DataTable();
+            var columns = table.Columns;
             columns.Add(SchemaTableColumn.ColumnName, typeof(string));
             columns.Add("ColumnSize", typeof(int));
             columns.Add("DataType", typeof(Type));

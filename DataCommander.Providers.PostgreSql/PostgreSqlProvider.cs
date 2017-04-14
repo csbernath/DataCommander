@@ -24,13 +24,7 @@
 
         string[] IProvider.KeyWords => null;
 
-        bool IProvider.CanConvertCommandToString
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        bool IProvider.CanConvertCommandToString => throw new NotImplementedException();
 
         bool IProvider.IsCommandCancelable => true;
 

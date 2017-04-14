@@ -70,18 +70,12 @@
 
         public bool IsPrimaryKey
         {
-            set
-            {
-                this.isPrimaryKey = value;
-            }
+            set => this.isPrimaryKey = value;
         }
 
         public bool IsForeignKey
         {
-            set
-            {
-                this.isForeignKey = value;
-            }
+            set => this.isForeignKey = value;
         }
 
         #region ITreeNode Members

@@ -93,15 +93,9 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public string CommandText
         {
-            get
-            {
-                return this.Command.CommandText;
-            }
+            get => this.Command.CommandText;
 
-            set
-            {
-                this.Command.CommandText = value;
-            }
+            set => this.Command.CommandText = value;
         }
 
         /// <summary>
@@ -109,15 +103,9 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public int CommandTimeout
         {
-            get
-            {
-                return this.Command.CommandTimeout;
-            }
+            get => this.Command.CommandTimeout;
 
-            set
-            {
-                this.Command.CommandTimeout = value;
-            }
+            set => this.Command.CommandTimeout = value;
         }
 
         /// <summary>
@@ -125,15 +113,9 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public CommandType CommandType
         {
-            get
-            {
-                return this.Command.CommandType;
-            }
+            get => this.Command.CommandType;
 
-            set
-            {
-                this.Command.CommandType = value;
-            }
+            set => this.Command.CommandType = value;
         }
 
         /// <summary>
@@ -141,15 +123,9 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public IDbConnection Connection
         {
-            get
-            {
-                return this.connection;
-            }
+            get => this.connection;
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
         /// <summary>
@@ -162,15 +138,9 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public IDbTransaction Transaction
         {
-            get
-            {
-                return this.Command.Transaction;
-            }
+            get => this.Command.Transaction;
 
-            set
-            {
-                this.Command.Transaction = value;
-            }
+            set => this.Command.Transaction = value;
         }
 
         /// <summary>
@@ -178,15 +148,9 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public UpdateRowSource UpdatedRowSource
         {
-            get
-            {
-                return this.Command.UpdatedRowSource;
-            }
+            get => this.Command.UpdatedRowSource;
 
-            set
-            {
-                this.Command.UpdatedRowSource = value;
-            }
+            set => this.Command.UpdatedRowSource = value;
         }
 
         /// <summary>

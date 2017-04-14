@@ -8,15 +8,9 @@
 
         string IDbConnectionStringBuilder.ConnectionString
         {
-            get
-            {
-                return this.sqlCeConnectionStringBuilder.ConnectionString;
-            }
+            get => this.sqlCeConnectionStringBuilder.ConnectionString;
 
-            set
-            {
-                this.sqlCeConnectionStringBuilder.ConnectionString = value;
-            }
+            set => this.sqlCeConnectionStringBuilder.ConnectionString = value;
         }
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)

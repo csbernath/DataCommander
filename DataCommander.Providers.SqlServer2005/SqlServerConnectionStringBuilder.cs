@@ -11,15 +11,9 @@
 
         string IDbConnectionStringBuilder.ConnectionString
         {
-            get
-            {
-                return this.sqlConnectionStringBuilder.ConnectionString;
-            }
+            get => this.sqlConnectionStringBuilder.ConnectionString;
 
-            set
-            {
-                this.sqlConnectionStringBuilder.ConnectionString = value;
-            }
+            set => this.sqlConnectionStringBuilder.ConnectionString = value;
         }
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)

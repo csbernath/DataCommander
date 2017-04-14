@@ -47,7 +47,7 @@
 
         private void ShowCreateFunction_Click(object sender, EventArgs e)
         {
-            string commandText = $"show create function {this.databaseNode.Name}.{this.name}";
+            var commandText = $"show create function {this.databaseNode.Name}.{this.name}";
             var statement = MySqlClientFactory.Instance.ExecuteReader(
                 this.databaseNode.ObjectExplorer.ConnectionString,
                 new CommandDefinition {CommandText = commandText},

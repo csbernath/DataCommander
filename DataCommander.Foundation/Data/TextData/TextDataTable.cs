@@ -5,7 +5,7 @@
     /// <summary>
     /// 
     /// </summary>
-    [DebuggerDisplay("Name = {Name}")]
+    [DebuggerDisplay("Name = {" + nameof(Name) + "}")]
     public sealed class TextDataTable
     {
         /// <summary>

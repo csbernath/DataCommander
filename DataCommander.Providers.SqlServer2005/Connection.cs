@@ -44,7 +44,7 @@ namespace DataCommander.Providers.SqlServer2005
         private void OnStateChange(object sender, StateChangeEventArgs e)
         {
             var now = LocalTime.Default.Now;
-            string text = $"Connection.State changed. OriginalState: {e.OriginalState}, CurrentState: {e.CurrentState}";
+            var text = $"Connection.State changed. OriginalState: {e.OriginalState}, CurrentState: {e.CurrentState}";
             this.InvokeInfoMessage
                 (
                     new InfoMessage[]
@@ -92,7 +92,7 @@ set arithabort on";
                     userName = this.sqlConnectionStringBuilder.UserID;
                 }
 
-                string caption = $"{this.sqlConnection.DataSource}.{this.sqlConnection.Database} ({userName} ({this.spid}))";
+                var caption = $"{this.sqlConnection.DataSource}.{this.sqlConnection.Database} ({userName} ({this.spid}))";
 
                 return caption;
             }

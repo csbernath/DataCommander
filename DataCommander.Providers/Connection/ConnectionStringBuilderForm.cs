@@ -51,10 +51,7 @@ namespace DataCommander.Providers
 
         public ConnectionProperties ConnectionProperties
         {
-            get
-            {
-                return this.connectionProperties;
-            }
+            get => this.connectionProperties;
 
             set
             {

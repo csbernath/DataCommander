@@ -44,18 +44,13 @@ namespace DataCommander.Foundation.Configuration
 
             using (xmlWriter.WriteElement(xmlElementName))
             {
-
                 if (xmlAttributeValue != null)
-                {
                     xmlWriter.WriteAttributeString("name", xmlAttributeValue);
-                }
 
                 Write(xmlWriter, node.Attributes);
 
                 foreach (var childNode in node.ChildNodes)
-                {
                     WriteNode(xmlWriter, childNode);
-                }
             }
         }
 
@@ -77,7 +72,7 @@ namespace DataCommander.Foundation.Configuration
                     {
                         var type = value.GetType();
 
-                        if (type != typeof (string))
+                        if (type != typeof(string))
                         {
                             var typeName = TypeNameCollection.GetTypeName(type);
                             xmlWriter.WriteAttributeString("type", typeName);
@@ -89,7 +84,7 @@ namespace DataCommander.Foundation.Configuration
                         switch (typeCode)
                         {
                             case TypeCode.Object:
-                                if (type == typeof (TimeSpan))
+                                if (type == typeof(TimeSpan))
                                 {
                                     var timeSpan = (TimeSpan) value;
                                     strValue = timeSpan.ToString();
@@ -124,9 +119,7 @@ namespace DataCommander.Foundation.Configuration
                         }
                     }
                     else
-                    {
                         xmlWriter.WriteAttributeString("isNull", bool.TrueString);
-                    }
                 }
             }
         }

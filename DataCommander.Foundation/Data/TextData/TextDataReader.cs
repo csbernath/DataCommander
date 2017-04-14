@@ -56,13 +56,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override int Depth
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public override int Depth => throw new NotImplementedException();
 
         /// <summary>
         /// 
@@ -321,24 +315,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public override bool HasRows
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public override bool HasRows => throw new NotImplementedException();
 
         /// <summary>
         /// 
         /// </summary>
-        public override bool IsClosed
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public override bool IsClosed => throw new NotImplementedException();
 
         /// <summary>
         /// 

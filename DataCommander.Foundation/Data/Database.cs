@@ -62,10 +62,7 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public IDbProviderFactoryHelper ProviderFactoryHelper
         {
-            get
-            {
-                return this.providerFactoryHelper;
-            }
+            get => this.providerFactoryHelper;
 
             set
             {

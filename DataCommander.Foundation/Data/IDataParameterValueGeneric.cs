@@ -4,7 +4,7 @@
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IDataParameterValue<T> : IDataParameterValue
+    public interface IDataParameterValue<out T> : IDataParameterValue
     {
         /// <summary>
         /// 

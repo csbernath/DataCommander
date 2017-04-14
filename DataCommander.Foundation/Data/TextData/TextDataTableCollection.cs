@@ -28,15 +28,9 @@
 
         TextDataTable IList<TextDataTable>.this[int index]
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
         #endregion
@@ -63,15 +57,9 @@
             throw new NotImplementedException();
         }
 
-        int ICollection<TextDataTable>.Count
-        {
-            get { throw new NotImplementedException();}
-        }
+        int ICollection<TextDataTable>.Count => throw new NotImplementedException();
 
-        bool ICollection<TextDataTable>.IsReadOnly
-        {
-            get { throw new NotImplementedException();}
-        }
+        bool ICollection<TextDataTable>.IsReadOnly => throw new NotImplementedException();
 
         bool ICollection<TextDataTable>.Remove(TextDataTable item)
         {

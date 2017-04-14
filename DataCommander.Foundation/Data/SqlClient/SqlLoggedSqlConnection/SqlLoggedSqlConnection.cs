@@ -128,15 +128,9 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// </summary>
         public string ConnectionString
         {
-            get
-            {
-                return this.Connection.ConnectionString;
-            }
+            get => this.Connection.ConnectionString;
 
-            set
-            {
-                this.Connection.ConnectionString = value;
-            }
+            set => this.Connection.ConnectionString = value;
         }
 
         /// <summary>

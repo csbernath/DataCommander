@@ -43,7 +43,7 @@ namespace DataCommander.Providers
         private void sqlBulkCopy_SqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
         {
             this.rowCount += e.RowsCopied;
-            string message = $"{this.rowCount} rows copied.";
+            var message = $"{this.rowCount} rows copied.";
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
             if (this.cancelRequested)
             {
@@ -54,13 +54,7 @@ namespace DataCommander.Providers
 
         #region IAsyncDataAdapter Members
 
-        IResultWriter IAsyncDataAdapter.ResultWriter
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        IResultWriter IAsyncDataAdapter.ResultWriter => throw new NotImplementedException();
 
         long IAsyncDataAdapter.RowCount => this.rowCount;
 

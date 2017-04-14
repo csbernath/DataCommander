@@ -99,7 +99,7 @@
 
         private void sqlBulkCopy_SqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
         {
-            string message = $"{e.RowsCopied} rows copied to destination.";
+            var message = $"{e.RowsCopied} rows copied to destination.";
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
 
             if (this.cancellationToken.IsCancellationRequested)
@@ -144,7 +144,7 @@
                 this.sqlBulkCopy.WriteToServer(dataTable);
             }
 
-            string message = $"{this.insertedRowCount} rows inserted.";
+            var message = $"{this.insertedRowCount} rows inserted.";
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
 
@@ -221,7 +221,7 @@
         {
             this.logResultWriter.WriteRows(rows, rowCount);
             this.readRowCount += rowCount;
-            string message = $"{this.readRowCount} row(s) read.";
+            var message = $"{this.readRowCount} row(s) read.";
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
             var targetRows = new object[rowCount][];
             for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)

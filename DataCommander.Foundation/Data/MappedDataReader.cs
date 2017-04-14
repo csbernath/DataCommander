@@ -283,13 +283,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override bool HasRows
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public override bool HasRows => throw new NotImplementedException();
 
         /// <summary>
         /// 
@@ -334,25 +328,13 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public override object this[string name]
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public override object this[string name] => throw new NotImplementedException();
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override object this[int ordinal]
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public override object this[int ordinal] => throw new NotImplementedException();
     }
 }

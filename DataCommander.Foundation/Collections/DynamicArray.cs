@@ -60,15 +60,9 @@
         /// <returns></returns>
         public T this[int index]
         {
-            get
-            {
-                return this.array[index];
-            }
+            get => this.array[index];
 
-            set
-            {
-                this.array[index] = value;
-            }
+            set => this.array[index] = value;
         }
 
         #endregion

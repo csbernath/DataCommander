@@ -23,7 +23,7 @@
 
         public override DataTable GetSchemaTable()
         {
-            DataTable table = CreateSchemaTable();
+            var table = CreateSchemaTable();
             AddSchemaRowString( table, "SourceServerItem", false );
             AddSchemaRowString( table, "ChangeType", false );
             AddSchemaRowString( table, "LockOwner", false );
@@ -42,10 +42,10 @@
             if (this.first)
             {
                 this.first = false;
-                TfsParameterCollection parameters = this.command.Parameters;
-                string path = (string) parameters[ "path" ].Value;
+                var parameters = this.command.Parameters;
+                var path = (string) parameters[ "path" ].Value;
                 RecursionType recursion;
-                TfsParameter parameter = parameters.FirstOrDefault( p => p.ParameterName == "recursion" );
+                var parameter = parameters.FirstOrDefault( p => p.ParameterName == "recursion" );
                 if (parameter != null)
                 {
                     string recursionString = Database.GetValueOrDefault<string>( parameter.Value );
@@ -100,7 +100,7 @@
             {
                 ExtendedItem item = this.items[this.index ];
 
-                object[] values = new object[]
+                var values = new object[]
                 {
                     item.SourceServerItem,
                     item.ChangeType.ToString(),

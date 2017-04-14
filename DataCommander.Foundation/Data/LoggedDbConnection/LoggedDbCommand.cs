@@ -48,54 +48,30 @@
 
         string IDbCommand.CommandText
         {
-            get
-            {
-                return this.command.CommandText;
-            }
+            get => this.command.CommandText;
 
-            set
-            {
-                this.command.CommandText = value;
-            }
+            set => this.command.CommandText = value;
         }
 
         int IDbCommand.CommandTimeout
         {
-            get
-            {
-                return this.command.CommandTimeout;
-            }
+            get => this.command.CommandTimeout;
 
-            set
-            {
-                this.command.CommandTimeout = value;
-            }
+            set => this.command.CommandTimeout = value;
         }
 
         CommandType IDbCommand.CommandType
         {
-            get
-            {
-                return this.command.CommandType;
-            }
+            get => this.command.CommandType;
 
-            set
-            {
-                this.command.CommandType = value;
-            }
+            set => this.command.CommandType = value;
         }
 
         IDbConnection IDbCommand.Connection
         {
-            get
-            {
-                return this.command.Connection;
-            }
+            get => this.command.Connection;
 
-            set
-            {
-                this.command.Connection = value;
-            }
+            set => this.command.Connection = value;
         }
 
         IDbDataParameter IDbCommand.CreateParameter()
@@ -231,28 +207,16 @@
 
         IDbTransaction IDbCommand.Transaction
         {
-            get
-            {
-                return this.command.Transaction;
-            }
+            get => this.command.Transaction;
 
-            set
-            {
-                this.command.Transaction = value;
-            }
+            set => this.command.Transaction = value;
         }
 
         UpdateRowSource IDbCommand.UpdatedRowSource
         {
-            get
-            {
-                return this.command.UpdatedRowSource;
-            }
+            get => this.command.UpdatedRowSource;
 
-            set
-            {
-                this.command.UpdatedRowSource = value;
-            }
+            set => this.command.UpdatedRowSource = value;
         }
 
 #endregion

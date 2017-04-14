@@ -38,7 +38,7 @@ namespace DataCommander.Providers.SQLite
             string databaseName,
             string name)
         {
-            string commandText = $@"
+            var commandText = $@"
 select  sql
 from	{databaseName}.sqlite_master
 where	name	= '{name}'";

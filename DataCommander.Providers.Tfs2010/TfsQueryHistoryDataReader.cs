@@ -28,7 +28,7 @@
 
         public override DataTable GetSchemaTable()
         {
-            DataTable table = CreateSchemaTable();
+            var table = CreateSchemaTable();
             AddSchemaRowInt32(table, "ChangesetId", false);
             AddSchemaRowString(table, "Committer", false);
             AddSchemaRowDateTime(table, "CreationDate", false);
@@ -45,11 +45,11 @@
             if (this.first)
             {
                 this.first = false;
-                TfsParameterCollection parameters = this.command.Parameters;
-                string path = (string)parameters["path"].Value;
+                var parameters = this.command.Parameters;
+                var path = (string)parameters["path"].Value;
                 VersionSpec version = VersionSpec.Latest;
-                int deletionId = 0;
-                TfsParameter parameter = parameters.FirstOrDefault(p => p.ParameterName == "recursion");
+                var deletionId = 0;
+                var parameter = parameters.FirstOrDefault(p => p.ParameterName == "recursion");
                 RecursionType recursion;
                 if (parameter != null && parameter.Value != null && parameter.Value != DBNull.Value)
                 {
@@ -84,14 +84,14 @@
                 this.enumerator = this.AsEnumerable(changesets).GetEnumerator();
             }
 
-            bool moveNext = this.enumerator.MoveNext();
+            var moveNext = this.enumerator.MoveNext();
 
             if (moveNext)
             {
                 Tuple<Changeset, int> pair = this.enumerator.Current;
                 Changeset changeset = pair.Item1;
 
-                object[] values = new object[]
+                var values = new object[]
                 {
                     changeset.ChangesetId,
                     changeset.Committer,
@@ -101,7 +101,7 @@
                     null
                 };
 
-                int changeIndex = pair.Item2;
+                var changeIndex = pair.Item2;
 
                 if (changeIndex >= 0)
                 {
@@ -134,7 +134,7 @@
 
                 if (changes.Length > 0)
                 {
-                    for (int i = 0; i < changes.Length; i++)
+                    for (var i = 0; i < changes.Length; i++)
                     {
                         yield return new Tuple<Changeset, int>(changeset, i);
                     }

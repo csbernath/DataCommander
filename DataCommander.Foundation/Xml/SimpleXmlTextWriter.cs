@@ -476,25 +476,13 @@ namespace DataCommander.Foundation.Xml
         /// When overridden in a derived class, gets the current xml:lang scope.
         /// </summary>
         /// <value></value>
-        public override string XmlLang
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public override string XmlLang => throw new NotImplementedException();
 
         /// <summary>
         /// When overridden in a derived class, gets an <see cref="T:System.Xml.XmlSpace"/> representing the current xml:space scope.
         /// </summary>
         /// <value></value>
-        public override XmlSpace XmlSpace
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public override XmlSpace XmlSpace => throw new NotImplementedException();
 
         private sealed class StackItem
         {

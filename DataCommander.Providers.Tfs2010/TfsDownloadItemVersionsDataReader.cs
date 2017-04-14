@@ -27,7 +27,7 @@
 
         public override DataTable GetSchemaTable()
         {
-            DataTable table = CreateSchemaTable();
+            var table = CreateSchemaTable();
             AddSchemaRowInt32( table, "ChangesetId", false );
             AddSchemaRowString( table, "Committer", false );
             AddSchemaRowDateTime( table, "CreationDate", false );
@@ -58,15 +58,15 @@
             if (this.first)
             {
                 this.first = false;
-                TfsParameterCollection parameters = this.command.Parameters;
+                var parameters = this.command.Parameters;
                 this.path = (string) parameters[ "path" ].Value;
                 VersionSpec version = VersionSpec.Latest;
-                int deletionId = 0;
+                var deletionId = 0;
                 RecursionType recursion = RecursionType.None;
                 string user = Database.GetValueOrDefault<string>( parameters[ "user" ].Value );
                 VersionSpec versionFrom = null;
                 VersionSpec versionTo = null;
-                TfsParameter parameter = parameters[ "maxCount" ];
+                var parameter = parameters[ "maxCount" ];
 
                 int maxCount = Database.GetValueOrDefault<int>( parameter.Value );
 
@@ -91,14 +91,14 @@
                 this.enumerator = this.AsEnumerable( changesets ).GetEnumerator();
             }
 
-            bool moveNext = this.enumerator.MoveNext();
+            var moveNext = this.enumerator.MoveNext();
 
             if (moveNext)
             {
                 var pair = this.enumerator.Current;
                 Changeset changeset = pair.Item1;
 
-                object[] values = new object[]
+                var values = new object[]
                 {
                     changeset.ChangesetId,
                     changeset.Committer,
@@ -108,7 +108,7 @@
                     null
                 };
 
-                int changeIndex = pair.Item2;
+                var changeIndex = pair.Item2;
 
                 if (changeIndex >= 0)
                 {
@@ -119,9 +119,9 @@
 
                 this.Values = values;
                 int changesetId = changeset.ChangesetId;
-                String changeType = String.Empty;
+                var changeType = String.Empty;
 
-                for (Int32 i = 0; i < changeset.Changes.Length; i++)
+                for (var i = 0; i < changeset.Changes.Length; i++)
                 {
                     Change change = changeset.Changes[ i ];
                     Trace.WriteLine( change.ChangeType );
@@ -137,12 +137,12 @@
                 }
 
                 DateTime creationDate = changeset.CreationDate;
-                int deletionId = 0;
+                var deletionId = 0;
                 ChangesetVersionSpec versionSpec = new ChangesetVersionSpec( changesetId );
                 string fileName = VersionControlPath.GetFileName( this.path );
-                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension( fileName );
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension( fileName );
                 string extension = VersionControlPath.GetExtension( this.path );
-                string localFileName = this.localPath + Path.DirectorySeparatorChar + changesetId.ToString().PadLeft( 5, '0' ) + ';' + changeType + ';' + changeset.Committer.Replace( '\\', ' ' ) + extension;
+                var localFileName = this.localPath + Path.DirectorySeparatorChar + changesetId.ToString().PadLeft( 5, '0' ) + ';' + changeType + ';' + changeset.Committer.Replace( '\\', ' ' ) + extension;
                 this.command.Connection.VersionControlServer.DownloadFile( this.path, deletionId, versionSpec, localFileName );
                 File.SetLastWriteTime( localFileName, creationDate );
                 File.SetAttributes( localFileName, FileAttributes.ReadOnly );
@@ -169,7 +169,7 @@
 
                 if (changes.Length > 0)
                 {
-                    for (int i = 0; i < changes.Length; i++)
+                    for (var i = 0; i < changes.Length; i++)
                     {
                         yield return Tuple.Create( changeset, i );
                     }

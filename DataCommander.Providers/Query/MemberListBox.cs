@@ -88,12 +88,8 @@ namespace DataCommander.Providers
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 if (this.components != null)
-                {
                     this.components.Dispose();
-                }
-            }
 
             base.Dispose(disposing);
         }
@@ -112,7 +108,8 @@ namespace DataCommander.Providers
             // listBox
             // 
             this.ListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ListBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(238)));
+            this.ListBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point,
+                ((System.Byte) (238)));
             this.ListBox.Name = "ListBox";
             this.ListBox.Size = new System.Drawing.Size(180, 134);
             this.ListBox.TabIndex = 0;
@@ -135,14 +132,14 @@ namespace DataCommander.Providers
         private void Close()
         {
             this.textBox.KeyboardHandler = null;
-            var form = (Form)this.Parent;
+            var form = (Form) this.Parent;
             form.Controls.Remove(this);
             form.Close();
         }
 
         private void SelectItem()
         {
-            var listBoxItem = (ListBoxItem<IObjectName>)this.ListBox.SelectedItem;
+            var listBoxItem = (ListBoxItem<IObjectName>) this.ListBox.SelectedItem;
 
             if (listBoxItem != null)
             {
@@ -205,13 +202,17 @@ namespace DataCommander.Providers
             this.Close();
         }
 
-        public ListBox ListBox { get; private set; }
+        public ListBox ListBox
+        {
+            get;
+            private set;
+        }
 
         public bool HandleKeyDown(KeyEventArgs e)
         {
             bool handled;
             var hWnd = this.ListBox.Handle.ToInt32();
-            NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.Keyboard.KeyDown, (int)e.KeyCode, 0);
+            NativeMethods.SendMessage(hWnd, (int) NativeMethods.Message.Keyboard.KeyDown, (int) e.KeyCode, 0);
 
             if (
                 e.KeyCode == Keys.Down ||
@@ -227,23 +228,21 @@ namespace DataCommander.Providers
                 {
                     var startIndex = this.ListBox.SelectedIndex + 1;
                     if (startIndex < this.ListBox.Items.Count - 1)
-                    {
                         this.FindNext(startIndex);
-                    }
                 }
                 else if (e.KeyCode == Keys.Up && e.Shift)
                 {
                     var startIndex = this.ListBox.SelectedIndex - 1;
                     if (startIndex > 0)
-                    {
                         this.FindPrevious(startIndex);
-                    }
                 }
             }
             else if (e.KeyCode.In(Keys.Subtract, Keys.OemMinus) && e.Control)
             {
                 handled = true;
-                var filteredItems = this.ListBox.Items.Cast<ListBoxItem<IObjectName>>().Where(item => IndexOf(item.Item.UnquotedName, this.prefix) >= 0).ToArray();
+                var filteredItems = this.ListBox.Items.Cast<ListBoxItem<IObjectName>>()
+                    .Where(item => IndexOf(item.Item.UnquotedName, this.prefix) >= 0)
+                    .ToArray();
                 this.ListBox.Items.Clear();
                 this.ListBox.Items.AddRange(filteredItems);
             }
@@ -267,7 +266,8 @@ namespace DataCommander.Providers
                     Index = i,
                     IndexOf = IndexOf(listBoxItem.Item.UnquotedName, prefix)
                 })
-                .Where(item => item.IndexOf >= 0).ToList();
+                .Where(item => item.IndexOf >= 0)
+                .ToList();
 
             var index = -1;
 
@@ -283,11 +283,11 @@ namespace DataCommander.Providers
                 if (index >= 3)
                 {
                     // scrolling 3 items up
-                    var wParam = (int)NativeMethods.Message.ScrollBarParameter.ThumbPosition;
+                    var wParam = (int) NativeMethods.Message.ScrollBarParameter.ThumbPosition;
                     var pos = (index - 3) << 16;
                     wParam += pos;
                     var hWnd = this.ListBox.Handle.ToInt32();
-                    NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.ScrollBar.VScroll, wParam, 0);
+                    NativeMethods.SendMessage(hWnd, (int) NativeMethods.Message.ScrollBar.VScroll, wParam, 0);
                 }
             }
         }
@@ -313,15 +313,11 @@ namespace DataCommander.Providers
                 var c = source[i];
 
                 if (i == 0)
-                {
                     sb.Append(c);
-                }
                 else
                 {
                     if (char.GetUnicodeCategory(c) == UnicodeCategory.UppercaseLetter)
-                    {
                         sb.Append(c);
-                    }
                 }
             }
 
@@ -340,9 +336,7 @@ namespace DataCommander.Providers
             });
 
             if (index >= 0)
-            {
                 this.ListBox.SelectedIndex = index;
-            }
         }
 
         private void FindPrevious(int startIndex)
@@ -356,9 +350,7 @@ namespace DataCommander.Providers
             });
 
             if (index >= 0)
-            {
                 this.ListBox.SelectedIndex = index;
-            }
         }
 
         public bool HandleKeyPress(KeyPressEventArgs e)
@@ -391,9 +383,7 @@ namespace DataCommander.Providers
                     }
                 }
                 else
-                {
                     this.prefix += char.ToLower(e.KeyChar);
-                }
 
                 this.LoadItems();
 

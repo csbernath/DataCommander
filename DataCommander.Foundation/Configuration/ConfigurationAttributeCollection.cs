@@ -10,7 +10,7 @@
     /// 
     /// </summary>
     [DebuggerTypeProxy(typeof (ConfigurationAttributeCollectionDebugger))]
-    [DebuggerDisplay("Count = {Count}")]
+    [DebuggerDisplay("Count = {" + nameof(Count) + "}")]
     public class ConfigurationAttributeCollection : IList<ConfigurationAttribute>
     {
         private readonly IndexableCollection<ConfigurationAttribute> collection;

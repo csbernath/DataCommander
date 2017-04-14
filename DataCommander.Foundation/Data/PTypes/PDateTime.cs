@@ -147,7 +147,7 @@ namespace DataCommander.Foundation.Data.PTypes
         {
             PDateTime sp;
 
-            if (s == null || s.Length == 0)
+            if (string.IsNullOrEmpty(s))
             {
                 sp = new PDateTime( type );
             }

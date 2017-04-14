@@ -41,15 +41,9 @@ namespace DataCommander.Foundation.IO
         /// </summary>
         public NotifyFilters NotifyFilter
         {
-            get
-            {
-                return this.watcher.NotifyFilter;
-            }
+            get => this.watcher.NotifyFilter;
 
-            set
-            {
-                this.watcher.NotifyFilter = value;
-            }
+            set => this.watcher.NotifyFilter = value;
         }
 
         /// <summary>
@@ -57,15 +51,9 @@ namespace DataCommander.Foundation.IO
         /// </summary>
         public bool EnableRaisingEvents
         {
-            get
-            {
-                return this.watcher.EnableRaisingEvents;
-            }
+            get => this.watcher.EnableRaisingEvents;
 
-            set
-            {
-                this.watcher.EnableRaisingEvents = value;
-            }
+            set => this.watcher.EnableRaisingEvents = value;
         }
 
         /// <summary>

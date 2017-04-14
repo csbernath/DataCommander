@@ -49,7 +49,7 @@ namespace DataCommander.Foundation.Configuration
                     break;
 
                 default:
-                    throw new ArgumentException(null, "conversionType");
+                    throw new ArgumentException(null, nameof(conversionType));
             }
 
             return value;

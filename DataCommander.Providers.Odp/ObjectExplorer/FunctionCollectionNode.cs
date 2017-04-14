@@ -22,7 +22,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText =
+            var commandText =
                 $@"select	OBJECT_NAME
 from	SYS.ALL_OBJECTS
 where	OWNER	= '{schemaNode.Name}'

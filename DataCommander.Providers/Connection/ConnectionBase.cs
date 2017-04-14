@@ -62,10 +62,7 @@ namespace DataCommander.Providers
                 return database;
             }
 
-            set
-            {
-                this.SetDatabase(value);
-            }
+            set => this.SetDatabase(value);
         }
 
         public abstract string ServerVersion

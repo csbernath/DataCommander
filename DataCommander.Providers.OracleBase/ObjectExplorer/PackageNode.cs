@@ -29,7 +29,7 @@ namespace DataCommander.Providers.OracleBase
         {
             //string commandText = "select distinct object_name from all_arguments where owner='{0}' and package_name='{1}'";
             //commandText = string.Format(commandText, schema.Name, name);
-            string commandText =
+            var commandText =
                 $@"select	procedure_name
 from	all_procedures
 where	owner = '{schemaNode.Name}'

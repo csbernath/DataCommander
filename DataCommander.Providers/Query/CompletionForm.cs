@@ -32,15 +32,9 @@ namespace DataCommander.Providers
 
         public event EventHandler<ItemSelectedEventArgs> ItemSelected
         {
-            add
-            {
-                this.itemSelectedEvent += value;
-            }
+            add => this.itemSelectedEvent += value;
 
-            remove
-            {
-                this.itemSelectedEvent -= value;
-            }
+            remove => this.itemSelectedEvent -= value;
         }
 
         public void Initialize(QueryTextBox textBox, GetCompletionResponse response)

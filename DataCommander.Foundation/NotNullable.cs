@@ -7,7 +7,7 @@
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    [DebuggerDisplay("{value}")]
+    [DebuggerDisplay("{" + nameof(value) + "}")]
     public struct NotNullable<T> where T : class
     {
         private readonly T value;

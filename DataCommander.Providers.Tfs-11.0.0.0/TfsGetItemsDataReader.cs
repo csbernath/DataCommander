@@ -24,7 +24,7 @@
 
         public override DataTable GetSchemaTable()
         {
-            DataTable table = CreateSchemaTable();
+            var table = CreateSchemaTable();
             AddSchemaRowString(table, "Name", false);
             AddSchemaRowInt32(table, "ChangesetId", false);
             AddSchemaRowDateTime(table, "CheckinDate", false);
@@ -47,7 +47,7 @@
                 if (this.first)
                 {
                     this.first = false;
-                    TfsParameterCollection parameters = this.command.Parameters;
+                    var parameters = this.command.Parameters;
                     string path = parameters["path"].GetValueOrDefault<string>();
                     string recursionString = Database.GetValueOrDefault<string>(parameters["recursion"].Value);
                     RecursionType recursion;
@@ -94,7 +94,7 @@
 
                     if (itemEncoding >= 0)
                     {
-                        Encoding encoding = Encoding.GetEncoding(item.Encoding);
+                        var encoding = Encoding.GetEncoding(item.Encoding);
                         encodingString = encoding.EncodingName;
                     }
                     else
@@ -102,7 +102,7 @@
                         encodingString = null;
                     }
 
-                    object[] values = new object[]
+                    var values = new object[]
                     {
                         item.ServerItem,
                         item.ChangesetId,

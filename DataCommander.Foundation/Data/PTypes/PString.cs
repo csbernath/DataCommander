@@ -146,7 +146,7 @@ namespace DataCommander.Foundation.Data.PTypes
         {
             PString sp;
 
-            if (s == null || s.Length == 0)
+            if (string.IsNullOrEmpty(s))
             {
                 sp = new PString( type );
             }

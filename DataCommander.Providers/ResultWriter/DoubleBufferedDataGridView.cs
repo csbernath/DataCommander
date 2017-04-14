@@ -15,14 +15,8 @@
 
         public bool PublicDoubleBuffered
         {
-            get
-            {
-                return this.DoubleBuffered;
-            }
-            set
-            {
-                this.DoubleBuffered = value;
-            }
+            get => this.DoubleBuffered;
+            set => this.DoubleBuffered = value;
         }
 
         protected override void OnCursorChanged( EventArgs e )

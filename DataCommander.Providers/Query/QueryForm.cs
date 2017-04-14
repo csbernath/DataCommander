@@ -241,7 +241,7 @@ namespace DataCommander
                 this.mnuObjectExplorer.Enabled = false;
             }
 
-            string text = $"&{index + 1} - {this.Text}";
+            var text = $"&{index + 1} - {this.Text}";
 
             this.database = connection.Database;
             this.SetResultWriterType(ResultWriterType.DataGrid);
@@ -1958,7 +1958,7 @@ namespace DataCommander
             {
                 if (this.database != args.database)
                 {
-                    string message = $"[DatabaseChanged] Database changed from {this.database} to {this.database}";
+                    var message = $"[DatabaseChanged] Database changed from {this.database} to {this.database}";
                     var infoMessage = new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message);
                     this.AddInfoMessage(infoMessage);
 
@@ -3043,7 +3043,7 @@ namespace DataCommander
 
             if (!found)
             {
-                string message = $"The specified text was not found.\r\n\r\nText: {text}\r\nControl: {control.Name}";
+                var message = $"The specified text was not found.\r\n\r\nText: {text}\r\nControl: {control.Name}";
                 MessageBox.Show(this, message, DataCommanderApplication.Instance.Name);
             }
         }
@@ -3811,7 +3811,7 @@ namespace DataCommander
                 }
                 catch (Exception ex)
                 {
-                    string message = $"Rollback failed. Exception:\r\n{ex.ToLogString()}";
+                    var message = $"Rollback failed. Exception:\r\n{ex.ToLogString()}";
                     this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Error, message));
                 }
 

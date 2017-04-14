@@ -81,15 +81,9 @@
 
         TextDataSetTable IList<TextDataSetTable>.this[ int index ]
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
 #endregion
@@ -128,13 +122,7 @@
         /// </summary>
         public int Count => this.collection.Count;
 
-        bool ICollection<TextDataSetTable>.IsReadOnly
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        bool ICollection<TextDataSetTable>.IsReadOnly => throw new NotImplementedException();
 
         bool ICollection<TextDataSetTable>.Remove( TextDataSetTable item )
         {

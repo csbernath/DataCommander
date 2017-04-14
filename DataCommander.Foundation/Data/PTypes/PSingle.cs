@@ -123,7 +123,7 @@ namespace DataCommander.Foundation.Data.PTypes
         {
             PSingle sp;
 
-            if (s == null || s.Length == 0)
+            if (string.IsNullOrEmpty(s))
             {
                 sp = new PSingle( type );
             }

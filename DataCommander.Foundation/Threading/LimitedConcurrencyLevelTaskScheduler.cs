@@ -210,7 +210,7 @@
         public LimitedConcurrencyLevelTaskScheduler(int maxDegreeOfParallelism)
         {
             if (maxDegreeOfParallelism < 1)
-                throw new ArgumentOutOfRangeException("maxDegreeOfParallelism");
+                throw new ArgumentOutOfRangeException(nameof(maxDegreeOfParallelism));
             this._maxDegreeOfParallelism = maxDegreeOfParallelism;
         }
 
@@ -307,18 +307,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public int QueuedItemCount
-        {
-            get { return this._tasks.Count; }
-        }
+        public int QueuedItemCount => this._tasks.Count;
 
         /// <summary>
         /// 
         /// </summary>
-        public int ThreadCount
-        {
-            get { return this._delegatesQueuedOrRunning; }
-        }
+        public int ThreadCount => this._delegatesQueuedOrRunning;
 
         /// <summary>Gets an enumerable of the tasks currently scheduled on this scheduler.</summary>
         /// <returns>An enumerable of the tasks currently scheduled.</returns>

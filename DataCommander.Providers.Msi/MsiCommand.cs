@@ -36,14 +36,8 @@
 
         IDbConnection IDbCommand.Connection
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
         }
 
         IDbDataParameter IDbCommand.CreateParameter()
@@ -92,14 +86,8 @@
 
         UpdateRowSource IDbCommand.UpdatedRowSource
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
         }
 
 #endregion

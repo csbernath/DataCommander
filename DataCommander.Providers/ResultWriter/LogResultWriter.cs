@@ -39,7 +39,7 @@
         {
             this.beforeExecuteReaderTimestamp = Stopwatch.GetTimestamp();
             var command = asyncDataAdapterCommand.Command;
-            string message = $"Executing command[{this.commandCount}] from line {asyncDataAdapterCommand.LineIndex + 1}...\r\n{command.CommandText}";
+            var message = $"Executing command[{this.commandCount}] from line {asyncDataAdapterCommand.LineIndex + 1}...\r\n{command.CommandText}";
 
             this.commandCount++;
 
@@ -55,7 +55,7 @@
         void IResultWriter.AfterExecuteReader(int fieldCount)
         {
             var duration = Stopwatch.GetTimestamp() - this.beforeExecuteReaderTimestamp;
-            string message = $"Command[{this.commandCount - 1}] started in {StopwatchTimeSpan.ToString(duration, 3)} seconds. Field count: {fieldCount}";
+            var message = $"Command[{this.commandCount - 1}] started in {StopwatchTimeSpan.ToString(duration, 3)} seconds. Field count: {fieldCount}";
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
             this.tableCount = 0;
         }
@@ -67,7 +67,7 @@
             var affected = affectedRows >= 0
                 ? $"{affectedRows} row(s) affected."
                 : null;
-            string message = $"Command[{this.commandCount - 1}] completed in {StopwatchTimeSpan.ToString(duration, 3)} seconds. {affected}";
+            var message = $"Command[{this.commandCount - 1}] completed in {StopwatchTimeSpan.ToString(duration, 3)} seconds. {affected}";
             this.addInfoMessage(new InfoMessage(now, InfoMessageSeverity.Verbose, message));
         }
 
@@ -201,7 +201,7 @@
         void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
         {
             var duration = Stopwatch.GetTimestamp() - this.firstRowReadBeginTimestamp;
-            string message = $"First row read completed in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
+            var message = $"First row read completed in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
 
@@ -213,7 +213,7 @@
         void IResultWriter.WriteTableEnd()
         {
             var duration = Stopwatch.GetTimestamp() - this.writeTableBeginTimestamp;
-            string message =
+            var message =
                 $"Reading {this.rowCount} row(s) from command[{this.commandCount - 1}] into table[{this.tableCount - 1}] finished in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
@@ -225,7 +225,7 @@
         void IResultWriter.End()
         {
             var duration = Stopwatch.GetTimestamp() - this.beginTimestamp;
-            string message = $"Query completed {this.commandCount} command(s) in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
+            var message = $"Query completed {this.commandCount} command(s) in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
 

@@ -35,9 +35,9 @@
         /// </summary>
         public event EventHandler<BeforeOpenDbConnectionEventArgs> BeforeOpen
         {
-            add { this.beforeOpen += value; }
+            add => this.beforeOpen += value;
 
-            remove { this.beforeOpen -= value; }
+            remove => this.beforeOpen -= value;
         }
 
         /// <summary>
@@ -45,9 +45,9 @@
         /// </summary>
         public event EventHandler<AfterOpenDbConnectionEventArgs> AfterOpen
         {
-            add { this.afterOpen += value; }
+            add => this.afterOpen += value;
 
-            remove { this.afterOpen -= value; }
+            remove => this.afterOpen -= value;
         }
 
         /// <summary>
@@ -55,9 +55,9 @@
         /// </summary>
         public event EventHandler<BeforeExecuteCommandEventArgs> BeforeExecuteReader
         {
-            add { this.beforeExecuteCommand += value; }
+            add => this.beforeExecuteCommand += value;
 
-            remove { this.beforeExecuteCommand -= value; }
+            remove => this.beforeExecuteCommand -= value;
         }
 
         /// <summary>
@@ -65,9 +65,9 @@
         /// </summary>
         public event EventHandler<AfterExecuteCommandEventArgs> AfterExecuteReader
         {
-            add { this.afterExecuteCommand += value; }
+            add => this.afterExecuteCommand += value;
 
-            remove { this.afterExecuteCommand -= value; }
+            remove => this.afterExecuteCommand -= value;
         }
 
         /// <summary>
@@ -75,9 +75,9 @@
         /// </summary>
         public event EventHandler<AfterReadEventArgs> AfterRead
         {
-            add { this.afterRead += value; }
+            add => this.afterRead += value;
 
-            remove { this.afterRead -= value; }
+            remove => this.afterRead -= value;
         }
 
 #endregion
@@ -106,9 +106,9 @@
 
         string IDbConnection.ConnectionString
         {
-            get { return this.connection.ConnectionString; }
+            get => this.connection.ConnectionString;
 
-            set { this.connection.ConnectionString = value; }
+            set => this.connection.ConnectionString = value;
         }
 
         int IDbConnection.ConnectionTimeout => this.connection.ConnectionTimeout;

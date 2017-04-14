@@ -12,50 +12,20 @@
     {
         #region IProvider Members
 
-        string IProvider.Name
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        string IProvider.Name => throw new NotImplementedException();
 
-        DbProviderFactory IProvider.DbProviderFactory
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        DbProviderFactory IProvider.DbProviderFactory => throw new NotImplementedException();
 
         ConnectionBase IProvider.CreateConnection(string connectionString)
         {
             throw new NotImplementedException();
         }
 
-        string[] IProvider.KeyWords
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        string[] IProvider.KeyWords => throw new NotImplementedException();
 
-        bool IProvider.CanConvertCommandToString
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        bool IProvider.CanConvertCommandToString => throw new NotImplementedException();
 
-        bool IProvider.IsCommandCancelable
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        bool IProvider.IsCommandCancelable => throw new NotImplementedException();
 
         void IProvider.DeriveParameters(IDbCommand command)
         {

@@ -32,9 +32,9 @@
             this.equalityComparers = equalityComparers;
         }
 
-#endregion
+        #endregion
 
-#region IEqualityComparer<T> Members
+        #region IEqualityComparer<T> Members
 
         bool IEqualityComparer<T>.Equals(T x, T y)
         {
@@ -48,15 +48,15 @@
             return hashCode;
         }
 
-#endregion
+        #endregion
 
-#region Private Methods
+        #region Private Methods
 
         private static int CombineHashCodes(int h1, int h2)
         {
             return (h1 << 5) + h1 ^ h2;
         }
 
-#endregion
+        #endregion
     }
 }

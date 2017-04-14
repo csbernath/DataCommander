@@ -32,7 +32,7 @@
         {
             get
             {
-                string commandText = $@"select sql
+                var commandText = $@"select sql
 from main.sqlite_master
 where
     type = 'index'

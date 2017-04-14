@@ -152,7 +152,7 @@ namespace DataCommander.Foundation.Text
         /// <returns></returns>
         public static bool ParseBoolean(string value, bool nullValue)
         {
-            var b = value != null && value.Length > 0
+            var b = !string.IsNullOrEmpty(value)
                 ? bool.Parse(value)
                 : nullValue;
             return b;

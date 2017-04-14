@@ -40,7 +40,7 @@
             get
             {
                 var contextMenu = new ContextMenuStrip();
-                ToolStripItemCollection items = contextMenu.Items;
+                var items = contextMenu.Items;
                 var menuItem = new ToolStripMenuItem("Open", null, this.Open_Click);
                 items.Add(menuItem);
 
@@ -59,7 +59,7 @@
         private void Open_Click(object sender, EventArgs e)
         {
             string name = VersionControlPath.GetFileName(this.item.ServerItem);
-            string localFileName = Path.GetTempPath();
+            var localFileName = Path.GetTempPath();
             localFileName = Path.Combine(localFileName, name);
             this.item.DownloadFile(localFileName);
             var startInfo = new ProcessStartInfo(localFileName);
@@ -69,7 +69,7 @@
         private void View_Click(object sender, EventArgs e)
         {
             string name = VersionControlPath.GetFileName(this.item.ServerItem);
-            string localFileName = Path.GetTempPath();
+            var localFileName = Path.GetTempPath();
             localFileName = Path.Combine(localFileName, name);
             this.item.DownloadFile(localFileName);
 
@@ -77,7 +77,7 @@
             ConfigurationAttributeCollection attributes = node.Attributes;
             string fileName;
             bool contains = attributes.TryGetAttributeValue("FileName", out fileName);
-            string arguments = '"' + localFileName + '"';
+            var arguments = '"' + localFileName + '"';
             var startInfo = new ProcessStartInfo(fileName, arguments);
             Process.Start(startInfo);
         }

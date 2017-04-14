@@ -66,23 +66,11 @@
 
         string IDbConnection.ConnectionString
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
         }
 
-        int IDbConnection.ConnectionTimeout
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        int IDbConnection.ConnectionTimeout => throw new NotImplementedException();
 
         IDbCommand IDbConnection.CreateCommand()
         {

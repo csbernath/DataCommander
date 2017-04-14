@@ -161,13 +161,7 @@
         /// </summary>
         public int Count => this.collection.Count;
 
-        bool ICollection<TextDataColumn>.IsReadOnly
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        bool ICollection<TextDataColumn>.IsReadOnly => throw new NotImplementedException();
 
         bool ICollection<TextDataColumn>.Remove( TextDataColumn item )
         {

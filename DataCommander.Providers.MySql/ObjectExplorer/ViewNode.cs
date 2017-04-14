@@ -29,13 +29,7 @@
             throw new NotImplementedException();
         }
 
-        bool ITreeNode.Sortable
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        bool ITreeNode.Sortable => throw new NotImplementedException();
 
         string ITreeNode.Query => $@"select *
 from {this.databaseNode.Name}.{this.name}";
@@ -55,7 +49,7 @@ from {this.databaseNode.Name}.{this.name}";
 
         private void ShowCreateTable_Click(object sender, EventArgs e)
         {
-            string commandText = $"show create table {this.databaseNode.Name}.{this.name}";
+            var commandText = $"show create table {this.databaseNode.Name}.{this.name}";
             var createTableStatement = MySqlClientFactory.Instance.ExecuteReader(
                 this.databaseNode.ObjectExplorer.ConnectionString,
                 new CommandDefinition {CommandText = commandText},

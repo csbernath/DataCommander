@@ -34,15 +34,9 @@
 			}
 		}
 
-		int IDataReader.Depth
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
+		int IDataReader.Depth => throw new NotImplementedException();
 
-		public DataTable GetSchemaTable()
+	    public DataTable GetSchemaTable()
 		{
 			var table = new DataTable();
 			var columns = table.Columns;
@@ -67,15 +61,9 @@
 			return table;
 		}
 
-		bool IDataReader.IsClosed
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
+		bool IDataReader.IsClosed => throw new NotImplementedException();
 
-		bool IDataReader.NextResult()
+	    bool IDataReader.NextResult()
 		{
 			return false;
 		}
@@ -254,15 +242,9 @@
 			throw new NotImplementedException();
 		}
 
-		object IDataRecord.this[ string name ]
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
+		object IDataRecord.this[ string name ] => throw new NotImplementedException();
 
-		object IDataRecord.this[ int i ] => this.GetValue( i );
+	    object IDataRecord.this[ int i ] => this.GetValue( i );
 
 #endregion
 	}

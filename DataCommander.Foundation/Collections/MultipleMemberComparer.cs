@@ -23,7 +23,7 @@
         {
             var result = 0;
 
-            foreach (var comparer in comparers)
+            foreach (var comparer in this.comparers)
             {
                 var currentResult = comparer.Compare(x, y);
                 if (currentResult != 0)

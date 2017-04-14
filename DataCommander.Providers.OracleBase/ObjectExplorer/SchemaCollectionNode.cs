@@ -54,14 +54,8 @@ namespace DataCommander.Providers.OracleBase
 
         public string SelectedSchema
         {
-            get
-            {
-                return selectedSchema;
-            }
-            set
-            {
-                selectedSchema = value;
-            }
+            get => selectedSchema;
+            set => selectedSchema = value;
         }
     }
 }

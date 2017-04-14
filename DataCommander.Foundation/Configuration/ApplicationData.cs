@@ -70,14 +70,10 @@ namespace DataCommander.Foundation.Configuration
                 company = companyAttribute.Company;
 
                 if (company.Length == 0)
-                {
                     company = null;
-                }
             }
             else
-            {
                 company = null;
-            }
 
             var productAttribute = (AssemblyProductAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyProductAttribute));
 
@@ -86,21 +82,15 @@ namespace DataCommander.Foundation.Configuration
                 product = productAttribute.Product;
 
                 if (product.Length == 0)
-                {
                     product = null;
-                }
             }
             else
-            {
                 product = null;
-            }
 
             var name = assembly.GetName();
 
             if (product == null)
-            {
                 product = name.Name;
-            }
 
             if (company != null)
             {
@@ -131,9 +121,7 @@ namespace DataCommander.Foundation.Configuration
             this.RootNode = reader.Read(xmlReader, this.sectionName, null, null);
 
             if (this.RootNode == null)
-            {
                 this.RootNode = new ConfigurationNode(null);
-            }
         }
 
         /// <summary>
@@ -153,9 +141,7 @@ namespace DataCommander.Foundation.Configuration
                 this.RootNode = reader.Read(fileName, sectionName, fileNames);
             }
             else
-            {
                 this.RootNode = new ConfigurationNode(null);
-            }
         }
 
         /// <summary>
@@ -174,9 +160,7 @@ namespace DataCommander.Foundation.Configuration
             ConfigurationWriter.Write(xmlWriter, this.RootNode.Attributes);
 
             foreach (var childNode in this.RootNode.ChildNodes)
-            {
                 ConfigurationWriter.WriteNode(xmlWriter, childNode);
-            }
 
             xmlWriter.WriteEndElement();
         }
@@ -190,6 +174,7 @@ namespace DataCommander.Foundation.Configuration
         {
             var directoryName = Path.GetDirectoryName(fileName);
             Directory.CreateDirectory(directoryName);
+
             using (var xmlTextWriter = new XmlTextWriter(fileName, Encoding.UTF8))
             {
                 xmlTextWriter.Formatting = Formatting.Indented;
@@ -210,9 +195,7 @@ namespace DataCommander.Foundation.Configuration
             var directoryName = Path.GetDirectoryName(this.fileName);
 
             if (!Directory.Exists(directoryName))
-            {
                 Directory.CreateDirectory(directoryName);
-            }
 
             this.Save(this.fileName, this.sectionName);
         }

@@ -250,11 +250,11 @@ namespace DataCommander.Foundation.Configuration
 
         private void Initialize()
         {
-            ConfigurationNode rootNode = null;
             StringCollection fileNames = null;
 
             try
             {
+                ConfigurationNode rootNode = null;
                 this.Load(out rootNode, out fileNames);
                 this.RootNode = rootNode;
             }

@@ -13,7 +13,7 @@
             TfsParameterCollection parameters,
             CreateDataReader createDataReader)
         {
-            DataReaderInfo info = new DataReaderInfo(name, parameters, createDataReader);
+            var info = new DataReaderInfo(name, parameters, createDataReader);
             dictionary.Add(name, info);
         }
 

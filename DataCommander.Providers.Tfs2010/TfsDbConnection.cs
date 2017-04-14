@@ -37,21 +37,12 @@
 
         string IDbConnection.ConnectionString
         {
-            get
-            {
-                return $"Data Source={this.connection.TfsTeamProjectCollection.Uri}";
-            }
+            get => $"Data Source={this.connection.TfsTeamProjectCollection.Uri}";
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
-        int IDbConnection.ConnectionTimeout
-        {
-            get { throw new NotImplementedException(); }
-        }
+        int IDbConnection.ConnectionTimeout => throw new NotImplementedException();
 
         IDbCommand IDbConnection.CreateCommand()
         {

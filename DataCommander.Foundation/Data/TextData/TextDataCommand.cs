@@ -98,15 +98,9 @@
         /// </summary>
         protected override DbConnection DbConnection
         {
-            get
-            {
-                return this.connection;
-            }
+            get => this.connection;
 
-            set
-            {
-                this.connection = (TextDataConnection) value;
-            }
+            set => this.connection = (TextDataConnection) value;
         }
 
         /// <summary>
@@ -119,15 +113,9 @@
         /// </summary>
         protected override DbTransaction DbTransaction
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
         /// <summary>
@@ -135,15 +123,9 @@
         /// </summary>
         public override bool DesignTimeVisible
         {
-            get
-            {
-                return false;
-            }
+            get => false;
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
         /// <summary>
@@ -201,15 +183,9 @@
         /// </summary>
         public override UpdateRowSource UpdatedRowSource
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
         #endregion

@@ -14,7 +14,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public PByte( byte value )
+        public PByte(byte value)
         {
             this.sql = value;
             this.ValueType = PValueType.Value;
@@ -24,13 +24,13 @@ namespace DataCommander.Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public PByte( SqlByte value )
+        public PByte(SqlByte value)
         {
             this.sql = value;
             this.ValueType = value.IsNull ? PValueType.Null : PValueType.Value;
         }
 
-        private PByte( PValueType type )
+        private PByte(PValueType type)
         {
             this.ValueType = type;
             this.sql = SqlByte.Null;
@@ -41,9 +41,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PByte( byte value )
+        public static implicit operator PByte(byte value)
         {
-            return new PByte( value );
+            return new PByte(value);
         }
 
         /// <summary>
@@ -51,9 +51,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PByte( byte? value )
+        public static implicit operator PByte(byte? value)
         {
-            return value != null ? new PByte( value.Value ) : Null;
+            return value != null ? new PByte(value.Value) : Null;
         }
 
         /// <summary>
@@ -61,9 +61,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PByte( SqlByte value )
+        public static implicit operator PByte(SqlByte value)
         {
-            return new PByte( value );
+            return new PByte(value);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator byte( PByte value )
+        public static implicit operator byte(PByte value)
         {
             return (byte) value.sql;
         }
@@ -82,7 +82,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static bool operator ==( PByte x, PByte y )
+        public static bool operator ==(PByte x, PByte y)
         {
             var isEqual = x.ValueType == y.ValueType;
 
@@ -103,7 +103,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static bool operator !=( PByte x, PByte y )
+        public static bool operator !=(PByte x, PByte y)
         {
             return !(x == y);
         }
@@ -114,19 +114,9 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="s"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static PByte Parse( string s, PValueType type )
+        public static PByte Parse(string s, PValueType type)
         {
-            PByte sp;
-
-            if (s == null || s.Length == 0)
-            {
-                sp = new PByte( type );
-            }
-            else
-            {
-                sp = SqlByte.Parse( s );
-            }
-
+            var sp = string.IsNullOrEmpty(s) ? new PByte(type) : SqlByte.Parse(s);
             return sp;
         }
 
@@ -135,14 +125,12 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         /// <param name="y"></param>
         /// <returns></returns>
-        public override bool Equals( object y )
+        public override bool Equals(object y)
         {
             var equals = y is PByte;
 
             if (equals)
-            {
                 equals = this == (PByte) y;
-            }
 
             return equals;
         }
@@ -160,7 +148,11 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public PValueType ValueType { get; private set; }
+        public PValueType ValueType
+        {
+            get;
+            private set;
+        }
 
         /// <summary>
         /// 
@@ -233,16 +225,16 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public static readonly PByte Null = new PByte( PValueType.Null );
+        public static readonly PByte Null = new PByte(PValueType.Null);
 
         /// <summary>
         /// 
         /// </summary>
-        public static readonly PByte Default = new PByte( PValueType.Default );
+        public static readonly PByte Default = new PByte(PValueType.Default);
 
         /// <summary>
         /// 
         /// </summary>
-        public static readonly PByte Empty = new PByte( PValueType.Empty );
+        public static readonly PByte Empty = new PByte(PValueType.Empty);
     }
 }

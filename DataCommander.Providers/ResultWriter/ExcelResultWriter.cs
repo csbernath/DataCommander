@@ -114,7 +114,7 @@
         private void CreateTable(DataTable schemaTable)
         {
             var worksheets = this.excelPackage.Workbook.Worksheets;
-            string tableName = $"Table{worksheets.Count + 1}";
+            var tableName = $"Table{worksheets.Count + 1}";
             this.excelWorksheet = worksheets.Add(tableName);
             var cells = this.excelWorksheet.Cells;
             var columnIndex = 1;

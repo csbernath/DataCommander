@@ -14,13 +14,7 @@
 
         public static IReadOnlyList<T> Instance => instance;
 
-        T IReadOnlyList<T>.this[int index]
-        {
-            get
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-        }
+        T IReadOnlyList<T>.this[int index] => throw new ArgumentOutOfRangeException();
 
         int IReadOnlyCollection<T>.Count => 0;
 

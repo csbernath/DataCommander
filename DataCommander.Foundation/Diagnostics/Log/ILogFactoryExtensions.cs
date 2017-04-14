@@ -56,7 +56,7 @@
         {
             var stackFrame = new StackFrame(1, false);
             var type = stackFrame.GetMethod().DeclaringType;
-            string name = $"{type.FullName}.{sectionName}";
+            var name = $"{type.FullName}.{sectionName}";
             var log = applicationLog.GetLog(name);
             var foundationLog = log as FoundationLog;
             if (foundationLog != null)
@@ -78,7 +78,7 @@
             var stackFrame = new StackFrame(1, false);
             var method = stackFrame.GetMethod();
             var type = method.DeclaringType;
-            string name = $"{type.FullName}.{method.Name}";
+            var name = $"{type.FullName}.{method.Name}";
             var log = applicationLog.GetLog(name);
             var foundationLog = log as FoundationLog;
             if (foundationLog != null)

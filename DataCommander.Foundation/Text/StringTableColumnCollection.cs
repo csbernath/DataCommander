@@ -40,15 +40,9 @@ namespace DataCommander.Foundation.Text
         /// <returns></returns>
         public StringTableColumn this[int index]
         {
-            get
-            {
-                return this.columns[index];
-            }
+            get => this.columns[index];
 
-            set
-            {
-                throw new Exception("The method or operation is not implemented.");
-            }
+            set => throw new Exception("The method or operation is not implemented.");
         }
 
         #endregion
@@ -97,13 +91,7 @@ namespace DataCommander.Foundation.Text
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadOnly
-        {
-            get
-            {
-                throw new Exception("The method or operation is not implemented.");
-            }
-        }
+        public bool IsReadOnly => throw new Exception("The method or operation is not implemented.");
 
         bool ICollection<StringTableColumn>.Remove(StringTableColumn item)
         {

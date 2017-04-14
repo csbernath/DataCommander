@@ -31,82 +31,46 @@
 
         public DbType DbType
         {
-            get
-            {
-                return this.dbType;
-            }
+            get => this.dbType;
 
-            set
-            {
-                this.dbType = value;
-            }
+            set => this.dbType = value;
         }
 
         public ParameterDirection Direction
         {
-            get
-            {
-                return this.direction;
-            }
+            get => this.direction;
 
-            set
-            {
-                this.direction = value;
-            }
+            set => this.direction = value;
         }
 
         public bool IsNullable => this.isNullable;
 
         public string ParameterName
         {
-            get
-            {
-                return this.name;
-            }
+            get => this.name;
 
-            set
-            {
-                this.name = value;
-            }
+            set => this.name = value;
         }
 
         string IDataParameter.SourceColumn
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
         DataRowVersion IDataParameter.SourceVersion
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
         public object Value
         {
-            get
-            {
-                return this.value;
-            }
+            get => this.value;
 
-            set
-            {
-                this.value = value;
-            }
+            set => this.value = value;
         }
 
         #endregion

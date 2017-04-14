@@ -52,7 +52,7 @@ namespace DataCommander.Providers.OracleBase
 
         private void ScriptObject_Click(object sender, EventArgs e)
         {
-            string commandText =
+            var commandText =
                 $@"select	text
 from	all_source
 where	owner = '{schemaNode.Name}'

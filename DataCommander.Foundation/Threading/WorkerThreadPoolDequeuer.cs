@@ -43,10 +43,7 @@ namespace DataCommander.Foundation.Threading
 
         internal WorkerThreadPool Pool
         {
-            set
-            {
-                this.pool = value;
-            }
+            set => this.pool = value;
         }
 
         internal long LastActivityTimestamp { get; private set; }

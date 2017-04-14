@@ -10,15 +10,9 @@
 
         string IDbConnectionStringBuilder.ConnectionString
         {
-            get
-            {
-                return this.npgsqlConnectionStringBuilder.ConnectionString;
-            }
+            get => this.npgsqlConnectionStringBuilder.ConnectionString;
 
-            set
-            {
-                this.npgsqlConnectionStringBuilder.ConnectionString = value;
-            }
+            set => this.npgsqlConnectionStringBuilder.ConnectionString = value;
         }
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)

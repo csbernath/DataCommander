@@ -61,12 +61,6 @@
             throw new InvalidOperationException();
         }
 
-        public override RuntimeMethodHandle MethodHandle
-        {
-            get
-            {
-                throw new InvalidOperationException();
-            }
-        }
+        public override RuntimeMethodHandle MethodHandle => throw new InvalidOperationException();
     }
 }

@@ -152,15 +152,9 @@
 
             TValue IDictionary<TKey, TValue>.this[TKey key]
             {
-                get
-                {
-                    return this.dictionary[key];
-                }
+                get => this.dictionary[key];
 
-                set
-                {
-                    this.dictionary[key] = value;
-                }
+                set => this.dictionary[key] = value;
             }
 
 #endregion

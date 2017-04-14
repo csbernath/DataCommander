@@ -158,7 +158,7 @@
                 }
             }
 
-            string message =
+            var message =
                 $"{this.readRowCount},{this.insertedRowCount},{this.readRowCount - this.insertedRowCount},{this.waitMilliseconds} (rows read,inserted,queued,wait).";
 
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
@@ -238,7 +238,7 @@
             this.logResultWriter.WriteRows(rows, rowCount);
             this.readRowCount += rowCount;
 
-            string message = $"{this.readRowCount},{this.insertedRowCount},{this.readRowCount - this.insertedRowCount} (rows read,inserted,queued).";
+            var message = $"{this.readRowCount},{this.insertedRowCount},{this.readRowCount - this.insertedRowCount} (rows read,inserted,queued).";
 
             this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
             var targetRows = new object[rowCount][];

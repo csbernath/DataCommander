@@ -100,7 +100,7 @@ order by c.column_id",
                 });
             }
 
-            string query =
+            var query =
                 $@"select  {columnNames}
 from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.Schema}].[{
                     databaseObjectMultipartName.Name}]";
@@ -264,7 +264,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
 
                             var keyCol = keyColObj.ToString();
 
-                            string filter = $"Name = '{keyCol}'";
+                            var filter = $"Name = '{keyCol}'";
                             var dataRow = schema.Select(filter)[0];
                             var identity = dataRow[1].ToString();
 
@@ -352,7 +352,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
 
         private void Indexes_Click(object sender, EventArgs e)
         {
-            string cmdText = $"use [{this.Database.Name}] exec sp_helpindex [{this.owner}.{this.name}]";
+            var cmdText = $"use [{this.Database.Name}] exec sp_helpindex [{this.owner}.{this.name}]";
             var connectionString = this.Database.Databases.Server.ConnectionString;
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
@@ -487,7 +487,7 @@ order by c.column_id", this.Database.Name, this.owner, this.name);
                 variableName = char.ToLower(variableName[0]) + variableName.Substring(1);
                 var prefix = i == 0 ? ' ' : ',';
                 stringTableRow[1] = $"{prefix}@{variableName}";
-                string s2 = $"as {dataRow["name"]}";
+                var s2 = $"as {dataRow["name"]}";
 
                 stringTableRow[2] = s2;
                 st.Rows.Add(stringTableRow);

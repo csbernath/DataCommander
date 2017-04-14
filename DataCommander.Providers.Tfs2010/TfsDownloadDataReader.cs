@@ -33,7 +33,7 @@
 
         public override DataTable GetSchemaTable()
         {
-            DataTable table = CreateSchemaTable();
+            var table = CreateSchemaTable();
             AddSchemaRowString(table, "ServerItem", false);
             AddSchemaRowInt32(table, "ItemType", false);
             AddSchemaRowDateTime(table, "CheckinDate", false);
@@ -54,7 +54,7 @@
                 if (this.first)
                 {
                     this.first = false;
-                    string serverPath = (string)this.command.Parameters["serverPath"].Value;
+                    var serverPath = (string)this.command.Parameters["serverPath"].Value;
                     this.item = this.command.Connection.VersionControlServer.GetItem(serverPath);
                     this.localPath = Database.GetValueOrDefault<string>(this.command.Parameters["localPath"].Value);
 
@@ -91,7 +91,7 @@
                 if (this.queue.Count > 0)
                 {
                     Item current = this.queue.Dequeue();
-                    object[] values = new object[4];
+                    var values = new object[4];
                     values[0] = current.ServerItem;
                     values[1] = current.ItemType;
                     values[2] = current.CheckinDate;
@@ -117,7 +117,7 @@
                             log.Write(LogLevel.Trace, "Downloading {0}...", current.ServerItem);
                             current.DownloadFile(path);
                             DateTime checkingDate = current.CheckinDate;
-                            FileInfo fileInfo = new FileInfo(path);
+                            var fileInfo = new FileInfo(path);
                             fileInfo.LastWriteTime = checkingDate;
                             fileInfo.Attributes = FileAttributes.ReadOnly;
                             break;
@@ -125,7 +125,7 @@
                         case ItemType.Folder:
                             if (!Directory.Exists(path))
                             {
-                                DirectoryInfo directoryInfo = Directory.CreateDirectory(path);
+                                var directoryInfo = Directory.CreateDirectory(path);
 
                                 if (!directoryInfo.Exists)
                                 {

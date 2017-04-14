@@ -33,9 +33,15 @@ namespace DataCommander.Providers
 
         #region Public Properties
 
-        public IDictionary<string, string> Tables { get; }
+        public IDictionary<string, string> Tables
+        {
+            get;
+        }
 
-        public Token[] Tokens { get; }
+        public Token[] Tokens
+        {
+            get;
+        }
 
         #endregion
 
@@ -141,7 +147,8 @@ namespace DataCommander.Providers
                                 case ParameterDirection.Input:
                                 case ParameterDirection.InputOutput:
                                     var dataParameter = provider.GetDataParameter(parameter);
-                                    var first = parameters.FirstOrDefault(p=>string.Compare(p.Name, parameter.ParameterName, StringComparison.InvariantCultureIgnoreCase) == 0);
+                                    var first = parameters.FirstOrDefault(
+                                        p => string.Compare(p.Name, parameter.ParameterName, StringComparison.InvariantCultureIgnoreCase) == 0);
                                     if (first == null)
                                     {
                                         first = parameters.FirstOrDefault(p => p.Name == null);
@@ -450,7 +457,7 @@ namespace DataCommander.Providers
             }
             if (index == -1)
             {
-                var lastToken = this.Tokens[ last ];
+                var lastToken = this.Tokens[last];
                 if (lastToken.EndPosition < position)
                 {
                     index = last + 1;
@@ -459,14 +466,14 @@ namespace DataCommander.Providers
             return index;
         }
 
-        public void FindToken( int position, out Token previousToken, out Token currentToken)
+        public void FindToken(int position, out Token previousToken, out Token currentToken)
         {
             previousToken = null;
             currentToken = null;
 
             for (var i = 0; i < this.Tokens.Length; i++)
             {
-                var token = this.Tokens[ i ];
+                var token = this.Tokens[i];
                 if (token.EndPosition + 1 < position)
                 {
                     previousToken = token;
@@ -526,7 +533,7 @@ namespace DataCommander.Providers
                     switch (dataParameter.DbType)
                     {
                         case DbType.Boolean:
-                            var valueStr = (string)value;
+                            var valueStr = (string) value;
                             double valueDbl;
                             var ok = double.TryParse(valueStr, NumberStyles.Any, null, out valueDbl);
 
@@ -599,10 +606,10 @@ namespace DataCommander.Providers
                             catch
                             {
                                 var formats = new string[]
-								{
-									"yyyyMMdd",
-									"yyyyMMdd HH:mm:ss"
-								};
+                                {
+                                    "yyyyMMdd",
+                                    "yyyyMMdd HH:mm:ss"
+                                };
 
                                 IFormatProvider formatProvider = CultureInfo.InvariantCulture;
                                 value2 = DateTime.ParseExact(value.ToString(), formats, formatProvider, DateTimeStyles.None);
@@ -624,21 +631,16 @@ namespace DataCommander.Providers
             return value2;
         }
 
-        private void SetParameterValues(
-            IProvider provider,
-            IDataParameterCollection parameters,
-            object[] values)
+        private void SetParameterValues(IProvider provider, IDataParameterCollection parameters, object[] values)
         {
             if (values.Length > parameters.Count)
-            {
-                throw new Exception("Too many arguments");
-            }
+                throw new ArgumentException("Too many arguments");
 
             var j = 0;
 
             for (var i = 0; i < parameters.Count; i++)
             {
-                var parameter = (IDataParameter)parameters[i];
+                var parameter = (IDataParameter) parameters[i];
                 var dataParameter = provider.GetDataParameter(parameter);
 
                 if (j < values.Length)
@@ -655,7 +657,7 @@ namespace DataCommander.Providers
                             }
                             catch (Exception e)
                             {
-                                string message = $"Invalid parameter value: {values[j]}\r\nIndex: {j}.\r\nMessage: {e.Message}";
+                                var message = $"Invalid parameter value: {values[j]}\r\nIndex: {j}.\r\nMessage: {e.Message}";
                                 throw new ArgumentException(message, parameter.ParameterName, e);
                             }
 
@@ -682,9 +684,7 @@ namespace DataCommander.Providers
                 if (parameter.Direction != ParameterDirection.Input)
                 {
                     var size = dataParameter.Size;
-
                     if (size == 0)
-                    {
                         switch (parameter.DbType)
                         {
                             case DbType.AnsiString:
@@ -697,7 +697,6 @@ namespace DataCommander.Providers
                             default:
                                 break;
                         }
-                    }
                 }
             }
         }
@@ -748,7 +747,7 @@ namespace DataCommander.Providers
             return new Parameter(name, value);
         }
 
-        private static IDictionary<string, string> FindTables( Token[] tokens, out Table[] allTables )
+        private static IDictionary<string, string> FindTables(Token[] tokens, out Table[] allTables)
         {
             var tables = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
             var tableList = new List<Table>();
@@ -826,16 +825,22 @@ namespace DataCommander.Providers
         {
             private string alias;
 
-            public Table( int index, string name, string alias )
+            public Table(int index, string name, string alias)
             {
                 this.Index = index;
                 this.Name = name;
                 this.alias = alias;
             }
 
-            public int Index { get; }
+            public int Index
+            {
+                get;
+            }
 
-            public string Name { get; }
+            public string Name
+            {
+                get;
+            }
         }
 
         private sealed class Parameter
@@ -846,9 +851,15 @@ namespace DataCommander.Providers
                 this.Value = value;
             }
 
-            public string Name { get; }
+            public string Name
+            {
+                get;
+            }
 
-            public object Value { get; }
+            public object Value
+            {
+                get;
+            }
         }
 
         #endregion

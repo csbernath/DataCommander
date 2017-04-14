@@ -225,7 +225,7 @@
             sb.Append(':');
             sb.Append(seconds.ToString().PadLeft(2, '0'));
 
-            string s = $"{sb}{fractionString}";
+            var s = $"{sb}{fractionString}";
             return s;
         }
 

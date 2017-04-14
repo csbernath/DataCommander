@@ -6,29 +6,11 @@ namespace DataCommander.Providers
     //[ContractClassFor(typeof (IAsyncDataAdapter))]
     internal abstract class IAsyncDataAdapterContract : IAsyncDataAdapter
     {
-        IResultWriter IAsyncDataAdapter.ResultWriter
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        IResultWriter IAsyncDataAdapter.ResultWriter => throw new NotImplementedException();
 
-        long IAsyncDataAdapter.RowCount
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        long IAsyncDataAdapter.RowCount => throw new NotImplementedException();
 
-        int IAsyncDataAdapter.TableCount
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        int IAsyncDataAdapter.TableCount => throw new NotImplementedException();
 
         void IAsyncDataAdapter.BeginFill(IProvider provider, IEnumerable<AsyncDataAdapterCommand> commands, int maxRecords, int rowBlockSize, IResultWriter resultWriter,
             Action<IAsyncDataAdapter, Exception> endFill, Action<IAsyncDataAdapter> writeEnd)

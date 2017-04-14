@@ -20,7 +20,7 @@
             var dotNetFrameworkVersion = AppDomainMonitor.DotNetFrameworkVersion;
             var targetFrameworkAttribute = assembly.GetCustomAttribute<TargetFrameworkAttribute>();
 
-            string text =
+            var text =
                 $@"
 <style>
     a {{text-decoration:none}}

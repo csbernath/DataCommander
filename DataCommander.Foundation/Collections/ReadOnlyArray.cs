@@ -46,15 +46,9 @@
         /// <returns></returns>
         public T this[int index]
         {
-            get
-            {
-                return this.Items[index];
-            }
+            get => this.Items[index];
 
-            set
-            {
-                throw new NotSupportedException();
-            }
+            set => throw new NotSupportedException();
         }
 
         #endregion

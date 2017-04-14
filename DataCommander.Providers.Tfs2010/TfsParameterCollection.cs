@@ -66,7 +66,7 @@
 
         private TfsParameter GetParameter(string parameterName)
         {
-            TfsParameter parameter = this.list.First(p => p.ParameterName == parameterName);
+            var parameter = this.list.First(p => p.ParameterName == parameterName);
             return parameter;
         }
 
@@ -77,15 +77,9 @@
         /// <returns></returns>
         object IDataParameterCollection.this[string parameterName]
         {
-            get
-            {
-                return this.GetParameter(parameterName);
-            }
+            get => this.GetParameter(parameterName);
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
         #endregion
@@ -117,21 +111,9 @@
             throw new NotImplementedException();
         }
 
-        bool IList.IsFixedSize
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        bool IList.IsFixedSize => throw new NotImplementedException();
 
-        bool IList.IsReadOnly
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        bool IList.IsReadOnly => throw new NotImplementedException();
 
         void IList.Remove(object value)
         {
@@ -146,14 +128,11 @@
 
         object IList.this[int index]
         {
-            get
-            {
-                return this.list[index];
-            }
+            get => this.list[index];
 
             set
             {
-                TfsParameter parameter = (TfsParameter) value;
+                var parameter = (TfsParameter) value;
                 this.list[index] = parameter;
             }
         }
@@ -169,21 +148,9 @@
 
         public int Count => this.list.Count;
 
-        bool ICollection.IsSynchronized
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        bool ICollection.IsSynchronized => throw new NotImplementedException();
 
-        object ICollection.SyncRoot
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        object ICollection.SyncRoot => throw new NotImplementedException();
 
         #endregion
 

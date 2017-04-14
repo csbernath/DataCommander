@@ -8,7 +8,7 @@
     {
         public override DataTable GetDataSources()
         {
-            DataTable dataTable = new DataTable();
+            var dataTable = new DataTable();
             dataTable.Columns.Add("ServerName", typeof(string));
             dataTable.Columns.Add("InstanceName", typeof(string));
             var projectCollections = RegisteredTfsConnections.GetProjectCollections();

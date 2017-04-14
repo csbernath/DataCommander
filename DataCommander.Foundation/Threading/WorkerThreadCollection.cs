@@ -47,9 +47,9 @@ namespace DataCommander.Foundation.Threading
 
         WorkerThread IList<WorkerThread>.this[int index]
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get => throw new Exception("The method or operation is not implemented.");
 
-            set { throw new Exception("The method or operation is not implemented."); }
+            set => throw new Exception("The method or operation is not implemented.");
         }
 
         #endregion
@@ -88,10 +88,7 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public int Count => this.threads.Count;
 
-        bool ICollection<WorkerThread>.IsReadOnly
-        {
-            get { throw new Exception("The method or operation is not implemented."); }
-        }
+        bool ICollection<WorkerThread>.IsReadOnly => throw new Exception("The method or operation is not implemented.");
 
         bool ICollection<WorkerThread>.Remove(WorkerThread item)
         {

@@ -26,30 +26,12 @@
 			throw new NotImplementedException();
 		}
 
-		bool ITreeNode.Sortable
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
+		bool ITreeNode.Sortable => throw new NotImplementedException();
 
-		string ITreeNode.Query
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
+	    string ITreeNode.Query => throw new NotImplementedException();
 
-		ContextMenuStrip ITreeNode.ContextMenu
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
+	    ContextMenuStrip ITreeNode.ContextMenu => throw new NotImplementedException();
 
-		#endregion
+	    #endregion
 	}
 }

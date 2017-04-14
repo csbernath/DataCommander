@@ -32,49 +32,28 @@
 
         public string CommandText
         {
-            get
-            {
-                return this.commandText;
-            }
+            get => this.commandText;
 
-            set
-            {
-                this.commandText = value;
-            }
+            set => this.commandText = value;
         }
 
         public int CommandTimeout
         {
-            get
-            {
-                return this.commandTimeout;
-            }
+            get => this.commandTimeout;
 
-            set
-            {
-                this.commandTimeout = value;
-            }
+            set => this.commandTimeout = value;
         }
 
         public CommandType CommandType
         {
-            get
-            {
-                return this.commandType;
-            }
+            get => this.commandType;
 
-            set
-            {
-                this.commandType = value;
-            }
+            set => this.commandType = value;
         }
 
         IDbConnection IDbCommand.Connection
         {
-            get
-            {
-                return this.connection.Connection;
-            }
+            get => this.connection.Connection;
 
             set
             {
@@ -143,15 +122,9 @@
 
         public UpdateRowSource UpdatedRowSource
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
         #endregion
@@ -168,7 +141,7 @@
         {
             IDataReader dataReader;
             TfsDataReaderFactory.DataReaderInfo info;
-            bool contains = TfsDataReaderFactory.Dictionary.TryGetValue(this.commandText, out info);
+            var contains = TfsDataReaderFactory.Dictionary.TryGetValue(this.commandText, out info);
 
             if (contains)
             {

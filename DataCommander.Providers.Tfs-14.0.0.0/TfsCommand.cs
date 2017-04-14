@@ -32,10 +32,7 @@
 
         IDbConnection IDbCommand.Connection
         {
-            get
-            {
-                return this.Connection.Connection;
-            }
+            get => this.Connection.Connection;
 
             set
             {
@@ -104,15 +101,9 @@
 
         public UpdateRowSource UpdatedRowSource
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
 #endregion

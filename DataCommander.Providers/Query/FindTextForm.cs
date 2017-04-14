@@ -41,15 +41,9 @@ namespace DataCommander
         /// </summary>
         public string FindText
         {
-            get
-            {
-                return this.cbText.Text;
-            }
+            get => this.cbText.Text;
 
-            set
-            {
-                this.cbText.Text = value;
-            }
+            set => this.cbText.Text = value;
         }
 
         /// <summary>

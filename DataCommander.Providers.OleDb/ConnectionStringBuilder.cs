@@ -8,15 +8,9 @@
 
         string IDbConnectionStringBuilder.ConnectionString
         {
-            get
-            {
-                return this.oleDbConnectionStringBuilder.ConnectionString;
-            }
+            get => this.oleDbConnectionStringBuilder.ConnectionString;
 
-            set
-            {
-                this.oleDbConnectionStringBuilder.ConnectionString = value;
-            }
+            set => this.oleDbConnectionStringBuilder.ConnectionString = value;
         }
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)

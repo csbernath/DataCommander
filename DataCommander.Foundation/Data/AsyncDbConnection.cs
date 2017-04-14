@@ -79,15 +79,9 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public string ConnectionString
         {
-            get
-            {
-                return this.cloneableConnection.ConnectionString;
-            }
+            get => this.cloneableConnection.ConnectionString;
 
-            set
-            {
-                this.cloneableConnection.ConnectionString = value;
-            }
+            set => this.cloneableConnection.ConnectionString = value;
         }
 
         /// <summary>

@@ -182,13 +182,7 @@ namespace DataCommander.Providers.Wmi
             throw new NotImplementedException();
         }
 
-        bool IProvider.CanConvertCommandToString
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        bool IProvider.CanConvertCommandToString => throw new NotImplementedException();
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {

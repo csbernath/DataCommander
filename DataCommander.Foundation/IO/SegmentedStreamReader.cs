@@ -112,46 +112,22 @@ namespace DataCommander.Foundation.IO
         /// <summary>
         /// 
         /// </summary>
-        public override bool CanRead
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public override bool CanRead => throw new NotImplementedException();
 
         /// <summary>
         /// 
         /// </summary>
-        public override bool CanSeek
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public override bool CanSeek => throw new NotImplementedException();
 
         /// <summary>
         /// 
         /// </summary>
-        public override bool CanWrite
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public override bool CanWrite => throw new NotImplementedException();
 
         /// <summary>
         /// 
         /// </summary>
-        public override long Length
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public override long Length => throw new NotImplementedException();
 
         /// <summary>
         /// 

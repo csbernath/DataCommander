@@ -23,7 +23,7 @@
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText =
+            var commandText =
                 $@"select	s.SEQUENCE_NAME
 from	SYS.ALL_SEQUENCES s
 where	s.SEQUENCE_OWNER	= '{this.schemaNode.Name}'
@@ -43,21 +43,9 @@ order by s.SEQUENCE_NAME
 
         bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        string ITreeNode.Query => throw new NotImplementedException();
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        ContextMenuStrip ITreeNode.ContextMenu => throw new NotImplementedException();
 
         #endregion
     }

@@ -65,14 +65,8 @@ namespace DataCommander.Providers.OracleClient
 
         public override string ConnectionName
         {
-            get
-            {
-                return this.connectionName;
-            }
-            set
-            {
-                this.connectionName = value;
-            }
+            get => this.connectionName;
+            set => this.connectionName = value;
         }
     }
 }

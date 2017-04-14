@@ -30,7 +30,7 @@
             //from	main.sqlite_stat1
             //where	tbl = '{0}'
             //order by idx", this.tableNode.Name);
-            string commandText = $"PRAGMA index_list({this.tableNode.Name});";
+            var commandText = $"PRAGMA index_list({this.tableNode.Name});";
             var children = new List<ITreeNode>();
             var transactionScope = new DbTransactionScope(this.tableNode.Database.Connection, null);
 

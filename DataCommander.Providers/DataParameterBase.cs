@@ -21,30 +21,18 @@ namespace DataCommander.Providers
 
         public DbType DbType
         {
-            get
-            {
-                return this.parameter.DbType;
-            }
+            get => this.parameter.DbType;
 
-            set
-            {
-                this.parameter.DbType = value;
-            }
+            set => this.parameter.DbType = value;
         }
 
         protected abstract void SetSize(int size);
 
         public int Size
         {
-            get
-            {
-                return this.size;
-            }
+            get => this.size;
 
-            set
-            {
-                this.SetSize(value);
-            }
+            set => this.SetSize(value);
         }
 
         public byte Precision { get; }

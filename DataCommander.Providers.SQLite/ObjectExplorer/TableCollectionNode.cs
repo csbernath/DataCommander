@@ -22,7 +22,7 @@ namespace DataCommander.Providers.SQLite
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText =
+            var commandText =
                 $@"
 select	name
 from

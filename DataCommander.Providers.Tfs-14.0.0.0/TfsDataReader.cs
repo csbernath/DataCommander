@@ -12,23 +12,11 @@
         {
         }
 
-        public int Depth
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public int Depth => throw new NotImplementedException();
 
         public abstract DataTable GetSchemaTable();
 
-        public bool IsClosed
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public bool IsClosed => throw new NotImplementedException();
 
         public bool NextResult()
         {
@@ -164,21 +152,9 @@
             throw new NotImplementedException();
         }
 
-        public object this[string name]
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public object this[string name] => throw new NotImplementedException();
 
-        public object this[int i]
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public object this[int i] => throw new NotImplementedException();
 
         #endregion
 

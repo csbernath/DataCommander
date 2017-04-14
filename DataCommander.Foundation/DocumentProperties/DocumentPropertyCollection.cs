@@ -229,21 +229,9 @@
             throw new NotImplementedException();
         }
 
-        int ICollection<DocumentProperty>.Count
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        int ICollection<DocumentProperty>.Count => throw new NotImplementedException();
 
-        bool ICollection<DocumentProperty>.IsReadOnly
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        bool ICollection<DocumentProperty>.IsReadOnly => throw new NotImplementedException();
 
         bool ICollection<DocumentProperty>.Remove( DocumentProperty item )
         {

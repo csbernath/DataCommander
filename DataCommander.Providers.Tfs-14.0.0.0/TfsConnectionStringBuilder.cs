@@ -8,14 +8,8 @@
 
         string IDbConnectionStringBuilder.ConnectionString
         {
-            get
-            {
-                return this.connectionStringBuilder.ConnectionString;
-            }
-            set
-            {
-                this.connectionStringBuilder.ConnectionString = value;
-            }
+            get => this.connectionStringBuilder.ConnectionString;
+            set => this.connectionStringBuilder.ConnectionString = value;
         }
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)

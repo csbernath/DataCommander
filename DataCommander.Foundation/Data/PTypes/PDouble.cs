@@ -123,7 +123,7 @@ namespace DataCommander.Foundation.Data.PTypes
         {
             PDouble sp;
 
-            if (s == null || s.Length == 0)
+            if (string.IsNullOrEmpty(s))
             {
                 sp = new PDouble( type );
             }

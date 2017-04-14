@@ -79,7 +79,7 @@
                     {
                         using (this.XmlWriter.WriteElement("Style"))
                         {
-                            string id = $"{tableIndex},{columnIndex}";
+                            var id = $"{tableIndex},{columnIndex}";
                             this.XmlWriter.WriteAttributeString("ss:ID", id);
 
                             if (column.NumberFormat != null)

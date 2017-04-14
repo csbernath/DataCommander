@@ -246,14 +246,8 @@
 
             char IList<char>.this[int index]
             {
-                get
-                {
-                    return this.source[index];
-                }
-                set
-                {
-                    throw new NotImplementedException();
-                }
+                get => this.source[index];
+                set => throw new NotImplementedException();
             }
 
 #endregion

@@ -31,7 +31,7 @@ namespace DataCommander.Providers.Odp
         {
             get
             {
-                string caption = $"{oracleConnectionStringBuilder.UserID}@{oracleConnectionStringBuilder.DataSource}";
+                var caption = $"{oracleConnectionStringBuilder.UserID}@{oracleConnectionStringBuilder.DataSource}";
                 return caption;
             }
         }
@@ -50,15 +50,9 @@ namespace DataCommander.Providers.Odp
 
         public override string ConnectionName
         {
-            get
-            {
-				return this.connectionName;
-            }
+            get => this.connectionName;
 
-            set
-            {
-				this.connectionName = value;
-            }
+            set => this.connectionName = value;
         }
 
         public override string DataSource => this.oracleConnection.DataSource;

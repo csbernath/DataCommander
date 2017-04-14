@@ -24,7 +24,7 @@
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            string commandText =
+            var commandText =
                 $@"
 select	s.TABLE_OWNER,
 	s.TABLE_NAME

@@ -54,15 +54,9 @@
         /// </summary>
         public override string ConnectionString
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
 
         /// <summary>
@@ -77,24 +71,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public override string DataSource
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public override string DataSource => throw new NotImplementedException();
 
         /// <summary>
         /// 
         /// </summary>
-        public override string Database
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public override string Database => throw new NotImplementedException();
 
         /// <summary>
         /// 
@@ -106,13 +88,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override string ServerVersion
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public override string ServerVersion => throw new NotImplementedException();
 
         /// <summary>
         /// 
