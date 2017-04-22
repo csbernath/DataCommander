@@ -7,18 +7,11 @@
     /// </summary>
     public sealed class LocalTime : IDateTimeProvider
     {
-        private static DateTime sharedDateTime;
-
         private readonly int increment;
         private readonly int adjustment;
 
-        private int incrementedTickCount;
-        private DateTime incrementedDateTime;
-
-        static LocalTime()
-        {
-            sharedDateTime = DateTime.Now;
-        }
+        private int lastTickCount;
+        private DateTime lastDateTime;
 
         /// <summary>
         /// 
@@ -35,10 +28,8 @@
             this.increment = increment;
             this.adjustment = adjustment;
 
-            sharedDateTime = DateTime.Now;
-
-            this.incrementedTickCount = UniversalTime.TickCount;
-            this.incrementedDateTime = sharedDateTime;
+            this.lastTickCount = UniversalTime.GetTickCount();
+            this.lastDateTime = DateTime.Now;
         }
 
         /// <summary>
@@ -54,27 +45,27 @@
         {
             get
             {
-                var elapsed = UniversalTime.GetTickCount() - this.incrementedTickCount;
+                var lastTickCount = this.lastTickCount;
+                var lastDateTime = this.lastDateTime;
+                var tickCount = UniversalTime.GetTickCount();
+                var elapsed = tickCount - lastTickCount;
+                DateTime now;
+
                 if (this.increment <= elapsed)
                 {
                     if (elapsed < this.adjustment)
-                    {
-                        var calculatedDateTime = this.incrementedDateTime.AddMilliseconds(elapsed);
-                        if (sharedDateTime < calculatedDateTime)
-                        {
-                            sharedDateTime = calculatedDateTime;
-                        }
-                    }
+                        now = lastDateTime.AddMilliseconds(elapsed);
                     else
                     {
-                        sharedDateTime = DateTime.Now;
+                        now = DateTime.Now;
+                        this.lastTickCount = tickCount;
+                        this.lastDateTime = now;
                     }
-
-                    this.incrementedTickCount = UniversalTime.TickCount;
-                    this.incrementedDateTime = sharedDateTime;
                 }
+                else
+                    now = lastDateTime;
 
-                return sharedDateTime;
+                return now;
             }
         }
     }
