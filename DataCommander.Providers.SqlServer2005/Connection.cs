@@ -6,7 +6,7 @@ namespace DataCommander.Providers.SqlServer2005
     using System.Threading;
     using System.Threading.Tasks;
     using DataCommander.Foundation;
-    using Foundation.Data;
+    using DataCommander.Foundation.Data;
 
     internal sealed class Connection : ConnectionBase
     {
@@ -45,13 +45,10 @@ namespace DataCommander.Providers.SqlServer2005
         {
             var now = LocalTime.Default.Now;
             var text = $"Connection.State changed. OriginalState: {e.OriginalState}, CurrentState: {e.CurrentState}";
-            this.InvokeInfoMessage
-                (
-                    new InfoMessage[]
-                    {
-                        new InfoMessage(now, InfoMessageSeverity.Information, text)
-                    }
-                );
+            this.InvokeInfoMessage(new[]
+            {
+                new InfoMessage(now, InfoMessageSeverity.Information, text)
+            });
         }
 
         public override async Task OpenAsync(CancellationToken cancellationToken)
@@ -137,7 +134,7 @@ set arithabort on";
 
                 switch (serverVersion)
                 {
-                        #region SQL Server 2000
+                    #region SQL Server 2000
 
                     case "08.00.0194":
                         description = "SQL Server 2000 RTM";
@@ -163,9 +160,9 @@ set arithabort on";
                         description = "SQL Server 2000 post SP4 hotfix build (build 2187)";
                         break;
 
-                        #endregion
+                    #endregion
 
-                        #region SQL Server 2005
+                    #region SQL Server 2005
 
                     case "09.00.1399":
                         description = "SQL Server 2005";
@@ -213,9 +210,9 @@ set arithabort on";
                         description = "Security update for SQL Server 2005 Service Pack 4 GDR: June 14, 2011";
                         break;
 
-                        #endregion
+                    #endregion
 
-                        #region SQL Server 2008
+                    #region SQL Server 2008
 
                     case "10.00.1600":
                         description = "SQL Server 2008 (RTM)";
@@ -229,9 +226,9 @@ set arithabort on";
                         description = "SQL Server 2008 R2 Service Pack 3 (SP3): September 26, 2014";
                         break;
 
-                        #endregion
+                    #endregion
 
-                        #region SQL Server 2012
+                    #region SQL Server 2012
 
                     case "11.00.2100":
                         description = "SQL Server 2012 RTM: March 6, 2012";
@@ -241,15 +238,23 @@ set arithabort on";
                         description = "SQL Server 2012 Service Pack 2 (SP2): June 10, 2014";
                         break;
 
-                        #endregion
+                    #endregion
 
-                        #region SQL Server 2014
+                    #region SQL Server 2014
 
                     case "12.00.2430":
                         description = "2999197 Cumulative update package 4 (CU4) for SQL Server 2014: October 21, 2014";
                         break;
 
-                        #endregion
+                    #endregion
+
+                    #region SQL Server 2016
+
+                    case "13.00.4001":
+                        description = "Microsoft SQL Server 2016 Service Pack 1 (SP1)";
+                        break;
+
+                    #endregion
 
                     default:
                         description = null;
