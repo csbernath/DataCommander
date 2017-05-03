@@ -45,11 +45,12 @@ namespace DataCommander.Foundation.Diagnostics
         {
             get
             {
+                int release;
                 string dotNetFrameworkVersion;
 
                 using (var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full"))
                 {
-                    var release = (int) key.GetValue("Release");
+                    release = (int)key.GetValue("Release");
 
                     switch (release)
                     {
@@ -85,13 +86,21 @@ namespace DataCommander.Foundation.Diagnostics
                             dotNetFrameworkVersion = "4.6.2";
                             break;
 
+                        case 460798:
+                            dotNetFrameworkVersion = "4.7 (Windows 10 Creators Update)";
+                            break;
+
+                        case 460805:
+                            dotNetFrameworkVersion = "4.7";
+                            break;
+
                         default:
                             dotNetFrameworkVersion = null;
                             break;
                     }
                 }
 
-                return dotNetFrameworkVersion;
+                return $"{dotNetFrameworkVersion} (Release {release})";
             }
         }
 
