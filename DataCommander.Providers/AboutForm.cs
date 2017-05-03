@@ -35,7 +35,7 @@ Including <a href=""https://github.com/csbernath/DataCommander/blob/master/DataC
 Build date: {lastWriteTime.ToString("yyyy-MM-dd")}
 <br/>
 <br/>
-Copyright © 2002-2016 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Bernáth</a>
+Copyright © 2002-2017 <a href=""mailto://csaba.bernath@gmail.com"">Csaba Bernáth</a>
 <br/>
 This program is freeware and released under the <a href=""https://www.gnu.org/licenses/gpl.txt"">GNU General Public Licence</a>.
 <br/>
