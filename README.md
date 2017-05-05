@@ -46,7 +46,7 @@ Development environment:
 |Oracle|Oracle using [Oracle provider](https://msdn.microsoft.com/en-us/library/system.data.oracleclient%28v=vs.110%29.aspx) from Microsoft|
 |PostgreSQL|[PostgreSQL](https://github.com/npgsql/Npgsql)|
 |SQLite|[SQLite .NET Data Provider](http://system.data.sqlite.org)|
-|SqlServer2005|[Microsoft SQL Server](http://www.microsoft.com/en-us/server-cloud/products/sql-server/) 2005 or greater|
+|SqlServer|[Microsoft SQL Server](http://www.microsoft.com/en-us/server-cloud/products/sql-server/) 2005 or greater|
 |SqlServerCe40|[Microsoft SQL Server Compact Edition 4.0](http://www.microsoft.com/en-us/download/details.aspx?id=17876)|
 |Tfs-11.0.0.0|[Microsoft Team Foundation Server](https://msdn.microsoft.com/en-us/vstudio/ff637362.aspx) using TFS client shipped with Visual Studio 2012|
 |Tfs-14.0.0.0|[Microsoft Team Foundation Server](https://msdn.microsoft.com/en-us/vstudio/ff637362.aspx) using TFS client shipped with Visual Studio 2015|
@@ -274,8 +274,8 @@ How to edit data in a table
 
 Available providers
 
-Microsoft SQL Server 2005
--------------------------
+Microsoft SQL Server
+--------------------
 
 Object Explorer
 
@@ -424,6 +424,7 @@ http://msdn.microsoft.com/en-us/library/office/aa140066(v=office.10).aspx.
 * 2011-06-01: [SqlServer2005] Uprading and fixing  intellisense to new sys views
 * 2011-05-30: [SqlServer2005] Moving system stored procedures node under stored procedures node in object exlorer
 * 2011-03-26: Creating  Microsoft.NET 4.0 based version of Data Commander.
+* 2002-01-??: Creating SqlUtil for querying Oracle and VB6 COM objects ADO recordsets via VBScript.
 
 References
 ----------
