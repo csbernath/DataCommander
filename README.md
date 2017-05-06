@@ -6,6 +6,10 @@ This program is freeware and released under the [GNU General Public License](htt
 Data Commander is a front-end for SQL and other databases.
 The program has a plugin architecture for adding arbitrary data providers.
 
+Credits
+-------
+![JetBrains Resharper](https://github.com/csbernath/DataCommander/blob/master/resharper-logo.ico)JetBrains Resharper
+
 The following plugins are already implemented:
 
 SQL databases (client/server):
