@@ -18,7 +18,6 @@
 *.nupkg
 *.obj
 *.pch
-*.png
 *.pdb
 *.res
 *.resources
