@@ -57,7 +57,8 @@ Target Framework: {targetFrameworkAttribute.FrameworkDisplayName}
 Credits:
 </br>
 <ul style=""list-style-type:none"">
-    <li><a href=""https://www.visualstudio.com/vs/community/"">Visual Studio Community 2017</a></li>                  
+    <li><a href=""https://www.visualstudio.com/vs/community/"">Visual Studio Community 2017</a></li>
+    <li><a href=""https://www.jetbrains.com/resharper/"">JetBrains R# ReSharper</a></li>
     <li><a href=""http://epplus.codeplex.com"">EPPlus Excel generator</a></li>
     <li><a href=""https://system.data.sqlite.org"">SQLite provider</a></li>
     <li><a href=""https://www.nuget.org/packages/MySql.Data/"">MySQL provider</a></li>
