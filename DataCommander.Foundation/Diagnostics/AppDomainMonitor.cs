@@ -5,6 +5,7 @@ namespace DataCommander.Foundation.Diagnostics
     using System.Diagnostics;
     using System.IO;
     using System.Reflection;
+    using System.Security.AccessControl;
     using System.Text;
     using DataCommander.Foundation.Linq;
     using DataCommander.Foundation.Text;
@@ -15,7 +16,7 @@ namespace DataCommander.Foundation.Diagnostics
     /// </summary>
     public static class AppDomainMonitor
     {
-        private static readonly ILog log = LogFactory.Instance.GetTypeLog(typeof (AppDomainMonitor));
+        private static readonly ILog log = LogFactory.Instance.GetTypeLog(typeof(AppDomainMonitor));
         private static readonly StringTableColumnInfo<AssemblyInfo>[] columns;
 
         static AppDomainMonitor()
@@ -27,10 +28,12 @@ namespace DataCommander.Foundation.Diagnostics
                 StringTableColumnInfo.Create<AssemblyInfo, Version>("Version", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Version),
                 StringTableColumnInfo.Create<AssemblyInfo, ProcessorArchitecture>("ProcessorArchitecture", StringTableColumnAlign.Left,
                     assemblyInfo => assemblyInfo.ProcessorArchitecture),
-                new StringTableColumnInfo<AssemblyInfo>("Date", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Date?.ToString("yyyy-MM-dd HH:mm:ss")),
+                new StringTableColumnInfo<AssemblyInfo>("Date", StringTableColumnAlign.Left,
+                    assemblyInfo => assemblyInfo.Date?.ToString("yyyy-MM-dd HH:mm:ss")),
                 new StringTableColumnInfo<AssemblyInfo>("PublicKeyToken", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.PublicKeyToken),
                 new StringTableColumnInfo<AssemblyInfo>("ImageRuntimeVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.ImageRuntimeVersion),
-                StringTableColumnInfo.Create<AssemblyInfo, bool>("GlobalAssemblyCache", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.GlobalAssemblyCache),
+                StringTableColumnInfo.Create<AssemblyInfo, bool>("GlobalAssemblyCache", StringTableColumnAlign.Left,
+                    assemblyInfo => assemblyInfo.GlobalAssemblyCache),
                 new StringTableColumnInfo<AssemblyInfo>("CodeBase", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.CodeBase),
                 new StringTableColumnInfo<AssemblyInfo>("Location", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Location)
             };
@@ -41,67 +44,85 @@ namespace DataCommander.Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public static string DotNetFrameworkVersion
+        /// <returns></returns>
+        public static int GetDotNetFrameworkRelease()
         {
-            get
+            using (var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full"))
             {
-                int release;
-                string dotNetFrameworkVersion;
-
-                using (var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full"))
-                {
-                    release = (int)key.GetValue("Release");
-
-                    switch (release)
-                    {
-                        case 378389:
-                            dotNetFrameworkVersion = "4.5";
-                            break;
-
-                        case 378675:
-                            dotNetFrameworkVersion = "4.5.1 (server)";
-                            break;
-
-                        case 378758:
-                            dotNetFrameworkVersion = "4.5.1 (client)";
-                            break;
-
-                        case 379893:
-                            dotNetFrameworkVersion = "4.5.2";
-                            break;
-
-                        case 394254:
-                            dotNetFrameworkVersion = "4.6.1 (Windows 10)";
-                            break;
-
-                        case 394271:
-                            dotNetFrameworkVersion = "4.6.1";
-                            break;
-
-                        case 394802:
-                            dotNetFrameworkVersion = "4.6.2 (Windows 10 Anniversary Update)";
-                            break;
-
-                        case 394806:
-                            dotNetFrameworkVersion = "4.6.2";
-                            break;
-
-                        case 460798:
-                            dotNetFrameworkVersion = "4.7 (Windows 10 Creators Update)";
-                            break;
-
-                        case 460805:
-                            dotNetFrameworkVersion = "4.7";
-                            break;
-
-                        default:
-                            dotNetFrameworkVersion = null;
-                            break;
-                    }
-                }
-
-                return $"{dotNetFrameworkVersion} (Release {release})";
+                var release = (int)key.GetValue("Release");
+                return release;
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="release"></param>
+        /// <returns></returns>
+        public static string GetDotNetFrameworkVersion(int release)
+        {
+            string version;
+
+            switch (release)
+            {
+                #region 4.5
+
+                case 378389:
+                    version = "4.5";
+                    break;
+
+                case 378675:
+                    version = "4.5.1 (server)";
+                    break;
+
+                case 378758:
+                    version = "4.5.1 (client)";
+                    break;
+
+                case 379893:
+                    version = "4.5.2";
+                    break;
+
+                #endregion
+
+                #region 4.6
+
+                case 394254:
+                    version = "4.6.1 (Windows 10)";
+                    break;
+
+                case 394271:
+                    version = "4.6.1";
+                    break;
+
+                case 394802:
+                    version = "4.6.2 (Windows 10 Anniversary Update)";
+                    break;
+
+                case 394806:
+                    version = "4.6.2";
+                    break;
+
+                #endregion
+
+                #region 4.7
+
+                case 460798:
+                    version = "4.7 (Windows 10 Creators Update)";
+                    break;
+
+                case 460805:
+                    version = "4.7";
+                    break;
+
+                #endregion
+
+                default:
+                    version = null;
+                    break;
+            }
+
+            return version;
         }
 
         /// <summary>
@@ -117,6 +138,8 @@ namespace DataCommander.Foundation.Diagnostics
                 var zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
                 var tickCountString = $"{tickCount} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";
                 var workingSet = Environment.WorkingSet;
+                var dotNetFrameworkRelease = GetDotNetFrameworkRelease();
+                var dotNetFrameworkVersion = GetDotNetFrameworkVersion(dotNetFrameworkRelease);
 
                 var message = $@"Environment information
 MachineName:            {Environment.MachineName}
@@ -126,7 +149,8 @@ Is64BitOperatingSystem: {Environment.Is64BitOperatingSystem}
 Is64BitProcess:         {Environment.Is64BitProcess}
 IntPtr.Size:            {IntPtr.Size} ({IntPtr.Size*8} bit)
 CLR version:            {Environment.Version}
-.NET Framework version: {DotNetFrameworkVersion}
+.NET Framework release: {dotNetFrameworkRelease}
+.NET Framework version: {dotNetFrameworkVersion}
 UserDomainName:         {Environment.UserDomainName}
 UserName:               {Environment.UserName}
 UserInteractive:        {Environment.UserInteractive}

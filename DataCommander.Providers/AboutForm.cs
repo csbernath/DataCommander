@@ -17,7 +17,8 @@
             var assembly = Assembly.GetEntryAssembly();
             var path = assembly.Location;
             var lastWriteTime = File.GetLastWriteTime(path);
-            var dotNetFrameworkVersion = AppDomainMonitor.DotNetFrameworkVersion;
+            var dotNetFrameworkRelease = AppDomainMonitor.GetDotNetFrameworkRelease();
+            var dotNetFrameworkVersion = AppDomainMonitor.GetDotNetFrameworkVersion(dotNetFrameworkRelease);
             var targetFrameworkAttribute = assembly.GetCustomAttribute<TargetFrameworkAttribute>();
 
             var text =
@@ -50,6 +51,7 @@ Target Framework: {targetFrameworkAttribute.FrameworkDisplayName}
 <br/>
 <table style=""font-family:verdana;font-size:9pt"">
 <tr><td>.NET CLR version:</td><td>{Environment.Version}</td></tr>
+<tr><td>.NET Framework release:</td><td>{dotNetFrameworkRelease}</td></tr>
 <tr><td>.NET Framework version:</td><td>{dotNetFrameworkVersion}</td></tr>
 <tr><td>.NET Processor architecture:</td><td>{assembly.GetName().ProcessorArchitecture}</td></tr>
 </table>
