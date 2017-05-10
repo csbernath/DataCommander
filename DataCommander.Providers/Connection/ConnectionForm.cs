@@ -96,7 +96,12 @@ namespace DataCommander.Providers
 
             this.dataGrid.DataSource = this.dataTable;
             if (colorTheme != null)
+            {
+                this.BackColor = colorTheme.BackColor;
+                this.ForeColor = colorTheme.ForeColor;
+
                 ColorThemeApplyer.Apply(this.dataGrid, colorTheme);
+            }
         }
 
         public ConnectionProperties ConnectionProperties { get; private set; }

@@ -61,10 +61,8 @@ namespace DataCommander.Providers
                 var keyWordList = new KeyWordList();
                 keyWordList.KeyWords = new string[keyWords.Length];
 
-                for (var i = 0; i < keyWords.Length; i++)
-                {
+                for (var i = 0; i < keyWords.Length; ++i)
                     keyWordList.KeyWords[i] = keyWords[i].ToUpper();
-                }
 
                 keyWordList.Color = color;
 
@@ -110,12 +108,8 @@ namespace DataCommander.Providers
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 if (this.components != null)
-                {
                     this.components.Dispose();
-                }
-            }
 
             base.Dispose(disposing);
         }
@@ -154,7 +148,6 @@ namespace DataCommander.Providers
             this.Name = "QueryTextBox";
             this.Size = new System.Drawing.Size(408, 150);
             this.ResumeLayout(false);
-
         }
 
         #endregion
@@ -174,12 +167,9 @@ namespace DataCommander.Providers
             }
         }
 
-        public static int GetLineIndex(
-            RichTextBox richTextBox,
-            int i)
+        public static int GetLineIndex(RichTextBox richTextBox, int i)
         {
-            return NativeMethods.SendMessage(richTextBox.Handle.ToInt32(), (int) NativeMethods.Message.EditBox.LineIndex,
-                i, 0);
+            return NativeMethods.SendMessage(richTextBox.Handle.ToInt32(), (int)NativeMethods.Message.EditBox.LineIndex, i, 0);
         }
 
         private int LineIndex(int i)
@@ -229,13 +219,9 @@ namespace DataCommander.Providers
                 var c = text[i];
 
                 if (wordFound && IsSeparator(c))
-                {
                     break;
-                }
                 else
-                {
                     wordFound = true;
-                }
 
                 i--;
             }
@@ -258,17 +244,13 @@ namespace DataCommander.Providers
                 if (wordEnd != -1 && isSeparator)
                 {
                     if (index > 0)
-                    {
                         index++;
-                    }
 
                     word = text.Substring(index, wordEnd - index + 1);
                     break;
                 }
                 else if (wordEnd == -1 && !isSeparator)
-                {
                     wordEnd = index;
-                }
 
                 index--;
             }
@@ -286,9 +268,7 @@ namespace DataCommander.Providers
                 var c = text[i];
 
                 if (IsSeparator(c))
-                {
                     break;
-                }
 
                 i++;
             }
@@ -355,9 +335,7 @@ namespace DataCommander.Providers
                 {
                     var token = tokenIterator.Next();
                     if (token == null)
-                    {
                         break;
-                    }
                     tokens.Add(token);
                 }
 
@@ -368,7 +346,9 @@ namespace DataCommander.Providers
                     switch (token.Type)
                     {
                         case TokenType.KeyWord:
-                            color = Color.Black;
+                            color = colorTheme != null
+                                ? colorTheme.ForeColor
+                                : Color.Black;
                             var keyWord = token.Value.ToUpper();
                             foreach (var keyWordList in this.keyWordLists)
                             {

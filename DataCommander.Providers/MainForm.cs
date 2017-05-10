@@ -9,6 +9,7 @@ namespace DataCommander
     using System.Drawing;
     using System.IO;
     using System.Linq;
+    using System.Runtime.InteropServices;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Security.Principal;
     using System.Text;
@@ -90,14 +91,26 @@ namespace DataCommander
             this.toolStripStatusLabel.Text = message;
             log.Trace(message);
 
-            //colorTheme = new ColorTheme(Color.FromArgb(0x25, 0x25, 0x26), Color.FromArgb(0xD8, 0xD8, 0xD8));
-            colorTheme = null;
+            colorTheme = new ColorTheme(
+                Color.FromArgb(0x25, 0x25, 0x26),
+                Color.FromArgb(0xD8, 0xD8, 0xD8),
+                Color.DarkOliveGreen,
+                Color.DeepSkyBlue,
+                Color.OrangeRed);
+            //colorTheme = null;
 
             if (colorTheme != null)
             {
-
                 this.BackColor = colorTheme.BackColor;
                 this.ForeColor = colorTheme.ForeColor;
+
+                foreach (Control control in this.Controls)
+                {
+                    control.BackColor = colorTheme.BackColor;
+                    control.ForeColor = colorTheme.ForeColor;
+                }
+
+                this.toolStripPanel.BackColor = colorTheme.BackColor;
 
                 mainMenu.BackColor = colorTheme.BackColor;
                 mainMenu.ForeColor = colorTheme.ForeColor;
@@ -119,6 +132,12 @@ namespace DataCommander
                     item.BackColor = colorTheme.BackColor;
                     item.ForeColor = colorTheme.ForeColor;
                 }
+
+                foreach (ToolStripItem item in this.statusBar.Items)
+                {
+                    item.BackColor = colorTheme.BackColor;
+                    item.ForeColor = colorTheme.ForeColor;
+                }
             }
 
             this.UpdateTotalMemory();
@@ -134,13 +153,15 @@ namespace DataCommander
         public void UpdateTotalMemory()
         {
             var totalMemory = GC.GetTotalMemory(false);
-            var totalMemoryMB = (double)totalMemory/1024.0/1024.0;
+            var totalMemoryMB = (double)totalMemory / 1024.0 / 1024.0;
             var text = $"{Math.Round(totalMemoryMB, 0)} MB";
 
             this.managedMemoryToolStripStatusLabel.Text = text;
 
             this.managedMemoryToolStripStatusLabel.ForeColor = totalMemoryMB <= 256
-                ? SystemColors.ControlText
+                ? colorTheme != null
+                    ? colorTheme.ForeColor
+                    : SystemColors.ControlText
                 : Color.Red;
         }
 

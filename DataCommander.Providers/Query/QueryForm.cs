@@ -208,9 +208,15 @@ namespace DataCommander
             var sqlKeyWords = Settings.CurrentType.Attributes["Sql92ReservedWords"].GetValue<string[]>();
             var providerKeyWords = provider.KeyWords;
 
-            this.QueryTextBox.AddKeyWords(new string[] {"exec"}, Color.Green);
-            this.QueryTextBox.AddKeyWords(sqlKeyWords, Color.Blue);
-            this.QueryTextBox.AddKeyWords(providerKeyWords, Color.Red);
+            this.QueryTextBox.AddKeyWords(new string[] {"exec"}, colorTheme != null
+                ? colorTheme.ExecKeyWordColor
+                : Color.Green);
+            this.QueryTextBox.AddKeyWords(sqlKeyWords, colorTheme != null
+                ? colorTheme.SqlKeyWordColor
+                : Color.Blue);
+            this.QueryTextBox.AddKeyWords(providerKeyWords, colorTheme != null
+                ? colorTheme.ProviderKeyWordColor
+                : Color.Red);
 
             this.QueryTextBox.CaretPositionPanel = this.sbPanelCaretPosition;
 
@@ -218,7 +224,7 @@ namespace DataCommander
 
             this.resultSetsTabPage = new TabPage("Results");
             this.resultSetsTabControl = new TabControl();
-            this.resultSetsTabControl.MouseUp += new MouseEventHandler(this.resultSetsTabControl_MouseUp);
+            this.resultSetsTabControl.MouseUp += this.resultSetsTabControl_MouseUp;
             this.resultSetsTabControl.Alignment = TabAlignment.Top;
             this.resultSetsTabControl.Dock = DockStyle.Fill;
             this.resultSetsTabPage.Controls.Add(this.resultSetsTabControl);
@@ -267,6 +273,15 @@ namespace DataCommander
 
                 messagesTextBox.BackColor = colorTheme.BackColor;
                 messagesTextBox.ForeColor = colorTheme.ForeColor;
+
+                statusBar.BackColor = colorTheme.BackColor;
+                statusBar.ForeColor = colorTheme.ForeColor;
+
+                foreach (ToolStripItem item in statusBar.Items)
+                {
+                    item.BackColor = colorTheme.BackColor;
+                    item.ForeColor = colorTheme.ForeColor;
+                }
             }
         }
 
@@ -2134,7 +2149,9 @@ namespace DataCommander
             {
                 if (this.errorCount == 0)
                 {
-                    this.sbPanelText.ForeColor = SystemColors.ControlText;
+                    this.sbPanelText.ForeColor = colorTheme != null
+                        ? colorTheme.ForeColor
+                        : SystemColors.ControlText;
                     this.sbPanelText.Text = "Query executed successfully.";
                 }
                 else
