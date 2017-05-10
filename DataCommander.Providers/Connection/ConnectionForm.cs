@@ -12,6 +12,8 @@ namespace DataCommander.Providers
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Windows.Forms;
     using Foundation.Linq;
+    using Query;
+
     internal sealed class ConnectionForm : Form
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
@@ -28,7 +30,7 @@ namespace DataCommander.Providers
         /// </summary>
         private readonly Container components = new Container();
 
-        public ConnectionForm(StatusStrip statusBar)
+        public ConnectionForm(StatusStrip statusBar, ColorTheme colorTheme)
         {
             this.statusBar = statusBar;
             this.InitializeComponent();
@@ -93,6 +95,8 @@ namespace DataCommander.Providers
             }
 
             this.dataGrid.DataSource = this.dataTable;
+            if (colorTheme != null)
+                ColorThemeApplyer.Apply(this.dataGrid, colorTheme);
         }
 
         public ConnectionProperties ConnectionProperties { get; private set; }
@@ -605,6 +609,24 @@ namespace DataCommander.Providers
         {
             this.Delete();
             e.Cancel = true;
+        }
+    }
+
+    internal static class ColorThemeApplyer
+    {
+        public static void Apply(DataGridView dataGridView, ColorTheme colorTheme)
+        {
+            dataGridView.BackgroundColor = colorTheme.BackColor;
+            dataGridView.BackColor = colorTheme.BackColor;
+            dataGridView.ForeColor = colorTheme.ForeColor;
+
+            dataGridView.EnableHeadersVisualStyles = true;
+            dataGridView.ColumnHeadersDefaultCellStyle.BackColor = colorTheme.BackColor;
+            dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = colorTheme.ForeColor;
+            dataGridView.RowsDefaultCellStyle.BackColor = colorTheme.BackColor;
+            dataGridView.RowsDefaultCellStyle.ForeColor = colorTheme.ForeColor;
+            dataGridView.RowHeadersDefaultCellStyle.BackColor = colorTheme.BackColor;
+            dataGridView.RowHeadersDefaultCellStyle.ForeColor = colorTheme.BackColor;
         }
     }
 }

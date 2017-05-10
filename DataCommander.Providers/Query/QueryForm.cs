@@ -151,6 +151,7 @@ namespace DataCommander
         private readonly LimitedConcurrencyLevelTaskScheduler scheduler = new LimitedConcurrencyLevelTaskScheduler(1);
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private readonly EventWaitHandle enqueueEvent = new EventWaitHandle(false, EventResetMode.AutoReset);
+        private readonly ColorTheme colorTheme;
 
         #endregion
 
@@ -167,7 +168,8 @@ namespace DataCommander
             IProvider provider,
             string connectionString,
             ConnectionBase connection,
-            StatusStrip parentStatusBar)
+            StatusStrip parentStatusBar,
+            ColorTheme colorTheme)
         {
             GarbageMonitor.Add("QueryForm", this);
 
@@ -176,6 +178,7 @@ namespace DataCommander
             this.connectionString = connectionString;
             this.Connection = connection;
             this.parentStatusBar = parentStatusBar;
+            this.colorTheme = colorTheme;
             connection.InfoMessage += this.Connection_InfoMessage;
             connection.DatabaseChanged += this.Connection_DatabaseChanged;
             this.timer.Tick += this.Timer_Tick;
@@ -256,6 +259,15 @@ namespace DataCommander
 
             this.SettingsChanged(null, null);
             Settings.Changed += this.SettingsChanged;
+
+            if (colorTheme != null)
+            {
+                tvObjectExplorer.BackColor = colorTheme.BackColor;
+                tvObjectExplorer.ForeColor = colorTheme.ForeColor;
+
+                messagesTextBox.BackColor = colorTheme.BackColor;
+                messagesTextBox.ForeColor = colorTheme.ForeColor;
+            }
         }
 
         private void CloseResultTabPage(TabPage tabPage)
@@ -355,9 +367,7 @@ namespace DataCommander
                 var tabs = new int[12];
 
                 for (var i = 0; i < tabs.Length; i++)
-                {
-                    tabs[i] = (i + 1)*width;
-                }
+                    tabs[i] = (i + 1) * width;
 
                 this.QueryTextBox.RichTextBox.Font = value;
                 this.QueryTextBox.RichTextBox.SelectionTabs = tabs;
@@ -467,8 +477,7 @@ namespace DataCommander
                         {
                             var commandBuilder = this.Provider.DbProviderFactory.CreateCommandBuilder();
                             var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataTable, tableSchema, this.TableStyle,
-                                !this.openTableMode,
-                                this.sbPanelText);
+                                !this.openTableMode, this.sbPanelText, colorTheme);
                             control.Dock = DockStyle.Fill;
                             text = dataTable.TableName;
                             var tabPage = new TabPage(text);
@@ -483,8 +492,7 @@ namespace DataCommander
                     {
                         var commandBuilder = this.Provider.DbProviderFactory.CreateCommandBuilder();
                         var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataSet.Tables[0], tableSchema, this.TableStyle,
-                            !this.openTableMode,
-                            this.sbPanelText);
+                            !this.openTableMode, this.sbPanelText, colorTheme);
                         control.Dock = DockStyle.Fill;
                         resultSetTabPage.Controls.Add(control);
                     }
@@ -587,7 +595,7 @@ namespace DataCommander
             this.cToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cancelQueryButton = new System.Windows.Forms.ToolStripButton();
-            this.QueryTextBox = new DataCommander.Providers.QueryTextBox();
+            this.QueryTextBox = new DataCommander.Providers.QueryTextBox(colorTheme);
             this.mainMenu.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.toolStrip.SuspendLayout();
@@ -1772,7 +1780,7 @@ namespace DataCommander
         private void ShowDataTableDataGrid(DataTable dataTable)
         {
             var commandBuilder = this.Provider.DbProviderFactory.CreateCommandBuilder();
-            var dataTableEditor = new DataTableEditor(commandBuilder);
+            var dataTableEditor = new DataTableEditor(commandBuilder, colorTheme);
             dataTableEditor.StatusBarPanel = this.sbPanelText;
             dataTableEditor.ReadOnly = !this.openTableMode;
 
@@ -2009,9 +2017,7 @@ namespace DataCommander
             try
             {
                 if (e != null)
-                {
                     this.ShowMessage(e);
-                }
 
                 if (this.Connection.State == ConnectionState.Open && this.Connection.Database != this.database)
                 {
@@ -3688,7 +3694,7 @@ namespace DataCommander
                 connection.Connection.ChangeDatabase(database);
             }
 
-            var queryForm = new QueryForm(this.mainForm, index, this.Provider, this.connectionString, connection, mainForm.StatusBar);
+            var queryForm = new QueryForm(this.mainForm, index, this.Provider, this.connectionString, connection, mainForm.StatusBar, colorTheme);
             queryForm.Font = mainForm.SelectedFont;
             queryForm.MdiParent = mainForm;
             queryForm.WindowState = this.WindowState;

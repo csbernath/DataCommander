@@ -41,14 +41,15 @@
             DataSet schemaTable,
             ResultWriterType tableStyle,
             bool readOnly,
-            ToolStripStatusLabel toolStripStatusLabel)
+            ToolStripStatusLabel toolStripStatusLabel,
+            ColorTheme colorTheme)
         {
             Control control;
 
             switch (tableStyle)
             {
                 case ResultWriterType.DataGrid:
-                    control = CreateDataTableEditorFromDataTable(commandBuilder, dataTable, schemaTable, readOnly, toolStripStatusLabel);
+                    control = CreateDataTableEditorFromDataTable(commandBuilder, dataTable, schemaTable, readOnly, toolStripStatusLabel, colorTheme);
                     break;
 
                 case ResultWriterType.Html:
@@ -70,9 +71,10 @@
             DataTable dataTable,
             DataSet tableSchema,
             bool readOnly,
-            ToolStripStatusLabel toolStripStatusLabel)
+            ToolStripStatusLabel toolStripStatusLabel,
+            ColorTheme colorTheme)
         {
-            var editor = new DataTableEditor(commandBuilder);
+            var editor = new DataTableEditor(commandBuilder, colorTheme);
             editor.ReadOnly = readOnly;
             editor.DataTable = dataTable;
             editor.TableName = dataTable.TableName;

@@ -20,6 +20,7 @@ namespace DataCommander.Providers
     using DataCommander.Foundation.Linq;
     using DataCommander.Foundation.Windows.Forms;
     using OfficeOpenXml;
+    using Query;
 
     /// <summary>
     /// Summary description for DataTableViewer.
@@ -48,7 +49,7 @@ namespace DataCommander.Providers
 
         #region Constructors
 
-        public DataTableEditor(DbCommandBuilder commandBuilder)
+        public DataTableEditor(DbCommandBuilder commandBuilder, ColorTheme colorTheme)
         {
             this.commandBuilder = commandBuilder;
 
@@ -57,6 +58,9 @@ namespace DataCommander.Providers
 
             // TODO: Add any initialization after the InitForm call
             GarbageMonitor.Add("DataTableEditor", this);
+
+            if (colorTheme != null)
+                ColorThemeApplyer.Apply(this.dataGrid, colorTheme);
         }
 
         #endregion

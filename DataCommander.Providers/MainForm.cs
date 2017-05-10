@@ -8,6 +8,7 @@ namespace DataCommander
     using System.Diagnostics;
     using System.Drawing;
     using System.IO;
+    using System.Linq;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Security.Principal;
     using System.Text;
@@ -20,6 +21,7 @@ namespace DataCommander
     using DataCommander.Foundation.Threading;
     using DataCommander.Foundation.Windows.Forms;
     using DataCommander.Providers;
+    using Providers.Query;
 
     /// <summary>
     /// Summary description for MainForm.
@@ -60,6 +62,7 @@ namespace DataCommander
         private ToolStripStatusLabel managedMemoryToolStripStatusLabel;
         private ToolStrip queryFormToolStrip;
         private System.Windows.Forms.Timer timer;
+        private ColorTheme colorTheme;
 
         /// <summary>
         /// 
@@ -86,6 +89,37 @@ namespace DataCommander
             var message = $"Current user: {WindowsIdentity.GetCurrent().Name}. Application loaded in {new StopwatchTimeSpan(elapsed).ToString(3)} seconds.";
             this.toolStripStatusLabel.Text = message;
             log.Trace(message);
+
+            //colorTheme = new ColorTheme(Color.FromArgb(0x25, 0x25, 0x26), Color.FromArgb(0xD8, 0xD8, 0xD8));
+            colorTheme = null;
+
+            if (colorTheme != null)
+            {
+
+                this.BackColor = colorTheme.BackColor;
+                this.ForeColor = colorTheme.ForeColor;
+
+                mainMenu.BackColor = colorTheme.BackColor;
+                mainMenu.ForeColor = colorTheme.ForeColor;
+
+                foreach (var menuItem in mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
+                {
+                    foreach (ToolStripItem x in menuItem.DropDownItems)
+                    {
+                        x.BackColor = colorTheme.BackColor;
+                        x.ForeColor = colorTheme.ForeColor;
+                    }
+                }
+
+                toolStrip.BackColor = colorTheme.BackColor;
+                toolStrip.ForeColor = colorTheme.ForeColor;
+
+                foreach (ToolStripItem item in toolStrip.Items)
+                {
+                    item.BackColor = colorTheme.BackColor;
+                    item.ForeColor = colorTheme.ForeColor;
+                }
+            }
 
             this.UpdateTotalMemory();
 
@@ -470,14 +504,14 @@ namespace DataCommander
 
         private void Connect()
         {
-            var connectionForm = new ConnectionForm(this.statusBar);
+            var connectionForm = new ConnectionForm(this.statusBar, colorTheme);
 
             if (connectionForm.ShowDialog() == DialogResult.OK)
             {
                 var connectionProperties = connectionForm.ConnectionProperties;
 
                 var queryForm = new QueryForm(this, this.MdiChildren.Length, connectionProperties.Provider, connectionProperties.ConnectionString,
-                    connectionProperties.Connection, this.statusBar);
+                    connectionProperties.Connection, this.statusBar, colorTheme);
 
                 queryForm.MdiParent = this;
                 if (this.SelectedFont != null)
@@ -717,12 +751,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                         node.AddChildNode(subNode);
                         connectionProperties.Save(subNode);
 
-                        var queryForm = new QueryForm(
-                            this,
-                            this.MdiChildren.Length,
-                            provider,
-                            connectionString,
-                            connection, this.statusBar);
+                        var queryForm = new QueryForm(this, this.MdiChildren.Length, provider, connectionString, connection, this.statusBar, colorTheme);
 
                         queryForm.MdiParent = this;
                         queryForm.Font = this.SelectedFont;
@@ -865,7 +894,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                 var connection = provider.CreateConnection(connectionString);
                 await connection.OpenAsync(CancellationToken.None);
 
-                var queryForm = new QueryForm(this, this.MdiChildren.Length, provider, connectionString, connection, this.statusBar);
+                var queryForm = new QueryForm(this, this.MdiChildren.Length, provider, connectionString, connection, this.statusBar, colorTheme);
                 queryForm.MdiParent = this;
                 queryForm.Font = this.SelectedFont;
                 queryForm.Show();

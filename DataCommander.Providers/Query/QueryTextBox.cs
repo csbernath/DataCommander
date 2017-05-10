@@ -12,6 +12,7 @@ namespace DataCommander.Providers
     using Foundation.Diagnostics.MethodProfiler;
     using Foundation.Linq;
     using Foundation.Text;
+    using Query;
 
     public sealed class QueryTextBox : UserControl
     {
@@ -23,6 +24,7 @@ namespace DataCommander.Providers
         private bool changeEventEnabled = true;
         private ToolStripStatusLabel sbPanel;
         private int columnIndex;
+        private readonly ColorTheme colorTheme;
 
         public RichTextBox RichTextBox { get; private set; }
 
@@ -31,15 +33,25 @@ namespace DataCommander.Providers
         /// </summary>
         private readonly Container components = new Container();
 
-        public QueryTextBox()
+        public QueryTextBox(ColorTheme colorTheme)
         {
+            this.colorTheme = colorTheme;
             // This call is required by the Windows.Forms Form Designer.
             this.InitializeComponent();
 
+            if (colorTheme != null)
+            {
+                this.BackColor = colorTheme.BackColor;
+                this.ForeColor = colorTheme.ForeColor;
+
+                this.RichTextBox.BackColor = colorTheme.BackColor;
+                this.RichTextBox.ForeColor = colorTheme.ForeColor;
+            }
+
             // TODO: Add any initialization after the InitForm call
-            this.RichTextBox.SelectionChanged += new EventHandler(this.richTextBox_SelectionChanged);
-            this.RichTextBox.DragEnter += new DragEventHandler(this.richTextBox_DragEnter);
-            this.RichTextBox.DragDrop += new DragEventHandler(this.richTextBox_DragDrop);
+            this.RichTextBox.SelectionChanged += this.richTextBox_SelectionChanged;
+            this.RichTextBox.DragEnter += this.richTextBox_DragEnter;
+            this.RichTextBox.DragDrop += this.richTextBox_DragDrop;
         }
 
         public void AddKeyWords(string[] keyWords, Color color)
@@ -179,27 +191,31 @@ namespace DataCommander.Providers
         {
             MethodProfiler.BeginMethod();
 
-            try
+            if (sbPanel != null)
             {
-                this.prevSelectionStart = this.selectionStart;
-                this.selectionStart = this.RichTextBox.SelectionStart;
-                this.prevSelectionLength = this.selectionLength;
-                this.selectionLength = this.RichTextBox.SelectionLength;
 
-                var charIndex = this.selectionStart;
-                var line = this.RichTextBox.GetLineFromCharIndex(charIndex) + 1;
-                var lineIndex = this.LineIndex(-1);
-                var col = charIndex - lineIndex + 1;
-                this.sbPanel.Text = "Ln " + line + " Col " + col;
-                this.columnIndex = col;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-            finally
-            {
-                MethodProfiler.EndMethod();
+                try
+                {
+                    this.prevSelectionStart = this.selectionStart;
+                    this.selectionStart = this.RichTextBox.SelectionStart;
+                    this.prevSelectionLength = this.selectionLength;
+                    this.selectionLength = this.RichTextBox.SelectionLength;
+
+                    var charIndex = this.selectionStart;
+                    var line = this.RichTextBox.GetLineFromCharIndex(charIndex) + 1;
+                    var lineIndex = this.LineIndex(-1);
+                    var col = charIndex - lineIndex + 1;
+                    this.sbPanel.Text = "Ln " + line + " Col " + col;
+                    this.columnIndex = col;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+                finally
+                {
+                    MethodProfiler.EndMethod();
+                }
             }
         }
 
@@ -292,9 +308,7 @@ namespace DataCommander.Providers
                 var c = text[i];
 
                 if (!IsSeparator(c))
-                {
                     break;
-                }
 
                 i++;
             }
@@ -325,7 +339,9 @@ namespace DataCommander.Providers
                 {
                     this.RichTextBox.SelectionStart = startIndex;
                     this.RichTextBox.SelectionLength = endIndex - startIndex + 1;
-                    this.RichTextBox.SelectionColor = SystemColors.ControlText;
+                    this.RichTextBox.SelectionColor = colorTheme != null
+                        ? colorTheme.ForeColor
+                        : SystemColors.ControlText;
                 }
                 finally
                 {
