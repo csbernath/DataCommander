@@ -22,8 +22,9 @@
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             var commandText = string.Format(@"select
-     s.name
-    ,t.name
+    s.name,
+    t.name,
+    type_table_object_id
 from [{0}].sys.schemas s (nolock)
 join [{0}].sys.table_types t (nolock)
     on s.schema_id = t.schema_id
@@ -41,7 +42,8 @@ order by 1,2", this.database.Name);
                     {
                         var schema = dataRecord.GetString(0);
                         var name = dataRecord.GetString(1);
-                        var tableTypeNode = new UserDefinedTableTypeNode(this.database, schema, name);
+                        var id = dataRecord.GetInt32(2);
+                        var tableTypeNode = new UserDefinedTableTypeNode(this.database, id, schema, name);
                         tableTypeNodes.Add(tableTypeNode);
                     });
                 }

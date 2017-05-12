@@ -18,7 +18,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         public bool IsLeaf => false;
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
 //            string commandText = @"select	u.name,o.name
 //from	{0}.dbo.sysobjects o
@@ -44,11 +44,12 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 //            return treeNodes;
 
             var childNodes = new List<ITreeNode>();
-            childNodes.Add( new SystemTableCollectionNode( this.DatabaseNode ) );
+            childNodes.Add(new SystemTableCollectionNode(this.DatabaseNode));
 
             var commandText = string.Format(@"select
-    s.name as [Schema],
-    tbl.name AS [Name]
+    s.name,
+    tbl.name,
+    tbl.object_id
 from [{0}].sys.tables as tbl (nolock)
 join [{0}].sys.schemas s (nolock)
     on tbl.schema_id = s.schema_id
@@ -70,21 +71,23 @@ where
     else 0
 end          
              AS bit)=0)
-order by
-[Schema] ASC,[Name] ASC", this.DatabaseNode.Name);
+order by 1,2", this.DatabaseNode.Name);
             var connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
-            DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
+                connection.Open();
                 var transactionScope = new DbTransactionScope(connection, null);
-                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
-            }
-            foreach (DataRow dataRow in dataTable.Rows)
-            {
-                var schema = (string) dataRow[ "Schema" ];
-                var name = (string) dataRow[ "Name" ];
-                var tableNode = new TableNode( this.DatabaseNode, schema, name );
-                childNodes.Add( tableNode );
+                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+                {
+                    dataReader.Read(dataRecord =>
+                    {
+                        var schema = dataRecord.GetString(0);
+                        var name = dataRecord.GetString(1);
+                        var object_id = dataRecord.GetInt32(2);
+                        var tableNode = new TableNode(this.DatabaseNode, schema, name, object_id);
+                        childNodes.Add(tableNode);
+                    });
+                }
             }
             return childNodes;
         }

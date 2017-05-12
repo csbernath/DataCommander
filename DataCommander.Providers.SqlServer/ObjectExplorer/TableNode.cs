@@ -22,28 +22,28 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private readonly string owner;
         private readonly string name;
+        private readonly int id;
 
-        public TableNode(
-            DatabaseNode database,
-            string owner,
-            string name)
+        public TableNode(DatabaseNode databaseNode, string owner, string name, int id)
         {
-            this.Database = database;
+            this.DatabaseNode = databaseNode;
             this.owner = owner;
             this.name = name;
+            this.id = id;
         }
 
+        public DatabaseNode DatabaseNode { get; }
+        public int Id => this.id;
         public string Name => $"{this.owner}.{this.name}";
-
         public bool IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             return new ITreeNode[]
             {
-                new ColumnCollectionNode(this.Database, this.owner, this.name),
-                new TriggerCollectionNode(this.Database, this.owner, this.name),
-                new IndexCollectionNode(this, this.owner, this.name)
+                new ColumnCollectionNode(DatabaseNode, id),
+                new TriggerCollectionNode(DatabaseNode, id),
+                new IndexCollectionNode(this)
             };
         }
 
@@ -112,8 +112,8 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
         {
             get
             {
-                var name = new DatabaseObjectMultipartName(null, this.Database.Name, this.owner, this.name);
-                var connectionString = this.Database.Databases.Server.ConnectionString;
+                var name = new DatabaseObjectMultipartName(null, this.DatabaseNode.Name, this.owner, this.name);
+                var connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
                 string text;
                 using (var connection = new SqlConnection(connectionString))
                 {
@@ -128,7 +128,7 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
         {
             var mainForm = DataCommanderApplication.Instance.MainForm;
             var queryForm = (QueryForm)mainForm.ActiveMdiChild;
-            var name = this.Database.Name + "." + this.owner + "." + this.name;
+            var name = this.DatabaseNode.Name + "." + this.owner + "." + this.name;
             var query = "select * from " + name;
             queryForm.OpenTable(query);
         }
@@ -141,10 +141,10 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
                     @"use [{0}]
 exec sp_MShelpcolumns N'{1}.[{2}]', @orderby = 'id'
 exec sp_MStablekeys N'{1}.[{2}]', null, 14
-exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
+exec sp_MStablechecks N'{1}.[{2}]'", this.DatabaseNode.Name, this.owner, this.name);
 
                 log.Write(LogLevel.Trace, commandText);
-                var connectionString = this.Database.Databases.Server.ConnectionString;
+                var connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
                 DataSet dataSet;
                 using (var connection = new SqlConnection(connectionString))
                 {
@@ -296,7 +296,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
                 queryForm.SetStatusbarPanelText("Copying table script to clipboard...", SystemColors.ControlText);
                 var stopwatch = Stopwatch.StartNew();
 
-                var connectionString = this.Database.Databases.Server.ConnectionString;
+                var connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
                 var csb = new SqlConnectionStringBuilder(connectionString);
 
                 var connectionInfo = new SqlConnectionInfo();
@@ -319,7 +319,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
                 var connection = new ServerConnection(connectionInfo);
                 connection.Connect();
                 var server = new Server(connection);
-                var database = server.Databases[this.Database.Name];
+                var database = server.Databases[this.DatabaseNode.Name];
                 var table = database.Tables[this.name, this.owner];
 
                 var options = new ScriptingOptions();
@@ -352,8 +352,8 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
 
         private void Indexes_Click(object sender, EventArgs e)
         {
-            var cmdText = $"use [{this.Database.Name}] exec sp_helpindex [{this.owner}.{this.name}]";
-            var connectionString = this.Database.Databases.Server.ConnectionString;
+            var cmdText = $"use [{this.DatabaseNode.Name}] exec sp_helpindex [{this.owner}.{this.name}]";
+            var connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -370,8 +370,8 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.Database.Name, this.owner, this.name);
 
         private void SelectScript_Click(object sender, EventArgs e)
         {
-            var name = new DatabaseObjectMultipartName(null, this.Database.Name, this.owner, this.name);
-            var connectionString = this.Database.Databases.Server.ConnectionString;
+            var name = new DatabaseObjectMultipartName(null, this.DatabaseNode.Name, this.owner, this.name);
+            var connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
             string selectStatement;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -398,9 +398,9 @@ join [{0}].sys.types t (nolock)
 where
 	s.name = '{1}'
 	and o.name = '{2}'
-order by c.column_id", this.Database.Name, this.owner, this.name);
+order by c.column_id", this.DatabaseNode.Name, this.owner, this.name);
             log.Write(LogLevel.Trace, commandText);
-            var connectionString = this.Database.Databases.Server.ConnectionString;
+            var connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
             DataTable table;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -526,7 +526,5 @@ order by c.column_id", this.Database.Name, this.owner, this.name);
                 return menu;
             }
         }
-
-        public DatabaseNode Database { get; }
     }
 }

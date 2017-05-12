@@ -10,15 +10,13 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
     internal sealed class TriggerCollectionNode : ITreeNode
     {
-        private readonly DatabaseNode database;
-        private readonly string schema;
-        private readonly string objectName;
+        private readonly DatabaseNode databaseNode;
+        private readonly int id;
 
-        public TriggerCollectionNode(DatabaseNode database, string owner, string objectName)
+        public TriggerCollectionNode(DatabaseNode databaseNode, int id)
         {
-            this.database = database;
-            this.schema = owner;
-            this.objectName = objectName;
+            this.databaseNode = databaseNode;
+            this.id = id;
         }
 
         public string Name => "Triggers";
@@ -28,22 +26,16 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             var cb = new SqlCommandBuilder();
-            var tableName = new DatabaseObjectMultipartName(null, this.database.Name, this.schema, this.objectName);
-            //string commandText = "select o1.name,o2.name from {0}..sysobjects o1 left join {0}..sysobjects o2 on o1.parent_obj = o2.id where o1.type = 'TR' and o2.name = '{1}'";
-            var commandText = string.Format(@"select  tr.name
-from    {0}.sys.schemas s
-join    {0}.sys.objects o
-on      s.schema_id = o.schema_id
-join    {0}.sys.triggers tr
-on      o.object_id = tr.parent_id
-where   s.name = {1}
-        and o.name = {2}
-order by 1",
-                cb.QuoteIdentifier(this.database.Name),
-                tableName.Schema.ToTSqlNVarChar(),
-                tableName.Name.ToTSqlNVarChar());
+            var databaseName = cb.QuoteIdentifier(this.databaseNode.Name);
 
-            var connectionString = this.database.Databases.Server.ConnectionString;
+            var commandText = $@"select
+    name,
+    object_id
+from {databaseName}.sys.triggers
+where object_id = {this.id}
+order name";
+
+            var connectionString = this.databaseNode.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -53,7 +45,8 @@ order by 1",
                     return dataReader.Read(dataRecord =>
                     {
                         var name = dataRecord.GetString(0);
-                        return new TriggerNode(this.database, this.schema, this.objectName, name);
+                        var id = dataRecord.GetInt32(1);
+                        return new TriggerNode(this.databaseNode, id, name);
                     }).ToList();
                 }
             }

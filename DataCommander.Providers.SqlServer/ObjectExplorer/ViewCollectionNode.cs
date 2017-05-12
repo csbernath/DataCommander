@@ -20,34 +20,33 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            var commandText = @"select
-     s.name as SchemaName
-    ,v.name as ViewName
-from [{0}].sys.views v (nolock)
-join [{0}].sys.schemas s (nolock)
-    on v.schema_id = s.schema_id
-order by s.name,v.name";
-            commandText = string.Format(commandText, this.database.Name);
-            var connectionString = this.database.Databases.Server.ConnectionString;
-            DataTable dataTable;
-            using (var connection = new SqlConnection(connectionString))
-            {
-                var transactionScope = new DbTransactionScope(connection, null);
-                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
-            }
-            var dataRows = dataTable.Rows;
-            var count = dataRows.Count;
             var treeNodes = new List<ITreeNode>();
             treeNodes.Add(new SystemViewCollectionNode(this.database));
 
-            for (var i = 0; i < count; i++)
+            var databaseName = new SqlCommandBuilder().QuoteIdentifier(this.database.Name);
+            var commandText = $@"select
+    s.name,
+    v.name,
+    v.object_id
+from {databaseName}.sys.schemas s (nolock)
+join {databaseName}.sys.views v (nolock)
+    on s.schema_id = v.schema_id
+order by 1,2";
+            using (var connection = new SqlConnection(this.database.Databases.Server.ConnectionString))
             {
-                var row = dataRows[i];
-                var schema = (string)row[0];
-                var name = (string)row[1];
-                treeNodes.Add(new ViewNode(this.database, schema, name));
+                connection.Open();
+                var transactionScope = new DbTransactionScope(connection, null);
+                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+                {
+                    dataReader.Read(dataRecord =>
+                    {
+                        var schema = dataRecord.GetString(0);
+                        var name = dataRecord.GetString(1);
+                        var id = dataRecord.GetInt32(2);
+                        treeNodes.Add(new ViewNode(this.database, id, schema, name));
+                    });
+                }
             }
-
             return treeNodes;
         }
 

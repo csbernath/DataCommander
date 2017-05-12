@@ -4,24 +4,23 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     using System.Collections.Generic;
     using System.Data.SqlClient;
     using System.Windows.Forms;
+    using Foundation.Data;
     using Foundation.Data.SqlClient;
 
     internal sealed class TriggerNode : ITreeNode
     {
-        private readonly DatabaseNode database;
-        private string schema;
-        private string objectName;
+        private readonly DatabaseNode databaseNode;
+        private readonly int id;
+        private readonly string name;
 
-        public TriggerNode(DatabaseNode database, string schema, string objectName, string name)
+        public TriggerNode(DatabaseNode databaseNode, int id, string name)
         {
-            this.database = database;
-            this.schema = schema;
-            this.objectName = objectName;
-            this.Name = name;
+            this.databaseNode = databaseNode;
+            this.id = id;
+            this.name = name;
         }
 
-        public string Name { get; }
-
+        public string Name => this.name;
         public bool IsLeaf => true;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
@@ -35,14 +34,22 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         void menuItemScriptObject_Click(object sender, EventArgs e)
         {
-            var connectionString = this.database.Databases.Server.ConnectionString;
-            string text;
+            var cb = new SqlCommandBuilder();
+            var databaseName = cb.QuoteIdentifier(this.databaseNode.Name);
+
+            var commandText = $@"select m.definition
+from {databaseName}.sys.sql_modules m (nolock)
+where m.object_id = {this.id}";
+
+            var connectionString = this.databaseNode.Databases.Server.ConnectionString;
+            string definition;
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                text = SqlDatabase.GetSysComments(connection, this.database.Name, this.schema, this.Name);
+                var trasnactionScope = new DbTransactionScope(connection, null);
+                definition = (string)trasnactionScope.ExecuteScalar(new CommandDefinition {CommandText = commandText});
             }
-            QueryForm.ShowText(text);
+            QueryForm.ShowText(definition);
         }
 
         public ContextMenuStrip ContextMenu

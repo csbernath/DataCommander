@@ -5,22 +5,19 @@
     using System.Data.SqlClient;
     using System.Windows.Forms;
     using Foundation.Data;
-    using Foundation.Data.SqlClient;
     using Foundation.Diagnostics;
     using Foundation.Linq;
 
     internal sealed class ColumnCollectionNode : ITreeNode
     {
         private ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private readonly DatabaseNode database;
-        private readonly string schemaName;
-        private readonly string objectName;
+        private readonly DatabaseNode databaseNode;
+        private readonly int id;
 
-        public ColumnCollectionNode(DatabaseNode database, string schemaName, string objectName)
+        public ColumnCollectionNode(DatabaseNode databaseNode, int id)
         {
-            this.database = database;
-            this.schemaName = schemaName;
-            this.objectName = objectName;
+            this.databaseNode = databaseNode;
+            this.id = id;
         }
 
         #region ITreeNode Members
@@ -35,20 +32,12 @@
 
             using (var methodLog = LogFactory.Instance.GetCurrentMethodLog())
             {
-                using (var connection = new SqlConnection())
+                using (var connection = new SqlConnection(this.databaseNode.Databases.Server.ConnectionString))
                 {
+                    connection.Open();
                     var cb = new SqlCommandBuilder();
-                    connection.ConnectionString = this.database.Databases.Server.ConnectionString;
-                    var commandText = string.Format(@"declare @object_id int
-
-select  @object_id = o.object_id
-from    {0}.sys.schemas s
-join    {0}.sys.all_objects o
-on      s.schema_id = o.schema_id
-where   s.name = {1}
-        and o.name = {2}
-
-select
+                    var databaseName = cb.QuoteIdentifier(this.databaseNode.Name);
+                    var commandText = $@"select
      c.column_id
     ,c.name
     ,c.system_type_id
@@ -57,35 +46,30 @@ select
     ,c.scale
     ,c.is_nullable
     ,t.name as UserTypeName
-from    {0}.sys.all_columns c
-join    {0}.sys.types t
+from    {databaseName}.sys.all_columns c
+join    {databaseName}.sys.types t
 on      c.user_type_id = t.user_type_id
-where   c.object_id = @object_id        
+where   c.object_id = {id}
 order by c.column_id
 
 declare @index_id int
 
 select  @index_id = i.index_id
-from    {0}.sys.indexes i
-where   i.object_id = @object_id
+from    {databaseName}.sys.indexes i
+where   i.object_id = {id}
         and i.is_primary_key = 1
 
 select  ic.column_id
-from    {0}.sys.index_columns ic
-where   ic.object_id = @object_id
+from    {databaseName}.sys.index_columns ic
+where   ic.object_id = {id}
         and ic.index_id = @index_id
 
 select  fkc.parent_column_id
-from    {0}.sys.foreign_key_columns fkc
-where   fkc.parent_object_id = @object_id
-order by fkc.parent_column_id",
-                        cb.QuoteIdentifier(this.database.Name),
-                        this.schemaName.ToTSqlNVarChar(),
-                        this.objectName.ToTSqlNVarChar()
-                        );
+from    {databaseName}.sys.foreign_key_columns fkc
+where   fkc.parent_object_id = {id}
+order by fkc.parent_column_id";
 
                     methodLog.Write(LogLevel.Trace, "commandText:\r\n{0}", commandText);
-                    connection.Open();
                     var transactionScope = new DbTransactionScope(connection, null);
                     using (var reader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
                     {

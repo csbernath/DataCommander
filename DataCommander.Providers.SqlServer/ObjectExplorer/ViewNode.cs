@@ -9,15 +9,14 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     internal sealed class ViewNode : ITreeNode
     {
         private readonly DatabaseNode database;
+        private readonly int id;
         private readonly string schema;
         private readonly string name;
 
-        public ViewNode(
-            DatabaseNode database,
-            string schema,
-            string name)
+        public ViewNode(DatabaseNode database, int id, string schema, string name)
         {
             this.database = database;
+            this.id = id;
             this.schema = schema;
             this.name = name;
         }
@@ -30,8 +29,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         {
             return new ITreeNode[]
             {
-                new ColumnCollectionNode(this.database, this.schema, this.name),
-                new TriggerCollectionNode(this.database, this.schema, this.name)
+                new ColumnCollectionNode(this.database, this.id),
+                new TriggerCollectionNode(this.database, this.id)
             };
         }
 

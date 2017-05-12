@@ -11,14 +11,10 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     internal sealed class IndexCollectionNode : ITreeNode
     {
         private readonly TableNode tableNode;
-        private readonly string schema;
-        private readonly string objectName;
 
-        public IndexCollectionNode(TableNode tableNode, string owner, string objectName)
+        public IndexCollectionNode(TableNode tableNode)
         {
             this.tableNode = tableNode;
-            this.schema = owner;
-            this.objectName = objectName;
         }
 
         public string Name => "Indexes";
@@ -28,26 +24,22 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             var cb = new SqlCommandBuilder();
-            var tableName = new DatabaseObjectMultipartName(null, this.tableNode.Database.Name, this.schema, this.objectName);
 
             var commandText = string.Format(@"select
-     i.name
-    ,i.type
-    ,i.is_unique    
+    i.name,
+    i.type,
+    i.is_unique    
 from {0}.sys.schemas s (nolock)
 join {0}.sys.objects o (nolock)
     on s.schema_id = o.schema_id
 join {0}.sys.indexes i (nolock)
     on o.object_id = i.object_id
-where
-    s.name = {1}
-    and o.name = {2}
+where o.object_id = {1}
 order by i.name",
-                cb.QuoteIdentifier(this.tableNode.Database.Name),
-                tableName.Schema.ToTSqlNVarChar(),
-                tableName.Name.ToTSqlNVarChar());
+                cb.QuoteIdentifier(this.tableNode.DatabaseNode.Name),
+                this.tableNode.Id);
 
-            var connectionString = this.tableNode.Database.Databases.Server.ConnectionString;
+            var connectionString = this.tableNode.DatabaseNode.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();

@@ -9,52 +9,49 @@
 
     internal sealed class SystemViewCollectionNode : ITreeNode
     {
-        public SystemViewCollectionNode( DatabaseNode database )
+        private readonly DatabaseNode databaseNode;
+
+        public SystemViewCollectionNode(DatabaseNode databaseNode)
         {
-            this.database = database;
+            this.databaseNode = databaseNode;
         }
 
         public string Name => "System Views";
 
         public bool IsLeaf => false;
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            var commandText = @"select  name,schema_id
-from    {0}.sys.schemas
-
-select  name,schema_id
-from    {0}.sys.system_views";
-            commandText = string.Format( commandText, this.database.Name );
+            var cb = new SqlCommandBuilder();
+            var databaseName = cb.QuoteIdentifier(this.databaseNode.Name);
+            var commandText = $@"select
+    s.name,
+    v.name,
+    v.object_id
+from {databaseName}.sys.schemas s (nolock)
+join {databaseName}.sys.system_views v (nolock)
+    on s.schema_id = v.schema_id
+order by 1,2";
+            commandText = string.Format(commandText, this.databaseNode.Name);
             var treeNodes = new List<ViewNode>();
-            var connectionString = this.database.Databases.Server.ConnectionString;
-            using (var connection = new SqlConnection( connectionString ))
+            var connectionString = this.databaseNode.Databases.Server.ConnectionString;
+            using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 var transactionScope = new DbTransactionScope(connection, null);
-                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition { CommandText = commandText }, CommandBehavior.Default))
+                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
                 {
-                    var schemas = new Dictionary<int, string>();
-
                     dataReader.Read(dataRecord =>
                     {
-                        var name = dataRecord.GetString(0);
-                        var id = dataRecord.GetInt32(1);
-                        schemas.Add(id, name);
-                    });
-
-                    dataReader.Read(dataRecord =>
-                    {
-                        var name = dataRecord.GetString(0);
-                        var schemaId = dataRecord.GetInt32(1);
-                        var schemaName = schemas[schemaId];
-                        var viewNode = new ViewNode(this.database, schemaName, name);
+                        var schema = dataRecord.GetString(0);
+                        var name = dataRecord.GetString(1);
+                        var id = dataRecord.GetInt32(2);
+                        var viewNode = new ViewNode(databaseNode, id, schema, name);
                         treeNodes.Add(viewNode);
                     });
                 }
             }
-
-            return treeNodes.OrderBy( node => node.Name ).Cast<ITreeNode>();
+            return treeNodes;
         }
 
         public bool Sortable => false;
@@ -62,7 +59,5 @@ from    {0}.sys.system_views";
         public string Query => null;
 
         public ContextMenuStrip ContextMenu => null;
-
-        private readonly DatabaseNode database;
     }
 }

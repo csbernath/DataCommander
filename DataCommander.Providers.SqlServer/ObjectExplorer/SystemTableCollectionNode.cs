@@ -22,8 +22,9 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         {
             var childNodes = new List<ITreeNode>();
             var commandText = string.Format( @"select
-    s.name as [Schema],
-    tbl.name AS [Name]
+    s.name,
+    tbl.name,
+    tbl.object_id
 from [{0}].sys.tables AS tbl
 join [{0}].sys.schemas s (nolock)
 on tbl.schema_id = s.schema_id
@@ -47,20 +48,21 @@ end
              AS bit)=1)
 order by [Schema],[Name]", this.DatabaseNode.Name);
             var connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
-            DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
                 var transactionScope = new DbTransactionScope(connection, null);
-                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+                {
+                    dataReader.Read(dataRecord =>
+                    {
+                        var schema = dataRecord.GetString(0);
+                        var name = dataRecord.GetString(1);
+                        var id = dataRecord.GetInt32(2);
+                        var tableNode = new TableNode(this.DatabaseNode, schema, name, id);
+                        childNodes.Add(tableNode);
+                    });
+                }
             }
-            foreach (DataRow dataRow in dataTable.Rows)
-            {
-                var schema = (string)dataRow["Schema"];
-                var name = (string)dataRow["Name"];
-                var tableNode = new TableNode(this.DatabaseNode, schema, name);
-                childNodes.Add(tableNode);
-            }
-
             return childNodes;
         }
 
