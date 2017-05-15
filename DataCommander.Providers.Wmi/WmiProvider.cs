@@ -7,6 +7,7 @@ namespace DataCommander.Providers.Wmi
     using System.Data.Common;
     using System.Management;
     using System.Xml;
+    using Connection;
     using DataCommander.Foundation.Data;
 
     internal sealed class WmiProvider : IProvider

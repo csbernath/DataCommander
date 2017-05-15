@@ -5,11 +5,13 @@
     using System.Data;
     using System.IO;
     using System.Linq;
+    using Connection;
     using DataCommander.Foundation;
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Diagnostics;
     using Microsoft.TeamFoundation.VersionControl.Client;
     using Microsoft.TeamFoundation.VersionControl.Common;
+    using Query;
 
     internal sealed class TfsDownloadDataReader : TfsDataReader
     {

@@ -4,6 +4,7 @@ namespace DataCommander.Providers.Wmi
     using System.Data;
     using System.Management;
     using System.Text;
+    using Query;
 
     internal sealed class WmiDataReader : IDataReader
     {

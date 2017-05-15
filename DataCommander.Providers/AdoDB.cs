@@ -1,10 +1,10 @@
-namespace DataCommander.Foundation.Data
+namespace DataCommander.Providers
 {
     using System;
     using System.IO;
     using System.Reflection;
     using ADODB;
-    using DataCommander.Foundation.Text;
+    using Foundation.Text;
 
     /// <summary>
     /// 
@@ -53,7 +53,7 @@ namespace DataCommander.Foundation.Data
             var colWidth = (int) d;
             colWidth++;
 
-            foreach (Field field in rs.Fields)
+            foreach (ADODB.Field field in rs.Fields)
             {
                 var fieldType = field.Type;
 

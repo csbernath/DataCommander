@@ -5,6 +5,7 @@ namespace DataCommander.Providers.OleDb
     using System.Data;
     using System.Data.OleDb;
     using System.Windows.Forms;
+    using Query;
 
     /// <summary>
     /// Summary description for CatalogsNode.

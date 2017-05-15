@@ -6,7 +6,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     using System.Linq;
     using System.Windows.Forms;
     using Foundation.Data;
-    using Foundation.Data.SqlClient;
 
     internal sealed class IndexCollectionNode : ITreeNode
     {

@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Providers
+﻿namespace DataCommander.Providers.Field
 {
     public sealed class BooleanField
     {

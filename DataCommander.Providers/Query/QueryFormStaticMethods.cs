@@ -7,6 +7,8 @@
     using System.IO;
     using System.Text;
     using System.Windows.Forms;
+    using Field;
+    using ResultWriter;
 
     internal static class QueryFormStaticMethods
     {

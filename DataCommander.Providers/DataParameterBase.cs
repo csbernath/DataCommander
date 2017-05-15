@@ -7,11 +7,7 @@ namespace DataCommander.Providers
         private readonly IDataParameter parameter;
         private readonly int size;
 
-        protected DataParameterBase(
-            IDataParameter parameter,
-            int size,
-            byte precision,
-            byte scale)
+        protected DataParameterBase(IDataParameter parameter, int size, byte precision, byte scale)
         {
             this.parameter = parameter;
             this.size = size;

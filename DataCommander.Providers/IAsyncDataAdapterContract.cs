@@ -2,6 +2,7 @@ namespace DataCommander.Providers
 {
     using System;
     using System.Collections.Generic;
+    using ResultWriter;
 
     //[ContractClassFor(typeof (IAsyncDataAdapter))]
     internal abstract class IAsyncDataAdapterContract : IAsyncDataAdapter

@@ -5,6 +5,7 @@ namespace DataCommander.Providers.OracleBase
     using System.Data.Common;
     using System.Threading;
     using System.Windows.Forms;
+    using Connection;
     using DataCommander.Foundation.Data;
 
     /// <summary>

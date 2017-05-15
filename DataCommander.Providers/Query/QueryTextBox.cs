@@ -1,4 +1,4 @@
-namespace DataCommander.Providers
+namespace DataCommander.Providers.Query
 {
     using System;
     using System.Collections.Generic;
@@ -12,7 +12,6 @@ namespace DataCommander.Providers
     using Foundation.Diagnostics.MethodProfiler;
     using Foundation.Linq;
     using Foundation.Text;
-    using Query;
 
     public sealed class QueryTextBox : UserControl
     {

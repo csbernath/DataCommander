@@ -1,4 +1,4 @@
-namespace DataCommander.Providers
+namespace DataCommander.Providers.ResultWriter
 {
     using System;
     using System.Collections.Generic;
@@ -13,12 +13,14 @@ namespace DataCommander.Providers
     using System.Threading.Tasks;
     using System.Windows.Forms;
     using System.Xml;
-    using DataCommander.Foundation;
-    using DataCommander.Foundation.Data;
-    using DataCommander.Foundation.Data.SqlClient;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Linq;
-    using DataCommander.Foundation.Windows.Forms;
+    using Connection;
+    using Field;
+    using Foundation;
+    using Foundation.Data;
+    using Foundation.Data.SqlClient;
+    using Foundation.Diagnostics;
+    using Foundation.Linq;
+    using Foundation.Windows.Forms;
     using OfficeOpenXml;
     using Query;
 

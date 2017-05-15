@@ -1,13 +1,15 @@
-namespace DataCommander.Providers
+namespace DataCommander.Providers.ResultWriter
 {
     using System;
     using System.Data;
     using System.Data.Common;
     using System.IO;
     using System.Text;
-    using DataCommander.Foundation.Data.SqlClient;
-    using DataCommander.Foundation.Text;
+    using Connection;
+    using Foundation.Data.SqlClient;
     using Foundation.Diagnostics.MethodProfiler;
+    using Foundation.Text;
+    using Query;
 
     internal sealed class TextResultWriter : IResultWriter
     {

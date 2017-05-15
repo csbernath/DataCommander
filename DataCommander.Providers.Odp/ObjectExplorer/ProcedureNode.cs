@@ -6,6 +6,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
     using System.Text;
     using System.Windows.Forms;
     using Foundation.Data;
+    using Query;
 
     internal sealed class ProcedureNode : ITreeNode
     {

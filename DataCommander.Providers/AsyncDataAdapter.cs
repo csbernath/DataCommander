@@ -8,6 +8,7 @@ namespace DataCommander.Providers
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Threading;
+    using ResultWriter;
     using ThreadState = System.Threading.ThreadState;
 
     internal sealed class AsyncDataAdapter : IAsyncDataAdapter

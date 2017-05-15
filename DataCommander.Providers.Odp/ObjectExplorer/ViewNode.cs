@@ -4,6 +4,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
     using System.Collections.Generic;
     using System.Windows.Forms;
     using Oracle.ManagedDataAccess.Client;
+    using Query;
 
     internal sealed class ViewNode : ITreeNode
 	{

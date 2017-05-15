@@ -3,6 +3,7 @@ namespace DataCommander.Providers.Wmi
     using System.Data;
     using System.Data.Common;
     using System.Management;
+    using Connection;
 
     internal sealed class WmiConnection : IDbConnection
     {

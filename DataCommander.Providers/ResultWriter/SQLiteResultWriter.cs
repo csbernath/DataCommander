@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Providers
+﻿namespace DataCommander.Providers.ResultWriter
 {
     using System;
     using System.Data;
@@ -6,8 +6,8 @@
     using System.Diagnostics;
     using System.IO;
     using System.Text;
-    using DataCommander.Foundation.Data;
-    using DataCommander.Foundation.Text;
+    using Foundation.Data;
+    using Foundation.Text;
 
     internal sealed class SQLiteResultWriter : IResultWriter
     {

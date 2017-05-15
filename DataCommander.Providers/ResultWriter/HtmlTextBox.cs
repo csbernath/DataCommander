@@ -1,11 +1,11 @@
-namespace DataCommander.Providers
+namespace DataCommander.Providers.ResultWriter
 {
     using System;
     using System.ComponentModel;
     using System.IO;
     using System.Text;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Diagnostics;
+    using Foundation.Diagnostics;
 
     /// <summary>
     /// Summary description for HtmlTextBox.

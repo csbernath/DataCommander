@@ -1,11 +1,11 @@
-﻿namespace DataCommander.Providers
+﻿namespace DataCommander.Providers.ResultWriter
 {
     using System;
     using System.Data;
     using System.IO;
     using System.Text;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
+    using Foundation.Data;
 
     internal sealed class MyDataObject : IDataObject
     {

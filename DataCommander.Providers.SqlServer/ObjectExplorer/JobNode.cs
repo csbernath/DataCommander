@@ -8,6 +8,7 @@
     using System.Windows.Forms;
     using Foundation.Data;
     using Foundation.Data.SqlClient;
+    using Query;
 
     /// <summary>
     /// TODO: Update summary.

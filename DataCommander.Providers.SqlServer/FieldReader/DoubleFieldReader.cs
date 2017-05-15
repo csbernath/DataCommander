@@ -2,6 +2,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
 {
     using System;
     using System.Data;
+    using Field;
 
     sealed class DoubleFieldReader : IDataFieldReader
     {

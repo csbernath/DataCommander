@@ -2,6 +2,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
 {
     using System;
     using System.Data;
+    using Field;
 
     internal sealed class SmallDateTimeDataFieldReader : IDataFieldReader
     {

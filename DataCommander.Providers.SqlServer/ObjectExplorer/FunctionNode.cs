@@ -5,6 +5,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     using System.Data.SqlClient;
     using System.Windows.Forms;
     using Foundation.Data.SqlClient;
+    using Query;
 
     internal sealed class FunctionNode : ITreeNode
     {

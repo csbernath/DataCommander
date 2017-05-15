@@ -1,10 +1,12 @@
-namespace DataCommander.Providers
+namespace DataCommander.Providers.ResultWriter
 {
     using System;
     using System.Data;
-    using DataCommander.Foundation.Data;
-    using DataCommander.Foundation.Diagnostics;
+    using Connection;
+    using Foundation.Data;
+    using Foundation.Diagnostics;
     using Foundation.Diagnostics.MethodProfiler;
+    using Query;
 
     /// <summary>
     /// Summary description for DataSetResultWriter.

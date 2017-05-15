@@ -10,6 +10,9 @@ namespace DataCommander.Providers.SQLite
     using System.Xml;
     using DataCommander.Foundation.Configuration;
     using DataCommander.Foundation.Data;
+    using Field;
+    using Providers.Connection;
+    using Query;
 
     public sealed class SQLiteProvider : IProvider
     {

@@ -1,6 +1,7 @@
-namespace DataCommander.Providers
+namespace DataCommander.Providers.ResultWriter
 {
     using System;
+    using Field;
 
     internal sealed class DateTimeDataWriter : DataWriterBase
     {

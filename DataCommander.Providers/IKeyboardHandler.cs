@@ -1,11 +1,10 @@
-﻿namespace DataCommander
+﻿namespace DataCommander.Providers
 {
     using System.Windows.Forms;
 
     internal interface IKeyboardHandler
     {
         bool HandleKeyDown(KeyEventArgs e);
-
         bool HandleKeyPress(KeyPressEventArgs e);
     }
 }

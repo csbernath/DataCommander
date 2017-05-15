@@ -12,6 +12,8 @@ namespace DataCommander.Providers.Odp
     using DataFieldReader;
     using Oracle.ManagedDataAccess.Client;
     using Oracle.ManagedDataAccess.Types;
+    using Providers.Connection;
+    using Query;
 
     internal sealed class OracleProvider : IProvider
     {

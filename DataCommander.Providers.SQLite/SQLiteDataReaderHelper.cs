@@ -4,6 +4,7 @@ namespace DataCommander.Providers.SQLite
     using System.Data;
     using System.Data.Common;
     using System.Data.SQLite;
+    using Field;
 
     internal sealed class DecimalDataFieldReader : IDataFieldReader
     {

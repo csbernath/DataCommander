@@ -1,11 +1,11 @@
-namespace DataCommander.Providers
+namespace DataCommander.Providers.ResultWriter
 {
     using System;
     using System.Data;
     using System.Data.Common;
     using System.IO;
     using System.Text;
-    using DataCommander.Foundation.Text;
+    using Foundation.Text;
 
     internal sealed class FileResultWriter : IResultWriter
     {

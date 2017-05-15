@@ -1,8 +1,8 @@
-namespace DataCommander.Providers
+namespace DataCommander.Providers.Field
 {
     using System;
     using System.Text;
-    using DataCommander.Foundation.Text;
+    using Foundation.Text;
 
     public sealed class BinaryField : IConvertible
     {

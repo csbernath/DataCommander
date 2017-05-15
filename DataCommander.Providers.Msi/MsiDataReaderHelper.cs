@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Providers.Msi
 {
     using System.Data;
+    using Field;
 
     internal sealed class MsiDataReaderHelper : IDataReaderHelper
     {

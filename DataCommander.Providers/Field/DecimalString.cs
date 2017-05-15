@@ -1,4 +1,4 @@
-namespace DataCommander
+namespace DataCommander.Providers.Field
 {
 
     internal sealed class DecimalString

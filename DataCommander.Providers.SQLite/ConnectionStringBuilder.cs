@@ -1,6 +1,7 @@
 ﻿namespace DataCommander.Providers.SQLite
 {
     using System.Data.SQLite;
+    using Providers.Connection;
 
     internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
     {

@@ -1,4 +1,4 @@
-namespace DataCommander.Providers
+namespace DataCommander.Providers.ResultWriter
 {
     internal static class HtmlEntity
     {

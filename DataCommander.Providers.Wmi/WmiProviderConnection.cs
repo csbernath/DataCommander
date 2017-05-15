@@ -3,6 +3,7 @@ namespace DataCommander.Providers.Wmi
     using System.Data;
     using System.Threading;
     using System.Threading.Tasks;
+    using Connection;
 
     internal sealed class WmiProviderConnection : ConnectionBase
     {

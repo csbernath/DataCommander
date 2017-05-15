@@ -2,6 +2,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
 {
     using System.Data;
     using System.Data.SqlClient;
+    using Field;
 
     sealed class TimeStampDataFieldReader : IDataFieldReader
     {

@@ -3,6 +3,7 @@
     using System.Linq;
     using Npgsql;
     using DataCommander.Providers;
+    using Providers.Connection;
 
     internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
     {

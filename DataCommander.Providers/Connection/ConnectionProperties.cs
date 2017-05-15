@@ -1,11 +1,11 @@
-namespace DataCommander.Providers
+namespace DataCommander.Providers.Connection
 {
     using System;
     using System.Data.Common;
     using System.Security.Cryptography;
     using System.Text;
-    using DataCommander.Foundation.Configuration;
-    using DataCommander.Foundation.Diagnostics;
+    using Foundation.Configuration;
+    using Foundation.Diagnostics;
 
     public sealed class ConnectionProperties
     {

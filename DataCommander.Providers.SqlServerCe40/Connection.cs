@@ -5,6 +5,7 @@
     using System.Data.SqlServerCe;
     using System.Threading;
     using System.Threading.Tasks;
+    using Providers.Connection;
 
     internal sealed class Connection : ConnectionBase
     {

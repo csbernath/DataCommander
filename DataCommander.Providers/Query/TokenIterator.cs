@@ -1,4 +1,4 @@
-namespace DataCommander.Providers
+namespace DataCommander.Providers.Query
 {
     using System.Linq;
     using System.Text;

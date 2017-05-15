@@ -12,6 +12,8 @@
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Providers;
     using global::MySql.Data.MySqlClient;
+    using Providers.Connection;
+    using Query;
 
     internal sealed class MySqlProvider : IProvider
     {

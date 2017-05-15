@@ -1,4 +1,4 @@
-namespace DataCommander
+namespace DataCommander.Providers.Query
 {
     using System;
     using System.Collections.Concurrent;
@@ -20,17 +20,16 @@ namespace DataCommander
     using System.Windows.Forms;
     using System.Xml;
     using ADODB;
-    using DataCommander.Foundation;
-    using DataCommander.Foundation.Configuration;
-    using DataCommander.Foundation.Data;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Linq;
-    using DataCommander.Foundation.Text;
-    using DataCommander.Foundation.Threading;
-    using DataCommander.Foundation.Windows.Forms;
-    using DataCommander.Providers;
-    using DataCommander.Providers.Query;
-    using DataCommander.Providers.ResultWriter;
+    using Connection;
+    using Foundation;
+    using Foundation.Configuration;
+    using Foundation.Data;
+    using Foundation.Diagnostics;
+    using Foundation.Linq;
+    using Foundation.Text;
+    using Foundation.Threading;
+    using Foundation.Windows.Forms;
+    using ResultWriter;
     using Timer = System.Windows.Forms.Timer;
 
     /// <summary>
@@ -162,14 +161,7 @@ namespace DataCommander
             NumberFormat = new NumberFormatInfo {NumberDecimalSeparator = "."};
         }
 
-        public QueryForm(
-            MainForm mainForm,
-            int index,
-            IProvider provider,
-            string connectionString,
-            ConnectionBase connection,
-            StatusStrip parentStatusBar,
-            ColorTheme colorTheme)
+        public QueryForm(MainForm mainForm,int index,IProvider provider,string connectionString,ConnectionBase connection,StatusStrip parentStatusBar,ColorTheme colorTheme)
         {
             GarbageMonitor.Add("QueryForm", this);
 
@@ -268,8 +260,23 @@ namespace DataCommander
 
             if (colorTheme != null)
             {
+                toolStrip.BackColor = colorTheme.BackColor;
+                toolStrip.ForeColor = colorTheme.ForeColor;
+
                 tvObjectExplorer.BackColor = colorTheme.BackColor;
                 tvObjectExplorer.ForeColor = colorTheme.ForeColor;
+
+                tabControl.BackColor = colorTheme.BackColor;
+                tabControl.ForeColor = colorTheme.ForeColor;
+
+                foreach (Control control in tabControl.Controls)
+                {
+                    control.BackColor = colorTheme.BackColor;
+                    control.ForeColor = colorTheme.ForeColor;
+                }
+
+                resultSetsTabControl.BackColor = colorTheme.BackColor;
+                resultSetsTabControl.ForeColor = colorTheme.ForeColor;
 
                 messagesTextBox.BackColor = colorTheme.BackColor;
                 messagesTextBox.ForeColor = colorTheme.ForeColor;
@@ -610,7 +617,7 @@ namespace DataCommander
             this.cToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cancelQueryButton = new System.Windows.Forms.ToolStripButton();
-            this.QueryTextBox = new DataCommander.Providers.QueryTextBox(colorTheme);
+            this.QueryTextBox = new QueryTextBox(colorTheme);
             this.mainMenu.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.toolStrip.SuspendLayout();
@@ -2804,7 +2811,6 @@ namespace DataCommander
                 if (e.Button == MouseButtons.Right)
                 {
                     var treeNodeV = this.tvObjectExplorer.SelectedNode;
-
                     if (treeNodeV != null)
                     {
                         var treeNode = (ITreeNode)treeNodeV.Tag;
@@ -2813,15 +2819,19 @@ namespace DataCommander
                         if (!treeNode.IsLeaf)
                         {
                             if (contextMenu == null)
-                            {
                                 contextMenu = new ContextMenuStrip(this.components);
-                            }
 
                             contextMenu.Items.Add(new ToolStripMenuItem("Refresh", null, this.mnuRefresh_Click));
                         }
 
                         if (contextMenu != null)
                         {
+                            if (colorTheme != null)
+                            {
+                                contextMenu.ForeColor = colorTheme.ForeColor;
+                                contextMenu.BackColor = colorTheme.BackColor;
+                            }
+
                             var contains = this.components.Components.Cast<IComponent>().Contains(contextMenu);
                             if (!contains)
                             {

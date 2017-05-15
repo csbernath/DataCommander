@@ -1,4 +1,4 @@
-namespace DataCommander.Providers
+namespace DataCommander.Providers.Query
 {
     using System;
     using System.ComponentModel;
@@ -6,8 +6,8 @@ namespace DataCommander.Providers
     using System.Linq;
     using System.Text;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Linq;
     using Foundation.Collections;
+    using Foundation.Linq;
 
     /// <summary>
     /// Summary description for MemberListBox.

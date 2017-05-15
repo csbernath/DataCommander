@@ -1,14 +1,16 @@
-﻿namespace DataCommander.Providers
+﻿namespace DataCommander.Providers.ResultWriter
 {
     using System;
     using System.Data;
     using System.Data.Common;
     using System.IO;
     using System.Text;
-    using DataCommander.Foundation.Data;
-    using DataCommander.Foundation.Data.SqlClient;
+    using Field;
     using Foundation.Collections;
+    using Foundation.Data;
+    using Foundation.Data.SqlClient;
     using Foundation.Text;
+    using Query;
 
     internal enum FieldType
     {

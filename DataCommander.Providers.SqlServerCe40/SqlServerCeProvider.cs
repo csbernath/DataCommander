@@ -8,8 +8,10 @@
     using System.Diagnostics;
     using System.Text;
     using System.Xml;
+    using Field;
     using Foundation.Data;
     using ObjectExplorer;
+    using Providers.Connection;
 
     public sealed class SqlServerCeProvider : IProvider
     {

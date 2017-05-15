@@ -5,8 +5,11 @@ namespace DataCommander.Providers
     using System.Data;
     using System.Globalization;
     using System.Linq;
+    using Connection;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Linq;
+    using Field;
+    using Query;
 
     public sealed class SqlStatement
     {

@@ -3,6 +3,7 @@ namespace DataCommander.Providers.OracleBase
     using System;
     using System.Collections.Generic;
     using System.Windows.Forms;
+    using Query;
 
     public sealed class ViewNode : ITreeNode
     {

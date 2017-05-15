@@ -4,8 +4,8 @@
     using System.Data;
     using System.Threading;
     using System.Threading.Tasks;
-    using DataCommander.Providers;
     using Npgsql;
+    using Providers.Connection;
 
     internal sealed class Connection : ConnectionBase
     {

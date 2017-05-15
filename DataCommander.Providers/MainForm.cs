@@ -1,4 +1,4 @@
-namespace DataCommander
+namespace DataCommander.Providers
 {
     using System;
     using System.Collections.Specialized;
@@ -9,20 +9,19 @@ namespace DataCommander
     using System.Drawing;
     using System.IO;
     using System.Linq;
-    using System.Runtime.InteropServices;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Security.Principal;
     using System.Text;
     using System.Threading;
     using System.Windows.Forms;
-    using DataCommander.Foundation;
-    using DataCommander.Foundation.Configuration;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Linq;
-    using DataCommander.Foundation.Threading;
-    using DataCommander.Foundation.Windows.Forms;
-    using DataCommander.Providers;
-    using Providers.Query;
+    using Connection;
+    using Foundation;
+    using Foundation.Configuration;
+    using Foundation.Diagnostics;
+    using Foundation.Linq;
+    using Foundation.Threading;
+    using Foundation.Windows.Forms;
+    using Query;
 
     /// <summary>
     /// Summary description for MainForm.

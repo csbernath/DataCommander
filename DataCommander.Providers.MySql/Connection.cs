@@ -3,8 +3,8 @@
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-    using DataCommander.Providers;
     using global::MySql.Data.MySqlClient;
+    using Providers.Connection;
 
     internal sealed class Connection : ConnectionBase
     {

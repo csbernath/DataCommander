@@ -7,6 +7,7 @@ namespace DataCommander.Providers.OracleBase
     using System.Threading;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
+    using Query;
 
     /// <summary>
     /// Summary description for TablesNode.

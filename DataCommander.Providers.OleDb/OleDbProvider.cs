@@ -8,6 +8,7 @@ namespace DataCommander.Providers.OleDb
     using System.Text;
     using System.Xml;
     using DataCommander.Foundation.Data;
+    using Providers.Connection;
 
     internal sealed class OleDbProvider : IProvider
     {

@@ -5,7 +5,6 @@ namespace DataCommander.Foundation.Diagnostics
     using System.Diagnostics;
     using System.IO;
     using System.Reflection;
-    using System.Security.AccessControl;
     using System.Text;
     using DataCommander.Foundation.Linq;
     using DataCommander.Foundation.Text;

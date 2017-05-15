@@ -1,4 +1,4 @@
-namespace DataCommander.Providers
+namespace DataCommander.Providers.Connection
 {
     using System;
     using System.Collections.Generic;
@@ -8,11 +8,11 @@ namespace DataCommander.Providers
     using System.Linq;
     using System.Windows.Forms;
     using System.Xml;
-    using DataCommander.Foundation.Configuration;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Windows.Forms;
+    using Foundation.Configuration;
+    using Foundation.Diagnostics;
     using Foundation.Linq;
-    using Query;
+    using Foundation.Windows.Forms;
+    using ResultWriter;
 
     internal sealed class ConnectionForm : Form
     {
@@ -132,7 +132,7 @@ namespace DataCommander.Providers
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.newButton = new System.Windows.Forms.Button();
-            this.dataGrid = new DataCommander.Providers.DoubleBufferedDataGridView();
+            this.dataGrid = new DoubleBufferedDataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
             this.SuspendLayout();
             // 

@@ -1,13 +1,14 @@
-﻿namespace DataCommander.Providers
+﻿namespace DataCommander.Providers.ResultWriter
 {
     using System;
     using System.Data;
     using System.Diagnostics;
     using System.Text;
-    using DataCommander.Foundation;
-    using DataCommander.Foundation.Data;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Linq;
+    using Connection;
+    using Foundation;
+    using Foundation.Data;
+    using Foundation.Diagnostics;
+    using Foundation.Linq;
 
     internal sealed class LogResultWriter : IResultWriter
     {

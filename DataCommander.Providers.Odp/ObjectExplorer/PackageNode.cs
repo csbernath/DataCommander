@@ -7,6 +7,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
     using System.Threading;
     using System.Windows.Forms;
     using Foundation.Data;
+    using Query;
 
     /// <summary>
     /// Summary description for TablesNode.

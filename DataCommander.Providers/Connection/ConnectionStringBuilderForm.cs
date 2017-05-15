@@ -1,4 +1,4 @@
-namespace DataCommander.Providers
+namespace DataCommander.Providers.Connection
 {
     using System;
     using System.Collections.Generic;
@@ -7,8 +7,8 @@ namespace DataCommander.Providers
     using System.Data.OleDb;
     using System.Text;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
     using Foundation;
+    using Foundation.Data;
 
     internal partial class ConnectionStringBuilderForm : Form
     {

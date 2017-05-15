@@ -7,6 +7,7 @@
     using System.Windows.Forms;
     using Foundation.Data;
     using global::MySql.Data.MySqlClient;
+    using Query;
 
     internal sealed class FunctionNode : ITreeNode
     {

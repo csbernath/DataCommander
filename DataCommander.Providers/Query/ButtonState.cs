@@ -1,4 +1,4 @@
-namespace DataCommander
+namespace DataCommander.Providers.Query
 {
     public enum CommandState
     {

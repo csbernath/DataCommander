@@ -4,7 +4,6 @@ namespace DataCommander.Providers
     using System.Data;
     using System.Data.OleDb;
     using ADODB;
-    using DataCommander.Foundation.Data;
 
     /// <summary>
     /// 
@@ -17,9 +16,7 @@ namespace DataCommander.Providers
         /// <param name="commandText"></param>
         /// <param name="connection"></param>
         /// <returns></returns>
-        public static int ExecuteNonQuery(
-            string commandText,
-            OleDbConnection connection )
+        public static int ExecuteNonQuery(string commandText, OleDbConnection connection)
         {
             var command = connection.CreateCommand();
             command.CommandText = commandText;
@@ -29,13 +26,13 @@ namespace DataCommander.Providers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="ADODBRecordset"></param>
+        /// <param name="adodbRecordset"></param>
         /// <returns></returns>
-        public static DataTable Convert( object ADODBRecordset )
+        public static DataTable Convert(object adodbRecordset)
         {
             var adapter = new OleDbDataAdapter();
             var dataTable = new DataTable();
-            adapter.Fill( dataTable, ADODBRecordset );
+            adapter.Fill(dataTable, adodbRecordset);
             return dataTable;
         }
 
@@ -45,22 +42,20 @@ namespace DataCommander.Providers
         /// <param name="rs"></param>
         /// <param name="columns"></param>
         /// <returns></returns>
-        [CLSCompliant( false )]
-        public static DataTable Convert(
-            _Recordset rs,
-            out OleDbParameter[] columns )
+        [CLSCompliant(false)]
+        public static DataTable Convert(_Recordset rs, out OleDbParameter[] columns)
         {
             var adapter = new OleDbDataAdapter();
             var dataTable = new DataTable();
-            adapter.Fill( dataTable, rs );
-            columns = new OleDbParameter[ rs.Fields.Count ];
+            adapter.Fill(dataTable, rs);
+            columns = new OleDbParameter[rs.Fields.Count];
             var index = 0;
 
-            foreach (Field field in rs.Fields)
+            foreach (ADODB.Field field in rs.Fields)
             {
                 var param = new OleDbParameter();
                 param.SourceColumn = field.Name;
-                param.OleDbType = (OleDbType) field.Type;
+                param.OleDbType = (OleDbType)field.Type;
 
                 var size = field.DefinedSize;
                 var precision = field.Precision;
@@ -73,9 +68,9 @@ namespace DataCommander.Providers
                 param.Size = size;
                 param.Precision = precision;
                 param.Scale = field.NumericScale;
-                param.IsNullable = (field.Attributes & (int) FieldAttributeEnum.adFldIsNullable) != 0;
+                param.IsNullable = (field.Attributes & (int)FieldAttributeEnum.adFldIsNullable) != 0;
 
-                columns[ index ] = param;
+                columns[index] = param;
 
                 index++;
             }
@@ -90,7 +85,7 @@ namespace DataCommander.Providers
         /// <param name="connection"></param>
         public static void DropTable(
             string tableName,
-            OleDbConnection connection )
+            OleDbConnection connection)
         {
             var command = connection.CreateCommand();
             command.CommandText = "drop table " + tableName;
@@ -113,7 +108,7 @@ namespace DataCommander.Providers
         private static void CreateTableSql(
             string tableName,
             OleDbParameter[] columns,
-            OleDbConnection connection )
+            OleDbConnection connection)
         {
             var cmdText = "create table " + tableName + "(";
             var i = 0;
@@ -200,7 +195,7 @@ namespace DataCommander.Providers
         private static void CreateTableJet(
             string tableName,
             OleDbParameter[] columns,
-            OleDbConnection connection )
+            OleDbConnection connection)
         {
             var cmdText = "create table " + tableName + "(";
             var i = 0;
@@ -289,16 +284,16 @@ namespace DataCommander.Providers
         private static void CreateTable(
             string tableName,
             OleDbParameter[] columns,
-            OleDbConnection connection )
+            OleDbConnection connection)
         {
             switch (connection.Provider)
             {
                 case "SQLOLEDB.1":
-                    CreateTableSql( tableName, columns, connection );
+                    CreateTableSql(tableName, columns, connection);
                     break;
 
                 case "Microsoft.Jet.OLEDB.4.0":
-                    CreateTableJet( tableName, columns, connection );
+                    CreateTableJet(tableName, columns, connection);
                     break;
 
                 default:
@@ -313,19 +308,19 @@ namespace DataCommander.Providers
         /// <param name="connection"></param>
         public static void CopyTable(
             DataTable sourceTable,
-            OleDbConnection connection )
+            OleDbConnection connection)
         {
-            var adapter = new OleDbDataAdapter( "select * from " + sourceTable.TableName + " where 0=1", connection );
+            var adapter = new OleDbDataAdapter("select * from " + sourceTable.TableName + " where 0=1", connection);
             var destTable = new DataTable();
-            adapter.Fill( destTable );
+            adapter.Fill(destTable);
 
             foreach (DataRow sourceRow in sourceTable.Rows)
             {
-                destTable.Rows.Add( sourceRow.ItemArray );
+                destTable.Rows.Add(sourceRow.ItemArray);
             }
 
-            var builder = new OleDbCommandBuilder( adapter );
-            adapter.Update( destTable );
+            var builder = new OleDbCommandBuilder(adapter);
+            adapter.Update(destTable);
         }
 
         /// <summary>
@@ -337,15 +332,15 @@ namespace DataCommander.Providers
         public static void CopyTable(
             object adodbRecordset,
             string tableName,
-            OleDbConnection connection )
+            OleDbConnection connection)
         {
-            var rs = (Recordset) adodbRecordset;
+            var rs = (Recordset)adodbRecordset;
             OleDbParameter[] columns;
-            var sourceTable = Convert( rs, out columns );
+            var sourceTable = Convert(rs, out columns);
             sourceTable.TableName = tableName;
-            DropTable( tableName, connection );
-            CreateTable( tableName, columns, connection );
-            CopyTable( sourceTable, connection );
+            DropTable(tableName, connection);
+            CreateTable(tableName, columns, connection);
+            CopyTable(sourceTable, connection);
         }
 
         /// <summary>
@@ -354,14 +349,11 @@ namespace DataCommander.Providers
         /// <param name="adodbStreamXml"></param>
         /// <param name="tableName"></param>
         /// <param name="connection"></param>
-        public static void CopyTable(
-            string adodbStreamXml,
-            string tableName,
-            OleDbConnection connection )
+        public static void CopyTable(string adodbStreamXml, string tableName, OleDbConnection connection)
         {
-            var rs = AdoDB.XmlToRecordset( adodbStreamXml );
+            var rs = AdoDB.XmlToRecordset(adodbStreamXml);
             object oRs = rs;
-            CopyTable( oRs, tableName, connection );
+            CopyTable(oRs, tableName, connection);
         }
     }
 }

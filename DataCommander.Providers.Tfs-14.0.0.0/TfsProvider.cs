@@ -6,8 +6,10 @@
     using System.Data.Common;
     using System.Linq;
     using System.Xml;
+    using Connection;
     using DataCommander.Foundation.Data;
     using Microsoft.TeamFoundation.VersionControl.Client;
+    using Query;
 
     public sealed class TfsProvider : IProvider
     {

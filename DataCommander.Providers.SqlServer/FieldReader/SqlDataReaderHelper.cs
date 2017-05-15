@@ -3,6 +3,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
     using System;
     using System.Data;
     using System.Data.SqlClient;
+    using Field;
     using Foundation.Data;
 
     internal sealed class SqlDataReaderHelper : IDataReaderHelper

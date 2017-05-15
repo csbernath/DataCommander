@@ -12,6 +12,8 @@
     using Foundation.Data;
     using Foundation.Diagnostics;
     using Npgsql;
+    using Providers.Connection;
+    using Query;
     using LogLevel = Foundation.Diagnostics.LogLevel;
 
     internal sealed class PostgreSqlProvider : IProvider

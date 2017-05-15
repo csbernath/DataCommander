@@ -5,6 +5,7 @@
     using System.Data.Common;
     using System.Data.SqlServerCe;
     using System.Globalization;
+    using Field;
     using Foundation.Data;
 
     internal sealed class SqlCeDataReaderHelper : IDataReaderHelper

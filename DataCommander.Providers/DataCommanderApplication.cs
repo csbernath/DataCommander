@@ -3,6 +3,7 @@ namespace DataCommander.Providers
     using System.Data.Common;
     using System.Diagnostics;
     using System.Reflection;
+    using Connection;
     using DataCommander.Foundation.Configuration;
     using DataCommander.Foundation.Diagnostics;
     using Microsoft.Win32;

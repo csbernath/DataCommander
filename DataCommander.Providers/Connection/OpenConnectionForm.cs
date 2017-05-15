@@ -1,4 +1,4 @@
-namespace DataCommander.Providers
+namespace DataCommander.Providers.Connection
 {
     using System;
     using System.ComponentModel;
@@ -7,8 +7,8 @@ namespace DataCommander.Providers
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Windows.Forms;
+    using Foundation.Diagnostics;
+    using Foundation.Windows.Forms;
     using Timer = System.Windows.Forms.Timer;
 
     internal sealed class OpenConnectionForm : Form

@@ -16,6 +16,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     using Foundation.Windows.Forms;
     using Microsoft.SqlServer.Management.Common;
     using Microsoft.SqlServer.Management.Smo;
+    using Query;
 
     internal sealed class TableNode : ITreeNode
     {

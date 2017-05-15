@@ -5,6 +5,7 @@ namespace DataCommander.Providers.SQLite
     using System.Data.SQLite;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
+    using Query;
 
     internal sealed class TableNode : ITreeNode
     {

@@ -7,6 +7,7 @@ namespace DataCommander.Providers.SqlServer
     using System.Threading.Tasks;
     using Foundation;
     using Foundation.Data;
+    using Providers.Connection;
 
     internal sealed class Connection : ConnectionBase
     {

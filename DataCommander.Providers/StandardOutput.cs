@@ -6,6 +6,7 @@ namespace DataCommander.Providers
     using System.Text;
     using ADODB;
     using DataCommander.Foundation.Windows.Forms;
+    using Query;
 
     /// <summary>
     /// Summary description for StandardOutput.

@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Providers
+﻿namespace DataCommander.Providers.ResultWriter
 {
     using System;
     using System.Collections.Concurrent;
@@ -9,10 +9,11 @@
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using DataCommander.Foundation;
-    using DataCommander.Foundation.Data;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Linq;
+    using Connection;
+    using Foundation;
+    using Foundation.Data;
+    using Foundation.Diagnostics;
+    using Foundation.Linq;
 
     internal sealed class CopyResultWriter : IResultWriter
     {

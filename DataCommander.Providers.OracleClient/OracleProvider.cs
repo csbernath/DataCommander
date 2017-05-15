@@ -9,6 +9,8 @@ namespace DataCommander.Providers.OracleClient
     using System.Xml;
     using DataCommander.Foundation.Data;
     using DataCommander.Providers.OracleBase;
+    using Field;
+    using Providers.Connection;
 
     public sealed class OracleProvider : IProvider
     {

@@ -10,6 +10,7 @@ namespace DataCommander.Providers.SqlServer
     using System.Text;
     using System.Threading;
     using System.Xml;
+    using Field;
     using FieldReader;
     using Foundation;
     using Foundation.Configuration;
@@ -18,6 +19,8 @@ namespace DataCommander.Providers.SqlServer
     using Foundation.Diagnostics;
     using Foundation.Diagnostics.Log;
     using Foundation.Linq;
+    using Providers.Connection;
+    using Query;
 
     internal sealed class SqlServerProvider : IProvider
     {
