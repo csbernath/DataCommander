@@ -37,9 +37,9 @@ namespace DataCommander.Providers.Query
             remove => this.itemSelectedEvent -= value;
         }
 
-        public void Initialize(QueryTextBox textBox, GetCompletionResponse response)
+        public void Initialize(QueryTextBox textBox, GetCompletionResponse response, ColorTheme colorTheme)
         {
-            var listBox = new MemberListBox(this, textBox);
+            var listBox = new MemberListBox(this, textBox, colorTheme);
             listBox.Initialize(response);
             listBox.Dock = DockStyle.Fill;
 
@@ -55,9 +55,7 @@ namespace DataCommander.Providers.Query
         public void SelectItem(int startIndex, int length, IObjectName objectName)
         {
             if (this.itemSelectedEvent != null)
-            {
                 this.itemSelectedEvent(this, new ItemSelectedEventArgs(startIndex, length, objectName));
-            }
         }
 
         /// <summary>
@@ -66,12 +64,8 @@ namespace DataCommander.Providers.Query
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 if (this.components != null)
-                {
                     this.components.Dispose();
-                }
-            }
 
             base.Dispose(disposing);
         }

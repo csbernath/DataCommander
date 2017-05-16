@@ -69,9 +69,9 @@ namespace DataCommander.Providers.Connection
                 dataGridViewTextBoxColumn.HeaderText = columnName;
 
                 if (columnName == "ConnectionName" ||
-                    columnName == "Data Source" ||
-                    columnName == "Initial Catalog" ||
-                    columnName == "User ID")
+                    columnName == ConnectionStringKeyword.DataSource ||
+                    columnName == ConnectionStringKeyword.InitialCatalog ||
+                    columnName == ConnectionStringKeyword.UserId)
                 {
                     float dataRowMaxWidth;
 
@@ -112,17 +112,14 @@ namespace DataCommander.Providers.Connection
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 if (this.components != null)
-                {
                     this.components.Dispose();
-                }
-            }
 
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
+
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
@@ -169,9 +166,9 @@ namespace DataCommander.Providers.Connection
             // dataGrid
             // 
             this.dataGrid.AllowUserToAddRows = false;
-            this.dataGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                                                                          | System.Windows.Forms.AnchorStyles.Left)
+                                                                         | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dataGrid.Location = new System.Drawing.Point(8, 8);
             this.dataGrid.Name = "dataGrid";
@@ -205,6 +202,7 @@ namespace DataCommander.Providers.Connection
             this.ResumeLayout(false);
 
         }
+
         #endregion
 
         public long Duration { get; private set; }
@@ -299,7 +297,8 @@ namespace DataCommander.Providers.Connection
 
         private void Delete()
         {
-            if (MessageBox.Show(this, "Do you want to delete the selected item(s)?", DataCommanderApplication.Instance.Name, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            if (MessageBox.Show(this, "Do you want to delete the selected item(s)?", DataCommanderApplication.Instance.Name, MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
                 var connectionsFolder = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
                 var index = this.SelectedIndex;
@@ -387,7 +386,7 @@ namespace DataCommander.Providers.Connection
             {
                 var hitTestInfo = this.dataGrid.HitTest(e.X, e.Y);
                 var rowIndex = hitTestInfo.RowIndex;
-                var contextMenu = new ContextMenuStrip( this.components );
+                var contextMenu = new ContextMenuStrip(this.components);
                 ToolStripMenuItem menuItem;
 
                 if (rowIndex >= 0)
@@ -565,7 +564,7 @@ namespace DataCommander.Providers.Connection
             {
                 e.Handled = true;
                 var node = this.SelectedConfigurationNode;
-                this.Connect( node );
+                this.Connect(node);
             }
 
             //if (e.KeyCode == Keys.D)

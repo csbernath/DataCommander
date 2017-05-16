@@ -731,22 +731,22 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                             break;
 
                         case 5:
-                            connectionString = $"Data Source={fileName}";
+                            connectionString = $"{ConnectionStringKeyword.DataSource}={fileName}";
                             provider = ProviderFactory.CreateProvider("Msi");
                             break;
 
                         case 6:
-                            connectionString = $"Data Source={fileName}";
+                            connectionString = $"{ConnectionStringKeyword.DataSource}={fileName}";
                             provider = ProviderFactory.CreateProvider(ProviderName.SQLite);
                             break;
 
                         case 7:
-                            connectionString = $"Data Source={fileName}";
+                            connectionString = $"{ConnectionStringKeyword.DataSource}={fileName}";
                             provider = ProviderFactory.CreateProvider("SqlServerCe");
                             break;
 
                         case 8:
-                            connectionString = $"Data Source={fileName}";
+                            connectionString = $"{ConnectionStringKeyword.DataSource}={fileName}";
                             provider = ProviderFactory.CreateProvider(ProviderName.SqlServerCe40);
                             break;
 

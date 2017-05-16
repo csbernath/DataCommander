@@ -260,6 +260,15 @@ namespace DataCommander.Providers.Query
 
             if (colorTheme != null)
             {
+                foreach (var menuItem in mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
+                {
+                    foreach (ToolStripItem x in menuItem.DropDownItems)
+                    {
+                        x.BackColor = colorTheme.BackColor;
+                        x.ForeColor = colorTheme.ForeColor;
+                    }
+                }
+
                 toolStrip.BackColor = colorTheme.BackColor;
                 toolStrip.ForeColor = colorTheme.ForeColor;
 
@@ -3240,7 +3249,7 @@ namespace DataCommander.Providers.Query
                     if (response.Items != null)
                     {
                         var completionForm = new CompletionForm(this);
-                        completionForm.Initialize(this.QueryTextBox, response);
+                        completionForm.Initialize(this.QueryTextBox, response, colorTheme);
                         completionForm.ItemSelected += new EventHandler<ItemSelectedEventArgs>(this.completionForm_ItemSelected);
                         completionForm.Show(this);
                         this.QueryTextBox.RichTextBox.Focus();

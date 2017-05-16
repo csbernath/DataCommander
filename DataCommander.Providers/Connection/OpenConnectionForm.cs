@@ -100,15 +100,15 @@ namespace DataCommander.Providers.Connection
             object userId;
             dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out userId);
             var dataSource = (string)dataSourceObject;
-            this.textBox.Text =
-                $"Connection name: {connectionProperties.ConnectionName}\r\nProvider name: {connectionProperties.ProviderName}\r\nData Source: {dataSource}\r\nUserId: {userId}";
+            this.textBox.Text = $@"Connection name: {connectionProperties.ConnectionName}
+Provider name: {connectionProperties.ProviderName}
+{ConnectionStringKeyword.DataSource}: {dataSource}
+{ConnectionStringKeyword.UserId}: {userId}";
             this.connectionProperties = connectionProperties;
             this.Cursor = Cursors.AppStarting;
 
             if (this.connectionProperties.Provider == null)
-            {
                 this.connectionProperties.Provider = ProviderFactory.CreateProvider(this.connectionProperties.ProviderName);
-            }
 
             var connection = this.connectionProperties.Provider.CreateConnection(connectionProperties.ConnectionString);
             this.cancellationTokenSource = new CancellationTokenSource();
@@ -142,12 +142,8 @@ namespace DataCommander.Providers.Connection
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 if (this.components != null)
-                {
                     this.components.Dispose();
-                }
-            }
 
             base.Dispose(disposing);
         }

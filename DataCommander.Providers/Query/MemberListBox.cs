@@ -24,7 +24,7 @@ namespace DataCommander.Providers.Query
         /// </summary>
         private readonly Container components = null;
 
-        public MemberListBox(CompletionForm completionForm, QueryTextBox textBox)
+        public MemberListBox(CompletionForm completionForm, QueryTextBox textBox, ColorTheme colorTheme)
         {
             // This call is required by the Windows.Forms Form Designer.
             this.InitializeComponent();
@@ -32,6 +32,12 @@ namespace DataCommander.Providers.Query
             // TODO: Add any initialization after the InitForm call
             this.completionForm = completionForm;
             this.textBox = textBox;
+
+            if (colorTheme != null)
+            {
+                ListBox.BackColor = colorTheme.BackColor;
+                ListBox.ForeColor = colorTheme.ForeColor;
+            }
         }
 
         private static string ToString(IObjectName objectName)
