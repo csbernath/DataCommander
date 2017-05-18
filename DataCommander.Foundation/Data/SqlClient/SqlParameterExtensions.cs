@@ -14,21 +14,21 @@
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public static string GetDataTypeName( this SqlParameter parameter )
+        public static string GetDataTypeName(this SqlParameter parameter)
         {
             var sb = new StringBuilder();
-            sb.Append( parameter.SqlDbType.ToString().ToLowerInvariant() );
+            sb.Append(parameter.SqlDbType.ToString().ToLowerInvariant());
 
             switch (parameter.SqlDbType)
             {
                 case SqlDbType.Decimal:
                     if (parameter.Scale == 0)
                     {
-                        sb.AppendFormat( "({0})", parameter.Precision );
+                        sb.AppendFormat("({0})", parameter.Precision);
                     }
                     else
                     {
-                        sb.AppendFormat( "({0},{1})", parameter.Precision, parameter.Scale );
+                        sb.AppendFormat("({0},{1})", parameter.Precision, parameter.Scale);
                     }
                     break;
 
@@ -48,7 +48,7 @@
                         sizeString = size.ToString();
                     }
 
-                    sb.AppendFormat( "({0})", sizeString );
+                    sb.AppendFormat("({0})", sizeString);
                     break;
             }
 

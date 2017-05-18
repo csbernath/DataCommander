@@ -1,10 +1,10 @@
 ﻿namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlClient;
     using System.Windows.Forms;
     using Foundation.Data;
+    using Foundation.Data.SqlClient;
+    using Foundation.Threading.Tasks;
 
     internal sealed class LoginCollectionNode : ITreeNode
     {
@@ -18,7 +18,7 @@
             this.server = server;
         }
 
-#region ITreeNode Members
+        #region ITreeNode Members
 
         string ITreeNode.Name => "Logins";
 
@@ -30,16 +30,12 @@
 from sys.server_principals sp (nolock)
 where   sp.type in('S','U','G')
 order by name";
+            var request = new ExecuteReaderRequest(commandText);
 
-            using (var connection = new SqlConnection(this.server.ConnectionString))
-            {
-                connection.Open();
-                var transactionScope = new DbTransactionScope(connection, null);
-                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
-                {
-                    return dataReader.Read(dataRecord => new LoginNode(dataRecord.GetString(0)));
-                }
-            }
+            var dbContext = new SqlConnectionStringDbContext(this.server.ConnectionString);
+            var loginNodes = TaskSyncRunner.Run(() => dbContext.ExecuteReaderAsync(request, dataRecord => new LoginNode(dataRecord.GetString(0))));
+
+            return loginNodes.Rows;
         }
 
         bool ITreeNode.Sortable => false;
@@ -48,6 +44,6 @@ order by name";
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-#endregion
+        #endregion
     }
 }

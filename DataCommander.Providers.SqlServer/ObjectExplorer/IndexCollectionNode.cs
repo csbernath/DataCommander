@@ -1,11 +1,12 @@
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     using System.Collections.Generic;
-    using System.Data;
     using System.Data.SqlClient;
-    using System.Linq;
+    using System.Threading.Tasks;
     using System.Windows.Forms;
     using Foundation.Data;
+    using Foundation.Data.SqlClient;
+    using Foundation.Threading.Tasks;
 
     internal sealed class IndexCollectionNode : ITreeNode
     {
@@ -33,27 +34,26 @@ join {0}.sys.objects o (nolock)
     on s.schema_id = o.schema_id
 join {0}.sys.indexes i (nolock)
     on o.object_id = i.object_id
-where o.object_id = {1}
+where o.object_id = @object_id
 order by i.name",
-                cb.QuoteIdentifier(this.tableNode.DatabaseNode.Name),
-                this.tableNode.Id);
+                cb.QuoteIdentifier(this.tableNode.DatabaseNode.Name));
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add("object_id", this.tableNode.Id);
+            var request = new ExecuteReaderRequest(commandText, parameters);
 
             var connectionString = this.tableNode.DatabaseNode.Databases.Server.ConnectionString;
-            using (var connection = new SqlConnection(connectionString))
+            var dbContext = new SqlConnectionStringDbContext(connectionString);
+
+            var response = TaskSyncRunner.Run(() => dbContext.ExecuteReaderAsync(request, dataRecord =>
             {
-                connection.Open();
-                var transactionScope = new DbTransactionScope(connection, null);
-                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
-                {
-                    return dataReader.Read(dataRecord =>
-                    {
-                        var name = dataRecord.GetString(0);
-                        var type = dataRecord.GetByte(1);
-                        var isUnique = dataRecord.GetBoolean(2);
-                        return new IndexNode(this.tableNode, name, type, isUnique);
-                    }).ToList();
-                }
-            }
+                var name = dataRecord.GetString(0);
+                var type = dataRecord.GetByte(1);
+                var isUnique = dataRecord.GetBoolean(2);
+                return new IndexNode(this.tableNode, name, type, isUnique);
+            }));
+
+            return response.Rows;
         }
 
         public bool Sortable => false;

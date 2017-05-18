@@ -43,9 +43,7 @@
         public static void Assert(bool condition, string userMessage)
         {
             if (!condition)
-            {
                 throw new InvalidOperationException(userMessage);
-            }
         }
 
         /// <summary>

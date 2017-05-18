@@ -72,7 +72,7 @@
 #endif
 
             return dataRecord.IsDBNull(columnIndex)
-                ? (short?) null
+                ? (short?)null
                 : dataRecord.GetInt16(columnIndex);
         }
 
@@ -102,7 +102,7 @@
         public static string GetStringOrDefault(this IDataRecord dataRecord, int columnIndex)
         {
             return dataRecord.IsDBNull(columnIndex)
-                ? (string)null
+                ? null
                 : dataRecord.GetString(columnIndex);
         }
     }

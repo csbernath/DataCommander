@@ -1,10 +1,10 @@
 ﻿namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlClient;
     using System.Windows.Forms;
     using Foundation.Data;
+    using Foundation.Data.SqlClient;
+    using Foundation.Threading.Tasks;
 
     internal sealed class DatabaseCollectionNode : ITreeNode
     {
@@ -18,7 +18,7 @@
 
         public ServerNode Server { get; }
 
-#region ITreeNode Members
+        #region ITreeNode Members
 
         string ITreeNode.Name => "Databases";
 
@@ -28,28 +28,21 @@
         {
             var list = new List<ITreeNode>();
             list.Add(new SystemDatabaseCollectionNode(this));
+            var dbContext = new SqlConnectionStringDbContext(this.Server.ConnectionString);
 
-            var connectionString = this.Server.ConnectionString;
-            using (var connection = new SqlConnection(connectionString))
-            {
-                const string commandText = @"select d.name
+            const string commandText = @"select d.name
 from sys.databases d (nolock)
 where name not in('master','model','msdb','tempdb')
 order by d.name";
 
-                connection.Open();
-                var transactionScope = new DbTransactionScope(connection, null);
+            var executeReaderRequest = new ExecuteReaderRequest(commandText);
 
-                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
-                {
-                    dataReader.Read(dataRecord =>
-                    {
-                        var name = dataRecord.GetString(0);
-                        var node = new DatabaseNode(this, name);
-                        list.Add(node);
-                    });
-                }
-            }
+            var response = TaskSyncRunner.Run(() => dbContext.ExecuteReaderAsync(executeReaderRequest, dataRecord =>
+            {
+                var name = dataRecord.GetString(0);
+                return new DatabaseNode(this, name);
+            }));
+            list.AddRange(response.Rows);
 
             return list;
         }
@@ -60,6 +53,6 @@ order by d.name";
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-#endregion
+        #endregion
     }
 }

@@ -233,5 +233,49 @@
 
             return s;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <param name="parameterName"></param>
+        /// <param name="value"></param>
+        public static void Add(this ICollection<SqlParameter> parameters, string parameterName, object value)
+        {
+            var parameter = new SqlParameter();
+            parameter.ParameterName = parameterName;
+            parameter.Value = value;
+
+            parameters.Add(parameter);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <param name="parameterName"></param>
+        /// <param name="sqlDbType"></param>
+        /// <param name="value"></param>
+        public static void Add(this ICollection<SqlParameter> parameters, string parameterName, SqlDbType sqlDbType, object value)
+        {
+            var parameter = new SqlParameter();
+            parameter.ParameterName = parameterName;
+            parameter.SqlDbType = sqlDbType;
+            parameter.Value = value;
+
+            parameters.Add(parameter);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static List<object> ToObjectList(this ICollection<SqlParameter> parameters)
+        {
+            var result = new List<object>(parameters.Count);
+            result.AddRange(parameters);
+            return result;
+        }
     }
 }

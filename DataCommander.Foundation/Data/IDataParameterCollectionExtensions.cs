@@ -21,9 +21,17 @@ namespace DataCommander.Foundation.Data
         public static void AddRange(this IDataParameterCollection dataParameterCollection, IEnumerable<object> parameters)
         {
             foreach (var parameter in parameters)
-            {
                 dataParameterCollection.Add(parameter);
-            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static List<object> ToObjectList(this IEnumerable<IDataParameter> parameters)
+        {
+            return new List<object>(parameters);
         }
 
         /// <summary>

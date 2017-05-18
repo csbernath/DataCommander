@@ -23,76 +23,65 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// </summary>
         /// <param name="section"></param>
         /// <param name="nodeName"></param>
-        public SimpleSqlConnectionFactory( ConfigurationSection section, string nodeName )
+        public SimpleSqlConnectionFactory(ConfigurationSection section, string nodeName)
         {
 #if CONTRACTS_FULL
             Contract.Requires(section != null);
 #endif
 
-            var node = section.SelectNode( nodeName, true );
+            var node = section.SelectNode(nodeName, true);
             this.connectionString = node.Attributes["ConnectionString"].GetValue<string>();
             TimeSpan timeSpan;
 
-            var contains = node.Attributes.TryGetAttributeValue( "CommandTimeout", out timeSpan );
+            var contains = node.Attributes.TryGetAttributeValue("CommandTimeout", out timeSpan);
 
             if (contains)
-            {
                 this.CommandTimeout = (int)timeSpan.TotalSeconds;
-            }
             else
-            {
                 this.CommandTimeout = 259200; // 3 days
-            }
 
             bool isSafe;
-            node.Attributes.TryGetAttributeValue( "IsSafe", out isSafe );
+            node.Attributes.TryGetAttributeValue("IsSafe", out isSafe);
             var sqlLogNode = node.ChildNodes["SqlLog"];
             bool enabled;
-            sqlLogNode.Attributes.TryGetAttributeValue( "Enabled", out enabled );
+            sqlLogNode.Attributes.TryGetAttributeValue("Enabled", out enabled);
 
             if (enabled)
             {
-                var sqlConnectionStringBuilder = new SqlConnectionStringBuilder( this.connectionString );
+                var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(this.connectionString);
                 var applicationName = sqlConnectionStringBuilder.ApplicationName;
                 string logConnectionString;
-                contains = sqlLogNode.Attributes.TryGetAttributeValue( "ConnectionString", null, out logConnectionString );
+                contains = sqlLogNode.Attributes.TryGetAttributeValue("ConnectionString", null, out logConnectionString);
 
                 if (!contains)
                 {
                     string dataSource;
-                    contains = sqlLogNode.Attributes.TryGetAttributeValue( "Data Source", null, out dataSource );
+                    contains = sqlLogNode.Attributes.TryGetAttributeValue("Data Source", null, out dataSource);
 
                     if (!contains)
-                    {
                         dataSource = sqlConnectionStringBuilder.DataSource;
-                    }
 
                     var initialCatalog = sqlLogNode.Attributes["Initial Catalog"].GetValue<string>();
 
-                    sqlConnectionStringBuilder =
-                        new SqlConnectionStringBuilder
-                        {
-                            DataSource = dataSource,
-                            InitialCatalog = initialCatalog,
-                            IntegratedSecurity = true,
-                            ApplicationName = applicationName + " (SqlLog)",
-                            Pooling = false
-                        };
+                    sqlConnectionStringBuilder = new SqlConnectionStringBuilder
+                    {
+                        DataSource = dataSource,
+                        InitialCatalog = initialCatalog,
+                        IntegratedSecurity = true,
+                        ApplicationName = applicationName + " (SqlLog)",
+                        Pooling = false
+                    };
 
                     logConnectionString = sqlConnectionStringBuilder.ConnectionString;
                 }
 
                 var loggedSqlCommandFilterNodeName = sqlLogNode.FullName + ConfigurationNode.Delimiter + "LoggedSqlCommandFilter";
-                var filter = new SimpleLoggedSqlCommandFilter( section, loggedSqlCommandFilterNodeName );
+                var filter = new SimpleLoggedSqlCommandFilter(section, loggedSqlCommandFilterNodeName);
 
                 if (isSafe)
-                {
-                    this.Factory = new SafeLoggedSqlConnectionFactory( logConnectionString, applicationName, filter );
-                }
+                    this.Factory = new SafeLoggedSqlConnectionFactory(logConnectionString, applicationName, filter);
                 else
-                {
-                    this.Factory = new SqlLoggedSqlConnectionFactory( logConnectionString, applicationName, filter );
-                }
+                    this.Factory = new SqlLoggedSqlConnectionFactory(logConnectionString, applicationName, filter);
 
                 var thread = this.Factory.Thread;
                 thread.Start();
@@ -100,13 +89,9 @@ namespace DataCommander.Foundation.Data.SqlClient
             else
             {
                 if (isSafe)
-                {
                     this.Factory = new SafeSqlConnectionFactory();
-                }
                 else
-                {
                     this.Factory = new NativeSqlCommandFactory();
-                }
             }
         }
 
@@ -125,7 +110,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public IDbConnection CreateConnection( string name )
+        public IDbConnection CreateConnection(string name)
         {
             string userName = null;
             string hostName = null;
@@ -172,8 +157,9 @@ namespace DataCommander.Foundation.Data.SqlClient
 
             if (name != null)
             {
-                var sqlConnectionStringBuilder = new SqlConnectionStringBuilder( this.connectionString );
-                sqlConnectionStringBuilder.ApplicationName = string.Format( CultureInfo.InvariantCulture, "{0} {1}", sqlConnectionStringBuilder.ApplicationName, name );
+                var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(this.connectionString);
+                sqlConnectionStringBuilder.ApplicationName = string.Format(CultureInfo.InvariantCulture, "{0} {1}", sqlConnectionStringBuilder.ApplicationName,
+                    name);
                 connectionString = sqlConnectionStringBuilder.ConnectionString;
             }
             else
@@ -181,7 +167,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                 connectionString = this.connectionString;
             }
 
-            return this.Factory.CreateConnection( connectionString, userName, hostName );
+            return this.Factory.CreateConnection(connectionString, userName, hostName);
         }
     }
 }

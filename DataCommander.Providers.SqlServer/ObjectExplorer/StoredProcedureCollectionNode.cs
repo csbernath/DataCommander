@@ -17,13 +17,15 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             this.isMSShipped = isMSShipped;
         }
 
-        public string Name => this.isMSShipped ? "System Stored Procedures" : "Stored Procedures";
+        public string Name => this.isMSShipped
+            ? "System Stored Procedures"
+            : "Stored Procedures";
 
         public bool IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            var commandText = string.Format( @"
+            var commandText = string.Format(@"
 select  s.name as Owner,
         o.name as Name        
 from    [{0}].sys.all_objects o (readpast)
@@ -35,14 +37,16 @@ where
     o.type = 'P'
     and o.is_ms_shipped = {1}
     and p.major_id is null
-order by s.name,o.name", this.database.Name, this.isMSShipped ? 1 : 0 );
+order by s.name,o.name", this.database.Name, this.isMSShipped
+                ? 1
+                : 0);
 
             DataTable dataTable;
             var connectionString = this.database.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 var transactionScope = new DbTransactionScope(connection, null);
-                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
             }
             var dataRows = dataTable.Rows;
             var count = dataRows.Count;
