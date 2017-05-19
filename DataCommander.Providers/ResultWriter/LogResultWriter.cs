@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.ResultWriter
+﻿using System.Linq;
+
+namespace DataCommander.Providers.ResultWriter
 {
     using System;
     using System.Data;
@@ -75,40 +77,126 @@
         void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
             this.writeTableBeginTimestamp = Stopwatch.GetTimestamp();
-
             var now = LocalTime.Default.Now;
+            var columns = schemaTable.Rows.Cast<DataRow>().Select(i => new DbColumn(i)).ToList();
 
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append("\r\npublic class ");
-            stringBuilder.Append(schemaTable.TableName);
+            stringBuilder.Append("\r\ninternal sealed class Row");
+            stringBuilder.Append(this.tableCount);
             stringBuilder.Append("\r\n{\r\n");
+
             var first = true;
-            foreach (DataRow dataRow in schemaTable.Rows)
+            foreach (var column in columns)
             {
                 if (first)
                     first = false;
                 else
                     stringBuilder.AppendLine();
 
-                var dbColumn = new DbColumn(dataRow);
-
                 stringBuilder.Append("    public ");
-                stringBuilder.Append(GetCSharpTypeName(dbColumn.DataType));
+                stringBuilder.Append(GetCSharpTypeName(column.DataType));
 
-                if (dbColumn.AllowDBNull == true && IsValueType(dbColumn.DataType))
+                if (column.AllowDBNull == true && IsValueType(column.DataType))
                     stringBuilder.Append('?');
 
                 stringBuilder.Append(' ');
-                stringBuilder.Append(dbColumn.ColumnName);
-                stringBuilder.Append(" { get; set; }");
+                stringBuilder.Append(column.ColumnName);
+                stringBuilder.Append(";");
             }
-            stringBuilder.Append("\r\n}");
+
+            stringBuilder.Append("\r\n}\r\nprivate static Row");
+            stringBuilder.Append(this.tableCount);
+            stringBuilder.Append(" Read");
+            stringBuilder.Append(this.tableCount);
+            stringBuilder.Append("(IDataRecord dataRecord)\r\n{\r\n    var row = new Row");
+            stringBuilder.Append(this.tableCount);
+            stringBuilder.Append("();\r\n");
+
+            first = true;
+            var index = 0;
+            foreach (var column in columns)
+            {
+                if (first)
+                    first = false;
+                else
+                    stringBuilder.AppendLine();
+
+                stringBuilder.Append("    row.");
+                stringBuilder.Append(column.ColumnName);
+                stringBuilder.Append(" = dataRecord.");
+                stringBuilder.Append(GetDataRecordMethodName(column));
+                stringBuilder.Append('(');
+                stringBuilder.Append(index);
+                stringBuilder.Append(");");
+
+                ++index;
+            }
+
+            stringBuilder.Append("\r\n    return row;\r\n}\r\n");
 
             this.addInfoMessage(new InfoMessage(now, InfoMessageSeverity.Verbose,
                 $"SchemaTable of table[{this.tableCount}]:\r\n{schemaTable.ToStringTableString()}\r\n{stringBuilder}"));
 
             this.tableCount++;
             this.rowCount = 0;
+        }
+
+        private static string GetDataRecordMethodName(DbColumn column)
+        {
+            var typeCode = Type.GetTypeCode(column.DataType);
+            string methodName = null;
+            switch (typeCode)
+            {
+                case TypeCode.Empty:
+                    break;
+                case TypeCode.Object:
+                    break;
+                case TypeCode.DBNull:
+                    break;
+                case TypeCode.Boolean:
+                    methodName = column.AllowDBNull == true ? "GetNullableBoolean" : "GetBoolean";
+                    break;
+                case TypeCode.Char:
+                    break;
+                case TypeCode.SByte:
+                    break;
+                case TypeCode.Byte:
+                    methodName = column.AllowDBNull == true ? "GetNullableByte" : "GetByte";
+                    break;
+                case TypeCode.Int16:
+                    methodName = column.AllowDBNull == true ? "GetNullableInt16" : "GetInt16";
+                    break;
+                case TypeCode.UInt16:
+                    break;
+                case TypeCode.Int32:
+                    methodName = column.AllowDBNull == true ? "GetNullableInt32" : "GetInt32";
+                    break;
+                case TypeCode.UInt32:
+                    break;
+                case TypeCode.Int64:
+                    methodName = column.AllowDBNull == true ? "GetNullableInt64" : "GetInt64";
+                    break;
+                case TypeCode.UInt64:
+                    break;
+                case TypeCode.Single:
+                    methodName = column.AllowDBNull == true ? "GetNullableFloat" : "GetFloat";
+                    break;
+                case TypeCode.Double:
+                    methodName = column.AllowDBNull == true ? "GetNullableDouble" : "GetDouble";
+                    break;
+                case TypeCode.Decimal:
+                    methodName = column.AllowDBNull == true ? "GetNullableDecimal" : "GetDecimal";
+                    break;
+                case TypeCode.DateTime:
+                    methodName = column.AllowDBNull == true ? "GetNullableDateTime" : "GetDateTime";
+                    break;
+                case TypeCode.String:
+                    methodName = column.AllowDBNull == true ? "GetStringOrDefault" : "GetString";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            return methodName;
         }
 
         private static string GetCSharpTypeName(Type dbColumnDataType)

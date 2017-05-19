@@ -9,6 +9,7 @@
     using DataCommander.Foundation;
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Diagnostics;
+    using Foundation.Diagnostics.Log;
     using Microsoft.TeamFoundation.VersionControl.Client;
     using Microsoft.TeamFoundation.VersionControl.Common;
     using Query;

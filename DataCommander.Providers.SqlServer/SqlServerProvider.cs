@@ -327,10 +327,10 @@ namespace DataCommander.Providers.SqlServer
             return typeName;
         }
 
-        Type IProvider.GetColumnType(DbColumn dataColumnSchema)
+        Type IProvider.GetColumnType(DbColumn column)
         {
-            var dbType = (SqlDbType)dataColumnSchema.ProviderType;
-            var columnSize = dataColumnSchema.ColumnSize;
+            var dbType = (SqlDbType)column.ProviderType;
+            var columnSize = column.ColumnSize;
             Type type;
 
             switch (dbType)

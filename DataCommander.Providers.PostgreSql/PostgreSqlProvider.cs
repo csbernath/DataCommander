@@ -11,10 +11,10 @@
     using DataCommander.Providers;
     using Foundation.Data;
     using Foundation.Diagnostics;
+    using Foundation.Diagnostics.Log;
     using Npgsql;
     using Providers.Connection;
     using Query;
-    using LogLevel = Foundation.Diagnostics.LogLevel;
 
     internal sealed class PostgreSqlProvider : IProvider
     {

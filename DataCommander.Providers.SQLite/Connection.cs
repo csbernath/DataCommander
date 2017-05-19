@@ -6,6 +6,7 @@ namespace DataCommander.Providers.SQLite
     using System.Threading;
     using System.Threading.Tasks;
     using DataCommander.Foundation.Diagnostics;
+    using Foundation.Diagnostics.Log;
     using Providers.Connection;
 
     internal sealed class Connection : ConnectionBase

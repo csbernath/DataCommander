@@ -11,6 +11,7 @@
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Providers;
+    using Foundation.Diagnostics.Log;
     using global::MySql.Data.MySqlClient;
     using Providers.Connection;
     using Query;
