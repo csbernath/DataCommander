@@ -1,9 +1,10 @@
-namespace DataCommander.Foundation.Data.SqlClient
+namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
 {
     using System;
     using System.Data;
     using System.Data.SqlClient;
     using System.Diagnostics;
+    using DataCommander.Foundation.Data.SqlClient.SqlLog;
 
     /// <summary>
     /// Logged SqlConnection class.

@@ -4,6 +4,7 @@ namespace DataCommander.Foundation.Threading.Tasks
     using System.Collections.Generic;
     using System.Threading;
     using DataCommander.Foundation.Diagnostics;
+    using DataCommander.Foundation.Diagnostics.Log;
     using DataCommander.Foundation.Linq;
     using DataCommander.Foundation.Text;
 #if FOUNDATION_4_0 || FOUNDATION_4_5 || FOUNDATION_4_6

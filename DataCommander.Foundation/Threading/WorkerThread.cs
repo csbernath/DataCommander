@@ -5,6 +5,7 @@ namespace DataCommander.Foundation.Threading
     using System.Globalization;
     using System.Threading;
     using DataCommander.Foundation.Diagnostics;
+    using DataCommander.Foundation.Diagnostics.Log;
     using ThreadState = System.Threading.ThreadState;
 
     /// <summary>

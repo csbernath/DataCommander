@@ -1,9 +1,9 @@
-namespace DataCommander.Foundation.Collections
+namespace DataCommander.Foundation.Collections.ObjectPool
 {
     using System;
     using System.Collections.Generic;
     using System.Threading;
-    using DataCommander.Foundation.Diagnostics;
+    using DataCommander.Foundation.Diagnostics.Log;
 
     /// <summary>
     /// 

@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.DocumentProperties
+﻿namespace DataCommander.Foundation.DocumentProperties.StructuredStorage
 {
     using System.Collections.Generic;
 

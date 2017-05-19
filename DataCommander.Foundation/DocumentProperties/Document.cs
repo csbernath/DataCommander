@@ -6,6 +6,7 @@
     using System.Runtime.InteropServices;
     using System.Xml;
     using System.Xml.Linq;
+    using DataCommander.Foundation.DocumentProperties.StructuredStorage;
 
     /// <summary>
     /// 

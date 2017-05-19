@@ -28,7 +28,7 @@
         {
             var list = new List<ITreeNode>();
             list.Add(new SystemDatabaseCollectionNode(this));
-            var dbContext = new SqlConnectionStringDbContext(this.Server.ConnectionString);
+            var executor = new SqlCommandExecutor(this.Server.ConnectionString);
 
             const string commandText = @"select d.name
 from sys.databases d (nolock)
@@ -37,11 +37,12 @@ order by d.name";
 
             var executeReaderRequest = new ExecuteReaderRequest(commandText);
 
-            var response = TaskSyncRunner.Run(() => dbContext.ExecuteReaderAsync(executeReaderRequest, dataRecord =>
+            var response = executor.ExecuteReader(executeReaderRequest, dataRecord =>
             {
                 var name = dataRecord.GetString(0);
                 return new DatabaseNode(this, name);
-            }));
+            });
+
             list.AddRange(response.Rows);
 
             return list;

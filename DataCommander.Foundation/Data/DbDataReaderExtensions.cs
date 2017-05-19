@@ -8,32 +8,17 @@
     using System.Threading;
     using Diagnostics.Contracts;
 
-    /// <summary>
-    /// 
-    /// </summary>
     public static class DbDataReaderExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataReader"></param>
-        /// <param name="read"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public static async Task ReadAsync(this DbDataReader dataReader, Action read, CancellationToken cancellationToken)
+        public static async Task ReadAsync(this DbDataReader dataReader, Action read,
+            CancellationToken cancellationToken)
         {
             while (await dataReader.ReadAsync(cancellationToken))
                 read();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataReader"></param>
-        /// <param name="reads"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public static async Task ReadAsync(this DbDataReader dataReader, IEnumerable<Action> reads, CancellationToken cancellationToken)
+        public static async Task ReadAsync(this DbDataReader dataReader, IEnumerable<Action> reads,
+            CancellationToken cancellationToken)
         {
             foreach (var read in reads)
             {
@@ -43,14 +28,6 @@
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataReader"></param>
-        /// <param name="read"></param>
-        /// <param name="cancellationToken"></param>
-        /// <typeparam name="TRow"></typeparam>
-        /// <returns></returns>
         public static async Task<ExecuteReaderResponse<TRow>> ReadAsync<TRow>(
             this DbDataReader dataReader,
             Func<IDataRecord, TRow> read,
@@ -67,16 +44,6 @@
             return ExecuteReaderResponse.Create(rows);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataReader"></param>
-        /// <param name="read1"></param>
-        /// <param name="read2"></param>
-        /// <param name="cancellationToken"></param>
-        /// <typeparam name="TRow1"></typeparam>
-        /// <typeparam name="TRow2"></typeparam>
-        /// <returns></returns>
         public static async Task<ExecuteReaderResponse<TRow1, TRow2>> ReadAsync<TRow1, TRow2>(
             this DbDataReader dataReader,
             Func<IDataRecord, TRow1> read1,

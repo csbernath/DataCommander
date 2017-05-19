@@ -1,6 +1,7 @@
-﻿namespace DataCommander.Foundation.Data.SqlClient
+﻿namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
 {
     using System.Data;
+    using DataCommander.Foundation.Data.SqlClient.SqlLog;
     using DataCommander.Foundation.Threading;
 
     /// <summary>

@@ -1,7 +1,5 @@
-﻿namespace DataCommander.Foundation.Diagnostics
+﻿namespace DataCommander.Foundation.Diagnostics.Log
 {
-    using Log;
-
     /// <summary>
     /// 
     /// </summary>

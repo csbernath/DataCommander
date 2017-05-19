@@ -1,12 +1,13 @@
 namespace DataCommander.Foundation.Data
 {
     using System;
-    using System.Data;
+    using System.Data.Common;
+    using System.Threading.Tasks;
     using DataCommander.Foundation.Diagnostics.Contracts;
 
-    public sealed class ExecuteCommandRequest
+    public sealed class ExecuteCommandAsyncRequest
     {
-        public ExecuteCommandRequest(InitializeCommandRequest initializeCommandRequest, Action<IDbCommand> execute)
+        public ExecuteCommandAsyncRequest(InitializeCommandRequest initializeCommandRequest, Func<DbCommand, Task> execute)
         {
             FoundationContract.Requires<ArgumentNullException>(initializeCommandRequest != null);
             FoundationContract.Requires<ArgumentNullException>(execute != null);
@@ -16,6 +17,6 @@ namespace DataCommander.Foundation.Data
         }
 
         public readonly InitializeCommandRequest InitializeCommandRequest;
-        public readonly Action<IDbCommand> Execute;
+        public readonly Func<DbCommand, Task> Execute;
     }
 }

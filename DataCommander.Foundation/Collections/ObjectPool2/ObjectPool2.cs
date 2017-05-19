@@ -1,5 +1,7 @@
 ﻿namespace DataCommander.Foundation.Collections.ObjectPool2
 {
+    using DataCommander.Foundation.Collections.IndexableCollection;
+
     /// <summary>
     /// 
     /// </summary>

@@ -1,4 +1,4 @@
-namespace DataCommander.Foundation.Collections
+namespace DataCommander.Foundation.Collections.ObjectPool
 {
     using System;
     using System.Threading;

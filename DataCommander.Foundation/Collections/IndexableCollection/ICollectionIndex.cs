@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Collections
+﻿namespace DataCommander.Foundation.Collections.IndexableCollection
 {
     using System.Collections.Generic;
 

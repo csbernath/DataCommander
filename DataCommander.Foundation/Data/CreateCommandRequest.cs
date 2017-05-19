@@ -1,14 +1,13 @@
-﻿namespace DataCommander.Foundation.Orm
+﻿namespace DataCommander.Foundation.Data
 {
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
-    using Data;
 
     /// <summary>
     /// 
     /// </summary>
-    public class CreateCommandRequest
+    public class InitializeCommandRequest
     {
         /// <summary>
         /// 
@@ -17,7 +16,7 @@
         /// <param name="parameters"></param>
         /// <param name="commandType"></param>
         /// <param name="commandTimeout"></param>
-        public CreateCommandRequest(string commandText, IEnumerable<object> parameters, CommandType commandType, int commandTimeout)
+        public InitializeCommandRequest(string commandText, IEnumerable<object> parameters, CommandType commandType, int commandTimeout)
         {
             CommandText = commandText;
             Parameters = parameters?.ToList();
@@ -30,7 +29,7 @@
         /// </summary>
         /// <param name="commandText"></param>
         /// <param name="parameters"></param>
-        public CreateCommandRequest(string commandText, IEnumerable<object> parameters)
+        public InitializeCommandRequest(string commandText, IEnumerable<object> parameters)
             : this(commandText, parameters, CommandType.Text, 0)
         {
         }
@@ -39,7 +38,7 @@
         /// 
         /// </summary>
         /// <param name="commandText"></param>
-        public CreateCommandRequest(string commandText)
+        public InitializeCommandRequest(string commandText)
             : this(commandText, null)
         {
         }

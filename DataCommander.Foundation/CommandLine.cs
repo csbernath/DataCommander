@@ -5,6 +5,7 @@
     using System.IO;
     using System.Text;
     using DataCommander.Foundation.Collections;
+    using DataCommander.Foundation.Collections.IndexableCollection;
     using DataCommander.Foundation.Linq;
 
     /// <summary>

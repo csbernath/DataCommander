@@ -6,6 +6,7 @@ namespace DataCommander.Providers
     using Connection;
     using DataCommander.Foundation.Configuration;
     using DataCommander.Foundation.Diagnostics;
+    using Foundation.Diagnostics.Log;
     using Microsoft.Win32;
     using Application = System.Windows.Forms.Application;
     using Task = System.Threading.Tasks.Task;

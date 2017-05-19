@@ -1,4 +1,4 @@
-namespace DataCommander.Foundation.Data.SqlClient
+namespace DataCommander.Foundation.Data.SqlClient.SqlLog
 {
     using System;
 

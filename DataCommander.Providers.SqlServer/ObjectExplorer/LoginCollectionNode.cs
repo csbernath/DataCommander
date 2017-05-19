@@ -3,8 +3,6 @@
     using System.Collections.Generic;
     using System.Windows.Forms;
     using Foundation.Data;
-    using Foundation.Data.SqlClient;
-    using Foundation.Threading.Tasks;
 
     internal sealed class LoginCollectionNode : ITreeNode
     {
@@ -31,11 +29,9 @@ from sys.server_principals sp (nolock)
 where   sp.type in('S','U','G')
 order by name";
             var request = new ExecuteReaderRequest(commandText);
-
-            var dbContext = new SqlConnectionStringDbContext(this.server.ConnectionString);
-            var loginNodes = TaskSyncRunner.Run(() => dbContext.ExecuteReaderAsync(request, dataRecord => new LoginNode(dataRecord.GetString(0))));
-
-            return loginNodes.Rows;
+            var executor = new SqlCommandExecutor(this.server.ConnectionString);
+            var response = executor.ExecuteReader(request, dataRecord => new LoginNode(dataRecord.GetString(0)));
+            return response.Rows;
         }
 
         bool ITreeNode.Sortable => false;

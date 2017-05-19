@@ -1,4 +1,4 @@
-namespace DataCommander.Foundation.Diagnostics
+namespace DataCommander.Foundation.Diagnostics.Log
 {
     internal interface ILogFormatter
     {

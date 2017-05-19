@@ -10,6 +10,7 @@ namespace DataCommander.Foundation.Configuration
     using System.Threading;
     using System.Xml;
     using DataCommander.Foundation.Diagnostics;
+    using DataCommander.Foundation.Diagnostics.Log;
     using DataCommander.Foundation.Linq;
     using DataCommander.Foundation.Text;
     using DataCommander.Foundation.Xml;

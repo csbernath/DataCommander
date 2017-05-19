@@ -1,7 +1,8 @@
-﻿namespace DataCommander.Foundation.Data
+﻿namespace DataCommander.Foundation.Data.LoggedDbConnection
 {
     using System.Data.Common;
     using DataCommander.Foundation.Diagnostics;
+    using DataCommander.Foundation.Diagnostics.Log;
     using DataCommander.Foundation.Linq;
 
     internal sealed class DbConnectionLogger

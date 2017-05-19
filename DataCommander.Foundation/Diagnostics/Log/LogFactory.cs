@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Diagnostics
+﻿namespace DataCommander.Foundation.Diagnostics.Log
 {
     using System;
     using DataCommander.Foundation.Configuration;

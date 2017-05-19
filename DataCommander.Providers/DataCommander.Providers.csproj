@@ -336,7 +336,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Query\ButtonState.cs" />
-    <Compile Include="Query\ColorTheme.cs" />
+    <Compile Include="ColorTheme.cs" />
     <Compile Include="Query\CompletionForm.cs">
       <SubType>Form</SubType>
     </Compile>

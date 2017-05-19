@@ -4,6 +4,7 @@
     using System.Collections;
     using System.Collections.Generic;
     using DataCommander.Foundation.Collections;
+    using DataCommander.Foundation.Collections.IndexableCollection;
 
     /// <summary>
     /// 

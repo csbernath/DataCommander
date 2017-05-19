@@ -8,6 +8,7 @@ namespace DataCommander.Providers
     using DataCommander.Foundation.Data;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Threading;
+    using Foundation.Diagnostics.Log;
     using ResultWriter;
     using ThreadState = System.Threading.ThreadState;
 

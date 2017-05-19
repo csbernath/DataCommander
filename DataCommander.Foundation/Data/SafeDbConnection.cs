@@ -4,6 +4,7 @@ namespace DataCommander.Foundation.Data
     using System.Data;
     using System.Diagnostics;
     using DataCommander.Foundation.Diagnostics;
+    using DataCommander.Foundation.Diagnostics.Log;
     using DataCommander.Foundation.Linq;
 
     /// <summary>

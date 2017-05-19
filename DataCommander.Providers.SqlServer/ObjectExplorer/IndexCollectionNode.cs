@@ -2,11 +2,9 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data.SqlClient;
-    using System.Threading.Tasks;
     using System.Windows.Forms;
     using Foundation.Data;
     using Foundation.Data.SqlClient;
-    using Foundation.Threading.Tasks;
 
     internal sealed class IndexCollectionNode : ITreeNode
     {
@@ -43,15 +41,15 @@ order by i.name",
             var request = new ExecuteReaderRequest(commandText, parameters);
 
             var connectionString = this.tableNode.DatabaseNode.Databases.Server.ConnectionString;
-            var dbContext = new SqlConnectionStringDbContext(connectionString);
+            var executor = new SqlCommandExecutor(connectionString);
 
-            var response = TaskSyncRunner.Run(() => dbContext.ExecuteReaderAsync(request, dataRecord =>
+            var response = executor.ExecuteReader(request, dataRecord =>
             {
                 var name = dataRecord.GetString(0);
                 var type = dataRecord.GetByte(1);
                 var isUnique = dataRecord.GetBoolean(2);
                 return new IndexNode(this.tableNode, name, type, isUnique);
-            }));
+            });
 
             return response.Rows;
         }

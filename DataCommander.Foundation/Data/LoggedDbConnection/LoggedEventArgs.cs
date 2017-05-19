@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Data
+﻿namespace DataCommander.Foundation.Data.LoggedDbConnection
 {
     using System;
     using System.Diagnostics;

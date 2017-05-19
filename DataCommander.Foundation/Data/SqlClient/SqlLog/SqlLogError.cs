@@ -1,9 +1,8 @@
-namespace DataCommander.Foundation.Data
+namespace DataCommander.Foundation.Data.SqlClient.SqlLog
 {
     using System;
     using System.Data.SqlClient;
     using System.Text;
-    using DataCommander.Foundation.Data.SqlClient;
 
     internal sealed class SqlLogError : ISqlLogItem
     {

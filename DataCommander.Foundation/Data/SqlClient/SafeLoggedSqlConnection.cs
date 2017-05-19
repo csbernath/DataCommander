@@ -3,6 +3,7 @@ namespace DataCommander.Foundation.Data.SqlClient
     using System;
     using System.Data;
     using System.Threading;
+    using DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection;
 
     /// <summary>
     /// 
@@ -23,7 +24,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="filter"></param>
         /// <param name="cancellationToken"></param>
         public SafeLoggedSqlConnection(
-            SqlLog sqlLog,
+            SqlLog.SqlLog sqlLog,
             int applicationId,
             string userName,
             string hostName,
@@ -31,7 +32,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             ISqlLoggedSqlCommandFilter filter,
             CancellationToken cancellationToken)
         {
-            var connection = new SqlLoggedSqlConnection(sqlLog, applicationId, userName, hostName, connectionString, filter);
+            var connection = new SqlLoggedSqlConnection.SqlLoggedSqlConnection(sqlLog, applicationId, userName, hostName, connectionString, filter);
             this.cancellationToken = cancellationToken;
 
             this.Initialize(connection, this);

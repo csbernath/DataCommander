@@ -3,6 +3,7 @@ namespace DataCommander.Foundation.Diagnostics
     using System;
     using System.Diagnostics;
     using System.Text;
+    using DataCommander.Foundation.Diagnostics.Log;
 
     /// <summary>
     /// 

@@ -7,6 +7,7 @@ namespace DataCommander.Foundation.Data.SqlClient
     using System.Text;
     using System.Threading;
     using DataCommander.Foundation.Diagnostics;
+    using DataCommander.Foundation.Diagnostics.Log;
     using DataCommander.Foundation.Linq;
 
     /// <summary>

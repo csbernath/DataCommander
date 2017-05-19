@@ -6,6 +6,7 @@ namespace DataCommander.Providers.ResultWriter
     using System.Text;
     using System.Windows.Forms;
     using Foundation.Diagnostics;
+    using Foundation.Diagnostics.Log;
 
     /// <summary>
     /// Summary description for HtmlTextBox.

@@ -4,7 +4,9 @@ namespace DataCommander.Foundation.Data.SqlClient
     using System.Collections.Generic;
     using System.Data;
     using DataCommander.Foundation.Configuration;
+    using DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection;
     using DataCommander.Foundation.Diagnostics;
+    using DataCommander.Foundation.Diagnostics.Log;
 
     internal sealed class SimpleLoggedSqlCommandFilter : ISqlLoggedSqlCommandFilter
     {

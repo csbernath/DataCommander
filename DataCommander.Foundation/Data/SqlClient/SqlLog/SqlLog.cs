@@ -1,4 +1,4 @@
-namespace DataCommander.Foundation.Data.SqlClient
+namespace DataCommander.Foundation.Data.SqlClient.SqlLog
 {
     using System;
     using System.Collections.Generic;
@@ -8,7 +8,9 @@ namespace DataCommander.Foundation.Data.SqlClient
     using System.Linq;
     using System.Text;
     using System.Threading;
+    using DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection;
     using DataCommander.Foundation.Diagnostics;
+    using DataCommander.Foundation.Diagnostics.Log;
     using DataCommander.Foundation.Threading;
 
     /// <summary>

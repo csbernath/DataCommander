@@ -3,6 +3,7 @@ namespace DataCommander.Foundation.IO
     using System;
     using System.IO;
     using DataCommander.Foundation.Diagnostics;
+    using DataCommander.Foundation.Diagnostics.Log;
 
     /// <summary>
     /// 

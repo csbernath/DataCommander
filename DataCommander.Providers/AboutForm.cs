@@ -7,6 +7,7 @@
     using System.Runtime.Versioning;
     using System.Windows.Forms;
     using DataCommander.Foundation.Diagnostics;
+    using Foundation.Diagnostics.Log;
 
     public partial class AboutForm : Form
     {

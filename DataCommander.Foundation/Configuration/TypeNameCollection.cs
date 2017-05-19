@@ -5,6 +5,7 @@ namespace DataCommander.Foundation.Configuration
     using System.Reflection;
     using System.Xml;
     using DataCommander.Foundation.Collections;
+    using DataCommander.Foundation.Collections.IndexableCollection;
 
     /// <summary>
     /// Summary description for TypeNames.

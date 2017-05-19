@@ -8,6 +8,7 @@ namespace DataCommander.Foundation.Data
     using System.Threading;
     using DataCommander.Foundation.Data.SqlClient;
     using DataCommander.Foundation.Diagnostics;
+    using DataCommander.Foundation.Diagnostics.Log;
     using DataCommander.Foundation.Linq;
     using DataCommander.Foundation.Threading;
 

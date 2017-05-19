@@ -1,6 +1,7 @@
 namespace DataCommander.Providers
 {
     using DataCommander.Foundation.Diagnostics;
+    using Foundation.Diagnostics.Log;
 
     public sealed class SqlObject
     {

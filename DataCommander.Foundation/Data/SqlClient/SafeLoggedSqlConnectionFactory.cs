@@ -2,6 +2,7 @@ namespace DataCommander.Foundation.Data.SqlClient
 {
     using System.Data;
     using System.Threading;
+    using DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection;
     using DataCommander.Foundation.Threading;
 
     /// <summary>
@@ -9,7 +10,7 @@ namespace DataCommander.Foundation.Data.SqlClient
     /// </summary>
     public class SafeLoggedSqlConnectionFactory : IDbConnectionFactory
     {
-        private readonly SqlLog sqlLog;
+        private readonly SqlLog.SqlLog sqlLog;
 
         private readonly int applicationId;
 
@@ -27,7 +28,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             ISqlLoggedSqlCommandFilter filter)
         {
             this.filter = filter;
-            this.sqlLog = new SqlLog(connectionString);
+            this.sqlLog = new SqlLog.SqlLog(connectionString);
             this.applicationId = this.sqlLog.ApplicationStart(applicationName, LocalTime.Default.Now, true);
         }
 
@@ -63,7 +64,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         public IDbConnectionHelper CreateConnectionHelper(IDbConnection connection)
         {
             var safeLoggedSqlConnection = (SafeLoggedSqlConnection)connection;
-            var loggedSqlConnection = (SqlLoggedSqlConnection)safeLoggedSqlConnection.Connection;
+            var loggedSqlConnection = (SqlLoggedSqlConnection.SqlLoggedSqlConnection)safeLoggedSqlConnection.Connection;
             var sqlConnection = loggedSqlConnection.Connection;
             return new SqlConnectionFactory(sqlConnection, connection);
         }

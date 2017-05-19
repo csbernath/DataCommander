@@ -7,6 +7,7 @@ namespace DataCommander.Foundation.Configuration
     using System.Threading;
     using System.Xml;
     using DataCommander.Foundation.Diagnostics;
+    using DataCommander.Foundation.Diagnostics.Log;
     using FileSystemWatcher = DataCommander.Foundation.IO.FileSystemWatcher;
 
     /// <summary>

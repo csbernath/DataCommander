@@ -4,6 +4,7 @@ namespace DataCommander.Foundation.IO
     using System.Globalization;
     using System.IO;
     using DataCommander.Foundation.Diagnostics;
+    using DataCommander.Foundation.Diagnostics.Log;
     using DataCommander.Foundation.Threading;
 
     /// <summary>

@@ -5,6 +5,7 @@ namespace DataCommander.Foundation.IO
     using System.Text;
     using System.Threading;
     using DataCommander.Foundation.Diagnostics;
+    using DataCommander.Foundation.Diagnostics.Log;
 
     /// <summary>
     /// Encapsulates <see cref="System.IO.FileSystemWatcher"/> to minimize number of OnChange events

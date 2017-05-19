@@ -6,6 +6,7 @@ namespace DataCommander.Foundation.Data.SqlClient
     using System.Globalization;
     using System.Security.Principal;
     using DataCommander.Foundation.Configuration;
+    using DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection;
 
 #if FOUNDATION_3_5
     using System.Web;

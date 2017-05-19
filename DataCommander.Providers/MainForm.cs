@@ -18,6 +18,7 @@ namespace DataCommander.Providers
     using Foundation;
     using Foundation.Configuration;
     using Foundation.Diagnostics;
+    using Foundation.Diagnostics.Log;
     using Foundation.Linq;
     using Foundation.Threading;
     using Foundation.Windows.Forms;

@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Data
+﻿namespace DataCommander.Foundation.Data.TextData
 {
     using System.Collections.Generic;
     using System.IO;

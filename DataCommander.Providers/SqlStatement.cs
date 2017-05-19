@@ -9,6 +9,7 @@ namespace DataCommander.Providers
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Foundation.Linq;
     using Field;
+    using Foundation.Diagnostics.Log;
     using Query;
 
     public sealed class SqlStatement
@@ -28,23 +29,16 @@ namespace DataCommander.Providers
             Table[] allTables;
             this.Tables = FindTables(this.Tokens, out allTables);
             this.allTables = allTables;
+
             foreach (var value in this.Tables.Values)
-            {
                 log.Write(LogLevel.Trace, value);
-            }
         }
 
         #region Public Properties
 
-        public IDictionary<string, string> Tables
-        {
-            get;
-        }
+        public IDictionary<string, string> Tables { get; }
 
-        public Token[] Tokens
-        {
-            get;
-        }
+        public Token[] Tokens { get; }
 
         #endregion
 
@@ -272,7 +266,9 @@ namespace DataCommander.Providers
                 }
                 else if (prev.Type == TokenType.OperatorOrPunctuator)
                 {
-                    var tokenAfterOperator = index < this.Tokens.Length ? this.Tokens[index] : null;
+                    var tokenAfterOperator = index < this.Tokens.Length
+                        ? this.Tokens[index]
+                        : null;
                     if (tokenAfterOperator != null && tokenAfterOperator.Value.Contains('.'))
                     {
                         sqlObject = this.GetSqlObject(tokenAfterOperator.Value);
@@ -296,7 +292,9 @@ namespace DataCommander.Providers
                 if (previousToken.Type == TokenType.KeyWord)
                 {
                     var value = previousToken.Value.ToLower();
-                    var name = currentToken != null ? currentToken.Value : null;
+                    var name = currentToken != null
+                        ? currentToken.Value
+                        : null;
 
                     switch (value)
                     {
@@ -536,7 +534,7 @@ namespace DataCommander.Providers
                     switch (dataParameter.DbType)
                     {
                         case DbType.Boolean:
-                            var valueStr = (string) value;
+                            var valueStr = (string)value;
                             double valueDbl;
                             var ok = double.TryParse(valueStr, NumberStyles.Any, null, out valueDbl);
 
@@ -643,7 +641,7 @@ namespace DataCommander.Providers
 
             for (var i = 0; i < parameters.Count; i++)
             {
-                var parameter = (IDataParameter) parameters[i];
+                var parameter = (IDataParameter)parameters[i];
                 var dataParameter = provider.GetDataParameter(parameter);
 
                 if (j < values.Length)
@@ -835,15 +833,9 @@ namespace DataCommander.Providers
                 this.alias = alias;
             }
 
-            public int Index
-            {
-                get;
-            }
+            public int Index { get; }
 
-            public string Name
-            {
-                get;
-            }
+            public string Name { get; }
         }
 
         private sealed class Parameter
@@ -854,15 +846,9 @@ namespace DataCommander.Providers
                 this.Value = value;
             }
 
-            public string Name
-            {
-                get;
-            }
+            public string Name { get; }
 
-            public object Value
-            {
-                get;
-            }
+            public object Value { get; }
         }
 
         #endregion

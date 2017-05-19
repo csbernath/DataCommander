@@ -11,6 +11,16 @@
     /// </summary>
     public static class IDbCommandExtensions
     {
+        public static void Initialize(this IDbCommand command, InitializeCommandRequest request)
+        {
+            command.CommandType = request.CommandType;
+            command.CommandText = request.CommandText;
+            command.CommandTimeout = request.CommandTimeout;
+
+            if (request.Parameters != null)
+                command.Parameters.AddRange(request.Parameters);
+        }
+
         /// <summary>
         /// 
         /// </summary>

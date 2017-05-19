@@ -1,15 +1,82 @@
 ﻿namespace DataCommander.Foundation.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Globalization;
     using System.Threading;
+    using DataCommander.Foundation.Diagnostics.Contracts;
 
     /// <summary>
     /// 
     /// </summary>
     public static class IDataReaderExtensions
     {
+        public static void Read(this IDataReader dataReader, Action read)
+        {
+            while (dataReader.Read())
+                read();
+        }
+
+        public static void Read(this IDataReader dataReader, IEnumerable<Action> reads)
+        {
+            foreach (var read in reads)
+            {
+                dataReader.Read(read);
+                var nextResult = dataReader.NextResult();
+                FoundationContract.Assert(nextResult);
+            }
+        }
+
+        public static ExecuteReaderResponse<TRow> Read<TRow>(this IDataReader dataReader, Func<IDataRecord, TRow> read)
+        {
+            var rows = new List<TRow>();
+
+            dataReader.Read(() =>
+            {
+                var row = read(dataReader);
+                rows.Add(row);
+            });
+
+            return ExecuteReaderResponse.Create(rows);
+        }
+
+        public static ExecuteReaderResponse<TRow1, TRow2> Read<TRow1, TRow2>(this IDataReader dataReader, Func<IDataRecord, TRow1> read1,
+            Func<IDataRecord, TRow2> read2)
+        {
+            List<TRow1> rows1 = null;
+            List<TRow2> rows2 = null;
+
+            var reads = new Action[]
+            {
+                () => rows1 = dataReader.Read(read1).Rows,
+                () => rows2 = dataReader.Read(read2).Rows,
+            };
+
+            dataReader.Read(reads);
+
+            return ExecuteReaderResponse.Create(rows1, rows2);
+        }
+
+        public static ExecuteReaderResponse<TRow1, TRow2, TRow3> Read<TRow1, TRow2, TRow3>(this IDataReader dataReader, Func<IDataRecord, TRow1> read1,
+            Func<IDataRecord, TRow2> read2, Func<IDataRecord, TRow3> read3)
+        {
+            List<TRow1> rows1 = null;
+            List<TRow2> rows2 = null;
+            List<TRow3> rows3 = null;
+
+            var reads = new Action[]
+            {
+                () => rows1 = dataReader.Read(read1).Rows,
+                () => rows2 = dataReader.Read(read2).Rows,
+                () => rows3 = dataReader.Read(read3).Rows
+            };
+
+            dataReader.Read(reads);
+
+            return ExecuteReaderResponse.Create(rows1, rows2, rows3);
+        }
+
         /// <summary>
         /// 
         /// </summary>

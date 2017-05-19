@@ -1,4 +1,4 @@
-namespace DataCommander.Foundation.Data
+namespace DataCommander.Foundation.Data.SqlClient
 {
     using System.Data;
     using System.Data.SqlClient;

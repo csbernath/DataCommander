@@ -4,7 +4,9 @@
     using System.Linq;
     using System.Threading;
     using DataCommander.Foundation.Collections;
+    using DataCommander.Foundation.Collections.IndexableCollection;
     using DataCommander.Foundation.Diagnostics;
+    using DataCommander.Foundation.Diagnostics.Log;
 
     /// <summary>
     /// 

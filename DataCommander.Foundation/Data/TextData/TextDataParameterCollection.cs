@@ -1,11 +1,11 @@
-﻿namespace DataCommander.Foundation.Data
+﻿namespace DataCommander.Foundation.Data.TextData
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Data.Common;
     using System.Diagnostics.Contracts;
-    using DataCommander.Foundation.Collections;
+    using DataCommander.Foundation.Collections.IndexableCollection;
 
     /// <summary>
     /// 

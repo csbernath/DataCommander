@@ -5,6 +5,7 @@
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using DataCommander.Foundation.Collections;
+    using DataCommander.Foundation.Collections.IndexableCollection;
 
     /// <summary>
     /// 

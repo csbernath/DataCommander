@@ -1,7 +1,6 @@
-namespace DataCommander.Foundation.Data
+namespace DataCommander.Foundation.Data.SqlClient.SqlLog
 {
     using System;
-    using DataCommander.Foundation.Data.SqlClient;
 
     internal sealed class SqlLogConnectionClose : ISqlLogItem
     {
