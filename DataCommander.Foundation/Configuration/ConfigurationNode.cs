@@ -14,7 +14,7 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         public const char Delimiter = '/';
 
-        private int index;
+        private int _index;
 
         /// <summary>
         /// 
@@ -87,8 +87,8 @@ namespace DataCommander.Foundation.Configuration
 
             if (childNode.Name == null)
             {
-                childNode.Name = ConfigurationElementName.Node + "[" + this.index + ']';
-                this.index++;
+                childNode.Name = ConfigurationElementName.Node + "[" + this._index + ']';
+                this._index++;
             }
 
             this.ChildNodes.Add(childNode);

@@ -7,11 +7,11 @@
     /// </summary>
     public sealed class LocalTime : IDateTimeProvider
     {
-        private readonly int increment;
-        private readonly int adjustment;
+        private readonly int _increment;
+        private readonly int _adjustment;
 
-        private int lastTickCount;
-        private DateTime lastDateTime;
+        private int _lastTickCount;
+        private DateTime _lastDateTime;
 
         /// <summary>
         /// 
@@ -25,11 +25,11 @@
             Contract.Requires<ArgumentOutOfRangeException>(increment <= adjustment);
 #endif
 
-            this.increment = increment;
-            this.adjustment = adjustment;
+            this._increment = increment;
+            this._adjustment = adjustment;
 
-            this.lastTickCount = UniversalTime.GetTickCount();
-            this.lastDateTime = DateTime.Now;
+            this._lastTickCount = UniversalTime.GetTickCount();
+            this._lastDateTime = DateTime.Now;
         }
 
         /// <summary>
@@ -45,21 +45,21 @@
         {
             get
             {
-                var lastTickCount = this.lastTickCount;
-                var lastDateTime = this.lastDateTime;
+                var lastTickCount = this._lastTickCount;
+                var lastDateTime = this._lastDateTime;
                 var tickCount = UniversalTime.GetTickCount();
                 var elapsed = tickCount - lastTickCount;
                 DateTime now;
 
-                if (this.increment <= elapsed)
+                if (this._increment <= elapsed)
                 {
-                    if (elapsed < this.adjustment)
+                    if (elapsed < this._adjustment)
                         now = lastDateTime.AddMilliseconds(elapsed);
                     else
                     {
                         now = DateTime.Now;
-                        this.lastTickCount = tickCount;
-                        this.lastDateTime = now;
+                        this._lastTickCount = tickCount;
+                        this._lastDateTime = now;
                     }
                 }
                 else

@@ -18,7 +18,7 @@
     /// </summary>
     public class NameValueCollectionReader
     {
-        private readonly TryGetValue<string, string> tryGetValue;
+        private readonly TryGetValue<string, string> _tryGetValue;
 
         /// <summary>
         /// 
@@ -38,7 +38,7 @@
 #if CONTRACTS_FULL
             Contract.Requires(tryGetValue != null);
 #endif
-            this.tryGetValue = tryGetValue;
+            this._tryGetValue = tryGetValue;
         }
 
         /// <summary>
@@ -103,7 +103,7 @@
         public string GetString(string name)
         {
             string value;
-            this.tryGetValue(name, out value);
+            this._tryGetValue(name, out value);
             return value;
         }
 
@@ -130,7 +130,7 @@
         public bool TryGetDateTime(string name, IFormatProvider provider, DateTimeStyles styles, out DateTime value)
         {
             string s;
-            var contains = this.tryGetValue(name, out s);
+            var contains = this._tryGetValue(name, out s);
 
             if (contains)
             {
@@ -156,7 +156,7 @@
         public bool TryGetDouble(string name, out double value)
         {
             string s;
-            var contains = this.tryGetValue(name, out s);
+            var contains = this._tryGetValue(name, out s);
 
             if (contains)
             {
@@ -184,7 +184,7 @@
         public bool TryGetDouble(string name, NumberStyles style, IFormatProvider provider, out double value)
         {
             string s;
-            var contains = this.tryGetValue(name, out s);
+            var contains = this._tryGetValue(name, out s);
 
             if (contains)
             {
@@ -211,7 +211,7 @@
         public bool TryGetEnum<T>(string name, out T value)
         {
             string s;
-            var contains = this.tryGetValue(name, out s);
+            var contains = this._tryGetValue(name, out s);
 
             if (contains)
             {
@@ -274,7 +274,7 @@
         public bool TryGetSingle(string name, NumberStyles style, IFormatProvider provider, out float value)
         {
             string s;
-            var contains = this.tryGetValue(name, out s);
+            var contains = this._tryGetValue(name, out s);
 
             if (contains)
             {
@@ -300,7 +300,7 @@
         public bool TryGetString(string name, out string value)
         {
             string s;
-            var contains = this.tryGetValue(name, out s);
+            var contains = this._tryGetValue(name, out s);
 
             value = contains
                 ? s
@@ -318,7 +318,7 @@
         public bool TryGetTimeSpan(string name, out TimeSpan value)
         {
             string s;
-            var contains = this.tryGetValue(name, out s);
+            var contains = this._tryGetValue(name, out s);
 
             value = contains
                 ? TimeSpan.Parse(s)
@@ -341,7 +341,7 @@
             Contract.Requires(tryParse != null);
 #endif
             string s;
-            var contains = this.tryGetValue(name, out s);
+            var contains = this._tryGetValue(name, out s);
 
             if (contains)
             {

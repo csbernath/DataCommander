@@ -9,7 +9,7 @@ namespace DataCommander.Foundation.Diagnostics.Log
 
     internal static class LogEntryFactory
     {
-        private static long id;
+        private static long _id;
 
         public static LogEntry Create(
             string logName,
@@ -17,7 +17,7 @@ namespace DataCommander.Foundation.Diagnostics.Log
             string message,
             LogLevel logLevel)
         {
-            var id = Interlocked.Increment(ref LogEntryFactory.id);
+            var id = Interlocked.Increment(ref LogEntryFactory._id);
             var thread = Thread.CurrentThread;
             var threadId = thread.ManagedThreadId;
             var threadName = thread.Name;

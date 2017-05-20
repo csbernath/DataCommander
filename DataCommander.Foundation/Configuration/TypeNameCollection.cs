@@ -12,25 +12,25 @@ namespace DataCommander.Foundation.Configuration
     /// </summary>
     internal static class TypeNameCollection
     {
-        private static readonly IndexableCollection<TypeCollectionItem> collection;
-        private static readonly UniqueIndex<string, TypeCollectionItem> nameIndex;
-        private static readonly UniqueIndex<Type, TypeCollectionItem> typeIndex;
-        private static readonly Assembly systemAssembly;
+        private static readonly IndexableCollection<TypeCollectionItem> Collection;
+        private static readonly UniqueIndex<string, TypeCollectionItem> NameIndex;
+        private static readonly UniqueIndex<Type, TypeCollectionItem> TypeIndex;
+        private static readonly Assembly SystemAssembly;
 
         static TypeNameCollection()
         {
-            nameIndex = new UniqueIndex<string, TypeCollectionItem>(
+            NameIndex = new UniqueIndex<string, TypeCollectionItem>(
                 "Name",
                 item => GetKeyResponse.Create(true, item.Name),
                 SortOrder.None);
 
-            typeIndex = new UniqueIndex<Type, TypeCollectionItem>(
+            TypeIndex = new UniqueIndex<Type, TypeCollectionItem>(
                 "Type",
                 item => GetKeyResponse.Create(true, item.Type),
                 new Dictionary<Type, TypeCollectionItem>(TypeEqualityComparer.Instance));
 
-            collection = new IndexableCollection<TypeCollectionItem>(nameIndex);
-            collection.Indexes.Add(typeIndex);
+            Collection = new IndexableCollection<TypeCollectionItem>(NameIndex);
+            Collection.Indexes.Add(TypeIndex);
 
             Add(TypeName.Bool, typeof (bool));
             Add(TypeName.Char, typeof (char));
@@ -53,13 +53,13 @@ namespace DataCommander.Foundation.Configuration
             Add(TypeName.DateTime, typeof (DateTime));
             Add(TypeName.XmlNode, typeof (XmlNode));
 
-            systemAssembly = Assembly.GetAssembly(typeof (int));
+            SystemAssembly = Assembly.GetAssembly(typeof (int));
         }
 
         private static void Add(string name, Type type)
         {
             var item = new TypeCollectionItem(name, type);
-            collection.Add(item);
+            Collection.Add(item);
         }
 
         public static Type GetType(string typeName)
@@ -81,7 +81,7 @@ namespace DataCommander.Foundation.Configuration
             }
 
             TypeCollectionItem item;
-            var contains = nameIndex.TryGetValue(typeName2, out item);
+            var contains = NameIndex.TryGetValue(typeName2, out item);
 
             if (contains)
             {
@@ -122,7 +122,7 @@ namespace DataCommander.Foundation.Configuration
             {
                 var assembly = type.Assembly;
 
-                if (assembly == systemAssembly)
+                if (assembly == SystemAssembly)
                 {
                     typeName = type.FullName;
                 }
@@ -136,7 +136,7 @@ namespace DataCommander.Foundation.Configuration
             else
             {
                 TypeCollectionItem item;
-                var contains = typeIndex.TryGetValue(type, out item);
+                var contains = TypeIndex.TryGetValue(type, out item);
 
                 if (contains)
                 {

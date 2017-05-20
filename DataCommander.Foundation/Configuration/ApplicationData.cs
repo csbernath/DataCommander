@@ -13,8 +13,8 @@ namespace DataCommander.Foundation.Configuration
     /// </summary>
     public sealed class ApplicationData
     {
-        private string fileName;
-        private string sectionName;
+        private string _fileName;
+        private string _sectionName;
 
         /// <summary>
         /// 
@@ -118,7 +118,7 @@ namespace DataCommander.Foundation.Configuration
         public void Load(XmlReader xmlReader)
         {
             var reader = new ConfigurationReader();
-            this.RootNode = reader.Read(xmlReader, this.sectionName, null, null);
+            this.RootNode = reader.Read(xmlReader, this._sectionName, null, null);
 
             if (this.RootNode == null)
                 this.RootNode = new ConfigurationNode(null);
@@ -131,8 +131,8 @@ namespace DataCommander.Foundation.Configuration
         /// <param name="sectionName"></param>
         public void Load(string fileName, string sectionName)
         {
-            this.fileName = fileName;
-            this.sectionName = sectionName;
+            this._fileName = fileName;
+            this._sectionName = sectionName;
 
             if (File.Exists(fileName))
             {
@@ -192,12 +192,12 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         public void Save()
         {
-            var directoryName = Path.GetDirectoryName(this.fileName);
+            var directoryName = Path.GetDirectoryName(this._fileName);
 
             if (!Directory.Exists(directoryName))
                 Directory.CreateDirectory(directoryName);
 
-            this.Save(this.fileName, this.sectionName);
+            this.Save(this._fileName, this._sectionName);
         }
 
         /// <summary>

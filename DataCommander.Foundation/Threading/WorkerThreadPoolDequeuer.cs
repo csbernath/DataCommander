@@ -8,8 +8,8 @@ namespace DataCommander.Foundation.Threading
     /// </summary>
     public class WorkerThreadPoolDequeuer
     {
-        private WorkerThreadPool pool;
-        private readonly WaitCallback callback;
+        private WorkerThreadPool _pool;
+        private readonly WaitCallback _callback;
 
         /// <summary>
         /// 
@@ -17,17 +17,17 @@ namespace DataCommander.Foundation.Threading
         /// <param name="callback"></param>
         public WorkerThreadPoolDequeuer(WaitCallback callback)
         {
-            this.callback = callback;
+            this._callback = callback;
             this.Thread = new WorkerThread(this.Start);
         }
 
         private void Start()
         {
-            WaitHandle[] waitHandles = { this.Thread.StopRequest, this.pool.EnqueueEvent };
+            WaitHandle[] waitHandles = { this.Thread.StopRequest, this._pool.EnqueueEvent };
 
             while (!this.Thread.IsStopRequested)
             {
-                var dequeued = this.pool.Dequeue(this.callback, waitHandles);
+                var dequeued = this._pool.Dequeue(this._callback, waitHandles);
 
                 if (dequeued)
                 {
@@ -43,7 +43,7 @@ namespace DataCommander.Foundation.Threading
 
         internal WorkerThreadPool Pool
         {
-            set => this.pool = value;
+            set => this._pool = value;
         }
 
         internal long LastActivityTimestamp { get; private set; }

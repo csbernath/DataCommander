@@ -12,7 +12,7 @@
     /// </summary>
     public sealed class MsvmComputerSystem
     {
-        private readonly ManagementObject managementObject;
+        private readonly ManagementObject _managementObject;
 
         /// <summary>
         /// 
@@ -24,7 +24,7 @@
             Contract.Requires<ArgumentNullException>(managementObject != null);
 #endif
 
-            this.managementObject = managementObject;
+            this._managementObject = managementObject;
         }
 
         /// <summary>
@@ -119,7 +119,7 @@
         {
             get
             {
-                var elementNameObject = this.managementObject["ElementName"];
+                var elementNameObject = this._managementObject["ElementName"];
                 var elementName = (string) elementNameObject;
                 return elementName;
             }
@@ -132,7 +132,7 @@
         {
             get
             {
-                var enabledStateObject = this.managementObject["EnabledState"];
+                var enabledStateObject = this._managementObject["EnabledState"];
                 var enabledStateUint16 = (ushort) enabledStateObject;
                 var enabledState = (MsvmComputerSystemEnabledState) enabledStateUint16;
                 return enabledState;
@@ -146,7 +146,7 @@
         {
             get
             {
-                var nameObject = this.managementObject["Name"];
+                var nameObject = this._managementObject["Name"];
                 var name = (string) nameObject;
                 return name;
             }
@@ -159,7 +159,7 @@
         {
             get
             {
-                var onTimeObject = this.managementObject["OnTimeInMilliseconds"];
+                var onTimeObject = this._managementObject["OnTimeInMilliseconds"];
                 var onTimeUInt64 = (ulong) onTimeObject;
                 TimeSpan? onTime;
 
@@ -188,7 +188,7 @@
             var query = $"SELECT * FROM Msvm_ShutdownComponent WHERE SystemName='{this.Name}'";
             var objectQuery = new ObjectQuery(query);
             var managementObjectSearcher = new ManagementObjectSearcher(
-                this.managementObject.Scope, objectQuery);
+                this._managementObject.Scope, objectQuery);
             var managementObjectCollection = managementObjectSearcher.Get();
             var shutdownComponent = managementObjectCollection.Cast<ManagementObject>().First();
             var resultObject = shutdownComponent.InvokeMethod(
@@ -214,15 +214,15 @@
         {
             const string methodName = "RequestStateChange";
             var requestedStateuInt16 = (ushort) requestedState;
-            var inParams = this.managementObject.GetMethodParameters(methodName);
+            var inParams = this._managementObject.GetMethodParameters(methodName);
             inParams["RequestedState"] = requestedStateuInt16;
-            var outParams = this.managementObject.InvokeMethod(methodName, inParams, null);
+            var outParams = this._managementObject.InvokeMethod(methodName, inParams, null);
             var returnValue = (MsvmComputerSystemRequestStateChangeReturnValue) (uint) outParams["Returnvalue"];
             var jobPath = (string) outParams["Job"];
 
             if (jobPath != null)
             {
-                var jobObject = new ManagementObject(this.managementObject.Scope,
+                var jobObject = new ManagementObject(this._managementObject.Scope,
                     new ManagementPath(jobPath), null);
                 jobObject.Get();
                 job = new ManagementJob(jobObject);

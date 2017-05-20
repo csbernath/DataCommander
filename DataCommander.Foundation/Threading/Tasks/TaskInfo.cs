@@ -12,12 +12,12 @@ namespace DataCommander.Foundation.Threading.Tasks
     /// </summary>
     public sealed class TaskInfo
     {
-        private readonly WeakReference weakReference;
-        private bool isCompleted;
+        private readonly WeakReference _weakReference;
+        private bool _isCompleted;
 
         internal TaskInfo(Task task, string name)
         {
-            this.weakReference = new WeakReference(task);
+            this._weakReference = new WeakReference(task);
             this.Id = task.Id;
             this.Name = name;
         }
@@ -57,9 +57,9 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// </summary>
         public bool IsCompleted
         {
-            get => this.isCompleted;
+            get => this._isCompleted;
 
-            internal set => this.isCompleted = true;
+            internal set => this._isCompleted = true;
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public bool IsAlive => this.weakReference.IsAlive;
+        public bool IsAlive => this._weakReference.IsAlive;
 
         /// <summary>
         /// 
@@ -88,9 +88,9 @@ namespace DataCommander.Foundation.Threading.Tasks
 
                 try
                 {
-                    if (this.weakReference.IsAlive)
+                    if (this._weakReference.IsAlive)
                     {
-                        task = (Task)this.weakReference.Target;
+                        task = (Task)this._weakReference.Target;
                     }
                 }
                 catch

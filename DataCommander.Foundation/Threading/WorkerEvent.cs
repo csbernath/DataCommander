@@ -5,13 +5,13 @@
 
     internal class WorkerEvent : WaitHandle
     {
-        private readonly EventWaitHandle eventWaitHandle;
+        private readonly EventWaitHandle _eventWaitHandle;
 
         public WorkerEvent(WorkerEventState initialState)
         {
-            this.eventWaitHandle = new EventWaitHandle(initialState == WorkerEventState.Signaled, EventResetMode.ManualReset);
+            this._eventWaitHandle = new EventWaitHandle(initialState == WorkerEventState.Signaled, EventResetMode.ManualReset);
             this.State = initialState;
-            this.SafeWaitHandle = this.eventWaitHandle.SafeWaitHandle;
+            this.SafeWaitHandle = this._eventWaitHandle.SafeWaitHandle;
         }
 
         public WorkerEventState State { get; private set; }
@@ -23,7 +23,7 @@
         public bool Reset()
         {
             this.State = WorkerEventState.NonSignaled;
-            return this.eventWaitHandle.Reset();
+            return this._eventWaitHandle.Reset();
         }
 
         /// <summary>
@@ -33,32 +33,32 @@
         public bool Set()
         {
             this.State = WorkerEventState.Signaled;
-            return this.eventWaitHandle.Set();
+            return this._eventWaitHandle.Set();
         }
 
         public override void Close()
         {
-            this.eventWaitHandle.Close();
+            this._eventWaitHandle.Close();
         }
 
         public override bool WaitOne()
         {
-            return this.eventWaitHandle.WaitOne();
+            return this._eventWaitHandle.WaitOne();
         }
 
         public override bool WaitOne(int millisecondsTimeout)
         {
-            return this.eventWaitHandle.WaitOne(millisecondsTimeout);
+            return this._eventWaitHandle.WaitOne(millisecondsTimeout);
         }
 
         public override bool WaitOne(TimeSpan timeout)
         {
-            return this.eventWaitHandle.WaitOne(timeout);
+            return this._eventWaitHandle.WaitOne(timeout);
         }
 
         public override bool WaitOne(int millisecondsTimeout, bool exitContext)
         {
-            return this.eventWaitHandle.WaitOne(millisecondsTimeout, exitContext);
+            return this._eventWaitHandle.WaitOne(millisecondsTimeout, exitContext);
         }
     }
 }

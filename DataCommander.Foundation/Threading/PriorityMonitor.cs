@@ -14,9 +14,9 @@
     /// <typeparam name="T"></typeparam>
     public sealed class PriorityMonitor<T>
     {
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private readonly IndexableCollection<LockRequest> lockRequests;
-        private readonly NonUniqueIndex<int, LockRequest> priorityIndex;
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly IndexableCollection<LockRequest> _lockRequests;
+        private readonly NonUniqueIndex<int, LockRequest> _priorityIndex;
 
         /// <summary>
         /// 
@@ -25,12 +25,12 @@
         public PriorityMonitor(T monitoredObject)
         {
             this.MonitoredObject = monitoredObject;
-            this.priorityIndex = new NonUniqueIndex<int, LockRequest>(
+            this._priorityIndex = new NonUniqueIndex<int, LockRequest>(
                 "priorityIndex",
                 item => GetKeyResponse.Create(true, item.Priority),
                 SortOrder.Ascending);
 
-            this.lockRequests = new IndexableCollection<LockRequest>(this.priorityIndex);
+            this._lockRequests = new IndexableCollection<LockRequest>(this._priorityIndex);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@
         {
             var lockRequest = new LockRequest(this, priority);
 
-            lock (this.lockRequests)
+            lock (this._lockRequests)
             {
                 bool isCompleted;
 
@@ -63,7 +63,7 @@
                 }
                 else
                 {
-                    this.lockRequests.Add(lockRequest);
+                    this._lockRequests.Add(lockRequest);
                     isCompleted = false;
                 }
 
@@ -82,7 +82,7 @@
         {
             LockRequest lockRequest;
 
-            lock (this.lockRequests)
+            lock (this._lockRequests)
             {
                 if (this.CurrentLockRequest == null)
                 {
@@ -107,19 +107,19 @@
             Contract.Requires(lockRequest == this.CurrentLockRequest);
 #endif
 
-            log.Write(LogLevel.Trace, "Exiting lockRequest... monitoredObject: {0}, priority: {1}", this.MonitoredObject,
+            Log.Write(LogLevel.Trace, "Exiting lockRequest... monitoredObject: {0}, priority: {1}", this.MonitoredObject,
                 lockRequest.Priority);
 
-            lock (this.lockRequests)
+            lock (this._lockRequests)
             {
-                if (this.lockRequests.Count == 0)
+                if (this._lockRequests.Count == 0)
                 {
                     this.CurrentLockRequest = null;
                 }
                 else
                 {
-                    var first = this.lockRequests.First();
-                    this.lockRequests.Remove(first);
+                    var first = this._lockRequests.First();
+                    this._lockRequests.Remove(first);
                     this.CurrentLockRequest = first;
                     first.Complete();
                 }
@@ -131,7 +131,7 @@
         /// </summary>
         public sealed class LockRequest : IDisposable
         {
-            private EventWaitHandle asyncWaitHandle;
+            private EventWaitHandle _asyncWaitHandle;
 
             internal LockRequest(PriorityMonitor<T> monitor, int priority)
             {
@@ -156,7 +156,7 @@
             /// <summary>
             /// 
             /// </summary>
-            public WaitHandle AsyncWaitHandle => this.asyncWaitHandle;
+            public WaitHandle AsyncWaitHandle => this._asyncWaitHandle;
 
             /// <summary>
             /// 
@@ -165,7 +165,7 @@
 
             internal void Initialize(bool isCompleted)
             {
-                log.Write(LogLevel.Trace,
+                Log.Write(LogLevel.Trace,
                     "Initializing lockRequest... monitoredObject: {0}, priority: {1}, isCompleted: {2}",
                     this.Monitor.MonitoredObject, this.Priority,
                     isCompleted);
@@ -176,21 +176,21 @@
                 }
                 else
                 {
-                    this.asyncWaitHandle = new EventWaitHandle(false, EventResetMode.ManualReset);
+                    this._asyncWaitHandle = new EventWaitHandle(false, EventResetMode.ManualReset);
                 }
             }
 
             internal void Complete()
             {
-                log.Write(LogLevel.Trace,
+                Log.Write(LogLevel.Trace,
                     "Completing lockRequest... monitoredObject: {0}, priority:{1}, asyncWaitHandle != null: {2}",
                     this.Monitor.MonitoredObject, this.Priority,
-                    this.asyncWaitHandle != null);
+                    this._asyncWaitHandle != null);
                 this.IsCompleted = true;
 
-                if (this.asyncWaitHandle != null)
+                if (this._asyncWaitHandle != null)
                 {
-                    this.asyncWaitHandle.Set();
+                    this._asyncWaitHandle.Set();
                 }
             }
 

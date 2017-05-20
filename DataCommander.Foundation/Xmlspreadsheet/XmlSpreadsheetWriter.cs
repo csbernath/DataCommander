@@ -10,8 +10,8 @@
     /// </summary>
     public sealed class XmlSpreadsheetWriter
     {
-        private XmlSpreadsheetTable table;
-        private int tableIndex = -1;
+        private XmlSpreadsheetTable _table;
+        private int _tableIndex = -1;
 
         /// <summary>
         /// 
@@ -107,17 +107,17 @@
 #if CONTRACTS_FULL
             Contract.Requires(table != null);
 #endif
-            this.tableIndex++;
-            this.table = table;
+            this._tableIndex++;
+            this._table = table;
             int columnIndex;
 
             this.XmlWriter.WriteStartElement("Worksheet");
-            this.XmlWriter.WriteAttributeString("ss:Name", this.table.TableName);
+            this.XmlWriter.WriteAttributeString("ss:Name", this._table.TableName);
 
             this.XmlWriter.WriteStartElement("Table");
 
             columnIndex = 1;
-            foreach (var column in this.table.Columns)
+            foreach (var column in this._table.Columns)
             {
                 using (this.XmlWriter.WriteElement("Column"))
                 {
@@ -133,7 +133,7 @@
 
             using (this.XmlWriter.WriteElement("Row"))
             {
-                foreach (var column in this.table.Columns)
+                foreach (var column in this._table.Columns)
                 {
                     var cell =
                         new XmlSpreadsheetCell(XmlSpreadsheetDataType.String, column.ColumnName)
@@ -210,13 +210,13 @@
                 }
                 else
                 {
-                    var column = this.table.Columns[columnIndex];
+                    var column = this._table.Columns[columnIndex];
                     type = column.DataType;
                     xmlValue = column.Convert(value);
                 }
 
                 var cell = new XmlSpreadsheetCell(type, xmlValue);
-                cell.StyleId = $"{this.tableIndex},{columnIndex}";
+                cell.StyleId = $"{this._tableIndex},{columnIndex}";
                 cell.Write(this.XmlWriter);
             }
 

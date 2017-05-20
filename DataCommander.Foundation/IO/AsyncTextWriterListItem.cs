@@ -4,18 +4,18 @@
 
     internal sealed class AsyncTextWriterListItem
     {
-        private readonly IFormatter formatter;
-        private readonly object[] args;
+        private readonly IFormatter _formatter;
+        private readonly object[] _args;
 
         public AsyncTextWriterListItem(IFormatter formatter, params object[] args)
         {
-            this.formatter = formatter;
-            this.args = args;
+            this._formatter = formatter;
+            this._args = args;
         }
 
         public void AppendTo(StringBuilder sb)
         {
-            this.formatter.AppendTo(sb, this.args);
+            this._formatter.AppendTo(sb, this._args);
         }
     }
 }

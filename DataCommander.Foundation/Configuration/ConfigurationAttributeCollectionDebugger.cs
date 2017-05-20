@@ -7,7 +7,7 @@
     /// </summary>
     internal sealed class ConfigurationAttributeCollectionDebugger
     {
-        private readonly ConfigurationAttributeCollection collection;
+        private readonly ConfigurationAttributeCollection _collection;
 
         /// <summary>
         /// 
@@ -15,7 +15,7 @@
         /// <param name="collection"></param>
         public ConfigurationAttributeCollectionDebugger( ConfigurationAttributeCollection collection )
         {
-            this.collection = collection;
+            this._collection = collection;
         }
 
         [DebuggerBrowsable( DebuggerBrowsableState.RootHidden )]
@@ -23,8 +23,8 @@
         {
             get
             {
-                var array = new ConfigurationAttribute[ this.collection.Count ];
-                this.collection.CopyTo( array, 0 );
+                var array = new ConfigurationAttribute[ this._collection.Count ];
+                this._collection.CopyTo( array, 0 );
                 return array;
             }
         }

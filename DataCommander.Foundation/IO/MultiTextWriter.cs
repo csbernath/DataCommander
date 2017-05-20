@@ -10,12 +10,12 @@
     /// </summary>
     public class MultiTextWriter : TextWriter
     {
-        private readonly List<TextWriter> textWriters = new List<TextWriter>();
+        private readonly List<TextWriter> _textWriters = new List<TextWriter>();
 
         /// <summary>
         /// 
         /// </summary>
-        public IList<TextWriter> TextWriters => this.textWriters;
+        public IList<TextWriter> TextWriters => this._textWriters;
 
         /// <summary>
         /// 
@@ -28,7 +28,7 @@
         /// <param name="value"></param>
         public override void Write(char value)
         {
-            foreach (var textWriter in this.textWriters)
+            foreach (var textWriter in this._textWriters)
             {
                 textWriter.Write(value);
             }
@@ -52,7 +52,7 @@
         /// <param name="value"></param>
         public override void Write(string value)
         {
-            foreach (var textWriter in this.textWriters)
+            foreach (var textWriter in this._textWriters)
             {
                 textWriter.Write(value);
             }

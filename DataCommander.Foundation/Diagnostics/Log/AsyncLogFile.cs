@@ -10,13 +10,13 @@ namespace DataCommander.Foundation.Diagnostics.Log
     {
         #region Private Fields
 
-        private string path;
-        private readonly int bufferSize;
-        private readonly LogFile logFile;
-        private readonly ILogFormatter formatter;
-        private readonly ConcurrentQueue<LogEntry> queue;
-        private readonly TimeSpan timerPeriod;
-        private Timer timer;
+        private string _path;
+        private readonly int _bufferSize;
+        private readonly LogFile _logFile;
+        private readonly ILogFormatter _formatter;
+        private readonly ConcurrentQueue<LogEntry> _queue;
+        private readonly TimeSpan _timerPeriod;
+        private Timer _timer;
 
         #endregion
 
@@ -29,17 +29,17 @@ namespace DataCommander.Foundation.Diagnostics.Log
             FileAttributes fileAttributes,
             DateTimeKind dateTimeKind)
         {
-            this.path = path;
-            this.bufferSize = bufferSize;
-            this.timerPeriod = timerPeriod;
-            this.queue = new ConcurrentQueue<LogEntry>();
-            this.formatter = formatter;
-            this.logFile = new LogFile(path, encoding, 1024, true, formatter, fileAttributes, dateTimeKind);
+            this._path = path;
+            this._bufferSize = bufferSize;
+            this._timerPeriod = timerPeriod;
+            this._queue = new ConcurrentQueue<LogEntry>();
+            this._formatter = formatter;
+            this._logFile = new LogFile(path, encoding, 1024, true, formatter, fileAttributes, dateTimeKind);
         }
 
         #region ILogFile Members
 
-        string ILogFile.FileName => this.logFile.FileName;
+        string ILogFile.FileName => this._logFile.FileName;
 
         void ILogFile.Open()
         {
@@ -47,35 +47,35 @@ namespace DataCommander.Foundation.Diagnostics.Log
             Contract.Assert(this.timer == null);
 #endif
 
-            this.timer = new Timer(this.TimerCallback, null, this.timerPeriod, this.timerPeriod);
+            this._timer = new Timer(this.TimerCallback, null, this._timerPeriod, this._timerPeriod);
         }
 
         public void Write(LogEntry entry)
         {
-            this.queue.Enqueue(entry);
+            this._queue.Enqueue(entry);
         }
 
         public void Flush()
         {
             LogEntry logEntry;
-            while (this.queue.TryDequeue(out logEntry))
+            while (this._queue.TryDequeue(out logEntry))
             {
-                var text = this.formatter.Format(logEntry);
-                this.logFile.Write(logEntry.CreationTime, text);
+                var text = this._formatter.Format(logEntry);
+                this._logFile.Write(logEntry.CreationTime, text);
             }
         }
 
         public void Close()
         {
-            if (this.timer != null)
+            if (this._timer != null)
             {
-                this.timer.Dispose();
-                this.timer = null;
+                this._timer.Dispose();
+                this._timer = null;
             }
 
             this.Flush();
 
-            this.logFile.Close();
+            this._logFile.Close();
         }
 
 #endregion

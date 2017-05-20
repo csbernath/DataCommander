@@ -14,24 +14,24 @@
     [DebuggerDisplay("Count = {" + nameof(Count) + "}")]
     public class ConfigurationAttributeCollection : IList<ConfigurationAttribute>
     {
-        private readonly IndexableCollection<ConfigurationAttribute> collection;
-        private readonly ListIndex<ConfigurationAttribute> listIndex;
-        private readonly UniqueIndex<string, ConfigurationAttribute> nameIndex;
+        private readonly IndexableCollection<ConfigurationAttribute> _collection;
+        private readonly ListIndex<ConfigurationAttribute> _listIndex;
+        private readonly UniqueIndex<string, ConfigurationAttribute> _nameIndex;
 
         /// <summary>
         /// 
         /// </summary>
         public ConfigurationAttributeCollection()
         {
-            this.listIndex = new ListIndex<ConfigurationAttribute>("List");
+            this._listIndex = new ListIndex<ConfigurationAttribute>("List");
 
-            this.nameIndex = new UniqueIndex<string, ConfigurationAttribute>(
+            this._nameIndex = new UniqueIndex<string, ConfigurationAttribute>(
                 "NameIndex",
                 attribute => GetKeyResponse.Create(true, attribute.Name),
                 SortOrder.None);
 
-            this.collection = new IndexableCollection<ConfigurationAttribute>(this.listIndex);
-            this.collection.Indexes.Add(this.nameIndex);
+            this._collection = new IndexableCollection<ConfigurationAttribute>(this._listIndex);
+            this._collection.Indexes.Add(this._nameIndex);
         }
 
         /// <summary>
@@ -47,15 +47,15 @@
                 Contract.Assert(0 <= index && index < this.Count);
 #endif
 
-                return this.listIndex[index];
+                return this._listIndex[index];
             }
 
             set
             {
-                var originalItem = this.listIndex[index];
-                ICollection<ConfigurationAttribute> collection = this.nameIndex;
+                var originalItem = this._listIndex[index];
+                ICollection<ConfigurationAttribute> collection = this._nameIndex;
                 collection.Remove(originalItem);
-                this.listIndex[index] = value;
+                this._listIndex[index] = value;
                 collection.Add(value);
             }
         }
@@ -73,7 +73,7 @@
                 Contract.Requires(this.ContainsKey(name));
 #endif
 
-                return this.nameIndex[name];
+                return this._nameIndex[name];
             }
         }
 
@@ -94,7 +94,7 @@
             Contract.Requires(!this.ContainsKey(name));
 #endif
             var attribute = new ConfigurationAttribute(name, value, description);
-            this.collection.Add(attribute);
+            this._collection.Add(attribute);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@
         [Pure]
         public bool ContainsKey(string name)
         {
-            return this.nameIndex.ContainsKey(name);
+            return this._nameIndex.ContainsKey(name);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@
         /// <returns></returns>
         public int IndexOf(ConfigurationAttribute item)
         {
-            return this.listIndex.IndexOf(item);
+            return this._listIndex.IndexOf(item);
         }
 
         /// <summary>
@@ -125,9 +125,9 @@
         /// <param name="item"></param>
         public void Insert(int index, ConfigurationAttribute item)
         {
-            ICollection<ConfigurationAttribute> collection = this.nameIndex;
+            ICollection<ConfigurationAttribute> collection = this._nameIndex;
             collection.Add(item);
-            this.listIndex.Insert(index, item);
+            this._listIndex.Insert(index, item);
         }
 
         /// <summary>
@@ -138,12 +138,12 @@
         public bool Remove(string name)
         {
             ConfigurationAttribute attribute;
-            var contains = this.nameIndex.TryGetValue(name, out attribute);
+            var contains = this._nameIndex.TryGetValue(name, out attribute);
             bool succeeded;
 
             if (contains)
             {
-                succeeded = this.collection.Remove(attribute);
+                succeeded = this._collection.Remove(attribute);
             }
             else
             {
@@ -159,9 +159,9 @@
         /// <param name="index"></param>
         public void RemoveAt(int index)
         {
-            var item = this.listIndex[index];
-            this.listIndex.RemoveAt(index);
-            ICollection<ConfigurationAttribute> collection = this.nameIndex;
+            var item = this._listIndex[index];
+            this._listIndex.RemoveAt(index);
+            ICollection<ConfigurationAttribute> collection = this._nameIndex;
             collection.Remove(item);
         }
 
@@ -173,7 +173,7 @@
         /// <returns></returns>
         public bool TryGetValue(string name, out ConfigurationAttribute attribute)
         {
-            return this.nameIndex.TryGetValue(name, out attribute);
+            return this._nameIndex.TryGetValue(name, out attribute);
         }
 
         /// <summary>
@@ -199,7 +199,7 @@
         public bool TryGetAttributeValue<T>(string name, T defaultValue, out T value)
         {
             ConfigurationAttribute attribute;
-            var contains = this.nameIndex.TryGetValue(name, out attribute);
+            var contains = this._nameIndex.TryGetValue(name, out attribute);
 
             if (contains)
             {
@@ -221,7 +221,7 @@
         public void SetAttributeValue(string name, object value)
         {
             ConfigurationAttribute attribute;
-            var contains = this.nameIndex.TryGetValue(name, out attribute);
+            var contains = this._nameIndex.TryGetValue(name, out attribute);
 
             if (contains)
             {
@@ -230,7 +230,7 @@
             else
             {
                 attribute = new ConfigurationAttribute(name, value, null);
-                this.collection.Add(attribute);
+                this._collection.Add(attribute);
             }
         }
 
@@ -242,7 +242,7 @@
         /// <param name="item"></param>
         public void Add(ConfigurationAttribute item)
         {
-            this.collection.Add(item);
+            this._collection.Add(item);
         }
 
         /// <summary>
@@ -250,7 +250,7 @@
         /// </summary>
         public void Clear()
         {
-            this.collection.Clear();
+            this._collection.Clear();
         }
 
         /// <summary>
@@ -260,7 +260,7 @@
         /// <returns></returns>
         public bool Contains(ConfigurationAttribute item)
         {
-            return this.collection.Contains(item);
+            return this._collection.Contains(item);
         }
 
         /// <summary>
@@ -270,18 +270,18 @@
         /// <param name="arrayIndex"></param>
         public void CopyTo(ConfigurationAttribute[] array, int arrayIndex)
         {
-            this.collection.CopyTo(array, arrayIndex);
+            this._collection.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.collection.Count;
+        public int Count => this._collection.Count;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadOnly => this.collection.IsReadOnly;
+        public bool IsReadOnly => this._collection.IsReadOnly;
 
         /// <summary>
         /// 
@@ -290,7 +290,7 @@
         /// <returns></returns>
         public bool Remove(ConfigurationAttribute item)
         {
-            return this.collection.Remove(item);
+            return this._collection.Remove(item);
         }
 
 #endregion
@@ -303,7 +303,7 @@
         /// <returns></returns>
         public IEnumerator<ConfigurationAttribute> GetEnumerator()
         {
-            return this.collection.GetEnumerator();
+            return this._collection.GetEnumerator();
         }
 
 #endregion
@@ -312,7 +312,7 @@
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.collection.GetEnumerator();
+            return this._collection.GetEnumerator();
         }
 
 #endregion

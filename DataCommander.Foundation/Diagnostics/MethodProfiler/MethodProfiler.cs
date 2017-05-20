@@ -20,12 +20,12 @@
         /// </summary>
         public const string ConditionString = "FOUNDATION_METHODPROFILER";
 
-        private static readonly MethodCollection methods = new MethodCollection();
-        private static readonly Dictionary<string, MethodFraction> methodFractions = new Dictionary<string, MethodFraction>();
-        private static readonly MethodInvocationStackCollection stacks = new MethodInvocationStackCollection();
-        private static readonly AsyncTextWriter textWriter;
-        private static readonly MethodFormatter methodFormatter = new MethodFormatter();
-        private static readonly MethodProfilerMethodInvocationFormatter methodProfilerMethodInvocationFormatter = new MethodProfilerMethodInvocationFormatter();
+        private static readonly MethodCollection Methods = new MethodCollection();
+        private static readonly Dictionary<string, MethodFraction> MethodFractions = new Dictionary<string, MethodFraction>();
+        private static readonly MethodInvocationStackCollection Stacks = new MethodInvocationStackCollection();
+        private static readonly AsyncTextWriter TextWriter;
+        private static readonly MethodFormatter MethodFormatter = new MethodFormatter();
+        private static readonly MethodProfilerMethodInvocationFormatter MethodProfilerMethodInvocationFormatter = new MethodProfilerMethodInvocationFormatter();
 
         static MethodProfiler()
         {
@@ -49,7 +49,7 @@
 
             var path = Path.GetTempFileName();
             var streamWriter = new StreamWriter( path, false, Encoding.UTF8, 65536 );
-            textWriter = new AsyncTextWriter( streamWriter );
+            TextWriter = new AsyncTextWriter( streamWriter );
 
             var sb = new StringBuilder();
             sb.AppendFormat( @"declare @applicationId int
@@ -60,7 +60,7 @@ exec MethodProfilerApplication_Add {0},{1}",
                 );
             sb.AppendFormat( ",{0},{1}\r\n", beginTime, Stopwatch.Frequency );
             sb.Append( "set @applicationId    = @@identity\r\n" );
-            textWriter.Write( sb.ToString() );
+            TextWriter.Write( sb.ToString() );
         }
 
         /// <summary>
@@ -77,23 +77,23 @@ exec MethodProfilerApplication_Add {0},{1}",
             int methodId;
             var added = false;
 
-            lock (methods)
+            lock (Methods)
             {
-                var contains = methods.TryGetValue( method, out methodId );
+                var contains = Methods.TryGetValue( method, out methodId );
 
                 if (!contains)
                 {
-                    methodId = methods.Add( method );
+                    methodId = Methods.Add( method );
                     added = true;
                 }
             }
 
             if (added)
             {
-                textWriter.Write( methodFormatter, method, methodId );
+                TextWriter.Write( MethodFormatter, method, methodId );
             }
 
-            stacks.Push( threadId, methodId, beginTime );
+            Stacks.Push( threadId, methodId, beginTime );
         }
 
         /// <summary>
@@ -113,27 +113,27 @@ exec MethodProfilerApplication_Add {0},{1}",
             int methodId;
             var added = false;
 
-            lock (methods)
+            lock (Methods)
             {
-                if (methodFractions.TryGetValue( key, out methodFraction ))
+                if (MethodFractions.TryGetValue( key, out methodFraction ))
                 {
-                    methods.TryGetValue( methodFraction, out methodId );
+                    Methods.TryGetValue( methodFraction, out methodId );
                 }
                 else
                 {
                     methodFraction = new MethodFraction( method, name );
-                    methodFractions.Add( key, methodFraction );
-                    methodId = methods.Add( methodFraction );
+                    MethodFractions.Add( key, methodFraction );
+                    methodId = Methods.Add( methodFraction );
                     added = true;
                 }
             }
 
             if (added)
             {
-                textWriter.Write( methodFormatter, methodFraction, methodId );
+                TextWriter.Write( MethodFormatter, methodFraction, methodId );
             }
 
-            stacks.Push( threadId, methodId, beginTime );
+            Stacks.Push( threadId, methodId, beginTime );
         }
 
         /// <summary>
@@ -148,8 +148,8 @@ exec MethodProfilerApplication_Add {0},{1}",
             var frame = trace.GetFrame( 0 );
             var method = frame.GetMethod();
             int methodId;
-            methods.TryGetValue( method, out methodId );
-            var item = stacks.Pop( threadId );
+            Methods.TryGetValue( method, out methodId );
+            var item = Stacks.Pop( threadId );
 
             if (item.MethodId != methodId)
             {
@@ -157,7 +157,7 @@ exec MethodProfilerApplication_Add {0},{1}",
             }
 
             item.EndTime = endTime;
-            textWriter.Write( methodProfilerMethodInvocationFormatter, item );
+            TextWriter.Write( MethodProfilerMethodInvocationFormatter, item );
         }
 
         /// <summary>
@@ -168,9 +168,9 @@ exec MethodProfilerApplication_Add {0},{1}",
         {
             var endTime = Stopwatch.GetTimestamp();
             var threadId = Thread.CurrentThread.ManagedThreadId;
-            var item = stacks.Pop( threadId );
+            var item = Stacks.Pop( threadId );
             item.EndTime = endTime;
-            textWriter.Write( methodProfilerMethodInvocationFormatter, item );
+            TextWriter.Write( MethodProfilerMethodInvocationFormatter, item );
         }
 
         /// <summary>
@@ -179,7 +179,7 @@ exec MethodProfilerApplication_Add {0},{1}",
         [Conditional( ConditionString )]
         public static void Close()
         {
-            textWriter.Close();
+            TextWriter.Close();
         }
     }
 }

@@ -8,48 +8,48 @@ namespace DataCommander.Foundation.Threading
     /// </summary>
     public class AsyncQueue
     {
-        private string name;
-        private IAsyncQueue asyncQueue;
-        private readonly Queue queue = new Queue();
-        private readonly AutoResetEvent queueEvent = new AutoResetEvent(false);
+        private string _name;
+        private IAsyncQueue _asyncQueue;
+        private readonly Queue _queue = new Queue();
+        private readonly AutoResetEvent _queueEvent = new AutoResetEvent(false);
 
         private sealed class ConsumerThread
         {
-            private readonly AsyncQueue queue;
-            private readonly IConsumer consumer;
+            private readonly AsyncQueue _queue;
+            private readonly IConsumer _consumer;
 
             public ConsumerThread(
                 AsyncQueue queue,
                 int id,
                 ThreadPriority priority)
             {
-                this.queue = queue;
+                this._queue = queue;
                 this.Thread = new WorkerThread(this.ThreadStart);
-                this.Thread.Name = $"Consumer({queue.name},{id})";
+                this.Thread.Name = $"Consumer({queue._name},{id})";
                 this.Thread.Priority = priority;
-                this.consumer = this.queue.asyncQueue.CreateConsumer(this.Thread, id);
+                this._consumer = this._queue._asyncQueue.CreateConsumer(this.Thread, id);
             }
 
             private void ThreadStart()
             {
-                var state = this.consumer.Enter();
+                var state = this._consumer.Enter();
 
                 try
                 {
                     while (!this.Thread.IsStopRequested)
                     {
-                        this.queue.Dequeue(this);
+                        this._queue.Dequeue(this);
                     }
                 }
                 finally
                 {
-                    this.consumer.Exit(state);
+                    this._consumer.Exit(state);
                 }
             }
 
             public void Consume(object item)
             {
-                this.consumer.Consume(item);
+                this._consumer.Consume(item);
             }
 
             public WorkerThread Thread { get; }
@@ -79,8 +79,8 @@ namespace DataCommander.Foundation.Threading
             Contract.Requires(consumerCount > 0);
 #endif
 
-            this.name = name;
-            this.asyncQueue = asyncQueue;
+            this._name = name;
+            this._asyncQueue = asyncQueue;
 
             for (var id = 0; id < consumerCount; id++)
             {
@@ -115,25 +115,25 @@ namespace DataCommander.Foundation.Threading
             Contract.Requires(item != null);
 #endif
 
-            lock (this.queue)
+            lock (this._queue)
             {
-                this.queue.Enqueue(item);
+                this._queue.Enqueue(item);
             }
 
-            this.queueEvent.Set();
+            this._queueEvent.Set();
         }
 
         private object Dequeue()
         {
             object item = null;
 
-            if (this.queue.Count > 0)
+            if (this._queue.Count > 0)
             {
-                lock (this.queue)
+                lock (this._queue)
                 {
-                    if (this.queue.Count > 0)
+                    if (this._queue.Count > 0)
                     {
-                        item = this.queue.Dequeue();
+                        item = this._queue.Dequeue();
                     }
                 }
             }
@@ -148,7 +148,7 @@ namespace DataCommander.Foundation.Threading
 #endif
 
             var args = new AsyncQueueConsumeEventArgs(item);
-            var eventHandler = this.asyncQueue.BeforeConsume;
+            var eventHandler = this._asyncQueue.BeforeConsume;
 
             if (eventHandler != null)
             {
@@ -157,7 +157,7 @@ namespace DataCommander.Foundation.Threading
 
             consumerThread.Consume(item);
 
-            eventHandler = this.asyncQueue.AfterConsume;
+            eventHandler = this._asyncQueue.AfterConsume;
 
             if (eventHandler != null)
             {
@@ -168,7 +168,7 @@ namespace DataCommander.Foundation.Threading
         private void Dequeue(ConsumerThread consumerThread)
         {
             var thread = consumerThread.Thread;
-            WaitHandle[] waitHandles = {thread.StopRequest, this.queueEvent};
+            WaitHandle[] waitHandles = {thread.StopRequest, this._queueEvent};
 
             while (!thread.IsStopRequested)
             {
@@ -188,7 +188,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// Gets the number of unconsumed items (queued items).
         /// </summary>
-        public int Count => this.queue.Count;
+        public int Count => this._queue.Count;
 
         /// <summary>
         /// Gets the consumer thread list.

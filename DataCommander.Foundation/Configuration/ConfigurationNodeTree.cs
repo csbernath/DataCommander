@@ -9,7 +9,7 @@ namespace DataCommander.Foundation.Configuration
     /// </summary>
     public sealed class ConfigurationNodeTree
     {
-        private ConfigurationNode rootNode = new ConfigurationNode(null);
+        private ConfigurationNode _rootNode = new ConfigurationNode(null);
 
         /// <summary>
         /// 
@@ -21,7 +21,7 @@ namespace DataCommander.Foundation.Configuration
             var reader = new ConfigurationReader();
             var textReader = new StringReader(xml);
             var xmlReader = new XmlTextReader(textReader);
-            this.rootNode = reader.Read(xmlReader, null, sectionName, null);
+            this._rootNode = reader.Read(xmlReader, null, sectionName, null);
         }
 
         /// <summary>
@@ -37,9 +37,9 @@ namespace DataCommander.Foundation.Configuration
 #endif
 
             xmlWriter.WriteStartElement(sectionName);
-            ConfigurationWriter.Write(xmlWriter, this.rootNode.Attributes);
+            ConfigurationWriter.Write(xmlWriter, this._rootNode.Attributes);
 
-            foreach (var childNode in this.rootNode.ChildNodes)
+            foreach (var childNode in this._rootNode.ChildNodes)
             {
                 ConfigurationWriter.WriteNode(xmlWriter, childNode);
             }
@@ -74,12 +74,12 @@ namespace DataCommander.Foundation.Configuration
         /// <returns></returns>
         public ConfigurationNode SelectNode(string path)
         {
-            if (this.rootNode == null)
+            if (this._rootNode == null)
             {
-                this.rootNode = new ConfigurationNode(null);
+                this._rootNode = new ConfigurationNode(null);
             }
 
-            var node = this.rootNode;
+            var node = this._rootNode;
 
             if (path != null)
             {

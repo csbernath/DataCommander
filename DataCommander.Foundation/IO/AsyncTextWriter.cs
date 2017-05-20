@@ -12,11 +12,11 @@ namespace DataCommander.Foundation.IO
     {
         #region Private Fields
 
-        private readonly TextWriter textWriter;
-        private readonly List<AsyncTextWriterListItem> list = new List<AsyncTextWriterListItem>();
-        private readonly object syncObject = new object();
-        private readonly ManualResetEvent waitHandle = new ManualResetEvent(false);
-        private RegisteredWaitHandle registeredWaitHandle;
+        private readonly TextWriter _textWriter;
+        private readonly List<AsyncTextWriterListItem> _list = new List<AsyncTextWriterListItem>();
+        private readonly object _syncObject = new object();
+        private readonly ManualResetEvent _waitHandle = new ManualResetEvent(false);
+        private RegisteredWaitHandle _registeredWaitHandle;
 
         #endregion
 
@@ -30,22 +30,22 @@ namespace DataCommander.Foundation.IO
             Contract.Requires<ArgumentNullException>(textWriter != null);
 #endif
 
-            this.textWriter = textWriter;
+            this._textWriter = textWriter;
         }
 
         private void Flush()
         {
             var sb = new StringBuilder();
 
-            while (this.list.Count > 0)
+            while (this._list.Count > 0)
             {
                 AsyncTextWriterListItem[] items;
-                lock (this.list)
+                lock (this._list)
                 {
-                    var count = this.list.Count;
+                    var count = this._list.Count;
                     items = new AsyncTextWriterListItem[count];
-                    this.list.CopyTo(items);
-                    this.list.Clear();
+                    this._list.CopyTo(items);
+                    this._list.Clear();
                 }
 
                 for (var i = 0; i < items.Length; i++)
@@ -54,19 +54,19 @@ namespace DataCommander.Foundation.IO
                 }
             }
 
-            this.textWriter.Write(sb);
-            this.textWriter.Flush();
+            this._textWriter.Write(sb);
+            this._textWriter.Flush();
         }
 
         private void Unregister()
         {
-            lock (this.syncObject)
+            lock (this._syncObject)
             {
-                if (this.registeredWaitHandle != null)
+                if (this._registeredWaitHandle != null)
                 {
                     ////log.Write(LogLevel.Trace,"Unregister...");
-                    var succeeded = this.registeredWaitHandle.Unregister(null);
-                    this.registeredWaitHandle = null;
+                    var succeeded = this._registeredWaitHandle.Unregister(null);
+                    this._registeredWaitHandle = null;
                     ////log.Write(LogLevel.Trace,"Unregister succeeded.");
                 }
             }
@@ -74,7 +74,7 @@ namespace DataCommander.Foundation.IO
 
         private void Callback(object state, bool timedOut)
         {
-            if (this.list.Count > 0)
+            if (this._list.Count > 0)
             {
                 this.Flush();
             }
@@ -86,19 +86,19 @@ namespace DataCommander.Foundation.IO
 
         private void Write(AsyncTextWriterListItem item)
         {
-            lock (this.list)
+            lock (this._list)
             {
-                this.list.Add(item);
+                this._list.Add(item);
             }
 
             const int timeout = 10000; // 10 seconds
 
-            lock (this.syncObject)
+            lock (this._syncObject)
             {
-                if (this.registeredWaitHandle == null)
+                if (this._registeredWaitHandle == null)
                 {
                     // log.Write("ThreadPool.RegisterWaitForSingleObject",LogLevel.Trace);
-                    this.registeredWaitHandle = ThreadPool.RegisterWaitForSingleObject(this.waitHandle, this.Callback,
+                    this._registeredWaitHandle = ThreadPool.RegisterWaitForSingleObject(this._waitHandle, this.Callback,
                         null, timeout, false);
                 }
             }
@@ -132,7 +132,7 @@ namespace DataCommander.Foundation.IO
         {
             this.Unregister();
             this.Flush();
-            this.textWriter.Close();
+            this._textWriter.Close();
         }
     }
 }

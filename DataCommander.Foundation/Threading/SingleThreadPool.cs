@@ -11,10 +11,10 @@
     /// </summary>
     public sealed class SingleThreadPool
     {
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private readonly Queue<Tuple<WaitCallback, object>> workItems = new Queue<Tuple<WaitCallback, object>>();
-        private readonly EventWaitHandle enqueueEvent = new EventWaitHandle(false, EventResetMode.AutoReset);
-        private int queuedItemCount;
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly Queue<Tuple<WaitCallback, object>> _workItems = new Queue<Tuple<WaitCallback, object>>();
+        private readonly EventWaitHandle _enqueueEvent = new EventWaitHandle(false, EventResetMode.AutoReset);
+        private int _queuedItemCount;
 
         /// <summary>
         /// 
@@ -32,7 +32,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public int QueuedItemCount => this.queuedItemCount;
+        public int QueuedItemCount => this._queuedItemCount;
 
         /// <summary>
         /// 
@@ -47,24 +47,24 @@
 
             var tuple = Tuple.Create(callback, state);
 
-            lock (this.workItems)
+            lock (this._workItems)
             {
-                this.workItems.Enqueue(tuple);
+                this._workItems.Enqueue(tuple);
             }
 
-            Interlocked.Increment(ref this.queuedItemCount);
-            this.enqueueEvent.Set();
+            Interlocked.Increment(ref this._queuedItemCount);
+            this._enqueueEvent.Set();
         }
 
         private void Dequeue()
         {
             Tuple<WaitCallback, object>[] array;
 
-            lock (this.workItems)
+            lock (this._workItems)
             {
-                array = new Tuple<WaitCallback, object>[this.workItems.Count];
-                this.workItems.CopyTo(array, 0);
-                this.workItems.Clear();
+                array = new Tuple<WaitCallback, object>[this._workItems.Count];
+                this._workItems.CopyTo(array, 0);
+                this._workItems.Clear();
             }
 
             for (var i = 0; i < array.Length; i++)
@@ -79,10 +79,10 @@
                 }
                 catch (Exception e)
                 {
-                    log.Write( LogLevel.Error, "Executing task failed. callback: {0}, state: {1}\r\n{2}", callback, state, e );
+                    Log.Write( LogLevel.Error, "Executing task failed. callback: {0}, state: {1}\r\n{2}", callback, state, e );
                 }
 
-                Interlocked.Decrement(ref this.queuedItemCount);
+                Interlocked.Decrement(ref this._queuedItemCount);
             }
         }
 
@@ -91,7 +91,7 @@
             var waitHandles = new WaitHandle[]
             {
                 this.Thread.StopRequest,
-                this.enqueueEvent
+                this._enqueueEvent
             };
 
             while (true)

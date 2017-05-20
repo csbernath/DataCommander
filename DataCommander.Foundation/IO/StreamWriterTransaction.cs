@@ -12,9 +12,9 @@
     {
         #region Private Fields
 
-        private readonly string path;
-        private readonly string tempPath;
-        private bool commited;
+        private readonly string _path;
+        private readonly string _tempPath;
+        private bool _commited;
 
         #endregion
 
@@ -27,8 +27,8 @@
             string path,
             string tempPath)
         {
-            this.path = path;
-            this.tempPath = tempPath;
+            this._path = path;
+            this._tempPath = tempPath;
             this.Writer = new StreamWriter(tempPath, false);
         }
 
@@ -43,8 +43,8 @@
             string tempPath,
             Encoding encoding)
         {
-            this.path = path;
-            this.tempPath = tempPath;
+            this._path = path;
+            this._tempPath = tempPath;
             this.Writer = new StreamWriter(tempPath, false, encoding);
         }
 
@@ -60,14 +60,14 @@
         {
             this.Writer.Close();
             const NativeMethods.MoveFileExFlags flags = NativeMethods.MoveFileExFlags.ReplaceExisiting;
-            var succeeded = NativeMethods.MoveFileEx(this.tempPath, this.path, flags);
+            var succeeded = NativeMethods.MoveFileEx(this._tempPath, this._path, flags);
 
             if (!succeeded)
             {
                 throw new Win32Exception();
             }
 
-            this.commited = true;
+            this._commited = true;
         }
 
         /// <summary>
@@ -77,9 +77,9 @@
         {
             this.Writer.Dispose();
 
-            if (!this.commited)
+            if (!this._commited)
             {
-                File.Delete(this.tempPath);
+                File.Delete(this._tempPath);
             }
         }
     }

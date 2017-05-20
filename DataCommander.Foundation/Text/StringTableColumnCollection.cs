@@ -9,7 +9,7 @@ namespace DataCommander.Foundation.Text
     /// </summary>
     public class StringTableColumnCollection : IList<StringTableColumn>
     {
-        private readonly List<StringTableColumn> columns = new List<StringTableColumn>();
+        private readonly List<StringTableColumn> _columns = new List<StringTableColumn>();
 
         #region IList<StringTableColumn> Members
 
@@ -20,7 +20,7 @@ namespace DataCommander.Foundation.Text
         /// <returns></returns>
         public int IndexOf(StringTableColumn item)
         {
-            return this.columns.IndexOf(item);
+            return this._columns.IndexOf(item);
         }
 
         void IList<StringTableColumn>.Insert(int index, StringTableColumn item)
@@ -40,7 +40,7 @@ namespace DataCommander.Foundation.Text
         /// <returns></returns>
         public StringTableColumn this[int index]
         {
-            get => this.columns[index];
+            get => this._columns[index];
 
             set => throw new Exception("The method or operation is not implemented.");
         }
@@ -55,7 +55,7 @@ namespace DataCommander.Foundation.Text
             Contract.Requires(item != null);
 #endif
 
-            this.columns.Add(item);
+            this._columns.Add(item);
         }
 
         void ICollection<StringTableColumn>.Add(StringTableColumn item)
@@ -75,7 +75,7 @@ namespace DataCommander.Foundation.Text
         /// <returns></returns>
         public bool Contains(StringTableColumn item)
         {
-            return this.columns.Contains(item);
+            return this._columns.Contains(item);
         }
 
         void ICollection<StringTableColumn>.CopyTo(StringTableColumn[] array, int arrayIndex)
@@ -86,7 +86,7 @@ namespace DataCommander.Foundation.Text
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.columns.Count;
+        public int Count => this._columns.Count;
 
         /// <summary>
         /// 
@@ -98,9 +98,9 @@ namespace DataCommander.Foundation.Text
             throw new Exception("The method or operation is not implemented.");
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable<StringTableColumn> Members
+        #region IEnumerable<StringTableColumn> Members
 
         /// <summary>
         /// 
@@ -108,18 +108,18 @@ namespace DataCommander.Foundation.Text
         /// <returns></returns>
         public IEnumerator<StringTableColumn> GetEnumerator()
         {
-            return this.columns.GetEnumerator();
+            return this._columns.GetEnumerator();
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable Members
+        #region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
         }
 
-#endregion
+        #endregion
     }
 }

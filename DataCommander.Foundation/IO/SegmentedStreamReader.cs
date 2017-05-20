@@ -10,9 +10,9 @@ namespace DataCommander.Foundation.IO
     /// </summary>
     public sealed class SegmentedStreamReader : Stream
     {
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private readonly Stream stream;
-        private long length;
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly Stream _stream;
+        private long _length;
 
         /// <summary>
         /// 
@@ -25,10 +25,10 @@ namespace DataCommander.Foundation.IO
             Contract.Requires<ArgumentNullException>(stream != null);
 #endif
 
-            this.stream = stream;
-            this.length = length;
+            this._stream = stream;
+            this._length = length;
             GarbageMonitor.Add(null, "SegmentedStreamReader", 0, this);
-            log.Trace(GarbageMonitor.State);
+            Log.Trace(GarbageMonitor.State);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace DataCommander.Foundation.IO
         {
             base.Dispose(disposing);
             GarbageMonitor.SetDisposeTime(this, LocalTime.Default.Now);
-            log.Trace(GarbageMonitor.State);
+            Log.Trace(GarbageMonitor.State);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace DataCommander.Foundation.IO
         /// <param name="value"></param>
         public override void SetLength(long value)
         {
-            this.length = value;
+            this._length = value;
         }
 
         /// <summary>
@@ -84,12 +84,12 @@ namespace DataCommander.Foundation.IO
 #endif
 
             int read;
-            var position = this.stream.Position;
+            var position = this._stream.Position;
 
-            if (position < this.length)
+            if (position < this._length)
             {
-                var min = (int) Math.Min(this.length - position, count);
-                read = this.stream.Read(buffer, offset, min);
+                var min = (int) Math.Min(this._length - position, count);
+                read = this._stream.Read(buffer, offset, min);
             }
             else
             {

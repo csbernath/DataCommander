@@ -10,13 +10,13 @@ namespace DataCommander.Foundation.Threading
     /// </summary>
     public sealed class WorkerThreadCollection : IList<WorkerThread>
     {
-        private readonly List<WorkerThread> threads = new List<WorkerThread>();
+        private readonly List<WorkerThread> _threads = new List<WorkerThread>();
 
         #region IList<WorkerThread> Members
 
         int IList<WorkerThread>.IndexOf(WorkerThread item)
         {
-            var index = this.threads.IndexOf(item);
+            var index = this._threads.IndexOf(item);
             return index;
         }
 
@@ -27,9 +27,9 @@ namespace DataCommander.Foundation.Threading
         /// <param name="item"></param>
         public void Insert(int index, WorkerThread item)
         {
-            lock (this.threads)
+            lock (this._threads)
             {
-                this.threads.Insert(index, item);
+                this._threads.Insert(index, item);
             }
         }
 
@@ -39,9 +39,9 @@ namespace DataCommander.Foundation.Threading
         /// <param name="index"></param>
         public void RemoveAt(int index)
         {
-            lock (this.threads)
+            lock (this._threads)
             {
-                this.threads.RemoveAt(index);
+                this._threads.RemoveAt(index);
             }
         }
 
@@ -62,9 +62,9 @@ namespace DataCommander.Foundation.Threading
         /// <param name="item"></param>
         public void Add(WorkerThread item)
         {
-            lock (this.threads)
+            lock (this._threads)
             {
-                this.threads.Add(item);
+                this._threads.Add(item);
             }
         }
 
@@ -86,7 +86,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.threads.Count;
+        public int Count => this._threads.Count;
 
         bool ICollection<WorkerThread>.IsReadOnly => throw new Exception("The method or operation is not implemented.");
 
@@ -101,7 +101,7 @@ namespace DataCommander.Foundation.Threading
 
         IEnumerator<WorkerThread> IEnumerable<WorkerThread>.GetEnumerator()
         {
-            return this.threads.GetEnumerator();
+            return this._threads.GetEnumerator();
         }
 
         #endregion
@@ -120,9 +120,9 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public void Start()
         {
-            lock (this.threads)
+            lock (this._threads)
             {
-                foreach (var thread in this.threads)
+                foreach (var thread in this._threads)
                 {
                     thread.Start();
                 }
@@ -134,9 +134,9 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public void Stop()
         {
-            lock (this.threads)
+            lock (this._threads)
             {
-                foreach (var thread in this.threads)
+                foreach (var thread in this._threads)
                 {
                     thread.Stop();
                 }
@@ -152,27 +152,27 @@ namespace DataCommander.Foundation.Threading
 #if CONTRACTS_FULL
             Contract.Requires(stopEvent != null);
 #endif
-            var stopper = new Stopper(this.threads, stopEvent);
+            var stopper = new Stopper(this._threads, stopEvent);
             stopper.Stop();
         }
 
         private sealed class Stopper
         {
-            private readonly IList<WorkerThread> threads;
-            private int count;
-            private readonly EventWaitHandle stopEvent;
+            private readonly IList<WorkerThread> _threads;
+            private int _count;
+            private readonly EventWaitHandle _stopEvent;
 
             public Stopper(IList<WorkerThread> threads, EventWaitHandle stopEvent)
             {
-                this.threads = threads;
-                this.stopEvent = stopEvent;
+                this._threads = threads;
+                this._stopEvent = stopEvent;
             }
 
             public void Stop()
             {
-                lock (this.threads)
+                lock (this._threads)
                 {
-                    foreach (var thread in this.threads)
+                    foreach (var thread in this._threads)
                     {
                         thread.Stopped += this.Thread_Stopped;
                         thread.Stop();
@@ -182,11 +182,11 @@ namespace DataCommander.Foundation.Threading
 
             private void Thread_Stopped(object sender, EventArgs e)
             {
-                Interlocked.Increment(ref this.count);
+                Interlocked.Increment(ref this._count);
 
-                if (this.count == this.threads.Count)
+                if (this._count == this._threads.Count)
                 {
-                    this.stopEvent.Set();
+                    this._stopEvent.Set();
                 }
             }
         }

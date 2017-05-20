@@ -8,20 +8,20 @@
     /// </summary>
     internal sealed class MemoryLogWriter : ILogWriter
     {
-        private readonly ICollection<LogEntry> logEntries;
+        private readonly ICollection<LogEntry> _logEntries;
 
         /// <summary>
         /// 
         /// </summary>
         public MemoryLogWriter()
         {
-            this.logEntries = new List<LogEntry>();
+            this._logEntries = new List<LogEntry>();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public IEnumerable<LogEntry> LogEntries => this.logEntries;
+        public IEnumerable<LogEntry> LogEntries => this._logEntries;
 
         #region ILogWriter Members
 
@@ -31,9 +31,9 @@
 
         void ILogWriter.Write( LogEntry logEntry )
         {
-            lock (this.logEntries)
+            lock (this._logEntries)
             {
-                this.logEntries.Add( logEntry );
+                this._logEntries.Add( logEntry );
             }
         }
 

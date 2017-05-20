@@ -7,7 +7,7 @@
     /// </summary>
     public sealed class ManagementJob
     {
-        private readonly ManagementObject managementObject;
+        private readonly ManagementObject _managementObject;
 
         /// <summary>
         /// 
@@ -19,17 +19,17 @@
             Contract.Requires<ArgumentNullException>(managementObject != null);
 #endif
 
-            this.managementObject = managementObject;
+            this._managementObject = managementObject;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public ManagementJobState JobState => (ManagementJobState)(ushort)this.managementObject["JobState"];
+        public ManagementJobState JobState => (ManagementJobState)(ushort)this._managementObject["JobState"];
 
         /// <summary>
         /// 
         /// </summary>
-        public object PercentComplete => this.managementObject["PercentComplete"];
+        public object PercentComplete => this._managementObject["PercentComplete"];
     }
 }

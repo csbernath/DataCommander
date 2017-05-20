@@ -9,12 +9,12 @@ namespace DataCommander.Foundation.Threading
     /// </summary>
     public sealed class WorkerThreadPoolDequeuerCollection : IList<WorkerThreadPoolDequeuer>
     {
-        private readonly List<WorkerThreadPoolDequeuer> list = new List<WorkerThreadPoolDequeuer>();
-        private readonly WorkerThreadPool pool;
+        private readonly List<WorkerThreadPoolDequeuer> _list = new List<WorkerThreadPoolDequeuer>();
+        private readonly WorkerThreadPool _pool;
 
         internal WorkerThreadPoolDequeuerCollection(WorkerThreadPool pool)
         {
-            this.pool = pool;
+            this._pool = pool;
         }
 
         /// <summary>
@@ -33,8 +33,8 @@ namespace DataCommander.Foundation.Threading
 #endif
 
             this.Threads.Add(dequeuer.Thread);
-            this.list.Add(dequeuer);
-            dequeuer.Pool = this.pool;
+            this._list.Add(dequeuer);
+            dequeuer.Pool = this._pool;
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace DataCommander.Foundation.Threading
         /// <param name="dequeuer"></param>
         public void Remove(WorkerThreadPoolDequeuer dequeuer)
         {
-            this.list.Remove(dequeuer);
+            this._list.Remove(dequeuer);
         }
 
 #region IList<WorkingThreadPoolDequeuer> Members
@@ -55,7 +55,7 @@ namespace DataCommander.Foundation.Threading
         /// <returns></returns>
         public int IndexOf(WorkerThreadPoolDequeuer item)
         {
-            return this.list.IndexOf(item);
+            return this._list.IndexOf(item);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace DataCommander.Foundation.Threading
         /// <param name="item"></param>
         public void Insert(int index, WorkerThreadPoolDequeuer item)
         {
-            this.list.Insert(index, item);
+            this._list.Insert(index, item);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace DataCommander.Foundation.Threading
         /// <param name="index"></param>
         public void RemoveAt(int index)
         {
-            this.list.RemoveAt(index);
+            this._list.RemoveAt(index);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace DataCommander.Foundation.Threading
         /// <returns></returns>
         public WorkerThreadPoolDequeuer this[int index]
         {
-            get => this.list[index];
+            get => this._list[index];
 
             set => throw new NotImplementedException();
         }

@@ -8,8 +8,8 @@ namespace DataCommander.Foundation.Diagnostics.Log
     /// </summary>
     public class EventLogWriter : ILogWriter
     {
-        private static readonly ILog log = InternalLogFactory.Instance.GetTypeLog(typeof (EventLogWriter));
-        private readonly EventLog eventLog;
+        private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof (EventLogWriter));
+        private readonly EventLog _eventLog;
 
         /// <summary>
         /// 
@@ -32,22 +32,22 @@ namespace DataCommander.Foundation.Diagnostics.Log
             }
             catch (Exception e)
             {
-                log.Write(LogLevel.Error, e.ToString());
+                Log.Write(LogLevel.Error, e.ToString());
             }
 
             try
             {
-                this.eventLog = new EventLog(logName, machineName, source);
+                this._eventLog = new EventLog(logName, machineName, source);
             }
             catch (Exception e)
             {
-                log.Write(LogLevel.Error, e.ToString());
+                Log.Write(LogLevel.Error, e.ToString());
             }
         }
 
         void IDisposable.Dispose()
         {
-            this.eventLog.Dispose();
+            this._eventLog.Dispose();
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace DataCommander.Foundation.Diagnostics.Log
         {
             try
             {
-                this.eventLog.Close();
+                this._eventLog.Close();
             }
             catch
             {
@@ -103,11 +103,11 @@ namespace DataCommander.Foundation.Diagnostics.Log
             try
             {
                 var message = TextLogFormatter.Format(entry);
-                this.eventLog.WriteEntry(message, eventLogEntryType);
+                this._eventLog.WriteEntry(message, eventLogEntryType);
             }
             catch (Exception e)
             {
-                log.Write(LogLevel.Error, e.ToString());
+                Log.Write(LogLevel.Error, e.ToString());
             }
         }
     }

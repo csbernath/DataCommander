@@ -10,8 +10,8 @@ namespace DataCommander.Foundation.Xml
     /// </summary>
     public class XmlElementReader
     {
-        private readonly XmlReader xmlReader;
-        private readonly XmlDocument xmlDocument = new XmlDocument();
+        private readonly XmlReader _xmlReader;
+        private readonly XmlDocument _xmlDocument = new XmlDocument();
 
         /// <summary>
         /// 
@@ -19,7 +19,7 @@ namespace DataCommander.Foundation.Xml
         /// <param name="xmlReader"></param>
         public XmlElementReader( XmlReader xmlReader )
         {
-            this.xmlReader = xmlReader;
+            this._xmlReader = xmlReader;
         }
 
         private static void ReadAttributes(
@@ -65,15 +65,15 @@ namespace DataCommander.Foundation.Xml
         public XmlElement ReadStartElement()
         {
             XmlElement xmlElement = null;
-            var found = MoveToElement( this.xmlReader );
+            var found = MoveToElement( this._xmlReader );
 
             if (found)
             {
                 var xmlDocument = new XmlDocument();
-                var name = this.xmlReader.Name;
+                var name = this._xmlReader.Name;
                 xmlElement = xmlDocument.CreateElement( name );
                 var attributes = xmlElement.Attributes;
-                ReadAttributes( this.xmlReader, xmlDocument, attributes );
+                ReadAttributes( this._xmlReader, xmlDocument, attributes );
             }
 
             return xmlElement;
@@ -164,7 +164,7 @@ namespace DataCommander.Foundation.Xml
         public XmlElement ReadElement()
         {
 #if DEBUG
-            var xmlLineInfo = this.xmlReader as IXmlLineInfo;
+            var xmlLineInfo = this._xmlReader as IXmlLineInfo;
 
             if (xmlLineInfo != null)
             {
@@ -174,18 +174,18 @@ namespace DataCommander.Foundation.Xml
 
             XmlElement xmlElement = null;
 
-            while (this.xmlReader.Read())
+            while (this._xmlReader.Read())
             {
 #if DEBUG
-                Trace.WriteLine($"{this.xmlReader.Name},{this.xmlReader.NodeType}");
+                Trace.WriteLine($"{this._xmlReader.Name},{this._xmlReader.NodeType}");
 #endif
-                var nodeType = this.xmlReader.NodeType;
+                var nodeType = this._xmlReader.NodeType;
                 var breakable = false;
 
                 switch (nodeType)
                 {
                     case XmlNodeType.Element:
-                        xmlElement = ReadElement( this.xmlReader, this.xmlDocument, 0 );
+                        xmlElement = ReadElement( this._xmlReader, this._xmlDocument, 0 );
                         breakable = true;
                         break;
 

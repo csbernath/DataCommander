@@ -89,8 +89,8 @@ namespace DataCommander.Foundation.Configuration
     /// </remarks>
     public sealed class ConfigurationSection
     {
-        private static readonly ILog log = InternalLogFactory.Instance.GetTypeLog(typeof (ConfigurationSection));
-        private int changed;
+        private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof (ConfigurationSection));
+        private int _changed;
 
         /// <summary>
         /// Reads configuration settings from the specified <paramref name="configFileName"/>.
@@ -217,7 +217,7 @@ namespace DataCommander.Foundation.Configuration
         /// <returns></returns>
         public ConfigurationNode SelectNode(string nodeName, bool throwOnError)
         {
-            if (this.changed != 0)
+            if (this._changed != 0)
             {
                 lock (this)
                 {
@@ -227,7 +227,7 @@ namespace DataCommander.Foundation.Configuration
                     this.RootNode = rootNode;
                 }
 
-                Interlocked.Exchange(ref this.changed, 0);
+                Interlocked.Exchange(ref this._changed, 0);
             }
 
             ConfigurationNode node;
@@ -261,7 +261,7 @@ namespace DataCommander.Foundation.Configuration
             }
             catch (Exception e)
             {
-                log.Write(LogLevel.Error, e.ToString());
+                Log.Write(LogLevel.Error, e.ToString());
             }
 
             if (fileNames != null)
@@ -280,15 +280,15 @@ namespace DataCommander.Foundation.Configuration
                 }
                 catch (Exception e)
                 {
-                    log.Write(LogLevel.Error, e.ToString());
+                    Log.Write(LogLevel.Error, e.ToString());
                 }
             }
         }
 
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
-            log.Trace("Settings.OnChanged. FileName: " + e.FullPath);
-            Interlocked.Increment(ref this.changed);
+            Log.Trace("Settings.OnChanged. FileName: " + e.FullPath);
+            Interlocked.Increment(ref this._changed);
 
             if (this.Changed != null)
             {

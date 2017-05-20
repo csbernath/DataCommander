@@ -15,15 +15,15 @@ namespace DataCommander.Foundation.Diagnostics.Log
     {
         #region Private Fields
 
-        private static readonly ILog log = InternalLogFactory.Instance.GetTypeLog(typeof (SqlLogWriter));
+        private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof (SqlLogWriter));
         private const int Period = 10000;
-        private readonly Func<IDbConnection> createConnection;
-        private readonly Func<LogEntry, string> logEntryToCommandText;
-        private readonly int commandTimeout;
-        private readonly SingleThreadPool singleThreadPool;
-        private readonly List<LogEntry> entryQueue = new List<LogEntry>();
-        private readonly object lockObject = new object();
-        private Timer timer;
+        private readonly Func<IDbConnection> _createConnection;
+        private readonly Func<LogEntry, string> _logEntryToCommandText;
+        private readonly int _commandTimeout;
+        private readonly SingleThreadPool _singleThreadPool;
+        private readonly List<LogEntry> _entryQueue = new List<LogEntry>();
+        private readonly object _lockObject = new object();
+        private Timer _timer;
 
         #endregion
 
@@ -46,24 +46,24 @@ namespace DataCommander.Foundation.Diagnostics.Log
             Contract.Requires<ArgumentNullException>(singleThreadPool != null);
 #endif
 
-            this.createConnection = createConnection;
-            this.logEntryToCommandText = logEntryToCommandText;
-            this.singleThreadPool = singleThreadPool;
-            this.commandTimeout = commandTimeout;
+            this._createConnection = createConnection;
+            this._logEntryToCommandText = logEntryToCommandText;
+            this._singleThreadPool = singleThreadPool;
+            this._commandTimeout = commandTimeout;
         }
 
 #region ILogWriter Members
 
         void ILogWriter.Open()
         {
-            this.timer = new Timer(this.TimerCallback, null, 0, Period);
+            this._timer = new Timer(this.TimerCallback, null, 0, Period);
         }
 
         void ILogWriter.Write(LogEntry logEntry)
         {
-            lock (this.entryQueue)
+            lock (this._entryQueue)
             {
-                this.entryQueue.Add(logEntry);
+                this._entryQueue.Add(logEntry);
             }
         }
 
@@ -79,10 +79,10 @@ namespace DataCommander.Foundation.Diagnostics.Log
 
         void ILogWriter.Close()
         {
-            if (this.timer != null)
+            if (this._timer != null)
             {
-                this.timer.Dispose();
-                this.timer = null;
+                this._timer.Dispose();
+                this._timer = null;
             }
 
             this.Flush();
@@ -101,30 +101,30 @@ namespace DataCommander.Foundation.Diagnostics.Log
 
         private void TimerCallback(object state)
         {
-            lock (this.lockObject)
+            lock (this._lockObject)
             {
-                if (this.entryQueue.Count > 0)
+                if (this._entryQueue.Count > 0)
                 {
-                    if (this.timer != null)
+                    if (this._timer != null)
                     {
-                        this.timer.Change(Timeout.Infinite, Timeout.Infinite);
+                        this._timer.Change(Timeout.Infinite, Timeout.Infinite);
                     }
 
                     LogEntry[] array;
 
-                    lock (this.entryQueue)
+                    lock (this._entryQueue)
                     {
-                        var count = this.entryQueue.Count;
+                        var count = this._entryQueue.Count;
                         array = new LogEntry[count];
-                        this.entryQueue.CopyTo(array);
-                        this.entryQueue.Clear();
+                        this._entryQueue.CopyTo(array);
+                        this._entryQueue.Clear();
                     }
 
-                    this.singleThreadPool.QueueUserWorkItem(this.WaitCallback, array);
+                    this._singleThreadPool.QueueUserWorkItem(this.WaitCallback, array);
 
-                    if (this.timer != null)
+                    if (this._timer != null)
                     {
-                        this.timer.Change(Period, Period);
+                        this._timer.Change(Period, Period);
                     }
                 }
             }
@@ -140,25 +140,25 @@ namespace DataCommander.Foundation.Diagnostics.Log
 
                 for (var i = 0; i < array.Length; i++)
                 {
-                    commandText = this.logEntryToCommandText(array[i]);
+                    commandText = this._logEntryToCommandText(array[i]);
                     sb.AppendLine(commandText);
                 }
 
                 commandText = sb.ToString();
 
-                using (var connection = this.createConnection())
+                using (var connection = this._createConnection())
                 {
                     connection.Open();
                     var command = connection.CreateCommand();
                     command.CommandType = CommandType.Text;
                     command.CommandText = commandText;
-                    command.CommandTimeout = this.commandTimeout;
+                    command.CommandTimeout = this._commandTimeout;
                     command.ExecuteNonQuery();
                 }
             }
             catch (Exception e)
             {
-                log.Error(e.ToLogString());
+                Log.Error(e.ToLogString());
             }
         }
     }

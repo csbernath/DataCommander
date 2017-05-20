@@ -18,10 +18,10 @@ namespace DataCommander.Foundation.IO
     public sealed class FileSystemMonitor : LoopThread, ILoopable
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private readonly string path;
-        private readonly string searchPattern;
-        private readonly int period;
-        private string[] last;
+        private readonly string _path;
+        private readonly string _searchPattern;
+        private readonly int _period;
+        private string[] _last;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileSystemMonitor"/> class.
@@ -42,9 +42,9 @@ namespace DataCommander.Foundation.IO
             string searchPattern,
             int period)
         {
-            this.path = path;
-            this.searchPattern = searchPattern;
-            this.period = period;
+            this._path = path;
+            this._searchPattern = searchPattern;
+            this._period = period;
 
             this.Initialize(this);
             var name = string.Format(CultureInfo.InvariantCulture, "FileSystemMonitor({0},{1})", path, searchPattern);
@@ -64,15 +64,15 @@ namespace DataCommander.Foundation.IO
         {
             try
             {
-                var current = Directory.GetFiles(this.path, this.searchPattern);
+                var current = Directory.GetFiles(this._path, this._searchPattern);
                 Array.Sort(current);
 
-                if (this.last != null)
+                if (this._last != null)
                 {
                     for (var i = 0; i < current.Length; i++)
                     {
                         var file = current[i];
-                        var index = Array.BinarySearch(this.last, file);
+                        var index = Array.BinarySearch(this._last, file);
 
                         if (index < 0 && this.Created != null)
                         {
@@ -81,15 +81,15 @@ namespace DataCommander.Foundation.IO
                             log.Trace(message);
 
                             var fileName = Path.GetFileName(file);
-                            var e = new FileSystemEventArgs(WatcherChangeTypes.Created, this.path,
+                            var e = new FileSystemEventArgs(WatcherChangeTypes.Created, this._path,
                                 fileName);
                             this.Created(this, e);
                         }
                     }
 
-                    for (var i = 0; i < this.last.Length; i++)
+                    for (var i = 0; i < this._last.Length; i++)
                     {
-                        var file = this.last[i];
+                        var file = this._last[i];
                         var index = Array.BinarySearch(current, file);
 
                         if (index < 0)
@@ -106,14 +106,14 @@ namespace DataCommander.Foundation.IO
                     }
                 }
 
-                this.last = current;
+                this._last = current;
             }
             catch (Exception e)
             {
                 log.Write(LogLevel.Error, e.ToString());
             }
 
-            this.Thread.WaitForStop(this.period);
+            this.Thread.WaitForStop(this._period);
         }
 
         void ILoopable.Last()

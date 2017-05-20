@@ -7,12 +7,12 @@ namespace DataCommander.Foundation.Text
     /// </summary>
     public static class Hex
     {
-        private static readonly char[] hexCharsUpper =
+        private static readonly char[] HexCharsUpper =
         {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
         };
 
-        private static readonly char[] hexCharsLower =
+        private static readonly char[] HexCharsLower =
         {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
         };
@@ -29,7 +29,7 @@ namespace DataCommander.Foundation.Text
             var d0 = value & 0x0F;
 
             var digits = new char[2];
-            var hexChars = isUpper ? hexCharsUpper : hexCharsLower;
+            var hexChars = isUpper ? HexCharsUpper : HexCharsLower;
 
             digits[0] = hexChars[d1];
             digits[1] = hexChars[d0];
@@ -52,7 +52,7 @@ namespace DataCommander.Foundation.Text
             var d0 = value & 0x000F;
 
             var digits = new char[4];
-            var hexChars = isUpper ? hexCharsUpper : hexCharsLower;
+            var hexChars = isUpper ? HexCharsUpper : HexCharsLower;
 
             digits[0] = hexChars[d3];
             digits[1] = hexChars[d2];
@@ -80,7 +80,7 @@ namespace DataCommander.Foundation.Text
             var d0 = value & 0x0000000F;
 
             var digits = new char[8];
-            var hexChars = isUpper ? hexCharsUpper : hexCharsLower;
+            var hexChars = isUpper ? HexCharsUpper : HexCharsLower;
             digits[0] = hexChars[d7];
             digits[1] = hexChars[d6];
             digits[2] = hexChars[d5];
@@ -116,7 +116,7 @@ namespace DataCommander.Foundation.Text
         {
             var chars = new char[length << 1];
             var j = 0;
-            var hexChars = isUpper ? hexCharsUpper : hexCharsLower;
+            var hexChars = isUpper ? HexCharsUpper : HexCharsLower;
 
             for (var i = 0; i < length; i++)
             {

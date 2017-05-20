@@ -8,8 +8,8 @@
     /// </summary>
     public sealed class Indentation : IDisposable
     {
-        private readonly IndentedTextWriter textWriter;
-        private readonly int indent;
+        private readonly IndentedTextWriter _textWriter;
+        private readonly int _indent;
 
         /// <summary>
         /// 
@@ -17,8 +17,8 @@
         /// <param name="textWriter"></param>
         public Indentation( IndentedTextWriter textWriter )
         {
-            this.textWriter = textWriter;
-            this.indent = ++this.textWriter.Indent;
+            this._textWriter = textWriter;
+            this._indent = ++this._textWriter.Indent;
         }
 
         #region IDisposable Members
@@ -29,7 +29,7 @@
             Contract.Assert( this.textWriter.Indent == this.indent );
 #endif
 
-            this.textWriter.Indent--;
+            this._textWriter.Indent--;
         }
 
 #endregion

@@ -3,7 +3,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public static class ILogExtensions
+    public static class LogExtensions
     {
         /// <summary>
         /// 

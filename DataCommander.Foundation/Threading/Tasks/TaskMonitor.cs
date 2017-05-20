@@ -18,10 +18,10 @@ namespace DataCommander.Foundation.Threading.Tasks
     {
         #region Private Fields
 
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private static readonly HashSet<TaskInfo> tasks = new HashSet<TaskInfo>();
+        private static ILog _log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly HashSet<TaskInfo> Tasks = new HashSet<TaskInfo>();
 
-        private static readonly StringTableColumnInfo<TaskInfo>[] columns =
+        private static readonly StringTableColumnInfo<TaskInfo>[] Columns =
         {
             StringTableColumnInfo.Create<TaskInfo, int>("Id", StringTableColumnAlign.Right, s => s.Id),
             new StringTableColumnInfo<TaskInfo>("Name", StringTableColumnAlign.Left, s => s.Name),
@@ -42,7 +42,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public static int Count => tasks.Count;
+        public static int Count => Tasks.Count;
 
         #endregion
 
@@ -74,9 +74,9 @@ namespace DataCommander.Foundation.Threading.Tasks
             var taskInfo = new TaskInfo(task, name);
             monitoredTaskState.TaskInfo = taskInfo;
 
-            lock (tasks)
+            lock (Tasks)
             {
-                tasks.Add(taskInfo);
+                Tasks.Add(taskInfo);
             }
 
             return new CreateTaskResponse
@@ -113,9 +113,9 @@ namespace DataCommander.Foundation.Threading.Tasks
             var taskInfo = new TaskInfo(task, name);
             monitoredTaskState.TaskInfo = taskInfo;
 
-            lock (tasks)
+            lock (Tasks)
             {
-                tasks.Add(taskInfo);
+                Tasks.Add(taskInfo);
             }
 
             return new CreateTaskResponse<TResult>
@@ -133,9 +133,9 @@ namespace DataCommander.Foundation.Threading.Tasks
         {
             string stringTableString;
 
-            lock (tasks)
+            lock (Tasks)
             {
-                stringTableString = tasks.ToString(columns);
+                stringTableString = Tasks.ToString(Columns);
             }
 
             return stringTableString;
@@ -148,9 +148,9 @@ namespace DataCommander.Foundation.Threading.Tasks
         {
             int count;
 
-            lock (tasks)
+            lock (Tasks)
             {
-                count = tasks.RemoveWhere(s => !s.IsAlive);
+                count = Tasks.RemoveWhere(s => !s.IsAlive);
             }
 
             return count;

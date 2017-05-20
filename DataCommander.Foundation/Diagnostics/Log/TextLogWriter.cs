@@ -25,8 +25,8 @@ namespace DataCommander.Foundation.Diagnostics.Log
     /// </remarks>
     internal sealed class TextLogWriter : ILogWriter
     {
-        private readonly TextWriter textWriter;
-        private readonly ILogFormatter formatter;
+        private readonly TextWriter _textWriter;
+        private readonly ILogFormatter _formatter;
 
         /// <summary>
         /// 
@@ -38,14 +38,14 @@ namespace DataCommander.Foundation.Diagnostics.Log
             Contract.Requires(textWriter != null);
 #endif
 
-            this.textWriter = textWriter;
-            this.formatter = new TextLogFormatter();
+            this._textWriter = textWriter;
+            this._formatter = new TextLogFormatter();
         }
 
         void ILogWriter.Write(LogEntry entry)
         {
-            var s = this.formatter.Format(entry);
-            this.textWriter.Write(s);
+            var s = this._formatter.Format(entry);
+            this._textWriter.Write(s);
         }
 
 #region ILogWriter Members
@@ -56,12 +56,12 @@ namespace DataCommander.Foundation.Diagnostics.Log
 
         void ILogWriter.Flush()
         {
-            this.textWriter.Flush();
+            this._textWriter.Flush();
         }
 
         void ILogWriter.Close()
         {
-            this.textWriter.Close();
+            this._textWriter.Close();
         }
 
 #endregion
@@ -70,7 +70,7 @@ namespace DataCommander.Foundation.Diagnostics.Log
 
         void IDisposable.Dispose()
         {
-            this.textWriter.Dispose();
+            this._textWriter.Dispose();
         }
 
 #endregion

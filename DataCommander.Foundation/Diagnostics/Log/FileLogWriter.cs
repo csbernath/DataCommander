@@ -10,9 +10,9 @@ namespace DataCommander.Foundation.Diagnostics.Log
     /// </summary>
     public class FileLogWriter : ILogWriter
     {
-        private static readonly ILog log = InternalLogFactory.Instance.GetTypeLog(typeof (FileLogWriter));
-        private readonly bool async;
-        private readonly ILogFile logFile;
+        private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof (FileLogWriter));
+        private readonly bool _async;
+        private readonly ILogFile _logFile;
 
         /// <summary>
         /// 
@@ -35,24 +35,24 @@ namespace DataCommander.Foundation.Diagnostics.Log
             FileAttributes fileAttributes,
             DateTimeKind dateTimeKind)
         {
-            this.async = async;
+            this._async = async;
             ILogFormatter formatter = new TextLogFormatter();
             // ILogFormatter formatter = new XmlLogFormatter();
 
             if (async)
             {
-                this.logFile = new AsyncLogFile(path, encoding, bufferSize, timerPeriod, formatter, fileAttributes, dateTimeKind);
+                this._logFile = new AsyncLogFile(path, encoding, bufferSize, timerPeriod, formatter, fileAttributes, dateTimeKind);
             }
             else
             {
-                this.logFile = new LogFile(path, encoding, bufferSize, autoFlush, formatter, fileAttributes, dateTimeKind);
+                this._logFile = new LogFile(path, encoding, bufferSize, autoFlush, formatter, fileAttributes, dateTimeKind);
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public string FileName => this.logFile.FileName;
+        public string FileName => this._logFile.FileName;
 
         #region ILogWriter Members
 
@@ -60,11 +60,11 @@ namespace DataCommander.Foundation.Diagnostics.Log
         {
             try
             {
-                this.logFile.Open();
+                this._logFile.Open();
             }
             catch (Exception e)
             {
-                log.Write(LogLevel.Error, e.ToLogString());
+                Log.Write(LogLevel.Error, e.ToLogString());
             }
         }
 
@@ -72,21 +72,21 @@ namespace DataCommander.Foundation.Diagnostics.Log
         {
             try
             {
-                if (this.async)
+                if (this._async)
                 {
-                    this.logFile.Write(logEntry);
+                    this._logFile.Write(logEntry);
                 }
                 else
                 {
-                    lock (this.logFile)
+                    lock (this._logFile)
                     {
-                        this.logFile.Write(logEntry);
+                        this._logFile.Write(logEntry);
                     }
                 }
             }
             catch (Exception e)
             {
-                log.Write(LogLevel.Error, e.ToString());
+                Log.Write(LogLevel.Error, e.ToString());
             }
         }
 
@@ -94,11 +94,11 @@ namespace DataCommander.Foundation.Diagnostics.Log
         {
             try
             {
-                this.logFile.Flush();
+                this._logFile.Flush();
             }
             catch (Exception e)
             {
-                log.Write(LogLevel.Error, e.ToLogString());
+                Log.Write(LogLevel.Error, e.ToLogString());
             }
         }
 
@@ -106,11 +106,11 @@ namespace DataCommander.Foundation.Diagnostics.Log
         {
             try
             {
-                this.logFile.Close();
+                this._logFile.Close();
             }
             catch (Exception e)
             {
-                log.Write(LogLevel.Error, e.ToLogString());
+                Log.Write(LogLevel.Error, e.ToLogString());
             }
         }
 
@@ -120,7 +120,7 @@ namespace DataCommander.Foundation.Diagnostics.Log
 
         void IDisposable.Dispose()
         {
-            this.logFile.Dispose();
+            this._logFile.Dispose();
         }
 
         #endregion

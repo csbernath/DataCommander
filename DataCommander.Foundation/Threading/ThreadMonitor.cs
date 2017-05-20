@@ -14,9 +14,9 @@ namespace DataCommander.Foundation.Threading
     /// </summary>
     public static class ThreadMonitor
     {
-        private static readonly SortedDictionary<int, WorkerThread> threads = new SortedDictionary<int, WorkerThread>();
+        private static readonly SortedDictionary<int, WorkerThread> Threads = new SortedDictionary<int, WorkerThread>();
 
-        private static readonly StringTableColumnInfo<WorkerThread>[] threadColumns =
+        private static readonly StringTableColumnInfo<WorkerThread>[] ThreadColumns =
         {
             new StringTableColumnInfo<WorkerThread>("ManagedThreadId", StringTableColumnAlign.Right, t => t.ManagedThreadId.ToString()),
             new StringTableColumnInfo<WorkerThread>("Name", StringTableColumnAlign.Left, t => t.Name),
@@ -29,7 +29,7 @@ namespace DataCommander.Foundation.Threading
             new StringTableColumnInfo<WorkerThread>("IsThreadPoolThread", StringTableColumnAlign.Left, t => t.Thread.IsThreadPoolThread.ToString())
         };
 
-        private static readonly StringTableColumnInfo<ThreadPoolRow>[] threadPoolColumns =
+        private static readonly StringTableColumnInfo<ThreadPoolRow>[] ThreadPoolColumns =
         {
             new StringTableColumnInfo<ThreadPoolRow>("Name", StringTableColumnAlign.Left, t => t.Name),
             new StringTableColumnInfo<ThreadPoolRow>("Min", StringTableColumnAlign.Right, t => t.Min.ToString()),
@@ -41,7 +41,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public static int Count => threads.Count;
+        public static int Count => Threads.Count;
 
         /// <summary>
         /// 
@@ -79,7 +79,7 @@ namespace DataCommander.Foundation.Threading
                 Max = maxCompletionPortThreads
             };
 
-            return threadPoolRows.ToString(threadPoolColumns);
+            return threadPoolRows.ToString(ThreadPoolColumns);
         }
 
         /// <summary>
@@ -88,9 +88,9 @@ namespace DataCommander.Foundation.Threading
         public static string ToStringTableString()
         {
             string stringTableString;
-            lock (threads)
+            lock (Threads)
             {
-                stringTableString = threads.Values.ToString(threadColumns);
+                stringTableString = Threads.Values.ToString(ThreadColumns);
             }
 
             return stringTableString;
@@ -102,9 +102,9 @@ namespace DataCommander.Foundation.Threading
             Contract.Requires<ArgumentNullException>(thread != null);
 #endif
 
-            lock (threads)
+            lock (Threads)
             {
-                threads.Add(thread.ManagedThreadId, thread);
+                Threads.Add(thread.ManagedThreadId, thread);
             }
         }
 
@@ -116,9 +116,9 @@ namespace DataCommander.Foundation.Threading
             var removableThreads = new List<WorkerThread>();
 
             WorkerThread[] currentThreads;
-            lock (threads)
+            lock (Threads)
             {
-                currentThreads = threads.Values.ToArray();
+                currentThreads = Threads.Values.ToArray();
             }
 
             var remaining = TimeSpan.FromMilliseconds(millisecondsTimout);
@@ -153,11 +153,11 @@ namespace DataCommander.Foundation.Threading
 
             if (removableThreads.Count > 0)
             {
-                lock (threads)
+                lock (Threads)
                 {
                     foreach (var thread in removableThreads)
                     {
-                        threads.Remove(thread.ManagedThreadId);
+                        Threads.Remove(thread.ManagedThreadId);
                     }
                 }
             }

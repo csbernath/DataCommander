@@ -6,16 +6,16 @@
 
     internal sealed class MethodFraction : MethodBase
     {
-        private readonly MethodBase method;
-        private readonly string name;
+        private readonly MethodBase _method;
+        private readonly string _name;
 
         public MethodFraction(MethodBase method, string name)
         {
-            this.method = method;
-            this.name = name;
+            this._method = method;
+            this._name = name;
         }
 
-        public override Type DeclaringType => this.method.DeclaringType;
+        public override Type DeclaringType => this._method.DeclaringType;
 
         public static string GetKey(MethodBase method, string name)
         {
@@ -25,35 +25,35 @@
 
         public override object[] GetCustomAttributes(bool inherit)
         {
-            return this.method.GetCustomAttributes(inherit);
+            return this._method.GetCustomAttributes(inherit);
         }
 
         public override object[] GetCustomAttributes(Type attributeType, bool inherit)
         {
-            return this.method.GetCustomAttributes(attributeType, inherit);
+            return this._method.GetCustomAttributes(attributeType, inherit);
         }
 
         public override bool IsDefined(Type attributeType, bool inherit)
         {
-            return this.method.IsDefined(attributeType, inherit);
+            return this._method.IsDefined(attributeType, inherit);
         }
 
-        public override MemberTypes MemberType => this.method.MemberType;
+        public override MemberTypes MemberType => this._method.MemberType;
 
-        public override string Name => this.method.Name + "[" + this.name + "]";
+        public override string Name => this._method.Name + "[" + this._name + "]";
 
-        public override Type ReflectedType => this.method.ReflectedType;
+        public override Type ReflectedType => this._method.ReflectedType;
 
-        public override MethodAttributes Attributes => this.method.Attributes;
+        public override MethodAttributes Attributes => this._method.Attributes;
 
         public override MethodImplAttributes GetMethodImplementationFlags()
         {
-            return this.method.GetMethodImplementationFlags();
+            return this._method.GetMethodImplementationFlags();
         }
 
         public override ParameterInfo[] GetParameters()
         {
-            return this.method.GetParameters();
+            return this._method.GetParameters();
         }
 
         public override object Invoke(object obj, BindingFlags invokeAttr, Binder binder, object[] parameters, CultureInfo culture)

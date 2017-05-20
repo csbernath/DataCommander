@@ -48,7 +48,7 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         private sealed class Reader
         {
-            private readonly NameValueCollection nameValueCollection;
+            private readonly NameValueCollection _nameValueCollection;
 
             public Reader(NameValueCollection nameValueCollection)
             {
@@ -56,12 +56,12 @@ namespace DataCommander.Foundation.Configuration
                 Contract.Requires<ArgumentNullException>(nameValueCollection != null);
 #endif
 
-                this.nameValueCollection = nameValueCollection;
+                this._nameValueCollection = nameValueCollection;
             }
 
             public bool TryGetValue(string name, out string value)
             {
-                value = this.nameValueCollection[name];
+                value = this._nameValueCollection[name];
                 var contains = value != null;
                 return contains;
             }
@@ -72,8 +72,8 @@ namespace DataCommander.Foundation.Configuration
         /// </summary>
         private sealed class PrefixedReader
         {
-            private readonly NameValueCollection nameValueCollection;
-            private readonly string prefix;
+            private readonly NameValueCollection _nameValueCollection;
+            private readonly string _prefix;
 
             public PrefixedReader(NameValueCollection nameValueCollection, string prefix)
             {
@@ -82,24 +82,24 @@ namespace DataCommander.Foundation.Configuration
                 Contract.Requires<ArgumentNullException>(prefix != null);
 #endif
 
-                this.nameValueCollection = nameValueCollection;
-                this.prefix = prefix;
+                this._nameValueCollection = nameValueCollection;
+                this._prefix = prefix;
             }
 
             public bool TryGetValue(string name, out string value)
             {
                 string prefixedName;
 
-                if (this.prefix != null)
+                if (this._prefix != null)
                 {
-                    prefixedName = this.prefix + name;
+                    prefixedName = this._prefix + name;
                 }
                 else
                 {
                     prefixedName = name;
                 }
 
-                value = this.nameValueCollection[prefixedName];
+                value = this._nameValueCollection[prefixedName];
                 var contains = value != null;
                 return contains;
             }

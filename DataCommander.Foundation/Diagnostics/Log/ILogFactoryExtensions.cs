@@ -7,7 +7,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public static class ILogFactoryExtensions
+    public static class LogFactoryExtensions
     {
         /// <summary>
         /// 

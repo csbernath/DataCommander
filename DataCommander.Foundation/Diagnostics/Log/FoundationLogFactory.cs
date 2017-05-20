@@ -10,8 +10,8 @@
 
     internal sealed class FoundationLogFactory : ILogFactory
     {
-        private readonly MultipleLog multipeLog;
-        private readonly IDateTimeProvider dateTimeProvider;
+        private readonly MultipleLog _multipeLog;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
         public FoundationLogFactory()
         {
@@ -20,7 +20,7 @@
             
             var dateTimeKind = DateTimeKind.Utc;
             node.Attributes.TryGetAttributeValue("DateTimeKind", DateTimeKind.Utc, out dateTimeKind);
-            this.dateTimeProvider = dateTimeKind == DateTimeKind.Utc
+            this._dateTimeProvider = dateTimeKind == DateTimeKind.Utc
                 ? (IDateTimeProvider) UniversalTime.Default
                 : LocalTime.Default;
 
@@ -36,7 +36,7 @@
                     var logWriter = ReadLogWriter(childNode);
                     if (logWriter != null)
                     {
-                        logWriter.logLevel = attributes["LogLevel"].GetValue<LogLevel>();
+                        logWriter.LogLevel = attributes["LogLevel"].GetValue<LogLevel>();
                         logWriters.Add(logWriter);
                     }
                 }
@@ -44,7 +44,7 @@
 
             if (logWriters.Count > 0)
             {
-                this.multipeLog = new MultipleLog(logWriters);
+                this._multipeLog = new MultipleLog(logWriters);
                 LogFactory.Instance = this;
 
                 foreach (var logWriter in logWriters)
@@ -59,11 +59,11 @@
             var logWriter = new LogWriter
             {
                 logWriter = new TextLogWriter(TraceWriter.Instance),
-                logLevel = LogLevel.Debug
+                LogLevel = LogLevel.Debug
             };
 
-            this.dateTimeProvider = LocalTime.Default;
-            this.multipeLog = new MultipleLog(logWriter.ItemAsEnumerable());
+            this._dateTimeProvider = LocalTime.Default;
+            this._multipeLog = new MultipleLog(logWriter.ItemAsEnumerable());
         }
 
         #region IApplicationLog Members
@@ -73,7 +73,7 @@
             get
             {
                 string fileName;
-                var fileLogWriter = this.multipeLog.LogWriters.Select(w => w.logWriter).OfType<FileLogWriter>().FirstOrDefault();
+                var fileLogWriter = this._multipeLog.LogWriters.Select(w => w.logWriter).OfType<FileLogWriter>().FirstOrDefault();
 
                 if (fileLogWriter != null)
                 {
@@ -99,9 +99,9 @@
 
         void IDisposable.Dispose()
         {
-            if (this.multipeLog != null)
+            if (this._multipeLog != null)
             {
-                this.multipeLog.Dispose();
+                this._multipeLog.Dispose();
             }
         }
 
@@ -109,30 +109,30 @@
 
         internal void Write(FoundationLog log, LogLevel logLevel, string message)
         {
-            if (this.multipeLog != null)
+            if (this._multipeLog != null)
             {
-                var logEntry = LogEntryFactory.Create(log.LoggedName, this.dateTimeProvider.Now, message, logLevel);
-                this.multipeLog.Write(logEntry);
+                var logEntry = LogEntryFactory.Create(log.LoggedName, this._dateTimeProvider.Now, message, logLevel);
+                this._multipeLog.Write(logEntry);
             }
         }
 
         internal void Write(FoundationLog log, LogLevel logLevel, string format, params object[] args)
         {
-            if (this.multipeLog != null)
+            if (this._multipeLog != null)
             {
                 var message = string.Format(format, args);
-                var logEntry = LogEntryFactory.Create(log.LoggedName, this.dateTimeProvider.Now, message, logLevel);
-                this.multipeLog.Write(logEntry);
+                var logEntry = LogEntryFactory.Create(log.LoggedName, this._dateTimeProvider.Now, message, logLevel);
+                this._multipeLog.Write(logEntry);
             }
         }
 
         internal void Write(FoundationLog log, LogLevel logLevel, Func<string> getMessage)
         {
-            if (this.multipeLog != null)
+            if (this._multipeLog != null)
             {
                 var message = getMessage();
-                var logEntry = LogEntryFactory.Create(log.LoggedName, this.dateTimeProvider.Now, message, logLevel);
-                this.multipeLog.Write(logEntry);
+                var logEntry = LogEntryFactory.Create(log.LoggedName, this._dateTimeProvider.Now, message, logLevel);
+                this._multipeLog.Write(logEntry);
             }
         }
 
@@ -208,7 +208,7 @@
         private sealed class LogWriter
         {
             public ILogWriter logWriter;
-            public LogLevel logLevel;
+            public LogLevel LogLevel;
         }
 
         private sealed class MultipleLog : IDisposable
@@ -242,7 +242,7 @@
                 for (var i = 0; i < this.LogWriters.Length; i++)
                 {
                     var logWriter = this.LogWriters[i];
-                    if (logWriter.logLevel >= logLevel)
+                    if (logWriter.LogLevel >= logLevel)
                     {
                         logWriter.logWriter.Write(logEntry);
                     }

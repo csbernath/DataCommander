@@ -7,7 +7,7 @@
     /// </summary>
     public sealed class XmlAttributeReader
     {
-        private readonly XmlAttributeCollection attributes;
+        private readonly XmlAttributeCollection _attributes;
 
         /// <summary>
         /// 
@@ -18,7 +18,7 @@
 #if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(attributes != null);
 #endif
-            this.attributes = attributes;
+            this._attributes = attributes;
         }
 
         /// <summary>
@@ -57,7 +57,7 @@
         /// <returns></returns>
         public bool TryGetValue(string name, out string value)
         {
-            return TryGetValue(this.attributes, name, out value);
+            return TryGetValue(this._attributes, name, out value);
         }
     }
 }

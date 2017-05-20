@@ -9,7 +9,7 @@ namespace DataCommander.Foundation.Text
     /// </summary>
     public class StringTableRowCollection : IEnumerable<StringTableRow>
     {
-        private readonly SegmentedCollection<StringTableRow> rows = new SegmentedCollection<StringTableRow>(64);
+        private readonly SegmentedCollection<StringTableRow> _rows = new SegmentedCollection<StringTableRow>(64);
 
         internal StringTableRowCollection()
         {
@@ -18,7 +18,7 @@ namespace DataCommander.Foundation.Text
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.rows.Count;
+        public int Count => this._rows.Count;
 
         /// <summary>
         /// 
@@ -26,7 +26,7 @@ namespace DataCommander.Foundation.Text
         /// <param name="row"></param>
         public void Add(StringTableRow row)
         {
-            this.rows.Add(row);
+            this._rows.Add(row);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace DataCommander.Foundation.Text
         /// <returns></returns>
         public IEnumerator<StringTableRow> GetEnumerator()
         {
-            IEnumerable<StringTableRow> enumerable = this.rows;
+            IEnumerable<StringTableRow> enumerable = this._rows;
             return enumerable.GetEnumerator();
         }
 

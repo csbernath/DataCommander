@@ -5,7 +5,7 @@ namespace DataCommander.Foundation.Text
     /// </summary>
     public sealed class StringTableRow
     {
-        private readonly string[] cells;
+        private readonly string[] _cells;
 
         /// <summary>
         /// 
@@ -18,7 +18,7 @@ namespace DataCommander.Foundation.Text
 #endif
 
             this.Table = table;
-            this.cells = new string[table.Columns.Count];
+            this._cells = new string[table.Columns.Count];
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace DataCommander.Foundation.Text
                 Contract.Requires(0 <= columnIndex && columnIndex < this.Table.Columns.Count);
 #endif
 
-                return this.cells[columnIndex];
+                return this._cells[columnIndex];
             }
 
             set
@@ -45,7 +45,7 @@ namespace DataCommander.Foundation.Text
 #if CONTRACTS_FULL
                 Contract.Requires(0 <= columnIndex && columnIndex < this.Table.Columns.Count);
 #endif
-                this.cells[columnIndex] = value;
+                this._cells[columnIndex] = value;
             }
         }
     }

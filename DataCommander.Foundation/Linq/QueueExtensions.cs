@@ -25,9 +25,7 @@
             queue.Clear();
             var last = array.Length - 1;
             for (var i = 0; i < last; i++)
-            {
                 queue.Enqueue(array[i]);
-            }
 
             return array[last];
         }

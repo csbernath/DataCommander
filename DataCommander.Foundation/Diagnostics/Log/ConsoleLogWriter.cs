@@ -7,7 +7,7 @@
     /// </summary>
     public sealed class ConsoleLogWriter : ILogWriter
     {
-        private static readonly object lockObject = new object();
+        private static readonly object LockObject = new object();
 
         private ConsoleLogWriter()
         {
@@ -31,7 +31,7 @@
 
         void ILogWriter.Write( LogEntry logEntry )
         {
-            lock (lockObject)
+            lock (LockObject)
             {
                 var color = Console.ForegroundColor;
 

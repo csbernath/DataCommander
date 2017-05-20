@@ -8,7 +8,7 @@
     /// </summary>
     public class EventableStream : Stream
     {
-        private readonly Stream stream;
+        private readonly Stream _stream;
 
         /// <summary>
         /// 
@@ -19,57 +19,57 @@
 #if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(stream != null);
 #endif
-            this.stream = stream;
+            this._stream = stream;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public override bool CanRead => this.stream.CanRead;
+        public override bool CanRead => this._stream.CanRead;
 
         /// <summary>
         /// 
         /// </summary>
-        public override bool CanSeek => this.stream.CanSeek;
+        public override bool CanSeek => this._stream.CanSeek;
 
         /// <summary>
         /// 
         /// </summary>
-        public override bool CanWrite => this.stream.CanWrite;
+        public override bool CanWrite => this._stream.CanWrite;
 
         /// <summary>
         /// 
         /// </summary>
         public override void Flush()
         {
-            this.stream.Flush();
+            this._stream.Flush();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public override long Length => this.stream.Length;
+        public override long Length => this._stream.Length;
 
         /// <summary>
         /// 
         /// </summary>
         public override long Position
         {
-            get => this.stream.Position;
+            get => this._stream.Position;
 
-            set => this.stream.Position = value;
+            set => this._stream.Position = value;
         }
 
-        private EventHandler beforeRead;
+        private EventHandler _beforeRead;
 
         /// <summary>
         /// 
         /// </summary>
         public event EventHandler BeforeRead
         {
-            add => this.beforeRead += value;
+            add => this._beforeRead += value;
 
-            remove => this.beforeRead -= value;
+            remove => this._beforeRead -= value;
         }
 
         /// <summary>
@@ -81,12 +81,12 @@
         /// <returns></returns>
         public override int Read(byte[] buffer, int offset, int count)
         {
-            if (this.beforeRead != null)
+            if (this._beforeRead != null)
             {
-                this.beforeRead(this, null);
+                this._beforeRead(this, null);
             }
 
-            return this.stream.Read(buffer, offset, count);
+            return this._stream.Read(buffer, offset, count);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@
         /// <returns></returns>
         public override long Seek(long offset, SeekOrigin origin)
         {
-            return this.stream.Seek(offset, origin);
+            return this._stream.Seek(offset, origin);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@
         /// <param name="value"></param>
         public override void SetLength(long value)
         {
-            this.stream.SetLength(value);
+            this._stream.SetLength(value);
         }
 
         /// <summary>
@@ -117,7 +117,7 @@
         /// <param name="count"></param>
         public override void Write(byte[] buffer, int offset, int count)
         {
-            this.stream.Write(buffer, offset, count);
+            this._stream.Write(buffer, offset, count);
         }
 
 #if FOUNDATION_3_5

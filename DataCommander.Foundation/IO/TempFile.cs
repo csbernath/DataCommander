@@ -8,8 +8,8 @@
     /// </summary>
     public sealed class TempFile : IDisposable
     {
-        private string filename;
-        private bool deleted;
+        private string _filename;
+        private bool _deleted;
 
         /// <summary>
         /// 
@@ -24,7 +24,7 @@
         /// <param name="filename"></param>
         public TempFile(string filename)
         {
-            this.filename = filename;
+            this._filename = filename;
         }
 
         /// <summary>
@@ -34,12 +34,12 @@
         {
             get
             {
-                if (this.filename == null)
+                if (this._filename == null)
                 {
-                    this.filename = Path.GetTempFileName();
+                    this._filename = Path.GetTempFileName();
                 }
 
-                return this.filename;
+                return this._filename;
             }
         }
 
@@ -48,15 +48,15 @@
         /// </summary>
         public void Delete()
         {
-            this.deleted = true;
-            File.Delete(this.filename);
+            this._deleted = true;
+            File.Delete(this._filename);
         }
 
         #region IDisposable Members
 
         void IDisposable.Dispose()
         {
-            if (this.filename != null && !this.deleted)
+            if (this._filename != null && !this._deleted)
             {
                 try
                 {

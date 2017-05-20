@@ -8,8 +8,8 @@ namespace DataCommander.Foundation.Threading
     /// </summary>
     public class WorkerThreadPool
     {
-        private readonly Queue<object> queue = new Queue<object>();
-        private int activeThreadCount;
+        private readonly Queue<object> _queue = new Queue<object>();
+        private int _activeThreadCount;
 
         /// <summary>
         /// 
@@ -27,9 +27,9 @@ namespace DataCommander.Foundation.Threading
         /// <param name="item"></param>
         public void QueueUserWorkItem( object item )
         {
-            lock (this.queue)
+            lock (this._queue)
             {
-                this.queue.Enqueue( item );
+                this._queue.Enqueue( item );
             }
 
             this.EnqueueEvent.Set();
@@ -38,29 +38,29 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public int QueuedItemCount => this.queue.Count;
+        public int QueuedItemCount => this._queue.Count;
 
         internal bool Dequeue( WaitCallback callback, WaitHandle[] waitHandles )
         {
             bool dequeued;
             object item = null;
 
-            if (this.queue.Count > 0)
+            if (this._queue.Count > 0)
             {
-                lock (this.queue)
+                lock (this._queue)
                 {
-                    if (this.queue.Count > 0)
+                    if (this._queue.Count > 0)
                     {
-                        item = this.queue.Dequeue();
+                        item = this._queue.Dequeue();
                     }
                 }
             }
 
             if (item != null)
             {
-                Interlocked.Increment( ref this.activeThreadCount );
+                Interlocked.Increment( ref this._activeThreadCount );
                 callback( item );
-                Interlocked.Decrement( ref this.activeThreadCount );
+                Interlocked.Decrement( ref this._activeThreadCount );
                 dequeued = true;
             }
             else
@@ -80,7 +80,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public int ActiveThreadCount => this.activeThreadCount;
+        public int ActiveThreadCount => this._activeThreadCount;
 
         internal AutoResetEvent EnqueueEvent { get; } = new AutoResetEvent( false );
 

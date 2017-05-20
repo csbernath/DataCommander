@@ -8,29 +8,29 @@
 
     internal sealed class MethodCollection : IEnumerable<MethodBase>
     {
-        private int idSequence;
-        private readonly ConcurrentDictionary<MethodBase, int> methods = new ConcurrentDictionary<MethodBase, int>();
+        private int _idSequence;
+        private readonly ConcurrentDictionary<MethodBase, int> _methods = new ConcurrentDictionary<MethodBase, int>();
 
         public bool TryGetValue(MethodBase method, out int methodId)
         {
-            return this.methods.TryGetValue(method, out methodId);
+            return this._methods.TryGetValue(method, out methodId);
         }
 
         public int Add(MethodBase method)
         {
-            var id = Interlocked.Increment(ref this.idSequence);
-            this.methods.TryAdd(method, id);
+            var id = Interlocked.Increment(ref this._idSequence);
+            this._methods.TryAdd(method, id);
             return id;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.methods.Values.GetEnumerator();
+            return this._methods.Values.GetEnumerator();
         }
 
         IEnumerator<MethodBase> IEnumerable<MethodBase>.GetEnumerator()
         {
-            return this.methods.Keys.GetEnumerator();
+            return this._methods.Keys.GetEnumerator();
         }
     }
 }

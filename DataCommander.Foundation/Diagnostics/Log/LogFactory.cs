@@ -8,7 +8,7 @@
     /// </summary>
     public static class LogFactory
     {
-        private static readonly ILog log = InternalLogFactory.Instance.GetTypeLog(typeof (LogFactory));
+        private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof (LogFactory));
 
         /// <summary>
         /// 
@@ -20,7 +20,7 @@
         /// </summary>
         public static void Read()
         {
-            log.Trace("Reading LogFactory configuration...");
+            Log.Trace("Reading LogFactory configuration...");
             var node = Settings.SelectCurrentType();
             if (node != null)
             {
@@ -34,7 +34,7 @@
                 instance = applicationLog;
             }
 
-            log.Trace("LogFactory configuration has been read successfully.");
+            Log.Trace("LogFactory configuration has been read successfully.");
         }
     }
 }

@@ -9,8 +9,8 @@
     /// </summary>
     public sealed class StringBuilderReader : TextReader
     {
-        private readonly StringBuilder stringBuilder;
-        private int index;
+        private readonly StringBuilder _stringBuilder;
+        private int _index;
 
         /// <summary>
         /// 
@@ -22,7 +22,7 @@
             Contract.Requires<ArgumentNullException>(stringBuilder != null);
 #endif
 
-            this.stringBuilder = stringBuilder;
+            this._stringBuilder = stringBuilder;
         }
 
         /// <summary>
@@ -33,9 +33,9 @@
         {
             int result;
 
-            if (this.index < this.stringBuilder.Length)
+            if (this._index < this._stringBuilder.Length)
             {
-                result = this.stringBuilder[this.index];
+                result = this._stringBuilder[this._index];
             }
             else
             {
@@ -53,10 +53,10 @@
         {
             int result;
 
-            if (this.index < this.stringBuilder.Length)
+            if (this._index < this._stringBuilder.Length)
             {
-                result = this.stringBuilder[this.index];
-                this.index++;
+                result = this._stringBuilder[this._index];
+                this._index++;
             }
             else
             {
@@ -75,12 +75,12 @@
         /// <returns></returns>
         public override int Read(char[] buffer, int index, int count)
         {
-            var result = Math.Min(count, this.stringBuilder.Length - this.index);
+            var result = Math.Min(count, this._stringBuilder.Length - this._index);
 
             if (result > 0)
             {
-                this.stringBuilder.CopyTo(this.index, buffer, index, result);
-                this.index += result;
+                this._stringBuilder.CopyTo(this._index, buffer, index, result);
+                this._index += result;
             }
 
             return result;

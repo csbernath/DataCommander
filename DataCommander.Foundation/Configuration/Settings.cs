@@ -14,14 +14,14 @@ namespace DataCommander.Foundation.Configuration
         /// <summary>
         /// The config file name.
         /// </summary>
-        private static string configFileName;
+        private static string _configFileName;
 
-        private static string sectionName;
+        private static string _sectionName;
 
         /// <summary>
         /// The ConfigurationSection instance.
         /// </summary>
-        private static ConfigurationSection section;
+        private static ConfigurationSection _section;
 
         /// <summary>
         /// 
@@ -40,34 +40,34 @@ namespace DataCommander.Foundation.Configuration
         {
             get
             {
-                if (configFileName == null)
+                if (_configFileName == null)
                 {
                     var setup = AppDomain.CurrentDomain.SetupInformation;
                     bool contains;
 
                     try
                     {
-                        contains = AppSettings.CurrentType.TryGetString("ConfigFileName", out configFileName);
+                        contains = AppSettings.CurrentType.TryGetString("ConfigFileName", out _configFileName);
                     }
                     catch
                     {
                         contains = false;
                     }
 
-                    if (contains && !string.IsNullOrEmpty(configFileName))
+                    if (contains && !string.IsNullOrEmpty(_configFileName))
                     {
-                        configFileName = Path.Combine(setup.ApplicationBase, configFileName);
+                        _configFileName = Path.Combine(setup.ApplicationBase, _configFileName);
                     }
                     else
                     {
-                        configFileName = setup.ConfigurationFile;
+                        _configFileName = setup.ConfigurationFile;
                     }
                 }
 
-                return configFileName;
+                return _configFileName;
             }
 
-            set => configFileName = value;
+            set => _configFileName = value;
         }
 
         /// <summary>
@@ -83,14 +83,14 @@ namespace DataCommander.Foundation.Configuration
         {
             get
             {
-                if (section == null)
+                if (_section == null)
                 {
                     var configFileName = ConfigFileName;
                     var sectionName = SectionName;
-                    section = new ConfigurationSection(configFileName, sectionName);
+                    _section = new ConfigurationSection(configFileName, sectionName);
                 }
 
-                return section;
+                return _section;
             }
         }
 
@@ -101,15 +101,15 @@ namespace DataCommander.Foundation.Configuration
         {
             get
             {
-                if (sectionName == null)
+                if (_sectionName == null)
                 {
-                    sectionName = ConfigurationSection.DefaultSectionName;
+                    _sectionName = ConfigurationSection.DefaultSectionName;
                 }
 
-                return sectionName;
+                return _sectionName;
             }
 
-            set => sectionName = value;
+            set => _sectionName = value;
         }
 
         /// <summary>

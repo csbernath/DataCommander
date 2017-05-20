@@ -4,7 +4,7 @@
 
     internal sealed class MethodInvocation
     {
-        private static int idSequence;
+        private static int _idSequence;
 
         public MethodInvocation(
             MethodInvocation parent,
@@ -12,7 +12,7 @@
             long beginTime)
         {
             this.Parent = parent;
-            this.Id = Interlocked.Increment(ref idSequence);
+            this.Id = Interlocked.Increment(ref _idSequence);
             this.MethodId = methodId;
             this.BeginTime = beginTime;
         }

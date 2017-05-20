@@ -8,9 +8,9 @@
     /// </summary>
     public sealed class XmlSpreadsheetCell
     {
-        private readonly XmlSpreadsheetAttributeCollection attributes = new XmlSpreadsheetAttributeCollection();
-        private readonly XmlSpreadsheetDataType dataType;
-        private readonly string value;
+        private readonly XmlSpreadsheetAttributeCollection _attributes = new XmlSpreadsheetAttributeCollection();
+        private readonly XmlSpreadsheetDataType _dataType;
+        private readonly string _value;
 
         /// <summary>
         /// 
@@ -19,8 +19,8 @@
         /// <param name="value"></param>
         public XmlSpreadsheetCell(XmlSpreadsheetDataType dataType, string value)
         {
-            this.dataType = dataType;
-            this.value = value;
+            this._dataType = dataType;
+            this._value = value;
         }
 
         /// <summary>
@@ -31,7 +31,7 @@
             set
             {
                 var attribute = new XmlSpreadsheetAttribute("ss:StyleID", value);
-                this.attributes.Add(attribute);
+                this._attributes.Add(attribute);
             }
         }
 
@@ -43,7 +43,7 @@
             set
             {
                 var attribute = new XmlSpreadsheetAttribute("ss:MergeAcross", value.ToString());
-                this.attributes.Add(attribute);
+                this._attributes.Add(attribute);
             }
         }
 
@@ -59,15 +59,15 @@
 
             using (xmlWriter.WriteElement("Cell"))
             {
-                foreach (var attribute in this.attributes)
+                foreach (var attribute in this._attributes)
                 {
                     attribute.Write(xmlWriter);
                 }
 
                 using (xmlWriter.WriteElement("Data"))
                 {
-                    xmlWriter.WriteAttributeString("ss:Type", this.dataType.ToString());
-                    xmlWriter.WriteString(this.value);
+                    xmlWriter.WriteAttributeString("ss:Type", this._dataType.ToString());
+                    xmlWriter.WriteString(this._value);
                 }
             }
         }

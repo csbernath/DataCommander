@@ -13,13 +13,13 @@ namespace DataCommander.Foundation.IO
     /// </summary>
     public class FileSystemWatcher
     {
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private readonly System.IO.FileSystemWatcher watcher;
-        private readonly string fullFileName;
-        private readonly string fileName;
-        private string shortFileName;
-        private int count;
-        private readonly Timer timer;
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly System.IO.FileSystemWatcher _watcher;
+        private readonly string _fullFileName;
+        private readonly string _fileName;
+        private string _shortFileName;
+        private int _count;
+        private readonly Timer _timer;
 
         /// <summary>
         /// Creates a new instance to watch NTFS events.
@@ -27,14 +27,14 @@ namespace DataCommander.Foundation.IO
         /// <param name="fileName">The file to watch</param>
         public FileSystemWatcher(string fileName)
         {
-            this.fullFileName = fileName;
-            this.shortFileName = this.ShortFileName;
+            this._fullFileName = fileName;
+            this._shortFileName = this.ShortFileName;
             var fileInfo = new FileInfo(fileName);
             var path = fileInfo.DirectoryName;
-            this.fileName = fileInfo.Name.ToUpper(CultureInfo.InvariantCulture);
-            this.watcher = new System.IO.FileSystemWatcher(path);
-            this.watcher.Changed += this.OnChanged;
-            this.timer = new Timer(this.TimerCallback, null, Timeout.Infinite, Timeout.Infinite);
+            this._fileName = fileInfo.Name.ToUpper(CultureInfo.InvariantCulture);
+            this._watcher = new System.IO.FileSystemWatcher(path);
+            this._watcher.Changed += this.OnChanged;
+            this._timer = new Timer(this.TimerCallback, null, Timeout.Infinite, Timeout.Infinite);
         }
 
         /// <summary>
@@ -42,9 +42,9 @@ namespace DataCommander.Foundation.IO
         /// </summary>
         public NotifyFilters NotifyFilter
         {
-            get => this.watcher.NotifyFilter;
+            get => this._watcher.NotifyFilter;
 
-            set => this.watcher.NotifyFilter = value;
+            set => this._watcher.NotifyFilter = value;
         }
 
         /// <summary>
@@ -52,9 +52,9 @@ namespace DataCommander.Foundation.IO
         /// </summary>
         public bool EnableRaisingEvents
         {
-            get => this.watcher.EnableRaisingEvents;
+            get => this._watcher.EnableRaisingEvents;
 
-            set => this.watcher.EnableRaisingEvents = value;
+            set => this._watcher.EnableRaisingEvents = value;
         }
 
         /// <summary>
@@ -69,28 +69,28 @@ namespace DataCommander.Foundation.IO
         {
             get
             {
-                if (this.shortFileName == null)
+                if (this._shortFileName == null)
                 {
                     var sb = new StringBuilder(255);
-                    var i = NativeMethods.GetShortPathName(this.fullFileName, sb, (uint) sb.Capacity);
+                    var i = NativeMethods.GetShortPathName(this._fullFileName, sb, (uint) sb.Capacity);
 
                     if (i > 0)
                     {
-                        this.shortFileName = sb.ToString().ToUpper(CultureInfo.InvariantCulture);
-                        var fileInfo = new FileInfo(this.shortFileName);
-                        this.shortFileName = fileInfo.Name;
+                        this._shortFileName = sb.ToString().ToUpper(CultureInfo.InvariantCulture);
+                        var fileInfo = new FileInfo(this._shortFileName);
+                        this._shortFileName = fileInfo.Name;
                     }
                 }
 
-                return this.shortFileName;
+                return this._shortFileName;
             }
         }
 
         private void TimerCallback(object state)
         {
-            log.Trace("Calling FileSystemWatcher.Changed event handlers... count: " + this.count);
-            this.Changed(this, new FileSystemEventArgs(WatcherChangeTypes.Changed, this.fullFileName, this.fullFileName));
-            this.count = 0;
+            Log.Trace("Calling FileSystemWatcher.Changed event handlers... count: " + this._count);
+            this.Changed(this, new FileSystemEventArgs(WatcherChangeTypes.Changed, this._fullFileName, this._fullFileName));
+            this._count = 0;
         }
 
         private void OnChanged(object sender, FileSystemEventArgs e)
@@ -99,7 +99,7 @@ namespace DataCommander.Foundation.IO
             {
                 var name = e.Name;
 
-                if (name == this.fileName || name == this.ShortFileName)
+                if (name == this._fileName || name == this.ShortFileName)
                 {
                     ////byte[] hash = ComputeHash(fullFileName);
                     ////bool changed = Compare(this.hash, hash) != 0;
@@ -110,17 +110,17 @@ namespace DataCommander.Foundation.IO
                     ////    Changed(sender, e);
                     ////}
 
-                    lock (this.timer)
+                    lock (this._timer)
                     {
-                        if (this.count == 0)
+                        if (this._count == 0)
                         {
-                            this.timer.Change(10000, Timeout.Infinite);
+                            this._timer.Change(10000, Timeout.Infinite);
                         }
 
-                        this.count++;
+                        this._count++;
                     }
 
-                    log.Trace("FileSystemWatcher.OnChanged: {0},{1}", name, e.ChangeType);
+                    Log.Trace("FileSystemWatcher.OnChanged: {0},{1}", name, e.ChangeType);
                 }
             }
         }

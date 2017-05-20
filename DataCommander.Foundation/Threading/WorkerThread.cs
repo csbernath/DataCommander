@@ -15,14 +15,14 @@ namespace DataCommander.Foundation.Threading
     {
         #region Private Fields
 
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private ThreadStart start;
-        private readonly WorkerEvent stopRequest = new WorkerEvent(WorkerEventState.NonSignaled);
-        private bool isStopAccepted;
-        private readonly WorkerEvent pauseRequest = new WorkerEvent(WorkerEventState.NonSignaled);
-        private readonly WorkerEvent continueRequest = new WorkerEvent(WorkerEventState.NonSignaled);
-        private EventHandler started;
-        private EventHandler stopped;
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+        private ThreadStart _start;
+        private readonly WorkerEvent _stopRequest = new WorkerEvent(WorkerEventState.NonSignaled);
+        private bool _isStopAccepted;
+        private readonly WorkerEvent _pauseRequest = new WorkerEvent(WorkerEventState.NonSignaled);
+        private readonly WorkerEvent _continueRequest = new WorkerEvent(WorkerEventState.NonSignaled);
+        private EventHandler _started;
+        private EventHandler _stopped;
 
         #endregion
 
@@ -38,7 +38,7 @@ namespace DataCommander.Foundation.Threading
             Contract.Requires<ArgumentNullException>(start != null);
 #endif
 
-            this.start = start;
+            this._start = start;
             this.Thread = new Thread(this.PrivateStart);
             ThreadMonitor.Add(this);
         }
@@ -52,9 +52,9 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public event EventHandler Started
         {
-            add => this.started += value;
+            add => this._started += value;
 
-            remove => this.started -= value;
+            remove => this._started -= value;
         }
 
         /// <summary>
@@ -62,9 +62,9 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public event EventHandler Stopped
         {
-            add => this.stopped += value;
+            add => this._stopped += value;
 
-            remove => this.stopped -= value;
+            remove => this._stopped -= value;
         }
 
 #endregion
@@ -74,7 +74,7 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public bool IsPauseRequested => this.pauseRequest.State == WorkerEventState.Signaled;
+        public bool IsPauseRequested => this._pauseRequest.State == WorkerEventState.Signaled;
 
         /// <summary>
         /// 
@@ -83,17 +83,17 @@ namespace DataCommander.Foundation.Threading
         {
             get
             {
-                var isStopRequested = this.stopRequest.State == WorkerEventState.Signaled;
+                var isStopRequested = this._stopRequest.State == WorkerEventState.Signaled;
 
                 if (isStopRequested)
                 {
-                    if (!this.isStopAccepted)
+                    if (!this._isStopAccepted)
                     {
-                        this.isStopAccepted = true;
-                        if (log.IsTraceEnabled)
+                        this._isStopAccepted = true;
+                        if (Log.IsTraceEnabled)
                         {
                             var stackTrace = new StackTrace(1, true);
-                            log.Trace("WorkerThread({0},{1}) accepted stop request.\r\n{2}", this.Thread.Name,
+                            Log.Trace("WorkerThread({0},{1}) accepted stop request.\r\n{2}", this.Thread.Name,
                                 this.Thread.ManagedThreadId, stackTrace);
                         }
                     }
@@ -111,12 +111,12 @@ namespace DataCommander.Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public WaitHandle PauseRequest => this.pauseRequest;
+        public WaitHandle PauseRequest => this._pauseRequest;
 
         /// <summary>
         /// 
         /// </summary>
-        public WaitHandle StopRequest => this.stopRequest;
+        public WaitHandle StopRequest => this._stopRequest;
 
         /// <summary>
         ///  Gets a unique identifier for the current managed thread.
@@ -175,7 +175,7 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public void Start()
         {
-            log.Trace("Starting WorkerThread({0})...", this.Thread.Name);
+            Log.Trace("Starting WorkerThread({0})...", this.Thread.Name);
             this.StartTime = LocalTime.Default.Now;
             this.Thread.Start();
         }
@@ -185,9 +185,9 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public void Stop()
         {
-            log.Trace("Stopping WorkerThread({0},{1})...", this.Thread.Name, this.Thread.ManagedThreadId);
+            Log.Trace("Stopping WorkerThread({0},{1})...", this.Thread.Name, this.Thread.ManagedThreadId);
             this.StopTime = LocalTime.Default.Now;
-            this.stopRequest.Set();
+            this._stopRequest.Set();
         }
 
         /// <summary>
@@ -195,8 +195,8 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public void Pause()
         {
-            log.Trace("WorkerThread({0},{1}) is requested to pause.", this.Thread.Name, this.Thread.ManagedThreadId);
-            this.pauseRequest.Set();
+            Log.Trace("WorkerThread({0},{1}) is requested to pause.", this.Thread.Name, this.Thread.ManagedThreadId);
+            this._pauseRequest.Set();
         }
 
         /// <summary>
@@ -204,9 +204,9 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public void Continue()
         {
-            log.Trace("WorkerThread({0},{1}) is requested to continue.", this.Thread.Name, this.Thread.ManagedThreadId);
-            this.pauseRequest.Reset();
-            this.continueRequest.Set();
+            Log.Trace("WorkerThread({0},{1}) is requested to continue.", this.Thread.Name, this.Thread.ManagedThreadId);
+            this._pauseRequest.Reset();
+            this._continueRequest.Set();
         }
 
         /// <summary>
@@ -214,10 +214,10 @@ namespace DataCommander.Foundation.Threading
         /// </summary>
         public void WaitForStopOrContinue()
         {
-            log.Write(LogLevel.Error, "WorkerThread({0},{1}) is waiting for stop or continue request...",
+            Log.Write(LogLevel.Error, "WorkerThread({0},{1}) is waiting for stop or continue request...",
                 this.Thread.Name, this.Thread.ManagedThreadId);
             var ticks = Stopwatch.GetTimestamp();
-            WaitHandle[] waitHandles = {this.stopRequest, this.continueRequest};
+            WaitHandle[] waitHandles = {this._stopRequest, this._continueRequest};
             var index = WaitHandle.WaitAny(waitHandles);
             ticks = Stopwatch.GetTimestamp() - ticks;
             string request;
@@ -237,7 +237,7 @@ namespace DataCommander.Foundation.Threading
                     break;
             }
 
-            log.Trace("WorkerThread({0},{1}) accepted {2} request in {3} seconds.", this.Thread.Name,
+            Log.Trace("WorkerThread({0},{1}) accepted {2} request in {3} seconds.", this.Thread.Name,
                 this.Thread.ManagedThreadId, request, StopwatchTimeSpan.ToString(ticks, 6));
         }
 
@@ -266,7 +266,7 @@ namespace DataCommander.Foundation.Threading
         /// <returns></returns>
         public bool WaitForStop(TimeSpan timeout)
         {
-            var signaled = this.stopRequest.WaitOne(timeout, false);
+            var signaled = this._stopRequest.WaitOne(timeout, false);
             return signaled;
         }
 
@@ -277,7 +277,7 @@ namespace DataCommander.Foundation.Threading
         /// <returns></returns>
         public bool WaitForStop(int timeout)
         {
-            var signaled = this.stopRequest.WaitOne(timeout, false);
+            var signaled = this._stopRequest.WaitOne(timeout, false);
             return signaled;
         }
 
@@ -297,35 +297,35 @@ namespace DataCommander.Foundation.Threading
         {
             var now = LocalTime.Default.Now;
             var elapsed = now - this.StartTime;
-            var win32threadId = NativeMethods.GetCurrentThreadId();
+            var win32ThreadId = NativeMethods.GetCurrentThreadId();
 
-            log.Write(
+            Log.Write(
                 LogLevel.Trace,
                 "WorkerThread({0},{1}) started in {2} seconds. Win32ThreadId: {3}",
                 this.Thread.Name,
                 this.Thread.ManagedThreadId,
                 elapsed,
-                win32threadId);
+                win32ThreadId);
 
             this.Thread.CurrentUICulture = CultureInfo.InvariantCulture;
 
-            if (this.started != null)
+            if (this._started != null)
             {
-                this.started(this, null);
+                this._started(this, null);
             }
 
             try
             {
-                this.start();
+                this._start();
             }
             catch (Exception e)
             {
-                log.Write(LogLevel.Error, "WorkerThread({0},{1}) unhandled exception:\r\n{2}", this.Thread.Name,
+                Log.Write(LogLevel.Error, "WorkerThread({0},{1}) unhandled exception:\r\n{2}", this.Thread.Name,
                     this.Thread.ManagedThreadId, e);
             }
 
             now = LocalTime.Default.Now;
-            if (this.stopRequest.State == WorkerEventState.Signaled)
+            if (this._stopRequest.State == WorkerEventState.Signaled)
             {
                 elapsed = now - this.StopTime;
             }
@@ -336,18 +336,18 @@ namespace DataCommander.Foundation.Threading
 
             this.StopTime = now;
 
-            log.Trace(
+            Log.Trace(
                 "WorkerThread({0},{1}) stopped in {2} seconds.",
                 this.Thread.Name,
                 this.Thread.ManagedThreadId,
                 elapsed);
 
-            if (this.stopped != null)
+            if (this._stopped != null)
             {
-                this.stopped(this, null);
+                this._stopped(this, null);
             }
 
-            this.start = null;
+            this._start = null;
         }
 
 #endregion

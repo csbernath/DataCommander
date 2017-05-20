@@ -11,7 +11,7 @@
     /// </summary>
     public sealed class XmlSpreadsheetAttributeCollection : ICollection<XmlSpreadsheetAttribute>
     {
-        private readonly IndexableCollection<XmlSpreadsheetAttribute> items;
+        private readonly IndexableCollection<XmlSpreadsheetAttribute> _items;
 
         internal XmlSpreadsheetAttributeCollection()
         {
@@ -20,7 +20,7 @@
                 item => GetKeyResponse.Create(true, item.LocalName),
                 SortOrder.None);
 
-            this.items = new IndexableCollection<XmlSpreadsheetAttribute>(this.NameIndex);
+            this._items = new IndexableCollection<XmlSpreadsheetAttribute>(this.NameIndex);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@
         /// <param name="item"></param>
         public void Add(XmlSpreadsheetAttribute item)
         {
-            this.items.Add(item);
+            this._items.Add(item);
         }
 
         void ICollection<XmlSpreadsheetAttribute>.Clear()
@@ -54,7 +54,7 @@
             throw new NotImplementedException();
         }
 
-        int ICollection<XmlSpreadsheetAttribute>.Count => this.items.Count;
+        int ICollection<XmlSpreadsheetAttribute>.Count => this._items.Count;
 
         bool ICollection<XmlSpreadsheetAttribute>.IsReadOnly => throw new NotImplementedException();
 
@@ -69,7 +69,7 @@
 
         IEnumerator<XmlSpreadsheetAttribute> IEnumerable<XmlSpreadsheetAttribute>.GetEnumerator()
         {
-            return this.items.GetEnumerator();
+            return this._items.GetEnumerator();
         }
 
         #endregion

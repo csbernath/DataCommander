@@ -9,8 +9,8 @@
     /// </summary>
     public class WorkerTask
     {
-        private Task task;
-        private TaskInfo taskInfo;
+        private Task _task;
+        private TaskInfo _taskInfo;
 
         /// <summary>
         /// 
@@ -23,8 +23,8 @@
         public WorkerTask(Action<object> action, object state, CancellationToken cancellationToken, TaskCreationOptions taskCreationOptions, string name)
         {
             var response = TaskMonitor.CreateTask(action, state, cancellationToken, taskCreationOptions, name);
-            this.task = response.Task;
-            this.taskInfo = response.TaskInfo;
+            this._task = response.Task;
+            this._taskInfo = response.TaskInfo;
         }
     }
 }
