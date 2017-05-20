@@ -19,12 +19,12 @@ namespace DataCommander.Foundation.Data
     {
         #region Private Fields
 
-        private static readonly ILog log = LogFactory.Instance.GetTypeLog(typeof (AsyncDbConnection));
-        private readonly IDbConnection cloneableConnection;
-        private readonly ICloneable cloneable;
-        private readonly List<string> commands = new List<string>();
-        private readonly AutoResetEvent queueEvent = new AutoResetEvent(false);
-        private readonly WorkerThread thread;
+        private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof (AsyncDbConnection));
+        private readonly IDbConnection _cloneableConnection;
+        private readonly ICloneable _cloneable;
+        private readonly List<string> _commands = new List<string>();
+        private readonly AutoResetEvent _queueEvent = new AutoResetEvent(false);
+        private readonly WorkerThread _thread;
 
         #endregion
 
@@ -35,11 +35,11 @@ namespace DataCommander.Foundation.Data
         /// <param name="threadName"></param>
         public AsyncDbConnection(IDbConnection cloneableConnection, string threadName)
         {
-            this.cloneableConnection = cloneableConnection;
-            this.cloneable = (ICloneable)cloneableConnection;
-            this.thread = new WorkerThread(this.Start);
-            this.thread.Name = threadName;
-            this.thread.Start();
+            this._cloneableConnection = cloneableConnection;
+            this._cloneable = (ICloneable)cloneableConnection;
+            this._thread = new WorkerThread(this.Start);
+            this._thread.Name = threadName;
+            this._thread.Start();
         }
 
         #region IDbConnection Members
@@ -73,16 +73,16 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public ConnectionState State => this.cloneableConnection.State;
+        public ConnectionState State => this._cloneableConnection.State;
 
         /// <summary>
         /// 
         /// </summary>
         public string ConnectionString
         {
-            get => this.cloneableConnection.ConnectionString;
+            get => this._cloneableConnection.ConnectionString;
 
-            set => this.cloneableConnection.ConnectionString = value;
+            set => this._cloneableConnection.ConnectionString = value;
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public IDbCommand CreateCommand()
         {
-            var command = this.cloneableConnection.CreateCommand();
+            var command = this._cloneableConnection.CreateCommand();
             return new AsyncDbCommand(this, command);
         }
 
@@ -108,19 +108,19 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public void Close()
         {
-            this.thread.Stop();
-            this.thread.Join();
+            this._thread.Stop();
+            this._thread.Join();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Database => this.cloneableConnection.Database;
+        public string Database => this._cloneableConnection.Database;
 
         /// <summary>
         /// 
         /// </summary>
-        public int ConnectionTimeout => this.cloneableConnection.ConnectionTimeout;
+        public int ConnectionTimeout => this._cloneableConnection.ConnectionTimeout;
 
         #endregion
 
@@ -142,12 +142,12 @@ namespace DataCommander.Foundation.Data
         {
             var commandText = ToString(command);
 
-            lock (this.commands)
+            lock (this._commands)
             {
-                this.commands.Add(commandText);
+                this._commands.Add(commandText);
             }
 
-            this.queueEvent.Set();
+            this._queueEvent.Set();
 
             return 0;
         }
@@ -192,38 +192,38 @@ namespace DataCommander.Foundation.Data
         {
             WaitHandle[] waitHandles =
             {
-                this.thread.StopRequest,
-                this.queueEvent
+                this._thread.StopRequest,
+                this._queueEvent
             };
 
-            const int Timeout = 10000; // 10 sec
+            const int timeout = 10000; // 10 sec
 
             while (true)
             {
                 this.Flush();
 
-                if (this.thread.IsStopRequested)
+                if (this._thread.IsStopRequested)
                 {
                     break;
                 }
 
-                WaitHandle.WaitAny(waitHandles, Timeout, false);
+                WaitHandle.WaitAny(waitHandles, timeout, false);
             }
         }
 
         private void Flush()
         {
-            if (this.commands.Count > 0)
+            if (this._commands.Count > 0)
             {
-                while (this.commands.Count > 0)
+                while (this._commands.Count > 0)
                 {
                     string[] commandTextArray;
 
-                    lock (this.commands)
+                    lock (this._commands)
                     {
-                        commandTextArray = new string[this.commands.Count];
-                        this.commands.CopyTo(commandTextArray);
-                        this.commands.Clear();
+                        commandTextArray = new string[this._commands.Count];
+                        this._commands.CopyTo(commandTextArray);
+                        this._commands.Clear();
                     }
 
                     var sb = new StringBuilder();
@@ -241,7 +241,7 @@ namespace DataCommander.Foundation.Data
                     var commandText = sb.ToString();
                     Exception exception = null;
 
-                    using (var connection = (IDbConnection)this.cloneable.Clone())
+                    using (var connection = (IDbConnection)this._cloneable.Clone())
                     {
                         var command = connection.CreateCommand();
                         command.CommandText = commandText;
@@ -272,7 +272,7 @@ namespace DataCommander.Foundation.Data
                             message = exception.ToLogString();
                         }
 
-                        log.Write(LogLevel.Error, message);
+                        Log.Write(LogLevel.Error, message);
                     }
                 }
             }

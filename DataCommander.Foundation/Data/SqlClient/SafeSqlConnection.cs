@@ -15,9 +15,9 @@ namespace DataCommander.Foundation.Data.SqlClient
     /// </summary>
     public class SafeSqlConnection : SafeDbConnection, ISafeDbConnection, ICloneable
     {
-        private static readonly ILog log = LogFactory.Instance.GetTypeLog(typeof(SafeSqlConnection));
-        private readonly CancellationToken cancellationToken = CancellationToken.None;
-        private short id;
+        private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(SafeSqlConnection));
+        private readonly CancellationToken _cancellationToken = CancellationToken.None;
+        private short _id;
 
         /// <summary>
         /// 
@@ -60,24 +60,24 @@ namespace DataCommander.Foundation.Data.SqlClient
             }
             catch (Exception e)
             {
-                log.Write(LogLevel.Error, "Exception:\r\n{0}", e.ToLogString());
+                Log.Write(LogLevel.Error, "Exception:\r\n{0}", e.ToLogString());
             }
 
             return id;
         }
 
-        CancellationToken ISafeDbConnection.CancellationToken => this.cancellationToken;
+        CancellationToken ISafeDbConnection.CancellationToken => this._cancellationToken;
 
         object ISafeDbConnection.Id
         {
             get
             {
-                if (this.id == 0)
+                if (this._id == 0)
                 {
-                    this.id = GetId(this.Connection);
+                    this._id = GetId(this.Connection);
                 }
 
-                return this.id;
+                return this._id;
             }
         }
 
@@ -143,7 +143,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             if (handled)
             {
                 sb.AppendFormat("\r\nWaiting {0}...", TimeSpan.FromMilliseconds(timeout));
-                log.Error(sb.ToString());
+                Log.Error(sb.ToString());
 
                 if (timeout > 0)
                 {
@@ -158,7 +158,7 @@ namespace DataCommander.Foundation.Data.SqlClient
 
         void ISafeDbConnection.HandleException(Exception exception, TimeSpan elapsed)
         {
-            HandleException(this.Connection, exception, elapsed, this.cancellationToken);
+            HandleException(this.Connection, exception, elapsed, this._cancellationToken);
         }
 
         internal static void HandleException(Exception exception, IDbCommand command, CancellationToken cancellationToken)
@@ -201,7 +201,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                 }
             }
 
-            log.Write(LogLevel.Error, sb.ToString());
+            Log.Write(LogLevel.Error, sb.ToString());
 
             if (handled)
             {
@@ -215,7 +215,7 @@ namespace DataCommander.Foundation.Data.SqlClient
 
         void ISafeDbConnection.HandleException(Exception exception, IDbCommand command)
         {
-            HandleException(exception, command, this.cancellationToken);
+            HandleException(exception, command, this._cancellationToken);
         }
     }
 }

@@ -12,14 +12,14 @@ namespace DataCommander.Foundation.Collections.ObjectPool
     {
         #region Private Fields
 
-        private static readonly ILog log = LogFactory.Instance.GetTypeLog(typeof (ObjectPool<T>));
-        private readonly IPoolableObjectFactory<T> factory;
-        private LinkedList<ObjectPoolItem<T>> idleItems = new LinkedList<ObjectPoolItem<T>>();
-        private readonly Dictionary<int, ObjectPoolItem<T>> activeItems = new Dictionary<int, ObjectPoolItem<T>>();
-        private readonly AutoResetEvent idleEvent = new AutoResetEvent( false );
-        private Timer timer;
-        private int key;
-        private bool disposed;
+        private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof (ObjectPool<T>));
+        private readonly IPoolableObjectFactory<T> _factory;
+        private LinkedList<ObjectPoolItem<T>> _idleItems = new LinkedList<ObjectPoolItem<T>>();
+        private readonly Dictionary<int, ObjectPoolItem<T>> _activeItems = new Dictionary<int, ObjectPoolItem<T>>();
+        private readonly AutoResetEvent _idleEvent = new AutoResetEvent( false );
+        private Timer _timer;
+        private int _key;
+        private bool _disposed;
 
         #endregion
 
@@ -42,10 +42,10 @@ namespace DataCommander.Foundation.Collections.ObjectPool
             Contract.Requires(minSize <= maxSize);
 #endif
 
-            this.factory = factory;
+            this._factory = factory;
             this.MinSize = minSize;
             this.MaxSize = maxSize;
-            this.timer = new Timer( this.TimerCallback, null, 30000, 30000 );
+            this._timer = new Timer( this.TimerCallback, null, 30000, 30000 );
         }
 
         /// <summary>
@@ -71,12 +71,12 @@ namespace DataCommander.Foundation.Collections.ObjectPool
         /// <summary>
         /// 
         /// </summary>
-        public int IdleCount => this.idleItems.Count;
+        public int IdleCount => this._idleItems.Count;
 
         /// <summary>
         /// 
         /// </summary>
-        public int ActiveCount => this.activeItems.Count;
+        public int ActiveCount => this._activeItems.Count;
 
 #endregion
 
@@ -98,9 +98,9 @@ namespace DataCommander.Foundation.Collections.ObjectPool
             var now = LocalTime.Default.Now;
             var obsoleteList = new List<ObjectPoolItem<T>>();
 
-            lock (this.idleItems)
+            lock (this._idleItems)
             {
-                var listNode = this.idleItems.First;
+                var listNode = this._idleItems.First;
 
                 while (listNode != null)
                 {
@@ -111,7 +111,7 @@ namespace DataCommander.Foundation.Collections.ObjectPool
                     if (timeSpan.TotalSeconds >= 10.0)
                     {
                         obsoleteList.Add( item );
-                        this.idleItems.Remove( listNode );
+                        this._idleItems.Remove( listNode );
                     }
 
                     listNode = next;
@@ -125,7 +125,7 @@ namespace DataCommander.Foundation.Collections.ObjectPool
 
             if (obsoleteList.Count > 0)
             {
-                log.Trace("{0} obsolete items destroyed from ObjectPool. idle: {1}, active: {2}.", obsoleteList.Count, this.idleItems.Count, this.activeItems.Count );
+                Log.Trace("{0} obsolete items destroyed from ObjectPool. idle: {1}, active: {2}.", obsoleteList.Count, this._idleItems.Count, this._activeItems.Count );
             }
         }
 #endregion
@@ -138,55 +138,55 @@ namespace DataCommander.Foundation.Collections.ObjectPool
 
             while (true)
             {
-                if (this.idleItems.Count > 0)
+                if (this._idleItems.Count > 0)
                 {
-                    lock (this.idleItems)
+                    lock (this._idleItems)
                     {
-                        if (this.idleItems.Count > 0)
+                        if (this._idleItems.Count > 0)
                         {
-                            var last = this.idleItems.Last;
-                            this.idleItems.RemoveLast();
+                            var last = this._idleItems.Last;
+                            this._idleItems.RemoveLast();
                             item = last.Value;
-                            log.Trace("Item(key:{0}) reused from object pool. idle: {1}, active: {2}.", item.Key, this.idleItems.Count, this.activeItems.Count );
+                            Log.Trace("Item(key:{0}) reused from object pool. idle: {1}, active: {2}.", item.Key, this._idleItems.Count, this._activeItems.Count );
                         }
                     }
 
-                    lock (this.activeItems)
+                    lock (this._activeItems)
                     {
-                        this.activeItems.Add( item.Key, item );
+                        this._activeItems.Add( item.Key, item );
                     }
 
-                    this.factory.InitializeObject( item.Value );
+                    this._factory.InitializeObject( item.Value );
                     break;
                 }
                 else
                 {
-                    var count = this.idleItems.Count + this.activeItems.Count;
+                    var count = this._idleItems.Count + this._activeItems.Count;
 
                     if (count < this.MaxSize)
                     {
                         var creationDate = LocalTime.Default.Now;
-                        var value = this.factory.CreateObject();
-                        var key = Interlocked.Increment( ref this.key );
+                        var value = this._factory.CreateObject();
+                        var key = Interlocked.Increment( ref this._key );
                         item = new ObjectPoolItem<T>( key, value, creationDate );
 
-                        lock (this.activeItems)
+                        lock (this._activeItems)
                         {
-                            this.activeItems.Add( item.Key, item );
+                            this._activeItems.Add( item.Key, item );
                         }
 
-                        log.Trace("New item(key:{0}) created in object pool. idle: {1}, active: {2}.", key, this.idleItems.Count, this.activeItems.Count );
+                        Log.Trace("New item(key:{0}) created in object pool. idle: {1}, active: {2}.", key, this._idleItems.Count, this._activeItems.Count );
                         break;
                     }
                     else
                     {
-                        log.Trace("object pool is active. Waiting for idle item..." );
-                        this.idleEvent.Reset();
+                        Log.Trace("object pool is active. Waiting for idle item..." );
+                        this._idleEvent.Reset();
 
                         WaitHandle[] waitHandles =
                         {
                             cancellationToken.WaitHandle,
-                            this.idleEvent
+                            this._idleEvent
                         };
 
                         var i = WaitHandle.WaitAny( waitHandles, 30000, false );
@@ -213,25 +213,25 @@ namespace DataCommander.Foundation.Collections.ObjectPool
         {
             bool idle;
 
-            lock (this.activeItems)
+            lock (this._activeItems)
             {
-                this.activeItems.Remove( item.Key );
+                this._activeItems.Remove( item.Key );
             }
 
-            lock (this.idleItems)
+            lock (this._idleItems)
             {
-                var count = this.activeItems.Count + this.idleItems.Count;
+                var count = this._activeItems.Count + this._idleItems.Count;
                 idle = count < this.MaxSize;
 
                 if (idle)
                 {
-                    this.idleItems.AddLast( item );
+                    this._idleItems.AddLast( item );
                 }
             }
 
             if (idle)
             {
-                this.idleEvent.Set();
+                this._idleEvent.Set();
             }
             else
             {
@@ -245,37 +245,37 @@ namespace DataCommander.Foundation.Collections.ObjectPool
 
         private void Dispose( bool disposing )
         {
-            if (!this.disposed)
+            if (!this._disposed)
             {
                 if (disposing)
                 {
-                    if (this.timer != null)
+                    if (this._timer != null)
                     {
-                        this.timer.Dispose();
-                        this.timer = null;
+                        this._timer.Dispose();
+                        this._timer = null;
                     }
 
-                    lock (this.idleItems)
+                    lock (this._idleItems)
                     {
-                        foreach (var item in this.idleItems)
+                        foreach (var item in this._idleItems)
                         {
                             this.FactoryDestroyObject( item );
                         }
 
-                        this.idleItems.Clear();
-                        this.idleItems = null;
+                        this._idleItems.Clear();
+                        this._idleItems = null;
                     }
 
-                    lock (this.activeItems)
+                    lock (this._activeItems)
                     {
-                        foreach (var item in this.activeItems.Values)
+                        foreach (var item in this._activeItems.Values)
                         {
-                            log.Trace("object pool item(key:{0}) is active.", item.Key );
+                            Log.Trace("object pool item(key:{0}) is active.", item.Key );
                         }
                     }
                 }
 
-                this.disposed = true;
+                this._disposed = true;
             }
         }
 
@@ -286,8 +286,8 @@ namespace DataCommander.Foundation.Collections.ObjectPool
 
         private void FactoryDestroyObject( ObjectPoolItem<T> item )
         {
-            this.factory.DestroyObject( item.Value );
-            log.Trace("ObjectPool item(key:{0}) destroyed.", item.Key );
+            this._factory.DestroyObject( item.Value );
+            Log.Trace("ObjectPool item(key:{0}) destroyed.", item.Key );
         }
 
 #endregion

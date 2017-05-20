@@ -8,7 +8,7 @@ namespace DataCommander.Foundation.Data.PTypes
     /// </summary>
     public struct PDecimal : INullable
     {
-        private SqlDecimal sql;
+        private SqlDecimal _sql;
 
         /// <summary>
         /// 
@@ -16,7 +16,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="value"></param>
         public PDecimal( decimal value )
         {
-            this.sql = value;
+            this._sql = value;
             this.ValueType = PValueType.Value;
         }
 
@@ -26,14 +26,14 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="value"></param>
         public PDecimal( SqlDecimal value )
         {
-            this.sql = value;
+            this._sql = value;
             this.ValueType = value.IsNull ? PValueType.Null : PValueType.Value;
         }
 
         private PDecimal( PValueType type )
         {
             this.ValueType = type;
-            this.sql = SqlDecimal.Null;
+            this._sql = SqlDecimal.Null;
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns></returns>
         public static implicit operator decimal( PDecimal value )
         {
-            return (decimal) value.sql;
+            return (decimal) value._sql;
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace DataCommander.Foundation.Data.PTypes
             {
                 if (x.ValueType == PValueType.Value)
                 {
-                    isEqual = x.sql.Value == y.sql.Value;
+                    isEqual = x._sql.Value == y._sql.Value;
                 }
             }
 
@@ -143,7 +143,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns></returns>
         public override int GetHashCode()
         {
-            var hashCode = this.sql.GetHashCode();
+            var hashCode = this._sql.GetHashCode();
             return hashCode;
         }
 
@@ -183,7 +183,7 @@ namespace DataCommander.Foundation.Data.PTypes
                         break;
 
                     case PValueType.Value:
-                        value = this.sql;
+                        value = this._sql;
                         break;
 
                     default:
@@ -199,17 +199,17 @@ namespace DataCommander.Foundation.Data.PTypes
                 if (value == null)
                 {
                     this.ValueType = PValueType.Default;
-                    this.sql = SqlDecimal.Null;
+                    this._sql = SqlDecimal.Null;
                 }
                 else if (value == DBNull.Value)
                 {
                     this.ValueType = PValueType.Null;
-                    this.sql = SqlDecimal.Null;
+                    this._sql = SqlDecimal.Null;
                 }
                 else
                 {
-                    this.sql = (SqlDecimal) value;
-                    this.ValueType = this.sql.IsNull ? PValueType.Null : PValueType.Value;
+                    this._sql = (SqlDecimal) value;
+                    this.ValueType = this._sql.IsNull ? PValueType.Null : PValueType.Value;
                 }
             }
         }
@@ -220,7 +220,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns></returns>
         public override string ToString()
         {
-            return this.sql.ToString();
+            return this._sql.ToString();
         }
 
         /// <summary>

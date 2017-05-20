@@ -3,7 +3,7 @@ namespace DataCommander.Foundation.Data
     using System.Data;
 
     //[ContractClassFor(typeof (IDbTransactionScope))]
-    internal abstract class IDbTransactionScopeContract : IDbTransactionScope
+    internal abstract class DbTransactionScopeContract : IDbTransactionScope
     {
         IDbConnection IDbTransactionScope.Connection
         {

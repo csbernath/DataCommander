@@ -10,7 +10,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public static class IDataReaderExtensions
+    public static class DataReaderExtensions
     {
         public static void Read(this IDataReader dataReader, Action read)
         {

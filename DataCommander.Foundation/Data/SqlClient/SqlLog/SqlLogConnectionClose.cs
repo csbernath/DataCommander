@@ -4,20 +4,20 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLog
 
     internal sealed class SqlLogConnectionClose : ISqlLogItem
     {
-        private readonly int applicationId;
-        private readonly int connectionNo;
-        private DateTime endDate;
+        private readonly int _applicationId;
+        private readonly int _connectionNo;
+        private DateTime _endDate;
 
         public SqlLogConnectionClose(
             int applicationId,
             int connectionNo,
             DateTime endDate )
         {
-            this.applicationId = applicationId;
-            this.connectionNo = connectionNo;
-            this.endDate = endDate;
+            this._applicationId = applicationId;
+            this._connectionNo = connectionNo;
+            this._endDate = endDate;
         }
 
-        public string CommandText => $"exec LogConnectionClose {this.applicationId},{this.connectionNo},{this.endDate.ToTSqlDateTime()}\r\n";
+        public string CommandText => $"exec LogConnectionClose {this._applicationId},{this._connectionNo},{this._endDate.ToTSqlDateTime()}\r\n";
     }
 }

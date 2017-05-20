@@ -6,7 +6,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public static class IDataRecordExtensions
+    public static class DataRecordExtensions
     {
         /// <summary>
         /// 

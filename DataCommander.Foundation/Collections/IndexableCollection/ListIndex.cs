@@ -9,7 +9,7 @@
     /// <typeparam name="T"></typeparam>
     public class ListIndex<T> : ICollectionIndex<T>, IList<T>
     {
-        private IList<T> list;
+        private IList<T> _list;
 
         /// <summary>
         /// 
@@ -44,7 +44,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.list.Count;
+        public int Count => this._list.Count;
 
         bool ICollection<T>.IsReadOnly => false;
 
@@ -60,7 +60,7 @@
 #if CONTRACTS_FULL
                 Contract.Assert(index < this.Count);
 #endif
-                return this.list[index];
+                return this._list[index];
             }
 
             set
@@ -68,7 +68,7 @@
 #if CONTRACTS_FULL
                 Contract.Assert(index < this.Count);
 #endif
-                this.list[index] = value;
+                this._list[index] = value;
             }
         }
 
@@ -79,7 +79,7 @@
         /// <param name="arrayIndex"></param>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            this.list.CopyTo(array, arrayIndex);
+            this._list.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@
         /// <returns></returns>
         public int IndexOf(T item)
         {
-            return this.list.IndexOf(item);
+            return this._list.IndexOf(item);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@
         /// <param name="item"></param>
         public void Insert(int index, T item)
         {
-            this.list.Insert(index, item);
+            this._list.Insert(index, item);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@
         /// <param name="index"></param>
         public void RemoveAt(int index)
         {
-            this.list.RemoveAt(index);
+            this._list.RemoveAt(index);
         }
 
         #region ICollectionIndex<T> Members
@@ -119,7 +119,7 @@
         /// <param name="item"></param>
         public void Add(T item)
         {
-            this.list.Add(item);
+            this._list.Add(item);
         }
 
         /// <summary>
@@ -127,7 +127,7 @@
         /// </summary>
         public void Clear()
         {
-            this.list.Clear();
+            this._list.Clear();
         }
 
         /// <summary>
@@ -140,7 +140,7 @@
 #if CONTRACTS_FULL
             Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
 #endif
-            return this.list.Contains(item);
+            return this._list.Contains(item);
         }
 
         /// <summary>
@@ -150,7 +150,7 @@
         /// <returns></returns>
         public bool Remove(T item)
         {
-            return this.list.Remove(item);
+            return this._list.Remove(item);
         }
 
         #endregion
@@ -163,7 +163,7 @@
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            return this.list.GetEnumerator();
+            return this._list.GetEnumerator();
         }
 
         #endregion
@@ -172,7 +172,7 @@
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.list.GetEnumerator();
+            return this._list.GetEnumerator();
         }
 
         #endregion
@@ -185,7 +185,7 @@
 #endif
 
             this.Name = name;
-            this.list = list;
+            this._list = list;
         }
     }
 }

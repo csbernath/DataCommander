@@ -8,7 +8,7 @@ namespace DataCommander.Foundation.Data.SqlClient
     /// </summary>
     public sealed class SqlSequence
     {
-        private readonly int id;
+        private readonly int _id;
 
         /// <summary>
         /// 
@@ -16,7 +16,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <param name="id"></param>
         public SqlSequence( int id )
         {
-            this.id = id;
+            this._id = id;
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ end";
             var command = connection.CreateCommand();
             command.CommandType = CommandType.StoredProcedure;
             command.CommandText = "GetNextSequenceValue";
-            var parameter = new SqlParameter( "@id", SqlDbType.Int ) { Value = this.id };
+            var parameter = new SqlParameter( "@id", SqlDbType.Int ) { Value = this._id };
             command.Parameters.Add( parameter );
             var scalar = command.ExecuteScalar();
             var value = (int) scalar;

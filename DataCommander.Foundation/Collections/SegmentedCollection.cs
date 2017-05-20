@@ -12,9 +12,9 @@
     {
         #region Private Fields
 
-        private readonly int segmentLength;
-        private Segment first;
-        private Segment last;
+        private readonly int _segmentLength;
+        private Segment _first;
+        private Segment _last;
 
         #endregion
 
@@ -28,7 +28,7 @@
             Contract.Requires<ArgumentOutOfRangeException>(segmentLength > 0);
 #endif
 
-            this.segmentLength = segmentLength;
+            this._segmentLength = segmentLength;
         }
 
 #region ICollection<T> Members
@@ -39,28 +39,28 @@
         /// <param name="item"></param>
         public void Add(T item)
         {
-            var index = this.Count%this.segmentLength;
+            var index = this.Count%this._segmentLength;
 
             if (index == 0)
             {
                 var newSegment = new Segment
                 {
-                    Items = new T[this.segmentLength]
+                    Items = new T[this._segmentLength]
                 };
 
                 if (this.Count == 0)
                 {
-                    this.first = newSegment;
-                    this.last = newSegment;
+                    this._first = newSegment;
+                    this._last = newSegment;
                 }
                 else
                 {
-                    this.last.Next = newSegment;
-                    this.last = newSegment;
+                    this._last.Next = newSegment;
+                    this._last = newSegment;
                 }
             }
 
-            this.last.Items[index] = item;
+            this._last.Items[index] = item;
             this.Count++;
         }
 
@@ -70,8 +70,8 @@
         public void Clear()
         {
             this.Count = 0;
-            this.first = null;
-            this.last = null;
+            this._first = null;
+            this._last = null;
         }
 
         /// <summary>
@@ -107,15 +107,15 @@
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            var segment = this.first;
+            var segment = this._first;
 
             while (segment != null)
             {
                 int count;
-                if (segment != this.last)
-                    count = this.segmentLength;
+                if (segment != this._last)
+                    count = this._segmentLength;
                 else
-                    count = this.Count <= this.segmentLength ? this.Count : this.Count%segmentLength;
+                    count = this.Count <= this._segmentLength ? this.Count : this.Count%_segmentLength;
 
                 for (var i = 0; i < count; i++)
                 {

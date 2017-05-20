@@ -9,7 +9,7 @@
     /// </summary>
     public sealed class TypeDictionary<TValue>
     {
-        private readonly Dictionary<Type, TValue> selections = new Dictionary<Type, TValue>();
+        private readonly Dictionary<Type, TValue> _selections = new Dictionary<Type, TValue>();
 
         /// <summary>
         /// 
@@ -18,7 +18,7 @@
         public void Add<T>(TValue value)
         {
             var type = typeof (T);
-            this.selections.Add(type, value);
+            this._selections.Add(type, value);
         }
 
         /// <summary>
@@ -27,7 +27,7 @@
         public bool TryGetValue<T>(out TValue value)
         {
             var type = typeof (T);
-            return this.selections.TryGetValue(type, out value);
+            return this._selections.TryGetValue(type, out value);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@
         /// <returns></returns>
         public TValue GetValueOrDefault(Type type)
         {
-            return this.selections.GetValueOrDefault(type);
+            return this._selections.GetValueOrDefault(type);
         }
 
         /// <summary>

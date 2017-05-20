@@ -6,7 +6,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public static class IDataParameterExtensions
+    public static class DataParameterExtensions
     {
         /// <summary>
         /// 

@@ -8,8 +8,8 @@
     /// </summary>
     public struct PXml
     {
-        private readonly SqlXml sqlXml;
-        private PValueType type;
+        private readonly SqlXml _sqlXml;
+        private PValueType _type;
 
         /// <summary>
         /// 
@@ -32,8 +32,8 @@
         /// <param name="type"></param>
         private PXml( PValueType type )
         {
-            this.type = type;
-            this.sqlXml = null;
+            this._type = type;
+            this._sqlXml = null;
         }
 
         /// <summary>
@@ -42,22 +42,22 @@
         /// <param name="value"></param>
         public PXml( SqlXml value )
         {
-            this.sqlXml = value;
+            this._sqlXml = value;
 
             if (value != null)
             {
-                this.type = PValueType.Value;
+                this._type = PValueType.Value;
             }
             else
             {
-                this.type = PValueType.Null;
+                this._type = PValueType.Null;
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public object Value => this.sqlXml;
+        public object Value => this._sqlXml;
 
         /// <summary>
         /// 

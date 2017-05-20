@@ -9,7 +9,7 @@
     /// <typeparam name="T"></typeparam>
     public class LinkedListIndex<T> : ICollectionIndex<T>
     {
-        private readonly LinkedList<T> linkedList = new LinkedList<T>();
+        private readonly LinkedList<T> _linkedList = new LinkedList<T>();
 
         /// <summary>
         /// 
@@ -28,7 +28,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.linkedList.Count;
+        public int Count => this._linkedList.Count;
 
         /// <summary>
         /// 
@@ -41,7 +41,7 @@
         /// <param name="item"></param>
         void ICollection<T>.Add( T item )
         {
-            var node = this.linkedList.AddLast(item);
+            var node = this._linkedList.AddLast(item);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@
         /// </summary>
         void ICollection<T>.Clear()
         {
-            this.linkedList.Clear();
+            this._linkedList.Clear();
         }
 
         /// <summary>
@@ -59,7 +59,7 @@
         /// <returns></returns>
         public bool Contains(T item)
         {
-            return this.linkedList.Contains(item);
+            return this._linkedList.Contains(item);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@
         /// <param name="arrayIndex"></param>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            this.linkedList.CopyTo(array, arrayIndex);
+            this._linkedList.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@
         /// <returns></returns>
         bool ICollection<T>.Remove( T item )
         {
-            return this.linkedList.Remove(item);
+            return this._linkedList.Remove(item);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@
         /// <returns></returns>
         public IEnumerator<T> /*IEnumerable<T>.*/GetEnumerator()
         {
-            return this.linkedList.GetEnumerator();
+            return this._linkedList.GetEnumerator();
         }
 
         /// <summary>
@@ -97,7 +97,7 @@
         /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.linkedList.GetEnumerator();
+            return this._linkedList.GetEnumerator();
         }
     }
 }

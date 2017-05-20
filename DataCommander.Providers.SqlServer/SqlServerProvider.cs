@@ -295,7 +295,7 @@ namespace DataCommander.Providers.SqlServer
         {
             var schemaRow = new DbColumn(sourceSchemaRow);
             var columnSize = schemaRow.ColumnSize;
-            var allowDBNull = schemaRow.AllowDBNull;
+            var allowDBNull = schemaRow.AllowDbNull;
             var dataType = schemaRow.DataType;
             var typeCode = Type.GetTypeCode(dataType);
             string typeName;
@@ -884,7 +884,7 @@ order by 1", name.Database);
                             break;
                     }
 
-                    var allowDBNull = dataColumnSchema.AllowDBNull.GetValueOrDefault();
+                    var allowDBNull = dataColumnSchema.AllowDbNull.GetValueOrDefault();
                     if (!allowDBNull)
                     {
                         sb.Append(" not null");

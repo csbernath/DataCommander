@@ -7,7 +7,7 @@
     /// </summary>
     public sealed class TextDataRow
     {
-        private readonly Convert convert;
+        private readonly Convert _convert;
 
         /// <summary>
         /// 
@@ -22,7 +22,7 @@
 #endif
 
             this.Columns = columns;
-            this.convert = convert;
+            this._convert = convert;
             this.ItemArray = new object[columns.Count];
 
             for (var i = 0; i < this.ItemArray.Length; i++)
@@ -56,7 +56,7 @@
             {
                 var index = this.Columns.IndexOf(columnName, true);
                 var column = this.Columns[index];
-                var convertedValue = this.convert(value, column);
+                var convertedValue = this._convert(value, column);
                 this.ItemArray[index] = convertedValue;
             }
         }
@@ -87,7 +87,7 @@
             set
             {
                 var index = this.Columns.IndexOf(column, true);
-                var convertedValue = this.convert(value, column);
+                var convertedValue = this._convert(value, column);
                 this.ItemArray[index] = convertedValue;
             }
         }

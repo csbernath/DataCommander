@@ -3920,7 +3920,7 @@ namespace DataCommander.Providers.Query
                 var typeName = destinationProvider.GetColumnTypeName(this.Provider, dataRow, dataTypeNames[i]);
                 row[1] = schemaRow.ColumnName;
                 row[2] = typeName;
-                var allowDBNull = schemaRow.AllowDBNull;
+                var allowDBNull = schemaRow.AllowDbNull;
 
                 if (allowDBNull == false)
                 {

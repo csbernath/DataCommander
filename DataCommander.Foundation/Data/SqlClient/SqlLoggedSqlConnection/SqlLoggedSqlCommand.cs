@@ -5,8 +5,8 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
 
     internal sealed class SqlLoggedSqlCommand : IDbCommand
     {
-        private readonly SqlLoggedSqlConnection connection;
-        private readonly IDbCommand command;
+        private readonly SqlLoggedSqlConnection _connection;
+        private readonly IDbCommand _command;
 
         public SqlLoggedSqlCommand(
             SqlLoggedSqlConnection connection,
@@ -17,94 +17,94 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
             Contract.Requires(command != null);
 #endif
 
-            this.connection = connection;
-            this.command = command;
+            this._connection = connection;
+            this._command = command;
         }
 
         public string CommandText
         {
-            get => this.command.CommandText;
+            get => this._command.CommandText;
 
-            set => this.command.CommandText = value;
+            set => this._command.CommandText = value;
         }
 
         public int CommandTimeout
         {
-            get => this.command.CommandTimeout;
+            get => this._command.CommandTimeout;
 
-            set => this.command.CommandTimeout = value;
+            set => this._command.CommandTimeout = value;
         }
 
         public CommandType CommandType
         {
-            get => this.command.CommandType;
+            get => this._command.CommandType;
 
-            set => this.command.CommandType = value;
+            set => this._command.CommandType = value;
         }
 
         public IDbConnection Connection
         {
-            get => this.connection;
+            get => this._connection;
 
             set => throw new NotImplementedException();
         }
 
-        public IDataParameterCollection Parameters => this.command.Parameters;
+        public IDataParameterCollection Parameters => this._command.Parameters;
 
         public IDbTransaction Transaction
         {
-            get => this.command.Transaction;
+            get => this._command.Transaction;
 
-            set => this.command.Transaction = value;
+            set => this._command.Transaction = value;
         }
 
         public UpdateRowSource UpdatedRowSource
         {
-            get => this.command.UpdatedRowSource;
+            get => this._command.UpdatedRowSource;
 
-            set => this.command.UpdatedRowSource = value;
+            set => this._command.UpdatedRowSource = value;
         }
 
         public void Dispose()
         {
-            this.command.Dispose();
+            this._command.Dispose();
         }
 
         public void Cancel()
         {
-            this.command.Cancel();
+            this._command.Cancel();
         }
 
         public IDbDataParameter CreateParameter()
         {
-            return this.command.CreateParameter();
+            return this._command.CreateParameter();
         }
 
         public int ExecuteNonQuery()
         {
-            return this.connection.ExecuteNonQuery(this.command);
+            return this._connection.ExecuteNonQuery(this._command);
         }
 
         public IDataReader ExecuteReader()
         {
-            var loggedSqlDataReader = new SqlLoggedSqlDataReader(this.connection, this.command);
+            var loggedSqlDataReader = new SqlLoggedSqlDataReader(this._connection, this._command);
             return loggedSqlDataReader.Execute();
         }
 
         public IDataReader ExecuteReader(CommandBehavior behavior)
         {
-            var loggedSqlDataReader = new SqlLoggedSqlDataReader(this.connection, this.command);
+            var loggedSqlDataReader = new SqlLoggedSqlDataReader(this._connection, this._command);
             return loggedSqlDataReader.Execute(behavior);
         }
 
         public object ExecuteScalar()
         {
-            return this.connection.ExecuteScalar(this.command);
+            return this._connection.ExecuteScalar(this._command);
         }
 
         public void Prepare()
         {
-            this.command.Prepare();
+            this._command.Prepare();
         }
     }
 }

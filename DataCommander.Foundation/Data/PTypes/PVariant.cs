@@ -8,7 +8,7 @@ namespace DataCommander.Foundation.Data.PTypes
     /// </summary>
     public struct PVariant : INullable
     {
-        private object sql;
+        private object _sql;
 
         /// <summary>
         /// 
@@ -32,7 +32,7 @@ namespace DataCommander.Foundation.Data.PTypes
         private PVariant( PValueType type )
         {
             this.ValueType = type;
-            this.sql = null;
+            this._sql = null;
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace DataCommander.Foundation.Data.PTypes
                 this.ValueType = PValueType.Value;
             }
 
-            this.sql = value;
+            this._sql = value;
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace DataCommander.Foundation.Data.PTypes
                 {
                     case PValueType.Value:
                     case PValueType.Null:
-                        value = this.sql;
+                        value = this._sql;
                         break;
 
                     default:
@@ -116,7 +116,7 @@ namespace DataCommander.Foundation.Data.PTypes
                     this.ValueType = PValueType.Value;
                 }
 
-                this.sql = value;
+                this._sql = value;
             }
         }
 
@@ -136,7 +136,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns></returns>
         public override string ToString()
         {
-            return this.sql.ToString();
+            return this._sql.ToString();
         }
     }
 }

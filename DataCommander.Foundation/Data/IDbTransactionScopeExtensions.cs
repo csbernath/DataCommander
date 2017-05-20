@@ -8,7 +8,7 @@ namespace DataCommander.Foundation.Data
     /// <summary>
     /// 
     /// </summary>
-    public static class IDbTransactionScopeExtensions
+    public static class DbTransactionScopeExtensions
     {
         /// <summary>
         /// 

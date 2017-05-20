@@ -11,9 +11,9 @@ namespace DataCommander.Foundation.Data
     {
         #region Private Fields
 
-        private readonly IDbCommand command;
-        private readonly IDataReader dataReader;
-        private bool nextResultCalled = true;
+        private readonly IDbCommand _command;
+        private readonly IDataReader _dataReader;
+        private bool _nextResultCalled = true;
 
         #endregion
 
@@ -24,8 +24,8 @@ namespace DataCommander.Foundation.Data
             Contract.Requires<ArgumentNullException>(dataReader != null);
 #endif
 
-            this.command = command;
-            this.dataReader = dataReader;
+            this._command = command;
+            this._dataReader = dataReader;
         }
 
         internal static DataReader Create(
@@ -78,9 +78,9 @@ namespace DataCommander.Foundation.Data
 #endif
             this.PrivateNextResult();
 
-            while (this.dataReader.Read())
+            while (this._dataReader.Read())
             {
-                yield return read(this.dataReader);
+                yield return read(this._dataReader);
             }
         }
 
@@ -95,9 +95,9 @@ namespace DataCommander.Foundation.Data
 #endif
             this.PrivateNextResult();
 
-            while (this.dataReader.Read())
+            while (this._dataReader.Read())
             {
-                read(this.dataReader);
+                read(this._dataReader);
             }
         }
 
@@ -112,9 +112,9 @@ namespace DataCommander.Foundation.Data
 #endif
             this.PrivateNextResult();
 
-            while (this.dataReader.Read())
+            while (this._dataReader.Read())
             {
-                var succeeded = read(this.dataReader);
+                var succeeded = read(this._dataReader);
                 if (!succeeded)
                 {
                     break;
@@ -133,8 +133,8 @@ namespace DataCommander.Foundation.Data
             Contract.Assert(!this.nextResultCalled);
 #endif
 
-            var nextResult = this.dataReader.NextResult();
-            this.nextResultCalled = true;
+            var nextResult = this._dataReader.NextResult();
+            this._nextResultCalled = true;
 
             return nextResult;
         }
@@ -143,20 +143,20 @@ namespace DataCommander.Foundation.Data
 
         void IDisposable.Dispose()
         {
-            this.dataReader.Dispose();
-            this.command.Dispose();
+            this._dataReader.Dispose();
+            this._command.Dispose();
         }
 
         private void PrivateNextResult()
         {
-            if (this.nextResultCalled)
+            if (this._nextResultCalled)
             {
-                this.nextResultCalled = false;
+                this._nextResultCalled = false;
             }
             else
             {
-                var nextResult = this.dataReader.NextResult();
-                this.nextResultCalled = true;
+                var nextResult = this._dataReader.NextResult();
+                this._nextResultCalled = true;
 
                 if (!nextResult)
                 {

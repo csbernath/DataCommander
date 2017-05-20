@@ -6,7 +6,7 @@
     /// <typeparam name="T"></typeparam>
     public struct DataParameterValue<T> : IDataParameterValue<T>
     {
-        private readonly T value;
+        private readonly T _value;
 
         /// <summary>
         /// 
@@ -15,13 +15,13 @@
         public DataParameterValue( T value )
         {
             this.Type = DataParameterValueType.Value;
-            this.value = value;
+            this._value = value;
         }
 
         private DataParameterValue( DataParameterValueType type )
         {
             this.Type = type;
-            this.value = default( T );
+            this._value = default( T );
         }
 
         /// <summary>
@@ -75,7 +75,7 @@
                 Contract.Assert( this.Type == DataParameterValueType.Value );
 #endif
 
-                return this.value;
+                return this._value;
             }
         }
 

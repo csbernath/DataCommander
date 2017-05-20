@@ -8,13 +8,13 @@ namespace DataCommander.Foundation.Data
     /// </summary>
     public class SafeDbCommand : IDbCommand
     {
-        private readonly SafeDbConnection connection;
+        private readonly SafeDbConnection _connection;
 
         internal SafeDbCommand(
             SafeDbConnection connection,
             IDbCommand command )
         {
-            this.connection = connection;
+            this._connection = connection;
             this.Command = command;
         }
 
@@ -49,7 +49,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public int ExecuteNonQuery()
         {
-            return this.connection.ExecuteNonQuery( this.Command );
+            return this._connection.ExecuteNonQuery( this.Command );
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public IDataReader ExecuteReader()
         {
-            return this.connection.ExecuteReader( this.Command, CommandBehavior.Default );
+            return this._connection.ExecuteReader( this.Command, CommandBehavior.Default );
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public IDataReader ExecuteReader( CommandBehavior behavior )
         {
-            return this.connection.ExecuteReader( this.Command, behavior );
+            return this._connection.ExecuteReader( this.Command, behavior );
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace DataCommander.Foundation.Data
         /// <returns></returns>
         public object ExecuteScalar()
         {
-            return this.connection.ExecuteScalar( this.Command );
+            return this._connection.ExecuteScalar( this.Command );
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public IDbConnection Connection
         {
-            get => this.connection;
+            get => this._connection;
 
             set => throw new NotImplementedException();
         }

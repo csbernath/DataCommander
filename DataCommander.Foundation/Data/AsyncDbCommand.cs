@@ -9,8 +9,8 @@ namespace DataCommander.Foundation.Data
     {
         #region Private Fields
 
-        private readonly AsyncDbConnection connection;
-        private readonly IDbCommand command;
+        private readonly AsyncDbConnection _connection;
+        private readonly IDbCommand _command;
 
         #endregion
 
@@ -21,8 +21,8 @@ namespace DataCommander.Foundation.Data
             Contract.Requires<ArgumentNullException>(command != null);
 #endif
 
-            this.connection = connection;
-            this.command = command;
+            this._connection = connection;
+            this._command = command;
         }
 
 #region IDbCommand Members
@@ -54,12 +54,12 @@ namespace DataCommander.Foundation.Data
                 Contract.Assert(this.command != null);
 #endif
 
-                return this.command.CommandType;
+                return this._command.CommandType;
             }
 
             set
             {
-                this.command.CommandType = value;
+                this._command.CommandType = value;
             }
         }
 
@@ -100,7 +100,7 @@ namespace DataCommander.Foundation.Data
             Contract.Assert(this.connection != null);
 #endif
 
-            return this.connection.ExecuteNonQuery(this);
+            return this._connection.ExecuteNonQuery(this);
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace DataCommander.Foundation.Data
 #if CONTRACTS_FULL
                 Contract.Assert(this.command != null);
 #endif
-                return this.command.CommandText;
+                return this._command.CommandText;
             }
 
             set
@@ -182,7 +182,7 @@ namespace DataCommander.Foundation.Data
 #if CONTRACTS_FULL
                 Contract.Assert(this.command != null);
 #endif
-                this.command.CommandText = value;
+                this._command.CommandText = value;
             }
         }
 
@@ -196,7 +196,7 @@ namespace DataCommander.Foundation.Data
 #if CONTRACTS_FULL
                 Contract.Assert(this.command != null);
 #endif
-                return this.command.Parameters;
+                return this._command.Parameters;
             }
         }
 
@@ -211,7 +211,7 @@ namespace DataCommander.Foundation.Data
                 Contract.Assert(this.command != null);
 #endif
 
-                return this.command.Transaction;
+                return this._command.Transaction;
             }
 
             set
@@ -220,7 +220,7 @@ namespace DataCommander.Foundation.Data
                 Contract.Assert(this.command != null);
 #endif
 
-                this.command.Transaction = value;
+                this._command.Transaction = value;
             }
         }
 

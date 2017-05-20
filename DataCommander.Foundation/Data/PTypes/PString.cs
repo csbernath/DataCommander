@@ -9,7 +9,7 @@ namespace DataCommander.Foundation.Data.PTypes
     /// </summary>
     public struct PString : INullable
     {
-        private SqlString sql;
+        private SqlString _sql;
 
         /// <summary>
         /// 
@@ -29,7 +29,7 @@ namespace DataCommander.Foundation.Data.PTypes
         private PString( PValueType type )
         {
             this.ValueType = type;
-            this.sql = SqlString.Null;
+            this._sql = SqlString.Null;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="value"></param>
         public PString( char value )
         {
-            this.sql = value.ToString();
+            this._sql = value.ToString();
             this.ValueType = PValueType.Value;
         }
 
@@ -49,7 +49,7 @@ namespace DataCommander.Foundation.Data.PTypes
         [DebuggerStepThrough]
         public PString( string value )
         {
-            this.sql = value;
+            this._sql = value;
             this.ValueType = PValueType.Value;
         }
 
@@ -59,7 +59,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="value"></param>
         public PString( SqlString value )
         {
-            this.sql = value;
+            this._sql = value;
             this.ValueType = value.IsNull ? PValueType.Null : PValueType.Value;
         }
 
@@ -101,7 +101,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns></returns>
         public static implicit operator string( PString value )
         {
-            return (string) value.sql;
+            return (string) value._sql;
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace DataCommander.Foundation.Data.PTypes
             {
                 if (x.ValueType == PValueType.Value)
                 {
-                    isEqual = x.sql.Value == y.sql.Value;
+                    isEqual = x._sql.Value == y._sql.Value;
                 }
             }
 
@@ -181,7 +181,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns></returns>
         public override int GetHashCode()
         {
-            var hashCode = this.sql.GetHashCode();
+            var hashCode = this._sql.GetHashCode();
             return hashCode;
         }
 
@@ -218,7 +218,7 @@ namespace DataCommander.Foundation.Data.PTypes
                 {
                     case PValueType.Value:
                     case PValueType.Null:
-                        value = this.sql;
+                        value = this._sql;
                         break;
 
                     default:
@@ -234,17 +234,17 @@ namespace DataCommander.Foundation.Data.PTypes
                 if (value == null)
                 {
                     this.ValueType = PValueType.Default;
-                    this.sql = SqlString.Null;
+                    this._sql = SqlString.Null;
                 }
                 else if (value == DBNull.Value)
                 {
                     this.ValueType = PValueType.Null;
-                    this.sql = SqlString.Null;
+                    this._sql = SqlString.Null;
                 }
                 else
                 {
-                    this.sql = (SqlString) value;
-                    this.ValueType = this.sql.IsNull ? PValueType.Null : PValueType.Value;
+                    this._sql = (SqlString) value;
+                    this.ValueType = this._sql.IsNull ? PValueType.Null : PValueType.Value;
                 }
             }
         }
@@ -255,7 +255,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns></returns>
         public override string ToString()
         {
-            return this.sql.ToString();
+            return this._sql.ToString();
         }
     }
 }

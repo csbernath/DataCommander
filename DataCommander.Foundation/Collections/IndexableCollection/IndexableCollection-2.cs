@@ -9,12 +9,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.defaultIndex.Count;
+        public int Count => this._defaultIndex.Count;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadOnly => this.defaultIndex.IsReadOnly;
+        public bool IsReadOnly => this._defaultIndex.IsReadOnly;
 
         /// <summary>
         /// 
@@ -49,7 +49,7 @@
 #if CONTRACTS_FULL
             Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
 #endif
-            return this.defaultIndex.Contains(item);
+            return this._defaultIndex.Contains(item);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@
         /// <param name="arrayIndex"></param>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            this.defaultIndex.CopyTo(array, arrayIndex);
+            this._defaultIndex.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -78,12 +78,12 @@
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            return this.defaultIndex.GetEnumerator();
+            return this._defaultIndex.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.defaultIndex.GetEnumerator();
+            return this._defaultIndex.GetEnumerator();
         }
     }
 }

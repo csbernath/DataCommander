@@ -39,7 +39,7 @@
     /// </remarks>
     public partial class IndexableCollection<T>
     {
-        private readonly ICollectionIndex<T> defaultIndex;
+        private readonly ICollectionIndex<T> _defaultIndex;
 
         /// <summary>
         /// 
@@ -52,7 +52,7 @@
             Contract.Ensures(this.Indexes.Count == 1);
 #endif
 
-            this.defaultIndex = defaultIndex;
+            this._defaultIndex = defaultIndex;
             this.Indexes.Add(defaultIndex);
         }
 

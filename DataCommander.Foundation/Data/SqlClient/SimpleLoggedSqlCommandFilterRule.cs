@@ -7,10 +7,10 @@ namespace DataCommander.Foundation.Data.SqlClient
     /// </summary>
     internal sealed class SimpleLoggedSqlCommandFilterRule
     {
-        private readonly string userName;
-        private readonly string hostName;
-        private readonly string database;
-        private readonly string commandText;
+        private readonly string _userName;
+        private readonly string _hostName;
+        private readonly string _database;
+        private readonly string _commandText;
 
         public SimpleLoggedSqlCommandFilterRule(
             bool include,
@@ -20,10 +20,10 @@ namespace DataCommander.Foundation.Data.SqlClient
             string commandText)
         {
             this.Include = include;
-            this.userName = userName;
-            this.hostName = hostName;
-            this.database = database;
-            this.commandText = commandText;
+            this._userName = userName;
+            this._hostName = hostName;
+            this._database = database;
+            this._commandText = commandText;
         }
 
         public bool Match(
@@ -34,10 +34,10 @@ namespace DataCommander.Foundation.Data.SqlClient
             var database = command.Connection.Database;
             var commandText = command.CommandText;
             var match =
-                (this.userName == null || this.userName == userName) &&
-                (this.hostName == null || this.hostName == hostName) &&
-                (this.database == null || this.database == database) &&
-                (this.commandText == null || this.commandText == commandText);
+                (this._userName == null || this._userName == userName) &&
+                (this._hostName == null || this._hostName == hostName) &&
+                (this._database == null || this._database == database) &&
+                (this._commandText == null || this._commandText == commandText);
 
             return match;
         }

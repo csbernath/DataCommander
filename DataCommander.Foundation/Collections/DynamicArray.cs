@@ -11,9 +11,9 @@
     /// <typeparam name="T"></typeparam>
     public class DynamicArray<T> : IList<T>
     {
-        private readonly int maxSize;
+        private readonly int _maxSize;
 
-        private T[] array;
+        private T[] _array;
 
         /// <summary>
         /// 
@@ -22,8 +22,8 @@
         /// <param name="maxSize"></param>
         public DynamicArray(int initialSize, int maxSize)
         {
-            this.array = new T[initialSize];
-            this.maxSize = maxSize;
+            this._array = new T[initialSize];
+            this._maxSize = maxSize;
         }
 
         #region IList<T> Members
@@ -35,7 +35,7 @@
         /// <returns></returns>
         public int IndexOf(T item)
         {
-            return this.array.IndexOf(item);
+            return this._array.IndexOf(item);
         }
 
         /// <summary>
@@ -60,9 +60,9 @@
         /// <returns></returns>
         public T this[int index]
         {
-            get => this.array[index];
+            get => this._array[index];
 
-            set => this.array[index] = value;
+            set => this._array[index] = value;
         }
 
         #endregion
@@ -79,24 +79,24 @@
             Contract.Assert(this.Count < this.maxSize);
 #endif
 
-            if (this.Count == this.array.Length)
+            if (this.Count == this._array.Length)
             {
                 var newSize = this.Count == 0 ? 1 : 2*this.Count;
 
-                if (newSize > this.maxSize)
+                if (newSize > this._maxSize)
                 {
-                    newSize = this.maxSize;
+                    newSize = this._maxSize;
                 }
 
                 if (newSize > this.Count)
                 {
                     var newArray = new T[newSize];
-                    Array.Copy(this.array, newArray, this.array.Length);
-                    this.array = newArray;
+                    Array.Copy(this._array, newArray, this._array.Length);
+                    this._array = newArray;
                 }
             }
 
-            this.array[this.Count] = item;
+            this._array[this.Count] = item;
             this.Count++;
         }
 
@@ -107,7 +107,7 @@
         {
             if (this.Count > 0)
             {
-                Array.Clear(this.array, 0, this.Count);
+                Array.Clear(this._array, 0, this.Count);
             }
 
             this.Count = 0;
@@ -120,7 +120,7 @@
         /// <returns></returns>
         public bool Contains(T item)
         {
-            return this.array.Contains(item);
+            return this._array.Contains(item);
         }
 
         void ICollection<T>.CopyTo(T[] array, int arrayIndex)
@@ -136,7 +136,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadOnly => this.array.IsReadOnly;
+        public bool IsReadOnly => this._array.IsReadOnly;
 
         bool ICollection<T>.Remove(T item)
         {
@@ -155,7 +155,7 @@
         {
             for (var i = 0; i < this.Count; i++)
             {
-                yield return this.array[i];
+                yield return this._array[i];
             }
         }
 

@@ -8,24 +8,24 @@ namespace DataCommander.Foundation.Data
     /// </summary>
     internal sealed class ConnectionStateManager : IDisposable
     {
-        private readonly IDbConnection connection;
-        private readonly ConnectionState state;
+        private readonly IDbConnection _connection;
+        private readonly ConnectionState _state;
 
         public ConnectionStateManager( IDbConnection connection )
         {
-            this.connection = connection;
+            this._connection = connection;
 
             if (connection != null)
             {
-                this.state = connection.State;
+                this._state = connection.State;
             }
         }
 
         public void Open()
         {
-            if (this.connection != null && this.state == ConnectionState.Closed)
+            if (this._connection != null && this._state == ConnectionState.Closed)
             {
-                this.connection.Open();
+                this._connection.Open();
             }
         }
 
@@ -33,9 +33,9 @@ namespace DataCommander.Foundation.Data
 
         public void Dispose()
         {
-            if (this.connection != null && this.state == ConnectionState.Closed)
+            if (this._connection != null && this._state == ConnectionState.Closed)
             {
-                this.connection.Close();
+                this._connection.Close();
             }
         }
 

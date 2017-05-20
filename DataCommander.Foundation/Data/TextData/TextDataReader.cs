@@ -15,14 +15,14 @@
     {
         #region Private Fields
 
-        private TextDataCommand command;
-        private readonly CommandBehavior behavior;
-        private readonly TextDataColumnCollection columns;
-        private DataTable schemaTable;
-        private readonly TextReader textReader;
-        private readonly TextDataStreamReader textDataStreamReader;
-        private object[] values;
-        private int rowCount;
+        private TextDataCommand _command;
+        private readonly CommandBehavior _behavior;
+        private readonly TextDataColumnCollection _columns;
+        private DataTable _schemaTable;
+        private readonly TextReader _textReader;
+        private readonly TextDataStreamReader _textDataStreamReader;
+        private object[] _values;
+        private int _rowCount;
 
         #endregion
 
@@ -32,18 +32,18 @@
             Contract.Requires(command != null);
 #endif
 
-            this.command = command;
-            this.behavior = behavior;
+            this._command = command;
+            this._behavior = behavior;
             var parameters = command.Parameters;
 #if CONTRACTS_FULL
             Contract.Assert(parameters != null);
 #endif
 
-            this.columns = parameters.GetParameterValue<TextDataColumnCollection>( "columns" );
+            this._columns = parameters.GetParameterValue<TextDataColumnCollection>( "columns" );
             var converters = parameters.GetParameterValue<IList<ITextDataConverter>>( "converters" );
             var getTextReader = parameters.GetParameterValue<IConverter<TextDataCommand, TextReader>>( "getTextReader" );
-            this.textReader = getTextReader.Convert( command );
-            this.textDataStreamReader = new TextDataStreamReader( this.textReader, this.columns, converters );
+            this._textReader = getTextReader.Convert( command );
+            this._textDataStreamReader = new TextDataStreamReader( this._textReader, this._columns, converters );
         }
 
         /// <summary>
@@ -61,7 +61,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override int FieldCount => this.columns.Count;
+        public override int FieldCount => this._columns.Count;
 
         /// <summary>
         /// 
@@ -70,7 +70,7 @@
         /// <returns></returns>
         public override bool GetBoolean( int ordinal )
         {
-            return (bool) this.values[ ordinal ];
+            return (bool) this._values[ ordinal ];
         }
 
         /// <summary>
@@ -80,7 +80,7 @@
         /// <returns></returns>
         public override byte GetByte( int ordinal )
         {
-            return (byte) this.values[ ordinal ];
+            return (byte) this._values[ ordinal ];
         }
 
         /// <summary>
@@ -104,7 +104,7 @@
         /// <returns></returns>
         public override char GetChar( int ordinal )
         {
-            return (char) this.values[ ordinal ];
+            return (char) this._values[ ordinal ];
         }
 
         /// <summary>
@@ -138,7 +138,7 @@
         /// <returns></returns>
         public override DateTime GetDateTime( int ordinal )
         {
-            return (DateTime) this.values[ ordinal ];
+            return (DateTime) this._values[ ordinal ];
         }
 
         /// <summary>
@@ -148,7 +148,7 @@
         /// <returns></returns>
         public override decimal GetDecimal( int ordinal )
         {
-            return (decimal) this.values[ ordinal ];
+            return (decimal) this._values[ ordinal ];
         }
 
         /// <summary>
@@ -158,7 +158,7 @@
         /// <returns></returns>
         public override double GetDouble( int ordinal )
         {
-            return (double) this.values[ ordinal ];
+            return (double) this._values[ ordinal ];
         }
 
         /// <summary>
@@ -187,7 +187,7 @@
         /// <returns></returns>
         public override float GetFloat( int ordinal )
         {
-            return (float) this.values[ ordinal ];
+            return (float) this._values[ ordinal ];
         }
 
         /// <summary>
@@ -197,7 +197,7 @@
         /// <returns></returns>
         public override Guid GetGuid( int ordinal )
         {
-            return (Guid) this.values[ ordinal ];
+            return (Guid) this._values[ ordinal ];
         }
 
         /// <summary>
@@ -207,7 +207,7 @@
         /// <returns></returns>
         public override short GetInt16( int ordinal )
         {
-            return (short) this.values[ ordinal ];
+            return (short) this._values[ ordinal ];
         }
 
         /// <summary>
@@ -217,7 +217,7 @@
         /// <returns></returns>
         public override int GetInt32( int ordinal )
         {
-            return (int) this.values[ ordinal ];
+            return (int) this._values[ ordinal ];
         }
 
         /// <summary>
@@ -227,7 +227,7 @@
         /// <returns></returns>
         public override long GetInt64( int ordinal )
         {
-            return (long) this.values[ ordinal ];
+            return (long) this._values[ ordinal ];
         }
 
         /// <summary>
@@ -237,7 +237,7 @@
         /// <returns></returns>
         public override string GetName( int ordinal )
         {
-            var column = this.columns[ ordinal ];
+            var column = this._columns[ ordinal ];
             return column.ColumnName;
         }
 
@@ -248,7 +248,7 @@
         /// <returns></returns>
         public override int GetOrdinal( string name )
         {
-            return this.columns.IndexOf( name );
+            return this._columns.IndexOf( name );
         }
 
         /// <summary>
@@ -257,15 +257,15 @@
         /// <returns></returns>
         public override DataTable GetSchemaTable()
         {
-            if (this.schemaTable == null)
+            if (this._schemaTable == null)
             {
-                this.schemaTable = new DataTable();
-                this.schemaTable.Locale = CultureInfo.InvariantCulture;
-                this.schemaTable.Columns.Add( "ColumnName", typeof( string ) );
-                this.schemaTable.Columns.Add( "DataType", typeof( Type ) );
-                this.schemaTable.Columns.Add( "IsKey", typeof( bool ) );
+                this._schemaTable = new DataTable();
+                this._schemaTable.Locale = CultureInfo.InvariantCulture;
+                this._schemaTable.Columns.Add( "ColumnName", typeof( string ) );
+                this._schemaTable.Columns.Add( "DataType", typeof( Type ) );
+                this._schemaTable.Columns.Add( "IsKey", typeof( bool ) );
 
-                foreach (var column in this.columns)
+                foreach (var column in this._columns)
                 {
                     object[] values =
                     {
@@ -274,11 +274,11 @@
                         false
                     };
 
-                    this.schemaTable.Rows.Add( values );
+                    this._schemaTable.Rows.Add( values );
                 }
             }
 
-            return this.schemaTable;
+            return this._schemaTable;
         }
 
         /// <summary>
@@ -288,7 +288,7 @@
         /// <returns></returns>
         public override string GetString( int ordinal )
         {
-            return (string) this.values[ ordinal ];
+            return (string) this._values[ ordinal ];
         }
 
         /// <summary>
@@ -298,7 +298,7 @@
         /// <returns></returns>
         public override object GetValue( int ordinal )
         {
-            return this.values[ ordinal ];
+            return this._values[ ordinal ];
         }
 
         /// <summary>
@@ -308,7 +308,7 @@
         /// <returns></returns>
         public override int GetValues( object[] values )
         {
-            this.values.CopyTo( values, 0 );
+            this._values.CopyTo( values, 0 );
             return values.Length;
         }
 
@@ -329,7 +329,7 @@
         /// <returns></returns>
         public override bool IsDBNull( int ordinal )
         {
-            return this.values[ ordinal ] == DBNull.Value;
+            return this._values[ ordinal ] == DBNull.Value;
         }
 
         /// <summary>
@@ -349,18 +349,18 @@
         {
             bool read;
 
-            if (this.behavior == CommandBehavior.SingleRow && this.rowCount == 1)
+            if (this._behavior == CommandBehavior.SingleRow && this._rowCount == 1)
             {
                 read = false;
             }
             else
             {
-                this.values = this.textDataStreamReader.ReadRow();
-                read = this.values != null;
+                this._values = this._textDataStreamReader.ReadRow();
+                read = this._values != null;
 
                 if (read)
                 {
-                    this.rowCount++;
+                    this._rowCount++;
                 }
             }
 
@@ -370,7 +370,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override int RecordsAffected => this.rowCount;
+        public override int RecordsAffected => this._rowCount;
 
         /// <summary>
         /// 
@@ -381,8 +381,8 @@
         {
             get
             {
-                var index = this.columns.IndexOf( name, true );
-                return this.values[ index ];
+                var index = this._columns.IndexOf( name, true );
+                return this._values[ index ];
             }
         }
 
@@ -391,6 +391,6 @@
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override object this[ int ordinal ] => this.values[ ordinal ];
+        public override object this[ int ordinal ] => this._values[ ordinal ];
     }
 }

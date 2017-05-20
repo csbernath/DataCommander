@@ -8,7 +8,7 @@ namespace DataCommander.Foundation.Data.PTypes
     /// </summary>
     public struct PBinary : INullable
     {
-        private SqlBinary sql;
+        private SqlBinary _sql;
 
         #region Constructors
 
@@ -18,14 +18,14 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="value"></param>
         public PBinary( byte[] value )
         {
-            this.sql = new SqlBinary( value );
+            this._sql = new SqlBinary( value );
             this.ValueType = PValueType.Value;
         }
 
         private PBinary( PValueType type )
         {
             this.ValueType = type;
-            this.sql = SqlBinary.Null;
+            this._sql = SqlBinary.Null;
         }
 
         #endregion
@@ -47,7 +47,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns></returns>
         public static implicit operator byte[]( PBinary value )
         {
-            return (byte[]) value.sql;
+            return (byte[]) value._sql;
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace DataCommander.Foundation.Data.PTypes
             {
                 if (x.ValueType == PValueType.Value)
                 {
-                    isEqual = x.sql.Value == y.sql.Value;
+                    isEqual = x._sql.Value == y._sql.Value;
                 }
             }
 
@@ -105,7 +105,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns></returns>
         public override int GetHashCode()
         {
-            var hashCode = this.sql.GetHashCode();
+            var hashCode = this._sql.GetHashCode();
             return hashCode;
         }
 
@@ -142,7 +142,7 @@ namespace DataCommander.Foundation.Data.PTypes
                 {
                     case PValueType.Value:
                     case PValueType.Null:
-                        value = this.sql;
+                        value = this._sql;
                         break;
 
                     default:
@@ -158,17 +158,17 @@ namespace DataCommander.Foundation.Data.PTypes
                 if (value == null)
                 {
                     this.ValueType = PValueType.Default;
-                    this.sql = SqlBinary.Null;
+                    this._sql = SqlBinary.Null;
                 }
                 else if (value == DBNull.Value)
                 {
                     this.ValueType = PValueType.Null;
-                    this.sql = SqlBinary.Null;
+                    this._sql = SqlBinary.Null;
                 }
                 else
                 {
                     this.ValueType = PValueType.Value;
-                    this.sql = (byte[]) value;
+                    this._sql = (byte[]) value;
                 }
             }
         }
@@ -180,7 +180,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         public override string ToString()
         {
-            return this.sql.ToString();
+            return this._sql.ToString();
         }
 
         /// <summary>

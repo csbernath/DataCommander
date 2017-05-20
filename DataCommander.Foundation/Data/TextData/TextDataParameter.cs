@@ -9,8 +9,8 @@
     /// </summary>
     public sealed class TextDataParameter : DbParameter
     {
-        private string name;
-        private object value;
+        private string _name;
+        private object _value;
 
         /// <summary>
         /// 
@@ -19,8 +19,8 @@
         /// <param name="value"></param>
         public TextDataParameter(string name, object value)
         {
-            this.name = name;
-            this.value = value;
+            this._name = name;
+            this._value = value;
         }
 
         /// <summary>
@@ -58,9 +58,9 @@
         /// </summary>
         public override string ParameterName
         {
-            get => this.name;
+            get => this._name;
 
-            set => this.name = value;
+            set => this._name = value;
         }
 
         /// <summary>
@@ -116,9 +116,9 @@
         /// </summary>
         public override object Value
         {
-            get => this.value;
+            get => this._value;
 
-            set => this.value = value;
+            set => this._value = value;
         }
     }
 }

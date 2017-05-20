@@ -5,9 +5,9 @@
 
     internal sealed class TextDataStreamWriter
     {
-        private readonly TextWriter textWriter;
+        private readonly TextWriter _textWriter;
 
-        private readonly IList<ITextDataConverter> converters;
+        private readonly IList<ITextDataConverter> _converters;
 
         public TextDataStreamWriter(TextWriter textWriter, IList<TextDataColumn> columns, IList<ITextDataConverter> converters)
         {
@@ -17,9 +17,9 @@
             Contract.Requires(converters != null);
 #endif
 
-            this.textWriter = textWriter;
+            this._textWriter = textWriter;
             this.Columns = columns;
-            this.converters = converters;
+            this._converters = converters;
         }
 
         public IList<TextDataColumn> Columns { get; }
@@ -34,14 +34,14 @@
             for (var i = 0; i < values.Length; i++)
             {
                 var value = values[i];
-                var converter = this.converters[i];
+                var converter = this._converters[i];
                 var column = this.Columns[i];
                 var valueString = converter.ToString(value, column);
 #if CONTRACTS_FULL
                 Contract.Assert(!string.IsNullOrEmpty(valueString));
                 Contract.Assert(column.MaxLength == valueString.Length);
 #endif
-                this.textWriter.Write(valueString);
+                this._textWriter.Write(valueString);
             }
         }
     }

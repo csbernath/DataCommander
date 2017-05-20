@@ -159,7 +159,7 @@
 
                 sb.AppendFormat("\t{0} {1}", dataColumnSchema.ColumnName, dataTypeName);
 
-                if (dataColumnSchema.AllowDBNull == false)
+                if (dataColumnSchema.AllowDbNull == false)
                 {
                     sb.Append(" not null");
                 }

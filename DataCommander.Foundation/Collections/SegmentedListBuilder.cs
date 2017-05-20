@@ -11,9 +11,9 @@
     {
         #region Private Fields
 
-        private readonly int segmentItemCapacity;
-        private readonly List<T[]> segments = new List<T[]>();
-        private int nextSegmentItemIndex;
+        private readonly int _segmentItemCapacity;
+        private readonly List<T[]> _segments = new List<T[]>();
+        private int _nextSegmentItemIndex;
 
         #endregion
 
@@ -26,7 +26,7 @@
 #if CONTRACTS_FULL
             Contract.Requires<ArgumentOutOfRangeException>(segmentItemCapacity > 0);
 #endif
-            this.segmentItemCapacity = segmentItemCapacity;
+            this._segmentItemCapacity = segmentItemCapacity;
         }
 
         /// <summary>
@@ -37,20 +37,20 @@
         {
             T[] currentSegment;
 
-            if (this.segments.Count > 0 && this.nextSegmentItemIndex < this.segmentItemCapacity)
+            if (this._segments.Count > 0 && this._nextSegmentItemIndex < this._segmentItemCapacity)
             {
-                var lastSegmentIndex = this.segments.Count - 1;
-                currentSegment = this.segments[lastSegmentIndex];
+                var lastSegmentIndex = this._segments.Count - 1;
+                currentSegment = this._segments[lastSegmentIndex];
             }
             else
             {
-                currentSegment = new T[this.segmentItemCapacity];
-                this.segments.Add(currentSegment);
-                nextSegmentItemIndex = 0;
+                currentSegment = new T[this._segmentItemCapacity];
+                this._segments.Add(currentSegment);
+                _nextSegmentItemIndex = 0;
             }
 
-            currentSegment[nextSegmentItemIndex] = item;
-            nextSegmentItemIndex++;
+            currentSegment[_nextSegmentItemIndex] = item;
+            _nextSegmentItemIndex++;
         }
 
         /// <summary>
@@ -61,12 +61,12 @@
             get
             {
                 var count = 0;
-                var segmentCount = this.segments.Count;
+                var segmentCount = this._segments.Count;
                 if (segmentCount > 0)
                 {
-                    count += (segmentCount - 1)*this.segmentItemCapacity;
+                    count += (segmentCount - 1)*this._segmentItemCapacity;
                 }
-                count += this.nextSegmentItemIndex;
+                count += this._nextSegmentItemIndex;
 
                 return count;
             }
@@ -79,18 +79,18 @@
         public IReadOnlyList<T> ToReadOnlyList()
         {
             var count = this.Count;
-            return new ReadOnlySegmentedList(this.segments, count);
+            return new ReadOnlySegmentedList(this._segments, count);
         }
 
         private sealed class ReadOnlySegmentedList : IReadOnlyList<T>
         {
-            private readonly IList<T[]> segments;
-            private readonly int count;
+            private readonly IList<T[]> _segments;
+            private readonly int _count;
 
             public ReadOnlySegmentedList(IList<T[]> segments, int count)
             {
-                this.segments = segments;
-                this.count = count;
+                this._segments = segments;
+                this._count = count;
             }
 
 #region IReadOnlyList<T> Members
@@ -99,10 +99,10 @@
             {
                 get
                 {
-                    var segmentLength = segments[0].Length;
+                    var segmentLength = _segments[0].Length;
 
                     var segmentIndex = index/segmentLength;
-                    var segment = this.segments[segmentIndex];
+                    var segment = this._segments[segmentIndex];
 
                     var segmentItemIndex = index%segmentLength;
                     var value = segment[segmentItemIndex];
@@ -110,17 +110,17 @@
                 }
             }
 
-            int IReadOnlyCollection<T>.Count => this.count;
+            int IReadOnlyCollection<T>.Count => this._count;
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator()
             {
                 var segmentIndex = 0;
-                var lastSegmentIndex = this.segments.Count - 1;
+                var lastSegmentIndex = this._segments.Count - 1;
 
-                foreach (var segment in this.segments)
+                foreach (var segment in this._segments)
                 {
                     var segmentLength = segment.Length;
-                    var segmentItemCount = segmentIndex < lastSegmentIndex ? segmentLength : this.count%segmentLength;
+                    var segmentItemCount = segmentIndex < lastSegmentIndex ? segmentLength : this._count%segmentLength;
 
                     for (var i = 0; i < segmentItemCount; i++)
                     {

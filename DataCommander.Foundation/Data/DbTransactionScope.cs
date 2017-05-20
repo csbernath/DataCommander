@@ -7,8 +7,8 @@ namespace DataCommander.Foundation.Data
     /// </summary>
     public sealed class DbTransactionScope : IDbTransactionScope
     {
-        private readonly IDbConnection connection;
-        private readonly IDbTransaction transaction;
+        private readonly IDbConnection _connection;
+        private readonly IDbTransaction _transaction;
 
         /// <summary>
         /// 
@@ -20,12 +20,12 @@ namespace DataCommander.Foundation.Data
 #if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(connection != null);
 #endif
-            this.connection = connection;
-            this.transaction = transaction;
+            this._connection = connection;
+            this._transaction = transaction;
         }
 
-        IDbConnection IDbTransactionScope.Connection => this.connection;
+        IDbConnection IDbTransactionScope.Connection => this._connection;
 
-        IDbTransaction IDbTransactionScope.Transaction => this.transaction;
+        IDbTransaction IDbTransactionScope.Transaction => this._transaction;
     }
 }

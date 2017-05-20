@@ -7,7 +7,7 @@ namespace DataCommander.Foundation.Data
     using System.Threading;
     using System.Threading.Tasks;
 
-    public static class IDbCommandExecutorExtensions
+    public static class DbCommandExecutorExtensions
     {
         public static void ExecuteCommands(this IDbCommandExecutor executor, IEnumerable<ExecuteCommandRequest> requests)
         {

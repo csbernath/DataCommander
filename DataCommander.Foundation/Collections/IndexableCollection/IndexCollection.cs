@@ -9,7 +9,7 @@
     /// <typeparam name="T"></typeparam>
     public class IndexCollection<T> : ICollection<ICollectionIndex<T>>
     {
-        private readonly Dictionary<string, ICollectionIndex<T>> dictionary = new Dictionary<string, ICollectionIndex<T>>();
+        private readonly Dictionary<string, ICollectionIndex<T>> _dictionary = new Dictionary<string, ICollectionIndex<T>>();
 
         /// <summary>
         /// 
@@ -21,7 +21,7 @@
             Contract.Assert(item != null);
 #endif
 
-            this.dictionary.Add(item.Name, item);
+            this._dictionary.Add(item.Name, item);
         }
 
         /// <summary>
@@ -29,7 +29,7 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public ICollectionIndex<T> this[string name] => this.dictionary[name];
+        public ICollectionIndex<T> this[string name] => this._dictionary[name];
 
         /// <summary>
         /// 
@@ -39,7 +39,7 @@
 #if CONTRACTS_FULL
             Contract.Ensures(this.Count == 0);
 #endif
-            this.dictionary.Clear();
+            this._dictionary.Clear();
         }
 
         /// <summary>
@@ -52,7 +52,7 @@
 #if CONTRACTS_FULL
             Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
 #endif
-            return this.dictionary.ContainsValue(item);
+            return this._dictionary.ContainsValue(item);
         }
 
         /// <summary>
@@ -62,13 +62,13 @@
         /// <param name="arrayIndex"></param>
         public void CopyTo(ICollectionIndex<T>[] array, int arrayIndex)
         {
-            this.dictionary.Values.CopyTo(array, arrayIndex);
+            this._dictionary.Values.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.dictionary.Count;
+        public int Count => this._dictionary.Count;
 
         /// <summary>
         /// 
@@ -83,11 +83,11 @@
         public bool Remove(ICollectionIndex<T> item)
         {
             bool succeeded;
-            var contains = this.dictionary.ContainsValue(item);
+            var contains = this._dictionary.ContainsValue(item);
 
             if (contains)
             {
-                succeeded = this.dictionary.Remove(item.Name);
+                succeeded = this._dictionary.Remove(item.Name);
             }
             else
             {
@@ -105,7 +105,7 @@
         /// <returns></returns>
         public bool TryGetValue(string name, out ICollectionIndex<T> item)
         {
-            return this.dictionary.TryGetValue(name, out item);
+            return this._dictionary.TryGetValue(name, out item);
         }
 
 #region IEnumerable<ICollectionIndex<T>> Members
@@ -116,7 +116,7 @@
         /// <returns></returns>
         public IEnumerator<ICollectionIndex<T>> GetEnumerator()
         {
-            return this.dictionary.Values.GetEnumerator();
+            return this._dictionary.Values.GetEnumerator();
         }
 
 #endregion
@@ -125,7 +125,7 @@
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.dictionary.Values.GetEnumerator();
+            return this._dictionary.Values.GetEnumerator();
         }
 
 #endregion

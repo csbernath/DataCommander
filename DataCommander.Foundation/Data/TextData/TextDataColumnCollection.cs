@@ -12,23 +12,23 @@
     /// </summary>
     public sealed class TextDataColumnCollection : IList<TextDataColumn>
     {
-        private readonly IndexableCollection<TextDataColumn> collection;
-        private readonly ListIndex<TextDataColumn> listIndex;
-        private readonly UniqueIndex<string, TextDataColumn> nameIndex;
+        private readonly IndexableCollection<TextDataColumn> _collection;
+        private readonly ListIndex<TextDataColumn> _listIndex;
+        private readonly UniqueIndex<string, TextDataColumn> _nameIndex;
 
         /// <summary>
         /// 
         /// </summary>
         public TextDataColumnCollection()
         {
-            this.listIndex = new ListIndex<TextDataColumn>( "List" );
+            this._listIndex = new ListIndex<TextDataColumn>( "List" );
 
-            this.nameIndex = new UniqueIndex<string, TextDataColumn>(
+            this._nameIndex = new UniqueIndex<string, TextDataColumn>(
                 "Name",
                 column => GetKeyResponse.Create( true, column.ColumnName ),
                 SortOrder.None );
 
-            this.collection = new IndexableCollection<TextDataColumn>( this.listIndex );
+            this._collection = new IndexableCollection<TextDataColumn>( this._listIndex );
         }
 
         /// <summary>
@@ -44,7 +44,7 @@
                 Contract.Requires( this.Contains( columnName ) );
 #endif
 
-                return this.nameIndex[ columnName ];
+                return this._nameIndex[ columnName ];
             }
         }
 
@@ -56,7 +56,7 @@
         [Pure]
         public bool Contains( string columnName )
         {
-            return this.nameIndex.ContainsKey( columnName );
+            return this._nameIndex.ContainsKey( columnName );
         }
 
         /// <summary>
@@ -67,12 +67,12 @@
         public int IndexOf( string columnName )
         {
             TextDataColumn column;
-            var contains = this.nameIndex.TryGetValue( columnName, out column );
+            var contains = this._nameIndex.TryGetValue( columnName, out column );
             int index;
 
             if (contains)
             {
-                index = this.listIndex.IndexOf( column );
+                index = this._listIndex.IndexOf( column );
             }
             else
             {
@@ -121,7 +121,7 @@
                 Contract.Assert( index < this.collection.Count );
 #endif
 
-                return this.listIndex[ index ];
+                return this._listIndex[ index ];
             }
 
             set
@@ -138,7 +138,7 @@
         /// <param name="item"></param>
         public void Add( TextDataColumn item )
         {
-            this.collection.Add( item );
+            this._collection.Add( item );
         }
 
         void ICollection<TextDataColumn>.Clear()
@@ -159,7 +159,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.collection.Count;
+        public int Count => this._collection.Count;
 
         bool ICollection<TextDataColumn>.IsReadOnly => throw new NotImplementedException();
 
@@ -174,7 +174,7 @@
 
         IEnumerator<TextDataColumn> IEnumerable<TextDataColumn>.GetEnumerator()
         {
-            return this.collection.GetEnumerator();
+            return this._collection.GetEnumerator();
         }
 
 #endregion
@@ -183,7 +183,7 @@
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.collection.GetEnumerator();
+            return this._collection.GetEnumerator();
         }
 
 #endregion
@@ -197,7 +197,7 @@
         /// <returns></returns>
         public int IndexOf( TextDataColumn item )
         {
-            return this.listIndex.IndexOf( item );
+            return this._listIndex.IndexOf( item );
         }
 
         /// <summary>

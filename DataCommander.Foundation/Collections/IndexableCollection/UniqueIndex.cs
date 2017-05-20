@@ -12,8 +12,8 @@
     /// <typeparam name="T"></typeparam>
     public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, T>
     {
-        private Func<T, GetKeyResponse<TKey>> getKey;
-        private IDictionary<TKey, T> dictionary;
+        private Func<T, GetKeyResponse<TKey>> _getKey;
+        private IDictionary<TKey, T> _dictionary;
 
         /// <summary>
         /// 
@@ -75,7 +75,7 @@
         /// <returns></returns>
         public T this[TKey key]
         {
-            get => this.dictionary[key];
+            get => this._dictionary[key];
 
             set => throw new NotSupportedException();
         }
@@ -88,7 +88,7 @@
         [Pure]
         public bool ContainsKey(TKey key)
         {
-            return this.dictionary.ContainsKey(key);
+            return this._dictionary.ContainsKey(key);
         }
 
         #region ICollectionIndex<TKey,T> Members
@@ -96,12 +96,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadOnly => this.dictionary.IsReadOnly;
+        public bool IsReadOnly => this._dictionary.IsReadOnly;
 
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.dictionary.Count;
+        public int Count => this._dictionary.Count;
 
         /// <summary>
         /// 
@@ -110,7 +110,7 @@
         /// <param name="arrayIndex"></param>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            this.dictionary.Values.CopyTo(array, arrayIndex);
+            this._dictionary.Values.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@
         /// <returns></returns>
         public bool TryGetValue(TKey key, out T item)
         {
-            return this.dictionary.TryGetValue(key, out item);
+            return this._dictionary.TryGetValue(key, out item);
         }
 
         /// <summary>
@@ -130,7 +130,7 @@
         /// <returns></returns>
         public IEnumerator<KeyValuePair<TKey, T>> GetEnumerator()
         {
-            return this.dictionary.GetEnumerator();
+            return this._dictionary.GetEnumerator();
         }
 
         #endregion
@@ -143,7 +143,7 @@
         /// <param name="item"></param>
         void ICollection<T>.Add(T item)
         {
-            var response = this.getKey(item);
+            var response = this._getKey(item);
 
             if (response.HasKey)
             {
@@ -151,7 +151,7 @@
 #if CONTRACTS_FULL
                 Contract.Assert(!this.dictionary.ContainsKey(key));
 #endif
-                this.dictionary.Add(key, item);
+                this._dictionary.Add(key, item);
             }
         }
 
@@ -160,7 +160,7 @@
         /// </summary>
         void ICollection<T>.Clear()
         {
-            this.dictionary.Clear();
+            this._dictionary.Clear();
         }
 
         /// <summary>
@@ -174,12 +174,12 @@
             Contract.Assert(item != null);
 #endif
 
-            var response = this.getKey(item);
+            var response = this._getKey(item);
             bool contains;
 
             if (response.HasKey)
             {
-                contains = this.dictionary.ContainsKey(response.Key);
+                contains = this._dictionary.ContainsKey(response.Key);
             }
             else
             {
@@ -200,12 +200,12 @@
             Contract.Assert(item != null);
 #endif
 
-            var response = this.getKey(item);
+            var response = this._getKey(item);
             bool succeeded;
 
             if (response.HasKey)
             {
-                succeeded = this.dictionary.Remove(response.Key);
+                succeeded = this._dictionary.Remove(response.Key);
             }
             else
             {
@@ -225,7 +225,7 @@
         /// <returns></returns>
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            return this.dictionary.Values.GetEnumerator();
+            return this._dictionary.Values.GetEnumerator();
         }
 
 #endregion
@@ -238,7 +238,7 @@
         /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.dictionary.Values.GetEnumerator();
+            return this._dictionary.Values.GetEnumerator();
         }
 
 #endregion
@@ -258,7 +258,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public ICollection<TKey> Keys => this.dictionary.Keys;
+        public ICollection<TKey> Keys => this._dictionary.Keys;
 
         /// <summary>
         /// 
@@ -273,7 +273,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public ICollection<T> Values => this.dictionary.Values;
+        public ICollection<T> Values => this._dictionary.Values;
 
 #endregion
 
@@ -300,7 +300,7 @@
 
         void ICollection<KeyValuePair<TKey, T>>.Clear()
         {
-            this.dictionary.Clear();
+            this._dictionary.Clear();
         }
 
         /// <summary>
@@ -334,8 +334,8 @@
 #endif
 
             this.Name = name;
-            this.getKey = getKey;
-            this.dictionary = dictionary;
+            this._getKey = getKey;
+            this._dictionary = dictionary;
         }
     }
 }

@@ -26,7 +26,7 @@
     /// </summary>
     public sealed class TextDataCommand : DbCommand
     {
-        private TextDataConnection connection;
+        private TextDataConnection _connection;
 
         #region Constructors
         #endregion
@@ -98,9 +98,9 @@
         /// </summary>
         protected override DbConnection DbConnection
         {
-            get => this.connection;
+            get => this._connection;
 
-            set => this.connection = (TextDataConnection) value;
+            set => this._connection = (TextDataConnection) value;
         }
 
         /// <summary>

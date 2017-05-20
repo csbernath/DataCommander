@@ -10,22 +10,22 @@
     /// </summary>
     public sealed class TextDataSetTableCollection : IList<TextDataSetTable>
     {
-        private readonly IndexableCollection<TextDataSetTable> collection;
-        private readonly ListIndex<TextDataSetTable> listIndex;
-        private readonly UniqueIndex<string, TextDataSetTable> nameIndex;
+        private readonly IndexableCollection<TextDataSetTable> _collection;
+        private readonly ListIndex<TextDataSetTable> _listIndex;
+        private readonly UniqueIndex<string, TextDataSetTable> _nameIndex;
 
         /// <summary>
         /// 
         /// </summary>
         public TextDataSetTableCollection()
         {
-            this.listIndex = new ListIndex<TextDataSetTable>( "List" );
-            this.nameIndex = new UniqueIndex<string, TextDataSetTable>(
+            this._listIndex = new ListIndex<TextDataSetTable>( "List" );
+            this._nameIndex = new UniqueIndex<string, TextDataSetTable>(
                 "Name",
                 item => GetKeyResponse.Create( true, item.Name ),
                 SortOrder.None );
-            this.collection = new IndexableCollection<TextDataSetTable>( this.listIndex );
-            this.collection.Indexes.Add( this.nameIndex );
+            this._collection = new IndexableCollection<TextDataSetTable>( this._listIndex );
+            this._collection.Indexes.Add( this._nameIndex );
         }
 
         /// <summary>
@@ -35,7 +35,7 @@
         /// <returns></returns>
         public bool Contains( string name )
         {
-            return this.nameIndex.ContainsKey( name );
+            return this._nameIndex.ContainsKey( name );
         }
 
         /// <summary>
@@ -43,7 +43,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public TextDataSetTable this[ int index ] => this.listIndex[ index ];
+        public TextDataSetTable this[ int index ] => this._listIndex[ index ];
 
         /// <summary>
         /// 
@@ -58,7 +58,7 @@
                 Contract.Assert( this.nameIndex.ContainsKey( name ) );
 #endif
 
-                return this.nameIndex[ name ];
+                return this._nameIndex[ name ];
             }
         }
 
@@ -99,12 +99,12 @@
 #if CONTRACTS_FULL
             Contract.Assert( item != null );
 #endif
-            this.collection.Add( item );
+            this._collection.Add( item );
         }
 
         void ICollection<TextDataSetTable>.Clear()
         {
-            this.collection.Clear();
+            this._collection.Clear();
         }
 
         bool ICollection<TextDataSetTable>.Contains( TextDataSetTable item )
@@ -120,7 +120,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.collection.Count;
+        public int Count => this._collection.Count;
 
         bool ICollection<TextDataSetTable>.IsReadOnly => throw new NotImplementedException();
 
@@ -135,7 +135,7 @@
 
         IEnumerator<TextDataSetTable> IEnumerable<TextDataSetTable>.GetEnumerator()
         {
-            return this.collection.GetEnumerator();
+            return this._collection.GetEnumerator();
         }
 
 #endregion
@@ -144,7 +144,7 @@
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.collection.GetEnumerator();
+            return this._collection.GetEnumerator();
         }
 
 #endregion

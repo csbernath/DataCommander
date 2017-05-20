@@ -11,7 +11,7 @@
     {
         #region Private Fields
 
-        private readonly IEqualityComparer<T>[] equalityComparers;
+        private readonly IEqualityComparer<T>[] _equalityComparers;
 
         #endregion
 
@@ -29,7 +29,7 @@
             Contract.Requires<ArgumentNullException>(Contract.ForAll(equalityComparers, c => c != null));
 #endif
 
-            this.equalityComparers = equalityComparers;
+            this._equalityComparers = equalityComparers;
         }
 
         #endregion
@@ -38,12 +38,12 @@
 
         bool IEqualityComparer<T>.Equals(T x, T y)
         {
-            return this.equalityComparers.All(c => c.Equals(x, y));
+            return this._equalityComparers.All(c => c.Equals(x, y));
         }
 
         int IEqualityComparer<T>.GetHashCode(T obj)
         {
-            var hashCodes = this.equalityComparers.Select(c => c.GetHashCode(obj));
+            var hashCodes = this._equalityComparers.Select(c => c.GetHashCode(obj));
             var hashCode = hashCodes.Aggregate(CombineHashCodes);
             return hashCode;
         }

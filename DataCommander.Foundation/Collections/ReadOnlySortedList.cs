@@ -14,9 +14,9 @@
     {
         #region Private Fields
 
-        private readonly IReadOnlyList<TValue> values;
-        private readonly Func<TValue, TKey> keySelector;
-        private readonly Comparison<TKey> comparison;
+        private readonly IReadOnlyList<TValue> _values;
+        private readonly Func<TValue, TKey> _keySelector;
+        private readonly Comparison<TKey> _comparison;
 
         #endregion
 
@@ -40,9 +40,9 @@
                 "keys must be unique and ordered");
 #endif
 
-            this.values = values;
-            this.keySelector = keySelector;
-            this.comparison = comparison;
+            this._values = values;
+            this._keySelector = keySelector;
+            this._comparison = comparison;
         }
 
         /// <summary>
@@ -76,7 +76,7 @@
         {
             get
             {
-                return this.values.Select(v => this.keySelector(v));
+                return this._values.Select(v => this._keySelector(v));
             }
         }
 
@@ -93,7 +93,7 @@
 
             if (index >= 0)
             {
-                value = this.values[index];
+                value = this._values[index];
                 succeeded = true;
             }
             else
@@ -108,7 +108,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public IEnumerable<TValue> Values => this.values;
+        public IEnumerable<TValue> Values => this._values;
 
         /// <summary>
         /// 
@@ -126,14 +126,14 @@
                     throw new KeyNotFoundException();
                 }
 
-                return this.values[index];
+                return this._values[index];
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.values.Count;
+        public int Count => this._values.Count;
 
         /// <summary>
         /// 
@@ -141,7 +141,7 @@
         /// <returns></returns>
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            return this.values.Select(value => KeyValuePair.Create(this.keySelector(value), value)).GetEnumerator();
+            return this._values.Select(value => KeyValuePair.Create(this._keySelector(value), value)).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -157,13 +157,13 @@
         {
             int indexOfKey;
 
-            if (this.values.Count > 0)
+            if (this._values.Count > 0)
             {
-                indexOfKey = BinarySearch.IndexOf(0, this.values.Count - 1, index =>
+                indexOfKey = BinarySearch.IndexOf(0, this._values.Count - 1, index =>
                 {
-                    var otherValue = this.values[index];
-                    var otherKey = this.keySelector(otherValue);
-                    return this.comparison(key, otherKey);
+                    var otherValue = this._values[index];
+                    var otherKey = this._keySelector(otherValue);
+                    return this._comparison(key, otherKey);
                 });
             }
             else

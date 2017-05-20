@@ -12,9 +12,9 @@
     {
         #region Private Fields
 
-        private T[] array;
-        private int head;
-        private int tail;
+        private T[] _array;
+        private int _head;
+        private int _tail;
 
         #endregion
 
@@ -30,7 +30,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Capacity => this.array.Length;
+        public int Capacity => this._array.Length;
 
         /// <summary>
         /// 
@@ -43,17 +43,17 @@
             Contract.Requires<ArgumentException>(this.Count < this.Capacity);
 #endif
 
-            if (this.head == -1)
+            if (this._head == -1)
             {
-                this.head = 0;
-                this.tail = 0;
+                this._head = 0;
+                this._tail = 0;
             }
             else
             {
-                this.head = (this.head - 1) % this.array.Length;
+                this._head = (this._head - 1) % this._array.Length;
             }
 
-            this.array[this.head] = item;
+            this._array[this._head] = item;
             this.Count++;
         }
 
@@ -68,17 +68,17 @@
             Contract.Assert(this.Count < this.array.Length);
 #endif
 
-            if (this.head == -1)
+            if (this._head == -1)
             {
-                this.head = 0;
-                this.tail = 0;
+                this._head = 0;
+                this._tail = 0;
             }
             else
             {
-                this.tail = (this.tail + 1) % this.array.Length;
+                this._tail = (this._tail + 1) % this._array.Length;
             }
 
-            this.array[this.tail] = item;
+            this._array[this._tail] = item;
             this.Count++;
         }
 
@@ -107,7 +107,7 @@
 #if CONTRACTS_FULL
             Contract.Requires<InvalidOperationException>(this.Count > 0);
 #endif
-            return this.array[this.head];
+            return this._array[this._head];
         }
 
         /// <summary>
@@ -120,9 +120,9 @@
             Contract.Requires<InvalidOperationException>(this.Count > 0);
 #endif
 
-            var item = this.array[this.head];
-            this.array[this.head] = default(T);
-            this.head = (this.head + 1) % this.array.Length;
+            var item = this._array[this._head];
+            this._array[this._head] = default(T);
+            this._head = (this._head + 1) % this._array.Length;
             this.Count--;
 
             return item;
@@ -138,7 +138,7 @@
             Contract.Requires<InvalidOperationException>(this.Count > 0);
 #endif
 
-            return this.array[this.tail];
+            return this._array[this._tail];
         }
 
         /// <summary>
@@ -151,9 +151,9 @@
             Contract.Requires<InvalidOperationException>(this.Count > 0);
 #endif
 
-            var item = this.array[this.tail];
-            this.array[this.tail] = default(T);
-            this.tail = (this.tail - 1) % this.array.Length;
+            var item = this._array[this._tail];
+            this._array[this._tail] = default(T);
+            this._tail = (this._tail - 1) % this._array.Length;
             this.Count--;
             return item;
         }
@@ -171,27 +171,27 @@
             var target = new T[capacity];
             if (this.Count > 0)
             {
-                if (this.head <= this.tail)
+                if (this._head <= this._tail)
                 {
-                    Array.Copy(this.array, this.head, target, 0, this.Count);
+                    Array.Copy(this._array, this._head, target, 0, this.Count);
                 }
                 else
                 {
-                    var headCount = this.array.Length - this.head;
-                    Array.Copy(this.array, this.head, target, 0, headCount);
-                    Array.Copy(this.array, 0, target, headCount, this.tail + 1);
+                    var headCount = this._array.Length - this._head;
+                    Array.Copy(this._array, this._head, target, 0, headCount);
+                    Array.Copy(this._array, 0, target, headCount, this._tail + 1);
                 }
 
-                this.head = 0;
-                this.tail = this.Count - 1;
+                this._head = 0;
+                this._tail = this.Count - 1;
             }
             else
             {
-                this.head = -1;
-                this.tail = -1;
+                this._head = -1;
+                this._tail = -1;
             }
 
-            this.array = target;
+            this._array = target;
         }
 
 #region IList<T> Members
@@ -220,14 +220,14 @@
         {
             get
             {
-                index = (this.head + index) % this.array.Length;
-                return this.array[index];
+                index = (this._head + index) % this._array.Length;
+                return this._array[index];
             }
 
             set
             {
-                index = (this.head + index) % this.array.Length;
-                this.array[index] = value;
+                index = (this._head + index) % this._array.Length;
+                this._array[index] = value;
             }
         }
 
@@ -275,17 +275,17 @@
         {
             if (this.Count > 0)
             {
-                var current = this.head;
+                var current = this._head;
                 while (true)
                 {
-                    var item = this.array[current];
+                    var item = this._array[current];
                     yield return item;
-                    if (current == this.tail)
+                    if (current == this._tail)
                     {
                         break;
                     }
 
-                    current = (current + 1) %this.array.Length;
+                    current = (current + 1) %this._array.Length;
                 }
             }
         }

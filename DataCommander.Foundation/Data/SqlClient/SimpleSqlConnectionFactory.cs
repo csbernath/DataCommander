@@ -17,7 +17,7 @@ namespace DataCommander.Foundation.Data.SqlClient
     /// </summary>
     public sealed class SimpleSqlConnectionFactory
     {
-        private readonly string connectionString;
+        private readonly string _connectionString;
 
         /// <summary>
         /// 
@@ -31,7 +31,7 @@ namespace DataCommander.Foundation.Data.SqlClient
 #endif
 
             var node = section.SelectNode(nodeName, true);
-            this.connectionString = node.Attributes["ConnectionString"].GetValue<string>();
+            this._connectionString = node.Attributes["ConnectionString"].GetValue<string>();
             TimeSpan timeSpan;
 
             var contains = node.Attributes.TryGetAttributeValue("CommandTimeout", out timeSpan);
@@ -49,7 +49,7 @@ namespace DataCommander.Foundation.Data.SqlClient
 
             if (enabled)
             {
-                var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(this.connectionString);
+                var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(this._connectionString);
                 var applicationName = sqlConnectionStringBuilder.ApplicationName;
                 string logConnectionString;
                 contains = sqlLogNode.Attributes.TryGetAttributeValue("ConnectionString", null, out logConnectionString);
@@ -158,14 +158,14 @@ namespace DataCommander.Foundation.Data.SqlClient
 
             if (name != null)
             {
-                var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(this.connectionString);
+                var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(this._connectionString);
                 sqlConnectionStringBuilder.ApplicationName = string.Format(CultureInfo.InvariantCulture, "{0} {1}", sqlConnectionStringBuilder.ApplicationName,
                     name);
                 connectionString = sqlConnectionStringBuilder.ConnectionString;
             }
             else
             {
-                connectionString = this.connectionString;
+                connectionString = this._connectionString;
             }
 
             return this.Factory.CreateConnection(connectionString, userName, hostName);

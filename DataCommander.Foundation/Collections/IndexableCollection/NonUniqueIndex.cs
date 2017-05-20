@@ -14,9 +14,9 @@
     {
         #region Private Fields
 
-        private IDictionary<TKey, ICollection<T>> dictionary;
-        private Func<T, GetKeyResponse<TKey>> getKey;
-        private Func<ICollection<T>> createCollection;
+        private IDictionary<TKey, ICollection<T>> _dictionary;
+        private Func<T, GetKeyResponse<TKey>> _getKey;
+        private Func<ICollection<T>> _createCollection;
 
         #endregion
 
@@ -89,7 +89,7 @@
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public ICollection<T> this[TKey key] => this.dictionary[key];
+        public ICollection<T> this[TKey key] => this._dictionary[key];
 
         /// <summary>
         /// 
@@ -100,7 +100,7 @@
         public bool TryGetFirstValue(TKey key, out T value)
         {
             ICollection<T> collection;
-            var contains = this.dictionary.TryGetValue(key, out collection);
+            var contains = this._dictionary.TryGetValue(key, out collection);
 
             if (contains)
             {
@@ -122,7 +122,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.dictionary.Count;
+        public int Count => this._dictionary.Count;
 
         bool ICollection<T>.IsReadOnly => false;
 
@@ -132,18 +132,18 @@
         /// <param name="item"></param>
         public void Add(T item)
         {
-            var response = this.getKey(item);
+            var response = this._getKey(item);
 
             if (response.HasKey)
             {
                 var key = response.Key;
                 ICollection<T> collection;
-                var contains = this.dictionary.TryGetValue(key, out collection);
+                var contains = this._dictionary.TryGetValue(key, out collection);
 
                 if (!contains)
                 {
-                    collection = this.createCollection();
-                    this.dictionary.Add(key, collection);
+                    collection = this._createCollection();
+                    this._dictionary.Add(key, collection);
                 }
 
                 collection.Add(item);
@@ -155,7 +155,7 @@
         /// </summary>
         void ICollection<T>.Clear()
         {
-            this.dictionary.Clear();
+            this._dictionary.Clear();
         }
 
         /// <summary>
@@ -165,14 +165,14 @@
         /// <returns></returns>
         public bool Contains(T item)
         {
-            var response = this.getKey(item);
+            var response = this._getKey(item);
             bool contains;
 
             if (response.HasKey)
             {
                 var key = response.Key;
                 ICollection<T> collection;
-                contains = this.dictionary.TryGetValue(key, out collection);
+                contains = this._dictionary.TryGetValue(key, out collection);
 
                 if (contains)
                 {
@@ -204,14 +204,14 @@
         /// <returns></returns>
         public bool Remove(T item)
         {
-            var response = this.getKey(item);
+            var response = this._getKey(item);
             var removed = false;
 
             if (response.HasKey)
             {
                 var key = response.Key;
                 ICollection<T> collection;
-                var contains = this.dictionary.TryGetValue(key, out collection);
+                var contains = this._dictionary.TryGetValue(key, out collection);
 
                 if (contains)
                 {
@@ -222,7 +222,7 @@
 
                     if (collection.Count == 0)
                     {
-                        succeeded = this.dictionary.Remove(key);
+                        succeeded = this._dictionary.Remove(key);
 #if CONTRACTS_FULL
                         Contract.Assert(succeeded, "dictionary.Remove");
 #endif
@@ -245,7 +245,7 @@
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            foreach (var collection in this.dictionary.Values)
+            foreach (var collection in this._dictionary.Values)
             {
                 foreach (var item in collection)
                 {
@@ -279,9 +279,9 @@
 #endif
 
             this.Name = name;
-            this.getKey = getKey;
-            this.dictionary = dictionary;
-            this.createCollection = createCollection;
+            this._getKey = getKey;
+            this._dictionary = dictionary;
+            this._createCollection = createCollection;
         }
 
 #region IDictionary<TKey,ICollection<T>> Members
@@ -298,10 +298,10 @@
         /// <returns></returns>
         public bool ContainsKey(TKey key)
         {
-            return this.dictionary.ContainsKey(key);
+            return this._dictionary.ContainsKey(key);
         }
 
-        ICollection<TKey> IDictionary<TKey, ICollection<T>>.Keys => this.dictionary.Keys;
+        ICollection<TKey> IDictionary<TKey, ICollection<T>>.Keys => this._dictionary.Keys;
 
         bool IDictionary<TKey, ICollection<T>>.Remove(TKey key)
         {
@@ -316,14 +316,14 @@
         /// <returns></returns>
         public bool TryGetValue(TKey key, out ICollection<T> value)
         {
-            return this.dictionary.TryGetValue(key, out value);
+            return this._dictionary.TryGetValue(key, out value);
         }
 
-        ICollection<ICollection<T>> IDictionary<TKey, ICollection<T>>.Values => this.dictionary.Values;
+        ICollection<ICollection<T>> IDictionary<TKey, ICollection<T>>.Values => this._dictionary.Values;
 
         ICollection<T> IDictionary<TKey, ICollection<T>>.this[TKey key]
         {
-            get => this.dictionary[key];
+            get => this._dictionary[key];
 
             set => throw new NotSupportedException();
         }
@@ -352,9 +352,9 @@
             throw new NotSupportedException();
         }
 
-        int ICollection<KeyValuePair<TKey, ICollection<T>>>.Count => this.dictionary.Count;
+        int ICollection<KeyValuePair<TKey, ICollection<T>>>.Count => this._dictionary.Count;
 
-        bool ICollection<KeyValuePair<TKey, ICollection<T>>>.IsReadOnly => this.dictionary.IsReadOnly;
+        bool ICollection<KeyValuePair<TKey, ICollection<T>>>.IsReadOnly => this._dictionary.IsReadOnly;
 
         bool ICollection<KeyValuePair<TKey, ICollection<T>>>.Remove(KeyValuePair<TKey, ICollection<T>> item)
         {
@@ -367,7 +367,7 @@
 
         IEnumerator<KeyValuePair<TKey, ICollection<T>>> IEnumerable<KeyValuePair<TKey, ICollection<T>>>.GetEnumerator()
         {
-            return this.dictionary.GetEnumerator();
+            return this._dictionary.GetEnumerator();
         }
 
 #endregion

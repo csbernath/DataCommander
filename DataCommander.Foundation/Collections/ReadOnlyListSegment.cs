@@ -11,8 +11,8 @@
     {
         #region Private Fields
 
-        private readonly IReadOnlyList<T> list;
-        private readonly int offset;
+        private readonly IReadOnlyList<T> _list;
+        private readonly int _offset;
 
         #endregion
 
@@ -32,8 +32,8 @@
             Contract.Requires<ArgumentOutOfRangeException>(0 <= offset + count && offset + count <= list.Count);
 #endif
 
-            this.list = list;
-            this.offset = offset;
+            this._list = list;
+            this._offset = offset;
             this.Count = count;
         }
 
@@ -42,7 +42,7 @@
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public T this[int index] => this.list[offset + index];
+        public T this[int index] => this._list[_offset + index];
 
         /// <summary>
         /// 
@@ -55,11 +55,11 @@
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            var end = offset + Count;
+            var end = _offset + Count;
 
-            for (var i = offset; i < end; i++)
+            for (var i = _offset; i < end; i++)
             {
-                yield return this.list[i];
+                yield return this._list[i];
             }
         }
 

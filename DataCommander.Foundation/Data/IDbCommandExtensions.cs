@@ -9,7 +9,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public static class IDbCommandExtensions
+    public static class DbCommandExtensions
     {
         public static void Initialize(this IDbCommand command, CreateCommandRequest request)
         {

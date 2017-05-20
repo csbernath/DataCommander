@@ -17,8 +17,8 @@
     /// </summary>
     public class MappedDataReader : DbDataReader
     {
-        private readonly IDataReader dataReader;
-        private readonly GetValues getValues;
+        private readonly IDataReader _dataReader;
+        private readonly GetValues _getValues;
 
         /// <summary>
         /// 
@@ -32,8 +32,8 @@
             Contract.Requires<ArgumentNullException>(getValues != null);
 #endif
 
-            this.dataReader = dataReader;
-            this.getValues = getValues;
+            this._dataReader = dataReader;
+            this._getValues = getValues;
         }
 
         /// <summary>
@@ -41,18 +41,18 @@
         /// </summary>
         public override void Close()
         {
-            this.dataReader.Close();
+            this._dataReader.Close();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public override int Depth => this.dataReader.Depth;
+        public override int Depth => this._dataReader.Depth;
 
         /// <summary>
         /// 
         /// </summary>
-        public override int FieldCount => this.dataReader.FieldCount;
+        public override int FieldCount => this._dataReader.FieldCount;
 
         /// <summary>
         /// 
@@ -168,7 +168,7 @@
         /// <returns></returns>
         public override Type GetFieldType(int ordinal)
         {
-            return this.dataReader.GetFieldType(ordinal);
+            return this._dataReader.GetFieldType(ordinal);
         }
 
         /// <summary>
@@ -228,7 +228,7 @@
         /// <returns></returns>
         public override string GetName(int ordinal)
         {
-            return this.dataReader.GetName(ordinal);
+            return this._dataReader.GetName(ordinal);
         }
 
         /// <summary>
@@ -238,7 +238,7 @@
         /// <returns></returns>
         public override int GetOrdinal(string name)
         {
-            return this.dataReader.GetOrdinal(name);
+            return this._dataReader.GetOrdinal(name);
         }
 
         /// <summary>
@@ -247,7 +247,7 @@
         /// <returns></returns>
         public override DataTable GetSchemaTable()
         {
-            return this.dataReader.GetSchemaTable();
+            return this._dataReader.GetSchemaTable();
         }
 
         /// <summary>
@@ -277,7 +277,7 @@
         /// <returns></returns>
         public override int GetValues(object[] values)
         {
-            return this.getValues(values);
+            return this._getValues(values);
         }
 
         /// <summary>
@@ -288,7 +288,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override bool IsClosed => this.dataReader.IsClosed;
+        public override bool IsClosed => this._dataReader.IsClosed;
 
         /// <summary>
         /// 
@@ -297,7 +297,7 @@
         /// <returns></returns>
         public override bool IsDBNull(int ordinal)
         {
-            return this.dataReader.IsDBNull(ordinal);
+            return this._dataReader.IsDBNull(ordinal);
         }
 
         /// <summary>
@@ -306,7 +306,7 @@
         /// <returns></returns>
         public override bool NextResult()
         {
-            return this.dataReader.NextResult();
+            return this._dataReader.NextResult();
         }
 
         /// <summary>
@@ -315,13 +315,13 @@
         /// <returns></returns>
         public override bool Read()
         {
-            return this.dataReader.Read();
+            return this._dataReader.Read();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public override int RecordsAffected => this.dataReader.RecordsAffected;
+        public override int RecordsAffected => this._dataReader.RecordsAffected;
 
         /// <summary>
         /// 

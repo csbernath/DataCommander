@@ -11,9 +11,9 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
     /// </summary>
     public sealed class SqlLoggedSqlConnection : IDbConnection
     {
-        private readonly int applicationId;
-        private int connectionNo;
-        private readonly SqlLog sqlLog;
+        private readonly int _applicationId;
+        private int _connectionNo;
+        private readonly SqlLog _sqlLog;
 
         /// <summary>
         /// 
@@ -36,8 +36,8 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
             Contract.Requires(sqlLog != null);
 #endif
 
-            this.sqlLog = sqlLog;
-            this.applicationId = applicationId;
+            this._sqlLog = sqlLog;
+            this._applicationId = applicationId;
             this.UserName = userName;
             this.HostName = hostName;
             this.Filter = filter;
@@ -61,7 +61,7 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
         {
             if (disposing)
             {
-                this.sqlLog.DisposeConnection(this.Connection);
+                this._sqlLog.DisposeConnection(this.Connection);
             }
         }
 
@@ -90,7 +90,7 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
         /// </summary>
         public void Close()
         {
-            this.sqlLog.CloseConnection(this.Connection);
+            this._sqlLog.CloseConnection(this.Connection);
         }
 
         IDbCommand IDbConnection.CreateCommand()
@@ -120,7 +120,7 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
             finally
             {
                 duration = Stopwatch.GetTimestamp() - duration;
-                this.connectionNo = this.sqlLog.ConnectionOpen(this.applicationId, this.Connection, this.UserName, this.HostName, startDate, duration, exception);
+                this._connectionNo = this._sqlLog.ConnectionOpen(this._applicationId, this.Connection, this.UserName, this.HostName, startDate, duration, exception);
             }
         }
 
@@ -155,7 +155,7 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
             long duration,
             Exception exception)
         {
-            this.sqlLog.CommandExecute(this.applicationId, this.connectionNo, command, startDate, duration, exception);
+            this._sqlLog.CommandExecute(this._applicationId, this._connectionNo, command, startDate, duration, exception);
         }
 
         internal int ExecuteNonQuery(IDbCommand command)
@@ -181,7 +181,7 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
 
                 if (contains)
                 {
-                    this.sqlLog.CommandExecute(this.applicationId, this.connectionNo, command, startDate, duration, exception);
+                    this._sqlLog.CommandExecute(this._applicationId, this._connectionNo, command, startDate, duration, exception);
                 }
             }
 
@@ -212,7 +212,7 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
 
                 if (contains)
                 {
-                    this.sqlLog.CommandExecute(this.applicationId, this.connectionNo, command, startDate, duration, exception);
+                    this._sqlLog.CommandExecute(this._applicationId, this._connectionNo, command, startDate, duration, exception);
                 }
             }
 

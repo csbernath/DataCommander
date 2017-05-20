@@ -6,11 +6,11 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLog
 
     internal sealed class SqlLogError : ISqlLogItem
     {
-        private readonly int applicationId;
-        private readonly int connectionNo;
-        private readonly int commandNo;
-        private readonly int executionNo;
-        private readonly Exception exception;
+        private readonly int _applicationId;
+        private readonly int _connectionNo;
+        private readonly int _commandNo;
+        private readonly int _executionNo;
+        private readonly Exception _exception;
 
         public SqlLogError(
             int applicationId,
@@ -19,11 +19,11 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLog
             int executionNo,
             Exception exception )
         {
-            this.applicationId = applicationId;
-            this.connectionNo = connectionNo;
-            this.commandNo = commandNo;
-            this.executionNo = executionNo;
-            this.exception = exception;
+            this._applicationId = applicationId;
+            this._connectionNo = connectionNo;
+            this._commandNo = commandNo;
+            this._executionNo = executionNo;
+            this._exception = exception;
         }
 
         public string CommandText
@@ -31,7 +31,7 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLog
             get
             {
                 var sb = new StringBuilder();
-                var sqlEx = this.exception as SqlException;
+                var sqlEx = this._exception as SqlException;
 
                 if (sqlEx != null)
                 {
@@ -53,8 +53,8 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLog
                 }
                 else
                 {
-                    var text = this.exception.ToString();
-                    sb.AppendFormat( "exec LogException {0},{1},{2},{3},{4}", this.applicationId, this.connectionNo, this.commandNo, this.executionNo, text.ToTSqlVarChar() );
+                    var text = this._exception.ToString();
+                    sb.AppendFormat( "exec LogException {0},{1},{2},{3},{4}", this._applicationId, this._connectionNo, this._commandNo, this._executionNo, text.ToTSqlVarChar() );
                 }
 
                 return sb.ToString();
@@ -73,10 +73,10 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLog
         {
             sb.AppendFormat(
                 "exec LogError {0},{1},{2},{3},{4},{5},{6},{7},{8},{9}\r\n",
-                this.applicationId,
-                this.connectionNo,
-                this.commandNo,
-                this.executionNo,
+                this._applicationId,
+                this._connectionNo,
+                this._commandNo,
+                this._executionNo,
                 errorNo,
                 error,
                 severity,

@@ -348,7 +348,7 @@
                             break;
                     }
 
-                    var allowDBNull = dataColumnSchema.AllowDBNull.GetValueOrDefault();
+                    var allowDBNull = dataColumnSchema.AllowDbNull.GetValueOrDefault();
                     if (!allowDBNull)
                     {
                         sb.Append(" not null");

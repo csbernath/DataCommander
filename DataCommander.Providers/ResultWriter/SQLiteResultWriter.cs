@@ -157,7 +157,7 @@
 
                 stringTableRow[2] = typeName;
                 st.Rows.Add(stringTableRow);
-                var allowDBNull = schemaRow.AllowDBNull.Value;
+                var allowDBNull = schemaRow.AllowDbNull.Value;
 
                 if (!allowDBNull)
                 {

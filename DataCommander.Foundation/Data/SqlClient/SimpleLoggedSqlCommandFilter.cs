@@ -10,17 +10,17 @@ namespace DataCommander.Foundation.Data.SqlClient
 
     internal sealed class SimpleLoggedSqlCommandFilter : ISqlLoggedSqlCommandFilter
     {
-        private readonly ConfigurationSection section;
-        private readonly string nodeName;
-        private SimpleLoggedSqlCommandFilterRule[] rules;
+        private readonly ConfigurationSection _section;
+        private readonly string _nodeName;
+        private SimpleLoggedSqlCommandFilterRule[] _rules;
 
         public SimpleLoggedSqlCommandFilter(
             ConfigurationSection section,
             string nodeName)
         {
-            this.section = section;
-            this.nodeName = nodeName;
-            this.section.Changed += this.SettingsChanged;
+            this._section = section;
+            this._nodeName = nodeName;
+            this._section.Changed += this.SettingsChanged;
             this.SettingsChanged(null, null);
         }
 
@@ -28,7 +28,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         {
             using (var log = LogFactory.Instance.GetCurrentMethodLog())
             {
-                var node = this.section.SelectNode(this.nodeName, false);
+                var node = this._section.SelectNode(this._nodeName, false);
                 if (node != null)
                 {
                     var list = new List<SimpleLoggedSqlCommandFilterRule>();
@@ -82,7 +82,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                         rules = null;
                     }
 
-                    this.rules = rules;
+                    this._rules = rules;
                 }
             }
         }
@@ -94,13 +94,13 @@ namespace DataCommander.Foundation.Data.SqlClient
         {
             bool contains;
 
-            if (this.rules != null && this.rules.Length > 0)
+            if (this._rules != null && this._rules.Length > 0)
             {
                 contains = false;
 
-                for (var i = 0; i < this.rules.Length; i++)
+                for (var i = 0; i < this._rules.Length; i++)
                 {
-                    var rule = this.rules[i];
+                    var rule = this._rules[i];
                     var match = rule.Match(userName, hostName, command);
 
                     if (match)

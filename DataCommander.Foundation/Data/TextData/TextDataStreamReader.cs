@@ -11,11 +11,11 @@
     {
         #region Private Fields
 
-        private readonly TextReader textReader;
+        private readonly TextReader _textReader;
 
-        private readonly IList<TextDataColumn> columns;
+        private readonly IList<TextDataColumn> _columns;
 
-        private readonly IList<ITextDataConverter> converters;
+        private readonly IList<ITextDataConverter> _converters;
 
         #endregion
 
@@ -33,9 +33,9 @@
             Contract.Requires(converters != null);
 #endif
 
-            this.textReader = textReader;
-            this.columns = columns;
-            this.converters = converters;
+            this._textReader = textReader;
+            this._columns = columns;
+            this._converters = converters;
         }
 
         /// <summary>
@@ -47,11 +47,11 @@
             object[] values = null;
             var index = 0;
 
-            foreach (var column in this.columns)
+            foreach (var column in this._columns)
             {
                 var maxLength = column.MaxLength;
                 var buffer = new char[maxLength];
-                var count = this.textReader.Read(buffer, 0, maxLength);
+                var count = this._textReader.Read(buffer, 0, maxLength);
 
                 if (count == 0)
                 {
@@ -64,11 +64,11 @@
 
                 if (index == 0)
                 {
-                    values = new object[this.columns.Count];
+                    values = new object[this._columns.Count];
                 }
 
                 var source = new string(buffer);
-                var converter = this.converters[index];
+                var converter = this._converters[index];
 #if CONTRACTS_FULL
                 Contract.Assert(converter != null);
 #endif

@@ -69,7 +69,7 @@
                 var schemaRow = new DbColumn(dataRow);
                 var columnName = schemaRow.ColumnName;
                 var columnSize = schemaRow.ColumnSize;
-                var allowDBNull = schemaRow.AllowDBNull;
+                var allowDBNull = schemaRow.AllowDbNull;
                 var dataType = schemaRow.DataType;
                 var dataTypeName = "???";
                 var typeCode = Type.GetTypeCode(dataType);

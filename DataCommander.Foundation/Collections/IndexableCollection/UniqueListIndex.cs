@@ -11,8 +11,8 @@
     /// <typeparam name="T"></typeparam>
     public class UniqueListIndex<TKey, T> : ICollectionIndex<T>
     {
-        private Func<T, TKey> keySelector;
-        private readonly IList<T> list;
+        private Func<T, TKey> _keySelector;
+        private readonly IList<T> _list;
 
         /// <summary>
         /// 
@@ -32,8 +32,8 @@
 #endif
 
             this.Name = name;
-            this.keySelector = keySelector;
-            this.list = list;
+            this._keySelector = keySelector;
+            this._list = list;
         }
 
 #region ICollectionIndex<T> Members
@@ -53,14 +53,14 @@
         /// <param name="item"></param>
         public void Add(T item)
         {
-            var contains = this.list.Contains(item);
+            var contains = this._list.Contains(item);
 
             if (contains)
             {
                 throw new ArgumentException();
             }
 
-            this.list.Add(item);
+            this._list.Add(item);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@
 #if CONTRACTS_FULL
             Contract.Ensures(this.Count == 0);
 #endif
-            this.list.Clear();
+            this._list.Clear();
         }
 
         /// <summary>
@@ -84,7 +84,7 @@
 #if CONTRACTS_FULL
             Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
 #endif
-            return this.list.Contains(item);
+            return this._list.Contains(item);
         }
 
         /// <summary>
@@ -94,18 +94,18 @@
         /// <param name="arrayIndex"></param>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            this.list.CopyTo(array, arrayIndex);
+            this._list.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.list.Count;
+        public int Count => this._list.Count;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadOnly => this.list.IsReadOnly;
+        public bool IsReadOnly => this._list.IsReadOnly;
 
         /// <summary>
         /// 
@@ -114,7 +114,7 @@
         /// <returns></returns>
         public bool Remove(T item)
         {
-            return this.list.Remove(item);
+            return this._list.Remove(item);
         }
 
 #endregion
@@ -127,7 +127,7 @@
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            return this.list.GetEnumerator();
+            return this._list.GetEnumerator();
         }
 
 #endregion
@@ -136,7 +136,7 @@
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.list.GetEnumerator();
+            return this._list.GetEnumerator();
         }
 
 #endregion

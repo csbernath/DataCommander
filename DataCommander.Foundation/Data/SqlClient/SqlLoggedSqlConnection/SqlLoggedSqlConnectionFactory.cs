@@ -9,9 +9,9 @@
     /// </summary>
     public sealed class SqlLoggedSqlConnectionFactory : IDbConnectionFactory
     {
-        private readonly SqlLog sqlLog;
-        private readonly int applicationId;
-        private readonly ISqlLoggedSqlCommandFilter filter;
+        private readonly SqlLog _sqlLog;
+        private readonly int _applicationId;
+        private readonly ISqlLoggedSqlCommandFilter _filter;
 
         /// <summary>
         /// 
@@ -24,19 +24,19 @@
             string applicationName,
             ISqlLoggedSqlCommandFilter filter)
         {
-            this.filter = filter;
-            this.sqlLog = new SqlLog(connectionString);
-            this.applicationId = this.sqlLog.ApplicationStart(applicationName, LocalTime.Default.Now, false);
+            this._filter = filter;
+            this._sqlLog = new SqlLog(connectionString);
+            this._applicationId = this._sqlLog.ApplicationStart(applicationName, LocalTime.Default.Now, false);
         }
 
-        WorkerThread IDbConnectionFactory.Thread => this.sqlLog.Thread;
+        WorkerThread IDbConnectionFactory.Thread => this._sqlLog.Thread;
 
         IDbConnection IDbConnectionFactory.CreateConnection(
             string connectionString,
             string userName,
             string hostName)
         {
-            return new SqlLoggedSqlConnection(this.sqlLog, this.applicationId, userName, hostName, connectionString, this.filter);
+            return new SqlLoggedSqlConnection(this._sqlLog, this._applicationId, userName, hostName, connectionString, this._filter);
         }
 
         IDbConnectionHelper IDbConnectionFactory.CreateConnectionHelper(IDbConnection connection)

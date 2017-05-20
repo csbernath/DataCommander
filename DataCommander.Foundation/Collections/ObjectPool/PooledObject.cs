@@ -8,8 +8,8 @@ namespace DataCommander.Foundation.Collections.ObjectPool
     /// </summary>
     public sealed class PooledObject<T> : IDisposable
     {
-        private readonly ObjectPool<T> pool;
-        private readonly ObjectPoolItem<T> item;
+        private readonly ObjectPool<T> _pool;
+        private readonly ObjectPoolItem<T> _item;
 
         /// <summary>
         /// 
@@ -21,21 +21,21 @@ namespace DataCommander.Foundation.Collections.ObjectPool
             Contract.Requires<ArgumentNullException>(pool != null);
 #endif
 
-            this.pool = pool;
-            this.item = pool.CreateObject(CancellationToken.None);
+            this._pool = pool;
+            this._item = pool.CreateObject(CancellationToken.None);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public T Value => this.item.Value;
+        public T Value => this._item.Value;
 
         /// <summary>
         /// 
         /// </summary>
         public void Dispose()
         {
-            this.pool.DestroyObject(this.item);
+            this._pool.DestroyObject(this._item);
         }
     }
 }

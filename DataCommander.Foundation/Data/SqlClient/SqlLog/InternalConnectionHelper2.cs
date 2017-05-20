@@ -6,18 +6,18 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLog
 
     internal sealed class InternalConnectionHelper2 : IInternalConnectionHelper
     {
-        private static readonly FieldInfo internalConnectionField;
+        private static readonly FieldInfo InternalConnectionField;
 
         static InternalConnectionHelper2()
         {
-            internalConnectionField = typeof(SqlConnection).GetField(
+            InternalConnectionField = typeof(SqlConnection).GetField(
                 "_innerConnection",
                 BindingFlags.Instance | BindingFlags.NonPublic);
         }
 
         object IInternalConnectionHelper.GetInternalConnection(IDbConnection connection)
         {
-            var internalConnection = internalConnectionField.GetValue(connection);
+            var internalConnection = InternalConnectionField.GetValue(connection);
             return internalConnection;
         }
 

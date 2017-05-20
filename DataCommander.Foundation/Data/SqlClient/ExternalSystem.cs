@@ -14,7 +14,7 @@ namespace DataCommander.Foundation.Data.SqlClient
     /// </summary>
     public static class ExternalSystem
     {
-        private static readonly byte[] optionalEntropy = { 78, 233, 56, 11, 243, 99, 21, 165, 56, 234, 111, 9, 78, 67, 87, 96 };
+        private static readonly byte[] OptionalEntropy = { 78, 233, 56, 11, 243, 99, 21, 165, 56, 234, 111, 9, 78, 67, 87, 96 };
 
         /// <summary>
         /// Gets the properties of an external system related to a specfied external system client.
@@ -63,7 +63,7 @@ namespace DataCommander.Foundation.Data.SqlClient
                     else
                     {
                         var bytes = (byte[]) value;
-                        value = ProtectedData.Unprotect( bytes, optionalEntropy, scope );
+                        value = ProtectedData.Unprotect( bytes, OptionalEntropy, scope );
                     }
                 }
 
@@ -90,7 +90,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         public static byte[] Encrypt( DataProtectionScope scope, string text )
         {
             var bytes = Encoding.UTF8.GetBytes( text );
-            var protectedBytes = ProtectedData.Protect( bytes, optionalEntropy, scope );
+            var protectedBytes = ProtectedData.Protect( bytes, OptionalEntropy, scope );
             return protectedBytes;
         }
 
@@ -102,7 +102,7 @@ namespace DataCommander.Foundation.Data.SqlClient
         /// <returns></returns>
         public static string Decrypt( DataProtectionScope scope, byte[] bytes )
         {
-            var unprotectedBytes = ProtectedData.Unprotect( bytes, optionalEntropy, scope );
+            var unprotectedBytes = ProtectedData.Unprotect( bytes, OptionalEntropy, scope );
             var text = Encoding.UTF8.GetString( unprotectedBytes );
             return text;
         }

@@ -10,8 +10,8 @@ namespace DataCommander.Foundation.Data.SqlClient
     /// </summary>
     public class SafeLoggedSqlConnection : SafeDbConnection, ISafeDbConnection
     {
-        private readonly CancellationToken cancellationToken;
-        private short id;
+        private readonly CancellationToken _cancellationToken;
+        private short _id;
 
         /// <summary>
         /// 
@@ -33,34 +33,34 @@ namespace DataCommander.Foundation.Data.SqlClient
             CancellationToken cancellationToken)
         {
             var connection = new SqlLoggedSqlConnection.SqlLoggedSqlConnection(sqlLog, applicationId, userName, hostName, connectionString, filter);
-            this.cancellationToken = cancellationToken;
+            this._cancellationToken = cancellationToken;
 
             this.Initialize(connection, this);
         }
 
-        CancellationToken ISafeDbConnection.CancellationToken => this.cancellationToken;
+        CancellationToken ISafeDbConnection.CancellationToken => this._cancellationToken;
 
         object ISafeDbConnection.Id
         {
             get
             {
-                if (this.id == 0)
+                if (this._id == 0)
                 {
-                    this.id = SafeSqlConnection.GetId(this.Connection);
+                    this._id = SafeSqlConnection.GetId(this.Connection);
                 }
 
-                return this.id;
+                return this._id;
             }
         }
 
         void ISafeDbConnection.HandleException(Exception exception, TimeSpan elapsed)
         {
-            SafeSqlConnection.HandleException(this.Connection, exception, elapsed, this.cancellationToken);
+            SafeSqlConnection.HandleException(this.Connection, exception, elapsed, this._cancellationToken);
         }
 
         void ISafeDbConnection.HandleException(Exception exception, IDbCommand command)
         {
-            SafeSqlConnection.HandleException(exception, command, this.cancellationToken);
+            SafeSqlConnection.HandleException(exception, command, this._cancellationToken);
         }
     }
 }

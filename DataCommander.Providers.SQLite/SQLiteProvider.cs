@@ -247,7 +247,7 @@ order by name collate nocase";
         {
             var schemaRow = new DbColumn(sourceSchemaRow);
             var columnSize = schemaRow.ColumnSize;
-            var allowDBNull = schemaRow.AllowDBNull;
+            var allowDBNull = schemaRow.AllowDbNull;
             string typeName;
 
             switch (sourceDataTypeName.ToLower())

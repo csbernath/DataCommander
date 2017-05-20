@@ -96,7 +96,7 @@ namespace DataCommander.Providers.ResultWriter
                 stringBuilder.Append("    public ");
                 stringBuilder.Append(GetCSharpTypeName(column.DataType));
 
-                if (column.AllowDBNull == true && IsValueType(column.DataType))
+                if (column.AllowDbNull == true && IsValueType(column.DataType))
                     stringBuilder.Append('?');
 
                 stringBuilder.Append(' ');
@@ -154,44 +154,44 @@ namespace DataCommander.Providers.ResultWriter
                 case TypeCode.DBNull:
                     break;
                 case TypeCode.Boolean:
-                    methodName = column.AllowDBNull == true ? "GetNullableBoolean" : "GetBoolean";
+                    methodName = column.AllowDbNull == true ? "GetNullableBoolean" : "GetBoolean";
                     break;
                 case TypeCode.Char:
                     break;
                 case TypeCode.SByte:
                     break;
                 case TypeCode.Byte:
-                    methodName = column.AllowDBNull == true ? "GetNullableByte" : "GetByte";
+                    methodName = column.AllowDbNull == true ? "GetNullableByte" : "GetByte";
                     break;
                 case TypeCode.Int16:
-                    methodName = column.AllowDBNull == true ? "GetNullableInt16" : "GetInt16";
+                    methodName = column.AllowDbNull == true ? "GetNullableInt16" : "GetInt16";
                     break;
                 case TypeCode.UInt16:
                     break;
                 case TypeCode.Int32:
-                    methodName = column.AllowDBNull == true ? "GetNullableInt32" : "GetInt32";
+                    methodName = column.AllowDbNull == true ? "GetNullableInt32" : "GetInt32";
                     break;
                 case TypeCode.UInt32:
                     break;
                 case TypeCode.Int64:
-                    methodName = column.AllowDBNull == true ? "GetNullableInt64" : "GetInt64";
+                    methodName = column.AllowDbNull == true ? "GetNullableInt64" : "GetInt64";
                     break;
                 case TypeCode.UInt64:
                     break;
                 case TypeCode.Single:
-                    methodName = column.AllowDBNull == true ? "GetNullableFloat" : "GetFloat";
+                    methodName = column.AllowDbNull == true ? "GetNullableFloat" : "GetFloat";
                     break;
                 case TypeCode.Double:
-                    methodName = column.AllowDBNull == true ? "GetNullableDouble" : "GetDouble";
+                    methodName = column.AllowDbNull == true ? "GetNullableDouble" : "GetDouble";
                     break;
                 case TypeCode.Decimal:
-                    methodName = column.AllowDBNull == true ? "GetNullableDecimal" : "GetDecimal";
+                    methodName = column.AllowDbNull == true ? "GetNullableDecimal" : "GetDecimal";
                     break;
                 case TypeCode.DateTime:
-                    methodName = column.AllowDBNull == true ? "GetNullableDateTime" : "GetDateTime";
+                    methodName = column.AllowDbNull == true ? "GetNullableDateTime" : "GetDateTime";
                     break;
                 case TypeCode.String:
-                    methodName = column.AllowDBNull == true ? "GetStringOrDefault" : "GetString";
+                    methodName = column.AllowDbNull == true ? "GetStringOrDefault" : "GetString";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

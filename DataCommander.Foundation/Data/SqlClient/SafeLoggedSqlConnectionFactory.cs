@@ -10,11 +10,11 @@ namespace DataCommander.Foundation.Data.SqlClient
     /// </summary>
     public class SafeLoggedSqlConnectionFactory : IDbConnectionFactory
     {
-        private readonly SqlLog.SqlLog sqlLog;
+        private readonly SqlLog.SqlLog _sqlLog;
 
-        private readonly int applicationId;
+        private readonly int _applicationId;
 
-        private readonly ISqlLoggedSqlCommandFilter filter;
+        private readonly ISqlLoggedSqlCommandFilter _filter;
 
         /// <summary>
         /// 
@@ -27,15 +27,15 @@ namespace DataCommander.Foundation.Data.SqlClient
             string applicationName,
             ISqlLoggedSqlCommandFilter filter)
         {
-            this.filter = filter;
-            this.sqlLog = new SqlLog.SqlLog(connectionString);
-            this.applicationId = this.sqlLog.ApplicationStart(applicationName, LocalTime.Default.Now, true);
+            this._filter = filter;
+            this._sqlLog = new SqlLog.SqlLog(connectionString);
+            this._applicationId = this._sqlLog.ApplicationStart(applicationName, LocalTime.Default.Now, true);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public WorkerThread Thread => this.sqlLog.Thread;
+        public WorkerThread Thread => this._sqlLog.Thread;
 
         /// <summary>
         /// 
@@ -47,12 +47,12 @@ namespace DataCommander.Foundation.Data.SqlClient
         public IDbConnection CreateConnection(string connectionString, string userName, string hostName)
         {
             return new SafeLoggedSqlConnection(
-                this.sqlLog,
-                this.applicationId,
+                this._sqlLog,
+                this._applicationId,
                 userName,
                 hostName,
                 connectionString,
-                this.filter,
+                this._filter,
                 CancellationToken.None);
         }
 

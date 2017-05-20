@@ -8,12 +8,12 @@
     {
         #region Private Fields
 
-        private static int commandIdCounter;
-        private readonly int commandId;
-        private readonly IDbCommand command;
-        private readonly EventHandler<BeforeExecuteCommandEventArgs> beforeExecuteCommand;
-        private readonly EventHandler<AfterExecuteCommandEventArgs> afterExecuteCommand;
-        private readonly EventHandler<AfterReadEventArgs> afterRead;
+        private static int _commandIdCounter;
+        private readonly int _commandId;
+        private readonly IDbCommand _command;
+        private readonly EventHandler<BeforeExecuteCommandEventArgs> _beforeExecuteCommand;
+        private readonly EventHandler<AfterExecuteCommandEventArgs> _afterExecuteCommand;
+        private readonly EventHandler<AfterReadEventArgs> _afterRead;
 
         #endregion
 
@@ -32,71 +32,71 @@
             Contract.Ensures(this.command != null);
 #endif
 
-            this.commandId = Interlocked.Increment(ref commandIdCounter);
-            this.command = command;
-            this.beforeExecuteCommand = beforeExecuteCommand;
-            this.afterExecuteCommand = afterExecuteCommand;
-            this.afterRead = afterRead;
+            this._commandId = Interlocked.Increment(ref _commandIdCounter);
+            this._command = command;
+            this._beforeExecuteCommand = beforeExecuteCommand;
+            this._afterExecuteCommand = afterExecuteCommand;
+            this._afterRead = afterRead;
         }
 
 #region IDbCommand Members
 
         void IDbCommand.Cancel()
         {
-            this.command.Cancel();
+            this._command.Cancel();
         }
 
         string IDbCommand.CommandText
         {
-            get => this.command.CommandText;
+            get => this._command.CommandText;
 
-            set => this.command.CommandText = value;
+            set => this._command.CommandText = value;
         }
 
         int IDbCommand.CommandTimeout
         {
-            get => this.command.CommandTimeout;
+            get => this._command.CommandTimeout;
 
-            set => this.command.CommandTimeout = value;
+            set => this._command.CommandTimeout = value;
         }
 
         CommandType IDbCommand.CommandType
         {
-            get => this.command.CommandType;
+            get => this._command.CommandType;
 
-            set => this.command.CommandType = value;
+            set => this._command.CommandType = value;
         }
 
         IDbConnection IDbCommand.Connection
         {
-            get => this.command.Connection;
+            get => this._command.Connection;
 
-            set => this.command.Connection = value;
+            set => this._command.Connection = value;
         }
 
         IDbDataParameter IDbCommand.CreateParameter()
         {
-            return this.command.CreateParameter();
+            return this._command.CreateParameter();
         }
 
         int IDbCommand.ExecuteNonQuery()
         {
             var commandInfo = new Lazy<LoggedDbCommandInfo>(() => this.CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.NonQuery));
 
-            if (this.beforeExecuteCommand != null)
+            if (this._beforeExecuteCommand != null)
             {
                 var eventArgs = new BeforeExecuteCommandEventArgs(commandInfo.Value);
-                this.beforeExecuteCommand(this, eventArgs);
+                this._beforeExecuteCommand(this, eventArgs);
             }
 
             int rowCount;
 
-            if (this.afterExecuteCommand != null)
+            if (this._afterExecuteCommand != null)
             {
                 Exception exception = null;
                 try
                 {
-                    rowCount = this.command.ExecuteNonQuery();
+                    rowCount = this._command.ExecuteNonQuery();
                 }
                 catch (Exception e)
                 {
@@ -106,12 +106,12 @@
                 finally
                 {
                     var eventArgs = new AfterExecuteCommandEventArgs(commandInfo.Value, exception);
-                    this.afterExecuteCommand(this, eventArgs);
+                    this._afterExecuteCommand(this, eventArgs);
                 }
             }
             else
             {
-                rowCount = this.command.ExecuteNonQuery();
+                rowCount = this._command.ExecuteNonQuery();
             }
 
             return rowCount;
@@ -121,20 +121,20 @@
         {
             var commandInfo = new Lazy<LoggedDbCommandInfo>(() => this.CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.Reader));
 
-            if (this.beforeExecuteCommand != null)
+            if (this._beforeExecuteCommand != null)
             {
                 var eventArgs = new BeforeExecuteCommandEventArgs(commandInfo.Value);
-                this.beforeExecuteCommand(this, eventArgs);
+                this._beforeExecuteCommand(this, eventArgs);
             }
 
             IDataReader dataReader;
 
-            if (this.afterExecuteCommand != null)
+            if (this._afterExecuteCommand != null)
             {
                 Exception exception = null;
                 try
                 {
-                    dataReader = this.command.ExecuteReader();
+                    dataReader = this._command.ExecuteReader();
                 }
                 catch (Exception e)
                 {
@@ -144,15 +144,15 @@
                 finally
                 {
                     var eventArgs = new AfterExecuteCommandEventArgs(commandInfo.Value, exception);
-                    this.afterExecuteCommand(this, eventArgs);
+                    this._afterExecuteCommand(this, eventArgs);
                 }
             }
             else
             {
-                dataReader = this.command.ExecuteReader();
+                dataReader = this._command.ExecuteReader();
             }
 
-            return new LoggedDataReader(dataReader, this.afterRead);
+            return new LoggedDataReader(dataReader, this._afterRead);
         }
 
         IDataReader IDbCommand.ExecuteReader()
@@ -164,20 +164,20 @@
         object IDbCommand.ExecuteScalar()
         {
             var commandInfo = new Lazy<LoggedDbCommandInfo>(() => this.CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.Scalar));
-            if (this.beforeExecuteCommand != null)
+            if (this._beforeExecuteCommand != null)
             {
                 var eventArgs = new BeforeExecuteCommandEventArgs(commandInfo.Value);
-                this.beforeExecuteCommand(this, eventArgs);
+                this._beforeExecuteCommand(this, eventArgs);
             }
 
             object scalar;
 
-            if (this.afterExecuteCommand != null)
+            if (this._afterExecuteCommand != null)
             {
                 Exception exception = null;
                 try
                 {
-                    scalar = this.command.ExecuteScalar();
+                    scalar = this._command.ExecuteScalar();
                 }
                 catch (Exception e)
                 {
@@ -187,36 +187,36 @@
                 finally
                 {
                     var args = new AfterExecuteCommandEventArgs(commandInfo.Value, exception);
-                    this.afterExecuteCommand(this, args);
+                    this._afterExecuteCommand(this, args);
                 }
             }
             else
             {
-                scalar = this.command.ExecuteScalar();
+                scalar = this._command.ExecuteScalar();
             }
 
             return scalar;
         }
 
-        IDataParameterCollection IDbCommand.Parameters => this.command.Parameters;
+        IDataParameterCollection IDbCommand.Parameters => this._command.Parameters;
 
         void IDbCommand.Prepare()
         {
-            this.command.Prepare();
+            this._command.Prepare();
         }
 
         IDbTransaction IDbCommand.Transaction
         {
-            get => this.command.Transaction;
+            get => this._command.Transaction;
 
-            set => this.command.Transaction = value;
+            set => this._command.Transaction = value;
         }
 
         UpdateRowSource IDbCommand.UpdatedRowSource
         {
-            get => this.command.UpdatedRowSource;
+            get => this._command.UpdatedRowSource;
 
-            set => this.command.UpdatedRowSource = value;
+            set => this._command.UpdatedRowSource = value;
         }
 
 #endregion
@@ -225,7 +225,7 @@
 
         void IDisposable.Dispose()
         {
-            this.command.Dispose();
+            this._command.Dispose();
         }
 
 #endregion
@@ -234,17 +234,17 @@
 
         private LoggedDbCommandInfo CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType executionType)
         {
-            var connection = this.command.Connection;
+            var connection = this._command.Connection;
 
             return new LoggedDbCommandInfo(
-                this.commandId,
+                this._commandId,
                 connection.State,
                 connection.Database,
                 executionType,
-                this.command.CommandType,
-                this.command.CommandTimeout,
-                this.command.CommandText,
-                this.command.Parameters.ToLogString());
+                this._command.CommandType,
+                this._command.CommandTimeout,
+                this._command.CommandText,
+                this._command.Parameters.ToLogString());
         }
 
 #endregion

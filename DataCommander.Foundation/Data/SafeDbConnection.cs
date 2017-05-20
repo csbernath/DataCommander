@@ -12,8 +12,8 @@ namespace DataCommander.Foundation.Data
     /// </summary>
     public class SafeDbConnection : IDbConnection
     {
-        private static readonly ILog log = LogFactory.Instance.GetTypeLog(typeof (SafeDbConnection));
-        private ISafeDbConnection safeDbConnection;
+        private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof (SafeDbConnection));
+        private ISafeDbConnection _safeDbConnection;
 
         /// <summary>
         /// 
@@ -42,7 +42,7 @@ namespace DataCommander.Foundation.Data
 #endif
 
             this.Connection = connection;
-            this.safeDbConnection = safeDbConnection;
+            this._safeDbConnection = safeDbConnection;
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace DataCommander.Foundation.Data
         {
             var count = 0;
 
-            while (!this.safeDbConnection.CancellationToken.IsCancellationRequested)
+            while (!this._safeDbConnection.CancellationToken.IsCancellationRequested)
             {
                 count++;
                 var stopwatch = new Stopwatch();
@@ -133,7 +133,7 @@ namespace DataCommander.Foundation.Data
                     stopwatch.Stop();
                     if (stopwatch.ElapsedMilliseconds >= 100)
                     {
-                        log.Trace("SafeDbConnection.Open() finished. {0}, count: {1}, elapsed: {2}",
+                        Log.Trace("SafeDbConnection.Open() finished. {0}, count: {1}, elapsed: {2}",
                             this.Connection.ConnectionString, count, stopwatch.Elapsed);
                     }
 
@@ -141,7 +141,7 @@ namespace DataCommander.Foundation.Data
                 }
                 catch (Exception e)
                 {
-                    this.safeDbConnection.HandleException(e, stopwatch.Elapsed);
+                    this._safeDbConnection.HandleException(e, stopwatch.Elapsed);
                 }
             }
         }
@@ -190,7 +190,7 @@ namespace DataCommander.Foundation.Data
 
             IDataReader reader = null;
 
-            while (!this.safeDbConnection.CancellationToken.IsCancellationRequested)
+            while (!this._safeDbConnection.CancellationToken.IsCancellationRequested)
             {
                 var ticks = Stopwatch.GetTimestamp();
 
@@ -210,7 +210,7 @@ namespace DataCommander.Foundation.Data
 
                     var state = this.Connection.State;
 
-                    log.Write(
+                    Log.Write(
                         LogLevel.Error,
                         "command.CommandText: {0}\r\nExecution time: {1}, command.CommandTimeout: {2}, connection.State: {3}\r\n{4}",
                         command.CommandText,
@@ -221,7 +221,7 @@ namespace DataCommander.Foundation.Data
 
                     if (state == ConnectionState.Open)
                     {
-                        this.safeDbConnection.HandleException(e, command);
+                        this._safeDbConnection.HandleException(e, command);
                     }
                     else
                     {
@@ -251,7 +251,7 @@ namespace DataCommander.Foundation.Data
                 this.Open();
             }
 
-            while (!this.safeDbConnection.CancellationToken.IsCancellationRequested)
+            while (!this._safeDbConnection.CancellationToken.IsCancellationRequested)
             {
                 try
                 {
@@ -260,11 +260,11 @@ namespace DataCommander.Foundation.Data
                 }
                 catch (Exception e)
                 {
-                    log.Write(LogLevel.Error, e.ToLogString());
+                    Log.Write(LogLevel.Error, e.ToLogString());
 
                     if (this.Connection.State == ConnectionState.Open)
                     {
-                        this.safeDbConnection.HandleException(e, command);
+                        this._safeDbConnection.HandleException(e, command);
                     }
                     else
                     {
@@ -291,7 +291,7 @@ namespace DataCommander.Foundation.Data
             var count = 0;
             var tryCount = 0;
 
-            while (tryCount == 0 || !this.safeDbConnection.CancellationToken.IsCancellationRequested)
+            while (tryCount == 0 || !this._safeDbConnection.CancellationToken.IsCancellationRequested)
             {
                 try
                 {
@@ -300,11 +300,11 @@ namespace DataCommander.Foundation.Data
                 }
                 catch (Exception e)
                 {
-                    log.Write(LogLevel.Error, e.ToLogString());
+                    Log.Write(LogLevel.Error, e.ToLogString());
 
                     if (this.Connection.State == ConnectionState.Open)
                     {
-                        this.safeDbConnection.HandleException(e, command);
+                        this._safeDbConnection.HandleException(e, command);
                     }
                     else
                     {

@@ -10,9 +10,9 @@
     /// </summary>
     public class DbCommandExecutionException : Exception
     {
-        private readonly string database;
-        private readonly string commandText;
-        private readonly int commandTimeout;
+        private readonly string _database;
+        private readonly string _commandText;
+        private readonly int _commandTimeout;
 
         /// <summary>
         /// 
@@ -23,9 +23,9 @@
         public DbCommandExecutionException(string message, Exception innerException, IDbCommand command)
             : base(message, innerException)
         {
-            this.commandText = command.ToLogString();
-            this.commandTimeout = command.CommandTimeout;
-            this.database = command.Connection.Database;
+            this._commandText = command.ToLogString();
+            this._commandTimeout = command.CommandTimeout;
+            this._database = command.Connection.Database;
         }
 
         /// <summary>
@@ -38,9 +38,9 @@
             sb.AppendFormat("DbCommandExecutionException: {0}\r\ninnerException:\r\n{1}\r\ndatabase: {2}\r\ncommandTimeout: {3}\r\ncommandText: {4}",
                 this.Message,
                 this.InnerException.ToLogString(),
-                this.database,
-                this.commandTimeout,
-                this.commandText);
+                this._database,
+                this._commandTimeout,
+                this._commandText);
             var s = sb.ToString();
             return s;
         }

@@ -9,10 +9,10 @@
     {
         #region Private Fields
 
-        private static readonly ILog log = LogFactory.Instance.GetTypeLog(typeof (DbConnectionLogger));
-        private LoggedDbConnection connection;
-        private BeforeOpenDbConnectionEventArgs beforeOpen;
-        private BeforeExecuteCommandEventArgs beforeExecuteReader;
+        private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof (DbConnectionLogger));
+        private LoggedDbConnection _connection;
+        private BeforeOpenDbConnectionEventArgs _beforeOpen;
+        private BeforeExecuteCommandEventArgs _beforeExecuteReader;
 
         #endregion
 
@@ -22,7 +22,7 @@
             Contract.Requires<ArgumentNullException>(connection != null);
 #endif
 
-            this.connection = connection;
+            this._connection = connection;
 
             connection.BeforeOpen += this.ConnectionBeforeOpen;
             connection.AfterOpen += this.ConnectionAfterOpen;
@@ -40,29 +40,29 @@
                 csb["Password"] = "<not logged here>";
             }
 
-            log.Trace("Opening connection {0}...", csb.ConnectionString);
+            Log.Trace("Opening connection {0}...", csb.ConnectionString);
 
-            this.beforeOpen = e;
+            this._beforeOpen = e;
         }
 
         private void ConnectionAfterOpen(object sender, AfterOpenDbConnectionEventArgs e)
         {
-            var duration = e.Timestamp - this.beforeOpen.Timestamp;
+            var duration = e.Timestamp - this._beforeOpen.Timestamp;
             if (e.Exception != null)
             {
-                log.Write(LogLevel.Error, "Opening connection finished in {0} seconds. Exception:\r\n{1}", StopwatchTimeSpan.ToString(duration, 3), e.Exception.ToLogString());
+                Log.Write(LogLevel.Error, "Opening connection finished in {0} seconds. Exception:\r\n{1}", StopwatchTimeSpan.ToString(duration, 3), e.Exception.ToLogString());
             }
             else
             {
-                log.Trace("Opening connection finished in {0} seconds.", StopwatchTimeSpan.ToString(duration, 3));
+                Log.Trace("Opening connection finished in {0} seconds.", StopwatchTimeSpan.ToString(duration, 3));
             }
 
-            this.beforeOpen = null;
+            this._beforeOpen = null;
         }
 
         private void ConnectionBeforeExecuteReader(object sender, BeforeExecuteCommandEventArgs e)
         {
-            this.beforeExecuteReader = e;
+            this._beforeExecuteReader = e;
         }
 
         private static string ToString(LoggedDbCommandInfo command, long duration)
@@ -73,22 +73,22 @@
 
         private void ConnectionAfterExecuteReader(object sender, AfterExecuteCommandEventArgs e)
         {
-            var duration = e.Timestamp - this.beforeExecuteReader.Timestamp;
+            var duration = e.Timestamp - this._beforeExecuteReader.Timestamp;
             if (e.Exception != null)
             {
-                log.Write(LogLevel.Error, "{0}\r\nException:\r\n{1}", ToString(e.Command, duration), e.Exception.ToLogString());
-                this.beforeExecuteReader = null;
+                Log.Write(LogLevel.Error, "{0}\r\nException:\r\n{1}", ToString(e.Command, duration), e.Exception.ToLogString());
+                this._beforeExecuteReader = null;
             }
             else
             {
-                log.Trace("{0}", ToString(e.Command, duration));
+                Log.Trace("{0}", ToString(e.Command, duration));
             }
         }
 
         private void ConnectionAfterRead(object sender, AfterReadEventArgs e)
         {
-            var duration = e.Timestamp - this.beforeExecuteReader.Timestamp;
-            log.Trace("{0} row(s) read in {1} seconds.", e.RowCount, StopwatchTimeSpan.ToString(duration, 3));
+            var duration = e.Timestamp - this._beforeExecuteReader.Timestamp;
+            Log.Trace("{0} row(s) read in {1} seconds.", e.RowCount, StopwatchTimeSpan.ToString(duration, 3));
         }
     }
 }

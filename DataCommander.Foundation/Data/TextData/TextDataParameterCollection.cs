@@ -12,23 +12,23 @@
     /// </summary>
     public sealed class TextDataParameterCollection : DbParameterCollection, IList<TextDataParameter>
     {
-        private readonly IndexableCollection<TextDataParameter> collection;
-        private readonly ListIndex<TextDataParameter> listIndex;
-        private readonly UniqueIndex<string, TextDataParameter> nameIndex;
+        private readonly IndexableCollection<TextDataParameter> _collection;
+        private readonly ListIndex<TextDataParameter> _listIndex;
+        private readonly UniqueIndex<string, TextDataParameter> _nameIndex;
 
         /// <summary>
         /// 
         /// </summary>
         public TextDataParameterCollection()
         {
-            this.listIndex = new ListIndex<TextDataParameter>("List");
-            this.nameIndex = new UniqueIndex<string, TextDataParameter>(
+            this._listIndex = new ListIndex<TextDataParameter>("List");
+            this._nameIndex = new UniqueIndex<string, TextDataParameter>(
                 "Name",
                 parameter => GetKeyResponse.Create(true, parameter.ParameterName),
                 SortOrder.None);
 
-            this.collection = new IndexableCollection<TextDataParameter>(this.listIndex);
-            this.collection.Indexes.Add(this.nameIndex);
+            this._collection = new IndexableCollection<TextDataParameter>(this._listIndex);
+            this._collection.Indexes.Add(this._nameIndex);
         }
 
         /// <summary>
@@ -44,8 +44,8 @@
 #endif
 
             var parameter = (TextDataParameter)value;
-            this.collection.Add(parameter);
-            return this.collection.Count - 1;
+            this._collection.Add(parameter);
+            return this._collection.Count - 1;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@
             Contract.Assert(parameter != null);
 #endif
 
-            this.collection.Add(parameter);
+            this._collection.Add(parameter);
             return parameter;
         }
 
@@ -77,7 +77,7 @@
         /// </summary>
         public override void Clear()
         {
-            this.collection.Clear();
+            this._collection.Clear();
         }
 
         /// <summary>
@@ -88,7 +88,7 @@
         [Pure]
         public override bool Contains(string value)
         {
-            return this.nameIndex.ContainsKey(value);
+            return this._nameIndex.ContainsKey(value);
         }
 
 #if FOUNDATION_3_5
@@ -132,7 +132,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override int Count => this.collection.Count;
+        public override int Count => this._collection.Count;
 
         /// <summary>
         /// 
@@ -271,7 +271,7 @@
 #if CONTRACTS_FULL
             Contract.Assert(this.Contains(parameterName));
 #endif
-            var parameter = this.nameIndex[parameterName];
+            var parameter = this._nameIndex[parameterName];
             var value = parameter.Value;
 #if CONTRACTS_FULL
             Contract.Assert(value is TResult);
@@ -287,7 +287,7 @@
         /// <returns></returns>
         public bool TryGetValue(string parameterName, out TextDataParameter parameter)
         {
-            return this.nameIndex.TryGetValue(parameterName, out parameter);
+            return this._nameIndex.TryGetValue(parameterName, out parameter);
         }
 
 #region IList<TextDataParameter> Members
@@ -298,7 +298,7 @@
             Contract.Assert(item != null);
 #endif
 
-            return this.listIndex.IndexOf(item);
+            return this._listIndex.IndexOf(item);
         }
 
         void IList<TextDataParameter>.Insert(int index, TextDataParameter item)
@@ -308,13 +308,13 @@
 
         void IList<TextDataParameter>.RemoveAt(int index)
         {
-            var parameter = this.listIndex[index];
-            this.collection.Remove(parameter);
+            var parameter = this._listIndex[index];
+            this._collection.Remove(parameter);
         }
 
         TextDataParameter IList<TextDataParameter>.this[int index]
         {
-            get => this.listIndex[index];
+            get => this._listIndex[index];
 
             set => throw new NotSupportedException();
         }
@@ -328,12 +328,12 @@
 #if CONTRACTS_FULL
             Contract.Assert(item != null);
 #endif
-            this.collection.Add(item);
+            this._collection.Add(item);
         }
 
         void ICollection<TextDataParameter>.Clear()
         {
-            this.collection.Clear();
+            this._collection.Clear();
         }
 
         bool ICollection<TextDataParameter>.Contains(TextDataParameter item)
@@ -346,16 +346,16 @@
             throw new NotImplementedException();
         }
 
-        int ICollection<TextDataParameter>.Count => this.collection.Count;
+        int ICollection<TextDataParameter>.Count => this._collection.Count;
 
-        bool ICollection<TextDataParameter>.IsReadOnly => this.collection.IsReadOnly;
+        bool ICollection<TextDataParameter>.IsReadOnly => this._collection.IsReadOnly;
 
         bool ICollection<TextDataParameter>.Remove(TextDataParameter item)
         {
 #if CONTRACTS_FULL
             Contract.Assert(item != null);
 #endif
-            return this.collection.Remove(item);
+            return this._collection.Remove(item);
         }
 
 #endregion
@@ -364,7 +364,7 @@
 
         IEnumerator<TextDataParameter> IEnumerable<TextDataParameter>.GetEnumerator()
         {
-            return this.collection.GetEnumerator();
+            return this._collection.GetEnumerator();
         }
 
 #endregion
@@ -373,7 +373,7 @@
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.collection.GetEnumerator();
+            return this._collection.GetEnumerator();
         }
 
 #endregion

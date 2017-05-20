@@ -11,10 +11,10 @@
     /// <typeparam name="T"></typeparam>
     public class SequenceIndex<TKey, T> : ICollectionIndex<T>
     {
-        private readonly string name;
-        private readonly Func<TKey> getNextKey;
-        private readonly Func<T, TKey> getKey;
-        private readonly IDictionary<TKey, T> dictionary;
+        private readonly string _name;
+        private readonly Func<TKey> _getNextKey;
+        private readonly Func<T, TKey> _getKey;
+        private readonly IDictionary<TKey, T> _dictionary;
 
         /// <summary>
         /// 
@@ -35,15 +35,15 @@
             Contract.Requires<ArgumentNullException>(dictionary != null);
 #endif
 
-            this.name = name;
-            this.getNextKey = getNextKey;
-            this.getKey = getKey;
-            this.dictionary = dictionary;
+            this._name = name;
+            this._getNextKey = getNextKey;
+            this._getKey = getKey;
+            this._dictionary = dictionary;
         }
 
 #region ICollectionIndex<T> Members
 
-        string ICollectionIndex<T>.Name => this.name;
+        string ICollectionIndex<T>.Name => this._name;
 
 #endregion
 
@@ -51,8 +51,8 @@
 
         void ICollection<T>.Add(T item)
         {
-            var key = this.getNextKey();
-            this.dictionary.Add(key, item);
+            var key = this._getNextKey();
+            this._dictionary.Add(key, item);
         }
 
         void ICollection<T>.Clear()
@@ -60,12 +60,12 @@
 #if CONTRACTS_FULL
             Contract.Ensures(this.dictionary.Count == 0);
 #endif
-            this.dictionary.Clear();
+            this._dictionary.Clear();
         }
 
         bool ICollection<T>.Contains(T item)
         {
-            return this.dictionary.Values.Contains(item);
+            return this._dictionary.Values.Contains(item);
         }
 
         void ICollection<T>.CopyTo(T[] array, int arrayIndex)
@@ -73,14 +73,14 @@
             throw new NotImplementedException();
         }
 
-        int ICollection<T>.Count => this.dictionary.Count;
+        int ICollection<T>.Count => this._dictionary.Count;
 
-        bool ICollection<T>.IsReadOnly => this.dictionary.IsReadOnly;
+        bool ICollection<T>.IsReadOnly => this._dictionary.IsReadOnly;
 
         bool ICollection<T>.Remove(T item)
         {
-            var key = this.getKey(item);
-            var removed = this.dictionary.Remove(key);
+            var key = this._getKey(item);
+            var removed = this._dictionary.Remove(key);
             return removed;
         }
 
@@ -90,7 +90,7 @@
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            return this.dictionary.Values.GetEnumerator();
+            return this._dictionary.Values.GetEnumerator();
         }
 
 #endregion
@@ -99,7 +99,7 @@
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.dictionary.Values.GetEnumerator();
+            return this._dictionary.Values.GetEnumerator();
         }
 
 #endregion

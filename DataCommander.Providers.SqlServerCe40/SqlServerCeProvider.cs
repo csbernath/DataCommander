@@ -209,7 +209,7 @@ ORDER BY ORDINAL_POSITION";
         {
             var schemaRow = new DbColumn(sourceSchemaRow);
             var columnSize = schemaRow.ColumnSize;
-            var allowDBNull = schemaRow.AllowDBNull;
+            var allowDBNull = schemaRow.AllowDbNull;
             var dataType = schemaRow.DataType;
             var typeCode = Type.GetTypeCode(dataType);
             string typeName;

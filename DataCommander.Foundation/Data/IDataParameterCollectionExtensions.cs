@@ -11,7 +11,7 @@ namespace DataCommander.Foundation.Data
     /// <summary>
     ///
     /// </summary>
-    public static class IDataParameterCollectionExtensions
+    public static class DataParameterCollectionExtensions
     {
         /// <summary>
         /// 

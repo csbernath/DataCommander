@@ -18,7 +18,7 @@ namespace DataCommander.Foundation.Data
     {
         #region Private Fields
 
-        private IDbProviderFactoryHelper providerFactoryHelper;
+        private IDbProviderFactoryHelper _providerFactoryHelper;
         internal const string NullString = "null";
 
         #endregion
@@ -55,13 +55,13 @@ namespace DataCommander.Foundation.Data
         /// </summary>
         public IDbProviderFactoryHelper ProviderFactoryHelper
         {
-            get => this.providerFactoryHelper;
+            get => this._providerFactoryHelper;
 
             set
             {
-                this.providerFactoryHelper = value;
-                this.CommandHelper = this.providerFactoryHelper.DbCommandHelper;
-                this.CommandBuilderHelper = this.providerFactoryHelper.DbCommandBuilderHelper;
+                this._providerFactoryHelper = value;
+                this.CommandHelper = this._providerFactoryHelper.DbCommandHelper;
+                this.CommandBuilderHelper = this._providerFactoryHelper.DbCommandBuilderHelper;
             }
         }
 

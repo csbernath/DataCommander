@@ -8,7 +8,7 @@ namespace DataCommander.Foundation.Data.PTypes
     /// </summary>
     public struct PBoolean : INullable
     {
-        private SqlBoolean sql;
+        private SqlBoolean _sql;
 
         /// <summary>
         /// 
@@ -45,7 +45,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <param name="value"></param>
         public PBoolean( bool value )
         {
-            this.sql = value;
+            this._sql = value;
             this.ValueType = PValueType.Value;
         }
 
@@ -55,14 +55,14 @@ namespace DataCommander.Foundation.Data.PTypes
         /// </summary>
         public PBoolean( SqlBoolean value )
         {
-            this.sql = value;
+            this._sql = value;
             this.ValueType = value.IsNull ? PValueType.Null : PValueType.Value;
         }
 
         private PBoolean( PValueType type )
         {
             this.ValueType = type;
-            this.sql = SqlBoolean.Null;
+            this._sql = SqlBoolean.Null;
         }
 
         #endregion
@@ -118,7 +118,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns></returns>
         public static implicit operator bool( PBoolean value )
         {
-            return (bool) value.sql;
+            return (bool) value._sql;
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace DataCommander.Foundation.Data.PTypes
             {
                 if (x.ValueType == PValueType.Value)
                 {
-                    isEqual = x.sql.Value == y.sql.Value;
+                    isEqual = x._sql.Value == y._sql.Value;
                 }
             }
 
@@ -206,7 +206,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns></returns>
         public override int GetHashCode()
         {
-            var hashCode = this.sql.GetHashCode();
+            var hashCode = this._sql.GetHashCode();
             return hashCode;
         }
 
@@ -243,7 +243,7 @@ namespace DataCommander.Foundation.Data.PTypes
                 {
                     case PValueType.Value:
                     case PValueType.Null:
-                        value = this.sql;
+                        value = this._sql;
                         break;
 
                     default:
@@ -259,17 +259,17 @@ namespace DataCommander.Foundation.Data.PTypes
                 if (value == null)
                 {
                     this.ValueType = PValueType.Default;
-                    this.sql = SqlBoolean.Null;
+                    this._sql = SqlBoolean.Null;
                 }
                 else if (value == DBNull.Value)
                 {
                     this.ValueType = PValueType.Null;
-                    this.sql = SqlBoolean.Null;
+                    this._sql = SqlBoolean.Null;
                 }
                 else
                 {
-                    this.sql = (SqlBoolean) value;
-                    this.ValueType = this.sql.IsNull ? PValueType.Null : PValueType.Value;
+                    this._sql = (SqlBoolean) value;
+                    this.ValueType = this._sql.IsNull ? PValueType.Null : PValueType.Value;
                 }
             }
         }
@@ -277,12 +277,12 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public bool IsTrue => this.sql.IsTrue;
+        public bool IsTrue => this._sql.IsTrue;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsFalse => this.sql.IsFalse;
+        public bool IsFalse => this._sql.IsFalse;
 
         /// <summary>
         /// 
@@ -290,7 +290,7 @@ namespace DataCommander.Foundation.Data.PTypes
         /// <returns></returns>
         public override string ToString()
         {
-            return this.sql.ToString();
+            return this._sql.ToString();
         }
     }
 }

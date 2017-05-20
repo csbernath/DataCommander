@@ -48,7 +48,7 @@
             this.BaseSchemaName = schemaTableRow.Field<string>(SchemaTableColumn.BaseSchemaName);
             this.BaseTableName = schemaTableRow.Field<string>(SchemaTableColumn.BaseTableName);
             this.DataType = (Type)schemaTableRow[SchemaTableColumn.DataType];
-            this.AllowDBNull = schemaTableRow.Field<bool?>(SchemaTableColumn.AllowDBNull);
+            this.AllowDbNull = schemaTableRow.Field<bool?>(SchemaTableColumn.AllowDBNull);
             this.ProviderType = schemaTableRow.Field<int>(SchemaTableColumn.ProviderType);
 
             column = columns[SchemaTableColumn.IsAliased];
@@ -87,7 +87,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public bool? AllowDBNull { get; }
+        public bool? AllowDbNull { get; }
 
         /// <summary>
         /// 

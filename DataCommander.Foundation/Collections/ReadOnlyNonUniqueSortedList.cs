@@ -15,10 +15,10 @@
     {
         #region Private Fields
 
-        private readonly IReadOnlyList<TValue> values;
-        private readonly Func<TValue, TKey> keySelector;
-        private readonly Comparison<TKey> comparison;
-        private IReadOnlyList<int> groups;
+        private readonly IReadOnlyList<TValue> _values;
+        private readonly Func<TValue, TKey> _keySelector;
+        private readonly Comparison<TKey> _comparison;
+        private IReadOnlyList<int> _groups;
 
         #endregion
 
@@ -44,9 +44,9 @@
                 "keys must be ordered");
 #endif
 
-            this.values = values;
-            this.keySelector = keySelector;
-            this.comparison = comparison;
+            this._values = values;
+            this._keySelector = keySelector;
+            this._comparison = comparison;
 
             this.InitializeGroups();
         }
@@ -71,7 +71,7 @@
         /// 
         /// </summary>
         [Pure]
-        public int Count => this.groups?.Count ?? 0;
+        public int Count => this._groups?.Count ?? 0;
 
         /// <summary>
         /// 
@@ -92,11 +92,11 @@
                 var index = this.IndexOf(key);
                 if (index >= 0)
                 {
-                    var currentGroupIndex = this.groups[index];
-                    var nextGroupIndex = index < this.groups.Count - 1 ? this.groups[index + 1] : this.values.Count;
+                    var currentGroupIndex = this._groups[index];
+                    var nextGroupIndex = index < this._groups.Count - 1 ? this._groups[index + 1] : this._values.Count;
                     var count = nextGroupIndex - currentGroupIndex;
 
-                    readOnlyList = new ReadOnlyListSegment<TValue>(this.values, currentGroupIndex, count);
+                    readOnlyList = new ReadOnlyListSegment<TValue>(this._values, currentGroupIndex, count);
                 }
                 else
                 {
@@ -113,13 +113,13 @@
         /// <returns></returns>
         public IEnumerable<IReadOnlyList<TValue>> GetGroups()
         {
-            var lastGroupIndex = this.groups.Count - 1;
+            var lastGroupIndex = this._groups.Count - 1;
             for (var groupIndex = 0; groupIndex <= lastGroupIndex; ++groupIndex)
             {
-                var valueStartIndex = this.groups[groupIndex];
-                var valueNextStartIndex = groupIndex < lastGroupIndex ? this.groups[groupIndex + 1] : this.values.Count;
+                var valueStartIndex = this._groups[groupIndex];
+                var valueNextStartIndex = groupIndex < lastGroupIndex ? this._groups[groupIndex + 1] : this._values.Count;
                 var valueCount = valueNextStartIndex - valueStartIndex;
-                yield return new ReadOnlyListSegment<TValue>(this.values, valueStartIndex, valueCount);
+                yield return new ReadOnlyListSegment<TValue>(this._values, valueStartIndex, valueCount);
             }
         }
 
@@ -144,11 +144,11 @@
 
         private void InitializeGroups()
         {
-            if (this.values.Count > 0)
+            if (this._values.Count > 0)
             {
 #region Create
 
-                var notEqualsCount = this.values.SelectPreviousAndCurrentKey(this.keySelector).Count(k => comparison(k.Previous, k.Current) != 0);
+                var notEqualsCount = this._values.SelectPreviousAndCurrentKey(this._keySelector).Count(k => _comparison(k.Previous, k.Current) != 0);
                 var smallArrayMaxLength = LargeObjectHeap.GetSmallArrayMaxLength(sizeof(int));
                 var itemCount = notEqualsCount + 1;
                 var segmentedArrayBuilder = new SegmentedArrayBuilder<int>(itemCount, smallArrayMaxLength);
@@ -160,17 +160,17 @@
                 segmentedArrayBuilder.Add(0);
                 var index = 0;
 
-                foreach (var key in this.values.SelectPreviousAndCurrentKey(this.keySelector))
+                foreach (var key in this._values.SelectPreviousAndCurrentKey(this._keySelector))
                 {
                     index++;
 
-                    if (comparison(key.Previous, key.Current) != 0)
+                    if (_comparison(key.Previous, key.Current) != 0)
                     {
                         segmentedArrayBuilder.Add(index);
                     }
                 }
 
-                this.groups = segmentedArrayBuilder.ToReadOnlyList();
+                this._groups = segmentedArrayBuilder.ToReadOnlyList();
 
 #endregion
             }
@@ -181,14 +181,14 @@
         {
             int index;
 
-            if (this.groups != null)
+            if (this._groups != null)
             {
-                index = BinarySearch.IndexOf(0, this.groups.Count - 1, currentIndex =>
+                index = BinarySearch.IndexOf(0, this._groups.Count - 1, currentIndex =>
                 {
-                    var valueIndex = this.groups[currentIndex];
-                    var otherValue = this.values[valueIndex];
-                    var otherKey = this.keySelector(otherValue);
-                    return this.comparison(key, otherKey);
+                    var valueIndex = this._groups[currentIndex];
+                    var otherValue = this._values[valueIndex];
+                    var otherKey = this._keySelector(otherValue);
+                    return this._comparison(key, otherKey);
                 });
             }
             else

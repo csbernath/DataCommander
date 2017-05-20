@@ -6,7 +6,7 @@ namespace DataCommander.Foundation.Data.SqlClient
 
     internal sealed class SqlConnectionFactory : IDbConnectionHelper
     {
-        private readonly IDbConnection connection;
+        private readonly IDbConnection _connection;
 
         public event EventHandler InfoMessage;
 
@@ -15,12 +15,12 @@ namespace DataCommander.Foundation.Data.SqlClient
             IDbConnection connection)
         {
             sqlConnection.InfoMessage += this.InfoMessageEvent;
-            this.connection = connection;
+            this._connection = connection;
         }
 
         private void InfoMessageEvent(object sender, SqlInfoMessageEventArgs e)
         {
-            this.InfoMessage?.Invoke(this.connection, e);
+            this.InfoMessage?.Invoke(this._connection, e);
         }
     }
 }
