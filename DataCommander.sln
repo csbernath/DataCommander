@@ -1,22 +1,14 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander", "DataCommander\DataCommander.csproj", "{FCD0459F-B6BF-4F88-8466-F31732C97EC3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers", "DataCommander.Providers\DataCommander.Providers.csproj", "{31A30A80-D1B6-4867-A65E-188DE9E912C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.SqlServer2005", "DataCommander.Providers.SqlServer2005\DataCommander.Providers.SqlServer2005.csproj", "{97F3ACFC-06D7-494F-ADA0-FDF1693DE112}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.SqlServer", "DataCommander.Providers.SqlServer\DataCommander.Providers.SqlServer.csproj", "{97F3ACFC-06D7-494F-ADA0-FDF1693DE112}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Foundation", "DataCommander.Foundation\DataCommander.Foundation.csproj", "{1BACF0AA-4122-4C10-A8D2-248542AF054C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{BB7CD33D-6307-4DDC-9EDD-451CFD59F0D6}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Tfs2010", "DataCommander.Providers.Tfs2010\DataCommander.Providers.Tfs2010.csproj", "{0174C31F-52A7-490D-A212-D1CE846943B8}"
 EndProject

@@ -65,7 +65,8 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE;DEBUG;FOUNDATION_4_6</DefineConstants>
-    <DocumentationFile>bin\Debug\DataCommander.Foundation.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
@@ -435,6 +436,16 @@
     <Compile Include="Data\AsyncDbConnection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data\ExecuteCommandAsyncRequest.cs" />
+    <Compile Include="Data\SqlClient\SqlCommandExecutor.cs" />
+    <Compile Include="Data\IDbCommandExecutor.cs" />
+    <Compile Include="Data\ExecuteReaderResponse.cs" />
+    <Compile Include="Data\ExecuteReaderResponse1.cs" />
+    <Compile Include="Data\ExecuteReaderResponse2.cs" />
+    <Compile Include="Data\DbDataReaderExtensions.cs" />
+    <Compile Include="Data\IDbCommandExecutorExtensions.cs" />
+    <Compile Include="Orm\OrmConnectionContext.cs" />
+    <Compile Include="Orm\OrmContext.cs" />
     <Compile Include="Data\CommandDefinition.cs" />
     <Compile Include="Data\ConnectionStateManager.cs" />
     <Compile Include="Data\Database.cs">
@@ -451,6 +462,7 @@
     <Compile Include="Data\DbCommandExecutionException.cs" />
     <Compile Include="Data\DbProviderFactoryExtensions.cs" />
     <Compile Include="Data\DbTransactionScope.cs" />
+    <Compile Include="Data\CreateCommandRequest.cs" />
     <Compile Include="Data\IDataParameterCollectionExtensions.cs" />
     <Compile Include="Data\IDataParameterExtensions.cs" />
     <Compile Include="Data\IDataParameterValue.cs" />
@@ -473,6 +485,7 @@
     <Compile Include="Data\IDbTransactionScopeContract.cs" />
     <Compile Include="Data\IDbTransactionScopeExtensions.cs" />
     <Compile Include="Data\ISafeDbConnection.cs" />
+    <Compile Include="Data\ITransactionScope.cs" />
     <Compile Include="Data\LoggedDbConnection\AfterExecuteCommandEventArgs.cs" />
     <Compile Include="Data\LoggedDbConnection\AfterOpenDbConnectionEventArgs.cs" />
     <Compile Include="Data\LoggedDbConnection\AfterReadEventArgs.cs" />
@@ -487,6 +500,10 @@
     <Compile Include="Data\LoggedDbConnection\LoggedDbConnectionFactory.cs" />
     <Compile Include="Data\LoggedDbConnection\LoggedEventArgs.cs" />
     <Compile Include="Data\MappedDataReader.cs" />
+    <Compile Include="Data\ExecuteCommandRequest.cs" />
+    <Compile Include="Data\ExecuteReaderRequest.cs" />
+    <Compile Include="Orm\SqlServerOrm.cs" />
+    <Compile Include="Threading\Tasks\TaskSyncRunner.cs" />
     <Compile Include="Data\PTypes\NamespaceDoc.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -622,6 +639,7 @@
     <Compile Include="Data\SqlClient\SqlStatementBuilder.cs" />
     <Compile Include="Data\SqlClient\SqlStatementExtensions.cs" />
     <Compile Include="Data\SqlNull.cs" />
+    <Compile Include="Data\ExecuteReaderResponse3.cs" />
     <Compile Include="Data\TextData\ITextDataConverter.cs" />
     <Compile Include="Data\TextData\TextDataColumn.cs" />
     <Compile Include="Data\TextData\TextDataColumnCollection.cs" />
@@ -644,6 +662,7 @@
     <Compile Include="Data\TextData\TextDataStreamWriter.cs" />
     <Compile Include="Data\TextData\TextDataTable.cs" />
     <Compile Include="Data\TextData\TextDataTableCollection.cs" />
+    <Compile Include="Data\TransactionScopeContext.cs" />
     <Compile Include="Diagnostics\AppDomainMonitor.cs">
       <SubType>Code</SubType>
     </Compile>

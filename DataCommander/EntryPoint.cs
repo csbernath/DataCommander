@@ -8,6 +8,7 @@ namespace DataCommander
     using DataCommander.Foundation.Configuration;
     using DataCommander.Foundation.Diagnostics;
     using DataCommander.Providers;
+    using Foundation.Diagnostics.Log;
     using Foundation.Diagnostics.MethodProfiler;
 
     internal static class EntryPoint
