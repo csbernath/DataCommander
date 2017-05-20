@@ -444,8 +444,6 @@
     <Compile Include="Data\ExecuteReaderResponse2.cs" />
     <Compile Include="Data\DbDataReaderExtensions.cs" />
     <Compile Include="Data\IDbCommandExecutorExtensions.cs" />
-    <Compile Include="Orm\OrmConnectionContext.cs" />
-    <Compile Include="Orm\OrmContext.cs" />
     <Compile Include="Data\CommandDefinition.cs" />
     <Compile Include="Data\ConnectionStateManager.cs" />
     <Compile Include="Data\Database.cs">
@@ -502,7 +500,6 @@
     <Compile Include="Data\MappedDataReader.cs" />
     <Compile Include="Data\ExecuteCommandRequest.cs" />
     <Compile Include="Data\ExecuteReaderRequest.cs" />
-    <Compile Include="Orm\SqlServerOrm.cs" />
     <Compile Include="Threading\Tasks\TaskSyncRunner.cs" />
     <Compile Include="Data\PTypes\NamespaceDoc.cs">
       <SubType>Code</SubType>
