@@ -25,6 +25,90 @@ Result: sort in memory|Yes|No
 
 ## [Object-relational mapping (ORM)](https://en.wikipedia.org/wiki/Object-relational_mapping)
 
+1. Download and restror the SQL Server 2016 sample database from https://github.com/microsoft/sql-server-samples
+2. Open the database with Data Commander and execute the following command:
+
+```SQL
+use WideWorldImporters
+
+select top 0
+    CustomerID,
+    CustomerName,
+    BillToCustomerID,
+    CustomerCategoryID
+from Sales.Customers
+
+select top 0 *
+from Sales.CustomerTransactions
+```
+
+3. The program generates C# ORM code snippets. See them in the Messages window:
+
+```C#
+internal sealed class Row0
+{
+    public int CustomerID;
+    public string CustomerName;
+    public int BillToCustomerID;
+    public int CustomerCategoryID;
+}
+
+private static Row0 Read0(IDataRecord dataRecord)
+{
+    var row = new Row0();
+    row.CustomerID = dataRecord.GetInt32(0);
+    row.CustomerName = dataRecord.GetString(1);
+    row.BillToCustomerID = dataRecord.GetInt32(2);
+    row.CustomerCategoryID = dataRecord.GetInt32(3);
+    return row;
+}
+
+internal sealed class Row1
+{
+    public int CustomerTransactionID;
+    public int CustomerID;
+    public int TransactionTypeID;
+    public int? InvoiceID;
+    public int? PaymentMethodID;
+    public DateTime TransactionDate;
+    public decimal AmountExcludingTax;
+    public decimal TaxAmount;
+    public decimal TransactionAmount;
+    public decimal OutstandingBalance;
+    public DateTime? FinalizationDate;
+    public bool? IsFinalized;
+    public int LastEditedBy;
+    public DateTime LastEditedWhen;
+}
+
+private static Row1 Read1(IDataRecord dataRecord)
+{
+    var row = new Row1();
+    row.CustomerTransactionID = dataRecord.GetInt32(0);
+    row.CustomerID = dataRecord.GetInt32(1);
+    row.TransactionTypeID = dataRecord.GetInt32(2);
+    row.InvoiceID = dataRecord.GetNullableInt32(3);
+    row.PaymentMethodID = dataRecord.GetNullableInt32(4);
+    row.TransactionDate = dataRecord.GetDateTime(5);
+    row.AmountExcludingTax = dataRecord.GetDecimal(6);
+    row.TaxAmount = dataRecord.GetDecimal(7);
+    row.TransactionAmount = dataRecord.GetDecimal(8);
+    row.OutstandingBalance = dataRecord.GetDecimal(9);
+    row.FinalizationDate = dataRecord.GetNullableDateTime(10);
+    row.IsFinalized = dataRecord.GetNullableBoolean(11);
+    row.LastEditedBy = dataRecord.GetInt32(12);
+    row.LastEditedWhen = dataRecord.GetDateTime(13);
+    return row;
+}
+
+private static ExecuteReaderResponse<Row0,Row1> Execute(this IDbCommandExecutor executor)
+{
+	const string commandText = "...";
+    var request = new ExecuteReaderRequest(commandText);
+    return executor.Read(request,Read0,Read1);
+}
+
+```
 
 ## Credits
 
