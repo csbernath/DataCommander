@@ -40,7 +40,7 @@ namespace DataCommander.Foundation.Data
             }, cancellationToken);
         }
 
-        public static void ExecuteCommand(this IDbCommandExecutor executor, InitializeCommandRequest request, Action<IDbCommand> execute)
+        public static void ExecuteCommand(this IDbCommandExecutor executor, CreateCommandRequest request, Action<IDbCommand> execute)
         {
             var requests = new[]
             {
@@ -50,7 +50,7 @@ namespace DataCommander.Foundation.Data
             executor.ExecuteCommands(requests);
         }
 
-        public static async Task ExecuteCommandAsync(this IDbCommandExecutor executor, InitializeCommandRequest request, Func<DbCommand, Task> execute,
+        public static async Task ExecuteCommandAsync(this IDbCommandExecutor executor, CreateCommandRequest request, Func<DbCommand, Task> execute,
             CancellationToken cancellationToken)
         {
             var requests = new[]
@@ -61,14 +61,14 @@ namespace DataCommander.Foundation.Data
             await executor.ExecuteCommandsAsync(requests, cancellationToken);
         }
 
-        public static int ExecuteNonQuery(this IDbCommandExecutor executor, InitializeCommandRequest request)
+        public static int ExecuteNonQuery(this IDbCommandExecutor executor, CreateCommandRequest request)
         {
             var affectedRows = 0;
             executor.ExecuteCommand(request, command => affectedRows = command.ExecuteNonQuery());
             return affectedRows;
         }
 
-        public static async Task<int> ExecuteNonQueryAsync(this IDbCommandExecutor executor, InitializeCommandRequest request,
+        public static async Task<int> ExecuteNonQueryAsync(this IDbCommandExecutor executor, CreateCommandRequest request,
             CancellationToken cancellationToken)
         {
             var affectedRows = 0;
@@ -81,14 +81,14 @@ namespace DataCommander.Foundation.Data
             return affectedRows;
         }
 
-        public static object ExecuteScalar(this IDbCommandExecutor executor, InitializeCommandRequest request)
+        public static object ExecuteScalar(this IDbCommandExecutor executor, CreateCommandRequest request)
         {
             object scalar = null;
             executor.ExecuteCommand(request, command => scalar = command.ExecuteScalar());
             return scalar;
         }
 
-        public static async Task<object> ExecuteScalarAsync(this IDbCommandExecutor executor, InitializeCommandRequest command,
+        public static async Task<object> ExecuteScalarAsync(this IDbCommandExecutor executor, CreateCommandRequest command,
             CancellationToken cancellationToken)
         {
             object scalar = null;

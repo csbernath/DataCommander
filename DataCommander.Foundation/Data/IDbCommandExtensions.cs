@@ -11,7 +11,7 @@
     /// </summary>
     public static class IDbCommandExtensions
     {
-        public static void Initialize(this IDbCommand command, InitializeCommandRequest request)
+        public static void Initialize(this IDbCommand command, CreateCommandRequest request)
         {
             command.CommandType = request.CommandType;
             command.CommandText = request.CommandText;

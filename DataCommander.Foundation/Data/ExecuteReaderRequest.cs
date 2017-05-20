@@ -6,7 +6,7 @@ namespace DataCommander.Foundation.Data
 
     public sealed class ExecuteReaderRequest
     {
-        public ExecuteReaderRequest(InitializeCommandRequest initializeCommandRequest, CommandBehavior commandBehavior, CancellationToken cancellationToken)
+        public ExecuteReaderRequest(CreateCommandRequest initializeCommandRequest, CommandBehavior commandBehavior, CancellationToken cancellationToken)
         {
             InitializeCommandRequest = initializeCommandRequest;
             CommandBehavior = commandBehavior;
@@ -14,16 +14,16 @@ namespace DataCommander.Foundation.Data
         }
 
         public ExecuteReaderRequest(string commandText)
-            : this(new InitializeCommandRequest(commandText), CommandBehavior.Default, CancellationToken.None)
+            : this(new CreateCommandRequest(commandText), CommandBehavior.Default, CancellationToken.None)
         {
         }
 
         public ExecuteReaderRequest(string commandText, IEnumerable<object> parameters)
-            : this(new InitializeCommandRequest(commandText, parameters), CommandBehavior.Default, CancellationToken.None)
+            : this(new CreateCommandRequest(commandText, parameters), CommandBehavior.Default, CancellationToken.None)
         {
         }
 
-        public readonly InitializeCommandRequest InitializeCommandRequest;
+        public readonly CreateCommandRequest InitializeCommandRequest;
         public readonly CommandBehavior CommandBehavior;
         public readonly CancellationToken CancellationToken;
     }

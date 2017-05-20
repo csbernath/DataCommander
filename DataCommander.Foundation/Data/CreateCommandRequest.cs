@@ -4,19 +4,9 @@
     using System.Data;
     using System.Linq;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public class InitializeCommandRequest
+    public class CreateCommandRequest
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="commandText"></param>
-        /// <param name="parameters"></param>
-        /// <param name="commandType"></param>
-        /// <param name="commandTimeout"></param>
-        public InitializeCommandRequest(string commandText, IEnumerable<object> parameters, CommandType commandType, int commandTimeout)
+        public CreateCommandRequest(string commandText, IEnumerable<object> parameters, CommandType commandType, int commandTimeout)
         {
             CommandText = commandText;
             Parameters = parameters?.ToList();
@@ -24,43 +14,19 @@
             CommandTimeout = commandTimeout;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="commandText"></param>
-        /// <param name="parameters"></param>
-        public InitializeCommandRequest(string commandText, IEnumerable<object> parameters)
+        public CreateCommandRequest(string commandText, IEnumerable<object> parameters)
             : this(commandText, parameters, CommandType.Text, 0)
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="commandText"></param>
-        public InitializeCommandRequest(string commandText)
+        public CreateCommandRequest(string commandText)
             : this(commandText, null)
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public readonly string CommandText;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public readonly List<object> Parameters;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public readonly CommandType CommandType;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public readonly int CommandTimeout;
     }
 }

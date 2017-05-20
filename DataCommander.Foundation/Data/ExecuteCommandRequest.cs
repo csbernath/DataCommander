@@ -6,7 +6,7 @@ namespace DataCommander.Foundation.Data
 
     public sealed class ExecuteCommandRequest
     {
-        public ExecuteCommandRequest(InitializeCommandRequest initializeCommandRequest, Action<IDbCommand> execute)
+        public ExecuteCommandRequest(CreateCommandRequest initializeCommandRequest, Action<IDbCommand> execute)
         {
             FoundationContract.Requires<ArgumentNullException>(initializeCommandRequest != null);
             FoundationContract.Requires<ArgumentNullException>(execute != null);
@@ -15,7 +15,7 @@ namespace DataCommander.Foundation.Data
             Execute = execute;
         }
 
-        public readonly InitializeCommandRequest InitializeCommandRequest;
+        public readonly CreateCommandRequest InitializeCommandRequest;
         public readonly Action<IDbCommand> Execute;
     }
 }

@@ -7,7 +7,7 @@ namespace DataCommander.Foundation.Data
 
     public sealed class ExecuteCommandAsyncRequest
     {
-        public ExecuteCommandAsyncRequest(InitializeCommandRequest initializeCommandRequest, Func<DbCommand, Task> execute)
+        public ExecuteCommandAsyncRequest(CreateCommandRequest initializeCommandRequest, Func<DbCommand, Task> execute)
         {
             FoundationContract.Requires<ArgumentNullException>(initializeCommandRequest != null);
             FoundationContract.Requires<ArgumentNullException>(execute != null);
@@ -16,7 +16,7 @@ namespace DataCommander.Foundation.Data
             Execute = execute;
         }
 
-        public readonly InitializeCommandRequest InitializeCommandRequest;
+        public readonly CreateCommandRequest InitializeCommandRequest;
         public readonly Func<DbCommand, Task> Execute;
     }
 }

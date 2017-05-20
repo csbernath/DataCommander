@@ -48,14 +48,7 @@ namespace DataCommander.Foundation.Data
         /// <summary>
         /// Retrieves the underlying <see cref="System.Data.IDbConnection"/>.
         /// </summary>
-        public IDbConnection Connection
-        {
-            [DebuggerStepThrough]
-            get;
-
-            [DebuggerStepThrough]
-            set;
-        }
+        public IDbConnection Connection { [DebuggerStepThrough] get; [DebuggerStepThrough] set; }
 
         /// <summary>
         /// 
@@ -91,27 +84,13 @@ namespace DataCommander.Foundation.Data
         /// Gets or sets the transaction.
         /// </summary>
         /// <value>The transaction.</value>
-        public IDbTransaction Transaction
-        {
-            [DebuggerStepThrough]
-            get;
-
-            [DebuggerStepThrough]
-            set;
-        }
+        public IDbTransaction Transaction { [DebuggerStepThrough] get; [DebuggerStepThrough] set; }
 
         /// <summary>
         /// Gets or sets the command timeout.
         /// </summary>
         /// <value>The command timeout.</value>
-        public int CommandTimeout
-        {
-            [DebuggerStepThrough]
-            get;
-
-            [DebuggerStepThrough]
-            set;
-        }
+        public int CommandTimeout { [DebuggerStepThrough] get; [DebuggerStepThrough] set; }
 
         /// <summary>
         /// Gets the last executed command's rowcount.
@@ -156,16 +135,16 @@ namespace DataCommander.Foundation.Data
 
                 var parameters = this.Command.Parameters;
                 var parameterObject = parameters[0];
-                var parameter = (IDataParameter)parameterObject;
+                var parameter = (IDataParameter) parameterObject;
                 var valueObject = parameter.Value;
-                var returnValue = (int)valueObject;
+                var returnValue = (int) valueObject;
                 return returnValue;
             }
         }
 
-#endregion
+        #endregion
 
-#region Public Static Methods
+        #region Public Static Methods
 
         /// <summary>
         /// 
@@ -388,7 +367,7 @@ namespace DataCommander.Foundation.Data
             }
             else
             {
-                returnValue = (TResult)value;
+                returnValue = (TResult) value;
             }
 
             return returnValue;
@@ -464,9 +443,9 @@ namespace DataCommander.Foundation.Data
             return s;
         }
 
-#endregion
+        #endregion
 
-#region Public Instance Methods
+        #region Public Instance Methods
 
         /// <summary>
         /// Opens the underlying <see cref="System.Data.IDbConnection"/>
@@ -820,9 +799,9 @@ namespace DataCommander.Foundation.Data
             return this.RowCount;
         }
 
-#endregion
+        #endregion
 
-#region Protected Methods
+        #region Protected Methods
 
         /// <summary>
         /// Inherited class must call this method first.
@@ -843,9 +822,9 @@ namespace DataCommander.Foundation.Data
             this.CommandTimeout = commandTimeout;
         }
 
-#endregion
+        #endregion
 
-#region Private Methods
+        #region Private Methods
 
         internal static void FillSchema(DataTable schemaTable, DataTable dataTable)
         {
@@ -855,8 +834,8 @@ namespace DataCommander.Foundation.Data
 
             foreach (DataRow row in schemaTable.Rows)
             {
-                var columnName = (string)row["ColumnName"];
-                var dataType = (Type)row["DataType"];
+                var columnName = (string) row["ColumnName"];
+                var dataType = (Type) row["DataType"];
                 var isKey = isKeyColumn != null && row.Field<bool?>(isKeyColumn) == true;
                 var columnNameAdd = columnName;
                 var index = 2;
@@ -920,6 +899,6 @@ namespace DataCommander.Foundation.Data
             return array;
         }
 
-#endregion
+        #endregion
     }
 }
