@@ -1,7 +1,5 @@
 # Data Commander
 
-This program is freeware and released under the [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.txt).
-
 Data Commander is a front-end for SQL and other databases.
 The program has a plugin architecture for adding arbitrary data providers.
 
@@ -9,10 +7,13 @@ Special features of Data Commander
 
 Feature|Data Commander|SQL Server Management Studio v17.0
 ---|---|---
+Audit: log commands to file|Yes|No
 Auto completion: Pascal case filtering|Yes|No
 Auto completion: column value filter|Yes|No
 Color themes|Light, dark|Light
+Create insert statements from select|Yes|No
 Drag & drop: file to binary constant|Yes|No
+Edit rows: generate change script|Yes|No
 Object explorer: find item|Yes|No
 ORM: .NET schema table|Yes|No
 ORM: C# [POCO](https://en.wikipedia.org/wiki/Plain_old_CLR_object) class|Yes|No
@@ -25,7 +26,7 @@ Result: sort in memory|Yes|No
 
 ## [Object-relational mapping (ORM)](https://en.wikipedia.org/wiki/Object-relational_mapping)
 
-1. Download and restror the SQL Server 2016 sample database from https://github.com/microsoft/sql-server-samples
+1. Download and restore the SQL Server 2016 sample database from https://github.com/microsoft/sql-server-samples
 2. Open the database with Data Commander and execute the following command:
 
 ```SQL
@@ -110,10 +111,6 @@ private static ExecuteReaderResponse<Row0,Row1> Execute(this IDbCommandExecutor 
 
 ```
 
-## Credits
-
-![JetBrains Resharper](https://github.com/csbernath/DataCommander/blob/master/resharper-logo.ico)JetBrains Resharper
-
 The following plugins are already implemented:
 
 SQL databases (client/server):
@@ -143,12 +140,6 @@ Features:
 - The editor has syntax highlighting, code completion for SQL statements.
 - The output of a query can be displayed as data grid, text, html.
 - The data grid can be exported into Excel file.
-
-Development environment:
-
-- .NET Framework 4.6.2
-- C# 7.0
-- Visual Studio Community 2017
 
 Provider.Name|Description
 ---|---
@@ -520,7 +511,7 @@ exec workspaces
 exec workspaces null,'bernath'
 ```
 
-### Changes
+## Changes
 
 - 2015-02-06: Upgrading to .NET Framework 4.5.
 - 2014-10-10: Moving to Github
@@ -586,7 +577,21 @@ http://msdn.microsoft.com/en-us/library/office/aa140066(v=office.10).aspx.
 - 2011-03-26: Creating  Microsoft.NET 4.0 based version of Data Commander.
 - 2002-01-??: Creating SqlUtil for querying Oracle and VB6 COM objects ADO recordsets via VBScript.
 
-### References
+## License
+
+This program is freeware and released under the [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.txt).
+
+## Development environment
+
+- .NET Framework 4.6.2
+- C# 7.0
+- Visual Studio Community 2017
+
+## Credits
+
+![JetBrains Resharper](https://github.com/csbernath/DataCommander/blob/master/resharper-logo.ico)JetBrains Resharper
+
+## References
 
 - [Microsoft SQL Server Management Studio v17.0](https://msdn.microsoft.com/en-us/library/hh213248.aspx)
 - [pgAdmin: PostgreSQL Tools](http://www.pgadmin.org/)
