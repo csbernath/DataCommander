@@ -9,7 +9,7 @@ namespace DataCommander.Foundation.Data
 
     public static class DbCommandExecutorExtensions
     {
-        public static void ExecuteCommands(this IDbCommandExecutor executor, IEnumerable<ExecuteCommandRequest> requests)
+        public static void Execute(this IDbCommandExecutor executor, IEnumerable<ExecuteCommandRequest> requests)
         {
             executor.Execute(connection =>
             {
@@ -24,7 +24,7 @@ namespace DataCommander.Foundation.Data
             });
         }
 
-        public static async Task ExecuteCommandsAsync(this IDbCommandExecutor executor, IEnumerable<ExecuteCommandAsyncRequest> requests,
+        public static async Task ExecuteAsync(this IDbCommandExecutor executor, IEnumerable<ExecuteCommandAsyncRequest> requests,
             CancellationToken cancellationToken)
         {
             await executor.ExecuteAsync(async connection =>
@@ -40,17 +40,17 @@ namespace DataCommander.Foundation.Data
             }, cancellationToken);
         }
 
-        public static void ExecuteCommand(this IDbCommandExecutor executor, CreateCommandRequest request, Action<IDbCommand> execute)
+        public static void Execute(this IDbCommandExecutor executor, CreateCommandRequest request, Action<IDbCommand> execute)
         {
             var requests = new[]
             {
                 new ExecuteCommandRequest(request, execute)
             };
 
-            executor.ExecuteCommands(requests);
+            executor.Execute(requests);
         }
 
-        public static async Task ExecuteCommandAsync(this IDbCommandExecutor executor, CreateCommandRequest request, Func<DbCommand, Task> execute,
+        public static async Task ExecuteAsync(this IDbCommandExecutor executor, CreateCommandRequest request, Func<DbCommand, Task> execute,
             CancellationToken cancellationToken)
         {
             var requests = new[]
@@ -58,13 +58,13 @@ namespace DataCommander.Foundation.Data
                 new ExecuteCommandAsyncRequest(request, execute)
             };
 
-            await executor.ExecuteCommandsAsync(requests, cancellationToken);
+            await executor.ExecuteAsync(requests, cancellationToken);
         }
 
         public static int ExecuteNonQuery(this IDbCommandExecutor executor, CreateCommandRequest request)
         {
             var affectedRows = 0;
-            executor.ExecuteCommand(request, command => affectedRows = command.ExecuteNonQuery());
+            executor.Execute(request, command => affectedRows = command.ExecuteNonQuery());
             return affectedRows;
         }
 
@@ -73,7 +73,7 @@ namespace DataCommander.Foundation.Data
         {
             var affectedRows = 0;
 
-            await executor.ExecuteCommandAsync(
+            await executor.ExecuteAsync(
                 request,
                 async dbCommand => affectedRows = await dbCommand.ExecuteNonQueryAsync(cancellationToken),
                 cancellationToken);
@@ -84,7 +84,7 @@ namespace DataCommander.Foundation.Data
         public static object ExecuteScalar(this IDbCommandExecutor executor, CreateCommandRequest request)
         {
             object scalar = null;
-            executor.ExecuteCommand(request, command => scalar = command.ExecuteScalar());
+            executor.Execute(request, command => scalar = command.ExecuteScalar());
             return scalar;
         }
 
@@ -93,7 +93,7 @@ namespace DataCommander.Foundation.Data
         {
             object scalar = null;
 
-            await executor.ExecuteCommandAsync(
+            await executor.ExecuteAsync(
                 command,
                 async dbCommand => scalar = await dbCommand.ExecuteScalarAsync(cancellationToken),
                 cancellationToken);
@@ -183,7 +183,7 @@ namespace DataCommander.Foundation.Data
 
         private static void ExecuteReader(this IDbCommandExecutor executor, ExecuteReaderRequest request, Action<IDataReader> read)
         {
-            executor.ExecuteCommand(request.InitializeCommandRequest, command =>
+            executor.Execute(request.CreateCommandRequest, command =>
             {
                 using (var dataReader = command.ExecuteReader(request.CommandBehavior))
                     read(dataReader);
@@ -192,8 +192,8 @@ namespace DataCommander.Foundation.Data
 
         private static async Task ExecuteReaderAsync(this IDbCommandExecutor executor, ExecuteReaderRequest request, Func<DbDataReader, Task> read)
         {
-            await executor.ExecuteCommandAsync(
-                request.InitializeCommandRequest,
+            await executor.ExecuteAsync(
+                request.CreateCommandRequest,
                 async dbCommand =>
                 {
                     using (var dataReader = await dbCommand.ExecuteReaderAsync(request.CommandBehavior, request.CancellationToken))
