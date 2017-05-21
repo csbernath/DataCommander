@@ -3,11 +3,11 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
+    using Foundation.Data;
 
     internal sealed class IndexCollectionNode : ITreeNode
     {
-        private readonly TableNode tableNode;
+        private readonly TableNode _tableNode;
 
         public IndexCollectionNode(TableNode tableNode)
         {
@@ -15,10 +15,10 @@
             Contract.Requires(tableNode != null);
 #endif
 
-            this.tableNode = tableNode;
+            _tableNode = tableNode;
         }
 
-#region ITreeNode Members
+        #region ITreeNode Members
 
         string ITreeNode.Name => "Indexes";
 
@@ -26,25 +26,15 @@
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            //            string commandText = string.Format(@"select	idx
-            //from	main.sqlite_stat1
-            //where	tbl = '{0}'
-            //order by idx", this.tableNode.Name);
-            var commandText = $"PRAGMA index_list({this.tableNode.Name});";
+            var commandText = $"PRAGMA index_list({_tableNode.Name});";
             var children = new List<ITreeNode>();
-            var transactionScope = new DbTransactionScope(this.tableNode.Database.Connection, null);
-
-            using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+            var executor = new DbCommandExecutor(_tableNode.Database.Connection);
+            var response = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
             {
-                dataReader.Read(dataRecord =>
-                {
-                    var name = dataRecord.GetString(0);
-                    var indexNode = new IndexNode(this.tableNode, name);
-                    children.Add(indexNode);
-                });
-            }
-
-            return children;
+                var name = dataRecord.GetString(0);
+                return new IndexNode(_tableNode, name);
+            });
+            return response.Rows;
         }
 
         bool ITreeNode.Sortable => false;
@@ -53,6 +43,6 @@
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-#endregion
+        #endregion
     }
 }

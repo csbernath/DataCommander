@@ -1,24 +1,23 @@
 namespace DataCommander.Providers.SQLite
 {
     using System.Collections.Generic;
-    using System.Data;
     using System.Data.SQLite;
     using System.Windows.Forms;
     using DataCommander.Foundation.Data;
 
     internal sealed class DatabaseCollectionNode : ITreeNode
     {
-        private readonly SQLiteConnection connection;
+        private readonly SQLiteConnection _connection;
 
         public DatabaseCollectionNode(SQLiteConnection connection)
         {
 #if CONTRACTS_FULL
             Contract.Requires(connection != null);
 #endif
-            this.connection = connection;
+            _connection = connection;
         }
 
-#region ITreeNode Members
+        #region ITreeNode Members
 
         string ITreeNode.Name => "Databases";
 
@@ -27,28 +26,19 @@ namespace DataCommander.Providers.SQLite
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             const string commandText = @"PRAGMA database_list;";
-            var children = new List<ITreeNode>();
-            var transactionScope = new DbTransactionScope(this.connection, null);
-
-            using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+            var executor = new DbCommandExecutor(this._connection);
+            var response = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
             {
-                dataReader.Read(dataRecord =>
-                {
-                    var name = dataRecord.GetString(1);
-                    var databaseNode = new DatabaseNode(this.connection, name);
-                    children.Add(databaseNode);
-                });
-            }
-
-            return children;
+                var name = dataRecord.GetString(1);
+                return new DatabaseNode(this._connection, name);
+            });
+            return response.Rows;
         }
 
         bool ITreeNode.Sortable => false;
-
         string ITreeNode.Query => null;
-
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-#endregion
+        #endregion
     }
 }

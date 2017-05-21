@@ -5,7 +5,6 @@ namespace DataCommander.Providers.SQLite
     using System.Data;
     using System.Data.Common;
     using System.Data.SQLite;
-    using System.Linq;
     using System.Text;
     using System.Xml;
     using DataCommander.Foundation.Configuration;
@@ -199,10 +198,12 @@ order by name collate nocase";
                 if (commandText != null)
                 {
                     var transactionScope = new DbTransactionScope(connection.Connection, null);
-                    using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+                    var executor = new DbCommandExecutor((DbConnection) connection.Connection);
+                    response.Items = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
                     {
-                        response.Items = dataReader.Read(dataRecord => (IObjectName)new ObjectName(dataRecord.GetStringOrDefault(0))).ToList();
-                    }
+                        var name = dataRecord.GetStringOrDefault(0);
+                        return (IObjectName) new ObjectName(name);
+                    }).Rows;
                 }
             }
 

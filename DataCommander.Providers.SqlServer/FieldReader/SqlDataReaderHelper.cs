@@ -39,6 +39,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
             {
                 case SqlDbType.BigInt:
                 case SqlDbType.Bit:
+                case SqlDbType.Udt:
                 case SqlDbType.Int:
                 case SqlDbType.SmallInt:
                 case SqlDbType.TinyInt:

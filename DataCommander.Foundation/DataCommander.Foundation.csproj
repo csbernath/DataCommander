@@ -436,6 +436,7 @@
     <Compile Include="Data\AsyncDbConnection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data\DbCommandExecutor.cs" />
     <Compile Include="Data\ExecuteCommandAsyncRequest.cs" />
     <Compile Include="Data\SqlClient\SqlCommandExecutor.cs" />
     <Compile Include="Data\IDbCommandExecutor.cs" />
