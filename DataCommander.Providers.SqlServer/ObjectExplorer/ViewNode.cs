@@ -9,20 +9,20 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
     internal sealed class ViewNode : ITreeNode
     {
-        private readonly DatabaseNode database;
-        private readonly int id;
-        private readonly string schema;
-        private readonly string name;
+        private readonly DatabaseNode _database;
+        private readonly int _id;
+        private readonly string _schema;
+        private readonly string _name;
 
         public ViewNode(DatabaseNode database, int id, string schema, string name)
         {
-            this.database = database;
-            this.id = id;
-            this.schema = schema;
-            this.name = name;
+            _database = database;
+            _id = id;
+            _schema = schema;
+            _name = name;
         }
 
-        public string Name => $"{this.schema}.{this.name}";
+        public string Name => $"{_schema}.{_name}";
 
         public bool IsLeaf => false;
 
@@ -30,8 +30,9 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         {
             return new ITreeNode[]
             {
-                new ColumnCollectionNode(this.database, this.id),
-                new TriggerCollectionNode(this.database, this.id)
+                new ColumnCollectionNode(_database, _id),
+                new TriggerCollectionNode(_database, _id),
+                new IndexCollectionNode(_database, _id),
             };
         }
 
@@ -41,8 +42,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         {
             get
             {
-                var name = new DatabaseObjectMultipartName(null, this.database.Name, this.schema, this.name);
-                var connectionString = this.database.Databases.Server.ConnectionString;
+                var name = new DatabaseObjectMultipartName(null, _database.Name, _schema, _name);
+                var connectionString = _database.Databases.Server.ConnectionString;
                 string text;
                 using (var connection = new SqlConnection(connectionString))
                 {
@@ -54,12 +55,12 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         private void menuItemScriptObject_Click(object sender, EventArgs e)
         {
-            var connectionString = this.database.Databases.Server.ConnectionString;
+            var connectionString = _database.Databases.Server.ConnectionString;
             string text;
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                text = SqlDatabase.GetSysComments(connection, this.database.Name, this.schema, this.name);
+                text = SqlDatabase.GetSysComments(connection, _database.Name, _schema, _name);
             }
             QueryForm.ShowText(text);
         }
@@ -68,7 +69,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         {
             get
             {
-                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, this.menuItemScriptObject_Click);
+                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, menuItemScriptObject_Click);
                 var contextMenu = new ContextMenuStrip();
                 contextMenu.Items.Add(menuItemScriptObject);
                 return contextMenu;

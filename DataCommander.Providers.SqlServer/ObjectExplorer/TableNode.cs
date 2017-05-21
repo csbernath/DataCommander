@@ -45,7 +45,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             {
                 new ColumnCollectionNode(DatabaseNode, id),
                 new TriggerCollectionNode(DatabaseNode, id),
-                new IndexCollectionNode(this)
+                new IndexCollectionNode(DatabaseNode, id)
             };
         }
 

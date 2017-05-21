@@ -6,14 +6,18 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
     internal sealed class IndexNode : ITreeNode
     {
-        private readonly TableNode tableNode;
+        private readonly DatabaseNode _databaseNode;
+        private readonly int _parentId;
+        private readonly int _id;
         private readonly string name;
         private readonly byte type;
         private readonly bool isUnique;
 
-        public IndexNode(TableNode tableNode, string name, byte type, bool isUnique)
+        public IndexNode(DatabaseNode databaseNode, int parentId, int id, string name, byte type, bool isUnique)
         {
-            this.tableNode = tableNode;
+            _databaseNode = databaseNode;
+            _parentId = parentId;
+            _id = id;
             this.name = name;
             this.type = type;
             this.isUnique = isUnique;
