@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Providers.SqlServer.ObjectExplorer
+﻿using System.Data.SqlClient;
+
+namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Windows.Forms;
     using Foundation.Data;
-    using Foundation.Data.SqlClient;
-    using Foundation.Threading.Tasks;
 
     internal sealed class DatabaseCollectionNode : ITreeNode
     {
@@ -13,7 +13,7 @@
 #if CONTRACTS_FULL
             Contract.Requires(server != null);
 #endif
-            this.Server = server;
+            Server = server;
         }
 
         public ServerNode Server { get; }
@@ -28,30 +28,23 @@
         {
             var list = new List<ITreeNode>();
             list.Add(new SystemDatabaseCollectionNode(this));
-            var executor = new SqlCommandExecutor(this.Server.ConnectionString);
 
             const string commandText = @"select d.name
 from sys.databases d (nolock)
 where name not in('master','model','msdb','tempdb')
 order by d.name";
 
-            var executeReaderRequest = new ExecuteReaderRequest(commandText);
-
-            var response = executor.ExecuteReader(executeReaderRequest, dataRecord =>
+            var rows = SqlClientFactory.Instance.ExecuteReader(Server.ConnectionString, new ExecuteReaderRequest(commandText), dataRecord =>
             {
                 var name = dataRecord.GetString(0);
                 return new DatabaseNode(this, name);
             });
-
-            list.AddRange(response.Rows);
-
+            list.AddRange(rows);
             return list;
         }
 
         bool ITreeNode.Sortable => false;
-
         string ITreeNode.Query => null;
-
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
         #endregion

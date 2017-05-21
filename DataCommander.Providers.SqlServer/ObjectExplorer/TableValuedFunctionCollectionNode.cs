@@ -1,16 +1,17 @@
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     using System.Collections.Generic;
-    using System.Data;
     using System.Data.SqlClient;
     using System.Windows.Forms;
     using Foundation.Data;
 
     internal sealed class TableValuedFunctionCollectionNode : ITreeNode
     {
+        private readonly DatabaseNode _database;
+
         public TableValuedFunctionCollectionNode(DatabaseNode database)
         {
-            this.database = database;
+            _database = database;
         }
 
         public string Name => "Table-valued Functions";
@@ -28,28 +29,22 @@ join [{0}].sys.objects o (nolock)
 on	s.schema_id = o.schema_id
 where o.type in('IF','TF')
 order by 1,2";
-            commandText = string.Format(commandText, this.database.Name);
-            var connectionString = this.database.Databases.Server.ConnectionString;
+            commandText = string.Format(commandText, _database.Name);
 
             return SqlClientFactory.Instance.ExecuteReader(
-                this.database.Databases.Server.ConnectionString,
-                new CommandDefinition {CommandText = commandText},
-                CommandBehavior.Default,
+                _database.Databases.Server.ConnectionString,
+                new ExecuteReaderRequest(commandText),
                 dataRecord =>
                 {
                     var owner = dataRecord.GetString(0);
                     var name = dataRecord.GetString(1);
                     var xtype = dataRecord.GetString(2);
-                    return new FunctionNode(this.database, owner, name, xtype);
+                    return new FunctionNode(_database, owner, name, xtype);
                 });
         }
 
         public bool Sortable => false;
-
         public string Query => null;
-
         public ContextMenuStrip ContextMenu => null;
-
-        readonly DatabaseNode database;
     }
 }

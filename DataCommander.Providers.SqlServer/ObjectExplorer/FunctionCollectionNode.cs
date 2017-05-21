@@ -18,8 +18,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         {
             return new ITreeNode[]
             {
-                new TableValuedFunctionCollectionNode(this.database),
-                new ScalarValuedFunctionCollectionNode(this.database)
+                new TableValuedFunctionCollectionNode(database),
+                new ScalarValuedFunctionCollectionNode(database)
             };
         }
 

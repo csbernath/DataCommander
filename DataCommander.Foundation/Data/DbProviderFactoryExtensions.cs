@@ -76,5 +76,20 @@
                 }
             }
         }
+
+        public static List<T> ExecuteReader<T>(
+            this DbProviderFactory dbProviderFactory,
+            string connectionString,
+            ExecuteReaderRequest request,
+            Func<IDataRecord, T> read)
+        {
+            using (var connection = dbProviderFactory.CreateConnection())
+            {
+                connection.ConnectionString = connectionString;
+                connection.Open();
+                var executor = new DbCommandExecutor(connection);
+                return executor.ExecuteReader(request, read).Rows;
+            }
+        }
     }
 }
