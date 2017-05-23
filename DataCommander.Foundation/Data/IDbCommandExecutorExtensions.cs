@@ -44,6 +44,15 @@ namespace DataCommander.Foundation.Data
             return scalar;
         }
 
+        public static void ExecuteReader(this IDbCommandExecutor executor, ExecuteReaderRequest request, Action<IDataReader> read)
+        {
+            executor.Execute(request.CreateCommandRequest, command =>
+            {
+                using (var dataReader = command.ExecuteReader(request.CommandBehavior))
+                    read(dataReader);
+            });
+        }
+
         public static List<T> ExecuteReader<T>(this IDbCommandExecutor executor, ExecuteReaderRequest request, Func<IDataRecord, T> read)
         {
             List<T> rows = null;
@@ -65,15 +74,6 @@ namespace DataCommander.Foundation.Data
             ExecuteReaderResponse<T1, T2, T3> response = null;
             executor.ExecuteReader(request, dataReader => response = dataReader.Read(read1, read2, read3));
             return response;
-        }
-
-        private static void ExecuteReader(this IDbCommandExecutor executor, ExecuteReaderRequest request, Action<IDataReader> read)
-        {
-            executor.Execute(request.CreateCommandRequest, command =>
-            {
-                using (var dataReader = command.ExecuteReader(request.CommandBehavior))
-                    read(dataReader);
-            });
         }
     }
 }

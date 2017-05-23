@@ -443,7 +443,6 @@
     <Compile Include="Data\IDbCommandAsyncExecutor.cs" />
     <Compile Include="Data\IDbCommandAsyncExecutorExtensions.cs" />
     <Compile Include="Data\IDbConnectionExtensions.cs" />
-    <Compile Include="Data\Scalar.cs" />
     <Compile Include="Data\SqlClient\SqlCommandExecutor.cs" />
     <Compile Include="Data\IDbCommandExecutor.cs" />
     <Compile Include="Data\ExecuteReaderResponse.cs" />
@@ -665,7 +664,6 @@
     <Compile Include="Data\TextData\TextDataStreamWriter.cs" />
     <Compile Include="Data\TextData\TextDataTable.cs" />
     <Compile Include="Data\TextData\TextDataTableCollection.cs" />
-    <Compile Include="Data\TransactionScopeContext.cs" />
     <Compile Include="Diagnostics\AppDomainMonitor.cs">
       <SubType>Code</SubType>
     </Compile>
