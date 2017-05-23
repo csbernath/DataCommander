@@ -1,9 +1,9 @@
+using System.Collections.Generic;
+using System.Data;
+using System.Threading;
+
 namespace DataCommander.Foundation.Data
 {
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Threading;
-
     public sealed class ExecuteReaderRequest
     {
         public ExecuteReaderRequest(CreateCommandRequest createCommandRequest, CommandBehavior commandBehavior, CancellationToken cancellationToken)

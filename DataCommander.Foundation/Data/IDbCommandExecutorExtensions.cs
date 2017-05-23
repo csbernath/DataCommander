@@ -1,9 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+
 namespace DataCommander.Foundation.Data
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-
     public static class IDbCommandExecutorExtensions
     {
         public static void Execute(this IDbCommandExecutor executor, IEnumerable<ExecuteCommandRequest> requests)
@@ -14,7 +14,7 @@ namespace DataCommander.Foundation.Data
                 {
                     using (var command = connection.CreateCommand())
                     {
-                        command.Initialize(request.InitializeCommandRequest);
+                        command.Initialize(request.CreateCommandRequest);
                         request.Execute(command);
                     }
                 }
@@ -27,7 +27,6 @@ namespace DataCommander.Foundation.Data
             {
                 new ExecuteCommandRequest(request, execute)
             };
-
             executor.Execute(requests);
         }
 
@@ -45,30 +44,25 @@ namespace DataCommander.Foundation.Data
             return scalar;
         }
 
-        public static List<TRow> ExecuteReader<TRow>(this IDbCommandExecutor executor, ExecuteReaderRequest request,
-            Func<IDataRecord, TRow> read)
+        public static List<T> ExecuteReader<T>(this IDbCommandExecutor executor, ExecuteReaderRequest request, Func<IDataRecord, T> read)
         {
-            List<TRow> rows = null;
-
-            executor.ExecuteReader(
-                request,
-                dataReader => rows = dataReader.Read(read));
-
+            List<T> rows = null;
+            executor.ExecuteReader(request, dataReader => rows = dataReader.Read(read));
             return rows;
         }
 
-        public static ExecuteReaderResponse<TRow1, TRow2> ExecuteReader<TRow1, TRow2>(this IDbCommandExecutor executor, ExecuteReaderRequest request,
-            Func<IDataRecord, TRow1> read1, Func<IDataRecord, TRow2> read2)
+        public static ExecuteReaderResponse<T1, T2> ExecuteReader<T1, T2>(this IDbCommandExecutor executor, ExecuteReaderRequest request,
+            Func<IDataRecord, T1> read1, Func<IDataRecord, T2> read2)
         {
-            ExecuteReaderResponse<TRow1, TRow2> response = null;
+            ExecuteReaderResponse<T1, T2> response = null;
             executor.ExecuteReader(request, dataReader => response = dataReader.Read(read1, read2));
             return response;
         }
 
-        public static ExecuteReaderResponse<TRow1, TRow2, TRow3> ExecuteReader<TRow1, TRow2, TRow3>(this IDbCommandExecutor executor,
-            ExecuteReaderRequest request, Func<IDataRecord, TRow1> read1, Func<IDataRecord, TRow2> read2, Func<IDataRecord, TRow3> read3)
+        public static ExecuteReaderResponse<T1, T2, T3> ExecuteReader<T1, T2, T3>(this IDbCommandExecutor executor, ExecuteReaderRequest request,
+            Func<IDataRecord, T1> read1, Func<IDataRecord, T2> read2, Func<IDataRecord, T3> read3)
         {
-            ExecuteReaderResponse<TRow1, TRow2, TRow3> response = null;
+            ExecuteReaderResponse<T1, T2, T3> response = null;
             executor.ExecuteReader(request, dataReader => response = dataReader.Read(read1, read2, read3));
             return response;
         }

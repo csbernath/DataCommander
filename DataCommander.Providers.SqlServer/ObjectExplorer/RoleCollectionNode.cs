@@ -1,9 +1,9 @@
+using System.Collections.Generic;
+using System.Windows.Forms;
+using DataCommander.Foundation.Data;
+
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Windows.Forms;
-    using Foundation.Data;
-
     internal sealed class RoleCollectionNode : ITreeNode
     {
         private readonly DatabaseNode _database;
@@ -14,7 +14,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         }
 
         public string Name => "Roles";
-
         public bool IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)

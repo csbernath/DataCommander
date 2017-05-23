@@ -26,7 +26,7 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             const string commandText = @"PRAGMA database_list;";
-            var executor = new DbCommandExecutor(this._connection);
+            var executor = DbCommandExecutorFactory.Create(_connection);
             var databaseNodes = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
             {
                 var name = dataRecord.GetString(1);

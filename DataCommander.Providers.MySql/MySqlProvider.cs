@@ -1,21 +1,19 @@
-﻿namespace DataCommander.Providers.MySql
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-    using DataCommander.Foundation.Configuration;
-    using DataCommander.Foundation.Data;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Providers;
-    using Foundation.Diagnostics.Log;
-    using global::MySql.Data.MySqlClient;
-    using Providers.Connection;
-    using Query;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.IO;
+using System.Linq;
+using System.Text;
+using DataCommander.Foundation.Configuration;
+using DataCommander.Foundation.Data;
+using DataCommander.Foundation.Diagnostics.Log;
+using DataCommander.Providers.Connection;
+using DataCommander.Providers.Query;
+using global::MySql.Data.MySqlClient;
 
+namespace DataCommander.Providers.MySql
+{
     internal sealed class MySqlProvider : IProvider
     {
         #region Private Fields
@@ -187,14 +185,12 @@
                 }
 
                 var objectNames = new List<IObjectName>();
-                var executor = new DbCommandExecutor((DbConnection)connection.Connection);
-
+                var executor = DbCommandExecutorFactory.Create(connection.Connection);
                 foreach (var statement in statements)
                 {
                     var items = executor.ExecuteReader(new ExecuteReaderRequest(statement), dataRecord => new ObjectName(null, dataRecord.GetString(0)));
                     objectNames.AddRange(items);
                 }
-
                 response.Items = objectNames;
             }
 

@@ -1,11 +1,11 @@
-﻿namespace DataCommander.Foundation.Data
-{
-    using System;
-    using System.Data;
-    using System.Globalization;
-    using System.Text;
-    using System.Threading;
+﻿using System;
+using System.Data;
+using System.Globalization;
+using System.Text;
+using System.Threading;
 
+namespace DataCommander.Foundation.Data
+{
     /// <summary>
     /// 
     /// </summary>

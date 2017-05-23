@@ -1,10 +1,10 @@
+using System;
+using System.Data.Common;
+using System.Threading.Tasks;
+using DataCommander.Foundation.Diagnostics.Contracts;
+
 namespace DataCommander.Foundation.Data
 {
-    using System;
-    using System.Data.Common;
-    using System.Threading.Tasks;
-    using DataCommander.Foundation.Diagnostics.Contracts;
-
     public sealed class ExecuteCommandAsyncRequest
     {
         public ExecuteCommandAsyncRequest(CreateCommandRequest initializeCommandRequest, Func<DbCommand, Task> execute)

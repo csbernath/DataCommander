@@ -1,8 +1,8 @@
+using System.Data;
+using System.Xml;
+
 namespace DataCommander.Foundation.Data
 {
-    using System.Data;
-    using System.Xml;
-
     /// <summary>
     /// 
     /// </summary>

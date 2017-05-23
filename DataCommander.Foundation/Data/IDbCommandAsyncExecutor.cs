@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DataCommander.Foundation.Data
 {
-    public interface IDbCommandAsyncExecutor
+    public interface IDbCommandAsyncExecutor : IDbCommandExecutor
     {
         Task ExecuteAsync(Action<DbConnection> execute, CancellationToken cancellationToken);
     }

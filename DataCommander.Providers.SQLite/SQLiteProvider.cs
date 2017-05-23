@@ -1,18 +1,18 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.SQLite;
+using System.Text;
+using System.Xml;
+using DataCommander.Foundation.Configuration;
+using DataCommander.Foundation.Data;
+using DataCommander.Providers.Connection;
+using DataCommander.Providers.Field;
+using DataCommander.Providers.Query;
+
 namespace DataCommander.Providers.SQLite
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.Data.SQLite;
-    using System.Text;
-    using System.Xml;
-    using DataCommander.Foundation.Configuration;
-    using DataCommander.Foundation.Data;
-    using Field;
-    using Providers.Connection;
-    using Query;
-
     public sealed class SQLiteProvider : IProvider
     {
         #region IProvider Members
@@ -35,9 +35,7 @@ namespace DataCommander.Providers.SQLite
         }
 
         bool IProvider.CanConvertCommandToString => false;
-
         bool IProvider.IsCommandCancelable => true;
-
         void IProvider.DeriveParameters(IDbCommand command)
         {
             throw new Exception("The method or operation is not implemented.");
@@ -197,8 +195,7 @@ order by name collate nocase";
 
                 if (commandText != null)
                 {
-                    var transactionScope = new DbTransactionScope(connection.Connection, null);
-                    var executor = new DbCommandExecutor((DbConnection) connection.Connection);
+                    var executor = DbCommandExecutorFactory.Create(connection.Connection);
                     response.Items = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
                     {
                         var name = dataRecord.GetStringOrDefault(0);

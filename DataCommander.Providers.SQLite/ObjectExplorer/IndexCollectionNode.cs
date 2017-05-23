@@ -25,7 +25,7 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             var commandText = $"PRAGMA index_list({_tableNode.Name});";
-            var executor = new DbCommandExecutor(_tableNode.Database.Connection);
+            var executor = DbCommandExecutorFactory.Create(_tableNode.Database.Connection);
             var indexNodes = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
             {
                 var name = dataRecord.GetString(0);
