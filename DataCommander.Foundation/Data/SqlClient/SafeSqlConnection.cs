@@ -1,15 +1,15 @@
+using System;
+using System.ComponentModel;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.Text;
+using System.Threading;
+using DataCommander.Foundation.Diagnostics.Log;
+using DataCommander.Foundation.Linq;
+
 namespace DataCommander.Foundation.Data.SqlClient
 {
-    using System;
-    using System.ComponentModel;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Text;
-    using System.Threading;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Diagnostics.Log;
-    using DataCommander.Foundation.Linq;
-
     /// <summary>
     /// Safe SQL Server connection for Windows Services.
     /// </summary>
@@ -51,12 +51,12 @@ namespace DataCommander.Foundation.Data.SqlClient
 
         internal static short GetId(IDbConnection connection)
         {
-            var transactionScope = new DbTransactionScope(connection, null);
+            var executor = new DbCommandExecutor((DbConnection) connection);
             short id = 0;
 
             try
             {
-                id = (short)transactionScope.ExecuteScalar(new CommandDefinition {CommandText = "select @@spid"});
+                id = (short) executor.ExecuteScalar(new CreateCommandRequest("select @@spid"));
             }
             catch (Exception e)
             {
@@ -170,7 +170,7 @@ namespace DataCommander.Foundation.Data.SqlClient
             var separator = new string('-', 80);
             var sb = new StringBuilder();
             sb.AppendLine("SafeSqlConnection.HandleException(command):\r\n");
-            var parameters = (SqlParameterCollection)command.Parameters;
+            var parameters = (SqlParameterCollection) command.Parameters;
             var p = parameters.ToLogString();
             var database = command.Connection.Database;
 

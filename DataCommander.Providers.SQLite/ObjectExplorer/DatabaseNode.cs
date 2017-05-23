@@ -1,9 +1,9 @@
-namespace DataCommander.Providers.SQLite
-{
-    using System.Collections.Generic;
-    using System.Data.SQLite;
-    using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.SQLite.ObjectExplorer
+{
     sealed class DatabaseNode : ITreeNode
     {
         public DatabaseNode(SQLiteConnection connection, string name)

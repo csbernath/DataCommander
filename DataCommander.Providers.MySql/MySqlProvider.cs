@@ -187,18 +187,12 @@
                 }
 
                 var objectNames = new List<IObjectName>();
-                var transactionScope = new DbTransactionScope(connection.Connection, null);
+                var executor = new DbCommandExecutor((DbConnection)connection.Connection);
 
                 foreach (var statement in statements)
                 {
-                    using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = statement}, CommandBehavior.Default))
-                    {
-                        dataReader.Read(dataRecord =>
-                        {
-                            var objectName = dataRecord.GetString(0);
-                            objectNames.Add(new ObjectName(null, objectName));
-                        });
-                    }
+                    var items = executor.ExecuteReader(new ExecuteReaderRequest(statement), dataRecord => new ObjectName(null, dataRecord.GetString(0)));
+                    objectNames.AddRange(items);
                 }
 
                 response.Items = objectNames;

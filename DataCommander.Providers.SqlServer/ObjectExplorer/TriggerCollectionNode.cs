@@ -39,7 +39,7 @@ order by name";
                 var name = dataRecord.GetString(0);
                 var id = dataRecord.GetInt32(1);
                 return new TriggerNode(_databaseNode, id, name);
-            }).Rows;
+            });
             return triggerNodes;
         }
 

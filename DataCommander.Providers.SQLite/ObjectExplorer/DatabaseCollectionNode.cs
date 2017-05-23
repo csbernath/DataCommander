@@ -1,10 +1,10 @@
-namespace DataCommander.Providers.SQLite
-{
-    using System.Collections.Generic;
-    using System.Data.SQLite;
-    using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.Windows.Forms;
+using DataCommander.Foundation.Data;
 
+namespace DataCommander.Providers.SQLite.ObjectExplorer
+{
     internal sealed class DatabaseCollectionNode : ITreeNode
     {
         private readonly SQLiteConnection _connection;
@@ -27,12 +27,12 @@ namespace DataCommander.Providers.SQLite
         {
             const string commandText = @"PRAGMA database_list;";
             var executor = new DbCommandExecutor(this._connection);
-            var response = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
+            var databaseNodes = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
             {
                 var name = dataRecord.GetString(1);
                 return new DatabaseNode(this._connection, name);
             });
-            return response.Rows;
+            return databaseNodes;
         }
 
         bool ITreeNode.Sortable => false;

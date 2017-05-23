@@ -1,12 +1,12 @@
-namespace DataCommander.Providers.SQLite
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data.SQLite;
-    using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
-    using Query;
+using System;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.Windows.Forms;
+using DataCommander.Foundation.Data;
+using DataCommander.Providers.Query;
 
+namespace DataCommander.Providers.SQLite.ObjectExplorer
+{
     internal sealed class TableNode : ITreeNode
     {
         public TableNode(DatabaseNode databaseNode, string name)

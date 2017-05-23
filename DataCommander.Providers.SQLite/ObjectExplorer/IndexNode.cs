@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Providers.SQLite
-{
-    using System.Collections.Generic;
-    using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
+using DataCommander.Foundation.Data;
 
+namespace DataCommander.Providers.SQLite.ObjectExplorer
+{
     internal sealed class IndexNode : ITreeNode
     {
         private readonly TableNode tableNode;

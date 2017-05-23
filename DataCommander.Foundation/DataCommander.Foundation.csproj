@@ -438,10 +438,12 @@
     </Compile>
     <Compile Include="Data\DbCommandExecutor.cs" />
     <Compile Include="Data\ExecuteCommandAsyncRequest.cs" />
+    <Compile Include="Data\IDbCommandAsyncExecutor.cs" />
+    <Compile Include="Data\IDbCommandAsyncExecutorExtensions.cs" />
+    <Compile Include="Data\IDbConnectionExtensions.cs" />
     <Compile Include="Data\SqlClient\SqlCommandExecutor.cs" />
     <Compile Include="Data\IDbCommandExecutor.cs" />
     <Compile Include="Data\ExecuteReaderResponse.cs" />
-    <Compile Include="Data\ExecuteReaderResponse1.cs" />
     <Compile Include="Data\ExecuteReaderResponse2.cs" />
     <Compile Include="Data\DbDataReaderExtensions.cs" />
     <Compile Include="Data\IDbCommandExecutorExtensions.cs" />

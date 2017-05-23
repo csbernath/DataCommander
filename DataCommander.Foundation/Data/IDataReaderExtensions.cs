@@ -28,7 +28,7 @@
             }
         }
 
-        public static ExecuteReaderResponse<TRow> Read<TRow>(this IDataReader dataReader, Func<IDataRecord, TRow> read)
+        public static List<TRow> Read<TRow>(this IDataReader dataReader, Func<IDataRecord, TRow> read)
         {
             var rows = new List<TRow>();
 
@@ -38,7 +38,7 @@
                 rows.Add(row);
             });
 
-            return ExecuteReaderResponse.Create(rows);
+            return rows;
         }
 
         public static ExecuteReaderResponse<TRow1, TRow2> Read<TRow1, TRow2>(this IDataReader dataReader, Func<IDataRecord, TRow1> read1,
@@ -49,8 +49,8 @@
 
             var reads = new Action[]
             {
-                () => rows1 = dataReader.Read(read1).Rows,
-                () => rows2 = dataReader.Read(read2).Rows,
+                () => rows1 = dataReader.Read(read1),
+                () => rows2 = dataReader.Read(read2),
             };
 
             dataReader.Read(reads);
@@ -67,9 +67,9 @@
 
             var reads = new Action[]
             {
-                () => rows1 = dataReader.Read(read1).Rows,
-                () => rows2 = dataReader.Read(read2).Rows,
-                () => rows3 = dataReader.Read(read3).Rows
+                () => rows1 = dataReader.Read(read1),
+                () => rows2 = dataReader.Read(read2),
+                () => rows3 = dataReader.Read(read3)
             };
 
             dataReader.Read(reads);

@@ -1,10 +1,9 @@
-﻿namespace DataCommander.Providers.SQLite
-{
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Windows.Forms;
-    using Foundation.Data;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
+using DataCommander.Foundation.Data;
 
+namespace DataCommander.Providers.SQLite.ObjectExplorer
+{
     internal sealed class IndexCollectionNode : ITreeNode
     {
         private readonly TableNode _tableNode;
@@ -21,26 +20,22 @@
         #region ITreeNode Members
 
         string ITreeNode.Name => "Indexes";
-
         bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             var commandText = $"PRAGMA index_list({_tableNode.Name});";
-            var children = new List<ITreeNode>();
             var executor = new DbCommandExecutor(_tableNode.Database.Connection);
-            var response = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
+            var indexNodes = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
             {
                 var name = dataRecord.GetString(0);
                 return new IndexNode(_tableNode, name);
             });
-            return response.Rows;
+            return indexNodes;
         }
 
         bool ITreeNode.Sortable => false;
-
         string ITreeNode.Query => null;
-
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
         #endregion

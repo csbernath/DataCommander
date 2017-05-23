@@ -88,7 +88,7 @@
                 connection.ConnectionString = connectionString;
                 connection.Open();
                 var executor = new DbCommandExecutor(connection);
-                return executor.ExecuteReader(request, read).Rows;
+                return executor.ExecuteReader(request, read);
             }
         }
     }

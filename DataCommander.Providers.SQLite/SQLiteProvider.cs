@@ -135,7 +135,7 @@ namespace DataCommander.Providers.SQLite
             throw new Exception("The method or operation is not implemented.");
         }
 
-        IObjectExplorer IProvider.ObjectExplorer => new ObjectExplorer();
+        IObjectExplorer IProvider.ObjectExplorer => new ObjectExplorer.ObjectExplorer();
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {
@@ -203,7 +203,7 @@ order by name collate nocase";
                     {
                         var name = dataRecord.GetStringOrDefault(0);
                         return (IObjectName) new ObjectName(name);
-                    }).Rows;
+                    });
                 }
             }
 

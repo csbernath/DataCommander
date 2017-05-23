@@ -52,7 +52,7 @@ order by i.name",
                 var type = dataRecord.GetByte(2);
                 var isUnique = dataRecord.GetBoolean(3);
                 return new IndexNode(_databaseNode, _id, indexId, name, type, isUnique);
-            }).Rows;
+            });
 
             return indexNodes;
         }

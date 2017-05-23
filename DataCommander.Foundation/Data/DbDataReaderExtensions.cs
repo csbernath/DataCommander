@@ -28,10 +28,7 @@
             }
         }
 
-        public static async Task<ExecuteReaderResponse<TRow>> ReadAsync<TRow>(
-            this DbDataReader dataReader,
-            Func<IDataRecord, TRow> read,
-            CancellationToken cancellationToken)
+        public static async Task<List<TRow>> ReadAsync<TRow>(this DbDataReader dataReader, Func<IDataRecord, TRow> read, CancellationToken cancellationToken)
         {
             var rows = new List<TRow>();
 
@@ -41,7 +38,7 @@
                 rows.Add(row);
             }, cancellationToken);
 
-            return ExecuteReaderResponse.Create(rows);
+            return rows;
         }
 
         public static async Task<ExecuteReaderResponse<TRow1, TRow2>> ReadAsync<TRow1, TRow2>(
@@ -55,8 +52,8 @@
 
             var reads = new Action[]
             {
-                async () => rows1 = (await dataReader.ReadAsync(read1, cancellationToken)).Rows,
-                async () => rows2 = (await dataReader.ReadAsync(read2, cancellationToken)).Rows,
+                async () => rows1 = (await dataReader.ReadAsync(read1, cancellationToken)),
+                async () => rows2 = (await dataReader.ReadAsync(read2, cancellationToken)),
             };
 
             await dataReader.ReadAsync(reads, cancellationToken);
@@ -89,9 +86,9 @@
 
             var reads = new Action[]
             {
-                async () => rows1 = (await dataReader.ReadAsync(read1, cancellationToken)).Rows,
-                async () => rows2 = (await dataReader.ReadAsync(read2, cancellationToken)).Rows,
-                async () => rows3 = (await dataReader.ReadAsync(read3, cancellationToken)).Rows,
+                async () => rows1 = (await dataReader.ReadAsync(read1, cancellationToken)),
+                async () => rows2 = (await dataReader.ReadAsync(read2, cancellationToken)),
+                async () => rows3 = (await dataReader.ReadAsync(read3, cancellationToken)),
             };
 
             await dataReader.ReadAsync(reads, cancellationToken);

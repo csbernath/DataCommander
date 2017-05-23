@@ -28,7 +28,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
                 var name = dataRecord.GetString(0);
                 return new RoleNode(this._database, name);
             });
-            return roleNodes.Rows;
+            return roleNodes;
         }
 
         public bool Sortable => false;

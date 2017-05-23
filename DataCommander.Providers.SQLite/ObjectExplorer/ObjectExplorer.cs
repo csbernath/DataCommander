@@ -1,9 +1,9 @@
-namespace DataCommander.Providers.SQLite
-{
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SQLite;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SQLite;
 
+namespace DataCommander.Providers.SQLite.ObjectExplorer
+{
     internal sealed class ObjectExplorer : IObjectExplorer
     {
         private SQLiteConnection connection;
