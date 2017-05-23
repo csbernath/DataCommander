@@ -56,7 +56,7 @@ namespace DataCommander.Foundation.Data
         public static List<T> ExecuteReader<T>(this IDbCommandExecutor executor, ExecuteReaderRequest request, Func<IDataRecord, T> read)
         {
             List<T> rows = null;
-            executor.ExecuteReader(request, dataReader => rows = dataReader.Read(read));
+            executor.ExecuteReader(request, dataReader => rows = dataReader.Read(() => read(dataReader)));
             return rows;
         }
 
@@ -64,7 +64,7 @@ namespace DataCommander.Foundation.Data
             Func<IDataRecord, T1> read1, Func<IDataRecord, T2> read2)
         {
             ExecuteReaderResponse<T1, T2> response = null;
-            executor.ExecuteReader(request, dataReader => response = dataReader.Read(read1, read2));
+            executor.ExecuteReader(request, dataReader => response = dataReader.Read(() => read1(dataReader), () => read2(dataReader)));
             return response;
         }
 
@@ -72,7 +72,8 @@ namespace DataCommander.Foundation.Data
             Func<IDataRecord, T1> read1, Func<IDataRecord, T2> read2, Func<IDataRecord, T3> read3)
         {
             ExecuteReaderResponse<T1, T2, T3> response = null;
-            executor.ExecuteReader(request, dataReader => response = dataReader.Read(read1, read2, read3));
+            executor.ExecuteReader(request,
+                dataReader => response = dataReader.Read(() => read1(dataReader), () => read2(dataReader), () => read3(dataReader)));
             return response;
         }
     }

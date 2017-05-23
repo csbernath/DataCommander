@@ -73,7 +73,7 @@ order by fkc.parent_column_id";
                     var executor = DbCommandExecutorFactory.Create(connection);
                     executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
                     {
-                        columnNodes = dataReader.Read(ToColumnNode).ToSortedDictionary(c => c.Id);
+                        columnNodes = dataReader.Read(() => ToColumnNode(dataReader)).ToSortedDictionary(c => c.Id);
                         dataReader.NextResult();
                         dataReader.Read(() =>
                         {

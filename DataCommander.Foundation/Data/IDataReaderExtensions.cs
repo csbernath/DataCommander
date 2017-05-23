@@ -28,20 +28,20 @@
             }
         }
 
-        public static List<T> Read<T>(this IDataReader dataReader, Func<IDataRecord, T> read)
+        public static List<T> Read<T>(this IDataReader dataReader, Func<T> read)
         {
             var rows = new List<T>();
 
             dataReader.Read(() =>
             {
-                var row = read(dataReader);
+                var row = read();
                 rows.Add(row);
             });
 
             return rows;
         }
 
-        public static ExecuteReaderResponse<T1, T2> Read<T1, T2>(this IDataReader dataReader, Func<IDataRecord, T1> read1, Func<IDataRecord, T2> read2)
+        public static ExecuteReaderResponse<T1, T2> Read<T1, T2>(this IDataReader dataReader, Func<T1> read1, Func<T2> read2)
         {
             List<T1> rows1 = null;
             List<T2> rows2 = null;
@@ -49,7 +49,7 @@
             var reads = new Action[]
             {
                 () => rows1 = dataReader.Read(read1),
-                () => rows2 = dataReader.Read(read2),
+                () => rows2 = dataReader.Read(read2)
             };
 
             dataReader.Read(reads);
@@ -57,8 +57,7 @@
             return ExecuteReaderResponse.Create(rows1, rows2);
         }
 
-        public static ExecuteReaderResponse<T1, T2, T3> Read<T1, T2, T3>(this IDataReader dataReader, Func<IDataRecord, T1> read1, Func<IDataRecord, T2> read2,
-            Func<IDataRecord, T3> read3)
+        public static ExecuteReaderResponse<T1, T2, T3> Read<T1, T2, T3>(this IDataReader dataReader, Func<T1> read1, Func<T2> read2, Func<T3> read3)
         {
             List<T1> rows1 = null;
             List<T2> rows2 = null;
