@@ -1,52 +1,52 @@
+using System.Data;
+using System.Data.SqlClient;
+using System.Security.Principal;
+using System.Threading;
+using System.Threading.Tasks;
+using DataCommander.Foundation;
+using DataCommander.Foundation.Data;
+using DataCommander.Providers.Connection;
+
 namespace DataCommander.Providers.SqlServer
 {
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Security.Principal;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Foundation;
-    using Foundation.Data;
-    using Providers.Connection;
-
     internal sealed class Connection : ConnectionBase
     {
         #region Private Fields
 
-        private readonly SqlConnectionStringBuilder sqlConnectionStringBuilder;
-        private SqlConnection sqlConnection;
-        private string serverName;
-        private short spid;
+        private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder;
+        private SqlConnection _sqlConnection;
+        private string _serverName;
+        private short _spid;
 
         #endregion
 
         public Connection(string connectionString)
         {
-            this.sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString)
+            _sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString)
             {
                 ApplicationName = "Data Commander",
                 Pooling = false
             };
 
-            this.CreateConnection();
+            CreateConnection();
         }
 
         public override string ConnectionName { get; set; }
 
         private void CreateConnection()
         {
-            this.sqlConnection = new SqlConnection(this.sqlConnectionStringBuilder.ConnectionString);
-            this.Connection = this.sqlConnection;
-            this.sqlConnection.FireInfoMessageEventOnUserErrors = true;
-            this.sqlConnection.InfoMessage += this.OnInfoMessage;
-            this.sqlConnection.StateChange += this.OnStateChange;
+            _sqlConnection = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
+            Connection = _sqlConnection;
+            _sqlConnection.FireInfoMessageEventOnUserErrors = true;
+            _sqlConnection.InfoMessage += OnInfoMessage;
+            _sqlConnection.StateChange += OnStateChange;
         }
 
         private void OnStateChange(object sender, StateChangeEventArgs e)
         {
             var now = LocalTime.Default.Now;
             var text = $"Connection.State changed. OriginalState: {e.OriginalState}, CurrentState: {e.CurrentState}";
-            this.InvokeInfoMessage(new[]
+            InvokeInfoMessage(new[]
             {
                 new InfoMessage(now, InfoMessageSeverity.Information, text)
             });
@@ -54,24 +54,23 @@ namespace DataCommander.Providers.SqlServer
 
         public override async Task OpenAsync(CancellationToken cancellationToken)
         {
-            await this.sqlConnection.OpenAsync(cancellationToken);
+            await _sqlConnection.OpenAsync(cancellationToken);
 
             if (!cancellationToken.IsCancellationRequested)
             {
                 const string commandText = @"select @@servername,@@spid
 set arithabort on";
 
-                var transactionScope = new DbTransactionScope(this.sqlConnection, null);
+                var executor = DbCommandExecutorFactory.Create(_sqlConnection);
 
-                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+                var item = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord => new
                 {
-                    dataReader.Read(dataRecord =>
-                    {
-                        this.serverName = dataRecord.GetString(0);
-                        this.spid = dataRecord.GetInt16(1);
-                        return false;
-                    });
-                }
+                    ServerName = dataRecord.GetString(0),
+                    Spid = dataRecord.GetInt16(1)
+                })[0];
+
+                _serverName = item.ServerName;
+                _spid = item.Spid;
             }
         }
 
@@ -81,16 +80,16 @@ set arithabort on";
             {
                 string userName = null;
 
-                if (this.sqlConnectionStringBuilder.IntegratedSecurity)
+                if (_sqlConnectionStringBuilder.IntegratedSecurity)
                 {
                     userName = WindowsIdentity.GetCurrent().Name;
                 }
                 else
                 {
-                    userName = this.sqlConnectionStringBuilder.UserID;
+                    userName = _sqlConnectionStringBuilder.UserID;
                 }
 
-                var caption = $"{this.sqlConnection.DataSource}.{this.sqlConnection.Database} ({userName} ({this.spid}))";
+                var caption = $"{_sqlConnection.DataSource}.{_sqlConnection.Database} ({userName} ({_spid}))";
 
                 return caption;
             }
@@ -99,18 +98,18 @@ set arithabort on";
         private void OnInfoMessage(object sender, SqlInfoMessageEventArgs e)
         {
             var infoMessages = SqlServerProvider.ToInfoMessages(e.Errors);
-            this.InvokeInfoMessage(infoMessages);
+            InvokeInfoMessage(infoMessages);
         }
 
-        public override string DataSource => this.sqlConnection.DataSource;
+        public override string DataSource => _sqlConnection.DataSource;
 
         public override string ServerVersion
         {
             get
             {
-                var transactionScope = new DbTransactionScope(this.sqlConnection, null);
+                var executor = DbCommandExecutorFactory.Create(_sqlConnection);
                 var commandText = "select @@version";
-                var version = transactionScope.ExecuteScalar<string>(new CommandDefinition {CommandText = commandText});
+                var version = (string) executor.ExecuteScalar(new CreateCommandRequest(commandText));
 
                 /* select
           serverproperty('Collation') as Collation,
@@ -130,7 +129,7 @@ set arithabort on";
           serverproperty('ProductLevel') as ProductLevel,
           serverproperty('ServerName') as ServerName
           */
-                var serverVersion = this.sqlConnection.ServerVersion;
+                var serverVersion = _sqlConnection.ServerVersion;
                 string description;
 
                 switch (serverVersion)
@@ -262,7 +261,7 @@ set arithabort on";
                         break;
                 }
 
-                return $"{serverVersion}\r\n{description}\r\n@@version: {version}\r\n@@servername: {this.serverName}";
+                return $"{serverVersion}\r\n{description}\r\n@@version: {version}\r\n@@servername: {_serverName}";
             }
         }
 
@@ -270,24 +269,24 @@ set arithabort on";
         {
             get
             {
-                var transactionScope = new DbTransactionScope(this.sqlConnection, null);
-                var scalar = transactionScope.ExecuteScalar(new CommandDefinition {CommandText = "select @@trancount"});
-                var transactionCount = (int)scalar;
+                var executor = DbCommandExecutorFactory.Create(_sqlConnection);
+                var scalar = executor.ExecuteScalar(new CreateCommandRequest("select @@trancount"));
+                var transactionCount = (int) scalar;
                 return transactionCount;
             }
         }
 
         public override IDbCommand CreateCommand()
         {
-            return this.sqlConnection.CreateCommand();
+            return _sqlConnection.CreateCommand();
         }
 
         protected override void SetDatabase(string database)
         {
-            this.sqlConnectionStringBuilder.InitialCatalog = database;
-            this.sqlConnection.Dispose();
-            this.sqlConnection = null;
-            this.CreateConnection();
+            _sqlConnectionStringBuilder.InitialCatalog = database;
+            _sqlConnection.Dispose();
+            _sqlConnection = null;
+            CreateConnection();
         }
     }
 }

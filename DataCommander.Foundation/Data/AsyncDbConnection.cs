@@ -1,17 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Text;
+using System.Threading;
+using DataCommander.Foundation.Data.SqlClient;
+using DataCommander.Foundation.Diagnostics;
+using DataCommander.Foundation.Diagnostics.Log;
+using DataCommander.Foundation.Linq;
+using DataCommander.Foundation.Threading;
+
 namespace DataCommander.Foundation.Data
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Text;
-    using System.Threading;
-    using DataCommander.Foundation.Data.SqlClient;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Diagnostics.Log;
-    using DataCommander.Foundation.Linq;
-    using DataCommander.Foundation.Threading;
-
     /// <summary>
     /// 
     /// </summary>
@@ -19,7 +19,7 @@ namespace DataCommander.Foundation.Data
     {
         #region Private Fields
 
-        private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof (AsyncDbConnection));
+        private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(AsyncDbConnection));
         private readonly IDbConnection _cloneableConnection;
         private readonly ICloneable _cloneable;
         private readonly List<string> _commands = new List<string>();
@@ -36,7 +36,7 @@ namespace DataCommander.Foundation.Data
         public AsyncDbConnection(IDbConnection cloneableConnection, string threadName)
         {
             this._cloneableConnection = cloneableConnection;
-            this._cloneable = (ICloneable)cloneableConnection;
+            this._cloneable = (ICloneable) cloneableConnection;
             this._thread = new WorkerThread(this.Start);
             this._thread.Name = threadName;
             this._thread.Start();
@@ -165,7 +165,7 @@ namespace DataCommander.Foundation.Data
                 case CommandType.StoredProcedure:
                     var sb = new StringBuilder();
                     sb.AppendFormat("exec {0}", command.CommandText);
-                    var parameters = (SqlParameterCollection)command.Parameters;
+                    var parameters = (SqlParameterCollection) command.Parameters;
                     var parametersString = parameters.ToLogString();
 
                     if (parametersString.Length > 0)
@@ -241,7 +241,7 @@ namespace DataCommander.Foundation.Data
                     var commandText = sb.ToString();
                     Exception exception = null;
 
-                    using (var connection = (IDbConnection)this._cloneable.Clone())
+                    using (var connection = (IDbConnection) this._cloneable.Clone())
                     {
                         var command = connection.CreateCommand();
                         command.CommandText = commandText;

@@ -999,8 +999,9 @@ order by ic.index_column_id
                 fourPartName.Name.ToTSqlNVarChar());
             log.Write(LogLevel.Trace, commandText);
 
-            var transactionScope = new DbTransactionScope(connection, null);
-            var dataSet = transactionScope.ExecuteDataSet(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
+            var executor = DbCommandExecutorFactory.Create(connection);
+            DataSet dataSet = null;
+            executor.Execute(new CreateCommandRequest(commandText), command => dataSet = command.ExecuteDataSet(CancellationToken.None));
             return dataSet;
         }
 

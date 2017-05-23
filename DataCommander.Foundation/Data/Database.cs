@@ -349,26 +349,14 @@ namespace DataCommander.Foundation.Data
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="value"></param>
-        /// <param name="inputNullValue"></param>
-        /// <param name="outputNullValue"></param>
-        /// <returns></returns>
         public static TResult GetValue<TResult>(object value, object inputNullValue, TResult outputNullValue)
         {
             TResult returnValue;
 
             if (value == null || value == inputNullValue)
-            {
                 returnValue = outputNullValue;
-            }
             else
-            {
                 returnValue = (TResult) value;
-            }
 
             return returnValue;
         }

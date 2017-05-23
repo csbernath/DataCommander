@@ -37,9 +37,8 @@ from main.sqlite_master
 where
     type = 'index'
     and name = '{this.name}'";
-                var transactionScope = new DbTransactionScope(this.tableNode.Database.Connection, null);
-
-                var sql = transactionScope.ExecuteScalar<string>(new CommandDefinition {CommandText = commandText});
+                var executor = DbCommandExecutorFactory.Create(this.tableNode.Database.Connection);
+                var sql = (string) executor.ExecuteScalar(new CreateCommandRequest(commandText));
                 return sql;
             }
         }

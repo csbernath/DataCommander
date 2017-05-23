@@ -43,9 +43,9 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
 select  sql
 from	{databaseName}.sqlite_master
 where	name	= '{name}'";
-            var transactionScope = new DbTransactionScope(connection, null);
-            var scalar = transactionScope.ExecuteScalar(new CommandDefinition {CommandText = commandText});
-            var script = Foundation.Data.Database.GetValueOrDefault<string>(scalar);
+            var executor = DbCommandExecutorFactory.Create(connection);
+            var scalar = executor.ExecuteScalar(new CreateCommandRequest(commandText));
+            var script = (string) scalar;
             return script;
         }
 
