@@ -28,14 +28,14 @@ namespace DataCommander.Foundation.Data
             }
         }
 
-        public async Task ExecuteAsync(Action<DbConnection> execute, CancellationToken cancellationToken)
+        public async Task ExecuteAsync(Func<DbConnection, Task> execute, CancellationToken cancellationToken)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 Log.Trace("connection.OpenAsync...");
                 await connection.OpenAsync(cancellationToken);
                 Log.Trace($"connection.OpenAsync. {connection.State}");
-                await Task.Run(() => execute(connection), cancellationToken);
+                await execute(connection);
             }
         }
     }
