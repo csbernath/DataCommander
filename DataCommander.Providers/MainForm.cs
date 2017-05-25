@@ -92,35 +92,34 @@ namespace DataCommander.Providers
             log.Trace(message);
 
             colorTheme = new ColorTheme(
-                Color.FromArgb(0x25, 0x25, 0x26),
-                Color.FromArgb(0xD8, 0xD8, 0xD8),
+                Color.FromArgb(220, 220, 220),
+                Color.FromArgb(30, 30, 30),
                 Color.DarkOliveGreen,
-                Color.DeepSkyBlue,
-                Color.OrangeRed);
-            //colorTheme = null;
+                Color.FromArgb(86, 156, 214),
+                Color.FromArgb(203, 65, 65));
 
             if (colorTheme != null)
             {
-                this.BackColor = colorTheme.BackColor;
                 this.ForeColor = colorTheme.ForeColor;
+                this.BackColor = colorTheme.BackColor;
 
                 foreach (Control control in this.Controls)
                 {
-                    control.BackColor = colorTheme.BackColor;
                     control.ForeColor = colorTheme.ForeColor;
+                    control.BackColor = colorTheme.BackColor;
                 }
 
                 this.toolStripPanel.BackColor = colorTheme.BackColor;
 
-                mainMenu.BackColor = colorTheme.BackColor;
                 mainMenu.ForeColor = colorTheme.ForeColor;
+                mainMenu.BackColor = colorTheme.BackColor;
 
                 foreach (var menuItem in mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
                 {
                     foreach (ToolStripItem x in menuItem.DropDownItems)
                     {
-                        x.BackColor = colorTheme.BackColor;
                         x.ForeColor = colorTheme.ForeColor;
+                        x.BackColor = colorTheme.BackColor;
                     }
                 }
 
@@ -129,14 +128,14 @@ namespace DataCommander.Providers
 
                 foreach (ToolStripItem item in toolStrip.Items)
                 {
-                    item.BackColor = colorTheme.BackColor;
                     item.ForeColor = colorTheme.ForeColor;
+                    item.BackColor = colorTheme.BackColor;
                 }
 
                 foreach (ToolStripItem item in this.statusBar.Items)
                 {
-                    item.BackColor = colorTheme.BackColor;
                     item.ForeColor = colorTheme.ForeColor;
+                    item.BackColor = colorTheme.BackColor;
                 }
             }
 

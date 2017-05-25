@@ -4,19 +4,19 @@ namespace DataCommander.Providers
 
     public sealed class ColorTheme
     {
-        public ColorTheme(Color backColor, Color foreColor, Color execKeyWordColor, Color sqlKeyWordColor, Color providerKeyWordColor)
+        public ColorTheme(Color foreColor, Color backColor, Color execKeyWordColor, Color sqlKeyWordColor, Color providerKeyWordColor)
         {
-            BackColor = backColor;
             ForeColor = foreColor;
+            BackColor = backColor;
             ExecKeyWordColor = execKeyWordColor;
             SqlKeyWordColor = sqlKeyWordColor;
             ProviderKeyWordColor = providerKeyWordColor;
         }
 
-        public Color BackColor { get; }
-        public Color ForeColor { get; }
-        public Color ExecKeyWordColor { get; }
-        public Color SqlKeyWordColor { get; }
-        public Color ProviderKeyWordColor { get; }
+        public readonly Color ForeColor;
+        public readonly Color BackColor;
+        public readonly Color ExecKeyWordColor;
+        public readonly Color SqlKeyWordColor;
+        public readonly Color ProviderKeyWordColor;
     }
 }

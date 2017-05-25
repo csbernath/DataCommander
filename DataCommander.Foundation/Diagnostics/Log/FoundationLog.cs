@@ -24,7 +24,7 @@
 
         public string LoggedName { get; set; }
 
-#region ILog Members
+        #region ILog Members
 
         bool ILog.IsErrorEnabled => true;
 
@@ -126,14 +126,14 @@
             this._applicationLog.Write(this, logLevel, getMessage);
         }
 
-#endregion
+        #endregion
 
-#region IDisposable Members
+        #region IDisposable Members
 
         void IDisposable.Dispose()
         {
         }
 
-#endregion
+        #endregion
     }
 }

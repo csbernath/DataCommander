@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Foundation.Data
+﻿using DataCommander.Foundation.Diagnostics.Log;
+
+namespace DataCommander.Foundation.Data
 {
     using System;
     using System.Collections.Generic;
@@ -10,15 +12,17 @@
 
     public static class DbDataReaderExtensions
     {
-        public static async Task ReadAsync(this DbDataReader dataReader, Action read,
-            CancellationToken cancellationToken)
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+
+        public static async Task ReadAsync(this DbDataReader dataReader, Action read, CancellationToken cancellationToken)
         {
+            Log.Trace(CallerInformation.Get(), "...");
             while (await dataReader.ReadAsync(cancellationToken))
                 read();
+            Log.Trace(CallerInformation.Get(), ".");
         }
 
-        public static async Task ReadAsync(this DbDataReader dataReader, IEnumerable<Action> reads,
-            CancellationToken cancellationToken)
+        public static async Task ReadAsync(this DbDataReader dataReader, IEnumerable<Action> reads, CancellationToken cancellationToken)
         {
             foreach (var read in reads)
             {
@@ -28,72 +32,60 @@
             }
         }
 
-        public static async Task<List<TRow>> ReadAsync<TRow>(this DbDataReader dataReader, Func<IDataRecord, TRow> read, CancellationToken cancellationToken)
+        public static async Task<List<T>> ReadAsync<T>(this DbDataReader dataReader, Func<IDataRecord, T> read, CancellationToken cancellationToken)
         {
-            var rows = new List<TRow>();
+            var objects = new List<T>();
 
             await dataReader.ReadAsync(() =>
             {
-                var row = read(dataReader);
-                rows.Add(row);
+                var @object = read(dataReader);
+                objects.Add(@object);
             }, cancellationToken);
 
-            return rows;
+            return objects;
         }
 
-        public static async Task<ExecuteReaderResponse<TRow1, TRow2>> ReadAsync<TRow1, TRow2>(
+        public static async Task<ExecuteReaderResponse<T1, T2>> ReadAsync<T1, T2>(
             this DbDataReader dataReader,
-            Func<IDataRecord, TRow1> read1,
-            Func<IDataRecord, TRow2> read2,
+            Func<IDataRecord, T1> read1,
+            Func<IDataRecord, T2> read2,
             CancellationToken cancellationToken)
         {
-            List<TRow1> rows1 = null;
-            List<TRow2> rows2 = null;
+            List<T1> objects1 = null;
+            List<T2> objects2 = null;
 
             var reads = new Action[]
             {
-                async () => rows1 = (await dataReader.ReadAsync(read1, cancellationToken)),
-                async () => rows2 = (await dataReader.ReadAsync(read2, cancellationToken)),
+                async () => objects1 = await dataReader.ReadAsync(read1, cancellationToken),
+                async () => objects2 = await dataReader.ReadAsync(read2, cancellationToken),
             };
 
             await dataReader.ReadAsync(reads, cancellationToken);
 
-            return ExecuteReaderResponse.Create(rows1, rows2);
+            return ExecuteReaderResponse.Create(objects1, objects2);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataReader"></param>
-        /// <param name="read1"></param>
-        /// <param name="read2"></param>
-        /// <param name="read3"></param>
-        /// <param name="cancellationToken"></param>
-        /// <typeparam name="TRow1"></typeparam>
-        /// <typeparam name="TRow2"></typeparam>
-        /// <typeparam name="TRow3"></typeparam>
-        /// <returns></returns>
-        public static async Task<ExecuteReaderResponse<TRow1, TRow2, TRow3>> ReadAsync<TRow1, TRow2, TRow3>(
+        public static async Task<ExecuteReaderResponse<T1, T2, T3>> ReadAsync<T1, T2, T3>(
             this DbDataReader dataReader,
-            Func<IDataRecord, TRow1> read1,
-            Func<IDataRecord, TRow2> read2,
-            Func<IDataRecord, TRow3> read3,
+            Func<IDataRecord, T1> read1,
+            Func<IDataRecord, T2> read2,
+            Func<IDataRecord, T3> read3,
             CancellationToken cancellationToken)
         {
-            List<TRow1> rows1 = null;
-            List<TRow2> rows2 = null;
-            List<TRow3> rows3 = null;
+            List<T1> objects1 = null;
+            List<T2> objects2 = null;
+            List<T3> objects3 = null;
 
             var reads = new Action[]
             {
-                async () => rows1 = (await dataReader.ReadAsync(read1, cancellationToken)),
-                async () => rows2 = (await dataReader.ReadAsync(read2, cancellationToken)),
-                async () => rows3 = (await dataReader.ReadAsync(read3, cancellationToken)),
+                async () => objects1 = (await dataReader.ReadAsync(read1, cancellationToken)),
+                async () => objects2 = (await dataReader.ReadAsync(read2, cancellationToken)),
+                async () => objects3 = (await dataReader.ReadAsync(read3, cancellationToken)),
             };
 
             await dataReader.ReadAsync(reads, cancellationToken);
 
-            return ExecuteReaderResponse.Create(rows1, rows2, rows3);
+            return ExecuteReaderResponse.Create(objects1, objects2, objects3);
         }
     }
 }

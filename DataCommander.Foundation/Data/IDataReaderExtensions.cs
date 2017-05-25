@@ -43,36 +43,36 @@
 
         public static ExecuteReaderResponse<T1, T2> Read<T1, T2>(this IDataReader dataReader, Func<T1> read1, Func<T2> read2)
         {
-            List<T1> rows1 = null;
-            List<T2> rows2 = null;
+            List<T1> objects1 = null;
+            List<T2> objects2 = null;
 
             var reads = new Action[]
             {
-                () => rows1 = dataReader.Read(read1),
-                () => rows2 = dataReader.Read(read2)
+                () => objects1 = dataReader.Read(read1),
+                () => objects2 = dataReader.Read(read2)
             };
 
             dataReader.Read(reads);
 
-            return ExecuteReaderResponse.Create(rows1, rows2);
+            return ExecuteReaderResponse.Create(objects1, objects2);
         }
 
         public static ExecuteReaderResponse<T1, T2, T3> Read<T1, T2, T3>(this IDataReader dataReader, Func<T1> read1, Func<T2> read2, Func<T3> read3)
         {
-            List<T1> rows1 = null;
-            List<T2> rows2 = null;
-            List<T3> rows3 = null;
+            List<T1> objects1 = null;
+            List<T2> objects2 = null;
+            List<T3> objects3 = null;
 
             var reads = new Action[]
             {
-                () => rows1 = dataReader.Read(read1),
-                () => rows2 = dataReader.Read(read2),
-                () => rows3 = dataReader.Read(read3)
+                () => objects1 = dataReader.Read(read1),
+                () => objects2 = dataReader.Read(read2),
+                () => objects3 = dataReader.Read(read3)
             };
 
             dataReader.Read(reads);
 
-            return ExecuteReaderResponse.Create(rows1, rows2, rows3);
+            return ExecuteReaderResponse.Create(objects1, objects2, objects3);
         }
 
         /// <summary>

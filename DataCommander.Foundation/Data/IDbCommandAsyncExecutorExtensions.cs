@@ -4,24 +4,26 @@ using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
+using DataCommander.Foundation.Diagnostics.Log;
 
 namespace DataCommander.Foundation.Data
 {
     public static class IDbCommandAsyncExecutorExtensions
     {
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+
         public static async Task ExecuteAsync(this IDbCommandAsyncExecutor executor, IEnumerable<ExecuteCommandAsyncRequest> requests,
             CancellationToken cancellationToken)
         {
             await executor.ExecuteAsync(async connection =>
             {
+                Log.Trace(CallerInformation.Get(), "...");
                 foreach (var request in requests)
                 {
-                    using (var command = connection.CreateCommand())
-                    {
-                        command.Initialize(request.InitializeCommandRequest);
+                    using (var command = connection.CreateCommand(request.CreateCommandRequest))
                         await request.Execute(command);
-                    }
                 }
+                Log.Trace(CallerInformation.Get(), ".");
             }, cancellationToken);
         }
 
@@ -51,26 +53,25 @@ namespace DataCommander.Foundation.Data
             return scalar;
         }
 
-        public static async Task<List<TRow>> ExecuteReaderAsync<TRow>(this IDbCommandAsyncExecutor executor, ExecuteReaderRequest request,
-            Func<IDataRecord, TRow> read)
+        public static async Task<List<T>> ExecuteReaderAsync<T>(this IDbCommandAsyncExecutor executor, ExecuteReaderRequest request, Func<IDataRecord, T> read)
         {
-            List<TRow> rows = null;
-            await executor.ExecuteReaderAsync(request, async dataReader => rows = await dataReader.ReadAsync(read, request.CancellationToken));
-            return rows;
+            List<T> objects = null;
+            await executor.ExecuteReaderAsync(request, async dataReader => objects = await dataReader.ReadAsync(read, request.CancellationToken));
+            return objects;
         }
 
-        public static async Task<ExecuteReaderResponse<TRow1, TRow2>> ExecuteReaderAsync<TRow1, TRow2>(this IDbCommandAsyncExecutor executor,
-            ExecuteReaderRequest request, Func<IDataRecord, TRow1> read1, Func<IDataRecord, TRow2> read2)
+        public static async Task<ExecuteReaderResponse<T1, T2>> ExecuteReaderAsync<T1, T2>(this IDbCommandAsyncExecutor executor,
+            ExecuteReaderRequest request, Func<IDataRecord, T1> read1, Func<IDataRecord, T2> read2)
         {
-            ExecuteReaderResponse<TRow1, TRow2> response = null;
+            ExecuteReaderResponse<T1, T2> response = null;
             await executor.ExecuteReaderAsync(request, async dataReader => response = await dataReader.ReadAsync(read1, read2, request.CancellationToken));
             return response;
         }
 
-        public static async Task<ExecuteReaderResponse<TRow1, TRow2, TRow3>> ExecuteReaderAsync<TRow1, TRow2, TRow3>(this IDbCommandAsyncExecutor executor,
-            ExecuteReaderRequest request, Func<IDataRecord, TRow1> read1, Func<IDataRecord, TRow2> read2, Func<IDataRecord, TRow3> read3)
+        public static async Task<ExecuteReaderResponse<T1, T2, T3>> ExecuteReaderAsync<T1, T2, T3>(this IDbCommandAsyncExecutor executor,
+            ExecuteReaderRequest request, Func<IDataRecord, T1> read1, Func<IDataRecord, T2> read2, Func<IDataRecord, T3> read3)
         {
-            ExecuteReaderResponse<TRow1, TRow2, TRow3> response = null;
+            ExecuteReaderResponse<T1, T2, T3> response = null;
             await executor.ExecuteReaderAsync(request,
                 async dataReader => response = await dataReader.ReadAsync(read1, read2, read3, request.CancellationToken));
             return response;
@@ -82,10 +83,11 @@ namespace DataCommander.Foundation.Data
                 request.CreateCommandRequest,
                 async dbCommand =>
                 {
+                    Log.Trace(CallerInformation.Get(), "...");
                     using (var dataReader = await dbCommand.ExecuteReaderAsync(request.CommandBehavior, request.CancellationToken))
                         await read(dataReader);
-                },
-                request.CancellationToken);
+                    Log.Trace(CallerInformation.Get(), ".");
+                }, request.CancellationToken);
         }
     }
 }

@@ -4,14 +4,14 @@
 
     public static class ExecuteReaderResponse
     {
-        public static ExecuteReaderResponse<TRow1, TRow2> Create<TRow1, TRow2>(List<TRow1> rows1, List<TRow2> rows2)
+        public static ExecuteReaderResponse<T1, T2> Create<T1, T2>(List<T1> objects1, List<T2> objects2)
         {
-            return new ExecuteReaderResponse<TRow1, TRow2>(rows1, rows2);
+            return new ExecuteReaderResponse<T1, T2>(objects1, objects2);
         }
 
-        public static ExecuteReaderResponse<TRow1, TRow2, TRow3> Create<TRow1, TRow2, TRow3>(List<TRow1> rows1, List<TRow2> rows2, List<TRow3> rows3)
+        public static ExecuteReaderResponse<T1, T2, T3> Create<T1, T2, T3>(List<T1> objects1, List<T2> objects2, List<T3> objects3)
         {
-            return new ExecuteReaderResponse<TRow1, TRow2, TRow3>(rows1, rows2, rows3);
+            return new ExecuteReaderResponse<T1, T2, T3>(objects1, objects2, objects3);
         }
     }
 }

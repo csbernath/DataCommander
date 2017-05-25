@@ -7,16 +7,16 @@ namespace DataCommander.Foundation.Data
 {
     public sealed class ExecuteCommandAsyncRequest
     {
-        public ExecuteCommandAsyncRequest(CreateCommandRequest initializeCommandRequest, Func<DbCommand, Task> execute)
+        public ExecuteCommandAsyncRequest(CreateCommandRequest createCommandRequest, Func<DbCommand, Task> execute)
         {
-            FoundationContract.Requires<ArgumentNullException>(initializeCommandRequest != null);
+            FoundationContract.Requires<ArgumentNullException>(createCommandRequest != null);
             FoundationContract.Requires<ArgumentNullException>(execute != null);
 
-            InitializeCommandRequest = initializeCommandRequest;
+            CreateCommandRequest = createCommandRequest;
             Execute = execute;
         }
 
-        public readonly CreateCommandRequest InitializeCommandRequest;
+        public readonly CreateCommandRequest CreateCommandRequest;
         public readonly Func<DbCommand, Task> Execute;
     }
 }

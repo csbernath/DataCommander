@@ -92,17 +92,12 @@ end",
                 name.ToTSqlNVarChar());
 
             var sb = new StringBuilder();
-            var transactionScope = new DbTransactionScope(connection, null);
-
-            using (var gridReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+            var executor = DbCommandExecutorFactory.Create(connection);
+            executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
             {
-                gridReader.Read(dataRecord =>
-                {
-                    var s = dataRecord.GetString(0);
-                    sb.Append(s);
-                    return true;
-                });
-            }
+                var s = dataReader.GetString(0);
+                sb.Append(s);
+            });
 
             return sb.ToString();
         }
