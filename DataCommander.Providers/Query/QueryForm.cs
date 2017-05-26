@@ -33,9 +33,6 @@ using Timer = System.Windows.Forms.Timer;
 
 namespace DataCommander.Providers.Query
 {
-    /// <summary>
-    /// Summary description for QueryForm.
-    /// </summary>
     public sealed class QueryForm : Form
     {
         #region Private Fields
@@ -166,98 +163,98 @@ namespace DataCommander.Providers.Query
         {
             GarbageMonitor.Add("QueryForm", this);
 
-            this._mainForm = mainForm;
-            this.Provider = provider;
-            this._connectionString = connectionString;
-            this.Connection = connection;
-            this._parentStatusBar = parentStatusBar;
-            this._colorTheme = colorTheme;
-            connection.InfoMessage += this.Connection_InfoMessage;
-            connection.DatabaseChanged += this.Connection_DatabaseChanged;
-            this._timer.Tick += this.Timer_Tick;
+            _mainForm = mainForm;
+            Provider = provider;
+            _connectionString = connectionString;
+            Connection = connection;
+            _parentStatusBar = parentStatusBar;
+            _colorTheme = colorTheme;
+            connection.InfoMessage += Connection_InfoMessage;
+            connection.DatabaseChanged += Connection_DatabaseChanged;
+            _timer.Tick += Timer_Tick;
 
-            var task = new Task(this.ConsumeInfoMessages);
-            task.Start(this._scheduler);
+            var task = new Task(ConsumeInfoMessages);
+            task.Start(_scheduler);
 
-            this._messagesTextBox = new RichTextBox();
-            this.components.Add(this._messagesTextBox);
-            GarbageMonitor.Add("QueryForm.messagesTextBox", this._messagesTextBox);
-            this._messagesTextBox.Multiline = true;
-            this._messagesTextBox.WordWrap = false;
-            this._messagesTextBox.Dock = DockStyle.Fill;
-            this._messagesTextBox.ScrollBars = RichTextBoxScrollBars.Both;
+            _messagesTextBox = new RichTextBox();
+            components.Add(_messagesTextBox);
+            GarbageMonitor.Add("QueryForm.messagesTextBox", _messagesTextBox);
+            _messagesTextBox.Multiline = true;
+            _messagesTextBox.WordWrap = false;
+            _messagesTextBox.Dock = DockStyle.Fill;
+            _messagesTextBox.ScrollBars = RichTextBoxScrollBars.Both;
 
-            this._messagesTabPage = new TabPage("Messages");
-            this._messagesTabPage.Controls.Add(this._messagesTextBox);
+            _messagesTabPage = new TabPage("Messages");
+            _messagesTabPage.Controls.Add(_messagesTextBox);
 
-            this.InitializeComponent();
-            GarbageMonitor.Add("queryForm.toolStrip", this._toolStrip);
-            this._mnuFind.Click += this.mnuFind_Click;
-            this._mnuFindNext.Click += this.mnuFindNext_Click;
-            this._mnuPaste.Click += this.mnuPaste_Click;
-            this._mnuGoTo.Click += this.mnuGoTo_Click;
-            this._mnuClearCache.Click += this.mnuClearCache_Click;
+            InitializeComponent();
+            GarbageMonitor.Add("queryForm.toolStrip", _toolStrip);
+            _mnuFind.Click += mnuFind_Click;
+            _mnuFindNext.Click += mnuFindNext_Click;
+            _mnuPaste.Click += mnuPaste_Click;
+            _mnuGoTo.Click += mnuGoTo_Click;
+            _mnuClearCache.Click += mnuClearCache_Click;
 
             var sqlKeyWords = Settings.CurrentType.Attributes["Sql92ReservedWords"].GetValue<string[]>();
             var providerKeyWords = provider.KeyWords;
 
-            this.QueryTextBox.AddKeyWords(new string[] {"exec"}, colorTheme != null
+            QueryTextBox.AddKeyWords(new string[] {"exec"}, colorTheme != null
                 ? colorTheme.ExecKeyWordColor
                 : Color.Green);
-            this.QueryTextBox.AddKeyWords(sqlKeyWords, colorTheme != null
+            QueryTextBox.AddKeyWords(sqlKeyWords, colorTheme != null
                 ? colorTheme.SqlKeyWordColor
                 : Color.Blue);
-            this.QueryTextBox.AddKeyWords(providerKeyWords, colorTheme != null
+            QueryTextBox.AddKeyWords(providerKeyWords, colorTheme != null
                 ? colorTheme.ProviderKeyWordColor
                 : Color.Red);
 
-            this.QueryTextBox.CaretPositionPanel = this._sbPanelCaretPosition;
+            QueryTextBox.CaretPositionPanel = _sbPanelCaretPosition;
 
-            this.SetText();
+            SetText();
 
-            this._resultSetsTabPage = new TabPage("Results");
-            this._resultSetsTabControl = new TabControl();
-            this._resultSetsTabControl.MouseUp += this.resultSetsTabControl_MouseUp;
-            this._resultSetsTabControl.Alignment = TabAlignment.Top;
-            this._resultSetsTabControl.Dock = DockStyle.Fill;
-            this._resultSetsTabPage.Controls.Add(this._resultSetsTabControl);
+            _resultSetsTabPage = new TabPage("Results");
+            _resultSetsTabControl = new TabControl();
+            _resultSetsTabControl.MouseUp += resultSetsTabControl_MouseUp;
+            _resultSetsTabControl.Alignment = TabAlignment.Top;
+            _resultSetsTabControl.Dock = DockStyle.Fill;
+            _resultSetsTabPage.Controls.Add(_resultSetsTabControl);
 
-            this._tabControl.TabPages.Add(this._resultSetsTabPage);
-            this._tabControl.TabPages.Add(this._messagesTabPage);
-            this._tabControl.SelectedTab = this._messagesTabPage;
+            _tabControl.TabPages.Add(_resultSetsTabPage);
+            _tabControl.TabPages.Add(_messagesTabPage);
+            _tabControl.SelectedTab = _messagesTabPage;
 
-            this._standardOutput = new StandardOutput(new TextBoxWriter(this._messagesTextBox), this);
+            _standardOutput = new StandardOutput(new TextBoxWriter(_messagesTextBox), this);
 
-            this._textBoxWriter = new TextBoxWriter(this._messagesTextBox);
+            _textBoxWriter = new TextBoxWriter(_messagesTextBox);
 
             var objectExplorer = provider.ObjectExplorer;
             if (objectExplorer != null)
             {
                 objectExplorer.SetConnection(connectionString, connection.Connection);
-                this.AddNodes(this._tvObjectExplorer.Nodes, objectExplorer.GetChildren(true), objectExplorer.Sortable);
+                AddNodes(_tvObjectExplorer.Nodes, objectExplorer.GetChildren(true), objectExplorer.Sortable);
             }
             else
             {
-                this._tvObjectExplorer.Visible = false;
-                this._splitterObjectExplorer.Visible = false;
-                this._mnuObjectExplorer.Enabled = false;
+                _tvObjectExplorer.Visible = false;
+                _splitterObjectExplorer.Visible = false;
+                _mnuObjectExplorer.Enabled = false;
             }
 
-            var text = $"&{index + 1} - {this.Text}";
+            var text = $"&{index + 1} - {Text}";
 
-            this._database = connection.Database;
-            this.SetResultWriterType(ResultWriterType.DataGrid);
+            _database = connection.Database;
+            SetResultWriterType(ResultWriterType.DataGrid);
 
             var node = Settings.CurrentType;
             var attributes = node.Attributes;
-            this._rowBlockSize = attributes["RowBlockSize"].GetValue<int>();
-            this._htmlMaxRecords = attributes["HtmlMaxRecords"].GetValue<int>();
-            this._wordMaxRecords = attributes["WordMaxRecords"].GetValue<int>();
-            this._rowBlockSize = attributes["RowBlockSize"].GetValue<int>();
-            this._timer.Interval = attributes["TimerInterval"].GetValue<int>();
+            _rowBlockSize = attributes["RowBlockSize"].GetValue<int>();
+            _htmlMaxRecords = attributes["HtmlMaxRecords"].GetValue<int>();
+            _wordMaxRecords = attributes["WordMaxRecords"].GetValue<int>();
+            _rowBlockSize = attributes["RowBlockSize"].GetValue<int>();
+            _timer.Interval = attributes["TimerInterval"].GetValue<int>();
 
-            this.SettingsChanged(null, null);
-            Settings.Changed += this.SettingsChanged;
+            SettingsChanged(null, null);
+            Settings.Changed += SettingsChanged;
 
             if (colorTheme != null)
             {
@@ -265,19 +262,19 @@ namespace DataCommander.Providers.Query
                 {
                     foreach (ToolStripItem x in menuItem.DropDownItems)
                     {
-                        x.BackColor = colorTheme.BackColor;
                         x.ForeColor = colorTheme.ForeColor;
+                        x.BackColor = colorTheme.BackColor;
                     }
                 }
 
-                _toolStrip.BackColor = colorTheme.BackColor;
                 _toolStrip.ForeColor = colorTheme.ForeColor;
+                _toolStrip.BackColor = colorTheme.BackColor;
 
-                _tvObjectExplorer.BackColor = colorTheme.BackColor;
                 _tvObjectExplorer.ForeColor = colorTheme.ForeColor;
+                _tvObjectExplorer.BackColor = colorTheme.BackColor;
 
-                _tabControl.BackColor = colorTheme.BackColor;
                 _tabControl.ForeColor = colorTheme.ForeColor;
+                _tabControl.BackColor = colorTheme.BackColor;
 
                 foreach (Control control in _tabControl.Controls)
                 {
@@ -285,19 +282,19 @@ namespace DataCommander.Providers.Query
                     control.ForeColor = colorTheme.ForeColor;
                 }
 
-                _resultSetsTabControl.BackColor = colorTheme.BackColor;
                 _resultSetsTabControl.ForeColor = colorTheme.ForeColor;
+                _resultSetsTabControl.BackColor = colorTheme.BackColor;
 
-                _messagesTextBox.BackColor = colorTheme.BackColor;
                 _messagesTextBox.ForeColor = colorTheme.ForeColor;
+                _messagesTextBox.BackColor = colorTheme.BackColor;
 
-                _statusBar.BackColor = colorTheme.BackColor;
                 _statusBar.ForeColor = colorTheme.ForeColor;
+                _statusBar.BackColor = colorTheme.BackColor;
 
                 foreach (ToolStripItem item in _statusBar.Items)
                 {
-                    item.BackColor = colorTheme.BackColor;
                     item.ForeColor = colorTheme.ForeColor;
+                    item.BackColor = colorTheme.BackColor;
                 }
             }
         }
@@ -317,7 +314,7 @@ namespace DataCommander.Providers.Query
 
         private void CloseResultSetTabPage(TabPage tabPage)
         {
-            this._resultSetsTabControl.TabPages.Remove(tabPage);
+            _resultSetsTabControl.TabPages.Remove(tabPage);
             var control = tabPage.Controls[0];
             var tabControl = control as TabControl;
             if (tabControl != null)
@@ -326,7 +323,7 @@ namespace DataCommander.Providers.Query
                 foreach (var subTabPage in tabPages)
                 {
                     tabControl.TabPages.Remove(subTabPage);
-                    this.CloseResultTabPage(subTabPage);
+                    CloseResultTabPage(subTabPage);
                     // GarbageMonitor.SetDisposeTime(subTabPage, LocalTime.Default.Now);
                     // subTabPage.Dispose();
                 }
@@ -337,7 +334,7 @@ namespace DataCommander.Providers.Query
             }
             else
             {
-                this.CloseResultTabPage(tabPage);
+                CloseResultTabPage(tabPage);
             }
         }
 
@@ -345,35 +342,35 @@ namespace DataCommander.Providers.Query
         {
             var toolStripMenuItem = (ToolStripMenuItem)sender;
             var tabPage = (TabPage)toolStripMenuItem.Tag;
-            this.CloseResultSetTabPage(tabPage);
+            CloseResultSetTabPage(tabPage);
             toolStripMenuItem.Tag = null;
         }
 
         private void resultSetsTabControl_MouseUp(object sender, MouseEventArgs e)
         {
             var hitTestInfo = new Tchittestinfo(e.X, e.Y);
-            var index = SendMessage(this._resultSetsTabControl.Handle, TcmHittest, IntPtr.Zero, ref hitTestInfo);
-            var hotTab = index >= 0 ? this._resultSetsTabControl.TabPages[index] : null;
+            var index = SendMessage(_resultSetsTabControl.Handle, TcmHittest, IntPtr.Zero, ref hitTestInfo);
+            var hotTab = index >= 0 ? _resultSetsTabControl.TabPages[index] : null;
 
             switch (e.Button)
             {
                 case MouseButtons.Middle:
                     if (index >= 0)
                     {
-                        this.CloseResultSetTabPage(hotTab);
+                        CloseResultSetTabPage(hotTab);
                     }
                     break;
 
                 case MouseButtons.Right:
                     if (index >= 0)
                     {
-                        var contextMenu = new ContextMenuStrip(this.components);
-                        contextMenu.Items.Add(new ToolStripMenuItem("Close", null, this.CloseResultSetTabPage_Click)
+                        var contextMenu = new ContextMenuStrip(components);
+                        contextMenu.Items.Add(new ToolStripMenuItem("Close", null, CloseResultSetTabPage_Click)
                         {
                             Tag = hotTab
                         });
-                        contextMenu.Items.Add(new ToolStripMenuItem("Close all", null, this.mnuCloseAllTabPages_Click, Keys.Control | Keys.Shift | Keys.F4));
-                        contextMenu.Show(this._resultSetsTabControl, e.Location);
+                        contextMenu.Items.Add(new ToolStripMenuItem("Close all", null, mnuCloseAllTabPages_Click, Keys.Control | Keys.Shift | Keys.F4));
+                        contextMenu.Show(_resultSetsTabControl, e.Location);
                     }
                     break;
             }
@@ -391,21 +388,21 @@ namespace DataCommander.Providers.Query
         {
             set
             {
-                this._font = value;
-                this.QueryTextBox.Font = value;
+                _font = value;
+                QueryTextBox.Font = value;
                 var size1 = TextRenderer.MeasureText("1", value);
                 var size2 = TextRenderer.MeasureText("12", value);
-                var width = this.QueryTextBox.TabSize*(size2.Width - size1.Width);
+                var width = QueryTextBox.TabSize*(size2.Width - size1.Width);
                 var tabs = new int[12];
 
                 for (var i = 0; i < tabs.Length; i++)
                     tabs[i] = (i + 1) * width;
 
-                this.QueryTextBox.RichTextBox.Font = value;
-                this.QueryTextBox.RichTextBox.SelectionTabs = tabs;
+                QueryTextBox.RichTextBox.Font = value;
+                QueryTextBox.RichTextBox.SelectionTabs = tabs;
 
-                this._messagesTextBox.Font = value;
-                this._messagesTextBox.SelectionTabs = tabs;
+                _messagesTextBox.Font = value;
+                _messagesTextBox.SelectionTabs = tabs;
             }
         }
 
@@ -417,11 +414,11 @@ namespace DataCommander.Providers.Query
         {
             get
             {
-                var query = this.QueryTextBox.SelectedText;
+                var query = QueryTextBox.SelectedText;
 
                 if (query.Length == 0)
                 {
-                    query = this.QueryTextBox.Text;
+                    query = QueryTextBox.Text;
                 }
 
                 query = query.Replace("\n", "\r\n");
@@ -435,7 +432,7 @@ namespace DataCommander.Providers.Query
 
         public ResultWriterType TableStyle { get; private set; }
 
-        internal ToolStrip ToolStrip => this._toolStrip;
+        internal ToolStrip ToolStrip => _toolStrip;
 
         #endregion
 
@@ -446,34 +443,34 @@ namespace DataCommander.Providers.Query
             switch (tableStyle)
             {
                 case ResultWriterType.Text:
-                    this.ShowDataTableText(dataTable);
+                    ShowDataTableText(dataTable);
                     break;
 
                 case ResultWriterType.DataGrid:
-                    this.ShowDataTableDataGrid(dataTable);
+                    ShowDataTableDataGrid(dataTable);
                     break;
 
                 case ResultWriterType.Html:
-                    this.ShowDataViewHtml(dataTable.DefaultView);
+                    ShowDataViewHtml(dataTable.DefaultView);
                     break;
 
                 case ResultWriterType.Rtf:
-                    this.ShowDataTableRtf(dataTable);
+                    ShowDataTableRtf(dataTable);
                     break;
 
                 case ResultWriterType.ListView:
-                    this.ShowDataTableListView(dataTable);
+                    ShowDataTableListView(dataTable);
                     break;
 
                 case ResultWriterType.Excel:
-                    this.ShowDataTableExcel(dataTable);
+                    ShowDataTableExcel(dataTable);
                     break;
             }
         }
 
         public void AppendQueryText(string text)
         {
-            this.QueryTextBox.RichTextBox.AppendText(text);
+            QueryTextBox.RichTextBox.AppendText(text);
         }
 
         public void ShowDataSet(DataSet dataSet)
@@ -484,32 +481,32 @@ namespace DataCommander.Providers.Query
                 {
                     DataSet tableSchema = null;
                     string text;
-                    if (this._openTableMode)
+                    if (_openTableMode)
                     {
-                        var tableName = this._sqlStatement.FindTableName();
+                        var tableName = _sqlStatement.FindTableName();
                         text = tableName;
                         dataSet.Tables[0].TableName = tableName;
-                        tableSchema = this.Provider.GetTableSchema(this.Connection.Connection, tableName);
+                        tableSchema = Provider.GetTableSchema(Connection.Connection, tableName);
                     }
                     else
                     {
-                        this.ResultSetCount++;
-                        text = $"Set {this.ResultSetCount}";
+                        ResultSetCount++;
+                        text = $"Set {ResultSetCount}";
                     }
                     var resultSetTabPage = new TabPage(text);
                     GarbageMonitor.Add("resultSetTabPage", resultSetTabPage);
                     resultSetTabPage.ToolTipText = null; // TODO
-                    this._resultSetsTabControl.TabPages.Add(resultSetTabPage);
-                    this._resultSetsTabControl.SelectedTab = resultSetTabPage;
+                    _resultSetsTabControl.TabPages.Add(resultSetTabPage);
+                    _resultSetsTabControl.SelectedTab = resultSetTabPage;
                     if (dataSet.Tables.Count > 1)
                     {
                         var tabControl = new TabControl {Dock = DockStyle.Fill};
                         var index = 0;
                         foreach (DataTable dataTable in dataSet.Tables)
                         {
-                            var commandBuilder = this.Provider.DbProviderFactory.CreateCommandBuilder();
-                            var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataTable, tableSchema, this.TableStyle,
-                                !this._openTableMode, this._sbPanelText, _colorTheme);
+                            var commandBuilder = Provider.DbProviderFactory.CreateCommandBuilder();
+                            var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataTable, tableSchema, TableStyle,
+                                !_openTableMode, _sbPanelText, _colorTheme);
                             control.Dock = DockStyle.Fill;
                             text = dataTable.TableName;
                             var tabPage = new TabPage(text);
@@ -522,9 +519,9 @@ namespace DataCommander.Providers.Query
                     }
                     else
                     {
-                        var commandBuilder = this.Provider.DbProviderFactory.CreateCommandBuilder();
-                        var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataSet.Tables[0], tableSchema, this.TableStyle,
-                            !this._openTableMode, this._sbPanelText, _colorTheme);
+                        var commandBuilder = Provider.DbProviderFactory.CreateCommandBuilder();
+                        var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataSet.Tables[0], tableSchema, TableStyle,
+                            !_openTableMode, _sbPanelText, _colorTheme);
                         control.Dock = DockStyle.Fill;
                         resultSetTabPage.Controls.Add(control);
                     }
@@ -538,7 +535,7 @@ namespace DataCommander.Providers.Query
             htmlTextBox.Dock = DockStyle.Fill;
 
             var tabPage = new TabPage(tabPageName);
-            this._tabControl.TabPages.Add(tabPage);
+            _tabControl.TabPages.Add(tabPage);
             tabPage.Controls.Add(htmlTextBox);
 
             htmlTextBox.Xml = xml;
@@ -1408,8 +1405,8 @@ namespace DataCommander.Providers.Query
             }
 
             ticks = Stopwatch.GetTimestamp() - ticks;
-            this._sbPanelText.Text = $"{count} item(s) added to Object Explorer in {StopwatchTimeSpan.ToString(ticks, 3)}.";
-            this._sbPanelText.ForeColor = SystemColors.ControlText;
+            _sbPanelText.Text = $"{count} item(s) added to Object Explorer in {StopwatchTimeSpan.ToString(ticks, 3)}.";
+            _sbPanelText.ForeColor = SystemColors.ControlText;
         }
 
         public void AddInfoMessage(InfoMessage infoMessage)
@@ -1418,11 +1415,11 @@ namespace DataCommander.Providers.Query
 
             if (infoMessage.Severity == InfoMessageSeverity.Error)
             {
-                this._errorCount++;
+                _errorCount++;
             }
 
-            this._infoMessages.Enqueue(infoMessage);
-            this._enqueueEvent.Set();
+            _infoMessages.Enqueue(infoMessage);
+            _enqueueEvent.Set();
         }
 
         private void AddInfoMessages(IEnumerable<InfoMessage> infoMessages)
@@ -1436,14 +1433,14 @@ namespace DataCommander.Providers.Query
                 (from infoMessage in infoMessages
                     where infoMessage.Severity == InfoMessageSeverity.Error
                     select infoMessage).Count();
-            this._errorCount += errorCount;
+            _errorCount += errorCount;
 
             foreach (var infoMessage in infoMessages)
             {
-                this._infoMessages.Enqueue(infoMessage);
+                _infoMessages.Enqueue(infoMessage);
             }
 
-            this._enqueueEvent.Set();
+            _enqueueEvent.Set();
         }
 
         private void AppendMessageText(
@@ -1459,7 +1456,7 @@ namespace DataCommander.Providers.Query
             }
 
             s += "] " + text + "\r\n";
-            this._messagesTextBox.AppendText(s);
+            _messagesTextBox.AppendText(s);
         }
 
         private void AddTabPage(
@@ -1477,7 +1474,7 @@ namespace DataCommander.Providers.Query
 
         private void Connection_InfoMessage(IEnumerable<InfoMessage> messages)
         {
-            this.AddInfoMessages(messages);
+            AddInfoMessages(messages);
         }
 
         internal static string DbValue(object value)
@@ -1500,9 +1497,9 @@ namespace DataCommander.Providers.Query
         {
             var sb = new StringBuilder();
 
-            if (this._command != null)
+            if (_command != null)
             {
-                sb.Append(this._command.CommandText + "\n");
+                sb.Append(_command.CommandText + "\n");
             }
 
             if (dataTable != null)
@@ -1516,22 +1513,22 @@ namespace DataCommander.Providers.Query
         private void SettingsChanged(object sender, EventArgs e)
         {
             var folder = Settings.CurrentType;
-            this._commandTimeout = folder.Attributes["CommandTimeout"].GetValue<int>();
+            _commandTimeout = folder.Attributes["CommandTimeout"].GetValue<int>();
         }
 
         private void SetText()
         {
             var sb = new StringBuilder();
-            sb.Append(this.Connection.ConnectionName);
+            sb.Append(Connection.ConnectionName);
             sb.Append(" - ");
-            sb.Append(this.Connection.Caption);
+            sb.Append(Connection.Caption);
 
-            if (this._fileName != null)
+            if (_fileName != null)
             {
-                sb.AppendFormat(" - {0}", this._fileName);
+                sb.AppendFormat(" - {0}", _fileName);
             }
 
-            this.Text = sb.ToString();
+            Text = sb.ToString();
 
             var mainForm = DataCommanderApplication.Instance.MainForm;
             mainForm.ActiveMdiChildToolStripTextBox.Text = sb.ToString();
@@ -1541,7 +1538,7 @@ namespace DataCommander.Providers.Query
         {
             if (e.Button == MouseButtons.Right)
             {
-                var contextMenu = new ContextMenuStrip(this.components);
+                var contextMenu = new ContextMenuStrip(components);
                 var values = Enum.GetValues(typeof (ResultWriterType));
 
                 for (var i = 0; i < values.Length; i++)
@@ -1550,29 +1547,29 @@ namespace DataCommander.Providers.Query
                     var item = new ToolStripMenuItem();
                     item.Text = tableStyle.ToString();
                     item.Tag = tableStyle;
-                    item.Click += this.TableStyleMenuItem_Click;
+                    item.Click += TableStyleMenuItem_Click;
                     contextMenu.Items.Add(item);
                 }
 
-                var bounds = this._sbPanelTableStyle.Bounds;
+                var bounds = _sbPanelTableStyle.Bounds;
                 var location = e.Location;
-                contextMenu.Show(this._statusBar, bounds.X + location.X, bounds.Y + location.Y);
+                contextMenu.Show(_statusBar, bounds.X + location.X, bounds.Y + location.Y);
             }
         }
 
         private void bToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.ExecuteQuerySingleRow();
+            ExecuteQuerySingleRow();
         }
 
         private void ExecuteQuery()
         {
             Log.Write(LogLevel.Trace, "ExecuteQuery...");
 
-            this.Cursor = Cursors.AppStarting;
-            this.SetGui(CommandState.Cancel);
+            Cursor = Cursors.AppStarting;
+            SetGui(CommandState.Cancel);
 
-            if (this._dataAdapter != null)
+            if (_dataAdapter != null)
             {
                 Log.Write(LogLevel.Error, "this.dataAdapter == null failed");
             }
@@ -1584,24 +1581,24 @@ namespace DataCommander.Providers.Query
             Log.Trace("ThreadMonitor:\r\n{0}", ThreadMonitor.ToStringTableString());
             ThreadMonitor.Join(0);
             Log.Write(LogLevel.Trace, GarbageMonitor.State);
-            this._openTableMode = false;
-            this._dataAdapter = new AsyncDataAdapter();
-            this._cancel = false;
+            _openTableMode = false;
+            _dataAdapter = new AsyncDataAdapter();
+            _cancel = false;
 
             try
             {
-                this._sbPanelText.Text = "Executing query...";
-                this._sbPanelText.ForeColor = SystemColors.ControlText;
-                var query = this.Query;
-                var statements = this.Provider.GetStatements(query);
+                _sbPanelText.Text = "Executing query...";
+                _sbPanelText.ForeColor = SystemColors.ControlText;
+                var query = Query;
+                var statements = Provider.GetStatements(query);
                 Log.Write(LogLevel.Trace, "Query:\r\n{0}", query);
                 IEnumerable<AsyncDataAdapterCommand> commands;
 
                 if (statements.Count == 1)
                 {
-                    this._sqlStatement = new SqlStatement(statements[0].CommandText);
-                    var command = this._sqlStatement.CreateCommand(this.Provider, this.Connection, this._commandType, this._commandTimeout);
-                    command.Transaction = this._transaction;
+                    _sqlStatement = new SqlStatement(statements[0].CommandText);
+                    var command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
+                    command.Transaction = _transaction;
                     commands = new[]
                     {
                         new AsyncDataAdapterCommand
@@ -1613,7 +1610,7 @@ namespace DataCommander.Providers.Query
                 }
                 else
                 {
-                    var transactionScope = new DbTransactionScope(this.Connection.Connection, this._transaction);
+                    var transactionScope = new DbTransactionScope(Connection.Connection, _transaction);
                     commands =
                         from statement in statements
                         select new AsyncDataAdapterCommand
@@ -1622,7 +1619,7 @@ namespace DataCommander.Providers.Query
                             Command = transactionScope.CreateCommand(new CommandDefinition
                             {
                                 CommandText = statement.CommandText,
-                                CommandTimeout = this._commandTimeout
+                                CommandTimeout = _commandTimeout
                             })
                         };
                 }
@@ -1630,13 +1627,13 @@ namespace DataCommander.Providers.Query
                 int maxRecords;
                 IResultWriter resultWriter = null;
 
-                switch (this.TableStyle)
+                switch (TableStyle)
                 {
                     case ResultWriterType.DataGrid:
                     case ResultWriterType.ListView:
                         maxRecords = int.MaxValue;
-                        this._dataSetResultWriter = new DataSetResultWriter(this.AddInfoMessage, this, this._showSchemaTable);
-                        resultWriter = this._dataSetResultWriter;
+                        _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, this, _showSchemaTable);
+                        resultWriter = _dataSetResultWriter;
                         break;
 
                     case ResultWriterType.DataGridView:
@@ -1645,47 +1642,47 @@ namespace DataCommander.Providers.Query
                         break;
 
                     case ResultWriterType.Html:
-                        maxRecords = this._htmlMaxRecords;
-                        this._dataSetResultWriter = new DataSetResultWriter(this.AddInfoMessage, this, this._showSchemaTable);
-                        resultWriter = this._dataSetResultWriter;
+                        maxRecords = _htmlMaxRecords;
+                        _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, this, _showSchemaTable);
+                        resultWriter = _dataSetResultWriter;
                         break;
 
                     case ResultWriterType.Rtf:
-                        maxRecords = this._wordMaxRecords;
-                        this._dataSetResultWriter = new DataSetResultWriter(this.AddInfoMessage, this, this._showSchemaTable);
-                        resultWriter = this._dataSetResultWriter;
+                        maxRecords = _wordMaxRecords;
+                        _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, this, _showSchemaTable);
+                        resultWriter = _dataSetResultWriter;
                         break;
 
                     case ResultWriterType.File:
                         maxRecords = int.MaxValue;
-                        resultWriter = new FileResultWriter(this._textBoxWriter);
-                        this._tabControl.SelectedTab = this._messagesTabPage;
+                        resultWriter = new FileResultWriter(_textBoxWriter);
+                        _tabControl.SelectedTab = _messagesTabPage;
                         break;
 
                     case ResultWriterType.SqLite:
                         maxRecords = int.MaxValue;
-                        var tableName = this._sqlStatement.FindTableName();
-                        resultWriter = new SQLiteResultWriter(this._textBoxWriter, tableName);
-                        this._tabControl.SelectedTab = this._messagesTabPage;
+                        var tableName = _sqlStatement.FindTableName();
+                        resultWriter = new SQLiteResultWriter(_textBoxWriter, tableName);
+                        _tabControl.SelectedTab = _messagesTabPage;
                         break;
 
                     case ResultWriterType.InsertScriptFile:
                         maxRecords = int.MaxValue;
-                        tableName = this._sqlStatement.FindTableName();
-                        resultWriter = new InsertScriptFileWriter(tableName, this._textBoxWriter);
-                        this._tabControl.SelectedTab = this._messagesTabPage;
+                        tableName = _sqlStatement.FindTableName();
+                        resultWriter = new InsertScriptFileWriter(tableName, _textBoxWriter);
+                        _tabControl.SelectedTab = _messagesTabPage;
                         break;
 
                     case ResultWriterType.Excel:
                         maxRecords = int.MaxValue;
-                        resultWriter = new ExcelResultWriter(this.Provider, this.AddInfoMessage);
-                        this._tabControl.SelectedTab = this._messagesTabPage;
+                        resultWriter = new ExcelResultWriter(Provider, AddInfoMessage);
+                        _tabControl.SelectedTab = _messagesTabPage;
                         break;
 
                     case ResultWriterType.Log:
                         maxRecords = int.MaxValue;
-                        resultWriter = new LogResultWriter(this.AddInfoMessage);
-                        this._tabControl.SelectedTab = this._messagesTabPage;
+                        resultWriter = new LogResultWriter(AddInfoMessage);
+                        _tabControl.SelectedTab = _messagesTabPage;
                         break;
 
                     default:
@@ -1695,31 +1692,31 @@ namespace DataCommander.Providers.Query
                         textBox.MaxLength = int.MaxValue;
                         textBox.Multiline = true;
                         textBox.WordWrap = false;
-                        textBox.Font = this._font;
+                        textBox.Font = _font;
                         textBox.Dock = DockStyle.Fill;
                         textBox.ScrollBars = RichTextBoxScrollBars.Both;
-                        textBox.SelectionChanged += this.textBox_SelectionChanged;
+                        textBox.SelectionChanged += textBox_SelectionChanged;
 
                         var resultSetTabPage = new TabPage("TextResult");
                         resultSetTabPage.Controls.Add(textBox);
-                        this._resultSetsTabControl.TabPages.Add(resultSetTabPage);
-                        this._resultSetsTabControl.SelectedTab = resultSetTabPage;
+                        _resultSetsTabControl.TabPages.Add(resultSetTabPage);
+                        _resultSetsTabControl.SelectedTab = resultSetTabPage;
 
                         var textWriter = new TextBoxWriter(textBox);
-                        resultWriter = new TextResultWriter(this.AddInfoMessage, textWriter, this);
+                        resultWriter = new TextResultWriter(AddInfoMessage, textWriter, this);
                         break;
                 }
 
-                this._stopwatch.Start();
-                this._timer.Start();
-                this.ShowTimer();
+                _stopwatch.Start();
+                _timer.Start();
+                ShowTimer();
 
-                this._errorCount = 0;
-                this._dataAdapter.BeginFill(this.Provider, commands, maxRecords, this._rowBlockSize, resultWriter, this.EndFillInvoker, this.WriteEndInvoker);
+                _errorCount = 0;
+                _dataAdapter.BeginFill(Provider, commands, maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
             }
             catch (Exception ex)
             {
-                this.EndFill(this._dataAdapter, ex);
+                EndFill(_dataAdapter, ex);
             }
         }
 
@@ -1730,15 +1727,15 @@ namespace DataCommander.Providers.Query
             textBox.MaxLength = int.MaxValue;
             textBox.Multiline = true;
             textBox.WordWrap = false;
-            textBox.Font = this._font;
+            textBox.Font = _font;
             textBox.ScrollBars = RichTextBoxScrollBars.Both;
 
-            this.ShowTabPage("TextResult", this.GetToolTipText(null), textBox);
+            ShowTabPage("TextResult", GetToolTipText(null), textBox);
 
             TextWriter textWriter = new TextBoxWriter(textBox);
-            var resultWriter = (IResultWriter)new TextResultWriter(this.AddInfoMessage, textWriter, this);
+            var resultWriter = (IResultWriter)new TextResultWriter(AddInfoMessage, textWriter, this);
 
-            resultWriter.Begin(this.Provider);
+            resultWriter.Begin(Provider);
 
             var schemaTable = new DataTable();
 
@@ -1811,16 +1808,16 @@ namespace DataCommander.Providers.Query
 
         private void ShowDataTableDataGrid(DataTable dataTable)
         {
-            var commandBuilder = this.Provider.DbProviderFactory.CreateCommandBuilder();
+            var commandBuilder = Provider.DbProviderFactory.CreateCommandBuilder();
             var dataTableEditor = new DataTableEditor(commandBuilder, _colorTheme);
-            dataTableEditor.StatusBarPanel = this._sbPanelText;
-            dataTableEditor.ReadOnly = !this._openTableMode;
+            dataTableEditor.StatusBarPanel = _sbPanelText;
+            dataTableEditor.ReadOnly = !_openTableMode;
 
-            if (this._openTableMode)
+            if (_openTableMode)
             {
-                var tableName = this._sqlStatement.FindTableName();
+                var tableName = _sqlStatement.FindTableName();
                 dataTableEditor.TableName = tableName;
-                var dataSet = this.Provider.GetTableSchema(this.Connection.Connection, tableName);
+                var dataSet = Provider.GetTableSchema(Connection.Connection, tableName);
 
                 foreach (DataTable schemaTable in dataSet.Tables)
                 {
@@ -1831,9 +1828,9 @@ namespace DataCommander.Providers.Query
             }
 
             GarbageMonitor.Add("dataTableEditor", dataTableEditor);
-            dataTableEditor.StatusBarPanel = this._sbPanelText;
+            dataTableEditor.StatusBarPanel = _sbPanelText;
             dataTableEditor.DataTable = dataTable;
-            this.ShowTabPage(dataTable.TableName, this.GetToolTipText(dataTable), dataTableEditor);
+            ShowTabPage(dataTable.TableName, GetToolTipText(dataTable), dataTableEditor);
         }
 
         private void ShowDataViewHtml(DataView dataView)
@@ -1854,29 +1851,29 @@ namespace DataCommander.Providers.Query
 
             var dataTable = dataView.Table;
             var tabPage = new TabPage(dataTable.TableName);
-            tabPage.ToolTipText = this.GetToolTipText(dataTable);
-            this._tabControl.TabPages.Add(tabPage);
+            tabPage.ToolTipText = GetToolTipText(dataTable);
+            _tabControl.TabPages.Add(tabPage);
 
             var htmlTextBox = new HtmlTextBox();
             htmlTextBox.Dock = DockStyle.Fill;
             tabPage.Controls.Add(htmlTextBox);
 
-            this._tabControl.SelectedTab = tabPage;
+            _tabControl.SelectedTab = tabPage;
 
             htmlTextBox.Navigate(fileName);
 
-            this._sbPanelRows.Text = dataTable.Rows.Count + " row(s).";
+            _sbPanelRows.Text = dataTable.Rows.Count + " row(s).";
         }
 
         private void ShowDataTableRtf(DataTable dataTable)
         {
             try
             {
-                this._sbPanelText.Text = "Creating Word document...";
-                this._sbPanelText.ForeColor = SystemColors.ControlText;
+                _sbPanelText.Text = "Creating Word document...";
+                _sbPanelText.ForeColor = SystemColors.ControlText;
 
-                this._sbPanelText.Text = "Word document created.";
-                this._sbPanelText.ForeColor = SystemColors.ControlText;
+                _sbPanelText.Text = "Word document created.";
+                _sbPanelText.ForeColor = SystemColors.ControlText;
 
                 var fileName = WordDocumentCreator.CreateWordDocument(dataTable);
 
@@ -1886,11 +1883,11 @@ namespace DataCommander.Providers.Query
                 richTextBox.LoadFile(fileName);
                 File.Delete(fileName);
 
-                this.ShowTabPage(dataTable.TableName, this.GetToolTipText(dataTable), richTextBox);
+                ShowTabPage(dataTable.TableName, GetToolTipText(dataTable), richTextBox);
             }
             catch (Exception e)
             {
-                this.ShowMessage(e);
+                ShowMessage(e);
             }
         }
 
@@ -1952,7 +1949,7 @@ namespace DataCommander.Providers.Query
                 listView.Items.Add(listViewItem);
             }
 
-            this.ShowTabPage(dataTable.TableName, null, listView);
+            ShowTabPage(dataTable.TableName, null, listView);
         }
 
         private void ShowTabPage(
@@ -1963,22 +1960,22 @@ namespace DataCommander.Providers.Query
             control.Dock = DockStyle.Fill;
             var tabPage = new TabPage(tabPageName);
             tabPage.ToolTipText = toolTipText;
-            this._tabControl.TabPages.Add(tabPage);
+            _tabControl.TabPages.Add(tabPage);
             tabPage.Controls.Add(control);
-            this._tabControl.SelectedTab = tabPage;
+            _tabControl.SelectedTab = tabPage;
             // tabPage.Refresh();
         }
 
         public void ShowMessage(Exception e)
         {
-            var message = this.Provider.GetExceptionMessage(e);
+            var message = Provider.GetExceptionMessage(e);
             var infoMessage = new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Error, message);
-            this.AddInfoMessage(infoMessage);
+            AddInfoMessage(infoMessage);
 
-            this._tabControl.SelectedTab = this._messagesTabPage;
+            _tabControl.SelectedTab = _messagesTabPage;
 
-            this._sbPanelText.Text = "Query batch completed with errors.";
-            this._sbPanelRows.Text = null;
+            _sbPanelText.Text = "Query batch completed with errors.";
+            _sbPanelRows.Text = null;
         }
 
         private void TabPage_Close(object sender, EventArgs e)
@@ -1990,20 +1987,20 @@ namespace DataCommander.Providers.Query
 
         private void Connection_DatabaseChanged(object sender, DatabaseChangedEventArgs args)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                this.Invoke(() => this.Connection_DatabaseChanged(sender, args));
+                this.Invoke(() => Connection_DatabaseChanged(sender, args));
             }
             else
             {
-                if (this._database != args.database)
+                if (_database != args.database)
                 {
-                    var message = $"[DatabaseChanged] Database changed from {this._database} to {this._database}";
+                    var message = $"[DatabaseChanged] Database changed from {_database} to {_database}";
                     var infoMessage = new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message);
-                    this.AddInfoMessage(infoMessage);
+                    AddInfoMessage(infoMessage);
 
-                    this._database = args.database;
-                    this.SetText();
+                    _database = args.database;
+                    SetText();
                 }
             }
         }
@@ -2015,15 +2012,15 @@ namespace DataCommander.Providers.Query
         {
             if (disposing)
             {
-                if (this.components != null)
+                if (components != null)
                 {
                     var now = LocalTime.Default.Now;
-                    foreach (IComponent component in this.components.Components)
+                    foreach (IComponent component in components.Components)
                     {
                         GarbageMonitor.SetDisposeTime(component, now);
                     }
 
-                    this.components.Dispose();
+                    components.Dispose();
                 }
             }
 
@@ -2037,10 +2034,10 @@ namespace DataCommander.Providers.Query
 
         private void ShowResultWriterDataSet()
         {
-            if (this._dataSetResultWriter != null)
+            if (_dataSetResultWriter != null)
             {
-                var dataSet = this._dataSetResultWriter.DataSet;
-                this.ShowDataSet(dataSet);
+                var dataSet = _dataSetResultWriter.DataSet;
+                ShowDataSet(dataSet);
             }
         }
 
@@ -2049,15 +2046,15 @@ namespace DataCommander.Providers.Query
             try
             {
                 if (e != null)
-                    this.ShowMessage(e);
+                    ShowMessage(e);
 
-                if (this.Connection.State == ConnectionState.Open && this.Connection.Database != this._database)
+                if (Connection.State == ConnectionState.Open && Connection.Database != _database)
                 {
-                    this._database = this.Connection.Database;
-                    this.SetText();
+                    _database = Connection.Database;
+                    SetText();
                 }
 
-                switch (this.TableStyle)
+                switch (TableStyle)
                 {
                     case ResultWriterType.Text:
                     default:
@@ -2067,7 +2064,7 @@ namespace DataCommander.Providers.Query
                     case ResultWriterType.Html:
                     case ResultWriterType.Rtf:
                     case ResultWriterType.ListView:
-                        this.Invoke(new MethodInvoker(this.ShowResultWriterDataSet));
+                        Invoke(new MethodInvoker(ShowResultWriterDataSet));
                         break;
 
                     case ResultWriterType.DataGridView:
@@ -2075,8 +2072,8 @@ namespace DataCommander.Providers.Query
                         const string text = "TODO";
                         var resultSetTabPage = new TabPage(text);
                         resultSetTabPage.ToolTipText = null; // TODO
-                        this._resultSetsTabControl.TabPages.Add(resultSetTabPage);
-                        this._resultSetsTabControl.SelectedTab = resultSetTabPage;
+                        _resultSetsTabControl.TabPages.Add(resultSetTabPage);
+                        _resultSetsTabControl.SelectedTab = resultSetTabPage;
                         var tabControl = new TabControl();
                         tabControl.Dock = DockStyle.Fill;
                         var index = 0;
@@ -2096,40 +2093,40 @@ namespace DataCommander.Providers.Query
 
                 if (e != null)
                 {
-                    if (this.Connection.State == ConnectionState.Closed)
+                    if (Connection.State == ConnectionState.Closed)
                     {
-                        this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information,
+                        AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information,
                             "Connection is closed. Opening connection..."));
 
-                        var csb = new SqlConnectionStringBuilder(this._connectionString);
-                        csb.InitialCatalog = this._database;
+                        var csb = new SqlConnectionStringBuilder(_connectionString);
+                        csb.InitialCatalog = _database;
 
                         var connectionProperties = new ConnectionProperties
                         {
-                            Provider = this.Provider,
+                            Provider = Provider,
                             ConnectionString = csb.ConnectionString
                         };
                         var openConnectionForm = new OpenConnectionForm(connectionProperties);
                         if (openConnectionForm.ShowDialog() == DialogResult.OK)
                         {
-                            this.Connection.Connection.Dispose();
-                            this.Connection = connectionProperties.Connection;
-                            this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Opening connection succeeded."));
+                            Connection.Connection.Dispose();
+                            Connection = connectionProperties.Connection;
+                            AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Opening connection succeeded."));
                         }
                         else
                         {
-                            this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Opening connection canceled."));
+                            AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Opening connection canceled."));
                         }
                     }
                 }
 
                 if (e != null || dataAdapter.TableCount == 0)
                 {
-                    this._tabControl.SelectedTab = this._messagesTabPage;
+                    _tabControl.SelectedTab = _messagesTabPage;
                 }
                 else
                 {
-                    switch (this.TableStyle)
+                    switch (TableStyle)
                     {
                         case ResultWriterType.DataGrid:
                         case ResultWriterType.DataGridView:
@@ -2138,70 +2135,70 @@ namespace DataCommander.Providers.Query
                         case ResultWriterType.Rtf:
                         case ResultWriterType.SqLite:
                         case ResultWriterType.Text:
-                            this._tabControl.SelectedTab = this._resultSetsTabPage;
+                            _tabControl.SelectedTab = _resultSetsTabPage;
                             break;
                     }
                 }
             }
             catch (Exception ex)
             {
-                this.Invoke(() => this.EndFillHandleException(ex));
+                this.Invoke(() => EndFillHandleException(ex));
             }
         }
 
         private void WriteEnd(IAsyncDataAdapter dataAdapter)
         {
-            this._timer.Stop();
-            this.WriteRows(dataAdapter.RowCount, 3);
-            this._stopwatch.Reset();
+            _timer.Stop();
+            WriteRows(dataAdapter.RowCount, 3);
+            _stopwatch.Reset();
 
-            if (this._cancel)
+            if (_cancel)
             {
-                this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Query was cancelled by user."));
-                this._sbPanelText.Text = "Query was cancelled by user.";
-                this._sbPanelText.ForeColor = SystemColors.ControlText;
-                this._cancel = false;
+                AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Query was cancelled by user."));
+                _sbPanelText.Text = "Query was cancelled by user.";
+                _sbPanelText.ForeColor = SystemColors.ControlText;
+                _cancel = false;
             }
             else
             {
-                if (this._errorCount == 0)
+                if (_errorCount == 0)
                 {
-                    this._sbPanelText.ForeColor = _colorTheme != null
+                    _sbPanelText.ForeColor = _colorTheme != null
                         ? _colorTheme.ForeColor
                         : SystemColors.ControlText;
-                    this._sbPanelText.Text = "Query executed successfully.";
+                    _sbPanelText.Text = "Query executed successfully.";
                 }
                 else
                 {
-                    this._sbPanelText.ForeColor = Color.Red;
-                    this._sbPanelText.Text = "Query completed with errors.";
+                    _sbPanelText.ForeColor = Color.Red;
+                    _sbPanelText.Text = "Query completed with errors.";
                 }
             }
 
-            this._dataAdapter = null;
-            this._dataSetResultWriter = null;
+            _dataAdapter = null;
+            _dataSetResultWriter = null;
 
-            this.SetGui(CommandState.Execute);
-            this.FocusControl(this.QueryTextBox);
-            this.Cursor = Cursors.Default;
+            SetGui(CommandState.Execute);
+            FocusControl(QueryTextBox);
+            Cursor = Cursors.Default;
 
-            this.Invoke(() => this._mainForm.UpdateTotalMemory());
+            this.Invoke(() => _mainForm.UpdateTotalMemory());
         }
 
         private void EndFillInvoker(IAsyncDataAdapter dataAdapter, Exception e)
         {
-            this.Invoke(() => this.EndFill(dataAdapter, e));
+            this.Invoke(() => EndFill(dataAdapter, e));
         }
 
         private void WriteEndInvoker(IAsyncDataAdapter dataAdapter)
         {
-            this.Invoke(() => this.WriteEnd(dataAdapter));
+            this.Invoke(() => WriteEnd(dataAdapter));
         }
 
         private void EndFillHandleException(Exception ex)
         {
-            this.QueryTextBox.Focus();
-            this.Cursor = Cursors.Default;
+            QueryTextBox.Focus();
+            Cursor = Cursors.Default;
             MessageBox.Show(ex.ToString());
         }
 
@@ -2210,25 +2207,25 @@ namespace DataCommander.Providers.Query
             var ok = (buttonState & CommandState.Execute) != 0;
             var cancel = (buttonState & CommandState.Cancel) != 0;
 
-            this._mnuCancel.Enabled = cancel;
+            _mnuCancel.Enabled = cancel;
 
-            this.ButtonState = buttonState;
+            ButtonState = buttonState;
 
-            this._executeQueryToolStripMenuItem.Enabled = ok;
-            this._executeQueryMenuItem.Enabled = ok;
-            this._mnuExecuteQuerySingleRow.Enabled = ok;
-            this._mnuExecuteQuerySchemaOnly.Enabled = ok;
-            this._mnuExecuteQueryKeyInfo.Enabled = ok;
-            this._mnuExecuteQueryXml.Enabled = ok;
+            _executeQueryToolStripMenuItem.Enabled = ok;
+            _executeQueryMenuItem.Enabled = ok;
+            _mnuExecuteQuerySingleRow.Enabled = ok;
+            _mnuExecuteQuerySchemaOnly.Enabled = ok;
+            _mnuExecuteQueryKeyInfo.Enabled = ok;
+            _mnuExecuteQueryXml.Enabled = ok;
 
             Log.Trace("this.executeQuerySplitButton.Enabled = {0};", ok);
-            this._executeQuerySplitButton.Enabled = ok;
-            this._cancelQueryButton.Enabled = cancel;
+            _executeQuerySplitButton.Enabled = ok;
+            _cancelQueryButton.Enabled = cancel;
         }
 
         private void mnuOpenTable_Click(object sender, EventArgs e)
         {
-            this.OpenTable(this.Query);
+            OpenTable(Query);
         }
 
         private static void WriteInfoMessageToLog(InfoMessage infoMessage)
@@ -2259,44 +2256,44 @@ namespace DataCommander.Providers.Query
         {
             var waitHandles = new WaitHandle[]
             {
-                this._enqueueEvent,
-                this._cancellationTokenSource.Token.WaitHandle
+                _enqueueEvent,
+                _cancellationTokenSource.Token.WaitHandle
             };
 
             while (true)
             {
                 var hasElements = false;
-                while (this._infoMessages.Count > 0 && this.IsHandleCreated)
+                while (_infoMessages.Count > 0 && IsHandleCreated)
                 {
                     hasElements = true;
-                    var infoMessages = new InfoMessage[this._infoMessages.Count];
-                    var count = this._infoMessages.Take(infoMessages);
+                    var infoMessages = new InfoMessage[_infoMessages.Count];
+                    var count = _infoMessages.Take(infoMessages);
                     var stringBuilder = new StringBuilder();
                     for (var i = 0; i < count; i++)
                     {
                         this.Invoke(() =>
                         {
                             var message = infoMessages[i];
-                            var color = this._messagesTextBox.SelectionColor;
+                            var color = _messagesTextBox.SelectionColor;
 
                             switch (message.Severity)
                             {
                                 case InfoMessageSeverity.Error:
-                                    this._messagesTextBox.SelectionColor = Color.Red;
+                                    _messagesTextBox.SelectionColor = _colorTheme != null ? _colorTheme.ProviderKeyWordColor : Color.Red;
                                     break;
 
                                 case InfoMessageSeverity.Information:
-                                    this._messagesTextBox.SelectionColor = Color.Blue;
+                                    _messagesTextBox.SelectionColor = _colorTheme != null ? _colorTheme.SqlKeyWordColor : Color.Blue;
                                     break;
                             }
 
-                            this.AppendMessageText(message.CreationTime, message.Severity, message.Message);
+                            AppendMessageText(message.CreationTime, message.Severity, message.Message);
 
                             switch (message.Severity)
                             {
                                 case InfoMessageSeverity.Error:
                                 case InfoMessageSeverity.Information:
-                                    this._messagesTextBox.SelectionColor = color;
+                                    _messagesTextBox.SelectionColor = color;
                                     break;
                             }
                         });
@@ -2307,12 +2304,12 @@ namespace DataCommander.Providers.Query
                 {
                     this.Invoke(() =>
                     {
-                        this._messagesTextBox.ScrollToCaret();
-                        this._messagesTextBox.Update();
+                        _messagesTextBox.ScrollToCaret();
+                        _messagesTextBox.Update();
                     });
                 }
 
-                if (this._infoMessages.Count == 0)
+                if (_infoMessages.Count == 0)
                 {
                     var w = WaitHandle.WaitAny(waitHandles, 1000);
                     if (w == 1)
@@ -2330,7 +2327,7 @@ namespace DataCommander.Providers.Query
             var line = richTextBox.GetLineFromCharIndex(charIndex) + 1;
             var lineIndex = QueryTextBox.GetLineIndex(richTextBox, -1);
             var col = charIndex - lineIndex + 1;
-            this._sbPanelCaretPosition.Text = "Ln " + line + " Col " + col;
+            _sbPanelCaretPosition.Text = "Ln " + line + " Col " + col;
         }
 
         private void AddTable(
@@ -2347,7 +2344,7 @@ namespace DataCommander.Providers.Query
             }
             catch (Exception e)
             {
-                this._messagesTextBox.Text += e.ToString();
+                _messagesTextBox.Text += e.ToString();
             }
         }
 
@@ -2355,35 +2352,35 @@ namespace DataCommander.Providers.Query
         {
             try
             {
-                this.Cursor = Cursors.WaitCursor;
+                Cursor = Cursors.WaitCursor;
 
-                var oldDbConnection = this.Connection.Connection as OleDbConnection;
+                var oldDbConnection = Connection.Connection as OleDbConnection;
 
-                if (oldDbConnection != null && string.IsNullOrEmpty(this.Query))
+                if (oldDbConnection != null && string.IsNullOrEmpty(Query))
                 {
                     var dataSet = new DataSet();
-                    this.AddTable(oldDbConnection, dataSet, OleDbSchemaGuid.Provider_Types, "Provider Types");
-                    this.AddTable(oldDbConnection, dataSet, OleDbSchemaGuid.DbInfoLiterals, "DbInfoLiterals");
+                    AddTable(oldDbConnection, dataSet, OleDbSchemaGuid.Provider_Types, "Provider Types");
+                    AddTable(oldDbConnection, dataSet, OleDbSchemaGuid.DbInfoLiterals, "DbInfoLiterals");
 
                     var c2 = new ConnectionClass();
-                    c2.Open(this._connectionString, null, null, 0);
+                    c2.Open(_connectionString, null, null, 0);
                     var rs = c2.OpenSchema(SchemaEnum.adSchemaDBInfoKeywords, Type.Missing, Type.Missing);
                     var dataTable = OleDbHelper.Convert(rs);
                     c2.Close();
                     dataSet.Tables.Add(dataTable);
 
-                    this.AddTable(oldDbConnection, dataSet, OleDbSchemaGuid.Sql_Languages, "Sql Languages");
-                    this.ShowDataSet(dataSet);
+                    AddTable(oldDbConnection, dataSet, OleDbSchemaGuid.Sql_Languages, "Sql Languages");
+                    ShowDataSet(dataSet);
                 }
                 else
                 {
-                    this._sqlStatement = new SqlStatement(this.Query);
-                    this._command = this._sqlStatement.CreateCommand(this.Provider, this.Connection, this._commandType, this._commandTimeout);
+                    _sqlStatement = new SqlStatement(Query);
+                    _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
 
-                    if (this._command != null)
+                    if (_command != null)
                     {
-                        this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, this._command.ToLogString()));
-                        var dataTable = this.Provider.GetParameterTable(this._command.Parameters);
+                        AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, _command.ToLogString()));
+                        var dataTable = Provider.GetParameterTable(_command.Parameters);
 
                         if (dataTable != null)
                         {
@@ -2425,78 +2422,78 @@ namespace DataCommander.Providers.Query
 
                             var dataSet = new DataSet();
                             dataSet.Tables.Add(dataTable);
-                            this.ShowDataSet(dataSet);
+                            ShowDataSet(dataSet);
                         }
                     }
                 }
 
-                this.Cursor = Cursors.Default;
+                Cursor = Cursors.Default;
             }
             catch (Exception ex)
             {
-                this.Cursor = Cursors.Default;
-                this.ShowMessage(ex);
+                Cursor = Cursors.Default;
+                ShowMessage(ex);
             }
         }
 
         private void mnuCloseTabPage_Click(object sender, EventArgs e)
         {
-            var tabPage = this._tabControl.SelectedTab;
-            if (tabPage != null && tabPage != this._messagesTabPage && tabPage != this._resultSetsTabPage)
+            var tabPage = _tabControl.SelectedTab;
+            if (tabPage != null && tabPage != _messagesTabPage && tabPage != _resultSetsTabPage)
             {
-                this.CloseResultSetTabPage(tabPage);
+                CloseResultSetTabPage(tabPage);
             }
         }
 
         private void CloseResultSetTabPages()
         {
-            var tabPages = this._resultSetsTabControl.TabPages.Cast<TabPage>().ToArray();
+            var tabPages = _resultSetsTabControl.TabPages.Cast<TabPage>().ToArray();
             foreach (var tabPage in tabPages)
             {
-                this.CloseResultSetTabPage(tabPage);
+                CloseResultSetTabPage(tabPage);
             }
-            this.ResultSetCount = 0;
+            ResultSetCount = 0;
         }
 
         private void mnuCloseAllTabPages_Click(object sender, EventArgs e)
         {
-            this.CloseResultSetTabPages();
+            CloseResultSetTabPages();
 
-            this._tabControl.SelectedTab = this._messagesTabPage;
-            this._messagesTextBox.Clear();
-            this._sbPanelText.Text = null;
-            this._sbPanelText.ForeColor = SystemColors.ControlText;
+            _tabControl.SelectedTab = _messagesTabPage;
+            _messagesTextBox.Clear();
+            _sbPanelText.Text = null;
+            _sbPanelText.ForeColor = SystemColors.ControlText;
 
-            if (this._dataAdapter == null)
+            if (_dataAdapter == null)
             {
-                this._sbPanelRows.Text = null;
-                this._sbPanelTimer.Text = null;
+                _sbPanelRows.Text = null;
+                _sbPanelTimer.Text = null;
             }
 
-            this.Invoke(() => this.FocusControl(this.QueryTextBox));
+            this.Invoke(() => FocusControl(QueryTextBox));
         }
 
         public void CancelCommandQuery()
         {
             Log.Trace(ThreadMonitor.ToStringTableString());
             const string message = "Cancelling command...";
-            this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, message));
-            this._sbPanelText.Text = "Cancel Executing Command/Query...";
-            this._sbPanelText.ForeColor = SystemColors.ControlText;
-            this._cancel = true;
-            this.SetGui(CommandState.None);
-            this._dataAdapter.Cancel();
+            AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, message));
+            _sbPanelText.Text = "Cancel Executing Command/Query...";
+            _sbPanelText.ForeColor = SystemColors.ControlText;
+            _cancel = true;
+            SetGui(CommandState.None);
+            _dataAdapter.Cancel();
         }
 
         private void mnuCancel_Click(object sender, EventArgs e)
         {
-            this.CancelCommandQuery();
+            CancelCommandQuery();
         }
 
         private void WriteRows(long rowCount, int scale)
         {
-            var ticks = this._stopwatch.ElapsedTicks;
-            this._sbPanelTimer.Text = StopwatchTimeSpan.ToString(ticks, scale);
+            var ticks = _stopwatch.ElapsedTicks;
+            _sbPanelTimer.Text = StopwatchTimeSpan.ToString(ticks, scale);
 
             var text = rowCount.ToString() + " row(s).";
 
@@ -2507,51 +2504,51 @@ namespace DataCommander.Providers.Query
                 text += " (" + Math.Round(rowCount/seconds, 0) + " rows/sec)";
             }
 
-            this._sbPanelRows.Text = text;
+            _sbPanelRows.Text = text;
         }
 
         private void ShowTimer()
         {
-            if (this._dataAdapter != null)
+            if (_dataAdapter != null)
             {
-                var rowCount = this._dataAdapter.RowCount;
-                this.WriteRows(rowCount, 0);
+                var rowCount = _dataAdapter.RowCount;
+                WriteRows(rowCount, 0);
             }
         }
 
         private void Timer_Tick(object o, EventArgs e)
         {
-            this.Invoke(this.ShowTimer);
+            this.Invoke(ShowTimer);
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            var text = this.QueryTextBox.RichTextBox.Text;
-            if (this.Connection != null)
+            var text = QueryTextBox.RichTextBox.Text;
+            if (Connection != null)
             {
-                Log.Write(LogLevel.Trace, "Saving text before closing form(connectionName: {0}):\r\n{1}", this.Connection.ConnectionName, text);
+                Log.Write(LogLevel.Trace, "Saving text before closing form(connectionName: {0}):\r\n{1}", Connection.ConnectionName, text);
             }
 
-            if (this._dataAdapter == null)
+            if (_dataAdapter == null)
             {
                 bool hasTransactions;
-                if (this._transaction != null)
+                if (_transaction != null)
                 {
                     hasTransactions = true;
                 }
-                else if (this.Connection != null && this.Connection.State == ConnectionState.Open)
+                else if (Connection != null && Connection.State == ConnectionState.Open)
                 {
                     try
                     {
-                        hasTransactions = this.Connection.TransactionCount > 0;
+                        hasTransactions = Connection.TransactionCount > 0;
                     }
                     catch (Exception ex)
                     {
-                        var message = this.Provider.GetExceptionMessage(ex);
-                        var color = this._messagesTextBox.SelectionColor;
-                        this._messagesTextBox.SelectionColor = Color.Red;
-                        this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, message));
-                        this._messagesTextBox.SelectionColor = color;
+                        var message = Provider.GetExceptionMessage(ex);
+                        var color = _messagesTextBox.SelectionColor;
+                        _messagesTextBox.SelectionColor = Color.Red;
+                        AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, message));
+                        _messagesTextBox.SelectionColor = color;
                         hasTransactions = false;
                     }
                 }
@@ -2584,24 +2581,24 @@ namespace DataCommander.Providers.Query
 
                 if (!e.Cancel)
                 {
-                    var length = this.QueryTextBox.Text.Length;
+                    var length = QueryTextBox.Text.Length;
 
                     if (length > 0)
                     {
-                        text = $"The text in {this.Text} has been changed.\r\nDo you want to save the changes?";
+                        text = $"The text in {Text} has been changed.\r\nDo you want to save the changes?";
                         var caption = DataCommanderApplication.Instance.Name;
                         var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 
                         switch (result)
                         {
                             case DialogResult.Yes:
-                                if (this._fileName != null)
+                                if (_fileName != null)
                                 {
-                                    this.Save(this._fileName);
+                                    Save(_fileName);
                                 }
                                 else
                                 {
-                                    this.ShowSaveFileDialog();
+                                    ShowSaveFileDialog();
                                 }
 
                                 break;
@@ -2624,8 +2621,8 @@ namespace DataCommander.Providers.Query
 
                 if (result == DialogResult.Yes)
                 {
-                    this.CancelCommandQuery();
-                    this._timer.Enabled = false;
+                    CancelCommandQuery();
+                    _timer.Enabled = false;
                 }
                 else
                 {
@@ -2635,86 +2632,86 @@ namespace DataCommander.Providers.Query
 
             if (!e.Cancel)
             {
-                this._cancellationTokenSource.Cancel();
+                _cancellationTokenSource.Cancel();
 
-                if (this.Connection != null)
+                if (Connection != null)
                 {
-                    var dataSource = this.Connection.DataSource;
-                    this._parentStatusBar.Items[0].Text = "Closing connection to database " + dataSource + "....";
-                    this.Connection.Close();
-                    this._parentStatusBar.Items[0].Text = "Connection to database " + dataSource + " closed.";
-                    this.Connection.Connection.Dispose();
-                    this.Connection = null;
+                    var dataSource = Connection.DataSource;
+                    _parentStatusBar.Items[0].Text = "Closing connection to database " + dataSource + "....";
+                    Connection.Close();
+                    _parentStatusBar.Items[0].Text = "Connection to database " + dataSource + " closed.";
+                    Connection.Connection.Dispose();
+                    Connection = null;
                 }
 
-                if (this._toolStrip != null)
+                if (_toolStrip != null)
                 {
-                    this._toolStrip.Dispose();
-                    this._toolStrip = null;
+                    _toolStrip.Dispose();
+                    _toolStrip = null;
                 }
             }
         }
 
         private void SetResultWriterType(ResultWriterType tableStyle)
         {
-            this.TableStyle = tableStyle;
-            this._sbPanelTableStyle.Text = tableStyle.ToString();
+            TableStyle = tableStyle;
+            _sbPanelTableStyle.Text = tableStyle.ToString();
         }
 
         private void mnuText_Click(object sender, EventArgs e)
         {
-            this.SetResultWriterType(ResultWriterType.Text);
+            SetResultWriterType(ResultWriterType.Text);
         }
 
         private void mnuDataGrid_Click(object sender, EventArgs e)
         {
-            this.SetResultWriterType(ResultWriterType.DataGrid);
+            SetResultWriterType(ResultWriterType.DataGrid);
         }
 
         private void mnuHtml_Click(object sender, EventArgs e)
         {
-            this.SetResultWriterType(ResultWriterType.Html);
+            SetResultWriterType(ResultWriterType.Html);
         }
 
         private void mnuRtf_Click(object sender, EventArgs e)
         {
-            this.SetResultWriterType(ResultWriterType.Rtf);
+            SetResultWriterType(ResultWriterType.Rtf);
         }
 
         private void mnuListView_Click(object sender, EventArgs e)
         {
-            this.SetResultWriterType(ResultWriterType.ListView);
+            SetResultWriterType(ResultWriterType.ListView);
         }
 
         private void mnuExcel_Click(object sender, EventArgs e)
         {
-            this.SetResultWriterType(ResultWriterType.Excel);
+            SetResultWriterType(ResultWriterType.Excel);
         }
 
         private void menuResultModeFile_Click(object sender, EventArgs e)
         {
-            this.SetResultWriterType(ResultWriterType.File);
+            SetResultWriterType(ResultWriterType.File);
         }
 
         private void mnuCommandTypeText_Click(object sender, EventArgs e)
         {
-            this._mnuCommandTypeText.Checked = true;
-            this._mnuCommandTypeStoredProcedure.Checked = false;
-            this._commandType = CommandType.Text;
+            _mnuCommandTypeText.Checked = true;
+            _mnuCommandTypeStoredProcedure.Checked = false;
+            _commandType = CommandType.Text;
         }
 
         private void mnuCommandTypeStoredProcedure_Click(object sender, EventArgs e)
         {
-            this._mnuCommandTypeText.Checked = false;
-            this._mnuCommandTypeStoredProcedure.Checked = true;
-            this._commandType = CommandType.StoredProcedure;
+            _mnuCommandTypeText.Checked = false;
+            _mnuCommandTypeStoredProcedure.Checked = true;
+            _commandType = CommandType.StoredProcedure;
         }
 
         private void menuObjectExplorer_Click(object sender, EventArgs e)
         {
-            var visible = !this._tvObjectExplorer.Visible;
-            this._tvObjectExplorer.Visible = visible;
-            this._splitterObjectExplorer.Visible = visible;
+            var visible = !_tvObjectExplorer.Visible;
+            _tvObjectExplorer.Visible = visible;
+            _splitterObjectExplorer.Visible = visible;
         }
 
         private void tvObjectBrowser_BeforeExpand(object sender, TreeViewCancelEventArgs e)
@@ -2727,7 +2724,7 @@ namespace DataCommander.Providers.Query
 
                 if (treeNode2 == null)
                 {
-                    this.Cursor = Cursors.WaitCursor;
+                    Cursor = Cursors.WaitCursor;
 
                     try
                     {
@@ -2741,24 +2738,24 @@ namespace DataCommander.Providers.Query
                         }
                         catch (Exception ex)
                         {
-                            this.ShowMessage(ex);
+                            ShowMessage(ex);
                         }
 
                         if (children != null)
                         {
-                            this.AddNodes(treeNode.Nodes, children, treeNode2.Sortable);
+                            AddNodes(treeNode.Nodes, children, treeNode2.Sortable);
                         }
                     }
                     finally
                     {
-                        this.Cursor = Cursors.Default;
+                        Cursor = Cursors.Default;
                     }
                 }
                 else
                 {
                     var count = treeNode.GetNodeCount(false);
-                    this._sbPanelText.Text = treeNode.Text + " node has " + count + " children.";
-                    this._sbPanelText.ForeColor = SystemColors.ControlText;
+                    _sbPanelText.Text = treeNode.Text + " node has " + count + " children.";
+                    _sbPanelText.ForeColor = SystemColors.ControlText;
                 }
             }
         }
@@ -2769,14 +2766,14 @@ namespace DataCommander.Providers.Query
             {
                 case MouseButtons.Left:
                 case MouseButtons.Right:
-                    var treeNode = this._tvObjectExplorer.GetNodeAt(e.X, e.Y);
+                    var treeNode = _tvObjectExplorer.GetNodeAt(e.X, e.Y);
                     if (treeNode != null)
                     {
                         var treeNode2 = (ITreeNode)treeNode.Tag;
 
                         if (e.Button != MouseButtons.Left)
                         {
-                            this._tvObjectExplorer.SelectedNode = treeNode;
+                            _tvObjectExplorer.SelectedNode = treeNode;
                         }
 
                         var text = treeNode.Text;
@@ -2790,26 +2787,26 @@ namespace DataCommander.Providers.Query
 
         private void mnuRefresh_Click(object sender, EventArgs e)
         {
-            var treeNodeV = this._tvObjectExplorer.SelectedNode;
+            var treeNodeV = _tvObjectExplorer.SelectedNode;
             if (treeNodeV != null)
             {
                 var treeNode = (ITreeNode)treeNodeV.Tag;
                 treeNodeV.Nodes.Clear();
-                this.AddNodes(treeNodeV.Nodes, treeNode.GetChildren(true), treeNode.Sortable);
+                AddNodes(treeNodeV.Nodes, treeNode.GetChildren(true), treeNode.Sortable);
             }
         }
 
         private void mnuRefreshObjectExplorer_Click(object sender, EventArgs e)
         {
-            var objectExplorer = this.Provider.ObjectExplorer;
+            var objectExplorer = Provider.ObjectExplorer;
             if (objectExplorer != null)
             {
                 using (new CursorManager(Cursors.WaitCursor))
                 {
-                    var rootNodes = this._tvObjectExplorer.Nodes;
+                    var rootNodes = _tvObjectExplorer.Nodes;
                     rootNodes.Clear();
                     var treeNodes = objectExplorer.GetChildren(true);
-                    this.AddNodes(rootNodes, treeNodes, objectExplorer.Sortable);
+                    AddNodes(rootNodes, treeNodes, objectExplorer.Sortable);
                 }
             }
         }
@@ -2820,7 +2817,7 @@ namespace DataCommander.Providers.Query
             {
                 if (e.Button == MouseButtons.Right)
                 {
-                    var treeNodeV = this._tvObjectExplorer.SelectedNode;
+                    var treeNodeV = _tvObjectExplorer.SelectedNode;
                     if (treeNodeV != null)
                     {
                         var treeNode = (ITreeNode)treeNodeV.Tag;
@@ -2829,9 +2826,9 @@ namespace DataCommander.Providers.Query
                         if (!treeNode.IsLeaf)
                         {
                             if (contextMenu == null)
-                                contextMenu = new ContextMenuStrip(this.components);
+                                contextMenu = new ContextMenuStrip(components);
 
-                            contextMenu.Items.Add(new ToolStripMenuItem("Refresh", null, this.mnuRefresh_Click));
+                            contextMenu.Items.Add(new ToolStripMenuItem("Refresh", null, mnuRefresh_Click));
                         }
 
                         if (contextMenu != null)
@@ -2842,14 +2839,14 @@ namespace DataCommander.Providers.Query
                                 contextMenu.BackColor = _colorTheme.BackColor;
                             }
 
-                            var contains = this.components.Components.Cast<IComponent>().Contains(contextMenu);
+                            var contains = components.Components.Cast<IComponent>().Contains(contextMenu);
                             if (!contains)
                             {
-                                this.components.Add(contextMenu);
+                                components.Add(contextMenu);
                                 GarbageMonitor.Add("contextMenu", contextMenu);
                             }
                             var pos = new Point(e.X, e.Y);
-                            contextMenu.Show(this._tvObjectExplorer, pos);
+                            contextMenu.Show(_tvObjectExplorer, pos);
                         }
                     }
                 }
@@ -2862,20 +2859,20 @@ namespace DataCommander.Providers.Query
 
         private void tvObjectBrowser_DoubleClick(object sender, EventArgs e)
         {
-            var selectedNode = this._tvObjectExplorer.SelectedNode;
+            var selectedNode = _tvObjectExplorer.SelectedNode;
             if (selectedNode != null)
             {
                 var treeNode = (ITreeNode)selectedNode.Tag;
 
                 try
                 {
-                    this.Cursor = Cursors.WaitCursor;
+                    Cursor = Cursors.WaitCursor;
                     var query = treeNode.Query;
                     if (query != null)
                     {
-                        var text0 = this.QueryTextBox.Text;
+                        var text0 = QueryTextBox.Text;
                         string append = null;
-                        var selectionStart = this.QueryTextBox.RichTextBox.TextLength;
+                        var selectionStart = QueryTextBox.RichTextBox.TextLength;
 
                         if (!string.IsNullOrEmpty(text0))
                         {
@@ -2885,32 +2882,32 @@ namespace DataCommander.Providers.Query
 
                         append += query;
 
-                        this.QueryTextBox.RichTextBox.AppendText(append);
-                        this.QueryTextBox.RichTextBox.SelectionStart = selectionStart;
-                        this.QueryTextBox.RichTextBox.SelectionLength = query.Length;
+                        QueryTextBox.RichTextBox.AppendText(append);
+                        QueryTextBox.RichTextBox.SelectionStart = selectionStart;
+                        QueryTextBox.RichTextBox.SelectionLength = query.Length;
 
-                        this.QueryTextBox.Focus();
+                        QueryTextBox.Focus();
                     }
                 }
                 finally
                 {
-                    this.Cursor = Cursors.Default;
+                    Cursor = Cursors.Default;
                 }
             }
         }
 
         private void mnuPaste_Click(object sender, EventArgs e)
         {
-            this.QueryTextBox.Paste();
+            QueryTextBox.Paste();
         }
 
         private void mnuGoTo_Click(object sender, EventArgs e)
         {
-            var control = this.ActiveControl;
+            var control = ActiveControl;
             var richTextBox = control as RichTextBox;
             if (richTextBox == null)
             {
-                richTextBox = this.QueryTextBox.RichTextBox;
+                richTextBox = QueryTextBox.RichTextBox;
             }
 
             var charIndex = richTextBox.SelectionStart;
@@ -2939,7 +2936,7 @@ namespace DataCommander.Providers.Query
             {
                 foreach (TreeNode child in parent.Nodes)
                 {
-                    found = this.FindTreeNode(child, matcher);
+                    found = FindTreeNode(child, matcher);
 
                     if (found != null)
                     {
@@ -2954,15 +2951,15 @@ namespace DataCommander.Providers.Query
         private void FindText(string text)
         {
             var found = false;
-            var control = this.ActiveControl;
+            var control = ActiveControl;
 
             try
             {
-                this.Cursor = Cursors.WaitCursor;
-                this._sbPanelText.Text = $"Finding {text}...";
-                this._sbPanelText.ForeColor = SystemColors.ControlText;
+                Cursor = Cursors.WaitCursor;
+                _sbPanelText.Text = $"Finding {text}...";
+                _sbPanelText.ForeColor = SystemColors.ControlText;
                 StringComparison comparison;
-                var options = this._findTextForm.RichTextBoxFinds;
+                var options = _findTextForm.RichTextBoxFinds;
                 switch (options)
                 {
                     case RichTextBoxFinds.None:
@@ -2996,7 +2993,7 @@ namespace DataCommander.Providers.Query
 
                     while (treeNode != null)
                     {
-                        treeNode2 = this.FindTreeNode(treeNode, matcher);
+                        treeNode2 = FindTreeNode(treeNode, matcher);
 
                         if (treeNode2 != null)
                         {
@@ -3032,16 +3029,16 @@ namespace DataCommander.Providers.Query
                                 dataView.RowFilter = rowFilter;
                                 var count = dataView.Count;
                                 found = count > 0;
-                                this._sbPanelText.Text = $"{count} rows found. RowFilter: {rowFilter}";
-                                this._sbPanelText.ForeColor = SystemColors.ControlText;
+                                _sbPanelText.Text = $"{count} rows found. RowFilter: {rowFilter}";
+                                _sbPanelText.ForeColor = SystemColors.ControlText;
                             }
                             else if (text.StartsWith("Sort="))
                             {
                                 var sort = text.Substring(5);
                                 var dataView = dataTable.DefaultView;
                                 dataView.Sort = sort;
-                                this._sbPanelText.Text = $"Rows sorted by {sort}.";
-                                this._sbPanelText.ForeColor = SystemColors.ControlText;
+                                _sbPanelText.Text = $"Rows sorted by {sort}.";
+                                _sbPanelText.ForeColor = SystemColors.ControlText;
                             }
                             else
                             {
@@ -3068,7 +3065,7 @@ namespace DataCommander.Providers.Query
 
                         if (richTextBox == null)
                         {
-                            richTextBox = this.QueryTextBox.RichTextBox;
+                            richTextBox = QueryTextBox.RichTextBox;
                         }
 
                         var start = richTextBox.SelectionStart + richTextBox.SelectionLength;
@@ -3079,9 +3076,9 @@ namespace DataCommander.Providers.Query
             }
             finally
             {
-                this._sbPanelText.Text = null;
-                this._sbPanelText.ForeColor = SystemColors.ControlText;
-                this.Cursor = Cursors.Default;
+                _sbPanelText.Text = null;
+                _sbPanelText.ForeColor = SystemColors.ControlText;
+                Cursor = Cursors.Default;
             }
 
             if (!found)
@@ -3095,12 +3092,12 @@ namespace DataCommander.Providers.Query
         {
             try
             {
-                if (this._findTextForm == null)
+                if (_findTextForm == null)
                 {
-                    this._findTextForm = new FindTextForm();
+                    _findTextForm = new FindTextForm();
                 }
 
-                var control = this.ActiveControl;
+                var control = ActiveControl;
                 var dataTableViewer = control as DataTableEditor;
 
                 if (dataTableViewer == null)
@@ -3113,45 +3110,45 @@ namespace DataCommander.Providers.Query
                 {
                     var dataTable = dataTableViewer.DataTable;
                     var name = dataTable.TableName;
-                    this._findTextForm.Text = $"Find (DataTable: {name})";
+                    _findTextForm.Text = $"Find (DataTable: {name})";
                 }
                 else
                 {
-                    this._findTextForm.Text = "Find";
+                    _findTextForm.Text = "Find";
                 }
 
-                if (this._findTextForm.ShowDialog() == DialogResult.OK)
+                if (_findTextForm.ShowDialog() == DialogResult.OK)
                 {
-                    this.FindText(this._findTextForm.FindText);
+                    FindText(_findTextForm.FindText);
                 }
             }
             catch (Exception ex)
             {
-                this.ShowMessage(ex);
+                ShowMessage(ex);
             }
         }
 
         private void mnuFindNext_Click(object sender, EventArgs e)
         {
-            if (this._findTextForm != null)
+            if (_findTextForm != null)
             {
-                var text = this._findTextForm.FindText;
+                var text = _findTextForm.FindText;
 
                 if (text != null)
                 {
-                    this.FindText(text);
+                    FindText(text);
                 }
             }
         }
 
         private void Save(string fileName)
         {
-            this.Cursor = Cursors.WaitCursor;
+            Cursor = Cursors.WaitCursor;
 
             try
             {
-                this._sbPanelText.Text = $"Saving file {fileName}...";
-                this._sbPanelText.ForeColor = SystemColors.ControlText;
+                _sbPanelText.Text = $"Saving file {fileName}...";
+                _sbPanelText.ForeColor = SystemColors.ControlText;
 
                 const RichTextBoxStreamType type = RichTextBoxStreamType.UnicodePlainText;
                 var encoding = Encoding.Unicode;
@@ -3160,17 +3157,17 @@ namespace DataCommander.Providers.Query
                 {
                     var preamble = encoding.GetPreamble();
                     stream.Write(preamble, 0, preamble.Length);
-                    this.QueryTextBox.RichTextBox.SaveFile(stream, type);
+                    QueryTextBox.RichTextBox.SaveFile(stream, type);
                 }
 
-                this._fileName = fileName;
-                this.SetText();
-                this._sbPanelText.Text = $"File {fileName} saved successfully.";
-                this._sbPanelText.ForeColor = SystemColors.ControlText;
+                _fileName = fileName;
+                SetText();
+                _sbPanelText.Text = $"File {fileName} saved successfully.";
+                _sbPanelText.ForeColor = SystemColors.ControlText;
             }
             finally
             {
-                this.Cursor = Cursors.Default;
+                Cursor = Cursors.Default;
             }
         }
 
@@ -3188,72 +3185,72 @@ namespace DataCommander.Providers.Query
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 var fileName = saveFileDialog.FileName;
-                this.Save(fileName);
+                Save(fileName);
             }
         }
 
         public void Save()
         {
-            if (this._fileName != null)
+            if (_fileName != null)
             {
-                this.Save(this._fileName);
+                Save(_fileName);
             }
             else
             {
-                this.ShowSaveFileDialog();
+                ShowSaveFileDialog();
             }
         }
 
         private void mnuSave_Click(object sender, EventArgs e)
         {
-            this.Save();
+            Save();
         }
 
         private void mnuSaveAs_Click(object sender, EventArgs e)
         {
-            this.ShowSaveFileDialog();
+            ShowSaveFileDialog();
         }
 
         private void mnuGotoQueryEditor_Click(object sender, EventArgs e)
         {
-            this.QueryTextBox.Select();
+            QueryTextBox.Select();
         }
 
         private void mnuGotoMessageTabPage_Click(object sender, EventArgs e)
         {
-            this._tabControl.SelectedTab = this._messagesTabPage;
+            _tabControl.SelectedTab = _messagesTabPage;
         }
 
         private GetCompletionResponse GetCompletion()
         {
-            var textBox = this.QueryTextBox.RichTextBox;
+            var textBox = QueryTextBox.RichTextBox;
             var text = textBox.Text;
             var position = textBox.SelectionStart;
 
             var ticks = Stopwatch.GetTimestamp();
-            var response = this.Provider.GetCompletion(this.Connection, this._transaction, text, position);
+            var response = Provider.GetCompletion(Connection, _transaction, text, position);
             var from = response.FromCache ? "cache" : "data source";
             ticks = Stopwatch.GetTimestamp() - ticks;
             var length = response.Items != null ? response.Items.Count : 0;
-            this._sbPanelText.Text = $"GetCompletion returned {length} items from {@from} in {StopwatchTimeSpan.ToString(ticks, 3)} seconds.";
-            this._sbPanelText.ForeColor = SystemColors.ControlText;
+            _sbPanelText.Text = $"GetCompletion returned {length} items from {@from} in {StopwatchTimeSpan.ToString(ticks, 3)} seconds.";
+            _sbPanelText.ForeColor = SystemColors.ControlText;
             return response;
         }
 
         private void mnuListMembers_Click(object sender, EventArgs e)
         {
-            if (this.QueryTextBox.KeyboardHandler == null)
+            if (QueryTextBox.KeyboardHandler == null)
             {
                 using (new CursorManager(Cursors.WaitCursor))
                 {
-                    var response = this.GetCompletion();
+                    var response = GetCompletion();
                     if (response.Items != null)
                     {
                         var completionForm = new CompletionForm(this);
-                        completionForm.Initialize(this.QueryTextBox, response, _colorTheme);
-                        completionForm.ItemSelected += new EventHandler<ItemSelectedEventArgs>(this.completionForm_ItemSelected);
+                        completionForm.Initialize(QueryTextBox, response, _colorTheme);
+                        completionForm.ItemSelected += new EventHandler<ItemSelectedEventArgs>(completionForm_ItemSelected);
                         completionForm.Show(this);
-                        this.QueryTextBox.RichTextBox.Focus();
+                        QueryTextBox.RichTextBox.Focus();
                     }
                 }
             }
@@ -3261,7 +3258,7 @@ namespace DataCommander.Providers.Query
 
         private void completionForm_ItemSelected(object sender, ItemSelectedEventArgs e)
         {
-            var textBox = this.QueryTextBox;
+            var textBox = QueryTextBox;
 
             var intPtr = textBox.RichTextBox.Handle;
             var hWnd = intPtr.ToInt32();
@@ -3279,18 +3276,18 @@ namespace DataCommander.Providers.Query
 
         private void mnuClearCache_Click(object sender, EventArgs e)
         {
-            this.Provider.ClearCompletionCache();
+            Provider.ClearCompletionCache();
         }
 
         private async void ExecuteReader(CommandBehavior commandBehavior)
         {
             try
             {
-                this.Cursor = Cursors.WaitCursor;
-                this._sqlStatement = new SqlStatement(this.Query);
-                this._command = this._sqlStatement.CreateCommand(this.Provider, this.Connection, this._commandType, this._commandTimeout);
+                Cursor = Cursors.WaitCursor;
+                _sqlStatement = new SqlStatement(Query);
+                _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
 
-                if (this._command != null)
+                if (_command != null)
                 {
                     IDataReader dataReader = null;
 
@@ -3300,16 +3297,16 @@ namespace DataCommander.Providers.Query
                         {
                             try
                             {
-                                dataReader = this._command.ExecuteReader(commandBehavior);
+                                dataReader = _command.ExecuteReader(commandBehavior);
                                 break;
                             }
                             catch
                             {
-                                if (this.Connection.State != ConnectionState.Open)
+                                if (Connection.State != ConnectionState.Open)
                                 {
-                                    this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Opening connection..."));
-                                    await this.Connection.OpenAsync(CancellationToken.None);
-                                    this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information,
+                                    AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Opening connection..."));
+                                    await Connection.OpenAsync(CancellationToken.None);
+                                    AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information,
                                         "Connection opened successfully."));
                                 }
                                 else
@@ -3324,7 +3321,7 @@ namespace DataCommander.Providers.Query
 
                         do
                         {
-                            var dataTable = this.Provider.GetSchemaTable(dataReader);
+                            var dataTable = Provider.GetSchemaTable(dataReader);
 
                             if (dataTable != null)
                             {
@@ -3339,8 +3336,8 @@ namespace DataCommander.Providers.Query
                             }
                         } while (dataReader.NextResult());
 
-                        this.ShowDataSet(dataSet);
-                        this._tabControl.SelectedTab = this._resultSetsTabPage;
+                        ShowDataSet(dataSet);
+                        _tabControl.SelectedTab = _resultSetsTabPage;
                     }
                     finally
                     {
@@ -3351,38 +3348,38 @@ namespace DataCommander.Providers.Query
                     }
                 }
 
-                this.Cursor = Cursors.Default;
+                Cursor = Cursors.Default;
             }
             catch (Exception ex)
             {
-                this.Cursor = Cursors.Default;
-                this.ShowMessage(ex);
+                Cursor = Cursors.Default;
+                ShowMessage(ex);
             }
         }
 
         private void mnuResultSchema_Click(object sender, EventArgs e)
         {
-            this.ExecuteReader(CommandBehavior.SchemaOnly);
+            ExecuteReader(CommandBehavior.SchemaOnly);
         }
 
         private void mnuKeyInfo_Click(object sender, EventArgs e)
         {
-            this.ExecuteReader(CommandBehavior.KeyInfo);
+            ExecuteReader(CommandBehavior.KeyInfo);
         }
 
         private void ExecuteQuerySingleRow()
         {
             try
             {
-                this._sqlStatement = new SqlStatement(this.Query);
-                this._command = this._sqlStatement.CreateCommand(this.Provider, this.Connection, this._commandType, this._commandTimeout);
+                _sqlStatement = new SqlStatement(Query);
+                _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
                 var dataSet = new DataSet();
-                using (var dataReader = this._command.ExecuteReader())
+                using (var dataReader = _command.ExecuteReader())
                 {
                     do
                     {
-                        var schemaTable = this.Provider.GetSchemaTable(dataReader);
-                        var dataReaderHelper = this.Provider.CreateDataReaderHelper(dataReader);
+                        var schemaTable = Provider.GetSchemaTable(dataReader);
+                        var dataReaderHelper = Provider.CreateDataReaderHelper(dataReader);
                         var rowCount = 0;
 
                         while (dataReader.Read())
@@ -3422,34 +3419,34 @@ namespace DataCommander.Providers.Query
                     dataReader.Close();
                 }
 
-                this.ShowDataSet(dataSet);
-                this._tabControl.SelectedTab = this._resultSetsTabPage;
+                ShowDataSet(dataSet);
+                _tabControl.SelectedTab = _resultSetsTabPage;
             }
             catch (Exception ex)
             {
-                this.ShowMessage(ex);
+                ShowMessage(ex);
             }
         }
 
         private void mnuSingleRow_Click(object sender, EventArgs e)
         {
-            this.ExecuteQuerySingleRow();
+            ExecuteQuerySingleRow();
         }
 
         private void mnuShowShemaTable_Click(object sender, EventArgs e)
         {
-            this._mnuShowShemaTable.Checked = !this._mnuShowShemaTable.Checked;
-            this._showSchemaTable = !this._showSchemaTable;
+            _mnuShowShemaTable.Checked = !_mnuShowShemaTable.Checked;
+            _showSchemaTable = !_showSchemaTable;
         }
 
         private void mnuXml_Click(object sender, EventArgs e)
         {
             try
             {
-                this._sqlStatement = new SqlStatement(this.Query);
-                this._command = this._sqlStatement.CreateCommand(this.Provider, this.Connection, this._commandType, this._commandTimeout);
+                _sqlStatement = new SqlStatement(Query);
+                _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
 
-                using (var dataReader = this._command.ExecuteReader())
+                using (var dataReader = _command.ExecuteReader())
                 {
                     while (true)
                     {
@@ -3488,7 +3485,7 @@ namespace DataCommander.Providers.Query
                             }
 
                             var resultSetTabPage = new TabPage("Xml");
-                            this._resultSetsTabControl.TabPages.Add(resultSetTabPage);
+                            _resultSetsTabControl.TabPages.Add(resultSetTabPage);
 
                             var htmlTextBox = new HtmlTextBox();
                             htmlTextBox.Dock = DockStyle.Fill;
@@ -3496,8 +3493,8 @@ namespace DataCommander.Providers.Query
                             resultSetTabPage.Controls.Add(htmlTextBox);
 
                             htmlTextBox.Navigate(path);
-                            this._resultSetsTabControl.SelectedTab = resultSetTabPage;
-                            this._tabControl.SelectedTab = this._resultSetsTabPage;
+                            _resultSetsTabControl.SelectedTab = resultSetTabPage;
+                            _tabControl.SelectedTab = _resultSetsTabPage;
                         }
 
                         if (!dataReader.NextResult())
@@ -3509,7 +3506,7 @@ namespace DataCommander.Providers.Query
             }
             catch (Exception ex)
             {
-                this.ShowMessage(ex);
+                ShowMessage(ex);
             }
         }
 
@@ -3517,14 +3514,14 @@ namespace DataCommander.Providers.Query
         {
             try
             {
-                var textWriter = this._standardOutput.TextWriter;
+                var textWriter = _standardOutput.TextWriter;
 
-                this._sqlStatement = new SqlStatement(this.Query);
-                this._command = this._sqlStatement.CreateCommand(this.Provider, this.Connection, CommandType.Text, this._commandTimeout);
-                var tableName = this._sqlStatement.FindTableName();
+                _sqlStatement = new SqlStatement(Query);
+                _command = _sqlStatement.CreateCommand(Provider, Connection, CommandType.Text, _commandTimeout);
+                var tableName = _sqlStatement.FindTableName();
                 var tableIndex = 0;
 
-                using (var dataReader = this._command.ExecuteReader())
+                using (var dataReader = _command.ExecuteReader())
                 {
                     while (true)
                     {
@@ -3533,7 +3530,7 @@ namespace DataCommander.Providers.Query
                             tableName = $"Table{tableIndex}";
                         }
 
-                        var dataReaderHelper = this.Provider.CreateDataReaderHelper(dataReader);
+                        var dataReaderHelper = Provider.CreateDataReaderHelper(dataReader);
                         var schemaTable = dataReader.GetSchemaTable();
                         var sb = new StringBuilder();
 
@@ -3548,7 +3545,7 @@ namespace DataCommander.Providers.Query
                                 tableName = schemaTable.TableName;
                             }
 
-                            this._standardOutput.WriteLine(InsertScriptFileWriter.GetCreateTableStatement(schemaTable));
+                            _standardOutput.WriteLine(InsertScriptFileWriter.GetCreateTableStatement(schemaTable));
                             var schemaRows = schemaTable.Rows;
                             var columnCount = schemaRows.Count;
                             sb.AppendFormat("insert into {0}(", tableName);
@@ -3594,14 +3591,14 @@ namespace DataCommander.Providers.Query
 
                             if (statementCount%100 == 0)
                             {
-                                this._standardOutput.Write(sb);
+                                _standardOutput.Write(sb);
                                 sb.Length = 0;
                             }
                         }
 
                         if (statementCount%100 != 0)
                         {
-                            this._standardOutput.Write(sb);
+                            _standardOutput.Write(sb);
                         }
 
                         if (!dataReader.NextResult())
@@ -3613,12 +3610,12 @@ namespace DataCommander.Providers.Query
                     }
                 }
 
-                this._tabControl.SelectedTab = this._messagesTabPage;
+                _tabControl.SelectedTab = _messagesTabPage;
 
             }
             catch (Exception ex)
             {
-                this.ShowMessage(ex);
+                ShowMessage(ex);
             }
         }
 
@@ -3626,15 +3623,15 @@ namespace DataCommander.Providers.Query
         {
             try
             {
-                this._sqlStatement = new SqlStatement(this.Query);
-                this._command = this._sqlStatement.CreateCommand(this.Provider, this.Connection, CommandType.Text, this._commandTimeout);
-                var tableName = this._sqlStatement.FindTableName();
+                _sqlStatement = new SqlStatement(Query);
+                _command = _sqlStatement.CreateCommand(Provider, Connection, CommandType.Text, _commandTimeout);
+                var tableName = _sqlStatement.FindTableName();
 
                 if (tableName != null)
                 {
-                    using (var dataReader = this._command.ExecuteReader())
+                    using (var dataReader = _command.ExecuteReader())
                     {
-                        var dataReaderHelper = this.Provider.CreateDataReaderHelper(dataReader);
+                        var dataReaderHelper = Provider.CreateDataReaderHelper(dataReader);
                         var schemaTable = dataReader.GetSchemaTable();
                         var schemaRows = schemaTable.Rows;
                         var columnCount = schemaRows.Count;
@@ -3680,14 +3677,14 @@ namespace DataCommander.Providers.Query
                                 sb.AppendFormat("{0}\t\tas {1}", s, dataReader.GetName(i));
                             }
 
-                            this._standardOutput.WriteLine(sb);
+                            _standardOutput.WriteLine(sb);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                this.ShowMessage(ex);
+                ShowMessage(ex);
             }
         }
 
@@ -3701,11 +3698,11 @@ namespace DataCommander.Providers.Query
                 text = reader.ReadToEnd();
             }
 
-            this.QueryTextBox.Text = text;
-            this._fileName = path;
-            this.SetText();
-            this._sbPanelText.Text = $"File {this._fileName} loaded successfully.";
-            this._sbPanelText.ForeColor = SystemColors.ControlText;
+            QueryTextBox.Text = text;
+            _fileName = path;
+            SetText();
+            _sbPanelText.Text = $"File {_fileName} loaded successfully.";
+            _sbPanelText.ForeColor = SystemColors.ControlText;
         }
 
         private void tvObjectBrowser_ItemDrag(object sender, ItemDragEventArgs e)
@@ -3713,7 +3710,7 @@ namespace DataCommander.Providers.Query
             var treeNode = (TreeNode)e.Item;
             var treeNode2 = (ITreeNode)treeNode.Tag;
             var text = treeNode.Text;
-            this._tvObjectExplorer.DoDragDrop(text, DragDropEffects.All);
+            _tvObjectExplorer.DoDragDrop(text, DragDropEffects.All);
         }
 
         private async void mnuDuplicateConnection_Click(object sender, EventArgs e)
@@ -3721,20 +3718,20 @@ namespace DataCommander.Providers.Query
             var mainForm = DataCommanderApplication.Instance.MainForm;
             var index = mainForm.MdiChildren.Length;
 
-            var connection = this.Provider.CreateConnection(this._connectionString);
-            connection.ConnectionName = this.Connection.ConnectionName;
+            var connection = Provider.CreateConnection(_connectionString);
+            connection.ConnectionName = Connection.ConnectionName;
             await connection.OpenAsync(CancellationToken.None);
-            var database = this.Connection.Database;
+            var database = Connection.Database;
 
-            if (connection.Database != this.Connection.Database)
+            if (connection.Database != Connection.Database)
             {
                 connection.Connection.ChangeDatabase(database);
             }
 
-            var queryForm = new QueryForm(this._mainForm, index, this.Provider, this._connectionString, connection, mainForm.StatusBar, _colorTheme);
+            var queryForm = new QueryForm(_mainForm, index, Provider, _connectionString, connection, mainForm.StatusBar, _colorTheme);
             queryForm.Font = mainForm.SelectedFont;
             queryForm.MdiParent = mainForm;
-            queryForm.WindowState = this.WindowState;
+            queryForm.WindowState = WindowState;
             queryForm.Show();
         }
 
@@ -3743,133 +3740,133 @@ namespace DataCommander.Providers.Query
             try
             {
                 Log.Write(LogLevel.Trace, "Query:\r\n{0}", query);
-                this._sqlStatement = new SqlStatement(query);
-                this._commandType = CommandType.Text;
-                this._openTableMode = true;
-                this._command = this._sqlStatement.CreateCommand(this.Provider, this.Connection, this._commandType, this._commandTimeout);
-                this._dataAdapter = new AsyncDataAdapter();
-                this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Executing query..."));
-                this._stopwatch.Start();
-                this._timer.Start();
+                _sqlStatement = new SqlStatement(query);
+                _commandType = CommandType.Text;
+                _openTableMode = true;
+                _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
+                _dataAdapter = new AsyncDataAdapter();
+                AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Executing query..."));
+                _stopwatch.Start();
+                _timer.Start();
                 const int maxRecords = int.MaxValue;
-                this._dataSetResultWriter = new DataSetResultWriter(this.AddInfoMessage, this, this._showSchemaTable);
-                IResultWriter resultWriter = this._dataSetResultWriter;
-                this._dataAdapter.BeginFill(
-                    this.Provider,
+                _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, this, _showSchemaTable);
+                IResultWriter resultWriter = _dataSetResultWriter;
+                _dataAdapter.BeginFill(
+                    Provider,
                     new[]
                     {
                         new AsyncDataAdapterCommand
                         {
                             LineIndex = 0,
-                            Command = this._command
+                            Command = _command
                         }
                     },
-                    maxRecords, this._rowBlockSize, resultWriter, this.EndFillInvoker, this.WriteEndInvoker);
+                    maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
             }
             catch (Exception ex)
             {
-                this.EndFill(this._dataAdapter, ex);
+                EndFill(_dataAdapter, ex);
             }
         }
 
         private void sQLiteDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.SetResultWriterType(ResultWriterType.SqLite);
+            SetResultWriterType(ResultWriterType.SqLite);
         }
 
         private void createSqlCeDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var sqlStatement = new SqlStatement(this.Query);
-            this._command = sqlStatement.CreateCommand(this.Provider, this.Connection, this._commandType, this._commandTimeout);
+            var sqlStatement = new SqlStatement(Query);
+            _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
             IAsyncDataAdapter asyncDataAdatper = new AsyncDataAdapter();
             var maxRecords = int.MaxValue;
             var tableName = sqlStatement.FindTableName();
-            var sqlCeResultWriter = new SqlCeResultWriter(this._textBoxWriter, tableName);
+            var sqlCeResultWriter = new SqlCeResultWriter(_textBoxWriter, tableName);
             asyncDataAdatper.BeginFill(
-                this.Provider,
+                Provider,
                 new[]
                 {
                     new AsyncDataAdapterCommand
                     {
                         LineIndex = 0,
-                        Command = this._command
+                        Command = _command
                     }
                 },
-                maxRecords, this._rowBlockSize, sqlCeResultWriter, this.EndFillInvoker, this.WriteEndInvoker);
+                maxRecords, _rowBlockSize, sqlCeResultWriter, EndFillInvoker, WriteEndInvoker);
         }
 
         private void SetTransaction(IDbTransaction transaction)
         {
-            if (this._transaction == null && transaction != null)
+            if (_transaction == null && transaction != null)
             {
-                this._transaction = transaction;
-                this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Transaction created successfully."));
-                this._tabControl.SelectedTab = this._messagesTabPage;
-                this._beginTransactionToolStripMenuItem.Enabled = false;
-                this._commitTransactionToolStripMenuItem.Enabled = true;
-                this._rollbackTransactionToolStripMenuItem.Enabled = true;
+                _transaction = transaction;
+                AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Transaction created successfully."));
+                _tabControl.SelectedTab = _messagesTabPage;
+                _beginTransactionToolStripMenuItem.Enabled = false;
+                _commitTransactionToolStripMenuItem.Enabled = true;
+                _rollbackTransactionToolStripMenuItem.Enabled = true;
             }
         }
 
         private void InvokeSetTransaction(IDbTransaction transaction)
         {
-            this.Invoke(new Action<IDbTransaction>(this.SetTransaction), transaction);
+            Invoke(new Action<IDbTransaction>(SetTransaction), transaction);
         }
 
         private void beginTransactionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this._transaction == null)
+            if (_transaction == null)
             {
-                var transaction = this.Connection.Connection.BeginTransaction();
-                this.SetTransaction(transaction);
+                var transaction = Connection.Connection.BeginTransaction();
+                SetTransaction(transaction);
             }
         }
 
         private void commitTransactionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this._transaction != null)
+            if (_transaction != null)
             {
-                this._transaction.Commit();
-                this._transaction.Dispose();
-                this._transaction = null;
+                _transaction.Commit();
+                _transaction.Dispose();
+                _transaction = null;
 
-                this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Transaction commited successfully."));
+                AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Transaction commited successfully."));
 
-                this._tabControl.SelectedTab = this._messagesTabPage;
-                this._beginTransactionToolStripMenuItem.Enabled = true;
-                this._commitTransactionToolStripMenuItem.Enabled = false;
-                this._rollbackTransactionToolStripMenuItem.Enabled = false;
+                _tabControl.SelectedTab = _messagesTabPage;
+                _beginTransactionToolStripMenuItem.Enabled = true;
+                _commitTransactionToolStripMenuItem.Enabled = false;
+                _rollbackTransactionToolStripMenuItem.Enabled = false;
             }
         }
 
         private void rollbackTransactionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this._transaction != null)
+            if (_transaction != null)
             {
                 try
                 {
-                    this._transaction.Rollback();
-                    this._transaction.Dispose();
-                    this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Transaction rolled back successfully."));
+                    _transaction.Rollback();
+                    _transaction.Dispose();
+                    AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Transaction rolled back successfully."));
                 }
                 catch (Exception ex)
                 {
                     var message = $"Rollback failed. Exception:\r\n{ex.ToLogString()}";
-                    this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Error, message));
+                    AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Error, message));
                 }
 
-                this._transaction = null;
-                this._tabControl.SelectedTab = this._messagesTabPage;
-                this._beginTransactionToolStripMenuItem.Enabled = true;
-                this._commitTransactionToolStripMenuItem.Enabled = false;
-                this._rollbackTransactionToolStripMenuItem.Enabled = false;
+                _transaction = null;
+                _tabControl.SelectedTab = _messagesTabPage;
+                _beginTransactionToolStripMenuItem.Enabled = true;
+                _commitTransactionToolStripMenuItem.Enabled = false;
+                _rollbackTransactionToolStripMenuItem.Enabled = false;
             }
         }
 
         internal void ScriptQueryAsCreateTable()
         {
-            var sqlStatement = new SqlStatement(this.Query);
-            var command = sqlStatement.CreateCommand(this.Provider, this.Connection, this._commandType, this._commandTimeout);
+            var sqlStatement = new SqlStatement(Query);
+            var command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
 
             var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
             var index = Array.IndexOf(forms, this);
@@ -3882,7 +3879,7 @@ namespace DataCommander.Providers.Query
             }
             else
             {
-                destinationProvider = this.Provider;
+                destinationProvider = Provider;
             }
 
             DataTable schemaTable;
@@ -3917,7 +3914,7 @@ namespace DataCommander.Providers.Query
                 var dataRow = schemaTable.Rows[i];
                 var schemaRow = new DbColumn(dataRow);
                 var row = stringTable.NewRow();
-                var typeName = destinationProvider.GetColumnTypeName(this.Provider, dataRow, dataTypeNames[i]);
+                var typeName = destinationProvider.GetColumnTypeName(Provider, dataRow, dataTypeNames[i]);
                 row[1] = schemaRow.ColumnName;
                 row[2] = typeName;
                 var allowDbNull = schemaRow.AllowDbNull;
@@ -3942,7 +3939,7 @@ namespace DataCommander.Providers.Query
             createTable.Append(')');
             var commandText = createTable.ToString();
 
-            this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "\r\n" + commandText));
+            AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "\r\n" + commandText));
         }
 
         internal void CopyTable()
@@ -3954,12 +3951,12 @@ namespace DataCommander.Providers.Query
                 var nextQueryForm = (QueryForm)forms[index + 1];
                 var destinationProvider = nextQueryForm.Provider;
                 var destinationConnection = nextQueryForm.Connection;
-                var sqlStatement = new SqlStatement(this.Query);
-                this._command = sqlStatement.CreateCommand(this.Provider, this.Connection, this._commandType, this._commandTimeout);
+                var sqlStatement = new SqlStatement(Query);
+                _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
                 string tableName;
-                if (this._command.CommandType == CommandType.StoredProcedure)
+                if (_command.CommandType == CommandType.StoredProcedure)
                 {
-                    tableName = this._command.CommandText;
+                    tableName = _command.CommandText;
                 }
                 else
                 {
@@ -3971,33 +3968,33 @@ namespace DataCommander.Providers.Query
                     tableName = tableName.Substring(1, tableName.Length - 2);
                 }
 
-                IResultWriter resultWriter = new CopyResultWriter(this.AddInfoMessage, destinationProvider, destinationConnection, tableName,
+                IResultWriter resultWriter = new CopyResultWriter(AddInfoMessage, destinationProvider, destinationConnection, tableName,
                     nextQueryForm.InvokeSetTransaction, CancellationToken.None);
                 var maxRecords = int.MaxValue;
                 var rowBlockSize = 10000;
-                this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, "Copying table..."));
-                this._sbPanelText.Text = "Copying table...";
-                this._sbPanelText.ForeColor = SystemColors.ControlText;
-                this.SetGui(CommandState.Cancel);
-                this._errorCount = 0;
-                this._stopwatch.Start();
-                this._timer.Start();
-                this._dataAdapter = new AsyncDataAdapter();
-                this._dataAdapter.BeginFill(
-                    this.Provider,
+                AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, "Copying table..."));
+                _sbPanelText.Text = "Copying table...";
+                _sbPanelText.ForeColor = SystemColors.ControlText;
+                SetGui(CommandState.Cancel);
+                _errorCount = 0;
+                _stopwatch.Start();
+                _timer.Start();
+                _dataAdapter = new AsyncDataAdapter();
+                _dataAdapter.BeginFill(
+                    Provider,
                     new[]
                     {
                         new AsyncDataAdapterCommand
                         {
                             LineIndex = 0,
-                            Command = this._command
+                            Command = _command
                         }
                     },
-                    maxRecords, rowBlockSize, resultWriter, this.EndFillInvoker, this.WriteEndInvoker);
+                    maxRecords, rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
             }
             else
             {
-                this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Please open a destination connection."));
+                AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Please open a destination connection."));
             }
         }
 
@@ -4011,12 +4008,12 @@ namespace DataCommander.Providers.Query
                 var destinationProvider = nextQueryForm.Provider;
                 var destinationConnection = (SqlConnection)nextQueryForm.Connection.Connection;
                 var destionationTransaction = (SqlTransaction)nextQueryForm._transaction;
-                var sqlStatement = new SqlStatement(this.Query);
-                this._command = sqlStatement.CreateCommand(this.Provider, this.Connection, this._commandType, this._commandTimeout);
+                var sqlStatement = new SqlStatement(Query);
+                _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
                 string tableName;
-                if (this._command.CommandType == CommandType.StoredProcedure)
+                if (_command.CommandType == CommandType.StoredProcedure)
                 {
-                    tableName = this._command.CommandText;
+                    tableName = _command.CommandText;
                 }
                 else
                 {
@@ -4026,42 +4023,42 @@ namespace DataCommander.Providers.Query
                 //IResultWriter resultWriter = new SqlBulkCopyResultWriter( this.AddInfoMessage, destinationProvider, destinationConnection, tableName, nextQueryForm.InvokeSetTransaction );
                 var maxRecords = int.MaxValue;
                 var rowBlockSize = 10000;
-                this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, "Copying table..."));
-                this._sbPanelText.Text = "Copying table...";
-                this._sbPanelText.ForeColor = SystemColors.ControlText;
-                this.SetGui(CommandState.Cancel);
-                this._errorCount = 0;
-                this._stopwatch.Start();
-                this._timer.Start();
-                this._dataAdapter = new SqlBulkCopyAsyncDataAdapter(destinationConnection, destionationTransaction, tableName, this.AddInfoMessage);
-                this._dataAdapter.BeginFill(
-                    this.Provider,
+                AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, "Copying table..."));
+                _sbPanelText.Text = "Copying table...";
+                _sbPanelText.ForeColor = SystemColors.ControlText;
+                SetGui(CommandState.Cancel);
+                _errorCount = 0;
+                _stopwatch.Start();
+                _timer.Start();
+                _dataAdapter = new SqlBulkCopyAsyncDataAdapter(destinationConnection, destionationTransaction, tableName, AddInfoMessage);
+                _dataAdapter.BeginFill(
+                    Provider,
                     new[]
                     {
                         new AsyncDataAdapterCommand
                         {
                             LineIndex = 0,
-                            Command = this._command
+                            Command = _command
                         }
                     },
-                    maxRecords, rowBlockSize, null, this.EndFillInvoker, this.WriteEndInvoker);
+                    maxRecords, rowBlockSize, null, EndFillInvoker, WriteEndInvoker);
             }
             else
             {
-                this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Please open a destination connection."));
+                AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Please open a destination connection."));
             }
         }
 
         private void insertScriptFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.SetResultWriterType(ResultWriterType.InsertScriptFile);
+            SetResultWriterType(ResultWriterType.InsertScriptFile);
         }
 
         private void TableStyleMenuItem_Click(object sender, EventArgs e)
         {
             var item = (ToolStripMenuItem)sender;
             var tableStyle = (ResultWriterType)item.Tag;
-            this.SetResultWriterType(tableStyle);
+            SetResultWriterType(tableStyle);
         }
 
         public static void ShowText(string text)
@@ -4110,8 +4107,8 @@ namespace DataCommander.Providers.Query
 
             public Tchittestinfo(int x, int y)
             {
-                this.pt = new Point(x, y);
-                this.flags = Tchittestflags.TchtOnitem;
+                pt = new Point(x, y);
+                flags = Tchittestflags.TchtOnitem;
             }
         }
 
@@ -4120,61 +4117,61 @@ namespace DataCommander.Providers.Query
 
         private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e)
         {
-            this.ExecuteQuery();
+            ExecuteQuery();
         }
 
         private void aToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.ExecuteQuery();
+            ExecuteQuery();
         }
 
         private void cancelExecutingQueryButton_Click(object sender, EventArgs e)
         {
-            this.CancelCommandQuery();
+            CancelCommandQuery();
         }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            this.ExecuteQuery();
+            ExecuteQuery();
         }
 
         private void openTableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.OpenTable(this.Query);
+            OpenTable(Query);
         }
 
         private void parseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var transactionScope = new DbTransactionScope(this.Connection.Connection, null);
+            var transactionScope = new DbTransactionScope(Connection.Connection, null);
             var on = false;
             try
             {
                 transactionScope.ExecuteNonQuery(new CommandDefinition {CommandText = "SET PARSEONLY ON"});
                 on = true;
-                var query = this.Query;
+                var query = Query;
                 bool succeeded;
 
                 try
                 {
                     transactionScope.ExecuteNonQuery(new CommandDefinition {CommandText = query});
-                    succeeded = this._infoMessages.Count == 0;
+                    succeeded = _infoMessages.Count == 0;
                 }
                 catch (Exception exception)
                 {
                     succeeded = false;
-                    var infoMessages = this.Provider.ToInfoMessages(exception);
-                    this.AddInfoMessages(infoMessages);
+                    var infoMessages = Provider.ToInfoMessages(exception);
+                    AddInfoMessages(infoMessages);
                 }
 
                 if (succeeded)
                 {
-                    this.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Command(s) completed successfully."));
+                    AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Command(s) completed successfully."));
                 }
             }
             catch (Exception exception)
             {
-                var infoMessages = this.Provider.ToInfoMessages(exception);
-                this.AddInfoMessages(infoMessages);
+                var infoMessages = Provider.ToInfoMessages(exception);
+                AddInfoMessages(infoMessages);
             }
 
             if (on)
@@ -4185,9 +4182,9 @@ namespace DataCommander.Providers.Query
 
         public void SetStatusbarPanelText(string text, Color color)
         {
-            this._sbPanelText.Text = text;
-            this._sbPanelText.ForeColor = color;
-            this.Refresh();
+            _sbPanelText.Text = text;
+            _sbPanelText.ForeColor = color;
+            Refresh();
         }
 
 #endregion
