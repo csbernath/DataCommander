@@ -1,11 +1,11 @@
+using System;
+using System.IO;
+using System.Reflection;
+using ADODB;
+using Foundation.Text;
+
 namespace DataCommander.Providers
 {
-    using System;
-    using System.IO;
-    using System.Reflection;
-    using ADODB;
-    using Foundation.Text;
-
     /// <summary>
     /// 
     /// </summary>
@@ -16,8 +16,8 @@ namespace DataCommander.Providers
         /// </summary>
         /// <param name="xml"></param>
         /// <returns></returns>
-        [CLSCompliant( false )]
-        public static RecordsetClass XmlToRecordset( string xml )
+        [CLSCompliant(false)]
+        public static RecordsetClass XmlToRecordset(string xml)
         {
             var stream = new StreamClass();
 
@@ -25,16 +25,16 @@ namespace DataCommander.Providers
                 Missing.Value,
                 ConnectModeEnum.adModeUnknown,
                 StreamOpenOptionsEnum.adOpenStreamUnspecified,
-                null, null );
+                null, null);
 
-            stream.WriteText( xml, 0 );
+            stream.WriteText(xml, 0);
             stream.Position = 0;
             var rs = new RecordsetClass();
 
             rs.Open(
                 stream, Missing.Value,
                 CursorTypeEnum.adOpenUnspecified,
-                LockTypeEnum.adLockUnspecified, 0 );
+                LockTypeEnum.adLockUnspecified, 0);
 
             return rs;
         }
@@ -44,12 +44,12 @@ namespace DataCommander.Providers
         /// </summary>
         /// <param name="rs"></param>
         /// <param name="writer"></param>
-        [CLSCompliant( false )]
-        public static void WriteSchema( _Recordset rs, TextWriter writer )
+        [CLSCompliant(false)]
+        public static void WriteSchema(_Recordset rs, TextWriter writer)
         {
             var index = 1;
             var d = (double) rs.Fields.Count;
-            d = Math.Log10( d );
+            d = Math.Log10(d);
             var colWidth = (int) d;
             colWidth++;
 
@@ -58,10 +58,10 @@ namespace DataCommander.Providers
                 var fieldType = field.Type;
 
                 var line =
-                    StringHelper.FormatColumn( index.ToString(), colWidth, false ) + ". " +
-                    StringHelper.FormatColumn( field.Name, 30, false );
+                    StringHelper.FormatColumn(index.ToString(), colWidth, false) + ". " +
+                    StringHelper.FormatColumn(field.Name, 30, false);
 
-                var fileTypeStr = Enum.Format( fieldType.GetType(), field.Type, "g" );
+                var fileTypeStr = Enum.Format(fieldType.GetType(), field.Type, "g");
 
                 switch (fieldType)
                 {
@@ -86,9 +86,9 @@ namespace DataCommander.Providers
                     fileTypeStr += " NOT NULL";
                 }
 
-                line += StringHelper.FormatColumn( fileTypeStr, 30, false );
+                line += StringHelper.FormatColumn(fileTypeStr, 30, false);
 
-                writer.WriteLine( line );
+                writer.WriteLine(line);
                 index++;
             }
         }
@@ -98,9 +98,9 @@ namespace DataCommander.Providers
         /// </summary>
         /// <param name="ADODBRecordset"></param>
         /// <param name="writer"></param>
-        public static void WriteSchema( object ADODBRecordset, TextWriter writer )
+        public static void WriteSchema(object ADODBRecordset, TextWriter writer)
         {
-            WriteSchema( (Recordset) ADODBRecordset, writer );
+            WriteSchema((Recordset) ADODBRecordset, writer);
         }
 
         /// <summary>
@@ -109,19 +109,19 @@ namespace DataCommander.Providers
         /// <param name="rs"></param>
         /// <param name="maxRowCount"></param>
         /// <param name="writer"></param>
-        [CLSCompliant( false )]
+        [CLSCompliant(false)]
         public static void WriteRows(
             _Recordset rs,
             int maxRowCount,
-            TextWriter writer )
+            TextWriter writer)
         {
             var recordCount = rs.RecordCount;
-            writer.WriteLine( "RecordCount: " + recordCount );
+            writer.WriteLine("RecordCount: " + recordCount);
 
             if (!rs.EOF)
             {
-                var rsStr = rs.GetString( StringFormatEnum.adClipString, maxRowCount, "\t", "\r\n", "<NULL>" );
-                writer.WriteLine( rsStr );
+                var rsStr = rs.GetString(StringFormatEnum.adClipString, maxRowCount, "\t", "\r\n", "<NULL>");
+                writer.WriteLine(rsStr);
             }
         }
 
@@ -130,9 +130,9 @@ namespace DataCommander.Providers
         /// </summary>
         /// <param name="ADODBRecordset"></param>
         /// <param name="writer"></param>
-        public static void WriteRows( object ADODBRecordset, TextWriter writer )
+        public static void WriteRows(object ADODBRecordset, TextWriter writer)
         {
-            WriteRows( (Recordset) ADODBRecordset, int.MaxValue, writer );
+            WriteRows((Recordset) ADODBRecordset, int.MaxValue, writer);
         }
 
         /// <summary>
@@ -144,13 +144,13 @@ namespace DataCommander.Providers
         public static void Write(
             object ADODBRecordset,
             int maxRowCount,
-            TextWriter writer )
+            TextWriter writer)
         {
             if (ADODBRecordset != null)
             {
                 var rs = (Recordset) ADODBRecordset;
-                WriteSchema( rs, writer );
-                WriteRows( rs, maxRowCount, writer );
+                WriteSchema(rs, writer);
+                WriteRows(rs, maxRowCount, writer);
             }
         }
 
@@ -161,13 +161,13 @@ namespace DataCommander.Providers
         /// <param name="writer"></param>
         public static void Write(
             object ADODBRecordset,
-            TextWriter writer )
+            TextWriter writer)
         {
             if (ADODBRecordset != null)
             {
                 var rs = (Recordset) ADODBRecordset;
-                WriteSchema( rs, writer );
-                WriteRows( rs, int.MaxValue, writer );
+                WriteSchema(rs, writer);
+                WriteRows(rs, int.MaxValue, writer);
             }
         }
     }

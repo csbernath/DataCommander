@@ -1,21 +1,19 @@
-﻿using Foundation.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using DataCommander.Providers.Connection;
+using DataCommander.Providers.Query;
+using Foundation.Data;
 using Foundation.Diagnostics.Log;
+using Npgsql;
 
 namespace DataCommander.Providers.PostgreSql
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-    using System.Threading;
-    using DataCommander.Providers;
-    using Npgsql;
-    using Providers.Connection;
-    using Query;
-
     internal sealed class PostgreSqlProvider : IProvider
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
@@ -54,7 +52,7 @@ namespace DataCommander.Providers.PostgreSql
 
         IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
         {
-            return new PostgreSqlDataReaderHelper((NpgsqlDataReader)dataReader);
+            return new PostgreSqlDataReaderHelper((NpgsqlDataReader) dataReader);
         }
 
         void IProvider.CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationconnection,
@@ -76,7 +74,7 @@ namespace DataCommander.Providers.PostgreSql
         Type IProvider.GetColumnType(DbColumn dataColumnSchema)
         {
             // TODO
-            return typeof (object);
+            return typeof(object);
         }
 
         string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
@@ -128,7 +126,7 @@ namespace DataCommander.Providers.PostgreSql
                             }
                         }
 
-                        array = list.Keys.Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
+                        array = list.Keys.Select(keyWord => (IObjectName) new NonSqlObjectName(keyWord)).ToList();
                     }
                 }
             }
@@ -316,7 +314,7 @@ order by 1", name.Database);
 
                 if (commandText != null)
                 {
-                    log.Write(System.LogLevel.Trace, "commandText:\r\n{0}", commandText);
+                    log.Write(LogLevel.Trace, "commandText:\r\n{0}", commandText);
                     var list = new List<IObjectName>();
                     try
                     {

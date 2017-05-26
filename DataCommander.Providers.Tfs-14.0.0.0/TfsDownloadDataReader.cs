@@ -1,19 +1,18 @@
-﻿using Foundation;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
+using DataCommander.Providers.Connection;
+using DataCommander.Providers.Query;
+using Foundation;
 using Foundation.Data;
 using Foundation.Diagnostics.Log;
+using Microsoft.TeamFoundation.VersionControl.Client;
+using Microsoft.TeamFoundation.VersionControl.Common;
 
 namespace DataCommander.Providers.Tfs
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.IO;
-    using System.Linq;
-    using Connection;
-    using Microsoft.TeamFoundation.VersionControl.Client;
-    using Microsoft.TeamFoundation.VersionControl.Common;
-    using Query;
-
     internal sealed class TfsDownloadDataReader : TfsDataReader
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
@@ -58,7 +57,7 @@ namespace DataCommander.Providers.Tfs
                 if (this.first)
                 {
                     this.first = false;
-                    var serverPath = (string)this.command.Parameters["serverPath"].Value;
+                    var serverPath = (string) this.command.Parameters["serverPath"].Value;
                     this.item = this.command.Connection.VersionControlServer.GetItem(serverPath);
                     this.localPath = Database.GetValueOrDefault<string>(this.command.Parameters["localPath"].Value);
 
@@ -80,7 +79,7 @@ namespace DataCommander.Providers.Tfs
                         }
                     }
 
-                    var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+                    var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
                     queryForm.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, $"localPath: {this.localPath}"));
 
 
@@ -118,7 +117,7 @@ namespace DataCommander.Providers.Tfs
                     switch (current.ItemType)
                     {
                         case ItemType.File:
-                            log.Write(System.LogLevel.Trace, "Downloading {0}...", current.ServerItem);
+                            log.Write(LogLevel.Trace, "Downloading {0}...", current.ServerItem);
                             current.DownloadFile(path);
                             var checkingDate = current.CheckinDate;
                             var fileInfo = new FileInfo(path);

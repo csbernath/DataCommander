@@ -244,7 +244,7 @@
     <Compile Include="FieldReader\VariantDataFieldReader.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataCommander.Foundation\DataCommander.Foundation.csproj">
+    <ProjectReference Include="..\Foundation\Foundation.csproj">
       <Project>{1bacf0aa-4122-4c10-a8d2-248542af054c}</Project>
       <Name>DataCommander.Foundation</Name>
     </ProjectReference>

@@ -1,34 +1,33 @@
+using System;
+using System.Data;
+using System.Data.SQLite;
+using System.Threading;
+using System.Threading.Tasks;
+using DataCommander.Providers.Connection;
 using Foundation.Diagnostics.Log;
 
 namespace DataCommander.Providers.SQLite
 {
-    using System;
-    using System.Data;
-    using System.Data.SQLite;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Providers.Connection;
-
     internal sealed class Connection : ConnectionBase
     {
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
         private readonly SQLiteConnection sqliteConnection;
 
-        public Connection( string connectionString )
+        public Connection(string connectionString)
         {
-            this.sqliteConnection = new SQLiteConnection( connectionString );
+            this.sqliteConnection = new SQLiteConnection(connectionString);
             // this.sqliteConnection.Flags = SQLiteConnectionFlags.LogAll;
             // this.sqliteConnection.Trace += this.sqliteConnection_Trace;
             this.Connection = this.sqliteConnection;
         }
 
-        void SQLiteLog_Log( object sender, LogEventArgs e )
+        void SQLiteLog_Log(object sender, LogEventArgs e)
         {
         }
 
-        private void sqliteConnection_Trace( object sender, TraceEventArgs e )
+        private void sqliteConnection_Trace(object sender, TraceEventArgs e)
         {
-            log.Write( System.LogLevel.Trace,  e.Statement );
+            log.Write(LogLevel.Trace, e.Statement);
         }
 
         public override string ConnectionName { get; set; }

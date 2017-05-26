@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Common;
 using System.Xml;
 using DataCommander.Providers.Connection;
+using Foundation.Data;
 
 namespace DataCommander.Providers.Msi
 {
@@ -109,7 +110,7 @@ namespace DataCommander.Providers.Msi
 
         IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
         {
-            var msiDataReader = (MsiDataReader)dataReader;
+            var msiDataReader = (MsiDataReader) dataReader;
             return new MsiDataReaderHelper(msiDataReader);
         }
 
@@ -125,7 +126,7 @@ namespace DataCommander.Providers.Msi
 
         Type IProvider.GetColumnType(DbColumn dataColumnSchema)
         {
-            return typeof (object);
+            return typeof(object);
         }
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
