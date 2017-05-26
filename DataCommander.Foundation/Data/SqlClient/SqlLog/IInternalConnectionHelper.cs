@@ -1,7 +1,7 @@
-namespace DataCommander.Foundation.Data.SqlClient.SqlLog
-{
-    using System.Data;
+using System.Data;
 
+namespace Foundation.Data.SqlClient.SqlLog
+{
     internal interface IInternalConnectionHelper
     {
         object GetInternalConnection(IDbConnection connection);

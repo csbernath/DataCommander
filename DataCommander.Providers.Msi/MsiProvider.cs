@@ -1,13 +1,12 @@
-﻿namespace DataCommander.Providers.Msi
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.Xml;
-    using Connection;
-    using DataCommander.Foundation.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Xml;
+using DataCommander.Providers.Connection;
 
+namespace DataCommander.Providers.Msi
+{
     public sealed class MsiProvider : IProvider
     {
         #region IProvider Members

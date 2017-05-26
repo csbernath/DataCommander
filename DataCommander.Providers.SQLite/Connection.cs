@@ -1,3 +1,5 @@
+using Foundation.Diagnostics.Log;
+
 namespace DataCommander.Providers.SQLite
 {
     using System;
@@ -5,8 +7,6 @@ namespace DataCommander.Providers.SQLite
     using System.Data.SQLite;
     using System.Threading;
     using System.Threading.Tasks;
-    using DataCommander.Foundation.Diagnostics;
-    using Foundation.Diagnostics.Log;
     using Providers.Connection;
 
     internal sealed class Connection : ConnectionBase
@@ -28,7 +28,7 @@ namespace DataCommander.Providers.SQLite
 
         private void sqliteConnection_Trace( object sender, TraceEventArgs e )
         {
-            log.Write( LogLevel.Trace,  e.Statement );
+            log.Write( System.LogLevel.Trace,  e.Statement );
         }
 
         public override string ConnectionName { get; set; }

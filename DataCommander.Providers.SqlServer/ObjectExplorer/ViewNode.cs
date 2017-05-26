@@ -1,10 +1,11 @@
+using Foundation.Data.SqlClient;
+
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     using System;
     using System.Collections.Generic;
     using System.Data.SqlClient;
     using System.Windows.Forms;
-    using Foundation.Data.SqlClient;
     using Query;
 
     internal sealed class ViewNode : ITreeNode

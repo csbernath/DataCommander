@@ -1,7 +1,7 @@
-namespace DataCommander.Foundation.Collections
-{
-    using System;
+using System;
 
+namespace Foundation.Collections
+{
     /// <exclude/>
     /// <summary>
     /// 

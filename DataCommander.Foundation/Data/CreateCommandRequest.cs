@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Foundation.Data
-{
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Linq;
+﻿using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 
+namespace Foundation.Data
+{
     public class CreateCommandRequest
     {
         public CreateCommandRequest(string commandText, IEnumerable<object> parameters, CommandType commandType, int commandTimeout)

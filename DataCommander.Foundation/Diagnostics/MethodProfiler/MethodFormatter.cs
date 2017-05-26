@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Foundation.Diagnostics.MethodProfiler
-{
-    using System.Reflection;
-    using System.Text;
-    using DataCommander.Foundation.Data.SqlClient;
-    using DataCommander.Foundation.IO;
+﻿using System.Reflection;
+using System.Text;
+using Foundation.Data.SqlClient;
+using Foundation.IO;
 
+namespace Foundation.Diagnostics.MethodProfiler
+{
     internal sealed class MethodFormatter : IFormatter
     {
         void IFormatter.AppendTo( StringBuilder sb, object[] args )

@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Text;
+using Foundation.Data.SqlClient;
 
-namespace DataCommander.Foundation.Data
+namespace Foundation.Data
 {
-    using System;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Text;
-    using DataCommander.Foundation.Data.SqlClient;
-
     /// <summary>
     ///
     /// </summary>

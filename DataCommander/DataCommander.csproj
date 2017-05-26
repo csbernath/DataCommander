@@ -221,9 +221,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataCommander.Foundation\DataCommander.Foundation.csproj">
-      <Project>{1bacf0aa-4122-4c10-a8d2-248542af054c}</Project>
-      <Name>DataCommander.Foundation</Name>
+    <ProjectReference Include="..\DataCommander.Foundation\Foundation.csproj">
+      <Project>{1BACF0AA-4122-4C10-A8D2-248542AF054C}</Project>
+      <Name>Foundation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataCommander.Foundation\Foundation.csproj">
+      <Project>{1BACF0AA-4122-4C10-A8D2-248542AF054C}</Project>
+      <Name>Foundation</Name>
     </ProjectReference>
     <ProjectReference Include="..\DataCommander.Providers\DataCommander.Providers.csproj">
       <Project>{31A30A80-D1B6-4867-A65E-188DE9E912C8}</Project>

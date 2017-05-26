@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation.Windows.Forms
-{
-    using System;
-    using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
+namespace Foundation.Windows.Forms
+{
     /// <summary>
     /// 
     /// </summary>

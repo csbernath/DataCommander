@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation.Collections
-{
-    using System;
-    using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 
+namespace Foundation.Collections
+{
     /// <summary>
     /// 
     /// </summary>

@@ -1,12 +1,12 @@
-﻿namespace DataCommander.Foundation.Data
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.Globalization;
-    using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Globalization;
+using System.Linq;
 
+namespace Foundation.Data
+{
     /// <summary>
     /// 
     /// </summary>

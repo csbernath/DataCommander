@@ -1,8 +1,9 @@
-﻿namespace DataCommander.Foundation.DocumentProperties.StructuredStorage
+﻿using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
+namespace Foundation.DocumentProperties.StructuredStorage
 {
-    using System;
-    using System.Runtime.CompilerServices;
-    using System.Runtime.InteropServices;
     using CT = System.Runtime.InteropServices.ComTypes;
 
     [ComImport, InterfaceType( (short) 1 ), Guid( "0000013A-0000-0000-C000-000000000046" )]

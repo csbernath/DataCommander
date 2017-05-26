@@ -1,11 +1,11 @@
-namespace DataCommander.Foundation.Data.SqlClient
-{
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Data.SqlTypes;
-    using System.Globalization;
-    using System.Text;
+using System.Data;
+using System.Data.SqlClient;
+using System.Data.SqlTypes;
+using System.Globalization;
+using System.Text;
 
+namespace Foundation.Data.SqlClient
+{
     /// <summary>
     /// Static helper methods for SQL Server connections.
     /// </summary>

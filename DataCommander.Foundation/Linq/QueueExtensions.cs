@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Foundation.Linq
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace Foundation.Linq
+{
     /// <summary>
     /// 
     /// </summary>

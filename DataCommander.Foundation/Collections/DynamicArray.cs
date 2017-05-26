@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Foundation.Collections
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using DataCommander.Foundation.Linq;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Foundation.Linq;
 
+namespace Foundation.Collections
+{
     /// <summary>
     /// https://en.wikipedia.org/wiki/Dynamic_array
     /// </summary>

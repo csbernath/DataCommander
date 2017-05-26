@@ -1,3 +1,6 @@
+using Foundation.Data.SqlClient;
+using Foundation.Diagnostics;
+
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     using System;
@@ -6,8 +9,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     using System.Diagnostics;
     using System.Drawing;
     using System.Windows.Forms;
-    using Foundation.Data.SqlClient;
-    using Foundation.Diagnostics;
     using Query;
 
     internal sealed class StoredProcedureNode : ITreeNode

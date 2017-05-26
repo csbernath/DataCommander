@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation.Threading
-{
-    using System;
-    using System.Threading;
+﻿using System;
+using System.Threading;
 
+namespace Foundation.Threading
+{
     internal class WorkerEvent : WaitHandle
     {
         private readonly EventWaitHandle _eventWaitHandle;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataCommander.Foundation.Collections
+namespace Foundation.Collections
 {
     /// <summary>
     /// Discrete union

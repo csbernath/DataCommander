@@ -1,11 +1,11 @@
-﻿namespace DataCommander.Foundation.Diagnostics.MethodProfiler
-{
-    using System.Collections;
-    using System.Collections.Concurrent;
-    using System.Collections.Generic;
-    using System.Reflection;
-    using System.Threading;
+﻿using System.Collections;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Threading;
 
+namespace Foundation.Diagnostics.MethodProfiler
+{
     internal sealed class MethodCollection : IEnumerable<MethodBase>
     {
         private int _idSequence;

@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation.Diagnostics.MethodProfiler
-{
-    using System.Collections.Concurrent;
-    using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 
+namespace Foundation.Diagnostics.MethodProfiler
+{
     internal sealed class MethodInvocationStackCollection
     {
         private readonly ConcurrentDictionary<int, Stack<MethodInvocation>> _stacks = new ConcurrentDictionary<int, Stack<MethodInvocation>>();

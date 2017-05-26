@@ -1,3 +1,5 @@
+using Foundation.Data;
+
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     using System.Collections.Generic;
@@ -5,7 +7,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     using System.Data.SqlClient;
     using System.Threading;
     using System.Windows.Forms;
-    using Foundation.Data;
 
     sealed class StoredProcedureCollectionNode : ITreeNode
     {

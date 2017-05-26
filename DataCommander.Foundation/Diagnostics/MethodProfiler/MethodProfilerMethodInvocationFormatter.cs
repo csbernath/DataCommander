@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Foundation.Diagnostics.MethodProfiler
-{
-    using System.Text;
-    using DataCommander.Foundation.Data.SqlClient;
-    using DataCommander.Foundation.IO;
+﻿using System.Text;
+using Foundation.Data.SqlClient;
+using Foundation.IO;
 
+namespace Foundation.Diagnostics.MethodProfiler
+{
     internal sealed class MethodProfilerMethodInvocationFormatter : IFormatter
     {
         void IFormatter.AppendTo(StringBuilder sb, object[] args)

@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation.Data.PTypes
-{
-    using System.Data.SqlTypes;
-    using System.Diagnostics;
+﻿using System.Data.SqlTypes;
+using System.Diagnostics;
 
+namespace Foundation.Data.PTypes
+{
     /// <summary>
     /// 
     /// </summary>

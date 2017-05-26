@@ -1,8 +1,9 @@
-﻿namespace DataCommander.Providers.SqlServer.ObjectExplorer
+﻿using Foundation.Linq;
+
+namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Windows.Forms;
-    using Foundation.Linq;
 
     internal sealed class LinkedServerNode : ITreeNode
     {

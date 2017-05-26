@@ -5,11 +5,11 @@ using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Text;
-using DataCommander.Foundation.Configuration;
-using DataCommander.Foundation.Data;
-using DataCommander.Foundation.Diagnostics.Log;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.Query;
+using Foundation.Configuration;
+using Foundation.Data;
+using Foundation.Diagnostics.Log;
 using global::MySql.Data.MySqlClient;
 
 namespace DataCommander.Providers.MySql

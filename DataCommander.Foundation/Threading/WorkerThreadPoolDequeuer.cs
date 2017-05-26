@@ -1,8 +1,8 @@
-namespace DataCommander.Foundation.Threading
-{
-    using System.Diagnostics;
-    using System.Threading;
+using System.Diagnostics;
+using System.Threading;
 
+namespace Foundation.Threading
+{
     /// <summary>
     /// 
     /// </summary>

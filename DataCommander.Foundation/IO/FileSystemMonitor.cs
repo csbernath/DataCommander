@@ -1,12 +1,11 @@
-namespace DataCommander.Foundation.IO
-{
-    using System;
-    using System.Globalization;
-    using System.IO;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Diagnostics.Log;
-    using DataCommander.Foundation.Threading;
+using System;
+using System.Globalization;
+using System.IO;
+using Foundation.Diagnostics.Log;
+using Foundation.Threading;
 
+namespace Foundation.IO
+{
     /// <summary>
     /// Periodically checks a directory for file creations/deletions
     /// and raises events when a new file is created or a file is deleted.

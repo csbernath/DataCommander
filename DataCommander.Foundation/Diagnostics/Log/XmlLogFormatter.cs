@@ -1,8 +1,8 @@
-namespace DataCommander.Foundation.Diagnostics.Log
-{
-    using System.IO;
-    using System.Xml;
+using System.IO;
+using System.Xml;
 
+namespace Foundation.Diagnostics.Log
+{
     internal sealed class XmlLogFormatter : ILogFormatter
     {
         private static void WriteElement(

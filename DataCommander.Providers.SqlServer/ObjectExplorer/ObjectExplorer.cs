@@ -1,8 +1,9 @@
+using Foundation.Linq;
+
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data;
-    using Foundation.Linq;
 
     internal sealed class ObjectExplorer : IObjectExplorer
     {

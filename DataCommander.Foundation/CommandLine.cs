@@ -1,13 +1,12 @@
-﻿namespace DataCommander.Foundation
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Text;
-    using DataCommander.Foundation.Collections;
-    using DataCommander.Foundation.Collections.IndexableCollection;
-    using DataCommander.Foundation.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using Foundation.Collections.IndexableCollection;
+using Foundation.Linq;
 
+namespace Foundation
+{
     /// <summary>
     /// 
     /// </summary>

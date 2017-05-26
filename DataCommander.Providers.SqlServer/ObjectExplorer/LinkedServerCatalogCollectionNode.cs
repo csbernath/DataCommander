@@ -1,10 +1,11 @@
-﻿namespace DataCommander.Providers.SqlServer.ObjectExplorer
+﻿using Foundation.Data;
+
+namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
     using System.Windows.Forms;
-    using Foundation.Data;
 
     internal sealed class LinkedServerCatalogCollectionNode : ITreeNode
     {

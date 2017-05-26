@@ -1,10 +1,10 @@
-namespace DataCommander.Foundation.Data.PTypes
-{
-    using System;
-    using System.Data.SqlTypes;
-    using System.Diagnostics;
-    using DataCommander.Foundation.Data.SqlClient;
+using System;
+using System.Data.SqlTypes;
+using System.Diagnostics;
+using Foundation.Data.SqlClient;
 
+namespace Foundation.Data.PTypes
+{
     /// <summary>
     /// 
     /// </summary>

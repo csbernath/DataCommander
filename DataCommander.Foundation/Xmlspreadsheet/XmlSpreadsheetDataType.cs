@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.XmlSpreadsheet
+﻿namespace Foundation.XmlSpreadsheet
 {
     /// <summary>
     /// 

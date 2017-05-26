@@ -2,9 +2,9 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
-using DataCommander.Foundation.Data;
-using DataCommander.Foundation.Diagnostics.Log;
-using DataCommander.Foundation.Linq;
+using Foundation.Data;
+using Foundation.Diagnostics.Log;
+using Foundation.Linq;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {

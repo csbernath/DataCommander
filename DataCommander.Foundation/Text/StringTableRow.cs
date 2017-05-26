@@ -1,4 +1,4 @@
-namespace DataCommander.Foundation.Text
+namespace Foundation.Text
 {
     /// <summary>
     /// Represents a row in the <see cref="StringTable"/>.

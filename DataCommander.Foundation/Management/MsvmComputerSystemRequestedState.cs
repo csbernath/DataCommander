@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Management
+﻿namespace Foundation.Management
 {
     /// <summary>
     /// 

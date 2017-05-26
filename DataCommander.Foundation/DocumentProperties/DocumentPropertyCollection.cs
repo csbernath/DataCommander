@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Foundation.DocumentProperties
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
+namespace Foundation.DocumentProperties
+{
     /// <summary>
     /// 
     /// </summary>

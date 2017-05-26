@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation.Data.LoggedDbConnection
-{
-    using System;
-    using System.Data;
+﻿using System;
+using System.Data;
 
+namespace Foundation.Data.LoggedDbConnection
+{
     /// <summary>
     /// 
     /// </summary>

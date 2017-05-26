@@ -5,7 +5,7 @@ using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DataCommander.Foundation.Data
+namespace Foundation.Data
 {
     public static class IDbCommandAsyncExecutorExtensions
     {

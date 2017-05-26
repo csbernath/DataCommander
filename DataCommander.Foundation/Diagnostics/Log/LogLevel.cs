@@ -1,4 +1,4 @@
-namespace DataCommander.Foundation.Diagnostics.Log
+namespace Foundation.Diagnostics.Log
 {
     /// <summary>
     /// The verbosity of logging.

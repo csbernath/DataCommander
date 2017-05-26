@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace DataCommander.Foundation.Data
+namespace Foundation.Data
 {
     public static class IDbCommandExecutorExtensions
     {

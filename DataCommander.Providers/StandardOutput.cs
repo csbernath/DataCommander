@@ -1,13 +1,13 @@
+using System.Data;
+using System.Data.OleDb;
+using System.IO;
+using System.Text;
+using ADODB;
+using DataCommander.Providers.Query;
+using Foundation.Windows.Forms;
+
 namespace DataCommander.Providers
 {
-    using System.Data;
-    using System.Data.OleDb;
-    using System.IO;
-    using System.Text;
-    using ADODB;
-    using DataCommander.Foundation.Windows.Forms;
-    using Query;
-
     /// <summary>
     /// Summary description for StandardOutput.
     /// </summary>

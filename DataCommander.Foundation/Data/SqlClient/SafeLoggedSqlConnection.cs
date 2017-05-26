@@ -1,10 +1,10 @@
-namespace DataCommander.Foundation.Data.SqlClient
-{
-    using System;
-    using System.Data;
-    using System.Threading;
-    using DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection;
+using System;
+using System.Data;
+using System.Threading;
+using Foundation.Data.SqlClient.SqlLoggedSqlConnection;
 
+namespace Foundation.Data.SqlClient
+{
     /// <summary>
     /// 
     /// </summary>

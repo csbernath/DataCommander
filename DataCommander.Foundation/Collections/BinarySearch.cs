@@ -1,9 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
-namespace DataCommander.Foundation.Collections
+namespace Foundation.Collections
 {
-    using System;
-
     /// <summary>
     /// 
     /// </summary>

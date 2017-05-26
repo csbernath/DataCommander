@@ -1,13 +1,12 @@
-namespace DataCommander.Foundation.Data.SqlClient
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using DataCommander.Foundation.Configuration;
-    using DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Diagnostics.Log;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using Foundation.Configuration;
+using Foundation.Data.SqlClient.SqlLoggedSqlConnection;
+using Foundation.Diagnostics.Log;
 
+namespace Foundation.Data.SqlClient
+{
     internal sealed class SimpleLoggedSqlCommandFilter : ISqlLoggedSqlCommandFilter
     {
         private readonly ConfigurationSection _section;

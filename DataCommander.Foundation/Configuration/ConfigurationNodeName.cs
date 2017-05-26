@@ -1,9 +1,9 @@
-namespace DataCommander.Foundation.Configuration
-{
-    using System;
-    using System.Diagnostics;
-    using System.Reflection;
+using System;
+using System.Diagnostics;
+using System.Reflection;
 
+namespace Foundation.Configuration
+{
     /// <summary>
     /// 
     /// </summary>

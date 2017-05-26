@@ -1,12 +1,14 @@
-﻿namespace DataCommander.Providers
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Xml;
+using DataCommander.Providers.Connection;
+using Foundation.Data;
+
+namespace DataCommander.Providers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.Xml;
-    using Connection;
-    using DataCommander.Foundation.Data;
+
 
     //[ContractClassFor(typeof (IProvider))]
     internal abstract class IProviderContract : IProvider

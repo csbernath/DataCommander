@@ -1,8 +1,7 @@
+using Foundation.Diagnostics.Log;
+
 namespace DataCommander.Providers
 {
-    using DataCommander.Foundation.Diagnostics;
-    using Foundation.Diagnostics.Log;
-
     public sealed class SqlObject
     {
         private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
@@ -16,11 +15,8 @@ namespace DataCommander.Providers
         }
 
         public string ParentName { get; set; }
-
         public string ParentAlias { get; }
-
         public SqlObjectTypes Type { get; }
-
         public string Name { get; set; }
     }
 }

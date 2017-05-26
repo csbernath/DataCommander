@@ -1,7 +1,8 @@
-﻿namespace DataCommander.Providers.SqlServer
+﻿using Foundation.Linq;
+
+namespace DataCommander.Providers.SqlServer
 {
     using System.Data.SqlClient;
-    using Foundation.Linq;
 
     internal sealed class SqlServerConnectionStringBuilder : IDbConnectionStringBuilder
     {

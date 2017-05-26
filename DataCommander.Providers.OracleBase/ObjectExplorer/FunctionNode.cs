@@ -1,3 +1,5 @@
+using Foundation.Data;
+
 namespace DataCommander.Providers.OracleBase
 {
     using System;
@@ -5,7 +7,6 @@ namespace DataCommander.Providers.OracleBase
     using System.Data;
     using System.Text;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
     using Query;
 
     public sealed class FunctionNode : ITreeNode

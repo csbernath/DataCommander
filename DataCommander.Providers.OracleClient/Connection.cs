@@ -1,3 +1,5 @@
+using Foundation;
+
 namespace DataCommander.Providers.OracleClient
 {
     using System;
@@ -6,7 +8,6 @@ namespace DataCommander.Providers.OracleClient
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using DataCommander.Foundation;
     using Providers.Connection;
 
     internal sealed class Connection : ConnectionBase

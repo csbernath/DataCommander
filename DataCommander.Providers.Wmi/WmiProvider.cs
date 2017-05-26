@@ -1,3 +1,5 @@
+using Foundation.Data;
+
 namespace DataCommander.Providers.Wmi
 {
     using System;
@@ -8,7 +10,6 @@ namespace DataCommander.Providers.Wmi
     using System.Management;
     using System.Xml;
     using Connection;
-    using DataCommander.Foundation.Data;
 
     internal sealed class WmiProvider : IProvider
     {

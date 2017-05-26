@@ -1,12 +1,12 @@
-namespace DataCommander.Foundation.Xml
-{
-    using System;
-    using System.CodeDom.Compiler;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.IO;
-    using System.Xml;
+using System;
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Xml;
 
+namespace Foundation.Xml
+{
     /// <summary>
     /// 
     /// </summary>

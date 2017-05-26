@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Foundation.Diagnostics.MethodProfiler
-{
-    using System.Threading;
+﻿using System.Threading;
 
+namespace Foundation.Diagnostics.MethodProfiler
+{
     internal sealed class MethodInvocation
     {
         private static int _idSequence;

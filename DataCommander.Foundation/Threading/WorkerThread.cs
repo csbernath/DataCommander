@@ -1,11 +1,12 @@
-namespace DataCommander.Foundation.Threading
+using System;
+using System.Diagnostics;
+using System.Globalization;
+using System.Threading;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Log;
+
+namespace Foundation.Threading
 {
-    using System;
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.Threading;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Diagnostics.Log;
     using ThreadState = System.Threading.ThreadState;
 
     /// <summary>

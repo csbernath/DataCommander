@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
-{
-    using System.Data;
+﻿using System.Data;
 
+namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
+{
     /// <summary>
     /// SQL logging can be filtered.
     /// </summary>

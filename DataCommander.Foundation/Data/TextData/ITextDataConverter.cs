@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Data.TextData
+﻿namespace Foundation.Data.TextData
 {
     /// <summary>
     /// 

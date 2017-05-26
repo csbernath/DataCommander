@@ -1,10 +1,11 @@
+using Foundation;
+
 namespace DataCommander.Providers.OleDb
 {
     using System.Data;
     using System.Data.OleDb;
     using System.Threading;
     using System.Threading.Tasks;
-    using DataCommander.Foundation;
     using Providers.Connection;
 
     internal sealed class Connection : ConnectionBase

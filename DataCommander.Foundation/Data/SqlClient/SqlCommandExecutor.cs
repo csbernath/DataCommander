@@ -1,14 +1,12 @@
-﻿using DataCommander.Foundation.Diagnostics.Log;
+﻿using System;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace DataCommander.Foundation.Data
+namespace Foundation.Data.SqlClient
 {
-    using System;
-    using System.Data;
-    using System.Data.Common;
-    using System.Data.SqlClient;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     public sealed class SqlCommandExecutor : IDbCommandAsyncExecutor
     {
         private readonly string _connectionString;

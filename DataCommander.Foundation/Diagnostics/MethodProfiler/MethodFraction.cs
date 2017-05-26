@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Foundation.Diagnostics.MethodProfiler
-{
-    using System;
-    using System.Globalization;
-    using System.Reflection;
+﻿using System;
+using System.Globalization;
+using System.Reflection;
 
+namespace Foundation.Diagnostics.MethodProfiler
+{
     internal sealed class MethodFraction : MethodBase
     {
         private readonly MethodBase _method;

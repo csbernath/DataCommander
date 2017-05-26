@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 
-namespace DataCommander.Foundation.Data
+namespace Foundation.Data
 {
     /// <summary>
     /// 

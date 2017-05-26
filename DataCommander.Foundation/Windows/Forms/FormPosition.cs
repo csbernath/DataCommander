@@ -1,9 +1,9 @@
-namespace DataCommander.Foundation.Windows.Forms
-{
-    using System.Drawing;
-    using System.Windows.Forms;
-    using DataCommander.Foundation.Configuration;
+using System.Drawing;
+using System.Windows.Forms;
+using Foundation.Configuration;
 
+namespace Foundation.Windows.Forms
+{
     /// <exclude/>
     public static class FormPosition
     {

@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Foundation
-{
-    using System;
-    using System.Diagnostics.Contracts;
-    using System.Runtime.Serialization;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Runtime.Serialization;
 
+namespace Foundation
+{
     /// <summary>
     /// 16 bit date type: 1990-01-01 - 2079-06-06
     /// </summary>

@@ -1,14 +1,14 @@
-namespace DataCommander.Foundation.Data.SqlClient
-{
-    using System;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Security.Cryptography;
-    using System.Security.Principal;
-    using System.Text;
-    using System.Threading;
-    using DataCommander.Foundation.Configuration;
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Security.Cryptography;
+using System.Security.Principal;
+using System.Text;
+using System.Threading;
+using Foundation.Configuration;
 
+namespace Foundation.Data.SqlClient
+{
     /// <summary>
     /// This class provides a mechanism to store security sensitive data (like passwords) in a safe way.
     /// </summary>

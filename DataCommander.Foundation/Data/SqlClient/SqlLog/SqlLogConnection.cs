@@ -1,9 +1,9 @@
-namespace DataCommander.Foundation.Data.SqlClient.SqlLog
-{
-    using System;
-    using System.Text;
-    using DataCommander.Foundation.Diagnostics;
+using System;
+using System.Text;
+using Foundation.Diagnostics;
 
+namespace Foundation.Data.SqlClient.SqlLog
+{
     internal sealed class SqlLogConnection : ISqlLogItem
     {
         private readonly string _name;

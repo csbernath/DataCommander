@@ -1,8 +1,9 @@
-﻿namespace DataCommander.Foundation
+﻿using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
+namespace Foundation
 {
-    using System;
-    using System.Runtime.CompilerServices;
-    using System.Runtime.InteropServices;
     using CT = System.Runtime.InteropServices.ComTypes;
 
     [ComImport, InterfaceType( (short) 1 ), ComConversionLoss, Guid( "0000000B-0000-0000-C000-000000000046" )]

@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Foundation.Data.TextData
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 
+namespace Foundation.Data.TextData
+{
     /// <summary>
     /// 
     /// </summary>

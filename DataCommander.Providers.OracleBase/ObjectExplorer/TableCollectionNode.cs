@@ -1,9 +1,10 @@
+using Foundation.Data;
+
 namespace DataCommander.Providers.OracleBase
 {
     using System.Collections.Generic;
     using System.Threading;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
 
     /// <summary>
 	/// Summary description for TablesNode.

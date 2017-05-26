@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Data.SqlClient.SqlLog
+﻿namespace Foundation.Data.SqlClient.SqlLog
 {
     internal sealed class SqLoglCommandExecution
     {

@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.SqlServerCe40
+﻿using Foundation.Data;
+
+namespace DataCommander.Providers.SqlServerCe40
 {
     using System;
     using System.Collections.Generic;
@@ -9,7 +11,6 @@
     using System.Text;
     using System.Xml;
     using Field;
-    using Foundation.Data;
     using ObjectExplorer;
     using Providers.Connection;
 

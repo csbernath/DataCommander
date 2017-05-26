@@ -1,8 +1,8 @@
 using System;
 using System.Data;
-using DataCommander.Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics.Contracts;
 
-namespace DataCommander.Foundation.Data
+namespace Foundation.Data
 {
     public sealed class ExecuteCommandRequest
     {

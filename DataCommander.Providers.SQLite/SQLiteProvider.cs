@@ -5,11 +5,11 @@ using System.Data.Common;
 using System.Data.SQLite;
 using System.Text;
 using System.Xml;
-using DataCommander.Foundation.Configuration;
-using DataCommander.Foundation.Data;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.Field;
 using DataCommander.Providers.Query;
+using Foundation.Configuration;
+using Foundation.Data;
 
 namespace DataCommander.Providers.SQLite
 {

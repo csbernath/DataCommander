@@ -1,9 +1,9 @@
-namespace DataCommander.Foundation
-{
-    using System;
-    using System.Runtime.InteropServices;
-    using System.Text;
+using System;
+using System.Runtime.InteropServices;
+using System.Text;
 
+namespace Foundation
+{
     /// <exclude/>
     /// <summary>
     /// Wrapper class for some NativeMethods. API functions (KERNEL32.DLL, USER32.DLL)

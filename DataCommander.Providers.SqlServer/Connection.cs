@@ -3,9 +3,9 @@ using System.Data.SqlClient;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
-using DataCommander.Foundation;
-using DataCommander.Foundation.Data;
 using DataCommander.Providers.Connection;
+using Foundation;
+using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer
 {

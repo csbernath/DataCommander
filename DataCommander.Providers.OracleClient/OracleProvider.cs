@@ -1,3 +1,5 @@
+using Foundation.Data;
+
 namespace DataCommander.Providers.OracleClient
 {
     using System;
@@ -7,7 +9,6 @@ namespace DataCommander.Providers.OracleClient
     using System.Data.OracleClient;
     using System.Text;
     using System.Xml;
-    using DataCommander.Foundation.Data;
     using DataCommander.Providers.OracleBase;
     using Field;
     using Providers.Connection;

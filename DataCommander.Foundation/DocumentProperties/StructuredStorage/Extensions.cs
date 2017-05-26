@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Foundation.DocumentProperties.StructuredStorage
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace Foundation.DocumentProperties.StructuredStorage
+{
     internal static class Extensions
     {
         public static IEnumerable<STATPROPSETSTG> AsEnumerable( this IPropertySetStorage propertySetStorage )

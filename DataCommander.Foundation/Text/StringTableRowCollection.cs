@@ -1,9 +1,9 @@
-namespace DataCommander.Foundation.Text
-{
-    using System.Collections;
-    using System.Collections.Generic;
-    using DataCommander.Foundation.Collections;
+using System.Collections;
+using System.Collections.Generic;
+using Foundation.Collections;
 
+namespace Foundation.Text
+{
     /// <summary>
     /// 
     /// </summary>

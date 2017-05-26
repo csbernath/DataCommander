@@ -1,18 +1,18 @@
-namespace DataCommander.Foundation.Data.SqlClient.SqlLog
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Text;
-    using System.Threading;
-    using DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Diagnostics.Log;
-    using DataCommander.Foundation.Threading;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using Foundation.Data.SqlClient.SqlLoggedSqlConnection;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Log;
+using Foundation.Threading;
 
+namespace Foundation.Data.SqlClient.SqlLog
+{
     /// <summary>
     /// Logs SQL activity of an application into a database.
     /// </summary>

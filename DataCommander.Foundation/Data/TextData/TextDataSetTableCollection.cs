@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Foundation.Data.TextData
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using DataCommander.Foundation.Collections.IndexableCollection;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Foundation.Collections.IndexableCollection;
 
+namespace Foundation.Data.TextData
+{
     /// <summary>
     /// 
     /// </summary>

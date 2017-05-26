@@ -1,13 +1,13 @@
-﻿namespace DataCommander.Foundation.Data.TextData
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.Globalization;
-    using System.IO;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Globalization;
+using System.IO;
 
+namespace Foundation.Data.TextData
+{
     /// <summary>
     /// 
     /// </summary>

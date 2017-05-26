@@ -1,9 +1,9 @@
-namespace DataCommander.Foundation.Diagnostics.Log
-{
-    using System;
-    using System.IO;
-    using System.Text;
+using System;
+using System.IO;
+using System.Text;
 
+namespace Foundation.Diagnostics.Log
+{
     internal sealed class LogFile : ILogFile
     {
         #region Private Fields

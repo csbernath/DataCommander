@@ -1,9 +1,10 @@
-﻿namespace DataCommander.Providers.Odp.ObjectExplorer
+﻿using Foundation.Data;
+
+namespace DataCommander.Providers.Odp.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Threading;
     using System.Windows.Forms;
-    using Foundation.Data;
 
     internal sealed class SynonymNode : ITreeNode
 	{

@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation.Data.LoggedDbConnection
-{
-    using System;
-    using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
+namespace Foundation.Data.LoggedDbConnection
+{
 #if FOUNDATION_3_5
 
 #else

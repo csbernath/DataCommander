@@ -1,9 +1,9 @@
-namespace DataCommander.Foundation.Data.SqlClient
-{
-    using System;
-    using System.Data;
-    using System.Data.SqlClient;
+using System;
+using System.Data;
+using System.Data.SqlClient;
 
+namespace Foundation.Data.SqlClient
+{
     internal sealed class SqlConnectionFactory : IDbConnectionHelper
     {
         private readonly IDbConnection _connection;

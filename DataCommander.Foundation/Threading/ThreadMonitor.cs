@@ -1,13 +1,13 @@
-namespace DataCommander.Foundation.Threading
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using System.Threading;
-    using DataCommander.Foundation.Linq;
-    using DataCommander.Foundation.Text;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading;
+using Foundation.Linq;
+using Foundation.Text;
 
+namespace Foundation.Threading
+{
     /// <summary>
     /// Monitors threads in the current process.
     /// <see cref="WorkerThread"/> instances are automatically added to this singleton.

@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Foundation.Diagnostics.Log
-{
-    using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
+namespace Foundation.Diagnostics.Log
+{
     /// <summary>
     /// 
     /// </summary>

@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
+﻿using Foundation.Data;
+
+namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +8,6 @@
     using System.Data.SqlServerCe;
     using System.Threading;
     using System.Windows.Forms;
-    using Foundation.Data;
 
     internal sealed class TableCollectionNode : ITreeNode
     {

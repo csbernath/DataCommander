@@ -1,8 +1,8 @@
-namespace DataCommander.Foundation.Configuration
-{
-    using System.Configuration;
-    using System.Xml;
+using System.Configuration;
+using System.Xml;
 
+namespace Foundation.Configuration
+{
     /// <exclude/>
     public sealed class SectionHandler : IConfigurationSectionHandler
     {

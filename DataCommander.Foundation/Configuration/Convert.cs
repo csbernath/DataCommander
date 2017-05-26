@@ -1,9 +1,9 @@
-namespace DataCommander.Foundation.Configuration
-{
-    using System;
-    using System.Globalization;
-    using System.Text;
+using System;
+using System.Globalization;
+using System.Text;
 
+namespace Foundation.Configuration
+{
     internal static class Convert
     {
         public static object ParseNumber(

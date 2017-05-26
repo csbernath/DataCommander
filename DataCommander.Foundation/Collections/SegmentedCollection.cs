@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Foundation.Collections
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
+namespace Foundation.Collections
+{
     /// <summary>
     /// 
     /// </summary>

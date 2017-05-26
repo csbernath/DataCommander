@@ -1,15 +1,15 @@
-namespace DataCommander.Foundation.Diagnostics
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.Linq;
-    using System.Threading;
-    using DataCommander.Foundation.Configuration;
-    using DataCommander.Foundation.Linq;
-    using DataCommander.Foundation.Text;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
+using System.Threading;
+using Foundation.Configuration;
+using Foundation.Linq;
+using Foundation.Text;
 
+namespace Foundation.Diagnostics
+{
     /// <summary>
     /// Summary description for GcMonitor.
     /// </summary>

@@ -1,15 +1,15 @@
-﻿namespace DataCommander.Foundation.Diagnostics.MethodProfiler
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Reflection;
-    using System.Text;
-    using System.Threading;
-    using DataCommander.Foundation.Data.SqlClient;
-    using DataCommander.Foundation.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Threading;
+using Foundation.Data.SqlClient;
+using Foundation.IO;
 
+namespace Foundation.Diagnostics.MethodProfiler
+{
     /// <summary>
     /// 
     /// </summary>

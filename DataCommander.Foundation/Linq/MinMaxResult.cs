@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Linq
+﻿namespace Foundation.Linq
 {
     /// <summary>
     /// 

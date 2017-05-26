@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation.Threading
-{
-    using System;
-    using System.Threading;
+﻿using System;
+using System.Threading;
 
+namespace Foundation.Threading
+{
     internal sealed class Lock
     {
         private readonly object _lockObject = new object();

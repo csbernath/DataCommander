@@ -1,13 +1,13 @@
-﻿namespace DataCommander.Foundation.DocumentProperties
-{
-    using System;
-    using System.IO;
-    using System.IO.Packaging;
-    using System.Runtime.InteropServices;
-    using System.Xml;
-    using System.Xml.Linq;
-    using DataCommander.Foundation.DocumentProperties.StructuredStorage;
+﻿using System;
+using System.IO;
+using System.IO.Packaging;
+using System.Runtime.InteropServices;
+using System.Xml;
+using System.Xml.Linq;
+using Foundation.DocumentProperties.StructuredStorage;
 
+namespace Foundation.DocumentProperties
+{
     /// <summary>
     /// 
     /// </summary>

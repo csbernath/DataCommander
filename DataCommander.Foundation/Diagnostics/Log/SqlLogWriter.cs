@@ -1,13 +1,13 @@
-namespace DataCommander.Foundation.Diagnostics.Log
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Text;
-    using System.Threading;
-    using DataCommander.Foundation.Linq;
-    using DataCommander.Foundation.Threading;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Text;
+using System.Threading;
+using Foundation.Linq;
+using Foundation.Threading;
 
+namespace Foundation.Diagnostics.Log
+{
     /// <summary>
     /// 
     /// </summary>

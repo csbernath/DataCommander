@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.DocumentProperties.StructuredStorage
+﻿namespace Foundation.DocumentProperties.StructuredStorage
 {
     internal enum StgDocumentSummaryPropertyId
     {

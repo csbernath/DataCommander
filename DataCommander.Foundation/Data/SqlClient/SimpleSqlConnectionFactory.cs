@@ -1,13 +1,13 @@
-namespace DataCommander.Foundation.Data.SqlClient
-{
-    using System;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Globalization;
-    using System.Security.Principal;
-    using DataCommander.Foundation.Configuration;
-    using DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection;
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.Security.Principal;
+using Foundation.Configuration;
+using Foundation.Data.SqlClient.SqlLoggedSqlConnection;
 
+namespace Foundation.Data.SqlClient
+{
 #if FOUNDATION_3_5
     using System.Web;
 #endif

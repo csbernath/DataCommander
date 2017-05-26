@@ -1,8 +1,8 @@
-namespace DataCommander.Foundation.Collections.ObjectPool
-{
-    using System;
-    using System.Threading;
+using System;
+using System.Threading;
 
+namespace Foundation.Collections.ObjectPool
+{
     /// <summary>
     /// 
     /// </summary>

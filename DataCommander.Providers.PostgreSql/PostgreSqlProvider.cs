@@ -1,4 +1,7 @@
-﻿namespace DataCommander.Providers.PostgreSql
+﻿using Foundation.Data;
+using Foundation.Diagnostics.Log;
+
+namespace DataCommander.Providers.PostgreSql
 {
     using System;
     using System.Collections.Generic;
@@ -9,9 +12,6 @@
     using System.Text;
     using System.Threading;
     using DataCommander.Providers;
-    using Foundation.Data;
-    using Foundation.Diagnostics;
-    using Foundation.Diagnostics.Log;
     using Npgsql;
     using Providers.Connection;
     using Query;
@@ -316,7 +316,7 @@ order by 1", name.Database);
 
                 if (commandText != null)
                 {
-                    log.Write(LogLevel.Trace, "commandText:\r\n{0}", commandText);
+                    log.Write(System.LogLevel.Trace, "commandText:\r\n{0}", commandText);
                     var list = new List<IObjectName>();
                     try
                     {

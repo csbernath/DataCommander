@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.DocumentProperties
+﻿namespace Foundation.DocumentProperties
 {
     /// <summary>
     /// 

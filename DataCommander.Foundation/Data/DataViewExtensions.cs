@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Foundation.Data
-{
-    using System.Data;
-    using System.Linq;
-    using DataCommander.Foundation.Linq;
+﻿using System.Data;
+using System.Linq;
+using Foundation.Linq;
 
+namespace Foundation.Data
+{
     /// <summary>
     /// 
     /// </summary>

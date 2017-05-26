@@ -6,7 +6,7 @@
     using System.Data.Common;
     using System.Xml;
     using Connection;
-    using DataCommander.Foundation.Data;
+    using Foundation.Data;
 
     //[ContractClass(typeof (IProviderContract))]
     public interface IProvider

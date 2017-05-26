@@ -1,3 +1,6 @@
+using Foundation.Configuration;
+using Foundation.Data;
+
 namespace DataCommander.Providers.Odp
 {
     using System;
@@ -7,8 +10,6 @@ namespace DataCommander.Providers.Odp
     using System.Text;
     using System.Threading;
     using System.Xml;
-    using DataCommander.Foundation.Configuration;
-    using DataCommander.Foundation.Data;
     using DataFieldReader;
     using Oracle.ManagedDataAccess.Client;
     using Oracle.ManagedDataAccess.Types;

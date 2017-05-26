@@ -1,9 +1,9 @@
-namespace DataCommander.Foundation.Threading.Tasks
+using System.Threading.Tasks;
+
+namespace Foundation.Threading.Tasks
 {
 #if FOUNDATION_3_5
 #else
-    using System.Threading.Tasks;
-
 #endif
 
     /// <summary>

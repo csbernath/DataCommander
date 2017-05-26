@@ -1,11 +1,10 @@
-namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
-{
-    using System;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Diagnostics;
-    using DataCommander.Foundation.Data.SqlClient.SqlLog;
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
 
+namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
+{
     /// <summary>
     /// Logged SqlConnection class.
     /// </summary>
@@ -13,7 +12,7 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
     {
         private readonly int _applicationId;
         private int _connectionNo;
-        private readonly SqlLog _sqlLog;
+        private readonly SqlLog.SqlLog _sqlLog;
 
         /// <summary>
         /// 
@@ -25,7 +24,7 @@ namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
         /// <param name="connectionString"></param>
         /// <param name="filter"></param>
         public SqlLoggedSqlConnection(
-            SqlLog sqlLog,
+            SqlLog.SqlLog sqlLog,
             int applicationId,
             string userName,
             string hostName,

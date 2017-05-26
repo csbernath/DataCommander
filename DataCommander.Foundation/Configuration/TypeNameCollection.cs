@@ -1,12 +1,11 @@
-namespace DataCommander.Foundation.Configuration
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Reflection;
-    using System.Xml;
-    using DataCommander.Foundation.Collections;
-    using DataCommander.Foundation.Collections.IndexableCollection;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Xml;
+using Foundation.Collections.IndexableCollection;
 
+namespace Foundation.Configuration
+{
     /// <summary>
     /// Summary description for TypeNames.
     /// </summary>

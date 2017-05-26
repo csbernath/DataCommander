@@ -1,10 +1,10 @@
-namespace DataCommander.Foundation.Text
-{
-    using System;
-    using System.Globalization;
-    using System.IO;
-    using DataCommander.Foundation.Configuration;
+using System;
+using System.Globalization;
+using System.IO;
+using Foundation.Configuration;
 
+namespace Foundation.Text
+{
     /// <exclude/>
     public static class StringHelper
     {

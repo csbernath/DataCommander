@@ -1,14 +1,15 @@
-namespace DataCommander.Foundation.Configuration
+using System;
+using System.Collections.Specialized;
+using System.Diagnostics;
+using System.IO;
+using System.Threading;
+using System.Xml;
+using Foundation.Diagnostics.Log;
+using FileSystemWatcher = Foundation.IO.FileSystemWatcher;
+
+namespace Foundation.Configuration
 {
-    using System;
-    using System.Collections.Specialized;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Threading;
-    using System.Xml;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Diagnostics.Log;
-    using FileSystemWatcher = DataCommander.Foundation.IO.FileSystemWatcher;
+    using FileSystemWatcher = FileSystemWatcher;
 
     /// <summary>
     /// Loads and parses the <c><DataCommander.Foundation.Configuration /></c> xml element from the config file.

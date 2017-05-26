@@ -1,14 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Threading.Tasks;
+using DataCommander.Providers.Connection;
+using DataCommander.Providers.ResultWriter;
+using Foundation;
+
 namespace DataCommander.Providers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Threading.Tasks;
-    using Connection;
-    using DataCommander.Foundation;
-    using ResultWriter;
-
     internal sealed class SqlBulkCopyAsyncDataAdapter : IAsyncDataAdapter
     {
         #region Private Fields
@@ -62,7 +62,8 @@ namespace DataCommander.Providers
 
         int IAsyncDataAdapter.TableCount => 1;
 
-        void IAsyncDataAdapter.BeginFill(IProvider provider, IEnumerable<AsyncDataAdapterCommand> commands, int maxRecords, int rowBlockSize, IResultWriter resultWriter,
+        void IAsyncDataAdapter.BeginFill(IProvider provider, IEnumerable<AsyncDataAdapterCommand> commands, int maxRecords, int rowBlockSize,
+            IResultWriter resultWriter,
             Action<IAsyncDataAdapter, Exception> endFill, Action<IAsyncDataAdapter> writeEnd)
         {
             this.provider = provider;

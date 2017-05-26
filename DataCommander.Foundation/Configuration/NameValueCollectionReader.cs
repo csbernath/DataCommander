@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation.Configuration
-{
-    using System;
-    using System.Globalization;
+﻿using System;
+using System.Globalization;
 
+namespace Foundation.Configuration
+{
     /// <summary>
     /// 
     /// </summary>

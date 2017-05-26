@@ -1,13 +1,13 @@
-﻿namespace DataCommander.Providers.ResultWriter
-{
-    using System;
-    using System.Data;
-    using System.Diagnostics;
-    using System.IO;
-    using Connection;
-    using DataCommander.Foundation.Data;
-    using OfficeOpenXml;
+﻿using System;
+using System.Data;
+using System.Diagnostics;
+using System.IO;
+using DataCommander.Providers.Connection;
+using Foundation.Data;
+using OfficeOpenXml;
 
+namespace DataCommander.Providers.ResultWriter
+{
     internal sealed class ExcelResultWriter : IResultWriter
     {
         private IProvider provider;
@@ -31,7 +31,7 @@
             this.logResultWriter = new LogResultWriter(addInfoMessage);
         }
 
-#region IResultWriter Members
+        #region IResultWriter Members
 
         void IResultWriter.Begin(IProvider provider)
         {
@@ -110,7 +110,7 @@
             Process.Start(this.excelPackage.File.FullName);
         }
 
-#endregion
+        #endregion
 
         private void CreateTable(DataTable schemaTable)
         {

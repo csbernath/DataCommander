@@ -1,20 +1,20 @@
-namespace DataCommander.Foundation.Configuration
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.IO;
-    using System.Linq;
-    using System.Threading;
-    using System.Xml;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Diagnostics.Log;
-    using DataCommander.Foundation.Linq;
-    using DataCommander.Foundation.Text;
-    using DataCommander.Foundation.Xml;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Xml;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Log;
+using Foundation.Linq;
+using Foundation.Text;
+using Foundation.Xml;
 
+namespace Foundation.Configuration
+{
     /// <summary>
     /// config file section reader.
     /// Reads nodes and attributes in the DataCommander.Foundation.Configuration section.

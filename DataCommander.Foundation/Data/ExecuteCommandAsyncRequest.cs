@@ -1,9 +1,9 @@
 using System;
 using System.Data.Common;
 using System.Threading.Tasks;
-using DataCommander.Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics.Contracts;
 
-namespace DataCommander.Foundation.Data
+namespace Foundation.Data
 {
     public sealed class ExecuteCommandAsyncRequest
     {

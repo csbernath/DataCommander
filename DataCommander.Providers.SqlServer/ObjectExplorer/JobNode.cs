@@ -1,4 +1,7 @@
-﻿namespace DataCommander.Providers.SqlServer.ObjectExplorer
+﻿using Foundation.Data;
+using Foundation.Data.SqlClient;
+
+namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     using System;
     using System.Collections.Generic;
@@ -6,8 +9,6 @@
     using System.Data.SqlClient;
     using System.Threading;
     using System.Windows.Forms;
-    using Foundation.Data;
-    using Foundation.Data.SqlClient;
     using Query;
 
     /// <summary>

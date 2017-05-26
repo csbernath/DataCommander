@@ -4,13 +4,12 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 using System.Threading;
-using DataCommander.Foundation.Data.SqlClient;
-using DataCommander.Foundation.Diagnostics;
-using DataCommander.Foundation.Diagnostics.Log;
-using DataCommander.Foundation.Linq;
-using DataCommander.Foundation.Threading;
+using Foundation.Data.SqlClient;
+using Foundation.Diagnostics.Log;
+using Foundation.Linq;
+using Foundation.Threading;
 
-namespace DataCommander.Foundation.Data
+namespace Foundation.Data
 {
     /// <summary>
     /// 

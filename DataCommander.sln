@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.SqlServer", "DataCommander.Providers.SqlServer\DataCommander.Providers.SqlServer.csproj", "{97F3ACFC-06D7-494F-ADA0-FDF1693DE112}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Foundation", "DataCommander.Foundation\DataCommander.Foundation.csproj", "{1BACF0AA-4122-4C10-A8D2-248542AF054C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation", "DataCommander.Foundation\Foundation.csproj", "{1BACF0AA-4122-4C10-A8D2-248542AF054C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Tfs2010", "DataCommander.Providers.Tfs2010\DataCommander.Providers.Tfs2010.csproj", "{0174C31F-52A7-490D-A212-D1CE846943B8}"
 EndProject

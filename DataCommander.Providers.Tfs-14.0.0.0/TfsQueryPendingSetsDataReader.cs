@@ -1,10 +1,11 @@
-﻿namespace DataCommander.Providers.Tfs
+﻿using Foundation;
+using Foundation.Data;
+
+namespace DataCommander.Providers.Tfs
 {
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using DataCommander.Foundation.Data;
-    using Foundation;
     using Microsoft.TeamFoundation.VersionControl.Client;
 
     internal sealed class TfsQueryPendingSetsDataReader : TfsDataReader

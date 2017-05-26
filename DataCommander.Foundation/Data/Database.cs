@@ -1,16 +1,16 @@
-namespace DataCommander.Foundation.Data
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.IO;
-    using System.Text;
-    using System.Threading;
-    using System.Xml;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Threading;
+using System.Xml;
 
+namespace Foundation.Data
+{
     /// <summary>
     /// Helper base class for ADO.NET.
     /// </summary>

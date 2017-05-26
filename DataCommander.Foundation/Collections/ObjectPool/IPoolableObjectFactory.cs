@@ -1,4 +1,4 @@
-namespace DataCommander.Foundation.Collections.ObjectPool
+namespace Foundation.Collections.ObjectPool
 {
     /// <summary>
     /// 

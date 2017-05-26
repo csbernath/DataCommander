@@ -1,12 +1,12 @@
-﻿namespace DataCommander.Foundation.Linq
-{
-    using System;
-    using System.ComponentModel;
-    using System.Data.SqlClient;
-    using System.Net.Sockets;
-    using System.Text;
-    using DataCommander.Foundation.Data.SqlClient;
+﻿using System;
+using System.ComponentModel;
+using System.Data.SqlClient;
+using System.Net.Sockets;
+using System.Text;
+using Foundation.Data.SqlClient;
 
+namespace Foundation.Linq
+{
     /// <summary>
     /// 
     /// </summary>

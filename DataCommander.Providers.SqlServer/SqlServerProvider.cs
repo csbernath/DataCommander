@@ -1,27 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Xml;
+using DataCommander.Providers.Connection;
+using DataCommander.Providers.Field;
+using DataCommander.Providers.Query;
+using DataCommander.Providers.SqlServer.FieldReader;
+using Foundation;
+using Foundation.Configuration;
+using Foundation.Data;
+using Foundation.Data.SqlClient;
+using Foundation.Diagnostics.Log;
+using Foundation.Linq;
+
 namespace DataCommander.Providers.SqlServer
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.Data.SqlClient;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-    using System.Threading;
-    using System.Xml;
-    using Field;
-    using FieldReader;
-    using Foundation;
-    using Foundation.Configuration;
-    using Foundation.Data;
-    using Foundation.Data.SqlClient;
-    using Foundation.Diagnostics;
-    using Foundation.Diagnostics.Log;
-    using Foundation.Linq;
-    using Providers.Connection;
-    using Query;
-
     internal sealed class SqlServerProvider : IProvider
     {
         #region Private Fields
@@ -402,7 +401,7 @@ namespace DataCommander.Providers.SqlServer
             {
                 var parts = new IdentifierParser(new StringReader(currentToken.Value)).Parse().ToList();
                 var lastPart = parts.Count > 0
-                    ? parts.Last()
+                    ? IListExtensions.Last(parts)
                     : null;
                 var lastPartLength = lastPart != null
                     ? lastPart.Length
@@ -916,7 +915,7 @@ order by 1", name.Database);
             foreach (var statementTokens in tokens.Split(token => IsBatchSeparator(commandText, token)).Where(statementTokens => statementTokens.Length > 0))
             {
                 var startIndex = statementTokens[0].StartPosition;
-                var endIndex = statementTokens.Last().EndPosition;
+                var endIndex = IListExtensions.Last(statementTokens).EndPosition;
                 var length = endIndex - startIndex + 1;
                 var statement = new Statement
                 {

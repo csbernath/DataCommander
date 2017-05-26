@@ -1,7 +1,7 @@
 using System.Data;
 using System.Data.SqlClient;
 
-namespace DataCommander.Foundation.Data.SqlClient
+namespace Foundation.Data.SqlClient
 {
     /// <summary>
     /// 

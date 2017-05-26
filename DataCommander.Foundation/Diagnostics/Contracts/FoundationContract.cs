@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation.Diagnostics.Contracts
-{
-    using System;
-    using DataCommander.Foundation.Collections;
+﻿using System;
+using Foundation.Collections;
 
+namespace Foundation.Diagnostics.Contracts
+{
     /// <summary>
     /// 
     /// </summary>

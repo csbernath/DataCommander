@@ -1,9 +1,9 @@
-namespace DataCommander.Foundation.Threading
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
+namespace Foundation.Threading
+{
     /// <summary>
     /// 
     /// </summary>

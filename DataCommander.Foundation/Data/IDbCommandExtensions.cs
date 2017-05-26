@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Text;
 using System.Threading;
 
-namespace DataCommander.Foundation.Data
+namespace Foundation.Data
 {
     /// <summary>
     /// 

@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Foundation.Data
-{
-    using System;
-    using System.Data;
-    using System.Threading;
+﻿using System;
+using System.Data;
+using System.Threading;
 
+namespace Foundation.Data
+{
     /// <summary>
     /// 
     /// </summary>

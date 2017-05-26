@@ -1,11 +1,11 @@
-﻿namespace DataCommander.Foundation.Data
-{
-    using System;
-    using System.Data;
-    using System.Linq;
-    using DataCommander.Foundation.Text;
-    using Linq;
+﻿using System;
+using System.Data;
+using System.Linq;
+using Foundation.Linq;
+using Foundation.Text;
 
+namespace Foundation.Data
+{
     /// <summary>
     /// 
     /// </summary>

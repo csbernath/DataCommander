@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation.Data.TextData
-{
-    using System;
-    using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
+namespace Foundation.Data.TextData
+{
     /// <summary>
     /// 
     /// </summary>

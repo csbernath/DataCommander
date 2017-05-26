@@ -1,11 +1,11 @@
-﻿namespace DataCommander.Foundation.Data.SqlClient
-{
-    using System;
-    using System.Data;
-    using System.Data.SqlTypes;
-    using System.Text;
-    using DataCommander.Foundation.Text;
+﻿using System;
+using System.Data;
+using System.Data.SqlTypes;
+using System.Text;
+using Foundation.Text;
 
+namespace Foundation.Data.SqlClient
+{
     /// <summary>
     /// 
     /// </summary>

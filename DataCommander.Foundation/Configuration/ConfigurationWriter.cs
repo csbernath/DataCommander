@@ -1,10 +1,10 @@
-namespace DataCommander.Foundation.Configuration
-{
-    using System;
-    using System.Xml;
-    using System.Xml.Serialization;
-    using DataCommander.Foundation.Xml;
+using System;
+using System.Xml;
+using System.Xml.Serialization;
+using Foundation.Xml;
 
+namespace Foundation.Configuration
+{
     /// <summary>
     /// 
     /// </summary>

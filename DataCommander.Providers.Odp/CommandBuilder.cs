@@ -1,8 +1,9 @@
+using Foundation.Data;
+
 namespace DataCommander.Providers.Odp
 {
     using System;
     using System.Data;
-    using DataCommander.Foundation.Data;
     using Oracle.ManagedDataAccess.Client;
 
     /// <exclude/>

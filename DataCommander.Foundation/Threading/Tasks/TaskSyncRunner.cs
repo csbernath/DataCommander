@@ -1,8 +1,8 @@
-namespace DataCommander.Foundation.Threading.Tasks
-{
-    using System;
-    using System.Threading.Tasks;
+using System;
+using System.Threading.Tasks;
 
+namespace Foundation.Threading.Tasks
+{
     /// <summary>
     /// 
     /// </summary>

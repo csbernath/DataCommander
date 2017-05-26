@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Foundation.Linq
+﻿using System.Collections.Concurrent;
+
+namespace Foundation.Linq
 {
 #if FOUNDATION_3_5
     using DataCommander.Foundation.Collections;
 #else
-    using System.Collections.Concurrent;
-
 #endif
 
     /// <summary>

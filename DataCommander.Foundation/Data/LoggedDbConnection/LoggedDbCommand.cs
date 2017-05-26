@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Foundation.Data.LoggedDbConnection
-{
-    using System;
-    using System.Data;
-    using System.Threading;
+﻿using System;
+using System.Data;
+using System.Threading;
 
+namespace Foundation.Data.LoggedDbConnection
+{
     internal sealed class LoggedDbCommand : IDbCommand
     {
         #region Private Fields

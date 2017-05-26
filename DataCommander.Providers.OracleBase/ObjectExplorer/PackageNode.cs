@@ -1,3 +1,5 @@
+using Foundation.Data;
+
 namespace DataCommander.Providers.OracleBase
 {
     using System;
@@ -6,7 +8,6 @@ namespace DataCommander.Providers.OracleBase
     using System.Text;
     using System.Threading;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
     using Query;
 
     /// <summary>

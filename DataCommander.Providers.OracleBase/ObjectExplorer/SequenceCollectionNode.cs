@@ -1,10 +1,11 @@
-﻿namespace DataCommander.Providers.OracleBase
+﻿using Foundation.Data;
+
+namespace DataCommander.Providers.OracleBase
 {
     using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
 
     internal sealed class SequenceCollectionNode : ITreeNode
     {

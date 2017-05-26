@@ -1,8 +1,9 @@
+using Foundation.Data.SqlClient;
+
 namespace DataCommander.Providers.PostgreSql
 {
     using System.Collections.Generic;
     using System.Linq;
-    using DataCommander.Foundation.Data.SqlClient;
 
     internal static class SqlServerObject
     {

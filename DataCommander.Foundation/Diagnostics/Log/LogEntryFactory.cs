@@ -1,8 +1,8 @@
-namespace DataCommander.Foundation.Diagnostics.Log
-{
-    using System;
-    using System.Threading;
+using System;
+using System.Threading;
 
+namespace Foundation.Diagnostics.Log
+{
 #if FOUNDATION_3_5
     using System.Web;
 #endif

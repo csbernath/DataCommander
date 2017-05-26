@@ -1,8 +1,8 @@
-namespace DataCommander.Foundation.Diagnostics
-{
-    using System.Collections.ObjectModel;
-    using System.Text;
+using System.Collections.ObjectModel;
+using System.Text;
 
+namespace Foundation.Diagnostics
+{
     /// <summary>
     /// 
     /// </summary>

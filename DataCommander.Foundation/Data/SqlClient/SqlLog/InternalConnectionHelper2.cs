@@ -1,9 +1,9 @@
-namespace DataCommander.Foundation.Data.SqlClient.SqlLog
-{
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Reflection;
+using System.Data;
+using System.Data.SqlClient;
+using System.Reflection;
 
+namespace Foundation.Data.SqlClient.SqlLog
+{
     internal sealed class InternalConnectionHelper2 : IInternalConnectionHelper
     {
         private static readonly FieldInfo InternalConnectionField;

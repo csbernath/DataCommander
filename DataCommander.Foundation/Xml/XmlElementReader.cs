@@ -1,6 +1,7 @@
-namespace DataCommander.Foundation.Xml
+using System.Xml;
+
+namespace Foundation.Xml
 {
-    using System.Xml;
 #if DEBUG
     using System.Diagnostics;
 #endif

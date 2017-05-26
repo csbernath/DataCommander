@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.Tfs
+﻿using Foundation.Data;
+
+namespace DataCommander.Providers.Tfs
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +9,6 @@
     using System.Linq;
     using System.Xml;
     using Connection;
-    using DataCommander.Foundation.Data;
     using Microsoft.TeamFoundation.VersionControl.Client;
     using Query;
 

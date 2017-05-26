@@ -1,3 +1,5 @@
+using Foundation.Data;
+
 namespace DataCommander.Providers.OracleBase
 {
     using System.Collections.Generic;
@@ -6,7 +8,6 @@ namespace DataCommander.Providers.OracleBase
     using System.Threading;
     using System.Windows.Forms;
     using Connection;
-    using DataCommander.Foundation.Data;
 
     /// <summary>
     /// Summary description for SchemaNode.

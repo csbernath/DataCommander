@@ -1,12 +1,11 @@
-namespace DataCommander.Foundation.IO
-{
-    using System.Globalization;
-    using System.IO;
-    using System.Text;
-    using System.Threading;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Diagnostics.Log;
+using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Threading;
+using Foundation.Diagnostics.Log;
 
+namespace Foundation.IO
+{
     /// <summary>
     /// Encapsulates <see cref="System.IO.FileSystemWatcher"/> to minimize number of OnChange events
     /// and resolve short and long filename problem.

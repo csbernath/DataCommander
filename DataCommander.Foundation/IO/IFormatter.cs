@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Foundation.IO
-{
-    using System.Text;
+﻿using System.Text;
 
+namespace Foundation.IO
+{
     /// <summary>
     /// 
     /// </summary>

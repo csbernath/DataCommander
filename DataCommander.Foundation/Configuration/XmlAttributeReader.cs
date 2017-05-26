@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Foundation.Configuration
-{
-    using System.Xml;
+﻿using System.Xml;
 
+namespace Foundation.Configuration
+{
     /// <summary>
     /// 
     /// </summary>

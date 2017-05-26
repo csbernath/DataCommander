@@ -1,9 +1,10 @@
+using Foundation.Data;
+
 namespace DataCommander.Providers.OracleBase
 {
     using System.Collections.Generic;
     using System.Data;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Data;
 
     internal sealed class ProcedureCollectionNode : ITreeNode
     {

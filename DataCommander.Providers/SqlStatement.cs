@@ -1,17 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
+using System.Linq;
+using DataCommander.Providers.Connection;
+using DataCommander.Providers.Field;
+using DataCommander.Providers.Query;
+using Foundation.Diagnostics.Log;
+using Foundation.Linq;
+
 namespace DataCommander.Providers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Globalization;
-    using System.Linq;
-    using Connection;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Linq;
-    using Field;
-    using Foundation.Diagnostics.Log;
-    using Query;
-
     public sealed class SqlStatement
     {
         #region Private Fields
@@ -44,11 +43,7 @@ namespace DataCommander.Providers
 
         #region Public Methods
 
-        public IDbCommand CreateCommand(
-            IProvider provider,
-            ConnectionBase connection,
-            CommandType commandType,
-            int commandTimeout)
+        public IDbCommand CreateCommand(IProvider provider, ConnectionBase connection, CommandType commandType, int commandTimeout)
         {
             var command = connection.CreateCommand();
             command.CommandType = commandType;
@@ -534,7 +529,7 @@ namespace DataCommander.Providers
                     switch (dataParameter.DbType)
                     {
                         case DbType.Boolean:
-                            var valueStr = (string)value;
+                            var valueStr = (string) value;
                             double valueDbl;
                             var ok = double.TryParse(valueStr, NumberStyles.Any, null, out valueDbl);
 
@@ -641,7 +636,7 @@ namespace DataCommander.Providers
 
             for (var i = 0; i < parameters.Count; i++)
             {
-                var parameter = (IDataParameter)parameters[i];
+                var parameter = (IDataParameter) parameters[i];
                 var dataParameter = provider.GetDataParameter(parameter);
 
                 if (j < values.Length)

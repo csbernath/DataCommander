@@ -1,10 +1,11 @@
+using Foundation;
+
 namespace DataCommander.Providers.Odp
 {
     using System.Data;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using DataCommander.Foundation;
     using Oracle.ManagedDataAccess.Client;
     using Providers.Connection;
 

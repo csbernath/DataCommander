@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Windows.Forms;
-using DataCommander.Foundation.Data;
 using DataCommander.Providers.Query;
+using Foundation.Data;
 
 namespace DataCommander.Providers.SQLite.ObjectExplorer
 {

@@ -1,4 +1,10 @@
-﻿namespace DataCommander.Foundation.Threading
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Foundation.Threading
 {
 #if FOUNDATION_3_5
     using System;
@@ -178,12 +184,6 @@
         }
     }
 #else
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     /// <summary>
     /// Provides a task scheduler that ensures a maximum concurrency level while
     /// running on top of the ThreadPool.

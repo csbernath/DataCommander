@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation
-{
-    using System;
-    using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
+namespace Foundation
+{
     /// <summary>
     /// 
     /// </summary>

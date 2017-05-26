@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace DataCommander.Foundation.Data
+namespace Foundation.Data
 {
     public sealed class ExecuteNonReaderRequest
     {

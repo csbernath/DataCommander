@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Foundation.XmlSpreadsheet
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Xml;
-    using DataCommander.Foundation.Xml;
+﻿using System;
+using System.Collections.Generic;
+using System.Xml;
+using Foundation.Xml;
 
+namespace Foundation.XmlSpreadsheet
+{
     /// <summary>
     /// 
     /// </summary>

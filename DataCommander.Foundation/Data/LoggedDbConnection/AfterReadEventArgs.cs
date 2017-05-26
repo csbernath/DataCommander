@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Data.LoggedDbConnection
+﻿namespace Foundation.Data.LoggedDbConnection
 {
     /// <summary>
     /// 

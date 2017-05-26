@@ -1,9 +1,9 @@
-namespace DataCommander.Foundation.IO
-{
-    using System;
-    using System.Globalization;
-    using System.IO;
+using System;
+using System.Globalization;
+using System.IO;
 
+namespace Foundation.IO
+{
     /// <summary>
     /// 
     /// </summary>

@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation.Data.TextData
-{
-    using System.Collections.Generic;
-    using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 
+namespace Foundation.Data.TextData
+{
     internal sealed class TextDataStreamWriter
     {
         private readonly TextWriter _textWriter;

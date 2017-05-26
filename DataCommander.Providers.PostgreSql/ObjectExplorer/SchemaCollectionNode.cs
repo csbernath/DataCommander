@@ -1,9 +1,10 @@
+using Foundation.Data;
+
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data;
     using System.Windows.Forms;
-    using Foundation.Data;
     using Npgsql;
 
     internal sealed class SchemaCollectionNode : ITreeNode

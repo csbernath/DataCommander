@@ -1,7 +1,7 @@
-namespace DataCommander.Foundation.Data
-{
-    using System.Data;
+using System.Data;
 
+namespace Foundation.Data
+{
     //[ContractClassFor(typeof (IDbTransactionScope))]
     internal abstract class DbTransactionScopeContract : IDbTransactionScope
     {

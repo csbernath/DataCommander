@@ -1,7 +1,7 @@
-namespace DataCommander.Foundation
-{
-    using System.Text;
+using System.Text;
 
+namespace Foundation
+{
     /// <exclude/>
     public sealed class Library
     {

@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Collections
+﻿namespace Foundation.Collections
 {
     /// <summary>
     /// 

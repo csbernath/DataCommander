@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Foundation.Data.LoggedDbConnection
-{
-    using System.Data.Common;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Diagnostics.Log;
-    using DataCommander.Foundation.Linq;
+﻿using System.Data.Common;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Log;
+using Foundation.Linq;
 
+namespace Foundation.Data.LoggedDbConnection
+{
     internal sealed class DbConnectionLogger
     {
         #region Private Fields

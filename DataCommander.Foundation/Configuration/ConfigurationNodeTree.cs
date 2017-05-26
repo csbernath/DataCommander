@@ -1,9 +1,9 @@
-namespace DataCommander.Foundation.Configuration
-{
-    using System.Globalization;
-    using System.IO;
-    using System.Xml;
+using System.Globalization;
+using System.IO;
+using System.Xml;
 
+namespace Foundation.Configuration
+{
     /// <summary>
     /// 
     /// </summary>

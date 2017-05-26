@@ -1,16 +1,16 @@
+using System.Data.Common;
+using System.Diagnostics;
+using System.Reflection;
+using DataCommander.Providers.Connection;
+using Foundation.Configuration;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Log;
+using Microsoft.Win32;
+using Application = System.Windows.Forms.Application;
+using Task = System.Threading.Tasks.Task;
+
 namespace DataCommander.Providers
 {
-    using System.Data.Common;
-    using System.Diagnostics;
-    using System.Reflection;
-    using Connection;
-    using DataCommander.Foundation.Configuration;
-    using DataCommander.Foundation.Diagnostics;
-    using Foundation.Diagnostics.Log;
-    using Microsoft.Win32;
-    using Application = System.Windows.Forms.Application;
-    using Task = System.Threading.Tasks.Task;
-
     public sealed class DataCommanderApplication
     {
         #region Private Fields

@@ -1,12 +1,12 @@
-namespace DataCommander.Foundation.Configuration
-{
-    using System;
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.IO;
-    using System.Xml;
-    using System.Xml.Serialization;
+using System;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
 
+namespace Foundation.Configuration
+{
     /// <summary>
     /// 
     /// </summary>

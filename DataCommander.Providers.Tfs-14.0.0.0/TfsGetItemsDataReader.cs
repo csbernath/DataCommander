@@ -1,11 +1,12 @@
-﻿namespace DataCommander.Providers.Tfs
+﻿using Foundation.Data;
+
+namespace DataCommander.Providers.Tfs
 {
     using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
     using System.Text;
-    using DataCommander.Foundation.Data;
     using Microsoft.TeamFoundation.VersionControl.Client;
 
     internal sealed class TfsGetItemsDataReader : TfsDataReader

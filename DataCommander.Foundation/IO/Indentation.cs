@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation.IO
-{
-    using System;
-    using System.CodeDom.Compiler;
+﻿using System;
+using System.CodeDom.Compiler;
 
+namespace Foundation.IO
+{
     /// <summary>
     /// 
     /// </summary>

@@ -1,10 +1,10 @@
-namespace DataCommander.Foundation.Configuration
-{
-    using System;
-    using System.Collections.Specialized;
-    using System.Configuration;
-    using System.Diagnostics;
+using System;
+using System.Collections.Specialized;
+using System.Configuration;
+using System.Diagnostics;
 
+namespace Foundation.Configuration
+{
     /// <summary>
     /// 
     /// </summary>

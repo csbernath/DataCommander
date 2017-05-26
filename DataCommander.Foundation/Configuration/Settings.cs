@@ -1,11 +1,11 @@
-namespace DataCommander.Foundation.Configuration
-{
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Reflection;
-    using System.Runtime.CompilerServices;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
+namespace Foundation.Configuration
+{
     /// <summary>
     /// This class is a singleton which holds a <see cref="ConfigurationSection"/> instance.
     /// </summary>

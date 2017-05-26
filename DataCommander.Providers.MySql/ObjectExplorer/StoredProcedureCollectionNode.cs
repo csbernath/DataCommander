@@ -1,9 +1,10 @@
-﻿namespace DataCommander.Providers.MySql.ObjectExplorer
+﻿using Foundation.Data;
+using Foundation.Data.SqlClient;
+
+namespace DataCommander.Providers.MySql.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data;
-    using Foundation.Data;
-    using Foundation.Data.SqlClient;
     using global::MySql.Data.MySqlClient;
 
     internal sealed class StoredProcedureCollectionNode : ITreeNode

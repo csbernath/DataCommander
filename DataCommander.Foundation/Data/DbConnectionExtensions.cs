@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
 
-namespace DataCommander.Foundation.Data
+namespace Foundation.Data
 {
     public static class DbConnectionExtensions
     {

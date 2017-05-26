@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Collections.IndexableCollection
+﻿namespace Foundation.Collections.IndexableCollection
 {
     /// <summary>
     /// 

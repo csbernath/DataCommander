@@ -1,16 +1,16 @@
-﻿namespace DataCommander.Foundation.Data.SqlClient
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Data.SqlTypes;
-    using System.Globalization;
-    using System.Linq;
-    using System.Text;
-    using DataCommander.Foundation.Text;
-    using Microsoft.SqlServer.Server;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Data.SqlTypes;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using Foundation.Text;
+using Microsoft.SqlServer.Server;
 
+namespace Foundation.Data.SqlClient
+{
     /// <summary>
     /// 
     /// </summary>

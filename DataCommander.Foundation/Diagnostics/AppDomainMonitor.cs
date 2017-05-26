@@ -1,16 +1,16 @@
-namespace DataCommander.Foundation.Diagnostics
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Reflection;
-    using System.Text;
-    using DataCommander.Foundation.Diagnostics.Log;
-    using DataCommander.Foundation.Linq;
-    using DataCommander.Foundation.Text;
-    using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using Foundation.Diagnostics.Log;
+using Foundation.Linq;
+using Foundation.Text;
+using Microsoft.Win32;
 
+namespace Foundation.Diagnostics
+{
     /// <summary>
     /// 
     /// </summary>

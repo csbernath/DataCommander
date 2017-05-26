@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Threading
+﻿namespace Foundation.Threading
 {
     internal enum WorkerEventState
     {

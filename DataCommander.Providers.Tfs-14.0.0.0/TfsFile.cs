@@ -1,11 +1,12 @@
-﻿namespace DataCommander.Providers.Tfs
+﻿using Foundation.Configuration;
+
+namespace DataCommander.Providers.Tfs
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Configuration;
     using Microsoft.TeamFoundation.VersionControl.Client;
     using Microsoft.TeamFoundation.VersionControl.Common;
 

@@ -1,8 +1,8 @@
-namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
-{
-    using System;
-    using System.Data;
+using System;
+using System.Data;
 
+namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
+{
     internal sealed class SqlLoggedSqlCommand : IDbCommand
     {
         private readonly SqlLoggedSqlConnection _connection;

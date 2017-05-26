@@ -1,10 +1,9 @@
-namespace DataCommander.Foundation.Threading
-{
-    using System;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Diagnostics.Log;
-    using DataCommander.Foundation.Linq;
+using System;
+using Foundation.Diagnostics.Log;
+using Foundation.Linq;
 
+namespace Foundation.Threading
+{
     /// <summary>
     /// This class is a specialized <see cref="WorkerThread"/> which
     /// repeats an operation until the operation is stopped.

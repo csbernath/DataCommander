@@ -1,9 +1,9 @@
-namespace DataCommander.Foundation.Data.SqlClient
-{
-    using System.Data;
-    using System.Data.SqlClient;
-    using DataCommander.Foundation.Threading;
+using System.Data;
+using System.Data.SqlClient;
+using Foundation.Threading;
 
+namespace Foundation.Data.SqlClient
+{
     /// <summary>
     /// 
     /// </summary>

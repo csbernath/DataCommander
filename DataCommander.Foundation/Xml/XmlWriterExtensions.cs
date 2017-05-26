@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation.Xml
-{
-    using System;
-    using System.Xml;
+﻿using System;
+using System.Xml;
 
+namespace Foundation.Xml
+{
     /// <summary>
     /// 
     /// </summary>

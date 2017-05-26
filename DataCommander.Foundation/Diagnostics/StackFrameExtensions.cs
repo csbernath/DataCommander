@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation.Diagnostics
-{
-    using System.Diagnostics;
-    using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 
+namespace Foundation.Diagnostics
+{
     internal static class StackFrameExtensions
     {
         public static string ToLogString(this StackFrame frame)

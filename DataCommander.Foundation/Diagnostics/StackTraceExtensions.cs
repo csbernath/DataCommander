@@ -1,10 +1,10 @@
-namespace DataCommander.Foundation.Diagnostics
-{
-    using System;
-    using System.Diagnostics;
-    using System.Text;
-    using DataCommander.Foundation.Diagnostics.Log;
+using System;
+using System.Diagnostics;
+using System.Text;
+using Foundation.Diagnostics.Log;
 
+namespace Foundation.Diagnostics
+{
     /// <summary>
     /// 
     /// </summary>

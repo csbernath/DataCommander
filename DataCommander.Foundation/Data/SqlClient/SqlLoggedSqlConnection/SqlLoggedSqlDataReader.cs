@@ -1,10 +1,10 @@
-namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
-{
-    using System;
-    using System.Data;
-    using System.Diagnostics;
-    using DataCommander.Foundation.Diagnostics;
+using System;
+using System.Data;
+using System.Diagnostics;
+using Foundation.Diagnostics;
 
+namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
+{
     internal sealed class SqlLoggedSqlDataReader : IDataReader
     {
         private readonly SqlLoggedSqlConnection _connection;

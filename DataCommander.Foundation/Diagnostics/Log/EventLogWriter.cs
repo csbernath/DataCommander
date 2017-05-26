@@ -1,8 +1,8 @@
-namespace DataCommander.Foundation.Diagnostics.Log
-{
-    using System;
-    using System.Diagnostics;
+using System;
+using System.Diagnostics;
 
+namespace Foundation.Diagnostics.Log
+{
     /// <summary>
     /// 
     /// </summary>

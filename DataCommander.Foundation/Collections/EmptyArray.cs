@@ -1,6 +1,6 @@
 ﻿#if FOUNDATION_4_6
 
-namespace DataCommander.Foundation.Collections
+namespace Foundation.Collections
 {
     internal static class EmptyArray<T>
     {

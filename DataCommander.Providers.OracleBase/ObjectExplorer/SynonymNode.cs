@@ -1,9 +1,10 @@
-﻿namespace DataCommander.Providers.OracleBase
+﻿using Foundation.Data;
+
+namespace DataCommander.Providers.OracleBase
 {
     using System.Collections.Generic;
     using System.Threading;
     using System.Windows.Forms;
-    using Foundation.Data;
 
     public sealed class SynonymNode : ITreeNode
 	{

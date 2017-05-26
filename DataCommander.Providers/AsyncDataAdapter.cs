@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Threading;
-using DataCommander.Foundation.Data;
-using DataCommander.Foundation.Diagnostics;
-using DataCommander.Foundation.Diagnostics.Log;
-using DataCommander.Foundation.Threading;
 using DataCommander.Providers.ResultWriter;
+using Foundation.Data;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Log;
+using Foundation.Threading;
 using ThreadState = System.Threading.ThreadState;
 
 namespace DataCommander.Providers

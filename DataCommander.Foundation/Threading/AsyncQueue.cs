@@ -1,8 +1,8 @@
-namespace DataCommander.Foundation.Threading
-{
-    using System.Collections;
-    using System.Threading;
+using System.Collections;
+using System.Threading;
 
+namespace Foundation.Threading
+{
     /// <summary>
     /// Asynchronous producer/consumer queue handler class.
     /// </summary>

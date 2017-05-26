@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Foundation.IO
-{
-    using System.Text;
+﻿using System.Text;
 
+namespace Foundation.IO
+{
     internal sealed class AsyncTextWriterListItem
     {
         private readonly IFormatter _formatter;

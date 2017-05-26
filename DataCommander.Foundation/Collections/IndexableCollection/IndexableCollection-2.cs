@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Foundation.Collections.IndexableCollection
-{
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
+namespace Foundation.Collections.IndexableCollection
+{
     public partial class IndexableCollection<T> : ICollection<T>
     {
         /// <summary>

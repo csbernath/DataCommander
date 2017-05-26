@@ -1,11 +1,11 @@
-namespace DataCommander.Foundation.Diagnostics.Log
-{
-    using System;
-    using System.Collections.Concurrent;
-    using System.IO;
-    using System.Text;
-    using System.Threading;
+using System;
+using System.Collections.Concurrent;
+using System.IO;
+using System.Text;
+using System.Threading;
 
+namespace Foundation.Diagnostics.Log
+{
     internal sealed class AsyncLogFile : ILogFile
     {
         #region Private Fields

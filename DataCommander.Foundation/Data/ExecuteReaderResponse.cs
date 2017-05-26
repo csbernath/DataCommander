@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Foundation.Data
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace Foundation.Data
+{
     public static class ExecuteReaderResponse
     {
         public static ExecuteReaderResponse<T1, T2> Create<T1, T2>(List<T1> objects1, List<T2> objects2)

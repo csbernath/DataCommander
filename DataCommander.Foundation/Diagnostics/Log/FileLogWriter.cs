@@ -1,10 +1,10 @@
-namespace DataCommander.Foundation.Diagnostics.Log
-{
-    using System;
-    using System.IO;
-    using System.Text;
-    using DataCommander.Foundation.Linq;
+using System;
+using System.IO;
+using System.Text;
+using Foundation.Linq;
 
+namespace Foundation.Diagnostics.Log
+{
     /// <summary>
     /// <see cref="ILogWriter"/> implementation for logging a multithreaded application into a file.
     /// </summary>

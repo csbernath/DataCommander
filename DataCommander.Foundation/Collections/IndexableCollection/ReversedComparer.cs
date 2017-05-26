@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation.Collections.IndexableCollection
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace Foundation.Collections.IndexableCollection
+{
     /// <summary>
     /// 
     /// </summary>

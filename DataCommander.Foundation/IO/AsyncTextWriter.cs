@@ -1,10 +1,10 @@
-namespace DataCommander.Foundation.IO
-{
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Text;
-    using System.Threading;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Threading;
 
+namespace Foundation.IO
+{
     /// <summary>
     /// 
     /// </summary>

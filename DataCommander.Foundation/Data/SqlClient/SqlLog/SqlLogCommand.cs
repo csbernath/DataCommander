@@ -1,13 +1,13 @@
-namespace DataCommander.Foundation.Data.SqlClient.SqlLog
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Globalization;
-    using System.Text;
-    using DataCommander.Foundation.Diagnostics;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.Text;
+using Foundation.Diagnostics;
 
+namespace Foundation.Data.SqlClient.SqlLog
+{
     internal sealed class SqlLogCommand : ISqlLogItem
     {
         #region Private Fields

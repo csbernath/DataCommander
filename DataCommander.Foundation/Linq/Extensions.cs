@@ -1,12 +1,12 @@
-﻿namespace DataCommander.Foundation.Linq
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Xml;
-    using System.Xml.Serialization;
-    using DataCommander.Foundation.Xml;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
+using Foundation.Xml;
 
+namespace Foundation.Linq
+{
     /// <summary>
     /// 
     /// </summary>

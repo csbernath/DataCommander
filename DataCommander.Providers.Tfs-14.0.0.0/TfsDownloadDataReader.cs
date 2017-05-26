@@ -1,4 +1,8 @@
-﻿namespace DataCommander.Providers.Tfs
+﻿using Foundation;
+using Foundation.Data;
+using Foundation.Diagnostics.Log;
+
+namespace DataCommander.Providers.Tfs
 {
     using System;
     using System.Collections.Generic;
@@ -6,10 +10,6 @@
     using System.IO;
     using System.Linq;
     using Connection;
-    using DataCommander.Foundation;
-    using DataCommander.Foundation.Data;
-    using DataCommander.Foundation.Diagnostics;
-    using Foundation.Diagnostics.Log;
     using Microsoft.TeamFoundation.VersionControl.Client;
     using Microsoft.TeamFoundation.VersionControl.Common;
     using Query;
@@ -118,7 +118,7 @@
                     switch (current.ItemType)
                     {
                         case ItemType.File:
-                            log.Write(LogLevel.Trace, "Downloading {0}...", current.ServerItem);
+                            log.Write(System.LogLevel.Trace, "Downloading {0}...", current.ServerItem);
                             current.DownloadFile(path);
                             var checkingDate = current.CheckinDate;
                             var fileInfo = new FileInfo(path);

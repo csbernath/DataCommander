@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation.Diagnostics
-{
-    using System;
-    using System.Threading;
+﻿using System;
+using System.Threading;
 
+namespace Foundation.Diagnostics
+{
     /// <summary>
     /// 
     /// </summary>

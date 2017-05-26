@@ -1,16 +1,15 @@
+using System;
+using System.Globalization;
+using System.IO;
+using System.Threading;
+using System.Windows.Forms;
+using DataCommander.Providers;
+using Foundation.Configuration;
+using Foundation.Diagnostics.Log;
+using Foundation.Diagnostics.MethodProfiler;
+
 namespace DataCommander
 {
-    using System;
-    using System.Globalization;
-    using System.IO;
-    using System.Threading;
-    using System.Windows.Forms;
-    using DataCommander.Foundation.Configuration;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Providers;
-    using Foundation.Diagnostics.Log;
-    using Foundation.Diagnostics.MethodProfiler;
-
     internal static class EntryPoint
     {
         [STAThread]

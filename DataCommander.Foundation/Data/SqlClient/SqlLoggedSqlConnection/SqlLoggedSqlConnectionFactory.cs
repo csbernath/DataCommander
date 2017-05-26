@@ -1,15 +1,14 @@
-﻿namespace DataCommander.Foundation.Data.SqlClient.SqlLoggedSqlConnection
-{
-    using System.Data;
-    using DataCommander.Foundation.Data.SqlClient.SqlLog;
-    using DataCommander.Foundation.Threading;
+﻿using System.Data;
+using Foundation.Threading;
 
+namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
+{
     /// <summary>
     /// 
     /// </summary>
     public sealed class SqlLoggedSqlConnectionFactory : IDbConnectionFactory
     {
-        private readonly SqlLog _sqlLog;
+        private readonly SqlLog.SqlLog _sqlLog;
         private readonly int _applicationId;
         private readonly ISqlLoggedSqlCommandFilter _filter;
 
@@ -25,7 +24,7 @@
             ISqlLoggedSqlCommandFilter filter)
         {
             this._filter = filter;
-            this._sqlLog = new SqlLog(connectionString);
+            this._sqlLog = new SqlLog.SqlLog(connectionString);
             this._applicationId = this._sqlLog.ApplicationStart(applicationName, LocalTime.Default.Now, false);
         }
 

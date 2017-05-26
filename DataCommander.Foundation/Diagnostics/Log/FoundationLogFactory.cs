@@ -1,13 +1,13 @@
-﻿namespace DataCommander.Foundation.Diagnostics.Log
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-    using DataCommander.Foundation.Configuration;
-    using DataCommander.Foundation.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using Foundation.Configuration;
+using Foundation.Linq;
 
+namespace Foundation.Diagnostics.Log
+{
     internal sealed class FoundationLogFactory : ILogFactory
     {
         private readonly MultipleLog _multipeLog;

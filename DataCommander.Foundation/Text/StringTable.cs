@@ -1,9 +1,9 @@
-namespace DataCommander.Foundation.Text
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
+namespace Foundation.Text
+{
     /// <summary>
     /// Represents a n x m matrix of strings.
     /// </summary>

@@ -1,12 +1,12 @@
-namespace DataCommander.Foundation.Data
-{
-    using System;
-    using System.Data;
-    using System.Diagnostics;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Diagnostics.Log;
-    using DataCommander.Foundation.Linq;
+using System;
+using System.Data;
+using System.Diagnostics;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Log;
+using Foundation.Linq;
 
+namespace Foundation.Data
+{
     /// <summary>
     /// Safe IDbConnection wrapper for Windows Services.
     /// </summary>

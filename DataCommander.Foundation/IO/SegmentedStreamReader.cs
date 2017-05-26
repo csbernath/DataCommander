@@ -1,10 +1,10 @@
-namespace DataCommander.Foundation.IO
-{
-    using System;
-    using System.IO;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Diagnostics.Log;
+using System;
+using System.IO;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Log;
 
+namespace Foundation.IO
+{
     /// <summary>
     /// 
     /// </summary>

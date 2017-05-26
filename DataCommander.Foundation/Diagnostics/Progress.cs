@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataCommander.Foundation.Diagnostics
+namespace Foundation.Diagnostics
 {
     /// <summary>
     /// 

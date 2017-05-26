@@ -1,7 +1,7 @@
-namespace DataCommander.Foundation.Data
-{
-    using System;
+using System;
 
+namespace Foundation.Data
+{
     /// <summary>
     /// 
     /// </summary>

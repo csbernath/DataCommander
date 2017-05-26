@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Foundation.DocumentProperties.StructuredStorage
-{
-    using System;
+﻿using System;
 
+namespace Foundation.DocumentProperties.StructuredStorage
+{
     internal static class PropertySetId
     {
         public static readonly Guid Summary = new Guid( "f29f85e0-4ff9-1068-ab91-08002b27b3d9" );

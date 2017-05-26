@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Foundation.XmlSpreadsheet
-{
-    using System.Xml;
+﻿using System.Xml;
 
+namespace Foundation.XmlSpreadsheet
+{
     /// <summary>
     /// 
     /// </summary>

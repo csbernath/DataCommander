@@ -1,10 +1,10 @@
+using System;
+using System.Collections.Generic;
+using ADODB;
+using Foundation.Configuration;
+
 namespace DataCommander.Providers
 {
-    using System;
-    using System.Collections.Generic;
-    using ADODB;
-    using DataCommander.Foundation.Configuration;
-
     public static class ProviderFactory
     {
         public static List<string> Providers

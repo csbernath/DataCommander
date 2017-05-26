@@ -1,11 +1,12 @@
-﻿namespace DataCommander.Providers.MySql.ObjectExplorer
+﻿using Foundation.Data;
+
+namespace DataCommander.Providers.MySql.ObjectExplorer
 {
     using System;
     using System.Data;
     using System.Drawing;
     using System.Linq;
     using System.Windows.Forms;
-    using Foundation.Data;
     using global::MySql.Data.MySqlClient;
     using Query;
 

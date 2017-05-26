@@ -1,7 +1,7 @@
-namespace DataCommander.Foundation.Configuration
-{
-    using System.IO;
+using System.IO;
 
+namespace Foundation.Configuration
+{
     /// <summary>
     /// 
     /// </summary>

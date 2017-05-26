@@ -1,9 +1,9 @@
-namespace DataCommander.Foundation.Diagnostics
-{
-    using System.Diagnostics;
-    using System.IO;
-    using System.Text;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
 
+namespace Foundation.Diagnostics
+{
     /// <summary>
     /// Summary description for DebugWriter.
     /// </summary>

@@ -1,14 +1,14 @@
-﻿namespace DataCommander.Providers
-{
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Reflection;
-    using System.Runtime.Versioning;
-    using System.Windows.Forms;
-    using DataCommander.Foundation.Diagnostics;
-    using Foundation.Diagnostics.Log;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Runtime.Versioning;
+using System.Windows.Forms;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Log;
 
+namespace DataCommander.Providers
+{
     public partial class AboutForm : Form
     {
         private bool first = true;

@@ -1,8 +1,8 @@
-namespace DataCommander.Foundation.Data.PTypes
-{
-    using System;
-    using System.Data.SqlTypes;
+using System;
+using System.Data.SqlTypes;
 
+namespace Foundation.Data.PTypes
+{
     /// <summary>
     /// 
     /// </summary>

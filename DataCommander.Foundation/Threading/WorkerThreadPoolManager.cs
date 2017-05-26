@@ -1,11 +1,11 @@
-namespace DataCommander.Foundation.Threading
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Threading;
-    using DataCommander.Foundation.Diagnostics;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
+using Foundation.Diagnostics;
 
+namespace Foundation.Threading
+{
     /// <summary>
     /// 
     /// </summary>

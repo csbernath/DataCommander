@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Foundation.Management
-{
-    using System.Management;
+﻿using System.Management;
 
+namespace Foundation.Management
+{
     /// <summary>
     /// 
     /// </summary>

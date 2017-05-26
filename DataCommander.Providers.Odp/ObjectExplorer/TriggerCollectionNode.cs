@@ -1,10 +1,11 @@
+using Foundation.Data;
+
 namespace DataCommander.Providers.Odp.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Data;
     using System.Threading;
     using System.Windows.Forms;
-    using Foundation.Data;
     using Oracle.ManagedDataAccess.Client;
 
     /// <summary>

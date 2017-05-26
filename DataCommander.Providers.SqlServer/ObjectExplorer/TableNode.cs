@@ -1,3 +1,9 @@
+using Foundation.Data;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Log;
+using Foundation.Text;
+using Foundation.Windows.Forms;
+
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     using System;
@@ -10,11 +16,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     using System.Text;
     using System.Threading;
     using System.Windows.Forms;
-    using Foundation.Data;
-    using Foundation.Diagnostics;
-    using Foundation.Diagnostics.Log;
-    using Foundation.Text;
-    using Foundation.Windows.Forms;
     using Microsoft.SqlServer.Management.Common;
     using Microsoft.SqlServer.Management.Smo;
     using Query;

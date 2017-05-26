@@ -1,12 +1,11 @@
-﻿namespace DataCommander.Foundation.Configuration
-{
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Diagnostics.Contracts;
-    using DataCommander.Foundation.Collections;
-    using DataCommander.Foundation.Collections.IndexableCollection;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.Contracts;
+using Foundation.Collections.IndexableCollection;
 
+namespace Foundation.Configuration
+{
     /// <summary>
     /// 
     /// </summary>

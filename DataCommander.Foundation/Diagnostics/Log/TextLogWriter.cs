@@ -1,8 +1,8 @@
-namespace DataCommander.Foundation.Diagnostics.Log
-{
-    using System;
-    using System.IO;
+using System;
+using System.IO;
 
+namespace Foundation.Diagnostics.Log
+{
     /// <summary>
     /// Writes log events to a <see cref="TextWriter"/>.
     /// </summary>

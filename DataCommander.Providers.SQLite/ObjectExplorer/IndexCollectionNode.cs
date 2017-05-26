@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
-using DataCommander.Foundation.Data;
+using Foundation.Data;
 
 namespace DataCommander.Providers.SQLite.ObjectExplorer
 {

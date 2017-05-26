@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Foundation.Data.TextData
-{
-    using System.Diagnostics;
+﻿using System.Diagnostics;
 
+namespace Foundation.Data.TextData
+{
     /// <summary>
     /// 
     /// </summary>

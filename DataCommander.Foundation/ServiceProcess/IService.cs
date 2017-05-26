@@ -1,7 +1,7 @@
-namespace DataCommander.Foundation.ServiceProcess
-{
-    using System.ServiceProcess;
+using System.ServiceProcess;
 
+namespace Foundation.ServiceProcess
+{
     /// <summary>
     /// 
     /// </summary>

@@ -5,10 +5,10 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Text;
 using System.Threading;
-using DataCommander.Foundation.Diagnostics.Log;
-using DataCommander.Foundation.Linq;
+using Foundation.Diagnostics.Log;
+using Foundation.Linq;
 
-namespace DataCommander.Foundation.Data.SqlClient
+namespace Foundation.Data.SqlClient
 {
     /// <summary>
     /// Safe SQL Server connection for Windows Services.

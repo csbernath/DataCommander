@@ -1,11 +1,11 @@
-﻿namespace DataCommander.Foundation.Collections
-{
-    using Linq;
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
-    using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Linq;
+using Foundation.Linq;
 
+namespace Foundation.Collections
+{
     /// <summary>
     /// 
     /// </summary>
