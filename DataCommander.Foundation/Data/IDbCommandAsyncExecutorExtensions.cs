@@ -4,59 +4,57 @@ using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
-using DataCommander.Foundation.Diagnostics.Log;
 
 namespace DataCommander.Foundation.Data
 {
     public static class IDbCommandAsyncExecutorExtensions
     {
-        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-
         public static async Task ExecuteAsync(this IDbCommandAsyncExecutor executor, IEnumerable<ExecuteCommandAsyncRequest> requests,
             CancellationToken cancellationToken)
         {
             await executor.ExecuteAsync(async connection =>
             {
-                Log.Trace(CallerInformation.Get(), "...");
                 foreach (var request in requests)
                 {
                     using (var command = connection.CreateCommand(request.CreateCommandRequest))
                         await request.Execute(command);
                 }
-                Log.Trace(CallerInformation.Get(), ".");
             }, cancellationToken);
         }
 
-        public static async Task ExecuteAsync(this IDbCommandAsyncExecutor executor, CreateCommandRequest request, Func<DbCommand, Task> execute,
-            CancellationToken cancellationToken)
+        public static async Task ExecuteAsync(this IDbCommandAsyncExecutor executor, ExecuteNonReaderRequest request, Func<DbCommand, Task> execute)
         {
             var requests = new[]
             {
-                new ExecuteCommandAsyncRequest(request, execute)
+                new ExecuteCommandAsyncRequest(request.CreateCommandRequest, execute)
             };
-            await executor.ExecuteAsync(requests, cancellationToken);
+            await executor.ExecuteAsync(requests, request.CancellationToken);
         }
 
-        public static async Task<int> ExecuteNonQueryAsync(this IDbCommandAsyncExecutor executor, CreateCommandRequest request,
-            CancellationToken cancellationToken)
+        public static async Task<int> ExecuteNonQueryAsync(this IDbCommandAsyncExecutor executor, ExecuteNonReaderRequest request)
         {
             var affectedRows = 0;
-            await executor.ExecuteAsync(request, async dbCommand => affectedRows = await dbCommand.ExecuteNonQueryAsync(cancellationToken), cancellationToken);
+            await executor.ExecuteAsync(
+                request,
+                async command => affectedRows = await command.ExecuteNonQueryAsync(request.CancellationToken));
             return affectedRows;
         }
 
-        public static async Task<object> ExecuteScalarAsync(this IDbCommandAsyncExecutor executor, CreateCommandRequest command,
-            CancellationToken cancellationToken)
+        public static async Task<object> ExecuteScalarAsync(this IDbCommandAsyncExecutor executor, ExecuteNonReaderRequest request)
         {
             object scalar = null;
-            await executor.ExecuteAsync(command, async dbCommand => scalar = await dbCommand.ExecuteScalarAsync(cancellationToken), cancellationToken);
+            await executor.ExecuteAsync(
+                request,
+                async command => scalar = await command.ExecuteScalarAsync(request.CancellationToken));
             return scalar;
         }
 
         public static async Task<List<T>> ExecuteReaderAsync<T>(this IDbCommandAsyncExecutor executor, ExecuteReaderRequest request, Func<IDataRecord, T> read)
         {
             List<T> objects = null;
-            await executor.ExecuteReaderAsync(request, async dataReader => objects = await dataReader.ReadAsync(read, request.CancellationToken));
+            await executor.ExecuteReaderAsync(
+                request,
+                async dataReader => objects = await dataReader.ReadAsync(read, request.CancellationToken));
             return objects;
         }
 
@@ -64,7 +62,9 @@ namespace DataCommander.Foundation.Data
             ExecuteReaderRequest request, Func<IDataRecord, T1> read1, Func<IDataRecord, T2> read2)
         {
             ExecuteReaderResponse<T1, T2> response = null;
-            await executor.ExecuteReaderAsync(request, async dataReader => response = await dataReader.ReadAsync(read1, read2, request.CancellationToken));
+            await executor.ExecuteReaderAsync(
+                request,
+                async dataReader => response = await dataReader.ReadAsync(read1, read2, request.CancellationToken));
             return response;
         }
 
@@ -72,7 +72,8 @@ namespace DataCommander.Foundation.Data
             ExecuteReaderRequest request, Func<IDataRecord, T1> read1, Func<IDataRecord, T2> read2, Func<IDataRecord, T3> read3)
         {
             ExecuteReaderResponse<T1, T2, T3> response = null;
-            await executor.ExecuteReaderAsync(request,
+            await executor.ExecuteReaderAsync(
+                request,
                 async dataReader => response = await dataReader.ReadAsync(read1, read2, read3, request.CancellationToken));
             return response;
         }
@@ -80,14 +81,12 @@ namespace DataCommander.Foundation.Data
         private static async Task ExecuteReaderAsync(this IDbCommandAsyncExecutor executor, ExecuteReaderRequest request, Func<DbDataReader, Task> read)
         {
             await executor.ExecuteAsync(
-                request.CreateCommandRequest,
-                async dbCommand =>
+                new ExecuteNonReaderRequest(request.CreateCommandRequest, request.CancellationToken),
+                async command =>
                 {
-                    Log.Trace(CallerInformation.Get(), "...");
-                    using (var dataReader = await dbCommand.ExecuteReaderAsync(request.CommandBehavior, request.CancellationToken))
+                    using (var dataReader = await command.ExecuteReaderAsync(request.CommandBehavior, request.CancellationToken))
                         await read(dataReader);
-                    Log.Trace(CallerInformation.Get(), ".");
-                }, request.CancellationToken);
+                });
         }
     }
 }

@@ -1,25 +1,19 @@
-﻿using DataCommander.Foundation.Diagnostics.Log;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Threading;
+using System.Threading.Tasks;
+using DataCommander.Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Foundation.Data
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using System.Data;
-    using System.Data.Common;
-    using System.Threading;
-    using Diagnostics.Contracts;
-
     public static class DbDataReaderExtensions
     {
-        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-
         public static async Task ReadAsync(this DbDataReader dataReader, Action read, CancellationToken cancellationToken)
         {
-            Log.Trace(CallerInformation.Get(), "...");
             while (await dataReader.ReadAsync(cancellationToken))
                 read();
-            Log.Trace(CallerInformation.Get(), ".");
         }
 
         public static async Task ReadAsync(this DbDataReader dataReader, IEnumerable<Action> reads, CancellationToken cancellationToken)

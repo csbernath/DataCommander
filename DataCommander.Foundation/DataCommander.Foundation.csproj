@@ -441,6 +441,7 @@
     <Compile Include="Data\DbCommandExecutorFactory.cs" />
     <Compile Include="Data\DbConnectionExtensions.cs" />
     <Compile Include="Data\ExecuteCommandAsyncRequest.cs" />
+    <Compile Include="Data\ExecuteNonReaderRequest.cs" />
     <Compile Include="Data\IDbCommandAsyncExecutor.cs" />
     <Compile Include="Data\IDbCommandAsyncExecutorExtensions.cs" />
     <Compile Include="Data\IDbConnectionExtensions.cs" />

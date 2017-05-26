@@ -10,5 +10,10 @@ namespace DataCommander.Foundation.Data
             command.Initialize(request);
             return command;
         }
+
+        public static IDbCommandAsyncExecutor CreateCommandAsyncExecutor(this DbConnection connection)
+        {
+            return new DbCommandAsyncExecutor(connection);
+        }
     }
 }

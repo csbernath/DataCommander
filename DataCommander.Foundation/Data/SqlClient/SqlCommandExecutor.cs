@@ -11,7 +11,6 @@ namespace DataCommander.Foundation.Data
 
     public sealed class SqlCommandExecutor : IDbCommandAsyncExecutor
     {
-        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
         private readonly string _connectionString;
 
         public SqlCommandExecutor(string connectionString)
@@ -32,9 +31,7 @@ namespace DataCommander.Foundation.Data
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                Log.Trace("connection.OpenAsync...");
                 await connection.OpenAsync(cancellationToken);
-                Log.Trace($"connection.OpenAsync. {connection.State}");
                 await execute(connection);
             }
         }

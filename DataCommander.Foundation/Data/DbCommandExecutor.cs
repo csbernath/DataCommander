@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataCommander.Foundation.Data
 {
-    internal sealed class DbCommandExecutor : IDbCommandExecutor
+    internal sealed partial class DbCommandExecutor : IDbCommandExecutor
     {
         private readonly IDbConnection _connection;
 
