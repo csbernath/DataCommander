@@ -40,10 +40,10 @@
             {
                 for (var i = 0; i < numOfColumns - 1; i++)
                 {
-                    text += QueryForm.DBValue(dataRow[i]) + separator;
+                    text += QueryForm.DbValue(dataRow[i]) + separator;
                 }
 
-                text += QueryForm.DBValue(dataRow[numOfColumns - 1]) + Environment.NewLine;
+                text += QueryForm.DbValue(dataRow[numOfColumns - 1]) + Environment.NewLine;
             }
 
             application.Selection.InsertAfter(text);
