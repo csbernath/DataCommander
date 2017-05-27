@@ -1,50 +1,51 @@
-﻿using System.Linq;
+﻿using System;
+using System.Data;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using DataCommander.Providers.Connection;
+using Foundation;
+using Foundation.Data;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Log;
+using Foundation.Linq;
 
 namespace DataCommander.Providers.ResultWriter
 {
-    using System;
-    using System.Data;
-    using System.Diagnostics;
-    using System.Text;
-    using Connection;
-    using Foundation;
-    using Foundation.Data;
-    using Foundation.Diagnostics;
-    using Foundation.Linq;
-
     internal sealed class LogResultWriter : IResultWriter
     {
-        private readonly Action<InfoMessage> addInfoMessage;
-        private int commandCount;
-        private int tableCount;
-        private int rowCount;
-        private long beginTimestamp;
-        private long beforeExecuteReaderTimestamp;
-        private long writeTableBeginTimestamp;
-        private long firstRowReadBeginTimestamp;
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly Action<InfoMessage> _addInfoMessage;
+        private int _commandCount;
+        private int _tableCount;
+        private int _rowCount;
+        private long _beginTimestamp;
+        private long _beforeExecuteReaderTimestamp;
+        private long _writeTableBeginTimestamp;
+        private long _firstRowReadBeginTimestamp;
 
         public LogResultWriter(Action<InfoMessage> addInfoMessage)
         {
 #if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(addInfoMessage != null);
 #endif
-            this.addInfoMessage = addInfoMessage;
+            _addInfoMessage = addInfoMessage;
         }
 
-#region IResultWriter Members
+        #region IResultWriter Members
 
         void IResultWriter.Begin(IProvider provider)
         {
-            this.beginTimestamp = Stopwatch.GetTimestamp();
+            _beginTimestamp = Stopwatch.GetTimestamp();
         }
 
         void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand)
         {
-            this.beforeExecuteReaderTimestamp = Stopwatch.GetTimestamp();
+            _beforeExecuteReaderTimestamp = Stopwatch.GetTimestamp();
             var command = asyncDataAdapterCommand.Command;
-            var message = $"Executing command[{this.commandCount}] from line {asyncDataAdapterCommand.LineIndex + 1}...\r\n{command.CommandText}";
+            var message = $"Executing command[{_commandCount}] from line {asyncDataAdapterCommand.LineIndex + 1}...\r\n{command.CommandText}";
 
-            this.commandCount++;
+            ++_commandCount;
 
             var parameters = command.Parameters;
             if (!parameters.IsNullOrEmpty())
@@ -52,37 +53,36 @@ namespace DataCommander.Providers.ResultWriter
                 message += "\r\n" + command.Parameters.ToLogString();
             }
 
-            this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
+            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
 
         void IResultWriter.AfterExecuteReader(int fieldCount)
         {
-            var duration = Stopwatch.GetTimestamp() - this.beforeExecuteReaderTimestamp;
-            var message = $"Command[{this.commandCount - 1}] started in {StopwatchTimeSpan.ToString(duration, 3)} seconds. Field count: {fieldCount}";
-            this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
-            this.tableCount = 0;
+            var duration = Stopwatch.GetTimestamp() - _beforeExecuteReaderTimestamp;
+            var message = $"Command[{_commandCount - 1}] started in {StopwatchTimeSpan.ToString(duration, 3)} seconds. Field count: {fieldCount}";
+            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
+            _tableCount = 0;
         }
 
         void IResultWriter.AfterCloseReader(int affectedRows)
         {
-            var duration = Stopwatch.GetTimestamp() - this.beforeExecuteReaderTimestamp;
+            var duration = Stopwatch.GetTimestamp() - _beforeExecuteReaderTimestamp;
             var now = LocalTime.Default.Now;
             var affected = affectedRows >= 0
                 ? $"{affectedRows} row(s) affected."
                 : null;
-            var message = $"Command[{this.commandCount - 1}] completed in {StopwatchTimeSpan.ToString(duration, 3)} seconds. {affected}";
-            this.addInfoMessage(new InfoMessage(now, InfoMessageSeverity.Verbose, message));
+            var message = $"Command[{_commandCount - 1}] completed in {StopwatchTimeSpan.ToString(duration, 3)} seconds. {affected}";
+            _addInfoMessage(new InfoMessage(now, InfoMessageSeverity.Verbose, message));
         }
 
         void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
-            this.writeTableBeginTimestamp = Stopwatch.GetTimestamp();
-            var now = LocalTime.Default.Now;
+            _writeTableBeginTimestamp = Stopwatch.GetTimestamp();
             var columns = schemaTable.Rows.Cast<DataRow>().Select(i => new DbColumn(i)).ToList();
 
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("\r\ninternal sealed class Row");
-            stringBuilder.Append(this.tableCount);
+            stringBuilder.Append(_tableCount);
             stringBuilder.Append("\r\n{\r\n");
 
             var first = true;
@@ -105,11 +105,11 @@ namespace DataCommander.Providers.ResultWriter
             }
 
             stringBuilder.Append("\r\n}\r\nprivate static Row");
-            stringBuilder.Append(this.tableCount);
+            stringBuilder.Append(_tableCount);
             stringBuilder.Append(" Read");
-            stringBuilder.Append(this.tableCount);
+            stringBuilder.Append(_tableCount);
             stringBuilder.Append("(IDataRecord dataRecord)\r\n{\r\n    var row = new Row");
-            stringBuilder.Append(this.tableCount);
+            stringBuilder.Append(_tableCount);
             stringBuilder.Append("();\r\n");
 
             first = true;
@@ -134,11 +134,10 @@ namespace DataCommander.Providers.ResultWriter
 
             stringBuilder.Append("\r\n    return row;\r\n}\r\n");
 
-            this.addInfoMessage(new InfoMessage(now, InfoMessageSeverity.Verbose,
-                $"SchemaTable of table[{this.tableCount}]:\r\n{schemaTable.ToStringTableString()}\r\n{stringBuilder}"));
+            Log.Trace($"SchemaTable of table[{_tableCount}]:\r\n{schemaTable.ToStringTableString()}\r\n{stringBuilder}");
 
-            this.tableCount++;
-            this.rowCount = 0;
+            ++_tableCount;
+            _rowCount = 0;
         }
 
         private static string GetDataRecordMethodName(DbColumn column)
@@ -284,27 +283,27 @@ namespace DataCommander.Providers.ResultWriter
 
         void IResultWriter.FirstRowReadBegin()
         {
-            this.firstRowReadBeginTimestamp = Stopwatch.GetTimestamp();
+            _firstRowReadBeginTimestamp = Stopwatch.GetTimestamp();
         }
 
         void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
         {
-            var duration = Stopwatch.GetTimestamp() - this.firstRowReadBeginTimestamp;
+            var duration = Stopwatch.GetTimestamp() - _firstRowReadBeginTimestamp;
             var message = $"First row read completed in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
-            this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
+            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
 
         void IResultWriter.WriteRows(object[][] rows, int rowCount)
         {
-            this.rowCount += rowCount;
+            _rowCount += rowCount;
         }
 
         void IResultWriter.WriteTableEnd()
         {
-            var duration = Stopwatch.GetTimestamp() - this.writeTableBeginTimestamp;
+            var duration = Stopwatch.GetTimestamp() - _writeTableBeginTimestamp;
             var message =
-                $"Reading {this.rowCount} row(s) from command[{this.commandCount - 1}] into table[{this.tableCount - 1}] finished in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
-            this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
+                $"Reading {_rowCount} row(s) from command[{_commandCount - 1}] into table[{_tableCount - 1}] finished in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
+            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
 
         void IResultWriter.WriteParameters(IDataParameterCollection parameters)
@@ -313,11 +312,11 @@ namespace DataCommander.Providers.ResultWriter
 
         void IResultWriter.End()
         {
-            var duration = Stopwatch.GetTimestamp() - this.beginTimestamp;
-            var message = $"Query completed {this.commandCount} command(s) in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
-            this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
+            var duration = Stopwatch.GetTimestamp() - _beginTimestamp;
+            var message = $"Query completed {_commandCount} command(s) in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
+            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
 
-#endregion
+        #endregion
     }
 }

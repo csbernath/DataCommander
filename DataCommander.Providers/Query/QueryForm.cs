@@ -302,14 +302,9 @@ namespace DataCommander.Providers.Query
         private void CloseResultTabPage(TabPage tabPage)
         {
             foreach (Control control in tabPage.Controls)
-            {
                 control.Dispose();
-            }
 
             tabPage.Controls.Clear();
-
-            //GarbageMonitor.SetDisposeTime(control, LocalTime.Default.Now);
-            //control.Dispose();
         }
 
         private void CloseResultSetTabPage(TabPage tabPage)
@@ -324,13 +319,7 @@ namespace DataCommander.Providers.Query
                 {
                     tabControl.TabPages.Remove(subTabPage);
                     CloseResultTabPage(subTabPage);
-                    // GarbageMonitor.SetDisposeTime(subTabPage, LocalTime.Default.Now);
-                    // subTabPage.Dispose();
                 }
-                // GarbageMonitor.SetDisposeTime(tabControl, LocalTime.Default.Now);
-                // tabControl.Dispose();
-                // GarbageMonitor.SetDisposeTime(tabPage, LocalTime.Default.Now);
-                // tabPage.Dispose();
             }
             else
             {
@@ -356,9 +345,7 @@ namespace DataCommander.Providers.Query
             {
                 case MouseButtons.Middle:
                     if (index >= 0)
-                    {
                         CloseResultSetTabPage(hotTab);
-                    }
                     break;
 
                 case MouseButtons.Right:
@@ -417,9 +404,7 @@ namespace DataCommander.Providers.Query
                 var query = QueryTextBox.SelectedText;
 
                 if (query.Length == 0)
-                {
                     query = QueryTextBox.Text;
-                }
 
                 query = query.Replace("\n", "\r\n");
                 return query;
@@ -427,9 +412,7 @@ namespace DataCommander.Providers.Query
         }
 
         public QueryTextBox QueryTextBox { get; private set; }
-
         internal int ResultSetCount { get; private set; }
-
         public ResultWriterType TableStyle { get; private set; }
 
         internal ToolStrip ToolStrip => _toolStrip;
@@ -552,815 +535,815 @@ namespace DataCommander.Providers.Query
         private void InitializeComponent()
         {
             var resources = new System.ComponentModel.ComponentResourceManager(typeof (QueryForm));
-            this._mainMenu = new System.Windows.Forms.MenuStrip();
-            this._menuItem9 = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuSave = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuSaveAs = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuDuplicateConnection = new System.Windows.Forms.ToolStripMenuItem();
-            this._menuItem8 = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuPaste = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuFind = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuFindNext = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuCodeCompletion = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuListMembers = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuClearCache = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuGoTo = new System.Windows.Forms.ToolStripMenuItem();
-            this._menuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this._menuItem7 = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuCommandTypeText = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuCommandTypeStoredProcedure = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuDescribeParameters = new System.Windows.Forms.ToolStripMenuItem();
-            this._toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this._mnuShowShemaTable = new System.Windows.Forms.ToolStripMenuItem();
-            this._executeQueryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuExecuteQuerySingleRow = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuExecuteQuerySchemaOnly = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuExecuteQueryKeyInfo = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuExecuteQueryXml = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuOpenTable = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuCancel = new System.Windows.Forms.ToolStripMenuItem();
-            this._parseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this._menuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuText = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuDataGrid = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuHtml = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuRtf = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuListView = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuExcel = new System.Windows.Forms.ToolStripMenuItem();
-            this._menuResultModeFile = new System.Windows.Forms.ToolStripMenuItem();
-            this._sQLiteDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._insertScriptFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this._mnuGotoQueryEditor = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuGotoMessageTabPage = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuCloseTabPage = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuCloseAllTabPages = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuCreateInsert = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuCreateInsertSelect = new System.Windows.Forms.ToolStripMenuItem();
-            this._createSqlCeDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._beginTransactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._commitTransactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._rollbackTransactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._menuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuObjectExplorer = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuRefreshObjectExplorer = new System.Windows.Forms.ToolStripMenuItem();
-            this._statusBar = new System.Windows.Forms.StatusStrip();
-            this._sbPanelText = new System.Windows.Forms.ToolStripStatusLabel();
-            this._sbPanelTableStyle = new System.Windows.Forms.ToolStripStatusLabel();
-            this._sbPanelTimer = new System.Windows.Forms.ToolStripStatusLabel();
-            this._sbPanelRows = new System.Windows.Forms.ToolStripStatusLabel();
-            this._sbPanelCaretPosition = new System.Windows.Forms.ToolStripStatusLabel();
-            this._tvObjectExplorer = new System.Windows.Forms.TreeView();
-            this._splitterObjectExplorer = new System.Windows.Forms.Splitter();
-            this._splitterQuery = new System.Windows.Forms.Splitter();
-            this._tabControl = new System.Windows.Forms.TabControl();
-            this._toolStrip = new System.Windows.Forms.ToolStrip();
-            this._toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this._executeQuerySplitButton = new System.Windows.Forms.ToolStripSplitButton();
-            this._executeQueryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._executeQuerySingleRowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._cToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._openTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._cancelQueryButton = new System.Windows.Forms.ToolStripButton();
-            this.QueryTextBox = new QueryTextBox(_colorTheme);
-            this._mainMenu.SuspendLayout();
-            this._statusBar.SuspendLayout();
-            this._toolStrip.SuspendLayout();
-            this.SuspendLayout();
+            _mainMenu = new System.Windows.Forms.MenuStrip();
+            _menuItem9 = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuSave = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuSaveAs = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuDuplicateConnection = new System.Windows.Forms.ToolStripMenuItem();
+            _menuItem8 = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuPaste = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuFind = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuFindNext = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuCodeCompletion = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuListMembers = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuClearCache = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuGoTo = new System.Windows.Forms.ToolStripMenuItem();
+            _menuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            _menuItem7 = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuCommandTypeText = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuCommandTypeStoredProcedure = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuDescribeParameters = new System.Windows.Forms.ToolStripMenuItem();
+            _toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            _mnuShowShemaTable = new System.Windows.Forms.ToolStripMenuItem();
+            _executeQueryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuExecuteQuerySingleRow = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuExecuteQuerySchemaOnly = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuExecuteQueryKeyInfo = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuExecuteQueryXml = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuOpenTable = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuCancel = new System.Windows.Forms.ToolStripMenuItem();
+            _parseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            _menuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuText = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuDataGrid = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuHtml = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuRtf = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuListView = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuExcel = new System.Windows.Forms.ToolStripMenuItem();
+            _menuResultModeFile = new System.Windows.Forms.ToolStripMenuItem();
+            _sQLiteDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _insertScriptFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            _mnuGotoQueryEditor = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuGotoMessageTabPage = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuCloseTabPage = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuCloseAllTabPages = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuCreateInsert = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuCreateInsertSelect = new System.Windows.Forms.ToolStripMenuItem();
+            _createSqlCeDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _beginTransactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _commitTransactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _rollbackTransactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _menuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuObjectExplorer = new System.Windows.Forms.ToolStripMenuItem();
+            _mnuRefreshObjectExplorer = new System.Windows.Forms.ToolStripMenuItem();
+            _statusBar = new System.Windows.Forms.StatusStrip();
+            _sbPanelText = new System.Windows.Forms.ToolStripStatusLabel();
+            _sbPanelTableStyle = new System.Windows.Forms.ToolStripStatusLabel();
+            _sbPanelTimer = new System.Windows.Forms.ToolStripStatusLabel();
+            _sbPanelRows = new System.Windows.Forms.ToolStripStatusLabel();
+            _sbPanelCaretPosition = new System.Windows.Forms.ToolStripStatusLabel();
+            _tvObjectExplorer = new System.Windows.Forms.TreeView();
+            _splitterObjectExplorer = new System.Windows.Forms.Splitter();
+            _splitterQuery = new System.Windows.Forms.Splitter();
+            _tabControl = new System.Windows.Forms.TabControl();
+            _toolStrip = new System.Windows.Forms.ToolStrip();
+            _toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            _executeQuerySplitButton = new System.Windows.Forms.ToolStripSplitButton();
+            _executeQueryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _executeQuerySingleRowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _cToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _openTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _cancelQueryButton = new System.Windows.Forms.ToolStripButton();
+            QueryTextBox = new QueryTextBox(_colorTheme);
+            _mainMenu.SuspendLayout();
+            _statusBar.SuspendLayout();
+            _toolStrip.SuspendLayout();
+            SuspendLayout();
             // 
             // mainMenu
             // 
-            this._mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+            _mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
             {
-                this._menuItem9,
-                this._menuItem8,
-                this._menuItem1,
-                this._menuItem3
+                _menuItem9,
+                _menuItem8,
+                _menuItem1,
+                _menuItem3
             });
-            this._mainMenu.Location = new System.Drawing.Point(0, 0);
-            this._mainMenu.Name = "_mainMenu";
-            this._mainMenu.Size = new System.Drawing.Size(1016, 24);
-            this._mainMenu.TabIndex = 0;
-            this._mainMenu.Visible = false;
+            _mainMenu.Location = new System.Drawing.Point(0, 0);
+            _mainMenu.Name = "_mainMenu";
+            _mainMenu.Size = new System.Drawing.Size(1016, 24);
+            _mainMenu.TabIndex = 0;
+            _mainMenu.Visible = false;
             // 
             // menuItem9
             // 
-            this._menuItem9.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            _menuItem9.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
             {
-                this._mnuSave,
-                this._mnuSaveAs,
-                this._mnuDuplicateConnection
+                _mnuSave,
+                _mnuSaveAs,
+                _mnuDuplicateConnection
             });
-            this._menuItem9.MergeAction = System.Windows.Forms.MergeAction.MatchOnly;
-            this._menuItem9.MergeIndex = 0;
-            this._menuItem9.Name = "_menuItem9";
-            this._menuItem9.Size = new System.Drawing.Size(37, 20);
-            this._menuItem9.Text = "&File";
+            _menuItem9.MergeAction = System.Windows.Forms.MergeAction.MatchOnly;
+            _menuItem9.MergeIndex = 0;
+            _menuItem9.Name = "_menuItem9";
+            _menuItem9.Size = new System.Drawing.Size(37, 20);
+            _menuItem9.Text = "&File";
             // 
             // mnuSave
             // 
-            this._mnuSave.MergeAction = System.Windows.Forms.MergeAction.Insert;
-            this._mnuSave.MergeIndex = 2;
-            this._mnuSave.Name = "_mnuSave";
-            this._mnuSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this._mnuSave.Size = new System.Drawing.Size(230, 22);
-            this._mnuSave.Text = "&Save";
-            this._mnuSave.Click += new System.EventHandler(this.mnuSave_Click);
+            _mnuSave.MergeAction = System.Windows.Forms.MergeAction.Insert;
+            _mnuSave.MergeIndex = 2;
+            _mnuSave.Name = "_mnuSave";
+            _mnuSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            _mnuSave.Size = new System.Drawing.Size(230, 22);
+            _mnuSave.Text = "&Save";
+            _mnuSave.Click += new System.EventHandler(mnuSave_Click);
             // 
             // mnuSaveAs
             // 
-            this._mnuSaveAs.MergeAction = System.Windows.Forms.MergeAction.Insert;
-            this._mnuSaveAs.MergeIndex = 3;
-            this._mnuSaveAs.Name = "_mnuSaveAs";
-            this._mnuSaveAs.Size = new System.Drawing.Size(230, 22);
-            this._mnuSaveAs.Text = "Save &As";
-            this._mnuSaveAs.Click += new System.EventHandler(this.mnuSaveAs_Click);
+            _mnuSaveAs.MergeAction = System.Windows.Forms.MergeAction.Insert;
+            _mnuSaveAs.MergeIndex = 3;
+            _mnuSaveAs.Name = "_mnuSaveAs";
+            _mnuSaveAs.Size = new System.Drawing.Size(230, 22);
+            _mnuSaveAs.Text = "Save &As";
+            _mnuSaveAs.Click += new System.EventHandler(mnuSaveAs_Click);
             // 
             // mnuDuplicateConnection
             // 
-            this._mnuDuplicateConnection.MergeAction = System.Windows.Forms.MergeAction.Insert;
-            this._mnuDuplicateConnection.MergeIndex = 4;
-            this._mnuDuplicateConnection.Name = "_mnuDuplicateConnection";
-            this._mnuDuplicateConnection.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this._mnuDuplicateConnection.Size = new System.Drawing.Size(230, 22);
-            this._mnuDuplicateConnection.Text = "Duplicate connection";
-            this._mnuDuplicateConnection.Click += new System.EventHandler(this.mnuDuplicateConnection_Click);
+            _mnuDuplicateConnection.MergeAction = System.Windows.Forms.MergeAction.Insert;
+            _mnuDuplicateConnection.MergeIndex = 4;
+            _mnuDuplicateConnection.Name = "_mnuDuplicateConnection";
+            _mnuDuplicateConnection.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
+            _mnuDuplicateConnection.Size = new System.Drawing.Size(230, 22);
+            _mnuDuplicateConnection.Text = "Duplicate connection";
+            _mnuDuplicateConnection.Click += new System.EventHandler(mnuDuplicateConnection_Click);
             // 
             // menuItem8
             // 
-            this._menuItem8.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            _menuItem8.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
             {
-                this._mnuPaste,
-                this._mnuFind,
-                this._mnuFindNext,
-                this._mnuCodeCompletion,
-                this._mnuGoTo
+                _mnuPaste,
+                _mnuFind,
+                _mnuFindNext,
+                _mnuCodeCompletion,
+                _mnuGoTo
             });
-            this._menuItem8.MergeAction = System.Windows.Forms.MergeAction.Insert;
-            this._menuItem8.MergeIndex = 2;
-            this._menuItem8.Name = "_menuItem8";
-            this._menuItem8.Size = new System.Drawing.Size(39, 20);
-            this._menuItem8.Text = "&Edit";
+            _menuItem8.MergeAction = System.Windows.Forms.MergeAction.Insert;
+            _menuItem8.MergeIndex = 2;
+            _menuItem8.Name = "_menuItem8";
+            _menuItem8.Size = new System.Drawing.Size(39, 20);
+            _menuItem8.Text = "&Edit";
             // 
             // mnuPaste
             // 
-            this._mnuPaste.Image = ((System.Drawing.Image)(resources.GetObject("mnuPaste.Image")));
-            this._mnuPaste.MergeIndex = 0;
-            this._mnuPaste.Name = "_mnuPaste";
-            this._mnuPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this._mnuPaste.Size = new System.Drawing.Size(166, 22);
-            this._mnuPaste.Text = "&Paste";
+            _mnuPaste.Image = ((System.Drawing.Image)(resources.GetObject("mnuPaste.Image")));
+            _mnuPaste.MergeIndex = 0;
+            _mnuPaste.Name = "_mnuPaste";
+            _mnuPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+            _mnuPaste.Size = new System.Drawing.Size(166, 22);
+            _mnuPaste.Text = "&Paste";
             // 
             // mnuFind
             // 
-            this._mnuFind.Image = ((System.Drawing.Image)(resources.GetObject("mnuFind.Image")));
-            this._mnuFind.MergeIndex = 1;
-            this._mnuFind.Name = "_mnuFind";
-            this._mnuFind.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            this._mnuFind.Size = new System.Drawing.Size(166, 22);
-            this._mnuFind.Text = "&Find";
+            _mnuFind.Image = ((System.Drawing.Image)(resources.GetObject("mnuFind.Image")));
+            _mnuFind.MergeIndex = 1;
+            _mnuFind.Name = "_mnuFind";
+            _mnuFind.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
+            _mnuFind.Size = new System.Drawing.Size(166, 22);
+            _mnuFind.Text = "&Find";
             // 
             // mnuFindNext
             // 
-            this._mnuFindNext.MergeIndex = 2;
-            this._mnuFindNext.Name = "_mnuFindNext";
-            this._mnuFindNext.ShortcutKeys = System.Windows.Forms.Keys.F3;
-            this._mnuFindNext.Size = new System.Drawing.Size(166, 22);
-            this._mnuFindNext.Text = "Find &Next";
+            _mnuFindNext.MergeIndex = 2;
+            _mnuFindNext.Name = "_mnuFindNext";
+            _mnuFindNext.ShortcutKeys = System.Windows.Forms.Keys.F3;
+            _mnuFindNext.Size = new System.Drawing.Size(166, 22);
+            _mnuFindNext.Text = "Find &Next";
             // 
             // mnuCodeCompletion
             // 
-            this._mnuCodeCompletion.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            _mnuCodeCompletion.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
             {
-                this._mnuListMembers,
-                this._mnuClearCache
+                _mnuListMembers,
+                _mnuClearCache
             });
-            this._mnuCodeCompletion.MergeIndex = 3;
-            this._mnuCodeCompletion.Name = "_mnuCodeCompletion";
-            this._mnuCodeCompletion.Size = new System.Drawing.Size(166, 22);
-            this._mnuCodeCompletion.Text = "&Code completion";
+            _mnuCodeCompletion.MergeIndex = 3;
+            _mnuCodeCompletion.Name = "_mnuCodeCompletion";
+            _mnuCodeCompletion.Size = new System.Drawing.Size(166, 22);
+            _mnuCodeCompletion.Text = "&Code completion";
             // 
             // mnuListMembers
             // 
-            this._mnuListMembers.MergeIndex = 0;
-            this._mnuListMembers.Name = "_mnuListMembers";
-            this._mnuListMembers.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.J)));
-            this._mnuListMembers.Size = new System.Drawing.Size(211, 22);
-            this._mnuListMembers.Text = "&List Members";
-            this._mnuListMembers.Click += new System.EventHandler(this.mnuListMembers_Click);
+            _mnuListMembers.MergeIndex = 0;
+            _mnuListMembers.Name = "_mnuListMembers";
+            _mnuListMembers.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.J)));
+            _mnuListMembers.Size = new System.Drawing.Size(211, 22);
+            _mnuListMembers.Text = "&List Members";
+            _mnuListMembers.Click += new System.EventHandler(mnuListMembers_Click);
             // 
             // mnuClearCache
             // 
-            this._mnuClearCache.MergeIndex = 1;
-            this._mnuClearCache.Name = "_mnuClearCache";
-            this._mnuClearCache.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+            _mnuClearCache.MergeIndex = 1;
+            _mnuClearCache.Name = "_mnuClearCache";
+            _mnuClearCache.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
                                                                             | System.Windows.Forms.Keys.C)));
-            this._mnuClearCache.Size = new System.Drawing.Size(211, 22);
-            this._mnuClearCache.Text = "&Clear Cache";
+            _mnuClearCache.Size = new System.Drawing.Size(211, 22);
+            _mnuClearCache.Text = "&Clear Cache";
             // 
             // mnuGoTo
             // 
-            this._mnuGoTo.MergeIndex = 4;
-            this._mnuGoTo.Name = "_mnuGoTo";
-            this._mnuGoTo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-            this._mnuGoTo.Size = new System.Drawing.Size(166, 22);
-            this._mnuGoTo.Text = "Go To...";
+            _mnuGoTo.MergeIndex = 4;
+            _mnuGoTo.Name = "_mnuGoTo";
+            _mnuGoTo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+            _mnuGoTo.Size = new System.Drawing.Size(166, 22);
+            _mnuGoTo.Text = "Go To...";
             // 
             // menuItem1
             // 
-            this._menuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            _menuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
             {
-                this._menuItem7,
-                this._mnuDescribeParameters,
-                this._toolStripSeparator2,
-                this._mnuShowShemaTable,
-                this._executeQueryToolStripMenuItem,
-                this._mnuExecuteQuerySingleRow,
-                this._mnuExecuteQuerySchemaOnly,
-                this._mnuExecuteQueryKeyInfo,
-                this._mnuExecuteQueryXml,
-                this._mnuOpenTable,
-                this._mnuCancel,
-                this._parseToolStripMenuItem,
-                this._toolStripSeparator1,
-                this._menuItem2,
-                this._toolStripSeparator3,
-                this._mnuGotoQueryEditor,
-                this._mnuGotoMessageTabPage,
-                this._mnuCloseTabPage,
-                this._mnuCloseAllTabPages,
-                this._mnuCreateInsert,
-                this._mnuCreateInsertSelect,
-                this._createSqlCeDatabaseToolStripMenuItem,
-                this._exportToolStripMenuItem,
-                this._beginTransactionToolStripMenuItem,
-                this._commitTransactionToolStripMenuItem,
-                this._rollbackTransactionToolStripMenuItem
+                _menuItem7,
+                _mnuDescribeParameters,
+                _toolStripSeparator2,
+                _mnuShowShemaTable,
+                _executeQueryToolStripMenuItem,
+                _mnuExecuteQuerySingleRow,
+                _mnuExecuteQuerySchemaOnly,
+                _mnuExecuteQueryKeyInfo,
+                _mnuExecuteQueryXml,
+                _mnuOpenTable,
+                _mnuCancel,
+                _parseToolStripMenuItem,
+                _toolStripSeparator1,
+                _menuItem2,
+                _toolStripSeparator3,
+                _mnuGotoQueryEditor,
+                _mnuGotoMessageTabPage,
+                _mnuCloseTabPage,
+                _mnuCloseAllTabPages,
+                _mnuCreateInsert,
+                _mnuCreateInsertSelect,
+                _createSqlCeDatabaseToolStripMenuItem,
+                _exportToolStripMenuItem,
+                _beginTransactionToolStripMenuItem,
+                _commitTransactionToolStripMenuItem,
+                _rollbackTransactionToolStripMenuItem
             });
-            this._menuItem1.MergeAction = System.Windows.Forms.MergeAction.Insert;
-            this._menuItem1.MergeIndex = 3;
-            this._menuItem1.Name = "_menuItem1";
-            this._menuItem1.Size = new System.Drawing.Size(51, 20);
-            this._menuItem1.Text = "&Query";
+            _menuItem1.MergeAction = System.Windows.Forms.MergeAction.Insert;
+            _menuItem1.MergeIndex = 3;
+            _menuItem1.Name = "_menuItem1";
+            _menuItem1.Size = new System.Drawing.Size(51, 20);
+            _menuItem1.Text = "&Query";
             // 
             // menuItem7
             // 
-            this._menuItem7.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            _menuItem7.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
             {
-                this._mnuCommandTypeText,
-                this._mnuCommandTypeStoredProcedure
+                _mnuCommandTypeText,
+                _mnuCommandTypeStoredProcedure
             });
-            this._menuItem7.MergeIndex = 0;
-            this._menuItem7.Name = "_menuItem7";
-            this._menuItem7.Size = new System.Drawing.Size(269, 22);
-            this._menuItem7.Text = "Command&Type";
+            _menuItem7.MergeIndex = 0;
+            _menuItem7.Name = "_menuItem7";
+            _menuItem7.Size = new System.Drawing.Size(269, 22);
+            _menuItem7.Text = "Command&Type";
             // 
             // mnuCommandTypeText
             // 
-            this._mnuCommandTypeText.Checked = true;
-            this._mnuCommandTypeText.CheckState = System.Windows.Forms.CheckState.Checked;
-            this._mnuCommandTypeText.MergeIndex = 0;
-            this._mnuCommandTypeText.Name = "_mnuCommandTypeText";
-            this._mnuCommandTypeText.Size = new System.Drawing.Size(165, 22);
-            this._mnuCommandTypeText.Text = "Text";
-            this._mnuCommandTypeText.Click += new System.EventHandler(this.mnuCommandTypeText_Click);
+            _mnuCommandTypeText.Checked = true;
+            _mnuCommandTypeText.CheckState = System.Windows.Forms.CheckState.Checked;
+            _mnuCommandTypeText.MergeIndex = 0;
+            _mnuCommandTypeText.Name = "_mnuCommandTypeText";
+            _mnuCommandTypeText.Size = new System.Drawing.Size(165, 22);
+            _mnuCommandTypeText.Text = "Text";
+            _mnuCommandTypeText.Click += new System.EventHandler(mnuCommandTypeText_Click);
             // 
             // mnuCommandTypeStoredProcedure
             // 
-            this._mnuCommandTypeStoredProcedure.MergeIndex = 1;
-            this._mnuCommandTypeStoredProcedure.Name = "_mnuCommandTypeStoredProcedure";
-            this._mnuCommandTypeStoredProcedure.Size = new System.Drawing.Size(165, 22);
-            this._mnuCommandTypeStoredProcedure.Text = "Stored Procedure";
-            this._mnuCommandTypeStoredProcedure.Click += new System.EventHandler(this.mnuCommandTypeStoredProcedure_Click);
+            _mnuCommandTypeStoredProcedure.MergeIndex = 1;
+            _mnuCommandTypeStoredProcedure.Name = "_mnuCommandTypeStoredProcedure";
+            _mnuCommandTypeStoredProcedure.Size = new System.Drawing.Size(165, 22);
+            _mnuCommandTypeStoredProcedure.Text = "Stored Procedure";
+            _mnuCommandTypeStoredProcedure.Click += new System.EventHandler(mnuCommandTypeStoredProcedure_Click);
             // 
             // mnuDescribeParameters
             // 
-            this._mnuDescribeParameters.MergeIndex = 1;
-            this._mnuDescribeParameters.Name = "_mnuDescribeParameters";
-            this._mnuDescribeParameters.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this._mnuDescribeParameters.Size = new System.Drawing.Size(269, 22);
-            this._mnuDescribeParameters.Text = "Describe &Parameters";
-            this._mnuDescribeParameters.Click += new System.EventHandler(this.mnuDescribeParameters_Click);
+            _mnuDescribeParameters.MergeIndex = 1;
+            _mnuDescribeParameters.Name = "_mnuDescribeParameters";
+            _mnuDescribeParameters.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            _mnuDescribeParameters.Size = new System.Drawing.Size(269, 22);
+            _mnuDescribeParameters.Text = "Describe &Parameters";
+            _mnuDescribeParameters.Click += new System.EventHandler(mnuDescribeParameters_Click);
             // 
             // toolStripSeparator2
             // 
-            this._toolStripSeparator2.Name = "_toolStripSeparator2";
-            this._toolStripSeparator2.Size = new System.Drawing.Size(266, 6);
+            _toolStripSeparator2.Name = "_toolStripSeparator2";
+            _toolStripSeparator2.Size = new System.Drawing.Size(266, 6);
             // 
             // mnuShowShemaTable
             // 
-            this._mnuShowShemaTable.MergeIndex = 3;
-            this._mnuShowShemaTable.Name = "_mnuShowShemaTable";
-            this._mnuShowShemaTable.Size = new System.Drawing.Size(269, 22);
-            this._mnuShowShemaTable.Text = "Show SchemaTable";
-            this._mnuShowShemaTable.Click += new System.EventHandler(this.mnuShowShemaTable_Click);
+            _mnuShowShemaTable.MergeIndex = 3;
+            _mnuShowShemaTable.Name = "_mnuShowShemaTable";
+            _mnuShowShemaTable.Size = new System.Drawing.Size(269, 22);
+            _mnuShowShemaTable.Text = "Show SchemaTable";
+            _mnuShowShemaTable.Click += new System.EventHandler(mnuShowShemaTable_Click);
             // 
             // executeQueryToolStripMenuItem
             // 
-            this._executeQueryToolStripMenuItem.Name = "_executeQueryToolStripMenuItem";
-            this._executeQueryToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-            this._executeQueryToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
-            this._executeQueryToolStripMenuItem.Text = "Execute Query";
-            this._executeQueryToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            _executeQueryToolStripMenuItem.Name = "_executeQueryToolStripMenuItem";
+            _executeQueryToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+            _executeQueryToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
+            _executeQueryToolStripMenuItem.Text = "Execute Query";
+            _executeQueryToolStripMenuItem.Click += new System.EventHandler(toolStripMenuItem1_Click);
             // 
             // mnuExecuteQuerySingleRow
             // 
-            this._mnuExecuteQuerySingleRow.MergeIndex = 6;
-            this._mnuExecuteQuerySingleRow.Name = "_mnuExecuteQuerySingleRow";
-            this._mnuExecuteQuerySingleRow.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
-            this._mnuExecuteQuerySingleRow.Size = new System.Drawing.Size(269, 22);
-            this._mnuExecuteQuerySingleRow.Text = "Execute Query (SingleRow)";
-            this._mnuExecuteQuerySingleRow.Click += new System.EventHandler(this.mnuSingleRow_Click);
+            _mnuExecuteQuerySingleRow.MergeIndex = 6;
+            _mnuExecuteQuerySingleRow.Name = "_mnuExecuteQuerySingleRow";
+            _mnuExecuteQuerySingleRow.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
+            _mnuExecuteQuerySingleRow.Size = new System.Drawing.Size(269, 22);
+            _mnuExecuteQuerySingleRow.Text = "Execute Query (SingleRow)";
+            _mnuExecuteQuerySingleRow.Click += new System.EventHandler(mnuSingleRow_Click);
             // 
             // mnuExecuteQuerySchemaOnly
             // 
-            this._mnuExecuteQuerySchemaOnly.MergeIndex = 7;
-            this._mnuExecuteQuerySchemaOnly.Name = "_mnuExecuteQuerySchemaOnly";
-            this._mnuExecuteQuerySchemaOnly.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this._mnuExecuteQuerySchemaOnly.Size = new System.Drawing.Size(269, 22);
-            this._mnuExecuteQuerySchemaOnly.Text = "Execute Query (Schema only)";
-            this._mnuExecuteQuerySchemaOnly.Click += new System.EventHandler(this.mnuResultSchema_Click);
+            _mnuExecuteQuerySchemaOnly.MergeIndex = 7;
+            _mnuExecuteQuerySchemaOnly.Name = "_mnuExecuteQuerySchemaOnly";
+            _mnuExecuteQuerySchemaOnly.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            _mnuExecuteQuerySchemaOnly.Size = new System.Drawing.Size(269, 22);
+            _mnuExecuteQuerySchemaOnly.Text = "Execute Query (Schema only)";
+            _mnuExecuteQuerySchemaOnly.Click += new System.EventHandler(mnuResultSchema_Click);
             // 
             // mnuExecuteQueryKeyInfo
             // 
-            this._mnuExecuteQueryKeyInfo.MergeIndex = 8;
-            this._mnuExecuteQueryKeyInfo.Name = "_mnuExecuteQueryKeyInfo";
-            this._mnuExecuteQueryKeyInfo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.K)));
-            this._mnuExecuteQueryKeyInfo.Size = new System.Drawing.Size(269, 22);
-            this._mnuExecuteQueryKeyInfo.Text = "Execute Query (&KeyInfo)";
-            this._mnuExecuteQueryKeyInfo.Click += new System.EventHandler(this.mnuKeyInfo_Click);
+            _mnuExecuteQueryKeyInfo.MergeIndex = 8;
+            _mnuExecuteQueryKeyInfo.Name = "_mnuExecuteQueryKeyInfo";
+            _mnuExecuteQueryKeyInfo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.K)));
+            _mnuExecuteQueryKeyInfo.Size = new System.Drawing.Size(269, 22);
+            _mnuExecuteQueryKeyInfo.Text = "Execute Query (&KeyInfo)";
+            _mnuExecuteQueryKeyInfo.Click += new System.EventHandler(mnuKeyInfo_Click);
             // 
             // mnuExecuteQueryXml
             // 
-            this._mnuExecuteQueryXml.MergeIndex = 9;
-            this._mnuExecuteQueryXml.Name = "_mnuExecuteQueryXml";
-            this._mnuExecuteQueryXml.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+            _mnuExecuteQueryXml.MergeIndex = 9;
+            _mnuExecuteQueryXml.Name = "_mnuExecuteQueryXml";
+            _mnuExecuteQueryXml.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
                                                                                  | System.Windows.Forms.Keys.X)));
-            this._mnuExecuteQueryXml.Size = new System.Drawing.Size(269, 22);
-            this._mnuExecuteQueryXml.Text = "Execute Query (XML)";
-            this._mnuExecuteQueryXml.Click += new System.EventHandler(this.mnuXml_Click);
+            _mnuExecuteQueryXml.Size = new System.Drawing.Size(269, 22);
+            _mnuExecuteQueryXml.Text = "Execute Query (XML)";
+            _mnuExecuteQueryXml.Click += new System.EventHandler(mnuXml_Click);
             // 
             // mnuOpenTable
             // 
-            this._mnuOpenTable.MergeIndex = 10;
-            this._mnuOpenTable.Name = "_mnuOpenTable";
-            this._mnuOpenTable.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+            _mnuOpenTable.MergeIndex = 10;
+            _mnuOpenTable.Name = "_mnuOpenTable";
+            _mnuOpenTable.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
                                                                            | System.Windows.Forms.Keys.O)));
-            this._mnuOpenTable.Size = new System.Drawing.Size(269, 22);
-            this._mnuOpenTable.Text = "Open Table";
-            this._mnuOpenTable.Click += new System.EventHandler(this.mnuOpenTable_Click);
+            _mnuOpenTable.Size = new System.Drawing.Size(269, 22);
+            _mnuOpenTable.Text = "Open Table";
+            _mnuOpenTable.Click += new System.EventHandler(mnuOpenTable_Click);
             // 
             // mnuCancel
             // 
-            this._mnuCancel.Enabled = false;
-            this._mnuCancel.MergeIndex = 11;
-            this._mnuCancel.Name = "_mnuCancel";
-            this._mnuCancel.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Pause)));
-            this._mnuCancel.Size = new System.Drawing.Size(269, 22);
-            this._mnuCancel.Text = "&Cancel Executing Query";
-            this._mnuCancel.Click += new System.EventHandler(this.mnuCancel_Click);
+            _mnuCancel.Enabled = false;
+            _mnuCancel.MergeIndex = 11;
+            _mnuCancel.Name = "_mnuCancel";
+            _mnuCancel.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Pause)));
+            _mnuCancel.Size = new System.Drawing.Size(269, 22);
+            _mnuCancel.Text = "&Cancel Executing Query";
+            _mnuCancel.Click += new System.EventHandler(mnuCancel_Click);
             // 
             // parseToolStripMenuItem
             // 
-            this._parseToolStripMenuItem.Name = "_parseToolStripMenuItem";
-            this._parseToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
-            this._parseToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
-            this._parseToolStripMenuItem.Text = "Parse";
-            this._parseToolStripMenuItem.Click += new System.EventHandler(this.parseToolStripMenuItem_Click);
+            _parseToolStripMenuItem.Name = "_parseToolStripMenuItem";
+            _parseToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
+            _parseToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
+            _parseToolStripMenuItem.Text = "Parse";
+            _parseToolStripMenuItem.Click += new System.EventHandler(parseToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
-            this._toolStripSeparator1.Name = "_toolStripSeparator1";
-            this._toolStripSeparator1.Size = new System.Drawing.Size(266, 6);
+            _toolStripSeparator1.Name = "_toolStripSeparator1";
+            _toolStripSeparator1.Size = new System.Drawing.Size(266, 6);
             // 
             // menuItem2
             // 
-            this._menuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            _menuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
             {
-                this._mnuText,
-                this._mnuDataGrid,
-                this._mnuHtml,
-                this._mnuRtf,
-                this._mnuListView,
-                this._mnuExcel,
-                this._menuResultModeFile,
-                this._sQLiteDatabaseToolStripMenuItem,
-                this._insertScriptFileToolStripMenuItem
+                _mnuText,
+                _mnuDataGrid,
+                _mnuHtml,
+                _mnuRtf,
+                _mnuListView,
+                _mnuExcel,
+                _menuResultModeFile,
+                _sQLiteDatabaseToolStripMenuItem,
+                _insertScriptFileToolStripMenuItem
             });
-            this._menuItem2.MergeIndex = 13;
-            this._menuItem2.Name = "_menuItem2";
-            this._menuItem2.Size = new System.Drawing.Size(269, 22);
-            this._menuItem2.Text = "Result &Mode";
+            _menuItem2.MergeIndex = 13;
+            _menuItem2.Name = "_menuItem2";
+            _menuItem2.Size = new System.Drawing.Size(269, 22);
+            _menuItem2.Text = "Result &Mode";
             // 
             // mnuText
             // 
-            this._mnuText.MergeIndex = 0;
-            this._mnuText.Name = "_mnuText";
-            this._mnuText.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
-            this._mnuText.Size = new System.Drawing.Size(221, 22);
-            this._mnuText.Text = "&Text";
-            this._mnuText.Click += new System.EventHandler(this.mnuText_Click);
+            _mnuText.MergeIndex = 0;
+            _mnuText.Name = "_mnuText";
+            _mnuText.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
+            _mnuText.Size = new System.Drawing.Size(221, 22);
+            _mnuText.Text = "&Text";
+            _mnuText.Click += new System.EventHandler(mnuText_Click);
             // 
             // mnuDataGrid
             // 
-            this._mnuDataGrid.MergeIndex = 1;
-            this._mnuDataGrid.Name = "_mnuDataGrid";
-            this._mnuDataGrid.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
-            this._mnuDataGrid.Size = new System.Drawing.Size(221, 22);
-            this._mnuDataGrid.Text = "&DataGrid";
-            this._mnuDataGrid.Click += new System.EventHandler(this.mnuDataGrid_Click);
+            _mnuDataGrid.MergeIndex = 1;
+            _mnuDataGrid.Name = "_mnuDataGrid";
+            _mnuDataGrid.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
+            _mnuDataGrid.Size = new System.Drawing.Size(221, 22);
+            _mnuDataGrid.Text = "&DataGrid";
+            _mnuDataGrid.Click += new System.EventHandler(mnuDataGrid_Click);
             // 
             // mnuHtml
             // 
-            this._mnuHtml.MergeIndex = 2;
-            this._mnuHtml.Name = "_mnuHtml";
-            this._mnuHtml.Size = new System.Drawing.Size(221, 22);
-            this._mnuHtml.Text = "&Html";
-            this._mnuHtml.Click += new System.EventHandler(this.mnuHtml_Click);
+            _mnuHtml.MergeIndex = 2;
+            _mnuHtml.Name = "_mnuHtml";
+            _mnuHtml.Size = new System.Drawing.Size(221, 22);
+            _mnuHtml.Text = "&Html";
+            _mnuHtml.Click += new System.EventHandler(mnuHtml_Click);
             // 
             // mnuRtf
             // 
-            this._mnuRtf.MergeIndex = 3;
-            this._mnuRtf.Name = "_mnuRtf";
-            this._mnuRtf.Size = new System.Drawing.Size(221, 22);
-            this._mnuRtf.Text = "&Rtf";
+            _mnuRtf.MergeIndex = 3;
+            _mnuRtf.Name = "_mnuRtf";
+            _mnuRtf.Size = new System.Drawing.Size(221, 22);
+            _mnuRtf.Text = "&Rtf";
             // 
             // mnuListView
             // 
-            this._mnuListView.MergeIndex = 4;
-            this._mnuListView.Name = "_mnuListView";
-            this._mnuListView.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
-            this._mnuListView.Size = new System.Drawing.Size(221, 22);
-            this._mnuListView.Text = "&ListView";
-            this._mnuListView.Click += new System.EventHandler(this.mnuListView_Click);
+            _mnuListView.MergeIndex = 4;
+            _mnuListView.Name = "_mnuListView";
+            _mnuListView.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+            _mnuListView.Size = new System.Drawing.Size(221, 22);
+            _mnuListView.Text = "&ListView";
+            _mnuListView.Click += new System.EventHandler(mnuListView_Click);
             // 
             // mnuExcel
             // 
-            this._mnuExcel.MergeIndex = 5;
-            this._mnuExcel.Name = "_mnuExcel";
-            this._mnuExcel.Size = new System.Drawing.Size(221, 22);
-            this._mnuExcel.Text = "&Excel";
-            this._mnuExcel.Visible = false;
+            _mnuExcel.MergeIndex = 5;
+            _mnuExcel.Name = "_mnuExcel";
+            _mnuExcel.Size = new System.Drawing.Size(221, 22);
+            _mnuExcel.Text = "&Excel";
+            _mnuExcel.Visible = false;
             // 
             // menuResultModeFile
             // 
-            this._menuResultModeFile.MergeIndex = 6;
-            this._menuResultModeFile.Name = "_menuResultModeFile";
-            this._menuResultModeFile.Size = new System.Drawing.Size(221, 22);
-            this._menuResultModeFile.Text = "&File";
-            this._menuResultModeFile.Click += new System.EventHandler(this.menuResultModeFile_Click);
+            _menuResultModeFile.MergeIndex = 6;
+            _menuResultModeFile.Name = "_menuResultModeFile";
+            _menuResultModeFile.Size = new System.Drawing.Size(221, 22);
+            _menuResultModeFile.Text = "&File";
+            _menuResultModeFile.Click += new System.EventHandler(menuResultModeFile_Click);
             // 
             // sQLiteDatabaseToolStripMenuItem
             // 
-            this._sQLiteDatabaseToolStripMenuItem.Name = "_sQLiteDatabaseToolStripMenuItem";
-            this._sQLiteDatabaseToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
-            this._sQLiteDatabaseToolStripMenuItem.Text = "SQLite database";
-            this._sQLiteDatabaseToolStripMenuItem.Click += new System.EventHandler(this.sQLiteDatabaseToolStripMenuItem_Click);
+            _sQLiteDatabaseToolStripMenuItem.Name = "_sQLiteDatabaseToolStripMenuItem";
+            _sQLiteDatabaseToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
+            _sQLiteDatabaseToolStripMenuItem.Text = "SQLite database";
+            _sQLiteDatabaseToolStripMenuItem.Click += new System.EventHandler(sQLiteDatabaseToolStripMenuItem_Click);
             // 
             // insertScriptFileToolStripMenuItem
             // 
-            this._insertScriptFileToolStripMenuItem.Name = "_insertScriptFileToolStripMenuItem";
-            this._insertScriptFileToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
-            this._insertScriptFileToolStripMenuItem.Text = "Insert Script File";
-            this._insertScriptFileToolStripMenuItem.Click += new System.EventHandler(this.insertScriptFileToolStripMenuItem_Click);
+            _insertScriptFileToolStripMenuItem.Name = "_insertScriptFileToolStripMenuItem";
+            _insertScriptFileToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
+            _insertScriptFileToolStripMenuItem.Text = "Insert Script File";
+            _insertScriptFileToolStripMenuItem.Click += new System.EventHandler(insertScriptFileToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
-            this._toolStripSeparator3.Name = "_toolStripSeparator3";
-            this._toolStripSeparator3.Size = new System.Drawing.Size(266, 6);
+            _toolStripSeparator3.Name = "_toolStripSeparator3";
+            _toolStripSeparator3.Size = new System.Drawing.Size(266, 6);
             // 
             // mnuGotoQueryEditor
             // 
-            this._mnuGotoQueryEditor.MergeIndex = 15;
-            this._mnuGotoQueryEditor.Name = "_mnuGotoQueryEditor";
-            this._mnuGotoQueryEditor.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+            _mnuGotoQueryEditor.MergeIndex = 15;
+            _mnuGotoQueryEditor.Name = "_mnuGotoQueryEditor";
+            _mnuGotoQueryEditor.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
                                                                                  | System.Windows.Forms.Keys.Q)));
-            this._mnuGotoQueryEditor.Size = new System.Drawing.Size(269, 22);
-            this._mnuGotoQueryEditor.Text = "Goto &Query Editor";
-            this._mnuGotoQueryEditor.Click += new System.EventHandler(this.mnuGotoQueryEditor_Click);
+            _mnuGotoQueryEditor.Size = new System.Drawing.Size(269, 22);
+            _mnuGotoQueryEditor.Text = "Goto &Query Editor";
+            _mnuGotoQueryEditor.Click += new System.EventHandler(mnuGotoQueryEditor_Click);
             // 
             // mnuGotoMessageTabPage
             // 
-            this._mnuGotoMessageTabPage.MergeIndex = 16;
-            this._mnuGotoMessageTabPage.Name = "_mnuGotoMessageTabPage";
-            this._mnuGotoMessageTabPage.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
-            this._mnuGotoMessageTabPage.Size = new System.Drawing.Size(269, 22);
-            this._mnuGotoMessageTabPage.Text = "Goto &Message TabPage";
-            this._mnuGotoMessageTabPage.Click += new System.EventHandler(this.mnuGotoMessageTabPage_Click);
+            _mnuGotoMessageTabPage.MergeIndex = 16;
+            _mnuGotoMessageTabPage.Name = "_mnuGotoMessageTabPage";
+            _mnuGotoMessageTabPage.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
+            _mnuGotoMessageTabPage.Size = new System.Drawing.Size(269, 22);
+            _mnuGotoMessageTabPage.Text = "Goto &Message TabPage";
+            _mnuGotoMessageTabPage.Click += new System.EventHandler(mnuGotoMessageTabPage_Click);
             // 
             // mnuCloseTabPage
             // 
-            this._mnuCloseTabPage.MergeIndex = 17;
-            this._mnuCloseTabPage.Name = "_mnuCloseTabPage";
+            _mnuCloseTabPage.MergeIndex = 17;
+            _mnuCloseTabPage.Name = "_mnuCloseTabPage";
             //this.mnuCloseTabPage.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4)));
-            this._mnuCloseTabPage.Size = new System.Drawing.Size(269, 22);
-            this._mnuCloseTabPage.Text = "Close Current &TabPage";
-            this._mnuCloseTabPage.Click += new System.EventHandler(this.mnuCloseTabPage_Click);
+            _mnuCloseTabPage.Size = new System.Drawing.Size(269, 22);
+            _mnuCloseTabPage.Text = "Close Current &TabPage";
+            _mnuCloseTabPage.Click += new System.EventHandler(mnuCloseTabPage_Click);
             // 
             // mnuCloseAllTabPages
             // 
-            this._mnuCloseAllTabPages.MergeIndex = 18;
-            this._mnuCloseAllTabPages.Name = "_mnuCloseAllTabPages";
-            this._mnuCloseAllTabPages.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+            _mnuCloseAllTabPages.MergeIndex = 18;
+            _mnuCloseAllTabPages.Name = "_mnuCloseAllTabPages";
+            _mnuCloseAllTabPages.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
                                                                                   | System.Windows.Forms.Keys.F4)));
-            this._mnuCloseAllTabPages.Size = new System.Drawing.Size(269, 22);
-            this._mnuCloseAllTabPages.Text = "Close &All TabPages";
-            this._mnuCloseAllTabPages.Click += new System.EventHandler(this.mnuCloseAllTabPages_Click);
+            _mnuCloseAllTabPages.Size = new System.Drawing.Size(269, 22);
+            _mnuCloseAllTabPages.Text = "Close &All TabPages";
+            _mnuCloseAllTabPages.Click += new System.EventHandler(mnuCloseAllTabPages_Click);
             // 
             // mnuCreateInsert
             // 
-            this._mnuCreateInsert.MergeIndex = 19;
-            this._mnuCreateInsert.Name = "_mnuCreateInsert";
-            this._mnuCreateInsert.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
-            this._mnuCreateInsert.Size = new System.Drawing.Size(269, 22);
-            this._mnuCreateInsert.Text = "Create insert statements";
-            this._mnuCreateInsert.Click += new System.EventHandler(this.mnuCreateInsert_Click);
+            _mnuCreateInsert.MergeIndex = 19;
+            _mnuCreateInsert.Name = "_mnuCreateInsert";
+            _mnuCreateInsert.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
+            _mnuCreateInsert.Size = new System.Drawing.Size(269, 22);
+            _mnuCreateInsert.Text = "Create insert statements";
+            _mnuCreateInsert.Click += new System.EventHandler(mnuCreateInsert_Click);
             // 
             // mnuCreateInsertSelect
             // 
-            this._mnuCreateInsertSelect.MergeIndex = 20;
-            this._mnuCreateInsertSelect.Name = "_mnuCreateInsertSelect";
-            this._mnuCreateInsertSelect.Size = new System.Drawing.Size(269, 22);
-            this._mnuCreateInsertSelect.Text = "Create \'insert select\' statements";
-            this._mnuCreateInsertSelect.Click += new System.EventHandler(this.mnuCreateInsertSelect_Click);
+            _mnuCreateInsertSelect.MergeIndex = 20;
+            _mnuCreateInsertSelect.Name = "_mnuCreateInsertSelect";
+            _mnuCreateInsertSelect.Size = new System.Drawing.Size(269, 22);
+            _mnuCreateInsertSelect.Text = "Create \'insert select\' statements";
+            _mnuCreateInsertSelect.Click += new System.EventHandler(mnuCreateInsertSelect_Click);
             // 
             // createSqlCeDatabaseToolStripMenuItem
             // 
-            this._createSqlCeDatabaseToolStripMenuItem.Name = "_createSqlCeDatabaseToolStripMenuItem";
-            this._createSqlCeDatabaseToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
-            this._createSqlCeDatabaseToolStripMenuItem.Text = "Create SQL Server Compact database";
-            this._createSqlCeDatabaseToolStripMenuItem.Click += new System.EventHandler(this.createSqlCeDatabaseToolStripMenuItem_Click);
+            _createSqlCeDatabaseToolStripMenuItem.Name = "_createSqlCeDatabaseToolStripMenuItem";
+            _createSqlCeDatabaseToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
+            _createSqlCeDatabaseToolStripMenuItem.Text = "Create SQL Server Compact database";
+            _createSqlCeDatabaseToolStripMenuItem.Click += new System.EventHandler(createSqlCeDatabaseToolStripMenuItem_Click);
             // 
             // exportToolStripMenuItem
             // 
-            this._exportToolStripMenuItem.Name = "_exportToolStripMenuItem";
-            this._exportToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
+            _exportToolStripMenuItem.Name = "_exportToolStripMenuItem";
+            _exportToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
             // 
             // beginTransactionToolStripMenuItem
             // 
-            this._beginTransactionToolStripMenuItem.Name = "_beginTransactionToolStripMenuItem";
-            this._beginTransactionToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
-            this._beginTransactionToolStripMenuItem.Text = "Begin Transaction";
-            this._beginTransactionToolStripMenuItem.Click += new System.EventHandler(this.beginTransactionToolStripMenuItem_Click);
+            _beginTransactionToolStripMenuItem.Name = "_beginTransactionToolStripMenuItem";
+            _beginTransactionToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
+            _beginTransactionToolStripMenuItem.Text = "Begin Transaction";
+            _beginTransactionToolStripMenuItem.Click += new System.EventHandler(beginTransactionToolStripMenuItem_Click);
             // 
             // commitTransactionToolStripMenuItem
             // 
-            this._commitTransactionToolStripMenuItem.Enabled = false;
-            this._commitTransactionToolStripMenuItem.Name = "_commitTransactionToolStripMenuItem";
-            this._commitTransactionToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
-            this._commitTransactionToolStripMenuItem.Text = "Commit Transaction";
-            this._commitTransactionToolStripMenuItem.Click += new System.EventHandler(this.commitTransactionToolStripMenuItem_Click);
+            _commitTransactionToolStripMenuItem.Enabled = false;
+            _commitTransactionToolStripMenuItem.Name = "_commitTransactionToolStripMenuItem";
+            _commitTransactionToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
+            _commitTransactionToolStripMenuItem.Text = "Commit Transaction";
+            _commitTransactionToolStripMenuItem.Click += new System.EventHandler(commitTransactionToolStripMenuItem_Click);
             // 
             // rollbackTransactionToolStripMenuItem
             // 
-            this._rollbackTransactionToolStripMenuItem.Enabled = false;
-            this._rollbackTransactionToolStripMenuItem.Name = "_rollbackTransactionToolStripMenuItem";
-            this._rollbackTransactionToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
-            this._rollbackTransactionToolStripMenuItem.Text = "Rollback Transaction";
-            this._rollbackTransactionToolStripMenuItem.Click += new System.EventHandler(this.rollbackTransactionToolStripMenuItem_Click);
+            _rollbackTransactionToolStripMenuItem.Enabled = false;
+            _rollbackTransactionToolStripMenuItem.Name = "_rollbackTransactionToolStripMenuItem";
+            _rollbackTransactionToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
+            _rollbackTransactionToolStripMenuItem.Text = "Rollback Transaction";
+            _rollbackTransactionToolStripMenuItem.Click += new System.EventHandler(rollbackTransactionToolStripMenuItem_Click);
             // 
             // menuItem3
             // 
-            this._menuItem3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            _menuItem3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
             {
-                this._mnuObjectExplorer,
-                this._mnuRefreshObjectExplorer
+                _mnuObjectExplorer,
+                _mnuRefreshObjectExplorer
             });
-            this._menuItem3.MergeAction = System.Windows.Forms.MergeAction.Insert;
-            this._menuItem3.MergeIndex = 4;
-            this._menuItem3.Name = "_menuItem3";
-            this._menuItem3.Size = new System.Drawing.Size(48, 20);
-            this._menuItem3.Text = "&Tools";
+            _menuItem3.MergeAction = System.Windows.Forms.MergeAction.Insert;
+            _menuItem3.MergeIndex = 4;
+            _menuItem3.Name = "_menuItem3";
+            _menuItem3.Size = new System.Drawing.Size(48, 20);
+            _menuItem3.Text = "&Tools";
             // 
             // mnuObjectExplorer
             // 
-            this._mnuObjectExplorer.MergeIndex = 0;
-            this._mnuObjectExplorer.Name = "_mnuObjectExplorer";
-            this._mnuObjectExplorer.ShortcutKeys = System.Windows.Forms.Keys.F8;
-            this._mnuObjectExplorer.Size = new System.Drawing.Size(229, 22);
-            this._mnuObjectExplorer.Text = "Object Explorer";
-            this._mnuObjectExplorer.Click += new System.EventHandler(this.menuObjectExplorer_Click);
+            _mnuObjectExplorer.MergeIndex = 0;
+            _mnuObjectExplorer.Name = "_mnuObjectExplorer";
+            _mnuObjectExplorer.ShortcutKeys = System.Windows.Forms.Keys.F8;
+            _mnuObjectExplorer.Size = new System.Drawing.Size(229, 22);
+            _mnuObjectExplorer.Text = "Object Explorer";
+            _mnuObjectExplorer.Click += new System.EventHandler(menuObjectExplorer_Click);
             // 
             // mnuRefreshObjectExplorer
             // 
-            this._mnuRefreshObjectExplorer.MergeIndex = 1;
-            this._mnuRefreshObjectExplorer.Name = "_mnuRefreshObjectExplorer";
-            this._mnuRefreshObjectExplorer.Size = new System.Drawing.Size(229, 22);
-            this._mnuRefreshObjectExplorer.Text = "Refresh Object Explorer\'s root";
-            this._mnuRefreshObjectExplorer.Click += new System.EventHandler(this.mnuRefreshObjectExplorer_Click);
+            _mnuRefreshObjectExplorer.MergeIndex = 1;
+            _mnuRefreshObjectExplorer.Name = "_mnuRefreshObjectExplorer";
+            _mnuRefreshObjectExplorer.Size = new System.Drawing.Size(229, 22);
+            _mnuRefreshObjectExplorer.Text = "Refresh Object Explorer\'s root";
+            _mnuRefreshObjectExplorer.Click += new System.EventHandler(mnuRefreshObjectExplorer_Click);
             // 
             // statusBar
             // 
-            this._statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+            _statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
             {
-                this._sbPanelText,
-                this._sbPanelTableStyle,
-                this._sbPanelTimer,
-                this._sbPanelRows,
-                this._sbPanelCaretPosition
+                _sbPanelText,
+                _sbPanelTableStyle,
+                _sbPanelTimer,
+                _sbPanelRows,
+                _sbPanelCaretPosition
             });
-            this._statusBar.Location = new System.Drawing.Point(300, 543);
-            this._statusBar.Name = "_statusBar";
-            this._statusBar.Size = new System.Drawing.Size(716, 22);
-            this._statusBar.TabIndex = 2;
+            _statusBar.Location = new System.Drawing.Point(300, 543);
+            _statusBar.Name = "_statusBar";
+            _statusBar.Size = new System.Drawing.Size(716, 22);
+            _statusBar.TabIndex = 2;
             // 
             // sbPanelText
             // 
-            this._sbPanelText.AutoSize = false;
-            this._sbPanelText.Name = "_sbPanelText";
-            this._sbPanelText.Size = new System.Drawing.Size(231, 17);
-            this._sbPanelText.Spring = true;
-            this._sbPanelText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            _sbPanelText.AutoSize = false;
+            _sbPanelText.Name = "_sbPanelText";
+            _sbPanelText.Size = new System.Drawing.Size(231, 17);
+            _sbPanelText.Spring = true;
+            _sbPanelText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // sbPanelTableStyle
             // 
-            this._sbPanelTableStyle.AutoSize = false;
-            this._sbPanelTableStyle.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this._sbPanelTableStyle.Name = "_sbPanelTableStyle";
-            this._sbPanelTableStyle.Size = new System.Drawing.Size(100, 17);
-            this._sbPanelTableStyle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._sbPanelTableStyle.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sbPanelTableStyle_MouseUp);
+            _sbPanelTableStyle.AutoSize = false;
+            _sbPanelTableStyle.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            _sbPanelTableStyle.Name = "_sbPanelTableStyle";
+            _sbPanelTableStyle.Size = new System.Drawing.Size(100, 17);
+            _sbPanelTableStyle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            _sbPanelTableStyle.MouseUp += new System.Windows.Forms.MouseEventHandler(sbPanelTableStyle_MouseUp);
             // 
             // sbPanelTimer
             // 
-            this._sbPanelTimer.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this._sbPanelTimer.AutoSize = false;
-            this._sbPanelTimer.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this._sbPanelTimer.Name = "_sbPanelTimer";
-            this._sbPanelTimer.Size = new System.Drawing.Size(70, 17);
-            this._sbPanelTimer.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            _sbPanelTimer.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            _sbPanelTimer.AutoSize = false;
+            _sbPanelTimer.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            _sbPanelTimer.Name = "_sbPanelTimer";
+            _sbPanelTimer.Size = new System.Drawing.Size(70, 17);
+            _sbPanelTimer.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // sbPanelRows
             // 
-            this._sbPanelRows.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this._sbPanelRows.AutoSize = false;
-            this._sbPanelRows.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this._sbPanelRows.Name = "_sbPanelRows";
-            this._sbPanelRows.Size = new System.Drawing.Size(200, 17);
-            this._sbPanelRows.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            _sbPanelRows.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            _sbPanelRows.AutoSize = false;
+            _sbPanelRows.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            _sbPanelRows.Name = "_sbPanelRows";
+            _sbPanelRows.Size = new System.Drawing.Size(200, 17);
+            _sbPanelRows.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // sbPanelCaretPosition
             // 
-            this._sbPanelCaretPosition.AutoSize = false;
-            this._sbPanelCaretPosition.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this._sbPanelCaretPosition.Name = "_sbPanelCaretPosition";
-            this._sbPanelCaretPosition.Size = new System.Drawing.Size(100, 17);
-            this._sbPanelCaretPosition.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            _sbPanelCaretPosition.AutoSize = false;
+            _sbPanelCaretPosition.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            _sbPanelCaretPosition.Name = "_sbPanelCaretPosition";
+            _sbPanelCaretPosition.Size = new System.Drawing.Size(100, 17);
+            _sbPanelCaretPosition.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tvObjectExplorer
             // 
-            this._tvObjectExplorer.Dock = System.Windows.Forms.DockStyle.Left;
-            this._tvObjectExplorer.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point,
+            _tvObjectExplorer.Dock = System.Windows.Forms.DockStyle.Left;
+            _tvObjectExplorer.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point,
                 ((byte)(238)));
-            this._tvObjectExplorer.Location = new System.Drawing.Point(0, 0);
-            this._tvObjectExplorer.Name = "_tvObjectExplorer";
-            this._tvObjectExplorer.Size = new System.Drawing.Size(300, 565);
-            this._tvObjectExplorer.TabIndex = 4;
-            this._tvObjectExplorer.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.tvObjectBrowser_BeforeExpand);
-            this._tvObjectExplorer.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.tvObjectBrowser_ItemDrag);
-            this._tvObjectExplorer.DoubleClick += new System.EventHandler(this.tvObjectBrowser_DoubleClick);
-            this._tvObjectExplorer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tvObjectBrowser_MouseDown);
-            this._tvObjectExplorer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tvObjectExplorer_MouseUp);
+            _tvObjectExplorer.Location = new System.Drawing.Point(0, 0);
+            _tvObjectExplorer.Name = "_tvObjectExplorer";
+            _tvObjectExplorer.Size = new System.Drawing.Size(300, 565);
+            _tvObjectExplorer.TabIndex = 4;
+            _tvObjectExplorer.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(tvObjectBrowser_BeforeExpand);
+            _tvObjectExplorer.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(tvObjectBrowser_ItemDrag);
+            _tvObjectExplorer.DoubleClick += new System.EventHandler(tvObjectBrowser_DoubleClick);
+            _tvObjectExplorer.MouseDown += new System.Windows.Forms.MouseEventHandler(tvObjectBrowser_MouseDown);
+            _tvObjectExplorer.MouseUp += new System.Windows.Forms.MouseEventHandler(tvObjectExplorer_MouseUp);
             // 
             // splitterObjectExplorer
             // 
-            this._splitterObjectExplorer.Location = new System.Drawing.Point(300, 0);
-            this._splitterObjectExplorer.Name = "_splitterObjectExplorer";
-            this._splitterObjectExplorer.Size = new System.Drawing.Size(3, 543);
-            this._splitterObjectExplorer.TabIndex = 5;
-            this._splitterObjectExplorer.TabStop = false;
+            _splitterObjectExplorer.Location = new System.Drawing.Point(300, 0);
+            _splitterObjectExplorer.Name = "_splitterObjectExplorer";
+            _splitterObjectExplorer.Size = new System.Drawing.Size(3, 543);
+            _splitterObjectExplorer.TabIndex = 5;
+            _splitterObjectExplorer.TabStop = false;
             // 
             // splitterQuery
             // 
-            this._splitterQuery.Dock = System.Windows.Forms.DockStyle.Top;
-            this._splitterQuery.Location = new System.Drawing.Point(303, 279);
-            this._splitterQuery.Name = "_splitterQuery";
-            this._splitterQuery.Size = new System.Drawing.Size(713, 2);
-            this._splitterQuery.TabIndex = 7;
-            this._splitterQuery.TabStop = false;
+            _splitterQuery.Dock = System.Windows.Forms.DockStyle.Top;
+            _splitterQuery.Location = new System.Drawing.Point(303, 279);
+            _splitterQuery.Name = "_splitterQuery";
+            _splitterQuery.Size = new System.Drawing.Size(713, 2);
+            _splitterQuery.TabIndex = 7;
+            _splitterQuery.TabStop = false;
             // 
             // tabControl
             // 
-            this._tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._tabControl.Location = new System.Drawing.Point(303, 281);
-            this._tabControl.Name = "_tabControl";
-            this._tabControl.SelectedIndex = 0;
-            this._tabControl.ShowToolTips = true;
-            this._tabControl.Size = new System.Drawing.Size(713, 262);
-            this._tabControl.TabIndex = 8;
+            _tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            _tabControl.Location = new System.Drawing.Point(303, 281);
+            _tabControl.Name = "_tabControl";
+            _tabControl.SelectedIndex = 0;
+            _tabControl.ShowToolTips = true;
+            _tabControl.Size = new System.Drawing.Size(713, 262);
+            _tabControl.TabIndex = 8;
             // 
             // toolStrip
             // 
-            this._toolStrip.Dock = System.Windows.Forms.DockStyle.None;
-            this._toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+            _toolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            _toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
             {
-                this._toolStripSeparator4,
-                this._executeQuerySplitButton,
-                this._cancelQueryButton
+                _toolStripSeparator4,
+                _executeQuerySplitButton,
+                _cancelQueryButton
             });
-            this._toolStrip.Location = new System.Drawing.Point(303, 281);
-            this._toolStrip.Name = "_toolStrip";
-            this._toolStrip.Size = new System.Drawing.Size(73, 25);
-            this._toolStrip.TabIndex = 9;
-            this._toolStrip.Text = "toolStrip1";
+            _toolStrip.Location = new System.Drawing.Point(303, 281);
+            _toolStrip.Name = "_toolStrip";
+            _toolStrip.Size = new System.Drawing.Size(73, 25);
+            _toolStrip.TabIndex = 9;
+            _toolStrip.Text = "toolStrip1";
             // 
             // toolStripSeparator4
             // 
-            this._toolStripSeparator4.Name = "_toolStripSeparator4";
-            this._toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            _toolStripSeparator4.Name = "_toolStripSeparator4";
+            _toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
             // executeQuerySplitButton
             // 
-            this._executeQuerySplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this._executeQuerySplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            _executeQuerySplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            _executeQuerySplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
             {
-                this._executeQueryMenuItem,
-                this._executeQuerySingleRowToolStripMenuItem,
-                this._cToolStripMenuItem,
-                this._openTableToolStripMenuItem
+                _executeQueryMenuItem,
+                _executeQuerySingleRowToolStripMenuItem,
+                _cToolStripMenuItem,
+                _openTableToolStripMenuItem
             });
-            this._executeQuerySplitButton.Image = ((System.Drawing.Image)(resources.GetObject("executeQuerySplitButton.Image")));
-            this._executeQuerySplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this._executeQuerySplitButton.Name = "_executeQuerySplitButton";
-            this._executeQuerySplitButton.Size = new System.Drawing.Size(32, 22);
-            this._executeQuerySplitButton.Text = "Execute Query";
-            this._executeQuerySplitButton.ButtonClick += new System.EventHandler(this.toolStripSplitButton1_ButtonClick);
+            _executeQuerySplitButton.Image = ((System.Drawing.Image)(resources.GetObject("executeQuerySplitButton.Image")));
+            _executeQuerySplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            _executeQuerySplitButton.Name = "_executeQuerySplitButton";
+            _executeQuerySplitButton.Size = new System.Drawing.Size(32, 22);
+            _executeQuerySplitButton.Text = "Execute Query";
+            _executeQuerySplitButton.ButtonClick += new System.EventHandler(toolStripSplitButton1_ButtonClick);
             // 
             // executeQueryMenuItem
             // 
-            this._executeQueryMenuItem.Name = "_executeQueryMenuItem";
-            this._executeQueryMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this._executeQueryMenuItem.Size = new System.Drawing.Size(168, 22);
-            this._executeQueryMenuItem.Text = "Execute Query";
-            this._executeQueryMenuItem.Click += new System.EventHandler(this.aToolStripMenuItem_Click);
+            _executeQueryMenuItem.Name = "_executeQueryMenuItem";
+            _executeQueryMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            _executeQueryMenuItem.Size = new System.Drawing.Size(168, 22);
+            _executeQueryMenuItem.Text = "Execute Query";
+            _executeQueryMenuItem.Click += new System.EventHandler(aToolStripMenuItem_Click);
             // 
             // executeQuerySingleRowToolStripMenuItem
             // 
-            this._executeQuerySingleRowToolStripMenuItem.Name = "_executeQuerySingleRowToolStripMenuItem";
-            this._executeQuerySingleRowToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this._executeQuerySingleRowToolStripMenuItem.Text = "Single Row";
-            this._executeQuerySingleRowToolStripMenuItem.Click += new System.EventHandler(this.bToolStripMenuItem_Click);
+            _executeQuerySingleRowToolStripMenuItem.Name = "_executeQuerySingleRowToolStripMenuItem";
+            _executeQuerySingleRowToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            _executeQuerySingleRowToolStripMenuItem.Text = "Single Row";
+            _executeQuerySingleRowToolStripMenuItem.Click += new System.EventHandler(bToolStripMenuItem_Click);
             // 
             // cToolStripMenuItem
             // 
-            this._cToolStripMenuItem.Name = "_cToolStripMenuItem";
-            this._cToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this._cToolStripMenuItem.Text = "XML";
+            _cToolStripMenuItem.Name = "_cToolStripMenuItem";
+            _cToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            _cToolStripMenuItem.Text = "XML";
             // 
             // openTableToolStripMenuItem
             // 
-            this._openTableToolStripMenuItem.Name = "_openTableToolStripMenuItem";
-            this._openTableToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this._openTableToolStripMenuItem.Text = "Open Table";
-            this._openTableToolStripMenuItem.Click += new System.EventHandler(this.openTableToolStripMenuItem_Click);
+            _openTableToolStripMenuItem.Name = "_openTableToolStripMenuItem";
+            _openTableToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            _openTableToolStripMenuItem.Text = "Open Table";
+            _openTableToolStripMenuItem.Click += new System.EventHandler(openTableToolStripMenuItem_Click);
             // 
             // cancelQueryButton
             // 
-            this._cancelQueryButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this._cancelQueryButton.Enabled = false;
-            this._cancelQueryButton.Image = ((System.Drawing.Image)(resources.GetObject("cancelQueryButton.Image")));
-            this._cancelQueryButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this._cancelQueryButton.Name = "_cancelQueryButton";
-            this._cancelQueryButton.Size = new System.Drawing.Size(23, 22);
-            this._cancelQueryButton.Text = "Cancel Executing Query";
-            this._cancelQueryButton.Click += new System.EventHandler(this.cancelExecutingQueryButton_Click);
+            _cancelQueryButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            _cancelQueryButton.Enabled = false;
+            _cancelQueryButton.Image = ((System.Drawing.Image)(resources.GetObject("cancelQueryButton.Image")));
+            _cancelQueryButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            _cancelQueryButton.Name = "_cancelQueryButton";
+            _cancelQueryButton.Size = new System.Drawing.Size(23, 22);
+            _cancelQueryButton.Text = "Cancel Executing Query";
+            _cancelQueryButton.Click += new System.EventHandler(cancelExecutingQueryButton_Click);
             // 
             // queryTextBox
             // 
-            this.QueryTextBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.QueryTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.QueryTextBox.Location = new System.Drawing.Point(303, 0);
-            this.QueryTextBox.Name = "QueryTextBox";
-            this.QueryTextBox.Size = new System.Drawing.Size(713, 279);
-            this.QueryTextBox.TabIndex = 1;
-            this.QueryTextBox.TabSize = 4;
+            QueryTextBox.Dock = System.Windows.Forms.DockStyle.Top;
+            QueryTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            QueryTextBox.Location = new System.Drawing.Point(303, 0);
+            QueryTextBox.Name = "QueryTextBox";
+            QueryTextBox.Size = new System.Drawing.Size(713, 279);
+            QueryTextBox.TabIndex = 1;
+            QueryTextBox.TabSize = 4;
             // 
             // QueryForm
             // 
-            this.AutoScaleBaseSize = new System.Drawing.Size(7, 15);
-            this.ClientSize = new System.Drawing.Size(1016, 565);
-            this.Controls.Add(this._toolStrip);
-            this.Controls.Add(this._tabControl);
-            this.Controls.Add(this._splitterQuery);
-            this.Controls.Add(this.QueryTextBox);
-            this.Controls.Add(this._splitterObjectExplorer);
-            this.Controls.Add(this._statusBar);
-            this.Controls.Add(this._tvObjectExplorer);
-            this.Controls.Add(this._mainMenu);
-            this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this._mainMenu;
-            this.Name = "QueryForm";
-            this._mainMenu.ResumeLayout(false);
-            this._mainMenu.PerformLayout();
-            this._statusBar.ResumeLayout(false);
-            this._statusBar.PerformLayout();
-            this._toolStrip.ResumeLayout(false);
-            this._toolStrip.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleBaseSize = new System.Drawing.Size(7, 15);
+            ClientSize = new System.Drawing.Size(1016, 565);
+            Controls.Add(_toolStrip);
+            Controls.Add(_tabControl);
+            Controls.Add(_splitterQuery);
+            Controls.Add(QueryTextBox);
+            Controls.Add(_splitterObjectExplorer);
+            Controls.Add(_statusBar);
+            Controls.Add(_tvObjectExplorer);
+            Controls.Add(_mainMenu);
+            Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            MainMenuStrip = _mainMenu;
+            Name = "QueryForm";
+            _mainMenu.ResumeLayout(false);
+            _mainMenu.PerformLayout();
+            _statusBar.ResumeLayout(false);
+            _statusBar.PerformLayout();
+            _toolStrip.ResumeLayout(false);
+            _toolStrip.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 
@@ -1564,15 +1547,13 @@ namespace DataCommander.Providers.Query
 
         private void ExecuteQuery()
         {
-            Log.Write(LogLevel.Trace, "ExecuteQuery...");
-
+            Log.Trace("ExecuteQuery...");
+            
             Cursor = Cursors.AppStarting;
             SetGui(CommandState.Cancel);
 
             if (_dataAdapter != null)
-            {
-                Log.Write(LogLevel.Error, "this.dataAdapter == null failed");
-            }
+                Log.Error("this.dataAdapter == null failed");
 
 #if CONTRACTS_FULL
             Contract.Assert(this.dataAdapter == null);
@@ -1580,7 +1561,7 @@ namespace DataCommander.Providers.Query
 
             Log.Trace("ThreadMonitor:\r\n{0}", ThreadMonitor.ToStringTableString());
             ThreadMonitor.Join(0);
-            Log.Write(LogLevel.Trace, GarbageMonitor.State);
+            Log.Trace(GarbageMonitor.State);
             _openTableMode = false;
             _dataAdapter = new AsyncDataAdapter();
             _cancel = false;
@@ -4164,9 +4145,7 @@ namespace DataCommander.Providers.Query
                 }
 
                 if (succeeded)
-                {
                     AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Command(s) completed successfully."));
-                }
             }
             catch (Exception exception)
             {
@@ -4175,9 +4154,7 @@ namespace DataCommander.Providers.Query
             }
 
             if (on)
-            {
                 transactionScope.ExecuteNonQuery(new CommandDefinition {CommandText = "SET PARSEONLY OFF"});
-            }
         }
 
         public void SetStatusbarPanelText(string text, Color color)
