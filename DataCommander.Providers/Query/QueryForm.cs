@@ -689,7 +689,7 @@ namespace DataCommander.Providers.Query
             // 
             // mnuPaste
             // 
-            _mnuPaste.Image = ((System.Drawing.Image)(resources.GetObject("mnuPaste.Image")));
+            _mnuPaste.Image = ((System.Drawing.Image)(resources.GetObject("_mnuPaste.Image")));
             _mnuPaste.MergeIndex = 0;
             _mnuPaste.Name = "_mnuPaste";
             _mnuPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
@@ -698,7 +698,7 @@ namespace DataCommander.Providers.Query
             // 
             // mnuFind
             // 
-            _mnuFind.Image = ((System.Drawing.Image)(resources.GetObject("mnuFind.Image")));
+            _mnuFind.Image = ((System.Drawing.Image)(resources.GetObject("_mnuFind.Image")));
             _mnuFind.MergeIndex = 1;
             _mnuFind.Name = "_mnuFind";
             _mnuFind.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
@@ -1264,7 +1264,7 @@ namespace DataCommander.Providers.Query
                 _cToolStripMenuItem,
                 _openTableToolStripMenuItem
             });
-            _executeQuerySplitButton.Image = ((System.Drawing.Image)(resources.GetObject("executeQuerySplitButton.Image")));
+            _executeQuerySplitButton.Image = ((System.Drawing.Image)(resources.GetObject("_executeQuerySplitButton.Image")));
             _executeQuerySplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             _executeQuerySplitButton.Name = "_executeQuerySplitButton";
             _executeQuerySplitButton.Size = new System.Drawing.Size(32, 22);
@@ -1303,7 +1303,7 @@ namespace DataCommander.Providers.Query
             // 
             _cancelQueryButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             _cancelQueryButton.Enabled = false;
-            _cancelQueryButton.Image = ((System.Drawing.Image)(resources.GetObject("cancelQueryButton.Image")));
+            _cancelQueryButton.Image = ((System.Drawing.Image)(resources.GetObject("_cancelQueryButton.Image")));
             _cancelQueryButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             _cancelQueryButton.Name = "_cancelQueryButton";
             _cancelQueryButton.Size = new System.Drawing.Size(23, 22);
@@ -1569,7 +1569,7 @@ namespace DataCommander.Providers.Query
             try
             {
                 _sbPanelText.Text = "Executing query...";
-                _sbPanelText.ForeColor = SystemColors.ControlText;
+                _sbPanelText.ForeColor = _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText;
                 var query = Query;
                 var statements = Provider.GetStatements(query);
                 Log.Write(LogLevel.Trace, "Query:\r\n{0}", query);
@@ -2137,21 +2137,19 @@ namespace DataCommander.Providers.Query
             {
                 AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Query was cancelled by user."));
                 _sbPanelText.Text = "Query was cancelled by user.";
-                _sbPanelText.ForeColor = SystemColors.ControlText;
+                _sbPanelText.ForeColor = _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText;
                 _cancel = false;
             }
             else
             {
                 if (_errorCount == 0)
                 {
-                    _sbPanelText.ForeColor = _colorTheme != null
-                        ? _colorTheme.ForeColor
-                        : SystemColors.ControlText;
+                    _sbPanelText.ForeColor = _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText;
                     _sbPanelText.Text = "Query executed successfully.";
                 }
                 else
                 {
-                    _sbPanelText.ForeColor = Color.Red;
+                    _sbPanelText.ForeColor = _colorTheme != null ? _colorTheme.ProviderKeyWordColor : Color.Red;
                     _sbPanelText.Text = "Query completed with errors.";
                 }
             }
