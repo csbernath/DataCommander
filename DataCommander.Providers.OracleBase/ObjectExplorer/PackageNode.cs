@@ -1,15 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
+using DataCommander.Providers.Query;
 using Foundation.Data;
 
-namespace DataCommander.Providers.OracleBase
+namespace DataCommander.Providers.OracleBase.ObjectExplorer
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Text;
-    using System.Threading;
-    using System.Windows.Forms;
-    using Query;
-
     /// <summary>
     /// Summary description for TablesNode.
     /// </summary>

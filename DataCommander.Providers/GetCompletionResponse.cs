@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace DataCommander.Providers
+{
     public sealed class GetCompletionResponse
     {
         public int StartPosition;

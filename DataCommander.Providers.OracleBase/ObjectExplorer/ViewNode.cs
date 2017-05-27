@@ -1,10 +1,10 @@
-namespace DataCommander.Providers.OracleBase
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Windows.Forms;
-    using Query;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+using DataCommander.Providers.Query;
 
+namespace DataCommander.Providers.OracleBase.ObjectExplorer
+{
     public sealed class ViewNode : ITreeNode
     {
         private readonly ViewCollectionNode parent;

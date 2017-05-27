@@ -1,9 +1,9 @@
+using System;
+using System.Data;
+using DataCommander.Providers.Field;
+
 namespace DataCommander.Providers.SqlServer.FieldReader
 {
-    using System;
-    using System.Data;
-    using Field;
-
     sealed class ShortStringFieldReader : IDataFieldReader
     {
         private readonly IDataRecord _dataRecord;
@@ -21,6 +21,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
         }
 
         #region IDataFieldReader Members
+
         object IDataFieldReader.Value
         {
             get
@@ -47,6 +48,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
                 return value;
             }
         }
+
         #endregion
     }
 }

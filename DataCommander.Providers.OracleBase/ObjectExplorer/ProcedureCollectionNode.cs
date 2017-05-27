@@ -1,11 +1,10 @@
+using System.Collections.Generic;
+using System.Data;
+using System.Windows.Forms;
 using Foundation.Data;
 
-namespace DataCommander.Providers.OracleBase
+namespace DataCommander.Providers.OracleBase.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Windows.Forms;
-
     internal sealed class ProcedureCollectionNode : ITreeNode
     {
         public ProcedureCollectionNode( SchemaNode schemaNode )

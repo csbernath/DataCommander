@@ -1,17 +1,15 @@
+using System;
+using System.Data;
+using DataCommander.Providers.Field;
+
 namespace DataCommander.Providers.SqlServer.FieldReader
 {
-    using System;
-    using System.Data;
-    using Field;
-
     internal sealed class LongStringFieldReader : IDataFieldReader
     {
         private readonly IDataRecord _dataRecord;
         private readonly int _columnOrdinal;
 
-        public LongStringFieldReader(
-            IDataRecord dataRecord,
-            int columnOrdinal)
+        public LongStringFieldReader(IDataRecord dataRecord, int columnOrdinal)
         {
             _dataRecord = dataRecord;
             _columnOrdinal = columnOrdinal;

@@ -1,11 +1,10 @@
+using System.Collections.Generic;
+using System.Threading;
+using System.Windows.Forms;
 using Foundation.Data;
 
-namespace DataCommander.Providers.OracleBase
+namespace DataCommander.Providers.OracleBase.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Windows.Forms;
-
     public sealed class ViewCollectionNode : ITreeNode
     {
         private readonly SchemaNode schemaNode;

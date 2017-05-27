@@ -1,13 +1,13 @@
-﻿namespace DataCommander.Providers
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.Xml;
-    using Connection;
-    using Foundation.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Xml;
+using DataCommander.Providers.Connection;
+using Foundation.Data;
 
+namespace DataCommander.Providers
+{
     //[ContractClass(typeof (IProviderContract))]
     public interface IProvider
     {

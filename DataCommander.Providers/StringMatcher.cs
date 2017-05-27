@@ -1,7 +1,7 @@
+using System;
+
 namespace DataCommander.Providers
 {
-    using System;
-
     internal sealed class StringMatcher : IStringMatcher
     {
         private readonly string _subString;

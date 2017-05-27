@@ -1,8 +1,8 @@
-namespace DataCommander.Providers.OracleBase
-{
-    using System.Collections.Generic;
-    using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.OracleBase.ObjectExplorer
+{
     /// <summary>
 	/// Summary description for TablesNode.
 	/// </summary>

@@ -8,8 +8,6 @@ using Foundation.Data;
 
 namespace DataCommander.Providers
 {
-
-
     //[ContractClassFor(typeof (IProvider))]
     internal abstract class ProviderContract : IProvider
     {
@@ -127,7 +125,8 @@ namespace DataCommander.Providers
             throw new NotImplementedException();
         }
 
-        void IProvider.CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationconnection, string destinationTableName,
+        void IProvider.CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationconnection,
+            string destinationTableName,
             out IDbCommand insertCommand, out Converter<object, object>[] converters)
         {
 #if CONTRACTS_FULL
@@ -152,6 +151,6 @@ namespace DataCommander.Providers
             throw new NotImplementedException();
         }
 
-#endregion
+        #endregion
     }
 }

@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Providers.OracleBase
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Windows.Forms;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.OracleBase.ObjectExplorer
+{
     public sealed class SequenceNode : ITreeNode
 	{
 		private SchemaNode schemaNode;

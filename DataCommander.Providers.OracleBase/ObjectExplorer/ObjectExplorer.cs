@@ -1,8 +1,8 @@
-namespace DataCommander.Providers.OracleBase
-{
-    using System.Collections.Generic;
-    using System.Data;
+using System.Collections.Generic;
+using System.Data;
 
+namespace DataCommander.Providers.OracleBase.ObjectExplorer
+{
     /// <summary>
     /// Summary description for ObjectBrowser.
     /// </summary>

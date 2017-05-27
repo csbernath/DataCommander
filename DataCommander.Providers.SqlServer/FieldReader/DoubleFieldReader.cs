@@ -1,14 +1,15 @@
+using System;
+using System.Data;
+using DataCommander.Providers.Field;
+
 namespace DataCommander.Providers.SqlServer.FieldReader
 {
-    using System;
-    using System.Data;
-    using Field;
-
-    sealed class DoubleFieldReader : IDataFieldReader
+    internal sealed class DoubleFieldReader : IDataFieldReader
     {
-        public DoubleFieldReader(
-            IDataRecord dataRecord,
-            int columnOrdinal)
+        private readonly IDataRecord _dataRecord;
+        private readonly int _columnOrdinal;
+
+        public DoubleFieldReader(IDataRecord dataRecord, int columnOrdinal)
         {
             _dataRecord = dataRecord;
             _columnOrdinal = columnOrdinal;
@@ -21,9 +22,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
                 object value;
 
                 if (_dataRecord.IsDBNull(_columnOrdinal))
-                {
                     value = DBNull.Value;
-                }
                 else
                 {
                     var d = _dataRecord.GetDouble(_columnOrdinal);
@@ -33,8 +32,5 @@ namespace DataCommander.Providers.SqlServer.FieldReader
                 return value;
             }
         }
-
-        readonly IDataRecord _dataRecord;
-        readonly int _columnOrdinal;
     }
 }
