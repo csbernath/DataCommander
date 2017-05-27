@@ -78,11 +78,14 @@ namespace DataCommander.Providers.ResultWriter
         void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
             _writeTableBeginTimestamp = Stopwatch.GetTimestamp();
-            var columns = schemaTable.Rows.Cast<DataRow>().Select(i => new DbColumn(i)).ToList();
 
+            var objectId = _tableCount + 1;
+            var objectTypeName = $"Object{objectId}";
+            var objectInstanceName = "@object";
+            var columns = schemaTable.Rows.Cast<DataRow>().Select(i => new DbColumn(i)).ToList();
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append("\r\ninternal sealed class Row");
-            stringBuilder.Append(_tableCount);
+            stringBuilder.Append("\r\ninternal sealed class ");
+            stringBuilder.Append(objectTypeName);
             stringBuilder.Append("\r\n{\r\n");
 
             var first = true;
@@ -104,13 +107,13 @@ namespace DataCommander.Providers.ResultWriter
                 stringBuilder.Append(";");
             }
 
-            stringBuilder.Append("\r\n}\r\nprivate static Row");
-            stringBuilder.Append(_tableCount);
-            stringBuilder.Append(" Read");
-            stringBuilder.Append(_tableCount);
-            stringBuilder.Append("(IDataRecord dataRecord)\r\n{\r\n    var row = new Row");
-            stringBuilder.Append(_tableCount);
-            stringBuilder.Append("();\r\n");
+            stringBuilder.AppendFormat(@"
+}}
+
+private static {0} Read{0}(IDataRecord dataRecord)
+{{
+    var {1} = new {0}();
+", objectTypeName, objectInstanceName);
 
             first = true;
             var index = 0;
@@ -121,7 +124,7 @@ namespace DataCommander.Providers.ResultWriter
                 else
                     stringBuilder.AppendLine();
 
-                stringBuilder.Append("    row.");
+                stringBuilder.AppendFormat("    {0}.",objectInstanceName);
                 stringBuilder.Append(column.ColumnName);
                 stringBuilder.Append(" = dataRecord.");
                 stringBuilder.Append(GetDataRecordMethodName(column));
@@ -132,7 +135,10 @@ namespace DataCommander.Providers.ResultWriter
                 ++index;
             }
 
-            stringBuilder.Append("\r\n    return row;\r\n}\r\n");
+            stringBuilder.AppendFormat(@"
+    return {0};
+}}
+", objectInstanceName);
 
             Log.Trace($"SchemaTable of table[{_tableCount}]:\r\n{schemaTable.ToStringTableString()}\r\n{stringBuilder}");
 

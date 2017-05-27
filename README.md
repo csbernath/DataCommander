@@ -26,87 +26,91 @@ Result: sort in memory|Yes|No
 
 ## [Object-relational mapping (ORM)](https://en.wikipedia.org/wiki/Object-relational_mapping)
 
-1. Download and restore the SQL Server 2016 sample database from https://github.com/microsoft/sql-server-samples
-2. Open the database with Data Commander and execute the following command:
+Download and restore the SQL Server 2016 sample database from https://github.com/microsoft/sql-server-samples
+
+Open the database with Data Commander and execute the following command:
 
 ```SQL
-use WideWorldImporters
+select
+    c.CustomerID,
+    c.CustomerName
+from Sales.Customers c
 
-select top 0
-    CustomerID,
-    CustomerName,
-    BillToCustomerID,
-    CustomerCategoryID
-from Sales.Customers
-
-select top 0 *
-from Sales.CustomerTransactions
+select
+    i.InvoiceID,
+    i.CustomerID,
+    i.InvoiceDate
+    from Sales.Invoices i
+order by i.CustomerID,i.InvoiceID
 ```
 
-3. The program generates C# ORM code snippets. See them in the Messages window:
+The program generates C# ORM code snippets. See them in log file:
 
 ```C#
-internal sealed class Row0
+internal sealed class Customer
 {
-    public int CustomerID;
-    public string CustomerName;
-    public int BillToCustomerID;
-    public int CustomerCategoryID;
+	public int CustomerID;
+	public string CustomerName;
 }
 
-private static Row0 Read0(IDataRecord dataRecord)
+private static Customer ReadCustomer(IDataRecord dataRecord)
 {
-    var row = new Row0();
-    row.CustomerID = dataRecord.GetInt32(0);
-    row.CustomerName = dataRecord.GetString(1);
-    row.BillToCustomerID = dataRecord.GetInt32(2);
-    row.CustomerCategoryID = dataRecord.GetInt32(3);
-    return row;
+	var @object = new Customer();
+	@object.CustomerID = dataRecord.GetInt32(0);
+	@object.CustomerName = dataRecord.GetString(1);
+	return @object;
 }
 
-internal sealed class Row1
+internal sealed class Invoice
 {
-    public int CustomerTransactionID;
-    public int CustomerID;
-    public int TransactionTypeID;
-    public int? InvoiceID;
-    public int? PaymentMethodID;
-    public DateTime TransactionDate;
-    public decimal AmountExcludingTax;
-    public decimal TaxAmount;
-    public decimal TransactionAmount;
-    public decimal OutstandingBalance;
-    public DateTime? FinalizationDate;
-    public bool? IsFinalized;
-    public int LastEditedBy;
-    public DateTime LastEditedWhen;
+	public int InvoiceID;
+	public int CustomerID;
+	public DateTime InvoiceDate;
 }
 
-private static Row1 Read1(IDataRecord dataRecord)
+private static Invoice ReadInvoice(IDataRecord dataRecord)
 {
-    var row = new Row1();
-    row.CustomerTransactionID = dataRecord.GetInt32(0);
-    row.CustomerID = dataRecord.GetInt32(1);
-    row.TransactionTypeID = dataRecord.GetInt32(2);
-    row.InvoiceID = dataRecord.GetNullableInt32(3);
-    row.PaymentMethodID = dataRecord.GetNullableInt32(4);
-    row.TransactionDate = dataRecord.GetDateTime(5);
-    row.AmountExcludingTax = dataRecord.GetDecimal(6);
-    row.TaxAmount = dataRecord.GetDecimal(7);
-    row.TransactionAmount = dataRecord.GetDecimal(8);
-    row.OutstandingBalance = dataRecord.GetDecimal(9);
-    row.FinalizationDate = dataRecord.GetNullableDateTime(10);
-    row.IsFinalized = dataRecord.GetNullableBoolean(11);
-    row.LastEditedBy = dataRecord.GetInt32(12);
-    row.LastEditedWhen = dataRecord.GetDateTime(13);
-    return row;
+	var @object = new Invoice();
+	@object.InvoiceID = dataRecord.GetInt32(0);
+	@object.CustomerID = dataRecord.GetInt32(1);
+	@object.InvoiceDate = dataRecord.GetDateTime(2);
+	return @object;
 }
+```
 
-private static ExecuteReaderResponse<Row0,Row1> Execute(this IDbCommandExecutor executor)
+2. The generated code can be used like this:
+
+```C#
+var connectionStringBuilder = new SqlConnectionStringBuilder();
+connectionStringBuilder.DataSource = @".\SQL2016_001";
+connectionStringBuilder.InitialCatalog = "WideWorldImporters";
+connectionStringBuilder.IntegratedSecurity = true;
+
+using (var connection = new SqlConnection(connectionStringBuilder.ConnectionString))
 {
-	const string commandText = "...";
-    var request = new ExecuteReaderRequest(commandText);
-    return executor.Read(request,Read0,Read1);
+	connection.Open();
+	var executor = connection.CreateCommandAsyncExecutor();
+
+	var commandText = "waitfor delay '00:00:01'";
+	var affectedRows = await executor.ExecuteNonQueryAsync(new ExecuteNonReaderRequest(commandText));
+
+	commandText = "select top 1 i.InvoiceID from Sales.Invoices i";
+	var scalar = await executor.ExecuteScalarAsync(new ExecuteNonReaderRequest(commandText));
+
+	var commandText = @"select
+c.CustomerID,
+c.CustomerName
+from Sales.Customers c
+
+select
+i.InvoiceID,
+i.CustomerID,
+i.InvoiceDate
+from Sales.Invoices i
+order by i.CustomerID,i.InvoiceID";
+	var response = await executor.ExecuteReaderAsync(new ExecuteReaderRequest(commandText), ReadCustomer, ReadInvoice);
+	var customers = response.Objects1;
+	var invoices = response.Objects2;
 }
 
 ```

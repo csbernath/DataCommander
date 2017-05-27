@@ -16,13 +16,19 @@ namespace Foundation.Data
                 read();
         }
 
-        public static async Task ReadAsync(this DbDataReader dataReader, IEnumerable<Action> reads, CancellationToken cancellationToken)
+        public static async Task ReadAsync(this DbDataReader dataReader, IEnumerable<Func<Task>> reads, CancellationToken cancellationToken)
         {
+            var first = true;
             foreach (var read in reads)
             {
-                await dataReader.ReadAsync(read, cancellationToken);
-                var nextResult = await dataReader.NextResultAsync(cancellationToken);
-                FoundationContract.Assert(nextResult);
+                if (first)
+                    first = false;
+                else
+                {
+                    var nextResult = await dataReader.NextResultAsync(cancellationToken);
+                    FoundationContract.Assert(nextResult);
+                }
+                await read();
             }
         }
 
@@ -48,13 +54,13 @@ namespace Foundation.Data
             List<T1> objects1 = null;
             List<T2> objects2 = null;
 
-            var reads = new Action[]
+            var readResults = new Func<Task>[]
             {
                 async () => objects1 = await dataReader.ReadAsync(read1, cancellationToken),
                 async () => objects2 = await dataReader.ReadAsync(read2, cancellationToken),
             };
 
-            await dataReader.ReadAsync(reads, cancellationToken);
+            await dataReader.ReadAsync(readResults, cancellationToken);
 
             return ExecuteReaderResponse.Create(objects1, objects2);
         }
@@ -70,7 +76,7 @@ namespace Foundation.Data
             List<T2> objects2 = null;
             List<T3> objects3 = null;
 
-            var reads = new Action[]
+            var reads = new Func<Task>[]
             {
                 async () => objects1 = (await dataReader.ReadAsync(read1, cancellationToken)),
                 async () => objects2 = (await dataReader.ReadAsync(read2, cancellationToken)),

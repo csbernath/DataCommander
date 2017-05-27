@@ -15,10 +15,8 @@ namespace Foundation.Data
             await executor.ExecuteAsync(async connection =>
             {
                 foreach (var request in requests)
-                {
                     using (var command = connection.CreateCommand(request.CreateCommandRequest))
                         await request.Execute(command);
-                }
             }, cancellationToken);
         }
 
