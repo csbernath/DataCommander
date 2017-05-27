@@ -209,13 +209,13 @@
     <Compile Include="WmiProviderFactory.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Foundation\Foundation.csproj">
-      <Project>{1bacf0aa-4122-4c10-a8d2-248542af054c}</Project>
-      <Name>DataCommander.Foundation</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DataCommander.Providers\DataCommander.Providers.csproj">
       <Project>{31A30A80-D1B6-4867-A65E-188DE9E912C8}</Project>
       <Name>DataCommander.Providers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Foundation\Foundation.csproj">
+      <Project>{1bacf0aa-4122-4c10-a8d2-248542af054c}</Project>
+      <Name>Foundation</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
