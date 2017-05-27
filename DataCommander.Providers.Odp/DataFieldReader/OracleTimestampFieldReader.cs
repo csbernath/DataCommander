@@ -6,15 +6,15 @@ namespace DataCommander.Providers.Odp.DataFieldReader
 
     internal sealed class OracleTimestampFieldReader : IDataFieldReader
     {
-        private readonly OracleDataReader dataReader;
-        private readonly int columnOrdinal;
+        private readonly OracleDataReader _dataReader;
+        private readonly int _columnOrdinal;
 
         public OracleTimestampFieldReader(
             OracleDataReader dataReader,
             int columnOrdinal )
         {
-            this.dataReader = dataReader;
-            this.columnOrdinal = columnOrdinal;
+            _dataReader = dataReader;
+            _columnOrdinal = columnOrdinal;
         }
 
         #region IDataFieldReader Members
@@ -25,13 +25,13 @@ namespace DataCommander.Providers.Odp.DataFieldReader
             {
                 object value;
 
-                if (dataReader.IsDBNull( columnOrdinal ))
+                if (_dataReader.IsDBNull( _columnOrdinal ))
                 {
                     value = DBNull.Value;
                 }
                 else
                 {
-                    var oracleTimeStamp = this.dataReader.GetOracleTimeStamp( this.columnOrdinal );
+                    var oracleTimeStamp = _dataReader.GetOracleTimeStamp( _columnOrdinal );
                     value = new OracleTimeStampField( oracleTimeStamp );
                 }
 

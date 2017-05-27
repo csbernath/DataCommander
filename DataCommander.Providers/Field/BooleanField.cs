@@ -2,27 +2,27 @@
 {
     public sealed class BooleanField
     {
-		private readonly bool value;
+		private readonly bool _value;
 
         public BooleanField(bool value)
         {
-            this.value = value;
+            _value = value;
         }
 
         public override string ToString()
         {
-            int int32value;
+            int int32Value;
 
-            if (this.value)
+            if (_value)
             {
-                int32value = 1;
+                int32Value = 1;
             }
             else
             {
-                int32value = 0;
+                int32Value = 0;
             }
 
-            return int32value.ToString();
+            return int32Value.ToString();
         }
     }
 }

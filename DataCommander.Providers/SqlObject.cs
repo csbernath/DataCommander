@@ -4,14 +4,14 @@ namespace DataCommander.Providers
 {
     public sealed class SqlObject
     {
-        private static ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static ILog _log = LogFactory.Instance.GetCurrentTypeLog();
 
         public SqlObject(string parentName, string parentAlias, SqlObjectTypes type, string name)
         {
-            this.ParentName = parentName;
-            this.ParentAlias = parentAlias;
-            this.Type = type;
-            this.Name = name;
+            ParentName = parentName;
+            ParentAlias = parentAlias;
+            Type = type;
+            Name = name;
         }
 
         public string ParentName { get; set; }

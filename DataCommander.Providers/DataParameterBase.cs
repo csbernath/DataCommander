@@ -4,31 +4,31 @@ namespace DataCommander.Providers
 
     public abstract class DataParameterBase
     {
-        private readonly IDataParameter parameter;
-        private readonly int size;
+        private readonly IDataParameter _parameter;
+        private readonly int _size;
 
         protected DataParameterBase(IDataParameter parameter, int size, byte precision, byte scale)
         {
-            this.parameter = parameter;
-            this.size = size;
-            this.Precision = precision;
-            this.Scale = scale;
+            _parameter = parameter;
+            _size = size;
+            Precision = precision;
+            Scale = scale;
         }
 
         public DbType DbType
         {
-            get => this.parameter.DbType;
+            get => _parameter.DbType;
 
-            set => this.parameter.DbType = value;
+            set => _parameter.DbType = value;
         }
 
         protected abstract void SetSize(int size);
 
         public int Size
         {
-            get => this.size;
+            get => _size;
 
-            set => this.SetSize(value);
+            set => SetSize(value);
         }
 
         public byte Precision { get; }

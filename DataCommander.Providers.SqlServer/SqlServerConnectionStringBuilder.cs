@@ -6,15 +6,15 @@ namespace DataCommander.Providers.SqlServer
 
     internal sealed class SqlServerConnectionStringBuilder : IDbConnectionStringBuilder
     {
-        private readonly SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder();
+        private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder = new SqlConnectionStringBuilder();
 
         #region IDbConnectionStringBuilder Members
 
         string IDbConnectionStringBuilder.ConnectionString
         {
-            get => this.sqlConnectionStringBuilder.ConnectionString;
+            get => _sqlConnectionStringBuilder.ConnectionString;
 
-            set => this.sqlConnectionStringBuilder.ConnectionString = value;
+            set => _sqlConnectionStringBuilder.ConnectionString = value;
         }
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
@@ -29,12 +29,12 @@ namespace DataCommander.Providers.SqlServer
 
         bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value)
         {
-            return this.sqlConnectionStringBuilder.TryGetValue(keyword, out value);
+            return _sqlConnectionStringBuilder.TryGetValue(keyword, out value);
         }
 
         void IDbConnectionStringBuilder.SetValue(string keyword, object value)
         {
-            this.sqlConnectionStringBuilder[keyword] = value;
+            _sqlConnectionStringBuilder[keyword] = value;
         }
 
         #endregion

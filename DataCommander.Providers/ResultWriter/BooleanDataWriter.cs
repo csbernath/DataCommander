@@ -10,11 +10,11 @@ namespace DataCommander.Providers.ResultWriter
 
             if (value == DBNull.Value)
             {
-                s = new string( ' ', this.Width );
+                s = new string( ' ', Width );
             }
             else
             {
-                s = value.ToString().PadLeft(this.Width );
+                s = value.ToString().PadLeft(Width );
             }
 
             return s;

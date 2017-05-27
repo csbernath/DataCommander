@@ -14,8 +14,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         public DatabaseNode(DatabaseCollectionNode databaseCollectionNode, string name)
         {
-            this.Databases = databaseCollectionNode;
-            this.Name = name;
+            Databases = databaseCollectionNode;
+            Name = name;
         }
 
         public DatabaseCollectionNode Databases { get; }
@@ -62,8 +62,8 @@ select
 	convert(decimal(15,4),fileproperty(f.name, 'SpaceUsed') * 8096.0 / 1000000)		as [Used (MB)],
 	convert(decimal(15,2),convert(float,fileproperty(name, 'SpaceUsed')) * 100.0 / size)	as [Used%],
 	convert(decimal(15,4),(f.size-fileproperty(name, 'SpaceUsed')) * 8096.0 / 1000000)	as [Free (MB)]
-from	[{0}].sys.database_files f", this.Name);
-            var connectionString = this.Databases.Server.ConnectionString;
+from	[{0}].sys.database_files f", Name);
+            var connectionString = Databases.Server.ConnectionString;
             var mainForm = DataCommanderApplication.Instance.MainForm;
             var queryForm = (QueryForm) mainForm.ActiveMdiChild;
             DataSet dataSet = null;
@@ -90,7 +90,7 @@ from	[{0}].sys.database_files f", this.Name);
             get
             {
                 var menuItemGetInformation = new ToolStripMenuItem("Get information", null,
-                    new EventHandler(this.menuItemGetInformation_Click));
+                    menuItemGetInformation_Click);
                 var contextMenu = new ContextMenuStrip();
                 contextMenu.Items.Add(menuItemGetInformation);
                 return contextMenu;

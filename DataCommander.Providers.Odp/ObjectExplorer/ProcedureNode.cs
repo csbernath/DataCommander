@@ -11,21 +11,21 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
     internal sealed class ProcedureNode : ITreeNode
     {
-		private readonly SchemaNode schemaNode;
-		private readonly PackageNode packageNode;
-		private readonly string name;
+		private readonly SchemaNode _schemaNode;
+		private readonly PackageNode _packageNode;
+		private readonly string _name;
 
         public ProcedureNode(
             SchemaNode schemaNode,
             PackageNode packageNode,
             string name)
         {
-            this.schemaNode = schemaNode;
-            this.packageNode = packageNode;
-            this.name = name;
+            _schemaNode = schemaNode;
+            _packageNode = packageNode;
+            _name = name;
         }
 
-        public string Name => name;
+        public string Name => _name;
 
         public bool IsLeaf => true;
 
@@ -40,14 +40,14 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         {
             get
             {
-                var query = "EXEC " + schemaNode.Name + '.';
+                var query = "EXEC " + _schemaNode.Name + '.';
 
-				if (packageNode != null)
+				if (_packageNode != null)
 				{
-					query += packageNode.Name + '.';
+					query += _packageNode.Name + '.';
 				}
 
-                query += name;
+                query += _name;
                 return query;
             }
         }
@@ -57,13 +57,13 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
             var commandText =
                 $@"select	text
 from	all_source
-where	owner = '{schemaNode.Name}'
-	and name = '{name}'
+where	owner = '{_schemaNode.Name}'
+	and name = '{_name}'
 	and type = 'PROCEDURE'
 order by line";
             var sb = new StringBuilder();
             string text;
-            var transactionScope = new DbTransactionScope(this.schemaNode.SchemasNode.Connection, null);
+            var transactionScope = new DbTransactionScope(_schemaNode.SchemasNode.Connection, null);
 
             transactionScope.ExecuteReader(
                 new CommandDefinition {CommandText = commandText},
@@ -84,7 +84,7 @@ order by line";
             {
                 ContextMenuStrip contextMenu;
 
-                if (this.packageNode != null)
+                if (_packageNode != null)
                 {
                     contextMenu = null;
                 }

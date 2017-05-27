@@ -7,14 +7,14 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
     internal sealed class SecurityNode : ITreeNode
     {
-        private readonly ServerNode server;
+        private readonly ServerNode _server;
 
         public SecurityNode(ServerNode serverNode)
         {
 #if CONTRACTS_FULL
             Contract.Requires( serverNode != null );
 #endif
-            this.server = serverNode;
+            _server = serverNode;
         }
 
 #region ITreeNode Members
@@ -25,7 +25,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
         {
-            return new LoginCollectionNode( this.server ).ItemToArray();
+            return new LoginCollectionNode( _server ).ItemToArray();
         }
 
         bool ITreeNode.Sortable => false;

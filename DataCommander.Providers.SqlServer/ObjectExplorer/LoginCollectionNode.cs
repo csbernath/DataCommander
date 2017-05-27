@@ -14,7 +14,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 #if CONTRACTS_FULL
             Contract.Requires(server != null);
 #endif
-            this._server = server;
+            _server = server;
         }
 
         #region ITreeNode Members
@@ -29,7 +29,7 @@ from sys.server_principals sp (nolock)
 where   sp.type in('S','U','G')
 order by name";
             var request = new ExecuteReaderRequest(commandText);
-            var executor = new SqlCommandExecutor(this._server.ConnectionString);
+            var executor = new SqlCommandExecutor(_server.ConnectionString);
             var loginNodes = executor.ExecuteReader(request, dataRecord => new LoginNode(dataRecord.GetString(0)));
             return loginNodes;
         }

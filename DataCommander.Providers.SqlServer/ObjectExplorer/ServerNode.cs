@@ -12,7 +12,7 @@
 #if CONTRACTS_FULL
             Contract.Requires(!connectionString.IsNullOrWhiteSpace());
 #endif
-            this.ConnectionString = connectionString;
+            ConnectionString = connectionString;
         }
 
         public string ConnectionString { get; }
@@ -24,13 +24,13 @@
             get
             {
                 string serverVersion;
-                using (var connection = new SqlConnection(this.ConnectionString))
+                using (var connection = new SqlConnection(ConnectionString))
                 {
                     connection.Open();
                     serverVersion = new Version(connection.ServerVersion).ToString();
                 }
 
-                var csb = new SqlConnectionStringBuilder(this.ConnectionString);
+                var csb = new SqlConnectionStringBuilder(ConnectionString);
                 string userName;
                 if (csb.IntegratedSecurity)
                 {

@@ -11,7 +11,7 @@ namespace DataCommander.Providers
 {
     public partial class AboutForm : Form
     {
-        private bool first = true;
+        private bool _first = true;
 
         public AboutForm()
         {
@@ -71,14 +71,14 @@ Credits:
 
             InitializeComponent();
 
-            this.webBrowser1.DocumentText = text;
+            webBrowser1.DocumentText = text;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == Keys.Escape)
             {
-                this.Close();
+                Close();
                 return true;
             }
             return base.ProcessCmdKey(ref msg, keyData);
@@ -86,9 +86,9 @@ Credits:
 
         private void webBrowser1_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
-            if (first)
+            if (_first)
             {
-                first = false;
+                _first = false;
             }
             else
             {

@@ -15,7 +15,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 #if CONTRACTS_FULL
             Contract.Requires( serverNode != null );
 #endif
-            this.Server = serverNode;
+            Server = serverNode;
         }
 
         public ServerNode Server { get; }
@@ -35,7 +35,7 @@ order by s.name";
 
             List<ITreeNode> treeNodes;
 
-            using (var connection = new SqlConnection(this.Server.ConnectionString))
+            using (var connection = new SqlConnection(Server.ConnectionString))
             {
                 connection.Open();
                 var transactionScope = new DbTransactionScope(connection, null);

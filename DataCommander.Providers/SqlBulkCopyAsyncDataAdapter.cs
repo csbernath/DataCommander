@@ -13,18 +13,18 @@ namespace DataCommander.Providers
     {
         #region Private Fields
 
-        private readonly Action<InfoMessage> addInfoMessage;
-        private readonly SqlBulkCopy sqlBulkCopy;
-        private long rowCount;
-        private bool cancelRequested;
-        private IDbCommand command;
-        private IProvider provider;
-        private IEnumerable<AsyncDataAdapterCommand> commands;
-        private int maxRecords;
-        private int rowBlockSize;
-        private IResultWriter resultWriter;
-        private Action<IAsyncDataAdapter, Exception> endFill;
-        private Action<IAsyncDataAdapter> writeEnd;
+        private readonly Action<InfoMessage> _addInfoMessage;
+        private readonly SqlBulkCopy _sqlBulkCopy;
+        private long _rowCount;
+        private bool _cancelRequested;
+        private IDbCommand _command;
+        private IProvider _provider;
+        private IEnumerable<AsyncDataAdapterCommand> _commands;
+        private int _maxRecords;
+        private int _rowBlockSize;
+        private IResultWriter _resultWriter;
+        private Action<IAsyncDataAdapter, Exception> _endFill;
+        private Action<IAsyncDataAdapter> _writeEnd;
 
         #endregion
 
@@ -34,22 +34,22 @@ namespace DataCommander.Providers
             string destinationTableName,
             Action<InfoMessage> addInfoMessage)
         {
-            this.sqlBulkCopy = new SqlBulkCopy(destinationConnection, SqlBulkCopyOptions.Default, destionationTransaction);
-            this.sqlBulkCopy.BulkCopyTimeout = int.MaxValue;
-            this.sqlBulkCopy.DestinationTableName = destinationTableName;
-            this.sqlBulkCopy.NotifyAfter = 100000;
-            this.sqlBulkCopy.SqlRowsCopied += new SqlRowsCopiedEventHandler(this.sqlBulkCopy_SqlRowsCopied);
-            this.addInfoMessage = addInfoMessage;
+            _sqlBulkCopy = new SqlBulkCopy(destinationConnection, SqlBulkCopyOptions.Default, destionationTransaction);
+            _sqlBulkCopy.BulkCopyTimeout = int.MaxValue;
+            _sqlBulkCopy.DestinationTableName = destinationTableName;
+            _sqlBulkCopy.NotifyAfter = 100000;
+            _sqlBulkCopy.SqlRowsCopied += sqlBulkCopy_SqlRowsCopied;
+            _addInfoMessage = addInfoMessage;
         }
 
         private void sqlBulkCopy_SqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
         {
-            this.rowCount += e.RowsCopied;
-            var message = $"{this.rowCount} rows copied.";
-            this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
-            if (this.cancelRequested)
+            _rowCount += e.RowsCopied;
+            var message = $"{_rowCount} rows copied.";
+            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
+            if (_cancelRequested)
             {
-                this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, "Aborting bulk copy..."));
+                _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, "Aborting bulk copy..."));
                 e.Abort = true;
             }
         }
@@ -58,7 +58,7 @@ namespace DataCommander.Providers
 
         IResultWriter IAsyncDataAdapter.ResultWriter => throw new NotImplementedException();
 
-        long IAsyncDataAdapter.RowCount => this.rowCount;
+        long IAsyncDataAdapter.RowCount => _rowCount;
 
         int IAsyncDataAdapter.TableCount => 1;
 
@@ -66,21 +66,21 @@ namespace DataCommander.Providers
             IResultWriter resultWriter,
             Action<IAsyncDataAdapter, Exception> endFill, Action<IAsyncDataAdapter> writeEnd)
         {
-            this.provider = provider;
-            this.commands = commands;
-            this.maxRecords = maxRecords;
-            this.rowBlockSize = rowBlockSize;
-            this.resultWriter = resultWriter;
-            this.endFill = endFill;
-            this.writeEnd = writeEnd;
+            _provider = provider;
+            _commands = commands;
+            _maxRecords = maxRecords;
+            _rowBlockSize = rowBlockSize;
+            _resultWriter = resultWriter;
+            _endFill = endFill;
+            _writeEnd = writeEnd;
 
-            Task.Factory.StartNew(this.Fill);
+            Task.Factory.StartNew(Fill);
         }
 
         void IAsyncDataAdapter.Cancel()
         {
-            this.cancelRequested = true;
-            Task.Factory.StartNew(this.CancelCommand);
+            _cancelRequested = true;
+            Task.Factory.StartNew(CancelCommand);
         }
 
         #endregion
@@ -92,17 +92,17 @@ namespace DataCommander.Providers
             Exception exception = null;
             try
             {
-                foreach (var command in this.commands)
+                foreach (var command in _commands)
                 {
-                    if (this.cancelRequested)
+                    if (_cancelRequested)
                     {
                         break;
                     }
 
-                    this.command = command.Command;
-                    using (var dataReader = this.command.ExecuteReader())
+                    _command = command.Command;
+                    using (var dataReader = _command.ExecuteReader())
                     {
-                        this.sqlBulkCopy.WriteToServer(dataReader);
+                        _sqlBulkCopy.WriteToServer(dataReader);
                     }
                 }
             }
@@ -111,13 +111,13 @@ namespace DataCommander.Providers
                 exception = e;
             }
 
-            this.writeEnd(this);
-            this.endFill(this, exception);
+            _writeEnd(this);
+            _endFill(this, exception);
         }
 
         private void CancelCommand()
         {
-            this.command.Cancel();
+            _command.Cancel();
         }
 
         #endregion

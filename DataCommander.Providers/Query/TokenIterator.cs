@@ -1,115 +1,111 @@
+using System.Linq;
+using System.Text;
+
 namespace DataCommander.Providers.Query
 {
-    using System.Linq;
-    using System.Text;
-
     internal sealed class TokenIterator
     {
         #region Private Fields
 
-        private static readonly char[] operatorsOrPunctuators = new char[]
+        private static readonly char[] OperatorsOrPunctuators = new char[]
         {
             '{', '}', '[', ']', '(', ')', '.', ',', ':', ';', '+', '-', '*', '/', '%', '&', '|', '^', '!', '~', '=', '<', '>', '?'
         };
 
-        private readonly string text;
-        private int index = 0;
-        private readonly int length;
-        private int tokenIndex;
-        private int lineIndex;
+        private readonly string _text;
+        private int _index = 0;
+        private readonly int _length;
+        private int _tokenIndex;
+        private int _lineIndex;
 
         #endregion
 
         public TokenIterator(string text)
         {
-            this.text = text;
+            _text = text;
 
             if (text != null)
-            {
-                this.length = text.Length;
-            }
+                _length = text.Length;
             else
-            {
-                this.length = 0;
-            }
+                _length = 0;
         }
 
         public Token Next()
         {
             Token token = null;
 
-            while (this.index < this.length)
+            while (_index < _length)
             {
                 int startPosition;
                 int endPosition;
                 string value;
-                var c = this.text[this.index];
+                var c = _text[_index];
 
                 if (c == 'N')
                 {
-                    startPosition = this.index;
-                    if (this.index + 1 < this.length && this.text[this.index + 1] == '\'')
+                    startPosition = _index;
+                    if (_index + 1 < _length && _text[_index + 1] == '\'')
                     {
-                        this.index++;
-                        value = this.ReadString();
-                        endPosition = this.index;
-                        token = new Token(this.tokenIndex, startPosition, endPosition - 1, this.lineIndex, TokenType.String, value);
+                        _index++;
+                        value = ReadString();
+                        endPosition = _index;
+                        token = new Token(_tokenIndex, startPosition, endPosition - 1, _lineIndex, TokenType.String, value);
                     }
                     else
                     {
-                        value = this.ReadKeyWord();
-                        endPosition = this.index;
-                        token = new Token(this.tokenIndex, startPosition, endPosition - 1, this.lineIndex, TokenType.KeyWord, value);
+                        value = ReadKeyWord();
+                        endPosition = _index;
+                        token = new Token(_tokenIndex, startPosition, endPosition - 1, _lineIndex, TokenType.KeyWord, value);
                     }
                     break;
                 }
                 else if (char.IsLetter(c) || c == '[' || c == '@')
                 {
-                    startPosition = this.index;
-                    value = this.ReadKeyWord();
-                    endPosition = this.index;
-                    token = new Token(this.tokenIndex, startPosition, endPosition - 1, this.lineIndex, TokenType.KeyWord, value);
+                    startPosition = _index;
+                    value = ReadKeyWord();
+                    endPosition = _index;
+                    token = new Token(_tokenIndex, startPosition, endPosition - 1, _lineIndex, TokenType.KeyWord, value);
                     break;
                 }
                 else if (c == '"' || c == '\'')
                 {
-                    startPosition = this.index;
-                    value = this.ReadString();
-                    endPosition = this.index;
-                    token = new Token(this.tokenIndex, startPosition, endPosition - 1, this.lineIndex, TokenType.String, value);
+                    startPosition = _index;
+                    value = ReadString();
+                    endPosition = _index;
+                    token = new Token(_tokenIndex, startPosition, endPosition - 1, _lineIndex, TokenType.String, value);
                     break;
                 }
                 else if (char.IsDigit(c) || c == '-')
                 {
-                    startPosition = this.index;
-                    value = this.ReadDigit();
-                    endPosition = this.index;
-                    token = new Token(this.tokenIndex, startPosition, endPosition - 1, this.lineIndex, TokenType.Digit, value);
+                    startPosition = _index;
+                    value = ReadDigit();
+                    endPosition = _index;
+                    token = new Token(_tokenIndex, startPosition, endPosition - 1, _lineIndex, TokenType.Digit, value);
                     break;
                 }
-                else if (operatorsOrPunctuators.Contains(c))
+                else if (OperatorsOrPunctuators.Contains(c))
                 {
-                    startPosition = this.index;
+                    startPosition = _index;
                     value = c.ToString();
-                    endPosition = this.index;
-                    token = new Token(this.tokenIndex, startPosition, endPosition, this.lineIndex, TokenType.OperatorOrPunctuator, value);
-                    this.index++;
+                    endPosition = _index;
+                    token = new Token(_tokenIndex, startPosition, endPosition, _lineIndex, TokenType.OperatorOrPunctuator, value);
+                    _index++;
                     break;
                 }
                 else if (c == '\r')
                 {
-                    this.lineIndex++;
-                    this.index += 2;
+                    _lineIndex++;
+                    _index += 2;
                 }
                 else
                 {
-                    this.index++;
+                    _index++;
                 }
             }
 
             if (token != null)
             {
-                this.tokenIndex++;
+                _tokenIndex++;
             }
             return token;
         }
@@ -120,16 +116,16 @@ namespace DataCommander.Providers.Query
         {
             var sb = new StringBuilder();
 
-            while (this.index < this.length)
+            while (_index < _length)
             {
-                var c = this.text[this.index];
+                var c = _text[_index];
                 if (char.IsWhiteSpace(c) || c == ',' || c == '(' || c == ')' || c == '=' || c == '+')
                 {
                     break;
                 }
                 else
                 {
-                    this.index++;
+                    _index++;
                 }
                 sb.Append(c);
             }
@@ -141,45 +137,33 @@ namespace DataCommander.Providers.Query
         private string ReadString()
         {
             var sb = new StringBuilder();
-            this.index++;
+            _index++;
             var escape = false;
 
-            while (this.index < this.length)
+            while (_index < _length)
             {
-                var c = this.text[this.index];
-                this.index++;
+                var c = _text[_index];
+                _index++;
 
                 if (escape)
                 {
                     if (c == 'n')
-                    {
                         c = '\n';
-                    }
                     else if (c == 'r')
-                    {
                         c = '\r';
-                    }
                     else if (c == 't')
-                    {
                         c = '\t';
-                    }
 
                     sb.Append(c);
 
                     escape = false;
                 }
                 else if (c == '"' || c == '\'')
-                {
                     break;
-                }
                 else if (c == '\\')
-                {
                     escape = true;
-                }
                 else
-                {
                     sb.Append(c);
-                }
             }
 
             return sb.ToString();
@@ -189,17 +173,13 @@ namespace DataCommander.Providers.Query
         {
             var sb = new StringBuilder();
 
-            while (this.index < this.length)
+            while (_index < _length)
             {
-                var c = this.text[this.index];
+                var c = _text[_index];
                 if (char.IsWhiteSpace(c) || c == ',')
-                {
                     break;
-                }
                 else
-                {
-                    this.index++;
-                }
+                    _index++;
                 sb.Append(c);
             }
 

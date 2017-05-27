@@ -10,14 +10,14 @@ namespace DataCommander.Providers.SqlServer
     /// </summary>
     internal sealed class DatabaseObjectMultipartName
     {
-        private string server;
+        private string _server;
 
         public DatabaseObjectMultipartName(string server, string database, string schema, string name)
         {
-            this.server = server;
-            this.Database = database;
-            this.Schema = schema;
-            this.Name = name;
+            _server = server;
+            Database = database;
+            Schema = schema;
+            Name = name;
         }
 
         public DatabaseObjectMultipartName(string currentDatabase, string name)
@@ -32,51 +32,51 @@ namespace DataCommander.Providers.SqlServer
 
                 if (i >= 0)
                 {
-                    this.Name = parts[i];
+                    Name = parts[i];
                     i--;
 
                     if (i >= 0)
                     {
-                        this.Schema = parts[i];
+                        Schema = parts[i];
                         i--;
 
                         if (i >= 0)
                         {
-                            this.Database = parts[i];
+                            Database = parts[i];
                             i--;
 
                             if (i >= 0)
                             {
-                                this.server = parts[i];
+                                _server = parts[i];
                             }
                         }
                     }
                 }
             }
 
-            if (this.Database == null)
+            if (Database == null)
             {
-                this.Database = currentDatabase;
+                Database = currentDatabase;
             }
 
-            if (string.IsNullOrEmpty(this.Schema))
+            if (string.IsNullOrEmpty(Schema))
             {
-                this.Schema = null;
+                Schema = null;
             }
 
-            if (this.Name != null)
+            if (Name != null)
             {
-                var length = this.Name.Length;
+                var length = Name.Length;
 
-                if (length > 0 && this.Name[0] == '[')
+                if (length > 0 && Name[0] == '[')
                 {
-                    this.Name = this.Name.Substring(1);
+                    Name = Name.Substring(1);
                     length--;
                 }
 
-                if (length > 0 && this.Name[length - 1] == ']')
+                if (length > 0 && Name[length - 1] == ']')
                 {
-                    this.Name = this.Name.Substring(0, length - 1);
+                    Name = Name.Substring(0, length - 1);
                 }
             }
         }
@@ -90,18 +90,18 @@ namespace DataCommander.Providers.SqlServer
         public override string ToString()
         {
             var sb = new StringBuilder();
-            if (this.Database != null)
+            if (Database != null)
             {
-                sb.Append(this.Database);
+                sb.Append(Database);
             }
 
-            if (this.Schema != null)
+            if (Schema != null)
             {
                 if (sb.Length > 0)
                 {
                     sb.Append('.');
                 }
-                sb.Append(this.Schema);
+                sb.Append(Schema);
             }
 
             if (sb.Length > 0)
@@ -109,7 +109,7 @@ namespace DataCommander.Providers.SqlServer
                 sb.Append('.');
             }
 
-            sb.Append(this.Name);
+            sb.Append(Name);
             return sb.ToString();
         }
     }

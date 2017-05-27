@@ -9,9 +9,9 @@ namespace DataCommander.Providers.ResultWriter
 
     internal sealed class FileResultWriter : IResultWriter
     {
-        private readonly TextWriter messageWriter;
-        private StreamWriter streamWriter;
-        private DataWriterBase[] dataWriters;
+        private readonly TextWriter _messageWriter;
+        private StreamWriter _streamWriter;
+        private DataWriterBase[] _dataWriters;
 
         public FileResultWriter(TextWriter messageWriter)
         {
@@ -19,7 +19,7 @@ namespace DataCommander.Providers.ResultWriter
             Contract.Requires(messageWriter != null);
 #endif
 
-            this.messageWriter = messageWriter;
+            _messageWriter = messageWriter;
         }
 
 #region IResultWriter Members
@@ -43,12 +43,12 @@ namespace DataCommander.Providers.ResultWriter
         void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
             var path = Path.GetTempFileName();
-            this.messageWriter.WriteLine("fileName: {0}", path);
+            _messageWriter.WriteLine("fileName: {0}", path);
             var encoding = Encoding.UTF8;
-            this.streamWriter = new StreamWriter(path, false, encoding, 4096);
-            this.streamWriter.AutoFlush = true;
+            _streamWriter = new StreamWriter(path, false, encoding, 4096);
+            _streamWriter.AutoFlush = true;
             var count = schemaTable.Rows.Count;
-            this.dataWriters = new DataWriterBase[count];
+            _dataWriters = new DataWriterBase[count];
             var st = new StringTable(3);
             st.Columns[2].Align = StringTableColumnAlign.Right;
 
@@ -136,7 +136,7 @@ namespace DataCommander.Providers.ResultWriter
                         throw new NotImplementedException(typeCode.ToString());
                 }
 
-                this.dataWriters[i] = dataWriter;
+                _dataWriters[i] = dataWriter;
 
                 var row = st.NewRow();
                 row[0] = (string)column[SchemaTableColumn.ColumnName];
@@ -145,7 +145,7 @@ namespace DataCommander.Providers.ResultWriter
                 st.Rows.Add(row);
             }
 
-            this.messageWriter.WriteLine(st);
+            _messageWriter.WriteLine(st);
         }
 
         public void FirstRowReadBegin()
@@ -168,21 +168,21 @@ namespace DataCommander.Providers.ResultWriter
 
                 for (var j = 0; j < row.Length; j++)
                 {
-                    var s = this.dataWriters[j].ToString(row[j]);
+                    var s = _dataWriters[j].ToString(row[j]);
                     sb.Append(s);
                 }
 
                 sb.Append("\r\n");
             }
 
-            this.streamWriter.Write(sb);
+            _streamWriter.Write(sb);
         }
 
         public void WriteTableEnd()
         {
-            this.streamWriter.Close();
-            this.streamWriter = null;
-            this.dataWriters = null;
+            _streamWriter.Close();
+            _streamWriter = null;
+            _dataWriters = null;
         }
 
         public void WriteParameters(IDataParameterCollection parameters)

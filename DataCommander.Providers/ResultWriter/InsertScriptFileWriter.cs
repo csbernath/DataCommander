@@ -42,12 +42,12 @@
 
     internal sealed class InsertScriptFileWriter : IResultWriter
     {
-        private readonly string tableName;
-        private readonly TextWriter messageWriter;
-        private StreamWriter streamWriter;
-        private DataTable schemaTable;
-        private string sqlStatementPrefix;
-        private bool firstRow = true;
+        private readonly string _tableName;
+        private readonly TextWriter _messageWriter;
+        private StreamWriter _streamWriter;
+        private DataTable _schemaTable;
+        private string _sqlStatementPrefix;
+        private bool _firstRow = true;
 
         public InsertScriptFileWriter(string tableName, TextWriter messageWriter)
         {
@@ -55,8 +55,8 @@
             Contract.Requires<ArgumentNullException>(messageWriter != null);
 #endif
 
-            this.tableName = tableName;
-            this.messageWriter = messageWriter;
+            _tableName = tableName;
+            _messageWriter = messageWriter;
         }
 
         public static string GetDataTypeName(Type dataType)
@@ -325,14 +325,14 @@
 
         void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
-            this.schemaTable = schemaTable;
-            this.messageWriter.WriteLine(GetCreateTableStatement(schemaTable));
-            this.sqlStatementPrefix = GetSqlStatementPrefix(this.tableName, this.schemaTable);
+            _schemaTable = schemaTable;
+            _messageWriter.WriteLine(GetCreateTableStatement(schemaTable));
+            _sqlStatementPrefix = GetSqlStatementPrefix(_tableName, _schemaTable);
 
             var path = Path.GetTempFileName();
-            this.messageWriter.WriteLine("fileName: {0}", path);
+            _messageWriter.WriteLine("fileName: {0}", path);
             var encoding = Encoding.UTF8;
-            this.streamWriter = new StreamWriter(path, false, encoding, 4096);
+            _streamWriter = new StreamWriter(path, false, encoding, 4096);
         }
 
         void IResultWriter.FirstRowReadBegin()
@@ -345,14 +345,14 @@
 
         void IResultWriter.WriteRows(object[][] rows, int rowCount)
         {
-            var fieldCount = this.schemaTable.Rows.Count;
+            var fieldCount = _schemaTable.Rows.Count;
             var sb = new StringBuilder();
 
             for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {
-                if (this.firstRow)
+                if (_firstRow)
                 {
-                    this.firstRow = false;
+                    _firstRow = false;
                 }
                 else
                 {
@@ -360,7 +360,7 @@
                 }
 
                 var values = rows[rowIndex];
-                sb.Append(this.sqlStatementPrefix);
+                sb.Append(_sqlStatementPrefix);
 
                 for (var i = 0; i < fieldCount; i++)
                 {
@@ -380,15 +380,15 @@
             {
                 sb.AppendLine();
                 sb.Append("GO");
-                this.streamWriter.Write(sb);
+                _streamWriter.Write(sb);
             }
         }
 
         void IResultWriter.WriteTableEnd()
         {
-            this.streamWriter.Close();
-            this.streamWriter.Dispose();
-            this.streamWriter = null;
+            _streamWriter.Close();
+            _streamWriter.Dispose();
+            _streamWriter = null;
         }
 
         void IResultWriter.WriteParameters(IDataParameterCollection parameters)

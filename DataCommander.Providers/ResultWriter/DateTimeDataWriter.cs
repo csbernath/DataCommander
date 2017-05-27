@@ -11,12 +11,12 @@ namespace DataCommander.Providers.ResultWriter
 
             if (value == DBNull.Value)
             {
-                s = new string(' ', this.Width);
+                s = new string(' ', Width);
             }
             else
             {
                 var field = (DateTimeField) value;
-                s = field.ToString().PadLeft(this.Width, ' ');
+                s = field.ToString().PadLeft(Width, ' ');
             }
 
             return s;

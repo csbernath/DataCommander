@@ -7,7 +7,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         public FunctionCollectionNode(DatabaseNode database)
         {
-            this.database = database;
+            _database = database;
         }
 
         public string Name => "Functions";
@@ -18,8 +18,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         {
             return new ITreeNode[]
             {
-                new TableValuedFunctionCollectionNode(database),
-                new ScalarValuedFunctionCollectionNode(database)
+                new TableValuedFunctionCollectionNode(_database),
+                new ScalarValuedFunctionCollectionNode(_database)
             };
         }
 
@@ -29,6 +29,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         public ContextMenuStrip ContextMenu => null;
 
-        readonly DatabaseNode database;
+        readonly DatabaseNode _database;
     }
 }

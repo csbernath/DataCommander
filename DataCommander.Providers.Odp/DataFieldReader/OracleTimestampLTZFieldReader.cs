@@ -4,17 +4,17 @@ namespace DataCommander.Providers.Odp.DataFieldReader
     using Field;
     using Oracle.ManagedDataAccess.Client;
 
-    internal sealed class OracleTimestampLTZFieldReader : IDataFieldReader
+    internal sealed class OracleTimestampLtzFieldReader : IDataFieldReader
     {
-        private readonly OracleDataReader dataReader;
-        private readonly int columnOrdinal;
+        private readonly OracleDataReader _dataReader;
+        private readonly int _columnOrdinal;
 
-        public OracleTimestampLTZFieldReader(
+        public OracleTimestampLtzFieldReader(
             OracleDataReader dataReader,
             int columnOrdinal )
         {
-            this.dataReader = dataReader;
-            this.columnOrdinal = columnOrdinal;
+            _dataReader = dataReader;
+            _columnOrdinal = columnOrdinal;
         }
 
         #region IDataFieldReader Members
@@ -25,14 +25,14 @@ namespace DataCommander.Providers.Odp.DataFieldReader
             {
                 object value;
 
-                if (dataReader.IsDBNull( columnOrdinal ))
+                if (_dataReader.IsDBNull( _columnOrdinal ))
                 {
                     value = DBNull.Value;
                 }
                 else
                 {
-                    var oracleTimeStamp = this.dataReader.GetOracleTimeStampLTZ( this.columnOrdinal );
-                    value = new OracleTimeStampLTZField( oracleTimeStamp );
+                    var oracleTimeStamp = _dataReader.GetOracleTimeStampLTZ( _columnOrdinal );
+                    value = new OracleTimeStampLtzField( oracleTimeStamp );
                 }
 
                 return value;

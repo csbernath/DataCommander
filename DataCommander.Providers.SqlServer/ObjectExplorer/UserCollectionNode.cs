@@ -10,11 +10,11 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
     internal sealed class UserCollectionNode : ITreeNode
     {
-        private readonly DatabaseNode database;
+        private readonly DatabaseNode _database;
 
         public UserCollectionNode(DatabaseNode  database)
         {
-            this.database = database;
+            _database = database;
         }
 
         public string Name => "Users";
@@ -24,8 +24,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             var commandText = "select name from {0}..sysusers where islogin = 1 order by name";
-            commandText = string.Format(commandText, this.database.Name);
-            var connectionString = this.database.Databases.Server.ConnectionString;
+            commandText = string.Format(commandText, _database.Name);
+            var connectionString = _database.Databases.Server.ConnectionString;
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -39,7 +39,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             for (var i=0;i<count;i++)
             {
                 var name = (string)dataRows[i][0];
-                treeNodes[i] = new UserNode(this.database,name);
+                treeNodes[i] = new UserNode(_database,name);
             }
 
             return treeNodes;

@@ -9,11 +9,11 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
     internal sealed class SchemaCollectionNode : ITreeNode
     {
-        private readonly DatabaseNode database;
+        private readonly DatabaseNode _database;
 
         public SchemaCollectionNode(DatabaseNode  database)
         {
-            this.database = database;
+            _database = database;
         }
 
         public string Name => "Schemas";
@@ -27,8 +27,8 @@ from {0}.sys.schemas s (nolock)
 order by s.name";
 
             var sqlCommandBuilder = new SqlCommandBuilder();
-            commandText = string.Format(commandText, sqlCommandBuilder.QuoteIdentifier(this.database.Name));
-            var connectionString = this.database.Databases.Server.ConnectionString;
+            commandText = string.Format(commandText, sqlCommandBuilder.QuoteIdentifier(_database.Name));
+            var connectionString = _database.Databases.Server.ConnectionString;
             var treeNodes = new List<ITreeNode>();
 
             using (var connection = new SqlConnection(connectionString))
@@ -40,7 +40,7 @@ order by s.name";
                     dataReader.Read(dataRecord =>
                     {
                         var name = dataRecord.GetString(0);
-                        var treeNode = new SchemaNode(this.database, name);
+                        var treeNode = new SchemaNode(_database, name);
                         treeNodes.Add(treeNode);
                     });
                 }

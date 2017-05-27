@@ -12,13 +12,13 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         public StoredProcedureCollectionNode(
             DatabaseNode database,
-            bool isMSShipped)
+            bool isMsShipped)
         {
-            this.database = database;
-            this.isMSShipped = isMSShipped;
+            _database = database;
+            _isMsShipped = isMsShipped;
         }
 
-        public string Name => this.isMSShipped
+        public string Name => _isMsShipped
             ? "System Stored Procedures"
             : "Stored Procedures";
 
@@ -38,12 +38,12 @@ where
     o.type = 'P'
     and o.is_ms_shipped = {1}
     and p.major_id is null
-order by s.name,o.name", this.database.Name, this.isMSShipped
+order by s.name,o.name", _database.Name, _isMsShipped
                 ? 1
                 : 0);
 
             DataTable dataTable;
-            var connectionString = this.database.Databases.Server.ConnectionString;
+            var connectionString = _database.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 var transactionScope = new DbTransactionScope(connection, null);
@@ -52,9 +52,9 @@ order by s.name,o.name", this.database.Name, this.isMSShipped
             var dataRows = dataTable.Rows;
             var count = dataRows.Count;
             var treeNodes = new List<ITreeNode>();
-            if (!this.isMSShipped)
+            if (!_isMsShipped)
             {
-                treeNodes.Add(new StoredProcedureCollectionNode(this.database, true));
+                treeNodes.Add(new StoredProcedureCollectionNode(_database, true));
             }
 
             for (var i = 0; i < count; i++)
@@ -63,7 +63,7 @@ order by s.name,o.name", this.database.Name, this.isMSShipped
                 var owner = (string)row["Owner"];
                 var name = (string)row["Name"];
 
-                treeNodes.Add(new StoredProcedureNode(this.database, owner, name));
+                treeNodes.Add(new StoredProcedureNode(_database, owner, name));
             }
 
             return treeNodes;
@@ -75,7 +75,7 @@ order by s.name,o.name", this.database.Name, this.isMSShipped
 
         public ContextMenuStrip ContextMenu => null;
 
-        readonly DatabaseNode database;
-        readonly bool isMSShipped;
+        readonly DatabaseNode _database;
+        readonly bool _isMsShipped;
     }
 }

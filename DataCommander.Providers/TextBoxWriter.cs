@@ -18,7 +18,7 @@ namespace DataCommander.Providers
         /// <param name="textBox"></param>
         public TextBoxWriter(TextBoxBase textBox)
         {
-            this.textBox = textBox;
+            _textBox = textBox;
         }
 
         /// <summary>
@@ -28,8 +28,8 @@ namespace DataCommander.Providers
 
         private void AppendText(string text)
         {
-            this.textBox.AppendText(text);
-			this.textBox.ScrollToCaret();
+            _textBox.AppendText(text);
+			_textBox.ScrollToCaret();
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace DataCommander.Providers
         /// <param name="str"></param>
         public override void Write(string str)
         {
-            this.textBox.Invoke(new AppendTextDelegate(this.AppendText), str);
+            _textBox.Invoke(new AppendTextDelegate(AppendText), str);
         }
 
         /// <summary>
@@ -48,9 +48,9 @@ namespace DataCommander.Providers
         public override void WriteLine(string value)
         {
             var line = value + Environment.NewLine;
-            this.textBox.Invoke(new AppendTextDelegate(this.AppendText), line);
+            _textBox.Invoke(new AppendTextDelegate(AppendText), line);
         }
 
-        private readonly TextBoxBase textBox;
+        private readonly TextBoxBase _textBox;
     }
 }

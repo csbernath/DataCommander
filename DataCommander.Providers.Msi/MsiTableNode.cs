@@ -6,18 +6,18 @@
 
     internal sealed class MsiTableNode : ITreeNode
 	{
-		private MsiConnection connection;
-		private TableInfo table;
+		private MsiConnection _connection;
+		private readonly TableInfo _table;
 
 		public MsiTableNode( MsiConnection connection, TableInfo table )
 		{
-			this.connection = connection;
-			this.table = table;
+			_connection = connection;
+			_table = table;
 		}
 
 		#region ITreeNode Members
 
-		string ITreeNode.Name => this.table.Name;
+		string ITreeNode.Name => _table.Name;
 
         bool ITreeNode.IsLeaf => true;
 
@@ -28,7 +28,7 @@
 
 		bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query => this.table.SqlSelectString;
+        string ITreeNode.Query => _table.SqlSelectString;
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 

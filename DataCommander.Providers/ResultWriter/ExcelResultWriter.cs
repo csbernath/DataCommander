@@ -10,74 +10,72 @@ namespace DataCommander.Providers.ResultWriter
 {
     internal sealed class ExcelResultWriter : IResultWriter
     {
-        private IProvider provider;
-        private readonly Action<InfoMessage> addInfoMessage;
-        private readonly IResultWriter logResultWriter;
-        private ExcelPackage excelPackage;
-        private ExcelWorksheet excelWorksheet;
-        private int rowCount;
+        private IProvider _provider;
+        private readonly Action<InfoMessage> _addInfoMessage;
+        private readonly IResultWriter _logResultWriter;
+        private ExcelPackage _excelPackage;
+        private ExcelWorksheet _excelWorksheet;
+        private int _rowCount;
 
-        public ExcelResultWriter(
-            IProvider provider,
-            Action<InfoMessage> addInfoMessage)
+        public ExcelResultWriter(IProvider provider, Action<InfoMessage> addInfoMessage)
         {
 #if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(provider != null);
             Contract.Requires<ArgumentNullException>(addInfoMessage != null);
 #endif
 
-            this.provider = provider;
-            this.addInfoMessage = addInfoMessage;
-            this.logResultWriter = new LogResultWriter(addInfoMessage);
+            _provider = provider;
+            _addInfoMessage = addInfoMessage;
+            _logResultWriter = new LogResultWriter(addInfoMessage);
         }
 
         #region IResultWriter Members
 
         void IResultWriter.Begin(IProvider provider)
         {
-            this.logResultWriter.Begin(provider);
-            this.provider = provider;
+            _logResultWriter.Begin(provider);
+            _provider = provider;
         }
 
         void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command)
         {
-            this.logResultWriter.BeforeExecuteReader(command);
+            _logResultWriter.BeforeExecuteReader(command);
         }
 
         void IResultWriter.AfterExecuteReader(int fieldCount)
         {
-            this.logResultWriter.AfterExecuteReader(fieldCount);
+            _logResultWriter.AfterExecuteReader(fieldCount);
 
             var fileName = Path.GetTempFileName() + ".xlsx";
-            this.excelPackage = new ExcelPackage(new FileInfo(fileName));
+            _excelPackage = new ExcelPackage(new FileInfo(fileName));
         }
 
         void IResultWriter.AfterCloseReader(int affectedRows)
         {
-            this.logResultWriter.AfterCloseReader(affectedRows);
+            _logResultWriter.AfterCloseReader(affectedRows);
         }
 
         void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
-            this.logResultWriter.WriteTableBegin(schemaTable);
-            this.CreateTable(schemaTable);
+            _logResultWriter.WriteTableBegin(schemaTable);
+            CreateTable(schemaTable);
         }
 
         void IResultWriter.FirstRowReadBegin()
         {
-            this.logResultWriter.FirstRowReadBegin();
+            _logResultWriter.FirstRowReadBegin();
         }
 
         void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
         {
-            this.logResultWriter.FirstRowReadEnd(dataTypeNames);
+            _logResultWriter.FirstRowReadEnd(dataTypeNames);
         }
 
         void IResultWriter.WriteRows(object[][] rows, int rowCount)
         {
-            this.logResultWriter.WriteRows(rows, rowCount);
+            _logResultWriter.WriteRows(rows, rowCount);
 
-            var cells = this.excelWorksheet.Cells;
+            var cells = _excelWorksheet.Cells;
 
             for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {
@@ -85,16 +83,16 @@ namespace DataCommander.Providers.ResultWriter
 
                 for (var columnIndex = 0; columnIndex < row.Length; columnIndex++)
                 {
-                    cells[this.rowCount + rowIndex, columnIndex + 1].Value = row[columnIndex];
+                    cells[_rowCount + rowIndex, columnIndex + 1].Value = row[columnIndex];
                 }
             }
 
-            this.rowCount += rowCount;
+            _rowCount += rowCount;
         }
 
         void IResultWriter.WriteTableEnd()
         {
-            this.logResultWriter.WriteTableEnd();
+            _logResultWriter.WriteTableEnd();
         }
 
         void IResultWriter.WriteParameters(IDataParameterCollection parameters)
@@ -103,21 +101,21 @@ namespace DataCommander.Providers.ResultWriter
 
         void IResultWriter.End()
         {
-            this.logResultWriter.End();
+            _logResultWriter.End();
 
-            this.excelPackage.Save();
+            _excelPackage.Save();
 
-            Process.Start(this.excelPackage.File.FullName);
+            Process.Start(_excelPackage.File.FullName);
         }
 
         #endregion
 
         private void CreateTable(DataTable schemaTable)
         {
-            var worksheets = this.excelPackage.Workbook.Worksheets;
+            var worksheets = _excelPackage.Workbook.Worksheets;
             var tableName = $"Table{worksheets.Count + 1}";
-            this.excelWorksheet = worksheets.Add(tableName);
-            var cells = this.excelWorksheet.Cells;
+            _excelWorksheet = worksheets.Add(tableName);
+            var cells = _excelWorksheet.Cells;
             var columnIndex = 1;
 
             foreach (DataRow schemaRow in schemaTable.Rows)
@@ -125,7 +123,7 @@ namespace DataCommander.Providers.ResultWriter
                 var dataColumnSchema = new DbColumn(schemaRow);
                 var columnName = dataColumnSchema.ColumnName;
                 var columnSize = dataColumnSchema.ColumnSize;
-                var dataType = this.provider.GetColumnType(dataColumnSchema);
+                var dataType = _provider.GetColumnType(dataColumnSchema);
 
                 var cell = cells[1, columnIndex];
                 cell.Value = columnName;
@@ -134,8 +132,8 @@ namespace DataCommander.Providers.ResultWriter
                 columnIndex++;
             }
 
-            this.excelWorksheet.View.FreezePanes(2, 1);
-            this.rowCount = 2;
+            _excelWorksheet.View.FreezePanes(2, 1);
+            _rowCount = 2;
         }
     }
 }

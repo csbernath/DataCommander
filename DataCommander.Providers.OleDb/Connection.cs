@@ -17,7 +17,7 @@ namespace DataCommander.Providers.OleDb
             this.oledbConnection = new OleDbConnection(connectionString);
             this.Connection = this.oledbConnection;
 
-            this.oledbConnection.InfoMessage += new OleDbInfoMessageEventHandler(this.OnInfoMessage);
+            this.oledbConnection.InfoMessage += this.OnInfoMessage;
         }
 
         public override string ConnectionName { get; set; }

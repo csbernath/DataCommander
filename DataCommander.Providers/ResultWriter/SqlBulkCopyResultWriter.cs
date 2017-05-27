@@ -15,27 +15,27 @@
 
     internal sealed class SqlBulkCopyResultWriter : IResultWriter
     {
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private readonly IResultWriter logResultWriter;
-        private readonly Action<InfoMessage> addInfoMessage;
-        private IProvider destinationProvider;
-        private readonly ConnectionBase destinationConnection;
-        private readonly SqlConnection destinationSqlConnection;
-        private readonly string tableName;
-        private readonly Action<IDbTransaction> setTransaction;
-        private readonly CancellationToken cancellationToken;
-        private IDbTransaction transaction;
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly IResultWriter _logResultWriter;
+        private readonly Action<InfoMessage> _addInfoMessage;
+        private IProvider _destinationProvider;
+        private readonly ConnectionBase _destinationConnection;
+        private readonly SqlConnection _destinationSqlConnection;
+        private readonly string _tableName;
+        private readonly Action<IDbTransaction> _setTransaction;
+        private readonly CancellationToken _cancellationToken;
+        private IDbTransaction _transaction;
         //private IDbCommand insertCommand;
-        private Converter<object, object>[] converters = null;
+        private Converter<object, object>[] _converters = null;
         //private IDbDataParameter[] parameters;
-        private ConcurrentQueue<QueueItem> queue;
-        private Task task;
-        private EventWaitHandle enqueueEvent;
-        private bool writeEnded;
-        private bool canConvertCommandToString;
-        private long readRowCount;
-        private long insertedRowCount;
-        private SqlBulkCopy sqlBulkCopy;
+        private ConcurrentQueue<QueueItem> _queue;
+        private Task _task;
+        private EventWaitHandle _enqueueEvent;
+        private bool _writeEnded;
+        private bool _canConvertCommandToString;
+        private long _readRowCount;
+        private long _insertedRowCount;
+        private SqlBulkCopy _sqlBulkCopy;
 
         public SqlBulkCopyResultWriter(
             Action<InfoMessage> addInfoMessage,
@@ -48,63 +48,63 @@
 #if CONTRACTS_FULL
             Contract.Requires(destinationProvider.DbProviderFactory == SqlClientFactory.Instance);
 #endif
-            this.destinationSqlConnection = (SqlConnection)destinationConnection.Connection;
+            _destinationSqlConnection = (SqlConnection)destinationConnection.Connection;
 
-            this.logResultWriter = new LogResultWriter(addInfoMessage);
-            this.addInfoMessage = addInfoMessage;
-            this.destinationProvider = destinationProvider;
-            this.canConvertCommandToString = destinationProvider.CanConvertCommandToString;
-            this.destinationConnection = destinationConnection;
-            this.tableName = tableName;
-            this.setTransaction = setTransaction;
-            this.cancellationToken = cancellationToken;
+            _logResultWriter = new LogResultWriter(addInfoMessage);
+            _addInfoMessage = addInfoMessage;
+            _destinationProvider = destinationProvider;
+            _canConvertCommandToString = destinationProvider.CanConvertCommandToString;
+            _destinationConnection = destinationConnection;
+            _tableName = tableName;
+            _setTransaction = setTransaction;
+            _cancellationToken = cancellationToken;
         }
 
 #region IResultWriter Members
 
         void IResultWriter.Begin(IProvider provider)
         {
-            this.logResultWriter.Begin(provider);
+            _logResultWriter.Begin(provider);
         }
 
         void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command)
         {
-            this.logResultWriter.BeforeExecuteReader(command);
+            _logResultWriter.BeforeExecuteReader(command);
         }
 
         void IResultWriter.AfterExecuteReader(int fieldCount)
         {
-            this.logResultWriter.AfterExecuteReader(fieldCount);
+            _logResultWriter.AfterExecuteReader(fieldCount);
         }
 
         void IResultWriter.AfterCloseReader(int affectedRows)
         {
-            this.logResultWriter.AfterCloseReader(affectedRows);
+            _logResultWriter.AfterCloseReader(affectedRows);
         }
 
         void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
-            this.logResultWriter.WriteTableBegin(schemaTable);
-            if (this.transaction == null)
+            _logResultWriter.WriteTableBegin(schemaTable);
+            if (_transaction == null)
             {
-                this.transaction = this.destinationConnection.Connection.BeginTransaction();
-                this.setTransaction(this.transaction);
+                _transaction = _destinationConnection.Connection.BeginTransaction();
+                _setTransaction(_transaction);
             }
 
-            var sqlTransaction = (SqlTransaction)this.transaction;
-            this.sqlBulkCopy = new SqlBulkCopy(this.destinationSqlConnection, SqlBulkCopyOptions.Default, sqlTransaction);
-            this.sqlBulkCopy.BulkCopyTimeout = int.MaxValue;
-            this.sqlBulkCopy.DestinationTableName = this.tableName;
-            this.sqlBulkCopy.NotifyAfter = 10000;
-            this.sqlBulkCopy.SqlRowsCopied += this.sqlBulkCopy_SqlRowsCopied;
+            var sqlTransaction = (SqlTransaction)_transaction;
+            _sqlBulkCopy = new SqlBulkCopy(_destinationSqlConnection, SqlBulkCopyOptions.Default, sqlTransaction);
+            _sqlBulkCopy.BulkCopyTimeout = int.MaxValue;
+            _sqlBulkCopy.DestinationTableName = _tableName;
+            _sqlBulkCopy.NotifyAfter = 10000;
+            _sqlBulkCopy.SqlRowsCopied += sqlBulkCopy_SqlRowsCopied;
         }
 
         private void sqlBulkCopy_SqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
         {
             var message = $"{e.RowsCopied} rows copied to destination.";
-            this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
+            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
 
-            if (this.cancellationToken.IsCancellationRequested)
+            if (_cancellationToken.IsCancellationRequested)
             {
                 e.Abort = true;
             }
@@ -124,7 +124,7 @@
                     for (var columnIndex = 0; columnIndex < row.Length; columnIndex++)
                     {
                         var sourceValue = row[columnIndex];
-                        var converter = this.converters[columnIndex];
+                        var converter = _converters[columnIndex];
                         object destinationValue;
 
                         if (converter != null)
@@ -140,14 +140,14 @@
                     }
 
                     dataTable.Rows.Add(dataRow);
-                    this.insertedRowCount++;
+                    _insertedRowCount++;
                 }
 
-                this.sqlBulkCopy.WriteToServer(dataTable);
+                _sqlBulkCopy.WriteToServer(dataTable);
             }
 
-            var message = $"{this.insertedRowCount} rows inserted.";
-            this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
+            var message = $"{_insertedRowCount} rows inserted.";
+            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
 
         private void Dequeue()
@@ -158,14 +158,14 @@
                 {
                     while (true)
                     {
-                        methodLog.Write(LogLevel.Trace, "this.queue.Count: {0}", this.queue.Count);
-                        if (this.queue.Count > 0)
+                        methodLog.Write(LogLevel.Trace, "this.queue.Count: {0}", _queue.Count);
+                        if (_queue.Count > 0)
                         {
-                            var items = new List<QueueItem>(this.queue.Count);
+                            var items = new List<QueueItem>(_queue.Count);
                             while (true)
                             {
                                 QueueItem item;
-                                var succeeded = this.queue.TryDequeue(out item);
+                                var succeeded = _queue.TryDequeue(out item);
                                 if (succeeded)
                                 {
                                     items.Add(item);
@@ -176,20 +176,20 @@
                                 }
                             }
 
-                            this.InsertItems(items);
+                            InsertItems(items);
                         }
 
-                        if (this.queue.Count == 0)
+                        if (_queue.Count == 0)
                         {
-                            methodLog.Write(LogLevel.Trace, "this.writeEnded: {0}", this.writeEnded);
-                            if (this.writeEnded)
+                            methodLog.Write(LogLevel.Trace, "this.writeEnded: {0}", _writeEnded);
+                            if (_writeEnded)
                             {
                                 break;
                             }
                             else
                             {
                                 methodLog.Write(LogLevel.Trace, "this.enqueueEvent.WaitOne( 1000 );...");
-                                this.enqueueEvent.WaitOne(1000);
+                                _enqueueEvent.WaitOne(1000);
                                 methodLog.Write(LogLevel.Trace, "this.enqueueEvent.WaitOne( 1000 ); finished.");
                             }
                         }
@@ -198,33 +198,33 @@
             }
             catch (Exception e)
             {
-                log.Write(LogLevel.Error, e.ToLogString());
+                Log.Write(LogLevel.Error, e.ToLogString());
             }
         }
 
         void IResultWriter.FirstRowReadBegin()
         {
-            this.logResultWriter.FirstRowReadBegin();
-            if (this.queue == null)
+            _logResultWriter.FirstRowReadBegin();
+            if (_queue == null)
             {
-                this.queue = new ConcurrentQueue<QueueItem>();
-                this.enqueueEvent = new EventWaitHandle(false, EventResetMode.AutoReset);
-                this.task = new Task(this.Dequeue, TaskCreationOptions.LongRunning);
-                this.task.Start();
+                _queue = new ConcurrentQueue<QueueItem>();
+                _enqueueEvent = new EventWaitHandle(false, EventResetMode.AutoReset);
+                _task = new Task(Dequeue, TaskCreationOptions.LongRunning);
+                _task.Start();
             }
         }
 
         void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
         {
-            this.logResultWriter.FirstRowReadEnd(dataTypeNames);
+            _logResultWriter.FirstRowReadEnd(dataTypeNames);
         }
 
         void IResultWriter.WriteRows(object[][] rows, int rowCount)
         {
-            this.logResultWriter.WriteRows(rows, rowCount);
-            this.readRowCount += rowCount;
-            var message = $"{this.readRowCount} row(s) read.";
-            this.addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
+            _logResultWriter.WriteRows(rows, rowCount);
+            _readRowCount += rowCount;
+            var message = $"{_readRowCount} row(s) read.";
+            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
             var targetRows = new object[rowCount][];
             for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {
@@ -240,18 +240,18 @@
                 Rows = targetRows
             };
 
-            this.queue.Enqueue(queueItem);
-            this.enqueueEvent.Set();
+            _queue.Enqueue(queueItem);
+            _enqueueEvent.Set();
             
-            while (!this.cancellationToken.IsCancellationRequested && this.queue.Count > 10)
+            while (!_cancellationToken.IsCancellationRequested && _queue.Count > 10)
             {
-                this.cancellationToken.WaitHandle.WaitOne(500);
+                _cancellationToken.WaitHandle.WaitOne(500);
             }
         }
 
         void IResultWriter.WriteTableEnd()
         {
-            this.logResultWriter.WriteTableEnd();
+            _logResultWriter.WriteTableEnd();
         }
 
         void IResultWriter.WriteParameters(IDataParameterCollection parameters)
@@ -260,14 +260,14 @@
 
         void IResultWriter.End()
         {
-            this.logResultWriter.End();
+            _logResultWriter.End();
             using (var methodLog = LogFactory.Instance.GetCurrentMethodLog())
             {
-                this.writeEnded = true;
-                if (this.task != null && !this.task.IsCompleted)
+                _writeEnded = true;
+                if (_task != null && !_task.IsCompleted)
                 {
                     methodLog.Write(LogLevel.Trace, "Waiting 500 ms for task...");
-                    this.task.Wait(500);
+                    _task.Wait(500);
                 }
             }
         }

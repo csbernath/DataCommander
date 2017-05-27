@@ -8,18 +8,18 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
     internal sealed class SynonymNode : ITreeNode
 	{
-		private readonly SchemaNode schema;
-		private readonly string name;
+		private readonly SchemaNode _schema;
+		private readonly string _name;
 
 		public SynonymNode( SchemaNode schema, string name )
 		{
-			this.schema = schema;
-			this.name = name;
+			_schema = schema;
+			_name = name;
 		}
 
 		#region ITreeNode Members
 
-		string ITreeNode.Name => this.name;
+		string ITreeNode.Name => _name;
 
         bool ITreeNode.IsLeaf => false;
 
@@ -30,13 +30,13 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 select	s.TABLE_OWNER,
 	s.TABLE_NAME
 from	SYS.ALL_SYNONYMS s
-where	s.OWNER			= '{this.schema.Name}'
-	and s.SYNONYM_NAME	= '{this.name}'";
-            var transactionScope = new DbTransactionScope(this.schema.SchemasNode.Connection, null);
+where	s.OWNER			= '{_schema.Name}'
+	and s.SYNONYM_NAME	= '{_name}'";
+            var transactionScope = new DbTransactionScope(_schema.SchemasNode.Connection, null);
             var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
             var dataRow = dataTable.Rows[0];
             var schemaName = (string)dataRow["TABLE_OWNER"];
-            var schemaNode = new SchemaNode(this.schema.SchemasNode, schemaName);
+            var schemaNode = new SchemaNode(_schema.SchemasNode, schemaName);
             var tableNode = new TableNode(schemaNode, (string)dataRow["TABLE_NAME"], true);
             return new ITreeNode[] {tableNode};
         }

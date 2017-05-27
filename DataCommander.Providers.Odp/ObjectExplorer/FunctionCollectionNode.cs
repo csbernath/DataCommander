@@ -8,11 +8,11 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
     internal sealed class FunctionCollectionNode : ITreeNode
     {
-        private readonly SchemaNode schemaNode;
+        private readonly SchemaNode _schemaNode;
 
         public FunctionCollectionNode(SchemaNode schemaNode)
         {
-            this.schemaNode = schemaNode;
+            _schemaNode = schemaNode;
         }
 
         #region ITreeNode Members
@@ -26,10 +26,10 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
             var commandText =
                 $@"select	OBJECT_NAME
 from	SYS.ALL_OBJECTS
-where	OWNER	= '{schemaNode.Name}'
+where	OWNER	= '{_schemaNode.Name}'
 	and OBJECT_TYPE	= 'FUNCTION'
 order by OBJECT_NAME";
-            var transactionScope = new DbTransactionScope(this.schemaNode.SchemasNode.Connection, null);
+            var transactionScope = new DbTransactionScope(_schemaNode.SchemasNode.Connection, null);
 
             return transactionScope.ExecuteReader(
                 new CommandDefinition {CommandText = commandText},
@@ -37,7 +37,7 @@ order by OBJECT_NAME";
                 dataRecord =>
                 {
                     var procedureName = dataRecord.GetString(0);
-                    return new FunctionNode(schemaNode, null, procedureName);
+                    return new FunctionNode(_schemaNode, null, procedureName);
                 });
         }
 

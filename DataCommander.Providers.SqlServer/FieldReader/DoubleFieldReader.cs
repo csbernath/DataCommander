@@ -10,8 +10,8 @@ namespace DataCommander.Providers.SqlServer.FieldReader
             IDataRecord dataRecord,
             int columnOrdinal)
         {
-            this.dataRecord = dataRecord;
-            this.columnOrdinal = columnOrdinal;
+            _dataRecord = dataRecord;
+            _columnOrdinal = columnOrdinal;
         }
 
         object IDataFieldReader.Value
@@ -20,13 +20,13 @@ namespace DataCommander.Providers.SqlServer.FieldReader
             {
                 object value;
 
-                if (this.dataRecord.IsDBNull(this.columnOrdinal))
+                if (_dataRecord.IsDBNull(_columnOrdinal))
                 {
                     value = DBNull.Value;
                 }
                 else
                 {
-                    var d = this.dataRecord.GetDouble(this.columnOrdinal);
+                    var d = _dataRecord.GetDouble(_columnOrdinal);
                     value = new DoubleField(d);
                 }
 
@@ -34,7 +34,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
             }
         }
 
-        readonly IDataRecord dataRecord;
-        readonly int columnOrdinal;
+        readonly IDataRecord _dataRecord;
+        readonly int _columnOrdinal;
     }
 }

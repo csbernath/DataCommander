@@ -9,11 +9,11 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
           TableNode table,
           string name)
         {
-            this.table = table;
-            this.name = name;
+            _table = table;
+            _name = name;
         }
 
-        public string Name => name;
+        public string Name => _name;
 
         public bool IsLeaf => true;
 
@@ -25,8 +25,8 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         public bool Sortable => false;
 
         public string Query => $@"select column_name from SYS.ALL_IND_COLUMNS
-where table_owner = '{table.Schema.Name}' and table_name = '{table.Name
-            }' and index_name = '{name}'
+where table_owner = '{_table.Schema.Name}' and table_name = '{_table.Name
+            }' and index_name = '{_name}'
 order by column_position";
 
         public ContextMenuStrip ContextMenu => null;
@@ -35,7 +35,7 @@ order by column_position";
         {
         }
 
-        readonly TableNode table;
-        readonly string name;
+        readonly TableNode _table;
+        readonly string _name;
     }
 }

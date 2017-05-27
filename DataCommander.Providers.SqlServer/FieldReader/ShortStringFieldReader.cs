@@ -6,18 +6,18 @@ namespace DataCommander.Providers.SqlServer.FieldReader
 
     sealed class ShortStringFieldReader : IDataFieldReader
     {
-        private readonly IDataRecord dataRecord;
-        private readonly int columnOrdinal;
-        private readonly SqlDbType sqlDbType;
+        private readonly IDataRecord _dataRecord;
+        private readonly int _columnOrdinal;
+        private readonly SqlDbType _sqlDbType;
 
         public ShortStringFieldReader(
             IDataRecord dataRecord,
             int columnOrdinal,
             SqlDbType sqlDbType)
         {
-            this.dataRecord = dataRecord;
-            this.columnOrdinal = columnOrdinal;
-            this.sqlDbType = sqlDbType;
+            _dataRecord = dataRecord;
+            _columnOrdinal = columnOrdinal;
+            _sqlDbType = sqlDbType;
         }
 
         #region IDataFieldReader Members
@@ -27,16 +27,16 @@ namespace DataCommander.Providers.SqlServer.FieldReader
             {
                 object value;
 
-                if (this.dataRecord.IsDBNull(this.columnOrdinal))
+                if (_dataRecord.IsDBNull(_columnOrdinal))
                 {
                     value = DBNull.Value;
                 }
                 else
                 {
-                    var s = this.dataRecord.GetString(this.columnOrdinal);
+                    var s = _dataRecord.GetString(_columnOrdinal);
 
-                    if (this.sqlDbType == SqlDbType.Char ||
-                        this.sqlDbType == SqlDbType.NChar)
+                    if (_sqlDbType == SqlDbType.Char ||
+                        _sqlDbType == SqlDbType.NChar)
                     {
                         s = s.TrimEnd();
                     }

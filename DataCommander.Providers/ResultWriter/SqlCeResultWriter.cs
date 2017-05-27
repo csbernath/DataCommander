@@ -11,23 +11,23 @@
 
     internal sealed class SqlCeResultWriter : IResultWriter
     {
-        private readonly TextWriter messageWriter;
-        private readonly string tableName;
-        private IProvider provider;
-        private SqlCeConnection connection;
-        private SqlCeCommand insertCommand;
+        private readonly TextWriter _messageWriter;
+        private readonly string _tableName;
+        private IProvider _provider;
+        private SqlCeConnection _connection;
+        private SqlCeCommand _insertCommand;
 
         public SqlCeResultWriter(TextWriter messageWriter, string tableName)
         {
-            this.messageWriter = messageWriter;
-            this.tableName = tableName;
+            _messageWriter = messageWriter;
+            _tableName = tableName;
         }
 
         #region IResultWriter Members
 
         void IResultWriter.Begin(IProvider provider)
         {
-            this.provider = provider;
+            _provider = provider;
         }
 
         void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command)
@@ -37,14 +37,14 @@
         void IResultWriter.AfterExecuteReader(int fieldCount)
         {
             var fileName = Path.GetTempFileName() + ".sdf";
-            this.messageWriter.WriteLine(fileName);
+            _messageWriter.WriteLine(fileName);
             var sb = new DbConnectionStringBuilder();
             sb.Add("Data Source", fileName);
             var connectionString = sb.ConnectionString;
             var sqlCeEngine = new SqlCeEngine(connectionString);
             sqlCeEngine.CreateDatabase();
-            this.connection = new SqlCeConnection(connectionString);
-            this.connection.Open();
+            _connection = new SqlCeConnection(connectionString);
+            _connection.Open();
         }
 
         void IResultWriter.AfterCloseReader(int affectedRows)
@@ -54,13 +54,13 @@
         void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
             var createTable = new StringBuilder();
-            createTable.AppendFormat("create table [{0}]\r\n(\r\n", this.tableName);
+            createTable.AppendFormat("create table [{0}]\r\n(\r\n", _tableName);
             var insertInto = new StringBuilder();
-            insertInto.AppendFormat("insert into [{0}](", this.tableName);
+            insertInto.AppendFormat("insert into [{0}](", _tableName);
             var values = new StringBuilder();
             values.Append("values(");
             var stringTable = new StringTable(3);
-            this.insertCommand = this.connection.CreateCommand();
+            _insertCommand = _connection.CreateCommand();
             var last = schemaTable.Rows.Count - 1;
 
             for (var i = 0; i <= last; i++)
@@ -69,7 +69,7 @@
                 var schemaRow = new DbColumn(dataRow);
                 var columnName = schemaRow.ColumnName;
                 var columnSize = schemaRow.ColumnSize;
-                var allowDBNull = schemaRow.AllowDbNull;
+                var allowDbNull = schemaRow.AllowDbNull;
                 var dataType = schemaRow.DataType;
                 var dataTypeName = "???";
                 var typeCode = Type.GetTypeCode(dataType);
@@ -192,7 +192,7 @@
                 row[1] = columnName;
                 row[2] = typeName;
 
-                if (allowDBNull != null && !allowDBNull.Value)
+                if (allowDbNull != null && !allowDbNull.Value)
                 {
                     row[2] += " not null";
                 }
@@ -209,21 +209,21 @@
 
                 stringTable.Rows.Add(row);
                 var parameter = new SqlCeParameter(null, sqlDbType);
-                this.insertCommand.Parameters.Add(parameter);
+                _insertCommand.Parameters.Add(parameter);
             }
 
             createTable.AppendLine(stringTable.ToString(4));
             createTable.Append(')');
             var commandText = createTable.ToString();
-            this.messageWriter.WriteLine(commandText);
-            var transactionScope = new DbTransactionScope(this.connection, null);
+            _messageWriter.WriteLine(commandText);
+            var transactionScope = new DbTransactionScope(_connection, null);
             transactionScope.ExecuteNonQuery(new CommandDefinition {CommandText = commandText});
             insertInto.Append(") ");
             values.Append(')');
             insertInto.Append(values);
             var insertCommandText = insertInto.ToString();
-            this.messageWriter.WriteLine(insertCommandText);
-            this.insertCommand.CommandText = insertInto.ToString();
+            _messageWriter.WriteLine(insertCommandText);
+            _insertCommand.CommandText = insertInto.ToString();
         }
 
         void IResultWriter.FirstRowReadBegin()
@@ -243,10 +243,10 @@
                 for (var columnIndex = 0; columnIndex < row.Length; columnIndex++)
                 {
                     var value = row[columnIndex];
-                    this.insertCommand.Parameters[columnIndex].Value = value;
+                    _insertCommand.Parameters[columnIndex].Value = value;
                 }
 
-                this.insertCommand.ExecuteNonQuery();
+                _insertCommand.ExecuteNonQuery();
             }
         }
 
@@ -260,9 +260,9 @@
 
         void IResultWriter.End()
         {
-            this.connection.Close();
-            this.connection.Dispose();
-            this.connection = null;
+            _connection.Close();
+            _connection.Dispose();
+            _connection = null;
         }
 
         #endregion

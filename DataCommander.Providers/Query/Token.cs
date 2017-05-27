@@ -10,24 +10,19 @@ namespace DataCommander.Providers.Query
             TokenType type,
             string value)
         {
-            this.Index = index;
-            this.StartPosition = startPosition;
-            this.EndPosition = endPosition;
-            this.LineIndex = lineIndex;
-            this.Type = type;
-            this.Value = value;
+            Index = index;
+            StartPosition = startPosition;
+            EndPosition = endPosition;
+            LineIndex = lineIndex;
+            Type = type;
+            Value = value;
         }
 
         public int Index { get; }
-
         public int StartPosition { get; }
-
         public int EndPosition { get; }
-
         public int LineIndex { get; }
-
         public TokenType Type { get; }
-
         public string Value { get; }
     }
 }

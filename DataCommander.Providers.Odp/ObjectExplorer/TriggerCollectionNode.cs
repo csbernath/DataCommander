@@ -15,7 +15,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
     {
         public TriggerCollectionNode(TableNode tableNode)
         {
-            this.table = tableNode;
+            _table = tableNode;
         }
 
         public string Name => "Triggers";
@@ -25,10 +25,10 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             var commandText = "select trigger_name from sys.dba_triggers where table_owner = '{0}' and table_name = '{1}' order by trigger_name";
-            commandText = string.Format(commandText, table.Schema.Name, table.Name);
+            commandText = string.Format(commandText, _table.Schema.Name, _table.Name);
 
             var dataTable = new DataTable();
-            var command = new OracleCommand(commandText, table.Schema.SchemasNode.Connection);
+            var command = new OracleCommand(commandText, _table.Schema.SchemasNode.Connection);
             command.FetchSize = 256 * 1024;
             command.Fill(dataTable, CancellationToken.None);
             var count = dataTable.Rows.Count;
@@ -43,7 +43,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
             var treeNodes = new ITreeNode[triggers.Length];
 
             for (var i = 0; i < triggers.Length; i++)
-                treeNodes[i] = new TriggerNode(table, triggers[i]);
+                treeNodes[i] = new TriggerNode(_table, triggers[i]);
 
             return treeNodes;
         }
@@ -58,6 +58,6 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         {
         }
 
-        readonly TableNode table;
+        readonly TableNode _table;
     }
 }

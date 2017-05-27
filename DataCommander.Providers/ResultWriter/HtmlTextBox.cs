@@ -15,16 +15,16 @@ namespace DataCommander.Providers.ResultWriter
     {
         #region Private Fields
 
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private WebBrowser webBrowser;
-        private string fileName;
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+        private WebBrowser _webBrowser;
+        private string _fileName;
 
         #endregion
 
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private readonly Container components = null;
+        private readonly Container _components = null;
 
         /// <summary>
         /// 
@@ -32,7 +32,7 @@ namespace DataCommander.Providers.ResultWriter
         public HtmlTextBox()
         {
             // This call is required by the Windows.Forms Form Designer.
-            this.InitializeComponent();
+            InitializeComponent();
 
             // TODO: Add any initialization after the InitForm call
         }
@@ -44,10 +44,10 @@ namespace DataCommander.Providers.ResultWriter
         {
             set
             {
-                this.fileName = Path.GetTempFileName();
-                this.fileName += ".xml";
+                _fileName = Path.GetTempFileName();
+                _fileName += ".xml";
 
-                using (var fileStream = new FileStream(this.fileName, FileMode.OpenOrCreate))
+                using (var fileStream = new FileStream(_fileName, FileMode.OpenOrCreate))
                 {
                     using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
                     {
@@ -56,13 +56,13 @@ namespace DataCommander.Providers.ResultWriter
                     }
                 }
 
-                this.webBrowser.Navigate(this.fileName);
+                _webBrowser.Navigate(_fileName);
             }
         }
 
         public void Navigate(string path)
         {
-            this.webBrowser.Navigate(path);
+            _webBrowser.Navigate(path);
         }
 
         /// <summary> 
@@ -72,21 +72,21 @@ namespace DataCommander.Providers.ResultWriter
         {
             if (disposing)
             {
-                if (File.Exists(this.fileName))
+                if (File.Exists(_fileName))
                 {
                     try
                     {
-                        File.Delete(this.fileName);
+                        File.Delete(_fileName);
                     }
                     catch (Exception e)
                     {
-                        log.Write(LogLevel.Error, e.ToString());
+                        Log.Write(LogLevel.Error, e.ToString());
                     }
                 }
 
-                if (this.components != null)
+                if (_components != null)
                 {
-                    this.components.Dispose();
+                    _components.Dispose();
                 }
             }
 
@@ -102,26 +102,26 @@ namespace DataCommander.Providers.ResultWriter
         private void InitializeComponent()
         {
             var resources = new System.Resources.ResourceManager(typeof (HtmlTextBox));
-            this.webBrowser = new WebBrowser();
-            GarbageMonitor.Add("webBrowser", this.webBrowser);
+            this._webBrowser = new WebBrowser();
+            GarbageMonitor.Add("webBrowser", this._webBrowser);
             // ((System.ComponentModel.ISupportInitialize)(this.webBrowser)).BeginInit();
             this.SuspendLayout();
             // 
             // webBrowser
             // 
-            this.webBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._webBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             //this.webBrowser.Enabled = true;
             //this.webBrowser.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("webBrowser.OcxState")));
-            this.webBrowser.Size = new System.Drawing.Size(464, 184);
-            this.webBrowser.TabIndex = 0;
-            this.webBrowser.DocumentCompleted += this.webBrowser_DocumentCompleted;
+            this._webBrowser.Size = new System.Drawing.Size(464, 184);
+            this._webBrowser.TabIndex = 0;
+            this._webBrowser.DocumentCompleted += this.webBrowser_DocumentCompleted;
 
             // 
             // HtmlTextBox
             // 
             this.Controls.AddRange(new System.Windows.Forms.Control[]
             {
-                this.webBrowser
+                this._webBrowser
             });
             this.Name = "HtmlTextBox";
             this.Size = new System.Drawing.Size(464, 184);
@@ -134,9 +134,9 @@ namespace DataCommander.Providers.ResultWriter
 
         private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            if (this.fileName != null)
+            if (_fileName != null)
             {
-                File.Delete(this.fileName);
+                File.Delete(_fileName);
             }
         }
     }

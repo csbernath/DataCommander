@@ -2,17 +2,17 @@
 {
     using System.Data.Common;
     using System.Data.SqlClient;
-    using DataCommander.Providers;
+    using Providers;
 
     internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
     {
-        private readonly DbConnectionStringBuilder dbConnectionStringBuilder = new SqlConnectionStringBuilder();
+        private readonly DbConnectionStringBuilder _dbConnectionStringBuilder = new SqlConnectionStringBuilder();
 
         string IDbConnectionStringBuilder.ConnectionString
         {
-            get => this.dbConnectionStringBuilder.ConnectionString;
+            get => _dbConnectionStringBuilder.ConnectionString;
 
-            set => this.dbConnectionStringBuilder.ConnectionString = value;
+            set => _dbConnectionStringBuilder.ConnectionString = value;
         }
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
@@ -22,12 +22,12 @@
 
         void IDbConnectionStringBuilder.SetValue(string keyword, object value)
         {
-            this.dbConnectionStringBuilder[keyword] = value;
+            _dbConnectionStringBuilder[keyword] = value;
         }
 
         bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value)
         {
-            return this.dbConnectionStringBuilder.TryGetValue(keyword, out value);
+            return _dbConnectionStringBuilder.TryGetValue(keyword, out value);
         }
     }
 }

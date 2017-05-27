@@ -1,39 +1,38 @@
+using System.Data;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using DataCommander.Providers.Connection;
 using Foundation;
+using Oracle.ManagedDataAccess.Client;
 
 namespace DataCommander.Providers.Odp
 {
-    using System.Data;
-    using System.Text;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Oracle.ManagedDataAccess.Client;
-    using Providers.Connection;
-
     internal sealed class Connection : ConnectionBase
     {
-		private readonly OracleConnectionStringBuilder oracleConnectionStringBuilder;
-		private readonly OracleConnection oracleConnection;
-		private string connectionName;
+		private readonly OracleConnectionStringBuilder _oracleConnectionStringBuilder;
+		private readonly OracleConnection _oracleConnection;
+		private string _connectionName;
 
         public Connection(string connectionString)
         {
-            this.oracleConnectionStringBuilder = new OracleConnectionStringBuilder(connectionString);            
-            this.oracleConnection = new OracleConnection(connectionString);
-            this.Connection = oracleConnection;
-            oracleConnection.InfoMessage += new OracleInfoMessageEventHandler(OnInfoMessage);
+            _oracleConnectionStringBuilder = new OracleConnectionStringBuilder(connectionString);            
+            _oracleConnection = new OracleConnection(connectionString);
+            Connection = _oracleConnection;
+            _oracleConnection.InfoMessage += OnInfoMessage;
         }
 
         public override async Task OpenAsync(CancellationToken cancellationToken)
         {
-            await this.oracleConnection.OpenAsync(cancellationToken);
-            var enlist = bool.Parse(oracleConnectionStringBuilder.Enlist);
+            await _oracleConnection.OpenAsync(cancellationToken);
+            var enlist = bool.Parse(_oracleConnectionStringBuilder.Enlist);
         }
 
         public override string Caption
         {
             get
             {
-                var caption = $"{oracleConnectionStringBuilder.UserID}@{oracleConnectionStringBuilder.DataSource}";
+                var caption = $"{_oracleConnectionStringBuilder.UserID}@{_oracleConnectionStringBuilder.DataSource}";
                 return caption;
             }
         }
@@ -52,18 +51,18 @@ namespace DataCommander.Providers.Odp
 
         public override string ConnectionName
         {
-            get => this.connectionName;
+            get => _connectionName;
 
-            set => this.connectionName = value;
+            set => _connectionName = value;
         }
 
-        public override string DataSource => this.oracleConnection.DataSource;
+        public override string DataSource => _oracleConnection.DataSource;
 
-        public override string ServerVersion => this.oracleConnection.ServerVersion;
+        public override string ServerVersion => _oracleConnection.ServerVersion;
 
         public override IDbCommand CreateCommand()
         {
-            var command = this.oracleConnection.CreateCommand();
+            var command = _oracleConnection.CreateCommand();
             command.InitialLONGFetchSize = 8 * 1024;
             command.FetchSize = 256 * 1024;
             return command;

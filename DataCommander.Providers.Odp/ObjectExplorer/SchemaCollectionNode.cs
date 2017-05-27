@@ -14,9 +14,9 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
     {
         public SchemaCollectionNode(OracleConnection connection)
         {
-            this.connection = connection;
+            _connection = connection;
             var oracleConnectionStringBuilder = new OracleConnectionStringBuilder(connection.ConnectionString);
-            this.selectedSchema = oracleConnectionStringBuilder.UserID;
+            _selectedSchema = oracleConnectionStringBuilder.UserID;
         }
 
         public string Name => "Schemas";
@@ -26,7 +26,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             var commandText = "select username from all_users order by username";
-            var transactionScope = new DbTransactionScope(this.connection, null);
+            var transactionScope = new DbTransactionScope(_connection, null);
             var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
             var count = dataTable.Rows.Count;
             var treeNodes = new ITreeNode[count];
@@ -46,7 +46,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
         public ContextMenuStrip ContextMenu => null;
 
-        public OracleConnection Connection => connection;
+        public OracleConnection Connection => _connection;
 
         public void BeforeExpand()
         {
@@ -54,11 +54,11 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
         public string SelectedSchema
         {
-            get => selectedSchema;
-            set => selectedSchema = value;
+            get => _selectedSchema;
+            set => _selectedSchema = value;
         }
 
-        readonly OracleConnection connection;
-        string selectedSchema;
+        readonly OracleConnection _connection;
+        string _selectedSchema;
     }
 }

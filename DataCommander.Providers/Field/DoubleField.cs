@@ -6,14 +6,14 @@ namespace DataCommander.Providers.Field
 	{
 		public DoubleField( double value )
 		{
-			this.Value = value;
+			Value = value;
 		}
 
 		public double Value { get; }
 
         public override string ToString()
 		{
-			return this.Value.ToString( "N16", CultureInfo.InvariantCulture );
+			return Value.ToString( "N16", CultureInfo.InvariantCulture );
 		}
 	}
 }

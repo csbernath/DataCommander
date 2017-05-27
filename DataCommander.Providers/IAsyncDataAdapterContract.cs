@@ -5,7 +5,7 @@ namespace DataCommander.Providers
     using ResultWriter;
 
     //[ContractClassFor(typeof (IAsyncDataAdapter))]
-    internal abstract class IAsyncDataAdapterContract : IAsyncDataAdapter
+    internal abstract class AsyncDataAdapterContract : IAsyncDataAdapter
     {
         IResultWriter IAsyncDataAdapter.ResultWriter => throw new NotImplementedException();
 

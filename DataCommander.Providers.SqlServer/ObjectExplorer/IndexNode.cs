@@ -9,18 +9,18 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         private readonly DatabaseNode _databaseNode;
         private readonly int _parentId;
         private readonly int _id;
-        private readonly string name;
-        private readonly byte type;
-        private readonly bool isUnique;
+        private readonly string _name;
+        private readonly byte _type;
+        private readonly bool _isUnique;
 
         public IndexNode(DatabaseNode databaseNode, int parentId, int id, string name, byte type, bool isUnique)
         {
             _databaseNode = databaseNode;
             _parentId = parentId;
             _id = id;
-            this.name = name;
-            this.type = type;
-            this.isUnique = isUnique;
+            _name = name;
+            _type = type;
+            _isUnique = isUnique;
         }
 
         public string Name
@@ -29,17 +29,17 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             {
                 var sb = new StringBuilder();
 
-                sb.Append(this.name);
+                sb.Append(_name);
                 sb.Append('(');
 
-                sb.Append(this.isUnique
+                sb.Append(_isUnique
                     ? "Unique"
                     : "Non-Unique");
 
                 sb.Append(',');
 
                 string typeString;
-                switch (this.type)
+                switch (_type)
                 {
                     case 1:
                         typeString = "Clustered";

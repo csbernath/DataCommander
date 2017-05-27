@@ -7,7 +7,7 @@
 
     internal sealed class MsiParameterCollection : IDataParameterCollection
 	{
-		private List<object> parameters = new List<object>();
+		private readonly List<object> _parameters = new List<object>();
 
 		#region IDataParameterCollection Members
 
@@ -90,7 +90,7 @@
 			throw new NotImplementedException();
 		}
 
-		int ICollection.Count => this.parameters.Count;
+		int ICollection.Count => _parameters.Count;
 
         bool ICollection.IsSynchronized => throw new NotImplementedException();
 

@@ -6,11 +6,11 @@ namespace DataCommander.Providers.SqlServer
 
     internal sealed class IdentifierParser
     {
-        private readonly TextReader textReader;
+        private readonly TextReader _textReader;
 
         public IdentifierParser(TextReader textReader)
         {
-            this.textReader = textReader;
+            _textReader = textReader;
         }
 
         public IEnumerable<string> Parse()
@@ -19,7 +19,7 @@ namespace DataCommander.Providers.SqlServer
 
             while (true)
             {
-                var peek = this.textReader.Peek();
+                var peek = _textReader.Peek();
 
                 if (peek == -1)
                 {
@@ -30,15 +30,15 @@ namespace DataCommander.Providers.SqlServer
 
                 if (peekChar == '.')
                 {
-                    this.textReader.Read();
+                    _textReader.Read();
                 }
                 else if (peekChar == '[')
                 {
-                    yield return this.ReadQuotedIdentifier();
+                    yield return ReadQuotedIdentifier();
                 }
                 else
                 {
-                    yield return this.ReadUnquotedIdentifier();
+                    yield return ReadUnquotedIdentifier();
                 }
             }
 
@@ -52,12 +52,12 @@ namespace DataCommander.Providers.SqlServer
 
         private string ReadQuotedIdentifier()
         {
-            this.textReader.Read();
+            _textReader.Read();
             var identifier = new StringBuilder();
 
             while (true)
             {
-                var peek = this.textReader.Peek();
+                var peek = _textReader.Peek();
 
                 if (peek == -1)
                     break;
@@ -66,13 +66,13 @@ namespace DataCommander.Providers.SqlServer
 
                 if (peekChar == ']')
                 {
-                    this.textReader.Read();
+                    _textReader.Read();
                     break;
                 }
                 else
                 {
                     identifier.Append(peekChar);
-                    this.textReader.Read();
+                    _textReader.Read();
                 }
             }
 
@@ -85,7 +85,7 @@ namespace DataCommander.Providers.SqlServer
 
             while (true)
             {
-                var peek = this.textReader.Peek();
+                var peek = _textReader.Peek();
 
                 if (peek == -1)
                     break;
@@ -99,7 +99,7 @@ namespace DataCommander.Providers.SqlServer
                 else
                 {
                     identifier.Append(peekChar);
-                    this.textReader.Read();
+                    _textReader.Read();
                 }
             }
 

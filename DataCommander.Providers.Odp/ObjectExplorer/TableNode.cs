@@ -10,21 +10,21 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 	/// </summary>
 	internal sealed class TableNode : ITreeNode
 	{
-		private readonly SchemaNode schema;
-		private readonly string name;
-		private readonly bool showFullName;
+		private readonly SchemaNode _schema;
+		private readonly string _name;
+		private readonly bool _showFullName;
 
 		public TableNode(
 			SchemaNode schema,
 			string name,
 			bool showFullName )
 		{
-			this.schema = schema;
-			this.name = name;
-			this.showFullName = showFullName;
+			_schema = schema;
+			_name = name;
+			_showFullName = showFullName;
 		}
 
-		public string Name => showFullName ? this.schema.Name + "." + this.name : this.name;
+		public string Name => _showFullName ? _schema.Name + "." + _name : _name;
 
 	    public bool IsLeaf => false;
 
@@ -39,7 +39,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
 		public bool Sortable => false;
 
-	    public string Query => "select * from " + schema.Name + "." + name;
+	    public string Query => "select * from " + _schema.Name + "." + _name;
 
 	    public ContextMenuStrip ContextMenu => null;
 
@@ -47,6 +47,6 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 		{
 		}
 
-		public SchemaNode Schema => schema;
+		public SchemaNode Schema => _schema;
 	}
 }

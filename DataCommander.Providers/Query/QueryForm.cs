@@ -1643,7 +1643,7 @@ namespace DataCommander.Providers.Query
                     case ResultWriterType.SqLite:
                         maxRecords = int.MaxValue;
                         var tableName = _sqlStatement.FindTableName();
-                        resultWriter = new SQLiteResultWriter(_textBoxWriter, tableName);
+                        resultWriter = new SqLiteResultWriter(_textBoxWriter, tableName);
                         _tabControl.SelectedTab = _messagesTabPage;
                         break;
 
@@ -1974,13 +1974,13 @@ namespace DataCommander.Providers.Query
             }
             else
             {
-                if (_database != args.database)
+                if (_database != args.Database)
                 {
                     var message = $"[DatabaseChanged] Database changed from {_database} to {_database}";
                     var infoMessage = new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message);
                     AddInfoMessage(infoMessage);
 
-                    _database = args.database;
+                    _database = args.Database;
                     SetText();
                 }
             }
@@ -3229,7 +3229,7 @@ namespace DataCommander.Providers.Query
                     {
                         var completionForm = new CompletionForm(this);
                         completionForm.Initialize(QueryTextBox, response, _colorTheme);
-                        completionForm.ItemSelected += new EventHandler<ItemSelectedEventArgs>(completionForm_ItemSelected);
+                        completionForm.ItemSelected += completionForm_ItemSelected;
                         completionForm.Show(this);
                         QueryTextBox.RichTextBox.Focus();
                     }

@@ -64,7 +64,7 @@ where	name	= '{name}'";
                 if (this.Name != "sqlite_master")
                 {
                     contextMenu = new ContextMenuStrip();
-                    contextMenu.Items.Add("Script", null, new EventHandler(this.Script_Click));
+                    contextMenu.Items.Add("Script", null, this.Script_Click);
                 }
 
                 return contextMenu;

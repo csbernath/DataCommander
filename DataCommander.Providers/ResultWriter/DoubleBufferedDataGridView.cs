@@ -7,23 +7,23 @@
     {
         public DoubleBufferedDataGridView()
         {
-            this.RowHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            RowHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
 
             // AccessViolationException on ToolTip that faults COMCTL32.dll - .NET 4.0
-            this.ShowCellToolTips = false;
+            ShowCellToolTips = false;
         }
 
         public bool PublicDoubleBuffered
         {
-            get => this.DoubleBuffered;
-            set => this.DoubleBuffered = value;
+            get => DoubleBuffered;
+            set => DoubleBuffered = value;
         }
 
         protected override void OnCursorChanged( EventArgs e )
         {
             base.OnCursorChanged( e );
-            var bDefault = this.Cursor == Cursors.Default;
-            this.DoubleBuffered = bDefault;
+            var bDefault = Cursor == Cursors.Default;
+            DoubleBuffered = bDefault;
         }
 
         //protected override void OnDataBindingComplete(DataGridViewBindingCompleteEventArgs e)

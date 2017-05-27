@@ -5,12 +5,12 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
     internal sealed class SchemaNode : ITreeNode
     {
-        private readonly DatabaseNode database;
+        private readonly DatabaseNode _database;
 
         public SchemaNode(DatabaseNode database, string name)
         {
-            this.database = database;
-            this.Name = name;
+            _database = database;
+            Name = name;
         }
 
         public string Name { get; }

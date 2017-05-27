@@ -20,7 +20,7 @@ namespace DataCommander.Providers.OracleClient
             oracleConnection = new OracleConnection(connectionString);
 #pragma warning restore 618
             this.Connection = oracleConnection;
-            oracleConnection.InfoMessage += new OracleInfoMessageEventHandler(OnInfoMessage);
+            oracleConnection.InfoMessage += OnInfoMessage;
         }
 
         public override Task OpenAsync(CancellationToken cancellationToken)

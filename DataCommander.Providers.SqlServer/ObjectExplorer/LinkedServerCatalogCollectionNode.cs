@@ -9,14 +9,14 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
     internal sealed class LinkedServerCatalogCollectionNode : ITreeNode
     {
-        private readonly LinkedServerNode linkedServer;
+        private readonly LinkedServerNode _linkedServer;
 
         public LinkedServerCatalogCollectionNode( LinkedServerNode linkedServer )
         {
 #if CONTRACTS_FULL
             Contract.Requires( linkedServer != null );
 #endif
-            this.linkedServer = linkedServer;
+            _linkedServer = linkedServer;
         }
 
 #region ITreeNode Members
@@ -59,7 +59,7 @@ end
 
 drop table #catalog";
 
-            using (var connection = new SqlConnection(this.linkedServer.LinkedServers.Server.ConnectionString))
+            using (var connection = new SqlConnection(_linkedServer.LinkedServers.Server.ConnectionString))
             {
                 connection.Open();
                 var transactionScope = new DbTransactionScope(connection, null);
@@ -68,14 +68,14 @@ drop table #catalog";
                     CommandText = commandText,
                     Parameters = new List<object>
                     {
-                        new SqlParameter("@name", this.linkedServer.Name),
+                        new SqlParameter("@name", _linkedServer.Name),
                         new SqlParameter("@getSystemCatalogs", false)
                     }
                 };
 
                 using (var dataReader = transactionScope.ExecuteReader(commandDefinition, CommandBehavior.Default))
                 {
-                    return dataReader.Read(dataRecord => new LinkedServerCatalogNode(this.linkedServer, dataRecord.GetString(0)));
+                    return dataReader.Read(dataRecord => new LinkedServerCatalogNode(_linkedServer, dataRecord.GetString(0)));
                 }
             }
         }

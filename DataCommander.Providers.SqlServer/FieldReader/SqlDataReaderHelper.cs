@@ -9,23 +9,23 @@ namespace DataCommander.Providers.SqlServer.FieldReader
 
     internal sealed class SqlDataReaderHelper : IDataReaderHelper
     {
-        private SqlDataReader sqlDataReader;
-        private readonly IDataFieldReader[] dataFieldReaders;
+        private SqlDataReader _sqlDataReader;
+        private readonly IDataFieldReader[] _dataFieldReaders;
 
         public SqlDataReaderHelper(IDataReader dataReader)
         {
-            this.sqlDataReader = (SqlDataReader)dataReader;
+            _sqlDataReader = (SqlDataReader)dataReader;
             var schemaTable = dataReader.GetSchemaTable();
 
             if (schemaTable != null)
             {
                 var rows = schemaTable.Rows;
                 var count = rows.Count;
-                this.dataFieldReaders = new IDataFieldReader[count];
+                _dataFieldReaders = new IDataFieldReader[count];
 
                 for (var i = 0; i < count; i++)
                 {
-                    this.dataFieldReaders[i] = CreateDataFieldReader(dataReader, new DbColumn(rows[i]));
+                    _dataFieldReaders[i] = CreateDataFieldReader(dataReader, new DbColumn(rows[i]));
                 }
             }
         }
@@ -127,12 +127,12 @@ namespace DataCommander.Providers.SqlServer.FieldReader
 
         int IDataReaderHelper.GetValues(object[] values)
         {
-            for (var i = 0; i < this.dataFieldReaders.Length; i++)
+            for (var i = 0; i < _dataFieldReaders.Length; i++)
             {
-                values[i] = this.dataFieldReaders[i].Value;
+                values[i] = _dataFieldReaders[i].Value;
             }
 
-            return this.dataFieldReaders.Length;
+            return _dataFieldReaders.Length;
         }
     }
 }

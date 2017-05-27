@@ -11,7 +11,7 @@ namespace DataCommander.Providers
 
 
     //[ContractClassFor(typeof (IProvider))]
-    internal abstract class IProviderContract : IProvider
+    internal abstract class ProviderContract : IProvider
     {
         #region IProvider Members
 

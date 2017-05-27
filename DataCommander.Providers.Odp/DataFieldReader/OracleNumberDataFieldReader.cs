@@ -6,13 +6,13 @@ namespace DataCommander.Providers.Odp.DataFieldReader
 
     internal sealed class OracleNumberDataFieldReader : IDataFieldReader
     {
-        private readonly OracleDataReader oracleDataReader;
-        private readonly int columnOrdinal;
+        private readonly OracleDataReader _oracleDataReader;
+        private readonly int _columnOrdinal;
 
         public OracleNumberDataFieldReader( OracleDataReader oracleDataReader, int columnOrdinal )
         {
-            this.oracleDataReader = oracleDataReader;
-            this.columnOrdinal = columnOrdinal;
+            _oracleDataReader = oracleDataReader;
+            _columnOrdinal = columnOrdinal;
         }
 
         #region IDataFieldReader Members
@@ -23,13 +23,13 @@ namespace DataCommander.Providers.Odp.DataFieldReader
             {
                 object value;
 
-                if (this.oracleDataReader.IsDBNull( this.columnOrdinal ))
+                if (_oracleDataReader.IsDBNull( _columnOrdinal ))
                 {
                     value = DBNull.Value;
                 }
                 else
                 {
-                    var oracleDecimal = this.oracleDataReader.GetOracleDecimal( this.columnOrdinal );
+                    var oracleDecimal = _oracleDataReader.GetOracleDecimal( _columnOrdinal );
                     value = new OracleDecimalField( oracleDecimal );
                 }
 

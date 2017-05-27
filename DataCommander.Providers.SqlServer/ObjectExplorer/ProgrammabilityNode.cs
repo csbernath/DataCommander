@@ -5,11 +5,11 @@
 
     internal sealed class ProgrammabilityNode : ITreeNode
     {
-        private readonly DatabaseNode database;
+        private readonly DatabaseNode _database;
 
         public ProgrammabilityNode(DatabaseNode database)
         {
-            this.database = database;
+            _database = database;
         }
 
         string ITreeNode.Name => "Programmability";
@@ -20,9 +20,9 @@
         {
             return new ITreeNode[]
             {
-                new StoredProcedureCollectionNode(this.database, false),
-                new FunctionCollectionNode(this.database),
-                new UserDefinedTableTypeCollectionNode(this.database)
+                new StoredProcedureCollectionNode(_database, false),
+                new FunctionCollectionNode(_database),
+                new UserDefinedTableTypeCollectionNode(_database)
             };
         }
 

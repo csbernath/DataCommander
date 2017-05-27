@@ -2,15 +2,15 @@ namespace DataCommander.Providers.SqlServer
 {
     internal sealed class NonSqlObjectName : IObjectName
     {
-        private readonly string objectName;
+        private readonly string _objectName;
 
         public NonSqlObjectName(string objectName)
         {
-            this.objectName = objectName;
+            _objectName = objectName;
         }
 
-        string IObjectName.UnquotedName => this.objectName;
+        string IObjectName.UnquotedName => _objectName;
 
-        string IObjectName.QuotedName => this.objectName;
+        string IObjectName.QuotedName => _objectName;
     }
 }

@@ -6,13 +6,13 @@
 
     public sealed class StreamFieldDataReader : IDataFieldReader
 	{
-		private readonly IDataRecord dataRecord;
-		private readonly int columnOrdinal;
+		private readonly IDataRecord _dataRecord;
+		private readonly int _columnOrdinal;
 
 		public StreamFieldDataReader( IDataRecord dataRecord, int columnOrdinal )
 		{
-			this.dataRecord = dataRecord;
-			this.columnOrdinal = columnOrdinal;
+			_dataRecord = dataRecord;
+			_columnOrdinal = columnOrdinal;
 		}
 
 		#region IDataFieldReader Members
@@ -21,7 +21,7 @@
 		{
 			get
 			{
-				var stream = (Stream) this.dataRecord[this.columnOrdinal ];
+				var stream = (Stream) _dataRecord[_columnOrdinal ];
 				object value;
 
 				if (stream != null)

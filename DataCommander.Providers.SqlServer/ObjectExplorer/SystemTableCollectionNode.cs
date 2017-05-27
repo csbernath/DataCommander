@@ -11,7 +11,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         public SystemTableCollectionNode(DatabaseNode databaseNode)
         {
-            this.DatabaseNode = databaseNode;
+            DatabaseNode = databaseNode;
         }
 
         string ITreeNode.Name => "System Tables";
@@ -46,8 +46,8 @@ where
     else 0
 end          
              AS bit)=1)
-order by [Schema],[Name]", this.DatabaseNode.Name);
-            var connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
+order by [Schema],[Name]", DatabaseNode.Name);
+            var connectionString = DatabaseNode.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 var transactionScope = new DbTransactionScope(connection, null);
@@ -58,7 +58,7 @@ order by [Schema],[Name]", this.DatabaseNode.Name);
                         var schema = dataRecord.GetString(0);
                         var name = dataRecord.GetString(1);
                         var id = dataRecord.GetInt32(2);
-                        var tableNode = new TableNode(this.DatabaseNode, schema, name, id);
+                        var tableNode = new TableNode(DatabaseNode, schema, name, id);
                         childNodes.Add(tableNode);
                     });
                 }

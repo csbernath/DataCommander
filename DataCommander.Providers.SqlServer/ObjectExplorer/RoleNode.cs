@@ -5,12 +5,12 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
     internal sealed class RoleNode : ITreeNode
     {
-        private readonly DatabaseNode database;
+        private readonly DatabaseNode _database;
 
         public RoleNode(DatabaseNode database, string name)
         {
-            this.database = database;
-            this.Name = name;
+            _database = database;
+            Name = name;
         }
 
         public string Name { get; }
@@ -35,7 +35,7 @@ select u.name from {0}..sysmembers m
 join {0}..sysusers u
 on m.memberuid = u.uid
 where m.groupuid = @uid
-order by u.name", this.database.Name, this.Name);
+order by u.name", _database.Name, Name);
 
                 return query;
             }

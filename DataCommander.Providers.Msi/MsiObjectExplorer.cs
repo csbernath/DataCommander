@@ -5,18 +5,18 @@
 
     internal sealed class MsiObjectExplorer : IObjectExplorer
 	{
-		private MsiConnection connection;
+		private MsiConnection _connection;
 
 		#region IObjectExplorer Members
 
         void IObjectExplorer.SetConnection( string connectionString, IDbConnection connection )            
         {
-            this.connection = (MsiConnection) connection;
+            _connection = (MsiConnection) connection;
         }
 
 		IEnumerable<ITreeNode> IObjectExplorer.GetChildren( bool refresh )
 		{
-			return new ITreeNode[] { new MsiTableCollectionNode( this.connection ) };
+			return new ITreeNode[] { new MsiTableCollectionNode( _connection ) };
 		}
 
 		bool IObjectExplorer.Sortable => false;

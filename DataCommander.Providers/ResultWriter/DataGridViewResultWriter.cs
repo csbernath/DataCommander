@@ -57,7 +57,7 @@
                 (from schemaRow in schemaTable.AsEnumerable()
                     select ToDataGridViewColumn(schemaRow)).ToArray();
             dataGridView.Columns.AddRange(columns);
-            this.DataGridViews.Add(dataGridView);
+            DataGridViews.Add(dataGridView);
         }
 
         void IResultWriter.FirstRowReadBegin()
@@ -70,7 +70,7 @@
 
         void IResultWriter.WriteRows(object[][] rows, int rowCount)
         {
-            var dataGridView = this.DataGridViews[this.DataGridViews.Count - 1];
+            var dataGridView = DataGridViews[DataGridViews.Count - 1];
             var targetRows = dataGridView.Rows;
             for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {

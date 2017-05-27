@@ -10,10 +10,10 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
     internal sealed class FunctionNode : ITreeNode
     {
-        private readonly DatabaseNode database;
-        private readonly string owner;
-        private readonly string name;
-        private readonly string xtype;
+        private readonly DatabaseNode _database;
+        private readonly string _owner;
+        private readonly string _name;
+        private readonly string _xtype;
 
         public FunctionNode(
             DatabaseNode database,
@@ -21,13 +21,13 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             string name,
             string xtype )
         {
-            this.database = database;
-            this.owner = owner;
-            this.name = name;
-            this.xtype = xtype;
+            _database = database;
+            _owner = owner;
+            _name = name;
+            _xtype = xtype;
         }
 
-        public string Name => $"{this.owner}.{this.name}";
+        public string Name => $"{_owner}.{_name}";
 
         public bool IsLeaf => true;
 
@@ -45,16 +45,16 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
                 //string query = string.Format("select {0}.{1}.[{2}]()",database.Name,owner,name);
                 string query;
 
-                switch (this.xtype)
+                switch (_xtype)
                 {
                     case "FN": //Scalar function
-                        query = $"select {this.database.Name}.{this.owner}.[{this.name}]()";
+                        query = $"select {_database.Name}.{_owner}.[{_name}]()";
                         break;
 
                     case "TF": //Table function
                     case "IF": //Inlined table-function
                         query = $@"select	*
-from	{this.database.Name}.{this.owner}.[{this.name}]()";
+from	{_database.Name}.{_owner}.[{_name}]()";
                         break;
 
                     default:
@@ -68,12 +68,12 @@ from	{this.database.Name}.{this.owner}.[{this.name}]()";
 
         void menuItemScriptObject_Click( object sender, EventArgs e )
         {
-            var connectionString = this.database.Databases.Server.ConnectionString;
+            var connectionString = _database.Databases.Server.ConnectionString;
             string text;
             using (var connection = new SqlConnection( connectionString ))
             {
                 connection.Open();
-                text = SqlDatabase.GetSysComments( connection, this.database.Name, this.owner, this.name );
+                text = SqlDatabase.GetSysComments( connection, _database.Name, _owner, _name );
             }
             QueryForm.ShowText( text );
         }
@@ -82,7 +82,7 @@ from	{this.database.Name}.{this.owner}.[{this.name}]()";
         {
             get
             {
-                var menuItemScriptObject = new ToolStripMenuItem( "Script Object", null, new EventHandler(this.menuItemScriptObject_Click ) );
+                var menuItemScriptObject = new ToolStripMenuItem( "Script Object", null, menuItemScriptObject_Click );
                 var contextMenu = new ContextMenuStrip();
                 contextMenu.Items.Add( menuItemScriptObject );
                 return contextMenu;

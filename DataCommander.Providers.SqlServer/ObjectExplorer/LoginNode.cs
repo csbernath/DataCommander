@@ -6,16 +6,16 @@
 
     internal sealed class LoginNode : ITreeNode
     {
-        private readonly string name;
+        private readonly string _name;
 
         public LoginNode( string name )
         {
-            this.name = name;
+            _name = name;
         }
 
         #region ITreeNode Members
 
-        string ITreeNode.Name => this.name;
+        string ITreeNode.Name => _name;
 
         bool ITreeNode.IsLeaf => true;
 

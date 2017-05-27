@@ -1,10 +1,9 @@
+using System.Collections.Generic;
+using System.Linq;
 using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
     internal static class SqlServerObject
     {
         public static string GetDatabases()

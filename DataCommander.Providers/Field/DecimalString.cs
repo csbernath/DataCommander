@@ -15,15 +15,15 @@ namespace DataCommander.Providers.Field
 			{
 				intValue = str.Substring( 0, index );
 				var fracValue = str.Substring( index + 1 );
-			    this.Scale = (byte) fracValue.Length;
+			    Scale = (byte) fracValue.Length;
 			}
 			else
 			{
 				intValue = str;
-			    this.Scale = 0;
+			    Scale = 0;
 			}
 
-		    this.Precision = (byte) (intValue.Length + this.Scale);
+		    Precision = (byte) (intValue.Length + Scale);
 		}
 
 		public byte Precision { get; }

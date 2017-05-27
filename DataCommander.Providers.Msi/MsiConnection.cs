@@ -9,20 +9,20 @@
     {
         #region Private Fields
 
-        private readonly string connectionString;
-        private ConnectionState state;
+        private readonly string _connectionString;
+        private ConnectionState _state;
 
         #endregion
 
         public MsiConnection(string connectionString)
         {
-            this.connectionString = connectionString;
+            _connectionString = connectionString;
         }
 
         public void Open()
         {
             var sb = new DbConnectionStringBuilder();
-            sb.ConnectionString = this.connectionString;
+            sb.ConnectionString = _connectionString;
 #if CONTRACTS_FULL
             Contract.Assert(sb.ContainsKey("Data Source"));
 #endif
@@ -31,8 +31,8 @@
             Contract.Assert(dataSourceObject is string);
 #endif
             var path = (string)dataSourceObject;
-            this.Database = new Database(path, DatabaseOpenMode.ReadOnly);
-            this.state = ConnectionState.Open;
+            Database = new Database(path, DatabaseOpenMode.ReadOnly);
+            _state = ConnectionState.Open;
         }
 
         public MsiCommand CreateCommand()
@@ -61,7 +61,7 @@
 
         void IDbConnection.Close()
         {
-            this.Database.Close();
+            Database.Close();
         }
 
         string IDbConnection.ConnectionString
@@ -77,14 +77,14 @@
             throw new NotImplementedException();
         }
 
-        string IDbConnection.Database => this.Database.FilePath;
+        string IDbConnection.Database => Database.FilePath;
 
         void IDbConnection.Open()
         {
             throw new NotImplementedException();
         }
 
-        ConnectionState IDbConnection.State => this.state;
+        ConnectionState IDbConnection.State => _state;
 
 #endregion
 

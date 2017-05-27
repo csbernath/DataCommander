@@ -29,41 +29,41 @@ namespace DataCommander.Providers
     /// </summary>
     public class MainForm : Form
     {
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private readonly StringCollection recentFileList = new StringCollection();
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly StringCollection _recentFileList = new StringCollection();
 
-        private MenuStrip mainMenu;
-        private ToolStripMenuItem menuItem1;
-        private ToolStripMenuItem mnuConnect;
-        private ImageList imageList;
-        private StatusStrip statusBar;
-        private ToolStrip toolStrip;
-        private ToolStripMenuItem mnuExit;
-        private ToolStripMenuItem mnuHelp;
-        private ToolStripMenuItem mnuAbout;
-        private ToolStripMenuItem mnuOpen;
-        private ToolStripButton btnConnect;
-        private ToolStripMenuItem mnuWindow;
-        private ToolStripMenuItem mnuRecentFileList;
-        private ToolStripMenuItem mnuFont;
-        private ToolStripButton openButton;
-        private ToolStripButton saveButton;
-        private ToolStripSeparator toolStripSeparator1;
-        private ToolStripButton helpButton;
-        private ToolStripMenuItem NewToolStripMenuItem;
-        private ToolStripMenuItem contentsToolStripMenuItem;
-        private ToolStripSeparator toolStripSeparator2;
-        private ToolStripPanel toolStripPanel;
-        private ToolStripMenuItem closeAllDocumentsMenuItem;
+        private MenuStrip _mainMenu;
+        private ToolStripMenuItem _menuItem1;
+        private ToolStripMenuItem _mnuConnect;
+        private ImageList _imageList;
+        private StatusStrip _statusBar;
+        private ToolStrip _toolStrip;
+        private ToolStripMenuItem _mnuExit;
+        private ToolStripMenuItem _mnuHelp;
+        private ToolStripMenuItem _mnuAbout;
+        private ToolStripMenuItem _mnuOpen;
+        private ToolStripButton _btnConnect;
+        private ToolStripMenuItem _mnuWindow;
+        private ToolStripMenuItem _mnuRecentFileList;
+        private ToolStripMenuItem _mnuFont;
+        private ToolStripButton _openButton;
+        private ToolStripButton _saveButton;
+        private ToolStripSeparator _toolStripSeparator1;
+        private ToolStripButton _helpButton;
+        private ToolStripMenuItem _newToolStripMenuItem;
+        private ToolStripMenuItem _contentsToolStripMenuItem;
+        private ToolStripSeparator _toolStripSeparator2;
+        private ToolStripPanel _toolStripPanel;
+        private ToolStripMenuItem _closeAllDocumentsMenuItem;
         private IContainer components;
-        private ToolStripStatusLabel toolStripStatusLabel;
-        private ToolStripMenuItem saveAllToolStripMenuItem;
-        private ToolStripMenuItem recentConnectionsToolStripMenuItem;
-        private ToolStripMenuItem checkForToolStripMenuItem;
-        private ToolStripStatusLabel managedMemoryToolStripStatusLabel;
-        private ToolStrip queryFormToolStrip;
-        private System.Windows.Forms.Timer timer;
-        private ColorTheme colorTheme;
+        private ToolStripStatusLabel _toolStripStatusLabel;
+        private ToolStripMenuItem _saveAllToolStripMenuItem;
+        private ToolStripMenuItem _recentConnectionsToolStripMenuItem;
+        private ToolStripMenuItem _checkForToolStripMenuItem;
+        private ToolStripStatusLabel _managedMemoryToolStripStatusLabel;
+        private ToolStrip _queryFormToolStrip;
+        private System.Windows.Forms.Timer _timer;
+        private ColorTheme _colorTheme;
 
         /// <summary>
         /// 
@@ -73,100 +73,100 @@ namespace DataCommander.Providers
             //
             // Required for Windows Form Designer support
             //
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.helpButton.Click += this.helpButton_Click;
-            this.mnuAbout.Click += this.mnuAbout_Click;
+            _helpButton.Click += helpButton_Click;
+            _mnuAbout.Click += mnuAbout_Click;
 
             //
             // TODO: Add any constructor code after InitializeComponent call
             //
-            this.LoadLayout();
+            LoadLayout();
 
             var start = Process.GetCurrentProcess().StartTime;
             var end = DateTime.Now;
             var elapsed = end - start;
 
             var message = $"Current user: {WindowsIdentity.GetCurrent().Name}. Application loaded in {new StopwatchTimeSpan(elapsed).ToString(3)} seconds.";
-            this.toolStripStatusLabel.Text = message;
-            log.Trace(message);
+            _toolStripStatusLabel.Text = message;
+            Log.Trace(message);
 
-            colorTheme = new ColorTheme(
+            _colorTheme = new ColorTheme(
                 Color.FromArgb(220, 220, 220),
                 Color.FromArgb(30, 30, 30),
                 Color.DarkOliveGreen,
                 Color.FromArgb(86, 156, 214),
                 Color.FromArgb(203, 65, 65));
 
-            if (colorTheme != null)
+            if (_colorTheme != null)
             {
-                this.ForeColor = colorTheme.ForeColor;
-                this.BackColor = colorTheme.BackColor;
+                ForeColor = _colorTheme.ForeColor;
+                BackColor = _colorTheme.BackColor;
 
-                foreach (Control control in this.Controls)
+                foreach (Control control in Controls)
                 {
-                    control.ForeColor = colorTheme.ForeColor;
-                    control.BackColor = colorTheme.BackColor;
+                    control.ForeColor = _colorTheme.ForeColor;
+                    control.BackColor = _colorTheme.BackColor;
                 }
 
-                this.toolStripPanel.BackColor = colorTheme.BackColor;
+                _toolStripPanel.BackColor = _colorTheme.BackColor;
 
-                mainMenu.ForeColor = colorTheme.ForeColor;
-                mainMenu.BackColor = colorTheme.BackColor;
+                _mainMenu.ForeColor = _colorTheme.ForeColor;
+                _mainMenu.BackColor = _colorTheme.BackColor;
 
-                foreach (var menuItem in mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
+                foreach (var menuItem in _mainMenu.Items.Cast<ToolStripItem>().OfType<ToolStripMenuItem>())
                 {
                     foreach (ToolStripItem x in menuItem.DropDownItems)
                     {
-                        x.ForeColor = colorTheme.ForeColor;
-                        x.BackColor = colorTheme.BackColor;
+                        x.ForeColor = _colorTheme.ForeColor;
+                        x.BackColor = _colorTheme.BackColor;
                     }
                 }
 
-                toolStrip.BackColor = colorTheme.BackColor;
-                toolStrip.ForeColor = colorTheme.ForeColor;
+                _toolStrip.BackColor = _colorTheme.BackColor;
+                _toolStrip.ForeColor = _colorTheme.ForeColor;
 
-                foreach (ToolStripItem item in toolStrip.Items)
+                foreach (ToolStripItem item in _toolStrip.Items)
                 {
-                    item.ForeColor = colorTheme.ForeColor;
-                    item.BackColor = colorTheme.BackColor;
+                    item.ForeColor = _colorTheme.ForeColor;
+                    item.BackColor = _colorTheme.BackColor;
                 }
 
-                foreach (ToolStripItem item in this.statusBar.Items)
+                foreach (ToolStripItem item in _statusBar.Items)
                 {
-                    item.ForeColor = colorTheme.ForeColor;
-                    item.BackColor = colorTheme.BackColor;
+                    item.ForeColor = _colorTheme.ForeColor;
+                    item.BackColor = _colorTheme.BackColor;
                 }
             }
 
-            this.UpdateTotalMemory();
+            UpdateTotalMemory();
 
-            this.timer = new System.Windows.Forms.Timer(this.components)
+            _timer = new System.Windows.Forms.Timer(components)
             {
                 Interval = 10000, // 10 seconds
             };
-            this.timer.Tick += Timer_Tick;
-            this.timer.Start();
+            _timer.Tick += Timer_Tick;
+            _timer.Start();
         }
 
         public void UpdateTotalMemory()
         {
             var totalMemory = GC.GetTotalMemory(false);
-            var totalMemoryMB = (double)totalMemory / 1024.0 / 1024.0;
-            var text = $"{Math.Round(totalMemoryMB, 0)} MB";
+            var totalMemoryMb = (double)totalMemory / 1024.0 / 1024.0;
+            var text = $"{Math.Round(totalMemoryMb, 0)} MB";
 
-            this.managedMemoryToolStripStatusLabel.Text = text;
+            _managedMemoryToolStripStatusLabel.Text = text;
 
-            this.managedMemoryToolStripStatusLabel.ForeColor = totalMemoryMB <= 256
-                ? colorTheme != null
-                    ? colorTheme.ForeColor
+            _managedMemoryToolStripStatusLabel.ForeColor = totalMemoryMb <= 256
+                ? _colorTheme != null
+                    ? _colorTheme.ForeColor
                     : SystemColors.ControlText
                 : Color.Red;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            this.UpdateTotalMemory();
+            UpdateTotalMemory();
         }
 
         /// <summary>
@@ -176,9 +176,9 @@ namespace DataCommander.Providers
         {
             if (disposing)
             {
-                if (this.components != null)
+                if (components != null)
                 {
-                    this.components.Dispose();
+                    components.Dispose();
                 }
             }
 
@@ -195,259 +195,259 @@ namespace DataCommander.Providers
         {
             this.components = new System.ComponentModel.Container();
             var resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.mainMenu = new System.Windows.Forms.MenuStrip();
-            this.menuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.NewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuConnect = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
-            this.recentConnectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuRecentFileList = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuFont = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuWindow = new System.Windows.Forms.ToolStripMenuItem();
-            this.closeAllDocumentsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
-            this.contentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkForToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.imageList = new System.Windows.Forms.ImageList(this.components);
-            this.btnConnect = new System.Windows.Forms.ToolStripButton();
-            this.openButton = new System.Windows.Forms.ToolStripButton();
-            this.saveButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.helpButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this._mainMenu = new System.Windows.Forms.MenuStrip();
+            this._menuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this._newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._mnuConnect = new System.Windows.Forms.ToolStripMenuItem();
+            this._mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
+            this._recentConnectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._mnuRecentFileList = new System.Windows.Forms.ToolStripMenuItem();
+            this._mnuExit = new System.Windows.Forms.ToolStripMenuItem();
+            this._mnuFont = new System.Windows.Forms.ToolStripMenuItem();
+            this._mnuWindow = new System.Windows.Forms.ToolStripMenuItem();
+            this._closeAllDocumentsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
+            this._contentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._checkForToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this._toolStrip = new System.Windows.Forms.ToolStrip();
+            this._imageList = new System.Windows.Forms.ImageList(this.components);
+            this._btnConnect = new System.Windows.Forms.ToolStripButton();
+            this._openButton = new System.Windows.Forms.ToolStripButton();
+            this._saveButton = new System.Windows.Forms.ToolStripButton();
+            this._toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this._helpButton = new System.Windows.Forms.ToolStripButton();
+            this._toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.ActiveMdiChildToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
-            this.statusBar = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.managedMemoryToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripPanel = new System.Windows.Forms.ToolStripPanel();
-            this.mainMenu.SuspendLayout();
-            this.toolStrip.SuspendLayout();
-            this.statusBar.SuspendLayout();
-            this.toolStripPanel.SuspendLayout();
+            this._statusBar = new System.Windows.Forms.StatusStrip();
+            this._toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this._managedMemoryToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this._toolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this._mainMenu.SuspendLayout();
+            this._toolStrip.SuspendLayout();
+            this._statusBar.SuspendLayout();
+            this._toolStripPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainMenu
             // 
-            this.mainMenu.Dock = System.Windows.Forms.DockStyle.None;
-            this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuItem1,
-            this.mnuFont,
-            this.mnuWindow,
-            this.mnuHelp});
-            this.mainMenu.Location = new System.Drawing.Point(0, 0);
-            this.mainMenu.MdiWindowListItem = this.mnuWindow;
-            this.mainMenu.Name = "mainMenu";
-            this.mainMenu.Size = new System.Drawing.Size(792, 24);
-            this.mainMenu.TabIndex = 1;
+            this._mainMenu.Dock = System.Windows.Forms.DockStyle.None;
+            this._mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._menuItem1,
+            this._mnuFont,
+            this._mnuWindow,
+            this._mnuHelp});
+            this._mainMenu.Location = new System.Drawing.Point(0, 0);
+            this._mainMenu.MdiWindowListItem = this._mnuWindow;
+            this._mainMenu.Name = "_mainMenu";
+            this._mainMenu.Size = new System.Drawing.Size(792, 24);
+            this._mainMenu.TabIndex = 1;
             // 
             // menuItem1
             // 
-            this.menuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.NewToolStripMenuItem,
-            this.mnuConnect,
-            this.mnuOpen,
-            this.recentConnectionsToolStripMenuItem,
-            this.saveAllToolStripMenuItem,
-            this.mnuRecentFileList,
-            this.mnuExit});
-            this.menuItem1.MergeIndex = 1;
-            this.menuItem1.Name = "menuItem1";
-            this.menuItem1.Size = new System.Drawing.Size(79, 20);
-            this.menuItem1.Text = "&Database";
+            this._menuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._newToolStripMenuItem,
+            this._mnuConnect,
+            this._mnuOpen,
+            this._recentConnectionsToolStripMenuItem,
+            this._saveAllToolStripMenuItem,
+            this._mnuRecentFileList,
+            this._mnuExit});
+            this._menuItem1.MergeIndex = 1;
+            this._menuItem1.Name = "_menuItem1";
+            this._menuItem1.Size = new System.Drawing.Size(79, 20);
+            this._menuItem1.Text = "&Database";
             // 
             // NewToolStripMenuItem
             // 
-            this.NewToolStripMenuItem.Name = "NewToolStripMenuItem";
-            this.NewToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
-            this.NewToolStripMenuItem.Text = "&Create";
-            this.NewToolStripMenuItem.Click += new System.EventHandler(this.CreateMenuItem_Click);
+            this._newToolStripMenuItem.Name = "_newToolStripMenuItem";
+            this._newToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this._newToolStripMenuItem.Text = "&Create";
+            this._newToolStripMenuItem.Click += new System.EventHandler(this.CreateMenuItem_Click);
             // 
             // mnuConnect
             // 
-            this.mnuConnect.Image = ((System.Drawing.Image)(resources.GetObject("mnuConnect.Image")));
-            this.mnuConnect.MergeIndex = 0;
-            this.mnuConnect.Name = "mnuConnect";
-            this.mnuConnect.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.mnuConnect.Size = new System.Drawing.Size(187, 22);
-            this.mnuConnect.Text = "&Connect";
-            this.mnuConnect.Click += new System.EventHandler(this.mnuConnect_Click);
+            this._mnuConnect.Image = ((System.Drawing.Image)(resources.GetObject("_mnuConnect.Image")));
+            this._mnuConnect.MergeIndex = 0;
+            this._mnuConnect.Name = "_mnuConnect";
+            this._mnuConnect.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this._mnuConnect.Size = new System.Drawing.Size(187, 22);
+            this._mnuConnect.Text = "&Connect";
+            this._mnuConnect.Click += new System.EventHandler(this.mnuConnect_Click);
             // 
             // mnuOpen
             // 
-            this.mnuOpen.Image = ((System.Drawing.Image)(resources.GetObject("mnuOpen.Image")));
-            this.mnuOpen.MergeIndex = 1;
-            this.mnuOpen.Name = "mnuOpen";
-            this.mnuOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.mnuOpen.Size = new System.Drawing.Size(187, 22);
-            this.mnuOpen.Text = "&Open";
-            this.mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
+            this._mnuOpen.Image = ((System.Drawing.Image)(resources.GetObject("_mnuOpen.Image")));
+            this._mnuOpen.MergeIndex = 1;
+            this._mnuOpen.Name = "_mnuOpen";
+            this._mnuOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this._mnuOpen.Size = new System.Drawing.Size(187, 22);
+            this._mnuOpen.Text = "&Open";
+            this._mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
             // 
             // recentConnectionsToolStripMenuItem
             // 
-            this.recentConnectionsToolStripMenuItem.Name = "recentConnectionsToolStripMenuItem";
-            this.recentConnectionsToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
-            this.recentConnectionsToolStripMenuItem.Text = "Recent connections";
+            this._recentConnectionsToolStripMenuItem.Name = "_recentConnectionsToolStripMenuItem";
+            this._recentConnectionsToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this._recentConnectionsToolStripMenuItem.Text = "Recent connections";
             // 
             // saveAllToolStripMenuItem
             // 
-            this.saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
-            this.saveAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            this._saveAllToolStripMenuItem.Name = "_saveAllToolStripMenuItem";
+            this._saveAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.S)));
-            this.saveAllToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
-            this.saveAllToolStripMenuItem.Text = "Save All";
-            this.saveAllToolStripMenuItem.Click += new System.EventHandler(this.saveAllToolStripMenuItem_Click);
+            this._saveAllToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this._saveAllToolStripMenuItem.Text = "Save All";
+            this._saveAllToolStripMenuItem.Click += new System.EventHandler(this.saveAllToolStripMenuItem_Click);
             // 
             // mnuRecentFileList
             // 
-            this.mnuRecentFileList.MergeIndex = 2;
-            this.mnuRecentFileList.Name = "mnuRecentFileList";
-            this.mnuRecentFileList.Size = new System.Drawing.Size(187, 22);
-            this.mnuRecentFileList.Text = "Recent &File List";
+            this._mnuRecentFileList.MergeIndex = 2;
+            this._mnuRecentFileList.Name = "_mnuRecentFileList";
+            this._mnuRecentFileList.Size = new System.Drawing.Size(187, 22);
+            this._mnuRecentFileList.Text = "Recent &File List";
             // 
             // mnuExit
             // 
-            this.mnuExit.Name = "mnuExit";
-            this.mnuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.mnuExit.Size = new System.Drawing.Size(187, 22);
-            this.mnuExit.Text = "Exit";
-            this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
+            this._mnuExit.Name = "_mnuExit";
+            this._mnuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
+            this._mnuExit.Size = new System.Drawing.Size(187, 22);
+            this._mnuExit.Text = "Exit";
+            this._mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
             // 
             // mnuFont
             // 
-            this.mnuFont.MergeIndex = 2;
-            this.mnuFont.Name = "mnuFont";
-            this.mnuFont.Size = new System.Drawing.Size(43, 20);
-            this.mnuFont.Text = "Font";
-            this.mnuFont.Click += new System.EventHandler(this.mnuFont_Click);
+            this._mnuFont.MergeIndex = 2;
+            this._mnuFont.Name = "_mnuFont";
+            this._mnuFont.Size = new System.Drawing.Size(43, 20);
+            this._mnuFont.Text = "Font";
+            this._mnuFont.Click += new System.EventHandler(this.mnuFont_Click);
             // 
             // mnuWindow
             // 
-            this.mnuWindow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.closeAllDocumentsMenuItem});
-            this.mnuWindow.MergeIndex = 6;
-            this.mnuWindow.Name = "mnuWindow";
-            this.mnuWindow.Size = new System.Drawing.Size(63, 20);
-            this.mnuWindow.Text = "&Window";
+            this._mnuWindow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._closeAllDocumentsMenuItem});
+            this._mnuWindow.MergeIndex = 6;
+            this._mnuWindow.Name = "_mnuWindow";
+            this._mnuWindow.Size = new System.Drawing.Size(63, 20);
+            this._mnuWindow.Text = "&Window";
             // 
             // closeAllDocumentsMenuItem
             // 
-            this.closeAllDocumentsMenuItem.Name = "closeAllDocumentsMenuItem";
-            this.closeAllDocumentsMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.closeAllDocumentsMenuItem.Text = "Close All Documents";
-            this.closeAllDocumentsMenuItem.Click += new System.EventHandler(this.closeAllDocumentsMenuItem_Click);
+            this._closeAllDocumentsMenuItem.Name = "_closeAllDocumentsMenuItem";
+            this._closeAllDocumentsMenuItem.Size = new System.Drawing.Size(184, 22);
+            this._closeAllDocumentsMenuItem.Text = "Close All Documents";
+            this._closeAllDocumentsMenuItem.Click += new System.EventHandler(this.closeAllDocumentsMenuItem_Click);
             // 
             // mnuHelp
             // 
-            this.mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.contentsToolStripMenuItem,
-            this.checkForToolStripMenuItem,
-            this.mnuAbout});
-            this.mnuHelp.MergeIndex = 7;
-            this.mnuHelp.Name = "mnuHelp";
-            this.mnuHelp.Size = new System.Drawing.Size(44, 20);
-            this.mnuHelp.Text = "&Help";
+            this._mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._contentsToolStripMenuItem,
+            this._checkForToolStripMenuItem,
+            this._mnuAbout});
+            this._mnuHelp.MergeIndex = 7;
+            this._mnuHelp.Name = "_mnuHelp";
+            this._mnuHelp.Size = new System.Drawing.Size(44, 20);
+            this._mnuHelp.Text = "&Help";
             // 
             // contentsToolStripMenuItem
             // 
-            this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
-            this.contentsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
-            this.contentsToolStripMenuItem.Text = "Contents";
-            this.contentsToolStripMenuItem.Click += new System.EventHandler(this.contentsToolStripMenuItem_Click);
+            this._contentsToolStripMenuItem.Name = "_contentsToolStripMenuItem";
+            this._contentsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
+            this._contentsToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this._contentsToolStripMenuItem.Text = "Contents";
+            this._contentsToolStripMenuItem.Click += new System.EventHandler(this.contentsToolStripMenuItem_Click);
             // 
             // checkForToolStripMenuItem
             // 
-            this.checkForToolStripMenuItem.Name = "checkForToolStripMenuItem";
-            this.checkForToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
-            this.checkForToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
-            this.checkForToolStripMenuItem.Text = "Check for updates ";
-            this.checkForToolStripMenuItem.Click += new System.EventHandler(this.checkForToolStripMenuItem_Click);
+            this._checkForToolStripMenuItem.Name = "_checkForToolStripMenuItem";
+            this._checkForToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
+            this._checkForToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this._checkForToolStripMenuItem.Text = "Check for updates ";
+            this._checkForToolStripMenuItem.Click += new System.EventHandler(this.checkForToolStripMenuItem_Click);
             // 
             // mnuAbout
             // 
-            this.mnuAbout.MergeIndex = 0;
-            this.mnuAbout.Name = "mnuAbout";
-            this.mnuAbout.Size = new System.Drawing.Size(198, 22);
-            this.mnuAbout.Text = "About...";
+            this._mnuAbout.MergeIndex = 0;
+            this._mnuAbout.Name = "_mnuAbout";
+            this._mnuAbout.Size = new System.Drawing.Size(198, 22);
+            this._mnuAbout.Text = "About...";
             // 
             // toolStrip
             // 
-            this.toolStrip.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip.ImageList = this.imageList;
-            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnConnect,
-            this.openButton,
-            this.saveButton,
-            this.toolStripSeparator1,
-            this.helpButton,
-            this.toolStripSeparator2,
+            this._toolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this._toolStrip.ImageList = this._imageList;
+            this._toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._btnConnect,
+            this._openButton,
+            this._saveButton,
+            this._toolStripSeparator1,
+            this._helpButton,
+            this._toolStripSeparator2,
             this.ActiveMdiChildToolStripTextBox});
-            this.toolStrip.Location = new System.Drawing.Point(3, 24);
-            this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(518, 25);
-            this.toolStrip.TabIndex = 2;
+            this._toolStrip.Location = new System.Drawing.Point(3, 24);
+            this._toolStrip.Name = "_toolStrip";
+            this._toolStrip.Size = new System.Drawing.Size(518, 25);
+            this._toolStrip.TabIndex = 2;
             // 
             // imageList
             // 
-            this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
-            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList.Images.SetKeyName(0, "");
-            this.imageList.Images.SetKeyName(1, "");
-            this.imageList.Images.SetKeyName(2, "");
-            this.imageList.Images.SetKeyName(3, "");
+            this._imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("_imageList.ImageStream")));
+            this._imageList.TransparentColor = System.Drawing.Color.Transparent;
+            this._imageList.Images.SetKeyName(0, "");
+            this._imageList.Images.SetKeyName(1, "");
+            this._imageList.Images.SetKeyName(2, "");
+            this._imageList.Images.SetKeyName(3, "");
             // 
             // btnConnect
             // 
-            this.btnConnect.Image = ((System.Drawing.Image)(resources.GetObject("btnConnect.Image")));
-            this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(23, 22);
-            this.btnConnect.ToolTipText = "Connect to database";
-            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            this._btnConnect.Image = ((System.Drawing.Image)(resources.GetObject("_btnConnect.Image")));
+            this._btnConnect.Name = "_btnConnect";
+            this._btnConnect.Size = new System.Drawing.Size(23, 22);
+            this._btnConnect.ToolTipText = "Connect to database";
+            this._btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
             // openButton
             // 
-            this.openButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.openButton.Image = ((System.Drawing.Image)(resources.GetObject("openButton.Image")));
-            this.openButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.openButton.Name = "openButton";
-            this.openButton.Size = new System.Drawing.Size(23, 22);
-            this.openButton.Text = "toolStripButton1";
-            this.openButton.ToolTipText = "Open database";
-            this.openButton.Click += new System.EventHandler(this.openButton_Click);
+            this._openButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this._openButton.Image = ((System.Drawing.Image)(resources.GetObject("_openButton.Image")));
+            this._openButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this._openButton.Name = "_openButton";
+            this._openButton.Size = new System.Drawing.Size(23, 22);
+            this._openButton.Text = "toolStripButton1";
+            this._openButton.ToolTipText = "Open database";
+            this._openButton.Click += new System.EventHandler(this.openButton_Click);
             // 
             // saveButton
             // 
-            this.saveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.saveButton.Enabled = false;
-            this.saveButton.Image = ((System.Drawing.Image)(resources.GetObject("saveButton.Image")));
-            this.saveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(23, 22);
-            this.saveButton.ToolTipText = "Save Query";
-            this.saveButton.Click += new EventHandler(this.saveButton_Click);
+            this._saveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this._saveButton.Enabled = false;
+            this._saveButton.Image = ((System.Drawing.Image)(resources.GetObject("_saveButton.Image")));
+            this._saveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this._saveButton.Name = "_saveButton";
+            this._saveButton.Size = new System.Drawing.Size(23, 22);
+            this._saveButton.ToolTipText = "Save Query";
+            this._saveButton.Click += new EventHandler(this.saveButton_Click);
             // 
             // toolStripSeparator1
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this._toolStripSeparator1.Name = "_toolStripSeparator1";
+            this._toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // helpButton
             // 
-            this.helpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.helpButton.Image = ((System.Drawing.Image)(resources.GetObject("helpButton.Image")));
-            this.helpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.helpButton.Name = "helpButton";
-            this.helpButton.Size = new System.Drawing.Size(23, 22);
-            this.helpButton.Text = "Help";
+            this._helpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this._helpButton.Image = ((System.Drawing.Image)(resources.GetObject("_helpButton.Image")));
+            this._helpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this._helpButton.Name = "_helpButton";
+            this._helpButton.Size = new System.Drawing.Size(23, 22);
+            this._helpButton.Text = "Help";
             // 
             // toolStripSeparator2
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this._toolStripSeparator2.Name = "_toolStripSeparator2";
+            this._toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // activeMdiChildToolStripTextBox
             // 
@@ -457,64 +457,64 @@ namespace DataCommander.Providers
             // 
             // statusBar
             // 
-            this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel,
-            this.managedMemoryToolStripStatusLabel});
-            this.statusBar.Location = new System.Drawing.Point(0, 531);
-            this.statusBar.Name = "statusBar";
-            this.statusBar.ShowItemToolTips = true;
-            this.statusBar.Size = new System.Drawing.Size(792, 22);
-            this.statusBar.TabIndex = 3;
+            this._statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._toolStripStatusLabel,
+            this._managedMemoryToolStripStatusLabel});
+            this._statusBar.Location = new System.Drawing.Point(0, 531);
+            this._statusBar.Name = "_statusBar";
+            this._statusBar.ShowItemToolTips = true;
+            this._statusBar.Size = new System.Drawing.Size(792, 22);
+            this._statusBar.TabIndex = 3;
             // 
             // toolStripStatusLabel
             // 
-            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(677, 17);
-            this.toolStripStatusLabel.Spring = true;
-            this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this._toolStripStatusLabel.Name = "_toolStripStatusLabel";
+            this._toolStripStatusLabel.Size = new System.Drawing.Size(677, 17);
+            this._toolStripStatusLabel.Spring = true;
+            this._toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // managedMemoryToolStripStatusLabel
             // 
-            this.managedMemoryToolStripStatusLabel.AutoSize = false;
-            this.managedMemoryToolStripStatusLabel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.managedMemoryToolStripStatusLabel.Name = "managedMemoryToolStripStatusLabel";
-            this.managedMemoryToolStripStatusLabel.Size = new System.Drawing.Size(100, 17);
-            this.managedMemoryToolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.managedMemoryToolStripStatusLabel.ToolTipText = "Managed memory";
-            this.managedMemoryToolStripStatusLabel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.managedMemoryToolStripStatusLabel_MouseUp);
+            this._managedMemoryToolStripStatusLabel.AutoSize = false;
+            this._managedMemoryToolStripStatusLabel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this._managedMemoryToolStripStatusLabel.Name = "_managedMemoryToolStripStatusLabel";
+            this._managedMemoryToolStripStatusLabel.Size = new System.Drawing.Size(100, 17);
+            this._managedMemoryToolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this._managedMemoryToolStripStatusLabel.ToolTipText = "Managed memory";
+            this._managedMemoryToolStripStatusLabel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.managedMemoryToolStripStatusLabel_MouseUp);
             // 
             // toolStripPanel
             // 
-            this.toolStripPanel.Controls.Add(this.mainMenu);
-            this.toolStripPanel.Controls.Add(this.toolStrip);
-            this.toolStripPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.toolStripPanel.Location = new System.Drawing.Point(0, 0);
-            this.toolStripPanel.Name = "toolStripPanel";
-            this.toolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.toolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.toolStripPanel.Size = new System.Drawing.Size(792, 49);
+            this._toolStripPanel.Controls.Add(this._mainMenu);
+            this._toolStripPanel.Controls.Add(this._toolStrip);
+            this._toolStripPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this._toolStripPanel.Location = new System.Drawing.Point(0, 0);
+            this._toolStripPanel.Name = "_toolStripPanel";
+            this._toolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this._toolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this._toolStripPanel.Size = new System.Drawing.Size(792, 49);
             // 
             // MainForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
             this.ClientSize = new System.Drawing.Size(792, 553);
-            this.Controls.Add(this.toolStripPanel);
-            this.Controls.Add(this.statusBar);
+            this.Controls.Add(this._toolStripPanel);
+            this.Controls.Add(this._statusBar);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
-            this.MainMenuStrip = this.mainMenu;
+            this.MainMenuStrip = this._mainMenu;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Data Commander";
-            this.mainMenu.ResumeLayout(false);
-            this.mainMenu.PerformLayout();
-            this.toolStrip.ResumeLayout(false);
-            this.toolStrip.PerformLayout();
-            this.statusBar.ResumeLayout(false);
-            this.statusBar.PerformLayout();
-            this.toolStripPanel.ResumeLayout(false);
-            this.toolStripPanel.PerformLayout();
+            this._mainMenu.ResumeLayout(false);
+            this._mainMenu.PerformLayout();
+            this._toolStrip.ResumeLayout(false);
+            this._toolStrip.PerformLayout();
+            this._statusBar.ResumeLayout(false);
+            this._statusBar.PerformLayout();
+            this._toolStripPanel.ResumeLayout(false);
+            this._toolStripPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -524,27 +524,27 @@ namespace DataCommander.Providers
 
         private void Connect()
         {
-            var connectionForm = new ConnectionForm(this.statusBar, colorTheme);
+            var connectionForm = new ConnectionForm(_statusBar, _colorTheme);
 
             if (connectionForm.ShowDialog() == DialogResult.OK)
             {
                 var connectionProperties = connectionForm.ConnectionProperties;
 
-                var queryForm = new QueryForm(this, this.MdiChildren.Length, connectionProperties.Provider, connectionProperties.ConnectionString,
-                    connectionProperties.Connection, this.statusBar, colorTheme);
+                var queryForm = new QueryForm(this, MdiChildren.Length, connectionProperties.Provider, connectionProperties.ConnectionString,
+                    connectionProperties.Connection, _statusBar, _colorTheme);
 
                 queryForm.MdiParent = this;
-                if (this.SelectedFont != null)
+                if (SelectedFont != null)
                 {
-                    queryForm.Font = this.SelectedFont;
+                    queryForm.Font = SelectedFont;
                 }
-                queryForm.FormClosing += this.queryForm_FormClosing;
+                queryForm.FormClosing += queryForm_FormClosing;
 
-                switch (this.WindowState)
+                switch (WindowState)
                 {
                     case FormWindowState.Normal:
-                        var width = Math.Max(this.ClientSize.Width + 70, 100);
-                        var height = Math.Max(this.ClientSize.Height - 120, 50);
+                        var width = Math.Max(ClientSize.Width + 70, 100);
+                        var height = Math.Max(ClientSize.Height - 120, 50);
                         queryForm.ClientSize = new Size(width, height);
                         break;
 
@@ -564,7 +564,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
                 queryForm.Show();
 
-                if (this.WindowState == FormWindowState.Maximized)
+                if (WindowState == FormWindowState.Maximized)
                 {
                     queryForm.WindowState = FormWindowState.Maximized;
                 }
@@ -578,22 +578,22 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                 var form = (Form)sender;
                 // form.MdiParent = null;
 
-                if (this.queryFormToolStrip != null)
+                if (_queryFormToolStrip != null)
                 {
-                    this.toolStripPanel.Controls.Remove(this.queryFormToolStrip);
-                    this.queryFormToolStrip = null;
+                    _toolStripPanel.Controls.Remove(_queryFormToolStrip);
+                    _queryFormToolStrip = null;
                 }
             }
         }
 
         private void mnuConnect_Click(object sender, EventArgs e)
         {
-            this.Connect();
+            Connect();
         }
 
         private void mnuExit_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void mnuAbout_Click(object sender, EventArgs e)
@@ -609,32 +609,32 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             var applicationData = DataCommanderApplication.Instance.ApplicationData;
             FormPosition.Save(this, applicationData);
             var folder = applicationData.CurrentType;
-            var array = new string[this.recentFileList.Count];
-            this.recentFileList.CopyTo(array, 0);
+            var array = new string[_recentFileList.Count];
+            _recentFileList.CopyTo(array, 0);
             folder.Attributes.SetAttributeValue("RecentFileList", array);
         }
 
         private void mnuRecentFile_Click(object sender, EventArgs e)
         {
             var menuItem = (ToolStripMenuItem)sender;
-            var index = this.mnuRecentFileList.DropDownItems.IndexOf(menuItem);
-            var count = this.recentFileList.Count;
-            var path = this.recentFileList[count - index - 1];
-            this.LoadFiles(new string[] {path});
+            var index = _mnuRecentFileList.DropDownItems.IndexOf(menuItem);
+            var count = _recentFileList.Count;
+            var path = _recentFileList[count - index - 1];
+            LoadFiles(new string[] {path});
         }
 
         private void CreateRecentFileListMenu()
         {
-            var menuItems = this.mnuRecentFileList.DropDownItems;
+            var menuItems = _mnuRecentFileList.DropDownItems;
             menuItems.Clear();
 
-            var count = this.recentFileList.Count;
+            var count = _recentFileList.Count;
 
             for (var i = 0; i < count; i++)
             {
-                var path = this.recentFileList[count - i - 1];
+                var path = _recentFileList[count - i - 1];
                 var text = $"{i + 1} {path}";
-                var menuItem = new ToolStripMenuItem(text, null, this.mnuRecentFile_Click);
+                var menuItem = new ToolStripMenuItem(text, null, mnuRecentFile_Click);
                 menuItems.Add(menuItem);
             }
         }
@@ -653,7 +653,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
                 for (i = 0; i < array.Length; i++)
                 {
-                    this.recentFileList.Add(array[i]);
+                    _recentFileList.Add(array[i]);
                 }
             }
 
@@ -662,13 +662,13 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
             if (contains)
             {
-                this.SelectedFont = DeserializeFont(base64);
+                SelectedFont = DeserializeFont(base64);
             }
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            this.SaveLayout();
+            SaveLayout();
             base.OnClosing(e);
         }
 
@@ -697,7 +697,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                     switch (fileDialog.FilterIndex)
                     {
                         case 1:
-                            this.LoadFiles(fileDialog.FileNames);
+                            LoadFiles(fileDialog.FileNames);
                             break;
 
                         case 2:
@@ -737,7 +737,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
                         case 6:
                             connectionString = $"{ConnectionStringKeyword.DataSource}={fileName}";
-                            provider = ProviderFactory.CreateProvider(ProviderName.SQLite);
+                            provider = ProviderFactory.CreateProvider(ProviderName.SqLite);
                             break;
 
                         case 7:
@@ -771,45 +771,45 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                         node.AddChildNode(subNode);
                         connectionProperties.Save(subNode);
 
-                        var queryForm = new QueryForm(this, this.MdiChildren.Length, provider, connectionString, connection, this.statusBar, colorTheme);
+                        var queryForm = new QueryForm(this, MdiChildren.Length, provider, connectionString, connection, _statusBar, _colorTheme);
 
                         queryForm.MdiParent = this;
-                        queryForm.Font = this.SelectedFont;
+                        queryForm.Font = SelectedFont;
                         queryForm.Show();
                     }
                 }
             }
             catch (Exception ex)
             {
-                log.Write(LogLevel.Error, ex.ToLogString());
+                Log.Write(LogLevel.Error, ex.ToLogString());
                 MessageBox.Show(this, ex.ToString());
             }
         }
 
         private void mnuOpen_Click(object sender, EventArgs e)
         {
-            this.Open();
+            Open();
         }
 
         public void LoadFiles(string[] fileNames)
         {
             var i = fileNames.Length - 1;
             var path = fileNames[i];
-            var queryForm = (QueryForm) this.ActiveMdiChild;
+            var queryForm = (QueryForm) ActiveMdiChild;
             queryForm.LoadFile(path);
 
-            var index = this.recentFileList.IndexOf(path);
+            var index = _recentFileList.IndexOf(path);
 
             if (index >= 0)
             {
-                this.recentFileList.RemoveAt(index);
+                _recentFileList.RemoveAt(index);
             }
 
-            this.recentFileList.Add(path);
-            this.CreateRecentFileListMenu();
+            _recentFileList.Add(path);
+            CreateRecentFileListMenu();
         }
 
-        public StatusStrip StatusBar => this.statusBar;
+        public StatusStrip StatusBar => _statusBar;
 
         private static string Serialize(Font font)
         {
@@ -834,15 +834,15 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
         private void mnuFont_Click(object sender, EventArgs e)
         {
             var fontDialog = new FontDialog();
-            fontDialog.Font = this.SelectedFont;
+            fontDialog.Font = SelectedFont;
             var dialogResult = fontDialog.ShowDialog();
 
             if (dialogResult == DialogResult.OK)
             {
-                this.SelectedFont = fontDialog.Font;
+                SelectedFont = fontDialog.Font;
                 var applicationData = DataCommanderApplication.Instance.ApplicationData;
                 var propertyFolder = applicationData.CurrentType;
-                propertyFolder.Attributes.SetAttributeValue("Font", Serialize(this.SelectedFont));
+                propertyFolder.Attributes.SetAttributeValue("Font", Serialize(SelectedFont));
             }
         }
 
@@ -850,17 +850,17 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            this.Connect();
+            Connect();
         }
 
         private void openButton_Click(object sender, EventArgs e)
         {
-            this.Open();
+            Open();
         }
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            var queryForm = (QueryForm)this.ActiveMdiChild;
+            var queryForm = (QueryForm)ActiveMdiChild;
 
             if (queryForm != null)
             {
@@ -870,7 +870,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
         private void helpButton_Click(object sender, EventArgs e)
         {
-            this.ShowContents();
+            ShowContents();
         }
 
         private async void CreateMenuItem_Click(object sender, EventArgs e)
@@ -899,7 +899,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                         break;
 
                     case 2:
-                        providerName = ProviderName.SQLite;
+                        providerName = ProviderName.SqLite;
                         connectionString = sb.ConnectionString;
                         break;
 
@@ -914,9 +914,9 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                 var connection = provider.CreateConnection(connectionString);
                 await connection.OpenAsync(CancellationToken.None);
 
-                var queryForm = new QueryForm(this, this.MdiChildren.Length, provider, connectionString, connection, this.statusBar, colorTheme);
+                var queryForm = new QueryForm(this, MdiChildren.Length, provider, connectionString, connection, _statusBar, _colorTheme);
                 queryForm.MdiParent = this;
-                queryForm.Font = this.SelectedFont;
+                queryForm.Font = SelectedFont;
                 queryForm.Show();
             }
         }
@@ -929,40 +929,40 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
         private void contentsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.ShowContents();
+            ShowContents();
         }
 
         protected override void OnMdiChildActivate(EventArgs e)
         {
             base.OnMdiChildActivate(e);
 
-            this.ActiveMdiChildToolStripTextBox.Text = this.ActiveMdiChild != null ? this.ActiveMdiChild.Text : null;
-            this.saveButton.Enabled = this.ActiveMdiChild != null;
+            ActiveMdiChildToolStripTextBox.Text = ActiveMdiChild != null ? ActiveMdiChild.Text : null;
+            _saveButton.Enabled = ActiveMdiChild != null;
 
-            if (this.ActiveMdiChild != null)
+            if (ActiveMdiChild != null)
             {
-                this.toolStripPanel.ResumeLayout(false);
-                if (this.queryFormToolStrip != null)
+                _toolStripPanel.ResumeLayout(false);
+                if (_queryFormToolStrip != null)
                 {
-                    this.toolStripPanel.Controls.Remove(this.queryFormToolStrip);
+                    _toolStripPanel.Controls.Remove(_queryFormToolStrip);
                 }
 
-                var queryForm = (QueryForm)this.ActiveMdiChild;
+                var queryForm = (QueryForm)ActiveMdiChild;
                 var queryFormToolStrip = queryForm.ToolStrip;
                 if (queryFormToolStrip != null)
                 {
                     queryFormToolStrip.Visible = true;
-                    var location = new Point(this.toolStrip.Right, this.toolStrip.Top);
-                    this.toolStripPanel.Join(queryFormToolStrip, location);
-                    this.toolStripPanel.PerformLayout();
+                    var location = new Point(_toolStrip.Right, _toolStrip.Top);
+                    _toolStripPanel.Join(queryFormToolStrip, location);
+                    _toolStripPanel.PerformLayout();
 
-                    this.queryFormToolStrip = queryFormToolStrip;
+                    _queryFormToolStrip = queryFormToolStrip;
                 }
-                this.CreateRecentFileListMenu();
+                CreateRecentFileListMenu();
             }
             else
             {
-                this.mnuRecentFileList.DropDownItems.Clear();
+                _mnuRecentFileList.DropDownItems.Clear();
             }
         }
 
@@ -970,7 +970,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
         {
             while (true)
             {
-                var mdiChildren = this.MdiChildren;
+                var mdiChildren = MdiChildren;
                 var length = mdiChildren.Length;
                 if (length == 0)
                 {
@@ -979,7 +979,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                 var mdiChild = mdiChildren[length - 1];
                 mdiChild.Close();
 
-                if (this.MdiChildren.Length == length)
+                if (MdiChildren.Length == length)
                 {
                     break;
                 }
@@ -988,13 +988,13 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
         internal void SaveAll()
         {
-            this.Cursor = Cursors.WaitCursor;
-            this.toolStripStatusLabel.Text = "Saving all items...";
-            log.Write(LogLevel.Trace, "Saving all items...");
+            Cursor = Cursors.WaitCursor;
+            _toolStripStatusLabel.Text = "Saving all items...";
+            Log.Write(LogLevel.Trace, "Saving all items...");
 
             var fileNamePrefix = Path.GetTempPath() + "DataCommander.SaveAll." + '[' + DateTime.Now.ToString("yyyyMMddHHmmss.fff") + ']';
             var index = 1;
-            foreach (var mdiChild in this.MdiChildren)
+            foreach (var mdiChild in MdiChildren)
             {
                 var queryForm = mdiChild as QueryForm;
                 if (queryForm != null)
@@ -1009,13 +1009,13 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                     }
                 }
             }
-            this.toolStripStatusLabel.Text = $"All items saved to {fileNamePrefix}.";
-            this.Cursor = Cursors.Default;
+            _toolStripStatusLabel.Text = $"All items saved to {fileNamePrefix}.";
+            Cursor = Cursors.Default;
         }
 
         private void saveAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.SaveAll();
+            SaveAll();
         }
 
         public ToolStripTextBox ActiveMdiChildToolStripTextBox { get; private set; }
@@ -1030,15 +1030,15 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
         {
             if (e.Button == MouseButtons.Right)
             {
-                var menu = new ContextMenuStrip(this.components);
+                var menu = new ContextMenuStrip(components);
 
                 var menuItem = new ToolStripMenuItem("Collect garbage");
                 menuItem.Click += CollectGarbage_Click;
                 menu.Items.Add(menuItem);
 
-                var bounds = this.managedMemoryToolStripStatusLabel.Bounds;
+                var bounds = _managedMemoryToolStripStatusLabel.Bounds;
                 var location = e.Location;
-                menu.Show(this.statusBar, bounds.X + location.X, bounds.Y + location.Y);
+                menu.Show(_statusBar, bounds.X + location.X, bounds.Y + location.Y);
             }
         }
 
@@ -1053,7 +1053,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             sb.Append(ThreadMonitor.ToStringTableString());
             sb.AppendLine();
             sb.Append(AppDomainMonitor.CurrentDomainState);
-            log.Trace(sb.ToString());
+            Log.Trace(sb.ToString());
 
             ThreadMonitor.Join(0);
         }

@@ -8,11 +8,11 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
     internal sealed class ViewCollectionNode : ITreeNode
     {
-		private readonly SchemaNode schemaNode;
+		private readonly SchemaNode _schemaNode;
 
         public ViewCollectionNode(SchemaNode schemaNode)
         {
-            this.schemaNode = schemaNode;
+            _schemaNode = schemaNode;
         }
 
         public string Name => "Views";
@@ -22,8 +22,8 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             var commandText = "select view_name from all_views where owner = '{0}' order by view_name";
-            commandText = string.Format(commandText, schemaNode.Name);
-            var transactionScope = new DbTransactionScope(this.SchemaNode.SchemasNode.Connection, null);
+            commandText = string.Format(commandText, _schemaNode.Name);
+            var transactionScope = new DbTransactionScope(SchemaNode.SchemasNode.Connection, null);
             var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
             var dataRows = dataTable.Rows;
             var count = dataRows.Count;
@@ -44,7 +44,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
         public ContextMenuStrip ContextMenu => null;
 
-        public SchemaNode SchemaNode => this.schemaNode;
+        public SchemaNode SchemaNode => _schemaNode;
 
         public void BeforeExpand()
         {

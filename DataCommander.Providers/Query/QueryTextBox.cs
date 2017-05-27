@@ -1,56 +1,56 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Text;
+using System.Windows.Forms;
+using Foundation.Diagnostics.MethodProfiler;
+using Foundation.Linq;
+using Foundation.Text;
+
 namespace DataCommander.Providers.Query
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Data.SqlClient;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.IO;
-    using System.Text;
-    using System.Windows.Forms;
-    using Foundation.Diagnostics.MethodProfiler;
-    using Foundation.Linq;
-    using Foundation.Text;
-
     public sealed class QueryTextBox : UserControl
     {
-        private readonly List<KeyWordList> keyWordLists = new List<KeyWordList>();
-        private int selectionStart = 0;
-        private int selectionLength = 0;
-        private int prevSelectionStart;
-        private int prevSelectionLength;
-        private bool changeEventEnabled = true;
-        private ToolStripStatusLabel sbPanel;
-        private int columnIndex;
-        private readonly ColorTheme colorTheme;
+        private readonly List<KeyWordList> _keyWordLists = new List<KeyWordList>();
+        private int _selectionStart = 0;
+        private int _selectionLength = 0;
+        private int _prevSelectionStart;
+        private int _prevSelectionLength;
+        private bool _changeEventEnabled = true;
+        private ToolStripStatusLabel _sbPanel;
+        private int _columnIndex;
+        private readonly ColorTheme _colorTheme;
 
         public RichTextBox RichTextBox { get; private set; }
 
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private readonly Container components = new Container();
+        private readonly Container _components = new Container();
 
         public QueryTextBox(ColorTheme colorTheme)
         {
-            this.colorTheme = colorTheme;
+            _colorTheme = colorTheme;
             // This call is required by the Windows.Forms Form Designer.
-            this.InitializeComponent();
+            InitializeComponent();
 
             if (colorTheme != null)
             {
-                this.BackColor = colorTheme.BackColor;
-                this.ForeColor = colorTheme.ForeColor;
+                BackColor = colorTheme.BackColor;
+                ForeColor = colorTheme.ForeColor;
 
-                this.RichTextBox.BackColor = colorTheme.BackColor;
-                this.RichTextBox.ForeColor = colorTheme.ForeColor;
+                RichTextBox.BackColor = colorTheme.BackColor;
+                RichTextBox.ForeColor = colorTheme.ForeColor;
             }
 
             // TODO: Add any initialization after the InitForm call
-            this.RichTextBox.SelectionChanged += this.richTextBox_SelectionChanged;
-            this.RichTextBox.DragEnter += this.richTextBox_DragEnter;
-            this.RichTextBox.DragDrop += this.richTextBox_DragDrop;
+            RichTextBox.SelectionChanged += richTextBox_SelectionChanged;
+            RichTextBox.DragEnter += richTextBox_DragEnter;
+            RichTextBox.DragDrop += richTextBox_DragDrop;
         }
 
         public void AddKeyWords(string[] keyWords, Color color)
@@ -65,40 +65,40 @@ namespace DataCommander.Providers.Query
 
                 keyWordList.Color = color;
 
-                this.keyWordLists.Add(keyWordList);
+                _keyWordLists.Add(keyWordList);
             }
         }
 
         public ToolStripStatusLabel CaretPositionPanel
         {
-            set => this.sbPanel = value;
+            set => _sbPanel = value;
         }
 
         public override string Text
         {
-            get => this.RichTextBox.Text;
+            get => RichTextBox.Text;
 
             set
             {
-                this.changeEventEnabled = false;
-                this.RichTextBox.Text = value;
+                _changeEventEnabled = false;
+                RichTextBox.Text = value;
 
                 if (value != null)
                 {
-                    var text = this.RichTextBox.Text;
-                    this.Colorize(text, 0, text.Length - 1);
+                    var text = RichTextBox.Text;
+                    Colorize(text, 0, text.Length - 1);
                 }
 
-                this.changeEventEnabled = true;
+                _changeEventEnabled = true;
             }
         }
 
-        public string SelectedText => this.RichTextBox.SelectedText;
+        public string SelectedText => RichTextBox.SelectedText;
 
         public void Paste()
         {
             var format = DataFormats.GetFormat(DataFormats.UnicodeText);
-            this.RichTextBox.Paste(format);
+            RichTextBox.Paste(format);
         }
 
         /// <summary> 
@@ -107,8 +107,8 @@ namespace DataCommander.Providers.Query
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-                if (this.components != null)
-                    this.components.Dispose();
+                if (_components != null)
+                    _components.Dispose();
 
             base.Dispose(disposing);
         }
@@ -157,8 +157,8 @@ namespace DataCommander.Providers.Query
 
             try
             {
-                this.RichTextBox.Select(startWord, length);
-                this.RichTextBox.SelectionColor = color;
+                RichTextBox.Select(startWord, length);
+                RichTextBox.SelectionColor = color;
             }
             finally
             {
@@ -173,29 +173,29 @@ namespace DataCommander.Providers.Query
 
         private int LineIndex(int i)
         {
-            return GetLineIndex(this.RichTextBox, i);
+            return GetLineIndex(RichTextBox, i);
         }
 
         private void richTextBox_SelectionChanged(object sender, EventArgs e)
         {
             MethodProfiler.BeginMethod();
 
-            if (sbPanel != null)
+            if (_sbPanel != null)
             {
 
                 try
                 {
-                    this.prevSelectionStart = this.selectionStart;
-                    this.selectionStart = this.RichTextBox.SelectionStart;
-                    this.prevSelectionLength = this.selectionLength;
-                    this.selectionLength = this.RichTextBox.SelectionLength;
+                    _prevSelectionStart = _selectionStart;
+                    _selectionStart = RichTextBox.SelectionStart;
+                    _prevSelectionLength = _selectionLength;
+                    _selectionLength = RichTextBox.SelectionLength;
 
-                    var charIndex = this.selectionStart;
-                    var line = this.RichTextBox.GetLineFromCharIndex(charIndex) + 1;
-                    var lineIndex = this.LineIndex(-1);
+                    var charIndex = _selectionStart;
+                    var line = RichTextBox.GetLineFromCharIndex(charIndex) + 1;
+                    var lineIndex = LineIndex(-1);
                     var col = charIndex - lineIndex + 1;
-                    this.sbPanel.Text = "Ln " + line + " Col " + col;
-                    this.columnIndex = col;
+                    _sbPanel.Text = "Ln " + line + " Col " + col;
+                    _columnIndex = col;
                 }
                 catch (Exception ex)
                 {
@@ -305,10 +305,10 @@ namespace DataCommander.Providers.Query
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                var orgSelectionStart = Math.Max(this.RichTextBox.SelectionStart, 0);
-                var orgSelectionLength = Math.Max(this.RichTextBox.SelectionLength, 0);
+                var orgSelectionStart = Math.Max(RichTextBox.SelectionStart, 0);
+                var orgSelectionLength = Math.Max(RichTextBox.SelectionLength, 0);
 
-                var intPtr = this.RichTextBox.Handle;
+                var intPtr = RichTextBox.Handle;
                 var hWnd = intPtr.ToInt32();
                 NativeMethods.SendMessage(hWnd, (int) NativeMethods.Message.Gdi.SetRedraw, 0, 0);
 
@@ -316,10 +316,10 @@ namespace DataCommander.Providers.Query
 
                 try
                 {
-                    this.RichTextBox.SelectionStart = startIndex;
-                    this.RichTextBox.SelectionLength = endIndex - startIndex + 1;
-                    this.RichTextBox.SelectionColor = colorTheme != null
-                        ? colorTheme.ForeColor
+                    RichTextBox.SelectionStart = startIndex;
+                    RichTextBox.SelectionLength = endIndex - startIndex + 1;
+                    RichTextBox.SelectionColor = _colorTheme != null
+                        ? _colorTheme.ForeColor
                         : SystemColors.ControlText;
                 }
                 finally
@@ -345,11 +345,11 @@ namespace DataCommander.Providers.Query
                     switch (token.Type)
                     {
                         case TokenType.KeyWord:
-                            color = colorTheme != null
-                                ? colorTheme.ForeColor
+                            color = _colorTheme != null
+                                ? _colorTheme.ForeColor
                                 : Color.Black;
                             var keyWord = token.Value.ToUpper();
-                            foreach (var keyWordList in this.keyWordLists)
+                            foreach (var keyWordList in _keyWordLists)
                             {
                                 if (Array.BinarySearch(keyWordList.KeyWords, keyWord) >= 0)
                                 {
@@ -366,7 +366,7 @@ namespace DataCommander.Providers.Query
 
                     if (color != null)
                     {
-                        this.SetColor(startIndex + token.StartPosition, token.EndPosition - token.StartPosition + 1,
+                        SetColor(startIndex + token.StartPosition, token.EndPosition - token.StartPosition + 1,
                             color.Value);
                     }
                 }
@@ -419,10 +419,10 @@ namespace DataCommander.Providers.Query
 
                 try
                 {
-                    this.RichTextBox.SelectionStart = orgSelectionStart;
-                    this.RichTextBox.SelectionLength = orgSelectionLength;
+                    RichTextBox.SelectionStart = orgSelectionStart;
+                    RichTextBox.SelectionLength = orgSelectionLength;
                     NativeMethods.SendMessage(hWnd, (int) NativeMethods.Message.Gdi.SetRedraw, 1, 0);
-                    this.RichTextBox.Refresh();
+                    RichTextBox.Refresh();
                 }
                 finally
                 {
@@ -441,26 +441,26 @@ namespace DataCommander.Providers.Query
 
             try
             {
-                if (this.changeEventEnabled)
+                if (_changeEventEnabled)
                 {
-                    this.RichTextBox.SelectionChanged -= new EventHandler(this.richTextBox_SelectionChanged);
+                    RichTextBox.SelectionChanged -= richTextBox_SelectionChanged;
 
-                    var text = this.RichTextBox.Text;
+                    var text = RichTextBox.Text;
 
                     if (text.Length > 0)
                     {
                         int startIndex;
                         int endIndex;
 
-                        if (this.prevSelectionStart < this.selectionStart)
+                        if (_prevSelectionStart < _selectionStart)
                         {
-                            startIndex = this.prevSelectionStart;
-                            endIndex = this.selectionStart;
+                            startIndex = _prevSelectionStart;
+                            endIndex = _selectionStart;
                         }
                         else
                         {
-                            startIndex = this.selectionStart;
-                            endIndex = Math.Min(this.prevSelectionStart, text.Length);
+                            startIndex = _selectionStart;
+                            endIndex = Math.Min(_prevSelectionStart, text.Length);
                         }
 
                         if (startIndex > 0)
@@ -483,23 +483,23 @@ namespace DataCommander.Providers.Query
 
                         if (startIndex >= 0)
                         {
-                            startIndex = this.WordStart(text, startIndex);
+                            startIndex = WordStart(text, startIndex);
                             endIndex = WordEnd(text, endIndex);
 
                             // colorizing next word if necessary
-                            if (this.selectionStart > 0)
+                            if (_selectionStart > 0)
                             {
-                                var c = text[this.selectionStart - 1];
+                                var c = text[_selectionStart - 1];
 
                                 if (IsSeparator(c))
                                 {
-                                    if (this.selectionStart < text.Length)
+                                    if (_selectionStart < text.Length)
                                     {
-                                        var c2 = text[this.selectionStart];
+                                        var c2 = text[_selectionStart];
 
                                         if (!IsSeparator(c2))
                                         {
-                                            endIndex = WordEnd(text, selectionStart);
+                                            endIndex = WordEnd(text, _selectionStart);
                                         }
                                     }
                                 }
@@ -513,11 +513,11 @@ namespace DataCommander.Providers.Query
                             }
 
                             var s = text.Substring(startIndex, length);
-                            this.Colorize(text, startIndex, endIndex);
+                            Colorize(text, startIndex, endIndex);
                         }
                     }
 
-                    this.RichTextBox.SelectionChanged += new EventHandler(this.richTextBox_SelectionChanged);
+                    RichTextBox.SelectionChanged += richTextBox_SelectionChanged;
                 }
             }
             catch (Exception ex)
@@ -552,28 +552,28 @@ namespace DataCommander.Providers.Query
 
             try
             {
-                if (this.KeyboardHandler != null)
+                if (KeyboardHandler != null)
                 {
-                    e.Handled = this.KeyboardHandler.HandleKeyDown(e);
+                    e.Handled = KeyboardHandler.HandleKeyDown(e);
                 }
                 else
                 {
                     if (e.KeyCode == Keys.Insert && e.Shift)
                     {
-                        this.Paste();
+                        Paste();
                         e.Handled = true;
                     }
                     else if (e.KeyCode == Keys.Tab)
                     {
                         e.Handled = true;
 
-                        var length = -((this.columnIndex - 1)%this.TabSize) + this.TabSize;
+                        var length = -((_columnIndex - 1)%TabSize) + TabSize;
                         var text = new string(' ', length);
-                        length = this.RichTextBox.SelectionLength;
+                        length = RichTextBox.SelectionLength;
 
                         if (length == 0)
                         {
-                            this.RichTextBox.SelectedText = text;
+                            RichTextBox.SelectedText = text;
                         }
                     }
                     else if (e.KeyCode == Keys.E && e.Control)
@@ -594,9 +594,9 @@ namespace DataCommander.Providers.Query
 
         private void richTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (this.KeyboardHandler != null)
+            if (KeyboardHandler != null)
             {
-                e.Handled = this.KeyboardHandler.HandleKeyPress(e);
+                e.Handled = KeyboardHandler.HandleKeyPress(e);
             }
             else
             {
@@ -633,11 +633,11 @@ namespace DataCommander.Providers.Query
             if (GetDataPresent(dataObject, DataFormats.UnicodeText))
             {
                 var text = (string)GetData(dataObject, DataFormats.UnicodeText);
-                var startIndex = this.RichTextBox.SelectionStart;
-                this.RichTextBox.SelectionLength = 0;
-                this.RichTextBox.SelectedText = text;
-                this.RichTextBox.SelectionStart = startIndex + text.Length;
-                this.RichTextBox.Focus();
+                var startIndex = RichTextBox.SelectionStart;
+                RichTextBox.SelectionLength = 0;
+                RichTextBox.SelectedText = text;
+                RichTextBox.SelectionStart = startIndex + text.Length;
+                RichTextBox.Focus();
             }
             else if (GetDataPresent(dataObject, DataFormats.FileDrop))
             {
@@ -654,11 +654,11 @@ namespace DataCommander.Providers.Query
                     stringBuilder.Append("0x");
                     stringBuilder.Append(chars);
                     var text = stringBuilder.ToString();
-                    var startIndex = this.RichTextBox.SelectionStart;
-                    this.RichTextBox.SelectionLength = 0;
-                    this.RichTextBox.SelectedText = text;
-                    this.RichTextBox.SelectionStart = startIndex + text.Length;
-                    this.RichTextBox.Focus();
+                    var startIndex = RichTextBox.SelectionStart;
+                    RichTextBox.SelectionLength = 0;
+                    RichTextBox.SelectedText = text;
+                    RichTextBox.SelectionStart = startIndex + text.Length;
+                    RichTextBox.Focus();
                 }
             }
         }
@@ -669,25 +669,21 @@ namespace DataCommander.Providers.Query
 
         private void CreateTable_Click(object sender, EventArgs e)
         {
-            var queryForm = this.Parent as QueryForm;
+            var queryForm = Parent as QueryForm;
             if (queryForm != null)
-            {
                 queryForm.ScriptQueryAsCreateTable();
-            }
         }
 
         private void CopyTable_Click(object sender, EventArgs e)
         {
-            var queryForm = this.Parent as QueryForm;
+            var queryForm = Parent as QueryForm;
             if (queryForm != null)
-            {
                 queryForm.CopyTable();
-            }
         }
 
         private void CopyTableWithSqlBulkCopy_Click(object sender, EventArgs e)
         {
-            var queryForm = (QueryForm) this.Parent;
+            var queryForm = (QueryForm) Parent;
             queryForm.CopyTableWithSqlBulkCopy();
         }
 
@@ -695,15 +691,15 @@ namespace DataCommander.Providers.Query
         {
             if (e.Button == MouseButtons.Right)
             {
-                var contextMenu = new ContextMenuStrip(this.components);
+                var contextMenu = new ContextMenuStrip(_components);
                 var items = contextMenu.Items;
-                var menuItem = new ToolStripMenuItem("Create table", null, this.CreateTable_Click);
+                var menuItem = new ToolStripMenuItem("Create table", null, CreateTable_Click);
                 items.Add(menuItem);
-                menuItem = new ToolStripMenuItem("Copy table", null, this.CopyTable_Click);
+                menuItem = new ToolStripMenuItem("Copy table", null, CopyTable_Click);
                 items.Add(menuItem);
 
                 var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
-                var index = Array.IndexOf(forms, (QueryForm) this.Parent);
+                var index = Array.IndexOf(forms, (QueryForm) Parent);
                 if (index < forms.Length - 1)
                 {
                     var nextQueryForm = (QueryForm) forms[index + 1];
@@ -711,7 +707,7 @@ namespace DataCommander.Providers.Query
                     if (destinationProvider.DbProviderFactory == SqlClientFactory.Instance)
                     {
                         menuItem = new ToolStripMenuItem("Copy table with SqlBulkCopy", null,
-                            this.CopyTableWithSqlBulkCopy_Click);
+                            CopyTableWithSqlBulkCopy_Click);
                         items.Add(menuItem);
                     }
                 }

@@ -25,9 +25,9 @@ namespace DataCommander.Providers.SqlServer
     {
         #region Private Fields
 
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private ObjectExplorer.ObjectExplorer objectBrowser;
-        private static string[] keyWords;
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+        private ObjectExplorer.ObjectExplorer _objectBrowser;
+        private static string[] _keyWords;
 
         #endregion
 
@@ -60,13 +60,13 @@ namespace DataCommander.Providers.SqlServer
         {
             get
             {
-                if (keyWords == null)
+                if (_keyWords == null)
                 {
                     var folder = Settings.CurrentType;
-                    keyWords = folder.Attributes["TSqlKeyWords"].GetValue<string[]>();
+                    _keyWords = folder.Attributes["TSqlKeyWords"].GetValue<string[]>();
                 }
 
-                return keyWords;
+                return _keyWords;
             }
         }
 
@@ -78,12 +78,12 @@ namespace DataCommander.Providers.SqlServer
         {
             get
             {
-                if (this.objectBrowser == null)
+                if (_objectBrowser == null)
                 {
-                    this.objectBrowser = new ObjectExplorer.ObjectExplorer();
+                    _objectBrowser = new ObjectExplorer.ObjectExplorer();
                 }
 
-                return this.objectBrowser;
+                return _objectBrowser;
             }
         }
 
@@ -271,7 +271,7 @@ namespace DataCommander.Providers.SqlServer
             catch (Exception e)
             {
                 var message = ((IProvider)this).GetExceptionMessage(e);
-                log.Write(LogLevel.Error, message);
+                Log.Write(LogLevel.Error, message);
             }
 
             command.Parameters.Clear();
@@ -294,7 +294,7 @@ namespace DataCommander.Providers.SqlServer
         {
             var schemaRow = new DbColumn(sourceSchemaRow);
             var columnSize = schemaRow.ColumnSize;
-            var allowDBNull = schemaRow.AllowDbNull;
+            var allowDbNull = schemaRow.AllowDbNull;
             var dataType = schemaRow.DataType;
             var typeCode = Type.GetTypeCode(dataType);
             string typeName;
@@ -413,7 +413,7 @@ namespace DataCommander.Providers.SqlServer
                 {
                     if (value.IndexOf("@@") == 0)
                     {
-                        array = keyWords.Where(k => k.StartsWith(value)).Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
+                        array = _keyWords.Where(k => k.StartsWith(value)).Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
                     }
                     else
                     {
@@ -640,7 +640,7 @@ order by 1", name.Database);
 
                 if (commandText != null)
                 {
-                    log.Write(LogLevel.Trace, "commandText:\r\n{0}", commandText);
+                    Log.Write(LogLevel.Trace, "commandText:\r\n{0}", commandText);
                     var list = new List<IObjectName>();
                     try
                     {
@@ -784,8 +784,8 @@ order by 1", name.Database);
 
             if (schemaTable != null)
             {
-                log.Trace(CallerInformation.Get(), schemaTable.ToStringTableString());
-                log.Trace(CallerInformation.Get(), "{0}", schemaTable.TableName);
+                Log.Trace(CallerInformation.Get(), schemaTable.ToStringTableString());
+                Log.Trace(CallerInformation.Get(), "{0}", schemaTable.TableName);
 
                 table = new DataTable("SchemaTable");
                 var columns = table.Columns;
@@ -883,8 +883,8 @@ order by 1", name.Database);
                             break;
                     }
 
-                    var allowDBNull = dataColumnSchema.AllowDbNull.GetValueOrDefault();
-                    if (!allowDBNull)
+                    var allowDbNull = dataColumnSchema.AllowDbNull.GetValueOrDefault();
+                    if (!allowDbNull)
                     {
                         sb.Append(" not null");
                     }
@@ -996,7 +996,7 @@ order by ic.index_column_id
                 sqlCommandBuilder.QuoteIdentifier(fourPartName.Database),
                 owner.ToTSqlNVarChar(),
                 fourPartName.Name.ToTSqlNVarChar());
-            log.Write(LogLevel.Trace, commandText);
+            Log.Write(LogLevel.Trace, commandText);
 
             var executor = DbCommandExecutorFactory.Create(connection);
             DataSet dataSet = null;

@@ -6,15 +6,15 @@ namespace DataCommander.Providers.Odp.DataFieldReader
 
     internal sealed class LongStringFieldReader : IDataFieldReader
     {
-        private readonly IDataRecord dataRecord;
-        private readonly int columnOrdinal;
+        private readonly IDataRecord _dataRecord;
+        private readonly int _columnOrdinal;
 
         public LongStringFieldReader(
             IDataRecord dataRecord,
             int columnOrdinal )
         {
-            this.dataRecord = dataRecord;
-            this.columnOrdinal = columnOrdinal;
+            _dataRecord = dataRecord;
+            _columnOrdinal = columnOrdinal;
         }
 
         object IDataFieldReader.Value
@@ -23,13 +23,13 @@ namespace DataCommander.Providers.Odp.DataFieldReader
             {
                 object value;
 
-                if (dataRecord.IsDBNull( columnOrdinal ))
+                if (_dataRecord.IsDBNull( _columnOrdinal ))
                 {
                     value = DBNull.Value;
                 }
                 else
                 {
-                    var s = dataRecord.GetString( columnOrdinal );
+                    var s = _dataRecord.GetString( _columnOrdinal );
                     value = new StringField( s, 1024 );
                 }
 

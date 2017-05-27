@@ -10,37 +10,23 @@ namespace DataCommander.Providers.Connection
     {
         public IDbConnection Connection { get; protected set; }
 
-        //public abstract void Open();
-
         public abstract Task OpenAsync(CancellationToken cancellationToken);
 
         public void Close()
         {
-            if (this.Connection != null)
-            {
-                this.Connection.Close();
-            }
+            if (Connection != null)
+                Connection.Close();
         }
 
         public abstract IDbCommand CreateCommand();
 
-        public abstract string ConnectionName
-        {
-            get;
-            set;
-        }
+        public abstract string ConnectionName { get; set; }
 
-        public string ConnectionString => this.Connection.ConnectionString;
+        public string ConnectionString => Connection.ConnectionString;
 
-        public abstract string Caption
-        {
-            get;
-        }
+        public abstract string Caption { get; }
 
-        public abstract string DataSource
-        {
-            get;
-        }
+        public abstract string DataSource { get; }
 
         protected abstract void SetDatabase(string database);
 
@@ -50,9 +36,9 @@ namespace DataCommander.Providers.Connection
             {
                 string database;
 
-                if (this.Connection != null)
+                if (Connection != null)
                 {
-                    database = this.Connection.Database;
+                    database = Connection.Database;
                 }
                 else
                 {
@@ -62,13 +48,10 @@ namespace DataCommander.Providers.Connection
                 return database;
             }
 
-            set => this.SetDatabase(value);
+            set => SetDatabase(value);
         }
 
-        public abstract string ServerVersion
-        {
-            get;
-        }
+        public abstract string ServerVersion { get; }
 
         public ConnectionState State
         {
@@ -77,37 +60,33 @@ namespace DataCommander.Providers.Connection
 #if CONTRACTS_FULL
                 Contract.Assert(this.Connection != null);
 #endif
-                return this.Connection.State;
+                return Connection.State;
             }
         }
 
-        public abstract int TransactionCount
-        {
-            get;
-        }
+        public abstract int TransactionCount { get; }
 
         protected void InvokeInfoMessage(IEnumerable<InfoMessage> messages)
         {
-            if (this.InfoMessage != null)
+            if (InfoMessage != null)
             {
-                this.InfoMessage( messages );
+                InfoMessage(messages);
             }
         }
 
         protected void InvokeDatabaseChanged(string database)
         {
-            if (this.DatabaseChanged != null)
+            if (DatabaseChanged != null)
             {
                 var args = new DatabaseChangedEventArgs
                 {
-                    database = database
+                    Database = database
                 };
-                this.DatabaseChanged( this, args );
+                DatabaseChanged(this, args);
             }
         }
 
         public event InfoMessageEventHandler InfoMessage;
-
         public event EventHandler<DatabaseChangedEventArgs> DatabaseChanged;
     }
 }

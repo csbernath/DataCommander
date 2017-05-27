@@ -11,7 +11,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         public ViewCollectionNode(DatabaseNode database)
         {
-            this.database = database;
+            _database = database;
         }
 
         public string Name => "Views";
@@ -21,9 +21,9 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             var treeNodes = new List<ITreeNode>();
-            treeNodes.Add(new SystemViewCollectionNode(this.database));
+            treeNodes.Add(new SystemViewCollectionNode(_database));
 
-            var databaseName = new SqlCommandBuilder().QuoteIdentifier(this.database.Name);
+            var databaseName = new SqlCommandBuilder().QuoteIdentifier(_database.Name);
             var commandText = $@"select
     s.name,
     v.name,
@@ -32,7 +32,7 @@ from {databaseName}.sys.schemas s (nolock)
 join {databaseName}.sys.views v (nolock)
     on s.schema_id = v.schema_id
 order by 1,2";
-            using (var connection = new SqlConnection(this.database.Databases.Server.ConnectionString))
+            using (var connection = new SqlConnection(_database.Databases.Server.ConnectionString))
             {
                 connection.Open();
                 var transactionScope = new DbTransactionScope(connection, null);
@@ -43,7 +43,7 @@ order by 1,2";
                         var schema = dataRecord.GetString(0);
                         var name = dataRecord.GetString(1);
                         var id = dataRecord.GetInt32(2);
-                        treeNodes.Add(new ViewNode(this.database, id, schema, name));
+                        treeNodes.Add(new ViewNode(_database, id, schema, name));
                     });
                 }
             }
@@ -56,6 +56,6 @@ order by 1,2";
 
         public ContextMenuStrip ContextMenu => null;
 
-        private readonly DatabaseNode database;
+        private readonly DatabaseNode _database;
     }
 }

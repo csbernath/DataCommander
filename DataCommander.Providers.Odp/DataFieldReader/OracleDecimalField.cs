@@ -5,16 +5,16 @@ namespace DataCommander.Providers.Odp.DataFieldReader
 
     internal sealed class OracleDecimalField : IConvertible
     {
-        private OracleDecimal oracleDecimal;
+        private OracleDecimal _oracleDecimal;
 
         public OracleDecimalField( OracleDecimal oracleDecimal )
         {
-            this.oracleDecimal = oracleDecimal;
+            _oracleDecimal = oracleDecimal;
         }
 
         public override string ToString()
         {
-            return this.oracleDecimal.ToString();
+            return _oracleDecimal.ToString();
         }
 
         #region IConvertible Members
@@ -46,7 +46,7 @@ namespace DataCommander.Providers.Odp.DataFieldReader
 
         decimal IConvertible.ToDecimal( IFormatProvider provider )
         {
-            return this.oracleDecimal.Value;
+            return _oracleDecimal.Value;
         }
 
         double IConvertible.ToDouble( IFormatProvider provider )
@@ -81,7 +81,7 @@ namespace DataCommander.Providers.Odp.DataFieldReader
 
         string IConvertible.ToString( IFormatProvider provider )
         {
-            return this.oracleDecimal.ToString();
+            return _oracleDecimal.ToString();
         }
 
         object IConvertible.ToType( Type conversionType, IFormatProvider provider )

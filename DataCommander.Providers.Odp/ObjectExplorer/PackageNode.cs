@@ -15,18 +15,18 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
     /// </summary>
     internal sealed class PackageNode : ITreeNode
     {
-        private readonly SchemaNode schemaNode;
-        private readonly string name;
+        private readonly SchemaNode _schemaNode;
+        private readonly string _name;
 
         public PackageNode(
             SchemaNode schema,
             string name)
         {
-            this.schemaNode = schema;
-            this.name = name;
+            _schemaNode = schema;
+            _name = name;
         }
 
-        public string Name => name;
+        public string Name => _name;
 
         public bool IsLeaf => false;
 
@@ -37,10 +37,10 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
             var commandText =
                 $@"select	procedure_name
 from	all_procedures
-where	owner = '{schemaNode.Name}'
-	and object_name = '{name}'
+where	owner = '{_schemaNode.Name}'
+	and object_name = '{_name}'
 order by procedure_name";
-            var transactionScope = new DbTransactionScope(this.schemaNode.SchemasNode.Connection, null);
+            var transactionScope = new DbTransactionScope(_schemaNode.SchemasNode.Connection, null);
 
             return transactionScope.ExecuteReader(
                 new CommandDefinition {CommandText = commandText},
@@ -48,7 +48,7 @@ order by procedure_name";
                 dataRecord =>
                 {
                     var procedureName = dataRecord.GetString(0);
-                    return new ProcedureNode(schemaNode, this, procedureName);
+                    return new ProcedureNode(_schemaNode, this, procedureName);
                 });
         }
 
@@ -59,8 +59,8 @@ order by procedure_name";
             get
             {
                 var commandText = "select text from all_source where owner = '{0}' and type = 'PACKAGE' and name = '{1}'";
-                commandText = string.Format(commandText, schemaNode.Name, name);
-                var transactionScope = new DbTransactionScope(this.schemaNode.SchemasNode.Connection, null);
+                commandText = string.Format(commandText, _schemaNode.Name, _name);
+                var transactionScope = new DbTransactionScope(_schemaNode.SchemasNode.Connection, null);
                 var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
                 var sb = new StringBuilder();
 
@@ -81,8 +81,8 @@ order by procedure_name";
         private void ScriptPackageBody(object sender, EventArgs e)
         {
             var commandText = "select text from all_source where owner = '{0}' and name = '{1}' and type = 'PACKAGE BODY'";
-            commandText = string.Format(commandText, schemaNode.Name, name);
-            var transactionScope = new DbTransactionScope(this.schemaNode.SchemasNode.Connection, null);
+            commandText = string.Format(commandText, _schemaNode.Name, _name);
+            var transactionScope = new DbTransactionScope(_schemaNode.SchemasNode.Connection, null);
             var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
             var dataRows = dataTable.Rows;
             var count = dataRows.Count;
@@ -129,6 +129,6 @@ order by procedure_name";
         {
         }
 
-        public SchemaNode SchemaNode => schemaNode;
+        public SchemaNode SchemaNode => _schemaNode;
     }
 }

@@ -4,12 +4,12 @@ namespace DataCommander.Providers.Field
 
     public sealed class StringField : IConvertible
     {
-        private readonly int length;
+        private readonly int _length;
 
         public StringField(string value, int length)
         {
-            this.Value = value;
-            this.length = length;
+            Value = value;
+            _length = length;
         }
 
         public string Value { get; }
@@ -18,13 +18,13 @@ namespace DataCommander.Providers.Field
         {
             string s;
 
-            if (this.Value.Length > this.length)
+            if (Value.Length > _length)
             {
-                s = this.Value.Substring(0, this.length);
+                s = Value.Substring(0, _length);
             }
             else
             {
-                s = this.Value;
+                s = Value;
             }
 
             return s;
@@ -94,7 +94,7 @@ namespace DataCommander.Providers.Field
 
         string IConvertible.ToString(IFormatProvider provider)
         {
-            return this.Value;
+            return Value;
         }
 
         object IConvertible.ToType(Type conversionType, IFormatProvider provider)

@@ -4,6 +4,6 @@ namespace DataCommander.Providers.Connection
 
     public class DatabaseChangedEventArgs : EventArgs
     {
-        public string database;
+        public string Database;
     }
 }

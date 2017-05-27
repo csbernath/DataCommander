@@ -18,8 +18,8 @@ namespace DataCommander.Providers.Odp
 
     internal sealed class OracleProvider : IProvider
     {
-        private string connectionString;
-        private readonly ObjectExplorer.ObjectExplorer objectExplorer = new ObjectExplorer.ObjectExplorer();
+        private string _connectionString;
+        private readonly ObjectExplorer.ObjectExplorer _objectExplorer = new ObjectExplorer.ObjectExplorer();
 
         string IProvider.Name => "Odp";
 
@@ -172,7 +172,7 @@ namespace DataCommander.Providers.Odp
                 var row = schemaTable.Rows[i];
                 var columnOrdinal = (int) row["ColumnOrdinal"] + 1;
                 var isKey = Database.GetValueOrDefault<bool>(row["IsKey"]);
-                var isRowID = (bool) row["IsRowID"];
+                var isRowId = (bool) row["IsRowID"];
                 var pk = string.Empty;
 
                 if (isKey)
@@ -180,7 +180,7 @@ namespace DataCommander.Providers.Odp
                     pk = "PKEY";
                 }
 
-                if (isRowID)
+                if (isRowId)
                 {
                     if (pk.Length > 0)
                     {
@@ -206,11 +206,11 @@ namespace DataCommander.Providers.Odp
                         break;
                 }
 
-                var allowDBNull = (bool) row["AllowDBNull"];
+                var allowDbNull = (bool) row["AllowDBNull"];
 
                 var dataTypeName = dataReader.GetDataTypeName(i);
                 var sb = new StringBuilder();
-                sb.Append(this.ToName(dbType));
+                sb.Append(ToName(dbType));
 
                 switch (dbType)
                 {
@@ -246,7 +246,7 @@ namespace DataCommander.Providers.Odp
                         break;
                 }
 
-                if (!allowDBNull)
+                if (!allowDbNull)
                 {
                     sb.Append(" NOT NULL");
                 }
@@ -354,7 +354,7 @@ namespace DataCommander.Providers.Odp
             return dataAdapter;
         }
 
-        IObjectExplorer IProvider.ObjectExplorer => objectExplorer;
+        IObjectExplorer IProvider.ObjectExplorer => _objectExplorer;
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {
@@ -485,7 +485,7 @@ order by OBJECT_NAME";
             if (commandText != null)
             {
                 var sb = new StringBuilder();
-                sb.Append(objectExplorer.SchemasNode.Connection.DataSource);
+                sb.Append(_objectExplorer.SchemasNode.Connection.DataSource);
                 sb.Append('.');
                 sb.Append(sqlObject.Type);
                 sb.Append('.');
@@ -736,7 +736,7 @@ order by OBJECT_NAME";
 
         ConnectionBase IProvider.CreateConnection(string connectionString)
         {
-            this.connectionString = connectionString;
+            _connectionString = connectionString;
             return new Connection(connectionString);
         }
 

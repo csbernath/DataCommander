@@ -36,15 +36,15 @@
 
     internal sealed class ColumnNode : ITreeNode
     {
-        private readonly string columnName;
-        private readonly byte systemTypeId;
-        private readonly short maxLength;
-        private readonly byte precision;
-        private readonly byte scale;
-        private readonly bool isNullable;
-        private readonly string userTypeName;
-        private bool isPrimaryKey;
-        private bool isForeignKey;
+        private readonly string _columnName;
+        private readonly byte _systemTypeId;
+        private readonly short _maxLength;
+        private readonly byte _precision;
+        private readonly byte _scale;
+        private readonly bool _isNullable;
+        private readonly string _userTypeName;
+        private bool _isPrimaryKey;
+        private bool _isForeignKey;
 
         public ColumnNode(
             int id,
@@ -56,26 +56,26 @@
             bool isNullable,
             string userTypeName )
         {
-            this.Id = id;
-            this.columnName = columnName;
-            this.systemTypeId = systemTypeId;
-            this.maxLength = maxLength;
-            this.precision = precision;
-            this.scale = scale;
-            this.isNullable = isNullable;
-            this.userTypeName = userTypeName;
+            Id = id;
+            _columnName = columnName;
+            _systemTypeId = systemTypeId;
+            _maxLength = maxLength;
+            _precision = precision;
+            _scale = scale;
+            _isNullable = isNullable;
+            _userTypeName = userTypeName;
         }
 
         public int Id { get; }
 
         public bool IsPrimaryKey
         {
-            set => this.isPrimaryKey = value;
+            set => _isPrimaryKey = value;
         }
 
         public bool IsForeignKey
         {
-            set => this.isForeignKey = value;
+            set => _isForeignKey = value;
         }
 
         #region ITreeNode Members
@@ -85,41 +85,41 @@
             get
             {
                 string typeName;
-                var systemType = (SqlServerSystemType)(int)this.systemTypeId;
+                var systemType = (SqlServerSystemType)(int)_systemTypeId;
                 switch (systemType)
                 {
                     case SqlServerSystemType.Char:
                     case SqlServerSystemType.VarBinary:
                     case SqlServerSystemType.VarChar:
-                        var maxLengthString = this.maxLength >= 0 ? this.maxLength.ToString() : "max";
-                        typeName = $"{this.userTypeName}({maxLengthString})";
+                        var maxLengthString = _maxLength >= 0 ? _maxLength.ToString() : "max";
+                        typeName = $"{_userTypeName}({maxLengthString})";
                         break;
 
                     case SqlServerSystemType.NChar:
                     case SqlServerSystemType.NVarChar:
-                        maxLengthString = this.maxLength >= 0 ? (this.maxLength/2).ToString() : "max";
-                        typeName = $"{this.userTypeName}({maxLengthString})";
+                        maxLengthString = _maxLength >= 0 ? (_maxLength/2).ToString() : "max";
+                        typeName = $"{_userTypeName}({maxLengthString})";
                         break;
 
                     case SqlServerSystemType.Decimal:
                     case SqlServerSystemType.Numeric:
-                        if (this.scale == 0)
+                        if (_scale == 0)
                         {
-                            typeName = $"{this.userTypeName}({this.precision})";
+                            typeName = $"{_userTypeName}({_precision})";
                         }
                         else
                         {
-                            typeName = $"{this.userTypeName}({this.precision},{this.scale})";
+                            typeName = $"{_userTypeName}({_precision},{_scale})";
                         }
                         break;
 
                     default:
-                        typeName = this.userTypeName;
+                        typeName = _userTypeName;
                         break;
                 }
 
                 return
-                    $"{this.columnName} ({(this.isPrimaryKey ? "PK, " : null)}{(this.isForeignKey ? "FK, " : null)}{typeName}, {(this.isNullable ? "null" : "not null")})";
+                    $"{_columnName} ({(_isPrimaryKey ? "PK, " : null)}{(_isForeignKey ? "FK, " : null)}{typeName}, {(_isNullable ? "null" : "not null")})";
             }
         }
 

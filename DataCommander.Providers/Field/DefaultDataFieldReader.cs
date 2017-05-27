@@ -5,13 +5,13 @@ namespace DataCommander.Providers.Field
 
     public sealed class DefaultDataFieldReader : IDataFieldReader
 	{
-		private readonly IDataRecord dataRecord;
-		private readonly int columnOrdinal;
+		private readonly IDataRecord _dataRecord;
+		private readonly int _columnOrdinal;
 
 		public DefaultDataFieldReader( IDataRecord dataRecord, int columnOrdinal )
 		{
-			this.dataRecord = dataRecord;
-			this.columnOrdinal = columnOrdinal;
+			_dataRecord = dataRecord;
+			_columnOrdinal = columnOrdinal;
 		}
 
 		object IDataFieldReader.Value
@@ -22,12 +22,12 @@ namespace DataCommander.Providers.Field
 
 				try
 				{
-					value = this.dataRecord.GetValue(this.columnOrdinal);					
+					value = _dataRecord.GetValue(_columnOrdinal);					
 				}
 				catch (Exception e)
 				{
-					var name = this.dataRecord.GetName(this.columnOrdinal);
-					var dataTypeName = this.dataRecord.GetDataTypeName( this.columnOrdinal );
+					var name = _dataRecord.GetName(_columnOrdinal);
+					var dataTypeName = _dataRecord.GetDataTypeName( _columnOrdinal );
 					var message = $"dataRecord.GetValue(columnordinal) failed. Column name: {name}, column dataTypeName: {dataTypeName}";
 					throw new Exception(message, e);
 				}

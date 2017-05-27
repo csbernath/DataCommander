@@ -9,26 +9,26 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
     /// </summary>
     internal sealed class ObjectExplorer : IObjectExplorer
     {
-        private OracleConnection connection;
-        private SchemaCollectionNode schemasNode;
+        private OracleConnection _connection;
+        private SchemaCollectionNode _schemasNode;
 
-        public OracleConnection OracleConnection => connection;
+        public OracleConnection OracleConnection => _connection;
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
-            return new ITreeNode[] { schemasNode };
+            return new ITreeNode[] { _schemasNode };
         }
 
         public bool Sortable => false;
 
-        public SchemaCollectionNode SchemasNode => schemasNode;
+        public SchemaCollectionNode SchemasNode => _schemasNode;
 
         #region IObjectExplorer Members
 
         void IObjectExplorer.SetConnection( string connectionString, IDbConnection connection )
         {
-            this.connection = (OracleConnection) connection;
-            schemasNode = new SchemaCollectionNode( this.connection );
+            _connection = (OracleConnection) connection;
+            _schemasNode = new SchemaCollectionNode( _connection );
         }
 
         #endregion

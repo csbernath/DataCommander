@@ -11,7 +11,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         public TableCollectionNode( DatabaseNode databaseNode )
         {
-            this.DatabaseNode = databaseNode;
+            DatabaseNode = databaseNode;
         }
 
         public string Name => "Tables";
@@ -44,7 +44,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 //            return treeNodes;
 
             var childNodes = new List<ITreeNode>();
-            childNodes.Add(new SystemTableCollectionNode(this.DatabaseNode));
+            childNodes.Add(new SystemTableCollectionNode(DatabaseNode));
 
             var commandText = string.Format(@"select
     s.name,
@@ -71,8 +71,8 @@ where
     else 0
 end          
              AS bit)=0)
-order by 1,2", this.DatabaseNode.Name);
-            var connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
+order by 1,2", DatabaseNode.Name);
+            var connectionString = DatabaseNode.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -83,8 +83,8 @@ order by 1,2", this.DatabaseNode.Name);
                     {
                         var schema = dataRecord.GetString(0);
                         var name = dataRecord.GetString(1);
-                        var object_id = dataRecord.GetInt32(2);
-                        var tableNode = new TableNode(this.DatabaseNode, schema, name, object_id);
+                        var objectId = dataRecord.GetInt32(2);
+                        var tableNode = new TableNode(DatabaseNode, schema, name, objectId);
                         childNodes.Add(tableNode);
                     });
                 }

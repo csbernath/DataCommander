@@ -9,9 +9,9 @@ namespace DataCommander.Providers.Connection
             InfoMessageSeverity severity,
             string message)
         {
-            this.CreationTime = creationTime;
-            this.Severity = severity;
-            this.Message = message;
+            CreationTime = creationTime;
+            Severity = severity;
+            Message = message;
         }
 
         public DateTime CreationTime { get; }

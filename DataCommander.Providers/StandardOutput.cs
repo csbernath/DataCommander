@@ -13,14 +13,14 @@ namespace DataCommander.Providers
     /// </summary>
     internal sealed class StandardOutput : IStandardOutput
     {
-        private readonly QueryForm queryForm;
+        private readonly QueryForm _queryForm;
 
         public StandardOutput(
             TextWriter textWriter,
             QueryForm queryForm)
         {
-            this.TextWriter = textWriter;
-            this.queryForm = queryForm;
+            TextWriter = textWriter;
+            _queryForm = queryForm;
         }
 
         public TextWriter TextWriter { get; }
@@ -43,7 +43,7 @@ namespace DataCommander.Providers
                 }
             }
 
-            this.TextWriter.WriteLine(sb.ToString());
+            TextWriter.WriteLine(sb.ToString());
         }
 
         public void Write(object arg)
@@ -54,33 +54,33 @@ namespace DataCommander.Providers
             {
                 var dataSet = new DataSet();
                 var adapter = new OleDbDataAdapter();
-                var objRS = arg;
+                var objRs = arg;
 
-                while (objRS != null)
+                while (objRs != null)
                 {
                     var dataTable = new DataTable();
-                    adapter.Fill(dataTable, objRS);
+                    adapter.Fill(dataTable, objRs);
                     dataSet.Tables.Add(dataTable);
                     object recordsAffected;
 
                     try
                     {
-                        objRS = rs.NextRecordset(out recordsAffected);
-                        this.TextWriter.WriteLine(recordsAffected + " row(s) affected.");
+                        objRs = rs.NextRecordset(out recordsAffected);
+                        TextWriter.WriteLine(recordsAffected + " row(s) affected.");
                     }
                     catch
                     {
-                        objRS = null;
+                        objRs = null;
                     }
                 }
 
-                this.queryForm.Invoke( () => this.queryForm.ShowDataSet( dataSet ) );
+                _queryForm.Invoke( () => _queryForm.ShowDataSet( dataSet ) );
             
             }
             else
             {
                 var s = arg.ToString();
-                this.TextWriter.Write(s);
+                TextWriter.Write(s);
             }
         }
     }

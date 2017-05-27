@@ -6,15 +6,15 @@ namespace DataCommander.Providers.Odp.DataFieldReader
 
     internal sealed class DateTimeDataFieldReader : IDataFieldReader
     {
-        private readonly OracleDataReader oracleDataReader;
-        private readonly int columnOrdinal;
+        private readonly OracleDataReader _oracleDataReader;
+        private readonly int _columnOrdinal;
 
         public DateTimeDataFieldReader(
             OracleDataReader oracleDataReader,			
             int columnOrdinal )
         {
-            this.oracleDataReader = oracleDataReader;
-            this.columnOrdinal = columnOrdinal;
+            _oracleDataReader = oracleDataReader;
+            _columnOrdinal = columnOrdinal;
         }
 
         object IDataFieldReader.Value
@@ -23,13 +23,13 @@ namespace DataCommander.Providers.Odp.DataFieldReader
             {
                 object value;
 
-                if (this.oracleDataReader.IsDBNull( columnOrdinal ))
+                if (_oracleDataReader.IsDBNull( _columnOrdinal ))
                 {
                     value = DBNull.Value;
                 }
                 else
                 {
-                    var oracleDate = this.oracleDataReader.GetOracleDate( columnOrdinal );
+                    var oracleDate = _oracleDataReader.GetOracleDate( _columnOrdinal );
                     var dateTime = oracleDate.Value;
                     var dateTimeField = new DateTimeField( dateTime );
                     value = dateTimeField;

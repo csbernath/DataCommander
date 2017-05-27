@@ -2,18 +2,18 @@ namespace DataCommander.Providers.Odp.DataFieldReader
 {
     using Oracle.ManagedDataAccess.Types;
 
-    internal sealed class OracleTimeStampLTZField
+    internal sealed class OracleTimeStampLtzField
     {
-        private OracleTimeStampLTZ value;
+        private OracleTimeStampLTZ _value;
 
-        public OracleTimeStampLTZField( OracleTimeStampLTZ value )
+        public OracleTimeStampLtzField( OracleTimeStampLTZ value )
         {
-            this.value = value;
+            _value = value;
         }
 
         public override string ToString()
         {
-            var dateTime = this.value.Value;
+            var dateTime = _value.Value;
             return dateTime.ToString( "yyyy-MM-dd HH:mm:ss.ffffff" );
         }
     }

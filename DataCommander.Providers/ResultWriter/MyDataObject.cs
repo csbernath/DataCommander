@@ -9,13 +9,13 @@
 
     internal sealed class MyDataObject : IDataObject
     {
-        private readonly DataView dataView;
-        private readonly int[] columnIndexes;
+        private readonly DataView _dataView;
+        private readonly int[] _columnIndexes;
 
         public MyDataObject(DataView dataView, int[] columnIndexes)
         {
-            this.dataView = dataView;
-            this.columnIndexes = columnIndexes;
+            _dataView = dataView;
+            _columnIndexes = columnIndexes;
         }
 
         #region IDataObject Members
@@ -37,7 +37,7 @@
             if (format == DataFormats.CommaSeparatedValue)
             {
                 var stringWriter = new StringWriter();
-                Database.Write(this.dataView, ',', "\r\n", stringWriter);
+                Database.Write(_dataView, ',', "\r\n", stringWriter);
                 var c = (char)0;
                 stringWriter.Write(c);
                 var s = stringWriter.ToString();
@@ -46,7 +46,7 @@
             else if (format == DataFormats.Html)
             {
                 var stringWriter = new StringWriter();
-                HtmlFormatter.Write(this.dataView, this.columnIndexes, stringWriter);
+                HtmlFormatter.Write(_dataView, _columnIndexes, stringWriter);
                 var htmlFragment = stringWriter.ToString();
                 stringWriter = new StringWriter();
                 WriteHtmlFragment(htmlFragment, stringWriter);
@@ -56,7 +56,7 @@
             }
             else if (format == DataFormats.Text || format == DataFormats.UnicodeText)
             {
-                data = this.dataView.ToStringTableString();
+                data = _dataView.ToStringTableString();
             }
             else if (format == "TabSeparatedValues")
             {

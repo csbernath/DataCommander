@@ -5,13 +5,13 @@
 
     public sealed class SingleFieldDataReader : IDataFieldReader
     {
-        private readonly IDataRecord dataRecord;
-        private readonly int columnOrdinal;
+        private readonly IDataRecord _dataRecord;
+        private readonly int _columnOrdinal;
 
         public SingleFieldDataReader(IDataRecord dataRecord, int columnOrdinal)
         {
-            this.dataRecord = dataRecord;
-            this.columnOrdinal = columnOrdinal;
+            _dataRecord = dataRecord;
+            _columnOrdinal = columnOrdinal;
         }
 
         #region IDataFieldReader Members
@@ -22,13 +22,13 @@
             {
                 object value;
 
-                if (this.dataRecord.IsDBNull(this.columnOrdinal))
+                if (_dataRecord.IsDBNull(_columnOrdinal))
                 {
                     value = DBNull.Value;
                 }
                 else
                 {
-                    var singleValue = (float)this.dataRecord[this.columnOrdinal];
+                    var singleValue = (float)_dataRecord[_columnOrdinal];
                     value = new SingleField(singleValue);
                 }
 

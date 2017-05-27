@@ -4,14 +4,14 @@
     {
         public SingleField(float value)
         {
-            this.Value = value;
+            Value = value;
         }
 
         public float Value { get; }
 
         public override string ToString()
         {
-            return this.Value.ToString("N16");
+            return Value.ToString("N16");
         }
     }
 }

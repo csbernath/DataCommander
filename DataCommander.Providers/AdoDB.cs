@@ -9,7 +9,7 @@ namespace DataCommander.Providers
     /// <summary>
     /// 
     /// </summary>
-    public static class AdoDB
+    public static class AdoDb
     {
         /// <summary>
         /// 
@@ -96,11 +96,11 @@ namespace DataCommander.Providers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="ADODBRecordset"></param>
+        /// <param name="adodbRecordset"></param>
         /// <param name="writer"></param>
-        public static void WriteSchema(object ADODBRecordset, TextWriter writer)
+        public static void WriteSchema(object adodbRecordset, TextWriter writer)
         {
-            WriteSchema((Recordset) ADODBRecordset, writer);
+            WriteSchema((Recordset) adodbRecordset, writer);
         }
 
         /// <summary>
@@ -128,27 +128,27 @@ namespace DataCommander.Providers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="ADODBRecordset"></param>
+        /// <param name="adodbRecordset"></param>
         /// <param name="writer"></param>
-        public static void WriteRows(object ADODBRecordset, TextWriter writer)
+        public static void WriteRows(object adodbRecordset, TextWriter writer)
         {
-            WriteRows((Recordset) ADODBRecordset, int.MaxValue, writer);
+            WriteRows((Recordset) adodbRecordset, int.MaxValue, writer);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="ADODBRecordset"></param>
+        /// <param name="adodbRecordset"></param>
         /// <param name="maxRowCount"></param>
         /// <param name="writer"></param>
         public static void Write(
-            object ADODBRecordset,
+            object adodbRecordset,
             int maxRowCount,
             TextWriter writer)
         {
-            if (ADODBRecordset != null)
+            if (adodbRecordset != null)
             {
-                var rs = (Recordset) ADODBRecordset;
+                var rs = (Recordset) adodbRecordset;
                 WriteSchema(rs, writer);
                 WriteRows(rs, maxRowCount, writer);
             }
@@ -157,15 +157,15 @@ namespace DataCommander.Providers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="ADODBRecordset"></param>
+        /// <param name="adodbRecordset"></param>
         /// <param name="writer"></param>
         public static void Write(
-            object ADODBRecordset,
+            object adodbRecordset,
             TextWriter writer)
         {
-            if (ADODBRecordset != null)
+            if (adodbRecordset != null)
             {
-                var rs = (Recordset) ADODBRecordset;
+                var rs = (Recordset) adodbRecordset;
                 WriteSchema(rs, writer);
                 WriteRows(rs, int.MaxValue, writer);
             }

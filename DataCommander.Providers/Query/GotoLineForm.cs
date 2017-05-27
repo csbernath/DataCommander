@@ -9,22 +9,22 @@ namespace DataCommander.Providers.Query
     /// </summary>
     public class GotoLineForm : Form
     {
-        private Label lineNumberLabel;
-        private TextBox lineNumberTextBox;
-        private Button okButton;
-        private Button cancelButton;
+        private Label _lineNumberLabel;
+        private TextBox _lineNumberTextBox;
+        private Button _okButton;
+        private Button _cancelButton;
 
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private readonly Container components = null;
+        private readonly Container _components = null;
 
         public GotoLineForm()
         {
             //
             // Required for Windows Form Designer support
             //
-            this.InitializeComponent();
+            InitializeComponent();
 
             //
             // TODO: Add any constructor code after InitializeComponent call
@@ -33,16 +33,16 @@ namespace DataCommander.Providers.Query
 
         public void Init(int currentLineNumber, int maxLineLineNumber)
         {
-            this.maxLineLineNumber = maxLineLineNumber;
-            this.lineNumberLabel.Text = $"Line number (1 - {maxLineLineNumber}):";
-            this.lineNumberTextBox.Text = currentLineNumber.ToString();
+            _maxLineLineNumber = maxLineLineNumber;
+            _lineNumberLabel.Text = $"Line number (1 - {maxLineLineNumber}):";
+            _lineNumberTextBox.Text = currentLineNumber.ToString();
         }
 
         public int LineNumber
         {
             get
             {
-                var s = this.lineNumberTextBox.Text;
+                var s = _lineNumberTextBox.Text;
                 var lineNumber = int.Parse(s);
                 return lineNumber;
             }
@@ -55,9 +55,9 @@ namespace DataCommander.Providers.Query
         {
             if (disposing)
             {
-                if (this.components != null)
+                if (_components != null)
                 {
-                    this.components.Dispose();
+                    _components.Dispose();
                 }
             }
 
@@ -71,54 +71,54 @@ namespace DataCommander.Providers.Query
         /// </summary>
         private void InitializeComponent()
         {
-            this.lineNumberLabel = new System.Windows.Forms.Label();
-            this.lineNumberTextBox = new System.Windows.Forms.TextBox();
-            this.okButton = new System.Windows.Forms.Button();
-            this.cancelButton = new System.Windows.Forms.Button();
+            this._lineNumberLabel = new System.Windows.Forms.Label();
+            this._lineNumberTextBox = new System.Windows.Forms.TextBox();
+            this._okButton = new System.Windows.Forms.Button();
+            this._cancelButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lineNumberLabel
             // 
-            this.lineNumberLabel.Location = new System.Drawing.Point(8, 8);
-            this.lineNumberLabel.Name = "lineNumberLabel";
-            this.lineNumberLabel.Size = new System.Drawing.Size(128, 16);
-            this.lineNumberLabel.TabIndex = 0;
-            this.lineNumberLabel.Text = "Line number (1 - {0}):";
+            this._lineNumberLabel.Location = new System.Drawing.Point(8, 8);
+            this._lineNumberLabel.Name = "_lineNumberLabel";
+            this._lineNumberLabel.Size = new System.Drawing.Size(128, 16);
+            this._lineNumberLabel.TabIndex = 0;
+            this._lineNumberLabel.Text = "Line number (1 - {0}):";
             // 
             // lineNumberTextBox
             // 
-            this.lineNumberTextBox.Location = new System.Drawing.Point(8, 24);
-            this.lineNumberTextBox.Name = "lineNumberTextBox";
-            this.lineNumberTextBox.Size = new System.Drawing.Size(208, 20);
-            this.lineNumberTextBox.TabIndex = 1;
-            this.lineNumberTextBox.Text = "";
+            this._lineNumberTextBox.Location = new System.Drawing.Point(8, 24);
+            this._lineNumberTextBox.Name = "_lineNumberTextBox";
+            this._lineNumberTextBox.Size = new System.Drawing.Size(208, 20);
+            this._lineNumberTextBox.TabIndex = 1;
+            this._lineNumberTextBox.Text = "";
             // 
             // okButton
             // 
-            this.okButton.Location = new System.Drawing.Point(56, 56);
-            this.okButton.Name = "okButton";
-            this.okButton.TabIndex = 2;
-            this.okButton.Text = "OK";
-            this.okButton.Click += new System.EventHandler(this.okButton_Click);
+            this._okButton.Location = new System.Drawing.Point(56, 56);
+            this._okButton.Name = "_okButton";
+            this._okButton.TabIndex = 2;
+            this._okButton.Text = "OK";
+            this._okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // cancelButton
             // 
-            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(136, 56);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.TabIndex = 3;
-            this.cancelButton.Text = "Cancel";
+            this._cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this._cancelButton.Location = new System.Drawing.Point(136, 56);
+            this._cancelButton.Name = "_cancelButton";
+            this._cancelButton.TabIndex = 3;
+            this._cancelButton.Text = "Cancel";
             // 
             // GotoLineForm
             // 
-            this.AcceptButton = this.okButton;
+            this.AcceptButton = this._okButton;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.CancelButton = this.cancelButton;
+            this.CancelButton = this._cancelButton;
             this.ClientSize = new System.Drawing.Size(224, 86);
-            this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.okButton);
-            this.Controls.Add(this.lineNumberTextBox);
-            this.Controls.Add(this.lineNumberLabel);
+            this.Controls.Add(this._cancelButton);
+            this.Controls.Add(this._okButton);
+            this.Controls.Add(this._lineNumberTextBox);
+            this.Controls.Add(this._lineNumberLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -135,12 +135,12 @@ namespace DataCommander.Providers.Query
         {
             try
             {
-                var s = this.lineNumberTextBox.Text;
+                var s = _lineNumberTextBox.Text;
                 var lineNumber = int.Parse(s);
 
-                if (lineNumber >= 1 && lineNumber <= this.maxLineLineNumber)
+                if (lineNumber >= 1 && lineNumber <= _maxLineLineNumber)
                 {
-                    this.DialogResult = DialogResult.OK;
+                    DialogResult = DialogResult.OK;
                 }
             }
             catch
@@ -148,6 +148,6 @@ namespace DataCommander.Providers.Query
             }
         }
 
-		private int maxLineLineNumber;
+		private int _maxLineLineNumber;
     }
 }

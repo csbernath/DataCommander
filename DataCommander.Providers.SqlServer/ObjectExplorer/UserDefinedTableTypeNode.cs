@@ -5,27 +5,27 @@
 
     internal sealed class UserDefinedTableTypeNode : ITreeNode
     {
-        private readonly DatabaseNode database;
-        private readonly int id;
-        private readonly string schema;
-        private readonly string name;
+        private readonly DatabaseNode _database;
+        private readonly int _id;
+        private readonly string _schema;
+        private readonly string _name;
 
         public UserDefinedTableTypeNode(DatabaseNode database, int id, string schema, string name)
         {
-            this.database = database;
-            this.id = id;
-            this.schema = schema;
-            this.name = name;
+            _database = database;
+            _id = id;
+            _schema = schema;
+            _name = name;
         }
 
-        string ITreeNode.Name => $"{this.schema}.{this.name}";
+        string ITreeNode.Name => $"{_schema}.{_name}";
         bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             return new ITreeNode[]
             {
-                new ColumnCollectionNode(this.database, id)
+                new ColumnCollectionNode(_database, _id)
             };
         }
 

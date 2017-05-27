@@ -6,19 +6,19 @@
 
     internal sealed class LinkedServerCatalogNode : ITreeNode
     {
-        private readonly string name;
+        private readonly string _name;
 
         public LinkedServerCatalogNode(LinkedServerNode linkedServer, string name)
         {
 #if CONTRACTS_FULL
             Contract.Requires(linkedServer != null);
 #endif
-            this.name = name;
+            _name = name;
         }
 
 #region ITreeNode Members
 
-        string ITreeNode.Name => this.name;
+        string ITreeNode.Name => _name;
 
         bool ITreeNode.IsLeaf => true;
 

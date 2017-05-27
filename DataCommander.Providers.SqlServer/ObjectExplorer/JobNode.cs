@@ -16,8 +16,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     /// </summary>
     internal sealed class JobNode : ITreeNode
     {
-        private readonly JobCollectionNode jobs;
-        private readonly string name;
+        private readonly JobCollectionNode _jobs;
+        private readonly string _name;
 
         public JobNode(
             JobCollectionNode jobs,
@@ -26,13 +26,13 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 #if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(jobs != null);
 #endif
-            this.jobs = jobs;
-            this.name = name;
+            _jobs = jobs;
+            _name = name;
         }
 
 #region ITreeNode Members
 
-        string ITreeNode.Name => this.name;
+        string ITreeNode.Name => _name;
 
         bool ITreeNode.IsLeaf => true;
 
@@ -47,9 +47,9 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         {
             get
             {
-                var commandText = $@"msdb..sp_help_job @job_name = {this.name.ToTSqlNVarChar()}";
+                var commandText = $@"msdb..sp_help_job @job_name = {_name.ToTSqlNVarChar()}";
                 DataSet dataSet;
-                using (var connection = new SqlConnection(this.jobs.Server.ConnectionString))
+                using (var connection = new SqlConnection(_jobs.Server.ConnectionString))
                 {
                     var transactionScope = new DbTransactionScope(connection, null);
                     dataSet = transactionScope.ExecuteDataSet(new CommandDefinition { CommandText = commandText }, CancellationToken.None);

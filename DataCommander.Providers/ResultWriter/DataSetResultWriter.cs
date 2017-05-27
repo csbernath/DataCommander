@@ -15,12 +15,12 @@ namespace DataCommander.Providers.ResultWriter
     {
         #region Private Fields
 
-        private readonly IResultWriter logResultWriter;
-        private QueryForm queryForm;
-        private readonly bool showShemaTable;
-        private IProvider provider;
-        private DataTable dataTable;
-        private int rowIndex;
+        private readonly IResultWriter _logResultWriter;
+        private QueryForm _queryForm;
+        private readonly bool _showShemaTable;
+        private IProvider _provider;
+        private DataTable _dataTable;
+        private int _rowIndex;
 
         #endregion
 
@@ -29,9 +29,9 @@ namespace DataCommander.Providers.ResultWriter
             QueryForm queryForm,
             bool showShemaTable)
         {
-            this.logResultWriter = new LogResultWriter(addInfoMessage);
-            this.queryForm = queryForm;
-            this.showShemaTable = showShemaTable;
+            _logResultWriter = new LogResultWriter(addInfoMessage);
+            _queryForm = queryForm;
+            _showShemaTable = showShemaTable;
         }
 
         #region Public Properties
@@ -44,57 +44,57 @@ namespace DataCommander.Providers.ResultWriter
 
         void IResultWriter.Begin(IProvider provider)
         {
-            this.logResultWriter.Begin(provider);
-            this.provider = provider;
+            _logResultWriter.Begin(provider);
+            _provider = provider;
         }
 
         void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command)
         {
-            this.logResultWriter.BeforeExecuteReader(command);
+            _logResultWriter.BeforeExecuteReader(command);
         }
 
         void IResultWriter.AfterExecuteReader(int fieldCount)
         {
-            this.logResultWriter.AfterExecuteReader(fieldCount);
-            this.DataSet = new DataSet();
+            _logResultWriter.AfterExecuteReader(fieldCount);
+            DataSet = new DataSet();
         }
 
         void IResultWriter.AfterCloseReader(int affectedRows)
         {
-            this.logResultWriter.AfterCloseReader(affectedRows);
+            _logResultWriter.AfterCloseReader(affectedRows);
         }
 
         void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
-            this.logResultWriter.WriteTableBegin(schemaTable);
-            this.CreateTable(schemaTable);
+            _logResultWriter.WriteTableBegin(schemaTable);
+            CreateTable(schemaTable);
         }
 
         void IResultWriter.FirstRowReadBegin()
         {
-            this.logResultWriter.FirstRowReadBegin();
+            _logResultWriter.FirstRowReadBegin();
         }
 
         void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
         {
-            this.logResultWriter.FirstRowReadEnd(dataTypeNames);
+            _logResultWriter.FirstRowReadEnd(dataTypeNames);
         }
 
         void IResultWriter.WriteRows(object[][] rows, int rowCount)
         {
             MethodProfiler.BeginMethod();
-            this.logResultWriter.WriteRows(rows, rowCount);
+            _logResultWriter.WriteRows(rows, rowCount);
 
             try
             {
-                var targetRows = this.dataTable.Rows;
+                var targetRows = _dataTable.Rows;
 
                 for (var i = 0; i < rowCount; i++)
                 {
                     targetRows.Add(rows[i]);
                 }
 
-                this.rowIndex += rowCount;
+                _rowIndex += rowCount;
             }
             finally
             {
@@ -104,9 +104,9 @@ namespace DataCommander.Providers.ResultWriter
 
         void IResultWriter.WriteTableEnd()
         {
-            this.logResultWriter.WriteTableEnd();
+            _logResultWriter.WriteTableEnd();
 
-            GarbageMonitor.Add("DataSetResultWriter", "System.Data.DataTable", this.dataTable.Rows.Count, this.dataTable);
+            GarbageMonitor.Add("DataSetResultWriter", "System.Data.DataTable", _dataTable.Rows.Count, _dataTable);
         }
 
         void IResultWriter.WriteParameters(IDataParameterCollection parameters)
@@ -116,7 +116,7 @@ namespace DataCommander.Providers.ResultWriter
 
         void IResultWriter.End()
         {
-            this.logResultWriter.End();
+            _logResultWriter.End();
 
             //int last = this.tableCount - 1;
             //if (last >= 0)
@@ -133,28 +133,28 @@ namespace DataCommander.Providers.ResultWriter
 
         private void CreateTable(DataTable schemaTable)
         {
-            var tableIndex = this.DataSet.Tables.Count;
+            var tableIndex = DataSet.Tables.Count;
             var tableName = schemaTable.TableName;
             if (tableName == "SchemaTable")
             {
                 tableName = $"Table {tableIndex}";
             }
-            if (this.showShemaTable)
+            if (_showShemaTable)
             {
                 schemaTable.TableName = $"Schema {tableIndex}";
-                this.DataSet.Tables.Add(schemaTable);
+                DataSet.Tables.Add(schemaTable);
             }
-            this.dataTable = this.DataSet.Tables.Add();
+            _dataTable = DataSet.Tables.Add();
             if (!string.IsNullOrEmpty(tableName))
             {
-                this.dataTable.TableName = tableName;
+                _dataTable.TableName = tableName;
             }
             foreach (DataRow schemaRow in schemaTable.Rows)
             {
                 var dataColumnSchema = new DbColumn(schemaRow);
                 var columnName = dataColumnSchema.ColumnName;
                 var columnSize = dataColumnSchema.ColumnSize;
-                var dataType = this.provider.GetColumnType(dataColumnSchema);
+                var dataType = _provider.GetColumnType(dataColumnSchema);
 
                 DataColumn dataColumn;
                 var n = 2;
@@ -162,7 +162,7 @@ namespace DataCommander.Providers.ResultWriter
 
                 while (true)
                 {
-                    if (this.dataTable.Columns.Contains(columnName2))
+                    if (_dataTable.Columns.Contains(columnName2))
                     {
                         columnName2 = columnName + n;
                         n++;
@@ -173,11 +173,11 @@ namespace DataCommander.Providers.ResultWriter
 
                         if (dataType != null)
                         {
-                            dataColumn = this.dataTable.Columns.Add(columnName, dataType);
+                            dataColumn = _dataTable.Columns.Add(columnName, dataType);
                         }
                         else
                         {
-                            dataColumn = this.dataTable.Columns.Add(columnName);
+                            dataColumn = _dataTable.Columns.Add(columnName);
                         }
 
                         dataColumn.ExtendedProperties.Add("ColumnName", dataColumnSchema.ColumnName);

@@ -7,7 +7,7 @@ namespace DataCommander.Providers.Field
     {
         public DateTimeField(DateTime value)
         {
-            this.Value = value;
+            Value = value;
         }
 
         public DateTime Value { get; }
@@ -48,7 +48,7 @@ namespace DataCommander.Providers.Field
 
         public override string ToString()
         {
-            return ToString(this.Value);
+            return ToString(Value);
         }
 
         #region IComparable Members
@@ -68,7 +68,7 @@ namespace DataCommander.Providers.Field
 
                     if (succeeded)
                     {
-                        result = this.Value.CompareTo(dateTime);
+                        result = Value.CompareTo(dateTime);
                     }
                     else
                     {
@@ -79,7 +79,7 @@ namespace DataCommander.Providers.Field
 
                 case TypeCode.Object:
                     var dateTimeField = (DateTimeField)obj;
-                    result = this.Value.CompareTo(dateTimeField.Value);
+                    result = Value.CompareTo(dateTimeField.Value);
                     break;
 
                 default:
@@ -115,7 +115,7 @@ namespace DataCommander.Providers.Field
 
         DateTime IConvertible.ToDateTime(IFormatProvider provider)
         {
-            return this.Value;
+            return Value;
         }
 
         decimal IConvertible.ToDecimal(IFormatProvider provider)
@@ -155,7 +155,7 @@ namespace DataCommander.Providers.Field
 
         string IConvertible.ToString(IFormatProvider provider)
         {
-            return this.ToString();
+            return ToString();
         }
 
         object IConvertible.ToType(Type conversionType, IFormatProvider provider)

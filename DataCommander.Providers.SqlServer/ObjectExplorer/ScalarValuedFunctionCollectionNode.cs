@@ -13,7 +13,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         public ScalarValuedFunctionCollectionNode(DatabaseNode database)
         {
-            this._database = database;
+            _database = database;
         }
 
         public string Name => "Scalar-valued Functions";

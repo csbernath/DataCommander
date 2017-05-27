@@ -9,11 +9,11 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
     internal sealed class UserDefinedTableTypeCollectionNode : ITreeNode
     {
-        private readonly DatabaseNode database;
+        private readonly DatabaseNode _database;
 
         public UserDefinedTableTypeCollectionNode(DatabaseNode database)
         {
-            this.database = database;
+            _database = database;
         }
 
         string ITreeNode.Name => "User-Defined Table Types";
@@ -29,10 +29,10 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 from [{0}].sys.schemas s (nolock)
 join [{0}].sys.table_types t (nolock)
     on s.schema_id = t.schema_id
-order by 1,2", this.database.Name);
+order by 1,2", _database.Name);
 
             var tableTypeNodes = new List<UserDefinedTableTypeNode>();
-            var connectionString = this.database.Databases.Server.ConnectionString;
+            var connectionString = _database.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -44,7 +44,7 @@ order by 1,2", this.database.Name);
                         var schema = dataRecord.GetString(0);
                         var name = dataRecord.GetString(1);
                         var id = dataRecord.GetInt32(2);
-                        var tableTypeNode = new UserDefinedTableTypeNode(this.database, id, schema, name);
+                        var tableTypeNode = new UserDefinedTableTypeNode(_database, id, schema, name);
                         tableTypeNodes.Add(tableTypeNode);
                     });
                 }

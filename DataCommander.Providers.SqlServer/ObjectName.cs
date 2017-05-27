@@ -1,19 +1,19 @@
+using System.Data.SqlClient;
+using System.Text;
+
 namespace DataCommander.Providers.SqlServer
 {
-    using System.Data.SqlClient;
-    using System.Text;
-
     internal sealed class ObjectName : IObjectName
     {
-        private SqlObject sqlObject;
-        private readonly string schemaName;
-        private readonly string objectName;
+        private SqlObject _sqlObject;
+        private readonly string _schemaName;
+        private readonly string _objectName;
 
         public ObjectName(SqlObject sqlObject, string schemaName, string objectName)
         {
-            this.sqlObject = sqlObject;
-            this.schemaName = schemaName;
-            this.objectName = objectName;
+            _sqlObject = sqlObject;
+            _schemaName = schemaName;
+            _objectName = objectName;
         }
 
         string IObjectName.UnquotedName
@@ -21,13 +21,13 @@ namespace DataCommander.Providers.SqlServer
             get
             {
                 var sb = new StringBuilder();
-                if (this.schemaName != null)
+                if (_schemaName != null)
                 {
-                    sb.Append(this.schemaName);
+                    sb.Append(_schemaName);
                     sb.Append('.');
                 }
 
-                sb.Append(this.objectName);
+                sb.Append(_objectName);
 
                 return sb.ToString();
             }
@@ -40,9 +40,9 @@ namespace DataCommander.Providers.SqlServer
                 var sb = new StringBuilder();
                 var sqlCommandBuilder = new SqlCommandBuilder();
 
-                if (this.schemaName != null)
+                if (_schemaName != null)
                 {
-                    sb.Append(QuoteIdentifier(this.schemaName));
+                    sb.Append(QuoteIdentifier(_schemaName));
                     sb.Append('.');
                 }
                 //else if (this.sqlObject.ParentAlias != null)
@@ -51,7 +51,7 @@ namespace DataCommander.Providers.SqlServer
                 //    sb.Append('.');
                 //}
 
-                sb.Append(QuoteIdentifier(this.objectName));
+                sb.Append(QuoteIdentifier(_objectName));
 
                 return sb.ToString();
             }
@@ -62,13 +62,9 @@ namespace DataCommander.Providers.SqlServer
             string quotedIdentifier;
 
             if (unquotedIdentifier.IndexOfAny(new[] {'.', '-'}) >= 0)
-            {
                 quotedIdentifier = new SqlCommandBuilder().QuoteIdentifier(unquotedIdentifier);
-            }
             else
-            {
                 quotedIdentifier = unquotedIdentifier;
-            }
 
             return quotedIdentifier;
         }

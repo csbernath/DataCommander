@@ -17,7 +17,7 @@ namespace DataCommander.Providers.SQLite
     {
         #region IProvider Members
 
-        string IProvider.Name => ProviderName.SQLite;
+        string IProvider.Name => ProviderName.SqLite;
 
         ConnectionBase IProvider.CreateConnection(string connectionString)
         {

@@ -15,8 +15,8 @@ namespace DataCommander.Providers
     {
         #region Private Fields
 
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private string sectionName;
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+        private string _sectionName;
 
         #endregion
 
@@ -24,7 +24,7 @@ namespace DataCommander.Providers
         {
             var fileName = Assembly.GetEntryAssembly().Location;
             var versionInfo = FileVersionInfo.GetVersionInfo(fileName);
-            this.Name = versionInfo.ProductName;
+            Name = versionInfo.ProductName;
 
             Settings.Section.SelectNode(null, true);
 
@@ -33,7 +33,7 @@ namespace DataCommander.Providers
 
         private static void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
         {
-            log.Write(LogLevel.Trace, "Reason: {0}", e.Reason);
+            Log.Write(LogLevel.Trace, "Reason: {0}", e.Reason);
             var mainForm = Instance.MainForm;
             mainForm.SaveAll();
         }
@@ -54,7 +54,7 @@ namespace DataCommander.Providers
         {
             get
             {
-                var folder = this.ApplicationData.CreateNode("DataCommander/Connections");
+                var folder = ApplicationData.CreateNode("DataCommander/Connections");
                 return folder;
             }
         }
@@ -65,19 +65,19 @@ namespace DataCommander.Providers
 
         public void Run()
         {
-            this.MainForm = new MainForm();
+            MainForm = new MainForm();
 
             Task.Delay(1000).ContinueWith(task =>
             {
-                log.Write(LogLevel.Trace, "{0}\r\n{1}", AppDomainMonitor.EnvironmentInfo, AppDomainMonitor.CurrentDomainState);
+                Log.Write(LogLevel.Trace, "{0}\r\n{1}", AppDomainMonitor.EnvironmentInfo, AppDomainMonitor.CurrentDomainState);
             });
 
-            Application.Run(this.MainForm);
+            Application.Run(MainForm);
         }
 
         public void SaveApplicationData()
         {
-            var folder = this.ConnectionsConfigurationNode;
+            var folder = ConnectionsConfigurationNode;
 
             foreach (var subFolder in folder.ChildNodes)
             {
@@ -101,21 +101,21 @@ namespace DataCommander.Providers
                 connectionProperties.Save(subFolder);
             }
 
-            var tempFileName = this.FileName + ".temp";
-            this.ApplicationData.Save(tempFileName, this.sectionName);
-            var succeeded = NativeMethods.MoveFileEx(tempFileName, this.FileName,
+            var tempFileName = FileName + ".temp";
+            ApplicationData.Save(tempFileName, _sectionName);
+            var succeeded = NativeMethods.MoveFileEx(tempFileName, FileName,
                 NativeMethods.MoveFileExFlags.ReplaceExisiting);
-            log.Write(LogLevel.Trace, "MoveFileEx succeeded: {0}", succeeded);
+            Log.Write(LogLevel.Trace, "MoveFileEx succeeded: {0}", succeeded);
         }
 
         public void LoadApplicationData(string fileName, string sectionName)
         {
-            this.ApplicationData.Load(fileName, sectionName);
+            ApplicationData.Load(fileName, sectionName);
 
             //var writer = new ConfigurationJsonWriter();
             //writer.Write(this.ApplicationData.RootNode);
 
-            var folder = this.ConnectionsConfigurationNode;
+            var folder = ConnectionsConfigurationNode;
 
             foreach (var subFolder in folder.ChildNodes)
             {
@@ -124,8 +124,8 @@ namespace DataCommander.Providers
                 connectionProperties.LoadProtectedPassword(subFolder);
             }
 
-            this.FileName = fileName;
-            this.sectionName = sectionName;
+            FileName = fileName;
+            _sectionName = sectionName;
         }
 
         #endregion

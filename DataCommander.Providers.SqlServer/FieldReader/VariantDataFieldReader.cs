@@ -11,8 +11,8 @@ namespace DataCommander.Providers.SqlServer.FieldReader
             IDataRecord dataRecord,
             int columnOrdinal)
         {
-            this.sqlDataReader = (SqlDataReader)dataRecord;
-            this.columnOrdinal = columnOrdinal;
+            _sqlDataReader = (SqlDataReader)dataRecord;
+            _columnOrdinal = columnOrdinal;
         }
 
         object IDataFieldReader.Value
@@ -21,13 +21,13 @@ namespace DataCommander.Providers.SqlServer.FieldReader
             {
                 object value;
 
-                if (this.sqlDataReader.IsDBNull(this.columnOrdinal))
+                if (_sqlDataReader.IsDBNull(_columnOrdinal))
                 {
                     value = DBNull.Value;
                 }
                 else
                 {
-                    value = this.sqlDataReader.GetValue(this.columnOrdinal);
+                    value = _sqlDataReader.GetValue(_columnOrdinal);
                     var type = value.GetType();
 
                     if (type.IsArray)
@@ -61,7 +61,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
             }
         }
 
-        readonly SqlDataReader sqlDataReader;
-        readonly int columnOrdinal;
+        readonly SqlDataReader _sqlDataReader;
+        readonly int _columnOrdinal;
     }
 }

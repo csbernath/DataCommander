@@ -14,8 +14,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 #if CONTRACTS_FULL
             Contract.Requires( linkedServers != null );
 #endif
-            this.LinkedServers = linkedServers;
-            this.Name = name;
+            LinkedServers = linkedServers;
+            Name = name;
         }
 
         public LinkedServerCollectionNode LinkedServers { get; }
@@ -24,7 +24,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
 #region ITreeNode Members
 
-        string ITreeNode.Name => this.Name;
+        string ITreeNode.Name => Name;
 
         bool ITreeNode.IsLeaf => false;
 

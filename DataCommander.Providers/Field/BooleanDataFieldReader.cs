@@ -5,13 +5,13 @@ namespace DataCommander.Providers.Field
 
     public sealed class BooleanDataFieldReader : IDataFieldReader
     {
-        private readonly IDataRecord dataRecord;
-        private readonly int columnOrdinal;
+        private readonly IDataRecord _dataRecord;
+        private readonly int _columnOrdinal;
 
         public BooleanDataFieldReader(IDataRecord dataRecord, int columnOrdinal)
         {
-            this.dataRecord = dataRecord;
-            this.columnOrdinal = columnOrdinal;
+            _dataRecord = dataRecord;
+            _columnOrdinal = columnOrdinal;
         }
 
         object IDataFieldReader.Value
@@ -20,13 +20,13 @@ namespace DataCommander.Providers.Field
             {
                 object value;
 
-                if (this.dataRecord.IsDBNull(this.columnOrdinal))
+                if (_dataRecord.IsDBNull(_columnOrdinal))
                 {
                     value = DBNull.Value;
                 }
                 else
                 {
-                    var booleanValue = this.dataRecord.GetBoolean(this.columnOrdinal);
+                    var booleanValue = _dataRecord.GetBoolean(_columnOrdinal);
                     value = new BooleanField(booleanValue);
                 }
 

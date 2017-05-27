@@ -6,18 +6,18 @@
 
     internal sealed class SequenceNode : ITreeNode
 	{
-		private SchemaNode schemaNode;
-		private readonly string name;
+		private SchemaNode _schemaNode;
+		private readonly string _name;
 
 		public SequenceNode( SchemaNode schemaNode, string name )
 		{
-			this.schemaNode = schemaNode;
-			this.name = name;
+			_schemaNode = schemaNode;
+			_name = name;
 		}
 
 		#region ITreeNode Members
 
-		string ITreeNode.Name => this.name;
+		string ITreeNode.Name => _name;
 
         bool ITreeNode.IsLeaf => true;
 

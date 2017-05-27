@@ -13,7 +13,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
     {
         public PackageCollectionNode(SchemaNode schema)
         {
-            this.schema = schema;
+            _schema = schema;
         }
 
         public string Name => "Packages";
@@ -23,15 +23,15 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             var folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
-            var key = schema.SchemasNode.Connection.DataSource + "." + schema.Name;
+            var key = _schema.SchemasNode.Connection.DataSource + "." + _schema.Name;
             string[] packages;
             var contains = folder.Attributes.TryGetAttributeValue(key, out packages);
 
             if (!contains || refresh)
             {
                 var commandText = "select object_name from all_objects where owner = '{0}' and object_type = 'PACKAGE' order by object_name";
-                commandText = string.Format(commandText, schema.Name);
-                var transactionScope = new DbTransactionScope(this.schema.SchemasNode.Connection, null);
+                commandText = string.Format(commandText, _schema.Name);
+                var transactionScope = new DbTransactionScope(_schema.SchemasNode.Connection, null);
                 var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
                 var count = dataTable.Rows.Count;
                 packages = new string[count];
@@ -47,7 +47,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
             var treeNodes = new ITreeNode[packages.Length];
 
             for (var i = 0; i < packages.Length; i++)
-                treeNodes[i] = new PackageNode(schema, packages[i]);
+                treeNodes[i] = new PackageNode(_schema, packages[i]);
 
             return treeNodes;
         }
@@ -56,7 +56,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
         public string Query => null;
 
-        public SchemaNode Schema => schema;
+        public SchemaNode Schema => _schema;
 
         public ContextMenuStrip ContextMenu => null;
 
@@ -64,6 +64,6 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         {
         }
 
-        readonly SchemaNode schema;
+        readonly SchemaNode _schema;
     }
 }

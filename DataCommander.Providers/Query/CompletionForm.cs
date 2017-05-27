@@ -12,29 +12,29 @@ namespace DataCommander.Providers.Query
         /// <summary>
         /// Required designer variable.
         /// </summary>kkjj
-        private readonly Container components = null;
+        private readonly Container _components = null;
 
-        private readonly QueryForm queryForm;
-        private EventHandler<ItemSelectedEventArgs> itemSelectedEvent;
+        private readonly QueryForm _queryForm;
+        private EventHandler<ItemSelectedEventArgs> _itemSelectedEvent;
 
         public CompletionForm(QueryForm queryForm)
         {
             //
             // Required for Windows Form Designer support
             //
-            this.InitializeComponent();
+            InitializeComponent();
 
             //
             // TODO: Add any constructor code after InitializeComponent call
             //
-            this.queryForm = queryForm;
+            _queryForm = queryForm;
         }
 
         public event EventHandler<ItemSelectedEventArgs> ItemSelected
         {
-            add => this.itemSelectedEvent += value;
+            add => _itemSelectedEvent += value;
 
-            remove => this.itemSelectedEvent -= value;
+            remove => _itemSelectedEvent -= value;
         }
 
         public void Initialize(QueryTextBox textBox, GetCompletionResponse response, ColorTheme colorTheme)
@@ -43,19 +43,19 @@ namespace DataCommander.Providers.Query
             listBox.Initialize(response);
             listBox.Dock = DockStyle.Fill;
 
-            this.Controls.Add(listBox);
+            Controls.Add(listBox);
 
             var charIndex = textBox.RichTextBox.SelectionStart;
             var pos = textBox.RichTextBox.GetPositionFromCharIndex(charIndex);
             var location = textBox.RichTextBox.PointToScreen(pos);
             location.Y += 20;
-            this.Location = location;
+            Location = location;
         }
 
         public void SelectItem(int startIndex, int length, IObjectName objectName)
         {
-            if (this.itemSelectedEvent != null)
-                this.itemSelectedEvent(this, new ItemSelectedEventArgs(startIndex, length, objectName));
+            if (_itemSelectedEvent != null)
+                _itemSelectedEvent(this, new ItemSelectedEventArgs(startIndex, length, objectName));
         }
 
         /// <summary>
@@ -64,8 +64,8 @@ namespace DataCommander.Providers.Query
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-                if (this.components != null)
-                    this.components.Dispose();
+                if (_components != null)
+                    _components.Dispose();
 
             base.Dispose(disposing);
         }

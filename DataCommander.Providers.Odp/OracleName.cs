@@ -3,8 +3,8 @@
 
     internal sealed class OracleName
     {
-        private readonly string owner;
-        private readonly string name;
+        private readonly string _owner;
+        private readonly string _name;
 
         public OracleName( string userId, string name )
         {
@@ -14,24 +14,24 @@
 
                 if (items.Length > 1)
                 {
-                    this.owner = items[ 0 ];
-                    this.name = items[ 1 ];
+                    _owner = items[ 0 ];
+                    _name = items[ 1 ];
                 }
                 else
                 {
-                    owner = userId;
-                    this.name = name;
+                    _owner = userId;
+                    _name = name;
                 }
             }
             else
             {
-                owner = userId;
-                this.name = name;
+                _owner = userId;
+                _name = name;
             }
         }
 
-        public string Owner => this.owner;
+        public string Owner => _owner;
 
-        public string Name => this.name;
+        public string Name => _name;
     }
 }

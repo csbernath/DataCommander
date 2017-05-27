@@ -18,7 +18,7 @@
 
         protected override void SetSize(int size)
         {
-            this.parameter.Size = size;
+            parameter.Size = size;
         }
     }
 }

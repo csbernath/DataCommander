@@ -7,8 +7,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         public UserNode(DatabaseNode database,string name)
         {
-            this.database = database;
-            this.Name = name;
+            _database = database;
+            Name = name;
         }
 
         public string Name { get; }
@@ -33,7 +33,7 @@ select u.name from {0}..sysmembers m
 join {0}..sysusers u
 on m.groupuid = u.uid
 where memberuid = @uid
-group by u.name", this.database.Name, this.Name);
+group by u.name", _database.Name, Name);
 
                 return query;
             }
@@ -41,6 +41,6 @@ group by u.name", this.database.Name, this.Name);
 
         public ContextMenuStrip ContextMenu => null;
 
-        readonly DatabaseNode database;
+        readonly DatabaseNode _database;
     }
 }

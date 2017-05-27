@@ -7,14 +7,14 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
     internal sealed class ServerObjectCollectionNode : ITreeNode
     {
-        private readonly ServerNode server;
+        private readonly ServerNode _server;
 
         public ServerObjectCollectionNode(ServerNode serverNode)
         {
 #if CONTRACTS_FULL
             Contract.Requires( serverNode != null );
 #endif
-            this.server = serverNode;
+            _server = serverNode;
         }
 
 #region ITreeNode Members
@@ -25,7 +25,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
         {
-            return new LinkedServerCollectionNode( this.server ).ItemToArray(); 
+            return new LinkedServerCollectionNode( _server ).ItemToArray(); 
         }
 
         bool ITreeNode.Sortable => false;

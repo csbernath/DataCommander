@@ -5,14 +5,14 @@
 
     internal sealed class DatabaseSecurityNode : ITreeNode
     {
-        private readonly DatabaseNode databaseNode;
+        private readonly DatabaseNode _databaseNode;
 
         public DatabaseSecurityNode(DatabaseNode databaseNode)
         {
 #if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(databaseNode != null);
 #endif
-            this.databaseNode = databaseNode;
+            _databaseNode = databaseNode;
         }
 
 #region ITreeNode Members
@@ -25,9 +25,9 @@
         {
             return new ITreeNode[]
             {
-                new UserCollectionNode(this.databaseNode),
-                new RoleCollectionNode(this.databaseNode),
-                new SchemaCollectionNode(this.databaseNode)
+                new UserCollectionNode(_databaseNode),
+                new RoleCollectionNode(_databaseNode),
+                new SchemaCollectionNode(_databaseNode)
             };
         }
 

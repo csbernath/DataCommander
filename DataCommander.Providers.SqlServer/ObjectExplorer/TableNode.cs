@@ -22,31 +22,31 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
     internal sealed class TableNode : ITreeNode
     {
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private readonly string owner;
-        private readonly string name;
-        private readonly int id;
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly string _owner;
+        private readonly string _name;
+        private readonly int _id;
 
         public TableNode(DatabaseNode databaseNode, string owner, string name, int id)
         {
-            this.DatabaseNode = databaseNode;
-            this.owner = owner;
-            this.name = name;
-            this.id = id;
+            DatabaseNode = databaseNode;
+            _owner = owner;
+            _name = name;
+            _id = id;
         }
 
         public DatabaseNode DatabaseNode { get; }
-        public int Id => this.id;
-        public string Name => $"{this.owner}.{this.name}";
+        public int Id => _id;
+        public string Name => $"{_owner}.{_name}";
         public bool IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             return new ITreeNode[]
             {
-                new ColumnCollectionNode(DatabaseNode, id),
-                new TriggerCollectionNode(DatabaseNode, id),
-                new IndexCollectionNode(DatabaseNode, id)
+                new ColumnCollectionNode(DatabaseNode, _id),
+                new TriggerCollectionNode(DatabaseNode, _id),
+                new IndexCollectionNode(DatabaseNode, _id)
             };
         }
 
@@ -115,8 +115,8 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
         {
             get
             {
-                var name = new DatabaseObjectMultipartName(null, this.DatabaseNode.Name, this.owner, this.name);
-                var connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
+                var name = new DatabaseObjectMultipartName(null, DatabaseNode.Name, _owner, _name);
+                var connectionString = DatabaseNode.Databases.Server.ConnectionString;
                 string text;
                 using (var connection = new SqlConnection(connectionString))
                 {
@@ -131,7 +131,7 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
         {
             var mainForm = DataCommanderApplication.Instance.MainForm;
             var queryForm = (QueryForm)mainForm.ActiveMdiChild;
-            var name = this.DatabaseNode.Name + "." + this.owner + "." + this.name;
+            var name = DatabaseNode.Name + "." + _owner + "." + _name;
             var query = "select * from " + name;
             queryForm.OpenTable(query);
         }
@@ -144,10 +144,10 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
                     @"use [{0}]
 exec sp_MShelpcolumns N'{1}.[{2}]', @orderby = 'id'
 exec sp_MStablekeys N'{1}.[{2}]', null, 14
-exec sp_MStablechecks N'{1}.[{2}]'", this.DatabaseNode.Name, this.owner, this.name);
+exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
 
-                log.Write(LogLevel.Trace, commandText);
-                var connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
+                Log.Write(LogLevel.Trace, commandText);
+                var connectionString = DatabaseNode.Databases.Server.ConnectionString;
                 DataSet dataSet;
                 using (var connection = new SqlConnection(connectionString))
                 {
@@ -299,7 +299,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.DatabaseNode.Name, this.owner, this.na
                 queryForm.SetStatusbarPanelText("Copying table script to clipboard...", SystemColors.ControlText);
                 var stopwatch = Stopwatch.StartNew();
 
-                var connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
+                var connectionString = DatabaseNode.Databases.Server.ConnectionString;
                 var csb = new SqlConnectionStringBuilder(connectionString);
 
                 var connectionInfo = new SqlConnectionInfo();
@@ -322,8 +322,8 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.DatabaseNode.Name, this.owner, this.na
                 var connection = new ServerConnection(connectionInfo);
                 connection.Connect();
                 var server = new Server(connection);
-                var database = server.Databases[this.DatabaseNode.Name];
-                var table = database.Tables[this.name, this.owner];
+                var database = server.Databases[DatabaseNode.Name];
+                var table = database.Tables[_name, _owner];
 
                 var options = new ScriptingOptions();
                 options.Indexes = true;
@@ -355,15 +355,15 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.DatabaseNode.Name, this.owner, this.na
 
         private void Indexes_Click(object sender, EventArgs e)
         {
-            var cmdText = $"use [{this.DatabaseNode.Name}] exec sp_helpindex [{this.owner}.{this.name}]";
-            var connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
+            var cmdText = $"use [{DatabaseNode.Name}] exec sp_helpindex [{_owner}.{_name}]";
+            var connectionString = DatabaseNode.Databases.Server.ConnectionString;
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
                 var transactionScope = new DbTransactionScope(connection, null);
                 dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = cmdText }, CancellationToken.None);
             }
-            dataTable.TableName = $"{this.name} indexes";
+            dataTable.TableName = $"{_name} indexes";
             var mainForm = DataCommanderApplication.Instance.MainForm;
             var queryForm = (QueryForm)mainForm.ActiveMdiChild;
             var dataSet = new DataSet();
@@ -373,8 +373,8 @@ exec sp_MStablechecks N'{1}.[{2}]'", this.DatabaseNode.Name, this.owner, this.na
 
         private void SelectScript_Click(object sender, EventArgs e)
         {
-            var name = new DatabaseObjectMultipartName(null, this.DatabaseNode.Name, this.owner, this.name);
-            var connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
+            var name = new DatabaseObjectMultipartName(null, DatabaseNode.Name, _owner, _name);
+            var connectionString = DatabaseNode.Databases.Server.ConnectionString;
             string selectStatement;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -401,9 +401,9 @@ join [{0}].sys.types t (nolock)
 where
 	s.name = '{1}'
 	and o.name = '{2}'
-order by c.column_id", this.DatabaseNode.Name, this.owner, this.name);
-            log.Write(LogLevel.Trace, commandText);
-            var connectionString = this.DatabaseNode.Databases.Server.ConnectionString;
+order by c.column_id", DatabaseNode.Name, _owner, _name);
+            Log.Write(LogLevel.Trace, commandText);
+            var connectionString = DatabaseNode.Databases.Server.ConnectionString;
             DataTable table;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -463,7 +463,7 @@ order by c.column_id", this.DatabaseNode.Name, this.owner, this.name);
                 sb.AppendFormat("    {0}@{1} {2}", prefix, variableName, typeName);
             }
 
-            sb.AppendFormat("\r\n\r\ninsert into {0}.{1}\r\n(\r\n    ", this.owner, this.name);
+            sb.AppendFormat("\r\n\r\ninsert into {0}.{1}\r\n(\r\n    ", _owner, _name);
             first = true;
 
             foreach (DataRow row in table.Rows)
@@ -508,22 +508,22 @@ order by c.column_id", this.DatabaseNode.Name, this.owner, this.name);
             get
             {
                 var menu = new ContextMenuStrip();
-                var item = new ToolStripMenuItem("Open", null, this.Open_Click);
+                var item = new ToolStripMenuItem("Open", null, Open_Click);
                 menu.Items.Add(item);
 
-                item = new ToolStripMenuItem("Script Table", null, this.ScriptTable_Click);
+                item = new ToolStripMenuItem("Script Table", null, ScriptTable_Click);
                 menu.Items.Add(item);
 
-                item = new ToolStripMenuItem("Schema", null, this.Schema_Click);
+                item = new ToolStripMenuItem("Schema", null, Schema_Click);
                 menu.Items.Add(item);
 
-                item = new ToolStripMenuItem("Indexes", null, this.Indexes_Click);
+                item = new ToolStripMenuItem("Indexes", null, Indexes_Click);
                 menu.Items.Add(item);
 
-                item = new ToolStripMenuItem("Select script", null, this.SelectScript_Click);
+                item = new ToolStripMenuItem("Select script", null, SelectScript_Click);
                 menu.Items.Add(item);
 
-                item = new ToolStripMenuItem("Insert script", null, this.InsertScript_Click);
+                item = new ToolStripMenuItem("Insert script", null, InsertScript_Click);
                 menu.Items.Add(item);
 
                 return menu;

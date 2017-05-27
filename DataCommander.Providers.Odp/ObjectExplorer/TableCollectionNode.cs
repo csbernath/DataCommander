@@ -14,7 +14,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 	{
 		public TableCollectionNode( SchemaNode schema )
 		{
-			this.schema = schema;
+			_schema = schema;
 		}
 
 		public string Name => "Tables";
@@ -24,16 +24,16 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         public IEnumerable<ITreeNode> GetChildren( bool refresh )
 		{
 			var folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
-			var key = schema.SchemasNode.Connection.DataSource + "." + schema.Name;
+			var key = _schema.SchemasNode.Connection.DataSource + "." + _schema.Name;
 			string[] tables;
 			var contains = folder.Attributes.TryGetAttributeValue( key, out tables );
 
 			if (!contains || refresh)
 			{
 				var commandText = "select table_name from all_tables where owner = '{0}' order by table_name";
-				commandText = string.Format( commandText, schema.Name );
+				commandText = string.Format( commandText, _schema.Name );
 
-				var command = new OracleCommand( commandText, schema.SchemasNode.Connection );
+				var command = new OracleCommand( commandText, _schema.SchemasNode.Connection );
 				command.FetchSize = 256 * 1024;
 				var dataTable = command.ExecuteDataTable(CancellationToken.None);
 				var count = dataTable.Rows.Count;
@@ -52,7 +52,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
 			for (var i = 0; i < tables.Length; i++)
 			{
-				treeNodes[ i ] = new TableNode( this.schema, tables[ i ], false );
+				treeNodes[ i ] = new TableNode( _schema, tables[ i ], false );
 			}
 
 			return treeNodes;
@@ -68,6 +68,6 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 		{
 		}
 
-        readonly SchemaNode schema;
+        readonly SchemaNode _schema;
 	}
 }

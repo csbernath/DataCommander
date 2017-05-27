@@ -13,42 +13,42 @@ namespace DataCommander.Providers.ResultWriter
 
     internal sealed class TextResultWriter : IResultWriter
     {
-        private readonly IResultWriter logResultWriter;
-        private readonly TextWriter textWriter;
-        private readonly QueryForm queryForm;
-        private int[] columnSize;
-        private int rowIndex;
-        private IProvider provider;
+        private readonly IResultWriter _logResultWriter;
+        private readonly TextWriter _textWriter;
+        private readonly QueryForm _queryForm;
+        private int[] _columnSize;
+        private int _rowIndex;
+        private IProvider _provider;
 
         public TextResultWriter(
             Action<InfoMessage> addInfoMessage,
             TextWriter textWriter,
             QueryForm queryForm)
         {
-            this.logResultWriter = new LogResultWriter(addInfoMessage);
-            this.textWriter = textWriter;
-            this.queryForm = queryForm;
+            _logResultWriter = new LogResultWriter(addInfoMessage);
+            _textWriter = textWriter;
+            _queryForm = queryForm;
         }
 
         void IResultWriter.Begin(IProvider provider)
         {
-            this.logResultWriter.Begin(provider);
-            this.provider = provider;
+            _logResultWriter.Begin(provider);
+            _provider = provider;
         }
 
         void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command)
         {
-            this.logResultWriter.BeforeExecuteReader(command);
+            _logResultWriter.BeforeExecuteReader(command);
         }
 
         void IResultWriter.AfterExecuteReader(int fieldCount)
         {
-            this.logResultWriter.AfterExecuteReader(fieldCount);
+            _logResultWriter.AfterExecuteReader(fieldCount);
         }
 
         void IResultWriter.AfterCloseReader(int affectedRows)
         {
-            this.logResultWriter.AfterCloseReader(affectedRows);
+            _logResultWriter.AfterCloseReader(affectedRows);
         }
 
         private void Write(
@@ -75,9 +75,9 @@ namespace DataCommander.Providers.ResultWriter
 
         public void WriteTableBegin(DataTable schemaTable)
         {
-            this.logResultWriter.WriteTableBegin(schemaTable);
+            _logResultWriter.WriteTableBegin(schemaTable);
 
-            this.rowIndex = 0;
+            _rowIndex = 0;
 
             if (schemaTable != null)
             {
@@ -86,7 +86,7 @@ namespace DataCommander.Providers.ResultWriter
                 var dataTypeColumn = schemaTable.Columns["DataType"];
 
                 var fieldCount = schemaTable.Rows.Count;
-                this.columnSize = new int[fieldCount];
+                _columnSize = new int[fieldCount];
 
                 var sb = new StringBuilder();
 
@@ -175,12 +175,12 @@ namespace DataCommander.Providers.ResultWriter
                             break;
                     }
 
-                    this.columnSize[i] = Math.Max(numOfChars, columnName.Length);
-                    this.Write(sb, columnName, this.columnSize[i]);
+                    _columnSize[i] = Math.Max(numOfChars, columnName.Length);
+                    Write(sb, columnName, _columnSize[i]);
                     sb.Append(' ');
                 }
 
-                this.textWriter.WriteLine(sb.ToString());
+                _textWriter.WriteLine(sb.ToString());
 
                 if (fieldCount > 0)
                 {
@@ -189,13 +189,13 @@ namespace DataCommander.Providers.ResultWriter
 
                     for (var i = 0; i < last; i++)
                     {
-                        sb.Append('-', this.columnSize[i]);
+                        sb.Append('-', _columnSize[i]);
                         sb.Append(' ');
                     }
 
-                    sb.Append('-', this.columnSize[last]);
+                    sb.Append('-', _columnSize[last]);
 
-                    this.textWriter.WriteLine(sb.ToString());
+                    _textWriter.WriteLine(sb.ToString());
                 }
             }
         }
@@ -267,18 +267,18 @@ namespace DataCommander.Providers.ResultWriter
 
         public void FirstRowReadBegin()
         {
-            this.logResultWriter.FirstRowReadBegin();
+            _logResultWriter.FirstRowReadBegin();
         }
 
         public void FirstRowReadEnd(string[] dataTypeNames)
         {
-            this.logResultWriter.FirstRowReadEnd(dataTypeNames);
+            _logResultWriter.FirstRowReadEnd(dataTypeNames);
         }
 
         public void WriteRows(object[][] rows, int rowCount)
         {
             MethodProfiler.BeginMethod();
-            this.logResultWriter.WriteRows(rows, rowCount);
+            _logResultWriter.WriteRows(rows, rowCount);
 
             try
             {
@@ -291,17 +291,17 @@ namespace DataCommander.Providers.ResultWriter
 
                     for (var j = 0; j < last; j++)
                     {
-                        this.Write(sb, StringValue(row[j], this.columnSize[j]), this.columnSize[j]);
+                        Write(sb, StringValue(row[j], _columnSize[j]), _columnSize[j]);
                         sb.Append(' ');
                     }
 
-                    sb.Append(StringValue(row[last], this.columnSize[last]));
+                    sb.Append(StringValue(row[last], _columnSize[last]));
                     sb.Append(Environment.NewLine);
                 }
 
-                this.rowIndex += rowCount;
+                _rowIndex += rowCount;
 
-                this.textWriter.Write(sb.ToString());
+                _textWriter.Write(sb.ToString());
             }
             finally
             {
@@ -311,7 +311,7 @@ namespace DataCommander.Providers.ResultWriter
 
         public void WriteTableEnd()
         {
-            this.logResultWriter.WriteTableEnd();
+            _logResultWriter.WriteTableEnd();
         }
 
         public static void WriteParameters(
@@ -445,7 +445,7 @@ namespace DataCommander.Providers.ResultWriter
         public void WriteParameters(IDataParameterCollection parameters)
         {
 
-            WriteParameters(parameters, this.textWriter, this.queryForm);
+            WriteParameters(parameters, _textWriter, _queryForm);
         }
 
         public void WriteEnd()
@@ -454,7 +454,7 @@ namespace DataCommander.Providers.ResultWriter
 
         void IResultWriter.End()
         {
-            this.logResultWriter.End();
+            _logResultWriter.End();
         }
     }
 }

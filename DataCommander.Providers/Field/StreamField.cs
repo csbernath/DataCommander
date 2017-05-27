@@ -6,7 +6,7 @@
 	{
         public StreamField( Stream stream )
 		{
-			this.Stream = stream;
+			Stream = stream;
 		}
 
 		public Stream Stream { get; }

@@ -1,22 +1,22 @@
+using System;
+
 namespace DataCommander.Providers.Query
 {
-    using System;
-
     internal sealed class ListBoxItem<T>
     {
-        private readonly Func<T, string> toString;
+        private readonly Func<T, string> _toString;
 
         public ListBoxItem(T item, Func<T, string> toString)
         {
-            this.Item = item;
-            this.toString = toString;
+            Item = item;
+            _toString = toString;
         }
 
         public T Item { get; }
 
         public override string ToString()
         {
-            return this.toString(this.Item);
+            return _toString(Item);
         }
     }
 }

@@ -12,29 +12,29 @@ namespace DataCommander.Providers.Connection
 
     internal partial class ConnectionStringBuilderForm : Form
     {
-        private readonly ConnectionProperties tempConnectionProperties = new ConnectionProperties();
-        private ConnectionProperties connectionProperties;
-        private readonly IList<string> providers;
-        private DbProviderFactory dbProviderFactory;
-        private IDbConnectionStringBuilder dbConnectionStringBuilder;
-        private DataTable dataSources;
-        private List<string> initialCatalogs;
-        private List<OleDbProviderInfo> oleDbProviders;
+        private readonly ConnectionProperties _tempConnectionProperties = new ConnectionProperties();
+        private ConnectionProperties _connectionProperties;
+        private readonly IList<string> _providers;
+        private DbProviderFactory _dbProviderFactory;
+        private IDbConnectionStringBuilder _dbConnectionStringBuilder;
+        private DataTable _dataSources;
+        private List<string> _initialCatalogs;
+        private List<OleDbProviderInfo> _oleDbProviders;
 
         public ConnectionStringBuilderForm()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.oleDbProviderLabel.Visible = false;
-            this.oleDbProvidersComboBox.Visible = false;
+            oleDbProviderLabel.Visible = false;
+            oleDbProvidersComboBox.Visible = false;
 
             var list = ProviderFactory.Providers;
             list.Sort();
-            this.providers = list;
+            _providers = list;
 
-            foreach (var provider in this.providers)
+            foreach (var provider in _providers)
             {
-                this.providersComboBox.Items.Add(provider);
+                providersComboBox.Items.Add(provider);
             }
         }
 
@@ -51,17 +51,17 @@ namespace DataCommander.Providers.Connection
 
         public ConnectionProperties ConnectionProperties
         {
-            get => this.connectionProperties;
+            get => _connectionProperties;
 
             set
             {
-                this.connectionProperties = value;
-                this.connectionNameTextBox.Text = this.connectionProperties.ConnectionName;
-                var providerName = this.connectionProperties.ProviderName;
-                this.providersComboBox.Text = providerName;
+                _connectionProperties = value;
+                connectionNameTextBox.Text = _connectionProperties.ConnectionName;
+                var providerName = _connectionProperties.ProviderName;
+                providersComboBox.Text = providerName;
                 var provider = ProviderFactory.CreateProvider(providerName);
-                this.dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
-                dbConnectionStringBuilder.ConnectionString = this.connectionProperties.ConnectionString;
+                _dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
+                _dbConnectionStringBuilder.ConnectionString = _connectionProperties.ConnectionString;
 
                 //if (providerName == ProviderName.OleDb)
                 //{
@@ -72,28 +72,28 @@ namespace DataCommander.Providers.Connection
                 //    this.oleDbProvidersComboBox.SelectedIndex = index;
                 //}
 
-                this.dataSourcesComboBox.Text = TryGetValue(dbConnectionStringBuilder, ConnectionStringKeyword.DataSource);
-                this.initialCatalogComboBox.Text = TryGetValue(dbConnectionStringBuilder, ConnectionStringKeyword.InitialCatalog);
+                dataSourcesComboBox.Text = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.DataSource);
+                initialCatalogComboBox.Text = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.InitialCatalog);
 
-                if (dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity))
+                if (_dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity))
                 {
                     object valueObject;
-                    if (dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out valueObject))
+                    if (_dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out valueObject))
                     {
-                        this.integratedSecurityCheckBox.Checked = (bool)valueObject;
+                        integratedSecurityCheckBox.Checked = (bool)valueObject;
                     }
                 }
 
-                this.userIdTextBox.Text = TryGetValue(dbConnectionStringBuilder, ConnectionStringKeyword.UserId);
-                this.passwordTextBox.Text = TryGetValue(dbConnectionStringBuilder, ConnectionStringKeyword.Password);
+                userIdTextBox.Text = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.UserId);
+                passwordTextBox.Text = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.Password);
             }
         }
 
         private void InitializeOleDbProvidersComboBox()
         {
-            this.oleDbProviderLabel.Visible = true;
-            this.oleDbProvidersComboBox.Visible = true;
-            this.oleDbProviders = new List<OleDbProviderInfo>();
+            oleDbProviderLabel.Visible = true;
+            oleDbProvidersComboBox.Visible = true;
+            _oleDbProviders = new List<OleDbProviderInfo>();
 
             using (IDataReader dataReader = OleDbEnumerator.GetRootEnumerator())
             {
@@ -105,8 +105,8 @@ namespace DataCommander.Providers.Connection
                     var name = dataReader.GetString(sourceName);
                     var description = dataReader.GetString(sourceDescription);
                     var item = new OleDbProviderInfo(name, description);
-                    this.oleDbProviders.Add(item);
-                    this.oleDbProvidersComboBox.Items.Add(description);
+                    _oleDbProviders.Add(item);
+                    oleDbProvidersComboBox.Items.Add(description);
                 }
             }
         }
@@ -115,20 +115,20 @@ namespace DataCommander.Providers.Connection
         {
             try
             {
-                var index = this.providersComboBox.SelectedIndex;
-                var providerName = this.providers[index];
+                var index = providersComboBox.SelectedIndex;
+                var providerName = _providers[index];
                 var provider = ProviderFactory.CreateProvider(providerName);
-                this.tempConnectionProperties.Provider = provider;
-                this.dbProviderFactory = provider.DbProviderFactory;
-                var oleDbFactory = this.dbProviderFactory as OleDbFactory;
+                _tempConnectionProperties.Provider = provider;
+                _dbProviderFactory = provider.DbProviderFactory;
+                var oleDbFactory = _dbProviderFactory as OleDbFactory;
 
                 if (oleDbFactory != null)
                 {
-                    this.InitializeOleDbProvidersComboBox();
+                    InitializeOleDbProvidersComboBox();
                 }
 
-                this.dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
-                this.integratedSecurityCheckBox.Enabled = dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity);
+                _dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
+                integratedSecurityCheckBox.Enabled = _dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity);
             }
             catch (Exception ex)
             {
@@ -138,13 +138,13 @@ namespace DataCommander.Providers.Connection
 
         private void GetDataSources(string[] dataSourceArray)
         {
-            this.dataSourcesComboBox.Items.Clear();
+            dataSourcesComboBox.Items.Clear();
 
             if (dataSourceArray != null)
             {
                 for (var i = 0; i < dataSourceArray.Length; i++)
                 {
-                    this.dataSourcesComboBox.Items.Add(dataSourceArray[i]);
+                    dataSourcesComboBox.Items.Add(dataSourceArray[i]);
                 }
             }
         }
@@ -153,21 +153,21 @@ namespace DataCommander.Providers.Connection
         {
             var applicationData = DataCommanderApplication.Instance.ApplicationData;
             var folder = applicationData.CurrentType;
-            folder = folder.CreateNode(this.tempConnectionProperties.Provider.Name);
+            folder = folder.CreateNode(_tempConnectionProperties.Provider.Name);
             string[] dataSourceArray;
             var contains = folder.Attributes.TryGetAttributeValue("Data Sources", out dataSourceArray);
 
             if (!contains || refresh)
             {
-                this.Cursor = Cursors.WaitCursor;
-                var dbDataSourceEnumerator = this.dbProviderFactory.CreateDataSourceEnumerator();
+                Cursor = Cursors.WaitCursor;
+                var dbDataSourceEnumerator = _dbProviderFactory.CreateDataSourceEnumerator();
 
                 if (dbDataSourceEnumerator != null)
                 {
-                    this.dataSources = dbDataSourceEnumerator.GetDataSources();
+                    _dataSources = dbDataSourceEnumerator.GetDataSources();
                     var dataSourceList = new List<string>();
 
-                    foreach (DataRow row in this.dataSources.Rows)
+                    foreach (DataRow row in _dataSources.Rows)
                     {
                         var serverName = row.GetValueOrDefault<string>("ServerName");
                         var instanceName = row.GetValueOrDefault<string>("InstanceName");
@@ -197,77 +197,77 @@ namespace DataCommander.Providers.Connection
                 }
 
                 folder.Attributes.SetAttributeValue("Data Sources", dataSourceArray);
-                this.GetDataSources(dataSourceArray);
-                this.Cursor = Cursors.Default;
+                GetDataSources(dataSourceArray);
+                Cursor = Cursors.Default;
             }
             else
             {
-                this.GetDataSources(dataSourceArray);
+                GetDataSources(dataSourceArray);
             }
         }
 
         private void dataSourcesComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var dataSource = this.dataSourcesComboBox.Text;
+            var dataSource = dataSourcesComboBox.Text;
         }
 
         private void refreshButton_Click(object sender, EventArgs e)
         {
-            var provider = this.providersComboBox.Text;
+            var provider = providersComboBox.Text;
 
             if (provider.Length > 0)
             {
-                this.GetDataSources(true);
+                GetDataSources(true);
             }
         }
 
         private void dataSourcesComboBox_DropDown(object sender, EventArgs e)
         {
-            if (this.dataSources == null)
+            if (_dataSources == null)
             {
-                var provider = this.providersComboBox.Text;
+                var provider = providersComboBox.Text;
 
                 if (provider.Length > 0)
                 {
-                    this.GetDataSources(false);
+                    GetDataSources(false);
                 }
             }
         }
 
         private DbConnection CreateConnection()
         {
-            var dataSource = this.dataSourcesComboBox.Text;
-            this.SaveTo(this.dbConnectionStringBuilder);
-            var connection = this.dbProviderFactory.CreateConnection();
-            connection.ConnectionString = this.dbConnectionStringBuilder.ConnectionString;
+            var dataSource = dataSourcesComboBox.Text;
+            SaveTo(_dbConnectionStringBuilder);
+            var connection = _dbProviderFactory.CreateConnection();
+            connection.ConnectionString = _dbConnectionStringBuilder.ConnectionString;
             return connection;
         }
 
         private void initialCatalogComboBox_DropDown(object sender, EventArgs e)
         {
-            var dataSource = this.dataSourcesComboBox.Text;
+            var dataSource = dataSourcesComboBox.Text;
 
-            if (!string.IsNullOrWhiteSpace(dataSource) && this.initialCatalogs == null)
+            if (!string.IsNullOrWhiteSpace(dataSource) && _initialCatalogs == null)
             {
                 try
                 {
-                    using (var connection = this.CreateConnection())
+                    using (var connection = CreateConnection())
                     {
                         connection.Open();
                         var schema = connection.GetSchema("Databases");
-                        this.initialCatalogs = new List<string>();
+                        _initialCatalogs = new List<string>();
 
                         foreach (DataRow row in schema.Rows)
                         {
                             var database = (string)row["database_name"];
-                            this.initialCatalogs.Add(database);
+                            _initialCatalogs.Add(database);
                         }
 
-                        this.initialCatalogs.Sort();
+                        _initialCatalogs.Sort();
 
-                        foreach (var database in this.initialCatalogs)
+                        foreach (var database in _initialCatalogs)
                         {
-                            this.initialCatalogComboBox.Items.Add(database);
+                            initialCatalogComboBox.Items.Add(database);
                         }
                     }
                 }
@@ -277,16 +277,16 @@ namespace DataCommander.Providers.Connection
                 }
                 finally
                 {
-                    this.Cursor = Cursors.Default;
+                    Cursor = Cursors.Default;
                 }
             }
         }
 
         private void OK_Click(object sender, EventArgs e)
         {
-            this.connectionProperties = new ConnectionProperties();
-            this.SaveTo(this.connectionProperties);
-            this.DialogResult = DialogResult.OK;
+            _connectionProperties = new ConnectionProperties();
+            SaveTo(_connectionProperties);
+            DialogResult = DialogResult.OK;
         }
 
         private static void SetValue(IDbConnectionStringBuilder dbConnectionStringBuilder, string keyword, string value)
@@ -299,8 +299,8 @@ namespace DataCommander.Providers.Connection
 
         private void SaveTo(IDbConnectionStringBuilder dbConnectionStringBuilder)
         {
-            SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.DataSource, this.dataSourcesComboBox.Text);
-            SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.InitialCatalog, this.initialCatalogComboBox.Text);
+            SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.DataSource, dataSourcesComboBox.Text);
+            SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.InitialCatalog, initialCatalogComboBox.Text);
 
             //var oleDbConnectionStringBuilder = dbConnectionStringBuilder as OleDbConnectionStringBuilder;
             //if (oleDbConnectionStringBuilder != null)
@@ -312,19 +312,19 @@ namespace DataCommander.Providers.Connection
 
             if (dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity))
             {
-                dbConnectionStringBuilder.SetValue(ConnectionStringKeyword.IntegratedSecurity, this.integratedSecurityCheckBox.Checked);
+                dbConnectionStringBuilder.SetValue(ConnectionStringKeyword.IntegratedSecurity, integratedSecurityCheckBox.Checked);
             }
 
-            SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.UserId, this.userIdTextBox.Text);
-            SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.Password, this.passwordTextBox.Text);
+            SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.UserId, userIdTextBox.Text);
+            SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.Password, passwordTextBox.Text);
         }
 
         private void SaveTo(ConnectionProperties connectionProperties)
         {
-            var providerName = this.providersComboBox.Text;
+            var providerName = providersComboBox.Text;
             var provider = ProviderFactory.CreateProvider(providerName);
-            this.dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
-            this.SaveTo(this.dbConnectionStringBuilder);
+            _dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
+            SaveTo(_dbConnectionStringBuilder);
 
             //var keywords = new List<string>();
 
@@ -353,22 +353,22 @@ namespace DataCommander.Providers.Connection
             //    this.dbConnectionStringBuilder.Remove(keyword);
             //}
 
-            connectionProperties.ConnectionName = this.connectionNameTextBox.Text;
-            connectionProperties.ProviderName = this.providersComboBox.Text;
-            connectionProperties.DataSource = TryGetValue(this.dbConnectionStringBuilder, ConnectionStringKeyword.DataSource);
-            connectionProperties.InitialCatalog = TryGetValue(this.dbConnectionStringBuilder, ConnectionStringKeyword.InitialCatalog);
+            connectionProperties.ConnectionName = connectionNameTextBox.Text;
+            connectionProperties.ProviderName = providersComboBox.Text;
+            connectionProperties.DataSource = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.DataSource);
+            connectionProperties.InitialCatalog = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.InitialCatalog);
 
             bool? integratedSecurity = null;
             object value;
-            if (this.dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out value))
+            if (_dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out value))
             {
                 integratedSecurity = (bool)value;
             }
 
             connectionProperties.IntegratedSecurity = integratedSecurity;
-            connectionProperties.UserId = TryGetValue(this.dbConnectionStringBuilder, ConnectionStringKeyword.UserId);
+            connectionProperties.UserId = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.UserId);
 
-            connectionProperties.ConnectionString = this.dbConnectionStringBuilder.ConnectionString;
+            connectionProperties.ConnectionString = _dbConnectionStringBuilder.ConnectionString;
         }
 
         private void testButton_Click(object sender, EventArgs e)
@@ -376,7 +376,7 @@ namespace DataCommander.Providers.Connection
             try
             {
                 var connectionProperties = new ConnectionProperties();
-                this.SaveTo(connectionProperties);
+                SaveTo(connectionProperties);
                 var form = new OpenConnectionForm(connectionProperties);
 
                 if (form.ShowDialog() == DialogResult.OK)
@@ -390,7 +390,7 @@ namespace DataCommander.Providers.Connection
             }
             finally
             {
-                this.Cursor = Cursors.Default;
+                Cursor = Cursors.Default;
             }
         }
 
@@ -398,12 +398,12 @@ namespace DataCommander.Providers.Connection
         {
             public OleDbProviderInfo(string name, string description)
             {
-                this.Name = name;
-                this.Description = description;
+                Name = name;
+                _description = description;
             }
 
             public readonly string Name;
-            private string Description;
+            private string _description;
         }
     }
 }

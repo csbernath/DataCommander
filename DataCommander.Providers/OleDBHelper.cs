@@ -351,7 +351,7 @@ namespace DataCommander.Providers
         /// <param name="connection"></param>
         public static void CopyTable(string adodbStreamXml, string tableName, OleDbConnection connection)
         {
-            var rs = AdoDB.XmlToRecordset(adodbStreamXml);
+            var rs = AdoDb.XmlToRecordset(adodbStreamXml);
             object oRs = rs;
             CopyTable(oRs, tableName, connection);
         }

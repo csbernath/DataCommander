@@ -9,18 +9,18 @@
     using Foundation.Data;
     using Foundation.Text;
 
-    internal sealed class SQLiteResultWriter : IResultWriter
+    internal sealed class SqLiteResultWriter : IResultWriter
     {
-        private readonly TextWriter messageWriter;
-        private SQLiteConnection connection;
-        private SQLiteTransaction transaction;
-        private string tableName;
-        private SQLiteCommand insertCommand;
+        private readonly TextWriter _messageWriter;
+        private SQLiteConnection _connection;
+        private SQLiteTransaction _transaction;
+        private string _tableName;
+        private SQLiteCommand _insertCommand;
 
-        public SQLiteResultWriter(TextWriter messageWriter, string tableName)
+        public SqLiteResultWriter(TextWriter messageWriter, string tableName)
         {
-            this.messageWriter = messageWriter;
-            this.tableName = tableName;
+            _messageWriter = messageWriter;
+            _tableName = tableName;
         }
 
         #region IResultWriter Members
@@ -36,12 +36,12 @@
         void IResultWriter.AfterExecuteReader(int fieldCount)
         {
             var fileName = Path.GetTempFileName() + ".sqlite";
-            this.messageWriter.WriteLine(fileName);
+            _messageWriter.WriteLine(fileName);
             var sb = new SQLiteConnectionStringBuilder();
             sb.DataSource = fileName;
             sb.DateTimeFormat = SQLiteDateFormats.ISO8601;
-            this.connection = new SQLiteConnection(sb.ConnectionString);
-            this.connection.Open();
+            _connection = new SQLiteConnection(sb.ConnectionString);
+            _connection.Open();
         }
 
         void IResultWriter.AfterCloseReader(int affectedRows)
@@ -56,7 +56,7 @@
             var schemaRowCount = schemaRows.Count;
             string insertStatement = null;
             var insertValues = new StringBuilder();
-            this.insertCommand = new SQLiteCommand();
+            _insertCommand = new SQLiteCommand();
             var st = new StringTable(3);
 
             for (var i = 0; i < schemaRowCount; i++)
@@ -70,15 +70,15 @@
 
                     if (tableName != null)
                     {
-                        this.tableName = tableName;
+                        _tableName = tableName;
                     }
 
-                    this.tableName = this.tableName.Replace('.', '_');
-                    this.tableName = this.tableName.Replace('[', '_');
-                    this.tableName = this.tableName.Replace(']', '_');
+                    _tableName = _tableName.Replace('.', '_');
+                    _tableName = _tableName.Replace('[', '_');
+                    _tableName = _tableName.Replace(']', '_');
 
-                    sb.AppendFormat("CREATE TABLE {0}\r\n(\r\n", this.tableName);
-                    insertStatement = "INSERT INTO " + this.tableName + '(';
+                    sb.AppendFormat("CREATE TABLE {0}\r\n(\r\n", _tableName);
+                    insertStatement = "INSERT INTO " + _tableName + '(';
                     insertValues.Append("VALUES(");
                 }
                 else
@@ -157,9 +157,9 @@
 
                 stringTableRow[2] = typeName;
                 st.Rows.Add(stringTableRow);
-                var allowDBNull = schemaRow.AllowDbNull.Value;
+                var allowDbNull = schemaRow.AllowDbNull.Value;
 
-                if (!allowDBNull)
+                if (!allowDbNull)
                 {
                     stringTableRow[2] += " NOT NULL";
                 }
@@ -170,7 +170,7 @@
                 }
 
                 var parameter = new SQLiteParameter(dbType);
-                this.insertCommand.Parameters.Add(parameter);
+                _insertCommand.Parameters.Add(parameter);
             }
 
             sb.Append(st.ToString(4));
@@ -180,12 +180,12 @@
             var commandText = sb.ToString();
             Trace.WriteLine(commandText);
             Trace.WriteLine(insertStatement);
-            var transactionScope = new DbTransactionScope(this.connection, null);
+            var transactionScope = new DbTransactionScope(_connection, null);
             transactionScope.ExecuteNonQuery(new CommandDefinition {CommandText = commandText});
-            this.transaction = this.connection.BeginTransaction();
-            this.insertCommand.Connection = this.connection;
-            this.insertCommand.Transaction = this.transaction;
-            this.insertCommand.CommandText = insertStatement;
+            _transaction = _connection.BeginTransaction();
+            _insertCommand.Connection = _connection;
+            _insertCommand.Transaction = _transaction;
+            _insertCommand.CommandText = insertStatement;
         }
 
         void IResultWriter.FirstRowReadBegin()
@@ -204,11 +204,11 @@
 
                 for (var j = 0; j < row.Length; j++)
                 {
-                    var parameter = this.insertCommand.Parameters[j];
+                    var parameter = _insertCommand.Parameters[j];
                     parameter.Value = row[j];
                 }
 
-                this.insertCommand.ExecuteNonQuery();
+                _insertCommand.ExecuteNonQuery();
             }
         }
 
@@ -222,18 +222,18 @@
 
         void IResultWriter.End()
         {
-            if (this.transaction != null)
+            if (_transaction != null)
             {
-                this.transaction.Commit();
-                this.transaction.Dispose();
-                this.transaction = null;
+                _transaction.Commit();
+                _transaction.Dispose();
+                _transaction = null;
             }
 
-            if (this.connection != null)
+            if (_connection != null)
             {
-                this.connection.Close();
-                this.connection.Dispose();
-                this.connection = null;
+                _connection.Close();
+                _connection.Dispose();
+                _connection = null;
             }
         }
 

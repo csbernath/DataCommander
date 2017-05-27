@@ -1,35 +1,31 @@
+using System.Data;
+using System.Drawing;
+
 namespace DataCommander.Providers.Connection
 {
-    using System.Data;
-    using System.Drawing;
-
     internal sealed class DataRowSelector
     {
-        private readonly DataColumn column;
-        private readonly Graphics graphics;
-        private readonly Font font;
+        private readonly DataColumn _column;
+        private readonly Graphics _graphics;
+        private readonly Font _font;
 
         public DataRowSelector(DataColumn column, Graphics graphics, Font font)
         {
-            this.column = column;
-            this.graphics = graphics;
-            this.font = font;
+            _column = column;
+            _graphics = graphics;
+            _font = font;
         }
 
         public float GetWidth(DataRow row)
         {
-            var s = row[this.column].ToString();
+            var s = row[_column].ToString();
             var length = s.Length;
             float width;
 
             if (length <= 256)
-            {
-                width = this.graphics.MeasureString(s, this.font).Width;
-            }
+                width = _graphics.MeasureString(s, _font).Width;
             else
-            {
                 width = 100;
-            }
 
             return width;
         }

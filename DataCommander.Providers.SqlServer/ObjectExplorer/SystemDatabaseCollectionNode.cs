@@ -10,14 +10,14 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
     internal sealed class SystemDatabaseCollectionNode : ITreeNode
     {
-        private readonly DatabaseCollectionNode databaseCollectionNode;
+        private readonly DatabaseCollectionNode _databaseCollectionNode;
 
         public SystemDatabaseCollectionNode(DatabaseCollectionNode databaseCollectionNode)
         {
 #if CONTRACTS_FULL
             Contract.Requires(databaseCollectionNode != null);
 #endif
-            this.databaseCollectionNode = databaseCollectionNode;
+            _databaseCollectionNode = databaseCollectionNode;
         }
 
 #region ITreeNode Members
@@ -28,7 +28,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            var connectionString = this.databaseCollectionNode.Server.ConnectionString;
+            var connectionString = _databaseCollectionNode.Server.ConnectionString;
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -44,7 +44,7 @@ order by d.name";
             foreach (DataRow dataRow in dataTable.Rows)
             {
                 var name = (string)dataRow[0];
-                var node = new DatabaseNode(this.databaseCollectionNode, name);
+                var node = new DatabaseNode(_databaseCollectionNode, name);
                 list.Add(node);
             }
 

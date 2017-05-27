@@ -1,11 +1,10 @@
+using System;
+using System.Data;
 using Foundation.Data;
+using Oracle.ManagedDataAccess.Client;
 
 namespace DataCommander.Providers.Odp
 {
-    using System;
-    using System.Data;
-    using Oracle.ManagedDataAccess.Client;
-
     /// <exclude/>
 	/// <summary>
 	/// Summary description for CommandBuilder.

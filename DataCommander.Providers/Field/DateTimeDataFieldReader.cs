@@ -5,15 +5,15 @@
 
     public sealed class DateTimeDataFieldReader : IDataFieldReader
 	{
-		private readonly IDataRecord dataRecord;
-		private readonly int columnOrdinal;
+		private readonly IDataRecord _dataRecord;
+		private readonly int _columnOrdinal;
 
 		public DateTimeDataFieldReader(
 			IDataRecord dataRecord,
 			int columnOrdinal )
 		{
-			this.dataRecord = dataRecord;
-			this.columnOrdinal = columnOrdinal;
+			_dataRecord = dataRecord;
+			_columnOrdinal = columnOrdinal;
 		}
 
 		object IDataFieldReader.Value
@@ -22,13 +22,13 @@
 			{
 				object value;
 
-				if (this.dataRecord.IsDBNull(this.columnOrdinal ))
+				if (_dataRecord.IsDBNull(_columnOrdinal ))
 				{
 					value = DBNull.Value;
 				}
 				else
 				{
-					var dateTime = this.dataRecord.GetDateTime(this.columnOrdinal );
+					var dateTime = _dataRecord.GetDateTime(_columnOrdinal );
 					value = new DateTimeField( dateTime );
 				}
 

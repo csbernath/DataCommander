@@ -10,18 +10,18 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
     internal sealed class TriggerNode : ITreeNode
     {
-        private readonly DatabaseNode databaseNode;
-        private readonly int id;
-        private readonly string name;
+        private readonly DatabaseNode _databaseNode;
+        private readonly int _id;
+        private readonly string _name;
 
         public TriggerNode(DatabaseNode databaseNode, int id, string name)
         {
-            this.databaseNode = databaseNode;
-            this.id = id;
-            this.name = name;
+            _databaseNode = databaseNode;
+            _id = id;
+            _name = name;
         }
 
-        public string Name => this.name;
+        public string Name => _name;
         public bool IsLeaf => true;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
@@ -36,13 +36,13 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         void menuItemScriptObject_Click(object sender, EventArgs e)
         {
             var cb = new SqlCommandBuilder();
-            var databaseName = cb.QuoteIdentifier(this.databaseNode.Name);
+            var databaseName = cb.QuoteIdentifier(_databaseNode.Name);
 
             var commandText = $@"select m.definition
 from {databaseName}.sys.sql_modules m (nolock)
-where m.object_id = {this.id}";
+where m.object_id = {_id}";
 
-            var connectionString = this.databaseNode.Databases.Server.ConnectionString;
+            var connectionString = _databaseNode.Databases.Server.ConnectionString;
             string definition;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -57,7 +57,7 @@ where m.object_id = {this.id}";
         {
             get
             {
-                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, new EventHandler(this.menuItemScriptObject_Click));
+                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, menuItemScriptObject_Click);
                 var contextMenu = new ContextMenuStrip();
                 contextMenu.Items.Add(menuItemScriptObject);
                 return contextMenu;

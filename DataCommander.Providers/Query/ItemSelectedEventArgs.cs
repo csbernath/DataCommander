@@ -6,9 +6,9 @@ namespace DataCommander.Providers.Query
     {
         public ItemSelectedEventArgs(int startIndex, int length, IObjectName objectName)
         {
-            this.StartIndex = startIndex;
-            this.Length = length;
-            this.ObjectName = objectName;
+            StartIndex = startIndex;
+            Length = length;
+            ObjectName = objectName;
         }
 
         public int StartIndex { get; }

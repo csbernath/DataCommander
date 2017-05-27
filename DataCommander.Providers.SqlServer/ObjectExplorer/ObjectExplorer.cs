@@ -11,12 +11,12 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
         {
-            this.ConnectionString = connectionString;
+            ConnectionString = connectionString;
         }
 
         IEnumerable<ITreeNode> IObjectExplorer.GetChildren(bool refresh)
         {
-            return new ServerNode(this.ConnectionString).ItemToArray();
+            return new ServerNode(ConnectionString).ItemToArray();
         }
 
         bool IObjectExplorer.Sortable => false;

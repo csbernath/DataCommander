@@ -10,20 +10,20 @@ namespace DataCommander.Providers.SqlServer.FieldReader
             IDataRecord dataRecord,
             int columnOrdinal)
         {
-            this.sqlDataReader = (SqlDataReader)dataRecord;
-            this.columnOrdinal = columnOrdinal;
+            _sqlDataReader = (SqlDataReader)dataRecord;
+            _columnOrdinal = columnOrdinal;
         }
 
         public object Value
         {
             get
             {
-                var o = this.sqlDataReader.GetValue(this.columnOrdinal);
+                var o = _sqlDataReader.GetValue(_columnOrdinal);
                 return o;
             }
         }
 
-        readonly SqlDataReader sqlDataReader;
-        readonly int columnOrdinal;
+        readonly SqlDataReader _sqlDataReader;
+        readonly int _columnOrdinal;
     }
 }

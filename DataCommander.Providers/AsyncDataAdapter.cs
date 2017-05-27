@@ -34,11 +34,11 @@ namespace DataCommander.Providers
 
         #region IAsyncDataAdapter Members
 
-        IResultWriter IAsyncDataAdapter.ResultWriter => this._resultWriter;
+        IResultWriter IAsyncDataAdapter.ResultWriter => _resultWriter;
 
-        long IAsyncDataAdapter.RowCount => this._rowCount;
+        long IAsyncDataAdapter.RowCount => _rowCount;
 
-        int IAsyncDataAdapter.TableCount => this._tableCount;
+        int IAsyncDataAdapter.TableCount => _tableCount;
 
         void IAsyncDataAdapter.BeginFill(
             IProvider provider,
@@ -49,22 +49,22 @@ namespace DataCommander.Providers
             Action<IAsyncDataAdapter, Exception> endFill,
             Action<IAsyncDataAdapter> writeEnd)
         {
-            this._provider = provider;
-            this._commands = commands;
-            this._maxRecords = maxRecords;
-            this._rowBlockSize = rowBlockSize;
-            this._resultWriter = resultWriter;
-            this._endFill = endFill;
-            this._writeEnd = writeEnd;
+            _provider = provider;
+            _commands = commands;
+            _maxRecords = maxRecords;
+            _rowBlockSize = rowBlockSize;
+            _resultWriter = resultWriter;
+            _endFill = endFill;
+            _writeEnd = writeEnd;
 
             if (commands != null)
             {
-                this._thread = new WorkerThread(this.Fill)
+                _thread = new WorkerThread(Fill)
                 {
                     Name = "AsyncDataAdapter.Fill"
                 };
 
-                this._thread.Start();
+                _thread.Start();
             }
             else
             {
@@ -76,21 +76,21 @@ namespace DataCommander.Providers
         {
             using (LogFactory.Instance.GetCurrentMethodLog())
             {
-                this._isCommandCanceled = true;
-                if (this._thread != null)
+                _isCommandCanceled = true;
+                if (_thread != null)
                 {
-                    this._thread.Stop();
-                    if (this._provider.IsCommandCancelable)
+                    _thread.Stop();
+                    if (_provider.IsCommandCancelable)
                     {
-                        ThreadPool.QueueUserWorkItem(this.CancelWaitCallback);
+                        ThreadPool.QueueUserWorkItem(CancelWaitCallback);
                     }
                     else
                     {
-                        var joined = this._thread.Join(5000);
+                        var joined = _thread.Join(5000);
 
                         if (!joined)
                         {
-                            this._thread.Abort();
+                            _thread.Abort();
                         }
                     }
                 }
@@ -112,11 +112,11 @@ namespace DataCommander.Providers
             using (LogFactory.Instance.GetCurrentMethodLog())
             {
                 Exception exception = null;
-                var dataReaderHelper = this._provider.CreateDataReaderHelper(dataReader);
+                var dataReaderHelper = _provider.CreateDataReaderHelper(dataReader);
                 var schemaRows = schemaTable.Rows;
                 var count = schemaRows.Count;
 
-                this._resultWriter.WriteTableBegin(schemaTable);
+                _resultWriter.WriteTableBegin(schemaTable);
 
                 var fieldCount = dataReader.FieldCount;
 
@@ -125,28 +125,28 @@ namespace DataCommander.Providers
                     fieldCount = 0;
                 }
 
-                var rows = new object[this._rowBlockSize][];
+                var rows = new object[_rowBlockSize][];
                 int i;
 
-                for (i = 0; i < this._rowBlockSize; i++)
+                for (i = 0; i < _rowBlockSize; i++)
                 {
                     rows[i] = new object[fieldCount];
                 }
 
-                this._rowCount = 0;
+                _rowCount = 0;
                 i = 0;
                 var first = true;
                 var exitFromWhile = false;
                 var stopwatch = Stopwatch.StartNew();
 
-                while (!this._isCommandCanceled && !this._thread.IsStopRequested && !exitFromWhile)
+                while (!_isCommandCanceled && !_thread.IsStopRequested && !exitFromWhile)
                 {
                     bool read;
 
                     if (first)
                     {
                         first = false;
-                        this._resultWriter.FirstRowReadBegin();
+                        _resultWriter.FirstRowReadBegin();
                         read = dataReader.Read();
 
                         var dataTypeNames = new string[count];
@@ -159,7 +159,7 @@ namespace DataCommander.Providers
                             }
                         }
 
-                        this._resultWriter.FirstRowReadEnd(dataTypeNames);
+                        _resultWriter.FirstRowReadEnd(dataTypeNames);
                     }
                     else
                     {
@@ -176,20 +176,20 @@ namespace DataCommander.Providers
 
                     if (read)
                     {
-                        this._rowCount++;
+                        _rowCount++;
                         dataReaderHelper.GetValues(rows[i]);
                         i++;
 
-                        if (i == this._rowBlockSize || stopwatch.ElapsedMilliseconds >= 5000)
+                        if (i == _rowBlockSize || stopwatch.ElapsedMilliseconds >= 5000)
                         {
-                            this._resultWriter.WriteRows(rows, i);
+                            _resultWriter.WriteRows(rows, i);
                             i = 0;
                             stopwatch.Restart();
                         }
 
-                        if (this._rowCount == this._maxRecords)
+                        if (_rowCount == _maxRecords)
                         {
-                            this.CancelWaitCallback(null);
+                            CancelWaitCallback(null);
                             break;
                         }
                     }
@@ -199,18 +199,18 @@ namespace DataCommander.Providers
                     }
                 }
 
-                if (i != this._rowBlockSize)
+                if (i != _rowBlockSize)
                 {
                     Log.Write(LogLevel.Trace, "resultWriter.WriteRows(rows,i);");
-                    this._resultWriter.WriteRows(rows, i);
+                    _resultWriter.WriteRows(rows, i);
                 }
 
                 Log.Write(LogLevel.Trace, "resultWriter.WriteTableEnd(rowCount);");
-                this._resultWriter.WriteTableEnd();
+                _resultWriter.WriteTableEnd();
 
-                if (this._rowCount > 0)
+                if (_rowCount > 0)
                 {
-                    this._tableCount++;
+                    _tableCount++;
                 }
 
                 if (exception != null)
@@ -231,16 +231,16 @@ namespace DataCommander.Providers
 
             try
             {
-                this._resultWriter.BeforeExecuteReader(asyncDataAdapterCommand);
+                _resultWriter.BeforeExecuteReader(asyncDataAdapterCommand);
                 IDataReader dataReader = null;
                 try
                 {
                     dataReader = command.ExecuteReader();
                     var fieldCount = dataReader.FieldCount;
-                    this._resultWriter.AfterExecuteReader(fieldCount);
+                    _resultWriter.AfterExecuteReader(fieldCount);
                     var tableIndex = 0;
 
-                    while (!this._thread.IsStopRequested)
+                    while (!_thread.IsStopRequested)
                     {
                         if (fieldCount > 0)
                         {
@@ -250,10 +250,10 @@ namespace DataCommander.Providers
                                 Log.Trace("schemaTable:\r\n{0}", schemaTable.ToStringTableString());
                             }
 
-                            this.ReadTable(dataReader, schemaTable, tableIndex);
+                            ReadTable(dataReader, schemaTable, tableIndex);
                         }
 
-                        if (this._rowCount >= this._maxRecords || !dataReader.NextResult())
+                        if (_rowCount >= _maxRecords || !dataReader.NextResult())
                         {
                             break;
                         }
@@ -267,7 +267,7 @@ namespace DataCommander.Providers
                     {
                         dataReader.Close();
                         var recordsAffected = dataReader.RecordsAffected;
-                        this._resultWriter.AfterCloseReader(recordsAffected);
+                        _resultWriter.AfterCloseReader(recordsAffected);
                     }
                 }
             }
@@ -294,10 +294,10 @@ namespace DataCommander.Providers
             {
                 if (command != null && command.Parameters != null)
                 {
-                    this._resultWriter.WriteParameters(command.Parameters);
+                    _resultWriter.WriteParameters(command.Parameters);
                 }
                 var ticks = Stopwatch.GetTimestamp();
-                this._endFill(this, exception);
+                _endFill(this, exception);
                 ticks = Stopwatch.GetTimestamp() - ticks;
                 Log.Write(LogLevel.Trace, "this.endFill( this, exception ); completed in {0} seconds.", StopwatchTimeSpan.ToString(ticks, 3));
             }
@@ -305,21 +305,21 @@ namespace DataCommander.Providers
 
         private void Fill()
         {
-            this._resultWriter.Begin(this._provider);
+            _resultWriter.Begin(_provider);
 
             try
             {
-                foreach (var command in this._commands)
+                foreach (var command in _commands)
                 {
-                    this._command = command;
-                    this.Fill(command);
+                    _command = command;
+                    Fill(command);
                     command.Command.Dispose();
                 }
             }
             finally
             {
-                this._resultWriter.End();
-                this._writeEnd(this);
+                _resultWriter.End();
+                _writeEnd(this);
             }
         }
 
@@ -327,7 +327,7 @@ namespace DataCommander.Providers
         {
             using (LogFactory.Instance.GetCurrentMethodLog())
             {
-                this._command.Command.Cancel();
+                _command.Command.Cancel();
             }
         }
 

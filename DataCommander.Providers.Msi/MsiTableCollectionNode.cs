@@ -6,11 +6,11 @@
 
     internal sealed class MsiTableCollectionNode : ITreeNode
 	{
-		private MsiConnection connection;
+		private readonly MsiConnection _connection;
 
 		public MsiTableCollectionNode( MsiConnection connection )
 		{
-			this.connection = connection;
+			_connection = connection;
 		}
 
 		#region ITreeNode Members
@@ -21,8 +21,8 @@
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
 		{
-			var e = from table in this.connection.Database.Tables
-					select (ITreeNode)new MsiTableNode( this.connection, table );
+			var e = from table in _connection.Database.Tables
+					select (ITreeNode)new MsiTableNode( _connection, table );
 
 			return e;
 		}

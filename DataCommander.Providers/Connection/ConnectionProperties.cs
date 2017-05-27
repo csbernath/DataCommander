@@ -10,7 +10,7 @@ namespace DataCommander.Providers.Connection
 
     public sealed class ConnectionProperties
     {
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
         public string ConnectionName;
         public string ProviderName;
 
@@ -22,7 +22,7 @@ namespace DataCommander.Providers.Connection
         public IProvider Provider;
         public string ConnectionString;
         public ConnectionBase Connection;
-        private static readonly byte[] entropy = {0x56, 0x4f, 0x3d, 0x78, 0xf1};
+        private static readonly byte[] Entropy = {0x56, 0x4f, 0x3d, 0x78, 0xf1};
 
         public static string ProtectPassword(string password)
         {
@@ -37,7 +37,7 @@ namespace DataCommander.Providers.Connection
                 bytes = new byte[0];
             }
 
-            var protectedBytes = ProtectedData.Protect(bytes, entropy, DataProtectionScope.CurrentUser);
+            var protectedBytes = ProtectedData.Protect(bytes, Entropy, DataProtectionScope.CurrentUser);
             var protectedPassword = Convert.ToBase64String(protectedBytes);
             return protectedPassword;
         }
@@ -45,7 +45,7 @@ namespace DataCommander.Providers.Connection
         public static string UnprotectPassword(string protectedPassword)
         {
             var protectedBytes = Convert.FromBase64String(protectedPassword);
-            var bytes = ProtectedData.Unprotect(protectedBytes, entropy, DataProtectionScope.CurrentUser);
+            var bytes = ProtectedData.Unprotect(protectedBytes, Entropy, DataProtectionScope.CurrentUser);
             var password = Encoding.UTF8.GetString(bytes);
             return password;
         }
@@ -53,48 +53,48 @@ namespace DataCommander.Providers.Connection
         public void Save(ConfigurationNode folder)
         {
             var attributes = folder.Attributes;
-            attributes.SetAttributeValue("ConnectionName", this.ConnectionName);
-            attributes.SetAttributeValue("ProviderName", this.ProviderName);
-            attributes.SetAttributeValue(ConnectionStringKeyword.DataSource, this.DataSource);
-            attributes.SetAttributeValue(ConnectionStringKeyword.InitialCatalog,this.InitialCatalog);
-            attributes.SetAttributeValue(ConnectionStringKeyword.IntegratedSecurity,this.IntegratedSecurity);
-            attributes.SetAttributeValue(ConnectionStringKeyword.UserId,this.UserId);
-            attributes.SetAttributeValue("ConnectionString", this.ConnectionString);
+            attributes.SetAttributeValue("ConnectionName", ConnectionName);
+            attributes.SetAttributeValue("ProviderName", ProviderName);
+            attributes.SetAttributeValue(ConnectionStringKeyword.DataSource, DataSource);
+            attributes.SetAttributeValue(ConnectionStringKeyword.InitialCatalog,InitialCatalog);
+            attributes.SetAttributeValue(ConnectionStringKeyword.IntegratedSecurity,IntegratedSecurity);
+            attributes.SetAttributeValue(ConnectionStringKeyword.UserId,UserId);
+            attributes.SetAttributeValue("ConnectionString", ConnectionString);
         }
 
         public void Load(ConfigurationNode folder)
         {
             var attributes = folder.Attributes;
-            this.ConnectionName = attributes["ConnectionName"].GetValue<string>();
-            this.ProviderName = attributes["ProviderName"].GetValue<string>();
-            this.ConnectionString = attributes["ConnectionString"].GetValue<string>();
+            ConnectionName = attributes["ConnectionName"].GetValue<string>();
+            ProviderName = attributes["ProviderName"].GetValue<string>();
+            ConnectionString = attributes["ConnectionString"].GetValue<string>();
 
             ConfigurationAttribute attribute;
             if (attributes.TryGetValue(ConnectionStringKeyword.DataSource, out attribute))
             {
-                this.DataSource = attribute.GetValue<string>();
+                DataSource = attribute.GetValue<string>();
             }
 
             if (attributes.TryGetValue(ConnectionStringKeyword.InitialCatalog, out attribute))
             {
-                this.InitialCatalog = attribute.GetValue<string>();
+                InitialCatalog = attribute.GetValue<string>();
             }
 
             if (attributes.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out attribute))
             {
                 if (attribute.Value != null)
                 {
-                    this.IntegratedSecurity = attribute.GetValue<bool>();
+                    IntegratedSecurity = attribute.GetValue<bool>();
                 }
                 else
                 {
-                    this.IntegratedSecurity = null;
+                    IntegratedSecurity = null;
                 }
             }
 
             if (attributes.TryGetValue(ConnectionStringKeyword.UserId, out attribute))
             {
-                this.UserId = attribute.GetValue<string>();
+                UserId = attribute.GetValue<string>();
             }
         }
 
@@ -112,15 +112,15 @@ namespace DataCommander.Providers.Connection
                 }
                 catch (Exception e)
                 {
-                    log.Write(LogLevel.Error, e.ToString());
+                    Log.Write(LogLevel.Error, e.ToString());
                 }
 
                 if (succeeded)
                 {
                     var dbConnectionStringBuilder = new DbConnectionStringBuilder();
-                    dbConnectionStringBuilder.ConnectionString = this.ConnectionString;
+                    dbConnectionStringBuilder.ConnectionString = ConnectionString;
                     dbConnectionStringBuilder[ConnectionStringKeyword.Password] = password;
-                    this.ConnectionString = dbConnectionStringBuilder.ConnectionString;
+                    ConnectionString = dbConnectionStringBuilder.ConnectionString;
                 }
             }
         }

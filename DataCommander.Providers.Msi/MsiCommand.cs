@@ -7,7 +7,7 @@
     {
         #region Private Fields
 
-        private MsiParameterCollection parameters = new MsiParameterCollection();
+        private readonly MsiParameterCollection _parameters = new MsiParameterCollection();
 
         #endregion
 
@@ -16,7 +16,7 @@
 #if CONTRACTS_FULL
             Contract.Requires(connection != null);
 #endif
-            this.Connection = connection;
+            Connection = connection;
         }
 
         public MsiConnection Connection { get; }
@@ -65,7 +65,7 @@
             throw new NotImplementedException();
         }
 
-        IDataParameterCollection IDbCommand.Parameters => this.parameters;
+        IDataParameterCollection IDbCommand.Parameters => _parameters;
 
         void IDbCommand.Prepare()
         {

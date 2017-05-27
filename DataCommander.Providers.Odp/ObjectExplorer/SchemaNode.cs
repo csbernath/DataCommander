@@ -8,18 +8,18 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
     /// </summary>
     internal sealed class SchemaNode : ITreeNode
     {
-		private readonly SchemaCollectionNode schemasNode;
-		private readonly string name;
+		private readonly SchemaCollectionNode _schemasNode;
+		private readonly string _name;
 
         public SchemaNode(
           SchemaCollectionNode schemasNode,
           string name)
         {
-            this.schemasNode = schemasNode;
-            this.name = name;
+            _schemasNode = schemasNode;
+            _name = name;
         }
 
-        public string Name => name;
+        public string Name => _name;
 
         public bool IsLeaf => false;
 
@@ -47,9 +47,9 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
         public void BeforeExpand()
         {
-            schemasNode.SelectedSchema = name;
+            _schemasNode.SelectedSchema = _name;
         }
 
-        public SchemaCollectionNode SchemasNode => schemasNode;
+        public SchemaCollectionNode SchemasNode => _schemasNode;
     }
 }

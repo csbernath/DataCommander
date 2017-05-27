@@ -4,7 +4,7 @@ namespace DataCommander.Providers.ResultWriter
     {
         public void Init( int width )
         {
-            this.Width = width;
+            Width = width;
         }
 
         public int Width { get; private set; }

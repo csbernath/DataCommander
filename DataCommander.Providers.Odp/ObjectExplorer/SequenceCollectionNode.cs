@@ -9,11 +9,11 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
     internal sealed class SequenceCollectionNode : ITreeNode
     {
-        private readonly SchemaNode schemaNode;
+        private readonly SchemaNode _schemaNode;
 
         public SequenceCollectionNode(SchemaNode schemaNode)
         {
-            this.schemaNode = schemaNode;
+            _schemaNode = schemaNode;
         }
 
         #region ITreeNode Members
@@ -27,10 +27,10 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
             var commandText =
                 $@"select	s.SEQUENCE_NAME
 from	SYS.ALL_SEQUENCES s
-where	s.SEQUENCE_OWNER	= '{this.schemaNode.Name}'
+where	s.SEQUENCE_OWNER	= '{_schemaNode.Name}'
 order by s.SEQUENCE_NAME
 ";
-            var transactionScope = new DbTransactionScope(this.schemaNode.SchemasNode.Connection, null);
+            var transactionScope = new DbTransactionScope(_schemaNode.SchemasNode.Connection, null);
 
             return transactionScope.ExecuteReader(
                 new CommandDefinition {CommandText = commandText},
@@ -38,7 +38,7 @@ order by s.SEQUENCE_NAME
                 dataRecord =>
                 {
                     var name = dataRecord.GetString(0);
-                    return new SequenceNode(this.schemaNode, name);
+                    return new SequenceNode(_schemaNode, name);
                 });
         }
 

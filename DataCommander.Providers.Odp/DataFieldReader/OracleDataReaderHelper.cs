@@ -7,23 +7,23 @@ namespace DataCommander.Providers.Odp.DataFieldReader
 
     sealed class OracleDataReaderHelper : IDataReaderHelper
 	{
-		private OracleDataReader oracleDataReader;
-		private readonly IDataFieldReader[] dataFieldReaders;
+		private OracleDataReader _oracleDataReader;
+		private readonly IDataFieldReader[] _dataFieldReaders;
 
 		public OracleDataReaderHelper( IDataReader dataReader )
 		{
-			this.oracleDataReader = (OracleDataReader) dataReader;
+			_oracleDataReader = (OracleDataReader) dataReader;
 			var schemaTable = dataReader.GetSchemaTable();
 
 			if (schemaTable != null)
 			{
 				var rows = schemaTable.Rows;
 				var count = rows.Count;
-				dataFieldReaders = new IDataFieldReader[ count ];
+				_dataFieldReaders = new IDataFieldReader[ count ];
 
 				for (var i = 0; i < count; i++)
 				{
-					dataFieldReaders[ i ] = CreateDataFieldReader( dataReader, rows[ i ] );
+					_dataFieldReaders[ i ] = CreateDataFieldReader( dataReader, rows[ i ] );
 				}
 			}
 		}
@@ -58,11 +58,11 @@ namespace DataCommander.Providers.Odp.DataFieldReader
                     break;
 
                 case OracleDbType.TimeStampTZ:
-                    dataFieldReader = new OracleTimestampTZFieldReader( oracleDataReader, columnOrdinal );
+                    dataFieldReader = new OracleTimestampTzFieldReader( oracleDataReader, columnOrdinal );
                     break;
 
                 case OracleDbType.TimeStampLTZ:
-                    dataFieldReader = new OracleTimestampLTZFieldReader( oracleDataReader, columnOrdinal );                    
+                    dataFieldReader = new OracleTimestampLtzFieldReader( oracleDataReader, columnOrdinal );                    
                     break;
 
                 case OracleDbType.Clob:
@@ -99,11 +99,11 @@ namespace DataCommander.Providers.Odp.DataFieldReader
 
 		int IDataReaderHelper.GetValues( object[] values )
 		{
-			var count = dataFieldReaders.Length;
+			var count = _dataFieldReaders.Length;
 
 			for (var i = 0; i < count; i++)
 			{
-				values[ i ] = dataFieldReaders[ i ].Value;
+				values[ i ] = _dataFieldReaders[ i ].Value;
 			}
 
 			return count;

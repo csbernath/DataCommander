@@ -20,13 +20,13 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             var commandText = "select name from {0}..sysusers where issqlrole = 1 order by name";
-            commandText = string.Format(commandText, this._database.Name);
-            var connectionString = this._database.Databases.Server.ConnectionString;
+            commandText = string.Format(commandText, _database.Name);
+            var connectionString = _database.Databases.Server.ConnectionString;
             var executor = new SqlCommandExecutor(connectionString);
             var roleNodes = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
             {
                 var name = dataRecord.GetString(0);
-                return new RoleNode(this._database, name);
+                return new RoleNode(_database, name);
             });
             return roleNodes;
         }
