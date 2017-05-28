@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Runtime.Versioning;
 using System.Windows.Forms;
 using Foundation.Diagnostics;
-using Foundation.Diagnostics.Log;
+using Foundation.Log;
 
 namespace DataCommander.Providers
 {

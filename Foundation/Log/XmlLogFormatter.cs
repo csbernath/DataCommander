@@ -1,7 +1,7 @@
 using System.IO;
 using System.Xml;
 
-namespace Foundation.Diagnostics.Log
+namespace Foundation.Log
 {
     internal sealed class XmlLogFormatter : ILogFormatter
     {

@@ -9,7 +9,7 @@ using DataCommander.Providers.Connection;
 using DataCommander.Providers.Query;
 using Foundation.Configuration;
 using Foundation.Data;
-using Foundation.Diagnostics.Log;
+using Foundation.Log;
 using global::MySql.Data.MySqlClient;
 
 namespace DataCommander.Providers.MySql

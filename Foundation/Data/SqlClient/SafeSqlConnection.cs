@@ -5,8 +5,8 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Text;
 using System.Threading;
-using Foundation.Diagnostics.Log;
 using Foundation.Linq;
+using Foundation.Log;
 
 namespace Foundation.Data.SqlClient
 {

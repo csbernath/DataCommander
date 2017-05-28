@@ -1,3 +1,5 @@
+using Foundation.Log;
+
 namespace DataCommander.Providers.Connection
 {
     using System;
@@ -10,7 +12,6 @@ namespace DataCommander.Providers.Connection
     using System.Xml;
     using Foundation.Configuration;
     using Foundation.Diagnostics;
-    using Foundation.Diagnostics.Log;
     using Foundation.Linq;
     using Foundation.Windows.Forms;
     using ResultWriter;

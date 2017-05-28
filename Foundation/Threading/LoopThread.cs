@@ -1,6 +1,6 @@
 using System;
-using Foundation.Diagnostics.Log;
 using Foundation.Linq;
+using Foundation.Log;
 
 namespace Foundation.Threading
 {

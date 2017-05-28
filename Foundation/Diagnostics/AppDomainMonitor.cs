@@ -4,8 +4,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using Foundation.Diagnostics.Log;
 using Foundation.Linq;
+using Foundation.Log;
 using Foundation.Text;
 using Microsoft.Win32;
 

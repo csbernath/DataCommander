@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading;
 using Foundation.Collections.IndexableCollection;
-using Foundation.Diagnostics.Log;
+using Foundation.Log;
 
 namespace Foundation.Threading
 {
@@ -22,13 +22,13 @@ namespace Foundation.Threading
         /// <param name="monitoredObject"></param>
         public PriorityMonitor(T monitoredObject)
         {
-            this.MonitoredObject = monitoredObject;
-            this._priorityIndex = new NonUniqueIndex<int, LockRequest>(
+            MonitoredObject = monitoredObject;
+            _priorityIndex = new NonUniqueIndex<int, LockRequest>(
                 "priorityIndex",
                 item => GetKeyResponse.Create(true, item.Priority),
                 SortOrder.Ascending);
 
-            this._lockRequests = new IndexableCollection<LockRequest>(this._priorityIndex);
+            _lockRequests = new IndexableCollection<LockRequest>(_priorityIndex);
         }
 
         /// <summary>
@@ -50,18 +50,18 @@ namespace Foundation.Threading
         {
             var lockRequest = new LockRequest(this, priority);
 
-            lock (this._lockRequests)
+            lock (_lockRequests)
             {
                 bool isCompleted;
 
-                if (this.CurrentLockRequest == null)
+                if (CurrentLockRequest == null)
                 {
-                    this.CurrentLockRequest = lockRequest;
+                    CurrentLockRequest = lockRequest;
                     isCompleted = true;
                 }
                 else
                 {
-                    this._lockRequests.Add(lockRequest);
+                    _lockRequests.Add(lockRequest);
                     isCompleted = false;
                 }
 
@@ -80,13 +80,13 @@ namespace Foundation.Threading
         {
             LockRequest lockRequest;
 
-            lock (this._lockRequests)
+            lock (_lockRequests)
             {
-                if (this.CurrentLockRequest == null)
+                if (CurrentLockRequest == null)
                 {
                     lockRequest = new LockRequest(this, priority);
                     lockRequest.Initialize(true);
-                    this.CurrentLockRequest = lockRequest;
+                    CurrentLockRequest = lockRequest;
                 }
                 else
                 {
@@ -105,20 +105,19 @@ namespace Foundation.Threading
             Contract.Requires(lockRequest == this.CurrentLockRequest);
 #endif
 
-            Log.Write(LogLevel.Trace, "Exiting lockRequest... monitoredObject: {0}, priority: {1}", this.MonitoredObject,
-                lockRequest.Priority);
+            Log.Trace("Exiting lockRequest... monitoredObject: {0}, priority: {1}", MonitoredObject, lockRequest.Priority);
 
-            lock (this._lockRequests)
+            lock (_lockRequests)
             {
-                if (this._lockRequests.Count == 0)
+                if (_lockRequests.Count == 0)
                 {
-                    this.CurrentLockRequest = null;
+                    CurrentLockRequest = null;
                 }
                 else
                 {
-                    var first = this._lockRequests.First();
-                    this._lockRequests.Remove(first);
-                    this.CurrentLockRequest = first;
+                    var first = _lockRequests.First();
+                    _lockRequests.Remove(first);
+                    CurrentLockRequest = first;
                     first.Complete();
                 }
             }
@@ -137,8 +136,8 @@ namespace Foundation.Threading
                 Contract.Requires(monitor != null);
 #endif
 
-                this.Monitor = monitor;
-                this.Priority = priority;
+                Monitor = monitor;
+                Priority = priority;
             }
 
             /// <summary>
@@ -154,7 +153,7 @@ namespace Foundation.Threading
             /// <summary>
             /// 
             /// </summary>
-            public WaitHandle AsyncWaitHandle => this._asyncWaitHandle;
+            public WaitHandle AsyncWaitHandle => _asyncWaitHandle;
 
             /// <summary>
             /// 
@@ -163,32 +162,25 @@ namespace Foundation.Threading
 
             internal void Initialize(bool isCompleted)
             {
-                Log.Write(LogLevel.Trace,
-                    "Initializing lockRequest... monitoredObject: {0}, priority: {1}, isCompleted: {2}",
-                    this.Monitor.MonitoredObject, this.Priority,
+                Log.Trace("Initializing lockRequest... monitoredObject: {0}, priority: {1}, isCompleted: {2}", Monitor.MonitoredObject, Priority,
                     isCompleted);
 
                 if (isCompleted)
-                {
-                    this.IsCompleted = true;
-                }
+                    IsCompleted = true;
                 else
-                {
-                    this._asyncWaitHandle = new EventWaitHandle(false, EventResetMode.ManualReset);
-                }
+                    _asyncWaitHandle = new EventWaitHandle(false, EventResetMode.ManualReset);
             }
 
             internal void Complete()
             {
-                Log.Write(LogLevel.Trace,
-                    "Completing lockRequest... monitoredObject: {0}, priority:{1}, asyncWaitHandle != null: {2}",
-                    this.Monitor.MonitoredObject, this.Priority,
-                    this._asyncWaitHandle != null);
-                this.IsCompleted = true;
+                Log.Trace("Completing lockRequest... monitoredObject: {0}, priority:{1}, asyncWaitHandle != null: {2}", Monitor.MonitoredObject,
+                    Priority, _asyncWaitHandle != null);
 
-                if (this._asyncWaitHandle != null)
+                IsCompleted = true;
+
+                if (_asyncWaitHandle != null)
                 {
-                    this._asyncWaitHandle.Set();
+                    _asyncWaitHandle.Set();
                 }
             }
 
@@ -196,11 +188,11 @@ namespace Foundation.Threading
 
             void IDisposable.Dispose()
             {
-                if (this.Monitor != null)
+                if (Monitor != null)
                 {
-                    var monitor = this.Monitor;
+                    var monitor = Monitor;
                     monitor.Exit(this);
-                    this.Monitor = null;
+                    Monitor = null;
                 }
             }
 

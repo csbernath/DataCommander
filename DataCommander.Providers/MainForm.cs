@@ -1,3 +1,5 @@
+using Foundation.Log;
+
 namespace DataCommander.Providers
 {
     using System;
@@ -18,7 +20,6 @@ namespace DataCommander.Providers
     using Foundation;
     using Foundation.Configuration;
     using Foundation.Diagnostics;
-    using Foundation.Diagnostics.Log;
     using Foundation.Linq;
     using Foundation.Threading;
     using Foundation.Windows.Forms;
@@ -68,7 +69,7 @@ namespace DataCommander.Providers
         /// <summary>
         /// 
         /// </summary>
-        public MainForm()
+        public MainForm(ColorTheme colorTheme)
         {
             //
             // Required for Windows Form Designer support
@@ -91,13 +92,7 @@ namespace DataCommander.Providers
             _toolStripStatusLabel.Text = message;
             Log.Trace(message);
 
-            _colorTheme = new ColorTheme(
-                Color.FromArgb(220, 220, 220),
-                Color.FromArgb(30, 30, 30),
-                Color.DarkOliveGreen,
-                Color.FromArgb(86, 156, 214),
-                Color.FromArgb(203, 65, 65));
-
+            _colorTheme = colorTheme;
             if (_colorTheme != null)
             {
                 ForeColor = _colorTheme.ForeColor;

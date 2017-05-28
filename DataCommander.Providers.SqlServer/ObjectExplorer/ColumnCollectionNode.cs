@@ -3,8 +3,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 using Foundation.Data;
-using Foundation.Diagnostics.Log;
 using Foundation.Linq;
+using Foundation.Log;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {

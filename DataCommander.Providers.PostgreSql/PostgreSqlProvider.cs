@@ -9,7 +9,7 @@ using System.Threading;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.Query;
 using Foundation.Data;
-using Foundation.Diagnostics.Log;
+using Foundation.Log;
 using Npgsql;
 
 namespace DataCommander.Providers.PostgreSql

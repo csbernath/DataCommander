@@ -5,8 +5,8 @@ using System.Threading;
 using System.Windows.Forms;
 using DataCommander.Providers;
 using Foundation.Configuration;
-using Foundation.Diagnostics.Log;
 using Foundation.Diagnostics.MethodProfiler;
+using Foundation.Log;
 
 namespace DataCommander
 {

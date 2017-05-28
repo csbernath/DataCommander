@@ -693,62 +693,62 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Diagnostics\Int64PerformanceCounter.cs" />
-    <Compile Include="Diagnostics\Log\AsyncLogFile.cs">
+    <Compile Include="Log\AsyncLogFile.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\Log\CallerInformation.cs" />
-    <Compile Include="Diagnostics\Log\ConsoleLogWriter.cs" />
-    <Compile Include="Diagnostics\Log\EventLogWriter.cs">
+    <Compile Include="Log\CallerInformation.cs" />
+    <Compile Include="Log\ConsoleLogWriter.cs" />
+    <Compile Include="Log\EventLogWriter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\Log\FileLogWriter.cs">
+    <Compile Include="Log\FileLogWriter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\Log\FoundationLog.cs" />
-    <Compile Include="Diagnostics\Log\FoundationLogFactory.cs" />
-    <Compile Include="Diagnostics\Log\ILog.cs" />
-    <Compile Include="Diagnostics\Log\ILogExtensions.cs" />
-    <Compile Include="Diagnostics\Log\ILogFactory.cs" />
-    <Compile Include="Diagnostics\Log\ILogFactoryExtensions.cs" />
-    <Compile Include="Diagnostics\Log\ILogFile.cs">
+    <Compile Include="Log\FoundationLog.cs" />
+    <Compile Include="Log\FoundationLogFactory.cs" />
+    <Compile Include="Log\ILog.cs" />
+    <Compile Include="Log\ILogExtensions.cs" />
+    <Compile Include="Log\ILogFactory.cs" />
+    <Compile Include="Log\ILogFactoryExtensions.cs" />
+    <Compile Include="Log\ILogFile.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\Log\ILogFormatter.cs">
+    <Compile Include="Log\ILogFormatter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\Log\ILogWriter.cs">
+    <Compile Include="Log\ILogWriter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\Log\InternalLogFactory.cs" />
-    <Compile Include="Diagnostics\Log\LogEntry.cs">
+    <Compile Include="Log\InternalLogFactory.cs" />
+    <Compile Include="Log\LogEntry.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\Log\LogEntryFactory.cs">
+    <Compile Include="Log\LogEntryFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\Log\LogFactory.cs" />
-    <Compile Include="Diagnostics\Log\LogFile.cs">
+    <Compile Include="Log\LogFactory.cs" />
+    <Compile Include="Log\LogFile.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\Log\LogLevel.cs">
+    <Compile Include="Log\LogLevel.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\Log\LogState.cs">
+    <Compile Include="Log\LogState.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\Log\MemoryLogWriter.cs" />
-    <Compile Include="Diagnostics\Log\NullApplicationLog.cs" />
-    <Compile Include="Diagnostics\Log\NullLog.cs" />
-    <Compile Include="Diagnostics\Log\SqlLogWriter.cs">
+    <Compile Include="Log\MemoryLogWriter.cs" />
+    <Compile Include="Log\NullApplicationLog.cs" />
+    <Compile Include="Log\NullLog.cs" />
+    <Compile Include="Log\SqlLogWriter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\Log\TextLogFormatter.cs">
+    <Compile Include="Log\TextLogFormatter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\Log\TextLogWriter.cs">
+    <Compile Include="Log\TextLogWriter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\Log\XmlLogFormatter.cs">
+    <Compile Include="Log\XmlLogFormatter.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Diagnostics\MethodProfiler\MethodCollection.cs" />
@@ -1015,7 +1015,7 @@
     <None Include="Collections\IndexableCollection\ClassDiagram.cd" />
     <None Include="Collections\ObjectPool\ClassDiagram.cd" />
     <None Include="Configuration\ClassDiagram.cd" />
-    <None Include="Diagnostics\Log\ClassDiagram.cd" />
+    <None Include="Log\ClassDiagram.cd" />
     <None Include="Text\ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

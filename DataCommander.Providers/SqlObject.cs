@@ -1,4 +1,4 @@
-using Foundation.Diagnostics.Log;
+using Foundation.Log;
 
 namespace DataCommander.Providers
 {

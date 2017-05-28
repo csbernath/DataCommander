@@ -1,4 +1,4 @@
-namespace Foundation.Diagnostics.Log
+namespace Foundation.Log
 {
     internal sealed class TextLogFormatter : ILogFormatter
     {

@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 
-namespace Foundation.Diagnostics.Log
+namespace Foundation.Log
 {
     /// <summary>
     /// 

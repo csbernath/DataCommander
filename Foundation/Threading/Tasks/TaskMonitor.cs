@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using Foundation.Diagnostics.Log;
 using Foundation.Linq;
+using Foundation.Log;
 using Foundation.Text;
 
 namespace Foundation.Threading.Tasks

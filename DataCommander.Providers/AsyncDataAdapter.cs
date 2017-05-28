@@ -6,7 +6,7 @@ using System.Threading;
 using DataCommander.Providers.ResultWriter;
 using Foundation.Data;
 using Foundation.Diagnostics;
-using Foundation.Diagnostics.Log;
+using Foundation.Log;
 using Foundation.Threading;
 using ThreadState = System.Threading.ThreadState;
 
@@ -201,7 +201,7 @@ namespace DataCommander.Providers
 
                 if (i != _rowBlockSize)
                 {
-                    Log.Write(LogLevel.Trace, "resultWriter.WriteRows(rows,i);");
+                    Log.Trace("resultWriter.WriteRows(rows,i);");
                     _resultWriter.WriteRows(rows, i);
                 }
 

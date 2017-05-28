@@ -1,7 +1,8 @@
 using System;
 using System.IO;
+using Foundation.Diagnostics;
 
-namespace Foundation.Diagnostics.Log
+namespace Foundation.Log
 {
     /// <summary>
     /// Writes log events to a <see cref="TextWriter"/>.

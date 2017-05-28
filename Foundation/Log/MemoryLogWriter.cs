@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Foundation.Diagnostics.Log
+namespace Foundation.Log
 {
     /// <summary>
     /// 

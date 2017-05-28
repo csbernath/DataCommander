@@ -5,8 +5,8 @@ using System.Data.SqlClient;
 using System.Text;
 using System.Threading;
 using Foundation.Data.SqlClient;
-using Foundation.Diagnostics.Log;
 using Foundation.Linq;
+using Foundation.Log;
 using Foundation.Threading;
 
 namespace Foundation.Data

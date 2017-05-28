@@ -1,7 +1,7 @@
 ﻿using System;
 using Foundation.Configuration;
 
-namespace Foundation.Diagnostics.Log
+namespace Foundation.Log
 {
     /// <summary>
     /// 

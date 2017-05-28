@@ -1,6 +1,6 @@
 using System;
 
-namespace Foundation.Diagnostics.Log
+namespace Foundation.Log
 {
     /// <summary>
     /// 

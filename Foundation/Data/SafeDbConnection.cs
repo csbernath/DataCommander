@@ -2,8 +2,8 @@ using System;
 using System.Data;
 using System.Diagnostics;
 using Foundation.Diagnostics;
-using Foundation.Diagnostics.Log;
 using Foundation.Linq;
+using Foundation.Log;
 
 namespace Foundation.Data
 {

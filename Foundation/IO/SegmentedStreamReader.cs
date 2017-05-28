@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using Foundation.Diagnostics;
-using Foundation.Diagnostics.Log;
+using Foundation.Log;
 
 namespace Foundation.IO
 {

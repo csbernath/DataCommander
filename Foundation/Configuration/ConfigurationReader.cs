@@ -8,8 +8,8 @@ using System.Linq;
 using System.Threading;
 using System.Xml;
 using Foundation.Diagnostics;
-using Foundation.Diagnostics.Log;
 using Foundation.Linq;
+using Foundation.Log;
 using Foundation.Text;
 using Foundation.Xml;
 

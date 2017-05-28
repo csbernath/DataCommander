@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 using System.IO;
-using Foundation.Diagnostics.Log;
+using Foundation.Log;
 using Foundation.Threading;
 
 namespace Foundation.IO

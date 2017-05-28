@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using Foundation.Configuration;
 using Foundation.Data.SqlClient.SqlLoggedSqlConnection;
-using Foundation.Diagnostics.Log;
+using Foundation.Log;
 
 namespace Foundation.Data.SqlClient
 {

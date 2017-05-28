@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using Foundation.Diagnostics.Log;
+using Foundation.Log;
 
 namespace Foundation.Threading
 {

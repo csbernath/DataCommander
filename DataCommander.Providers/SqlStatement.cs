@@ -6,8 +6,8 @@ using System.Linq;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.Field;
 using DataCommander.Providers.Query;
-using Foundation.Diagnostics.Log;
 using Foundation.Linq;
+using Foundation.Log;
 
 namespace DataCommander.Providers
 {

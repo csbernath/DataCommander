@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using Foundation.Linq;
 
-namespace Foundation.Diagnostics.Log
+namespace Foundation.Log
 {
     /// <summary>
     /// <see cref="ILogWriter"/> implementation for logging a multithreaded application into a file.

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using Foundation.Data.SqlClient.SqlLoggedSqlConnection;
 using Foundation.Diagnostics;
-using Foundation.Diagnostics.Log;
+using Foundation.Log;
 using Foundation.Threading;
 
 namespace Foundation.Data.SqlClient.SqlLog
@@ -153,8 +153,7 @@ namespace Foundation.Data.SqlClient.SqlLog
                     var seconds = (double)ticks/Stopwatch.Frequency;
                     var speed = (int)(array.Length/seconds);
 
-                    Log.Write(
-                        LogLevel.Trace,
+                    Log.Trace(
                         "SqlLog.Flush() called. Count: {0}, Elapsed: {1}, Speed: {2} item/sec\r\n{3}",
                         array.Length,
                         StopwatchTimeSpan.ToString(ticks, 3),

@@ -4,7 +4,7 @@ using System.Data.SQLite;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Providers.Connection;
-using Foundation.Diagnostics.Log;
+using Foundation.Log;
 
 namespace DataCommander.Providers.SQLite
 {

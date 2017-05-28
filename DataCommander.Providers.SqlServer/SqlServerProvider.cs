@@ -16,8 +16,8 @@ using Foundation;
 using Foundation.Configuration;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
-using Foundation.Diagnostics.Log;
 using Foundation.Linq;
+using Foundation.Log;
 
 namespace DataCommander.Providers.SqlServer
 {

@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace Foundation.Diagnostics.Log
+namespace Foundation.Log
 {
     internal sealed class LogFile : ILogFile
     {

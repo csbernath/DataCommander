@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 using Foundation.Diagnostics;
-using Foundation.Diagnostics.Log;
+using Foundation.Log;
 
 namespace Foundation.Threading
 {
@@ -300,12 +300,7 @@ namespace Foundation.Threading
             var elapsed = now - this.StartTime;
             var win32ThreadId = NativeMethods.GetCurrentThreadId();
 
-            Log.Write(
-                LogLevel.Trace,
-                "WorkerThread({0},{1}) started in {2} seconds. Win32ThreadId: {3}",
-                this.Thread.Name,
-                this.Thread.ManagedThreadId,
-                elapsed,
+            Log.Trace("WorkerThread({0},{1}) started in {2} seconds. Win32ThreadId: {3}", this.Thread.Name, this.Thread.ManagedThreadId, elapsed,
                 win32ThreadId);
 
             this.Thread.CurrentUICulture = CultureInfo.InvariantCulture;

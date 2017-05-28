@@ -6,7 +6,7 @@ using System.Threading;
 using Foundation.Linq;
 using Foundation.Threading;
 
-namespace Foundation.Diagnostics.Log
+namespace Foundation.Log
 {
     /// <summary>
     /// 

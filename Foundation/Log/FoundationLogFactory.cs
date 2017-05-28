@@ -4,9 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Foundation.Configuration;
+using Foundation.Diagnostics;
 using Foundation.Linq;
 
-namespace Foundation.Diagnostics.Log
+namespace Foundation.Log
 {
     internal sealed class FoundationLogFactory : ILogFactory
     {

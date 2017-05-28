@@ -1,3 +1,5 @@
+using Foundation.Log;
+
 namespace DataCommander.Providers.Connection
 {
     using System;
@@ -6,7 +8,6 @@ namespace DataCommander.Providers.Connection
     using System.Text;
     using Foundation.Configuration;
     using Foundation.Diagnostics;
-    using Foundation.Diagnostics.Log;
 
     public sealed class ConnectionProperties
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace Foundation.Diagnostics.Log
+namespace Foundation.Log
 {
 #if FOUNDATION_3_5
     using System.Web;
