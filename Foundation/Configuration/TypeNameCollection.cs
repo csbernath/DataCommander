@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
 using Foundation.Collections.IndexableCollection;
+using Foundation.Data;
 
 namespace Foundation.Configuration
 {
@@ -31,28 +32,28 @@ namespace Foundation.Configuration
             Collection = new IndexableCollection<TypeCollectionItem>(NameIndex);
             Collection.Indexes.Add(TypeIndex);
 
-            Add(TypeName.Bool, typeof (bool));
-            Add(TypeName.Char, typeof (char));
-            Add(TypeName.String, typeof (string));
-            Add(TypeName.Object, typeof (object));
+            Add(CSharpTypeName.Boolean, typeof(bool));
+            Add(CSharpTypeName.Char, typeof(char));
+            Add(CSharpTypeName.String, typeof(string));
+            Add(CSharpTypeName.Object, typeof(object));
 
-            Add(TypeName.SByte, typeof (sbyte));
-            Add(TypeName.Int16, typeof (short));
-            Add(TypeName.Int32, typeof (int));
-            Add(TypeName.Int64, typeof (long));
-            Add(TypeName.Byte, typeof (byte));
-            Add(TypeName.UInt16, typeof (ushort));
-            Add(TypeName.UInt32, typeof (uint));
-            Add(TypeName.UInt64, typeof (ulong));
+            Add(CSharpTypeName.SByte, typeof(sbyte));
+            Add(CSharpTypeName.Int16, typeof(short));
+            Add(CSharpTypeName.Int32, typeof(int));
+            Add(CSharpTypeName.Int64, typeof(long));
+            Add(CSharpTypeName.Byte, typeof(byte));
+            Add(CSharpTypeName.UInt16, typeof(ushort));
+            Add(CSharpTypeName.UInt32, typeof(uint));
+            Add(CSharpTypeName.UInt64, typeof(ulong));
 
-            Add(TypeName.Single, typeof (float));
-            Add(TypeName.Double, typeof (double));
-            Add(TypeName.Decimal, typeof (decimal));
+            Add(CSharpTypeName.Single, typeof(float));
+            Add(CSharpTypeName.Double, typeof(double));
+            Add(CSharpTypeName.Decimal, typeof(decimal));
 
-            Add(TypeName.DateTime, typeof (DateTime));
-            Add(TypeName.XmlNode, typeof (XmlNode));
+            Add(TypeName.DateTime, typeof(DateTime));
+            Add(TypeName.XmlNode, typeof(XmlNode));
 
-            SystemAssembly = Assembly.GetAssembly(typeof (int));
+            SystemAssembly = Assembly.GetAssembly(typeof(int));
         }
 
         private static void Add(string name, Type type)
@@ -165,24 +166,6 @@ namespace Foundation.Configuration
 
         private static class TypeName
         {
-            public const string Bool = "bool";
-            public const string Char = "char";
-            public const string String = "string";
-            public const string Object = "object";
-
-            public const string SByte = "sbyte";
-            public const string Int16 = "short";
-            public const string Int32 = "int";
-            public const string Int64 = "long";
-            public const string Byte = "byte";
-            public const string UInt16 = "ushort";
-            public const string UInt32 = "uint";
-            public const string UInt64 = "ulong";
-
-            public const string Single = "float";
-            public const string Double = "double";
-            public const string Decimal = "decimal";
-
             public const string DateTime = "datetime";
             public const string XmlNode = "xmlnode";
         }

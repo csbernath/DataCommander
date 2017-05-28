@@ -2,7 +2,6 @@
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using DataCommander.Providers.Connection;
 using Foundation;
 using Foundation.Data;
@@ -23,6 +22,7 @@ namespace DataCommander.Providers.ResultWriter
         private long _beforeExecuteReaderTimestamp;
         private long _writeTableBeginTimestamp;
         private long _firstRowReadBeginTimestamp;
+        private readonly OrmBuilder _ormBuilder = new OrmBuilder();
 
         public LogResultWriter(Action<InfoMessage> addInfoMessage)
         {
@@ -49,9 +49,7 @@ namespace DataCommander.Providers.ResultWriter
 
             var parameters = command.Parameters;
             if (!parameters.IsNullOrEmpty())
-            {
                 message += "\r\n" + command.Parameters.ToLogString();
-            }
 
             _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
         }
@@ -81,210 +79,11 @@ namespace DataCommander.Providers.ResultWriter
 
             var objectId = _tableCount + 1;
             var objectTypeName = $"Object{objectId}";
-            var objectInstanceName = "@object";
             var columns = schemaTable.Rows.Cast<DataRow>().Select(i => new DbColumn(i)).ToList();
-            var stringBuilder = new StringBuilder();
-            stringBuilder.Append("\r\ninternal sealed class ");
-            stringBuilder.Append(objectTypeName);
-            stringBuilder.Append("\r\n{\r\n");
-
-            var first = true;
-            foreach (var column in columns)
-            {
-                if (first)
-                    first = false;
-                else
-                    stringBuilder.AppendLine();
-
-                stringBuilder.Append("    public ");
-                stringBuilder.Append(GetCSharpTypeName(column.DataType));
-
-                if (column.AllowDbNull == true && IsValueType(column.DataType))
-                    stringBuilder.Append('?');
-
-                stringBuilder.Append(' ');
-                stringBuilder.Append(column.ColumnName);
-                stringBuilder.Append(";");
-            }
-
-            stringBuilder.AppendFormat(@"
-}}
-
-private static {0} Read{0}(IDataRecord dataRecord)
-{{
-    var {1} = new {0}();
-", objectTypeName, objectInstanceName);
-
-            first = true;
-            var index = 0;
-            foreach (var column in columns)
-            {
-                if (first)
-                    first = false;
-                else
-                    stringBuilder.AppendLine();
-
-                stringBuilder.AppendFormat("    {0}.",objectInstanceName);
-                stringBuilder.Append(column.ColumnName);
-                stringBuilder.Append(" = dataRecord.");
-                stringBuilder.Append(GetDataRecordMethodName(column));
-                stringBuilder.Append('(');
-                stringBuilder.Append(index);
-                stringBuilder.Append(");");
-
-                ++index;
-            }
-
-            stringBuilder.AppendFormat(@"
-    return {0};
-}}
-", objectInstanceName);
-
-            Log.Trace($"SchemaTable of table[{_tableCount}]:\r\n{schemaTable.ToStringTableString()}\r\n{stringBuilder}");
-
+            _ormBuilder.Add(objectTypeName, columns);
+            Log.Trace($"SchemaTable of table[{_tableCount}]:\r\n{schemaTable.ToStringTableString()}");
             ++_tableCount;
             _rowCount = 0;
-        }
-
-        private static string GetDataRecordMethodName(DbColumn column)
-        {
-            var typeCode = Type.GetTypeCode(column.DataType);
-            string methodName = null;
-            switch (typeCode)
-            {
-                case TypeCode.Empty:
-                    break;
-                case TypeCode.Object:
-                    break;
-                case TypeCode.DBNull:
-                    break;
-                case TypeCode.Boolean:
-                    methodName = column.AllowDbNull == true ? "GetNullableBoolean" : "GetBoolean";
-                    break;
-                case TypeCode.Char:
-                    break;
-                case TypeCode.SByte:
-                    break;
-                case TypeCode.Byte:
-                    methodName = column.AllowDbNull == true ? "GetNullableByte" : "GetByte";
-                    break;
-                case TypeCode.Int16:
-                    methodName = column.AllowDbNull == true ? "GetNullableInt16" : "GetInt16";
-                    break;
-                case TypeCode.UInt16:
-                    break;
-                case TypeCode.Int32:
-                    methodName = column.AllowDbNull == true ? "GetNullableInt32" : "GetInt32";
-                    break;
-                case TypeCode.UInt32:
-                    break;
-                case TypeCode.Int64:
-                    methodName = column.AllowDbNull == true ? "GetNullableInt64" : "GetInt64";
-                    break;
-                case TypeCode.UInt64:
-                    break;
-                case TypeCode.Single:
-                    methodName = column.AllowDbNull == true ? "GetNullableFloat" : "GetFloat";
-                    break;
-                case TypeCode.Double:
-                    methodName = column.AllowDbNull == true ? "GetNullableDouble" : "GetDouble";
-                    break;
-                case TypeCode.Decimal:
-                    methodName = column.AllowDbNull == true ? "GetNullableDecimal" : "GetDecimal";
-                    break;
-                case TypeCode.DateTime:
-                    methodName = column.AllowDbNull == true ? "GetNullableDateTime" : "GetDateTime";
-                    break;
-                case TypeCode.String:
-                    methodName = column.AllowDbNull == true ? "GetStringOrDefault" : "GetString";
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-            return methodName;
-        }
-
-        private static string GetCSharpTypeName(Type dbColumnDataType)
-        {
-            var typeCode = Type.GetTypeCode(dbColumnDataType);
-            string csharpTypeName;
-            switch (typeCode)
-            {
-                case TypeCode.Boolean:
-                    csharpTypeName = "bool";
-                    break;
-                case TypeCode.Char:
-                    csharpTypeName = "char";
-                    break;
-                case TypeCode.SByte:
-                    csharpTypeName = "byte";
-                    break;
-                case TypeCode.Byte:
-                    csharpTypeName = "byte";
-                    break;
-                case TypeCode.Int16:
-                    csharpTypeName = "shorrt";
-                    break;
-                case TypeCode.UInt16:
-                    csharpTypeName = "ushort";
-                    break;
-                case TypeCode.Int32:
-                    csharpTypeName = "int";
-                    break;
-                case TypeCode.UInt32:
-                    csharpTypeName = "uint";
-                    break;
-                case TypeCode.Int64:
-                    csharpTypeName = "long";
-                    break;
-                case TypeCode.UInt64:
-                    csharpTypeName = "ulong";
-                    break;
-                case TypeCode.Single:
-                    csharpTypeName = "float";
-                    break;
-                case TypeCode.Double:
-                    csharpTypeName = "double";
-                    break;
-                case TypeCode.Decimal:
-                    csharpTypeName = "decimal";
-                    break;
-                case TypeCode.String:
-                    csharpTypeName = "string";
-                    break;
-                default:
-                    csharpTypeName = dbColumnDataType.Name;
-                    break;
-            }
-            return csharpTypeName;
-        }
-
-        private static bool IsValueType(Type dbColumnDataType)
-        {
-            var typeCode = Type.GetTypeCode(dbColumnDataType);
-            var isValueType = false;
-
-            switch (typeCode)
-            {
-                case TypeCode.Boolean:
-                case TypeCode.Char:
-                case TypeCode.SByte:
-                case TypeCode.Byte:
-                case TypeCode.Int16:
-                case TypeCode.UInt16:
-                case TypeCode.Int32:
-                case TypeCode.UInt32:
-                case TypeCode.Int64:
-                case TypeCode.UInt64:
-                case TypeCode.Single:
-                case TypeCode.Double:
-                case TypeCode.Decimal:
-                case TypeCode.DateTime:
-                    isValueType = true;
-                    break;
-            }
-
-            return isValueType;
         }
 
         void IResultWriter.FirstRowReadBegin()
@@ -321,6 +120,8 @@ private static {0} Read{0}(IDataRecord dataRecord)
             var duration = Stopwatch.GetTimestamp() - _beginTimestamp;
             var message = $"Query completed {_commandCount} command(s) in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
             _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
+
+            Log.Trace($"\r\n{_ormBuilder}");
         }
 
         #endregion

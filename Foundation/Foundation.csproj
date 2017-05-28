@@ -436,6 +436,7 @@
     <Compile Include="Data\AsyncDbConnection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CSharpTypeName.cs" />
     <Compile Include="Data\DbCommandAsyncExecutor.cs" />
     <Compile Include="Data\DbCommandExecutor.cs" />
     <Compile Include="Data\DbCommandExecutorFactory.cs" />
@@ -445,6 +446,7 @@
     <Compile Include="Data\IDbCommandAsyncExecutor.cs" />
     <Compile Include="Data\IDbCommandAsyncExecutorExtensions.cs" />
     <Compile Include="Data\IDbConnectionExtensions.cs" />
+    <Compile Include="Data\OrmBuilder.cs" />
     <Compile Include="Data\SqlClient\SqlCommandExecutor.cs" />
     <Compile Include="Data\IDbCommandExecutor.cs" />
     <Compile Include="Data\ExecuteReaderResponse.cs" />
