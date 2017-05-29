@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DataCommander.Providers.SqlServer</RootNamespace>
     <AssemblyName>DataCommander.Providers.SqlServer</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -248,6 +248,10 @@
       <Project>{31a30a80-d1b6-4867-a65e-188de9e912c8}</Project>
       <Name>DataCommander.Providers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Foundation\Foundation.csproj">
+      <Project>{1bacf0aa-4122-4c10-a8d2-248542af054c}</Project>
+      <Name>Foundation</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -270,9 +274,6 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Foundation">
-      <HintPath>..\DataCommander.Foundation\bin\Debug\Foundation.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.SqlServer.ConnectionInfo, Version=14.100.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
