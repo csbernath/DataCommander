@@ -1,4 +1,4 @@
-using Foundation.Data;
+﻿using Foundation.Data;
 using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer

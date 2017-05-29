@@ -1,4 +1,4 @@
-using System.Data;
+﻿using System.Data;
 using Foundation.Threading;
 
 namespace Foundation.Data

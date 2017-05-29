@@ -1,4 +1,4 @@
-namespace SqlUtil.Providers.Odp
+﻿namespace SqlUtil.Providers.Odp
 {
     using System;
     using System.Collections.Generic;

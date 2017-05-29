@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.Query
+﻿namespace DataCommander.Providers.Query
 {
     public enum TokenType
     {

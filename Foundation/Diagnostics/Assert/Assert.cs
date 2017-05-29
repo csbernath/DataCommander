@@ -1,4 +1,4 @@
-#if FOUNDATION_3_5
+﻿#if FOUNDATION_3_5
 namespace DataCommander.Foundation.Diagnostics
 {
     using System;

@@ -1,4 +1,4 @@
-using Foundation.Data;
+﻿using Foundation.Data;
 using Foundation.Diagnostics;
 using Foundation.Log;
 using Foundation.Text;

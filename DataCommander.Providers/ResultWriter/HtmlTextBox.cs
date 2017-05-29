@@ -1,4 +1,4 @@
-using Foundation.Log;
+﻿using Foundation.Log;
 
 namespace DataCommander.Providers.ResultWriter
 {

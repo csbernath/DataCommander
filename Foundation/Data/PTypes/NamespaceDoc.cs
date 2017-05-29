@@ -1,4 +1,4 @@
-namespace Foundation.Data.PTypes
+﻿namespace Foundation.Data.PTypes
 {
 #if DOC
     /// <summary>

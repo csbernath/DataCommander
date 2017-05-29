@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.SqlServer.FieldReader
+﻿namespace DataCommander.Providers.SqlServer.FieldReader
 {
     using System.Data;
     using System.Data.SqlClient;

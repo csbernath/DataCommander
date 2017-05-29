@@ -1,4 +1,4 @@
-namespace SqlUtil.Providers.Wmi
+﻿namespace SqlUtil.Providers.Wmi
 {
     using System;
     using WAVE.Foundation.Collections;

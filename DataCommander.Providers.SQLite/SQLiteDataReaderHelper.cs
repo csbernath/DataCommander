@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.SQLite
+﻿namespace DataCommander.Providers.SQLite
 {
     using System;
     using System.Data;

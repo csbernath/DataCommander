@@ -1,4 +1,4 @@
-namespace Foundation.Threading
+﻿namespace Foundation.Threading
 {
 #if DOC
     /// <summary>

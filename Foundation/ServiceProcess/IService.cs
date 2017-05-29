@@ -1,4 +1,4 @@
-using System.ServiceProcess;
+﻿using System.ServiceProcess;
 
 namespace Foundation.ServiceProcess
 {

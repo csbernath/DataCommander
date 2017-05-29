@@ -1,4 +1,4 @@
-namespace Foundation
+﻿namespace Foundation
 {
 #if DOC
     /// <summary>

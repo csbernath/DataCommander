@@ -1,4 +1,4 @@
-namespace SqlUtil.Providers.Odbc
+﻿namespace SqlUtil.Providers.Odbc
 {
     using System;
     using System.Data;

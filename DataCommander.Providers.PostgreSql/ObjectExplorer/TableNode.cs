@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.PostgreSql.ObjectExplorer
+﻿namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Windows.Forms;

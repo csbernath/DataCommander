@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.Odp
+﻿namespace DataCommander.Providers.Odp
 {
     using Oracle.ManagedDataAccess.Client;
 

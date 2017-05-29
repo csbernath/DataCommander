@@ -1,4 +1,4 @@
-using Foundation.Data;
+﻿using Foundation.Data;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
 {

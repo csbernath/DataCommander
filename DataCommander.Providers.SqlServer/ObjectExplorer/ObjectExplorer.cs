@@ -1,4 +1,4 @@
-using Foundation.Linq;
+﻿using Foundation.Linq;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {

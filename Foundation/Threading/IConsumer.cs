@@ -1,4 +1,4 @@
-namespace Foundation.Threading
+﻿namespace Foundation.Threading
 {
     /// <summary>
     /// AsyncQueue implementors must implement this interface.

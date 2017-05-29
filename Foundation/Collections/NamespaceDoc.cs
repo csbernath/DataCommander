@@ -1,4 +1,4 @@
-namespace Foundation.Collections
+﻿namespace Foundation.Collections
 {
 #if DOC
     /// <summary>

@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.Wmi
+﻿namespace DataCommander.Providers.Wmi
 {
     using System;
     using System.Data;

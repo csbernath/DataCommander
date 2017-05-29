@@ -1,4 +1,4 @@
-namespace DataCommander.Providers
+﻿namespace DataCommander.Providers
 {
     using System.Collections.Generic;
     using System.Windows.Forms;

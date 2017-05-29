@@ -1,4 +1,4 @@
-using System.Configuration;
+﻿using System.Configuration;
 using System.Xml;
 
 namespace Foundation.Configuration

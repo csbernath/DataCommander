@@ -1,4 +1,4 @@
-namespace Foundation.Log
+﻿namespace Foundation.Log
 {
     /// <summary>
     /// The verbosity of logging.

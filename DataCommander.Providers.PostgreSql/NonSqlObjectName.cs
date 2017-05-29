@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.PostgreSql
+﻿namespace DataCommander.Providers.PostgreSql
 {
     internal sealed class NonSqlObjectName : IObjectName
     {

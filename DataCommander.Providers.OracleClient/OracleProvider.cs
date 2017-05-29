@@ -1,4 +1,4 @@
-using DataCommander.Providers.OracleBase.ObjectExplorer;
+﻿using DataCommander.Providers.OracleBase.ObjectExplorer;
 using Foundation.Data;
 
 namespace DataCommander.Providers.OracleClient

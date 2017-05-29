@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.Odp.DataFieldReader
+﻿namespace DataCommander.Providers.Odp.DataFieldReader
 {
     using System;
     using System.Data;

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Foundation.Linq;
 using Foundation.Log;
 

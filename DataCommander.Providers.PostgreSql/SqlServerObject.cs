@@ -1,4 +1,4 @@
-using Foundation.Data.SqlClient;
+﻿using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.PostgreSql
 {

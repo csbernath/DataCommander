@@ -1,10 +1,10 @@
-using System;
+ï»¿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("DataCommander.Providers.OleDb")]
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyCopyright("Copyright © 2002-2017 Csaba Bernáth")]
-[assembly: AssemblyCompany("Csaba Bernáth")]
+[assembly: AssemblyCopyright("Copyright Â© 2002-2017 Csaba BernÃ¡th")]
+[assembly: AssemblyCompany("Csaba BernÃ¡th")]
 [assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]

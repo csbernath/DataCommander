@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.MySql
+﻿namespace DataCommander.Providers.MySql
 {
     using System.Collections.Generic;
     using System.Data.SqlClient;

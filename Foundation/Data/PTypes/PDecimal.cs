@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data.SqlTypes;
 
 namespace Foundation.Data.PTypes

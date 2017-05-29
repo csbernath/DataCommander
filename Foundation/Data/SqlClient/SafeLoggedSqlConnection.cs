@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 using System.Threading;
 using Foundation.Data.SqlClient.SqlLoggedSqlConnection;

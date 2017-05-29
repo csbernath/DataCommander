@@ -1,4 +1,4 @@
-namespace Foundation.Linq
+﻿namespace Foundation.Linq
 {
     /// <summary>
     /// 

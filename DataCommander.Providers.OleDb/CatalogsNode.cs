@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.OleDb
+﻿namespace DataCommander.Providers.OleDb
 {
     using System.Collections.Generic;
     using System.Data.OleDb;

@@ -1,4 +1,4 @@
-namespace DataCommander.Foundation.Threading
+﻿namespace DataCommander.Foundation.Threading
 {
     a
     using System;

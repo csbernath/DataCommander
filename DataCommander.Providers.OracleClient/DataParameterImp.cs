@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.OracleClient
+﻿namespace DataCommander.Providers.OracleClient
 {
     using System.Data.OracleClient;
 

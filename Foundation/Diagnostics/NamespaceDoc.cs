@@ -1,4 +1,4 @@
-namespace Foundation.Diagnostics
+﻿namespace Foundation.Diagnostics
 {
 #if DOC
     /// <summary>

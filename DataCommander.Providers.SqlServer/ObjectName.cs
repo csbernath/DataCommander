@@ -1,4 +1,4 @@
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System.Text;
 
 namespace DataCommander.Providers.SqlServer

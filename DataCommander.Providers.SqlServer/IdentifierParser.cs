@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.SqlServer
+﻿namespace DataCommander.Providers.SqlServer
 {
     using System.Collections.Generic;
     using System.IO;

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 using Foundation.Data;
 using Oracle.ManagedDataAccess.Client;

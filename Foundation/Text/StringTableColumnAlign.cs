@@ -1,4 +1,4 @@
-namespace Foundation.Text
+﻿namespace Foundation.Text
 {
     /// <summary>
     /// 

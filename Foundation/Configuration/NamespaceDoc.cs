@@ -1,4 +1,4 @@
-namespace Foundation.Configuration
+﻿namespace Foundation.Configuration
 {
 #if DOC
     /// <summary>

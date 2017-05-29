@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.PostgreSql
+﻿namespace DataCommander.Providers.PostgreSql
 {
     using System.Data.SqlClient;
     using System.IO;

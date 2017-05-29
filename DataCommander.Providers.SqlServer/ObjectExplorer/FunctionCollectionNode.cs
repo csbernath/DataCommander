@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.SqlServer.ObjectExplorer
+﻿namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Windows.Forms;

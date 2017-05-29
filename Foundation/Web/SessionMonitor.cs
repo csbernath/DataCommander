@@ -1,4 +1,4 @@
-namespace DataCommander.Foundation.Web
+﻿namespace DataCommander.Foundation.Web
 {
     using System;
     using System.Collections.Generic;

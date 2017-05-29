@@ -1,4 +1,4 @@
-using Foundation.Configuration;
+﻿using Foundation.Configuration;
 using Foundation.Data;
 
 namespace DataCommander.Providers.Odp

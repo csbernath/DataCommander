@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.Odp.ObjectExplorer
+﻿namespace DataCommander.Providers.Odp.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Windows.Forms;

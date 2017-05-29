@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.Connection
+﻿namespace DataCommander.Providers.Connection
 {
     using System;
     using System.ComponentModel;

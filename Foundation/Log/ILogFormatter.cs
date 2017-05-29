@@ -1,4 +1,4 @@
-namespace Foundation.Log
+﻿namespace Foundation.Log
 {
     internal interface ILogFormatter
     {

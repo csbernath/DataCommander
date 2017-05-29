@@ -1,4 +1,4 @@
-namespace DataCommander.Providers.ResultWriter
+﻿namespace DataCommander.Providers.ResultWriter
 {
     using System;
     using System.Data;
