@@ -64,7 +64,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;FOUNDATION_4_6</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;FOUNDATION_4_7</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -321,6 +321,9 @@
     </Compile>
     <Compile Include="Collections\ConcurrentQueue.cs" />
     <Compile Include="Collections\EmptyArray.cs" />
+    <Compile Include="Collections\EmptyEnumerable.cs" />
+    <Compile Include="Collections\EmptyEnumerator.cs" />
+    <Compile Include="Collections\EmptyNonGenericEnumerator.cs" />
     <Compile Include="Collections\LargeObjectHeap.cs" />
     <Compile Include="Collections\MemberComparer.cs" />
     <Compile Include="Collections\MultipleMemberComparer.cs" />

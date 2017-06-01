@@ -7,25 +7,23 @@ namespace Foundation
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    [DebuggerDisplay("{" + nameof(value) + "}")]
+    [DebuggerDisplay("{" + nameof(_value) + "}")]
     public struct NotNullable<T> where T : class
     {
-        private readonly T value;
+        private readonly T _value;
 
         private NotNullable(T value)
         {
             if (value == null)
-            {
                 throw new ArgumentNullException();
-            }
 
-            this.value = value;
+            _value = value;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public bool HasValue => this.value != null;
+        public bool HasValue => _value != null;
 
         /// <summary>
         /// 
@@ -34,12 +32,10 @@ namespace Foundation
         {
             get
             {
-                if (this.value == null)
-                {
+                if (_value == null)
                     throw new InvalidOperationException();
-                }
 
-                return this.value;
+                return _value;
             }
         }
 

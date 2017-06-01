@@ -4,15 +4,13 @@ using System.Collections.Generic;
 
 namespace Foundation.Collections
 {
-    internal sealed class EmptyReadOnlyList<T> : IReadOnlyList<T>
+    public sealed class EmptyReadOnlyList<T> : IReadOnlyList<T>
     {
-        private static readonly EmptyReadOnlyList<T> instance = new EmptyReadOnlyList<T>();
+        public static readonly EmptyReadOnlyList<T> Value = new EmptyReadOnlyList<T>();
 
         private EmptyReadOnlyList()
         {
         }
-
-        public static IReadOnlyList<T> Instance => instance;
 
         T IReadOnlyList<T>.this[int index] => throw new ArgumentOutOfRangeException();
 
@@ -20,13 +18,12 @@ namespace Foundation.Collections
 
         public IEnumerator<T> GetEnumerator()
         {
-            var emptyArray = (IEnumerable<T>)EmptyArray<T>.Value;
-            return emptyArray.GetEnumerator();
+            return EmptyEnumerator<T>.Value;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return EmptyNonGenericEnumerator.Value;
         }
     }
 }

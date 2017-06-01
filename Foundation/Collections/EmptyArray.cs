@@ -1,4 +1,4 @@
-﻿#if FOUNDATION_4_6
+﻿#if FOUNDATION_4_6 || FOUNDATION_4_7
 
 namespace Foundation.Collections
 {

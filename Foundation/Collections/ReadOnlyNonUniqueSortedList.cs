@@ -99,9 +99,7 @@ namespace Foundation.Collections
                     readOnlyList = new ReadOnlyListSegment<TValue>(this._values, currentGroupIndex, count);
                 }
                 else
-                {
-                    readOnlyList = EmptyReadOnlyList<TValue>.Instance;
-                }
+                    readOnlyList = EmptyReadOnlyList<TValue>.Value;
 
                 return readOnlyList;
             }

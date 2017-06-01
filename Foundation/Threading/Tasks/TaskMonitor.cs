@@ -7,8 +7,9 @@ using Foundation.Text;
 
 namespace Foundation.Threading.Tasks
 {
-#if FOUNDATION_4_0 || FOUNDATION_4_5 || FOUNDATION_4_6
+#if FOUNDATION_4_0 || FOUNDATION_4_5 || FOUNDATION_4_6 || FOUNDATION_4_7
     using System.Threading.Tasks;
+
 #endif
 
     /// <summary>
