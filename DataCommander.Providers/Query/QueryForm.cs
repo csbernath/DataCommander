@@ -3703,12 +3703,13 @@ namespace DataCommander.Providers.Query
             var database = Connection.Database;
 
             if (connection.Database != Connection.Database)
-            {
                 connection.Connection.ChangeDatabase(database);
-            }
 
             var queryForm = new QueryForm(_mainForm, index, Provider, _connectionString, connection, mainForm.StatusBar, _colorTheme);
-            queryForm.Font = mainForm.SelectedFont;
+
+            if (mainForm.SelectedFont != null)
+                queryForm.Font = mainForm.SelectedFont;
+
             queryForm.MdiParent = mainForm;
             queryForm.WindowState = WindowState;
             queryForm.Show();

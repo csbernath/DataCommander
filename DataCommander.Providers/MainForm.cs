@@ -529,10 +529,10 @@ namespace DataCommander.Providers
                     connectionProperties.Connection, _statusBar, _colorTheme);
 
                 queryForm.MdiParent = this;
+
                 if (SelectedFont != null)
-                {
                     queryForm.Font = SelectedFont;
-                }
+
                 queryForm.FormClosing += queryForm_FormClosing;
 
                 switch (WindowState)
