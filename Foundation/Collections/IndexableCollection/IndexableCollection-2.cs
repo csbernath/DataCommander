@@ -9,12 +9,12 @@ namespace Foundation.Collections.IndexableCollection
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this._defaultIndex.Count;
+        public int Count => _defaultIndex.Count;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadOnly => this._defaultIndex.IsReadOnly;
+        public bool IsReadOnly => _defaultIndex.IsReadOnly;
 
         /// <summary>
         /// 
@@ -22,7 +22,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="item"></param>
         public void Add(T item)
         {
-            foreach (var index in this.Indexes)
+            foreach (var index in Indexes)
             {
                 index.Add(item);
             }
@@ -33,7 +33,7 @@ namespace Foundation.Collections.IndexableCollection
         /// </summary>
         public void Clear()
         {
-            foreach (var index in this.Indexes)
+            foreach (var index in Indexes)
             {
                 index.Clear();
             }
@@ -49,7 +49,7 @@ namespace Foundation.Collections.IndexableCollection
 #if CONTRACTS_FULL
             Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
 #endif
-            return this._defaultIndex.Contains(item);
+            return _defaultIndex.Contains(item);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="arrayIndex"></param>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            this._defaultIndex.CopyTo(array, arrayIndex);
+            _defaultIndex.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool Remove(T item)
         {
-            return this.Indexes.All(index => index.Remove(item));
+            return Indexes.All(index => index.Remove(item));
         }
 
         /// <summary>
@@ -78,12 +78,12 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            return this._defaultIndex.GetEnumerator();
+            return _defaultIndex.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this._defaultIndex.GetEnumerator();
+            return _defaultIndex.GetEnumerator();
         }
     }
 }

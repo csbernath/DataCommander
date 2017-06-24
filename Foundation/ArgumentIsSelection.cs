@@ -32,11 +32,11 @@ namespace Foundation
             Contract.Requires<ArgumentNullException>(action != null);
 #endif
 
-            if (!this.selected)
+            if (!selected)
             {
-                var argumentAs = this.argument as TArgumentAs;
-                this.selected = argumentAs != null;
-                if (this.selected)
+                var argumentAs = argument as TArgumentAs;
+                selected = argumentAs != null;
+                if (selected)
                 {
                     action(argumentAs);
                 }
@@ -56,10 +56,10 @@ namespace Foundation
             Contract.Requires<ArgumentNullException>(action != null);
 #endif
 
-            if (!this.selected)
+            if (!selected)
             {
-                this.selected = this.argument == null;
-                if (this.selected)
+                selected = argument == null;
+                if (selected)
                 {
                     action();
                 }
@@ -80,10 +80,10 @@ namespace Foundation
             Contract.Requires<ArgumentNullException>(action != null);
 #endif
 
-            if (!this.selected)
+            if (!selected)
             {
-                this.selected = condition();
-                if (this.selected)
+                selected = condition();
+                if (selected)
                 {
                     action();
                 }
@@ -102,7 +102,7 @@ namespace Foundation
             Contract.Requires<ArgumentNullException>(action != null);
 #endif
 
-            if (!this.selected)
+            if (!selected)
             {
                 action();
             }

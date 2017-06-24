@@ -19,8 +19,8 @@ namespace Foundation.Data.TextData
         /// <param name="value"></param>
         public TextDataParameter(string name, object value)
         {
-            this._name = name;
-            this._value = value;
+            _name = name;
+            _value = value;
         }
 
         /// <summary>
@@ -58,9 +58,9 @@ namespace Foundation.Data.TextData
         /// </summary>
         public override string ParameterName
         {
-            get => this._name;
+            get => _name;
 
-            set => this._name = value;
+            set => _name = value;
         }
 
         /// <summary>
@@ -116,9 +116,9 @@ namespace Foundation.Data.TextData
         /// </summary>
         public override object Value
         {
-            get => this._value;
+            get => _value;
 
-            set => this._value = value;
+            set => _value = value;
         }
     }
 }

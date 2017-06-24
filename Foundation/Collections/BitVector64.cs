@@ -15,7 +15,7 @@ namespace Foundation.Collections
         [CLSCompliant(false)]
         public BitVector64(ulong data)
         {
-            this.Value = data;
+            Value = data;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Foundation.Collections
             get
             {
                 var bit = 1UL << index;
-                return (this.Value & bit) == bit;
+                return (Value & bit) == bit;
             }
 
             set
@@ -41,11 +41,11 @@ namespace Foundation.Collections
 
                 if (value)
                 {
-                    this.Value |= bit;
+                    Value |= bit;
                 }
                 else
                 {
-                    this.Value &= ~bit;
+                    Value &= ~bit;
                 }
             }
         }
@@ -56,7 +56,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public override string ToString()
         {
-            var value = this.Value.ToString("X");
+            var value = Value.ToString("X");
             value = value.PadLeft(16, '0');
             return value;
         }

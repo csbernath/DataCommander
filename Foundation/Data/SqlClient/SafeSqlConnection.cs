@@ -26,7 +26,7 @@ namespace Foundation.Data.SqlClient
         public SafeSqlConnection(string connectionString)
         {
             var connection = new SqlConnection(connectionString);
-            this.Initialize(connection, this);
+            Initialize(connection, this);
         }
 
         /// <summary>
@@ -35,14 +35,14 @@ namespace Foundation.Data.SqlClient
         /// <param name="connection"></param>
         public SafeSqlConnection(IDbConnection connection)
         {
-            this.Initialize(connection, this);
+            Initialize(connection, this);
         }
 
         #region ICloneable Members
 
         object ICloneable.Clone()
         {
-            var connectionString = this.ConnectionString;
+            var connectionString = ConnectionString;
             var connection = new SafeSqlConnection(connectionString);
             return connection;
         }
@@ -66,18 +66,18 @@ namespace Foundation.Data.SqlClient
             return id;
         }
 
-        CancellationToken ISafeDbConnection.CancellationToken => this._cancellationToken;
+        CancellationToken ISafeDbConnection.CancellationToken => _cancellationToken;
 
         object ISafeDbConnection.Id
         {
             get
             {
-                if (this._id == 0)
+                if (_id == 0)
                 {
-                    this._id = GetId(this.Connection);
+                    _id = GetId(Connection);
                 }
 
-                return this._id;
+                return _id;
             }
         }
 
@@ -158,7 +158,7 @@ namespace Foundation.Data.SqlClient
 
         void ISafeDbConnection.HandleException(Exception exception, TimeSpan elapsed)
         {
-            HandleException(this.Connection, exception, elapsed, this._cancellationToken);
+            HandleException(Connection, exception, elapsed, _cancellationToken);
         }
 
         internal static void HandleException(Exception exception, IDbCommand command, CancellationToken cancellationToken)
@@ -215,7 +215,7 @@ namespace Foundation.Data.SqlClient
 
         void ISafeDbConnection.HandleException(Exception exception, IDbCommand command)
         {
-            HandleException(exception, command, this._cancellationToken);
+            HandleException(exception, command, _cancellationToken);
         }
     }
 }

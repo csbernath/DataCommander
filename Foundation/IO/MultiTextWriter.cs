@@ -15,7 +15,7 @@ namespace Foundation.IO
         /// <summary>
         /// 
         /// </summary>
-        public IList<TextWriter> TextWriters => this._textWriters;
+        public IList<TextWriter> TextWriters => _textWriters;
 
         /// <summary>
         /// 
@@ -28,7 +28,7 @@ namespace Foundation.IO
         /// <param name="value"></param>
         public override void Write(char value)
         {
-            foreach (var textWriter in this._textWriters)
+            foreach (var textWriter in _textWriters)
             {
                 textWriter.Write(value);
             }
@@ -43,7 +43,7 @@ namespace Foundation.IO
         public override void Write(char[] buffer, int index, int count)
         {
             var value = new string(buffer, index, count);
-            this.Write(value);
+            Write(value);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Foundation.IO
         /// <param name="value"></param>
         public override void Write(string value)
         {
-            foreach (var textWriter in this._textWriters)
+            foreach (var textWriter in _textWriters)
             {
                 textWriter.Write(value);
             }

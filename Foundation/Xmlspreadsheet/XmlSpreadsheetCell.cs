@@ -19,8 +19,8 @@ namespace Foundation.XmlSpreadsheet
         /// <param name="value"></param>
         public XmlSpreadsheetCell(XmlSpreadsheetDataType dataType, string value)
         {
-            this._dataType = dataType;
-            this._value = value;
+            _dataType = dataType;
+            _value = value;
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Foundation.XmlSpreadsheet
             set
             {
                 var attribute = new XmlSpreadsheetAttribute("ss:StyleID", value);
-                this._attributes.Add(attribute);
+                _attributes.Add(attribute);
             }
         }
 
@@ -43,7 +43,7 @@ namespace Foundation.XmlSpreadsheet
             set
             {
                 var attribute = new XmlSpreadsheetAttribute("ss:MergeAcross", value.ToString());
-                this._attributes.Add(attribute);
+                _attributes.Add(attribute);
             }
         }
 
@@ -59,15 +59,15 @@ namespace Foundation.XmlSpreadsheet
 
             using (xmlWriter.WriteElement("Cell"))
             {
-                foreach (var attribute in this._attributes)
+                foreach (var attribute in _attributes)
                 {
                     attribute.Write(xmlWriter);
                 }
 
                 using (xmlWriter.WriteElement("Data"))
                 {
-                    xmlWriter.WriteAttributeString("ss:Type", this._dataType.ToString());
-                    xmlWriter.WriteString(this._value);
+                    xmlWriter.WriteAttributeString("ss:Type", _dataType.ToString());
+                    xmlWriter.WriteString(_value);
                 }
             }
         }

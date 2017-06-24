@@ -8,7 +8,7 @@ namespace Foundation.Configuration
     {
         private SectionHandler(XmlNode section)
         {
-            this.Section = section;
+            Section = section;
         }
 
         /// <summary>

@@ -19,7 +19,7 @@ namespace Foundation.Collections.IndexableCollection
 #if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(name != null);
 #endif
-            this.Initialize(name, new List<T>());
+            Initialize(name, new List<T>());
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Foundation.Collections.IndexableCollection
             Contract.Requires<ArgumentNullException>(name != null);
             Contract.Requires<ArgumentNullException>(list != null);
 #endif
-            this.Initialize(name, list);
+            Initialize(name, list);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this._list.Count;
+        public int Count => _list.Count;
 
         bool ICollection<T>.IsReadOnly => false;
 
@@ -60,7 +60,7 @@ namespace Foundation.Collections.IndexableCollection
 #if CONTRACTS_FULL
                 Contract.Assert(index < this.Count);
 #endif
-                return this._list[index];
+                return _list[index];
             }
 
             set
@@ -68,7 +68,7 @@ namespace Foundation.Collections.IndexableCollection
 #if CONTRACTS_FULL
                 Contract.Assert(index < this.Count);
 #endif
-                this._list[index] = value;
+                _list[index] = value;
             }
         }
 
@@ -79,7 +79,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="arrayIndex"></param>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            this._list.CopyTo(array, arrayIndex);
+            _list.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public int IndexOf(T item)
         {
-            return this._list.IndexOf(item);
+            return _list.IndexOf(item);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="item"></param>
         public void Insert(int index, T item)
         {
-            this._list.Insert(index, item);
+            _list.Insert(index, item);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="index"></param>
         public void RemoveAt(int index)
         {
-            this._list.RemoveAt(index);
+            _list.RemoveAt(index);
         }
 
         #region ICollectionIndex<T> Members
@@ -119,7 +119,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="item"></param>
         public void Add(T item)
         {
-            this._list.Add(item);
+            _list.Add(item);
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace Foundation.Collections.IndexableCollection
         /// </summary>
         public void Clear()
         {
-            this._list.Clear();
+            _list.Clear();
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace Foundation.Collections.IndexableCollection
 #if CONTRACTS_FULL
             Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
 #endif
-            return this._list.Contains(item);
+            return _list.Contains(item);
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool Remove(T item)
         {
-            return this._list.Remove(item);
+            return _list.Remove(item);
         }
 
         #endregion
@@ -163,7 +163,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            return this._list.GetEnumerator();
+            return _list.GetEnumerator();
         }
 
         #endregion
@@ -172,7 +172,7 @@ namespace Foundation.Collections.IndexableCollection
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this._list.GetEnumerator();
+            return _list.GetEnumerator();
         }
 
         #endregion
@@ -184,8 +184,8 @@ namespace Foundation.Collections.IndexableCollection
             Contract.Requires<ArgumentNullException>(list != null);
 #endif
 
-            this.Name = name;
-            this._list = list;
+            Name = name;
+            _list = list;
         }
     }
 }

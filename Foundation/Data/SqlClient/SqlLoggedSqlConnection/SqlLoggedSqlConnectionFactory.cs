@@ -23,19 +23,19 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             string applicationName,
             ISqlLoggedSqlCommandFilter filter)
         {
-            this._filter = filter;
-            this._sqlLog = new SqlLog.SqlLog(connectionString);
-            this._applicationId = this._sqlLog.ApplicationStart(applicationName, LocalTime.Default.Now, false);
+            _filter = filter;
+            _sqlLog = new SqlLog.SqlLog(connectionString);
+            _applicationId = _sqlLog.ApplicationStart(applicationName, LocalTime.Default.Now, false);
         }
 
-        WorkerThread IDbConnectionFactory.Thread => this._sqlLog.Thread;
+        WorkerThread IDbConnectionFactory.Thread => _sqlLog.Thread;
 
         IDbConnection IDbConnectionFactory.CreateConnection(
             string connectionString,
             string userName,
             string hostName)
         {
-            return new SqlLoggedSqlConnection(this._sqlLog, this._applicationId, userName, hostName, connectionString, this._filter);
+            return new SqlLoggedSqlConnection(_sqlLog, _applicationId, userName, hostName, connectionString, _filter);
         }
 
         IDbConnectionHelper IDbConnectionFactory.CreateConnectionHelper(IDbConnection connection)

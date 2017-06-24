@@ -16,8 +16,8 @@ namespace Foundation.Data.LoggedDbConnection
             LoggedDbCommandInfo command,
             Exception exception)
         {
-            this.Command = command;
-            this.Exception = exception;
+            Command = command;
+            Exception = exception;
         }
 
         /// <summary>

@@ -18,7 +18,7 @@ namespace Foundation.Configuration
 #if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(attributes != null);
 #endif
-            this._attributes = attributes;
+            _attributes = attributes;
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public bool TryGetValue(string name, out string value)
         {
-            return TryGetValue(this._attributes, name, out value);
+            return TryGetValue(_attributes, name, out value);
         }
     }
 }

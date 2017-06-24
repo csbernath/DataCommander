@@ -21,7 +21,7 @@ namespace Foundation.Configuration
             var reader = new ConfigurationReader();
             var textReader = new StringReader(xml);
             var xmlReader = new XmlTextReader(textReader);
-            this._rootNode = reader.Read(xmlReader, null, sectionName, null);
+            _rootNode = reader.Read(xmlReader, null, sectionName, null);
         }
 
         /// <summary>
@@ -37,9 +37,9 @@ namespace Foundation.Configuration
 #endif
 
             xmlWriter.WriteStartElement(sectionName);
-            ConfigurationWriter.Write(xmlWriter, this._rootNode.Attributes);
+            ConfigurationWriter.Write(xmlWriter, _rootNode.Attributes);
 
-            foreach (var childNode in this._rootNode.ChildNodes)
+            foreach (var childNode in _rootNode.ChildNodes)
             {
                 ConfigurationWriter.WriteNode(xmlWriter, childNode);
             }
@@ -59,7 +59,7 @@ namespace Foundation.Configuration
             using (var textWriter = new StringWriter(CultureInfo.InvariantCulture))
             {
                 var xmlWriter = new XmlTextWriter(textWriter) {Formatting = Formatting.Indented, Indentation = 2, IndentChar = ' '};
-                this.Save(xmlWriter, sectionName);
+                Save(xmlWriter, sectionName);
                 xmlWriter.Close();
                 s = textWriter.ToString();
             }
@@ -74,12 +74,12 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public ConfigurationNode SelectNode(string path)
         {
-            if (this._rootNode == null)
+            if (_rootNode == null)
             {
-                this._rootNode = new ConfigurationNode(null);
+                _rootNode = new ConfigurationNode(null);
             }
 
-            var node = this._rootNode;
+            var node = _rootNode;
 
             if (path != null)
             {

@@ -13,24 +13,24 @@ namespace Foundation.Diagnostics.MethodProfiler
 
         public bool TryGetValue(MethodBase method, out int methodId)
         {
-            return this._methods.TryGetValue(method, out methodId);
+            return _methods.TryGetValue(method, out methodId);
         }
 
         public int Add(MethodBase method)
         {
-            var id = Interlocked.Increment(ref this._idSequence);
-            this._methods.TryAdd(method, id);
+            var id = Interlocked.Increment(ref _idSequence);
+            _methods.TryAdd(method, id);
             return id;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this._methods.Values.GetEnumerator();
+            return _methods.Values.GetEnumerator();
         }
 
         IEnumerator<MethodBase> IEnumerable<MethodBase>.GetEnumerator()
         {
-            return this._methods.Keys.GetEnumerator();
+            return _methods.Keys.GetEnumerator();
         }
     }
 }

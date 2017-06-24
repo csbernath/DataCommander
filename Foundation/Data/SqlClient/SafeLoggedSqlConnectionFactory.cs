@@ -27,15 +27,15 @@ namespace Foundation.Data.SqlClient
             string applicationName,
             ISqlLoggedSqlCommandFilter filter)
         {
-            this._filter = filter;
-            this._sqlLog = new SqlLog.SqlLog(connectionString);
-            this._applicationId = this._sqlLog.ApplicationStart(applicationName, LocalTime.Default.Now, true);
+            _filter = filter;
+            _sqlLog = new SqlLog.SqlLog(connectionString);
+            _applicationId = _sqlLog.ApplicationStart(applicationName, LocalTime.Default.Now, true);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public WorkerThread Thread => this._sqlLog.Thread;
+        public WorkerThread Thread => _sqlLog.Thread;
 
         /// <summary>
         /// 
@@ -47,12 +47,12 @@ namespace Foundation.Data.SqlClient
         public IDbConnection CreateConnection(string connectionString, string userName, string hostName)
         {
             return new SafeLoggedSqlConnection(
-                this._sqlLog,
-                this._applicationId,
+                _sqlLog,
+                _applicationId,
                 userName,
                 hostName,
                 connectionString,
-                this._filter,
+                _filter,
                 CancellationToken.None);
         }
 

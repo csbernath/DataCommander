@@ -14,13 +14,13 @@ namespace Foundation.Data.SqlClient
             SqlConnection sqlConnection,
             IDbConnection connection)
         {
-            sqlConnection.InfoMessage += this.InfoMessageEvent;
-            this._connection = connection;
+            sqlConnection.InfoMessage += InfoMessageEvent;
+            _connection = connection;
         }
 
         private void InfoMessageEvent(object sender, SqlInfoMessageEventArgs e)
         {
-            this.InfoMessage?.Invoke(this._connection, e);
+            InfoMessage?.Invoke(_connection, e);
         }
     }
 }

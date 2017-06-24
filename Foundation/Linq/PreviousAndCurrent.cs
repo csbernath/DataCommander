@@ -8,8 +8,8 @@
     {
         internal PreviousAndCurrent(T previous, T current)
         {
-            this.Previous = previous;
-            this.Current = current;
+            Previous = previous;
+            Current = current;
         }
 
         /// <summary>

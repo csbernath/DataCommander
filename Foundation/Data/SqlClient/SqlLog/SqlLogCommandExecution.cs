@@ -4,8 +4,8 @@
     {
         public SqLoglCommandExecution(int commandNo)
         {
-            this.CommandNo = commandNo;
-            this.ExecutionNo = 1;
+            CommandNo = commandNo;
+            ExecutionNo = 1;
         }
 
         public int CommandNo { get; }

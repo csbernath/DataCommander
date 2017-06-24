@@ -40,9 +40,9 @@ namespace Foundation.Collections
                 "keys must be unique and ordered");
 #endif
 
-            this._values = values;
-            this._keySelector = keySelector;
-            this._comparison = comparison;
+            _values = values;
+            _keySelector = keySelector;
+            _comparison = comparison;
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public bool ContainsKey(TKey key)
         {
-            return this.IndexOfKey(key) >= 0;
+            return IndexOfKey(key) >= 0;
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace Foundation.Collections
         {
             get
             {
-                return this._values.Select(v => this._keySelector(v));
+                return _values.Select(v => _keySelector(v));
             }
         }
 
@@ -89,11 +89,11 @@ namespace Foundation.Collections
         public bool TryGetValue(TKey key, out TValue value)
         {
             bool succeeded;
-            var index = this.IndexOfKey(key);
+            var index = IndexOfKey(key);
 
             if (index >= 0)
             {
-                value = this._values[index];
+                value = _values[index];
                 succeeded = true;
             }
             else
@@ -108,7 +108,7 @@ namespace Foundation.Collections
         /// <summary>
         /// 
         /// </summary>
-        public IEnumerable<TValue> Values => this._values;
+        public IEnumerable<TValue> Values => _values;
 
         /// <summary>
         /// 
@@ -119,21 +119,21 @@ namespace Foundation.Collections
         {
             get
             {
-                var index = this.IndexOfKey(key);
+                var index = IndexOfKey(key);
 
                 if (index < 0)
                 {
                     throw new KeyNotFoundException();
                 }
 
-                return this._values[index];
+                return _values[index];
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this._values.Count;
+        public int Count => _values.Count;
 
         /// <summary>
         /// 
@@ -141,12 +141,12 @@ namespace Foundation.Collections
         /// <returns></returns>
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            return this._values.Select(value => KeyValuePair.Create(this._keySelector(value), value)).GetEnumerator();
+            return _values.Select(value => KeyValuePair.Create(_keySelector(value), value)).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
 
 #endregion
@@ -157,13 +157,13 @@ namespace Foundation.Collections
         {
             int indexOfKey;
 
-            if (this._values.Count > 0)
+            if (_values.Count > 0)
             {
-                indexOfKey = BinarySearch.IndexOf(0, this._values.Count - 1, index =>
+                indexOfKey = BinarySearch.IndexOf(0, _values.Count - 1, index =>
                 {
-                    var otherValue = this._values[index];
-                    var otherKey = this._keySelector(otherValue);
-                    return this._comparison(key, otherKey);
+                    var otherValue = _values[index];
+                    var otherKey = _keySelector(otherValue);
+                    return _comparison(key, otherKey);
                 });
             }
             else

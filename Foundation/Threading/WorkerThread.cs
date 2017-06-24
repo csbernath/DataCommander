@@ -39,8 +39,8 @@ namespace Foundation.Threading
             Contract.Requires<ArgumentNullException>(start != null);
 #endif
 
-            this._start = start;
-            this.Thread = new Thread(this.PrivateStart);
+            _start = start;
+            Thread = new Thread(PrivateStart);
             ThreadMonitor.Add(this);
         }
 
@@ -53,9 +53,9 @@ namespace Foundation.Threading
         /// </summary>
         public event EventHandler Started
         {
-            add => this._started += value;
+            add => _started += value;
 
-            remove => this._started -= value;
+            remove => _started -= value;
         }
 
         /// <summary>
@@ -63,9 +63,9 @@ namespace Foundation.Threading
         /// </summary>
         public event EventHandler Stopped
         {
-            add => this._stopped += value;
+            add => _stopped += value;
 
-            remove => this._stopped -= value;
+            remove => _stopped -= value;
         }
 
 #endregion
@@ -75,7 +75,7 @@ namespace Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public bool IsPauseRequested => this._pauseRequest.State == WorkerEventState.Signaled;
+        public bool IsPauseRequested => _pauseRequest.State == WorkerEventState.Signaled;
 
         /// <summary>
         /// 
@@ -84,18 +84,18 @@ namespace Foundation.Threading
         {
             get
             {
-                var isStopRequested = this._stopRequest.State == WorkerEventState.Signaled;
+                var isStopRequested = _stopRequest.State == WorkerEventState.Signaled;
 
                 if (isStopRequested)
                 {
-                    if (!this._isStopAccepted)
+                    if (!_isStopAccepted)
                     {
-                        this._isStopAccepted = true;
+                        _isStopAccepted = true;
                         if (Log.IsTraceEnabled)
                         {
                             var stackTrace = new StackTrace(1, true);
-                            Log.Trace("WorkerThread({0},{1}) accepted stop request.\r\n{2}", this.Thread.Name,
-                                this.Thread.ManagedThreadId, stackTrace);
+                            Log.Trace("WorkerThread({0},{1}) accepted stop request.\r\n{2}", Thread.Name,
+                                Thread.ManagedThreadId, stackTrace);
                         }
                     }
                 }
@@ -107,31 +107,31 @@ namespace Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public ThreadState ThreadState => this.Thread.ThreadState;
+        public ThreadState ThreadState => Thread.ThreadState;
 
         /// <summary>
         /// 
         /// </summary>
-        public WaitHandle PauseRequest => this._pauseRequest;
+        public WaitHandle PauseRequest => _pauseRequest;
 
         /// <summary>
         /// 
         /// </summary>
-        public WaitHandle StopRequest => this._stopRequest;
+        public WaitHandle StopRequest => _stopRequest;
 
         /// <summary>
         ///  Gets a unique identifier for the current managed thread.
         /// </summary>
-        public int ManagedThreadId => this.Thread.ManagedThreadId;
+        public int ManagedThreadId => Thread.ManagedThreadId;
 
         /// <summary>
         ///  Gets or sets the name of the thread.
         /// </summary>
         public string Name
         {
-            get => this.Thread.Name;
+            get => Thread.Name;
 
-            set => this.Thread.Name = value;
+            set => Thread.Name = value;
         }
 
         /// <summary>
@@ -139,9 +139,9 @@ namespace Foundation.Threading
         /// </summary>
         public ThreadPriority Priority
         {
-            get => this.Thread.Priority;
+            get => Thread.Priority;
 
-            set => this.Thread.Priority = value;
+            set => Thread.Priority = value;
         }
 
         /// <summary>
@@ -149,9 +149,9 @@ namespace Foundation.Threading
         /// </summary>
         public bool IsBackground
         {
-            get => this.Thread.IsBackground;
+            get => Thread.IsBackground;
 
-            set => this.Thread.IsBackground = value;
+            set => Thread.IsBackground = value;
         }
 
         /// <summary>
@@ -176,9 +176,9 @@ namespace Foundation.Threading
         /// </summary>
         public void Start()
         {
-            Log.Trace("Starting WorkerThread({0})...", this.Thread.Name);
-            this.StartTime = LocalTime.Default.Now;
-            this.Thread.Start();
+            Log.Trace("Starting WorkerThread({0})...", Thread.Name);
+            StartTime = LocalTime.Default.Now;
+            Thread.Start();
         }
 
         /// <summary>
@@ -186,9 +186,9 @@ namespace Foundation.Threading
         /// </summary>
         public void Stop()
         {
-            Log.Trace("Stopping WorkerThread({0},{1})...", this.Thread.Name, this.Thread.ManagedThreadId);
-            this.StopTime = LocalTime.Default.Now;
-            this._stopRequest.Set();
+            Log.Trace("Stopping WorkerThread({0},{1})...", Thread.Name, Thread.ManagedThreadId);
+            StopTime = LocalTime.Default.Now;
+            _stopRequest.Set();
         }
 
         /// <summary>
@@ -196,8 +196,8 @@ namespace Foundation.Threading
         /// </summary>
         public void Pause()
         {
-            Log.Trace("WorkerThread({0},{1}) is requested to pause.", this.Thread.Name, this.Thread.ManagedThreadId);
-            this._pauseRequest.Set();
+            Log.Trace("WorkerThread({0},{1}) is requested to pause.", Thread.Name, Thread.ManagedThreadId);
+            _pauseRequest.Set();
         }
 
         /// <summary>
@@ -205,9 +205,9 @@ namespace Foundation.Threading
         /// </summary>
         public void Continue()
         {
-            Log.Trace("WorkerThread({0},{1}) is requested to continue.", this.Thread.Name, this.Thread.ManagedThreadId);
-            this._pauseRequest.Reset();
-            this._continueRequest.Set();
+            Log.Trace("WorkerThread({0},{1}) is requested to continue.", Thread.Name, Thread.ManagedThreadId);
+            _pauseRequest.Reset();
+            _continueRequest.Set();
         }
 
         /// <summary>
@@ -216,9 +216,9 @@ namespace Foundation.Threading
         public void WaitForStopOrContinue()
         {
             Log.Write(LogLevel.Error, "WorkerThread({0},{1}) is waiting for stop or continue request...",
-                this.Thread.Name, this.Thread.ManagedThreadId);
+                Thread.Name, Thread.ManagedThreadId);
             var ticks = Stopwatch.GetTimestamp();
-            WaitHandle[] waitHandles = {this._stopRequest, this._continueRequest};
+            WaitHandle[] waitHandles = { _stopRequest, _continueRequest };
             var index = WaitHandle.WaitAny(waitHandles);
             ticks = Stopwatch.GetTimestamp() - ticks;
             string request;
@@ -238,8 +238,8 @@ namespace Foundation.Threading
                     break;
             }
 
-            Log.Trace("WorkerThread({0},{1}) accepted {2} request in {3} seconds.", this.Thread.Name,
-                this.Thread.ManagedThreadId, request, StopwatchTimeSpan.ToString(ticks, 6));
+            Log.Trace("WorkerThread({0},{1}) accepted {2} request in {3} seconds.", Thread.Name,
+                Thread.ManagedThreadId, request, StopwatchTimeSpan.ToString(ticks, 6));
         }
 
         /// <summary>
@@ -247,7 +247,7 @@ namespace Foundation.Threading
         /// </summary>
         public void Join()
         {
-            this.Thread.Join();
+            Thread.Join();
         }
 
         /// <summary>
@@ -257,7 +257,7 @@ namespace Foundation.Threading
         /// <returns></returns>
         public bool Join(int millisecondsTimeout)
         {
-            return this.Thread.Join(millisecondsTimeout);
+            return Thread.Join(millisecondsTimeout);
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace Foundation.Threading
         /// <returns></returns>
         public bool WaitForStop(TimeSpan timeout)
         {
-            var signaled = this._stopRequest.WaitOne(timeout, false);
+            var signaled = _stopRequest.WaitOne(timeout, false);
             return signaled;
         }
 
@@ -278,7 +278,7 @@ namespace Foundation.Threading
         /// <returns></returns>
         public bool WaitForStop(int timeout)
         {
-            var signaled = this._stopRequest.WaitOne(timeout, false);
+            var signaled = _stopRequest.WaitOne(timeout, false);
             return signaled;
         }
 
@@ -287,7 +287,7 @@ namespace Foundation.Threading
         /// </summary>
         public void Abort()
         {
-            this.Thread.Abort();
+            Thread.Abort();
         }
 
 #endregion
@@ -297,53 +297,53 @@ namespace Foundation.Threading
         private void PrivateStart()
         {
             var now = LocalTime.Default.Now;
-            var elapsed = now - this.StartTime;
+            var elapsed = now - StartTime;
             var win32ThreadId = NativeMethods.GetCurrentThreadId();
 
-            Log.Trace("WorkerThread({0},{1}) started in {2} seconds. Win32ThreadId: {3}", this.Thread.Name, this.Thread.ManagedThreadId, elapsed,
+            Log.Trace("WorkerThread({0},{1}) started in {2} seconds. Win32ThreadId: {3}", Thread.Name, Thread.ManagedThreadId, elapsed,
                 win32ThreadId);
 
-            this.Thread.CurrentUICulture = CultureInfo.InvariantCulture;
+            Thread.CurrentUICulture = CultureInfo.InvariantCulture;
 
-            if (this._started != null)
+            if (_started != null)
             {
-                this._started(this, null);
+                _started(this, null);
             }
 
             try
             {
-                this._start();
+                _start();
             }
             catch (Exception e)
             {
-                Log.Write(LogLevel.Error, "WorkerThread({0},{1}) unhandled exception:\r\n{2}", this.Thread.Name,
-                    this.Thread.ManagedThreadId, e);
+                Log.Write(LogLevel.Error, "WorkerThread({0},{1}) unhandled exception:\r\n{2}", Thread.Name,
+                    Thread.ManagedThreadId, e);
             }
 
             now = LocalTime.Default.Now;
-            if (this._stopRequest.State == WorkerEventState.Signaled)
+            if (_stopRequest.State == WorkerEventState.Signaled)
             {
-                elapsed = now - this.StopTime;
+                elapsed = now - StopTime;
             }
             else
             {
                 elapsed = TimeSpan.Zero;
             }
 
-            this.StopTime = now;
+            StopTime = now;
 
             Log.Trace(
                 "WorkerThread({0},{1}) stopped in {2} seconds.",
-                this.Thread.Name,
-                this.Thread.ManagedThreadId,
+                Thread.Name,
+                Thread.ManagedThreadId,
                 elapsed);
 
-            if (this._stopped != null)
+            if (_stopped != null)
             {
-                this._stopped(this, null);
+                _stopped(this, null);
             }
 
-            this._start = null;
+            _start = null;
         }
 
 #endregion

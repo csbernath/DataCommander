@@ -32,10 +32,10 @@ namespace Foundation
             Contract.Requires<ArgumentNullException>(action != null);
 #endif
 
-            if (!this.selected)
+            if (!selected)
             {
-                this.selected = this.argument.Equals(other);
-                if (this.selected)
+                selected = argument.Equals(other);
+                if (selected)
                 {
                     action();
                 }
@@ -54,7 +54,7 @@ namespace Foundation
             Contract.Requires<ArgumentNullException>(action != null);
 #endif
 
-            if (!this.selected)
+            if (!selected)
             {
                 action();
             }

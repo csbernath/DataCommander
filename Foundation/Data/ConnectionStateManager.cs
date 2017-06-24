@@ -13,19 +13,19 @@ namespace Foundation.Data
 
         public ConnectionStateManager( IDbConnection connection )
         {
-            this._connection = connection;
+            _connection = connection;
 
             if (connection != null)
             {
-                this._state = connection.State;
+                _state = connection.State;
             }
         }
 
         public void Open()
         {
-            if (this._connection != null && this._state == ConnectionState.Closed)
+            if (_connection != null && _state == ConnectionState.Closed)
             {
-                this._connection.Open();
+                _connection.Open();
             }
         }
 
@@ -33,9 +33,9 @@ namespace Foundation.Data
 
         public void Dispose()
         {
-            if (this._connection != null && this._state == ConnectionState.Closed)
+            if (_connection != null && _state == ConnectionState.Closed)
             {
-                this._connection.Close();
+                _connection.Close();
             }
         }
 

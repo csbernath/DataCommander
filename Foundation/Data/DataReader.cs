@@ -24,8 +24,8 @@ namespace Foundation.Data
             Contract.Requires<ArgumentNullException>(dataReader != null);
 #endif
 
-            this._command = command;
-            this._dataReader = dataReader;
+            _command = command;
+            _dataReader = dataReader;
         }
 
         internal static DataReader Create(
@@ -76,11 +76,11 @@ namespace Foundation.Data
 #if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(read != null);
 #endif
-            this.PrivateNextResult();
+            PrivateNextResult();
 
-            while (this._dataReader.Read())
+            while (_dataReader.Read())
             {
-                yield return read(this._dataReader);
+                yield return read(_dataReader);
             }
         }
 
@@ -93,11 +93,11 @@ namespace Foundation.Data
 #if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(read != null);
 #endif
-            this.PrivateNextResult();
+            PrivateNextResult();
 
-            while (this._dataReader.Read())
+            while (_dataReader.Read())
             {
-                read(this._dataReader);
+                read(_dataReader);
             }
         }
 
@@ -110,11 +110,11 @@ namespace Foundation.Data
 #if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(read != null);
 #endif
-            this.PrivateNextResult();
+            PrivateNextResult();
 
-            while (this._dataReader.Read())
+            while (_dataReader.Read())
             {
-                var succeeded = read(this._dataReader);
+                var succeeded = read(_dataReader);
                 if (!succeeded)
                 {
                     break;
@@ -133,8 +133,8 @@ namespace Foundation.Data
             Contract.Assert(!this.nextResultCalled);
 #endif
 
-            var nextResult = this._dataReader.NextResult();
-            this._nextResultCalled = true;
+            var nextResult = _dataReader.NextResult();
+            _nextResultCalled = true;
 
             return nextResult;
         }
@@ -143,20 +143,20 @@ namespace Foundation.Data
 
         void IDisposable.Dispose()
         {
-            this._dataReader.Dispose();
-            this._command.Dispose();
+            _dataReader.Dispose();
+            _command.Dispose();
         }
 
         private void PrivateNextResult()
         {
-            if (this._nextResultCalled)
+            if (_nextResultCalled)
             {
-                this._nextResultCalled = false;
+                _nextResultCalled = false;
             }
             else
             {
-                var nextResult = this._dataReader.NextResult();
-                this._nextResultCalled = true;
+                var nextResult = _dataReader.NextResult();
+                _nextResultCalled = true;
 
                 if (!nextResult)
                 {

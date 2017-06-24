@@ -14,12 +14,12 @@ namespace Foundation.XmlSpreadsheet
 
         internal XmlSpreadsheetAttributeCollection()
         {
-            this.NameIndex = new UniqueIndex<string, XmlSpreadsheetAttribute>(
+            NameIndex = new UniqueIndex<string, XmlSpreadsheetAttribute>(
                 "NameIndex",
                 item => GetKeyResponse.Create(true, item.LocalName),
                 SortOrder.None);
 
-            this._items = new IndexableCollection<XmlSpreadsheetAttribute>(this.NameIndex);
+            _items = new IndexableCollection<XmlSpreadsheetAttribute>(NameIndex);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Foundation.XmlSpreadsheet
         /// <param name="item"></param>
         public void Add(XmlSpreadsheetAttribute item)
         {
-            this._items.Add(item);
+            _items.Add(item);
         }
 
         void ICollection<XmlSpreadsheetAttribute>.Clear()
@@ -53,7 +53,7 @@ namespace Foundation.XmlSpreadsheet
             throw new NotImplementedException();
         }
 
-        int ICollection<XmlSpreadsheetAttribute>.Count => this._items.Count;
+        int ICollection<XmlSpreadsheetAttribute>.Count => _items.Count;
 
         bool ICollection<XmlSpreadsheetAttribute>.IsReadOnly => throw new NotImplementedException();
 
@@ -68,7 +68,7 @@ namespace Foundation.XmlSpreadsheet
 
         IEnumerator<XmlSpreadsheetAttribute> IEnumerable<XmlSpreadsheetAttribute>.GetEnumerator()
         {
-            return this._items.GetEnumerator();
+            return _items.GetEnumerator();
         }
 
         #endregion

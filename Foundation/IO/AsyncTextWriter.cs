@@ -30,22 +30,22 @@ namespace Foundation.IO
             Contract.Requires<ArgumentNullException>(textWriter != null);
 #endif
 
-            this._textWriter = textWriter;
+            _textWriter = textWriter;
         }
 
         private void Flush()
         {
             var sb = new StringBuilder();
 
-            while (this._list.Count > 0)
+            while (_list.Count > 0)
             {
                 AsyncTextWriterListItem[] items;
-                lock (this._list)
+                lock (_list)
                 {
-                    var count = this._list.Count;
+                    var count = _list.Count;
                     items = new AsyncTextWriterListItem[count];
-                    this._list.CopyTo(items);
-                    this._list.Clear();
+                    _list.CopyTo(items);
+                    _list.Clear();
                 }
 
                 for (var i = 0; i < items.Length; i++)
@@ -54,19 +54,19 @@ namespace Foundation.IO
                 }
             }
 
-            this._textWriter.Write(sb);
-            this._textWriter.Flush();
+            _textWriter.Write(sb);
+            _textWriter.Flush();
         }
 
         private void Unregister()
         {
-            lock (this._syncObject)
+            lock (_syncObject)
             {
-                if (this._registeredWaitHandle != null)
+                if (_registeredWaitHandle != null)
                 {
                     ////log.Write(LogLevel.Trace,"Unregister...");
-                    var succeeded = this._registeredWaitHandle.Unregister(null);
-                    this._registeredWaitHandle = null;
+                    var succeeded = _registeredWaitHandle.Unregister(null);
+                    _registeredWaitHandle = null;
                     ////log.Write(LogLevel.Trace,"Unregister succeeded.");
                 }
             }
@@ -74,31 +74,31 @@ namespace Foundation.IO
 
         private void Callback(object state, bool timedOut)
         {
-            if (this._list.Count > 0)
+            if (_list.Count > 0)
             {
-                this.Flush();
+                Flush();
             }
             else
             {
-                this.Unregister();
+                Unregister();
             }
         }
 
         private void Write(AsyncTextWriterListItem item)
         {
-            lock (this._list)
+            lock (_list)
             {
-                this._list.Add(item);
+                _list.Add(item);
             }
 
             const int timeout = 10000; // 10 seconds
 
-            lock (this._syncObject)
+            lock (_syncObject)
             {
-                if (this._registeredWaitHandle == null)
+                if (_registeredWaitHandle == null)
                 {
                     // log.Write("ThreadPool.RegisterWaitForSingleObject",LogLevel.Trace);
-                    this._registeredWaitHandle = ThreadPool.RegisterWaitForSingleObject(this._waitHandle, this.Callback,
+                    _registeredWaitHandle = ThreadPool.RegisterWaitForSingleObject(_waitHandle, Callback,
                         null, timeout, false);
                 }
             }
@@ -111,7 +111,7 @@ namespace Foundation.IO
         public void Write(string value)
         {
             var item = new AsyncTextWriterListItem(DefaultFormatter.Instance, value);
-            this.Write(item);
+            Write(item);
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace Foundation.IO
         public void Write(IFormatter formatter, params object[] args)
         {
             var item = new AsyncTextWriterListItem(formatter, args);
-            this.Write(item);
+            Write(item);
         }
 
         /// <summary>
@@ -130,9 +130,9 @@ namespace Foundation.IO
         /// </summary>
         public void Close()
         {
-            this.Unregister();
-            this.Flush();
-            this._textWriter.Close();
+            Unregister();
+            Flush();
+            _textWriter.Close();
         }
     }
 }

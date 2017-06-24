@@ -176,7 +176,7 @@ namespace Foundation.Linq
                 Contract.Requires<ArgumentNullException>(source != null);
 #endif
                 this.source = source;
-                this.sourceAsList = source as IList;
+                sourceAsList = source as IList;
             }
 
 #region ICollection<TResult> Members
@@ -191,7 +191,7 @@ namespace Foundation.Linq
                 Contract.Assert(this.sourceAsList != null);
 #endif
 
-                this.sourceAsList.Add(item);
+                sourceAsList.Add(item);
             }
 
             /// <summary>
@@ -203,7 +203,7 @@ namespace Foundation.Linq
                 Contract.Assert(this.sourceAsList != null);
 #endif
 
-                this.sourceAsList.Clear();
+                sourceAsList.Clear();
             }
 
             /// <summary>
@@ -214,13 +214,13 @@ namespace Foundation.Linq
             bool ICollection<TResult>.Contains(TResult item)
             {
                 bool contains;
-                if (this.sourceAsList != null)
+                if (sourceAsList != null)
                 {
-                    contains = this.sourceAsList.Contains(item);
+                    contains = sourceAsList.Contains(item);
                 }
                 else
                 {
-                    var enumerable = (IEnumerable)this.source;
+                    var enumerable = (IEnumerable)source;
                     var enumerableT = enumerable.Cast<TResult>();
                     contains = enumerableT.Contains(item);
                 }
@@ -235,13 +235,13 @@ namespace Foundation.Linq
             /// <param name="arrayIndex"></param>
             void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex)
             {
-                this.source.CopyTo(array, arrayIndex);
+                source.CopyTo(array, arrayIndex);
             }
 
             /// <summary>
             /// 
             /// </summary>
-            int ICollection<TResult>.Count => this.source.Count;
+            int ICollection<TResult>.Count => source.Count;
 
             /// <summary>
             /// 
@@ -268,7 +268,7 @@ namespace Foundation.Linq
             /// <returns></returns>
             public IEnumerator<TResult> GetEnumerator()
             {
-                foreach (TResult item in this.source)
+                foreach (TResult item in source)
                 {
                     yield return item;
                 }
@@ -284,7 +284,7 @@ namespace Foundation.Linq
             /// <returns></returns>
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return this.GetEnumerator();
+                return GetEnumerator();
             }
 
 #endregion
@@ -343,7 +343,7 @@ namespace Foundation.Linq
 #if CONTRACTS_FULL
                 Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
 #endif
-                return this.collection.Contains(item);
+                return collection.Contains(item);
             }
 
             /// <summary>
@@ -353,13 +353,13 @@ namespace Foundation.Linq
             /// <param name="arrayIndex"></param>
             void ICollection<T>.CopyTo(T[] array, int arrayIndex)
             {
-                this.collection.CopyTo(array, arrayIndex);
+                collection.CopyTo(array, arrayIndex);
             }
 
             /// <summary>
             /// 
             /// </summary>
-            public int Count => this.collection.Count;
+            public int Count => collection.Count;
 
             /// <summary>
             /// 
@@ -386,7 +386,7 @@ namespace Foundation.Linq
             /// <returns></returns>
             IEnumerator<T> IEnumerable<T>.GetEnumerator()
             {
-                return this.collection.GetEnumerator();
+                return collection.GetEnumerator();
             }
 
 #endregion
@@ -399,7 +399,7 @@ namespace Foundation.Linq
             /// <returns></returns>
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return this.collection.GetEnumerator();
+                return collection.GetEnumerator();
             }
 
 #endregion

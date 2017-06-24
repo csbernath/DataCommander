@@ -28,14 +28,14 @@ namespace Foundation.Data.LoggedDbConnection
             string commandText,
             string parameters )
         {
-            this.CommandId = commandId;
-            this.ConnectionState = connectionState;
-            this.Database = database;
-            this.ExecutionType = executionType;
-            this.CommandType = commandType;
-            this.CommandText = commandText;
-            this.CommandTimeout = commandTimeout;
-            this.Parameters = parameters;
+            CommandId = commandId;
+            ConnectionState = connectionState;
+            Database = database;
+            ExecutionType = executionType;
+            CommandType = commandType;
+            CommandText = commandText;
+            CommandTimeout = commandTimeout;
+            Parameters = parameters;
         }
 
         /// <summary>

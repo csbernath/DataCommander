@@ -19,8 +19,8 @@ namespace Foundation.Data.LoggedDbConnection
         /// </summary>
         public LoggedEventArgs()
         {
-            this.Timestamp = Stopwatch.GetTimestamp();
-            this.DateTime = LocalTime.Default.Now;
+            Timestamp = Stopwatch.GetTimestamp();
+            DateTime = LocalTime.Default.Now;
         }
 
         /// <summary>

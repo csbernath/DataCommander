@@ -17,8 +17,8 @@ namespace Foundation.IO
         /// <param name="textWriter"></param>
         public Indentation( IndentedTextWriter textWriter )
         {
-            this._textWriter = textWriter;
-            this._indent = ++this._textWriter.Indent;
+            _textWriter = textWriter;
+            _indent = ++_textWriter.Indent;
         }
 
         #region IDisposable Members
@@ -29,7 +29,7 @@ namespace Foundation.IO
             Contract.Assert( this.textWriter.Indent == this.indent );
 #endif
 
-            this._textWriter.Indent--;
+            _textWriter.Indent--;
         }
 
 #endregion

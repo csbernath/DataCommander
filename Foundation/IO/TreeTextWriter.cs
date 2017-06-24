@@ -22,11 +22,11 @@ namespace Foundation.IO
         /// <param name="indentation"></param>
         public TreeTextWriter(TextWriter textWriter, int indentation)
         {
-            this._textWriter = textWriter;
-            this._indentation = indentation;
-            this._state = State.WriteEndElement;
-            this._originalForegroundColor = Console.ForegroundColor;
-            this.ForegroundColor = this._originalForegroundColor;
+            _textWriter = textWriter;
+            _indentation = indentation;
+            _state = State.WriteEndElement;
+            _originalForegroundColor = Console.ForegroundColor;
+            ForegroundColor = _originalForegroundColor;
         }
 
         /// <summary>
@@ -44,11 +44,11 @@ namespace Foundation.IO
         {
             if (level > 0)
             {
-                var prefix = '|' + new string(' ', this._indentation - 1);
+                var prefix = '|' + new string(' ', _indentation - 1);
 
                 for (var i = 0; i < level; i++)
                 {
-                    this._textWriter.Write(prefix);
+                    _textWriter.Write(prefix);
                 }
             }
         }
@@ -59,15 +59,15 @@ namespace Foundation.IO
         /// <param name="value"></param>
         public void WriteStartElement(string value)
         {
-            if (this._state == State.WriteStartElement)
+            if (_state == State.WriteStartElement)
             {
-                this._textWriter.WriteLine();
+                _textWriter.WriteLine();
             }
 
-            this.WritePrefix(this._level);
-            this._textWriter.Write(value);
-            this._level++;
-            this._state = State.WriteStartElement;
+            WritePrefix(_level);
+            _textWriter.Write(value);
+            _level++;
+            _state = State.WriteStartElement;
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Foundation.IO
         public void WriteStartElement(string format, params object[] arguments)
         {
             var value = string.Format(CultureInfo.InvariantCulture, format, arguments);
-            this.WriteStartElement(value);
+            WriteStartElement(value);
         }
 
         /// <summary>
@@ -87,20 +87,20 @@ namespace Foundation.IO
         /// <param name="value"></param>
         public void WriteEndElement(string value)
         {
-            this._level--;
+            _level--;
 
-            if (this._state == State.WriteEndElement)
+            if (_state == State.WriteEndElement)
             {
-                this.WritePrefix(this._level);
+                WritePrefix(_level);
             }
 
-            this._textWriter.WriteLine(value);
+            _textWriter.WriteLine(value);
 
-            if (this._state == State.WriteStartElement)
+            if (_state == State.WriteStartElement)
             {
             }
 
-            this._state = State.WriteEndElement;
+            _state = State.WriteEndElement;
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace Foundation.IO
         public void WriteEndElement(string format, params object[] arguments)
         {
             var value = string.Format(CultureInfo.InvariantCulture, format, arguments);
-            this.WriteEndElement(value);
+            WriteEndElement(value);
         }
 
         /// <summary>
@@ -120,26 +120,26 @@ namespace Foundation.IO
         /// <param name="value"></param>
         public void WriteElement(string value)
         {
-            if (this._state == State.WriteStartElement)
+            if (_state == State.WriteStartElement)
             {
-                this._textWriter.WriteLine();
+                _textWriter.WriteLine();
             }
 
-            this.WritePrefix(this._level);
+            WritePrefix(_level);
 
-            if (this._originalForegroundColor != this.ForegroundColor)
+            if (_originalForegroundColor != ForegroundColor)
             {
-                Console.ForegroundColor = this.ForegroundColor;
+                Console.ForegroundColor = ForegroundColor;
             }
 
-            this._textWriter.WriteLine(value);
+            _textWriter.WriteLine(value);
 
-            if (this._originalForegroundColor != this.ForegroundColor)
+            if (_originalForegroundColor != ForegroundColor)
             {
-                Console.ForegroundColor = this._originalForegroundColor;
+                Console.ForegroundColor = _originalForegroundColor;
             }
 
-            this._state = State.WriteEndElement;
+            _state = State.WriteEndElement;
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace Foundation.IO
         public void WriteElement(string format, params object[] arguments)
         {
             var value = string.Format(CultureInfo.InvariantCulture, format, arguments);
-            this.WriteElement(value);
+            WriteElement(value);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace Foundation.IO
         public void WriteElement(object value)
         {
             var s = value != null ? value.ToString() : null;
-            this.WriteElement(s);
+            WriteElement(s);
         }
     }
 }

@@ -35,15 +35,15 @@ namespace Foundation.Collections.IndexableCollection
             Contract.Requires<ArgumentNullException>(dictionary != null);
 #endif
 
-            this._name = name;
-            this._getNextKey = getNextKey;
-            this._getKey = getKey;
-            this._dictionary = dictionary;
+            _name = name;
+            _getNextKey = getNextKey;
+            _getKey = getKey;
+            _dictionary = dictionary;
         }
 
 #region ICollectionIndex<T> Members
 
-        string ICollectionIndex<T>.Name => this._name;
+        string ICollectionIndex<T>.Name => _name;
 
 #endregion
 
@@ -51,8 +51,8 @@ namespace Foundation.Collections.IndexableCollection
 
         void ICollection<T>.Add(T item)
         {
-            var key = this._getNextKey();
-            this._dictionary.Add(key, item);
+            var key = _getNextKey();
+            _dictionary.Add(key, item);
         }
 
         void ICollection<T>.Clear()
@@ -60,12 +60,12 @@ namespace Foundation.Collections.IndexableCollection
 #if CONTRACTS_FULL
             Contract.Ensures(this.dictionary.Count == 0);
 #endif
-            this._dictionary.Clear();
+            _dictionary.Clear();
         }
 
         bool ICollection<T>.Contains(T item)
         {
-            return this._dictionary.Values.Contains(item);
+            return _dictionary.Values.Contains(item);
         }
 
         void ICollection<T>.CopyTo(T[] array, int arrayIndex)
@@ -73,14 +73,14 @@ namespace Foundation.Collections.IndexableCollection
             throw new NotImplementedException();
         }
 
-        int ICollection<T>.Count => this._dictionary.Count;
+        int ICollection<T>.Count => _dictionary.Count;
 
-        bool ICollection<T>.IsReadOnly => this._dictionary.IsReadOnly;
+        bool ICollection<T>.IsReadOnly => _dictionary.IsReadOnly;
 
         bool ICollection<T>.Remove(T item)
         {
-            var key = this._getKey(item);
-            var removed = this._dictionary.Remove(key);
+            var key = _getKey(item);
+            var removed = _dictionary.Remove(key);
             return removed;
         }
 
@@ -90,7 +90,7 @@ namespace Foundation.Collections.IndexableCollection
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            return this._dictionary.Values.GetEnumerator();
+            return _dictionary.Values.GetEnumerator();
         }
 
 #endregion
@@ -99,7 +99,7 @@ namespace Foundation.Collections.IndexableCollection
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this._dictionary.Values.GetEnumerator();
+            return _dictionary.Values.GetEnumerator();
         }
 
 #endregion

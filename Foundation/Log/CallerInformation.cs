@@ -9,9 +9,9 @@ namespace Foundation.Log
     {
         private CallerInformation(string callerMemberName, string callerFilePath, int callerLineNumber)
         {
-            this.CallerMemberName = callerMemberName;
-            this.CallerFilePath = callerFilePath;
-            this.CallerLineNumber = callerLineNumber;
+            CallerMemberName = callerMemberName;
+            CallerFilePath = callerFilePath;
+            CallerLineNumber = callerLineNumber;
         }
 
         /// <summary>

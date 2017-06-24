@@ -16,7 +16,7 @@ namespace Foundation.Data.SqlClient
         /// <param name="id"></param>
         public SqlSequence(int id)
         {
-            this._id = id;
+            _id = id;
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ end";
             var command = connection.CreateCommand();
             command.CommandType = CommandType.StoredProcedure;
             command.CommandText = "GetNextSequenceValue";
-            var parameter = new SqlParameter("@id", SqlDbType.Int) {Value = this._id};
+            var parameter = new SqlParameter("@id", SqlDbType.Int) {Value = _id };
             command.Parameters.Add(parameter);
             var scalar = command.ExecuteScalar();
             var value = (int) scalar;

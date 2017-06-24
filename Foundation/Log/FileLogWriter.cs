@@ -35,24 +35,24 @@ namespace Foundation.Log
             FileAttributes fileAttributes,
             DateTimeKind dateTimeKind)
         {
-            this._async = async;
+            _async = async;
             ILogFormatter formatter = new TextLogFormatter();
             // ILogFormatter formatter = new XmlLogFormatter();
 
             if (async)
             {
-                this._logFile = new AsyncLogFile(path, encoding, bufferSize, timerPeriod, formatter, fileAttributes, dateTimeKind);
+                _logFile = new AsyncLogFile(path, encoding, bufferSize, timerPeriod, formatter, fileAttributes, dateTimeKind);
             }
             else
             {
-                this._logFile = new LogFile(path, encoding, bufferSize, autoFlush, formatter, fileAttributes, dateTimeKind);
+                _logFile = new LogFile(path, encoding, bufferSize, autoFlush, formatter, fileAttributes, dateTimeKind);
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public string FileName => this._logFile.FileName;
+        public string FileName => _logFile.FileName;
 
         #region ILogWriter Members
 
@@ -60,7 +60,7 @@ namespace Foundation.Log
         {
             try
             {
-                this._logFile.Open();
+                _logFile.Open();
             }
             catch (Exception e)
             {
@@ -72,15 +72,15 @@ namespace Foundation.Log
         {
             try
             {
-                if (this._async)
+                if (_async)
                 {
-                    this._logFile.Write(logEntry);
+                    _logFile.Write(logEntry);
                 }
                 else
                 {
-                    lock (this._logFile)
+                    lock (_logFile)
                     {
-                        this._logFile.Write(logEntry);
+                        _logFile.Write(logEntry);
                     }
                 }
             }
@@ -94,7 +94,7 @@ namespace Foundation.Log
         {
             try
             {
-                this._logFile.Flush();
+                _logFile.Flush();
             }
             catch (Exception e)
             {
@@ -106,7 +106,7 @@ namespace Foundation.Log
         {
             try
             {
-                this._logFile.Close();
+                _logFile.Close();
             }
             catch (Exception e)
             {
@@ -120,7 +120,7 @@ namespace Foundation.Log
 
         void IDisposable.Dispose()
         {
-            this._logFile.Dispose();
+            _logFile.Dispose();
         }
 
         #endregion

@@ -38,7 +38,7 @@ namespace Foundation.Collections.IndexableCollection
             Contract.Requires<ArgumentNullException>(dictionary != null);
             Contract.Requires<ArgumentNullException>(createCollection != null);
 #endif
-            this.Initialize(name, getKey, dictionary, createCollection);
+            Initialize(name, getKey, dictionary, createCollection);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Foundation.Collections.IndexableCollection
                     throw new NotSupportedException();
             }
 
-            this.Initialize(
+            Initialize(
                 name,
                 getKey,
                 dictionary,
@@ -89,7 +89,7 @@ namespace Foundation.Collections.IndexableCollection
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public ICollection<T> this[TKey key] => this._dictionary[key];
+        public ICollection<T> this[TKey key] => _dictionary[key];
 
         /// <summary>
         /// 
@@ -100,7 +100,7 @@ namespace Foundation.Collections.IndexableCollection
         public bool TryGetFirstValue(TKey key, out T value)
         {
             ICollection<T> collection;
-            var contains = this._dictionary.TryGetValue(key, out collection);
+            var contains = _dictionary.TryGetValue(key, out collection);
 
             if (contains)
             {
@@ -122,7 +122,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this._dictionary.Count;
+        public int Count => _dictionary.Count;
 
         bool ICollection<T>.IsReadOnly => false;
 
@@ -132,18 +132,18 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="item"></param>
         public void Add(T item)
         {
-            var response = this._getKey(item);
+            var response = _getKey(item);
 
             if (response.HasKey)
             {
                 var key = response.Key;
                 ICollection<T> collection;
-                var contains = this._dictionary.TryGetValue(key, out collection);
+                var contains = _dictionary.TryGetValue(key, out collection);
 
                 if (!contains)
                 {
-                    collection = this._createCollection();
-                    this._dictionary.Add(key, collection);
+                    collection = _createCollection();
+                    _dictionary.Add(key, collection);
                 }
 
                 collection.Add(item);
@@ -155,7 +155,7 @@ namespace Foundation.Collections.IndexableCollection
         /// </summary>
         void ICollection<T>.Clear()
         {
-            this._dictionary.Clear();
+            _dictionary.Clear();
         }
 
         /// <summary>
@@ -165,14 +165,14 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool Contains(T item)
         {
-            var response = this._getKey(item);
+            var response = _getKey(item);
             bool contains;
 
             if (response.HasKey)
             {
                 var key = response.Key;
                 ICollection<T> collection;
-                contains = this._dictionary.TryGetValue(key, out collection);
+                contains = _dictionary.TryGetValue(key, out collection);
 
                 if (contains)
                 {
@@ -204,14 +204,14 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool Remove(T item)
         {
-            var response = this._getKey(item);
+            var response = _getKey(item);
             var removed = false;
 
             if (response.HasKey)
             {
                 var key = response.Key;
                 ICollection<T> collection;
-                var contains = this._dictionary.TryGetValue(key, out collection);
+                var contains = _dictionary.TryGetValue(key, out collection);
 
                 if (contains)
                 {
@@ -222,7 +222,7 @@ namespace Foundation.Collections.IndexableCollection
 
                     if (collection.Count == 0)
                     {
-                        succeeded = this._dictionary.Remove(key);
+                        succeeded = _dictionary.Remove(key);
 #if CONTRACTS_FULL
                         Contract.Assert(succeeded, "dictionary.Remove");
 #endif
@@ -245,7 +245,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            foreach (var collection in this._dictionary.Values)
+            foreach (var collection in _dictionary.Values)
             {
                 foreach (var item in collection)
                 {
@@ -278,10 +278,10 @@ namespace Foundation.Collections.IndexableCollection
             Contract.Requires<ArgumentNullException>(createCollection != null);
 #endif
 
-            this.Name = name;
-            this._getKey = getKey;
-            this._dictionary = dictionary;
-            this._createCollection = createCollection;
+            Name = name;
+            _getKey = getKey;
+            _dictionary = dictionary;
+            _createCollection = createCollection;
         }
 
 #region IDictionary<TKey,ICollection<T>> Members
@@ -298,10 +298,10 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool ContainsKey(TKey key)
         {
-            return this._dictionary.ContainsKey(key);
+            return _dictionary.ContainsKey(key);
         }
 
-        ICollection<TKey> IDictionary<TKey, ICollection<T>>.Keys => this._dictionary.Keys;
+        ICollection<TKey> IDictionary<TKey, ICollection<T>>.Keys => _dictionary.Keys;
 
         bool IDictionary<TKey, ICollection<T>>.Remove(TKey key)
         {
@@ -316,14 +316,14 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool TryGetValue(TKey key, out ICollection<T> value)
         {
-            return this._dictionary.TryGetValue(key, out value);
+            return _dictionary.TryGetValue(key, out value);
         }
 
-        ICollection<ICollection<T>> IDictionary<TKey, ICollection<T>>.Values => this._dictionary.Values;
+        ICollection<ICollection<T>> IDictionary<TKey, ICollection<T>>.Values => _dictionary.Values;
 
         ICollection<T> IDictionary<TKey, ICollection<T>>.this[TKey key]
         {
-            get => this._dictionary[key];
+            get => _dictionary[key];
 
             set => throw new NotSupportedException();
         }
@@ -352,9 +352,9 @@ namespace Foundation.Collections.IndexableCollection
             throw new NotSupportedException();
         }
 
-        int ICollection<KeyValuePair<TKey, ICollection<T>>>.Count => this._dictionary.Count;
+        int ICollection<KeyValuePair<TKey, ICollection<T>>>.Count => _dictionary.Count;
 
-        bool ICollection<KeyValuePair<TKey, ICollection<T>>>.IsReadOnly => this._dictionary.IsReadOnly;
+        bool ICollection<KeyValuePair<TKey, ICollection<T>>>.IsReadOnly => _dictionary.IsReadOnly;
 
         bool ICollection<KeyValuePair<TKey, ICollection<T>>>.Remove(KeyValuePair<TKey, ICollection<T>> item)
         {
@@ -367,7 +367,7 @@ namespace Foundation.Collections.IndexableCollection
 
         IEnumerator<KeyValuePair<TKey, ICollection<T>>> IEnumerable<KeyValuePair<TKey, ICollection<T>>>.GetEnumerator()
         {
-            return this._dictionary.GetEnumerator();
+            return _dictionary.GetEnumerator();
         }
 
 #endregion

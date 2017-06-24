@@ -32,18 +32,18 @@ namespace Foundation.Data.TextData
             Contract.Requires(command != null);
 #endif
 
-            this._command = command;
-            this._behavior = behavior;
+            _command = command;
+            _behavior = behavior;
             var parameters = command.Parameters;
 #if CONTRACTS_FULL
             Contract.Assert(parameters != null);
 #endif
 
-            this._columns = parameters.GetParameterValue<TextDataColumnCollection>( "columns" );
+            _columns = parameters.GetParameterValue<TextDataColumnCollection>( "columns" );
             var converters = parameters.GetParameterValue<IList<ITextDataConverter>>( "converters" );
             var getTextReader = parameters.GetParameterValue<IConverter<TextDataCommand, TextReader>>( "getTextReader" );
-            this._textReader = getTextReader.Convert( command );
-            this._textDataStreamReader = new TextDataStreamReader( this._textReader, this._columns, converters );
+            _textReader = getTextReader.Convert( command );
+            _textDataStreamReader = new TextDataStreamReader(_textReader, _columns, converters );
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Foundation.Data.TextData
         /// <summary>
         /// 
         /// </summary>
-        public override int FieldCount => this._columns.Count;
+        public override int FieldCount => _columns.Count;
 
         /// <summary>
         /// 
@@ -70,7 +70,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override bool GetBoolean( int ordinal )
         {
-            return (bool) this._values[ ordinal ];
+            return (bool)_values[ ordinal ];
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override byte GetByte( int ordinal )
         {
-            return (byte) this._values[ ordinal ];
+            return (byte)_values[ ordinal ];
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override char GetChar( int ordinal )
         {
-            return (char) this._values[ ordinal ];
+            return (char)_values[ ordinal ];
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override DateTime GetDateTime( int ordinal )
         {
-            return (DateTime) this._values[ ordinal ];
+            return (DateTime)_values[ ordinal ];
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override decimal GetDecimal( int ordinal )
         {
-            return (decimal) this._values[ ordinal ];
+            return (decimal)_values[ ordinal ];
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override double GetDouble( int ordinal )
         {
-            return (double) this._values[ ordinal ];
+            return (double)_values[ ordinal ];
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override float GetFloat( int ordinal )
         {
-            return (float) this._values[ ordinal ];
+            return (float)_values[ ordinal ];
         }
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override Guid GetGuid( int ordinal )
         {
-            return (Guid) this._values[ ordinal ];
+            return (Guid)_values[ ordinal ];
         }
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override short GetInt16( int ordinal )
         {
-            return (short) this._values[ ordinal ];
+            return (short)_values[ ordinal ];
         }
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override int GetInt32( int ordinal )
         {
-            return (int) this._values[ ordinal ];
+            return (int)_values[ ordinal ];
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override long GetInt64( int ordinal )
         {
-            return (long) this._values[ ordinal ];
+            return (long)_values[ ordinal ];
         }
 
         /// <summary>
@@ -237,7 +237,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override string GetName( int ordinal )
         {
-            var column = this._columns[ ordinal ];
+            var column = _columns[ ordinal ];
             return column.ColumnName;
         }
 
@@ -248,7 +248,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override int GetOrdinal( string name )
         {
-            return this._columns.IndexOf( name );
+            return _columns.IndexOf( name );
         }
 
         /// <summary>
@@ -257,15 +257,15 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override DataTable GetSchemaTable()
         {
-            if (this._schemaTable == null)
+            if (_schemaTable == null)
             {
-                this._schemaTable = new DataTable();
-                this._schemaTable.Locale = CultureInfo.InvariantCulture;
-                this._schemaTable.Columns.Add( "ColumnName", typeof( string ) );
-                this._schemaTable.Columns.Add( "DataType", typeof( Type ) );
-                this._schemaTable.Columns.Add( "IsKey", typeof( bool ) );
+                _schemaTable = new DataTable();
+                _schemaTable.Locale = CultureInfo.InvariantCulture;
+                _schemaTable.Columns.Add( "ColumnName", typeof( string ) );
+                _schemaTable.Columns.Add( "DataType", typeof( Type ) );
+                _schemaTable.Columns.Add( "IsKey", typeof( bool ) );
 
-                foreach (var column in this._columns)
+                foreach (var column in _columns)
                 {
                     object[] values =
                     {
@@ -274,11 +274,11 @@ namespace Foundation.Data.TextData
                         false
                     };
 
-                    this._schemaTable.Rows.Add( values );
+                    _schemaTable.Rows.Add( values );
                 }
             }
 
-            return this._schemaTable;
+            return _schemaTable;
         }
 
         /// <summary>
@@ -288,7 +288,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override string GetString( int ordinal )
         {
-            return (string) this._values[ ordinal ];
+            return (string)_values[ ordinal ];
         }
 
         /// <summary>
@@ -298,7 +298,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override object GetValue( int ordinal )
         {
-            return this._values[ ordinal ];
+            return _values[ ordinal ];
         }
 
         /// <summary>
@@ -308,7 +308,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override int GetValues( object[] values )
         {
-            this._values.CopyTo( values, 0 );
+            _values.CopyTo( values, 0 );
             return values.Length;
         }
 
@@ -329,7 +329,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override bool IsDBNull( int ordinal )
         {
-            return this._values[ ordinal ] == DBNull.Value;
+            return _values[ ordinal ] == DBNull.Value;
         }
 
         /// <summary>
@@ -349,18 +349,18 @@ namespace Foundation.Data.TextData
         {
             bool read;
 
-            if (this._behavior == CommandBehavior.SingleRow && this._rowCount == 1)
+            if (_behavior == CommandBehavior.SingleRow && _rowCount == 1)
             {
                 read = false;
             }
             else
             {
-                this._values = this._textDataStreamReader.ReadRow();
-                read = this._values != null;
+                _values = _textDataStreamReader.ReadRow();
+                read = _values != null;
 
                 if (read)
                 {
-                    this._rowCount++;
+                    _rowCount++;
                 }
             }
 
@@ -370,7 +370,7 @@ namespace Foundation.Data.TextData
         /// <summary>
         /// 
         /// </summary>
-        public override int RecordsAffected => this._rowCount;
+        public override int RecordsAffected => _rowCount;
 
         /// <summary>
         /// 
@@ -381,8 +381,8 @@ namespace Foundation.Data.TextData
         {
             get
             {
-                var index = this._columns.IndexOf( name, true );
-                return this._values[ index ];
+                var index = _columns.IndexOf( name, true );
+                return _values[ index ];
             }
         }
 
@@ -391,6 +391,6 @@ namespace Foundation.Data.TextData
         /// </summary>
         /// <param name="ordinal"></param>
         /// <returns></returns>
-        public override object this[ int ordinal ] => this._values[ ordinal ];
+        public override object this[ int ordinal ] => _values[ ordinal ];
     }
 }

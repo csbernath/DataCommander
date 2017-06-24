@@ -42,10 +42,10 @@ namespace Foundation.Collections.ObjectPool
             Contract.Requires(minSize <= maxSize);
 #endif
 
-            this._factory = factory;
-            this.MinSize = minSize;
-            this.MaxSize = maxSize;
-            this._timer = new Timer( this.TimerCallback, null, 30000, 30000 );
+            _factory = factory;
+            MinSize = minSize;
+            MaxSize = maxSize;
+            _timer = new Timer(TimerCallback, null, 30000, 30000 );
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Foundation.Collections.ObjectPool
         /// </summary>
         ~ObjectPool()
         {
-            this.Dispose( false );
+            Dispose( false );
         }
 #endregion
 
@@ -71,12 +71,12 @@ namespace Foundation.Collections.ObjectPool
         /// <summary>
         /// 
         /// </summary>
-        public int IdleCount => this._idleItems.Count;
+        public int IdleCount => _idleItems.Count;
 
         /// <summary>
         /// 
         /// </summary>
-        public int ActiveCount => this._activeItems.Count;
+        public int ActiveCount => _activeItems.Count;
 
 #endregion
 
@@ -86,7 +86,7 @@ namespace Foundation.Collections.ObjectPool
         /// </summary>
         public void Dispose()
         {
-            this.Dispose( true );
+            Dispose( true );
             GC.SuppressFinalize( this );
         }
 
@@ -98,9 +98,9 @@ namespace Foundation.Collections.ObjectPool
             var now = LocalTime.Default.Now;
             var obsoleteList = new List<ObjectPoolItem<T>>();
 
-            lock (this._idleItems)
+            lock (_idleItems)
             {
-                var listNode = this._idleItems.First;
+                var listNode = _idleItems.First;
 
                 while (listNode != null)
                 {
@@ -111,7 +111,7 @@ namespace Foundation.Collections.ObjectPool
                     if (timeSpan.TotalSeconds >= 10.0)
                     {
                         obsoleteList.Add( item );
-                        this._idleItems.Remove( listNode );
+                        _idleItems.Remove( listNode );
                     }
 
                     listNode = next;
@@ -120,12 +120,12 @@ namespace Foundation.Collections.ObjectPool
 
             foreach (var item in obsoleteList)
             {
-                this.FactoryDestroyObject( item );
+                FactoryDestroyObject( item );
             }
 
             if (obsoleteList.Count > 0)
             {
-                Log.Trace("{0} obsolete items destroyed from ObjectPool. idle: {1}, active: {2}.", obsoleteList.Count, this._idleItems.Count, this._activeItems.Count );
+                Log.Trace("{0} obsolete items destroyed from ObjectPool. idle: {1}, active: {2}.", obsoleteList.Count, _idleItems.Count, _activeItems.Count );
             }
         }
 #endregion
@@ -138,55 +138,55 @@ namespace Foundation.Collections.ObjectPool
 
             while (true)
             {
-                if (this._idleItems.Count > 0)
+                if (_idleItems.Count > 0)
                 {
-                    lock (this._idleItems)
+                    lock (_idleItems)
                     {
-                        if (this._idleItems.Count > 0)
+                        if (_idleItems.Count > 0)
                         {
-                            var last = this._idleItems.Last;
-                            this._idleItems.RemoveLast();
+                            var last = _idleItems.Last;
+                            _idleItems.RemoveLast();
                             item = last.Value;
-                            Log.Trace("Item(key:{0}) reused from object pool. idle: {1}, active: {2}.", item.Key, this._idleItems.Count, this._activeItems.Count );
+                            Log.Trace("Item(key:{0}) reused from object pool. idle: {1}, active: {2}.", item.Key, _idleItems.Count, _activeItems.Count );
                         }
                     }
 
-                    lock (this._activeItems)
+                    lock (_activeItems)
                     {
-                        this._activeItems.Add( item.Key, item );
+                        _activeItems.Add( item.Key, item );
                     }
 
-                    this._factory.InitializeObject( item.Value );
+                    _factory.InitializeObject( item.Value );
                     break;
                 }
                 else
                 {
-                    var count = this._idleItems.Count + this._activeItems.Count;
+                    var count = _idleItems.Count + _activeItems.Count;
 
-                    if (count < this.MaxSize)
+                    if (count < MaxSize)
                     {
                         var creationDate = LocalTime.Default.Now;
-                        var value = this._factory.CreateObject();
-                        var key = Interlocked.Increment( ref this._key );
+                        var value = _factory.CreateObject();
+                        var key = Interlocked.Increment( ref _key);
                         item = new ObjectPoolItem<T>( key, value, creationDate );
 
-                        lock (this._activeItems)
+                        lock (_activeItems)
                         {
-                            this._activeItems.Add( item.Key, item );
+                            _activeItems.Add( item.Key, item );
                         }
 
-                        Log.Trace("New item(key:{0}) created in object pool. idle: {1}, active: {2}.", key, this._idleItems.Count, this._activeItems.Count );
+                        Log.Trace("New item(key:{0}) created in object pool. idle: {1}, active: {2}.", key, _idleItems.Count, _activeItems.Count );
                         break;
                     }
                     else
                     {
                         Log.Trace("object pool is active. Waiting for idle item..." );
-                        this._idleEvent.Reset();
+                        _idleEvent.Reset();
 
                         WaitHandle[] waitHandles =
                         {
                             cancellationToken.WaitHandle,
-                            this._idleEvent
+                            _idleEvent
                         };
 
                         var i = WaitHandle.WaitAny( waitHandles, 30000, false );
@@ -213,29 +213,29 @@ namespace Foundation.Collections.ObjectPool
         {
             bool idle;
 
-            lock (this._activeItems)
+            lock (_activeItems)
             {
-                this._activeItems.Remove( item.Key );
+                _activeItems.Remove( item.Key );
             }
 
-            lock (this._idleItems)
+            lock (_idleItems)
             {
-                var count = this._activeItems.Count + this._idleItems.Count;
-                idle = count < this.MaxSize;
+                var count = _activeItems.Count + _idleItems.Count;
+                idle = count < MaxSize;
 
                 if (idle)
                 {
-                    this._idleItems.AddLast( item );
+                    _idleItems.AddLast( item );
                 }
             }
 
             if (idle)
             {
-                this._idleEvent.Set();
+                _idleEvent.Set();
             }
             else
             {
-                this.FactoryDestroyObject( item );
+                FactoryDestroyObject( item );
             }
         }
 
@@ -245,48 +245,48 @@ namespace Foundation.Collections.ObjectPool
 
         private void Dispose( bool disposing )
         {
-            if (!this._disposed)
+            if (!_disposed)
             {
                 if (disposing)
                 {
-                    if (this._timer != null)
+                    if (_timer != null)
                     {
-                        this._timer.Dispose();
-                        this._timer = null;
+                        _timer.Dispose();
+                        _timer = null;
                     }
 
-                    lock (this._idleItems)
+                    lock (_idleItems)
                     {
-                        foreach (var item in this._idleItems)
+                        foreach (var item in _idleItems)
                         {
-                            this.FactoryDestroyObject( item );
+                            FactoryDestroyObject( item );
                         }
 
-                        this._idleItems.Clear();
-                        this._idleItems = null;
+                        _idleItems.Clear();
+                        _idleItems = null;
                     }
 
-                    lock (this._activeItems)
+                    lock (_activeItems)
                     {
-                        foreach (var item in this._activeItems.Values)
+                        foreach (var item in _activeItems.Values)
                         {
                             Log.Trace("object pool item(key:{0}) is active.", item.Key );
                         }
                     }
                 }
 
-                this._disposed = true;
+                _disposed = true;
             }
         }
 
         private void TimerCallback( object state )
         {
-            this.Clear();
+            Clear();
         }
 
         private void FactoryDestroyObject( ObjectPoolItem<T> item )
         {
-            this._factory.DestroyObject( item.Value );
+            _factory.DestroyObject( item.Value );
             Log.Trace("ObjectPool item(key:{0}) destroyed.", item.Key );
         }
 

@@ -13,11 +13,11 @@ namespace Foundation.Data.SqlClient.SqlLog
             int connectionNo,
             DateTime endDate )
         {
-            this._applicationId = applicationId;
-            this._connectionNo = connectionNo;
-            this._endDate = endDate;
+            _applicationId = applicationId;
+            _connectionNo = connectionNo;
+            _endDate = endDate;
         }
 
-        public string CommandText => $"exec LogConnectionClose {this._applicationId},{this._connectionNo},{this._endDate.ToTSqlDateTime()}\r\n";
+        public string CommandText => $"exec LogConnectionClose {_applicationId},{_connectionNo},{_endDate.ToTSqlDateTime()}\r\n";
     }
 }

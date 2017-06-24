@@ -75,12 +75,12 @@ namespace Foundation.Linq
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator()
             {
-                return this.enumerator;
+                return enumerator;
             }
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return this.enumerator;
+                return enumerator;
             }
         }
 

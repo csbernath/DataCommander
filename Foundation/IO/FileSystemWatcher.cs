@@ -26,14 +26,14 @@ namespace Foundation.IO
         /// <param name="fileName">The file to watch</param>
         public FileSystemWatcher(string fileName)
         {
-            this._fullFileName = fileName;
-            this._shortFileName = this.ShortFileName;
+            _fullFileName = fileName;
+            _shortFileName = ShortFileName;
             var fileInfo = new FileInfo(fileName);
             var path = fileInfo.DirectoryName;
-            this._fileName = fileInfo.Name.ToUpper(CultureInfo.InvariantCulture);
-            this._watcher = new System.IO.FileSystemWatcher(path);
-            this._watcher.Changed += this.OnChanged;
-            this._timer = new Timer(this.TimerCallback, null, Timeout.Infinite, Timeout.Infinite);
+            _fileName = fileInfo.Name.ToUpper(CultureInfo.InvariantCulture);
+            _watcher = new System.IO.FileSystemWatcher(path);
+            _watcher.Changed += OnChanged;
+            _timer = new Timer(TimerCallback, null, Timeout.Infinite, Timeout.Infinite);
         }
 
         /// <summary>
@@ -41,9 +41,9 @@ namespace Foundation.IO
         /// </summary>
         public NotifyFilters NotifyFilter
         {
-            get => this._watcher.NotifyFilter;
+            get => _watcher.NotifyFilter;
 
-            set => this._watcher.NotifyFilter = value;
+            set => _watcher.NotifyFilter = value;
         }
 
         /// <summary>
@@ -51,9 +51,9 @@ namespace Foundation.IO
         /// </summary>
         public bool EnableRaisingEvents
         {
-            get => this._watcher.EnableRaisingEvents;
+            get => _watcher.EnableRaisingEvents;
 
-            set => this._watcher.EnableRaisingEvents = value;
+            set => _watcher.EnableRaisingEvents = value;
         }
 
         /// <summary>
@@ -68,37 +68,37 @@ namespace Foundation.IO
         {
             get
             {
-                if (this._shortFileName == null)
+                if (_shortFileName == null)
                 {
                     var sb = new StringBuilder(255);
-                    var i = NativeMethods.GetShortPathName(this._fullFileName, sb, (uint) sb.Capacity);
+                    var i = NativeMethods.GetShortPathName(_fullFileName, sb, (uint) sb.Capacity);
 
                     if (i > 0)
                     {
-                        this._shortFileName = sb.ToString().ToUpper(CultureInfo.InvariantCulture);
-                        var fileInfo = new FileInfo(this._shortFileName);
-                        this._shortFileName = fileInfo.Name;
+                        _shortFileName = sb.ToString().ToUpper(CultureInfo.InvariantCulture);
+                        var fileInfo = new FileInfo(_shortFileName);
+                        _shortFileName = fileInfo.Name;
                     }
                 }
 
-                return this._shortFileName;
+                return _shortFileName;
             }
         }
 
         private void TimerCallback(object state)
         {
-            Log.Trace("Calling FileSystemWatcher.Changed event handlers... count: " + this._count);
-            this.Changed(this, new FileSystemEventArgs(WatcherChangeTypes.Changed, this._fullFileName, this._fullFileName));
-            this._count = 0;
+            Log.Trace("Calling FileSystemWatcher.Changed event handlers... count: " + _count);
+            Changed(this, new FileSystemEventArgs(WatcherChangeTypes.Changed, _fullFileName, _fullFileName));
+            _count = 0;
         }
 
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
-            if (this.Changed != null)
+            if (Changed != null)
             {
                 var name = e.Name;
 
-                if (name == this._fileName || name == this.ShortFileName)
+                if (name == _fileName || name == ShortFileName)
                 {
                     ////byte[] hash = ComputeHash(fullFileName);
                     ////bool changed = Compare(this.hash, hash) != 0;
@@ -109,14 +109,14 @@ namespace Foundation.IO
                     ////    Changed(sender, e);
                     ////}
 
-                    lock (this._timer)
+                    lock (_timer)
                     {
-                        if (this._count == 0)
+                        if (_count == 0)
                         {
-                            this._timer.Change(10000, Timeout.Infinite);
+                            _timer.Change(10000, Timeout.Infinite);
                         }
 
-                        this._count++;
+                        _count++;
                     }
 
                     Log.Trace("FileSystemWatcher.OnChanged: {0},{1}", name, e.ChangeType);

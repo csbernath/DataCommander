@@ -31,15 +31,15 @@ namespace Foundation.Data.SqlClient
 #endif
 
             var node = section.SelectNode(nodeName, true);
-            this._connectionString = node.Attributes["ConnectionString"].GetValue<string>();
+            _connectionString = node.Attributes["ConnectionString"].GetValue<string>();
             TimeSpan timeSpan;
 
             var contains = node.Attributes.TryGetAttributeValue("CommandTimeout", out timeSpan);
 
             if (contains)
-                this.CommandTimeout = (int)timeSpan.TotalSeconds;
+                CommandTimeout = (int)timeSpan.TotalSeconds;
             else
-                this.CommandTimeout = 259200; // 3 days
+                CommandTimeout = 259200; // 3 days
 
             bool isSafe;
             node.Attributes.TryGetAttributeValue("IsSafe", out isSafe);
@@ -49,7 +49,7 @@ namespace Foundation.Data.SqlClient
 
             if (enabled)
             {
-                var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(this._connectionString);
+                var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_connectionString);
                 var applicationName = sqlConnectionStringBuilder.ApplicationName;
                 string logConnectionString;
                 contains = sqlLogNode.Attributes.TryGetAttributeValue("ConnectionString", null, out logConnectionString);
@@ -80,19 +80,19 @@ namespace Foundation.Data.SqlClient
                 var filter = new SimpleLoggedSqlCommandFilter(section, loggedSqlCommandFilterNodeName);
 
                 if (isSafe)
-                    this.Factory = new SafeLoggedSqlConnectionFactory(logConnectionString, applicationName, filter);
+                    Factory = new SafeLoggedSqlConnectionFactory(logConnectionString, applicationName, filter);
                 else
-                    this.Factory = new SqlLoggedSqlConnectionFactory(logConnectionString, applicationName, filter);
+                    Factory = new SqlLoggedSqlConnectionFactory(logConnectionString, applicationName, filter);
 
-                var thread = this.Factory.Thread;
+                var thread = Factory.Thread;
                 thread.Start();
             }
             else
             {
                 if (isSafe)
-                    this.Factory = new SafeSqlConnectionFactory();
+                    Factory = new SafeSqlConnectionFactory();
                 else
-                    this.Factory = new NativeSqlCommandFactory();
+                    Factory = new NativeSqlCommandFactory();
             }
         }
 
@@ -158,17 +158,17 @@ namespace Foundation.Data.SqlClient
 
             if (name != null)
             {
-                var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(this._connectionString);
+                var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_connectionString);
                 sqlConnectionStringBuilder.ApplicationName = string.Format(CultureInfo.InvariantCulture, "{0} {1}", sqlConnectionStringBuilder.ApplicationName,
                     name);
                 connectionString = sqlConnectionStringBuilder.ConnectionString;
             }
             else
             {
-                connectionString = this._connectionString;
+                connectionString = _connectionString;
             }
 
-            return this.Factory.CreateConnection(connectionString, userName, hostName);
+            return Factory.CreateConnection(connectionString, userName, hostName);
         }
     }
 }

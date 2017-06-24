@@ -23,9 +23,9 @@ namespace Foundation.Data
         public DbCommandExecutionException(string message, Exception innerException, IDbCommand command)
             : base(message, innerException)
         {
-            this._commandText = command.ToLogString();
-            this._commandTimeout = command.CommandTimeout;
-            this._database = command.Connection.Database;
+            _commandText = command.ToLogString();
+            _commandTimeout = command.CommandTimeout;
+            _database = command.Connection.Database;
         }
 
         /// <summary>
@@ -36,11 +36,11 @@ namespace Foundation.Data
         {
             var sb = new StringBuilder();
             sb.AppendFormat("DbCommandExecutionException: {0}\r\ninnerException:\r\n{1}\r\ndatabase: {2}\r\ncommandTimeout: {3}\r\ncommandText: {4}",
-                this.Message,
-                this.InnerException.ToLogString(),
-                this._database,
-                this._commandTimeout,
-                this._commandText);
+                Message,
+                InnerException.ToLogString(),
+                _database,
+                _commandTimeout,
+                _commandText);
             var s = sb.ToString();
             return s;
         }

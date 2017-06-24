@@ -10,19 +10,19 @@ namespace Foundation.Threading
 
         public IDisposable Enter()
         {
-            Monitor.Enter(this._lockObject);
-            Interlocked.Increment(ref this._counter);
-            this.ThreadId = Thread.CurrentThread.ManagedThreadId;
-            return new Disposer(this.Exit);
+            Monitor.Enter(_lockObject);
+            Interlocked.Increment(ref _counter);
+            ThreadId = Thread.CurrentThread.ManagedThreadId;
+            return new Disposer(Exit);
         }
 
         public bool TryEnter()
         {
-            var entered = Monitor.TryEnter(this._lockObject);
+            var entered = Monitor.TryEnter(_lockObject);
             if (entered)
             {
-                Interlocked.Increment(ref this._counter);
-                this.ThreadId = Thread.CurrentThread.ManagedThreadId;
+                Interlocked.Increment(ref _counter);
+                ThreadId = Thread.CurrentThread.ManagedThreadId;
             }
 
             return entered;
@@ -30,12 +30,12 @@ namespace Foundation.Threading
 
         public void Exit()
         {
-            this.ThreadId = 0;
-            Interlocked.Decrement(ref this._counter);
-            Monitor.Exit(this._lockObject);
+            ThreadId = 0;
+            Interlocked.Decrement(ref _counter);
+            Monitor.Exit(_lockObject);
         }
 
-        public bool Locked => this._counter > 0;
+        public bool Locked => _counter > 0;
 
         public int ThreadId { get; private set; }
     }

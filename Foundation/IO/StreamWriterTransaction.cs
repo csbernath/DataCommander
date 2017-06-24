@@ -27,9 +27,9 @@ namespace Foundation.IO
             string path,
             string tempPath)
         {
-            this._path = path;
-            this._tempPath = tempPath;
-            this.Writer = new StreamWriter(tempPath, false);
+            _path = path;
+            _tempPath = tempPath;
+            Writer = new StreamWriter(tempPath, false);
         }
 
         /// <summary>
@@ -43,9 +43,9 @@ namespace Foundation.IO
             string tempPath,
             Encoding encoding)
         {
-            this._path = path;
-            this._tempPath = tempPath;
-            this.Writer = new StreamWriter(tempPath, false, encoding);
+            _path = path;
+            _tempPath = tempPath;
+            Writer = new StreamWriter(tempPath, false, encoding);
         }
 
         /// <summary>
@@ -58,16 +58,16 @@ namespace Foundation.IO
         /// </summary>
         public void Commit()
         {
-            this.Writer.Close();
+            Writer.Close();
             const NativeMethods.MoveFileExFlags flags = NativeMethods.MoveFileExFlags.ReplaceExisiting;
-            var succeeded = NativeMethods.MoveFileEx(this._tempPath, this._path, flags);
+            var succeeded = NativeMethods.MoveFileEx(_tempPath, _path, flags);
 
             if (!succeeded)
             {
                 throw new Win32Exception();
             }
 
-            this._commited = true;
+            _commited = true;
         }
 
         /// <summary>
@@ -75,11 +75,11 @@ namespace Foundation.IO
         /// </summary>
         void IDisposable.Dispose()
         {
-            this.Writer.Dispose();
+            Writer.Dispose();
 
-            if (!this._commited)
+            if (!_commited)
             {
-                File.Delete(this._tempPath);
+                File.Delete(_tempPath);
             }
         }
     }

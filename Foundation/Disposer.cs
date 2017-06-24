@@ -25,11 +25,11 @@ namespace Foundation
 
         void IDisposable.Dispose()
         {
-            if (!this.disposed && this.dispose != null)
+            if (!disposed && dispose != null)
             {
-                this.dispose();
-                this.disposed = true;
-                this.dispose = null;
+                dispose();
+                disposed = true;
+                dispose = null;
             }
         }
     }

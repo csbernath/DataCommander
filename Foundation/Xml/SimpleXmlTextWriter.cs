@@ -21,7 +21,7 @@ namespace Foundation.Xml
         /// <param name="textWriter">The text writer.</param>
         public SimpleXmlTextWriter(TextWriter textWriter)
         {
-            this._textWriter = new IndentedTextWriter(textWriter, "    ");
+            _textWriter = new IndentedTextWriter(textWriter, "    ");
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Foundation.Xml
         /// </summary>
         public override void Flush()
         {
-            this._textWriter.Flush();
+            _textWriter.Flush();
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace Foundation.Xml
         /// </summary>
         public override void WriteEndAttribute()
         {
-            this._textWriter.Indent--;
+            _textWriter.Indent--;
         }
 
         /// <summary>
@@ -195,24 +195,24 @@ namespace Foundation.Xml
         /// <exception cref="T:System.InvalidOperationException">This results in an invalid XML document.</exception>
         public override void WriteEndElement()
         {
-            var stackItem = this._stack.Pop();
+            var stackItem = _stack.Pop();
 
             if (stackItem.HasChildNodes)
             {
-                this._textWriter.Write("</");
-                this._textWriter.Write(stackItem.LocalName);
-                this._textWriter.WriteLine('>');
+                _textWriter.Write("</");
+                _textWriter.Write(stackItem.LocalName);
+                _textWriter.WriteLine('>');
             }
             else
             {
                 if (stackItem.HasAttributes)
                 {
-                    this._textWriter.WriteLine();
-                    this._textWriter.WriteLine("/>");
+                    _textWriter.WriteLine();
+                    _textWriter.WriteLine("/>");
                 }
             }
 
-            this._textWriter.Indent--;
+            _textWriter.Indent--;
         }
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace Foundation.Xml
         /// </summary>
         public override void WriteFullEndElement()
         {
-            this.WriteEndElement();
+            WriteEndElement();
         }
 
         /// <summary>
@@ -343,13 +343,13 @@ namespace Foundation.Xml
         /// <param name="ns"></param>
         public override void WriteStartAttribute(string prefix, string localName, string ns)
         {
-            var stackItem = this._stack.Peek();
+            var stackItem = _stack.Peek();
             stackItem.HasAttributes = true;
 
-            this._textWriter.WriteLine();
-            this._textWriter.Indent++;
-            this._textWriter.Write(localName);
-            this._textWriter.Write(" = ");
+            _textWriter.WriteLine();
+            _textWriter.Indent++;
+            _textWriter.Write(localName);
+            _textWriter.Write(" = ");
         }
 
         /// <summary>
@@ -381,29 +381,29 @@ namespace Foundation.Xml
         /// <exception cref="T:System.InvalidOperationException">The writer is closed.</exception>
         public override void WriteStartElement(string prefix, string localName, string ns)
         {
-            var parent = this._stack.Count > 0 ? this._stack.Peek() : null;
+            var parent = _stack.Count > 0 ? _stack.Peek() : null;
 
             if (parent != null)
             {
                 if (parent.HasAttributes && !parent.HasChildNodes)
                 {
-                    this._textWriter.WriteLine();
-                    this._textWriter.WriteLine('>');
+                    _textWriter.WriteLine();
+                    _textWriter.WriteLine('>');
                 }
                 else if (!parent.HasAttributes && !parent.HasChildNodes)
                 {
-                    this._textWriter.WriteLine('>');
+                    _textWriter.WriteLine('>');
                 }
 
                 parent.HasChildNodes = true;
-                this._textWriter.Indent++;
+                _textWriter.Indent++;
             }
 
-            this._textWriter.Write('<');
-            this._textWriter.Write(localName);
+            _textWriter.Write('<');
+            _textWriter.Write(localName);
 
             var stackItem = new StackItem(localName);
-            this._stack.Push(stackItem);
+            _stack.Push(stackItem);
         }
 
         /// <summary>
@@ -426,7 +426,7 @@ namespace Foundation.Xml
         /// <exception cref="T:System.ArgumentException">The text string contains an invalid surrogate pair.</exception>
         public override void WriteString(string text)
         {
-            this._textWriter.Write('"');
+            _textWriter.Write('"');
 
             for (var i = 0; i < text.Length; i++)
             {
@@ -438,16 +438,16 @@ namespace Foundation.Xml
                     case '\r':
                     case '\n':
                         var encoded = Encode(c);
-                        this._textWriter.Write(encoded);
+                        _textWriter.Write(encoded);
                         break;
 
                     default:
-                        this._textWriter.Write(c);
+                        _textWriter.Write(c);
                         break;
                 }
             }
 
-            this._textWriter.Write('"');
+            _textWriter.Write('"');
         }
 
         /// <summary>
@@ -488,7 +488,7 @@ namespace Foundation.Xml
         {
             public StackItem(string localName)
             {
-                this.LocalName = localName;
+                LocalName = localName;
             }
 
             public string LocalName { get; }

@@ -69,7 +69,7 @@ namespace Foundation.Diagnostics
         /// <param name="ticks"></param>
         public StopwatchTimeSpan(long ticks)
         {
-            this.Ticks = ticks;
+            Ticks = ticks;
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Foundation.Diagnostics
         /// <param name="timeSpan"></param>
         public StopwatchTimeSpan(TimeSpan timeSpan)
         {
-            this.Ticks = ToTicks(timeSpan);
+            Ticks = ToTicks(timeSpan);
         }
 
         /// <summary>
@@ -89,37 +89,37 @@ namespace Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public TimeSpan Elapsed => ToTimeSpan(this.Ticks);
+        public TimeSpan Elapsed => ToTimeSpan(Ticks);
 
         /// <summary>
         /// 
         /// </summary>
-        public double TotalHours => (double)this.Ticks/TicksPerHour;
+        public double TotalHours => (double)Ticks / TicksPerHour;
 
         /// <summary>
         /// 
         /// </summary>
-        public double TotalMinutes => (double)this.Ticks/TicksPerMinute;
+        public double TotalMinutes => (double)Ticks / TicksPerMinute;
 
         /// <summary>
         /// 
         /// </summary>
-        public double TotalSeconds => (double)this.Ticks/TicksPerSecond;
+        public double TotalSeconds => (double)Ticks / TicksPerSecond;
 
         /// <summary>
         /// 
         /// </summary>
-        public double TotalMilliseconds => (double)this.Ticks*1000/TicksPerSecond;
+        public double TotalMilliseconds => (double)Ticks * 1000/TicksPerSecond;
 
         /// <summary>
         /// 
         /// </summary>
-        public double TotalMicroseconds => (double)this.Ticks*1000000/TicksPerSecond;
+        public double TotalMicroseconds => (double)Ticks * 1000000/TicksPerSecond;
 
         /// <summary>
         /// 
         /// </summary>
-        public double TotalNanoseconds => (double)this.Ticks*1000000000/TicksPerSecond;
+        public double TotalNanoseconds => (double)Ticks * 1000000000/TicksPerSecond;
 
         /// <summary>
         /// 
@@ -257,7 +257,7 @@ namespace Foundation.Diagnostics
         /// <returns></returns>
         public string ToString(int scale)
         {
-            return ToString(this.Ticks, scale);
+            return ToString(Ticks, scale);
         }
 
         /// <summary>
@@ -266,7 +266,7 @@ namespace Foundation.Diagnostics
         /// <returns></returns>
         public override string ToString()
         {
-            return ToString(this.Ticks, 9);
+            return ToString(Ticks, 9);
         }
     }
 }

@@ -17,17 +17,17 @@ namespace Foundation.Data.SqlClient
             ConfigurationSection section,
             string nodeName)
         {
-            this._section = section;
-            this._nodeName = nodeName;
-            this._section.Changed += this.SettingsChanged;
-            this.SettingsChanged(null, null);
+            _section = section;
+            _nodeName = nodeName;
+            _section.Changed += SettingsChanged;
+            SettingsChanged(null, null);
         }
 
         private void SettingsChanged(object sender, EventArgs e)
         {
             using (var log = LogFactory.Instance.GetCurrentMethodLog())
             {
-                var node = this._section.SelectNode(this._nodeName, false);
+                var node = _section.SelectNode(_nodeName, false);
                 if (node != null)
                 {
                     var list = new List<SimpleLoggedSqlCommandFilterRule>();
@@ -81,7 +81,7 @@ namespace Foundation.Data.SqlClient
                         rules = null;
                     }
 
-                    this._rules = rules;
+                    _rules = rules;
                 }
             }
         }
@@ -93,13 +93,13 @@ namespace Foundation.Data.SqlClient
         {
             bool contains;
 
-            if (this._rules != null && this._rules.Length > 0)
+            if (_rules != null && _rules.Length > 0)
             {
                 contains = false;
 
-                for (var i = 0; i < this._rules.Length; i++)
+                for (var i = 0; i < _rules.Length; i++)
                 {
-                    var rule = this._rules[i];
+                    var rule = _rules[i];
                     var match = rule.Match(userName, hostName, command);
 
                     if (match)

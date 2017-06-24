@@ -100,9 +100,9 @@ namespace Foundation.Configuration
         /// <param name="sectionName"></param>
         public ConfigurationSection(string configFileName, string sectionName)
         {
-            this.ConfigFileName = configFileName;
-            this.SectionName = sectionName;
-            this.Initialize();
+            ConfigFileName = configFileName;
+            SectionName = sectionName;
+            Initialize();
         }
 
         /// <summary>
@@ -111,9 +111,9 @@ namespace Foundation.Configuration
         /// <param name="configFileName"></param>
         public ConfigurationSection(string configFileName)
         {
-            this.ConfigFileName = configFileName;
-            this.SectionName = DefaultSectionName;
-            this.Initialize();
+            ConfigFileName = configFileName;
+            SectionName = DefaultSectionName;
+            Initialize();
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace Foundation.Configuration
             {
                 var trace = new StackTrace(1);
                 var nodeName = ConfigurationNodeName.FromNamespace(trace, 0);
-                var node = this.SelectNode(nodeName, true);
+                var node = SelectNode(nodeName, true);
                 return node;
             }
         }
@@ -161,7 +161,7 @@ namespace Foundation.Configuration
             {
                 var trace = new StackTrace(1);
                 var nodeName = ConfigurationNodeName.FromType(trace, 0);
-                var node = this.SelectNode(nodeName, true);
+                var node = SelectNode(nodeName, true);
                 return node;
             }
         }
@@ -175,7 +175,7 @@ namespace Foundation.Configuration
             {
                 var trace = new StackTrace(1);
                 var nodeName = ConfigurationNodeName.FromMethod(trace, 0);
-                var node = this.SelectNode(nodeName, true);
+                var node = SelectNode(nodeName, true);
                 return node;
             }
         }
@@ -199,13 +199,13 @@ namespace Foundation.Configuration
         {
             if (node == null)
             {
-                if (!File.Exists(this.ConfigFileName))
+                if (!File.Exists(ConfigFileName))
                 {
-                    throw new FileNotFoundException("Configuration file not found.", this.ConfigFileName);
+                    throw new FileNotFoundException("Configuration file not found.", ConfigFileName);
                 }
                 else
                 {
-                    throw new ArgumentException($"Configuration node not found.\r\nNodeName: {nodeName}\r\nConfigFileName: {this.ConfigFileName}");
+                    throw new ArgumentException($"Configuration node not found.\r\nNodeName: {nodeName}\r\nConfigFileName: {ConfigFileName}");
                 }
             }
         }
@@ -218,24 +218,24 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public ConfigurationNode SelectNode(string nodeName, bool throwOnError)
         {
-            if (this._changed != 0)
+            if (_changed != 0)
             {
                 lock (this)
                 {
                     ConfigurationNode rootNode;
                     StringCollection fileNames;
-                    this.Load(out rootNode, out fileNames);
-                    this.RootNode = rootNode;
+                    Load(out rootNode, out fileNames);
+                    RootNode = rootNode;
                 }
 
-                Interlocked.Exchange(ref this._changed, 0);
+                Interlocked.Exchange(ref _changed, 0);
             }
 
             ConfigurationNode node;
 
-            if (this.RootNode != null)
+            if (RootNode != null)
             {
-                node = this.RootNode.SelectNode(nodeName);
+                node = RootNode.SelectNode(nodeName);
             }
             else
             {
@@ -244,7 +244,7 @@ namespace Foundation.Configuration
 
             if (throwOnError)
             {
-                this.Check(nodeName, node);
+                Check(nodeName, node);
             }
 
             return node;
@@ -257,8 +257,8 @@ namespace Foundation.Configuration
             try
             {
                 ConfigurationNode rootNode = null;
-                this.Load(out rootNode, out fileNames);
-                this.RootNode = rootNode;
+                Load(out rootNode, out fileNames);
+                RootNode = rootNode;
             }
             catch (Exception e)
             {
@@ -273,11 +273,11 @@ namespace Foundation.Configuration
                     {
                         var watcher = new FileSystemWatcher(fileName);
                         watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
-                        watcher.Changed += this.OnChanged;
+                        watcher.Changed += OnChanged;
                         watcher.EnableRaisingEvents = true;
                     }
 
-                    this.IsFileSystemWatcherEnabled = fileNames.Count > 0;
+                    IsFileSystemWatcherEnabled = fileNames.Count > 0;
                 }
                 catch (Exception e)
                 {
@@ -289,11 +289,11 @@ namespace Foundation.Configuration
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
             Log.Trace("Settings.OnChanged. FileName: " + e.FullPath);
-            Interlocked.Increment(ref this._changed);
+            Interlocked.Increment(ref _changed);
 
-            if (this.Changed != null)
+            if (Changed != null)
             {
-                this.Changed(this, e);
+                Changed(this, e);
             }
         }
 
@@ -301,7 +301,7 @@ namespace Foundation.Configuration
         {
             var reader = new ConfigurationReader();
             fileNames = new StringCollection();
-            rootNode = reader.Read(this.ConfigFileName, this.SectionName, fileNames);
+            rootNode = reader.Read(ConfigFileName, SectionName, fileNames);
         }
     }
 }

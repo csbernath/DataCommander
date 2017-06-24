@@ -16,9 +16,9 @@
             string name,
             string value)
         {
-            this.Index = index;
-            this.Name = name;
-            this.Value = value;
+            Index = index;
+            Name = name;
+            Value = value;
         }
 
         /// <summary>

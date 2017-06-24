@@ -21,7 +21,7 @@ namespace Foundation.Log
             
             var dateTimeKind = DateTimeKind.Utc;
             node.Attributes.TryGetAttributeValue("DateTimeKind", DateTimeKind.Utc, out dateTimeKind);
-            this._dateTimeProvider = dateTimeKind == DateTimeKind.Utc
+            _dateTimeProvider = dateTimeKind == DateTimeKind.Utc
                 ? (IDateTimeProvider) UniversalTime.Default
                 : LocalTime.Default;
 
@@ -45,7 +45,7 @@ namespace Foundation.Log
 
             if (logWriters.Count > 0)
             {
-                this._multipeLog = new MultipleLog(logWriters);
+                _multipeLog = new MultipleLog(logWriters);
                 LogFactory.Instance = this;
 
                 foreach (var logWriter in logWriters)
@@ -63,8 +63,8 @@ namespace Foundation.Log
                 LogLevel = LogLevel.Debug
             };
 
-            this._dateTimeProvider = LocalTime.Default;
-            this._multipeLog = new MultipleLog(logWriter.ItemAsEnumerable());
+            _dateTimeProvider = LocalTime.Default;
+            _multipeLog = new MultipleLog(logWriter.ItemAsEnumerable());
         }
 
         #region IApplicationLog Members
@@ -74,7 +74,7 @@ namespace Foundation.Log
             get
             {
                 string fileName;
-                var fileLogWriter = this._multipeLog.LogWriters.Select(w => w.logWriter).OfType<FileLogWriter>().FirstOrDefault();
+                var fileLogWriter = _multipeLog.LogWriters.Select(w => w.logWriter).OfType<FileLogWriter>().FirstOrDefault();
 
                 if (fileLogWriter != null)
                 {
@@ -100,9 +100,9 @@ namespace Foundation.Log
 
         void IDisposable.Dispose()
         {
-            if (this._multipeLog != null)
+            if (_multipeLog != null)
             {
-                this._multipeLog.Dispose();
+                _multipeLog.Dispose();
             }
         }
 
@@ -110,30 +110,30 @@ namespace Foundation.Log
 
         internal void Write(FoundationLog log, LogLevel logLevel, string message)
         {
-            if (this._multipeLog != null)
+            if (_multipeLog != null)
             {
-                var logEntry = LogEntryFactory.Create(log.LoggedName, this._dateTimeProvider.Now, message, logLevel);
-                this._multipeLog.Write(logEntry);
+                var logEntry = LogEntryFactory.Create(log.LoggedName, _dateTimeProvider.Now, message, logLevel);
+                _multipeLog.Write(logEntry);
             }
         }
 
         internal void Write(FoundationLog log, LogLevel logLevel, string format, params object[] args)
         {
-            if (this._multipeLog != null)
+            if (_multipeLog != null)
             {
                 var message = string.Format(format, args);
-                var logEntry = LogEntryFactory.Create(log.LoggedName, this._dateTimeProvider.Now, message, logLevel);
-                this._multipeLog.Write(logEntry);
+                var logEntry = LogEntryFactory.Create(log.LoggedName, _dateTimeProvider.Now, message, logLevel);
+                _multipeLog.Write(logEntry);
             }
         }
 
         internal void Write(FoundationLog log, LogLevel logLevel, Func<string> getMessage)
         {
-            if (this._multipeLog != null)
+            if (_multipeLog != null)
             {
                 var message = getMessage();
-                var logEntry = LogEntryFactory.Create(log.LoggedName, this._dateTimeProvider.Now, message, logLevel);
-                this._multipeLog.Write(logEntry);
+                var logEntry = LogEntryFactory.Create(log.LoggedName, _dateTimeProvider.Now, message, logLevel);
+                _multipeLog.Write(logEntry);
             }
         }
 
@@ -220,7 +220,7 @@ namespace Foundation.Log
                 Contract.Requires<ArgumentNullException>(logWriters != null);
 #endif
 
-                this.LogWriters = logWriters.ToArray();
+                LogWriters = logWriters.ToArray();
             }
 
             public LogWriter[] LogWriters { get; }
@@ -229,7 +229,7 @@ namespace Foundation.Log
 
             public void Dispose()
             {
-                foreach (var logWriter in this.LogWriters)
+                foreach (var logWriter in LogWriters)
                 {
                     logWriter.logWriter.Dispose();
                 }
@@ -240,9 +240,9 @@ namespace Foundation.Log
             public void Write(LogEntry logEntry)
             {
                 var logLevel = logEntry.LogLevel;
-                for (var i = 0; i < this.LogWriters.Length; i++)
+                for (var i = 0; i < LogWriters.Length; i++)
                 {
-                    var logWriter = this.LogWriters[i];
+                    var logWriter = LogWriters[i];
                     if (logWriter.LogLevel >= logLevel)
                     {
                         logWriter.logWriter.Write(logEntry);

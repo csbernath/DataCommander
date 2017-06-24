@@ -16,7 +16,7 @@ namespace Foundation.Collections.IndexableCollection
 
         private ReversedComparer(IComparer<T> comparer)
         {
-            this._comparer = comparer;
+            _comparer = comparer;
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Foundation.Collections.IndexableCollection
 
         int IComparer<T>.Compare(T x, T y)
         {
-            return this._comparer.Compare(y, x);
+            return _comparer.Compare(y, x);
         }
 
         #endregion

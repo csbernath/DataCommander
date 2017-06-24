@@ -20,12 +20,12 @@ namespace Foundation.Data
 #if CONTRACTS_FULL
             Contract.Requires<ArgumentNullException>(connection != null);
 #endif
-            this._connection = connection;
-            this._transaction = transaction;
+            _connection = connection;
+            _transaction = transaction;
         }
 
-        IDbConnection IDbTransactionScope.Connection => this._connection;
+        IDbConnection IDbTransactionScope.Connection => _connection;
 
-        IDbTransaction IDbTransactionScope.Transaction => this._transaction;
+        IDbTransaction IDbTransactionScope.Transaction => _transaction;
     }
 }

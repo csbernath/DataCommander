@@ -13,7 +13,7 @@ namespace Foundation.Data.LoggedDbConnection
         /// <param name="exception"></param>
         public AfterOpenDbConnectionEventArgs(Exception exception)
         {
-            this.Exception = exception;
+            Exception = exception;
         }
 
         /// <summary>

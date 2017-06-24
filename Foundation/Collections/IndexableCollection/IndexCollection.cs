@@ -21,7 +21,7 @@ namespace Foundation.Collections.IndexableCollection
             Contract.Assert(item != null);
 #endif
 
-            this._dictionary.Add(item.Name, item);
+            _dictionary.Add(item.Name, item);
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Foundation.Collections.IndexableCollection
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public ICollectionIndex<T> this[string name] => this._dictionary[name];
+        public ICollectionIndex<T> this[string name] => _dictionary[name];
 
         /// <summary>
         /// 
@@ -39,7 +39,7 @@ namespace Foundation.Collections.IndexableCollection
 #if CONTRACTS_FULL
             Contract.Ensures(this.Count == 0);
 #endif
-            this._dictionary.Clear();
+            _dictionary.Clear();
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Foundation.Collections.IndexableCollection
 #if CONTRACTS_FULL
             Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
 #endif
-            return this._dictionary.ContainsValue(item);
+            return _dictionary.ContainsValue(item);
         }
 
         /// <summary>
@@ -62,13 +62,13 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="arrayIndex"></param>
         public void CopyTo(ICollectionIndex<T>[] array, int arrayIndex)
         {
-            this._dictionary.Values.CopyTo(array, arrayIndex);
+            _dictionary.Values.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this._dictionary.Count;
+        public int Count => _dictionary.Count;
 
         /// <summary>
         /// 
@@ -83,11 +83,11 @@ namespace Foundation.Collections.IndexableCollection
         public bool Remove(ICollectionIndex<T> item)
         {
             bool succeeded;
-            var contains = this._dictionary.ContainsValue(item);
+            var contains = _dictionary.ContainsValue(item);
 
             if (contains)
             {
-                succeeded = this._dictionary.Remove(item.Name);
+                succeeded = _dictionary.Remove(item.Name);
             }
             else
             {
@@ -105,7 +105,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool TryGetValue(string name, out ICollectionIndex<T> item)
         {
-            return this._dictionary.TryGetValue(name, out item);
+            return _dictionary.TryGetValue(name, out item);
         }
 
 #region IEnumerable<ICollectionIndex<T>> Members
@@ -116,7 +116,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public IEnumerator<ICollectionIndex<T>> GetEnumerator()
         {
-            return this._dictionary.Values.GetEnumerator();
+            return _dictionary.Values.GetEnumerator();
         }
 
 #endregion
@@ -125,7 +125,7 @@ namespace Foundation.Collections.IndexableCollection
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this._dictionary.Values.GetEnumerator();
+            return _dictionary.Values.GetEnumerator();
         }
 
 #endregion

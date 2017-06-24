@@ -23,9 +23,9 @@ namespace Foundation.Text
             Contract.Requires<ArgumentNullException>(toStringFunction != null);
 #endif
 
-            this.ColumnName = columnName;
-            this.Align = align;
-            this.ToStringFunction = toStringFunction;
+            ColumnName = columnName;
+            Align = align;
+            ToStringFunction = toStringFunction;
         }
 
         /// <summary>

@@ -29,7 +29,7 @@ namespace Foundation.Collections
             Contract.Requires<ArgumentNullException>(Contract.ForAll(equalityComparers, c => c != null));
 #endif
 
-            this._equalityComparers = equalityComparers;
+            _equalityComparers = equalityComparers;
         }
 
         #endregion
@@ -38,12 +38,12 @@ namespace Foundation.Collections
 
         bool IEqualityComparer<T>.Equals(T x, T y)
         {
-            return this._equalityComparers.All(c => c.Equals(x, y));
+            return _equalityComparers.All(c => c.Equals(x, y));
         }
 
         int IEqualityComparer<T>.GetHashCode(T obj)
         {
-            var hashCodes = this._equalityComparers.Select(c => c.GetHashCode(obj));
+            var hashCodes = _equalityComparers.Select(c => c.GetHashCode(obj));
             var hashCode = hashCodes.Aggregate(CombineHashCodes);
             return hashCode;
         }

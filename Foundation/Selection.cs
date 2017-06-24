@@ -209,9 +209,9 @@ namespace Foundation
         {
             var selectedIndex = -1;
 
-            for (var i = 0; i < this.selections.Length; ++i)
+            for (var i = 0; i < selections.Length; ++i)
             {
-                var selection = this.selections[i];
+                var selection = selections[i];
                 var selected = selection(argument);
                 if (selected)
                 {

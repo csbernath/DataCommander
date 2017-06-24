@@ -37,7 +37,7 @@ namespace Foundation.Log
 
             try
             {
-                this._eventLog = new EventLog(logName, machineName, source);
+                _eventLog = new EventLog(logName, machineName, source);
             }
             catch (Exception e)
             {
@@ -47,7 +47,7 @@ namespace Foundation.Log
 
         void IDisposable.Dispose()
         {
-            this._eventLog.Dispose();
+            _eventLog.Dispose();
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Foundation.Log
         {
             try
             {
-                this._eventLog.Close();
+                _eventLog.Close();
             }
             catch
             {
@@ -103,7 +103,7 @@ namespace Foundation.Log
             try
             {
                 var message = TextLogFormatter.Format(entry);
-                this._eventLog.WriteEntry(message, eventLogEntryType);
+                _eventLog.WriteEntry(message, eventLogEntryType);
             }
             catch (Exception e)
             {

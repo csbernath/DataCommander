@@ -7,8 +7,8 @@
     {
         internal DocumentProperty( DocumentPropertyId id, object value )
         {
-            this.Id = id;
-            this.Value = value;
+            Id = id;
+            Value = value;
         }
 
         /// <summary>

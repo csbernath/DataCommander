@@ -41,13 +41,13 @@ namespace Foundation.IO
             string searchPattern,
             int period)
         {
-            this._path = path;
-            this._searchPattern = searchPattern;
-            this._period = period;
+            _path = path;
+            _searchPattern = searchPattern;
+            _period = period;
 
-            this.Initialize(this);
+            Initialize(this);
             var name = string.Format(CultureInfo.InvariantCulture, "FileSystemMonitor({0},{1})", path, searchPattern);
-            this.Thread.Name = name;
+            Thread.Name = name;
         }
 
         /// <summary>
@@ -63,37 +63,37 @@ namespace Foundation.IO
         {
             try
             {
-                var current = Directory.GetFiles(this._path, this._searchPattern);
+                var current = Directory.GetFiles(_path, _searchPattern);
                 Array.Sort(current);
 
-                if (this._last != null)
+                if (_last != null)
                 {
                     for (var i = 0; i < current.Length; i++)
                     {
                         var file = current[i];
-                        var index = Array.BinarySearch(this._last, file);
+                        var index = Array.BinarySearch(_last, file);
 
-                        if (index < 0 && this.Created != null)
+                        if (index < 0 && Created != null)
                         {
                             var message = string.Format(CultureInfo.InvariantCulture,
-                                "FileSystemMonitor({0}).Created: {1}", this.Thread.ManagedThreadId, file);
+                                "FileSystemMonitor({0}).Created: {1}", Thread.ManagedThreadId, file);
                             log.Trace(message);
 
                             var fileName = Path.GetFileName(file);
-                            var e = new FileSystemEventArgs(WatcherChangeTypes.Created, this._path,
+                            var e = new FileSystemEventArgs(WatcherChangeTypes.Created, _path,
                                 fileName);
-                            this.Created(this, e);
+                            Created(this, e);
                         }
                     }
 
-                    for (var i = 0; i < this._last.Length; i++)
+                    for (var i = 0; i < _last.Length; i++)
                     {
-                        var file = this._last[i];
+                        var file = _last[i];
                         var index = Array.BinarySearch(current, file);
 
                         if (index < 0)
                         {
-                            log.Trace("{0}.Deleted: {1}", this.Thread.Name, file);
+                            log.Trace("{0}.Deleted: {1}", Thread.Name, file);
                         }
                     }
                 }
@@ -105,14 +105,14 @@ namespace Foundation.IO
                     }
                 }
 
-                this._last = current;
+                _last = current;
             }
             catch (Exception e)
             {
                 log.Write(LogLevel.Error, e.ToString());
             }
 
-            this.Thread.WaitForStop(this._period);
+            Thread.WaitForStop(_period);
         }
 
         void ILoopable.Last()

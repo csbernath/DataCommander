@@ -20,7 +20,7 @@ namespace Foundation.Text
         /// <returns></returns>
         public int IndexOf(StringTableColumn item)
         {
-            return this._columns.IndexOf(item);
+            return _columns.IndexOf(item);
         }
 
         void IList<StringTableColumn>.Insert(int index, StringTableColumn item)
@@ -40,7 +40,7 @@ namespace Foundation.Text
         /// <returns></returns>
         public StringTableColumn this[int index]
         {
-            get => this._columns[index];
+            get => _columns[index];
 
             set => throw new Exception("The method or operation is not implemented.");
         }
@@ -55,7 +55,7 @@ namespace Foundation.Text
             Contract.Requires(item != null);
 #endif
 
-            this._columns.Add(item);
+            _columns.Add(item);
         }
 
         void ICollection<StringTableColumn>.Add(StringTableColumn item)
@@ -75,7 +75,7 @@ namespace Foundation.Text
         /// <returns></returns>
         public bool Contains(StringTableColumn item)
         {
-            return this._columns.Contains(item);
+            return _columns.Contains(item);
         }
 
         void ICollection<StringTableColumn>.CopyTo(StringTableColumn[] array, int arrayIndex)
@@ -86,7 +86,7 @@ namespace Foundation.Text
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this._columns.Count;
+        public int Count => _columns.Count;
 
         /// <summary>
         /// 
@@ -108,7 +108,7 @@ namespace Foundation.Text
         /// <returns></returns>
         public IEnumerator<StringTableColumn> GetEnumerator()
         {
-            return this._columns.GetEnumerator();
+            return _columns.GetEnumerator();
         }
 
         #endregion
@@ -117,7 +117,7 @@ namespace Foundation.Text
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
 
         #endregion

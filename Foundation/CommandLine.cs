@@ -24,14 +24,14 @@ namespace Foundation
             Contract.Requires<ArgumentNullException>(commandLine != null);
 #endif
 
-            this.arguments = new IndexableCollection<CommandLineArgument>(this.ListIndex);
+            this.arguments = new IndexableCollection<CommandLineArgument>(ListIndex);
             var dictionary = new Dictionary<string, ICollection<CommandLineArgument>>(StringComparer.InvariantCultureIgnoreCase);
-            this.NameIndex = new NonUniqueIndex<string, CommandLineArgument>(
+            NameIndex = new NonUniqueIndex<string, CommandLineArgument>(
                 "nameIndex",
                 argument => GetKeyResponse.Create(argument.Name != null, argument.Name),
                 dictionary,
                 () => new List<CommandLineArgument>());
-            this.arguments.Indexes.Add(this.NameIndex);
+            this.arguments.Indexes.Add(NameIndex);
             var stringReader = new StringReader(commandLine);
             var arguments = Parse(stringReader);
             this.arguments.Add(arguments);

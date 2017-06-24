@@ -14,7 +14,7 @@ namespace Foundation.Data.TextData
         /// <param name="name"></param>
         public TextDataSet(string name)
         {
-            this.Name = name;
+            Name = name;
         }
 
         /// <summary>

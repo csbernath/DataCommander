@@ -9,10 +9,10 @@ namespace Foundation.Data.SqlClient.SqlLog
 
         public SqlLogApplicationEnd( int applicationId, DateTime endDate )
         {
-            this._applicationId = applicationId;
-            this._endDate = endDate;
+            _applicationId = applicationId;
+            _endDate = endDate;
         }
 
-        public string CommandText => $"exec LogApplicationEnd {this._applicationId},{this._endDate.ToTSqlDateTime()}\r\n";
+        public string CommandText => $"exec LogApplicationEnd {_applicationId},{_endDate.ToTSqlDateTime()}\r\n";
     }
 }

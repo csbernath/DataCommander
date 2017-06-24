@@ -18,9 +18,9 @@ namespace Foundation.Threading.Tasks
 
         internal TaskInfo(Task task, string name)
         {
-            this._weakReference = new WeakReference(task);
-            this.Id = task.Id;
-            this.Name = name;
+            _weakReference = new WeakReference(task);
+            Id = task.Id;
+            Name = name;
         }
 
         /// <summary>
@@ -58,9 +58,9 @@ namespace Foundation.Threading.Tasks
         /// </summary>
         public bool IsCompleted
         {
-            get => this._isCompleted;
+            get => _isCompleted;
 
-            internal set => this._isCompleted = true;
+            internal set => _isCompleted = true;
         }
 
         /// <summary>
@@ -71,12 +71,12 @@ namespace Foundation.Threading.Tasks
         /// <summary>
         /// 
         /// </summary>
-        public TimeSpan? CompletedTimeSpan => this.CompletedTime - this.StartTime;
+        public TimeSpan? CompletedTimeSpan => CompletedTime - StartTime;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsAlive => this._weakReference.IsAlive;
+        public bool IsAlive => _weakReference.IsAlive;
 
         /// <summary>
         /// 
@@ -89,9 +89,9 @@ namespace Foundation.Threading.Tasks
 
                 try
                 {
-                    if (this._weakReference.IsAlive)
+                    if (_weakReference.IsAlive)
                     {
-                        task = (Task)this._weakReference.Target;
+                        task = (Task)_weakReference.Target;
                     }
                 }
                 catch

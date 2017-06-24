@@ -9,7 +9,7 @@ namespace Foundation.Diagnostics.MethodProfiler
 
         public void Push(int threadId, int methodId, long beginTime)
         {
-            var stack = this._stacks.GetOrAdd(threadId, key => new Stack<MethodInvocation>());
+            var stack = _stacks.GetOrAdd(threadId, key => new Stack<MethodInvocation>());
             var parent = stack.Count > 0 ? stack.Peek() : null;
             var item = new MethodInvocation(parent, methodId, beginTime);
             stack.Push(item);
@@ -17,7 +17,7 @@ namespace Foundation.Diagnostics.MethodProfiler
 
         public MethodInvocation Pop(int threadId)
         {
-            var stack = this._stacks[threadId];
+            var stack = _stacks[threadId];
             return stack.Pop();
         }
     }

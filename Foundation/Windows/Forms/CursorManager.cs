@@ -20,7 +20,7 @@ namespace Foundation.Windows.Forms
             Contract.Requires<ArgumentNullException>(cursor != null);
 #endif
 
-            this.originalCursor = Cursor.Current;
+            originalCursor = Cursor.Current;
             Cursor.Current = cursor;
         }
 
@@ -29,7 +29,7 @@ namespace Foundation.Windows.Forms
         /// </summary>
         void IDisposable.Dispose()
         {
-            Cursor.Current = this.originalCursor;
+            Cursor.Current = originalCursor;
         }
     }
 }

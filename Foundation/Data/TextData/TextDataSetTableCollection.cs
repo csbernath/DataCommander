@@ -19,13 +19,13 @@ namespace Foundation.Data.TextData
         /// </summary>
         public TextDataSetTableCollection()
         {
-            this._listIndex = new ListIndex<TextDataSetTable>( "List" );
-            this._nameIndex = new UniqueIndex<string, TextDataSetTable>(
+            _listIndex = new ListIndex<TextDataSetTable>( "List" );
+            _nameIndex = new UniqueIndex<string, TextDataSetTable>(
                 "Name",
                 item => GetKeyResponse.Create( true, item.Name ),
                 SortOrder.None );
-            this._collection = new IndexableCollection<TextDataSetTable>( this._listIndex );
-            this._collection.Indexes.Add( this._nameIndex );
+            _collection = new IndexableCollection<TextDataSetTable>(_listIndex);
+            _collection.Indexes.Add(_nameIndex);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public bool Contains( string name )
         {
-            return this._nameIndex.ContainsKey( name );
+            return _nameIndex.ContainsKey( name );
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Foundation.Data.TextData
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public TextDataSetTable this[ int index ] => this._listIndex[ index ];
+        public TextDataSetTable this[ int index ] => _listIndex[ index ];
 
         /// <summary>
         /// 
@@ -58,7 +58,7 @@ namespace Foundation.Data.TextData
                 Contract.Assert( this.nameIndex.ContainsKey( name ) );
 #endif
 
-                return this._nameIndex[ name ];
+                return _nameIndex[ name ];
             }
         }
 
@@ -99,12 +99,12 @@ namespace Foundation.Data.TextData
 #if CONTRACTS_FULL
             Contract.Assert( item != null );
 #endif
-            this._collection.Add( item );
+            _collection.Add( item );
         }
 
         void ICollection<TextDataSetTable>.Clear()
         {
-            this._collection.Clear();
+            _collection.Clear();
         }
 
         bool ICollection<TextDataSetTable>.Contains( TextDataSetTable item )
@@ -120,7 +120,7 @@ namespace Foundation.Data.TextData
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this._collection.Count;
+        public int Count => _collection.Count;
 
         bool ICollection<TextDataSetTable>.IsReadOnly => throw new NotImplementedException();
 
@@ -135,7 +135,7 @@ namespace Foundation.Data.TextData
 
         IEnumerator<TextDataSetTable> IEnumerable<TextDataSetTable>.GetEnumerator()
         {
-            return this._collection.GetEnumerator();
+            return _collection.GetEnumerator();
         }
 
 #endregion
@@ -144,7 +144,7 @@ namespace Foundation.Data.TextData
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this._collection.GetEnumerator();
+            return _collection.GetEnumerator();
         }
 
 #endregion

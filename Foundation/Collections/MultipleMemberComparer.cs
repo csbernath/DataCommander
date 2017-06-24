@@ -16,14 +16,14 @@ namespace Foundation.Collections
         /// <param name="comparers"></param>
         public MultipleMemberComparer(params IComparer<T>[] comparers)
         {
-            this._comparers = comparers;
+            _comparers = comparers;
         }
 
         int IComparer<T>.Compare(T x, T y)
         {
             var result = 0;
 
-            foreach (var comparer in this._comparers)
+            foreach (var comparer in _comparers)
             {
                 var currentResult = comparer.Compare(x, y);
                 if (currentResult != 0)

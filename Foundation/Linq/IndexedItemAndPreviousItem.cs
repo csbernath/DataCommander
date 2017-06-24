@@ -13,8 +13,8 @@
         /// <param name="currentItem"></param>
         public IndexedItemAndPreviousItem(T previousItem, IndexedItem<T> currentItem)
         {
-            this.PreviousItem = previousItem;
-            this.CurrentItem = currentItem;
+            PreviousItem = previousItem;
+            CurrentItem = currentItem;
         }
 
         /// <summary>

@@ -204,7 +204,7 @@ namespace Foundation.DocumentProperties
         internal void Add( DocumentPropertyId id, object value )
         {
             var property = new DocumentProperty( id, value );
-            this.dictionary.Add( id, property );
+            dictionary.Add( id, property );
         }
 
         #region ICollection<DocumentProperty> Members
@@ -244,7 +244,7 @@ namespace Foundation.DocumentProperties
 
         IEnumerator<DocumentProperty> IEnumerable<DocumentProperty>.GetEnumerator()
         {
-            return this.dictionary.Values.GetEnumerator();
+            return dictionary.Values.GetEnumerator();
         }
 
         #endregion

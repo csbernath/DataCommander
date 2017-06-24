@@ -26,7 +26,7 @@ namespace Foundation.Collections
 
         int IList<T>.IndexOf(T item)
         {
-            return Array.IndexOf(this.Items, item);
+            return Array.IndexOf(Items, item);
         }
 
         void IList<T>.Insert(int index, T item)
@@ -46,7 +46,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public T this[int index]
         {
-            get => this.Items[index];
+            get => Items[index];
 
             set => throw new NotSupportedException();
         }
@@ -67,20 +67,20 @@ namespace Foundation.Collections
 
         bool ICollection<T>.Contains(T item)
         {
-            var index = Array.IndexOf(this.Items, item);
+            var index = Array.IndexOf(Items, item);
             var contains = index >= 0;
             return contains;
         }
 
         void ICollection<T>.CopyTo(T[] array, int arrayIndex)
         {
-            this.Items.CopyTo(array, arrayIndex);
+            Items.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this.Items.Length;
+        public int Count => Items.Length;
 
         bool ICollection<T>.IsReadOnly => true;
 
@@ -95,7 +95,7 @@ namespace Foundation.Collections
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            IEnumerable<T> enumerable = this.Items;
+            IEnumerable<T> enumerable = Items;
             return enumerable.GetEnumerator();
         }
 
@@ -105,7 +105,7 @@ namespace Foundation.Collections
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.Items.GetEnumerator();
+            return Items.GetEnumerator();
         }
 
         #endregion

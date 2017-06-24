@@ -155,8 +155,8 @@ namespace Foundation.Configuration
         {
             public TypeCollectionItem(string name, Type type)
             {
-                this.Name = name;
-                this.Type = type;
+                Name = name;
+                Type = type;
             }
 
             public string Name { get; }

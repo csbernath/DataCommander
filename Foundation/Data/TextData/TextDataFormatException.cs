@@ -17,10 +17,10 @@ namespace Foundation.Data.TextData
         public TextDataFormatException( TextDataColumn column, ITextDataConverter converter, string fieldValue, Exception innerException )
             : base( null, innerException )
         {
-            this.Column = column;
-            this.Converter = converter;
-            this.Fieldvalue = fieldValue;
-            this.Message = $"Conversion ({converter}) of string value '{fieldValue}' to type {column.DataType} failed. ";
+            Column = column;
+            Converter = converter;
+            Fieldvalue = fieldValue;
+            Message = $"Conversion ({converter}) of string value '{fieldValue}' to type {column.DataType} failed. ";
         }
 
         /// <summary>

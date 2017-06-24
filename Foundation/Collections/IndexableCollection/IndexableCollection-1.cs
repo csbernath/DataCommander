@@ -52,8 +52,8 @@
             Contract.Ensures(this.Indexes.Count == 1);
 #endif
 
-            this._defaultIndex = defaultIndex;
-            this.Indexes.Add(defaultIndex);
+            _defaultIndex = defaultIndex;
+            Indexes.Add(defaultIndex);
         }
 
         /// <summary>

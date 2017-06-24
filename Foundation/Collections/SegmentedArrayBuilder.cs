@@ -34,16 +34,16 @@ namespace Foundation.Collections
             if (length > 0)
             {
                 var segmentArrayLength = (length + segmentLength - 1)/segmentLength;
-                this._segments = new T[segmentArrayLength][];
+                _segments = new T[segmentArrayLength][];
                 var lastSegmentArrayIndex = segmentArrayLength - 1;
 
                 for (var i = 0; i < lastSegmentArrayIndex; i++)
                 {
-                    this._segments[i] = new T[segmentLength];
+                    _segments[i] = new T[segmentLength];
                 }
 
                 var lastSegmentLength = length - lastSegmentArrayIndex*segmentLength;
-                this._segments[lastSegmentArrayIndex] = new T[lastSegmentLength];
+                _segments[lastSegmentArrayIndex] = new T[lastSegmentLength];
             }
         }
 
@@ -53,17 +53,17 @@ namespace Foundation.Collections
         /// <param name="item"></param>
         public void Add(T item)
         {
-            var currentSegment = this._segments[this._currentSegmentArrayIndex];
-            currentSegment[this._currentSegmentIndex] = item;
+            var currentSegment = _segments[_currentSegmentArrayIndex];
+            currentSegment[_currentSegmentIndex] = item;
 
-            if (this._currentSegmentIndex < currentSegment.Length - 1)
+            if (_currentSegmentIndex < currentSegment.Length - 1)
             {
-                this._currentSegmentIndex++;
+                _currentSegmentIndex++;
             }
             else
             {
-                this._currentSegmentArrayIndex++;
-                this._currentSegmentIndex = 0;
+                _currentSegmentArrayIndex++;
+                _currentSegmentIndex = 0;
             }
         }
 
@@ -73,7 +73,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public IReadOnlyList<T> ToReadOnlyList()
         {
-            return new ReadOnlySegmentedList(this._segments);
+            return new ReadOnlySegmentedList(_segments);
         }
 
         private sealed class ReadOnlySegmentedList : IReadOnlyList<T>
@@ -82,16 +82,16 @@ namespace Foundation.Collections
 
             public ReadOnlySegmentedList(T[][] segments)
             {
-                this._segments = segments;
+                _segments = segments;
             }
 
             T IReadOnlyList<T>.this[int index]
             {
                 get
                 {
-                    var segmentLength = this._segments[0].Length;
+                    var segmentLength = _segments[0].Length;
                     var segmentArrayIndex = index/segmentLength;
-                    var segment = this._segments[segmentArrayIndex];
+                    var segment = _segments[segmentArrayIndex];
                     var segmentIndex = index%segmentLength;
                     var value = segment[segmentIndex];
                     return value;
@@ -110,9 +110,9 @@ namespace Foundation.Collections
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator()
             {
-                for (var segmentArrayIndex = 0; segmentArrayIndex < this._segments.Length; segmentArrayIndex++)
+                for (var segmentArrayIndex = 0; segmentArrayIndex < _segments.Length; segmentArrayIndex++)
                 {
-                    var segment = this._segments[segmentArrayIndex];
+                    var segment = _segments[segmentArrayIndex];
                     for (var segmentIndex = 0; segmentIndex < segment.Length; segmentIndex++)
                     {
                         yield return segment[segmentIndex];

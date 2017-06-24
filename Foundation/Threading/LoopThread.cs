@@ -40,7 +40,7 @@ namespace Foundation.Threading
         /// <param name="loopable"></param>
         public LoopThread(ILoopable loopable)
         {
-            this.Initialize(loopable);
+            Initialize(loopable);
         }
 
         /// <summary>
@@ -54,45 +54,45 @@ namespace Foundation.Threading
         /// <param name="loopable"></param>
         protected void Initialize(ILoopable loopable)
         {
-            this._loopable = loopable;
-            this.Thread = new WorkerThread(this.Start);
+            _loopable = loopable;
+            Thread = new WorkerThread(Start);
         }
 
         private void Start()
         {
             Exception exception = null;
 
-            while (!this.Thread.IsStopRequested)
+            while (!Thread.IsStopRequested)
             {
                 try
                 {
-                    if (!this.Thread.IsStopRequested)
+                    if (!Thread.IsStopRequested)
                     {
-                        this._loopable.First(exception);
+                        _loopable.First(exception);
                         exception = null;
 
-                        while (!this.Thread.IsStopRequested)
+                        while (!Thread.IsStopRequested)
                         {
-                            this._loopable.Next();
+                            _loopable.Next();
                         }
                     }
                 }
                 catch (Exception e)
                 {
                     exception = e;
-                    Log.Write(LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", this.Thread.Name,
-                        this.Thread.ManagedThreadId, e.ToLogString());
+                    Log.Write(LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", Thread.Name,
+                        Thread.ManagedThreadId, e.ToLogString());
                 }
             }
 
             try
             {
-                this._loopable.Last();
+                _loopable.Last();
             }
             catch (Exception e)
             {
-                Log.Write(LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", this.Thread.Name,
-                    this.Thread.ManagedThreadId, e.ToLogString());
+                Log.Write(LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", Thread.Name,
+                    Thread.ManagedThreadId, e.ToLogString());
             }
         }
     }

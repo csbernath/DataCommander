@@ -20,8 +20,8 @@ namespace Foundation.Collections
         /// <param name="comparer"></param>
         public MemberComparer(Func<T, T1> get, IComparer<T1> comparer)
         {
-            this._get = get;
-            this._comparer = comparer;
+            _get = get;
+            _comparer = comparer;
         }
 
         /// <summary>
@@ -35,9 +35,9 @@ namespace Foundation.Collections
 
         int IComparer<T>.Compare(T x, T y)
         {
-            var x1 = this._get(x);
-            var y1 = this._get(y);
-            var result = this._comparer.Compare(x1, y1);
+            var x1 = _get(x);
+            var y1 = _get(y);
+            var result = _comparer.Compare(x1, y1);
             return result;
         }
     }

@@ -18,7 +18,7 @@ namespace Foundation.Text
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this._rows.Count;
+        public int Count => _rows.Count;
 
         /// <summary>
         /// 
@@ -26,7 +26,7 @@ namespace Foundation.Text
         /// <param name="row"></param>
         public void Add(StringTableRow row)
         {
-            this._rows.Add(row);
+            _rows.Add(row);
         }
 
         /// <summary>
@@ -35,13 +35,13 @@ namespace Foundation.Text
         /// <returns></returns>
         public IEnumerator<StringTableRow> GetEnumerator()
         {
-            IEnumerable<StringTableRow> enumerable = this._rows;
+            IEnumerable<StringTableRow> enumerable = _rows;
             return enumerable.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }

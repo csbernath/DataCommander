@@ -211,7 +211,7 @@ namespace Foundation.Threading
         {
             if (maxDegreeOfParallelism < 1)
                 throw new ArgumentOutOfRangeException(nameof(maxDegreeOfParallelism));
-            this._maxDegreeOfParallelism = maxDegreeOfParallelism;
+            _maxDegreeOfParallelism = maxDegreeOfParallelism;
         }
 
         /// <summary>Queues a task to the scheduler.</summary>
@@ -220,13 +220,13 @@ namespace Foundation.Threading
         {
             // Add the task to the list of tasks to be processed.  If there aren't enough
             // delegates currently queued or running to process tasks, schedule another.
-            lock (this._tasks)
+            lock (_tasks)
             {
-                this._tasks.AddLast(task);
-                if (this._delegatesQueuedOrRunning < this._maxDegreeOfParallelism)
+                _tasks.AddLast(task);
+                if (_delegatesQueuedOrRunning < _maxDegreeOfParallelism)
                 {
-                    ++this._delegatesQueuedOrRunning;
-                    this.NotifyThreadPoolOfPendingWork();
+                    ++_delegatesQueuedOrRunning;
+                    NotifyThreadPoolOfPendingWork();
                 }
             }
         }
@@ -247,23 +247,23 @@ namespace Foundation.Threading
                     while (true)
                     {
                         Task item;
-                        lock (this._tasks)
+                        lock (_tasks)
                         {
                             // When there are no more items to be processed,
                             // note that we're done processing, and get out.
-                            if (this._tasks.Count == 0)
+                            if (_tasks.Count == 0)
                             {
-                                --this._delegatesQueuedOrRunning;
+                                --_delegatesQueuedOrRunning;
                                 break;
                             }
 
                             // Get the next item from the queue
-                            item = this._tasks.First.Value;
-                            this._tasks.RemoveFirst();
+                            item = _tasks.First.Value;
+                            _tasks.RemoveFirst();
                         }
 
                         // Execute the task we pulled out of the queue
-                        this.TryExecuteTask(item);
+                        TryExecuteTask(item);
                     }
                 }
                     // We're done processing items on the current thread
@@ -286,10 +286,10 @@ namespace Foundation.Threading
 
             // If the task was previously queued, remove it from the queue
             if (taskWasPreviouslyQueued)
-                this.TryDequeue(task);
+                TryDequeue(task);
 
             // Try to run the task.
-            return this.TryExecuteTask(task);
+            return TryExecuteTask(task);
         }
 
         /// <summary>Attempts to remove a previously scheduled task from the scheduler.</summary>
@@ -297,22 +297,22 @@ namespace Foundation.Threading
         /// <returns>Whether the task could be found and removed.</returns>
         protected override sealed bool TryDequeue(Task task)
         {
-            lock (this._tasks)
-                return this._tasks.Remove(task);
+            lock (_tasks)
+                return _tasks.Remove(task);
         }
 
         /// <summary>Gets the maximum concurrency level supported by this scheduler.</summary>
-        public override sealed int MaximumConcurrencyLevel => this._maxDegreeOfParallelism;
+        public override sealed int MaximumConcurrencyLevel => _maxDegreeOfParallelism;
 
         /// <summary>
         /// 
         /// </summary>
-        public int QueuedItemCount => this._tasks.Count;
+        public int QueuedItemCount => _tasks.Count;
 
         /// <summary>
         /// 
         /// </summary>
-        public int ThreadCount => this._delegatesQueuedOrRunning;
+        public int ThreadCount => _delegatesQueuedOrRunning;
 
         /// <summary>Gets an enumerable of the tasks currently scheduled on this scheduler.</summary>
         /// <returns>An enumerable of the tasks currently scheduled.</returns>
@@ -321,16 +321,16 @@ namespace Foundation.Threading
             var lockTaken = false;
             try
             {
-                Monitor.TryEnter(this._tasks, ref lockTaken);
+                Monitor.TryEnter(_tasks, ref lockTaken);
                 if (lockTaken)
-                    return this._tasks.ToArray();
+                    return _tasks.ToArray();
                 else
                     throw new NotSupportedException();
             }
             finally
             {
                 if (lockTaken)
-                    Monitor.Exit(this._tasks);
+                    Monitor.Exit(_tasks);
             }
         }
     }

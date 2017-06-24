@@ -39,14 +39,14 @@ namespace Foundation.Log
             Contract.Requires(textWriter != null);
 #endif
 
-            this._textWriter = textWriter;
-            this._formatter = new TextLogFormatter();
+            _textWriter = textWriter;
+            _formatter = new TextLogFormatter();
         }
 
         void ILogWriter.Write(LogEntry entry)
         {
-            var s = this._formatter.Format(entry);
-            this._textWriter.Write(s);
+            var s = _formatter.Format(entry);
+            _textWriter.Write(s);
         }
 
 #region ILogWriter Members
@@ -57,12 +57,12 @@ namespace Foundation.Log
 
         void ILogWriter.Flush()
         {
-            this._textWriter.Flush();
+            _textWriter.Flush();
         }
 
         void ILogWriter.Close()
         {
-            this._textWriter.Close();
+            _textWriter.Close();
         }
 
 #endregion
@@ -71,7 +71,7 @@ namespace Foundation.Log
 
         void IDisposable.Dispose()
         {
-            this._textWriter.Dispose();
+            _textWriter.Dispose();
         }
 
 #endregion

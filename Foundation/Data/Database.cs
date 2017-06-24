@@ -38,7 +38,7 @@ namespace Foundation.Data
         /// <param name="connection"></param>
         public Database(IDbConnection connection)
         {
-            this.Connection = connection;
+            Connection = connection;
         }
 
         #endregion
@@ -55,13 +55,13 @@ namespace Foundation.Data
         /// </summary>
         public IDbProviderFactoryHelper ProviderFactoryHelper
         {
-            get => this._providerFactoryHelper;
+            get => _providerFactoryHelper;
 
             set
             {
-                this._providerFactoryHelper = value;
-                this.CommandHelper = this._providerFactoryHelper.DbCommandHelper;
-                this.CommandBuilderHelper = this._providerFactoryHelper.DbCommandBuilderHelper;
+                _providerFactoryHelper = value;
+                CommandHelper = _providerFactoryHelper.DbCommandHelper;
+                CommandBuilderHelper = _providerFactoryHelper.DbCommandBuilderHelper;
             }
         }
 
@@ -78,7 +78,7 @@ namespace Foundation.Data
         /// <summary>
         /// Gets the underlying <see cref="IDbConnection.State"/>.
         /// </summary>
-        public ConnectionState State => this.Connection.State;
+        public ConnectionState State => Connection.State;
 
         /// <summary>
         /// Gets or sets the transaction.
@@ -133,7 +133,7 @@ namespace Foundation.Data
                 Contract.Requires<ArgumentException>(((IDataParameter)this.Command.Parameters[0]).Value is int);
 #endif
 
-                var parameters = this.Command.Parameters;
+                var parameters = Command.Parameters;
                 var parameterObject = parameters[0];
                 var parameter = (IDataParameter) parameterObject;
                 var valueObject = parameter.Value;
@@ -440,7 +440,7 @@ namespace Foundation.Data
         /// </summary>
         public void Open()
         {
-            this.Connection.Open();
+            Connection.Open();
         }
 
         /// <summary>
@@ -448,7 +448,7 @@ namespace Foundation.Data
         /// </summary>
         public void Close()
         {
-            this.Connection.Close();
+            Connection.Close();
         }
 
         /// <summary>
@@ -456,7 +456,7 @@ namespace Foundation.Data
         /// </summary>
         public void Dispose()
         {
-            this.Connection.Dispose();
+            Connection.Dispose();
         }
 
         /// <summary>
@@ -469,7 +469,7 @@ namespace Foundation.Data
             Contract.Requires(this.Connection != null);
 #endif
 
-            return this.Connection.BeginTransaction();
+            return Connection.BeginTransaction();
         }
 
         /// <summary>
@@ -483,7 +483,7 @@ namespace Foundation.Data
             Contract.Requires(this.Connection != null);
 #endif
 
-            return this.Connection.BeginTransaction(il);
+            return Connection.BeginTransaction(il);
         }
 
         /// <summary>
@@ -501,10 +501,10 @@ namespace Foundation.Data
             Contract.Requires(this.Connection != null);
 #endif
 
-            this.Command = this.Connection.CreateCommand();
-            this.Command.Transaction = this.Transaction;
-            this.Command.CommandTimeout = this.CommandTimeout;
-            return this.Command;
+            Command = Connection.CreateCommand();
+            Command.Transaction = Transaction;
+            Command.CommandTimeout = CommandTimeout;
+            return Command;
         }
 
         /// <summary>
@@ -514,9 +514,9 @@ namespace Foundation.Data
         /// <returns>A <see cref="System.Data.IDbCommand"/> object associated with the connection.</returns>
         public IDbCommand CreateCommand(string commandText)
         {
-            this.Command = this.CreateCommand();
-            this.Command.CommandText = commandText;
-            return this.Command;
+            Command = CreateCommand();
+            Command.CommandText = commandText;
+            return Command;
         }
 
         /// <summary>
@@ -527,9 +527,9 @@ namespace Foundation.Data
         /// <returns>A Command object associated with the connection.</returns>
         public IDbCommand CreateCommand(string commandText, CommandType commandType)
         {
-            this.Command = this.CreateCommand(commandText);
-            this.Command.CommandType = commandType;
-            return this.Command;
+            Command = CreateCommand(commandText);
+            Command.CommandType = commandType;
+            return Command;
         }
 
         /// <summary>
@@ -542,7 +542,7 @@ namespace Foundation.Data
             Contract.Requires(this.CommandBuilderHelper != null);
 #endif
 
-            this.CommandBuilderHelper.DeriveParameters(command);
+            CommandBuilderHelper.DeriveParameters(command);
         }
 
         /// <summary>
@@ -558,9 +558,9 @@ namespace Foundation.Data
             Contract.Requires(command != null);
 #endif
 
-            this.Command = command;
-            this.RowCount = command.ExecuteNonQuery();
-            return this.RowCount;
+            Command = command;
+            RowCount = command.ExecuteNonQuery();
+            return RowCount;
         }
 
         /// <summary>
@@ -576,17 +576,17 @@ namespace Foundation.Data
             //this.rowCount = this.command.ExecuteNonQuery();
             //return this.rowCount;
 
-            this.Command = this.CreateCommand(commandText);
+            Command = CreateCommand(commandText);
             try
             {
-                this.RowCount = this.Command.ExecuteNonQuery();
+                RowCount = Command.ExecuteNonQuery();
             }
             catch (Exception exception)
             {
-                throw new DbCommandExecutionException("Database.ExecuteNonQuery failed.", exception, this.Command);
+                throw new DbCommandExecutionException("Database.ExecuteNonQuery failed.", exception, Command);
             }
 
-            return this.RowCount;
+            return RowCount;
         }
 
         /// <summary>
@@ -600,7 +600,7 @@ namespace Foundation.Data
             Contract.Requires<ArgumentNullException>(command != null);
 #endif
 
-            this.Command = command;
+            Command = command;
             var scalar = command.ExecuteScalar();
             return scalar;
         }
@@ -612,8 +612,8 @@ namespace Foundation.Data
         /// <returns></returns>
         public object ExecuteScalar(string commandText)
         {
-            this.Command = this.CreateCommand(commandText);
-            var scalar = this.Command.ExecuteScalar();
+            Command = CreateCommand(commandText);
+            var scalar = Command.ExecuteScalar();
             return scalar;
         }
 
@@ -624,8 +624,8 @@ namespace Foundation.Data
         /// <returns></returns>
         public IDataReader ExecuteReader(string commandText)
         {
-            this.Command = this.CreateCommand(commandText);
-            return this.Command.ExecuteReader();
+            Command = CreateCommand(commandText);
+            return Command.ExecuteReader();
         }
 
         /// <summary>
@@ -636,8 +636,8 @@ namespace Foundation.Data
         /// <returns>An <see cref="IDataReader"/> object.</returns>
         public IDataReader ExecuteReader(string commandText, CommandBehavior behavior)
         {
-            this.Command = this.CreateCommand(commandText);
-            return this.Command.ExecuteReader(behavior);
+            Command = CreateCommand(commandText);
+            return Command.ExecuteReader(behavior);
         }
 
         /// <summary>
@@ -648,8 +648,8 @@ namespace Foundation.Data
         /// <returns></returns>
         public DataTable ExecuteDataTable(string commandText, CancellationToken cancellationToken)
         {
-            this.Command = this.CreateCommand(commandText);
-            return this.Command.ExecuteDataTable(cancellationToken);
+            Command = CreateCommand(commandText);
+            return Command.ExecuteDataTable(cancellationToken);
         }
 
         /// <summary>
@@ -664,9 +664,9 @@ namespace Foundation.Data
             Contract.Requires<ArgumentNullException>(command != null);
 #endif
 
-            this.Command = command;
+            Command = command;
             var dataTable = new DataTable();
-            this.RowCount = command.Fill(dataTable, cancellationToken);
+            RowCount = command.Fill(dataTable, cancellationToken);
             return dataTable;
         }
 
@@ -678,10 +678,10 @@ namespace Foundation.Data
         /// <returns></returns>
         public DataSet ExecuteDataSet(IDbCommand command, CancellationToken cancellationToken)
         {
-            this.Command = command;
+            Command = command;
             var dataSet = new DataSet();
             dataSet.Locale = CultureInfo.InvariantCulture;
-            this.RowCount = command.Fill(dataSet, cancellationToken);
+            RowCount = command.Fill(dataSet, cancellationToken);
             return dataSet;
         }
 
@@ -693,8 +693,8 @@ namespace Foundation.Data
         /// <returns></returns>
         public DataSet ExecuteDataSet(string commandText, CancellationToken cancellationToken)
         {
-            this.Command = this.CreateCommand(commandText);
-            return this.ExecuteDataSet(this.Command, cancellationToken);
+            Command = CreateCommand(commandText);
+            return ExecuteDataSet(Command, cancellationToken);
         }
 
         /// <summary>
@@ -709,7 +709,7 @@ namespace Foundation.Data
             Contract.Requires<ArgumentNullException>(this.CommandHelper != null);
 #endif
 
-            return this.CommandHelper.ExecuteXmlDocument(command);
+            return CommandHelper.ExecuteXmlDocument(command);
         }
 
         /// <summary>
@@ -719,8 +719,8 @@ namespace Foundation.Data
         /// <returns></returns>
         public XmlDocument ExecuteXmlDocument(string commandText)
         {
-            this.Command = this.CreateCommand(commandText);
-            return this.ExecuteXmlDocument(this.Command);
+            Command = CreateCommand(commandText);
+            return ExecuteXmlDocument(Command);
         }
 
         /// <summary>
@@ -735,7 +735,7 @@ namespace Foundation.Data
             Contract.Requires<ArgumentNullException>(command != null);
 #endif
 
-            this.Command = command;
+            Command = command;
             DataTable schemaTable;
 
             using (var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly | CommandBehavior.KeyInfo))
@@ -782,9 +782,9 @@ namespace Foundation.Data
             Contract.Requires<ArgumentNullException>(dataSet != null);
 #endif
 
-            this.Command = this.CreateCommand(commandText);
-            this.RowCount = this.Command.Fill(dataSet, cancellationToken);
-            return this.RowCount;
+            Command = CreateCommand(commandText);
+            RowCount = Command.Fill(dataSet, cancellationToken);
+            return RowCount;
         }
 
         #endregion
@@ -804,10 +804,10 @@ namespace Foundation.Data
             IDbCommandHelper commandHelper,
             int commandTimeout)
         {
-            this.Connection = connection;
-            this.Transaction = transaction;
-            this.CommandHelper = commandHelper;
-            this.CommandTimeout = commandTimeout;
+            Connection = connection;
+            Transaction = transaction;
+            CommandHelper = commandHelper;
+            CommandTimeout = commandTimeout;
         }
 
         #endregion

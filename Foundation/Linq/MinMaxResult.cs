@@ -23,10 +23,10 @@
             IndexedItem<T> min,
             IndexedItem<T> max)
         {
-            this.Count = count;
-            this.WhereCount = whereCount;
-            this.Min = min;
-            this.Max = max;
+            Count = count;
+            WhereCount = whereCount;
+            Min = min;
+            Max = max;
         }
 
         /// <summary>

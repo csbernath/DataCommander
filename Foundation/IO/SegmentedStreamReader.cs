@@ -25,8 +25,8 @@ namespace Foundation.IO
             Contract.Requires<ArgumentNullException>(stream != null);
 #endif
 
-            this._stream = stream;
-            this._length = length;
+            _stream = stream;
+            _length = length;
             GarbageMonitor.Add(null, "SegmentedStreamReader", 0, this);
             Log.Trace(GarbageMonitor.State);
         }
@@ -67,7 +67,7 @@ namespace Foundation.IO
         /// <param name="value"></param>
         public override void SetLength(long value)
         {
-            this._length = value;
+            _length = value;
         }
 
         /// <summary>
@@ -84,12 +84,12 @@ namespace Foundation.IO
 #endif
 
             int read;
-            var position = this._stream.Position;
+            var position = _stream.Position;
 
-            if (position < this._length)
+            if (position < _length)
             {
-                var min = (int) Math.Min(this._length - position, count);
-                read = this._stream.Read(buffer, offset, min);
+                var min = (int) Math.Min(_length - position, count);
+                read = _stream.Read(buffer, offset, min);
             }
             else
             {

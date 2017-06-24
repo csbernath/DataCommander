@@ -24,9 +24,9 @@ namespace Foundation.Configuration
             object value,
             string description)
         {
-            this.Name = name;
-            this.Value = value;
-            this.Description = description;
+            Name = name;
+            Value = value;
+            Description = description;
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Foundation.Configuration
             Contract.Requires((this.Value == null && typeof (T).IsClass) || this.Value is T);
 #endif
 
-            var value = (T)this.Value;
+            var value = (T)Value;
             return value;
         }
 
@@ -65,7 +65,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public ConfigurationAttribute Clone()
         {
-            var clone = new ConfigurationAttribute(this.Name, this.Value, this.Description);
+            var clone = new ConfigurationAttribute(Name, Value, Description);
             return clone;
         }
 
@@ -78,9 +78,9 @@ namespace Foundation.Configuration
             string typeName;
             Type type = null;
 
-            if (this.Value != null)
+            if (Value != null)
             {
-                type = this.Value.GetType();
+                type = Value.GetType();
                 typeName = TypeNameCollection.GetTypeName(type);
             }
             else
@@ -88,7 +88,7 @@ namespace Foundation.Configuration
                 typeName = "object";
             }
 
-            textWriter.Write("  " + typeName + " " + this.Name + " = ");
+            textWriter.Write("  " + typeName + " " + Name + " = ");
 
             if (type != null)
             {
@@ -98,13 +98,13 @@ namespace Foundation.Configuration
 
                     if (elementType == typeof (byte))
                     {
-                        var inArray = (byte[])this.Value;
+                        var inArray = (byte[])Value;
                         var base64 = System.Convert.ToBase64String(inArray);
                         textWriter.WriteLine(base64);
                     }
                     else
                     {
-                        var array = (Array)this.Value;
+                        var array = (Array)Value;
 
                         if (array.Length > 0)
                         {
@@ -123,12 +123,12 @@ namespace Foundation.Configuration
                 }
                 else
                 {
-                    Write(this.Value, textWriter);
+                    Write(Value, textWriter);
                 }
             }
             else
             {
-                Write(this.Value, textWriter);
+                Write(Value, textWriter);
             }
         }
 

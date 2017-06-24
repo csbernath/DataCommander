@@ -18,7 +18,7 @@ namespace Foundation.Collections
         public void Add<T>(TValue value)
         {
             var type = typeof (T);
-            this._selections.Add(type, value);
+            _selections.Add(type, value);
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Foundation.Collections
         public bool TryGetValue<T>(out TValue value)
         {
             var type = typeof (T);
-            return this._selections.TryGetValue(type, out value);
+            return _selections.TryGetValue(type, out value);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public TValue GetValueOrDefault(Type type)
         {
-            return this._selections.GetValueOrDefault(type);
+            return _selections.GetValueOrDefault(type);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Foundation.Collections
         public TValue GetValueOrDefault<T>()
         {
             var type = typeof (T);
-            return this.GetValueOrDefault(type);
+            return GetValueOrDefault(type);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Foundation.Diagnostics
         /// <param name="exception"></param>
         public Error( ErrorType type, string message, Exception exception )
         {
-            this.Type = type;
+            Type = type;
             this.message = message;
             this.exception = exception;
         }
@@ -30,7 +30,7 @@ namespace Foundation.Diagnostics
 
         public override string ToString()
         {
-            return $"{this.Type}\r\n{this.message}\r\n{this.exception}";
+            return $"{Type}\r\n{message}\r\n{exception}";
         }
     }
 }

@@ -11,7 +11,7 @@
         /// <param name="connectionString"></param>
         public BeforeOpenDbConnectionEventArgs(string connectionString)
         {
-            this.ConnectionString = connectionString;
+            ConnectionString = connectionString;
         }
 
         /// <summary>

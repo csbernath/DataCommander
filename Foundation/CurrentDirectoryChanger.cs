@@ -15,7 +15,7 @@ namespace Foundation
         /// <param name="path"></param>
         public CurrentDirectoryChanger( string path )
         {
-            this.currentDirectory = Environment.CurrentDirectory;
+            currentDirectory = Environment.CurrentDirectory;
             Environment.CurrentDirectory = path;
         }
 
@@ -23,7 +23,7 @@ namespace Foundation
 
         void IDisposable.Dispose()
         {
-            Environment.CurrentDirectory = this.currentDirectory;
+            Environment.CurrentDirectory = currentDirectory;
         }
 
         #endregion

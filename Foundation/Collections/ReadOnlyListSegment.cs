@@ -32,9 +32,9 @@ namespace Foundation.Collections
             Contract.Requires<ArgumentOutOfRangeException>(0 <= offset + count && offset + count <= list.Count);
 #endif
 
-            this._list = list;
-            this._offset = offset;
-            this.Count = count;
+            _list = list;
+            _offset = offset;
+            Count = count;
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Foundation.Collections
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public T this[int index] => this._list[_offset + index];
+        public T this[int index] => _list[_offset + index];
 
         /// <summary>
         /// 
@@ -59,13 +59,13 @@ namespace Foundation.Collections
 
             for (var i = _offset; i < end; i++)
             {
-                yield return this._list[i];
+                yield return _list[i];
             }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }

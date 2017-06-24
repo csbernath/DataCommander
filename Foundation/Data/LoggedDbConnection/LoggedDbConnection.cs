@@ -25,7 +25,7 @@ namespace Foundation.Data.LoggedDbConnection
             Contract.Requires(connection != null);
 #endif
 
-            this._connection = connection;
+            _connection = connection;
         }
 
 #region Public Events
@@ -35,9 +35,9 @@ namespace Foundation.Data.LoggedDbConnection
         /// </summary>
         public event EventHandler<BeforeOpenDbConnectionEventArgs> BeforeOpen
         {
-            add => this._beforeOpen += value;
+            add => _beforeOpen += value;
 
-            remove => this._beforeOpen -= value;
+            remove => _beforeOpen -= value;
         }
 
         /// <summary>
@@ -45,9 +45,9 @@ namespace Foundation.Data.LoggedDbConnection
         /// </summary>
         public event EventHandler<AfterOpenDbConnectionEventArgs> AfterOpen
         {
-            add => this._afterOpen += value;
+            add => _afterOpen += value;
 
-            remove => this._afterOpen -= value;
+            remove => _afterOpen -= value;
         }
 
         /// <summary>
@@ -55,9 +55,9 @@ namespace Foundation.Data.LoggedDbConnection
         /// </summary>
         public event EventHandler<BeforeExecuteCommandEventArgs> BeforeExecuteReader
         {
-            add => this._beforeExecuteCommand += value;
+            add => _beforeExecuteCommand += value;
 
-            remove => this._beforeExecuteCommand -= value;
+            remove => _beforeExecuteCommand -= value;
         }
 
         /// <summary>
@@ -65,9 +65,9 @@ namespace Foundation.Data.LoggedDbConnection
         /// </summary>
         public event EventHandler<AfterExecuteCommandEventArgs> AfterExecuteReader
         {
-            add => this._afterExecuteCommand += value;
+            add => _afterExecuteCommand += value;
 
-            remove => this._afterExecuteCommand -= value;
+            remove => _afterExecuteCommand -= value;
         }
 
         /// <summary>
@@ -75,9 +75,9 @@ namespace Foundation.Data.LoggedDbConnection
         /// </summary>
         public event EventHandler<AfterReadEventArgs> AfterRead
         {
-            add => this._afterRead += value;
+            add => _afterRead += value;
 
-            remove => this._afterRead -= value;
+            remove => _afterRead -= value;
         }
 
 #endregion
@@ -86,55 +86,55 @@ namespace Foundation.Data.LoggedDbConnection
 
         IDbTransaction IDbConnection.BeginTransaction(IsolationLevel il)
         {
-            return this._connection.BeginTransaction(il);
+            return _connection.BeginTransaction(il);
         }
 
         IDbTransaction IDbConnection.BeginTransaction()
         {
-            return this._connection.BeginTransaction();
+            return _connection.BeginTransaction();
         }
 
         void IDbConnection.ChangeDatabase(string databaseName)
         {
-            this._connection.ChangeDatabase(databaseName);
+            _connection.ChangeDatabase(databaseName);
         }
 
         void IDbConnection.Close()
         {
-            this._connection.Close();
+            _connection.Close();
         }
 
         string IDbConnection.ConnectionString
         {
-            get => this._connection.ConnectionString;
+            get => _connection.ConnectionString;
 
-            set => this._connection.ConnectionString = value;
+            set => _connection.ConnectionString = value;
         }
 
-        int IDbConnection.ConnectionTimeout => this._connection.ConnectionTimeout;
+        int IDbConnection.ConnectionTimeout => _connection.ConnectionTimeout;
 
         IDbCommand IDbConnection.CreateCommand()
         {
-            var command = this._connection.CreateCommand();
-            return new LoggedDbCommand(command, this._beforeExecuteCommand, this._afterExecuteCommand, this._afterRead);
+            var command = _connection.CreateCommand();
+            return new LoggedDbCommand(command, _beforeExecuteCommand, _afterExecuteCommand, _afterRead);
         }
 
-        string IDbConnection.Database => this._connection.Database;
+        string IDbConnection.Database => _connection.Database;
 
         void IDbConnection.Open()
         {
-            if (this._beforeOpen != null)
+            if (_beforeOpen != null)
             {
-                var eventArgs = new BeforeOpenDbConnectionEventArgs(this._connection.ConnectionString);
-                this._beforeOpen(this, eventArgs);
+                var eventArgs = new BeforeOpenDbConnectionEventArgs(_connection.ConnectionString);
+                _beforeOpen(this, eventArgs);
             }
 
-            if (this._afterOpen != null)
+            if (_afterOpen != null)
             {
                 Exception exception = null;
                 try
                 {
-                    this._connection.Open();
+                    _connection.Open();
                 }
                 catch (Exception e)
                 {
@@ -144,16 +144,16 @@ namespace Foundation.Data.LoggedDbConnection
                 finally
                 {
                     var eventArgs = new AfterOpenDbConnectionEventArgs(exception);
-                    this._afterOpen(this, eventArgs);
+                    _afterOpen(this, eventArgs);
                 }
             }
             else
             {
-                this._connection.Open();
+                _connection.Open();
             }
         }
 
-        ConnectionState IDbConnection.State => this._connection.State;
+        ConnectionState IDbConnection.State => _connection.State;
 
 #endregion
 
@@ -161,7 +161,7 @@ namespace Foundation.Data.LoggedDbConnection
 
         void IDisposable.Dispose()
         {
-            this._connection.Dispose();
+            _connection.Dispose();
         }
 
 #endregion

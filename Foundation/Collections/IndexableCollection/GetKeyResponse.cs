@@ -13,8 +13,8 @@
         /// <param name="key"></param>
         public GetKeyResponse(bool hasKey, T key)
         {
-            this.HasKey = hasKey;
-            this.Key = key;
+            HasKey = hasKey;
+            Key = key;
         }
 
         /// <summary>

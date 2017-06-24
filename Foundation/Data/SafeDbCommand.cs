@@ -14,8 +14,8 @@ namespace Foundation.Data
             SafeDbConnection connection,
             IDbCommand command )
         {
-            this._connection = connection;
-            this.Command = command;
+            _connection = connection;
+            Command = command;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Foundation.Data
         /// </summary>
         public void Dispose()
         {
-            this.Command.Dispose();
+            Command.Dispose();
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Foundation.Data
         /// </summary>
         public void Cancel()
         {
-            this.Command.Cancel();
+            Command.Cancel();
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public IDbDataParameter CreateParameter()
         {
-            return this.Command.CreateParameter();
+            return Command.CreateParameter();
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public int ExecuteNonQuery()
         {
-            return this._connection.ExecuteNonQuery( this.Command );
+            return _connection.ExecuteNonQuery(Command);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public IDataReader ExecuteReader()
         {
-            return this._connection.ExecuteReader( this.Command, CommandBehavior.Default );
+            return _connection.ExecuteReader(Command, CommandBehavior.Default );
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public IDataReader ExecuteReader( CommandBehavior behavior )
         {
-            return this._connection.ExecuteReader( this.Command, behavior );
+            return _connection.ExecuteReader(Command, behavior );
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public object ExecuteScalar()
         {
-            return this._connection.ExecuteScalar( this.Command );
+            return _connection.ExecuteScalar(Command);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Foundation.Data
         /// </summary>
         public void Prepare()
         {
-            this.Command.Prepare();
+            Command.Prepare();
         }
 
         /// <summary>
@@ -93,9 +93,9 @@ namespace Foundation.Data
         /// </summary>
         public string CommandText
         {
-            get => this.Command.CommandText;
+            get => Command.CommandText;
 
-            set => this.Command.CommandText = value;
+            set => Command.CommandText = value;
         }
 
         /// <summary>
@@ -103,9 +103,9 @@ namespace Foundation.Data
         /// </summary>
         public int CommandTimeout
         {
-            get => this.Command.CommandTimeout;
+            get => Command.CommandTimeout;
 
-            set => this.Command.CommandTimeout = value;
+            set => Command.CommandTimeout = value;
         }
 
         /// <summary>
@@ -113,9 +113,9 @@ namespace Foundation.Data
         /// </summary>
         public CommandType CommandType
         {
-            get => this.Command.CommandType;
+            get => Command.CommandType;
 
-            set => this.Command.CommandType = value;
+            set => Command.CommandType = value;
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Foundation.Data
         /// </summary>
         public IDbConnection Connection
         {
-            get => this._connection;
+            get => _connection;
 
             set => throw new NotImplementedException();
         }
@@ -131,16 +131,16 @@ namespace Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public IDataParameterCollection Parameters => this.Command.Parameters;
+        public IDataParameterCollection Parameters => Command.Parameters;
 
         /// <summary>
         /// 
         /// </summary>
         public IDbTransaction Transaction
         {
-            get => this.Command.Transaction;
+            get => Command.Transaction;
 
-            set => this.Command.Transaction = value;
+            set => Command.Transaction = value;
         }
 
         /// <summary>
@@ -148,9 +148,9 @@ namespace Foundation.Data
         /// </summary>
         public UpdateRowSource UpdatedRowSource
         {
-            get => this.Command.UpdatedRowSource;
+            get => Command.UpdatedRowSource;
 
-            set => this.Command.UpdatedRowSource = value;
+            set => Command.UpdatedRowSource = value;
         }
 
         /// <summary>

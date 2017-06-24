@@ -19,11 +19,11 @@ namespace Foundation.Data.SqlClient.SqlLog
             int executionNo,
             Exception exception )
         {
-            this._applicationId = applicationId;
-            this._connectionNo = connectionNo;
-            this._commandNo = commandNo;
-            this._executionNo = executionNo;
-            this._exception = exception;
+            _applicationId = applicationId;
+            _connectionNo = connectionNo;
+            _commandNo = commandNo;
+            _executionNo = executionNo;
+            _exception = exception;
         }
 
         public string CommandText
@@ -31,7 +31,7 @@ namespace Foundation.Data.SqlClient.SqlLog
             get
             {
                 var sb = new StringBuilder();
-                var sqlEx = this._exception as SqlException;
+                var sqlEx = _exception as SqlException;
 
                 if (sqlEx != null)
                 {
@@ -48,13 +48,13 @@ namespace Foundation.Data.SqlClient.SqlLog
                             procedure = null;
                         }
 
-                        this.AppendError( sb, i + 1, error.Number, error.Class, error.State, procedure, error.LineNumber, error.Message );
+                        AppendError( sb, i + 1, error.Number, error.Class, error.State, procedure, error.LineNumber, error.Message );
                     }
                 }
                 else
                 {
-                    var text = this._exception.ToString();
-                    sb.AppendFormat( "exec LogException {0},{1},{2},{3},{4}", this._applicationId, this._connectionNo, this._commandNo, this._executionNo, text.ToTSqlVarChar() );
+                    var text = _exception.ToString();
+                    sb.AppendFormat( "exec LogException {0},{1},{2},{3},{4}", _applicationId, _connectionNo, _commandNo, _executionNo, text.ToTSqlVarChar() );
                 }
 
                 return sb.ToString();
@@ -73,10 +73,10 @@ namespace Foundation.Data.SqlClient.SqlLog
         {
             sb.AppendFormat(
                 "exec LogError {0},{1},{2},{3},{4},{5},{6},{7},{8},{9}\r\n",
-                this._applicationId,
-                this._connectionNo,
-                this._commandNo,
-                this._executionNo,
+                _applicationId,
+                _connectionNo,
+                _commandNo,
+                _executionNo,
                 errorNo,
                 error,
                 severity,

@@ -44,7 +44,7 @@ namespace Foundation
         /// <param name="dateTime"></param>
         public SmallDate(DateTime dateTime)
         {
-            this.value = ToSmallDateValue(dateTime);
+            value = ToSmallDateValue(dateTime);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Foundation
         public SmallDate(int year, int month, int day)
         {
             var dateTime = new DateTime(year, month, day);
-            this.value = ToSmallDateValue(dateTime);
+            value = ToSmallDateValue(dateTime);
         }
 
         /// <summary>
@@ -71,17 +71,17 @@ namespace Foundation
         /// <summary>
         /// 
         /// </summary>
-        public int Year => ToDateTime(this.value).Year;
+        public int Year => ToDateTime(value).Year;
 
         /// <summary>
         /// 
         /// </summary>
-        public int Month => ToDateTime(this.value).Month;
+        public int Month => ToDateTime(value).Month;
 
         /// <summary>
         /// 
         /// </summary>
-        public int Day => ToDateTime(this.value).Day;
+        public int Day => ToDateTime(value).Day;
 
         /// <summary>
         /// 
@@ -128,7 +128,7 @@ namespace Foundation
         [Pure]
         public DateTime ToDateTime()
         {
-            return ToDateTime(this.value);
+            return ToDateTime(value);
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace Foundation
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return this.value;
+            return value;
         }
 
         /// <summary>
@@ -173,13 +173,13 @@ namespace Foundation
         /// <returns></returns>
         public override string ToString()
         {
-            var dateTime = ToDateTime(this.value);
+            var dateTime = ToDateTime(value);
             return dateTime.ToShortDateString();
         }
 
         int IComparable<SmallDate>.CompareTo(SmallDate other)
         {
-            return this.value.CompareTo(other.value);
+            return value.CompareTo(other.value);
         }
 
         private static DateTime ToDateTime(ushort value)
@@ -202,7 +202,7 @@ namespace Foundation
 
         bool IEquatable<SmallDate>.Equals(SmallDate other)
         {
-            return this.value == other.value;
+            return value == other.value;
         }
     }
 }

@@ -19,17 +19,17 @@ namespace Foundation.Management
             Contract.Requires<ArgumentNullException>(managementObject != null);
 #endif
 
-            this._managementObject = managementObject;
+            _managementObject = managementObject;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public ManagementJobState JobState => (ManagementJobState)(ushort)this._managementObject["JobState"];
+        public ManagementJobState JobState => (ManagementJobState)(ushort)_managementObject["JobState"];
 
         /// <summary>
         /// 
         /// </summary>
-        public object PercentComplete => this._managementObject["PercentComplete"];
+        public object PercentComplete => _managementObject["PercentComplete"];
     }
 }

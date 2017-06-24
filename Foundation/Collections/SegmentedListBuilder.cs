@@ -26,7 +26,7 @@ namespace Foundation.Collections
 #if CONTRACTS_FULL
             Contract.Requires<ArgumentOutOfRangeException>(segmentItemCapacity > 0);
 #endif
-            this._segmentItemCapacity = segmentItemCapacity;
+            _segmentItemCapacity = segmentItemCapacity;
         }
 
         /// <summary>
@@ -37,15 +37,15 @@ namespace Foundation.Collections
         {
             T[] currentSegment;
 
-            if (this._segments.Count > 0 && this._nextSegmentItemIndex < this._segmentItemCapacity)
+            if (_segments.Count > 0 && _nextSegmentItemIndex < _segmentItemCapacity)
             {
-                var lastSegmentIndex = this._segments.Count - 1;
-                currentSegment = this._segments[lastSegmentIndex];
+                var lastSegmentIndex = _segments.Count - 1;
+                currentSegment = _segments[lastSegmentIndex];
             }
             else
             {
-                currentSegment = new T[this._segmentItemCapacity];
-                this._segments.Add(currentSegment);
+                currentSegment = new T[_segmentItemCapacity];
+                _segments.Add(currentSegment);
                 _nextSegmentItemIndex = 0;
             }
 
@@ -61,12 +61,12 @@ namespace Foundation.Collections
             get
             {
                 var count = 0;
-                var segmentCount = this._segments.Count;
+                var segmentCount = _segments.Count;
                 if (segmentCount > 0)
                 {
-                    count += (segmentCount - 1)*this._segmentItemCapacity;
+                    count += (segmentCount - 1)* _segmentItemCapacity;
                 }
-                count += this._nextSegmentItemIndex;
+                count += _nextSegmentItemIndex;
 
                 return count;
             }
@@ -78,8 +78,8 @@ namespace Foundation.Collections
         /// <returns></returns>
         public IReadOnlyList<T> ToReadOnlyList()
         {
-            var count = this.Count;
-            return new ReadOnlySegmentedList(this._segments, count);
+            var count = Count;
+            return new ReadOnlySegmentedList(_segments, count);
         }
 
         private sealed class ReadOnlySegmentedList : IReadOnlyList<T>
@@ -89,8 +89,8 @@ namespace Foundation.Collections
 
             public ReadOnlySegmentedList(IList<T[]> segments, int count)
             {
-                this._segments = segments;
-                this._count = count;
+                _segments = segments;
+                _count = count;
             }
 
 #region IReadOnlyList<T> Members
@@ -102,7 +102,7 @@ namespace Foundation.Collections
                     var segmentLength = _segments[0].Length;
 
                     var segmentIndex = index/segmentLength;
-                    var segment = this._segments[segmentIndex];
+                    var segment = _segments[segmentIndex];
 
                     var segmentItemIndex = index%segmentLength;
                     var value = segment[segmentItemIndex];
@@ -110,17 +110,17 @@ namespace Foundation.Collections
                 }
             }
 
-            int IReadOnlyCollection<T>.Count => this._count;
+            int IReadOnlyCollection<T>.Count => _count;
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator()
             {
                 var segmentIndex = 0;
-                var lastSegmentIndex = this._segments.Count - 1;
+                var lastSegmentIndex = _segments.Count - 1;
 
-                foreach (var segment in this._segments)
+                foreach (var segment in _segments)
                 {
                     var segmentLength = segment.Length;
-                    var segmentItemCount = segmentIndex < lastSegmentIndex ? segmentLength : this._count%segmentLength;
+                    var segmentItemCount = segmentIndex < lastSegmentIndex ? segmentLength : _count % segmentLength;
 
                     for (var i = 0; i < segmentItemCount; i++)
                     {

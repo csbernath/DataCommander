@@ -17,8 +17,8 @@
             Contract.Requires<ArgumentNullException>(table != null);
 #endif
 
-            this.Table = table;
-            this._cells = new string[table.Columns.Count];
+            Table = table;
+            _cells = new string[table.Columns.Count];
         }
 
         /// <summary>
@@ -37,7 +37,7 @@
                 Contract.Requires(0 <= columnIndex && columnIndex < this.Table.Columns.Count);
 #endif
 
-                return this._cells[columnIndex];
+                return _cells[columnIndex];
             }
 
             set
@@ -45,7 +45,7 @@
 #if CONTRACTS_FULL
                 Contract.Requires(0 <= columnIndex && columnIndex < this.Table.Columns.Count);
 #endif
-                this._cells[columnIndex] = value;
+                _cells[columnIndex] = value;
             }
         }
     }

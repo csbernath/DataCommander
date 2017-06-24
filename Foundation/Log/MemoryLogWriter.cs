@@ -15,13 +15,13 @@ namespace Foundation.Log
         /// </summary>
         public MemoryLogWriter()
         {
-            this._logEntries = new List<LogEntry>();
+            _logEntries = new List<LogEntry>();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public IEnumerable<LogEntry> LogEntries => this._logEntries;
+        public IEnumerable<LogEntry> LogEntries => _logEntries;
 
         #region ILogWriter Members
 
@@ -31,9 +31,9 @@ namespace Foundation.Log
 
         void ILogWriter.Write( LogEntry logEntry )
         {
-            lock (this._logEntries)
+            lock (_logEntries)
             {
-                this._logEntries.Add( logEntry );
+                _logEntries.Add( logEntry );
             }
         }
 

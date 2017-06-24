@@ -31,8 +31,8 @@ namespace Foundation.Data.PTypes
         /// <param name="type"></param>
         private PVariant( PValueType type )
         {
-            this.ValueType = type;
-            this._sql = null;
+            ValueType = type;
+            _sql = null;
         }
 
         /// <summary>
@@ -43,18 +43,18 @@ namespace Foundation.Data.PTypes
         {
             if (value == null)
             {
-                this.ValueType = PValueType.Default;
+                ValueType = PValueType.Default;
             }
             else if (value == DBNull.Value)
             {
-                this.ValueType = PValueType.Null;
+                ValueType = PValueType.Null;
             }
             else
             {
-                this.ValueType = PValueType.Value;
+                ValueType = PValueType.Value;
             }
 
-            this._sql = value;
+            _sql = value;
         }
 
         /// <summary>
@@ -65,17 +65,17 @@ namespace Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public bool IsNull => this.ValueType == PValueType.Null;
+        public bool IsNull => ValueType == PValueType.Null;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsValue => this.ValueType == PValueType.Value;
+        public bool IsValue => ValueType == PValueType.Value;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsEmpty => this.ValueType == PValueType.Empty;
+        public bool IsEmpty => ValueType == PValueType.Empty;
 
         /// <summary>
         /// 
@@ -86,11 +86,11 @@ namespace Foundation.Data.PTypes
             {
                 object value;
 
-                switch (this.ValueType)
+                switch (ValueType)
                 {
                     case PValueType.Value:
                     case PValueType.Null:
-                        value = this._sql;
+                        value = _sql;
                         break;
 
                     default:
@@ -105,18 +105,18 @@ namespace Foundation.Data.PTypes
             {
                 if (value == null)
                 {
-                    this.ValueType = PValueType.Default;
+                    ValueType = PValueType.Default;
                 }
                 else if (value == DBNull.Value)
                 {
-                    this.ValueType = PValueType.Null;
+                    ValueType = PValueType.Null;
                 }
                 else
                 {
-                    this.ValueType = PValueType.Value;
+                    ValueType = PValueType.Value;
                 }
 
-                this._sql = value;
+                _sql = value;
             }
         }
 
@@ -136,7 +136,7 @@ namespace Foundation.Data.PTypes
         /// <returns></returns>
         public override string ToString()
         {
-            return this._sql.ToString();
+            return _sql.ToString();
         }
     }
 }

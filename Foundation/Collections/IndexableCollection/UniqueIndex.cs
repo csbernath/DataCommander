@@ -26,7 +26,7 @@ namespace Foundation.Collections.IndexableCollection
             Func<T, GetKeyResponse<TKey>> getKey,
             IDictionary<TKey, T> dictionary)
         {
-            this.Initialize(name, getKey, dictionary);
+            Initialize(name, getKey, dictionary);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Foundation.Collections.IndexableCollection
                     throw new ArgumentException();
             }
 
-            this.Initialize(name, getKey, dictionary);
+            Initialize(name, getKey, dictionary);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public T this[TKey key]
         {
-            get => this._dictionary[key];
+            get => _dictionary[key];
 
             set => throw new NotSupportedException();
         }
@@ -88,7 +88,7 @@ namespace Foundation.Collections.IndexableCollection
         [Pure]
         public bool ContainsKey(TKey key)
         {
-            return this._dictionary.ContainsKey(key);
+            return _dictionary.ContainsKey(key);
         }
 
         #region ICollectionIndex<TKey,T> Members
@@ -96,12 +96,12 @@ namespace Foundation.Collections.IndexableCollection
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadOnly => this._dictionary.IsReadOnly;
+        public bool IsReadOnly => _dictionary.IsReadOnly;
 
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this._dictionary.Count;
+        public int Count => _dictionary.Count;
 
         /// <summary>
         /// 
@@ -110,7 +110,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="arrayIndex"></param>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            this._dictionary.Values.CopyTo(array, arrayIndex);
+            _dictionary.Values.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool TryGetValue(TKey key, out T item)
         {
-            return this._dictionary.TryGetValue(key, out item);
+            return _dictionary.TryGetValue(key, out item);
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public IEnumerator<KeyValuePair<TKey, T>> GetEnumerator()
         {
-            return this._dictionary.GetEnumerator();
+            return _dictionary.GetEnumerator();
         }
 
         #endregion
@@ -143,7 +143,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="item"></param>
         void ICollection<T>.Add(T item)
         {
-            var response = this._getKey(item);
+            var response = _getKey(item);
 
             if (response.HasKey)
             {
@@ -151,7 +151,7 @@ namespace Foundation.Collections.IndexableCollection
 #if CONTRACTS_FULL
                 Contract.Assert(!this.dictionary.ContainsKey(key));
 #endif
-                this._dictionary.Add(key, item);
+                _dictionary.Add(key, item);
             }
         }
 
@@ -160,7 +160,7 @@ namespace Foundation.Collections.IndexableCollection
         /// </summary>
         void ICollection<T>.Clear()
         {
-            this._dictionary.Clear();
+            _dictionary.Clear();
         }
 
         /// <summary>
@@ -174,12 +174,12 @@ namespace Foundation.Collections.IndexableCollection
             Contract.Assert(item != null);
 #endif
 
-            var response = this._getKey(item);
+            var response = _getKey(item);
             bool contains;
 
             if (response.HasKey)
             {
-                contains = this._dictionary.ContainsKey(response.Key);
+                contains = _dictionary.ContainsKey(response.Key);
             }
             else
             {
@@ -200,12 +200,12 @@ namespace Foundation.Collections.IndexableCollection
             Contract.Assert(item != null);
 #endif
 
-            var response = this._getKey(item);
+            var response = _getKey(item);
             bool succeeded;
 
             if (response.HasKey)
             {
-                succeeded = this._dictionary.Remove(response.Key);
+                succeeded = _dictionary.Remove(response.Key);
             }
             else
             {
@@ -225,7 +225,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            return this._dictionary.Values.GetEnumerator();
+            return _dictionary.Values.GetEnumerator();
         }
 
 #endregion
@@ -238,7 +238,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this._dictionary.Values.GetEnumerator();
+            return _dictionary.Values.GetEnumerator();
         }
 
 #endregion
@@ -258,7 +258,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <summary>
         /// 
         /// </summary>
-        public ICollection<TKey> Keys => this._dictionary.Keys;
+        public ICollection<TKey> Keys => _dictionary.Keys;
 
         /// <summary>
         /// 
@@ -273,7 +273,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <summary>
         /// 
         /// </summary>
-        public ICollection<T> Values => this._dictionary.Values;
+        public ICollection<T> Values => _dictionary.Values;
 
 #endregion
 
@@ -300,7 +300,7 @@ namespace Foundation.Collections.IndexableCollection
 
         void ICollection<KeyValuePair<TKey, T>>.Clear()
         {
-            this._dictionary.Clear();
+            _dictionary.Clear();
         }
 
         /// <summary>
@@ -333,9 +333,9 @@ namespace Foundation.Collections.IndexableCollection
             Contract.Requires<ArgumentNullException>(dictionary != null);
 #endif
 
-            this.Name = name;
-            this._getKey = getKey;
-            this._dictionary = dictionary;
+            Name = name;
+            _getKey = getKey;
+            _dictionary = dictionary;
         }
     }
 }

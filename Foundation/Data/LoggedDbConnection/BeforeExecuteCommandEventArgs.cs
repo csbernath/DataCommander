@@ -11,7 +11,7 @@
         /// <param name="command"></param>
         public BeforeExecuteCommandEventArgs(LoggedDbCommandInfo command)
         {
-            this.Command = command;
+            Command = command;
         }
 
         /// <summary>

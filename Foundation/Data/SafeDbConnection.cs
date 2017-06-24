@@ -41,8 +41,8 @@ namespace Foundation.Data
             Contract.Requires<ArgumentNullException>(safeDbConnection != null);
 #endif
 
-            this.Connection = connection;
-            this._safeDbConnection = safeDbConnection;
+            Connection = connection;
+            _safeDbConnection = safeDbConnection;
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Foundation.Data
         /// </summary>
         public void Dispose()
         {
-            this.Dispose(true);
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
@@ -62,10 +62,10 @@ namespace Foundation.Data
         {
             if (disposing)
             {
-                if (this.Connection != null)
+                if (Connection != null)
                 {
-                    this.Connection.Dispose();
-                    this.Connection = null;
+                    Connection.Dispose();
+                    Connection = null;
                 }
             }
         }
@@ -76,7 +76,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public IDbTransaction BeginTransaction()
         {
-            return this.Connection.BeginTransaction();
+            return Connection.BeginTransaction();
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Foundation.Data
         /// </summary>
         IDbTransaction IDbConnection.BeginTransaction(IsolationLevel il)
         {
-            return this.Connection.BeginTransaction(il);
+            return Connection.BeginTransaction(il);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Foundation.Data
         /// <param name="databaseName"></param>
         public void ChangeDatabase(string databaseName)
         {
-            this.Connection.ChangeDatabase(databaseName);
+            Connection.ChangeDatabase(databaseName);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Foundation.Data
         /// </summary>
         public void Close()
         {
-            this.Connection.Close();
+            Connection.Close();
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public IDbCommand CreateCommand()
         {
-            var command = this.Connection.CreateCommand();
+            var command = Connection.CreateCommand();
             return new SafeDbCommand(this, command);
         }
 
@@ -121,7 +121,7 @@ namespace Foundation.Data
         {
             var count = 0;
 
-            while (!this._safeDbConnection.CancellationToken.IsCancellationRequested)
+            while (!_safeDbConnection.CancellationToken.IsCancellationRequested)
             {
                 count++;
                 var stopwatch = new Stopwatch();
@@ -129,19 +129,19 @@ namespace Foundation.Data
                 try
                 {
                     stopwatch.Start();
-                    this.Connection.Open();
+                    Connection.Open();
                     stopwatch.Stop();
                     if (stopwatch.ElapsedMilliseconds >= 100)
                     {
                         Log.Trace("SafeDbConnection.Open() finished. {0}, count: {1}, elapsed: {2}",
-                            this.Connection.ConnectionString, count, stopwatch.Elapsed);
+                            Connection.ConnectionString, count, stopwatch.Elapsed);
                     }
 
                     break;
                 }
                 catch (Exception e)
                 {
-                    this._safeDbConnection.HandleException(e, stopwatch.Elapsed);
+                    _safeDbConnection.HandleException(e, stopwatch.Elapsed);
                 }
             }
         }
@@ -151,25 +151,25 @@ namespace Foundation.Data
         /// </summary>
         public string ConnectionString
         {
-            get => this.Connection.ConnectionString;
+            get => Connection.ConnectionString;
 
-            set => this.Connection.ConnectionString = value;
+            set => Connection.ConnectionString = value;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int ConnectionTimeout => this.Connection.ConnectionTimeout;
+        public int ConnectionTimeout => Connection.ConnectionTimeout;
 
         /// <summary>
         /// 
         /// </summary>
-        public string Database => this.Connection.Database;
+        public string Database => Connection.Database;
 
         /// <summary>
         /// 
         /// </summary>
-        public ConnectionState State => this.Connection.State;
+        public ConnectionState State => Connection.State;
 
         /// <summary>
         /// 
@@ -183,14 +183,14 @@ namespace Foundation.Data
             Contract.Requires<ArgumentNullException>(command != null);
 #endif
 
-            if (this.Connection.State != ConnectionState.Open)
+            if (Connection.State != ConnectionState.Open)
             {
-                this.Open();
+                Open();
             }
 
             IDataReader reader = null;
 
-            while (!this._safeDbConnection.CancellationToken.IsCancellationRequested)
+            while (!_safeDbConnection.CancellationToken.IsCancellationRequested)
             {
                 var ticks = Stopwatch.GetTimestamp();
 
@@ -208,7 +208,7 @@ namespace Foundation.Data
                         reader.Dispose();
                     }
 
-                    var state = this.Connection.State;
+                    var state = Connection.State;
 
                     Log.Write(
                         LogLevel.Error,
@@ -221,11 +221,11 @@ namespace Foundation.Data
 
                     if (state == ConnectionState.Open)
                     {
-                        this._safeDbConnection.HandleException(e, command);
+                        _safeDbConnection.HandleException(e, command);
                     }
                     else
                     {
-                        this.Open();
+                        Open();
                     }
                 }
             }
@@ -246,12 +246,12 @@ namespace Foundation.Data
 
             object scalar = null;
 
-            if (this.Connection.State != ConnectionState.Open)
+            if (Connection.State != ConnectionState.Open)
             {
-                this.Open();
+                Open();
             }
 
-            while (!this._safeDbConnection.CancellationToken.IsCancellationRequested)
+            while (!_safeDbConnection.CancellationToken.IsCancellationRequested)
             {
                 try
                 {
@@ -262,13 +262,13 @@ namespace Foundation.Data
                 {
                     Log.Write(LogLevel.Error, e.ToLogString());
 
-                    if (this.Connection.State == ConnectionState.Open)
+                    if (Connection.State == ConnectionState.Open)
                     {
-                        this._safeDbConnection.HandleException(e, command);
+                        _safeDbConnection.HandleException(e, command);
                     }
                     else
                     {
-                        this.Open();
+                        Open();
                     }
                 }
             }
@@ -283,15 +283,15 @@ namespace Foundation.Data
         /// <returns></returns>
         internal int ExecuteNonQuery(IDbCommand command)
         {
-            if (this.Connection.State != ConnectionState.Open)
+            if (Connection.State != ConnectionState.Open)
             {
-                this.Open();
+                Open();
             }
 
             var count = 0;
             var tryCount = 0;
 
-            while (tryCount == 0 || !this._safeDbConnection.CancellationToken.IsCancellationRequested)
+            while (tryCount == 0 || !_safeDbConnection.CancellationToken.IsCancellationRequested)
             {
                 try
                 {
@@ -302,13 +302,13 @@ namespace Foundation.Data
                 {
                     Log.Write(LogLevel.Error, e.ToLogString());
 
-                    if (this.Connection.State == ConnectionState.Open)
+                    if (Connection.State == ConnectionState.Open)
                     {
-                        this._safeDbConnection.HandleException(e, command);
+                        _safeDbConnection.HandleException(e, command);
                     }
                     else
                     {
-                        this.Open();
+                        Open();
                     }
                 }
 

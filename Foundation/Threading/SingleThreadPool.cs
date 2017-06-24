@@ -20,7 +20,7 @@ namespace Foundation.Threading
         /// </summary>
         public SingleThreadPool()
         {
-            this.Thread = new WorkerThread(this.Start);
+            Thread = new WorkerThread(Start);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public int QueuedItemCount => this._queuedItemCount;
+        public int QueuedItemCount => _queuedItemCount;
 
         /// <summary>
         /// 
@@ -46,24 +46,24 @@ namespace Foundation.Threading
 
             var tuple = Tuple.Create(callback, state);
 
-            lock (this._workItems)
+            lock (_workItems)
             {
-                this._workItems.Enqueue(tuple);
+                _workItems.Enqueue(tuple);
             }
 
-            Interlocked.Increment(ref this._queuedItemCount);
-            this._enqueueEvent.Set();
+            Interlocked.Increment(ref _queuedItemCount);
+            _enqueueEvent.Set();
         }
 
         private void Dequeue()
         {
             Tuple<WaitCallback, object>[] array;
 
-            lock (this._workItems)
+            lock (_workItems)
             {
-                array = new Tuple<WaitCallback, object>[this._workItems.Count];
-                this._workItems.CopyTo(array, 0);
-                this._workItems.Clear();
+                array = new Tuple<WaitCallback, object>[_workItems.Count];
+                _workItems.CopyTo(array, 0);
+                _workItems.Clear();
             }
 
             for (var i = 0; i < array.Length; i++)
@@ -81,7 +81,7 @@ namespace Foundation.Threading
                     Log.Write( LogLevel.Error, "Executing task failed. callback: {0}, state: {1}\r\n{2}", callback, state, e );
                 }
 
-                Interlocked.Decrement(ref this._queuedItemCount);
+                Interlocked.Decrement(ref _queuedItemCount);
             }
         }
 
@@ -89,20 +89,20 @@ namespace Foundation.Threading
         {
             var waitHandles = new WaitHandle[]
             {
-                this.Thread.StopRequest,
-                this._enqueueEvent
+                Thread.StopRequest,
+                _enqueueEvent
             };
 
             while (true)
             {
                 WaitHandle.WaitAny(waitHandles);
 
-                if (this.Thread.IsStopRequested)
+                if (Thread.IsStopRequested)
                 {
                     break;
                 }
 
-                this.Dequeue();
+                Dequeue();
             }
         }
 
@@ -111,9 +111,9 @@ namespace Foundation.Threading
         /// </summary>
         public void Stop()
         {
-            this.Thread.Stop();
-            this.Thread.Join();
-            this.Dequeue();
+            Thread.Stop();
+            Thread.Join();
+            Dequeue();
         }
     }
 }

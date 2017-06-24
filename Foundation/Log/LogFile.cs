@@ -30,69 +30,69 @@ namespace Foundation.Log
             FileAttributes fileAttributes,
             DateTimeKind dateTimeKind)
         {
-            this._path = path;
-            this._encoding = encoding;
-            this._bufferSize = bufferSize;
-            this._autoFlush = autoFlush;
-            this._formatter = formatter;
-            this._fileAttributes = fileAttributes;
-            this._dateTimeKind = dateTimeKind;
+            _path = path;
+            _encoding = encoding;
+            _bufferSize = bufferSize;
+            _autoFlush = autoFlush;
+            _formatter = formatter;
+            _fileAttributes = fileAttributes;
+            _dateTimeKind = dateTimeKind;
         }
 
         private FileStream Open(string fileName, DateTime dateTime)
         {
-            this._date = dateTime.Date;
+            _date = dateTime.Date;
 
-            this.FileName = fileName.Replace("{date}", dateTime.ToString("yyyy.MM.dd"));
-            this.FileName = this.FileName.Replace("{time}", dateTime.ToString("HH.mm.ss.fff"));
-            this.FileName = this.FileName.Replace("{guid}", Guid.NewGuid().ToString());
+            FileName = fileName.Replace("{date}", dateTime.ToString("yyyy.MM.dd"));
+            FileName = FileName.Replace("{time}", dateTime.ToString("HH.mm.ss.fff"));
+            FileName = FileName.Replace("{guid}", Guid.NewGuid().ToString());
 
-            return new FileStream(this.FileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read, this._bufferSize);
+            return new FileStream(FileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read, _bufferSize);
         }
 
         private void Open(DateTime dateTime)
         {
             try
             {
-                this._fileStream = this.Open(this._path, dateTime);
+                _fileStream = Open(_path, dateTime);
             }
             catch (Exception e)
             {
                 Log.Write(LogLevel.Error, e.ToString());
 
                 var directory = Path.GetTempPath();
-                var fileName = Path.GetFileName(this._path);
-                this._path = Path.Combine(directory, fileName);
-                this._fileStream = this.Open(this._path, dateTime);
+                var fileName = Path.GetFileName(_path);
+                _path = Path.Combine(directory, fileName);
+                _fileStream = Open(_path, dateTime);
 
-                Log.Write(LogLevel.Error, $"LogFile path: {this.FileName}");
+                Log.Write(LogLevel.Error, $"LogFile path: {FileName}");
             }
 
-            if (this._fileStream.Length == 0)
+            if (_fileStream.Length == 0)
             {
-                var preamble = this._encoding.GetPreamble();
-                this._fileStream.Write(preamble, 0, preamble.Length);
+                var preamble = _encoding.GetPreamble();
+                _fileStream.Write(preamble, 0, preamble.Length);
             }
         }
 
         public void Write(DateTime dateTime, string text)
         {
-            if (this._fileStream == null)
+            if (_fileStream == null)
             {
-                this.Open(dateTime);
+                Open(dateTime);
             }
-            else if (dateTime.Date != this._date)
+            else if (dateTime.Date != _date)
             {
-                this.Close();
-                this.Open(dateTime);
+                Close();
+                Open(dateTime);
             }
 
-            var array = this._encoding.GetBytes(text);
-            this._fileStream.Write(array, 0, array.Length);
+            var array = _encoding.GetBytes(text);
+            _fileStream.Write(array, 0, array.Length);
 
-            if (this._autoFlush)
+            if (_autoFlush)
             {
-                this._fileStream.Flush();
+                _fileStream.Flush();
             }
         }
 
@@ -102,44 +102,44 @@ namespace Foundation.Log
 
         void ILogFile.Open()
         {
-            var begin = this._formatter.Begin();
+            var begin = _formatter.Begin();
 
             if (begin != null)
             {
-                this.Write(LocalTime.Default.Now, begin);
+                Write(LocalTime.Default.Now, begin);
             }
         }
 
         void ILogFile.Write(LogEntry entry)
         {
-            var text = this._formatter.Format(entry);
-            this.Write(entry.CreationTime, text);
+            var text = _formatter.Format(entry);
+            Write(entry.CreationTime, text);
         }
 
         void ILogFile.Flush()
         {
-            this._fileStream.Flush();
+            _fileStream.Flush();
         }
 
         public void Close()
         {
-            if (this._fileStream != null)
+            if (_fileStream != null)
             {
-                var end = this._formatter.End();
+                var end = _formatter.End();
 
                 if (end != null)
                 {
-                    this.Write(LocalTime.Default.Now, end);
+                    Write(LocalTime.Default.Now, end);
                 }
 
-                this._fileStream.Close();
-                var name = this._fileStream.Name;
-                this._fileStream = null;
+                _fileStream.Close();
+                var name = _fileStream.Name;
+                _fileStream = null;
 
-                if (this._fileAttributes != default(FileAttributes))
+                if (_fileAttributes != default(FileAttributes))
                 {
                     var attributes = File.GetAttributes(name);
-                    attributes |= this._fileAttributes; // FileAttributes.ReadOnly | FileAttributes.Hidden;
+                    attributes |= _fileAttributes; // FileAttributes.ReadOnly | FileAttributes.Hidden;
                     File.SetAttributes(name, attributes);
                 }
             }
@@ -151,7 +151,7 @@ namespace Foundation.Log
 
         void IDisposable.Dispose()
         {
-            this.Close();
+            Close();
         }
 
         #endregion

@@ -11,7 +11,7 @@
         /// <param name="rowCount"></param>
         public AfterReadEventArgs(int rowCount)
         {
-            this.RowCount = rowCount;
+            RowCount = rowCount;
         }
 
         /// <summary>

@@ -184,12 +184,12 @@ namespace Foundation.Diagnostics
                 int size,
                 object target)
             {
-                this.Id = id;
-                this.Name = name;
-                this.TypeName = typeName;
-                this.Size = size;
-                this.WeakReference = new WeakReference(target);
-                this.Timestamp = Stopwatch.GetTimestamp();
+                Id = id;
+                Name = name;
+                TypeName = typeName;
+                Size = size;
+                WeakReference = new WeakReference(target);
+                Timestamp = Stopwatch.GetTimestamp();
             }
 
             public long Id { get; }
@@ -215,19 +215,19 @@ namespace Foundation.Diagnostics
 
             public ListItemState(ListItem listItem, long timestamp)
             {
-                this.ListItem = listItem;
+                ListItem = listItem;
                 this.timestamp = timestamp;
 
-                this.IsAlive = listItem.WeakReference.IsAlive;
-                if (this.IsAlive)
+                IsAlive = listItem.WeakReference.IsAlive;
+                if (IsAlive)
                 {
                     try
                     {
-                        this.Generation = GC.GetGeneration(this.ListItem.WeakReference);
+                        Generation = GC.GetGeneration(ListItem.WeakReference);
                     }
                     catch
                     {
-                        this.IsAlive = false;
+                        IsAlive = false;
                     }
                 }
             }
@@ -238,7 +238,7 @@ namespace Foundation.Diagnostics
 
             public int? Generation { get; }
 
-            public long Age => this.timestamp - this.ListItem.Timestamp;
+            public long Age => timestamp - ListItem.Timestamp;
         }
     }
 }

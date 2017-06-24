@@ -13,9 +13,9 @@ namespace Foundation.Collections.ObjectPool
             T value,
             DateTime creationDate)
         {
-            this.Key = key;
-            this.Value = value;
-            this.CreationDate = creationDate;
+            Key = key;
+            Value = value;
+            CreationDate = creationDate;
         }
 
         public int Key { get; }

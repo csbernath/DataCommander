@@ -22,15 +22,15 @@ namespace Foundation.Configuration
         /// </summary>
         public ConfigurationAttributeCollection()
         {
-            this._listIndex = new ListIndex<ConfigurationAttribute>("List");
+            _listIndex = new ListIndex<ConfigurationAttribute>("List");
 
-            this._nameIndex = new UniqueIndex<string, ConfigurationAttribute>(
+            _nameIndex = new UniqueIndex<string, ConfigurationAttribute>(
                 "NameIndex",
                 attribute => GetKeyResponse.Create(true, attribute.Name),
                 SortOrder.None);
 
-            this._collection = new IndexableCollection<ConfigurationAttribute>(this._listIndex);
-            this._collection.Indexes.Add(this._nameIndex);
+            _collection = new IndexableCollection<ConfigurationAttribute>(_listIndex);
+            _collection.Indexes.Add(_nameIndex);
         }
 
         /// <summary>
@@ -46,15 +46,15 @@ namespace Foundation.Configuration
                 Contract.Assert(0 <= index && index < this.Count);
 #endif
 
-                return this._listIndex[index];
+                return _listIndex[index];
             }
 
             set
             {
-                var originalItem = this._listIndex[index];
-                ICollection<ConfigurationAttribute> collection = this._nameIndex;
+                var originalItem = _listIndex[index];
+                ICollection<ConfigurationAttribute> collection = _nameIndex;
                 collection.Remove(originalItem);
-                this._listIndex[index] = value;
+                _listIndex[index] = value;
                 collection.Add(value);
             }
         }
@@ -72,7 +72,7 @@ namespace Foundation.Configuration
                 Contract.Requires(this.ContainsKey(name));
 #endif
 
-                return this._nameIndex[name];
+                return _nameIndex[name];
             }
         }
 
@@ -93,7 +93,7 @@ namespace Foundation.Configuration
             Contract.Requires(!this.ContainsKey(name));
 #endif
             var attribute = new ConfigurationAttribute(name, value, description);
-            this._collection.Add(attribute);
+            _collection.Add(attribute);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace Foundation.Configuration
         [Pure]
         public bool ContainsKey(string name)
         {
-            return this._nameIndex.ContainsKey(name);
+            return _nameIndex.ContainsKey(name);
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public int IndexOf(ConfigurationAttribute item)
         {
-            return this._listIndex.IndexOf(item);
+            return _listIndex.IndexOf(item);
         }
 
         /// <summary>
@@ -124,9 +124,9 @@ namespace Foundation.Configuration
         /// <param name="item"></param>
         public void Insert(int index, ConfigurationAttribute item)
         {
-            ICollection<ConfigurationAttribute> collection = this._nameIndex;
+            ICollection<ConfigurationAttribute> collection = _nameIndex;
             collection.Add(item);
-            this._listIndex.Insert(index, item);
+            _listIndex.Insert(index, item);
         }
 
         /// <summary>
@@ -137,12 +137,12 @@ namespace Foundation.Configuration
         public bool Remove(string name)
         {
             ConfigurationAttribute attribute;
-            var contains = this._nameIndex.TryGetValue(name, out attribute);
+            var contains = _nameIndex.TryGetValue(name, out attribute);
             bool succeeded;
 
             if (contains)
             {
-                succeeded = this._collection.Remove(attribute);
+                succeeded = _collection.Remove(attribute);
             }
             else
             {
@@ -158,9 +158,9 @@ namespace Foundation.Configuration
         /// <param name="index"></param>
         public void RemoveAt(int index)
         {
-            var item = this._listIndex[index];
-            this._listIndex.RemoveAt(index);
-            ICollection<ConfigurationAttribute> collection = this._nameIndex;
+            var item = _listIndex[index];
+            _listIndex.RemoveAt(index);
+            ICollection<ConfigurationAttribute> collection = _nameIndex;
             collection.Remove(item);
         }
 
@@ -172,7 +172,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public bool TryGetValue(string name, out ConfigurationAttribute attribute)
         {
-            return this._nameIndex.TryGetValue(name, out attribute);
+            return _nameIndex.TryGetValue(name, out attribute);
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public bool TryGetAttributeValue<T>(string name, out T value)
         {
-            return this.TryGetAttributeValue(name, default(T), out value);
+            return TryGetAttributeValue(name, default(T), out value);
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace Foundation.Configuration
         public bool TryGetAttributeValue<T>(string name, T defaultValue, out T value)
         {
             ConfigurationAttribute attribute;
-            var contains = this._nameIndex.TryGetValue(name, out attribute);
+            var contains = _nameIndex.TryGetValue(name, out attribute);
 
             if (contains)
             {
@@ -220,7 +220,7 @@ namespace Foundation.Configuration
         public void SetAttributeValue(string name, object value)
         {
             ConfigurationAttribute attribute;
-            var contains = this._nameIndex.TryGetValue(name, out attribute);
+            var contains = _nameIndex.TryGetValue(name, out attribute);
 
             if (contains)
             {
@@ -229,7 +229,7 @@ namespace Foundation.Configuration
             else
             {
                 attribute = new ConfigurationAttribute(name, value, null);
-                this._collection.Add(attribute);
+                _collection.Add(attribute);
             }
         }
 
@@ -241,7 +241,7 @@ namespace Foundation.Configuration
         /// <param name="item"></param>
         public void Add(ConfigurationAttribute item)
         {
-            this._collection.Add(item);
+            _collection.Add(item);
         }
 
         /// <summary>
@@ -249,7 +249,7 @@ namespace Foundation.Configuration
         /// </summary>
         public void Clear()
         {
-            this._collection.Clear();
+            _collection.Clear();
         }
 
         /// <summary>
@@ -259,7 +259,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public bool Contains(ConfigurationAttribute item)
         {
-            return this._collection.Contains(item);
+            return _collection.Contains(item);
         }
 
         /// <summary>
@@ -269,18 +269,18 @@ namespace Foundation.Configuration
         /// <param name="arrayIndex"></param>
         public void CopyTo(ConfigurationAttribute[] array, int arrayIndex)
         {
-            this._collection.CopyTo(array, arrayIndex);
+            _collection.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this._collection.Count;
+        public int Count => _collection.Count;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadOnly => this._collection.IsReadOnly;
+        public bool IsReadOnly => _collection.IsReadOnly;
 
         /// <summary>
         /// 
@@ -289,7 +289,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public bool Remove(ConfigurationAttribute item)
         {
-            return this._collection.Remove(item);
+            return _collection.Remove(item);
         }
 
 #endregion
@@ -302,7 +302,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public IEnumerator<ConfigurationAttribute> GetEnumerator()
         {
-            return this._collection.GetEnumerator();
+            return _collection.GetEnumerator();
         }
 
 #endregion
@@ -311,7 +311,7 @@ namespace Foundation.Configuration
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this._collection.GetEnumerator();
+            return _collection.GetEnumerator();
         }
 
 #endregion

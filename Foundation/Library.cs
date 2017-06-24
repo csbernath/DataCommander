@@ -13,7 +13,7 @@ namespace Foundation
         /// <param name="fileName"></param>
         public Library( string fileName )
         {
-            this.moduleHandle = NativeMethods.LoadLibrary( fileName );
+            moduleHandle = NativeMethods.LoadLibrary( fileName );
         }
 
         /// <summary>
@@ -21,9 +21,9 @@ namespace Foundation
         /// </summary>
         ~Library()
         {
-            if (this.moduleHandle != 0)
+            if (moduleHandle != 0)
             {
-                NativeMethods.FreeLibrary( this.moduleHandle );
+                NativeMethods.FreeLibrary(moduleHandle);
             }
         }
 
@@ -35,7 +35,7 @@ namespace Foundation
         public string LoadString( int id )
         {
             var buffer = new byte[ 1024 ];
-            var n = NativeMethods.LoadString( this.moduleHandle, id, buffer, buffer.Length );
+            var n = NativeMethods.LoadString(moduleHandle, id, buffer, buffer.Length );
             string value = null;
 
             if (n > 0)

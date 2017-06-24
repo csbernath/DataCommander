@@ -19,7 +19,7 @@ namespace Foundation
 
         private SmallTimeSpan(short value)
         {
-            this.TotalMinutes = value;
+            TotalMinutes = value;
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Foundation
         /// <param name="timeSpan"></param>
         public SmallTimeSpan(TimeSpan timeSpan)
         {
-            this.TotalMinutes = ToSmallTimeSpanValue(timeSpan);
+            TotalMinutes = ToSmallTimeSpanValue(timeSpan);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Foundation
         /// <returns></returns>
         public override string ToString()
         {
-            return ToTimeSpan(this.TotalMinutes).ToString();
+            return ToTimeSpan(TotalMinutes).ToString();
         }
 
         private static TimeSpan ToTimeSpan(short value)

@@ -21,7 +21,7 @@ namespace Foundation.Text
 
             for (var i = 0; i < columnCount; i++)
             {
-                this.Columns.Add(new StringTableColumn());
+                Columns.Add(new StringTableColumn());
             }
         }
 
@@ -46,10 +46,10 @@ namespace Foundation.Text
 
         private int GetMaxColumnWidth(int columnIndex)
         {
-            var rowCount = this.Rows.Count;
+            var rowCount = Rows.Count;
 
             var maxColumnWidth = rowCount > 0
-                ? this.Rows.Max(row =>
+                ? Rows.Max(row =>
                 {
                     var value = row[columnIndex];
                     return value?.Length ?? 0;
@@ -65,15 +65,15 @@ namespace Foundation.Text
         /// <returns></returns>
         public override string ToString()
         {
-            var count = this.Columns.Count;
+            var count = Columns.Count;
             var columnWidths = new int[count];
 
             for (var i = 0; i < count; i++)
             {
-                columnWidths[i] = this.GetMaxColumnWidth(i);
+                columnWidths[i] = GetMaxColumnWidth(i);
             }
 
-            return this.ToString(columnWidths, " ");
+            return ToString(columnWidths, " ");
         }
 
         /// <summary>
@@ -83,12 +83,12 @@ namespace Foundation.Text
         /// <returns></returns>
         public string ToString(int indent)
         {
-            var columnWidths = new int[this.Columns.Count];
-            var last = this.Columns.Count - 1;
+            var columnWidths = new int[Columns.Count];
+            var last = Columns.Count - 1;
 
             for (var i = 0; i <= last; i++)
             {
-                var width = this.GetMaxColumnWidth(i);
+                var width = GetMaxColumnWidth(i);
 
                 if (i < last)
                 {
@@ -103,7 +103,7 @@ namespace Foundation.Text
                 columnWidths[i] = width;
             }
 
-            return this.ToString(columnWidths, " ");
+            return ToString(columnWidths, " ");
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace Foundation.Text
             var stringBuilder = new StringBuilder();
             var first = true;
 
-            foreach (var row in this.Rows)
+            foreach (var row in Rows)
             {
                 if (first)
                 {
@@ -132,7 +132,7 @@ namespace Foundation.Text
                     stringBuilder.AppendLine();
                 }
 
-                this.WriteRow(row, columnWidths, columnSeparator, stringBuilder);
+                WriteRow(row, columnWidths, columnSeparator, stringBuilder);
             }
 
             return stringBuilder.ToString();
@@ -150,7 +150,7 @@ namespace Foundation.Text
             Contract.Requires<ArgumentNullException>(stringBuilder != null);
 #endif
 
-            var count = this.Columns.Count;
+            var count = Columns.Count;
 
             for (var j = 0; j < count; ++j)
             {
@@ -159,7 +159,7 @@ namespace Foundation.Text
                     stringBuilder.Append(columnSeparator);
                 }
 
-                var column = this.Columns[j];
+                var column = Columns[j];
                 var alignRight = column.Align == StringTableColumnAlign.Right;
                 var text = StringHelper.FormatColumn(row[j], columnWidths[j], alignRight);
                 stringBuilder.Append(text);

@@ -11,10 +11,10 @@ namespace Foundation.Diagnostics.MethodProfiler
             int methodId,
             long beginTime)
         {
-            this.Parent = parent;
-            this.Id = Interlocked.Increment(ref _idSequence);
-            this.MethodId = methodId;
-            this.BeginTime = beginTime;
+            Parent = parent;
+            Id = Interlocked.Increment(ref _idSequence);
+            MethodId = methodId;
+            BeginTime = beginTime;
         }
 
         public MethodInvocation Parent { get; }

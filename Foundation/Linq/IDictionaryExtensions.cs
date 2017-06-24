@@ -133,10 +133,10 @@ namespace Foundation.Linq
 
             bool IDictionary<TKey, TValue>.ContainsKey(TKey key)
             {
-                return this.dictionary.ContainsKey(key);
+                return dictionary.ContainsKey(key);
             }
 
-            ICollection<TKey> IDictionary<TKey, TValue>.Keys => this.dictionary.Keys;
+            ICollection<TKey> IDictionary<TKey, TValue>.Keys => dictionary.Keys;
 
             bool IDictionary<TKey, TValue>.Remove(TKey key)
             {
@@ -145,16 +145,16 @@ namespace Foundation.Linq
 
             bool IDictionary<TKey, TValue>.TryGetValue(TKey key, out TValue value)
             {
-                return this.dictionary.TryGetValue(key, out value);
+                return dictionary.TryGetValue(key, out value);
             }
 
-            ICollection<TValue> IDictionary<TKey, TValue>.Values => this.dictionary.Values;
+            ICollection<TValue> IDictionary<TKey, TValue>.Values => dictionary.Values;
 
             TValue IDictionary<TKey, TValue>.this[TKey key]
             {
-                get => this.dictionary[key];
+                get => dictionary[key];
 
-                set => this.dictionary[key] = value;
+                set => dictionary[key] = value;
             }
 
 #endregion
@@ -173,15 +173,15 @@ namespace Foundation.Linq
 
             bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
             {
-                return this.dictionary.Contains(item);
+                return dictionary.Contains(item);
             }
 
             void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
             {
-                this.dictionary.CopyTo(array, arrayIndex);
+                dictionary.CopyTo(array, arrayIndex);
             }
 
-            int ICollection<KeyValuePair<TKey, TValue>>.Count => this.dictionary.Count;
+            int ICollection<KeyValuePair<TKey, TValue>>.Count => dictionary.Count;
 
             bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly => true;
 
@@ -196,7 +196,7 @@ namespace Foundation.Linq
 
             IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
             {
-                return this.dictionary.GetEnumerator();
+                return dictionary.GetEnumerator();
             }
 
 #endregion
@@ -205,7 +205,7 @@ namespace Foundation.Linq
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return this.dictionary.GetEnumerator();
+                return dictionary.GetEnumerator();
             }
 
 #endregion

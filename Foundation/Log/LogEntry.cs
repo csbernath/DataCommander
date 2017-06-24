@@ -34,15 +34,15 @@ namespace Foundation.Log
             string message,
             LogLevel logLevel)
         {
-            this.Id = id;
-            this.LogName = logName;
-            this.CreationTime = creationTime;
-            this.ManagedThreadId = managedThreadId;
-            this.ThreadName = threadName;
-            this.UserName = userName;
-            this.HostName = hostName;
-            this.Message = message;
-            this.LogLevel = logLevel;
+            Id = id;
+            LogName = logName;
+            CreationTime = creationTime;
+            ManagedThreadId = managedThreadId;
+            ThreadName = threadName;
+            UserName = userName;
+            HostName = hostName;
+            Message = message;
+            LogLevel = logLevel;
         }
 
         /// <summary>

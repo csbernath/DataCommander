@@ -21,14 +21,14 @@ namespace Foundation.Data.TextData
         /// </summary>
         public TextDataColumnCollection()
         {
-            this._listIndex = new ListIndex<TextDataColumn>( "List" );
+            _listIndex = new ListIndex<TextDataColumn>( "List" );
 
-            this._nameIndex = new UniqueIndex<string, TextDataColumn>(
+            _nameIndex = new UniqueIndex<string, TextDataColumn>(
                 "Name",
                 column => GetKeyResponse.Create( true, column.ColumnName ),
                 SortOrder.None );
 
-            this._collection = new IndexableCollection<TextDataColumn>( this._listIndex );
+            _collection = new IndexableCollection<TextDataColumn>(_listIndex);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Foundation.Data.TextData
                 Contract.Requires( this.Contains( columnName ) );
 #endif
 
-                return this._nameIndex[ columnName ];
+                return _nameIndex[ columnName ];
             }
         }
 
@@ -56,7 +56,7 @@ namespace Foundation.Data.TextData
         [Pure]
         public bool Contains( string columnName )
         {
-            return this._nameIndex.ContainsKey( columnName );
+            return _nameIndex.ContainsKey( columnName );
         }
 
         /// <summary>
@@ -67,12 +67,12 @@ namespace Foundation.Data.TextData
         public int IndexOf( string columnName )
         {
             TextDataColumn column;
-            var contains = this._nameIndex.TryGetValue( columnName, out column );
+            var contains = _nameIndex.TryGetValue( columnName, out column );
             int index;
 
             if (contains)
             {
-                index = this._listIndex.IndexOf( column );
+                index = _listIndex.IndexOf( column );
             }
             else
             {
@@ -84,7 +84,7 @@ namespace Foundation.Data.TextData
 
         internal int IndexOf( string columnName, bool throwException )
         {
-            var index = this.IndexOf( columnName );
+            var index = IndexOf( columnName );
 
             if (index < 0)
             {
@@ -97,7 +97,7 @@ namespace Foundation.Data.TextData
 
         internal int IndexOf( TextDataColumn column, bool throwException )
         {
-            var index = this.IndexOf( column );
+            var index = IndexOf( column );
 
             if (index < 0)
             {
@@ -121,7 +121,7 @@ namespace Foundation.Data.TextData
                 Contract.Assert( index < this.collection.Count );
 #endif
 
-                return this._listIndex[ index ];
+                return _listIndex[ index ];
             }
 
             set
@@ -138,7 +138,7 @@ namespace Foundation.Data.TextData
         /// <param name="item"></param>
         public void Add( TextDataColumn item )
         {
-            this._collection.Add( item );
+            _collection.Add( item );
         }
 
         void ICollection<TextDataColumn>.Clear()
@@ -159,7 +159,7 @@ namespace Foundation.Data.TextData
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this._collection.Count;
+        public int Count => _collection.Count;
 
         bool ICollection<TextDataColumn>.IsReadOnly => throw new NotImplementedException();
 
@@ -174,7 +174,7 @@ namespace Foundation.Data.TextData
 
         IEnumerator<TextDataColumn> IEnumerable<TextDataColumn>.GetEnumerator()
         {
-            return this._collection.GetEnumerator();
+            return _collection.GetEnumerator();
         }
 
 #endregion
@@ -183,7 +183,7 @@ namespace Foundation.Data.TextData
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this._collection.GetEnumerator();
+            return _collection.GetEnumerator();
         }
 
 #endregion
@@ -197,7 +197,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public int IndexOf( TextDataColumn item )
         {
-            return this._listIndex.IndexOf( item );
+            return _listIndex.IndexOf( item );
         }
 
         /// <summary>

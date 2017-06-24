@@ -33,9 +33,9 @@ namespace Foundation.Data.TextData
             Contract.Requires(converters != null);
 #endif
 
-            this._textReader = textReader;
-            this._columns = columns;
-            this._converters = converters;
+            _textReader = textReader;
+            _columns = columns;
+            _converters = converters;
         }
 
         /// <summary>
@@ -47,11 +47,11 @@ namespace Foundation.Data.TextData
             object[] values = null;
             var index = 0;
 
-            foreach (var column in this._columns)
+            foreach (var column in _columns)
             {
                 var maxLength = column.MaxLength;
                 var buffer = new char[maxLength];
-                var count = this._textReader.Read(buffer, 0, maxLength);
+                var count = _textReader.Read(buffer, 0, maxLength);
 
                 if (count == 0)
                 {
@@ -64,11 +64,11 @@ namespace Foundation.Data.TextData
 
                 if (index == 0)
                 {
-                    values = new object[this._columns.Count];
+                    values = new object[_columns.Count];
                 }
 
                 var source = new string(buffer);
-                var converter = this._converters[index];
+                var converter = _converters[index];
 #if CONTRACTS_FULL
                 Contract.Assert(converter != null);
 #endif

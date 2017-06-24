@@ -40,8 +40,8 @@ namespace Foundation.Diagnostics
         /// <param name="item"></param>
         public void Increment(long item)
         {
-            Interlocked.Increment(ref this.count);
-            Interlocked.Add(ref this.sum, item);
+            Interlocked.Increment(ref count);
+            Interlocked.Add(ref sum, item);
 
             while (true)
             {
@@ -89,22 +89,22 @@ namespace Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public long Count => this.count;
+        public long Count => count;
 
         /// <summary>
         /// 
         /// </summary>
-        public long Sum => this.sum;
+        public long Sum => sum;
 
         /// <summary>
         /// 
         /// </summary>
-        public long Min => this.min;
+        public long Min => min;
 
         /// <summary>
         /// 
         /// </summary>
-        public long Max => this.max;
+        public long Max => max;
 
         /// <summary>
         /// 
@@ -112,12 +112,12 @@ namespace Foundation.Diagnostics
         /// <returns></returns>
         public string ToLogString()
         {
-            return $@"Int64PerformanceCounter '{this.name}'
-count: {this.count}
-min: {this.toString(this.min)}
-avg: {this.toString((long)((double)this.Sum/this.Count))}
-max: {this.toString(this.max)}
-sum: {this.toString(this.sum)}";
+            return $@"Int64PerformanceCounter '{name}'
+count: {count}
+min: {toString(min)}
+avg: {toString((long)((double)Sum / Count))}
+max: {toString(max)}
+sum: {toString(sum)}";
         }
     }
 }

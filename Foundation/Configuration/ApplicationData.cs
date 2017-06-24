@@ -30,7 +30,7 @@ namespace Foundation.Configuration
             {
                 var trace = new StackTrace(1);
                 var nodeName = ConfigurationNodeName.FromNamespace(trace, 0);
-                var node = this.CreateNode(nodeName);
+                var node = CreateNode(nodeName);
                 return node;
             }
         }
@@ -44,7 +44,7 @@ namespace Foundation.Configuration
             {
                 var trace = new StackTrace(1);
                 var nodeName = ConfigurationNodeName.FromType(trace, 0);
-                var node = this.CreateNode(nodeName);
+                var node = CreateNode(nodeName);
                 return node;
             }
         }
@@ -118,10 +118,10 @@ namespace Foundation.Configuration
         public void Load(XmlReader xmlReader)
         {
             var reader = new ConfigurationReader();
-            this.RootNode = reader.Read(xmlReader, this._sectionName, null, null);
+            RootNode = reader.Read(xmlReader, _sectionName, null, null);
 
-            if (this.RootNode == null)
-                this.RootNode = new ConfigurationNode(null);
+            if (RootNode == null)
+                RootNode = new ConfigurationNode(null);
         }
 
         /// <summary>
@@ -131,17 +131,17 @@ namespace Foundation.Configuration
         /// <param name="sectionName"></param>
         public void Load(string fileName, string sectionName)
         {
-            this._fileName = fileName;
-            this._sectionName = sectionName;
+            _fileName = fileName;
+            _sectionName = sectionName;
 
             if (File.Exists(fileName))
             {
                 var reader = new ConfigurationReader();
                 var fileNames = new StringCollection();
-                this.RootNode = reader.Read(fileName, sectionName, fileNames);
+                RootNode = reader.Read(fileName, sectionName, fileNames);
             }
             else
-                this.RootNode = new ConfigurationNode(null);
+                RootNode = new ConfigurationNode(null);
         }
 
         /// <summary>
@@ -157,9 +157,9 @@ namespace Foundation.Configuration
 #endif
 
             xmlWriter.WriteStartElement(sectionName);
-            ConfigurationWriter.Write(xmlWriter, this.RootNode.Attributes);
+            ConfigurationWriter.Write(xmlWriter, RootNode.Attributes);
 
-            foreach (var childNode in this.RootNode.ChildNodes)
+            foreach (var childNode in RootNode.ChildNodes)
                 ConfigurationWriter.WriteNode(xmlWriter, childNode);
 
             xmlWriter.WriteEndElement();
@@ -181,7 +181,7 @@ namespace Foundation.Configuration
                 xmlTextWriter.Indentation = 2;
                 xmlTextWriter.IndentChar = ' ';
                 xmlTextWriter.WriteStartDocument();
-                this.Save(xmlTextWriter, sectionName);
+                Save(xmlTextWriter, sectionName);
                 xmlTextWriter.WriteEndDocument();
                 xmlTextWriter.Close();
             }
@@ -192,12 +192,12 @@ namespace Foundation.Configuration
         /// </summary>
         public void Save()
         {
-            var directoryName = Path.GetDirectoryName(this._fileName);
+            var directoryName = Path.GetDirectoryName(_fileName);
 
             if (!Directory.Exists(directoryName))
                 Directory.CreateDirectory(directoryName);
 
-            this.Save(this._fileName, this._sectionName);
+            Save(_fileName, _sectionName);
         }
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public ConfigurationNode CreateNode(string nodeName)
         {
-            return this.RootNode.CreateNode(nodeName);
+            return RootNode.CreateNode(nodeName);
         }
     }
 }

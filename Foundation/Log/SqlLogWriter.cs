@@ -46,46 +46,46 @@ namespace Foundation.Log
             Contract.Requires<ArgumentNullException>(singleThreadPool != null);
 #endif
 
-            this._createConnection = createConnection;
-            this._logEntryToCommandText = logEntryToCommandText;
-            this._singleThreadPool = singleThreadPool;
-            this._commandTimeout = commandTimeout;
+            _createConnection = createConnection;
+            _logEntryToCommandText = logEntryToCommandText;
+            _singleThreadPool = singleThreadPool;
+            _commandTimeout = commandTimeout;
         }
 
 #region ILogWriter Members
 
         void ILogWriter.Open()
         {
-            this._timer = new Timer(this.TimerCallback, null, 0, Period);
+            _timer = new Timer(TimerCallback, null, 0, Period);
         }
 
         void ILogWriter.Write(LogEntry logEntry)
         {
-            lock (this._entryQueue)
+            lock (_entryQueue)
             {
-                this._entryQueue.Add(logEntry);
+                _entryQueue.Add(logEntry);
             }
         }
 
         private void Flush()
         {
-            this.TimerCallback(null);
+            TimerCallback(null);
         }
 
         void ILogWriter.Flush()
         {
-            this.Flush();
+            Flush();
         }
 
         void ILogWriter.Close()
         {
-            if (this._timer != null)
+            if (_timer != null)
             {
-                this._timer.Dispose();
-                this._timer = null;
+                _timer.Dispose();
+                _timer = null;
             }
 
-            this.Flush();
+            Flush();
         }
 
 #endregion
@@ -101,30 +101,30 @@ namespace Foundation.Log
 
         private void TimerCallback(object state)
         {
-            lock (this._lockObject)
+            lock (_lockObject)
             {
-                if (this._entryQueue.Count > 0)
+                if (_entryQueue.Count > 0)
                 {
-                    if (this._timer != null)
+                    if (_timer != null)
                     {
-                        this._timer.Change(Timeout.Infinite, Timeout.Infinite);
+                        _timer.Change(Timeout.Infinite, Timeout.Infinite);
                     }
 
                     LogEntry[] array;
 
-                    lock (this._entryQueue)
+                    lock (_entryQueue)
                     {
-                        var count = this._entryQueue.Count;
+                        var count = _entryQueue.Count;
                         array = new LogEntry[count];
-                        this._entryQueue.CopyTo(array);
-                        this._entryQueue.Clear();
+                        _entryQueue.CopyTo(array);
+                        _entryQueue.Clear();
                     }
 
-                    this._singleThreadPool.QueueUserWorkItem(this.WaitCallback, array);
+                    _singleThreadPool.QueueUserWorkItem(WaitCallback, array);
 
-                    if (this._timer != null)
+                    if (_timer != null)
                     {
-                        this._timer.Change(Period, Period);
+                        _timer.Change(Period, Period);
                     }
                 }
             }
@@ -140,19 +140,19 @@ namespace Foundation.Log
 
                 for (var i = 0; i < array.Length; i++)
                 {
-                    commandText = this._logEntryToCommandText(array[i]);
+                    commandText = _logEntryToCommandText(array[i]);
                     sb.AppendLine(commandText);
                 }
 
                 commandText = sb.ToString();
 
-                using (var connection = this._createConnection())
+                using (var connection = _createConnection())
                 {
                     connection.Open();
                     var command = connection.CreateCommand();
                     command.CommandType = CommandType.Text;
                     command.CommandText = commandText;
-                    command.CommandTimeout = this._commandTimeout;
+                    command.CommandTimeout = _commandTimeout;
                     command.ExecuteNonQuery();
                 }
             }

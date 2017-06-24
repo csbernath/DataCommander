@@ -31,9 +31,9 @@ namespace Foundation.Collections.IndexableCollection
             Contract.Requires<ArgumentNullException>(list != null);
 #endif
 
-            this.Name = name;
-            this._keySelector = keySelector;
-            this._list = list;
+            Name = name;
+            _keySelector = keySelector;
+            _list = list;
         }
 
 #region ICollectionIndex<T> Members
@@ -53,14 +53,14 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="item"></param>
         public void Add(T item)
         {
-            var contains = this._list.Contains(item);
+            var contains = _list.Contains(item);
 
             if (contains)
             {
                 throw new ArgumentException();
             }
 
-            this._list.Add(item);
+            _list.Add(item);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Foundation.Collections.IndexableCollection
 #if CONTRACTS_FULL
             Contract.Ensures(this.Count == 0);
 #endif
-            this._list.Clear();
+            _list.Clear();
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Foundation.Collections.IndexableCollection
 #if CONTRACTS_FULL
             Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
 #endif
-            return this._list.Contains(item);
+            return _list.Contains(item);
         }
 
         /// <summary>
@@ -94,18 +94,18 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="arrayIndex"></param>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            this._list.CopyTo(array, arrayIndex);
+            _list.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this._list.Count;
+        public int Count => _list.Count;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadOnly => this._list.IsReadOnly;
+        public bool IsReadOnly => _list.IsReadOnly;
 
         /// <summary>
         /// 
@@ -114,7 +114,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool Remove(T item)
         {
-            return this._list.Remove(item);
+            return _list.Remove(item);
         }
 
 #endregion
@@ -127,7 +127,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            return this._list.GetEnumerator();
+            return _list.GetEnumerator();
         }
 
 #endregion
@@ -136,7 +136,7 @@ namespace Foundation.Collections.IndexableCollection
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this._list.GetEnumerator();
+            return _list.GetEnumerator();
         }
 
 #endregion

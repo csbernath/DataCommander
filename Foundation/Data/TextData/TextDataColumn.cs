@@ -34,14 +34,14 @@ namespace Foundation.Data.TextData
             string format,
             IFormatProvider formatProvider)
         {
-            this.ColumnName = columnName;
-            this.Caption = caption;
-            this.MaxLength = maxLength;
-            this.DataType = dataType;
-            this.NumericPrecision = numericPrecision;
-            this.NumericScale = numericScale;
-            this.Format = format;
-            this.FormatProvider = formatProvider;
+            ColumnName = columnName;
+            Caption = caption;
+            MaxLength = maxLength;
+            DataType = dataType;
+            NumericPrecision = numericPrecision;
+            NumericScale = numericScale;
+            Format = format;
+            FormatProvider = formatProvider;
         }
 
         /// <summary>

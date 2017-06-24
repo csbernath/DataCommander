@@ -32,71 +32,71 @@ namespace Foundation.Data.LoggedDbConnection
             Contract.Ensures(this.command != null);
 #endif
 
-            this._commandId = Interlocked.Increment(ref _commandIdCounter);
-            this._command = command;
-            this._beforeExecuteCommand = beforeExecuteCommand;
-            this._afterExecuteCommand = afterExecuteCommand;
-            this._afterRead = afterRead;
+            _commandId = Interlocked.Increment(ref _commandIdCounter);
+            _command = command;
+            _beforeExecuteCommand = beforeExecuteCommand;
+            _afterExecuteCommand = afterExecuteCommand;
+            _afterRead = afterRead;
         }
 
 #region IDbCommand Members
 
         void IDbCommand.Cancel()
         {
-            this._command.Cancel();
+            _command.Cancel();
         }
 
         string IDbCommand.CommandText
         {
-            get => this._command.CommandText;
+            get => _command.CommandText;
 
-            set => this._command.CommandText = value;
+            set => _command.CommandText = value;
         }
 
         int IDbCommand.CommandTimeout
         {
-            get => this._command.CommandTimeout;
+            get => _command.CommandTimeout;
 
-            set => this._command.CommandTimeout = value;
+            set => _command.CommandTimeout = value;
         }
 
         CommandType IDbCommand.CommandType
         {
-            get => this._command.CommandType;
+            get => _command.CommandType;
 
-            set => this._command.CommandType = value;
+            set => _command.CommandType = value;
         }
 
         IDbConnection IDbCommand.Connection
         {
-            get => this._command.Connection;
+            get => _command.Connection;
 
-            set => this._command.Connection = value;
+            set => _command.Connection = value;
         }
 
         IDbDataParameter IDbCommand.CreateParameter()
         {
-            return this._command.CreateParameter();
+            return _command.CreateParameter();
         }
 
         int IDbCommand.ExecuteNonQuery()
         {
-            var commandInfo = new Lazy<LoggedDbCommandInfo>(() => this.CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.NonQuery));
+            var commandInfo = new Lazy<LoggedDbCommandInfo>(() => CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.NonQuery));
 
-            if (this._beforeExecuteCommand != null)
+            if (_beforeExecuteCommand != null)
             {
                 var eventArgs = new BeforeExecuteCommandEventArgs(commandInfo.Value);
-                this._beforeExecuteCommand(this, eventArgs);
+                _beforeExecuteCommand(this, eventArgs);
             }
 
             int rowCount;
 
-            if (this._afterExecuteCommand != null)
+            if (_afterExecuteCommand != null)
             {
                 Exception exception = null;
                 try
                 {
-                    rowCount = this._command.ExecuteNonQuery();
+                    rowCount = _command.ExecuteNonQuery();
                 }
                 catch (Exception e)
                 {
@@ -106,12 +106,12 @@ namespace Foundation.Data.LoggedDbConnection
                 finally
                 {
                     var eventArgs = new AfterExecuteCommandEventArgs(commandInfo.Value, exception);
-                    this._afterExecuteCommand(this, eventArgs);
+                    _afterExecuteCommand(this, eventArgs);
                 }
             }
             else
             {
-                rowCount = this._command.ExecuteNonQuery();
+                rowCount = _command.ExecuteNonQuery();
             }
 
             return rowCount;
@@ -119,22 +119,22 @@ namespace Foundation.Data.LoggedDbConnection
 
         IDataReader IDbCommand.ExecuteReader(CommandBehavior behavior)
         {
-            var commandInfo = new Lazy<LoggedDbCommandInfo>(() => this.CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.Reader));
+            var commandInfo = new Lazy<LoggedDbCommandInfo>(() => CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.Reader));
 
-            if (this._beforeExecuteCommand != null)
+            if (_beforeExecuteCommand != null)
             {
                 var eventArgs = new BeforeExecuteCommandEventArgs(commandInfo.Value);
-                this._beforeExecuteCommand(this, eventArgs);
+                _beforeExecuteCommand(this, eventArgs);
             }
 
             IDataReader dataReader;
 
-            if (this._afterExecuteCommand != null)
+            if (_afterExecuteCommand != null)
             {
                 Exception exception = null;
                 try
                 {
-                    dataReader = this._command.ExecuteReader();
+                    dataReader = _command.ExecuteReader();
                 }
                 catch (Exception e)
                 {
@@ -144,15 +144,15 @@ namespace Foundation.Data.LoggedDbConnection
                 finally
                 {
                     var eventArgs = new AfterExecuteCommandEventArgs(commandInfo.Value, exception);
-                    this._afterExecuteCommand(this, eventArgs);
+                    _afterExecuteCommand(this, eventArgs);
                 }
             }
             else
             {
-                dataReader = this._command.ExecuteReader();
+                dataReader = _command.ExecuteReader();
             }
 
-            return new LoggedDataReader(dataReader, this._afterRead);
+            return new LoggedDataReader(dataReader, _afterRead);
         }
 
         IDataReader IDbCommand.ExecuteReader()
@@ -163,21 +163,21 @@ namespace Foundation.Data.LoggedDbConnection
 
         object IDbCommand.ExecuteScalar()
         {
-            var commandInfo = new Lazy<LoggedDbCommandInfo>(() => this.CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.Scalar));
-            if (this._beforeExecuteCommand != null)
+            var commandInfo = new Lazy<LoggedDbCommandInfo>(() => CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType.Scalar));
+            if (_beforeExecuteCommand != null)
             {
                 var eventArgs = new BeforeExecuteCommandEventArgs(commandInfo.Value);
-                this._beforeExecuteCommand(this, eventArgs);
+                _beforeExecuteCommand(this, eventArgs);
             }
 
             object scalar;
 
-            if (this._afterExecuteCommand != null)
+            if (_afterExecuteCommand != null)
             {
                 Exception exception = null;
                 try
                 {
-                    scalar = this._command.ExecuteScalar();
+                    scalar = _command.ExecuteScalar();
                 }
                 catch (Exception e)
                 {
@@ -187,36 +187,36 @@ namespace Foundation.Data.LoggedDbConnection
                 finally
                 {
                     var args = new AfterExecuteCommandEventArgs(commandInfo.Value, exception);
-                    this._afterExecuteCommand(this, args);
+                    _afterExecuteCommand(this, args);
                 }
             }
             else
             {
-                scalar = this._command.ExecuteScalar();
+                scalar = _command.ExecuteScalar();
             }
 
             return scalar;
         }
 
-        IDataParameterCollection IDbCommand.Parameters => this._command.Parameters;
+        IDataParameterCollection IDbCommand.Parameters => _command.Parameters;
 
         void IDbCommand.Prepare()
         {
-            this._command.Prepare();
+            _command.Prepare();
         }
 
         IDbTransaction IDbCommand.Transaction
         {
-            get => this._command.Transaction;
+            get => _command.Transaction;
 
-            set => this._command.Transaction = value;
+            set => _command.Transaction = value;
         }
 
         UpdateRowSource IDbCommand.UpdatedRowSource
         {
-            get => this._command.UpdatedRowSource;
+            get => _command.UpdatedRowSource;
 
-            set => this._command.UpdatedRowSource = value;
+            set => _command.UpdatedRowSource = value;
         }
 
 #endregion
@@ -225,7 +225,7 @@ namespace Foundation.Data.LoggedDbConnection
 
         void IDisposable.Dispose()
         {
-            this._command.Dispose();
+            _command.Dispose();
         }
 
 #endregion
@@ -234,17 +234,17 @@ namespace Foundation.Data.LoggedDbConnection
 
         private LoggedDbCommandInfo CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType executionType)
         {
-            var connection = this._command.Connection;
+            var connection = _command.Connection;
 
             return new LoggedDbCommandInfo(
-                this._commandId,
+                _commandId,
                 connection.State,
                 connection.Database,
                 executionType,
-                this._command.CommandType,
-                this._command.CommandTimeout,
-                this._command.CommandText,
-                this._command.Parameters.ToLogString());
+                _command.CommandType,
+                _command.CommandTimeout,
+                _command.CommandText,
+                _command.Parameters.ToLogString());
         }
 
 #endregion

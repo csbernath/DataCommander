@@ -22,8 +22,8 @@ namespace Foundation.Collections
         /// <param name="maxSize"></param>
         public DynamicArray(int initialSize, int maxSize)
         {
-            this._array = new T[initialSize];
-            this._maxSize = maxSize;
+            _array = new T[initialSize];
+            _maxSize = maxSize;
         }
 
         #region IList<T> Members
@@ -35,7 +35,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public int IndexOf(T item)
         {
-            return this._array.IndexOf(item);
+            return _array.IndexOf(item);
         }
 
         /// <summary>
@@ -60,9 +60,9 @@ namespace Foundation.Collections
         /// <returns></returns>
         public T this[int index]
         {
-            get => this._array[index];
+            get => _array[index];
 
-            set => this._array[index] = value;
+            set => _array[index] = value;
         }
 
         #endregion
@@ -79,25 +79,25 @@ namespace Foundation.Collections
             Contract.Assert(this.Count < this.maxSize);
 #endif
 
-            if (this.Count == this._array.Length)
+            if (Count == _array.Length)
             {
-                var newSize = this.Count == 0 ? 1 : 2*this.Count;
+                var newSize = Count == 0 ? 1 : 2* Count;
 
-                if (newSize > this._maxSize)
+                if (newSize > _maxSize)
                 {
-                    newSize = this._maxSize;
+                    newSize = _maxSize;
                 }
 
-                if (newSize > this.Count)
+                if (newSize > Count)
                 {
                     var newArray = new T[newSize];
-                    Array.Copy(this._array, newArray, this._array.Length);
-                    this._array = newArray;
+                    Array.Copy(_array, newArray, _array.Length);
+                    _array = newArray;
                 }
             }
 
-            this._array[this.Count] = item;
-            this.Count++;
+            _array[Count] = item;
+            Count++;
         }
 
         /// <summary>
@@ -105,12 +105,12 @@ namespace Foundation.Collections
         /// </summary>
         public void Clear()
         {
-            if (this.Count > 0)
+            if (Count > 0)
             {
-                Array.Clear(this._array, 0, this.Count);
+                Array.Clear(_array, 0, Count);
             }
 
-            this.Count = 0;
+            Count = 0;
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public bool Contains(T item)
         {
-            return this._array.Contains(item);
+            return _array.Contains(item);
         }
 
         void ICollection<T>.CopyTo(T[] array, int arrayIndex)
@@ -136,7 +136,7 @@ namespace Foundation.Collections
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadOnly => this._array.IsReadOnly;
+        public bool IsReadOnly => _array.IsReadOnly;
 
         bool ICollection<T>.Remove(T item)
         {
@@ -153,9 +153,9 @@ namespace Foundation.Collections
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            for (var i = 0; i < this.Count; i++)
+            for (var i = 0; i < Count; i++)
             {
-                yield return this._array[i];
+                yield return _array[i];
             }
         }
 
@@ -165,7 +165,7 @@ namespace Foundation.Collections
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
 
 #endregion

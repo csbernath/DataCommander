@@ -21,14 +21,14 @@ namespace Foundation.Data.TextData
         /// </summary>
         public TextDataParameterCollection()
         {
-            this._listIndex = new ListIndex<TextDataParameter>("List");
-            this._nameIndex = new UniqueIndex<string, TextDataParameter>(
+            _listIndex = new ListIndex<TextDataParameter>("List");
+            _nameIndex = new UniqueIndex<string, TextDataParameter>(
                 "Name",
                 parameter => GetKeyResponse.Create(true, parameter.ParameterName),
                 SortOrder.None);
 
-            this._collection = new IndexableCollection<TextDataParameter>(this._listIndex);
-            this._collection.Indexes.Add(this._nameIndex);
+            _collection = new IndexableCollection<TextDataParameter>(_listIndex);
+            _collection.Indexes.Add(_nameIndex);
         }
 
         /// <summary>
@@ -44,8 +44,8 @@ namespace Foundation.Data.TextData
 #endif
 
             var parameter = (TextDataParameter)value;
-            this._collection.Add(parameter);
-            return this._collection.Count - 1;
+            _collection.Add(parameter);
+            return _collection.Count - 1;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Foundation.Data.TextData
             Contract.Assert(parameter != null);
 #endif
 
-            this._collection.Add(parameter);
+            _collection.Add(parameter);
             return parameter;
         }
 
@@ -77,7 +77,7 @@ namespace Foundation.Data.TextData
         /// </summary>
         public override void Clear()
         {
-            this._collection.Clear();
+            _collection.Clear();
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Foundation.Data.TextData
         [Pure]
         public override bool Contains(string value)
         {
-            return this._nameIndex.ContainsKey(value);
+            return _nameIndex.ContainsKey(value);
         }
 
 #if FOUNDATION_3_5
@@ -101,7 +101,7 @@ namespace Foundation.Data.TextData
         [Pure]
         public bool PureContains(string value)
         {
-            return this.Contains(value);
+            return Contains(value);
         }
 #endif
 
@@ -132,7 +132,7 @@ namespace Foundation.Data.TextData
         /// <summary>
         /// 
         /// </summary>
-        public override int Count => this._collection.Count;
+        public override int Count => _collection.Count;
 
         /// <summary>
         /// 
@@ -271,7 +271,7 @@ namespace Foundation.Data.TextData
 #if CONTRACTS_FULL
             Contract.Assert(this.Contains(parameterName));
 #endif
-            var parameter = this._nameIndex[parameterName];
+            var parameter = _nameIndex[parameterName];
             var value = parameter.Value;
 #if CONTRACTS_FULL
             Contract.Assert(value is TResult);
@@ -287,7 +287,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public bool TryGetValue(string parameterName, out TextDataParameter parameter)
         {
-            return this._nameIndex.TryGetValue(parameterName, out parameter);
+            return _nameIndex.TryGetValue(parameterName, out parameter);
         }
 
 #region IList<TextDataParameter> Members
@@ -298,7 +298,7 @@ namespace Foundation.Data.TextData
             Contract.Assert(item != null);
 #endif
 
-            return this._listIndex.IndexOf(item);
+            return _listIndex.IndexOf(item);
         }
 
         void IList<TextDataParameter>.Insert(int index, TextDataParameter item)
@@ -308,13 +308,13 @@ namespace Foundation.Data.TextData
 
         void IList<TextDataParameter>.RemoveAt(int index)
         {
-            var parameter = this._listIndex[index];
-            this._collection.Remove(parameter);
+            var parameter = _listIndex[index];
+            _collection.Remove(parameter);
         }
 
         TextDataParameter IList<TextDataParameter>.this[int index]
         {
-            get => this._listIndex[index];
+            get => _listIndex[index];
 
             set => throw new NotSupportedException();
         }
@@ -328,12 +328,12 @@ namespace Foundation.Data.TextData
 #if CONTRACTS_FULL
             Contract.Assert(item != null);
 #endif
-            this._collection.Add(item);
+            _collection.Add(item);
         }
 
         void ICollection<TextDataParameter>.Clear()
         {
-            this._collection.Clear();
+            _collection.Clear();
         }
 
         bool ICollection<TextDataParameter>.Contains(TextDataParameter item)
@@ -346,16 +346,16 @@ namespace Foundation.Data.TextData
             throw new NotImplementedException();
         }
 
-        int ICollection<TextDataParameter>.Count => this._collection.Count;
+        int ICollection<TextDataParameter>.Count => _collection.Count;
 
-        bool ICollection<TextDataParameter>.IsReadOnly => this._collection.IsReadOnly;
+        bool ICollection<TextDataParameter>.IsReadOnly => _collection.IsReadOnly;
 
         bool ICollection<TextDataParameter>.Remove(TextDataParameter item)
         {
 #if CONTRACTS_FULL
             Contract.Assert(item != null);
 #endif
-            return this._collection.Remove(item);
+            return _collection.Remove(item);
         }
 
 #endregion
@@ -364,7 +364,7 @@ namespace Foundation.Data.TextData
 
         IEnumerator<TextDataParameter> IEnumerable<TextDataParameter>.GetEnumerator()
         {
-            return this._collection.GetEnumerator();
+            return _collection.GetEnumerator();
         }
 
 #endregion
@@ -373,7 +373,7 @@ namespace Foundation.Data.TextData
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this._collection.GetEnumerator();
+            return _collection.GetEnumerator();
         }
 
 #endregion

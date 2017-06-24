@@ -14,7 +14,7 @@ namespace Foundation.Threading
 
         internal WorkerThreadPoolDequeuerCollection(WorkerThreadPool pool)
         {
-            this._pool = pool;
+            _pool = pool;
         }
 
         /// <summary>
@@ -32,9 +32,9 @@ namespace Foundation.Threading
             Contract.Assert(dequeuer != null);
 #endif
 
-            this.Threads.Add(dequeuer.Thread);
-            this._list.Add(dequeuer);
-            dequeuer.Pool = this._pool;
+            Threads.Add(dequeuer.Thread);
+            _list.Add(dequeuer);
+            dequeuer.Pool = _pool;
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Foundation.Threading
         /// <param name="dequeuer"></param>
         public void Remove(WorkerThreadPoolDequeuer dequeuer)
         {
-            this._list.Remove(dequeuer);
+            _list.Remove(dequeuer);
         }
 
 #region IList<WorkingThreadPoolDequeuer> Members
@@ -55,7 +55,7 @@ namespace Foundation.Threading
         /// <returns></returns>
         public int IndexOf(WorkerThreadPoolDequeuer item)
         {
-            return this._list.IndexOf(item);
+            return _list.IndexOf(item);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Foundation.Threading
         /// <param name="item"></param>
         public void Insert(int index, WorkerThreadPoolDequeuer item)
         {
-            this._list.Insert(index, item);
+            _list.Insert(index, item);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Foundation.Threading
         /// <param name="index"></param>
         public void RemoveAt(int index)
         {
-            this._list.RemoveAt(index);
+            _list.RemoveAt(index);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Foundation.Threading
         /// <returns></returns>
         public WorkerThreadPoolDequeuer this[int index]
         {
-            get => this._list[index];
+            get => _list[index];
 
             set => throw new NotImplementedException();
         }

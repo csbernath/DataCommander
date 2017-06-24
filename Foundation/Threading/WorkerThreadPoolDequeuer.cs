@@ -17,21 +17,21 @@ namespace Foundation.Threading
         /// <param name="callback"></param>
         public WorkerThreadPoolDequeuer(WaitCallback callback)
         {
-            this._callback = callback;
-            this.Thread = new WorkerThread(this.Start);
+            _callback = callback;
+            Thread = new WorkerThread(Start);
         }
 
         private void Start()
         {
-            WaitHandle[] waitHandles = { this.Thread.StopRequest, this._pool.EnqueueEvent };
+            WaitHandle[] waitHandles = { Thread.StopRequest, _pool.EnqueueEvent };
 
-            while (!this.Thread.IsStopRequested)
+            while (!Thread.IsStopRequested)
             {
-                var dequeued = this._pool.Dequeue(this._callback, waitHandles);
+                var dequeued = _pool.Dequeue(_callback, waitHandles);
 
                 if (dequeued)
                 {
-                    this.LastActivityTimestamp = Stopwatch.GetTimestamp();
+                    LastActivityTimestamp = Stopwatch.GetTimestamp();
                 }
             }
         }
@@ -43,7 +43,7 @@ namespace Foundation.Threading
 
         internal WorkerThreadPool Pool
         {
-            set => this._pool = value;
+            set => _pool = value;
         }
 
         internal long LastActivityTimestamp { get; private set; }

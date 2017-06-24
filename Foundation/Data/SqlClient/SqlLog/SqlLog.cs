@@ -96,13 +96,13 @@ namespace Foundation.Data.SqlClient.SqlLog
         /// <param name="connectionString"></param>
         public SqlLog(string connectionString)
         {
-            this.Thread = new WorkerThread(this.Start)
+            Thread = new WorkerThread(Start)
             {
                 Name = typeof (SqlLog).Name,
                 Priority = ThreadPriority.Lowest
             };
 
-            this._connection = new SafeSqlConnection(connectionString);
+            _connection = new SafeSqlConnection(connectionString);
         }
 
         /// <summary>
@@ -112,15 +112,15 @@ namespace Foundation.Data.SqlClient.SqlLog
 
         private void Flush()
         {
-            while (this._queue.Count > 0)
+            while (_queue.Count > 0)
             {
                 ISqlLogItem[] array;
 
-                lock (this._queue)
+                lock (_queue)
                 {
-                    array = new ISqlLogItem[this._queue.Count];
-                    this._queue.CopyTo(array, 0);
-                    this._queue.Clear();
+                    array = new ISqlLogItem[_queue.Count];
+                    _queue.CopyTo(array, 0);
+                    _queue.Clear();
                 }
 
                 var sb = new StringBuilder();
@@ -137,7 +137,7 @@ namespace Foundation.Data.SqlClient.SqlLog
 
                 try
                 {
-                    var command = this._connection.CreateCommand();
+                    var command = _connection.CreateCommand();
                     command.CommandText = cmdText;
                     command.CommandTimeout = 259200;
                     ticks = Stopwatch.GetTimestamp();
@@ -165,42 +165,42 @@ namespace Foundation.Data.SqlClient.SqlLog
 
         private void Start()
         {
-            WaitHandle[] waitHandles = {this.Thread.StopRequest, this._queueEvent};
+            WaitHandle[] waitHandles = { Thread.StopRequest, _queueEvent };
 
-            while (!this.Thread.IsStopRequested)
+            while (!Thread.IsStopRequested)
             {
                 var i = WaitHandle.WaitAny(waitHandles);
-                this.CheckConnections();
+                CheckConnections();
 
                 if (i == 0)
                 {
                     List<object> list;
 
-                    lock (this._connections)
+                    lock (_connections)
                     {
-                        list = this._connections.Keys.ToList();
+                        list = _connections.Keys.ToList();
                     }
 
-                    this.CloseConnections(list, LocalTime.Default.Now);
+                    CloseConnections(list, LocalTime.Default.Now);
                 }
 
-                this.Flush();
+                Flush();
             }
 
             var endDate = LocalTime.Default.Now;
 
-            lock (this._applications)
+            lock (_applications)
             {
-                foreach (var applicationId in this._applications.Keys)
+                foreach (var applicationId in _applications.Keys)
                 {
                     var item = new SqlLogApplicationEnd(applicationId, endDate);
-                    this.Enqueue(item);
+                    Enqueue(item);
                 }
             }
 
-            this.Flush();
+            Flush();
 
-            Log.Trace("queue.Count: {0}", this._queue.Count);
+            Log.Trace("queue.Count: {0}", _queue.Count);
         }
 
         /// <summary>
@@ -220,26 +220,26 @@ namespace Foundation.Data.SqlClient.SqlLog
             var commandText = sb.ToString();
             int applicationId;
 
-            if (this._connection.State != ConnectionState.Open)
+            if (_connection.State != ConnectionState.Open)
             {
                 if (safe)
                 {
-                    this._connection.Open();
+                    _connection.Open();
                 }
                 else
                 {
-                    this._connection.Connection.Open();
+                    _connection.Connection.Open();
                 }
             }
 
-            var transactionScope = new DbTransactionScope(this._connection, null);
+            var transactionScope = new DbTransactionScope(_connection, null);
             applicationId = (int)transactionScope.ExecuteScalar(new CommandDefinition { CommandText = commandText });
             Log.Trace("SqlLog.ApplicationStart({0})", applicationId);
             var commands = new Dictionary<string, SqLoglCommandExecution>();
 
-            lock (this._applications)
+            lock (_applications)
             {
-                this._applications.Add(applicationId, commands);
+                _applications.Add(applicationId, commands);
             }
 
             return applicationId;
@@ -253,11 +253,11 @@ namespace Foundation.Data.SqlClient.SqlLog
         public void ApplicationEnd(int applicationId, DateTime endDate)
         {
             var item = new SqlLogApplicationEnd(applicationId, endDate);
-            this.Enqueue(item);
+            Enqueue(item);
 
-            lock (this._applications)
+            lock (_applications)
             {
-                this._applications.Remove(applicationId);
+                _applications.Remove(applicationId);
             }
         }
 
@@ -265,11 +265,11 @@ namespace Foundation.Data.SqlClient.SqlLog
             object internalConnection,
             DateTime endDate)
         {
-            var sqlLogConnection = this._connections[internalConnection];
+            var sqlLogConnection = _connections[internalConnection];
 
-            lock (this._connections)
+            lock (_connections)
             {
-                this._connections.Remove(internalConnection);
+                _connections.Remove(internalConnection);
             }
 
             if (sqlLogConnection != null)
@@ -277,7 +277,7 @@ namespace Foundation.Data.SqlClient.SqlLog
                 var applicationId = sqlLogConnection.ApplicationId;
                 var connectionNo = sqlLogConnection.ConnectionNo;
                 var item = new SqlLogConnectionClose(applicationId, connectionNo, endDate);
-                this.Enqueue(item);
+                Enqueue(item);
             }
         }
 
@@ -285,9 +285,9 @@ namespace Foundation.Data.SqlClient.SqlLog
         {
             var list = new List<object>();
 
-            lock (this._connections)
+            lock (_connections)
             {
-                foreach (var connection in this._connections.Keys)
+                foreach (var connection in _connections.Keys)
                 {
                     var isOpen = InternalConnectionHelper.IsOpen(connection);
 
@@ -300,7 +300,7 @@ namespace Foundation.Data.SqlClient.SqlLog
 
             if (list.Count > 0)
             {
-                this.CloseConnections(list, LocalTime.Default.Now);
+                CloseConnections(list, LocalTime.Default.Now);
             }
         }
 
@@ -308,18 +308,18 @@ namespace Foundation.Data.SqlClient.SqlLog
         {
             foreach (var connection in connections)
             {
-                this.ConnectionClosed(connection, endDate);
+                ConnectionClosed(connection, endDate);
             }
         }
 
         private void Enqueue(ISqlLogItem item)
         {
-            lock (this._queue)
+            lock (_queue)
             {
-                this._queue.Enqueue(item);
+                _queue.Enqueue(item);
             }
 
-            this._queueEvent.Set();
+            _queueEvent.Set();
         }
 
         /// <summary>
@@ -347,7 +347,7 @@ namespace Foundation.Data.SqlClient.SqlLog
 
             if (internalConnection != null)
             {
-                this._connections.TryGetValue(internalConnection, out sqlLogConnection);
+                _connections.TryGetValue(internalConnection, out sqlLogConnection);
             }
 
             var isNew = sqlLogConnection == null;
@@ -359,23 +359,23 @@ namespace Foundation.Data.SqlClient.SqlLog
             }
             else
             {
-                connectionNo = Interlocked.Increment(ref this._connectionCounter);
+                connectionNo = Interlocked.Increment(ref _connectionCounter);
                 var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connection.ConnectionString);
                 var name = sqlConnectionStringBuilder.ApplicationName;
                 sqlLogConnection = new SqlLogConnection(applicationId, connectionNo, name, userName, hostName, startDate, duration, exception);
 
                 if (internalConnection != null)
                 {
-                    lock (this._connections)
+                    lock (_connections)
                     {
-                        this._connections.Add(internalConnection, sqlLogConnection);
+                        _connections.Add(internalConnection, sqlLogConnection);
                     }
                 }
 
                 var trace = new StackTrace(2, true).ToString();
                 Log.Trace("LoggedSqlConnection.Open() succeeded. ConnectionNo: {0}\r\n{1}", connectionNo, trace);
 
-                this.Enqueue(sqlLogConnection);
+                Enqueue(sqlLogConnection);
             }
 
             return connectionNo;
@@ -398,7 +398,7 @@ namespace Foundation.Data.SqlClient.SqlLog
                 if (!isOpen)
                 {
                     var endDate = LocalTime.Default.Now;
-                    this.ConnectionClosed(internalConnection, endDate);
+                    ConnectionClosed(internalConnection, endDate);
                 }
             }
         }
@@ -420,7 +420,7 @@ namespace Foundation.Data.SqlClient.SqlLog
                 if (!isOpen)
                 {
                     var endDate = LocalTime.Default.Now;
-                    this.ConnectionClosed(internalConnection, endDate);
+                    ConnectionClosed(internalConnection, endDate);
                 }
             }
         }
@@ -442,9 +442,9 @@ namespace Foundation.Data.SqlClient.SqlLog
             long duration,
             Exception exception)
         {
-            var commands = this._applications[applicationId];
+            var commands = _applications[applicationId];
             var item = new SqlLogCommand(applicationId, commands, connectionNo, command, startDate, duration, exception);
-            this.Enqueue(item);
+            Enqueue(item);
         }
     }
 }

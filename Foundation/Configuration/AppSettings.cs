@@ -56,12 +56,12 @@ namespace Foundation.Configuration
                 Contract.Requires<ArgumentNullException>(nameValueCollection != null);
 #endif
 
-                this._nameValueCollection = nameValueCollection;
+                _nameValueCollection = nameValueCollection;
             }
 
             public bool TryGetValue(string name, out string value)
             {
-                value = this._nameValueCollection[name];
+                value = _nameValueCollection[name];
                 var contains = value != null;
                 return contains;
             }
@@ -82,24 +82,24 @@ namespace Foundation.Configuration
                 Contract.Requires<ArgumentNullException>(prefix != null);
 #endif
 
-                this._nameValueCollection = nameValueCollection;
-                this._prefix = prefix;
+                _nameValueCollection = nameValueCollection;
+                _prefix = prefix;
             }
 
             public bool TryGetValue(string name, out string value)
             {
                 string prefixedName;
 
-                if (this._prefix != null)
+                if (_prefix != null)
                 {
-                    prefixedName = this._prefix + name;
+                    prefixedName = _prefix + name;
                 }
                 else
                 {
                     prefixedName = name;
                 }
 
-                value = this._nameValueCollection[prefixedName];
+                value = _nameValueCollection[prefixedName];
                 var contains = value != null;
                 return contains;
             }

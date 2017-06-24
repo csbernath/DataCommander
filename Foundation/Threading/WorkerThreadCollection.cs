@@ -16,7 +16,7 @@ namespace Foundation.Threading
 
         int IList<WorkerThread>.IndexOf(WorkerThread item)
         {
-            var index = this._threads.IndexOf(item);
+            var index = _threads.IndexOf(item);
             return index;
         }
 
@@ -27,9 +27,9 @@ namespace Foundation.Threading
         /// <param name="item"></param>
         public void Insert(int index, WorkerThread item)
         {
-            lock (this._threads)
+            lock (_threads)
             {
-                this._threads.Insert(index, item);
+                _threads.Insert(index, item);
             }
         }
 
@@ -39,9 +39,9 @@ namespace Foundation.Threading
         /// <param name="index"></param>
         public void RemoveAt(int index)
         {
-            lock (this._threads)
+            lock (_threads)
             {
-                this._threads.RemoveAt(index);
+                _threads.RemoveAt(index);
             }
         }
 
@@ -62,9 +62,9 @@ namespace Foundation.Threading
         /// <param name="item"></param>
         public void Add(WorkerThread item)
         {
-            lock (this._threads)
+            lock (_threads)
             {
-                this._threads.Add(item);
+                _threads.Add(item);
             }
         }
 
@@ -86,7 +86,7 @@ namespace Foundation.Threading
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this._threads.Count;
+        public int Count => _threads.Count;
 
         bool ICollection<WorkerThread>.IsReadOnly => throw new Exception("The method or operation is not implemented.");
 
@@ -101,7 +101,7 @@ namespace Foundation.Threading
 
         IEnumerator<WorkerThread> IEnumerable<WorkerThread>.GetEnumerator()
         {
-            return this._threads.GetEnumerator();
+            return _threads.GetEnumerator();
         }
 
         #endregion
@@ -120,9 +120,9 @@ namespace Foundation.Threading
         /// </summary>
         public void Start()
         {
-            lock (this._threads)
+            lock (_threads)
             {
-                foreach (var thread in this._threads)
+                foreach (var thread in _threads)
                 {
                     thread.Start();
                 }
@@ -134,9 +134,9 @@ namespace Foundation.Threading
         /// </summary>
         public void Stop()
         {
-            lock (this._threads)
+            lock (_threads)
             {
-                foreach (var thread in this._threads)
+                foreach (var thread in _threads)
                 {
                     thread.Stop();
                 }
@@ -152,7 +152,7 @@ namespace Foundation.Threading
 #if CONTRACTS_FULL
             Contract.Requires(stopEvent != null);
 #endif
-            var stopper = new Stopper(this._threads, stopEvent);
+            var stopper = new Stopper(_threads, stopEvent);
             stopper.Stop();
         }
 
@@ -164,17 +164,17 @@ namespace Foundation.Threading
 
             public Stopper(IList<WorkerThread> threads, EventWaitHandle stopEvent)
             {
-                this._threads = threads;
-                this._stopEvent = stopEvent;
+                _threads = threads;
+                _stopEvent = stopEvent;
             }
 
             public void Stop()
             {
-                lock (this._threads)
+                lock (_threads)
                 {
-                    foreach (var thread in this._threads)
+                    foreach (var thread in _threads)
                     {
-                        thread.Stopped += this.Thread_Stopped;
+                        thread.Stopped += Thread_Stopped;
                         thread.Stop();
                     }
                 }
@@ -182,11 +182,11 @@ namespace Foundation.Threading
 
             private void Thread_Stopped(object sender, EventArgs e)
             {
-                Interlocked.Increment(ref this._count);
+                Interlocked.Increment(ref _count);
 
-                if (this._count == this._threads.Count)
+                if (_count == _threads.Count)
                 {
-                    this._stopEvent.Set();
+                    _stopEvent.Set();
                 }
             }
         }

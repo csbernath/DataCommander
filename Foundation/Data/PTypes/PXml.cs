@@ -32,8 +32,8 @@ namespace Foundation.Data.PTypes
         /// <param name="type"></param>
         private PXml( PValueType type )
         {
-            this._type = type;
-            this._sqlXml = null;
+            _type = type;
+            _sqlXml = null;
         }
 
         /// <summary>
@@ -42,22 +42,22 @@ namespace Foundation.Data.PTypes
         /// <param name="value"></param>
         public PXml( SqlXml value )
         {
-            this._sqlXml = value;
+            _sqlXml = value;
 
             if (value != null)
             {
-                this._type = PValueType.Value;
+                _type = PValueType.Value;
             }
             else
             {
-                this._type = PValueType.Null;
+                _type = PValueType.Null;
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public object Value => this._sqlXml;
+        public object Value => _sqlXml;
 
         /// <summary>
         /// 

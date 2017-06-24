@@ -33,34 +33,34 @@ namespace Foundation.Data.SqlClient
             CancellationToken cancellationToken)
         {
             var connection = new SqlLoggedSqlConnection.SqlLoggedSqlConnection(sqlLog, applicationId, userName, hostName, connectionString, filter);
-            this._cancellationToken = cancellationToken;
+            _cancellationToken = cancellationToken;
 
-            this.Initialize(connection, this);
+            Initialize(connection, this);
         }
 
-        CancellationToken ISafeDbConnection.CancellationToken => this._cancellationToken;
+        CancellationToken ISafeDbConnection.CancellationToken => _cancellationToken;
 
         object ISafeDbConnection.Id
         {
             get
             {
-                if (this._id == 0)
+                if (_id == 0)
                 {
-                    this._id = SafeSqlConnection.GetId(this.Connection);
+                    _id = SafeSqlConnection.GetId(Connection);
                 }
 
-                return this._id;
+                return _id;
             }
         }
 
         void ISafeDbConnection.HandleException(Exception exception, TimeSpan elapsed)
         {
-            SafeSqlConnection.HandleException(this.Connection, exception, elapsed, this._cancellationToken);
+            SafeSqlConnection.HandleException(Connection, exception, elapsed, _cancellationToken);
         }
 
         void ISafeDbConnection.HandleException(Exception exception, IDbCommand command)
         {
-            SafeSqlConnection.HandleException(exception, command, this._cancellationToken);
+            SafeSqlConnection.HandleException(exception, command, _cancellationToken);
         }
     }
 }

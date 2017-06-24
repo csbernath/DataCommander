@@ -19,7 +19,7 @@ namespace Foundation.DocumentProperties
             Contract.Requires(properties != null);
 #endif
 
-            this.Properties = properties;
+            Properties = properties;
         }
 
         /// <summary>

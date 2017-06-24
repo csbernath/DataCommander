@@ -17,8 +17,8 @@
         /// <param name="value"></param>
         public IndexedItem(int index, T value)
         {
-            this.Index = index;
-            this.Value = value;
+            Index = index;
+            Value = value;
         }
 
         /// <summary>

@@ -24,7 +24,7 @@ namespace Foundation.Management
             Contract.Requires<ArgumentNullException>(managementObject != null);
 #endif
 
-            this._managementObject = managementObject;
+            _managementObject = managementObject;
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Foundation.Management
         {
             get
             {
-                var elementNameObject = this._managementObject["ElementName"];
+                var elementNameObject = _managementObject["ElementName"];
                 var elementName = (string) elementNameObject;
                 return elementName;
             }
@@ -132,7 +132,7 @@ namespace Foundation.Management
         {
             get
             {
-                var enabledStateObject = this._managementObject["EnabledState"];
+                var enabledStateObject = _managementObject["EnabledState"];
                 var enabledStateUint16 = (ushort) enabledStateObject;
                 var enabledState = (MsvmComputerSystemEnabledState) enabledStateUint16;
                 return enabledState;
@@ -146,7 +146,7 @@ namespace Foundation.Management
         {
             get
             {
-                var nameObject = this._managementObject["Name"];
+                var nameObject = _managementObject["Name"];
                 var name = (string) nameObject;
                 return name;
             }
@@ -159,7 +159,7 @@ namespace Foundation.Management
         {
             get
             {
-                var onTimeObject = this._managementObject["OnTimeInMilliseconds"];
+                var onTimeObject = _managementObject["OnTimeInMilliseconds"];
                 var onTimeUInt64 = (ulong) onTimeObject;
                 TimeSpan? onTime;
 
@@ -185,10 +185,10 @@ namespace Foundation.Management
         [CLSCompliant(false)]
         public InitiateShutdownReturnValue InitiateShutdown(bool force, string reason)
         {
-            var query = $"SELECT * FROM Msvm_ShutdownComponent WHERE SystemName='{this.Name}'";
+            var query = $"SELECT * FROM Msvm_ShutdownComponent WHERE SystemName='{Name}'";
             var objectQuery = new ObjectQuery(query);
             var managementObjectSearcher = new ManagementObjectSearcher(
-                this._managementObject.Scope, objectQuery);
+                _managementObject.Scope, objectQuery);
             var managementObjectCollection = managementObjectSearcher.Get();
             var shutdownComponent = managementObjectCollection.Cast<ManagementObject>().First();
             var resultObject = shutdownComponent.InvokeMethod(
@@ -214,15 +214,15 @@ namespace Foundation.Management
         {
             const string methodName = "RequestStateChange";
             var requestedStateuInt16 = (ushort) requestedState;
-            var inParams = this._managementObject.GetMethodParameters(methodName);
+            var inParams = _managementObject.GetMethodParameters(methodName);
             inParams["RequestedState"] = requestedStateuInt16;
-            var outParams = this._managementObject.InvokeMethod(methodName, inParams, null);
+            var outParams = _managementObject.InvokeMethod(methodName, inParams, null);
             var returnValue = (MsvmComputerSystemRequestStateChangeReturnValue) (uint) outParams["Returnvalue"];
             var jobPath = (string) outParams["Job"];
 
             if (jobPath != null)
             {
-                var jobObject = new ManagementObject(this._managementObject.Scope,
+                var jobObject = new ManagementObject(_managementObject.Scope,
                     new ManagementPath(jobPath), null);
                 jobObject.Get();
                 job = new ManagementJob(jobObject);

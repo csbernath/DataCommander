@@ -24,13 +24,13 @@ namespace Foundation.Collections
         /// <param name="capacity"></param>
         public CircularBuffer(int capacity)
         {
-            this.SetCapacity(capacity);
+            SetCapacity(capacity);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int Capacity => this._array.Length;
+        public int Capacity => _array.Length;
 
         /// <summary>
         /// 
@@ -43,18 +43,18 @@ namespace Foundation.Collections
             Contract.Requires<ArgumentException>(this.Count < this.Capacity);
 #endif
 
-            if (this._head == -1)
+            if (_head == -1)
             {
-                this._head = 0;
-                this._tail = 0;
+                _head = 0;
+                _tail = 0;
             }
             else
             {
-                this._head = (this._head - 1) % this._array.Length;
+                _head = (_head - 1) % _array.Length;
             }
 
-            this._array[this._head] = item;
-            this.Count++;
+            _array[_head] = item;
+            Count++;
         }
 
         /// <summary>
@@ -68,18 +68,18 @@ namespace Foundation.Collections
             Contract.Assert(this.Count < this.array.Length);
 #endif
 
-            if (this._head == -1)
+            if (_head == -1)
             {
-                this._head = 0;
-                this._tail = 0;
+                _head = 0;
+                _tail = 0;
             }
             else
             {
-                this._tail = (this._tail + 1) % this._array.Length;
+                _tail = (_tail + 1) % _array.Length;
             }
 
-            this._array[this._tail] = item;
-            this.Count++;
+            _array[_tail] = item;
+            Count++;
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Foundation.Collections
 
             foreach (var item in items)
             {
-                this.AddTail(item);
+                AddTail(item);
             }
         }
 
@@ -107,7 +107,7 @@ namespace Foundation.Collections
 #if CONTRACTS_FULL
             Contract.Requires<InvalidOperationException>(this.Count > 0);
 #endif
-            return this._array[this._head];
+            return _array[_head];
         }
 
         /// <summary>
@@ -120,10 +120,10 @@ namespace Foundation.Collections
             Contract.Requires<InvalidOperationException>(this.Count > 0);
 #endif
 
-            var item = this._array[this._head];
-            this._array[this._head] = default(T);
-            this._head = (this._head + 1) % this._array.Length;
-            this.Count--;
+            var item = _array[_head];
+            _array[_head] = default(T);
+            _head = (_head + 1) % _array.Length;
+            Count--;
 
             return item;
         }
@@ -138,7 +138,7 @@ namespace Foundation.Collections
             Contract.Requires<InvalidOperationException>(this.Count > 0);
 #endif
 
-            return this._array[this._tail];
+            return _array[_tail];
         }
 
         /// <summary>
@@ -151,10 +151,10 @@ namespace Foundation.Collections
             Contract.Requires<InvalidOperationException>(this.Count > 0);
 #endif
 
-            var item = this._array[this._tail];
-            this._array[this._tail] = default(T);
-            this._tail = (this._tail - 1) % this._array.Length;
-            this.Count--;
+            var item = _array[_tail];
+            _array[_tail] = default(T);
+            _tail = (_tail - 1) % _array.Length;
+            Count--;
             return item;
         }
 
@@ -169,29 +169,29 @@ namespace Foundation.Collections
 #endif
 
             var target = new T[capacity];
-            if (this.Count > 0)
+            if (Count > 0)
             {
-                if (this._head <= this._tail)
+                if (_head <= _tail)
                 {
-                    Array.Copy(this._array, this._head, target, 0, this.Count);
+                    Array.Copy(_array, _head, target, 0, Count);
                 }
                 else
                 {
-                    var headCount = this._array.Length - this._head;
-                    Array.Copy(this._array, this._head, target, 0, headCount);
-                    Array.Copy(this._array, 0, target, headCount, this._tail + 1);
+                    var headCount = _array.Length - _head;
+                    Array.Copy(_array, _head, target, 0, headCount);
+                    Array.Copy(_array, 0, target, headCount, _tail + 1);
                 }
 
-                this._head = 0;
-                this._tail = this.Count - 1;
+                _head = 0;
+                _tail = Count - 1;
             }
             else
             {
-                this._head = -1;
-                this._tail = -1;
+                _head = -1;
+                _tail = -1;
             }
 
-            this._array = target;
+            _array = target;
         }
 
 #region IList<T> Members
@@ -220,14 +220,14 @@ namespace Foundation.Collections
         {
             get
             {
-                index = (this._head + index) % this._array.Length;
-                return this._array[index];
+                index = (_head + index) % _array.Length;
+                return _array[index];
             }
 
             set
             {
-                index = (this._head + index) % this._array.Length;
-                this._array[index] = value;
+                index = (_head + index) % _array.Length;
+                _array[index] = value;
             }
         }
 
@@ -273,19 +273,19 @@ namespace Foundation.Collections
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            if (this.Count > 0)
+            if (Count > 0)
             {
-                var current = this._head;
+                var current = _head;
                 while (true)
                 {
-                    var item = this._array[current];
+                    var item = _array[current];
                     yield return item;
-                    if (current == this._tail)
+                    if (current == _tail)
                     {
                         break;
                     }
 
-                    current = (current + 1) %this._array.Length;
+                    current = (current + 1) % _array.Length;
                 }
             }
         }

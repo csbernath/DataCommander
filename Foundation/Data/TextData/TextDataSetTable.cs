@@ -17,9 +17,9 @@
             Contract.Requires(rowCount >= 0);
 #endif
 
-            this.Name = name;
-            this.RowCount = rowCount;
-            this.Table = table;
+            Name = name;
+            RowCount = rowCount;
+            Table = table;
         }
 
         /// <summary>

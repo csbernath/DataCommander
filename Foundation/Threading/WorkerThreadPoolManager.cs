@@ -42,8 +42,8 @@ namespace Foundation.Threading
             WorkerThreadPool pool,
             IWaitCallbackFactory waitCallbackFactory )
         {
-            this._pool = pool;
-            this._waitCallbackFactory = waitCallbackFactory;
+            _pool = pool;
+            _waitCallbackFactory = waitCallbackFactory;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Foundation.Threading
         /// </summary>
         public void Start()
         {
-            this._timer = new Timer( this.ManagePoolDequeuers, null, 10000, 10000 );
+            _timer = new Timer(ManagePoolDequeuers, null, 10000, 10000 );
         }
 
         /// <summary>
@@ -59,21 +59,21 @@ namespace Foundation.Threading
         /// </summary>
         public void Stop()
         {
-            this._timer.Dispose();
+            _timer.Dispose();
         }
 
         private void ManagePoolDequeuers( object state )
         {
-            if (this._pool.QueuedItemCount > 0)
+            if (_pool.QueuedItemCount > 0)
             {
-                var addableThreadCount = this._pool.MaxThreadCount - this._pool.Dequeuers.Count;
+                var addableThreadCount = _pool.MaxThreadCount - _pool.Dequeuers.Count;
                 var count = Math.Min( addableThreadCount, 5 );
 
                 for (var i = 0; i < count; i++)
                 {
-                    var callback = this._waitCallbackFactory.CreateWaitCallback();
+                    var callback = _waitCallbackFactory.CreateWaitCallback();
                     var dequeuer = new WorkerThreadPoolDequeuer( callback );
-                    this._pool.Dequeuers.Add( dequeuer );
+                    _pool.Dequeuers.Add( dequeuer );
                     dequeuer.Thread.Start();
                 }
             }
@@ -83,7 +83,7 @@ namespace Foundation.Threading
                 var dequeuers = new List<WorkerThreadPoolDequeuer>();
                 var threads = new WorkerThreadCollection();
 
-                foreach (var dequeuer in this._pool.Dequeuers)
+                foreach (var dequeuer in _pool.Dequeuers)
                 {
                     var milliseconds = StopwatchTimeSpan.ToInt32( timestamp - dequeuer.LastActivityTimestamp, 1000 );
 
@@ -96,7 +96,7 @@ namespace Foundation.Threading
 
                 foreach (var dequeuer in dequeuers)
                 {
-                    this._pool.Dequeuers.Remove( dequeuer );
+                    _pool.Dequeuers.Remove( dequeuer );
                 }
 
                 var stopEvent = new ManualResetEvent( false );

@@ -14,8 +14,8 @@ namespace Foundation.XmlSpreadsheet
         /// <param name="value"></param>
         public XmlSpreadsheetAttribute(string localName, string value)
         {
-            this.LocalName = localName;
-            this.Value = value;
+            LocalName = localName;
+            Value = value;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Foundation.XmlSpreadsheet
             Contract.Requires<ArgumentNullException>(xmlWriter != null);
 #endif
 
-            xmlWriter.WriteAttributeString(this.LocalName, this.Value);
+            xmlWriter.WriteAttributeString(LocalName, Value);
         }
     }
 }

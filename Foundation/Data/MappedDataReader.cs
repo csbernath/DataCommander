@@ -32,8 +32,8 @@ namespace Foundation.Data
             Contract.Requires<ArgumentNullException>(getValues != null);
 #endif
 
-            this._dataReader = dataReader;
-            this._getValues = getValues;
+            _dataReader = dataReader;
+            _getValues = getValues;
         }
 
         /// <summary>
@@ -41,18 +41,18 @@ namespace Foundation.Data
         /// </summary>
         public override void Close()
         {
-            this._dataReader.Close();
+            _dataReader.Close();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public override int Depth => this._dataReader.Depth;
+        public override int Depth => _dataReader.Depth;
 
         /// <summary>
         /// 
         /// </summary>
-        public override int FieldCount => this._dataReader.FieldCount;
+        public override int FieldCount => _dataReader.FieldCount;
 
         /// <summary>
         /// 
@@ -168,7 +168,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public override Type GetFieldType(int ordinal)
         {
-            return this._dataReader.GetFieldType(ordinal);
+            return _dataReader.GetFieldType(ordinal);
         }
 
         /// <summary>
@@ -228,7 +228,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public override string GetName(int ordinal)
         {
-            return this._dataReader.GetName(ordinal);
+            return _dataReader.GetName(ordinal);
         }
 
         /// <summary>
@@ -238,7 +238,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public override int GetOrdinal(string name)
         {
-            return this._dataReader.GetOrdinal(name);
+            return _dataReader.GetOrdinal(name);
         }
 
         /// <summary>
@@ -247,7 +247,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public override DataTable GetSchemaTable()
         {
-            return this._dataReader.GetSchemaTable();
+            return _dataReader.GetSchemaTable();
         }
 
         /// <summary>
@@ -277,7 +277,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public override int GetValues(object[] values)
         {
-            return this._getValues(values);
+            return _getValues(values);
         }
 
         /// <summary>
@@ -288,7 +288,7 @@ namespace Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public override bool IsClosed => this._dataReader.IsClosed;
+        public override bool IsClosed => _dataReader.IsClosed;
 
         /// <summary>
         /// 
@@ -297,7 +297,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public override bool IsDBNull(int ordinal)
         {
-            return this._dataReader.IsDBNull(ordinal);
+            return _dataReader.IsDBNull(ordinal);
         }
 
         /// <summary>
@@ -306,7 +306,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public override bool NextResult()
         {
-            return this._dataReader.NextResult();
+            return _dataReader.NextResult();
         }
 
         /// <summary>
@@ -315,13 +315,13 @@ namespace Foundation.Data
         /// <returns></returns>
         public override bool Read()
         {
-            return this._dataReader.Read();
+            return _dataReader.Read();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public override int RecordsAffected => this._dataReader.RecordsAffected;
+        public override int RecordsAffected => _dataReader.RecordsAffected;
 
         /// <summary>
         /// 

@@ -22,7 +22,7 @@ namespace Foundation.IO
             Contract.Requires<ArgumentNullException>(stringBuilder != null);
 #endif
 
-            this._stringBuilder = stringBuilder;
+            _stringBuilder = stringBuilder;
         }
 
         /// <summary>
@@ -33,9 +33,9 @@ namespace Foundation.IO
         {
             int result;
 
-            if (this._index < this._stringBuilder.Length)
+            if (_index < _stringBuilder.Length)
             {
-                result = this._stringBuilder[this._index];
+                result = _stringBuilder[_index];
             }
             else
             {
@@ -53,10 +53,10 @@ namespace Foundation.IO
         {
             int result;
 
-            if (this._index < this._stringBuilder.Length)
+            if (_index < _stringBuilder.Length)
             {
-                result = this._stringBuilder[this._index];
-                this._index++;
+                result = _stringBuilder[_index];
+                _index++;
             }
             else
             {
@@ -75,12 +75,12 @@ namespace Foundation.IO
         /// <returns></returns>
         public override int Read(char[] buffer, int index, int count)
         {
-            var result = Math.Min(count, this._stringBuilder.Length - this._index);
+            var result = Math.Min(count, _stringBuilder.Length - _index);
 
             if (result > 0)
             {
-                this._stringBuilder.CopyTo(this._index, buffer, index, result);
-                this._index += result;
+                _stringBuilder.CopyTo(_index, buffer, index, result);
+                _index += result;
             }
 
             return result;

@@ -14,14 +14,14 @@
         /// <param name="value"></param>
         public DataParameterValue( T value )
         {
-            this.Type = DataParameterValueType.Value;
-            this._value = value;
+            Type = DataParameterValueType.Value;
+            _value = value;
         }
 
         private DataParameterValue( DataParameterValueType type )
         {
-            this.Type = type;
-            this._value = default( T );
+            Type = type;
+            _value = default( T );
         }
 
         /// <summary>
@@ -75,10 +75,10 @@
                 Contract.Assert( this.Type == DataParameterValueType.Value );
 #endif
 
-                return this._value;
+                return _value;
             }
         }
 
-        object IDataParameterValue.ValueObject => this.Value;
+        object IDataParameterValue.ValueObject => Value;
     }
 }

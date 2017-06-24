@@ -34,9 +34,9 @@ namespace Foundation
             Contract.Requires<ArgumentNullException>(action != null);
 #endif
 
-            if (!this.selected && this.type == typeof (T))
+            if (!selected && type == typeof (T))
             {
-                this.selected = true;
+                selected = true;
                 action();
             }
 
@@ -53,7 +53,7 @@ namespace Foundation
             Contract.Requires<ArgumentNullException>(action != null);
 #endif
 
-            if (!this.selected)
+            if (!selected)
             {
                 action();
             }

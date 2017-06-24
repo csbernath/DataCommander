@@ -35,12 +35,12 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             Contract.Requires(sqlLog != null);
 #endif
 
-            this._sqlLog = sqlLog;
-            this._applicationId = applicationId;
-            this.UserName = userName;
-            this.HostName = hostName;
-            this.Filter = filter;
-            this.Connection = new SqlConnection(connectionString);
+            _sqlLog = sqlLog;
+            _applicationId = applicationId;
+            UserName = userName;
+            HostName = hostName;
+            Filter = filter;
+            Connection = new SqlConnection(connectionString);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
         /// </summary>
         public void Dispose()
         {
-            this.Dispose(true);
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
@@ -60,13 +60,13 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
         {
             if (disposing)
             {
-                this._sqlLog.DisposeConnection(this.Connection);
+                _sqlLog.DisposeConnection(Connection);
             }
         }
 
         IDbTransaction IDbConnection.BeginTransaction()
         {
-            return this.Connection.BeginTransaction();
+            return Connection.BeginTransaction();
         }
 
         /// <summary>
@@ -76,12 +76,12 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
         /// <returns></returns>
         public IDbTransaction BeginTransaction(IsolationLevel il)
         {
-            return this.Connection.BeginTransaction(il);
+            return Connection.BeginTransaction(il);
         }
 
         void IDbConnection.ChangeDatabase(string databaseName)
         {
-            this.Connection.ChangeDatabase(databaseName);
+            Connection.ChangeDatabase(databaseName);
         }
 
         /// <summary>
@@ -89,12 +89,12 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
         /// </summary>
         public void Close()
         {
-            this._sqlLog.CloseConnection(this.Connection);
+            _sqlLog.CloseConnection(Connection);
         }
 
         IDbCommand IDbConnection.CreateCommand()
         {
-            IDbCommand command = this.Connection.CreateCommand();
+            IDbCommand command = Connection.CreateCommand();
             return new SqlLoggedSqlCommand(this, command);
         }
 
@@ -109,7 +109,7 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
 
             try
             {
-                this.Connection.Open();
+                Connection.Open();
             }
             catch (Exception e)
             {
@@ -119,7 +119,7 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             finally
             {
                 duration = Stopwatch.GetTimestamp() - duration;
-                this._connectionNo = this._sqlLog.ConnectionOpen(this._applicationId, this.Connection, this.UserName, this.HostName, startDate, duration, exception);
+                _connectionNo = _sqlLog.ConnectionOpen(_applicationId, Connection, UserName, HostName, startDate, duration, exception);
             }
         }
 
@@ -128,25 +128,25 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
         /// </summary>
         public string ConnectionString
         {
-            get => this.Connection.ConnectionString;
+            get => Connection.ConnectionString;
 
-            set => this.Connection.ConnectionString = value;
+            set => Connection.ConnectionString = value;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int ConnectionTimeout => this.Connection.ConnectionTimeout;
+        public int ConnectionTimeout => Connection.ConnectionTimeout;
 
         /// <summary>
         /// 
         /// </summary>
-        public string Database => this.Connection.Database;
+        public string Database => Connection.Database;
 
         /// <summary>
         /// 
         /// </summary>
-        public ConnectionState State => this.Connection.State;
+        public ConnectionState State => Connection.State;
 
         internal void CommandExeucte(
             IDbCommand command,
@@ -154,7 +154,7 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             long duration,
             Exception exception)
         {
-            this._sqlLog.CommandExecute(this._applicationId, this._connectionNo, command, startDate, duration, exception);
+            _sqlLog.CommandExecute(_applicationId, _connectionNo, command, startDate, duration, exception);
         }
 
         internal int ExecuteNonQuery(IDbCommand command)
@@ -176,11 +176,11 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             finally
             {
                 duration = Stopwatch.GetTimestamp() - duration;
-                var contains = exception != null || this.Filter == null || this.Filter.Contains(this.UserName, this.HostName, command);
+                var contains = exception != null || Filter == null || Filter.Contains(UserName, HostName, command);
 
                 if (contains)
                 {
-                    this._sqlLog.CommandExecute(this._applicationId, this._connectionNo, command, startDate, duration, exception);
+                    _sqlLog.CommandExecute(_applicationId, _connectionNo, command, startDate, duration, exception);
                 }
             }
 
@@ -207,11 +207,11 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             finally
             {
                 duration = Stopwatch.GetTimestamp() - duration;
-                var contains = exception != null || this.Filter == null || this.Filter.Contains(this.UserName, this.HostName, command);
+                var contains = exception != null || Filter == null || Filter.Contains(UserName, HostName, command);
 
                 if (contains)
                 {
-                    this._sqlLog.CommandExecute(this._applicationId, this._connectionNo, command, startDate, duration, exception);
+                    _sqlLog.CommandExecute(_applicationId, _connectionNo, command, startDate, duration, exception);
                 }
             }
 

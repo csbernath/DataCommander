@@ -21,8 +21,8 @@ namespace Foundation.Data
             Contract.Requires<ArgumentNullException>(command != null);
 #endif
 
-            this._connection = connection;
-            this._command = command;
+            _connection = connection;
+            _command = command;
         }
 
 #region IDbCommand Members
@@ -54,12 +54,12 @@ namespace Foundation.Data
                 Contract.Assert(this.command != null);
 #endif
 
-                return this._command.CommandType;
+                return _command.CommandType;
             }
 
             set
             {
-                this._command.CommandType = value;
+                _command.CommandType = value;
             }
         }
 
@@ -100,7 +100,7 @@ namespace Foundation.Data
             Contract.Assert(this.connection != null);
 #endif
 
-            return this._connection.ExecuteNonQuery(this);
+            return _connection.ExecuteNonQuery(this);
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace Foundation.Data
 #if CONTRACTS_FULL
                 Contract.Assert(this.command != null);
 #endif
-                return this._command.CommandText;
+                return _command.CommandText;
             }
 
             set
@@ -182,7 +182,7 @@ namespace Foundation.Data
 #if CONTRACTS_FULL
                 Contract.Assert(this.command != null);
 #endif
-                this._command.CommandText = value;
+                _command.CommandText = value;
             }
         }
 
@@ -196,7 +196,7 @@ namespace Foundation.Data
 #if CONTRACTS_FULL
                 Contract.Assert(this.command != null);
 #endif
-                return this._command.Parameters;
+                return _command.Parameters;
             }
         }
 
@@ -211,7 +211,7 @@ namespace Foundation.Data
                 Contract.Assert(this.command != null);
 #endif
 
-                return this._command.Transaction;
+                return _command.Transaction;
             }
 
             set
@@ -220,7 +220,7 @@ namespace Foundation.Data
                 Contract.Assert(this.command != null);
 #endif
 
-                this._command.Transaction = value;
+                _command.Transaction = value;
             }
         }
 

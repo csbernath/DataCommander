@@ -19,19 +19,19 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             SqlLoggedSqlConnection connection,
             IDbCommand command)
         {
-            this._connection = connection;
-            this._command = command;
+            _connection = connection;
+            _command = command;
         }
 
         public IDataReader Execute()
         {
             Exception exception = null;
-            this._startDate = LocalTime.Default.Now;
-            this._startTick = Stopwatch.GetTimestamp();
+            _startDate = LocalTime.Default.Now;
+            _startTick = Stopwatch.GetTimestamp();
 
             try
             {
-                this._reader = this._command.ExecuteReader();
+                _reader = _command.ExecuteReader();
             }
             catch (Exception e)
             {
@@ -40,16 +40,16 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             }
             finally
             {
-                var ticks = Stopwatch.GetTimestamp() - this._startTick;
+                var ticks = Stopwatch.GetTimestamp() - _startTick;
                 var duration = StopwatchTimeSpan.ToInt32(ticks, 1000);
-                var filter = this._connection.Filter;
-                this._contains = exception != null || filter == null ||
-                                filter.Contains(this._connection.UserName, this._connection.HostName, this._command);
+                var filter = _connection.Filter;
+                _contains = exception != null || filter == null ||
+                                filter.Contains(_connection.UserName, _connection.HostName, _command);
 
-                if (this._contains)
+                if (_contains)
                 {
-                    this._connection.CommandExeucte(this._command, this._startDate, duration, exception);
-                    this._logged = true;
+                    _connection.CommandExeucte(_command, _startDate, duration, exception);
+                    _logged = true;
                 }
             }
 
@@ -59,12 +59,12 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
         public IDataReader Execute(CommandBehavior behavior)
         {
             Exception exception = null;
-            this._startDate = LocalTime.Default.Now;
-            this._startTick = Stopwatch.GetTimestamp();
+            _startDate = LocalTime.Default.Now;
+            _startTick = Stopwatch.GetTimestamp();
 
             try
             {
-                this._reader = this._command.ExecuteReader(behavior);
+                _reader = _command.ExecuteReader(behavior);
             }
             catch (Exception e)
             {
@@ -73,16 +73,16 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             }
             finally
             {
-                var ticks = Stopwatch.GetTimestamp() - this._startTick;
+                var ticks = Stopwatch.GetTimestamp() - _startTick;
                 var duration = StopwatchTimeSpan.ToInt32(ticks, 1000);
-                var filter = this._connection.Filter;
-                this._contains = exception != null || filter == null ||
-                                filter.Contains(this._connection.UserName, this._connection.HostName, this._command);
+                var filter = _connection.Filter;
+                _contains = exception != null || filter == null ||
+                                filter.Contains(_connection.UserName, _connection.HostName, _command);
 
-                if (this._contains)
+                if (_contains)
                 {
-                    this._connection.CommandExeucte(this._command, this._startDate, duration, exception);
-                    this._logged = true;
+                    _connection.CommandExeucte(_command, _startDate, duration, exception);
+                    _logged = true;
                 }
             }
 
@@ -91,130 +91,130 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
 
         public void Dispose()
         {
-            this._reader.Dispose();
+            _reader.Dispose();
 
-            if (this._contains && !this._logged)
+            if (_contains && !_logged)
             {
-                var duration = Stopwatch.GetTimestamp() - this._startTick;
-                this._connection.CommandExeucte(this._command, this._startDate, duration, null);
+                var duration = Stopwatch.GetTimestamp() - _startTick;
+                _connection.CommandExeucte(_command, _startDate, duration, null);
             }
         }
 
         public bool GetBoolean(int i)
         {
-            return this._reader.GetBoolean(i);
+            return _reader.GetBoolean(i);
         }
 
         public byte GetByte(int i)
         {
-            return this._reader.GetByte(i);
+            return _reader.GetByte(i);
         }
 
         public long GetBytes(int i, long fieldOffset, byte[] buffer, int bufferoffset, int length)
         {
-            return this._reader.GetBytes(i, fieldOffset, buffer, bufferoffset, length);
+            return _reader.GetBytes(i, fieldOffset, buffer, bufferoffset, length);
         }
 
         public char GetChar(int i)
         {
-            return this._reader.GetChar(i);
+            return _reader.GetChar(i);
         }
 
         public long GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length)
         {
-            return this._reader.GetChars(i, fieldoffset, buffer, bufferoffset, length);
+            return _reader.GetChars(i, fieldoffset, buffer, bufferoffset, length);
         }
 
         public IDataReader GetData(int i)
         {
-            return this._reader.GetData(i);
+            return _reader.GetData(i);
         }
 
         public string GetDataTypeName(int i)
         {
-            return this._reader.GetDataTypeName(i);
+            return _reader.GetDataTypeName(i);
         }
 
         public DateTime GetDateTime(int i)
         {
-            return this._reader.GetDateTime(i);
+            return _reader.GetDateTime(i);
         }
 
         public decimal GetDecimal(int i)
         {
-            return this._reader.GetDecimal(i);
+            return _reader.GetDecimal(i);
         }
 
         public double GetDouble(int i)
         {
-            return this._reader.GetDouble(i);
+            return _reader.GetDouble(i);
         }
 
         public Type GetFieldType(int i)
         {
-            return this._reader.GetFieldType(i);
+            return _reader.GetFieldType(i);
         }
 
         public float GetFloat(int i)
         {
-            return this._reader.GetFloat(i);
+            return _reader.GetFloat(i);
         }
 
         public Guid GetGuid(int i)
         {
-            return this._reader.GetGuid(i);
+            return _reader.GetGuid(i);
         }
 
         public short GetInt16(int i)
         {
-            return this._reader.GetInt16(i);
+            return _reader.GetInt16(i);
         }
 
         public int GetInt32(int i)
         {
-            return this._reader.GetInt32(i);
+            return _reader.GetInt32(i);
         }
 
         public long GetInt64(int i)
         {
-            return this._reader.GetInt64(i);
+            return _reader.GetInt64(i);
         }
 
         public string GetName(int i)
         {
-            return this._reader.GetName(i);
+            return _reader.GetName(i);
         }
 
         public int GetOrdinal(string name)
         {
-            return this._reader.GetOrdinal(name);
+            return _reader.GetOrdinal(name);
         }
 
         public string GetString(int i)
         {
-            return this._reader.GetString(i);
+            return _reader.GetString(i);
         }
 
         public object GetValue(int i)
         {
-            return this._reader.GetValue(i);
+            return _reader.GetValue(i);
         }
 
         public int GetValues(object[] values)
         {
-            return this._reader.GetValues(values);
+            return _reader.GetValues(values);
         }
 
         public bool IsDBNull(int i)
         {
-            return this._reader.IsDBNull(i);
+            return _reader.IsDBNull(i);
         }
 
-        public int FieldCount => this._reader.FieldCount;
+        public int FieldCount => _reader.FieldCount;
 
-        public object this[string name] => this._reader[name];
+        public object this[string name] => _reader[name];
 
-        public object this[int i] => this._reader[i];
+        public object this[int i] => _reader[i];
 
         public void Close()
         {
@@ -222,7 +222,7 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
 
             try
             {
-                this._reader.Close();
+                _reader.Close();
             }
             catch (Exception e)
             {
@@ -231,43 +231,43 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             }
             finally
             {
-                var duration = Stopwatch.GetTimestamp() - this._startTick;
-                this._contains |= exception != null;
+                var duration = Stopwatch.GetTimestamp() - _startTick;
+                _contains |= exception != null;
 
-                if (this._contains && !this._logged)
+                if (_contains && !_logged)
                 {
-                    this._connection.CommandExeucte(this._command, this._startDate, duration, null);
-                    this._logged = true;
+                    _connection.CommandExeucte(_command, _startDate, duration, null);
+                    _logged = true;
                 }
             }
         }
 
         public DataTable GetSchemaTable()
         {
-            return this._reader.GetSchemaTable();
+            return _reader.GetSchemaTable();
         }
 
         public bool NextResult()
         {
             bool nextResult;
 
-            if (this._contains)
+            if (_contains)
             {
                 try
                 {
-                    nextResult = this._reader.NextResult();
+                    nextResult = _reader.NextResult();
                 }
                 catch (Exception e)
                 {
-                    var duration = Stopwatch.GetTimestamp() - this._startTick;
-                    this._connection.CommandExeucte(this._command, this._startDate, duration, e);
-                    this._logged = true;
+                    var duration = Stopwatch.GetTimestamp() - _startTick;
+                    _connection.CommandExeucte(_command, _startDate, duration, e);
+                    _logged = true;
                     throw;
                 }
             }
             else
             {
-                nextResult = this._reader.NextResult();
+                nextResult = _reader.NextResult();
             }
 
             return nextResult;
@@ -279,23 +279,23 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
 
             try
             {
-                read = this._reader.Read();
+                read = _reader.Read();
             }
             catch (Exception e)
             {
-                var duration = Stopwatch.GetTimestamp() - this._startTick;
-                this._connection.CommandExeucte(this._command, this._startDate, duration, e);
-                this._logged = true;
+                var duration = Stopwatch.GetTimestamp() - _startTick;
+                _connection.CommandExeucte(_command, _startDate, duration, e);
+                _logged = true;
                 throw;
             }
 
             return read;
         }
 
-        public int Depth => this._reader.Depth;
+        public int Depth => _reader.Depth;
 
-        public bool IsClosed => this._reader.IsClosed;
+        public bool IsClosed => _reader.IsClosed;
 
-        public int RecordsAffected => this._reader.RecordsAffected;
+        public int RecordsAffected => _reader.RecordsAffected;
     }
 }

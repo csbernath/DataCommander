@@ -17,94 +17,94 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             Contract.Requires(command != null);
 #endif
 
-            this._connection = connection;
-            this._command = command;
+            _connection = connection;
+            _command = command;
         }
 
         public string CommandText
         {
-            get => this._command.CommandText;
+            get => _command.CommandText;
 
-            set => this._command.CommandText = value;
+            set => _command.CommandText = value;
         }
 
         public int CommandTimeout
         {
-            get => this._command.CommandTimeout;
+            get => _command.CommandTimeout;
 
-            set => this._command.CommandTimeout = value;
+            set => _command.CommandTimeout = value;
         }
 
         public CommandType CommandType
         {
-            get => this._command.CommandType;
+            get => _command.CommandType;
 
-            set => this._command.CommandType = value;
+            set => _command.CommandType = value;
         }
 
         public IDbConnection Connection
         {
-            get => this._connection;
+            get => _connection;
 
             set => throw new NotImplementedException();
         }
 
-        public IDataParameterCollection Parameters => this._command.Parameters;
+        public IDataParameterCollection Parameters => _command.Parameters;
 
         public IDbTransaction Transaction
         {
-            get => this._command.Transaction;
+            get => _command.Transaction;
 
-            set => this._command.Transaction = value;
+            set => _command.Transaction = value;
         }
 
         public UpdateRowSource UpdatedRowSource
         {
-            get => this._command.UpdatedRowSource;
+            get => _command.UpdatedRowSource;
 
-            set => this._command.UpdatedRowSource = value;
+            set => _command.UpdatedRowSource = value;
         }
 
         public void Dispose()
         {
-            this._command.Dispose();
+            _command.Dispose();
         }
 
         public void Cancel()
         {
-            this._command.Cancel();
+            _command.Cancel();
         }
 
         public IDbDataParameter CreateParameter()
         {
-            return this._command.CreateParameter();
+            return _command.CreateParameter();
         }
 
         public int ExecuteNonQuery()
         {
-            return this._connection.ExecuteNonQuery(this._command);
+            return _connection.ExecuteNonQuery(_command);
         }
 
         public IDataReader ExecuteReader()
         {
-            var loggedSqlDataReader = new SqlLoggedSqlDataReader(this._connection, this._command);
+            var loggedSqlDataReader = new SqlLoggedSqlDataReader(_connection, _command);
             return loggedSqlDataReader.Execute();
         }
 
         public IDataReader ExecuteReader(CommandBehavior behavior)
         {
-            var loggedSqlDataReader = new SqlLoggedSqlDataReader(this._connection, this._command);
+            var loggedSqlDataReader = new SqlLoggedSqlDataReader(_connection, _command);
             return loggedSqlDataReader.Execute(behavior);
         }
 
         public object ExecuteScalar()
         {
-            return this._connection.ExecuteScalar(this._command);
+            return _connection.ExecuteScalar(_command);
         }
 
         public void Prepare()
         {
-            this._command.Prepare();
+            _command.Prepare();
         }
     }
 }

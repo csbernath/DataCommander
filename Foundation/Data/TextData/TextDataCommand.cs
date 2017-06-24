@@ -98,15 +98,15 @@ namespace Foundation.Data.TextData
         /// </summary>
         protected override DbConnection DbConnection
         {
-            get => this._connection;
+            get => _connection;
 
-            set => this._connection = (TextDataConnection) value;
+            set => _connection = (TextDataConnection) value;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        protected override DbParameterCollection DbParameterCollection => this.Parameters;
+        protected override DbParameterCollection DbParameterCollection => Parameters;
 
         /// <summary>
         /// 
@@ -144,10 +144,10 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override int ExecuteNonQuery()
         {
-            var columns = this.Parameters.GetParameterValue<IList<TextDataColumn>>( "columns" );
-            var converters = this.Parameters.GetParameterValue<IList<ITextDataConverter>>( "converters" );
-            var rows = this.Parameters.GetParameterValue<IEnumerable<object[]>>( "rows" );
-            var getTextWriter = this.Parameters.GetParameterValue<IConverter<TextDataCommand, TextWriter>>( "getTextWriter" );
+            var columns = Parameters.GetParameterValue<IList<TextDataColumn>>( "columns" );
+            var converters = Parameters.GetParameterValue<IList<ITextDataConverter>>( "converters" );
+            var rows = Parameters.GetParameterValue<IEnumerable<object[]>>( "rows" );
+            var getTextWriter = Parameters.GetParameterValue<IConverter<TextDataCommand, TextWriter>>( "getTextWriter" );
             var textWriter = getTextWriter.Convert( this );
             var textDataStreamWriter = new TextDataStreamWriter( textWriter, columns, converters );
             var count = 0;

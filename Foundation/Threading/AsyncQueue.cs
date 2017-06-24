@@ -23,33 +23,33 @@ namespace Foundation.Threading
                 int id,
                 ThreadPriority priority)
             {
-                this._queue = queue;
-                this.Thread = new WorkerThread(this.ThreadStart);
-                this.Thread.Name = $"Consumer({queue._name},{id})";
-                this.Thread.Priority = priority;
-                this._consumer = this._queue._asyncQueue.CreateConsumer(this.Thread, id);
+                _queue = queue;
+                Thread = new WorkerThread(ThreadStart);
+                Thread.Name = $"Consumer({queue._name},{id})";
+                Thread.Priority = priority;
+                _consumer = _queue._asyncQueue.CreateConsumer(Thread, id);
             }
 
             private void ThreadStart()
             {
-                var state = this._consumer.Enter();
+                var state = _consumer.Enter();
 
                 try
                 {
-                    while (!this.Thread.IsStopRequested)
+                    while (!Thread.IsStopRequested)
                     {
-                        this._queue.Dequeue(this);
+                        _queue.Dequeue(this);
                     }
                 }
                 finally
                 {
-                    this._consumer.Exit(state);
+                    _consumer.Exit(state);
                 }
             }
 
             public void Consume(object item)
             {
-                this._consumer.Consume(item);
+                _consumer.Consume(item);
             }
 
             public WorkerThread Thread { get; }
@@ -79,13 +79,13 @@ namespace Foundation.Threading
             Contract.Requires(consumerCount > 0);
 #endif
 
-            this._name = name;
-            this._asyncQueue = asyncQueue;
+            _name = name;
+            _asyncQueue = asyncQueue;
 
             for (var id = 0; id < consumerCount; id++)
             {
                 var consumerThread = new ConsumerThread(this, id, priority);
-                this.Consumers.Add(consumerThread.Thread);
+                Consumers.Add(consumerThread.Thread);
             }
         }
 
@@ -102,7 +102,7 @@ namespace Foundation.Threading
             int consumerCount,
             ThreadPriority priority)
         {
-            this.Initialize(name, asyncQueue, consumerCount, priority);
+            Initialize(name, asyncQueue, consumerCount, priority);
         }
 
         /// <summary>
@@ -115,25 +115,25 @@ namespace Foundation.Threading
             Contract.Requires(item != null);
 #endif
 
-            lock (this._queue)
+            lock (_queue)
             {
-                this._queue.Enqueue(item);
+                _queue.Enqueue(item);
             }
 
-            this._queueEvent.Set();
+            _queueEvent.Set();
         }
 
         private object Dequeue()
         {
             object item = null;
 
-            if (this._queue.Count > 0)
+            if (_queue.Count > 0)
             {
-                lock (this._queue)
+                lock (_queue)
                 {
-                    if (this._queue.Count > 0)
+                    if (_queue.Count > 0)
                     {
-                        item = this._queue.Dequeue();
+                        item = _queue.Dequeue();
                     }
                 }
             }
@@ -148,7 +148,7 @@ namespace Foundation.Threading
 #endif
 
             var args = new AsyncQueueConsumeEventArgs(item);
-            var eventHandler = this._asyncQueue.BeforeConsume;
+            var eventHandler = _asyncQueue.BeforeConsume;
 
             if (eventHandler != null)
             {
@@ -157,7 +157,7 @@ namespace Foundation.Threading
 
             consumerThread.Consume(item);
 
-            eventHandler = this._asyncQueue.AfterConsume;
+            eventHandler = _asyncQueue.AfterConsume;
 
             if (eventHandler != null)
             {
@@ -168,15 +168,15 @@ namespace Foundation.Threading
         private void Dequeue(ConsumerThread consumerThread)
         {
             var thread = consumerThread.Thread;
-            WaitHandle[] waitHandles = {thread.StopRequest, this._queueEvent};
+            WaitHandle[] waitHandles = {thread.StopRequest, _queueEvent };
 
             while (!thread.IsStopRequested)
             {
-                var item = this.Dequeue();
+                var item = Dequeue();
 
                 if (item != null)
                 {
-                    this.Consume(consumerThread, item);
+                    Consume(consumerThread, item);
                 }
                 else
                 {
@@ -188,7 +188,7 @@ namespace Foundation.Threading
         /// <summary>
         /// Gets the number of unconsumed items (queued items).
         /// </summary>
-        public int Count => this._queue.Count;
+        public int Count => _queue.Count;
 
         /// <summary>
         /// Gets the consumer thread list.

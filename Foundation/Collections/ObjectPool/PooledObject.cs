@@ -21,21 +21,21 @@ namespace Foundation.Collections.ObjectPool
             Contract.Requires<ArgumentNullException>(pool != null);
 #endif
 
-            this._pool = pool;
-            this._item = pool.CreateObject(CancellationToken.None);
+            _pool = pool;
+            _item = pool.CreateObject(CancellationToken.None);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public T Value => this._item.Value;
+        public T Value => _item.Value;
 
         /// <summary>
         /// 
         /// </summary>
         public void Dispose()
         {
-            this._pool.DestroyObject(this._item);
+            _pool.DestroyObject(_item);
         }
     }
 }

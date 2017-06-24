@@ -39,8 +39,8 @@ namespace Foundation
 
             sharedDateTime = DateTime.Now;
 
-            this.incrementedTickCount = sharedTickCount;
-            this.incrementedDateTime = sharedDateTime;
+            incrementedTickCount = sharedTickCount;
+            incrementedDateTime = sharedDateTime;
         }
 
         /// <summary>
@@ -71,12 +71,12 @@ namespace Foundation
         {
             get
             {
-                var elapsed = GetTickCount() - this.incrementedTickCount;
-                if (this.increment <= elapsed)
+                var elapsed = GetTickCount() - incrementedTickCount;
+                if (increment <= elapsed)
                 {
-                    if (elapsed < this.adjustment)
+                    if (elapsed < adjustment)
                     {
-                        var calculatedDateTime = this.incrementedDateTime.AddMilliseconds(elapsed);
+                        var calculatedDateTime = incrementedDateTime.AddMilliseconds(elapsed);
                         if (sharedDateTime < calculatedDateTime)
                         {
                             sharedDateTime = calculatedDateTime;
@@ -87,8 +87,8 @@ namespace Foundation
                         sharedDateTime = DateTime.UtcNow;
                     }
 
-                    this.incrementedTickCount = sharedTickCount;
-                    this.incrementedDateTime = sharedDateTime;
+                    incrementedTickCount = sharedTickCount;
+                    incrementedDateTime = sharedDateTime;
                 }
 
                 return sharedDateTime;

@@ -9,7 +9,7 @@ namespace Foundation.Threading
     {
         internal AsyncQueueConsumeEventArgs(object item)
         {
-            this.Item = item;
+            Item = item;
         }
 
         /// <summary>

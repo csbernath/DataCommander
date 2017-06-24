@@ -18,8 +18,8 @@ namespace Foundation.Data.PTypes
         [DebuggerStepThrough]
         public PInt16( short value )
         {
-            this._sql = value;
-            this.ValueType = PValueType.Value;
+            _sql = value;
+            ValueType = PValueType.Value;
         }
 
         /// <summary>
@@ -28,14 +28,14 @@ namespace Foundation.Data.PTypes
         /// <param name="value"></param>
         public PInt16( SqlInt16 value )
         {
-            this._sql = value;
-            this.ValueType = value.IsNull ? PValueType.Null : PValueType.Value;
+            _sql = value;
+            ValueType = value.IsNull ? PValueType.Null : PValueType.Value;
         }
 
         private PInt16( PValueType type )
         {
-            this.ValueType = type;
-            this._sql = SqlInt16.Null;
+            ValueType = type;
+            _sql = SqlInt16.Null;
         }
 
         /// <summary>
@@ -146,7 +146,7 @@ namespace Foundation.Data.PTypes
         /// <returns></returns>
         public override int GetHashCode()
         {
-            var hashCode = this._sql.GetHashCode();
+            var hashCode = _sql.GetHashCode();
             return hashCode;
         }
 
@@ -158,17 +158,17 @@ namespace Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public bool IsNull => this.ValueType == PValueType.Null;
+        public bool IsNull => ValueType == PValueType.Null;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsValue => this.ValueType == PValueType.Value;
+        public bool IsValue => ValueType == PValueType.Value;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsEmpty => this.ValueType == PValueType.Empty;
+        public bool IsEmpty => ValueType == PValueType.Empty;
 
         /// <summary>
         /// 
@@ -179,11 +179,11 @@ namespace Foundation.Data.PTypes
             {
                 object value;
 
-                switch (this.ValueType)
+                switch (ValueType)
                 {
                     case PValueType.Value:
                     case PValueType.Null:
-                        value = this._sql;
+                        value = _sql;
                         break;
 
                     default:
@@ -198,18 +198,18 @@ namespace Foundation.Data.PTypes
             {
                 if (value == null)
                 {
-                    this.ValueType = PValueType.Default;
-                    this._sql = SqlInt16.Null;
+                    ValueType = PValueType.Default;
+                    _sql = SqlInt16.Null;
                 }
                 else if (value == DBNull.Value)
                 {
-                    this.ValueType = PValueType.Null;
-                    this._sql = SqlInt16.Null;
+                    ValueType = PValueType.Null;
+                    _sql = SqlInt16.Null;
                 }
                 else
                 {
-                    this._sql = (SqlInt16) value;
-                    this.ValueType = this._sql.IsNull ? PValueType.Null : PValueType.Value;
+                    _sql = (SqlInt16) value;
+                    ValueType = _sql.IsNull ? PValueType.Null : PValueType.Value;
                 }
             }
         }
@@ -220,7 +220,7 @@ namespace Foundation.Data.PTypes
         /// <returns></returns>
         public override string ToString()
         {
-            return this._sql.ToString();
+            return _sql.ToString();
         }
 
         /// <summary>

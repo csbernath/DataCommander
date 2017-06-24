@@ -17,7 +17,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="name"></param>
         public LinkedListIndex(string name)
         {
-            this.Name = name;
+            Name = name;
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this._linkedList.Count;
+        public int Count => _linkedList.Count;
 
         /// <summary>
         /// 
@@ -41,7 +41,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="item"></param>
         void ICollection<T>.Add( T item )
         {
-            var node = this._linkedList.AddLast(item);
+            var node = _linkedList.AddLast(item);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Foundation.Collections.IndexableCollection
         /// </summary>
         void ICollection<T>.Clear()
         {
-            this._linkedList.Clear();
+            _linkedList.Clear();
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool Contains(T item)
         {
-            return this._linkedList.Contains(item);
+            return _linkedList.Contains(item);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="arrayIndex"></param>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            this._linkedList.CopyTo(array, arrayIndex);
+            _linkedList.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         bool ICollection<T>.Remove( T item )
         {
-            return this._linkedList.Remove(item);
+            return _linkedList.Remove(item);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public IEnumerator<T> /*IEnumerable<T>.*/GetEnumerator()
         {
-            return this._linkedList.GetEnumerator();
+            return _linkedList.GetEnumerator();
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this._linkedList.GetEnumerator();
+            return _linkedList.GetEnumerator();
         }
     }
 }

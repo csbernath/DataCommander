@@ -34,11 +34,11 @@ namespace Foundation.Data
         /// <param name="threadName"></param>
         public AsyncDbConnection(IDbConnection cloneableConnection, string threadName)
         {
-            this._cloneableConnection = cloneableConnection;
-            this._cloneable = (ICloneable) cloneableConnection;
-            this._thread = new WorkerThread(this.Start);
-            this._thread.Name = threadName;
-            this._thread.Start();
+            _cloneableConnection = cloneableConnection;
+            _cloneable = (ICloneable) cloneableConnection;
+            _thread = new WorkerThread(Start);
+            _thread.Name = threadName;
+            _thread.Start();
         }
 
         #region IDbConnection Members
@@ -72,16 +72,16 @@ namespace Foundation.Data
         /// <summary>
         /// 
         /// </summary>
-        public ConnectionState State => this._cloneableConnection.State;
+        public ConnectionState State => _cloneableConnection.State;
 
         /// <summary>
         /// 
         /// </summary>
         public string ConnectionString
         {
-            get => this._cloneableConnection.ConnectionString;
+            get => _cloneableConnection.ConnectionString;
 
-            set => this._cloneableConnection.ConnectionString = value;
+            set => _cloneableConnection.ConnectionString = value;
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public IDbCommand CreateCommand()
         {
-            var command = this._cloneableConnection.CreateCommand();
+            var command = _cloneableConnection.CreateCommand();
             return new AsyncDbCommand(this, command);
         }
 
@@ -107,19 +107,19 @@ namespace Foundation.Data
         /// </summary>
         public void Close()
         {
-            this._thread.Stop();
-            this._thread.Join();
+            _thread.Stop();
+            _thread.Join();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Database => this._cloneableConnection.Database;
+        public string Database => _cloneableConnection.Database;
 
         /// <summary>
         /// 
         /// </summary>
-        public int ConnectionTimeout => this._cloneableConnection.ConnectionTimeout;
+        public int ConnectionTimeout => _cloneableConnection.ConnectionTimeout;
 
         #endregion
 
@@ -130,7 +130,7 @@ namespace Foundation.Data
         /// </summary>
         public void Dispose()
         {
-            this.Close();
+            Close();
         }
 
         #endregion
@@ -141,12 +141,12 @@ namespace Foundation.Data
         {
             var commandText = ToString(command);
 
-            lock (this._commands)
+            lock (_commands)
             {
-                this._commands.Add(commandText);
+                _commands.Add(commandText);
             }
 
-            this._queueEvent.Set();
+            _queueEvent.Set();
 
             return 0;
         }
@@ -191,17 +191,17 @@ namespace Foundation.Data
         {
             WaitHandle[] waitHandles =
             {
-                this._thread.StopRequest,
-                this._queueEvent
+                _thread.StopRequest,
+                _queueEvent
             };
 
             const int timeout = 10000; // 10 sec
 
             while (true)
             {
-                this.Flush();
+                Flush();
 
-                if (this._thread.IsStopRequested)
+                if (_thread.IsStopRequested)
                 {
                     break;
                 }
@@ -212,17 +212,17 @@ namespace Foundation.Data
 
         private void Flush()
         {
-            if (this._commands.Count > 0)
+            if (_commands.Count > 0)
             {
-                while (this._commands.Count > 0)
+                while (_commands.Count > 0)
                 {
                     string[] commandTextArray;
 
-                    lock (this._commands)
+                    lock (_commands)
                     {
-                        commandTextArray = new string[this._commands.Count];
-                        this._commands.CopyTo(commandTextArray);
-                        this._commands.Clear();
+                        commandTextArray = new string[_commands.Count];
+                        _commands.CopyTo(commandTextArray);
+                        _commands.Clear();
                     }
 
                     var sb = new StringBuilder();
@@ -240,7 +240,7 @@ namespace Foundation.Data
                     var commandText = sb.ToString();
                     Exception exception = null;
 
-                    using (var connection = (IDbConnection) this._cloneable.Clone())
+                    using (var connection = (IDbConnection)_cloneable.Clone())
                     {
                         var command = connection.CreateCommand();
                         command.CommandText = commandText;

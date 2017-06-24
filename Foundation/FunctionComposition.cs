@@ -40,8 +40,8 @@ namespace Foundation
 
             public Z Evaluate(X x)
             {
-                var y = this.func1(x);
-                var z = this.func2(y);
+                var y = func1(x);
+                var z = func2(y);
                 return z;
             }
         }

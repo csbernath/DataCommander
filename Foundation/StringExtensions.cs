@@ -246,7 +246,7 @@ namespace Foundation
 
             char IList<char>.this[int index]
             {
-                get => this.source[index];
+                get => source[index];
                 set => throw new NotImplementedException();
             }
 
@@ -274,7 +274,7 @@ namespace Foundation
                 throw new NotImplementedException();
             }
 
-            int ICollection<char>.Count => this.source.Length;
+            int ICollection<char>.Count => source.Length;
 
             bool ICollection<char>.IsReadOnly => true;
 

@@ -21,13 +21,13 @@ namespace Foundation.Data.TextData
             Contract.Requires(convert != null);
 #endif
 
-            this.Columns = columns;
-            this._convert = convert;
-            this.ItemArray = new object[columns.Count];
+            Columns = columns;
+            _convert = convert;
+            ItemArray = new object[columns.Count];
 
-            for (var i = 0; i < this.ItemArray.Length; i++)
+            for (var i = 0; i < ItemArray.Length; i++)
             {
-                this.ItemArray[i] = DBNull.Value;
+                ItemArray[i] = DBNull.Value;
             }
         }
 
@@ -48,16 +48,16 @@ namespace Foundation.Data.TextData
         {
             get
             {
-                var index = this.Columns.IndexOf(columnName, true);
-                return this.ItemArray[index];
+                var index = Columns.IndexOf(columnName, true);
+                return ItemArray[index];
             }
 
             set
             {
-                var index = this.Columns.IndexOf(columnName, true);
-                var column = this.Columns[index];
-                var convertedValue = this._convert(value, column);
-                this.ItemArray[index] = convertedValue;
+                var index = Columns.IndexOf(columnName, true);
+                var column = Columns[index];
+                var convertedValue = _convert(value, column);
+                ItemArray[index] = convertedValue;
             }
         }
 
@@ -80,15 +80,15 @@ namespace Foundation.Data.TextData
         {
             get
             {
-                var index = this.Columns.IndexOf(column, true);
-                return this.ItemArray[index];
+                var index = Columns.IndexOf(column, true);
+                return ItemArray[index];
             }
 
             set
             {
-                var index = this.Columns.IndexOf(column, true);
-                var convertedValue = this._convert(value, column);
-                this.ItemArray[index] = convertedValue;
+                var index = Columns.IndexOf(column, true);
+                var convertedValue = _convert(value, column);
+                ItemArray[index] = convertedValue;
             }
         }
     }

@@ -25,11 +25,11 @@ namespace Foundation
             Contract.Requires<ArgumentOutOfRangeException>(increment <= adjustment);
 #endif
 
-            this._increment = increment;
-            this._adjustment = adjustment;
+            _increment = increment;
+            _adjustment = adjustment;
 
-            this._lastTickCount = UniversalTime.GetTickCount();
-            this._lastDateTime = DateTime.Now;
+            _lastTickCount = UniversalTime.GetTickCount();
+            _lastDateTime = DateTime.Now;
         }
 
         /// <summary>
@@ -45,21 +45,21 @@ namespace Foundation
         {
             get
             {
-                var lastTickCount = this._lastTickCount;
-                var lastDateTime = this._lastDateTime;
+                var lastTickCount = _lastTickCount;
+                var lastDateTime = _lastDateTime;
                 var tickCount = UniversalTime.GetTickCount();
                 var elapsed = tickCount - lastTickCount;
                 DateTime now;
 
-                if (this._increment <= elapsed)
+                if (_increment <= elapsed)
                 {
-                    if (elapsed < this._adjustment)
+                    if (elapsed < _adjustment)
                         now = lastDateTime.AddMilliseconds(elapsed);
                     else
                     {
                         now = DateTime.Now;
-                        this._lastTickCount = tickCount;
-                        this._lastDateTime = now;
+                        _lastTickCount = tickCount;
+                        _lastDateTime = now;
                     }
                 }
                 else

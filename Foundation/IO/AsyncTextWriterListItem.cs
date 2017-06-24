@@ -9,13 +9,13 @@ namespace Foundation.IO
 
         public AsyncTextWriterListItem(IFormatter formatter, params object[] args)
         {
-            this._formatter = formatter;
-            this._args = args;
+            _formatter = formatter;
+            _args = args;
         }
 
         public void AppendTo(StringBuilder sb)
         {
-            this._formatter.AppendTo(sb, this._args);
+            _formatter.AppendTo(sb, _args);
         }
     }
 }

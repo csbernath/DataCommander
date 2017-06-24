@@ -24,7 +24,7 @@ namespace Foundation.IO
         /// <param name="filename"></param>
         public TempFile(string filename)
         {
-            this._filename = filename;
+            _filename = filename;
         }
 
         /// <summary>
@@ -34,12 +34,12 @@ namespace Foundation.IO
         {
             get
             {
-                if (this._filename == null)
+                if (_filename == null)
                 {
-                    this._filename = Path.GetTempFileName();
+                    _filename = Path.GetTempFileName();
                 }
 
-                return this._filename;
+                return _filename;
             }
         }
 
@@ -48,19 +48,19 @@ namespace Foundation.IO
         /// </summary>
         public void Delete()
         {
-            this._deleted = true;
-            File.Delete(this._filename);
+            _deleted = true;
+            File.Delete(_filename);
         }
 
         #region IDisposable Members
 
         void IDisposable.Dispose()
         {
-            if (this._filename != null && !this._deleted)
+            if (_filename != null && !_deleted)
             {
                 try
                 {
-                    this.Delete();
+                    Delete();
                 }
                 catch
                 {

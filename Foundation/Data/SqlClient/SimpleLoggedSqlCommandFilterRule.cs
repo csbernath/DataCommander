@@ -19,11 +19,11 @@ namespace Foundation.Data.SqlClient
             string database,
             string commandText)
         {
-            this.Include = include;
-            this._userName = userName;
-            this._hostName = hostName;
-            this._database = database;
-            this._commandText = commandText;
+            Include = include;
+            _userName = userName;
+            _hostName = hostName;
+            _database = database;
+            _commandText = commandText;
         }
 
         public bool Match(
@@ -34,10 +34,10 @@ namespace Foundation.Data.SqlClient
             var database = command.Connection.Database;
             var commandText = command.CommandText;
             var match =
-                (this._userName == null || this._userName == userName) &&
-                (this._hostName == null || this._hostName == hostName) &&
-                (this._database == null || this._database == database) &&
-                (this._commandText == null || this._commandText == commandText);
+                (_userName == null || _userName == userName) &&
+                (_hostName == null || _hostName == hostName) &&
+                (_database == null || _database == database) &&
+                (_commandText == null || _commandText == commandText);
 
             return match;
         }

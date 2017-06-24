@@ -15,7 +15,7 @@ namespace Foundation.Configuration
         /// <param name="collection"></param>
         public ConfigurationAttributeCollectionDebugger( ConfigurationAttributeCollection collection )
         {
-            this._collection = collection;
+            _collection = collection;
         }
 
         [DebuggerBrowsable( DebuggerBrowsableState.RootHidden )]
@@ -23,8 +23,8 @@ namespace Foundation.Configuration
         {
             get
             {
-                var array = new ConfigurationAttribute[ this._collection.Count ];
-                this._collection.CopyTo( array, 0 );
+                var array = new ConfigurationAttribute[_collection.Count ];
+                _collection.CopyTo( array, 0 );
                 return array;
             }
         }

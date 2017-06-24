@@ -38,7 +38,7 @@ namespace Foundation.Configuration
 #if CONTRACTS_FULL
             Contract.Requires(tryGetValue != null);
 #endif
-            this._tryGetValue = tryGetValue;
+            _tryGetValue = tryGetValue;
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Foundation.Configuration
         public T GetValue<T>(string name, TryParse<T> tryParse, T defaultValue)
         {
             T value;
-            var contains = this.TryGetValue(name, tryParse, out value);
+            var contains = TryGetValue(name, tryParse, out value);
 
             if (!contains)
             {
@@ -70,7 +70,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public bool GetBoolean(string name, bool defaultValue)
         {
-            return this.GetValue(name, bool.TryParse, defaultValue);
+            return GetValue(name, bool.TryParse, defaultValue);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public double GetDouble(string name, double defaultValue)
         {
-            return this.GetValue(name, double.TryParse, defaultValue);
+            return GetValue(name, double.TryParse, defaultValue);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public int GetInt32(string name, int defaultValue)
         {
-            return this.GetValue(name, int.TryParse, defaultValue);
+            return GetValue(name, int.TryParse, defaultValue);
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace Foundation.Configuration
         public string GetString(string name)
         {
             string value;
-            this._tryGetValue(name, out value);
+            _tryGetValue(name, out value);
             return value;
         }
 
@@ -115,7 +115,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public bool TryGetBoolean(string name, out bool value)
         {
-            var contains = this.TryGetValue(name, bool.TryParse, out value);
+            var contains = TryGetValue(name, bool.TryParse, out value);
             return contains;
         }
 
@@ -130,7 +130,7 @@ namespace Foundation.Configuration
         public bool TryGetDateTime(string name, IFormatProvider provider, DateTimeStyles styles, out DateTime value)
         {
             string s;
-            var contains = this._tryGetValue(name, out s);
+            var contains = _tryGetValue(name, out s);
 
             if (contains)
             {
@@ -156,7 +156,7 @@ namespace Foundation.Configuration
         public bool TryGetDouble(string name, out double value)
         {
             string s;
-            var contains = this._tryGetValue(name, out s);
+            var contains = _tryGetValue(name, out s);
 
             if (contains)
             {
@@ -184,7 +184,7 @@ namespace Foundation.Configuration
         public bool TryGetDouble(string name, NumberStyles style, IFormatProvider provider, out double value)
         {
             string s;
-            var contains = this._tryGetValue(name, out s);
+            var contains = _tryGetValue(name, out s);
 
             if (contains)
             {
@@ -211,7 +211,7 @@ namespace Foundation.Configuration
         public bool TryGetEnum<T>(string name, out T value)
         {
             string s;
-            var contains = this._tryGetValue(name, out s);
+            var contains = _tryGetValue(name, out s);
 
             if (contains)
             {
@@ -235,7 +235,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public bool TryGetInt16(string name, out short value)
         {
-            var contains = this.TryGetValue(name, short.TryParse, out value);
+            var contains = TryGetValue(name, short.TryParse, out value);
             return contains;
         }
 
@@ -247,7 +247,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public bool TryGetInt32(string name, out int value)
         {
-            var contains = this.TryGetValue(name, int.TryParse, out value);
+            var contains = TryGetValue(name, int.TryParse, out value);
             return contains;
         }
 
@@ -259,7 +259,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public bool TryGetInt64(string name, out long value)
         {
-            var contains = this.TryGetValue(name, long.TryParse, out value);
+            var contains = TryGetValue(name, long.TryParse, out value);
             return contains;
         }
 
@@ -274,7 +274,7 @@ namespace Foundation.Configuration
         public bool TryGetSingle(string name, NumberStyles style, IFormatProvider provider, out float value)
         {
             string s;
-            var contains = this._tryGetValue(name, out s);
+            var contains = _tryGetValue(name, out s);
 
             if (contains)
             {
@@ -300,7 +300,7 @@ namespace Foundation.Configuration
         public bool TryGetString(string name, out string value)
         {
             string s;
-            var contains = this._tryGetValue(name, out s);
+            var contains = _tryGetValue(name, out s);
 
             value = contains
                 ? s
@@ -318,7 +318,7 @@ namespace Foundation.Configuration
         public bool TryGetTimeSpan(string name, out TimeSpan value)
         {
             string s;
-            var contains = this._tryGetValue(name, out s);
+            var contains = _tryGetValue(name, out s);
 
             value = contains
                 ? TimeSpan.Parse(s)
@@ -341,7 +341,7 @@ namespace Foundation.Configuration
             Contract.Requires(tryParse != null);
 #endif
             string s;
-            var contains = this._tryGetValue(name, out s);
+            var contains = _tryGetValue(name, out s);
 
             if (contains)
             {

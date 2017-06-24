@@ -44,11 +44,11 @@ namespace Foundation.Collections
                 "keys must be ordered");
 #endif
 
-            this._values = values;
-            this._keySelector = keySelector;
-            this._comparison = comparison;
+            _values = values;
+            _keySelector = keySelector;
+            _comparison = comparison;
 
-            this.InitializeGroups();
+            InitializeGroups();
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Foundation.Collections
         /// 
         /// </summary>
         [Pure]
-        public int Count => this._groups?.Count ?? 0;
+        public int Count => _groups?.Count ?? 0;
 
         /// <summary>
         /// 
@@ -89,14 +89,14 @@ namespace Foundation.Collections
 
                 IReadOnlyList<TValue> readOnlyList;
 
-                var index = this.IndexOf(key);
+                var index = IndexOf(key);
                 if (index >= 0)
                 {
-                    var currentGroupIndex = this._groups[index];
-                    var nextGroupIndex = index < this._groups.Count - 1 ? this._groups[index + 1] : this._values.Count;
+                    var currentGroupIndex = _groups[index];
+                    var nextGroupIndex = index < _groups.Count - 1 ? _groups[index + 1] : _values.Count;
                     var count = nextGroupIndex - currentGroupIndex;
 
-                    readOnlyList = new ReadOnlyListSegment<TValue>(this._values, currentGroupIndex, count);
+                    readOnlyList = new ReadOnlyListSegment<TValue>(_values, currentGroupIndex, count);
                 }
                 else
                     readOnlyList = EmptyReadOnlyList<TValue>.Value;
@@ -111,13 +111,13 @@ namespace Foundation.Collections
         /// <returns></returns>
         public IEnumerable<IReadOnlyList<TValue>> GetGroups()
         {
-            var lastGroupIndex = this._groups.Count - 1;
+            var lastGroupIndex = _groups.Count - 1;
             for (var groupIndex = 0; groupIndex <= lastGroupIndex; ++groupIndex)
             {
-                var valueStartIndex = this._groups[groupIndex];
-                var valueNextStartIndex = groupIndex < lastGroupIndex ? this._groups[groupIndex + 1] : this._values.Count;
+                var valueStartIndex = _groups[groupIndex];
+                var valueNextStartIndex = groupIndex < lastGroupIndex ? _groups[groupIndex + 1] : _values.Count;
                 var valueCount = valueNextStartIndex - valueStartIndex;
-                yield return new ReadOnlyListSegment<TValue>(this._values, valueStartIndex, valueCount);
+                yield return new ReadOnlyListSegment<TValue>(_values, valueStartIndex, valueCount);
             }
         }
 
@@ -133,7 +133,7 @@ namespace Foundation.Collections
         [Pure]
         public bool ContainsKey(TKey key)
         {
-            return this.IndexOf(key) >= 0;
+            return IndexOf(key) >= 0;
         }
 
 #endregion
@@ -142,11 +142,11 @@ namespace Foundation.Collections
 
         private void InitializeGroups()
         {
-            if (this._values.Count > 0)
+            if (_values.Count > 0)
             {
 #region Create
 
-                var notEqualsCount = this._values.SelectPreviousAndCurrentKey(this._keySelector).Count(k => _comparison(k.Previous, k.Current) != 0);
+                var notEqualsCount = _values.SelectPreviousAndCurrentKey(_keySelector).Count(k => _comparison(k.Previous, k.Current) != 0);
                 var smallArrayMaxLength = LargeObjectHeap.GetSmallArrayMaxLength(sizeof(int));
                 var itemCount = notEqualsCount + 1;
                 var segmentedArrayBuilder = new SegmentedArrayBuilder<int>(itemCount, smallArrayMaxLength);
@@ -158,7 +158,7 @@ namespace Foundation.Collections
                 segmentedArrayBuilder.Add(0);
                 var index = 0;
 
-                foreach (var key in this._values.SelectPreviousAndCurrentKey(this._keySelector))
+                foreach (var key in _values.SelectPreviousAndCurrentKey(_keySelector))
                 {
                     index++;
 
@@ -168,7 +168,7 @@ namespace Foundation.Collections
                     }
                 }
 
-                this._groups = segmentedArrayBuilder.ToReadOnlyList();
+                _groups = segmentedArrayBuilder.ToReadOnlyList();
 
 #endregion
             }
@@ -179,14 +179,14 @@ namespace Foundation.Collections
         {
             int index;
 
-            if (this._groups != null)
+            if (_groups != null)
             {
-                index = BinarySearch.IndexOf(0, this._groups.Count - 1, currentIndex =>
+                index = BinarySearch.IndexOf(0, _groups.Count - 1, currentIndex =>
                 {
-                    var valueIndex = this._groups[currentIndex];
-                    var otherValue = this._values[valueIndex];
-                    var otherKey = this._keySelector(otherValue);
-                    return this._comparison(key, otherKey);
+                    var valueIndex = _groups[currentIndex];
+                    var otherValue = _values[valueIndex];
+                    var otherKey = _keySelector(otherValue);
+                    return _comparison(key, otherKey);
                 });
             }
             else

@@ -22,8 +22,8 @@ namespace Foundation.Configuration
         /// <param name="name"></param>
         public ConfigurationNode(string name)
         {
-            this.Name = name;
-            this.HasName = name != null;
+            Name = name;
+            HasName = name != null;
         }
 
         /// <summary>
@@ -55,16 +55,16 @@ namespace Foundation.Configuration
             {
                 string fullName;
 
-                if (this.Parent != null)
+                if (Parent != null)
                 {
-                    fullName = this.Parent.FullName;
+                    fullName = Parent.FullName;
 
                     if (fullName != null)
                     {
                         fullName += Delimiter;
                     }
 
-                    fullName += this.Name;
+                    fullName += Name;
                 }
                 else
                 {
@@ -87,11 +87,11 @@ namespace Foundation.Configuration
 
             if (childNode.Name == null)
             {
-                childNode.Name = ConfigurationElementName.Node + "[" + this._index + ']';
-                this._index++;
+                childNode.Name = ConfigurationElementName.Node + "[" + _index + ']';
+                _index++;
             }
 
-            this.ChildNodes.Add(childNode);
+            ChildNodes.Add(childNode);
             childNode.Parent = this;
         }
 
@@ -112,7 +112,7 @@ namespace Foundation.Configuration
                 index++;
             }
 
-            this.ChildNodes.Insert(index, childNode);
+            ChildNodes.Insert(index, childNode);
             childNode.Parent = this;
         }
 
@@ -127,7 +127,7 @@ namespace Foundation.Configuration
             Contract.Requires(this == childNode.Parent);
 #endif
 
-            this.ChildNodes.Remove(childNode);
+            ChildNodes.Remove(childNode);
             childNode.Parent = null;
         }
 
@@ -137,15 +137,15 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public ConfigurationNode Clone()
         {
-            var clone = new ConfigurationNode(this.Name);
+            var clone = new ConfigurationNode(Name);
 
-            foreach (var attribute in this.Attributes)
+            foreach (var attribute in Attributes)
             {
                 var attributeClone = attribute.Clone();
                 clone.Attributes.Add(attributeClone);
             }
 
-            foreach (var childNode in this.ChildNodes)
+            foreach (var childNode in ChildNodes)
             {
                 var childNodeClone = childNode.Clone();
                 clone.AddChildNode(childNodeClone);
@@ -242,16 +242,16 @@ namespace Foundation.Configuration
         /// <param name="textWriter"></param>
         public void Write(TextWriter textWriter)
         {
-            textWriter.WriteLine("[" + this.FullName + "]");
+            textWriter.WriteLine("[" + FullName + "]");
 
-            foreach (var attribute in this.Attributes)
+            foreach (var attribute in Attributes)
             {
                 attribute.Write(textWriter);
             }
 
             textWriter.WriteLine();
 
-            foreach (var childNode in this.ChildNodes)
+            foreach (var childNode in ChildNodes)
             {
                 childNode.Write(textWriter);
             }
@@ -271,13 +271,13 @@ namespace Foundation.Configuration
             var sb = new StringBuilder();
             var indent = new string(' ', level * 2);
             sb.Append(indent);
-            sb.Append(this.Name);
+            sb.Append(Name);
             sb.Append("\t\t");
-            sb.AppendLine(this.Description);
+            sb.AppendLine(Description);
 
-            if (this.Attributes.Count > 0)
+            if (Attributes.Count > 0)
             {
-                foreach (var attribute in this.Attributes)
+                foreach (var attribute in Attributes)
                 {
                     sb.Append('\t');
                     sb.Append(attribute.Name);
@@ -309,7 +309,7 @@ namespace Foundation.Configuration
 
             textWriter.Write(sb);
 
-            foreach (var childNode in this.ChildNodes)
+            foreach (var childNode in ChildNodes)
             {
                 childNode.WriteDocumentation(textWriter, level + 1);
             }

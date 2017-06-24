@@ -19,11 +19,11 @@ namespace Foundation.Configuration
         /// </summary>
         public ConfigurationNodeCollection()
         {
-            this._listIndex = new ListIndex<ConfigurationNode>("List");
-            this._nameIndex = new UniqueIndex<string, ConfigurationNode>("Name", node => GetKeyResponse.Create(true, node.Name), SortOrder.Ascending);
+            _listIndex = new ListIndex<ConfigurationNode>("List");
+            _nameIndex = new UniqueIndex<string, ConfigurationNode>("Name", node => GetKeyResponse.Create(true, node.Name), SortOrder.Ascending);
 
-            this._collection = new IndexableCollection<ConfigurationNode>(this._listIndex);
-            this._collection.Indexes.Add(this._nameIndex);
+            _collection = new IndexableCollection<ConfigurationNode>(_listIndex);
+            _collection.Indexes.Add(_nameIndex);
         }
 
         /// <summary>
@@ -31,14 +31,14 @@ namespace Foundation.Configuration
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public ConfigurationNode this[string name] => this._nameIndex[name];
+        public ConfigurationNode this[string name] => _nameIndex[name];
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public ConfigurationNode this[int index] => this._listIndex[index];
+        public ConfigurationNode this[int index] => _listIndex[index];
 
         /// <summary>
         /// 
@@ -48,7 +48,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public bool TryGetValue(string name, out ConfigurationNode item)
         {
-            return this._nameIndex.TryGetValue(name, out item);
+            return _nameIndex.TryGetValue(name, out item);
         }
 
         #region ICollection<ConfigurationNode> Members
@@ -62,7 +62,7 @@ namespace Foundation.Configuration
 #if CONTRACTS_FULL
             Contract.Assert(item != null);
 #endif
-            this._collection.Add(item);
+            _collection.Add(item);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Foundation.Configuration
         /// </summary>
         public void Clear()
         {
-            this._collection.Clear();
+            _collection.Clear();
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public bool Contains(ConfigurationNode item)
         {
-            return this._nameIndex.Contains(item);
+            return _nameIndex.Contains(item);
         }
 
         /// <summary>
@@ -90,13 +90,13 @@ namespace Foundation.Configuration
         /// <param name="arrayIndex"></param>
         public void CopyTo(ConfigurationNode[] array, int arrayIndex)
         {
-            this._collection.CopyTo(array, arrayIndex);
+            _collection.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int Count => this._collection.Count;
+        public int Count => _collection.Count;
 
         /// <summary>
         /// 
@@ -110,7 +110,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public bool Remove(ConfigurationNode item)
         {
-            return this._collection.Remove(item);
+            return _collection.Remove(item);
         }
 
 #endregion
@@ -123,7 +123,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public IEnumerator<ConfigurationNode> GetEnumerator()
         {
-            return this._collection.GetEnumerator();
+            return _collection.GetEnumerator();
         }
 
 #endregion
@@ -132,15 +132,15 @@ namespace Foundation.Configuration
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this._collection.GetEnumerator();
+            return _collection.GetEnumerator();
         }
 
 #endregion
 
         internal void Insert(int index, ConfigurationNode item)
         {
-            var where = this._collection.Indexes.Where(current => current != this._listIndex);
-            this._listIndex.Insert(index, item);
+            var where = _collection.Indexes.Where(current => current != _listIndex);
+            _listIndex.Insert(index, item);
 
             foreach (var current in where)
             {

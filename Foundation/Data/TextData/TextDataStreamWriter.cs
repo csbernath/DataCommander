@@ -17,9 +17,9 @@ namespace Foundation.Data.TextData
             Contract.Requires(converters != null);
 #endif
 
-            this._textWriter = textWriter;
-            this.Columns = columns;
-            this._converters = converters;
+            _textWriter = textWriter;
+            Columns = columns;
+            _converters = converters;
         }
 
         public IList<TextDataColumn> Columns { get; }
@@ -34,14 +34,14 @@ namespace Foundation.Data.TextData
             for (var i = 0; i < values.Length; i++)
             {
                 var value = values[i];
-                var converter = this._converters[i];
-                var column = this.Columns[i];
+                var converter = _converters[i];
+                var column = Columns[i];
                 var valueString = converter.ToString(value, column);
 #if CONTRACTS_FULL
                 Contract.Assert(!string.IsNullOrEmpty(valueString));
                 Contract.Assert(column.MaxLength == valueString.Length);
 #endif
-                this._textWriter.Write(valueString);
+                _textWriter.Write(valueString);
             }
         }
     }
