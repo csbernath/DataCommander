@@ -520,8 +520,10 @@
     <Compile Include="DomainDrivenDesign\ICommandHandler.cs" />
     <Compile Include="DomainDrivenDesign\ICommandResult.cs" />
     <Compile Include="DomainDrivenDesign\IEventHandler.cs" />
-    <Compile Include="DomainDrivenDesign\IMessageSender.cs" />
+    <Compile Include="DomainDrivenDesign\IAsyncMessageSender.cs" />
     <Compile Include="DomainDrivenDesign\IAsyncMessageHandler.cs" />
+    <Compile Include="DomainDrivenDesign\IMessageHandler.cs" />
+    <Compile Include="DomainDrivenDesign\IMessageSender.cs" />
     <Compile Include="DomainDrivenDesign\IOneWayMessageHandler.cs" />
     <Compile Include="DomainDrivenDesign\ICommand.cs" />
     <Compile Include="DomainDrivenDesign\IEvent.cs" />
@@ -530,8 +532,10 @@
     <Compile Include="DomainDrivenDesign\IAsyncQueryHandler.cs" />
     <Compile Include="DomainDrivenDesign\IQueryHandler.cs" />
     <Compile Include="DomainDrivenDesign\IQueryResult.cs" />
+    <Compile Include="DomainDrivenDesign\IQuerySender.cs" />
     <Compile Include="DomainDrivenDesign\IRequest.cs" />
     <Compile Include="DomainDrivenDesign\IResponse.cs" />
+    <Compile Include="DomainDrivenDesign\MessageSender.cs" />
     <Compile Include="DomainDrivenDesign\QueryHandler.cs" />
     <Compile Include="DomainDrivenDesign\CommandHandler.cs" />
     <Compile Include="DomainDrivenDesign\QueryHandlerFactory.cs" />

@@ -1,6 +1,6 @@
 ﻿namespace Foundation.DomainDrivenDesign
 {
-    public interface IQuery : IRequest
+    public interface IQuery<TQueryResult> : IRequest where TQueryResult : IQueryResult
     {
     }
 }

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace Foundation.DomainDrivenDesign
 {
     internal sealed class QueryHandler<TQuery, TQueryResult> : IAsyncQueryHandler<TQuery, TQueryResult>
-        where TQuery : IQuery where TQueryResult : IQueryResult
+        where TQuery : IQuery<TQueryResult> where TQueryResult : IQueryResult
     {
         private readonly Func<TQuery, TQueryResult> _handle;
 

@@ -1,10 +1,7 @@
-﻿namespace Foundation.DomainDrivenDesign
+namespace Foundation.DomainDrivenDesign
 {
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public interface IMessageSender<in TRequest, TResponse> where TRequest : IRequest where TResponse : IResponse
+    public interface IMessageSender<in TRequest, out TResponse> where TRequest : IRequest where TResponse : IResponse
     {
-        Task<TResponse> Send(TRequest request, CancellationToken cancellationToken);
+        TResponse Send(TRequest request);
     }
 }
