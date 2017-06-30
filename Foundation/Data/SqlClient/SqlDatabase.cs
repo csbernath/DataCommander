@@ -95,8 +95,11 @@ end",
             var executor = DbCommandExecutorFactory.Create(connection);
             executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
             {
-                var s = dataReader.GetString(0);
-                sb.Append(s);
+                while (dataReader.Read())
+                {
+                    var s = dataReader.GetString(0);
+                    sb.Append(s);
+                }
             });
 
             return sb.ToString();
