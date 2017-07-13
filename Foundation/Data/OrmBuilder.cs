@@ -6,16 +6,22 @@ namespace Foundation.Data
 {
     public sealed class OrmBuilder
     {
+        private readonly bool _properties;
         private readonly StringBuilder _objectStringBuilder = new StringBuilder();
         private readonly StringBuilder _readObjectStringBuilder = new StringBuilder();
 
+        public OrmBuilder(bool properties)
+        {
+            _properties = properties;
+        }
+
         public void Add(string objectTypeName, IReadOnlyCollection<DbColumn> columns)
         {
-            AddObject(objectTypeName, columns, _objectStringBuilder);
+            AddObject(objectTypeName, columns, _objectStringBuilder, _properties);
             AddReadObject(objectTypeName, columns, _readObjectStringBuilder);
         }
 
-        private static void AddObject(string objectTypeName, IReadOnlyCollection<DbColumn> columns, StringBuilder stringBuilder)
+        private static void AddObject(string objectTypeName, IReadOnlyCollection<DbColumn> columns, StringBuilder stringBuilder, bool properties)
         {
             if (stringBuilder.Length > 0)
                 stringBuilder.Append("\r\n\r\n");
@@ -40,7 +46,7 @@ namespace Foundation.Data
 
                 stringBuilder.Append(' ');
                 stringBuilder.Append(column.ColumnName);
-                stringBuilder.Append(";");
+                stringBuilder.Append(properties ? " { get; set; }" : ";");
             }
 
             stringBuilder.Append(@"

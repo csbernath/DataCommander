@@ -22,7 +22,7 @@ namespace DataCommander.Providers.ResultWriter
         private long _beforeExecuteReaderTimestamp;
         private long _writeTableBeginTimestamp;
         private long _firstRowReadBeginTimestamp;
-        private readonly OrmBuilder _ormBuilder = new OrmBuilder();
+        private readonly OrmBuilder _ormBuilder = new OrmBuilder(true);
 
         public LogResultWriter(Action<InfoMessage> addInfoMessage)
         {
