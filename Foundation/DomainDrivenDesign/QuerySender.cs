@@ -13,9 +13,10 @@ namespace Foundation.DomainDrivenDesign
 
         public TQueryResult Send<TQueryResult>(IQuery<TQueryResult> query) where TQueryResult : IQueryResult
         {
-            var queryType = query.GetType();
-            var handler = (Func<TQueryt,TQueryResult>) _getHandler(queryType);
-            return (TQueryResult) handler.Handle(query);
+            //var queryType = query.GetType();
+            //var handler = (Func<TQuery>,TQueryResult>) _getHandler(queryType);
+            //return (TQueryResult) handler.Handle(query);
+            throw new NotImplementedException();
         }
     }
 }

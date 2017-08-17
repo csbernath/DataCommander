@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Runtime.Serialization;
 
@@ -8,10 +9,10 @@ namespace Foundation
     /// 16 bit date type: 1990-01-01 - 2079-06-06
     /// </summary>
     [DataContract]
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public struct SmallDate : IComparable<SmallDate>, IEquatable<SmallDate>
     {
-        [DataMember]
-        private readonly ushort value;
+        [DataMember] private readonly ushort _value;
 
         /// <summary>
         /// 
@@ -35,7 +36,7 @@ namespace Foundation
 
         private SmallDate(ushort value)
         {
-            this.value = value;
+            _value = value;
         }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace Foundation
         /// <param name="dateTime"></param>
         public SmallDate(DateTime dateTime)
         {
-            value = ToSmallDateValue(dateTime);
+            _value = ToSmallDateValue(dateTime);
         }
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace Foundation
         public SmallDate(int year, int month, int day)
         {
             var dateTime = new DateTime(year, month, day);
-            value = ToSmallDateValue(dateTime);
+            _value = ToSmallDateValue(dateTime);
         }
 
         /// <summary>
@@ -71,17 +72,17 @@ namespace Foundation
         /// <summary>
         /// 
         /// </summary>
-        public int Year => ToDateTime(value).Year;
+        public int Year => ToDateTime(_value).Year;
 
         /// <summary>
         /// 
         /// </summary>
-        public int Month => ToDateTime(value).Month;
+        public int Month => ToDateTime(_value).Month;
 
         /// <summary>
         /// 
         /// </summary>
-        public int Day => ToDateTime(value).Day;
+        public int Day => ToDateTime(_value).Day;
 
         /// <summary>
         /// 
@@ -102,7 +103,7 @@ namespace Foundation
         /// <returns></returns>
         public static SmallDate operator +(SmallDate smallDate, int value)
         {
-            var result = smallDate.value + value;
+            var result = smallDate._value + value;
             if (result < ushort.MinValue || ushort.MaxValue < result)
             {
                 throw new OverflowException();
@@ -118,7 +119,17 @@ namespace Foundation
         /// <returns></returns>
         public static int operator -(SmallDate smallDate1, SmallDate smallDate2)
         {
-            return smallDate1.value - smallDate2.value;
+            return smallDate1._value - smallDate2._value;
+        }
+
+        public static bool operator <=(SmallDate smallDate1, SmallDate smallDate2)
+        {
+            return smallDate1._value <= smallDate2._value;
+        }
+
+        public static bool operator >=(SmallDate smallDate1, SmallDate smallDate2)
+        {
+            return smallDate1._value >= smallDate2._value;
         }
 
         /// <summary>
@@ -128,7 +139,7 @@ namespace Foundation
         [Pure]
         public DateTime ToDateTime()
         {
-            return ToDateTime(value);
+            return ToDateTime(_value);
         }
 
         /// <summary>
@@ -139,21 +150,15 @@ namespace Foundation
         [Pure]
         public SmallDate AddDays(short value)
         {
-            var valueInt32 = this.value + value;
+            var valueInt32 = _value + value;
             ushort valueUInt16;
 
             if (valueInt32 < ushort.MinValue)
-            {
                 valueUInt16 = ushort.MinValue;
-            }
             else if (ushort.MaxValue < valueInt32)
-            {
                 valueUInt16 = ushort.MaxValue;
-            }
             else
-            {
-                valueUInt16 = (ushort)valueInt32;
-            }
+                valueUInt16 = (ushort) valueInt32;
 
             return new SmallDate(valueUInt16);
         }
@@ -164,7 +169,7 @@ namespace Foundation
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return value;
+            return _value;
         }
 
         /// <summary>
@@ -173,13 +178,13 @@ namespace Foundation
         /// <returns></returns>
         public override string ToString()
         {
-            var dateTime = ToDateTime(value);
+            var dateTime = ToDateTime(_value);
             return dateTime.ToShortDateString();
         }
 
         int IComparable<SmallDate>.CompareTo(SmallDate other)
         {
-            return value.CompareTo(other.value);
+            return _value.CompareTo(other._value);
         }
 
         private static DateTime ToDateTime(ushort value)
@@ -196,13 +201,30 @@ namespace Foundation
 
             var timeSpan = dateTime - MinDateTime;
             var totalDays = timeSpan.TotalDays;
-            var value = (ushort)totalDays;
+            var value = (ushort) totalDays;
             return value;
         }
 
         bool IEquatable<SmallDate>.Equals(SmallDate other)
         {
-            return value == other.value;
+            return _value == other._value;
+        }
+
+        private string DebuggerDisplay
+        {
+            get
+            {
+                string debuggerDisplay;
+
+                if (_value == ushort.MinValue)
+                    debuggerDisplay = $"{ToDateTime():d}(min)";
+                else if (_value == ushort.MaxValue)
+                    debuggerDisplay = $"{ToDateTime():d}(max)";
+                else
+                    debuggerDisplay = $"{ToDateTime():d}";
+
+                return debuggerDisplay;
+            }
         }
     }
 }
