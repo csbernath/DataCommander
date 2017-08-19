@@ -2,11 +2,12 @@
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Runtime.Serialization;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation
 {
     /// <summary>
-    /// 16 bit date type: 1990-01-01 - 2079-06-06
+    /// 16 bit date type: 1900-01-01 - 2079-06-06
     /// </summary>
     [DataContract]
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
@@ -22,7 +23,7 @@ namespace Foundation
         /// <summary>
         /// 
         /// </summary>
-        public static readonly DateTime MaxDateTime = new DateTime(2079, 06, 07);
+        public static readonly DateTime MaxDateTime = new DateTime(2079, 06, 06);
 
         /// <summary>
         /// 
@@ -194,10 +195,8 @@ namespace Foundation
 
         private static ushort ToSmallDateValue(DateTime dateTime)
         {
-#if CONTRACTS_FULL
-            Contract.Requires<ArgumentOutOfRangeException>(MinDateTime <= dateTime);
-            Contract.Requires<ArgumentOutOfRangeException>(dateTime < MaxDateTime);
-#endif
+            FoundationContract.Requires<ArgumentOutOfRangeException>(MinDateTime <= dateTime);
+            FoundationContract.Requires<ArgumentOutOfRangeException>(dateTime <= MaxDateTime);
 
             var timeSpan = dateTime - MinDateTime;
             var totalDays = timeSpan.TotalDays;
