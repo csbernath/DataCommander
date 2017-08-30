@@ -13,6 +13,27 @@ namespace Foundation.Linq
     /// </summary>
     public static class IEnumerableExtensions
     {
+        public static bool CountIsGreaterThan<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate, int count)
+        {
+            var countIsGreaterThan = false;
+            var filteredCount = 0;
+
+            foreach (var item in source)
+            {
+                if (predicate(item))
+                {
+                    ++filteredCount;
+                    if (filteredCount > count)
+                    {
+                        countIsGreaterThan = true;
+                        break;
+                    }
+                }
+            }
+
+            return countIsGreaterThan;
+        }
+
         /// <summary>
         /// 
         /// </summary>
