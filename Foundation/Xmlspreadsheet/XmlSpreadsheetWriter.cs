@@ -109,14 +109,13 @@ namespace Foundation.XmlSpreadsheet
 #endif
             _tableIndex++;
             _table = table;
-            int columnIndex;
 
             XmlWriter.WriteStartElement("Worksheet");
             XmlWriter.WriteAttributeString("ss:Name", _table.TableName);
 
             XmlWriter.WriteStartElement("Table");
 
-            columnIndex = 1;
+            var columnIndex = 1;
             foreach (var column in _table.Columns)
             {
                 using (XmlWriter.WriteElement("Column"))

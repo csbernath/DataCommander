@@ -32,7 +32,7 @@ namespace Foundation.IO
         /// <summary>
         /// 
         /// </summary>
-        public ConsoleColor ForegroundColor { get; set; }
+        public ConsoleColor ForegroundColor { get; }
 
         private enum State
         {

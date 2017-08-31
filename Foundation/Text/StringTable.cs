@@ -20,9 +20,7 @@ namespace Foundation.Text
 #endif
 
             for (var i = 0; i < columnCount; i++)
-            {
                 Columns.Add(new StringTableColumn());
-            }
         }
 
         /// <summary>
@@ -69,9 +67,7 @@ namespace Foundation.Text
             var columnWidths = new int[count];
 
             for (var i = 0; i < count; i++)
-            {
                 columnWidths[i] = GetMaxColumnWidth(i);
-            }
 
             return ToString(columnWidths, " ");
         }
@@ -95,9 +91,7 @@ namespace Foundation.Text
                     var remainder = (width + 1)%indent;
 
                     if (remainder != 0)
-                    {
                         width += indent - remainder;
-                    }
                 }
 
                 columnWidths[i] = width;
@@ -124,13 +118,9 @@ namespace Foundation.Text
             foreach (var row in Rows)
             {
                 if (first)
-                {
                     first = false;
-                }
                 else
-                {
                     stringBuilder.AppendLine();
-                }
 
                 WriteRow(row, columnWidths, columnSeparator, stringBuilder);
             }
@@ -155,9 +145,7 @@ namespace Foundation.Text
             for (var j = 0; j < count; ++j)
             {
                 if (j > 0)
-                {
                     stringBuilder.Append(columnSeparator);
-                }
 
                 var column = Columns[j];
                 var alignRight = column.Align == StringTableColumnAlign.Right;

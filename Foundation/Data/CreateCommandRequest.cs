@@ -6,7 +6,7 @@ namespace Foundation.Data
 {
     public class CreateCommandRequest
     {
-        public CreateCommandRequest(string commandText, IEnumerable<object> parameters, CommandType commandType, int commandTimeout)
+        private CreateCommandRequest(string commandText, IEnumerable<object> parameters, CommandType commandType, int commandTimeout)
         {
             CommandText = commandText;
             Parameters = parameters?.ToList();

@@ -81,7 +81,7 @@
             }
         }
 
-        public string Database { get; set; }
+        public string Database { get; }
 
         public string Schema { get; set; }
 

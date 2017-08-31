@@ -11,6 +11,7 @@ using DataCommander.Providers.Query;
 using Foundation.Data;
 using Foundation.Log;
 using Npgsql;
+using DbColumn = Foundation.Data.DbColumn;
 
 namespace DataCommander.Providers.PostgreSql
 {
@@ -67,6 +68,11 @@ namespace DataCommander.Providers.PostgreSql
         }
 
         System.Xml.XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Type GetColumnType(DbColumn dataColumnSchema)
         {
             throw new NotImplementedException();
         }

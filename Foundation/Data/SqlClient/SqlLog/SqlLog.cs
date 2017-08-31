@@ -218,29 +218,22 @@ namespace Foundation.Data.SqlClient.SqlLog
             sb.Append(',');
             sb.Append(startDate.ToTSqlDateTime());
             var commandText = sb.ToString();
-            int applicationId;
 
             if (_connection.State != ConnectionState.Open)
             {
                 if (safe)
-                {
                     _connection.Open();
-                }
                 else
-                {
                     _connection.Connection.Open();
-                }
             }
 
             var transactionScope = new DbTransactionScope(_connection, null);
-            applicationId = (int)transactionScope.ExecuteScalar(new CommandDefinition { CommandText = commandText });
+            var applicationId = (int)transactionScope.ExecuteScalar(new CommandDefinition { CommandText = commandText });
             Log.Trace("SqlLog.ApplicationStart({0})", applicationId);
             var commands = new Dictionary<string, SqLoglCommandExecution>();
 
             lock (_applications)
-            {
                 _applications.Add(applicationId, commands);
-            }
 
             return applicationId;
         }
@@ -256,9 +249,7 @@ namespace Foundation.Data.SqlClient.SqlLog
             Enqueue(item);
 
             lock (_applications)
-            {
                 _applications.Remove(applicationId);
-            }
         }
 
         private void ConnectionClosed(
@@ -268,9 +259,7 @@ namespace Foundation.Data.SqlClient.SqlLog
             var sqlLogConnection = _connections[internalConnection];
 
             lock (_connections)
-            {
                 _connections.Remove(internalConnection);
-            }
 
             if (sqlLogConnection != null)
             {
@@ -292,9 +281,7 @@ namespace Foundation.Data.SqlClient.SqlLog
                     var isOpen = InternalConnectionHelper.IsOpen(connection);
 
                     if (!isOpen)
-                    {
                         list.Add(connection);
-                    }
                 }
             }
 
@@ -307,17 +294,13 @@ namespace Foundation.Data.SqlClient.SqlLog
         private void CloseConnections(IEnumerable<object> connections, DateTime endDate)
         {
             foreach (var connection in connections)
-            {
                 ConnectionClosed(connection, endDate);
-            }
         }
 
         private void Enqueue(ISqlLogItem item)
         {
             lock (_queue)
-            {
                 _queue.Enqueue(item);
-            }
 
             _queueEvent.Set();
         }
@@ -346,17 +329,13 @@ namespace Foundation.Data.SqlClient.SqlLog
             SqlLogConnection sqlLogConnection = null;
 
             if (internalConnection != null)
-            {
                 _connections.TryGetValue(internalConnection, out sqlLogConnection);
-            }
 
             var isNew = sqlLogConnection == null;
             int connectionNo;
 
             if (sqlLogConnection != null)
-            {
                 connectionNo = sqlLogConnection.ConnectionNo;
-            }
             else
             {
                 connectionNo = Interlocked.Increment(ref _connectionCounter);
@@ -367,9 +346,7 @@ namespace Foundation.Data.SqlClient.SqlLog
                 if (internalConnection != null)
                 {
                     lock (_connections)
-                    {
                         _connections.Add(internalConnection, sqlLogConnection);
-                    }
                 }
 
                 var trace = new StackTrace(2, true).ToString();

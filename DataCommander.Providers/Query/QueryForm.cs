@@ -3516,13 +3516,9 @@ namespace DataCommander.Providers.Query
                         if (schemaTable != null)
                         {
                             if (tableName != null)
-                            {
                                 schemaTable.TableName = tableName;
-                            }
                             else
-                            {
                                 tableName = schemaTable.TableName;
-                            }
 
                             _standardOutput.WriteLine(InsertScriptFileWriter.GetCreateTableStatement(schemaTable));
                             var schemaRows = schemaTable.Rows;
@@ -3532,9 +3528,7 @@ namespace DataCommander.Providers.Query
                             for (var i = 0; i < columnCount; i++)
                             {
                                 if (i > 0)
-                                {
                                     sb.Append(',');
-                                }
 
                                 var schemaRow = schemaRows[i];
                                 var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
@@ -3557,16 +3551,14 @@ namespace DataCommander.Providers.Query
                             for (var i = 0; i < fieldCount; i++)
                             {
                                 if (i > 0)
-                                {
                                     sb.Append(',');
-                                }
 
                                 var s = InsertScriptFileWriter.ToString(values[i]);
                                 sb.Append(s);
                             }
 
                             sb.AppendLine(");");
-                            statementCount++;
+                            ++statementCount;
 
                             if (statementCount%100 == 0)
                             {
@@ -3575,10 +3567,8 @@ namespace DataCommander.Providers.Query
                             }
                         }
 
-                        if (statementCount%100 != 0)
-                        {
+                        if (statementCount % 100 != 0)
                             _standardOutput.Write(sb);
-                        }
 
                         if (!dataReader.NextResult())
                         {
@@ -3617,12 +3607,10 @@ namespace DataCommander.Providers.Query
                         var sb = new StringBuilder();
                         sb.AppendFormat("insert into {0}(", tableName);
 
-                        for (var i = 0; i < columnCount; i++)
+                        for (var i = 0; i < columnCount; ++i)
                         {
                             if (i > 0)
-                            {
                                 sb.Append(',');
-                            }
 
                             var schemaRow = schemaRows[i];
                             var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
@@ -3645,13 +3633,9 @@ namespace DataCommander.Providers.Query
                                 sb.Append('\t');
 
                                 if (i == 0)
-                                {
                                     sb.Append(' ');
-                                }
-                                {
-                                    sb.Append(',');
-                                }
 
+                                sb.Append(',');
                                 var s = InsertScriptFileWriter.ToString(values[i]);
                                 sb.AppendFormat("{0}\t\tas {1}", s, dataReader.GetName(i));
                             }

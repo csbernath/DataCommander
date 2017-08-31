@@ -67,13 +67,9 @@ namespace Foundation.Linq
             var flagUInt64 = Convert.ToUInt64(flag);
 
             if (set)
-            {
                 containerUInt64 |= flagUInt64;
-            }
             else
-            {
                 containerUInt64 &= ~flagUInt64;
-            }
 
             return (T) Enum.ToObject(type, containerUInt64);
         }

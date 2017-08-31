@@ -79,9 +79,7 @@ order by c.column_id",
             var first = true;
 
             if (connection.State != ConnectionState.Open)
-            {
                 connection.Open();
-            }
 
             var transactionScope = new DbTransactionScope(connection, null);
             using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
@@ -89,13 +87,9 @@ order by c.column_id",
                 dataReader.Read(dataRecord =>
                 {
                     if (first)
-                    {
                         first = false;
-                    }
                     else
-                    {
                         columnNames.Append(",\r\n        ");
-                    }
 
                     columnNames.Append('[');
                     columnNames.Append(dataRecord[0]);
@@ -447,13 +441,9 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                     case "decimal":
                         var scale = row.Field<byte>("scale");
                         if (scale == 0)
-                        {
                             typeName += "(" + row["precision"].ToString() + ")";
-                        }
                         else
-                        {
                             typeName += "(" + row["precision"].ToString() + ',' + scale + ")";
-                        }
                         break;
 
                     default:

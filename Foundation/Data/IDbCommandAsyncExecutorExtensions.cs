@@ -9,7 +9,7 @@ namespace Foundation.Data
 {
     public static class IDbCommandAsyncExecutorExtensions
     {
-        public static async Task ExecuteAsync(this IDbCommandAsyncExecutor executor, IEnumerable<ExecuteCommandAsyncRequest> requests,
+        private static async Task ExecuteAsync(this IDbCommandAsyncExecutor executor, IEnumerable<ExecuteCommandAsyncRequest> requests,
             CancellationToken cancellationToken)
         {
             await executor.ExecuteAsync(async connection =>

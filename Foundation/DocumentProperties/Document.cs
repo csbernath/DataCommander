@@ -242,12 +242,12 @@ namespace Foundation.DocumentProperties
                     var propVariantArray = new PropVariant[1];
                     propertyStorage.ReadMultiple( 1, propSpecArray, propVariantArray );
                     var propVariant = propVariantArray[ 0 ];
-                    DocumentPropertyId id;
 
                     try
                     {
                         var value = propVariant.Value;
 
+                        DocumentPropertyId id;
                         if (statPropSetStg.fmtid == PropertySetId.Summary)
                         {
                             switch ((StgSummaryPropertyId) statPropStg.PROPID)

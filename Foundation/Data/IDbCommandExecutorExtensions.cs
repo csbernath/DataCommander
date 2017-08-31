@@ -6,7 +6,7 @@ namespace Foundation.Data
 {
     public static class IDbCommandExecutorExtensions
     {
-        public static void Execute(this IDbCommandExecutor executor, IEnumerable<ExecuteCommandRequest> requests)
+        private static void Execute(this IDbCommandExecutor executor, IEnumerable<ExecuteCommandRequest> requests)
         {
             executor.Execute(connection =>
             {

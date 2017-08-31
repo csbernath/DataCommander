@@ -10,7 +10,7 @@ namespace Foundation.Data
 {
     public static class DbDataReaderExtensions
     {
-        public static async Task ReadAsync(this DbDataReader dataReader, Action read, CancellationToken cancellationToken)
+        private static async Task ReadAsync(this DbDataReader dataReader, Action read, CancellationToken cancellationToken)
         {
             while (await dataReader.ReadAsync(cancellationToken))
                 read();
