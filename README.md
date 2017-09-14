@@ -5,7 +5,7 @@ The program has a plugin architecture for adding arbitrary data providers.
 
 Special features of Data Commander
 
-Feature|Data Commander|SQL Server Management Studio v17.0
+Feature|Data Commander|SQL Server Management Studio v17.2
 ---|---|---
 Audit: log commands to file|Yes|No
 Auto completion: Pascal case filtering|Yes|No
@@ -587,7 +587,7 @@ This program is freeware and released under the [GNU General Public License](htt
 
 ## Development environment
 
-- .NET Framework 4.6.2
+- .NET Framework 4.7
 - C# 7.0
 - Visual Studio Community 2017
 
