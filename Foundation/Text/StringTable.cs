@@ -88,7 +88,7 @@ namespace Foundation.Text
 
                 if (i < last)
                 {
-                    var remainder = (width + 1)%indent;
+                    var remainder = (width + 1) % indent;
 
                     if (remainder != 0)
                         width += indent - remainder;
@@ -140,16 +140,22 @@ namespace Foundation.Text
             Contract.Requires<ArgumentNullException>(stringBuilder != null);
 #endif
 
-            var count = Columns.Count;
+            var last = Columns.Count - 1;
 
-            for (var j = 0; j < count; ++j)
+            for (var j = 0; j <= last; ++j)
             {
                 if (j > 0)
                     stringBuilder.Append(columnSeparator);
 
                 var column = Columns[j];
                 var alignRight = column.Align == StringTableColumnAlign.Right;
-                var text = StringHelper.FormatColumn(row[j], columnWidths[j], alignRight);
+
+                string text;
+                if (j == last && !alignRight)
+                    text = row[j];
+                else
+                    text = StringHelper.FormatColumn(row[j], columnWidths[j], alignRight);
+
                 stringBuilder.Append(text);
             }
         }
