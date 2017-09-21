@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
 {
@@ -57,6 +58,21 @@ namespace Foundation.Data
             return dataRecord.IsDBNull(columnIndex)
                 ? (decimal?)null
                 : dataRecord.GetDecimal(columnIndex);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataRecord"></param>
+        /// <param name="columnIndex"></param>
+        /// <returns></returns>
+        public static Guid? GetNullableGuid(this IDataRecord dataRecord, int columnIndex)
+        {
+            FoundationContract.Requires<ArgumentNullException>(dataRecord != null);
+
+            return dataRecord.IsDBNull(columnIndex)
+                ? (Guid?) null
+                : dataRecord.GetGuid(columnIndex);
         }
 
         /// <summary>

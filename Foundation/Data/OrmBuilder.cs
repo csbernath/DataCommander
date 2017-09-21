@@ -178,6 +178,11 @@ namespace Foundation.Data
                 case TypeCode.DateTime:
                     isValueType = true;
                     break;
+
+                case TypeCode.Object:
+                    if (dbColumnDataType == typeof(Guid))
+                        isValueType = true;
+                    break;
             }
 
             return isValueType;
@@ -192,6 +197,8 @@ namespace Foundation.Data
                 case TypeCode.Empty:
                     break;
                 case TypeCode.Object:
+                    if (column.DataType == typeof(Guid))
+                        methodName = column.AllowDbNull == true ? "GetNullableGuid" : "GetGuid";
                     break;
                 case TypeCode.DBNull:
                     break;
