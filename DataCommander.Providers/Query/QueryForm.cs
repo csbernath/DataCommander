@@ -1547,8 +1547,12 @@ namespace DataCommander.Providers.Query
 
         private void ExecuteQuery()
         {
+            var query = Query;
+            if (string.IsNullOrWhiteSpace(query))
+                return;
+
             Log.Trace("ExecuteQuery...");
-            
+
             Cursor = Cursors.AppStarting;
             SetGui(CommandState.Cancel);
 
@@ -1570,7 +1574,6 @@ namespace DataCommander.Providers.Query
             {
                 _sbPanelText.Text = "Executing query...";
                 _sbPanelText.ForeColor = _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText;
-                var query = Query;
                 var statements = Provider.GetStatements(query);
                 Log.Write(LogLevel.Trace, "Query:\r\n{0}", query);
                 IEnumerable<AsyncDataAdapterCommand> commands;
@@ -1697,6 +1700,7 @@ namespace DataCommander.Providers.Query
             }
             catch (Exception ex)
             {
+                WriteEnd(_dataAdapter);
                 EndFill(_dataAdapter, ex);
             }
         }

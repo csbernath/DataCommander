@@ -264,15 +264,17 @@ namespace DataCommander.Providers.SqlServer
                 CommandTimeout = command.CommandTimeout
             };
 
-            try
-            {
-                SqlCommandBuilder.DeriveParameters(sqlCommand);
-            }
-            catch (Exception e)
-            {
-                var message = ((IProvider)this).GetExceptionMessage(e);
-                Log.Write(LogLevel.Error, message);
-            }
+            //try
+            //{
+            //    SqlCommandBuilder.DeriveParameters(sqlCommand);
+            //}
+            //catch (Exception e)
+            //{
+            //    var message = ((IProvider)this).GetExceptionMessage(e);
+            //    Log.Write(LogLevel.Error, message);
+            //}
+
+            SqlCommandBuilder.DeriveParameters(sqlCommand);
 
             command.Parameters.Clear();
 
