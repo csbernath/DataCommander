@@ -41,6 +41,20 @@ namespace Foundation.Diagnostics
 
         #region Public Properties
 
+        public static string GetWindowsVersion()
+        {
+            using (var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion"))
+            {
+                var stringBuilder = new StringBuilder();
+                stringBuilder.AppendFormat("ProductName:{0},ReleaseId:{1},CurrentBuild:{2}",
+                    key.GetValue("ProductName"),
+                    key.GetValue("ReleaseId"),
+                    key.GetValue("CurrentBuild"));
+
+                return stringBuilder.ToString();
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -145,6 +159,7 @@ namespace Foundation.Diagnostics
 MachineName:            {Environment.MachineName}
 ProcessorCount:         {Environment.ProcessorCount}
 OSVersion:              {Environment.OSVersion}
+Windows version:        {GetWindowsVersion()}
 Is64BitOperatingSystem: {Environment.Is64BitOperatingSystem}
 Is64BitProcess:         {Environment.Is64BitProcess}
 IntPtr.Size:            {IntPtr.Size} ({IntPtr.Size*8} bit)
