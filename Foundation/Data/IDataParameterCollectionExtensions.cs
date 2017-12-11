@@ -10,7 +10,7 @@ namespace Foundation.Data
     /// <summary>
     ///
     /// </summary>
-    public static class DataParameterCollectionExtensions
+    public static class IDataParameterCollectionExtensions
     {
         /// <summary>
         /// 

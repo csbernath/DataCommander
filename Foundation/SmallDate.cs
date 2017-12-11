@@ -167,6 +167,20 @@ namespace Foundation
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="months"></param>
+        /// <returns></returns>
+        [Pure]
+        public SmallDate AddMonths(int months)
+        {
+            var dateTime = ToDateTime();
+            dateTime = dateTime.AddMonths(months);
+            var result = ToSmallDateValue(dateTime);
+            return new SmallDate(result);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
         {

@@ -1,6 +1,12 @@
-﻿namespace Foundation.Data
+﻿using System.Data;
+
+namespace Foundation.Data
 {
-    class IDbConnectionExtensions
+    public static class IDbConnectionExtensions
     {
+        public static IDbCommandExecutor CreateCommandExecutor(this IDbConnection connection)
+        {
+            return new DbCommandExecutor(connection);
+        }
     }
 }

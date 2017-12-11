@@ -92,7 +92,7 @@ end",
                 name.ToTSqlNVarChar());
 
             var sb = new StringBuilder();
-            var executor = DbCommandExecutorFactory.Create(connection);
+            var executor = connection.CreateCommandExecutor();
             executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
             {
                 while (dataReader.Read())

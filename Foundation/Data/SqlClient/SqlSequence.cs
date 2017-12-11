@@ -33,7 +33,7 @@ namespace Foundation.Data.SqlClient
     constraint PK_Sequence primary key clustered(Id)
 )";
 
-            var executor = DbCommandExecutorFactory.Create(connection);
+            var executor = connection.CreateCommandExecutor();
             executor.ExecuteNonQuery(new CreateCommandRequest(commandText));
 
             commandText = @"create proc dbo.IncrementSequence

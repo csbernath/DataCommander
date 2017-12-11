@@ -9,7 +9,7 @@ namespace Foundation.Data
     /// <summary>
     /// 
     /// </summary>
-    public static class DbCommandExtensions
+    public static class IDbCommandExtensions
     {
         public static void Initialize(this IDbCommand command, CreateCommandRequest request)
         {
