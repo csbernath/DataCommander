@@ -129,6 +129,10 @@ namespace Foundation.Diagnostics
                     version = "4.7";
                     break;
 
+                case 461308:
+                    version = "4.7.1 (Windows 10 Fall Creators Update 1709)";
+                    break;
+
                 #endregion
 
                 default:

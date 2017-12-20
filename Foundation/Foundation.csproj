@@ -542,6 +542,7 @@
     <Compile Include="DomainDrivenDesign\QueryHandlerFactory.cs" />
     <Compile Include="DomainDrivenDesign\QuerySender.cs" />
     <Compile Include="DomainDrivenDesign\VoidResponse.cs" />
+    <Compile Include="Option.cs" />
     <Compile Include="Threading\Tasks\TaskSyncRunner.cs" />
     <Compile Include="Data\PTypes\NamespaceDoc.cs">
       <SubType>Code</SubType>

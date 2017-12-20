@@ -51,6 +51,7 @@ Target Framework: {targetFrameworkAttribute.FrameworkDisplayName}
 <br/>
 <br/>
 <table style=""font-family:verdana;font-size:9pt"">
+<tr><td>Windows version:</td><td>{AppDomainMonitor.GetWindowsVersion()}</td></tr>
 <tr><td>.NET CLR version:</td><td>{Environment.Version}</td></tr>
 <tr><td>.NET Framework release:</td><td>{dotNetFrameworkRelease}</td></tr>
 <tr><td>.NET Framework version:</td><td>{dotNetFrameworkVersion}</td></tr>
