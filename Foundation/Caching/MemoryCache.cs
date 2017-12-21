@@ -55,16 +55,16 @@ namespace DataCommander.Foundation.Caching
 
         void ICache.Add( ICacheItem item )
         {
-            Contract.Assert( item != null );
-            Contract.Assert( item.Key != null );
-            Contract.Assert( item.SlidingExpiration > TimeSpan.Zero );
-            Contract.Assert( !this.keyIndex.ContainsKey( item.Key ) );
+            FoundationContract.Assert( item != null );
+            FoundationContract.Assert( item.Key != null );
+            FoundationContract.Assert( item.SlidingExpiration > TimeSpan.Zero );
+            FoundationContract.Assert( !this.keyIndex.ContainsKey( item.Key ) );
 
             CacheEntry entry;
 
             lock (this.entries)
             {
-                Contract.Assert( !this.keyIndex.ContainsKey( item.Key ) );
+                FoundationContract.Assert( !this.keyIndex.ContainsKey( item.Key ) );
 
                 entry = new CacheEntry
                         {
@@ -82,9 +82,9 @@ namespace DataCommander.Foundation.Caching
 
         void ICache.AddOrGetExisiting( ICacheItem item )
         {
-            Contract.Assert( item != null );
-            Contract.Assert( item.Key != null );
-            Contract.Assert( item.SlidingExpiration > TimeSpan.Zero );
+            FoundationContract.Assert( item != null );
+            FoundationContract.Assert( item.Key != null );
+            FoundationContract.Assert( item.SlidingExpiration > TimeSpan.Zero );
 
             CacheEntry entry;
 
@@ -224,7 +224,7 @@ namespace DataCommander.Foundation.Caching
                     lock (this.entries)
                     {
                         bool succeeded = collection.Remove( entry );
-                        Contract.Assert( succeeded, "collection.Remove( entry )" );
+                        FoundationContract.Assert( succeeded, "collection.Remove( entry )" );
 
                         entry.Value = value;
                         entry.AbsoluteExpiration = LocalTime.Default.Now + item.SlidingExpiration;

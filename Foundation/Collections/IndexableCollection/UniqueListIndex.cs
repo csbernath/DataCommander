@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.IndexableCollection
 {
@@ -25,11 +26,9 @@ namespace Foundation.Collections.IndexableCollection
             Func<T, TKey> keySelector,
             IList<T> list)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(name != null);
             FoundationContract.Requires<ArgumentNullException>(keySelector != null);
             FoundationContract.Requires<ArgumentNullException>(list != null);
-#endif
 
             Name = name;
             _keySelector = keySelector;
@@ -69,7 +68,7 @@ namespace Foundation.Collections.IndexableCollection
         public void Clear()
         {
 #if CONTRACTS_FULL
-            Contract.Ensures(this.Count == 0);
+            FoundationContract.Ensures(this.Count == 0);
 #endif
             _list.Clear();
         }
@@ -82,7 +81,7 @@ namespace Foundation.Collections.IndexableCollection
         public bool Contains(T item)
         {
 #if CONTRACTS_FULL
-            Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
+            FoundationContract.Ensures(!Contract.Result<bool>() || this.Count > 0);
 #endif
             return _list.Contains(item);
         }

@@ -36,7 +36,7 @@ namespace Foundation.Data.TextData
             _behavior = behavior;
             var parameters = command.Parameters;
 #if CONTRACTS_FULL
-            Contract.Assert(parameters != null);
+            FoundationContract.Assert(parameters != null);
 #endif
 
             _columns = parameters.GetParameterValue<TextDataColumnCollection>( "columns" );

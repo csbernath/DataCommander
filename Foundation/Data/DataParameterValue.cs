@@ -72,7 +72,7 @@
             get
             {
 #if CONTRACTS_FULL
-                Contract.Assert( this.Type == DataParameterValueType.Value );
+                FoundationContract.Assert( this.Type == DataParameterValueType.Value );
 #endif
 
                 return _value;

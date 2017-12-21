@@ -44,7 +44,7 @@ namespace Foundation.Log
         void ILogFile.Open()
         {
 #if CONTRACTS_FULL
-            Contract.Assert(this.timer == null);
+            FoundationContract.Assert(this.timer == null);
 #endif
 
             _timer = new Timer(TimerCallback, null, _timerPeriod, _timerPeriod);

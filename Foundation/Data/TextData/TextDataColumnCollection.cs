@@ -117,8 +117,8 @@ namespace Foundation.Data.TextData
             get
             {
 #if CONTRACTS_FULL
-                Contract.Assert( index >= 0 );
-                Contract.Assert( index < this.collection.Count );
+                FoundationContract.Assert( index >= 0 );
+                FoundationContract.Assert( index < this.collection.Count );
 #endif
 
                 return _listIndex[ index ];

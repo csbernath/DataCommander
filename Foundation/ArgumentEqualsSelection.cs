@@ -1,4 +1,5 @@
 ﻿using System;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation
 {
@@ -28,9 +29,7 @@ namespace Foundation
         /// <returns></returns>
         public ArgumentEqualsSelection<TArgument> IfArgumentEquals(TArgument other, Action action)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(action != null);
-#endif
 
             if (!selected)
             {
@@ -50,14 +49,10 @@ namespace Foundation
         /// <param name="action"></param>
         public void Else(Action action)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(action != null);
-#endif
 
             if (!selected)
-            {
                 action();
-            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Diagnostics;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Configuration
 {
@@ -52,9 +53,7 @@ namespace Foundation.Configuration
 
             public Reader(NameValueCollection nameValueCollection)
             {
-#if CONTRACTS_FULL
                 FoundationContract.Requires<ArgumentNullException>(nameValueCollection != null);
-#endif
 
                 _nameValueCollection = nameValueCollection;
             }
@@ -77,10 +76,8 @@ namespace Foundation.Configuration
 
             public PrefixedReader(NameValueCollection nameValueCollection, string prefix)
             {
-#if CONTRACTS_FULL
                 FoundationContract.Requires<ArgumentNullException>(nameValueCollection != null);
                 FoundationContract.Requires<ArgumentNullException>(prefix != null);
-#endif
 
                 _nameValueCollection = nameValueCollection;
                 _prefix = prefix;

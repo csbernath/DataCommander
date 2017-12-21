@@ -29,7 +29,7 @@ namespace Foundation.Data.LoggedDbConnection
             FoundationContract.Requires<ArgumentNullException>(afterExecuteCommand != null);
             FoundationContract.Requires<ArgumentNullException>(afterRead != null);
 
-            Contract.Ensures(this.command != null);
+            FoundationContract.Ensures(this.command != null);
 #endif
 
             _commandId = Interlocked.Increment(ref _commandIdCounter);

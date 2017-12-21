@@ -1,4 +1,7 @@
-﻿namespace Foundation.Collections
+﻿using System;
+using Foundation.Diagnostics.Contracts;
+
+namespace Foundation.Collections
 {
     /// <summary>
     /// 
@@ -15,9 +18,7 @@
         /// <returns></returns>
         public static int GetSmallArrayMaxLength(int itemSize)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentOutOfRangeException>(itemSize > 0);
-#endif
 
             return (MaxSmallObjectSize - 16)/itemSize;
         }

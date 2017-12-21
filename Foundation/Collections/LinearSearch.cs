@@ -1,4 +1,5 @@
 ﻿using System;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
 {
@@ -16,9 +17,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public static int IndexOf(int minIndex, int maxIndex, Func<int, bool> predicate)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(predicate != null);
-#endif
 
             var index = -1;
 
@@ -45,9 +44,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public static int LastIndexOf(int minIndex, int maxIndex, Func<int, bool> predicate)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(predicate != null);
-#endif
 
             var index = -1;
 

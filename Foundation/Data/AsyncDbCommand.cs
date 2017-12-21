@@ -51,7 +51,7 @@ namespace Foundation.Data
             get
             {
 #if CONTRACTS_FULL
-                Contract.Assert(this.command != null);
+                FoundationContract.Assert(this.command != null);
 #endif
 
                 return _command.CommandType;
@@ -97,7 +97,7 @@ namespace Foundation.Data
         public int ExecuteNonQuery()
         {
 #if CONTRACTS_FULL
-            Contract.Assert(this.connection != null);
+            FoundationContract.Assert(this.connection != null);
 #endif
 
             return _connection.ExecuteNonQuery(this);
@@ -172,7 +172,7 @@ namespace Foundation.Data
             get
             {
 #if CONTRACTS_FULL
-                Contract.Assert(this.command != null);
+                FoundationContract.Assert(this.command != null);
 #endif
                 return _command.CommandText;
             }
@@ -180,7 +180,7 @@ namespace Foundation.Data
             set
             {
 #if CONTRACTS_FULL
-                Contract.Assert(this.command != null);
+                FoundationContract.Assert(this.command != null);
 #endif
                 _command.CommandText = value;
             }
@@ -194,7 +194,7 @@ namespace Foundation.Data
             get
             {
 #if CONTRACTS_FULL
-                Contract.Assert(this.command != null);
+                FoundationContract.Assert(this.command != null);
 #endif
                 return _command.Parameters;
             }
@@ -208,7 +208,7 @@ namespace Foundation.Data
             get
             {
 #if CONTRACTS_FULL
-                Contract.Assert(this.command != null);
+                FoundationContract.Assert(this.command != null);
 #endif
 
                 return _command.Transaction;
@@ -217,7 +217,7 @@ namespace Foundation.Data
             set
             {
 #if CONTRACTS_FULL
-                Contract.Assert(this.command != null);
+                FoundationContract.Assert(this.command != null);
 #endif
 
                 _command.Transaction = value;

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.IndexableCollection
 {
@@ -17,9 +18,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="item"></param>
         public void Add(ICollectionIndex<T> item)
         {
-#if CONTRACTS_FULL
-            Contract.Assert(item != null);
-#endif
+            FoundationContract.Assert(item != null);
 
             _dictionary.Add(item.Name, item);
         }
@@ -36,9 +35,8 @@ namespace Foundation.Collections.IndexableCollection
         /// </summary>
         public void Clear()
         {
-#if CONTRACTS_FULL
-            Contract.Ensures(this.Count == 0);
-#endif
+            FoundationContract.Ensures(this.Count == 0);
+
             _dictionary.Clear();
         }
 
@@ -49,9 +47,8 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool Contains(ICollectionIndex<T> item)
         {
-#if CONTRACTS_FULL
-            Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
-#endif
+            //FoundationContract.Ensures(!Contract.Result<bool>() || this.Count > 0);
+
             return _dictionary.ContainsValue(item);
         }
 

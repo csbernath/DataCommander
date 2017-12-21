@@ -61,9 +61,9 @@ namespace DataCommander.Foundation.Threading
                     for (int i = 0; i < this.actions.Length; i++)
                     {
                         Action action = this.actions[ i ];
-                        Contract.Assert( action != null, string.Format( "action[{0}]", i ) );
+                        FoundationContract.Assert( action != null, string.Format( "action[{0}]", i ) );
                         bool succeeded = ThreadPool.QueueUserWorkItem( this.Callback, action );
-                        Contract.Assert( succeeded, "Adding work item to thread pool failed." );
+                        FoundationContract.Assert( succeeded, "Adding work item to thread pool failed." );
                     }
                 }
                 else

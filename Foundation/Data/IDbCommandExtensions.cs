@@ -91,7 +91,7 @@ namespace Foundation.Data
 
             var scalar = command.ExecuteScalar();
 #if CONTRACTS_FULL
-            Contract.Assert(scalar is T);
+            FoundationContract.Assert(scalar is T);
 #endif
 
             return (T)scalar;

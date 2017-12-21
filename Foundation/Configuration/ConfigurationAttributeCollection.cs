@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using Foundation.Collections.IndexableCollection;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Configuration
 {
@@ -42,9 +44,7 @@ namespace Foundation.Configuration
         {
             get
             {
-#if CONTRACTS_FULL
-                Contract.Assert(0 <= index && index < this.Count);
-#endif
+                FoundationContract.Assert(0 <= index && index < this.Count);
 
                 return _listIndex[index];
             }
@@ -68,9 +68,7 @@ namespace Foundation.Configuration
         {
             get
             {
-#if CONTRACTS_FULL
-                FoundationContract.Requires(this.ContainsKey(name));
-#endif
+                FoundationContract.Requires<ArgumentOutOfRangeException>(this.ContainsKey(name));
 
                 return _nameIndex[name];
             }

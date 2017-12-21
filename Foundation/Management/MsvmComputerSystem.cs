@@ -42,7 +42,7 @@ namespace Foundation.Management
             var query = $"SELECT * FROM Msvm_ComputerSystem WHERE Name='{name}'";
             var list = managementScope.ExecuteQuery(query, mo => new MsvmComputerSystem(mo));
 #if CONTRACTS_FULL
-            Contract.Assert(list.Count > 0);
+            FoundationContract.Assert(list.Count > 0);
 #endif
             MsvmComputerSystem item;
 

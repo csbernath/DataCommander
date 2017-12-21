@@ -29,7 +29,7 @@ namespace Foundation.Threading
         public void Add(WorkerThreadPoolDequeuer dequeuer)
         {
 #if CONTRACTS_FULL
-            Contract.Assert(dequeuer != null);
+            FoundationContract.Assert(dequeuer != null);
 #endif
 
             Threads.Add(dequeuer.Thread);

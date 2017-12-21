@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
 {
@@ -20,11 +21,9 @@ namespace Foundation.Collections
             int maxIndex,
             Func<int, int> compareTo)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentOutOfRangeException>(minIndex >= 0);
             FoundationContract.Requires<ArgumentOutOfRangeException>(minIndex <= maxIndex);
             FoundationContract.Requires<ArgumentNullException>(compareTo != null);
-#endif
 
             var result = -1;
 

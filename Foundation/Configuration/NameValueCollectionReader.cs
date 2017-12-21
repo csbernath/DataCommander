@@ -136,7 +136,7 @@ namespace Foundation.Configuration
             {
                 var succeeded = DateTime.TryParse(s, provider, styles, out value);
 #if CONTRACTS_FULL
-                Contract.Assert(succeeded);
+                FoundationContract.Assert(succeeded);
 #endif
             }
             else
@@ -162,7 +162,7 @@ namespace Foundation.Configuration
             {
                 var succeeded = double.TryParse(s, out value);
 #if CONTRACTS_FULL
-                Contract.Assert(succeeded);
+                FoundationContract.Assert(succeeded);
 #endif
             }
             else
@@ -190,7 +190,7 @@ namespace Foundation.Configuration
             {
                 var succeeded = double.TryParse(s, style, provider, out value);
 #if CONTRACTS_FULL
-                Contract.Assert(succeeded);
+                FoundationContract.Assert(succeeded);
 #endif
             }
             else
@@ -280,7 +280,7 @@ namespace Foundation.Configuration
             {
                 var succeeded = float.TryParse(s, style, provider, out value);
 #if CONTRACTS_FULL
-                Contract.Assert(succeeded);
+                FoundationContract.Assert(succeeded);
 #endif
             }
             else
@@ -347,7 +347,7 @@ namespace Foundation.Configuration
             {
                 var succeeded = tryParse(s, out value);
 #if CONTRACTS_FULL
-                Contract.Assert(succeeded);
+                FoundationContract.Assert(succeeded);
 #endif
             }
             else

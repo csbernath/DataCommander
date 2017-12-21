@@ -10,7 +10,7 @@ namespace Foundation.Data
             get
             {
 #if CONTRACTS_FULL
-                Contract.Ensures(Contract.Result<IDbConnection>() != null);
+                FoundationContract.Ensures(Contract.Result<IDbConnection>() != null);
 #endif
                 return null;
             }

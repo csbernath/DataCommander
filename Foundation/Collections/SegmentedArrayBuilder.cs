@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
 {
@@ -26,10 +28,8 @@ namespace Foundation.Collections
             int length,
             int segmentLength)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentOutOfRangeException>(length >= 0);
             FoundationContract.Requires<ArgumentOutOfRangeException>(segmentLength >= 0);
-#endif
 
             if (length > 0)
             {

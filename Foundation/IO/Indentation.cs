@@ -26,7 +26,7 @@ namespace Foundation.IO
         void IDisposable.Dispose()
         {
 #if CONTRACTS_FULL
-            Contract.Assert( this.textWriter.Indent == this.indent );
+            FoundationContract.Assert( this.textWriter.Indent == this.indent );
 #endif
 
             _textWriter.Indent--;

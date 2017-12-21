@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.IndexableCollection
 {
@@ -46,9 +48,8 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool Contains(T item)
         {
-#if CONTRACTS_FULL
-            Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
-#endif
+            FoundationContract.Ensures(!Contract.Result<bool>() || this.Count > 0);
+
             return _defaultIndex.Contains(item);
         }
 

@@ -80,7 +80,7 @@ namespace Foundation.IO
         public override int Read(byte[] buffer, int offset, int count)
         {
 #if CONTRACTS_FULL
-            Contract.Assert(count >= 0);
+            FoundationContract.Assert(count >= 0);
 #endif
 
             int read;

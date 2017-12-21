@@ -112,8 +112,8 @@ namespace Foundation.Linq
             FoundationContract.Requires<ArgumentOutOfRangeException>(count >= 0);
             FoundationContract.Requires<ArgumentOutOfRangeException>(partitionCount > 0);
 
-            Contract.Ensures(Contract.Result<IEnumerable<List<TSource>>>().Count() <= partitionCount);
-            Contract.Ensures(Contract.ForAll(Contract.Result<IEnumerable<List<TSource>>>().ToList(), partition => partition.Count > 0));
+            FoundationContract.Ensures(Contract.Result<IEnumerable<List<TSource>>>().Count() <= partitionCount);
+            FoundationContract.Ensures(Contract.ForAll(Contract.Result<IEnumerable<List<TSource>>>().ToList(), partition => partition.Count > 0));
 #endif
 
             var partitionSize = count/partitionCount;

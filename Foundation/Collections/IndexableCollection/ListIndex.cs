@@ -1,5 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.IndexableCollection
 {
@@ -16,9 +19,8 @@ namespace Foundation.Collections.IndexableCollection
         /// </summary>
         public ListIndex(string name)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(name != null);
-#endif
+
             Initialize(name, new List<T>());
         }
 
@@ -29,10 +31,9 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="list"></param>
         public ListIndex(string name, IList<T> list)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(name != null);
             FoundationContract.Requires<ArgumentNullException>(list != null);
-#endif
+
             Initialize(name, list);
         }
 
@@ -57,17 +58,15 @@ namespace Foundation.Collections.IndexableCollection
         {
             get
             {
-#if CONTRACTS_FULL
-                Contract.Assert(index < this.Count);
-#endif
+                FoundationContract.Assert(index < this.Count);
+
                 return _list[index];
             }
 
             set
             {
-#if CONTRACTS_FULL
-                Contract.Assert(index < this.Count);
-#endif
+                FoundationContract.Assert(index < this.Count);
+
                 _list[index] = value;
             }
         }
@@ -137,9 +136,8 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool Contains(T item)
         {
-#if CONTRACTS_FULL
-            Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
-#endif
+            FoundationContract.Ensures(!Contract.Result<bool>() || this.Count > 0);
+
             return _list.Contains(item);
         }
 
@@ -179,10 +177,8 @@ namespace Foundation.Collections.IndexableCollection
 
         private void Initialize(string name, IList<T> list)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(name != null);
             FoundationContract.Requires<ArgumentNullException>(list != null);
-#endif
 
             Name = name;
             _list = list;

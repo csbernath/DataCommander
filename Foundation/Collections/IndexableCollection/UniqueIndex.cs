@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.IndexableCollection
 {
@@ -148,9 +149,9 @@ namespace Foundation.Collections.IndexableCollection
             if (response.HasKey)
             {
                 var key = response.Key;
-#if CONTRACTS_FULL
-                Contract.Assert(!this.dictionary.ContainsKey(key));
-#endif
+
+                FoundationContract.Assert(!this._dictionary.ContainsKey(key));
+
                 _dictionary.Add(key, item);
             }
         }
@@ -170,9 +171,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool Contains(T item)
         {
-#if CONTRACTS_FULL
-            Contract.Assert(item != null);
-#endif
+            FoundationContract.Assert(item != null);
 
             var response = _getKey(item);
             bool contains;
@@ -196,9 +195,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         bool ICollection<T>.Remove(T item)
         {
-#if CONTRACTS_FULL
-            Contract.Assert(item != null);
-#endif
+            FoundationContract.Assert(item != null);
 
             var response = _getKey(item);
             bool succeeded;
@@ -327,11 +324,9 @@ namespace Foundation.Collections.IndexableCollection
 
         private void Initialize(string name, Func<T, GetKeyResponse<TKey>> getKey, IDictionary<TKey, T> dictionary)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(name != null);
             FoundationContract.Requires<ArgumentNullException>(getKey != null);
             FoundationContract.Requires<ArgumentNullException>(dictionary != null);
-#endif
 
             Name = name;
             _getKey = getKey;

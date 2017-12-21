@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.IndexableCollection
 {
@@ -29,11 +30,9 @@ namespace Foundation.Collections.IndexableCollection
             Func<T, TKey> getKey,
             IDictionary<TKey, T> dictionary)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(getNextKey != null);
             FoundationContract.Requires<ArgumentNullException>(getKey != null);
             FoundationContract.Requires<ArgumentNullException>(dictionary != null);
-#endif
 
             _name = name;
             _getNextKey = getNextKey;
@@ -57,9 +56,8 @@ namespace Foundation.Collections.IndexableCollection
 
         void ICollection<T>.Clear()
         {
-#if CONTRACTS_FULL
-            Contract.Ensures(this.dictionary.Count == 0);
-#endif
+            FoundationContract.Ensures(_dictionary.Count == 0);
+
             _dictionary.Clear();
         }
 

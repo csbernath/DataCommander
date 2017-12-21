@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
 {
@@ -39,9 +40,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public void AddHead(T item)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentException>(this.Count < this.Capacity);
-#endif
 
             if (_head == -1)
             {
@@ -64,9 +63,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public void AddTail(T item)
         {
-#if CONTRACTS_FULL
-            Contract.Assert(this.Count < this.array.Length);
-#endif
+            //FoundationContract.Assert(this.Count < this.array.Length);
 
             if (_head == -1)
             {
@@ -88,9 +85,7 @@ namespace Foundation.Collections
         /// <param name="items"></param>
         public void AddTail(IEnumerable<T> items)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(items != null);
-#endif
 
             foreach (var item in items)
             {
@@ -104,9 +99,8 @@ namespace Foundation.Collections
         /// <returns></returns>
         public T PeekHead()
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<InvalidOperationException>(this.Count > 0);
-#endif
+
             return _array[_head];
         }
 
@@ -116,9 +110,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public T RemoveHead()
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<InvalidOperationException>(this.Count > 0);
-#endif
 
             var item = _array[_head];
             _array[_head] = default(T);
@@ -134,9 +126,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public T PeekTail()
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<InvalidOperationException>(this.Count > 0);
-#endif
 
             return _array[_tail];
         }
@@ -147,9 +137,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public T RemoveTail()
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<InvalidOperationException>(this.Count > 0);
-#endif
 
             var item = _array[_tail];
             _array[_tail] = default(T);
@@ -164,9 +152,7 @@ namespace Foundation.Collections
         /// <param name="capacity"></param>
         public void SetCapacity(int capacity)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<InvalidOperationException>(capacity >= this.Count);
-#endif
 
             var target = new T[capacity];
             if (Count > 0)

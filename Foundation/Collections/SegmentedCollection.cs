@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
 {
@@ -24,9 +25,7 @@ namespace Foundation.Collections
         /// <param name="segmentLength"></param>
         public SegmentedCollection(int segmentLength)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentOutOfRangeException>(segmentLength > 0);
-#endif
 
             _segmentLength = segmentLength;
         }

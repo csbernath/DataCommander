@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
 {
@@ -23,11 +26,9 @@ namespace Foundation.Collections
         /// <param name="equalityComparers"></param>
         public MultipleMemberEqualityComparer(params IEqualityComparer<T>[] equalityComparers)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(equalityComparers != null);
             FoundationContract.Requires<ArgumentOutOfRangeException>(equalityComparers.Length > 0);
             FoundationContract.Requires<ArgumentNullException>(Contract.ForAll(equalityComparers, c => c != null));
-#endif
 
             _equalityComparers = equalityComparers;
         }

@@ -60,7 +60,7 @@ namespace Foundation.Configuration
         public void Add(ConfigurationNode item)
         {
 #if CONTRACTS_FULL
-            Contract.Assert(item != null);
+            FoundationContract.Assert(item != null);
 #endif
             _collection.Add(item);
         }

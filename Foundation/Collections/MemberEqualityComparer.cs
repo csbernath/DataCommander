@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
 {
@@ -29,10 +30,8 @@ namespace Foundation.Collections
         /// <param name="equalityComparer"></param>
         public MemberEqualityComparer(Func<T, T1> get, IEqualityComparer<T1> equalityComparer)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(get != null);
             FoundationContract.Requires<ArgumentNullException>(equalityComparer != null);
-#endif
 
             _get = get;
             _equalityComparer = equalityComparer;

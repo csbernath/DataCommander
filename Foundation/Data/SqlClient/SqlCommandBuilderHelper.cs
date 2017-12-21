@@ -26,7 +26,7 @@ namespace Foundation.Data.SqlClient
         public void DeriveParameters(IDbCommand command)
         {
 #if CONTRACTS_FULL
-            Contract.Assert(command != null);
+            FoundationContract.Assert(command != null);
 #endif
 
             var sqlCommand = (SqlCommand)command;

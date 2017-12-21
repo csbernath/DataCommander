@@ -55,7 +55,7 @@ namespace Foundation.Data.TextData
             get
             {
 #if CONTRACTS_FULL
-                Contract.Assert( this.nameIndex.ContainsKey( name ) );
+                FoundationContract.Assert( this.nameIndex.ContainsKey( name ) );
 #endif
 
                 return _nameIndex[ name ];
@@ -97,7 +97,7 @@ namespace Foundation.Data.TextData
         public void Add( TextDataSetTable item )
         {
 #if CONTRACTS_FULL
-            Contract.Assert( item != null );
+            FoundationContract.Assert( item != null );
 #endif
             _collection.Add( item );
         }

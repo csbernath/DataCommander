@@ -188,7 +188,7 @@ namespace Foundation.Linq
             void ICollection<TResult>.Add(TResult item)
             {
 #if CONTRACTS_FULL
-                Contract.Assert(this.sourceAsList != null);
+                FoundationContract.Assert(this.sourceAsList != null);
 #endif
 
                 sourceAsList.Add(item);
@@ -200,7 +200,7 @@ namespace Foundation.Linq
             void ICollection<TResult>.Clear()
             {
 #if CONTRACTS_FULL
-                Contract.Assert(this.sourceAsList != null);
+                FoundationContract.Assert(this.sourceAsList != null);
 #endif
 
                 sourceAsList.Clear();
@@ -341,7 +341,7 @@ namespace Foundation.Linq
             bool ICollection<T>.Contains(T item)
             {
 #if CONTRACTS_FULL
-                Contract.Ensures(!Contract.Result<bool>() || this.Count > 0);
+                FoundationContract.Ensures(!Contract.Result<bool>() || this.Count > 0);
 #endif
                 return collection.Contains(item);
             }

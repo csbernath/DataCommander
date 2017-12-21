@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Foundation.Collections.IndexableCollection;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 
 namespace Foundation
@@ -20,9 +21,7 @@ namespace Foundation
         /// <param name="commandLine"></param>
         public CommandLine(string commandLine)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(commandLine != null);
-#endif
 
             this.arguments = new IndexableCollection<CommandLineArgument>(ListIndex);
             var dictionary = new Dictionary<string, ICollection<CommandLineArgument>>(StringComparer.InvariantCultureIgnoreCase);
@@ -53,17 +52,16 @@ namespace Foundation
         {
             var read = textReader.Read();
             var c = (char) read;
-#if CONTRACTS_FULL
-            Contract.Assert(c == '"');
-#endif
+
+            FoundationContract.Assert(c == '"');
+
             var sb = new StringBuilder();
 
             while (true)
             {
                 read = textReader.Read();
-#if CONTRACTS_FULL
-                Contract.Assert(read >= 0);
-#endif
+                FoundationContract.Assert(read >= 0);
+
                 c = (char) read;
 
                 if (c == '"')
@@ -84,9 +82,8 @@ namespace Foundation
         {
             var read = textReader.Read();
             var c = (char) read;
-#if CONTRACTS_FULL
-            Contract.Assert(c == '/' || c == '-');
-#endif
+            FoundationContract.Assert(c == '/' || c == '-');
+
             var sb = new StringBuilder();
 
             while (true)

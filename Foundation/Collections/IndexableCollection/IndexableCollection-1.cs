@@ -1,4 +1,8 @@
-﻿namespace Foundation.Collections.IndexableCollection
+﻿using System;
+using System.Diagnostics.Contracts;
+using Foundation.Diagnostics.Contracts;
+
+namespace Foundation.Collections.IndexableCollection
 {
     /// <summary>
     /// 
@@ -47,10 +51,8 @@
         /// <param name="defaultIndex"></param>
         public IndexableCollection(ICollectionIndex<T> defaultIndex)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(defaultIndex != null);
-            Contract.Ensures(this.Indexes.Count == 1);
-#endif
+            //FoundationContract.Ensures(this.Indexes.Count == 1);
 
             _defaultIndex = defaultIndex;
             Indexes.Add(defaultIndex);
@@ -64,11 +66,9 @@
         //[ContractInvariantMethod]
         private void ContractInvariant()
         {
-#if CONTRACTS_FULL
-            Contract.Invariant(this.Indexes != null);
-            Contract.Invariant(this.defaultIndex != null);
-            Contract.Invariant(this.Indexes.Count > 0);
-#endif
+            //Contract.Invariant(this.Indexes != null);
+            //Contract.Invariant(this.defaultIndex != null);
+            //Contract.Invariant(this.Indexes.Count > 0);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Xml;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Configuration
 {
@@ -151,10 +152,8 @@ namespace Foundation.Configuration
         /// <param name="sectionName"></param>
         public void Save(XmlWriter xmlWriter, string sectionName)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(xmlWriter != null);
             FoundationContract.Requires<ArgumentNullException>(sectionName != null);
-#endif
 
             xmlWriter.WriteStartElement(sectionName);
             ConfigurationWriter.Write(xmlWriter, RootNode.Attributes);

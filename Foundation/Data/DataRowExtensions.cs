@@ -22,7 +22,7 @@ namespace Foundation.Data
 #endif
             var valueObject = dataRow[name];
 #if CONTRACTS_FULL
-            Contract.Assert(valueObject is T);
+            FoundationContract.Assert(valueObject is T);
 #endif
 
             return (T)valueObject;

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Configuration
 {
@@ -51,9 +52,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public T GetValue<T>()
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires((this.Value == null && typeof (T).IsClass) || this.Value is T);
-#endif
+            FoundationContract.Requires<ArgumentOutOfRangeException>((this.Value == null && typeof (T).IsClass) || this.Value is T);
 
             var value = (T)Value;
             return value;
@@ -197,9 +196,7 @@ namespace Foundation.Configuration
             /// <returns></returns>        
             public static XmlElement Serialize(object obj)
             {
-#if CONTRACTS_FULL
                 FoundationContract.Requires<ArgumentNullException>(obj != null);
-#endif
 
                 var type = obj.GetType();
                 var xmlSerializer = new XmlSerializer(type);

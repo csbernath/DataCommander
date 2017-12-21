@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 
 namespace Foundation.Collections
@@ -75,9 +76,7 @@ namespace Foundation.Collections
         /// <param name="item"></param>
         public void Add(T item)
         {
-#if CONTRACTS_FULL
-            Contract.Assert(this.Count < this.maxSize);
-#endif
+            FoundationContract.Assert(Count < _maxSize);
 
             if (Count == _array.Length)
             {

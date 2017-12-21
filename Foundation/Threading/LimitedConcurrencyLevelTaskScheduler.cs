@@ -108,7 +108,7 @@ namespace Foundation.Threading
             lock (this.queue)
             {
                 bool succeeded = this.queue.TryAdd( action );
-                Contract.Assert( succeeded );
+                FoundationContract.Assert( succeeded );
 
                 if (this.threadCount < this.maximumConcurrencyLevel)
                 {

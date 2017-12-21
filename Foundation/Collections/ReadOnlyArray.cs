@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 namespace Foundation.Collections
 {
@@ -113,9 +114,7 @@ namespace Foundation.Collections
         //[ContractInvariantMethod]
         private void ObjectInvariant()
         {
-#if CONTRACTS_FULL
-            Contract.Invariant(this.Items != null);
-#endif
+            //Contract.Invariant(this.Items != null);
         }
     }
 }

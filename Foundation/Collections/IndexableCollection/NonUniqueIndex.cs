@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.IndexableCollection
 {
@@ -33,11 +35,10 @@ namespace Foundation.Collections.IndexableCollection
             IDictionary<TKey, ICollection<T>> dictionary,
             Func<ICollection<T>> createCollection)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(getKey != null);
             FoundationContract.Requires<ArgumentNullException>(dictionary != null);
             FoundationContract.Requires<ArgumentNullException>(createCollection != null);
-#endif
+            
             Initialize(name, getKey, dictionary, createCollection);
         }
 
@@ -104,9 +105,8 @@ namespace Foundation.Collections.IndexableCollection
 
             if (contains)
             {
-#if CONTRACTS_FULL
-                Contract.Assert(collection != null);
-#endif
+                FoundationContract.Assert(collection != null);
+
                 value = collection.First();
             }
             else
@@ -216,16 +216,14 @@ namespace Foundation.Collections.IndexableCollection
                 if (contains)
                 {
                     var succeeded = collection.Remove(item);
-#if CONTRACTS_FULL
-                    Contract.Assert(succeeded, "collection.Remove");
-#endif
+
+                    FoundationContract.Assert(succeeded, "collection.Remove");
 
                     if (collection.Count == 0)
                     {
                         succeeded = _dictionary.Remove(key);
-#if CONTRACTS_FULL
-                        Contract.Assert(succeeded, "dictionary.Remove");
-#endif
+
+                        FoundationContract.Assert(succeeded, "dictionary.Remove");
                     }
 
                     removed = true;
@@ -272,11 +270,9 @@ namespace Foundation.Collections.IndexableCollection
             IDictionary<TKey, ICollection<T>> dictionary,
             Func<ICollection<T>> createCollection)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(getKey != null);
             FoundationContract.Requires<ArgumentNullException>(dictionary != null);
             FoundationContract.Requires<ArgumentNullException>(createCollection != null);
-#endif
 
             Name = name;
             _getKey = getKey;

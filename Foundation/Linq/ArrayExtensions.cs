@@ -99,7 +99,7 @@ namespace Foundation.Linq
             if (array != null)
             {
 #if CONTRACTS_FULL
-                Contract.Assert(comparer != null);
+                FoundationContract.Assert(comparer != null);
 #endif
 
                 for (var i = 0; i < array.Length; i++)

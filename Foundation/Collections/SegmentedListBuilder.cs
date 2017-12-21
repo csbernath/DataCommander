@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
 {
@@ -23,9 +25,8 @@ namespace Foundation.Collections
         /// <param name="segmentItemCapacity"></param>
         public SegmentedListBuilder(int segmentItemCapacity)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentOutOfRangeException>(segmentItemCapacity > 0);
-#endif
+
             _segmentItemCapacity = segmentItemCapacity;
         }
 

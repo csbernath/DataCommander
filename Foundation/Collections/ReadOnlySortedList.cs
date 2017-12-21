@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Foundation.Diagnostics.Contracts;
+using Foundation.Linq;
 
 namespace Foundation.Collections
 {
@@ -31,14 +33,12 @@ namespace Foundation.Collections
             Func<TValue, TKey> keySelector,
             Comparison<TKey> comparison)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(values != null);
             FoundationContract.Requires<ArgumentNullException>(keySelector != null);
             FoundationContract.Requires<ArgumentNullException>(comparison != null);
             FoundationContract.Requires<ArgumentException>(
                 values.Select(keySelector).SelectPreviousAndCurrent().All(k => comparison(k.Previous, k.Current) < 0),
                 "keys must be unique and ordered");
-#endif
 
             _values = values;
             _keySelector = keySelector;

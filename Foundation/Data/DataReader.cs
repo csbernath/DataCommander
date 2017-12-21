@@ -129,8 +129,8 @@ namespace Foundation.Data
         public bool NextResult()
         {
 #if CONTRACTS_FULL
-            Contract.Assert(this.dataReader != null);
-            Contract.Assert(!this.nextResultCalled);
+            FoundationContract.Assert(this.dataReader != null);
+            FoundationContract.Assert(!this.nextResultCalled);
 #endif
 
             var nextResult = _dataReader.NextResult();

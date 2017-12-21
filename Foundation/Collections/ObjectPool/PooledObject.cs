@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.ObjectPool
 {
@@ -17,9 +18,7 @@ namespace Foundation.Collections.ObjectPool
         /// <param name="pool"></param>
         public PooledObject(ObjectPool<T> pool)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(pool != null);
-#endif
 
             _pool = pool;
             _item = pool.CreateObject(CancellationToken.None);

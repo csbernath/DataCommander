@@ -56,7 +56,7 @@ namespace Foundation.Data.TextData
         public TextDataParameter Add(TextDataParameter parameter)
         {
 #if CONTRACTS_FULL
-            Contract.Assert(parameter != null);
+            FoundationContract.Assert(parameter != null);
 #endif
 
             _collection.Add(parameter);
@@ -269,12 +269,12 @@ namespace Foundation.Data.TextData
         public TResult GetParameterValue<TResult>(string parameterName)
         {
 #if CONTRACTS_FULL
-            Contract.Assert(this.Contains(parameterName));
+            FoundationContract.Assert(this.Contains(parameterName));
 #endif
             var parameter = _nameIndex[parameterName];
             var value = parameter.Value;
 #if CONTRACTS_FULL
-            Contract.Assert(value is TResult);
+            FoundationContract.Assert(value is TResult);
 #endif
             return (TResult)value;
         }
@@ -295,7 +295,7 @@ namespace Foundation.Data.TextData
         int IList<TextDataParameter>.IndexOf(TextDataParameter item)
         {
 #if CONTRACTS_FULL
-            Contract.Assert(item != null);
+            FoundationContract.Assert(item != null);
 #endif
 
             return _listIndex.IndexOf(item);
@@ -326,7 +326,7 @@ namespace Foundation.Data.TextData
         void ICollection<TextDataParameter>.Add(TextDataParameter item)
         {
 #if CONTRACTS_FULL
-            Contract.Assert(item != null);
+            FoundationContract.Assert(item != null);
 #endif
             _collection.Add(item);
         }
@@ -353,7 +353,7 @@ namespace Foundation.Data.TextData
         bool ICollection<TextDataParameter>.Remove(TextDataParameter item)
         {
 #if CONTRACTS_FULL
-            Contract.Assert(item != null);
+            FoundationContract.Assert(item != null);
 #endif
             return _collection.Remove(item);
         }

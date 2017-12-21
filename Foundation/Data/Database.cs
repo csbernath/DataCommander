@@ -167,7 +167,7 @@ namespace Foundation.Data
             command.CommandText = commandText;
             var adapter = factory.CreateDataAdapter();
 #if CONTRACTS_FULL
-            Contract.Assert(adapter != null);
+            FoundationContract.Assert(adapter != null);
 #endif
             adapter.SelectCommand = command;
             var table = new DataTable();

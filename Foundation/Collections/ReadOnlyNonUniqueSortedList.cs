@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 
 namespace Foundation.Collections
@@ -35,14 +36,12 @@ namespace Foundation.Collections
             Func<TValue, TKey> keySelector,
             Comparison<TKey> comparison)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(values != null);
             FoundationContract.Requires<ArgumentNullException>(keySelector != null);
             FoundationContract.Requires<ArgumentNullException>(comparison != null);
             FoundationContract.Requires<ArgumentException>(
                 values.SelectPreviousAndCurrentKey(keySelector).All(key => comparison(key.Previous, key.Current) <= 0),
                 "keys must be ordered");
-#endif
 
             _values = values;
             _keySelector = keySelector;
@@ -83,9 +82,7 @@ namespace Foundation.Collections
         {
             get
             {
-#if CONTRACTS_FULL
-                Contract.Ensures(Contract.Result<IReadOnlyList<TValue>>() != null);
-#endif
+                FoundationContract.Ensures(Contract.Result<IReadOnlyList<TValue>>() != null);
 
                 IReadOnlyList<TValue> readOnlyList;
 

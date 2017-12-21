@@ -59,7 +59,7 @@ namespace Foundation.Data.TextData
                 }
 
 #if CONTRACTS_FULL
-                Contract.Assert(count == maxLength);
+                FoundationContract.Assert(count == maxLength);
 #endif
 
                 if (index == 0)
@@ -70,7 +70,7 @@ namespace Foundation.Data.TextData
                 var source = new string(buffer);
                 var converter = _converters[index];
 #if CONTRACTS_FULL
-                Contract.Assert(converter != null);
+                FoundationContract.Assert(converter != null);
 #endif
                 object value;
 

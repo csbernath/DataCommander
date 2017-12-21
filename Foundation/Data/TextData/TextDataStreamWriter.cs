@@ -38,8 +38,8 @@ namespace Foundation.Data.TextData
                 var column = Columns[i];
                 var valueString = converter.ToString(value, column);
 #if CONTRACTS_FULL
-                Contract.Assert(!string.IsNullOrEmpty(valueString));
-                Contract.Assert(column.MaxLength == valueString.Length);
+                FoundationContract.Assert(!string.IsNullOrEmpty(valueString));
+                FoundationContract.Assert(column.MaxLength == valueString.Length);
 #endif
                 _textWriter.Write(valueString);
             }
