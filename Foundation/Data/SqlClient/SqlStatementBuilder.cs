@@ -172,7 +172,7 @@ namespace Foundation.Data.SqlClient
             string value)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(commandText != null);
+            FoundationContract.Requires(commandText != null);
 #endif
             var s = value.ToTSqlNVarChar();
             commandText.Append(s);
@@ -190,7 +190,7 @@ namespace Foundation.Data.SqlClient
             SqlDbType sqlDbType)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(commandText != null);
+            FoundationContract.Requires(commandText != null);
 #endif
 
             var s = ToString(value, sqlDbType);

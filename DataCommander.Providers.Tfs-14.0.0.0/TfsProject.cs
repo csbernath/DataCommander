@@ -32,7 +32,7 @@
         internal static IEnumerable<ITreeNode> GetChildren( Item item )
 		{
 #if CONTRACTS_FULL
-            Contract.Requires(item != null);
+            FoundationContract.Requires(item != null);
 #endif
 			var itemSet = item.VersionControlServer.GetItems( item.ServerItem, RecursionType.OneLevel );
 			var folders = new List<ITreeNode>();

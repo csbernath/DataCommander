@@ -1035,7 +1035,7 @@ order by ic.index_column_id
         internal static List<InfoMessage> ToInfoMessages(SqlErrorCollection sqlErrors)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(sqlErrors != null);
+            FoundationContract.Requires<ArgumentNullException>(sqlErrors != null);
 #endif
             var now = LocalTime.Default.Now;
             var count = sqlErrors.Count;

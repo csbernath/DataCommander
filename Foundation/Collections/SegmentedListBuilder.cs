@@ -24,7 +24,7 @@ namespace Foundation.Collections
         public SegmentedListBuilder(int segmentItemCapacity)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentOutOfRangeException>(segmentItemCapacity > 0);
+            FoundationContract.Requires<ArgumentOutOfRangeException>(segmentItemCapacity > 0);
 #endif
             _segmentItemCapacity = segmentItemCapacity;
         }

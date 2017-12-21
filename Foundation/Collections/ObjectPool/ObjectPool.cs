@@ -37,9 +37,9 @@ namespace Foundation.Collections.ObjectPool
             int maxSize )
         {
 #if CONTRACTS_FULL
-            Contract.Requires(factory != null);
-            Contract.Requires(minSize >= 0);
-            Contract.Requires(minSize <= maxSize);
+            FoundationContract.Requires(factory != null);
+            FoundationContract.Requires(minSize >= 0);
+            FoundationContract.Requires(minSize <= maxSize);
 #endif
 
             _factory = factory;

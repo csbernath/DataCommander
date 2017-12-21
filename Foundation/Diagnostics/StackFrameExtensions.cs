@@ -8,7 +8,7 @@ namespace Foundation.Diagnostics
         public static string ToLogString(this StackFrame frame)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(frame != null);
+            FoundationContract.Requires<ArgumentNullException>(frame != null);
 #endif
 
             var stringBuilder = new StringBuilder();

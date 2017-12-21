@@ -27,7 +27,7 @@ namespace Foundation.IO
         public AsyncTextWriter(TextWriter textWriter)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(textWriter != null);
+            FoundationContract.Requires<ArgumentNullException>(textWriter != null);
 #endif
 
             _textWriter = textWriter;

@@ -47,7 +47,7 @@ namespace DataCommander.Providers.ResultWriter
             CancellationToken cancellationToken)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(destinationProvider.DbProviderFactory == SqlClientFactory.Instance);
+            FoundationContract.Requires(destinationProvider.DbProviderFactory == SqlClientFactory.Instance);
 #endif
             _destinationSqlConnection = (SqlConnection)destinationConnection.Connection;
 

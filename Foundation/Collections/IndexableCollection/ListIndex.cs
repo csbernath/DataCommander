@@ -17,7 +17,7 @@ namespace Foundation.Collections.IndexableCollection
         public ListIndex(string name)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(name != null);
+            FoundationContract.Requires<ArgumentNullException>(name != null);
 #endif
             Initialize(name, new List<T>());
         }
@@ -30,8 +30,8 @@ namespace Foundation.Collections.IndexableCollection
         public ListIndex(string name, IList<T> list)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(name != null);
-            Contract.Requires<ArgumentNullException>(list != null);
+            FoundationContract.Requires<ArgumentNullException>(name != null);
+            FoundationContract.Requires<ArgumentNullException>(list != null);
 #endif
             Initialize(name, list);
         }
@@ -180,8 +180,8 @@ namespace Foundation.Collections.IndexableCollection
         private void Initialize(string name, IList<T> list)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(name != null);
-            Contract.Requires<ArgumentNullException>(list != null);
+            FoundationContract.Requires<ArgumentNullException>(name != null);
+            FoundationContract.Requires<ArgumentNullException>(list != null);
 #endif
 
             Name = name;

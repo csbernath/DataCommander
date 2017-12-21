@@ -57,8 +57,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             DatabaseObjectMultipartName databaseObjectMultipartName)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(connection != null);
-            Contract.Requires(databaseObjectMultipartName != null);
+            FoundationContract.Requires(connection != null);
+            FoundationContract.Requires(databaseObjectMultipartName != null);
 #endif
 
             var commandText = string.Format(@"select  c.name

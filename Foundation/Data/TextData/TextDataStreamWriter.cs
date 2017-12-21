@@ -12,9 +12,9 @@ namespace Foundation.Data.TextData
         public TextDataStreamWriter(TextWriter textWriter, IList<TextDataColumn> columns, IList<ITextDataConverter> converters)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(textWriter != null);
-            Contract.Requires(columns != null);
-            Contract.Requires(converters != null);
+            FoundationContract.Requires(textWriter != null);
+            FoundationContract.Requires(columns != null);
+            FoundationContract.Requires(converters != null);
 #endif
 
             _textWriter = textWriter;
@@ -27,8 +27,8 @@ namespace Foundation.Data.TextData
         public void WriteRow(object[] values)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(values != null);
-            Contract.Requires(this.Columns.Count == values.Length);
+            FoundationContract.Requires(values != null);
+            FoundationContract.Requires(this.Columns.Count == values.Length);
 #endif
 
             for (var i = 0; i < values.Length; i++)

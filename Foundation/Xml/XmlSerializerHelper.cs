@@ -19,7 +19,7 @@ namespace Foundation.Xml
         public static object Deserialize( string xml, Type type )
         {
 #if CONTRACTS_FULL
-            Contract.Requires(type != null);
+            FoundationContract.Requires(type != null);
 #endif
 
             var stringReader = new StringReader( xml );
@@ -37,8 +37,8 @@ namespace Foundation.Xml
         public static object Deserialize( XmlReader xmlReader, Type type )
         {
 #if CONTRACTS_FULL
-            Contract.Requires(xmlReader != null);
-            Contract.Requires(type != null);
+            FoundationContract.Requires(xmlReader != null);
+            FoundationContract.Requires(type != null);
 #endif
 
             var xmlSerializer = new XmlSerializer( type );

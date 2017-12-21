@@ -40,7 +40,7 @@ namespace Foundation.Collections
         public void AddHead(T item)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentException>(this.Count < this.Capacity);
+            FoundationContract.Requires<ArgumentException>(this.Count < this.Capacity);
 #endif
 
             if (_head == -1)
@@ -89,7 +89,7 @@ namespace Foundation.Collections
         public void AddTail(IEnumerable<T> items)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(items != null);
+            FoundationContract.Requires<ArgumentNullException>(items != null);
 #endif
 
             foreach (var item in items)
@@ -105,7 +105,7 @@ namespace Foundation.Collections
         public T PeekHead()
         {
 #if CONTRACTS_FULL
-            Contract.Requires<InvalidOperationException>(this.Count > 0);
+            FoundationContract.Requires<InvalidOperationException>(this.Count > 0);
 #endif
             return _array[_head];
         }
@@ -117,7 +117,7 @@ namespace Foundation.Collections
         public T RemoveHead()
         {
 #if CONTRACTS_FULL
-            Contract.Requires<InvalidOperationException>(this.Count > 0);
+            FoundationContract.Requires<InvalidOperationException>(this.Count > 0);
 #endif
 
             var item = _array[_head];
@@ -135,7 +135,7 @@ namespace Foundation.Collections
         public T PeekTail()
         {
 #if CONTRACTS_FULL
-            Contract.Requires<InvalidOperationException>(this.Count > 0);
+            FoundationContract.Requires<InvalidOperationException>(this.Count > 0);
 #endif
 
             return _array[_tail];
@@ -148,7 +148,7 @@ namespace Foundation.Collections
         public T RemoveTail()
         {
 #if CONTRACTS_FULL
-            Contract.Requires<InvalidOperationException>(this.Count > 0);
+            FoundationContract.Requires<InvalidOperationException>(this.Count > 0);
 #endif
 
             var item = _array[_tail];
@@ -165,7 +165,7 @@ namespace Foundation.Collections
         public void SetCapacity(int capacity)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<InvalidOperationException>(capacity >= this.Count);
+            FoundationContract.Requires<InvalidOperationException>(capacity >= this.Count);
 #endif
 
             var target = new T[capacity];

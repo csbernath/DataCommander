@@ -18,7 +18,7 @@ namespace Foundation.Data
         public DbTransactionScope(IDbConnection connection, IDbTransaction transaction)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(connection != null);
+            FoundationContract.Requires<ArgumentNullException>(connection != null);
 #endif
             _connection = connection;
             _transaction = transaction;

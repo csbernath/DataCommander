@@ -19,7 +19,7 @@ namespace Foundation.Xml
         public static string SerializeToXmlString(this XmlSerializer xmlSerializer, XmlWriterSettings xmlWriterSettings, object o)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(xmlSerializer != null);
+            FoundationContract.Requires<ArgumentNullException>(xmlSerializer != null);
 #endif
 
             var sb = new StringBuilder();

@@ -25,7 +25,7 @@ namespace Foundation.Data.SqlClient
         public static ConfigurationAttributeCollection GetProperties( string name, IDbConnection connection )
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(connection != null);
+            FoundationContract.Requires<ArgumentNullException>(connection != null);
 #endif
 
             var properties = new ConfigurationAttributeCollection { Name = name };

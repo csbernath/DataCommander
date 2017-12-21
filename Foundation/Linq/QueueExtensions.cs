@@ -16,8 +16,8 @@ namespace Foundation.Linq
         public static T DequeueTail<T>(this Queue<T> queue)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(queue != null);
-            Contract.Requires<ArgumentException>(queue.Count > 0);
+            FoundationContract.Requires<ArgumentNullException>(queue != null);
+            FoundationContract.Requires<ArgumentException>(queue.Count > 0);
 #endif
 
             var array = new T[queue.Count];

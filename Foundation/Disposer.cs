@@ -17,7 +17,7 @@ namespace Foundation
         public Disposer(Action dispose)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dispose != null);
+            FoundationContract.Requires<ArgumentNullException>(dispose != null);
 #endif
 
             this.dispose = dispose;

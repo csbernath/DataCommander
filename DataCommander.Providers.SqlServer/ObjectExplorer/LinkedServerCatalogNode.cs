@@ -11,7 +11,7 @@
         public LinkedServerCatalogNode(LinkedServerNode linkedServer, string name)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(linkedServer != null);
+            FoundationContract.Requires(linkedServer != null);
 #endif
             _name = name;
         }

@@ -14,7 +14,7 @@ namespace Foundation.Log
         public FoundationLog(FoundationLogFactory applicationLog, string name)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(applicationLog != null);
+            FoundationContract.Requires<ArgumentNullException>(applicationLog != null);
 #endif
 
             _applicationLog = applicationLog;

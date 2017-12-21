@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.Connection
+﻿using Foundation.Diagnostics.Contracts;
+
+namespace DataCommander.Providers.Connection
 {
     using System;
     using System.Collections.Generic;
@@ -57,9 +59,7 @@
         {
             get
             {
-#if CONTRACTS_FULL
-                Contract.Assert(this.Connection != null);
-#endif
+                FoundationContract.Assert(this.Connection != null);
                 return Connection.State;
             }
         }

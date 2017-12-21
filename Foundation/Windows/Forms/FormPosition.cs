@@ -43,8 +43,8 @@ namespace Foundation.Windows.Forms
             Form form )
         {
 #if CONTRACTS_FULL
-            Contract.Requires(applicationData != null);
-            Contract.Requires(form != null);
+            FoundationContract.Requires(applicationData != null);
+            FoundationContract.Requires(form != null);
 #endif
 
             var type = form.GetType();

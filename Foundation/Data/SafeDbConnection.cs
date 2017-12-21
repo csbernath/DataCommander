@@ -37,8 +37,8 @@ namespace Foundation.Data
             ISafeDbConnection safeDbConnection)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(connection != null);
-            Contract.Requires<ArgumentNullException>(safeDbConnection != null);
+            FoundationContract.Requires<ArgumentNullException>(connection != null);
+            FoundationContract.Requires<ArgumentNullException>(safeDbConnection != null);
 #endif
 
             Connection = connection;
@@ -180,7 +180,7 @@ namespace Foundation.Data
         internal IDataReader ExecuteReader(IDbCommand command, CommandBehavior behavior)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(command != null);
+            FoundationContract.Requires<ArgumentNullException>(command != null);
 #endif
 
             if (Connection.State != ConnectionState.Open)
@@ -241,7 +241,7 @@ namespace Foundation.Data
         internal object ExecuteScalar(IDbCommand command)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(command != null);
+            FoundationContract.Requires<ArgumentNullException>(command != null);
 #endif
 
             object scalar = null;

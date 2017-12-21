@@ -19,7 +19,7 @@ namespace Foundation.Data
         public static string ToStringTableString(this DataTable dataTable)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dataTable != null);
+            FoundationContract.Requires<ArgumentNullException>(dataTable != null);
 #endif
 
             var rows = dataTable.AsEnumerable().Where(dataRow => dataRow.RowState != DataRowState.Deleted);

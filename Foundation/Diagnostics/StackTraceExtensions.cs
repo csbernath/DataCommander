@@ -20,7 +20,7 @@ namespace Foundation.Diagnostics
         public static string ToLogString(this StackTrace trace)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(trace != null);
+            FoundationContract.Requires<ArgumentNullException>(trace != null);
 #endif
 
             var stringBuilder = new StringBuilder();

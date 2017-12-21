@@ -22,7 +22,7 @@ namespace Foundation.IO
         public SegmentedStreamReader(Stream stream, long length)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(stream != null);
+            FoundationContract.Requires<ArgumentNullException>(stream != null);
 #endif
 
             _stream = stream;

@@ -23,7 +23,7 @@ namespace Foundation.Management
             Func<ManagementObject, T> selector)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(managementScope != null);
+            FoundationContract.Requires<ArgumentNullException>(managementScope != null);
 #endif
 
             var objectQuery = new ObjectQuery(query);

@@ -17,8 +17,8 @@ namespace Foundation.Data.TextData
         public TextDataRow(TextDataColumnCollection columns, Convert convert)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(columns != null);
-            Contract.Requires(convert != null);
+            FoundationContract.Requires(columns != null);
+            FoundationContract.Requires(convert != null);
 #endif
 
             Columns = columns;

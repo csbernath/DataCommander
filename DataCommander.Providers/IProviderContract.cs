@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Xml;
 using DataCommander.Providers.Connection;
 using Foundation.Data;
+using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers
 {
@@ -30,40 +31,34 @@ namespace DataCommander.Providers
 
         void IProvider.DeriveParameters(IDbCommand command)
         {
-#if CONTRACTS_FULL
-            Contract.Requires(command != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(command != null);
         }
 
         DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
         {
-#if CONTRACTS_FULL
-            Contract.Requires(parameter != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(parameter != null);
+
             return null;
         }
 
         DataTable IProvider.GetParameterTable(IDataParameterCollection parameters)
         {
-#if CONTRACTS_FULL
-            Contract.Requires(parameters != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(parameters != null);
+
             return null;
         }
 
         XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
         {
-#if CONTRACTS_FULL
-            Contract.Requires(command != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(command != null);
+
             return null;
         }
 
         DataTable IProvider.GetSchemaTable(IDataReader dataReader)
         {
-#if CONTRACTS_FULL
-            Contract.Requires(dataReader != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(dataReader != null);
+
             return null;
         }
 
@@ -74,17 +69,15 @@ namespace DataCommander.Providers
 
         Type IProvider.GetColumnType(DbColumn dataColumnSchema)
         {
-#if CONTRACTS_FULL
-            Contract.Requires(dataColumnSchema != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(dataColumnSchema != null);
+
             return null;
         }
 
         IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
         {
-#if CONTRACTS_FULL
-            Contract.Requires(dataReader != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(dataReader != null);
+
             return null;
         }
 
@@ -97,9 +90,8 @@ namespace DataCommander.Providers
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {
-#if CONTRACTS_FULL
-            Contract.Requires(connection != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(connection != null);
+
             return null;
         }
 
@@ -109,9 +101,8 @@ namespace DataCommander.Providers
 
         string IProvider.GetExceptionMessage(Exception exception)
         {
-#if CONTRACTS_FULL
-            Contract.Requires(exception != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(exception != null);
+
             return null;
         }
 
@@ -129,9 +120,8 @@ namespace DataCommander.Providers
             string destinationTableName,
             out IDbCommand insertCommand, out Converter<object, object>[] converters)
         {
-#if CONTRACTS_FULL
-            Contract.Ensures(Contract.ValueAtReturn(out insertCommand) != null);
-#endif
+            //FoundationContract.Ensures(Contract.ValueAtReturn(out insertCommand) != null);
+
             insertCommand = null;
             converters = null;
         }

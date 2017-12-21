@@ -15,7 +15,7 @@ namespace DataCommander.Foundation.Threading.Tasks
 
         internal CancellationToken( CancellationTokenSource source )
         {
-            Contract.Requires<ArgumentNullException>( source != null );
+            FoundationContract.Requires<ArgumentNullException>( source != null );
             this.source = source;
         }
 

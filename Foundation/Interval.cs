@@ -31,7 +31,7 @@
 //        /// <param name="right"></param>
 //        public Interval(T left, T right)
 //        {
-//            //Contract.Requires<ArgumentException>(IntervalRelation.IsValid(left, right));
+//            //FoundationContract.Requires<ArgumentException>(IntervalRelation.IsValid(left, right));
 
 //            this.Left = left;
 //            this.Right = right;

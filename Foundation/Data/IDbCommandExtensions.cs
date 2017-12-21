@@ -30,7 +30,7 @@ namespace Foundation.Data
         public static void AddParameterIfNotNull(this IDbCommand command, string parameterName, object value)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(command != null);
+            FoundationContract.Requires(command != null);
 #endif
 
             if (value != null)
@@ -65,7 +65,7 @@ namespace Foundation.Data
         public static DataTable ExecuteDataTable(this IDbCommand command, CancellationToken cancellationToken)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(command != null);
+            FoundationContract.Requires<ArgumentNullException>(command != null);
 #endif
 
             var dataTable = new DataTable
@@ -86,7 +86,7 @@ namespace Foundation.Data
         public static T ExecuteScalarValue<T>(this IDbCommand command)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(command != null);
+            FoundationContract.Requires<ArgumentNullException>(command != null);
 #endif
 
             var scalar = command.ExecuteScalar();
@@ -106,7 +106,7 @@ namespace Foundation.Data
         public static T ExecuteScalarValueOrDefault<T>(this IDbCommand command)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(command != null);
+            FoundationContract.Requires<ArgumentNullException>(command != null);
 #endif
 
             var scalar = command.ExecuteScalar();
@@ -126,8 +126,8 @@ namespace Foundation.Data
             CancellationToken cancellationToken)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(command != null);
-            Contract.Requires<ArgumentNullException>(dataSet != null);
+            FoundationContract.Requires<ArgumentNullException>(command != null);
+            FoundationContract.Requires<ArgumentNullException>(dataSet != null);
 #endif
 
             var rowCount = 0;
@@ -205,7 +205,7 @@ namespace Foundation.Data
             CancellationToken cancellationToken)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(command != null);
+            FoundationContract.Requires<ArgumentNullException>(command != null);
 #endif
 
             var rowCount = 0;
@@ -243,7 +243,7 @@ namespace Foundation.Data
         public static string ToLogString(this IDbCommand command)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(command != null);
+            FoundationContract.Requires<ArgumentNullException>(command != null);
 #endif
 
             var sb = new StringBuilder();

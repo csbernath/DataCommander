@@ -25,7 +25,7 @@ namespace Foundation.Data.SqlClient
         public static void AddStructured(this SqlParameterCollection parameters, string parameterName, IEnumerable<SqlDataRecord> sqlDataRecords)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(parameters != null);
+            FoundationContract.Requires(parameters != null);
 #endif
 
             var parameter = new SqlParameter(parameterName, SqlDbType.Structured);
@@ -46,7 +46,7 @@ namespace Foundation.Data.SqlClient
         public static string ToLogString(this SqlParameterCollection parameters)
         {
 #if CONTRACTS_FULL
-            Contract.Requires( parameters != null );
+            FoundationContract.Requires( parameters != null );
 #endif
 
             var sb = new StringBuilder();

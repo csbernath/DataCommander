@@ -16,7 +16,7 @@ namespace Foundation.Data.SqlClient
         public static string ToLogString(this SqlError error)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(error != null);
+            FoundationContract.Requires<ArgumentNullException>(error != null);
 #endif
 
             var sb = new StringBuilder();

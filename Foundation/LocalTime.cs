@@ -21,8 +21,8 @@ namespace Foundation
         public LocalTime(int increment, int adjustment)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentOutOfRangeException>(increment >= 0);
-            Contract.Requires<ArgumentOutOfRangeException>(increment <= adjustment);
+            FoundationContract.Requires<ArgumentOutOfRangeException>(increment >= 0);
+            FoundationContract.Requires<ArgumentOutOfRangeException>(increment <= adjustment);
 #endif
 
             _increment = increment;

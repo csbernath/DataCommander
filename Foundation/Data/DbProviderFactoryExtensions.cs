@@ -25,8 +25,8 @@ namespace Foundation.Data
             string commandText)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(factory != null);
-            Contract.Requires<ArgumentNullException>(connection != null);
+            FoundationContract.Requires<ArgumentNullException>(factory != null);
+            FoundationContract.Requires<ArgumentNullException>(connection != null);
 #endif
 
             var command = connection.CreateCommand();
@@ -59,9 +59,9 @@ namespace Foundation.Data
             Func<IDataRecord, T> read)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dbProviderFactory != null);
-            Contract.Requires<ArgumentNullException>(commandDefinition != null);
-            Contract.Requires<ArgumentNullException>(read != null);
+            FoundationContract.Requires<ArgumentNullException>(dbProviderFactory != null);
+            FoundationContract.Requires<ArgumentNullException>(commandDefinition != null);
+            FoundationContract.Requires<ArgumentNullException>(read != null);
 #endif
 
             using (var connection = dbProviderFactory.CreateConnection())

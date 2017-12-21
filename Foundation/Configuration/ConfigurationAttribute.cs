@@ -52,7 +52,7 @@ namespace Foundation.Configuration
         public T GetValue<T>()
         {
 #if CONTRACTS_FULL
-            Contract.Requires((this.Value == null && typeof (T).IsClass) || this.Value is T);
+            FoundationContract.Requires((this.Value == null && typeof (T).IsClass) || this.Value is T);
 #endif
 
             var value = (T)Value;
@@ -198,7 +198,7 @@ namespace Foundation.Configuration
             public static XmlElement Serialize(object obj)
             {
 #if CONTRACTS_FULL
-                Contract.Requires<ArgumentNullException>(obj != null);
+                FoundationContract.Requires<ArgumentNullException>(obj != null);
 #endif
 
                 var type = obj.GetType();

@@ -12,7 +12,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         public SecurityNode(ServerNode serverNode)
         {
 #if CONTRACTS_FULL
-            Contract.Requires( serverNode != null );
+            FoundationContract.Requires( serverNode != null );
 #endif
             _server = serverNode;
         }

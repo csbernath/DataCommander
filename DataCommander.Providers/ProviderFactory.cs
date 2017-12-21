@@ -32,7 +32,7 @@ namespace DataCommander.Providers
         public static IProvider CreateProvider(string name)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(name != null);
+            FoundationContract.Requires<ArgumentNullException>(name != null);
             Contract.Ensures(Contract.Result<IProvider>() != null);
 #endif
 

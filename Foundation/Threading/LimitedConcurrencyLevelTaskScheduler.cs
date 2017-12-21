@@ -36,8 +36,8 @@ namespace Foundation.Threading
         /// <param name="queue"></param>
         public LimitedConcurrencyLevelTaskScheduler( string name, int maximumConcurrencyLevel, IProducerConsumerCollection<Action> queue )
         {
-            Contract.Requires( maximumConcurrencyLevel >= 0 );
-            Contract.Requires( queue != null );
+            FoundationContract.Requires( maximumConcurrencyLevel >= 0 );
+            FoundationContract.Requires( queue != null );
 
             this.name = name;
             this.queue = queue;
@@ -56,7 +56,7 @@ namespace Foundation.Threading
 
             set
             {
-                Contract.Requires( value >= 0 );
+                FoundationContract.Requires( value >= 0 );
                 this.maximumConcurrencyLevel = value;
             }
         }

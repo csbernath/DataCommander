@@ -18,7 +18,7 @@ namespace Foundation.Data
         public static T GetValue<T>(this DataRow dataRow, string name)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dataRow != null);
+            FoundationContract.Requires<ArgumentNullException>(dataRow != null);
 #endif
             var valueObject = dataRow[name];
 #if CONTRACTS_FULL
@@ -42,7 +42,7 @@ namespace Foundation.Data
             T outputNullValue)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dataRow != null);
+            FoundationContract.Requires<ArgumentNullException>(dataRow != null);
 #endif
             var valueObject = dataRow[name];
             return Database.GetValue(valueObject, outputNullValue);
@@ -58,7 +58,7 @@ namespace Foundation.Data
         public static T GetValueOrDefault<T>(this DataRow dataRow, int columnIndex)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dataRow != null);
+            FoundationContract.Requires<ArgumentNullException>(dataRow != null);
 #endif
             var value = dataRow[columnIndex];
             return Database.GetValueOrDefault<T>(value);
@@ -74,7 +74,7 @@ namespace Foundation.Data
         public static T GetValueOrDefault<T>(this DataRow dataRow, string name)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dataRow != null);
+            FoundationContract.Requires<ArgumentNullException>(dataRow != null);
 #endif
             var value = dataRow[name];
             return Database.GetValueOrDefault<T>(value);
@@ -88,7 +88,7 @@ namespace Foundation.Data
         public static StringTable ToStringTable(this DataRow dataRow)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dataRow != null);
+            FoundationContract.Requires<ArgumentNullException>(dataRow != null);
 #endif
             var stringTable = new StringTable(2);
             var dataTable = dataRow.Table;

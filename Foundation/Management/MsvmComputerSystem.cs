@@ -21,7 +21,7 @@ namespace Foundation.Management
         public MsvmComputerSystem(ManagementObject managementObject)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(managementObject != null);
+            FoundationContract.Requires<ArgumentNullException>(managementObject != null);
 #endif
 
             _managementObject = managementObject;
@@ -36,7 +36,7 @@ namespace Foundation.Management
         public static MsvmComputerSystem GetByName(ManagementScope managementScope, string name)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(managementScope != null);
+            FoundationContract.Requires(managementScope != null);
 #endif
 
             var query = $"SELECT * FROM Msvm_ComputerSystem WHERE Name='{name}'";
@@ -67,7 +67,7 @@ namespace Foundation.Management
         public static List<MsvmComputerSystem> GetByElementName(ManagementScope managementScope, string elementName)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(managementScope != null);
+            FoundationContract.Requires(managementScope != null);
 #endif
 
             var query = $"SELECT * FROM Msvm_ComputerSystem WHERE ElementName='{elementName}'";
@@ -85,8 +85,8 @@ namespace Foundation.Management
             IEnumerable<string> elementNames)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(managementScope != null);
-            Contract.Requires(elementNames != null);
+            FoundationContract.Requires(managementScope != null);
+            FoundationContract.Requires(elementNames != null);
 #endif
 
             var sb = new StringBuilder();

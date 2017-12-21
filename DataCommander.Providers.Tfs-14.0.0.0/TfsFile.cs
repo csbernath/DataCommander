@@ -17,7 +17,7 @@ namespace DataCommander.Providers.Tfs
         public TfsFile(Item item)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(item != null);
+            FoundationContract.Requires(item != null);
 #endif
             this.item = item;
         }

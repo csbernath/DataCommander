@@ -32,8 +32,8 @@ namespace Foundation.Configuration
         public void Save(XmlWriter xmlWriter, string sectionName)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(xmlWriter != null);
-            Contract.Requires<ArgumentNullException>(sectionName != null);
+            FoundationContract.Requires<ArgumentNullException>(xmlWriter != null);
+            FoundationContract.Requires<ArgumentNullException>(sectionName != null);
 #endif
 
             xmlWriter.WriteStartElement(sectionName);

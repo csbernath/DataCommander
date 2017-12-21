@@ -69,7 +69,7 @@ namespace Foundation.Configuration
             get
             {
 #if CONTRACTS_FULL
-                Contract.Requires(this.ContainsKey(name));
+                FoundationContract.Requires(this.ContainsKey(name));
 #endif
 
                 return _nameIndex[name];
@@ -90,7 +90,7 @@ namespace Foundation.Configuration
         public void Add(string name, object value, string description)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(!this.ContainsKey(name));
+            FoundationContract.Requires(!this.ContainsKey(name));
 #endif
             var attribute = new ConfigurationAttribute(name, value, description);
             _collection.Add(attribute);

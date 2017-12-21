@@ -56,8 +56,8 @@ namespace Foundation.Text
         public static unsafe void SetChar(string s, int index, char ch)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(index >= 0);
-            Contract.Requires(index < s.Length);
+            FoundationContract.Requires(index >= 0);
+            FoundationContract.Requires(index < s.Length);
 #endif
 
             fixed (char* p = s)
@@ -110,8 +110,8 @@ namespace Foundation.Text
             params object[] parameters)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(textWriter != null);
-            Contract.Requires(obj != null);
+            FoundationContract.Requires(textWriter != null);
+            FoundationContract.Requires(obj != null);
 #endif
 
             var type = obj.GetType();

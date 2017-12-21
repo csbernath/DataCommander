@@ -17,7 +17,7 @@ namespace Foundation.Data
         public static string ToStringTableString(this DataView dataView)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dataView != null);
+            FoundationContract.Requires<ArgumentNullException>(dataView != null);
 #endif
 
             var rows = dataView.Cast<DataRowView>().Select((dataRowView, rowIndex) => dataRowView.Row);

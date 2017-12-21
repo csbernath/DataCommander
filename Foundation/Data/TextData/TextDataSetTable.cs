@@ -14,7 +14,7 @@
         public TextDataSetTable( string name, int rowCount, TextDataTable table )
         {
 #if CONTRACTS_FULL
-            Contract.Requires(rowCount >= 0);
+            FoundationContract.Requires(rowCount >= 0);
 #endif
 
             Name = name;

@@ -36,7 +36,7 @@ namespace Foundation.Configuration
         public NameValueCollectionReader(TryGetValue<string, string> tryGetValue)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(tryGetValue != null);
+            FoundationContract.Requires(tryGetValue != null);
 #endif
             _tryGetValue = tryGetValue;
         }
@@ -338,7 +338,7 @@ namespace Foundation.Configuration
         public bool TryGetValue<T>(string name, TryParse<T> tryParse, out T value)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(tryParse != null);
+            FoundationContract.Requires(tryParse != null);
 #endif
             string s;
             var contains = _tryGetValue(name, out s);

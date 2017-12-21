@@ -15,7 +15,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         public SystemDatabaseCollectionNode(DatabaseCollectionNode databaseCollectionNode)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(databaseCollectionNode != null);
+            FoundationContract.Requires(databaseCollectionNode != null);
 #endif
             _databaseCollectionNode = databaseCollectionNode;
         }

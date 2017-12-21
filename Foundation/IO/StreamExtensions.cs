@@ -29,9 +29,9 @@ namespace DataCommander.Foundation.IO
         /// <param name="bufferSize"></param>
         public static void CopyTo( this Stream inputStream, Stream outputStream, int bufferSize )
         {
-            Contract.Requires<ArgumentNullException>( inputStream != null );
-            Contract.Requires<ArgumentNullException>( outputStream != null );
-            Contract.Requires<ArgumentOutOfRangeException>( bufferSize > 0 );
+            FoundationContract.Requires<ArgumentNullException>( inputStream != null );
+            FoundationContract.Requires<ArgumentNullException>( outputStream != null );
+            FoundationContract.Requires<ArgumentOutOfRangeException>( bufferSize > 0 );
 
             var buffer = new byte[bufferSize];
 

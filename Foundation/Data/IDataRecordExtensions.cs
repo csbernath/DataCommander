@@ -18,7 +18,7 @@ namespace Foundation.Data
         public static bool? GetNullableBoolean(this IDataRecord dataRecord, int columnIndex)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dataRecord != null);
+            FoundationContract.Requires<ArgumentNullException>(dataRecord != null);
 #endif
 
             return dataRecord.IsDBNull(columnIndex)
@@ -35,7 +35,7 @@ namespace Foundation.Data
         public static DateTime? GetNullableDateTime(this IDataRecord dataRecord, int columnIndex)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dataRecord != null);
+            FoundationContract.Requires<ArgumentNullException>(dataRecord != null);
 #endif
 
             return dataRecord.IsDBNull(columnIndex)
@@ -52,7 +52,7 @@ namespace Foundation.Data
         public static decimal? GetNullableDecimal(this IDataRecord dataRecord, int columnIndex)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dataRecord != null);
+            FoundationContract.Requires<ArgumentNullException>(dataRecord != null);
 #endif
 
             return dataRecord.IsDBNull(columnIndex)
@@ -84,7 +84,7 @@ namespace Foundation.Data
         public static short? GetNullableInt16(this IDataRecord dataRecord, int columnIndex)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dataRecord != null);
+            FoundationContract.Requires<ArgumentNullException>(dataRecord != null);
 #endif
 
             return dataRecord.IsDBNull(columnIndex)
@@ -101,7 +101,7 @@ namespace Foundation.Data
         public static int? GetNullableInt32(this IDataRecord dataRecord, int columnIndex)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dataRecord != null);
+            FoundationContract.Requires<ArgumentNullException>(dataRecord != null);
 #endif
 
             return dataRecord.IsDBNull(columnIndex)

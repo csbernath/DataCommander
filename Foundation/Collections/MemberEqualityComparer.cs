@@ -30,8 +30,8 @@ namespace Foundation.Collections
         public MemberEqualityComparer(Func<T, T1> get, IEqualityComparer<T1> equalityComparer)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(get != null);
-            Contract.Requires<ArgumentNullException>(equalityComparer != null);
+            FoundationContract.Requires<ArgumentNullException>(get != null);
+            FoundationContract.Requires<ArgumentNullException>(equalityComparer != null);
 #endif
 
             _get = get;

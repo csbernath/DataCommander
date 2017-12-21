@@ -29,7 +29,7 @@ namespace Foundation.Data.TextData
         internal TextDataReader( TextDataCommand command, CommandBehavior behavior )
         {
 #if CONTRACTS_FULL
-            Contract.Requires(command != null);
+            FoundationContract.Requires(command != null);
 #endif
 
             _command = command;

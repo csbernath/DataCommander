@@ -18,7 +18,7 @@ namespace DataCommander.Foundation
         /// <returns></returns>
         public static bool Equality<T>( IComparable<T> arg1, T arg2 )
         {
-            Contract.Requires( arg1 != null );
+            FoundationContract.Requires( arg1 != null );
 
             return arg1.CompareTo( arg2 ) == 0;
         }
@@ -32,7 +32,7 @@ namespace DataCommander.Foundation
         /// <returns></returns>
         public static bool GreaterThan<T>( IComparable<T> arg1, T arg2 )
         {
-            Contract.Requires( arg1 != null );
+            FoundationContract.Requires( arg1 != null );
 
             return arg1.CompareTo( arg2 ) > 0;
         }
@@ -46,7 +46,7 @@ namespace DataCommander.Foundation
         /// <returns></returns>
         public static bool GreaterThanOrEqual<T>( IComparable<T> arg1, T arg2 )
         {
-            Contract.Requires( arg1 != null );
+            FoundationContract.Requires( arg1 != null );
 
             return arg1.CompareTo( arg2 ) >= 0;
         }
@@ -60,7 +60,7 @@ namespace DataCommander.Foundation
         /// <returns></returns>
         public static bool Inequality<T>( IComparable<T> arg1, T arg2 )
         {
-            Contract.Requires( arg1 != null );
+            FoundationContract.Requires( arg1 != null );
 
             return arg1.CompareTo( arg2 ) != 0;
         }
@@ -74,7 +74,7 @@ namespace DataCommander.Foundation
         /// <returns></returns>
         public static bool LessThan<T>( IComparable<T> arg1, T arg2 )
         {
-            Contract.Requires( arg1 != null );
+            FoundationContract.Requires( arg1 != null );
             return arg1.CompareTo( arg2 ) < 0;
         }
 
@@ -87,7 +87,7 @@ namespace DataCommander.Foundation
         /// <returns></returns>
         public static bool LessThanOrEqual<T>( IComparable<T> arg1, T arg2 )
         {
-            Contract.Requires( arg1 != null );
+            FoundationContract.Requires( arg1 != null );
 
             return arg1.CompareTo( arg2 ) <= 0;
         }

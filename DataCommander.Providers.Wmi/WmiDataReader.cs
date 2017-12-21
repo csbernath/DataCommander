@@ -16,7 +16,7 @@
         public WmiDataReader(WmiCommand command)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(command != null);
+            FoundationContract.Requires(command != null);
 #endif
 
             this.command = command;

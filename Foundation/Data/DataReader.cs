@@ -20,8 +20,8 @@ namespace Foundation.Data
         private DataReader(IDbCommand command, IDataReader dataReader)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(command != null);
-            Contract.Requires<ArgumentNullException>(dataReader != null);
+            FoundationContract.Requires<ArgumentNullException>(command != null);
+            FoundationContract.Requires<ArgumentNullException>(dataReader != null);
 #endif
 
             _command = command;
@@ -34,8 +34,8 @@ namespace Foundation.Data
             CommandBehavior commandBehavior)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(transactionScope != null);
-            Contract.Requires<ArgumentNullException>(commandDefinition != null);
+            FoundationContract.Requires<ArgumentNullException>(transactionScope != null);
+            FoundationContract.Requires<ArgumentNullException>(commandDefinition != null);
 #endif
 
             IDbCommand command = null;
@@ -74,7 +74,7 @@ namespace Foundation.Data
         public IEnumerable<T> Read<T>(Func<IDataRecord, T> read)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(read != null);
+            FoundationContract.Requires<ArgumentNullException>(read != null);
 #endif
             PrivateNextResult();
 
@@ -91,7 +91,7 @@ namespace Foundation.Data
         public void Read(Action<IDataRecord> read)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(read != null);
+            FoundationContract.Requires<ArgumentNullException>(read != null);
 #endif
             PrivateNextResult();
 
@@ -108,7 +108,7 @@ namespace Foundation.Data
         public void Read(Func<IDataRecord, bool> read)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(read != null);
+            FoundationContract.Requires<ArgumentNullException>(read != null);
 #endif
             PrivateNextResult();
 

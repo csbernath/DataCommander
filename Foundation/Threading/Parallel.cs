@@ -47,8 +47,8 @@ namespace DataCommander.Foundation.Threading
 
             public Invoker( Action[] actions )
             {
-                Contract.Requires<ArgumentNullException>( actions != null );
-                Contract.Requires<ArgumentNullException>( Contract.ForAll( actions, action => action != null ) );
+                FoundationContract.Requires<ArgumentNullException>( actions != null );
+                FoundationContract.Requires<ArgumentNullException>( Contract.ForAll( actions, action => action != null ) );
                 this.actions = actions;
             }
 

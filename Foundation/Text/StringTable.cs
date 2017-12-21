@@ -16,7 +16,7 @@ namespace Foundation.Text
         public StringTable(int columnCount)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentOutOfRangeException>(columnCount >= 0);
+            FoundationContract.Requires<ArgumentOutOfRangeException>(columnCount >= 0);
 #endif
 
             for (var i = 0; i < columnCount; i++)
@@ -109,7 +109,7 @@ namespace Foundation.Text
         public string ToString(IReadOnlyList<int> columnWidths, string columnSeparator)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(columnWidths != null);
+            FoundationContract.Requires<ArgumentNullException>(columnWidths != null);
 #endif
 
             var stringBuilder = new StringBuilder();
@@ -135,9 +135,9 @@ namespace Foundation.Text
             StringBuilder stringBuilder)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(row != null);
-            Contract.Requires<ArgumentNullException>(columnWidths != null);
-            Contract.Requires<ArgumentNullException>(stringBuilder != null);
+            FoundationContract.Requires<ArgumentNullException>(row != null);
+            FoundationContract.Requires<ArgumentNullException>(columnWidths != null);
+            FoundationContract.Requires<ArgumentNullException>(stringBuilder != null);
 #endif
 
             var last = Columns.Count - 1;

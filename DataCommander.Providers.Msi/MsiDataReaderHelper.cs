@@ -10,7 +10,7 @@
         public MsiDataReaderHelper( MsiDataReader dataReader )
         {
 #if CONTRACTS_FULL
-            Contract.Requires( dataReader != null );
+            FoundationContract.Requires( dataReader != null );
 #endif
             var view = dataReader.View;
             var index = 0;

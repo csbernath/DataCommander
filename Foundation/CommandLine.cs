@@ -21,7 +21,7 @@ namespace Foundation
         public CommandLine(string commandLine)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(commandLine != null);
+            FoundationContract.Requires<ArgumentNullException>(commandLine != null);
 #endif
 
             this.arguments = new IndexableCollection<CommandLineArgument>(ListIndex);

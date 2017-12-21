@@ -78,7 +78,7 @@ namespace Foundation.Linq
         public static bool In<T>(this T item, params T[] collection)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(collection != null);
+            FoundationContract.Requires<ArgumentNullException>(collection != null);
 #endif
             return collection.Contains(item);
         }

@@ -17,7 +17,7 @@ namespace Foundation.Windows.Forms
         public CursorManager(Cursor cursor)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(cursor != null);
+            FoundationContract.Requires<ArgumentNullException>(cursor != null);
 #endif
 
             originalCursor = Cursor.Current;

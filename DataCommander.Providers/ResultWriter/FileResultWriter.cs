@@ -16,7 +16,7 @@
         public FileResultWriter(TextWriter messageWriter)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(messageWriter != null);
+            FoundationContract.Requires(messageWriter != null);
 #endif
 
             _messageWriter = messageWriter;

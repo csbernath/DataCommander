@@ -328,9 +328,9 @@ namespace Foundation.Collections.IndexableCollection
         private void Initialize(string name, Func<T, GetKeyResponse<TKey>> getKey, IDictionary<TKey, T> dictionary)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(name != null);
-            Contract.Requires<ArgumentNullException>(getKey != null);
-            Contract.Requires<ArgumentNullException>(dictionary != null);
+            FoundationContract.Requires<ArgumentNullException>(name != null);
+            FoundationContract.Requires<ArgumentNullException>(getKey != null);
+            FoundationContract.Requires<ArgumentNullException>(dictionary != null);
 #endif
 
             Name = name;

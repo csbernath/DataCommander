@@ -19,7 +19,7 @@ namespace Foundation.IO
         public StringBuilderReader(StringBuilder stringBuilder)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(stringBuilder != null);
+            FoundationContract.Requires<ArgumentNullException>(stringBuilder != null);
 #endif
 
             _stringBuilder = stringBuilder;

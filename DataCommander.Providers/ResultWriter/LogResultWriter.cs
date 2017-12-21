@@ -27,7 +27,7 @@ namespace DataCommander.Providers.ResultWriter
         public LogResultWriter(Action<InfoMessage> addInfoMessage)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(addInfoMessage != null);
+            FoundationContract.Requires<ArgumentNullException>(addInfoMessage != null);
 #endif
             _addInfoMessage = addInfoMessage;
         }

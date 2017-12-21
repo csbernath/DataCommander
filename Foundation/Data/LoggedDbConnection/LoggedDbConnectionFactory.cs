@@ -15,7 +15,7 @@ namespace Foundation.Data.LoggedDbConnection
         public static IDbConnection ToLoggedDbConnection(this IDbConnection connection)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(connection != null);
+            FoundationContract.Requires(connection != null);
 #endif
 
             var loggedDbConnection = new LoggedDbConnection(connection);

@@ -32,7 +32,7 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             ISqlLoggedSqlCommandFilter filter)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(sqlLog != null);
+            FoundationContract.Requires(sqlLog != null);
 #endif
 
             _sqlLog = sqlLog;

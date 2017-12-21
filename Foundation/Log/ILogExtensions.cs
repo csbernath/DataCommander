@@ -14,8 +14,8 @@
         public static void Trace(this ILog log, CallerInformation callerInformation, string message)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(log != null);
-            Contract.Requires<ArgumentNullException>(callerInformation != null);
+            FoundationContract.Requires<ArgumentNullException>(log != null);
+            FoundationContract.Requires<ArgumentNullException>(callerInformation != null);
 #endif
 
             var messageWithCallerInformation =

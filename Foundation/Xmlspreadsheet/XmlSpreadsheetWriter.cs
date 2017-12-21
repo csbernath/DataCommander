@@ -20,7 +20,7 @@ namespace Foundation.XmlSpreadsheet
         public XmlSpreadsheetWriter(XmlWriter xmlWriter)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(xmlWriter != null);
+            FoundationContract.Requires(xmlWriter != null);
 #endif
 
             XmlWriter = xmlWriter;
@@ -105,7 +105,7 @@ namespace Foundation.XmlSpreadsheet
         public void WriteStartTable(XmlSpreadsheetTable table)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(table != null);
+            FoundationContract.Requires(table != null);
 #endif
             _tableIndex++;
             _table = table;
@@ -191,7 +191,7 @@ namespace Foundation.XmlSpreadsheet
         public void WriteRow(object[] values)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(values != null);
+            FoundationContract.Requires(values != null);
 #endif
 
             WriteStartRow();

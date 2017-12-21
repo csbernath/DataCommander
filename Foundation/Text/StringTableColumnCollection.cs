@@ -52,7 +52,7 @@ namespace Foundation.Text
         internal void Add(StringTableColumn item)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(item != null);
+            FoundationContract.Requires(item != null);
 #endif
 
             _columns.Add(item);

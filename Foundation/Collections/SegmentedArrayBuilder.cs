@@ -27,8 +27,8 @@ namespace Foundation.Collections
             int segmentLength)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentOutOfRangeException>(length >= 0);
-            Contract.Requires<ArgumentOutOfRangeException>(segmentLength >= 0);
+            FoundationContract.Requires<ArgumentOutOfRangeException>(length >= 0);
+            FoundationContract.Requires<ArgumentOutOfRangeException>(segmentLength >= 0);
 #endif
 
             if (length > 0)

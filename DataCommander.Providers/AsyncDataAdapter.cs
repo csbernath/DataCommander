@@ -6,6 +6,7 @@ using System.Threading;
 using DataCommander.Providers.ResultWriter;
 using Foundation.Data;
 using Foundation.Diagnostics;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
 using Foundation.Threading;
 using ThreadState = System.Threading.ThreadState;
@@ -103,11 +104,9 @@ namespace DataCommander.Providers
 
         private void ReadTable(IDataReader dataReader, DataTable schemaTable, int tableIndex)
         {
-#if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dataReader != null);
-            Contract.Requires<ArgumentNullException>(schemaTable != null);
-            Contract.Requires<ArgumentOutOfRangeException>(tableIndex >= 0);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(dataReader != null);
+            FoundationContract.Requires<ArgumentNullException>(schemaTable != null);
+            FoundationContract.Requires<ArgumentOutOfRangeException>(tableIndex >= 0);
 
             using (LogFactory.Instance.GetCurrentMethodLog())
             {
@@ -222,9 +221,8 @@ namespace DataCommander.Providers
 
         private void Fill(AsyncDataAdapterCommand asyncDataAdapterCommand)
         {
-#if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(asyncDataAdapterCommand != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(asyncDataAdapterCommand != null);
+
             var command = asyncDataAdapterCommand.Command;
 
             Exception exception = null;

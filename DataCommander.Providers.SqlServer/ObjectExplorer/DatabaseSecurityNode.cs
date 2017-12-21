@@ -10,7 +10,7 @@
         public DatabaseSecurityNode(DatabaseNode databaseNode)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(databaseNode != null);
+            FoundationContract.Requires<ArgumentNullException>(databaseNode != null);
 #endif
             _databaseNode = databaseNode;
         }

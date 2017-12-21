@@ -26,9 +26,9 @@ namespace Foundation.Collections.IndexableCollection
             IList<T> list)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(name != null);
-            Contract.Requires<ArgumentNullException>(keySelector != null);
-            Contract.Requires<ArgumentNullException>(list != null);
+            FoundationContract.Requires<ArgumentNullException>(name != null);
+            FoundationContract.Requires<ArgumentNullException>(keySelector != null);
+            FoundationContract.Requires<ArgumentNullException>(list != null);
 #endif
 
             Name = name;

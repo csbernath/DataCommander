@@ -12,7 +12,7 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
         public DatabaseCollectionNode(SQLiteConnection connection)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(connection != null);
+            FoundationContract.Requires(connection != null);
 #endif
             _connection = connection;
         }

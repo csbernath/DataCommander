@@ -21,9 +21,9 @@ namespace Foundation.Collections
             Func<int, int> compareTo)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentOutOfRangeException>(minIndex >= 0);
-            Contract.Requires<ArgumentOutOfRangeException>(minIndex <= maxIndex);
-            Contract.Requires<ArgumentNullException>(compareTo != null);
+            FoundationContract.Requires<ArgumentOutOfRangeException>(minIndex >= 0);
+            FoundationContract.Requires<ArgumentOutOfRangeException>(minIndex <= maxIndex);
+            FoundationContract.Requires<ArgumentNullException>(compareTo != null);
 #endif
 
             var result = -1;

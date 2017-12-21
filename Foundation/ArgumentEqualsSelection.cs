@@ -29,7 +29,7 @@ namespace Foundation
         public ArgumentEqualsSelection<TArgument> IfArgumentEquals(TArgument other, Action action)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(action != null);
+            FoundationContract.Requires<ArgumentNullException>(action != null);
 #endif
 
             if (!selected)
@@ -51,7 +51,7 @@ namespace Foundation
         public void Else(Action action)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(action != null);
+            FoundationContract.Requires<ArgumentNullException>(action != null);
 #endif
 
             if (!selected)

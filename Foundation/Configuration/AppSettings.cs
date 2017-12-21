@@ -53,7 +53,7 @@ namespace Foundation.Configuration
             public Reader(NameValueCollection nameValueCollection)
             {
 #if CONTRACTS_FULL
-                Contract.Requires<ArgumentNullException>(nameValueCollection != null);
+                FoundationContract.Requires<ArgumentNullException>(nameValueCollection != null);
 #endif
 
                 _nameValueCollection = nameValueCollection;
@@ -78,8 +78,8 @@ namespace Foundation.Configuration
             public PrefixedReader(NameValueCollection nameValueCollection, string prefix)
             {
 #if CONTRACTS_FULL
-                Contract.Requires<ArgumentNullException>(nameValueCollection != null);
-                Contract.Requires<ArgumentNullException>(prefix != null);
+                FoundationContract.Requires<ArgumentNullException>(nameValueCollection != null);
+                FoundationContract.Requires<ArgumentNullException>(prefix != null);
 #endif
 
                 _nameValueCollection = nameValueCollection;

@@ -168,7 +168,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <param name="taskCreationOptions"></param>
         protected void Construct( Action<object> action, object state, CancellationToken cancellationToken, TaskCreationOptions taskCreationOptions )
         {
-            Contract.Requires<ArgumentNullException>( action != null );
+            FoundationContract.Requires<ArgumentNullException>( action != null );
             this.action = action;
             this.state = state;
             this.taskCreationOptions = taskCreationOptions;

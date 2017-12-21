@@ -15,7 +15,7 @@ namespace DataCommander.Providers.Msi
         public MsiDataReader(MsiCommand command, CommandBehavior behavior)
         {
 #if CONTRACTS_FULL
-            Contract.Requires( command != null );
+            FoundationContract.Requires( command != null );
 #endif
             _command = command;
             _behavior = behavior;

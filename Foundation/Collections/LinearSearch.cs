@@ -17,7 +17,7 @@ namespace Foundation.Collections
         public static int IndexOf(int minIndex, int maxIndex, Func<int, bool> predicate)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(predicate != null);
+            FoundationContract.Requires<ArgumentNullException>(predicate != null);
 #endif
 
             var index = -1;
@@ -46,7 +46,7 @@ namespace Foundation.Collections
         public static int LastIndexOf(int minIndex, int maxIndex, Func<int, bool> predicate)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(predicate != null);
+            FoundationContract.Requires<ArgumentNullException>(predicate != null);
 #endif
 
             var index = -1;

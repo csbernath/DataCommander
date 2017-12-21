@@ -76,7 +76,7 @@ namespace Foundation.Threading
             ThreadPriority priority)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(consumerCount > 0);
+            FoundationContract.Requires(consumerCount > 0);
 #endif
 
             _name = name;
@@ -112,7 +112,7 @@ namespace Foundation.Threading
         public void Enqueue(object item)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(item != null);
+            FoundationContract.Requires(item != null);
 #endif
 
             lock (_queue)
@@ -144,7 +144,7 @@ namespace Foundation.Threading
         private void Consume(ConsumerThread consumerThread, object item)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(consumerThread != null);
+            FoundationContract.Requires(consumerThread != null);
 #endif
 
             var args = new AsyncQueueConsumeEventArgs(item);

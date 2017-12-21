@@ -28,8 +28,8 @@ order by table_name";
         public static string GetObjects(string schema, IEnumerable<string> objectTypes)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());
-            Contract.Requires<ArgumentException>(objectTypes != null && objectTypes.Any());
+            FoundationContract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());
+            FoundationContract.Requires<ArgumentException>(objectTypes != null && objectTypes.Any());
 #endif
 
             return
@@ -58,9 +58,9 @@ end";
             IEnumerable<string> objectTypes)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentException>(!database.IsNullOrWhiteSpace());
-            Contract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());
-            Contract.Requires<ArgumentException>(objectTypes != null && objectTypes.Any());
+            FoundationContract.Requires<ArgumentException>(!database.IsNullOrWhiteSpace());
+            FoundationContract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());
+            FoundationContract.Requires<ArgumentException>(objectTypes != null && objectTypes.Any());
 #endif
 
             return string.Format(@"if exists(select * from sys.databases (nolock) where name = '{0}')

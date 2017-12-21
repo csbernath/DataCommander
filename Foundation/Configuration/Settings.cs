@@ -165,7 +165,7 @@ namespace Foundation.Configuration
         public static string GetAssemblyConfigFileName(Assembly assembly)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(assembly != null);
+            FoundationContract.Requires<ArgumentNullException>(assembly != null);
 #endif
 
             var codeBase = assembly.CodeBase;

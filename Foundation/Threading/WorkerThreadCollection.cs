@@ -150,7 +150,7 @@ namespace Foundation.Threading
         public void Stop(EventWaitHandle stopEvent)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(stopEvent != null);
+            FoundationContract.Requires(stopEvent != null);
 #endif
             var stopper = new Stopper(_threads, stopEvent);
             stopper.Stop();

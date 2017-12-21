@@ -48,7 +48,7 @@
         public IndexableCollection(ICollectionIndex<T> defaultIndex)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(defaultIndex != null);
+            FoundationContract.Requires<ArgumentNullException>(defaultIndex != null);
             Contract.Ensures(this.Indexes.Count == 1);
 #endif
 

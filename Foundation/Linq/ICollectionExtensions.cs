@@ -42,7 +42,7 @@ namespace Foundation.Linq
         public static void Add<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentException>(collection != null || items == null);
+            FoundationContract.Requires<ArgumentException>(collection != null || items == null);
 #endif
 
             if (items != null)
@@ -64,7 +64,7 @@ namespace Foundation.Linq
         public static int Remove<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentException>(collection != null || items == null);
+            FoundationContract.Requires<ArgumentException>(collection != null || items == null);
 #endif
 
             var count = 0;
@@ -94,7 +94,7 @@ namespace Foundation.Linq
         public static ICollection<T> AsReadOnly<T>(this ICollection<T> collection)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(collection != null);
+            FoundationContract.Requires<ArgumentNullException>(collection != null);
 #endif
             return new ReadOnlyCollection<T>(collection);
         }
@@ -141,7 +141,7 @@ namespace Foundation.Linq
         public static T[] ToArray<T>(ICollection<T> source)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(source != null);
+            FoundationContract.Requires<ArgumentNullException>(source != null);
 #endif
 
             var target = new T[source.Count];
@@ -173,7 +173,7 @@ namespace Foundation.Linq
             public CastedCollection(ICollection source)
             {
 #if CONTRACTS_FULL
-                Contract.Requires<ArgumentNullException>(source != null);
+                FoundationContract.Requires<ArgumentNullException>(source != null);
 #endif
                 this.source = source;
                 sourceAsList = source as IList;
@@ -308,7 +308,7 @@ namespace Foundation.Linq
             public ReadOnlyCollection(ICollection<T> collection)
             {
 #if CONTRACTS_FULL
-                Contract.Requires(collection != null);
+                FoundationContract.Requires(collection != null);
 #endif
 
                 this.collection = collection;

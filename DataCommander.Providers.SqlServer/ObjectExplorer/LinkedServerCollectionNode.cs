@@ -13,7 +13,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         public LinkedServerCollectionNode( ServerNode serverNode )
         {
 #if CONTRACTS_FULL
-            Contract.Requires( serverNode != null );
+            FoundationContract.Requires( serverNode != null );
 #endif
             Server = serverNode;
         }

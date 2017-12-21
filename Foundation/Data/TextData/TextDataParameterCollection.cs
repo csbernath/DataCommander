@@ -39,8 +39,8 @@ namespace Foundation.Data.TextData
         public override int Add(object value)
         {
 #if CONTRACTS_FULL
-            Contract.Requires( value != null );
-            Contract.Requires( value is TextDataParameter );
+            FoundationContract.Requires( value != null );
+            FoundationContract.Requires( value is TextDataParameter );
 #endif
 
             var parameter = (TextDataParameter)value;

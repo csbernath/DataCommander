@@ -10,7 +10,7 @@
             : base(parameter, parameter.Size, parameter.Precision, parameter.Scale)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(parameter != null);
+            FoundationContract.Requires<ArgumentNullException>(parameter != null);
 #endif
 
             this.parameter = parameter;

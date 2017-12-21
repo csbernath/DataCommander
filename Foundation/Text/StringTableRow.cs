@@ -14,7 +14,7 @@
         internal StringTableRow(StringTable table)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(table != null);
+            FoundationContract.Requires<ArgumentNullException>(table != null);
 #endif
 
             Table = table;
@@ -34,7 +34,7 @@
             get
             {
 #if CONTRACTS_FULL
-                Contract.Requires(0 <= columnIndex && columnIndex < this.Table.Columns.Count);
+                FoundationContract.Requires(0 <= columnIndex && columnIndex < this.Table.Columns.Count);
 #endif
 
                 return _cells[columnIndex];
@@ -43,7 +43,7 @@
             set
             {
 #if CONTRACTS_FULL
-                Contract.Requires(0 <= columnIndex && columnIndex < this.Table.Columns.Count);
+                FoundationContract.Requires(0 <= columnIndex && columnIndex < this.Table.Columns.Count);
 #endif
                 _cells[columnIndex] = value;
             }

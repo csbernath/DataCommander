@@ -24,7 +24,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             string name)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(jobs != null);
+            FoundationContract.Requires<ArgumentNullException>(jobs != null);
 #endif
             _jobs = jobs;
             _name = name;

@@ -23,9 +23,9 @@ namespace Foundation.Linq
             Func<TValue, TKey> keySelector)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dictionary != null);
-            Contract.Requires<ArgumentNullException>(items != null);
-            Contract.Requires<ArgumentNullException>(keySelector != null);
+            FoundationContract.Requires<ArgumentNullException>(dictionary != null);
+            FoundationContract.Requires<ArgumentNullException>(items != null);
+            FoundationContract.Requires<ArgumentNullException>(keySelector != null);
 #endif
 
             foreach (var item in items)
@@ -66,8 +66,8 @@ namespace Foundation.Linq
             Func<TKey, TValue> valueFactory)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dictionary != null);
-            Contract.Requires<ArgumentNullException>(valueFactory != null);
+            FoundationContract.Requires<ArgumentNullException>(dictionary != null);
+            FoundationContract.Requires<ArgumentNullException>(valueFactory != null);
 #endif
 
             TValue value;
@@ -92,7 +92,7 @@ namespace Foundation.Linq
         public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dictionary != null);
+            FoundationContract.Requires<ArgumentNullException>(dictionary != null);
 #endif
 
             TValue value;
@@ -119,7 +119,7 @@ namespace Foundation.Linq
             public ReadOnlyDictionary(IDictionary<TKey, TValue> dictionary)
             {
 #if CONTRACTS_FULL
-                Contract.Requires<ArgumentNullException>(dictionary != null);
+                FoundationContract.Requires<ArgumentNullException>(dictionary != null);
 #endif
                 this.dictionary = dictionary;
             }

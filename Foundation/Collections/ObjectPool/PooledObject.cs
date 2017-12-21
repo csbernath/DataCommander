@@ -18,7 +18,7 @@ namespace Foundation.Collections.ObjectPool
         public PooledObject(ObjectPool<T> pool)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(pool != null);
+            FoundationContract.Requires<ArgumentNullException>(pool != null);
 #endif
 
             _pool = pool;

@@ -24,9 +24,9 @@ namespace Foundation.Collections
         public MultipleMemberEqualityComparer(params IEqualityComparer<T>[] equalityComparers)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(equalityComparers != null);
-            Contract.Requires<ArgumentOutOfRangeException>(equalityComparers.Length > 0);
-            Contract.Requires<ArgumentNullException>(Contract.ForAll(equalityComparers, c => c != null));
+            FoundationContract.Requires<ArgumentNullException>(equalityComparers != null);
+            FoundationContract.Requires<ArgumentOutOfRangeException>(equalityComparers.Length > 0);
+            FoundationContract.Requires<ArgumentNullException>(Contract.ForAll(equalityComparers, c => c != null));
 #endif
 
             _equalityComparers = equalityComparers;

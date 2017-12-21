@@ -100,9 +100,9 @@ namespace Foundation.Threading
         internal void Exit(LockRequest lockRequest)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(lockRequest != null);
-            Contract.Requires(lockRequest.Monitor == this);
-            Contract.Requires(lockRequest == this.CurrentLockRequest);
+            FoundationContract.Requires(lockRequest != null);
+            FoundationContract.Requires(lockRequest.Monitor == this);
+            FoundationContract.Requires(lockRequest == this.CurrentLockRequest);
 #endif
 
             Log.Trace("Exiting lockRequest... monitoredObject: {0}, priority: {1}", MonitoredObject, lockRequest.Priority);
@@ -133,7 +133,7 @@ namespace Foundation.Threading
             internal LockRequest(PriorityMonitor<T> monitor, int priority)
             {
 #if CONTRACTS_FULL
-                Contract.Requires(monitor != null);
+                FoundationContract.Requires(monitor != null);
 #endif
 
                 Monitor = monitor;

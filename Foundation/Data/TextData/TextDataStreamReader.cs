@@ -28,9 +28,9 @@ namespace Foundation.Data.TextData
         public TextDataStreamReader(TextReader textReader, IList<TextDataColumn> columns, IList<ITextDataConverter> converters)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(textReader != null);
-            Contract.Requires(columns != null);
-            Contract.Requires(converters != null);
+            FoundationContract.Requires(textReader != null);
+            FoundationContract.Requires(columns != null);
+            FoundationContract.Requires(converters != null);
 #endif
 
             _textReader = textReader;

@@ -34,9 +34,9 @@ namespace Foundation.Collections.IndexableCollection
             Func<ICollection<T>> createCollection)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(getKey != null);
-            Contract.Requires<ArgumentNullException>(dictionary != null);
-            Contract.Requires<ArgumentNullException>(createCollection != null);
+            FoundationContract.Requires<ArgumentNullException>(getKey != null);
+            FoundationContract.Requires<ArgumentNullException>(dictionary != null);
+            FoundationContract.Requires<ArgumentNullException>(createCollection != null);
 #endif
             Initialize(name, getKey, dictionary, createCollection);
         }
@@ -273,9 +273,9 @@ namespace Foundation.Collections.IndexableCollection
             Func<ICollection<T>> createCollection)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(getKey != null);
-            Contract.Requires<ArgumentNullException>(dictionary != null);
-            Contract.Requires<ArgumentNullException>(createCollection != null);
+            FoundationContract.Requires<ArgumentNullException>(getKey != null);
+            FoundationContract.Requires<ArgumentNullException>(dictionary != null);
+            FoundationContract.Requires<ArgumentNullException>(createCollection != null);
 #endif
 
             Name = name;

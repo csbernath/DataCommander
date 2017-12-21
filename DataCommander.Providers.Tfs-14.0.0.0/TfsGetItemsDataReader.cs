@@ -19,7 +19,7 @@ namespace DataCommander.Providers.Tfs
         public TfsGetItemsDataReader(TfsCommand command)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(command != null);
+            FoundationContract.Requires<ArgumentNullException>(command != null);
 #endif
             this.command = command;
         }

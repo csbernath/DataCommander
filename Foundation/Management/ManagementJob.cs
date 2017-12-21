@@ -16,7 +16,7 @@ namespace Foundation.Management
         public ManagementJob(ManagementObject managementObject)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(managementObject != null);
+            FoundationContract.Requires<ArgumentNullException>(managementObject != null);
 #endif
 
             _managementObject = managementObject;

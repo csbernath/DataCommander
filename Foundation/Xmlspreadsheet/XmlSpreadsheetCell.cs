@@ -54,7 +54,7 @@ namespace Foundation.XmlSpreadsheet
         public void Write(XmlWriter xmlWriter)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(xmlWriter != null);
+            FoundationContract.Requires(xmlWriter != null);
 #endif
 
             using (xmlWriter.WriteElement("Cell"))

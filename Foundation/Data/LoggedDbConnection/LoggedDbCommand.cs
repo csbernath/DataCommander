@@ -24,10 +24,10 @@ namespace Foundation.Data.LoggedDbConnection
             EventHandler<AfterReadEventArgs> afterRead)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(command != null);
-            Contract.Requires<ArgumentNullException>(beforeExecuteCommand != null);
-            Contract.Requires<ArgumentNullException>(afterExecuteCommand != null);
-            Contract.Requires<ArgumentNullException>(afterRead != null);
+            FoundationContract.Requires<ArgumentNullException>(command != null);
+            FoundationContract.Requires<ArgumentNullException>(beforeExecuteCommand != null);
+            FoundationContract.Requires<ArgumentNullException>(afterExecuteCommand != null);
+            FoundationContract.Requires<ArgumentNullException>(afterRead != null);
 
             Contract.Ensures(this.command != null);
 #endif

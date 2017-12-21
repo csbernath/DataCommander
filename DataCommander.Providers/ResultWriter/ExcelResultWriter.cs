@@ -20,8 +20,8 @@ namespace DataCommander.Providers.ResultWriter
         public ExcelResultWriter(IProvider provider, Action<InfoMessage> addInfoMessage)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(provider != null);
-            Contract.Requires<ArgumentNullException>(addInfoMessage != null);
+            FoundationContract.Requires<ArgumentNullException>(provider != null);
+            FoundationContract.Requires<ArgumentNullException>(addInfoMessage != null);
 #endif
 
             _provider = provider;

@@ -12,7 +12,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             string name )
         {
 #if CONTRACTS_FULL
-            Contract.Requires( linkedServers != null );
+            FoundationContract.Requires( linkedServers != null );
 #endif
             LinkedServers = linkedServers;
             Name = name;

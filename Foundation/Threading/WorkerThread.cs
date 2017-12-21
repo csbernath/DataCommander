@@ -36,7 +36,7 @@ namespace Foundation.Threading
         public WorkerThread(ThreadStart start)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(start != null);
+            FoundationContract.Requires<ArgumentNullException>(start != null);
 #endif
 
             _start = start;

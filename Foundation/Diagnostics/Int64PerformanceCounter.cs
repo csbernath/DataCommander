@@ -27,7 +27,7 @@ namespace Foundation.Diagnostics
         public Int64PerformanceCounter(string name, Func<long, string> toString)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(toString != null);
+            FoundationContract.Requires<ArgumentNullException>(toString != null);
 #endif
 
             this.name = name;

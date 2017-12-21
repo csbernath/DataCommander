@@ -36,10 +36,10 @@ namespace Foundation.Collections
             Comparison<TKey> comparison)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(values != null);
-            Contract.Requires<ArgumentNullException>(keySelector != null);
-            Contract.Requires<ArgumentNullException>(comparison != null);
-            Contract.Requires<ArgumentException>(
+            FoundationContract.Requires<ArgumentNullException>(values != null);
+            FoundationContract.Requires<ArgumentNullException>(keySelector != null);
+            FoundationContract.Requires<ArgumentNullException>(comparison != null);
+            FoundationContract.Requires<ArgumentException>(
                 values.SelectPreviousAndCurrentKey(keySelector).All(key => comparison(key.Previous, key.Current) <= 0),
                 "keys must be ordered");
 #endif

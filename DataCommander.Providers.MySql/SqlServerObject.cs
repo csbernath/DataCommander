@@ -15,8 +15,8 @@ namespace DataCommander.Providers.MySql
         public static string GetTables(string tableSchema, IEnumerable<string> tableTypes)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(!tableSchema.IsNullOrWhiteSpace());
-            Contract.Requires(tableTypes != null && tableTypes.Any());
+            FoundationContract.Requires(!tableSchema.IsNullOrWhiteSpace());
+            FoundationContract.Requires(tableTypes != null && tableTypes.Any());
 #endif
 
             return $@"select TABLE_NAME

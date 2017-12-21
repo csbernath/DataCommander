@@ -217,7 +217,7 @@ namespace Foundation.Log
             public MultipleLog(IEnumerable<LogWriter> logWriters)
             {
 #if CONTRACTS_FULL
-                Contract.Requires<ArgumentNullException>(logWriters != null);
+                FoundationContract.Requires<ArgumentNullException>(logWriters != null);
 #endif
 
                 LogWriters = logWriters.ToArray();

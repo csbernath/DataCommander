@@ -14,7 +14,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         public LinkedServerCatalogCollectionNode( LinkedServerNode linkedServer )
         {
 #if CONTRACTS_FULL
-            Contract.Requires( linkedServer != null );
+            FoundationContract.Requires( linkedServer != null );
 #endif
             _linkedServer = linkedServer;
         }

@@ -23,7 +23,7 @@ namespace DataCommander.Foundation.Threading.Tasks
         /// <param name="taskCreationOptions"></param>
         public Task( Func<object, TResult> function, object state, CancellationToken cancellationToken, TaskCreationOptions taskCreationOptions )
         {
-            Contract.Requires<ArgumentNullException>( function != null );
+            FoundationContract.Requires<ArgumentNullException>( function != null );
             this.function = function;
             this.Construct( this.Invoke, state, cancellationToken, taskCreationOptions );
         }

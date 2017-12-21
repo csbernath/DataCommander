@@ -9,7 +9,7 @@ namespace Foundation.Data
         public DbColumn(DataRow schemaTableRow)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(schemaTableRow != null);
+            FoundationContract.Requires<ArgumentNullException>(schemaTableRow != null);
 #endif
 
             ColumnName = schemaTableRow.Field<string>(SchemaTableColumn.ColumnName);

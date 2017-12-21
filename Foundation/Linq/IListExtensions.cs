@@ -19,7 +19,7 @@ namespace Foundation.Linq
         public static int IndexOf<T>(this IList<T> source, Func<T, bool> predicate)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(source != null);
+            FoundationContract.Requires<ArgumentNullException>(source != null);
 #endif
 
             const int minIndex = 0;
@@ -37,7 +37,7 @@ namespace Foundation.Linq
         public static int LastIndexOf<T>(this IList<T> source, Func<T, bool> predicate)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(source != null);
+            FoundationContract.Requires<ArgumentNullException>(source != null);
 #endif
 
             const int minIndex = 0;
@@ -54,8 +54,8 @@ namespace Foundation.Linq
         public static T Last<T>(this IList<T> source)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(source != null);
-            Contract.Requires<ArgumentException>(source.Count > 0);
+            FoundationContract.Requires<ArgumentNullException>(source != null);
+            FoundationContract.Requires<ArgumentException>(source.Count > 0);
 #endif
 
             var lastIndex = source.Count - 1;

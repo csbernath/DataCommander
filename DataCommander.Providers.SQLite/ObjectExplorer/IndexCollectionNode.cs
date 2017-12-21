@@ -11,7 +11,7 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
         public IndexCollectionNode(TableNode tableNode)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(tableNode != null);
+            FoundationContract.Requires(tableNode != null);
 #endif
 
             _tableNode = tableNode;

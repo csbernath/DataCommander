@@ -12,7 +12,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         public JobCollectionNode(ServerNode server)
         {
 #if CONTRACTS_FULL
-            Contract.Requires( server != null );
+            FoundationContract.Requires( server != null );
 #endif
             Server = server;
         }

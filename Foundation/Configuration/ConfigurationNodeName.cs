@@ -12,7 +12,7 @@ namespace Foundation.Configuration
         private static string FromTypeDelimitedName(string name)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(name != null);
+            FoundationContract.Requires<ArgumentNullException>(name != null);
 #endif
 
             var nodeName = name.Replace(Type.Delimiter, ConfigurationNode.Delimiter);
@@ -22,7 +22,7 @@ namespace Foundation.Configuration
         private static MethodBase GetMethod(StackTrace trace, int frameIndex)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(trace != null);
+            FoundationContract.Requires<ArgumentNullException>(trace != null);
 #endif
 
             var frame = trace.GetFrame(frameIndex);
@@ -39,7 +39,7 @@ namespace Foundation.Configuration
         internal static string FromNamespace(StackTrace trace, int frameIndex)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(trace != null);
+            FoundationContract.Requires<ArgumentNullException>(trace != null);
 #endif
 
             var method = GetMethod(trace, frameIndex);
@@ -56,7 +56,7 @@ namespace Foundation.Configuration
         public static string FromType(Type type)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(type != null);
+            FoundationContract.Requires<ArgumentNullException>(type != null);
 #endif
 
             var name = type.FullName;
@@ -67,7 +67,7 @@ namespace Foundation.Configuration
         internal static string FromType(StackTrace trace, int frameIndex)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(trace != null);
+            FoundationContract.Requires<ArgumentNullException>(trace != null);
 #endif
 
             var method = GetMethod(trace, frameIndex);
@@ -79,7 +79,7 @@ namespace Foundation.Configuration
         internal static string FromMethod(MethodBase method)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(method != null);
+            FoundationContract.Requires<ArgumentNullException>(method != null);
 #endif
 
             var name = method.DeclaringType.FullName + Type.Delimiter + method.Name;
@@ -90,7 +90,7 @@ namespace Foundation.Configuration
         internal static string FromMethod(StackTrace trace, int frameIndex)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(trace != null);
+            FoundationContract.Requires<ArgumentNullException>(trace != null);
 #endif
 
             var method = GetMethod(trace, frameIndex);

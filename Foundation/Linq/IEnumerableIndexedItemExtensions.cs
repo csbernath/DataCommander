@@ -20,8 +20,8 @@ namespace Foundation.Linq
         public static IndexedItem<TSource> FirstIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(source != null);
-            Contract.Requires<ArgumentNullException>(predicate != null);
+            FoundationContract.Requires<ArgumentNullException>(source != null);
+            FoundationContract.Requires<ArgumentNullException>(predicate != null);
 #endif
 
             var firstIndex = -1;
@@ -51,8 +51,8 @@ namespace Foundation.Linq
         public static IndexedItem<TSource> ExtremumIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, TSource, bool> firstArgumentIsExtremum)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(source != null);
-            Contract.Requires<ArgumentNullException>(firstArgumentIsExtremum != null);
+            FoundationContract.Requires<ArgumentNullException>(source != null);
+            FoundationContract.Requires<ArgumentNullException>(firstArgumentIsExtremum != null);
 #endif
 
             var extremumIndex = -1;
@@ -83,8 +83,8 @@ namespace Foundation.Linq
         public static IndexedItem<TSource> MinIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, int> selector)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(source != null);
-            Contract.Requires<ArgumentNullException>(selector != null);
+            FoundationContract.Requires<ArgumentNullException>(source != null);
+            FoundationContract.Requires<ArgumentNullException>(selector != null);
 #endif
 
             var minIndex = -1;

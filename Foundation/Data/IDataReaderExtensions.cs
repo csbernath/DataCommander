@@ -103,7 +103,7 @@ namespace Foundation.Data
         public static IEnumerable<IDataReader> AsEnumerable(this IDataReader dataReader)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dataReader != null);
+            FoundationContract.Requires<ArgumentNullException>(dataReader != null);
 #endif
 
             while (dataReader.Read())
@@ -122,8 +122,8 @@ namespace Foundation.Data
         public static int Fill(this IDataReader dataReader, DataSet dataSet, CancellationToken cancellationToken)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dataReader != null);
-            Contract.Requires<ArgumentNullException>(dataSet != null);
+            FoundationContract.Requires<ArgumentNullException>(dataReader != null);
+            FoundationContract.Requires<ArgumentNullException>(dataSet != null);
 #endif
 
             var rowCount = 0;
@@ -159,8 +159,8 @@ namespace Foundation.Data
         public static int Fill(this IDataReader dataReader, DataTable dataTable, CancellationToken cancellationToken)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dataReader != null);
-            Contract.Requires<ArgumentNullException>(dataTable != null);
+            FoundationContract.Requires<ArgumentNullException>(dataReader != null);
+            FoundationContract.Requires<ArgumentNullException>(dataTable != null);
 #endif
 
             var schemaTable = dataReader.GetSchemaTable();

@@ -7,7 +7,7 @@ namespace Foundation.DocumentProperties.StructuredStorage
         public static IEnumerable<STATPROPSETSTG> AsEnumerable( this IPropertySetStorage propertySetStorage )
         {
 #if CONTRACTS_FULL
-            Contract.Requires(propertySetStorage != null);
+            FoundationContract.Requires(propertySetStorage != null);
 #endif
 
             IEnumSTATPROPSETSTG enumStatPropSetStg;
@@ -31,7 +31,7 @@ namespace Foundation.DocumentProperties.StructuredStorage
         internal static IEnumerable<STATPROPSTG> AsEnumerable( this IPropertyStorage propertyStorage )
         {
 #if CONTRACTS_FULL
-            Contract.Requires(propertyStorage != null);
+            FoundationContract.Requires(propertyStorage != null);
 #endif
 
             IEnumSTATPROPSTG enumStatPropStg;

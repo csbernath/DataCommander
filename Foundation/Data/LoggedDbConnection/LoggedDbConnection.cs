@@ -22,7 +22,7 @@ namespace Foundation.Data.LoggedDbConnection
         public LoggedDbConnection(IDbConnection connection)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(connection != null);
+            FoundationContract.Requires(connection != null);
 #endif
 
             _connection = connection;

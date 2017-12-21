@@ -17,8 +17,8 @@ namespace Foundation.Data
         internal AsyncDbCommand(AsyncDbConnection connection, IDbCommand command)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(connection != null);
-            Contract.Requires<ArgumentNullException>(command != null);
+            FoundationContract.Requires<ArgumentNullException>(connection != null);
+            FoundationContract.Requires<ArgumentNullException>(command != null);
 #endif
 
             _connection = connection;

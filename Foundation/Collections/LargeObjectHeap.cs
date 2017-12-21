@@ -16,7 +16,7 @@
         public static int GetSmallArrayMaxLength(int itemSize)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentOutOfRangeException>(itemSize > 0);
+            FoundationContract.Requires<ArgumentOutOfRangeException>(itemSize > 0);
 #endif
 
             return (MaxSmallObjectSize - 16)/itemSize;

@@ -17,9 +17,9 @@ namespace DataCommander.Foundation.Caching
 
         internal CacheItem( string key, Func<T> getValue, TimeSpan slidingExpiration )
         {
-            Contract.Requires( key != null );
-            Contract.Requires( getValue != null );
-            Contract.Requires( slidingExpiration > TimeSpan.Zero );
+            FoundationContract.Requires( key != null );
+            FoundationContract.Requires( getValue != null );
+            FoundationContract.Requires( slidingExpiration > TimeSpan.Zero );
 
             this.key = key;
             this.slidingExpiration = slidingExpiration;

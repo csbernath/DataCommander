@@ -14,8 +14,8 @@ namespace Foundation.Data.LoggedDbConnection
             EventHandler<AfterReadEventArgs> afterRead)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(dataReader != null);
-            Contract.Requires(afterRead != null);
+            FoundationContract.Requires(dataReader != null);
+            FoundationContract.Requires(afterRead != null);
 #endif
 
             _dataReader = dataReader;

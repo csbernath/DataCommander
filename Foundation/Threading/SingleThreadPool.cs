@@ -41,7 +41,7 @@ namespace Foundation.Threading
         public void QueueUserWorkItem(WaitCallback callback, object state)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(callback != null);
+            FoundationContract.Requires(callback != null);
 #endif
 
             var tuple = Tuple.Create(callback, state);

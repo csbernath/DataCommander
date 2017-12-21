@@ -82,7 +82,7 @@ namespace Foundation.Configuration
         public void AddChildNode(ConfigurationNode childNode)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentException>(childNode.Parent == null);
+            FoundationContract.Requires<ArgumentException>(childNode.Parent == null);
 #endif
 
             if (childNode.Name == null)
@@ -103,7 +103,7 @@ namespace Foundation.Configuration
         public void InsertChildNode(int index, ConfigurationNode childNode)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentException>(childNode.Parent == null);
+            FoundationContract.Requires<ArgumentException>(childNode.Parent == null);
 #endif
 
             if (childNode.Name == null)
@@ -123,8 +123,8 @@ namespace Foundation.Configuration
         public void RemoveChildNode(ConfigurationNode childNode)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(childNode != null);
-            Contract.Requires(this == childNode.Parent);
+            FoundationContract.Requires(childNode != null);
+            FoundationContract.Requires(this == childNode.Parent);
 #endif
 
             ChildNodes.Remove(childNode);
@@ -162,7 +162,7 @@ namespace Foundation.Configuration
         public ConfigurationNode CreateNode(string nodeName)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(nodeName != null);
+            FoundationContract.Requires(nodeName != null);
 #endif
             var node = this;
             var nodeNames = nodeName.Split(Delimiter);
@@ -265,7 +265,7 @@ namespace Foundation.Configuration
         public void WriteDocumentation(TextWriter textWriter, int level)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(textWriter != null);
+            FoundationContract.Requires(textWriter != null);
 #endif
 
             var sb = new StringBuilder();

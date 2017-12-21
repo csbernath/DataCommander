@@ -19,7 +19,7 @@ namespace Foundation.Linq
     /// <returns></returns>
         public static bool HasFlag( this Enum container, Enum flag )
         {
-            Contract.Requires( container.GetType() == flag.GetType() );
+            FoundationContract.Requires( container.GetType() == flag.GetType() );
 
             UInt64 containerUInt64 = Convert.ToUInt64( container );
             UInt64 flagUInt64 = Convert.ToUInt64( flag );
@@ -38,7 +38,7 @@ namespace Foundation.Linq
         public static T SetFlag<T>(this T container, T flag)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentException>(typeof (T).IsEnum);
+            FoundationContract.Requires<ArgumentException>(typeof (T).IsEnum);
 #endif
             var type = typeof (T);
 
@@ -59,7 +59,7 @@ namespace Foundation.Linq
         public static T SetFlag<T>(this T container, T flag, bool set)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentException>(typeof (T).IsEnum);
+            FoundationContract.Requires<ArgumentException>(typeof (T).IsEnum);
 #endif
             var type = typeof (T);
 
@@ -84,7 +84,7 @@ namespace Foundation.Linq
         public static T ResetFlag<T>(this T container, T flag)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(typeof (T).IsEnum);
+            FoundationContract.Requires<ArgumentNullException>(typeof (T).IsEnum);
 #endif
             var type = typeof (T);
             var containerUInt64 = Convert.ToUInt64(container);

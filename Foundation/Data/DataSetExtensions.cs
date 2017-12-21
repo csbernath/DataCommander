@@ -16,8 +16,8 @@ namespace Foundation.Data
         public static void SetDataTableNames(this DataSet dataSet, IEnumerable<string> dataTableNames)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dataSet != null);
-            Contract.Requires<ArgumentNullException>(dataTableNames != null);
+            FoundationContract.Requires<ArgumentNullException>(dataSet != null);
+            FoundationContract.Requires<ArgumentNullException>(dataTableNames != null);
 #endif
 
             var dataTables = dataSet.Tables;

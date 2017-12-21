@@ -19,7 +19,7 @@ namespace Foundation.Linq
         public static IEnumerable<T> AsEnumerable<T>(this IEnumerator<T> enumerator)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(enumerator != null);
+            FoundationContract.Requires<ArgumentNullException>(enumerator != null);
 #endif
 
             return new Enumerable<T>(enumerator);
@@ -34,8 +34,8 @@ namespace Foundation.Linq
         public static List<T> Take<T>(this IEnumerator<T> enumerator, int count)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(enumerator != null);
-            Contract.Requires<ArgumentOutOfRangeException>(count >= 0);
+            FoundationContract.Requires<ArgumentNullException>(enumerator != null);
+            FoundationContract.Requires<ArgumentOutOfRangeException>(count >= 0);
 #endif
 
             var list = new List<T>(count);
@@ -67,7 +67,7 @@ namespace Foundation.Linq
             public Enumerable(IEnumerator<T> enumerator)
             {
 #if CONTRACTS_FULL
-                Contract.Requires(enumerator != null);
+                FoundationContract.Requires(enumerator != null);
 #endif
 
                 this.enumerator = enumerator;

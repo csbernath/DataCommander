@@ -1,4 +1,5 @@
 ﻿using Foundation.Data;
+using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.Tfs
 {
@@ -32,9 +33,8 @@ namespace DataCommander.Providers.Tfs
 
         public TfsQueryWorkspacesDataReader(TfsCommand command)
         {
-#if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(command != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(command != null);
+
             this.command = command;
         }
 

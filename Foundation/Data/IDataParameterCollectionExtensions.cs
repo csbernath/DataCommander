@@ -41,7 +41,7 @@ namespace Foundation.Data
         public static string ToLogString( this IDataParameterCollection parameters )
         {
 #if CONTRACTS_FULL
-            Contract.Requires( parameters != null );
+            FoundationContract.Requires( parameters != null );
 #endif
 
             var sqlParameters = parameters as SqlParameterCollection;

@@ -17,7 +17,7 @@ namespace Foundation
         public TypeIsSelection(Type type)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(type != null);
+            FoundationContract.Requires<ArgumentNullException>(type != null);
 #endif
             this.type = type;
         }
@@ -31,7 +31,7 @@ namespace Foundation
         public TypeIsSelection IfTypeIs<T>(Action action)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(action != null);
+            FoundationContract.Requires<ArgumentNullException>(action != null);
 #endif
 
             if (!selected && type == typeof (T))
@@ -50,7 +50,7 @@ namespace Foundation
         public void Else(Action action)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(action != null);
+            FoundationContract.Requires<ArgumentNullException>(action != null);
 #endif
 
             if (!selected)

@@ -48,7 +48,7 @@ namespace Foundation
         public static int Select(Func<bool>[] selections)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(selections != null);
+            FoundationContract.Requires<ArgumentNullException>(selections != null);
 #endif
 
             var selectedIndex = -1;
@@ -194,7 +194,7 @@ namespace Foundation
         public MultipleDispatchSelection(params Func<TArgument, bool>[] selections)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(selections != null);
+            FoundationContract.Requires<ArgumentNullException>(selections != null);
 #endif
 
             this.selections = selections;

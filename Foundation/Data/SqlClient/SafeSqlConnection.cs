@@ -164,7 +164,7 @@ namespace Foundation.Data.SqlClient
         internal static void HandleException(Exception exception, IDbCommand command, CancellationToken cancellationToken)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(command != null);
+            FoundationContract.Requires<ArgumentNullException>(command != null);
 #endif
 
             var separator = new string('-', 80);

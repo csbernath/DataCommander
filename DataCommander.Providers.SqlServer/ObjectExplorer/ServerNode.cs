@@ -10,7 +10,7 @@
         public ServerNode(string connectionString)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(!connectionString.IsNullOrWhiteSpace());
+            FoundationContract.Requires(!connectionString.IsNullOrWhiteSpace());
 #endif
             ConnectionString = connectionString;
         }

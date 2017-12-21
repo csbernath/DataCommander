@@ -16,7 +16,7 @@ namespace Foundation.DocumentProperties
         internal Document( DocumentPropertyCollection properties )
         {
 #if CONTRACTS_FULL
-            Contract.Requires(properties != null);
+            FoundationContract.Requires(properties != null);
 #endif
 
             Properties = properties;

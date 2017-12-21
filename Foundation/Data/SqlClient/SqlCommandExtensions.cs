@@ -18,7 +18,7 @@ namespace Foundation.Data.SqlClient
         public static string ToLogString(this SqlCommand command)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(command != null);
+            FoundationContract.Requires(command != null);
 #endif
 
             var sb = new StringBuilder();

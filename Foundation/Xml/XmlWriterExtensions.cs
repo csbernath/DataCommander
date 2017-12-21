@@ -17,7 +17,7 @@ namespace Foundation.Xml
         public static IDisposable WriteElement(this XmlWriter xmlWriter, string localName)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(xmlWriter != null);
+            FoundationContract.Requires<ArgumentNullException>(xmlWriter != null);
 #endif
 
             xmlWriter.WriteStartElement(localName);
@@ -35,7 +35,7 @@ namespace Foundation.Xml
         public static IDisposable WriteElement(this XmlWriter xmlWriter, string prefix, string localName, string ns)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(xmlWriter != null);
+            FoundationContract.Requires<ArgumentNullException>(xmlWriter != null);
 #endif
 
             xmlWriter.WriteStartElement(prefix, localName, ns);

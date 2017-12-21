@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers
+﻿using Foundation.Diagnostics.Contracts;
+
+namespace DataCommander.Providers
 {
     using System;
     using System.Collections.Generic;
@@ -16,14 +18,12 @@
         void IAsyncDataAdapter.BeginFill(IProvider provider, IEnumerable<AsyncDataAdapterCommand> commands, int maxRecords, int rowBlockSize, IResultWriter resultWriter,
             Action<IAsyncDataAdapter, Exception> endFill, Action<IAsyncDataAdapter> writeEnd)
         {
-#if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(provider != null);
-            Contract.Requires<ArgumentOutOfRangeException>(maxRecords >= 0);
-            Contract.Requires<ArgumentOutOfRangeException>(rowBlockSize >= 0);
-            Contract.Requires<ArgumentNullException>(resultWriter != null);
-            Contract.Requires<ArgumentNullException>(endFill != null);
-            Contract.Requires<ArgumentNullException>(writeEnd != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(provider != null);
+            FoundationContract.Requires<ArgumentOutOfRangeException>(maxRecords >= 0);
+            FoundationContract.Requires<ArgumentOutOfRangeException>(rowBlockSize >= 0);
+            FoundationContract.Requires<ArgumentNullException>(resultWriter != null);
+            FoundationContract.Requires<ArgumentNullException>(endFill != null);
+            FoundationContract.Requires<ArgumentNullException>(writeEnd != null);
         }
 
         void IAsyncDataAdapter.Cancel()

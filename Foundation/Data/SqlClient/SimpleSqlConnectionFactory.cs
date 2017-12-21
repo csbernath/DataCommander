@@ -27,7 +27,7 @@ namespace Foundation.Data.SqlClient
         public SimpleSqlConnectionFactory(ConfigurationSection section, string nodeName)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(section != null);
+            FoundationContract.Requires(section != null);
 #endif
 
             var node = section.SelectNode(nodeName, true);

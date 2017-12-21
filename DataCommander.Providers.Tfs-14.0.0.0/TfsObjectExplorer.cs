@@ -14,7 +14,7 @@
         public static string GetName(Item item)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(item != null);
+            FoundationContract.Requires(item != null);
 #endif
             var name = VersionControlPath.GetFileName(item.ServerItem);
             return name;

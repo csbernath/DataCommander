@@ -36,7 +36,7 @@ namespace Foundation.Log
         public TextLogWriter(TextWriter textWriter)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(textWriter != null);
+            FoundationContract.Requires(textWriter != null);
 #endif
 
             _textWriter = textWriter;

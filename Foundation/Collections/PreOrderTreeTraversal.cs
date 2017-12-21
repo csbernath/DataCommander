@@ -18,9 +18,9 @@ namespace Foundation.Collections
         public static void ForEach<T>(T rootNode, Func<T, IEnumerable<T>> getChildNodes, Action<T> action)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(rootNode != null);
-            Contract.Requires<ArgumentNullException>(getChildNodes != null);
-            Contract.Requires<ArgumentNullException>(action != null);
+            FoundationContract.Requires<ArgumentNullException>(rootNode != null);
+            FoundationContract.Requires<ArgumentNullException>(getChildNodes != null);
+            FoundationContract.Requires<ArgumentNullException>(action != null);
 #endif
 
             action(rootNode);
@@ -40,9 +40,9 @@ namespace Foundation.Collections
         public static T FirstOrDefault<T>(T rootNode, Func<T, IEnumerable<T>> getChildNodes, Func<T, bool> predicate) where T : class
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(rootNode != null);
-            Contract.Requires<ArgumentNullException>(getChildNodes != null);
-            Contract.Requires<ArgumentNullException>(predicate != null);
+            FoundationContract.Requires<ArgumentNullException>(rootNode != null);
+            FoundationContract.Requires<ArgumentNullException>(getChildNodes != null);
+            FoundationContract.Requires<ArgumentNullException>(predicate != null);
 #endif
 
             T firstOrDefault = null;

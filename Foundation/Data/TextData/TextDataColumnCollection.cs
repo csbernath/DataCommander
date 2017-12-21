@@ -41,7 +41,7 @@ namespace Foundation.Data.TextData
             get
             {
 #if CONTRACTS_FULL
-                Contract.Requires( this.Contains( columnName ) );
+                FoundationContract.Requires( this.Contains( columnName ) );
 #endif
 
                 return _nameIndex[ columnName ];

@@ -30,9 +30,9 @@ namespace Foundation.Collections.IndexableCollection
             IDictionary<TKey, T> dictionary)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(getNextKey != null);
-            Contract.Requires<ArgumentNullException>(getKey != null);
-            Contract.Requires<ArgumentNullException>(dictionary != null);
+            FoundationContract.Requires<ArgumentNullException>(getNextKey != null);
+            FoundationContract.Requires<ArgumentNullException>(getKey != null);
+            FoundationContract.Requires<ArgumentNullException>(dictionary != null);
 #endif
 
             _name = name;

@@ -20,7 +20,7 @@ namespace Foundation.Text
             Func<T, string> toStringFunction)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(toStringFunction != null);
+            FoundationContract.Requires<ArgumentNullException>(toStringFunction != null);
 #endif
 
             ColumnName = columnName;

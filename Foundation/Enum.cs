@@ -17,7 +17,7 @@ namespace Foundation
         public static T Parse(string value)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentException>(typeof (T).IsEnum);
+            FoundationContract.Requires<ArgumentException>(typeof (T).IsEnum);
 #endif
 
             var type = typeof (T);
@@ -33,7 +33,7 @@ namespace Foundation
         public static T? ToNullableEnum(int? source)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentException>(typeof (T).IsEnum);
+            FoundationContract.Requires<ArgumentException>(typeof (T).IsEnum);
 #endif
 
             T? target;

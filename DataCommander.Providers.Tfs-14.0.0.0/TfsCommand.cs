@@ -8,7 +8,7 @@
         public TfsCommand(TfsConnection connection)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(connection != null);
+            FoundationContract.Requires(connection != null);
 #endif
             this.Connection = connection;
         }

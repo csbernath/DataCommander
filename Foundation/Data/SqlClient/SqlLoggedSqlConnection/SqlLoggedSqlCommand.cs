@@ -13,8 +13,8 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             IDbCommand command)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(connection != null);
-            Contract.Requires(command != null);
+            FoundationContract.Requires(connection != null);
+            FoundationContract.Requires(command != null);
 #endif
 
             _connection = connection;

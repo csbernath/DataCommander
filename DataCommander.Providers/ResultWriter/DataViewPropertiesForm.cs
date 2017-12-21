@@ -10,7 +10,7 @@
         public DataViewPropertiesForm(DataViewProperties properties)
         {
 #if CONTRACTS_FULL
-            Contract.Requires(properties != null);
+            FoundationContract.Requires(properties != null);
 #endif
 
             _properties = properties;

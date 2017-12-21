@@ -28,8 +28,8 @@ namespace Foundation.Data
         public static void SetValue<T>( this IDataParameter parameter, DataParameterValue<T> value )
         {
 #if CONTRACTS_FULL
-            Contract.Requires( parameter != null );
-            Contract.Requires( value.Type == DataParameterValueType.Value || value.Type == DataParameterValueType.Null || value.Type == DataParameterValueType.Default );
+            FoundationContract.Requires( parameter != null );
+            FoundationContract.Requires( value.Type == DataParameterValueType.Value || value.Type == DataParameterValueType.Null || value.Type == DataParameterValueType.Default );
 #endif
 
             object valueObject;

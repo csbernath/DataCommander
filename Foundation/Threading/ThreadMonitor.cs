@@ -99,7 +99,7 @@ namespace Foundation.Threading
         internal static void Add(WorkerThread thread)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(thread != null);
+            FoundationContract.Requires<ArgumentNullException>(thread != null);
 #endif
 
             lock (Threads)

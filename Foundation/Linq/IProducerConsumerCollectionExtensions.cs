@@ -22,8 +22,8 @@ namespace Foundation.Linq
         public static int Take<T>(this IProducerConsumerCollection<T> collection, T[] target)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(collection != null);
-            Contract.Requires<ArgumentNullException>(target != null);
+            FoundationContract.Requires<ArgumentNullException>(collection != null);
+            FoundationContract.Requires<ArgumentNullException>(target != null);
 #endif
 
             var i = 0;

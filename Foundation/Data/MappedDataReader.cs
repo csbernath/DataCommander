@@ -28,8 +28,8 @@ namespace Foundation.Data
         public MappedDataReader(IDataReader dataReader, GetValues getValues)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(dataReader != null);
-            Contract.Requires<ArgumentNullException>(getValues != null);
+            FoundationContract.Requires<ArgumentNullException>(dataReader != null);
+            FoundationContract.Requires<ArgumentNullException>(getValues != null);
 #endif
 
             _dataReader = dataReader;

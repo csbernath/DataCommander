@@ -17,7 +17,7 @@ namespace Foundation.IO
         public EventableStream(Stream stream)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(stream != null);
+            FoundationContract.Requires<ArgumentNullException>(stream != null);
 #endif
             _stream = stream;
         }

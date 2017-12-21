@@ -35,7 +35,7 @@ namespace Foundation.XmlSpreadsheet
         public void Write(XmlWriter xmlWriter)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(xmlWriter != null);
+            FoundationContract.Requires<ArgumentNullException>(xmlWriter != null);
 #endif
 
             xmlWriter.WriteAttributeString(LocalName, Value);

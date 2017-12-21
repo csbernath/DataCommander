@@ -210,8 +210,8 @@ namespace Foundation
         public static string Right(this string value, int length)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(value != null);
-            Contract.Requires<ArgumentOutOfRangeException>(value.Length >= length);
+            FoundationContract.Requires<ArgumentNullException>(value != null);
+            FoundationContract.Requires<ArgumentOutOfRangeException>(value.Length >= length);
 #endif
 
             var startIndex = value.Length - length;

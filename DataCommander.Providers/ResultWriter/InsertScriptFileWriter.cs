@@ -52,7 +52,7 @@
         public InsertScriptFileWriter(string tableName, TextWriter messageWriter)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(messageWriter != null);
+            FoundationContract.Requires<ArgumentNullException>(messageWriter != null);
 #endif
 
             _tableName = tableName;

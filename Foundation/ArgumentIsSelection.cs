@@ -29,7 +29,7 @@ namespace Foundation
         public ArgumentIsSelection<TArgument> IfArgumentIs<TArgumentAs>(Action<TArgumentAs> action) where TArgumentAs : class
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(action != null);
+            FoundationContract.Requires<ArgumentNullException>(action != null);
 #endif
 
             if (!selected)
@@ -53,7 +53,7 @@ namespace Foundation
         public ArgumentIsSelection<TArgument> IfArgumentIsNull(Action action)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(action != null);
+            FoundationContract.Requires<ArgumentNullException>(action != null);
 #endif
 
             if (!selected)
@@ -77,7 +77,7 @@ namespace Foundation
         public ArgumentIsSelection<TArgument> If(Func<bool> condition, Action action)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(action != null);
+            FoundationContract.Requires<ArgumentNullException>(action != null);
 #endif
 
             if (!selected)
@@ -99,7 +99,7 @@ namespace Foundation
         public void Else(Action action)
         {
 #if CONTRACTS_FULL
-            Contract.Requires<ArgumentNullException>(action != null);
+            FoundationContract.Requires<ArgumentNullException>(action != null);
 #endif
 
             if (!selected)
