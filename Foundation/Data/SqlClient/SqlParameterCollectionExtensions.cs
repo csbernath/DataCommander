@@ -6,6 +6,7 @@ using System.Data.SqlTypes;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Text;
 using Microsoft.SqlServer.Server;
 
@@ -24,9 +25,7 @@ namespace Foundation.Data.SqlClient
         /// <param name="sqlDataRecords"></param>
         public static void AddStructured(this SqlParameterCollection parameters, string parameterName, IEnumerable<SqlDataRecord> sqlDataRecords)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(parameters != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(parameters != null);
 
             var parameter = new SqlParameter(parameterName, SqlDbType.Structured);
 
@@ -45,9 +44,7 @@ namespace Foundation.Data.SqlClient
         /// <returns></returns>
         public static string ToLogString(this SqlParameterCollection parameters)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires( parameters != null );
-#endif
+            FoundationContract.Requires<ArgumentNullException>(parameters != null);
 
             var sb = new StringBuilder();
             var first = true;

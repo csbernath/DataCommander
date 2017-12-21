@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.DocumentProperties.StructuredStorage
 {
@@ -6,9 +8,7 @@ namespace Foundation.DocumentProperties.StructuredStorage
     {
         public static IEnumerable<STATPROPSETSTG> AsEnumerable( this IPropertySetStorage propertySetStorage )
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(propertySetStorage != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(propertySetStorage != null);
 
             IEnumSTATPROPSETSTG enumStatPropSetStg;
             propertySetStorage.Enum( out enumStatPropSetStg );
@@ -30,9 +30,7 @@ namespace Foundation.DocumentProperties.StructuredStorage
 
         internal static IEnumerable<STATPROPSTG> AsEnumerable( this IPropertyStorage propertyStorage )
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(propertyStorage != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(propertyStorage != null);
 
             IEnumSTATPROPSTG enumStatPropStg;
             propertyStorage.Enum( out enumStatPropStg );

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.IO;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.IO
 {
@@ -16,9 +18,8 @@ namespace Foundation.IO
         /// <param name="stream"></param>
         public EventableStream(Stream stream)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(stream != null);
-#endif
+
             _stream = stream;
         }
 
@@ -120,20 +121,10 @@ namespace Foundation.IO
             _stream.Write(buffer, offset, count);
         }
 
-#if FOUNDATION_3_5
-        [ContractInvariantMethod]
-        private void ObjectInvariant()
-        {
-            Contract.Invariant( this.stream != null );
-        }
-#else
         //[ContractInvariantMethod]
         private new void ObjectInvariant()
         {
-#if CONTRACTS_FULL
-            Contract.Invariant(this.stream != null);
-#endif
-        }
-#endif
+            //Contract.Invariant(this.stream != null);
         }
     }
+}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Threading;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data.LoggedDbConnection
 {
@@ -23,14 +24,10 @@ namespace Foundation.Data.LoggedDbConnection
             EventHandler<AfterExecuteCommandEventArgs> afterExecuteCommand,
             EventHandler<AfterReadEventArgs> afterRead)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(command != null);
             FoundationContract.Requires<ArgumentNullException>(beforeExecuteCommand != null);
             FoundationContract.Requires<ArgumentNullException>(afterExecuteCommand != null);
             FoundationContract.Requires<ArgumentNullException>(afterRead != null);
-
-            FoundationContract.Ensures(this.command != null);
-#endif
 
             _commandId = Interlocked.Increment(ref _commandIdCounter);
             _command = command;

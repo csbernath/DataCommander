@@ -6,6 +6,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using Foundation.Configuration;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data.SqlClient
 {
@@ -24,9 +25,7 @@ namespace Foundation.Data.SqlClient
         /// <returns></returns>
         public static ConfigurationAttributeCollection GetProperties( string name, IDbConnection connection )
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(connection != null);
-#endif
 
             var properties = new ConfigurationAttributeCollection { Name = name };
             var dataSet = ExternalSystem_GetProperties( connection, name );

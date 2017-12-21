@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
 {
@@ -18,9 +20,7 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static IEnumerable<T> AsEnumerable<T>(this IEnumerator<T> enumerator)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(enumerator != null);
-#endif
 
             return new Enumerable<T>(enumerator);
         }
@@ -33,10 +33,8 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static List<T> Take<T>(this IEnumerator<T> enumerator, int count)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(enumerator != null);
             FoundationContract.Requires<ArgumentOutOfRangeException>(count >= 0);
-#endif
 
             var list = new List<T>(count);
 
@@ -66,9 +64,7 @@ namespace Foundation.Linq
 
             public Enumerable(IEnumerator<T> enumerator)
             {
-#if CONTRACTS_FULL
-                FoundationContract.Requires(enumerator != null);
-#endif
+                FoundationContract.Requires<ArgumentNullException>(enumerator != null);
 
                 this.enumerator = enumerator;
             }

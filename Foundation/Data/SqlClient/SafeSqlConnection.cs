@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Text;
 using System.Threading;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 using Foundation.Log;
 
@@ -163,9 +164,7 @@ namespace Foundation.Data.SqlClient
 
         internal static void HandleException(Exception exception, IDbCommand command, CancellationToken cancellationToken)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(command != null);
-#endif
 
             var separator = new string('-', 80);
             var sb = new StringBuilder();

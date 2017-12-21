@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
 
 namespace Foundation.Diagnostics
@@ -19,9 +20,7 @@ namespace Foundation.Diagnostics
         /// <returns></returns>
         public static string ToLogString(this StackTrace trace)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(trace != null);
-#endif
 
             var stringBuilder = new StringBuilder();
 

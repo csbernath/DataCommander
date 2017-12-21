@@ -8,6 +8,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Xml;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
 {
@@ -125,13 +126,11 @@ namespace Foundation.Data
         {
             get
             {
-#if CONTRACTS_FULL
-                FoundationContract.Requires<ArgumentNullException>(this.Command != null);
-                FoundationContract.Requires<ArgumentException>(this.Command.Parameters.Count > 0);
-                FoundationContract.Requires<ArgumentException>(this.Command.Parameters[0] is IDataParameter);
-                FoundationContract.Requires<ArgumentException>(((IDataParameter)this.Command.Parameters[0]).Direction == ParameterDirection.ReturnValue);
-                FoundationContract.Requires<ArgumentException>(((IDataParameter)this.Command.Parameters[0]).Value is int);
-#endif
+                FoundationContract.Requires<ArgumentNullException>(Command != null);
+                FoundationContract.Requires<ArgumentException>(Command.Parameters.Count > 0);
+                FoundationContract.Requires<ArgumentException>(Command.Parameters[0] is IDataParameter);
+                FoundationContract.Requires<ArgumentException>(((IDataParameter)Command.Parameters[0]).Direction == ParameterDirection.ReturnValue);
+                FoundationContract.Requires<ArgumentException>(((IDataParameter)Command.Parameters[0]).Value is int);
 
                 var parameters = Command.Parameters;
                 var parameterObject = parameters[0];
@@ -158,17 +157,14 @@ namespace Foundation.Data
             DbConnection connection,
             string commandText)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(factory != null);
             FoundationContract.Requires<ArgumentNullException>(connection != null);
-#endif
 
             var command = connection.CreateCommand();
             command.CommandText = commandText;
             var adapter = factory.CreateDataAdapter();
-#if CONTRACTS_FULL
             FoundationContract.Assert(adapter != null);
-#endif
+
             adapter.SelectCommand = command;
             var table = new DataTable();
             adapter.Fill(table);
@@ -184,10 +180,8 @@ namespace Foundation.Data
             DataTable dataTable,
             TextWriter textWriter)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(dataTable != null);
             FoundationContract.Requires<ArgumentNullException>(textWriter != null);
-#endif
 
             var columns = dataTable.Columns;
 
@@ -234,10 +228,8 @@ namespace Foundation.Data
             string lineSeparator,
             TextWriter textWriter)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(!string.IsNullOrEmpty(lineSeparator));
-            FoundationContract.Requires(textWriter != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(lineSeparator));
+            FoundationContract.Requires<ArgumentNullException>(textWriter != null);
 
             if (dataView != null)
             {
@@ -311,11 +303,9 @@ namespace Foundation.Data
             DataRow[] dataRows,
             TextWriter textWriter)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(dataTable != null);
             FoundationContract.Requires<ArgumentNullException>(dataRows != null);
             FoundationContract.Requires<ArgumentNullException>(textWriter != null);
-#endif
 
             var columns = dataTable.Columns;
 
@@ -399,9 +389,7 @@ namespace Foundation.Data
             int columnNumber,
             int rowNumber)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(dataTable != null);
-#endif
 
             var dataColumn = dataTable.Columns[columnNumber];
             var type = dataColumn.DataType;
@@ -465,9 +453,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public IDbTransaction BeginTransaction()
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(this.Connection != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(Connection != null);
 
             return Connection.BeginTransaction();
         }
@@ -479,9 +465,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public IDbTransaction BeginTransaction(IsolationLevel il)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(this.Connection != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(this.Connection != null);
 
             return Connection.BeginTransaction(il);
         }
@@ -497,9 +481,7 @@ namespace Foundation.Data
         /// </returns>
         public IDbCommand CreateCommand()
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(this.Connection != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(this.Connection != null);
 
             Command = Connection.CreateCommand();
             Command.Transaction = Transaction;
@@ -538,9 +520,7 @@ namespace Foundation.Data
         /// <param name="command"></param>
         public void DeriveParameters(IDbCommand command)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(this.CommandBuilderHelper != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(this.CommandBuilderHelper != null);
 
             CommandBuilderHelper.DeriveParameters(command);
         }
@@ -554,9 +534,7 @@ namespace Foundation.Data
         /// </returns>
         public int ExecuteNonQuery(IDbCommand command)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(command != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(command != null);
 
             Command = command;
             RowCount = command.ExecuteNonQuery();
@@ -596,9 +574,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public object ExecuteScalar(IDbCommand command)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(command != null);
-#endif
 
             Command = command;
             var scalar = command.ExecuteScalar();
@@ -660,9 +636,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public DataTable ExecuteDataTable(IDbCommand command, CancellationToken cancellationToken)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(command != null);
-#endif
 
             Command = command;
             var dataTable = new DataTable();
@@ -704,10 +678,8 @@ namespace Foundation.Data
         /// <returns></returns>
         public XmlDocument ExecuteXmlDocument(IDbCommand command)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(command != null);
             FoundationContract.Requires<ArgumentNullException>(this.CommandHelper != null);
-#endif
 
             return CommandHelper.ExecuteXmlDocument(command);
         }
@@ -731,9 +703,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public DataTable FillSchema(IDbCommand command, DataTable dataTable)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(command != null);
-#endif
 
             Command = command;
             DataTable schemaTable;
@@ -755,9 +725,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static DataTable[] FillSchema(IDbCommand command, DataSet dataSet, CancellationToken cancellationToken)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(command != null);
-#endif
 
             DataTable[] schemaTables;
 
@@ -778,9 +746,9 @@ namespace Foundation.Data
         /// <returns></returns>
         public int Fill(string commandText, DataSet dataSet, CancellationToken cancellationToken)
         {
-#if CONTRACTS_FULL
+
             FoundationContract.Requires<ArgumentNullException>(dataSet != null);
-#endif
+
 
             Command = CreateCommand(commandText);
             RowCount = Command.Fill(dataSet, cancellationToken);

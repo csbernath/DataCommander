@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
 
 namespace Foundation.Threading
@@ -40,9 +41,7 @@ namespace Foundation.Threading
         /// <param name="state"></param>
         public void QueueUserWorkItem(WaitCallback callback, object state)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(callback != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(callback != null);
 
             var tuple = Tuple.Create(callback, state);
 

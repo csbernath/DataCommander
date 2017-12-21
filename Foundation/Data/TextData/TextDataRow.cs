@@ -1,4 +1,5 @@
 ﻿using System;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data.TextData
 {
@@ -16,10 +17,8 @@ namespace Foundation.Data.TextData
         /// <param name="convert"></param>
         public TextDataRow(TextDataColumnCollection columns, Convert convert)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(columns != null);
-            FoundationContract.Requires(convert != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(columns != null);
+            FoundationContract.Requires<ArgumentException>(convert != null);
 
             Columns = columns;
             _convert = convert;

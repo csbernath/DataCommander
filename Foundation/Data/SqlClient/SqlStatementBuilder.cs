@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlTypes;
 using System.Text;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Text;
 
 namespace Foundation.Data.SqlClient
@@ -171,9 +172,8 @@ namespace Foundation.Data.SqlClient
             StringBuilder commandText,
             string value)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(commandText != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(commandText != null);
+
             var s = value.ToTSqlNVarChar();
             commandText.Append(s);
         }
@@ -189,9 +189,7 @@ namespace Foundation.Data.SqlClient
             object value,
             SqlDbType sqlDbType)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(commandText != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(commandText != null);
 
             var s = ToString(value, sqlDbType);
             commandText.Append(s);

@@ -1,4 +1,7 @@
-﻿namespace Foundation.Data.TextData
+﻿using System;
+using Foundation.Diagnostics.Contracts;
+
+namespace Foundation.Data.TextData
 {
     /// <summary>
     /// 
@@ -13,9 +16,7 @@
         /// <param name="table"></param>
         public TextDataSetTable( string name, int rowCount, TextDataTable table )
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(rowCount >= 0);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(rowCount >= 0);
 
             Name = name;
             RowCount = rowCount;

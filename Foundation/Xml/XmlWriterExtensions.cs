@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Xml
 {
@@ -16,9 +17,7 @@ namespace Foundation.Xml
         /// <returns></returns>
         public static IDisposable WriteElement(this XmlWriter xmlWriter, string localName)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(xmlWriter != null);
-#endif
 
             xmlWriter.WriteStartElement(localName);
             return new Disposer(xmlWriter.WriteEndElement);
@@ -34,9 +33,7 @@ namespace Foundation.Xml
         /// <returns></returns>
         public static IDisposable WriteElement(this XmlWriter xmlWriter, string prefix, string localName, string ns)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(xmlWriter != null);
-#endif
 
             xmlWriter.WriteStartElement(prefix, localName, ns);
             return new Disposer(xmlWriter.WriteEndElement);

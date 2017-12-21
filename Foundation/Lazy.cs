@@ -25,7 +25,7 @@ namespace DataCommander.Foundation
         /// <param name="valueFactory"></param>
         public Lazy( Func<T> valueFactory )
         {
-            FoundationContract.Requires( valueFactory != null );
+            FoundationContract.Requires<ArgumentException>( valueFactory != null );
 
             this.valueFactory = valueFactory;
         }

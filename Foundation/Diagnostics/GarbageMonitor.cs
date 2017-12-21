@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Foundation.Configuration;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 using Foundation.Text;
 
@@ -106,9 +107,7 @@ namespace Foundation.Diagnostics
         /// <param name="target"></param>
         public static void Add(string name, object target)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(target != null);
-#endif
 
             string typeName = null;
             var size = 0;
@@ -135,9 +134,7 @@ namespace Foundation.Diagnostics
         /// <param name="target"></param>
         public static void Add(string name, string typeName, int size, object target)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(target != null);
-#endif
 
             var id = Interlocked.Increment(ref GarbageMonitor.id);
             var item = new ListItem(id, name, typeName, size, target);
@@ -155,9 +152,7 @@ namespace Foundation.Diagnostics
         /// <param name="disposeTime"></param>
         public static void SetDisposeTime(object target, DateTime disposeTime)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(target != null);
-#endif
 
             lock (items)
             {

@@ -1,4 +1,6 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Xml;
 
 namespace Foundation.XmlSpreadsheet
@@ -53,9 +55,7 @@ namespace Foundation.XmlSpreadsheet
         /// <param name="xmlWriter"></param>
         public void Write(XmlWriter xmlWriter)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(xmlWriter != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(xmlWriter != null);
 
             using (xmlWriter.WriteElement("Cell"))
             {

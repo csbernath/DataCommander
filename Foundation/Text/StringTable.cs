@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Text
 {
@@ -15,9 +17,7 @@ namespace Foundation.Text
         /// <param name="columnCount"></param>
         public StringTable(int columnCount)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentOutOfRangeException>(columnCount >= 0);
-#endif
 
             for (var i = 0; i < columnCount; i++)
                 Columns.Add(new StringTableColumn());
@@ -108,9 +108,7 @@ namespace Foundation.Text
         /// <returns></returns>
         public string ToString(IReadOnlyList<int> columnWidths, string columnSeparator)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(columnWidths != null);
-#endif
 
             var stringBuilder = new StringBuilder();
             var first = true;
@@ -134,11 +132,9 @@ namespace Foundation.Text
             string columnSeparator,
             StringBuilder stringBuilder)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(row != null);
             FoundationContract.Requires<ArgumentNullException>(columnWidths != null);
             FoundationContract.Requires<ArgumentNullException>(stringBuilder != null);
-#endif
 
             var last = Columns.Count - 1;
 

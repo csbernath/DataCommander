@@ -1,4 +1,6 @@
-﻿using System.Management;
+﻿using System;
+using System.Management;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Management
 {
@@ -15,9 +17,7 @@ namespace Foundation.Management
         /// <param name="managementObject"></param>
         public ManagementJob(ManagementObject managementObject)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(managementObject != null);
-#endif
 
             _managementObject = managementObject;
         }

@@ -1,4 +1,6 @@
-﻿namespace Foundation.Data
+﻿using Foundation.Diagnostics.Contracts;
+
+namespace Foundation.Data
 {
     /// <summary>
     /// 
@@ -71,10 +73,7 @@
         {
             get
             {
-#if CONTRACTS_FULL
                 FoundationContract.Assert( this.Type == DataParameterValueType.Value );
-#endif
-
                 return _value;
             }
         }

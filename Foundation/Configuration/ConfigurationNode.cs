@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Configuration
 {
@@ -81,9 +82,7 @@ namespace Foundation.Configuration
         /// <param name="childNode"></param>
         public void AddChildNode(ConfigurationNode childNode)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentException>(childNode.Parent == null);
-#endif
 
             if (childNode.Name == null)
             {
@@ -102,9 +101,7 @@ namespace Foundation.Configuration
         /// <param name="childNode"></param>
         public void InsertChildNode(int index, ConfigurationNode childNode)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentException>(childNode.Parent == null);
-#endif
 
             if (childNode.Name == null)
             {
@@ -122,10 +119,8 @@ namespace Foundation.Configuration
         /// <param name="childNode"></param>
         public void RemoveChildNode(ConfigurationNode childNode)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(childNode != null);
-            FoundationContract.Requires(this == childNode.Parent);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(childNode != null);
+            FoundationContract.Requires<ArgumentNullException>(this == childNode.Parent);
 
             ChildNodes.Remove(childNode);
             childNode.Parent = null;
@@ -161,9 +156,8 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public ConfigurationNode CreateNode(string nodeName)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(nodeName != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(nodeName != null);
+
             var node = this;
             var nodeNames = nodeName.Split(Delimiter);
 
@@ -264,9 +258,7 @@ namespace Foundation.Configuration
         /// <param name="level">Recursion level</param>
         public void WriteDocumentation(TextWriter textWriter, int level)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(textWriter != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(textWriter != null);
 
             var sb = new StringBuilder();
             var indent = new string(' ', level * 2);

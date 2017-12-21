@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using Foundation.Diagnostics;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 using Foundation.Log;
 
@@ -36,10 +38,8 @@ namespace Foundation.Data
             IDbConnection connection,
             ISafeDbConnection safeDbConnection)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(connection != null);
             FoundationContract.Requires<ArgumentNullException>(safeDbConnection != null);
-#endif
 
             Connection = connection;
             _safeDbConnection = safeDbConnection;
@@ -179,9 +179,7 @@ namespace Foundation.Data
         /// <returns></returns>
         internal IDataReader ExecuteReader(IDbCommand command, CommandBehavior behavior)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(command != null);
-#endif
 
             if (Connection.State != ConnectionState.Open)
             {
@@ -240,9 +238,7 @@ namespace Foundation.Data
         /// <returns></returns>
         internal object ExecuteScalar(IDbCommand command)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(command != null);
-#endif
 
             object scalar = null;
 
@@ -321,9 +317,7 @@ namespace Foundation.Data
         //[ContractInvariantMethod]
         private void ContractInvariant()
         {
-#if CONTRACTS_FULL
-            Contract.Invariant(this.Connection != null);
-#endif
+            //Contract.Invariant(this.Connection != null);
         }
     }
 }

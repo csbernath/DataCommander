@@ -1,4 +1,6 @@
 ﻿using System.Data;
+using System.Diagnostics.Contracts;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
 {
@@ -9,9 +11,7 @@ namespace Foundation.Data
         {
             get
             {
-#if CONTRACTS_FULL
                 FoundationContract.Ensures(Contract.Result<IDbConnection>() != null);
-#endif
                 return null;
             }
         }

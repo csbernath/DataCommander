@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data.TextData
 {
@@ -11,11 +13,9 @@ namespace Foundation.Data.TextData
 
         public TextDataStreamWriter(TextWriter textWriter, IList<TextDataColumn> columns, IList<ITextDataConverter> converters)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(textWriter != null);
-            FoundationContract.Requires(columns != null);
-            FoundationContract.Requires(converters != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(textWriter != null);
+            FoundationContract.Requires<ArgumentNullException>(columns != null);
+            FoundationContract.Requires<ArgumentNullException>(converters != null);
 
             _textWriter = textWriter;
             Columns = columns;
@@ -26,10 +26,8 @@ namespace Foundation.Data.TextData
 
         public void WriteRow(object[] values)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(values != null);
-            FoundationContract.Requires(this.Columns.Count == values.Length);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(values != null);
+            FoundationContract.Requires<ArgumentNullException>(this.Columns.Count == values.Length);
 
             for (var i = 0; i < values.Length; i++)
             {
@@ -37,10 +35,10 @@ namespace Foundation.Data.TextData
                 var converter = _converters[i];
                 var column = Columns[i];
                 var valueString = converter.ToString(value, column);
-#if CONTRACTS_FULL
+
                 FoundationContract.Assert(!string.IsNullOrEmpty(valueString));
                 FoundationContract.Assert(column.MaxLength == valueString.Length);
-#endif
+
                 _textWriter.Write(valueString);
             }
         }

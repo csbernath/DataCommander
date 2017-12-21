@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Foundation.Collections;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
 {
@@ -50,10 +51,8 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static TSource First<TSource>(this IReadOnlyList<TSource> source)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(source != null);
             FoundationContract.Requires<ArgumentException>(source.Count > 0);
-#endif
 
             return source[0];
         }

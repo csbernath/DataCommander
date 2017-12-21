@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics.Contracts;
 using Foundation.Collections.IndexableCollection;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data.TextData
 {
@@ -38,10 +39,9 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override int Add(object value)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires( value != null );
-            FoundationContract.Requires( value is TextDataParameter );
-#endif
+
+            FoundationContract.Requires<ArgumentException>( value != null );
+            FoundationContract.Requires<ArgumentException>( value is TextDataParameter );
 
             var parameter = (TextDataParameter)value;
             _collection.Add(parameter);
@@ -55,9 +55,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public TextDataParameter Add(TextDataParameter parameter)
         {
-#if CONTRACTS_FULL
             FoundationContract.Assert(parameter != null);
-#endif
 
             _collection.Add(parameter);
             return parameter;
@@ -268,14 +266,12 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public TResult GetParameterValue<TResult>(string parameterName)
         {
-#if CONTRACTS_FULL
             FoundationContract.Assert(this.Contains(parameterName));
-#endif
+
             var parameter = _nameIndex[parameterName];
             var value = parameter.Value;
-#if CONTRACTS_FULL
+
             FoundationContract.Assert(value is TResult);
-#endif
             return (TResult)value;
         }
 
@@ -294,9 +290,7 @@ namespace Foundation.Data.TextData
 
         int IList<TextDataParameter>.IndexOf(TextDataParameter item)
         {
-#if CONTRACTS_FULL
             FoundationContract.Assert(item != null);
-#endif
 
             return _listIndex.IndexOf(item);
         }
@@ -325,9 +319,8 @@ namespace Foundation.Data.TextData
 
         void ICollection<TextDataParameter>.Add(TextDataParameter item)
         {
-#if CONTRACTS_FULL
             FoundationContract.Assert(item != null);
-#endif
+
             _collection.Add(item);
         }
 
@@ -352,9 +345,8 @@ namespace Foundation.Data.TextData
 
         bool ICollection<TextDataParameter>.Remove(TextDataParameter item)
         {
-#if CONTRACTS_FULL
             FoundationContract.Assert(item != null);
-#endif
+
             return _collection.Remove(item);
         }
 

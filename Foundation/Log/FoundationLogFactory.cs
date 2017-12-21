@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Foundation.Configuration;
 using Foundation.Diagnostics;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 
 namespace Foundation.Log
@@ -216,9 +217,7 @@ namespace Foundation.Log
         {
             public MultipleLog(IEnumerable<LogWriter> logWriters)
             {
-#if CONTRACTS_FULL
                 FoundationContract.Requires<ArgumentNullException>(logWriters != null);
-#endif
 
                 LogWriters = logWriters.ToArray();
             }

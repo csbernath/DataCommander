@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
 {
@@ -15,10 +17,8 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static T DequeueTail<T>(this Queue<T> queue)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(queue != null);
             FoundationContract.Requires<ArgumentException>(queue.Count > 0);
-#endif
 
             var array = new T[queue.Count];
             queue.CopyTo(array, 0);

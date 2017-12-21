@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
 {
@@ -22,11 +23,9 @@ namespace Foundation.Linq
             IEnumerable<TValue> items,
             Func<TValue, TKey> keySelector)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(dictionary != null);
             FoundationContract.Requires<ArgumentNullException>(items != null);
             FoundationContract.Requires<ArgumentNullException>(keySelector != null);
-#endif
 
             foreach (var item in items)
             {
@@ -65,10 +64,8 @@ namespace Foundation.Linq
             TKey key,
             Func<TKey, TValue> valueFactory)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(dictionary != null);
             FoundationContract.Requires<ArgumentNullException>(valueFactory != null);
-#endif
 
             TValue value;
 
@@ -91,9 +88,7 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(dictionary != null);
-#endif
 
             TValue value;
             dictionary.TryGetValue(key, out value);
@@ -118,13 +113,11 @@ namespace Foundation.Linq
             /// <param name="dictionary"></param>
             public ReadOnlyDictionary(IDictionary<TKey, TValue> dictionary)
             {
-#if CONTRACTS_FULL
                 FoundationContract.Requires<ArgumentNullException>(dictionary != null);
-#endif
                 this.dictionary = dictionary;
             }
 
-#region IDictionary<TKey,TValue> Members
+            #region IDictionary<TKey,TValue> Members
 
             void IDictionary<TKey, TValue>.Add(TKey key, TValue value)
             {

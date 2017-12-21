@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data.TextData
 {
@@ -27,11 +28,9 @@ namespace Foundation.Data.TextData
         /// <param name="converters"></param>
         public TextDataStreamReader(TextReader textReader, IList<TextDataColumn> columns, IList<ITextDataConverter> converters)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(textReader != null);
-            FoundationContract.Requires(columns != null);
-            FoundationContract.Requires(converters != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(textReader != null);
+            FoundationContract.Requires<ArgumentNullException>(columns != null);
+            FoundationContract.Requires<ArgumentNullException>(converters != null);
 
             _textReader = textReader;
             _columns = columns;
@@ -58,20 +57,16 @@ namespace Foundation.Data.TextData
                     break;
                 }
 
-#if CONTRACTS_FULL
                 FoundationContract.Assert(count == maxLength);
-#endif
 
                 if (index == 0)
-                {
                     values = new object[_columns.Count];
-                }
 
                 var source = new string(buffer);
                 var converter = _converters[index];
-#if CONTRACTS_FULL
+
                 FoundationContract.Assert(converter != null);
-#endif
+
                 object value;
 
                 try

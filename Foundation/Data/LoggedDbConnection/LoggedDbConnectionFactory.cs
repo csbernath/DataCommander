@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data.LoggedDbConnection
 {
@@ -14,9 +16,7 @@ namespace Foundation.Data.LoggedDbConnection
         /// <returns></returns>
         public static IDbConnection ToLoggedDbConnection(this IDbConnection connection)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(connection != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(connection != null);
 
             var loggedDbConnection = new LoggedDbConnection(connection);
             var logger = new DbConnectionLogger(loggedDbConnection);

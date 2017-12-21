@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.IO
 {
@@ -18,9 +19,7 @@ namespace Foundation.IO
         /// <param name="stringBuilder"></param>
         public StringBuilderReader(StringBuilder stringBuilder)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(stringBuilder != null);
-#endif
 
             _stringBuilder = stringBuilder;
         }

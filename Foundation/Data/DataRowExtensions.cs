@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Text;
 
 namespace Foundation.Data
@@ -17,13 +19,11 @@ namespace Foundation.Data
         /// <returns></returns>
         public static T GetValue<T>(this DataRow dataRow, string name)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(dataRow != null);
-#endif
+
             var valueObject = dataRow[name];
-#if CONTRACTS_FULL
+
             FoundationContract.Assert(valueObject is T);
-#endif
 
             return (T)valueObject;
         }
@@ -41,9 +41,8 @@ namespace Foundation.Data
             string name,
             T outputNullValue)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(dataRow != null);
-#endif
+
             var valueObject = dataRow[name];
             return Database.GetValue(valueObject, outputNullValue);
         }
@@ -57,9 +56,8 @@ namespace Foundation.Data
         /// <returns></returns>
         public static T GetValueOrDefault<T>(this DataRow dataRow, int columnIndex)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(dataRow != null);
-#endif
+
             var value = dataRow[columnIndex];
             return Database.GetValueOrDefault<T>(value);
         }
@@ -73,9 +71,8 @@ namespace Foundation.Data
         /// <returns></returns>
         public static T GetValueOrDefault<T>(this DataRow dataRow, string name)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(dataRow != null);
-#endif
+
             var value = dataRow[name];
             return Database.GetValueOrDefault<T>(value);
         }
@@ -87,9 +84,8 @@ namespace Foundation.Data
         /// <returns></returns>
         public static StringTable ToStringTable(this DataRow dataRow)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(dataRow != null);
-#endif
+
             var stringTable = new StringTable(2);
             var dataTable = dataRow.Table;
             var itemArray = dataRow.ItemArray;

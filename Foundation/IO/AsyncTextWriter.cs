@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.IO
 {
@@ -26,9 +28,7 @@ namespace Foundation.IO
         /// <param name="textWriter"></param>
         public AsyncTextWriter(TextWriter textWriter)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(textWriter != null);
-#endif
 
             _textWriter = textWriter;
         }

@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Threading;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Threading
 {
@@ -75,9 +77,7 @@ namespace Foundation.Threading
             int consumerCount,
             ThreadPriority priority)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(consumerCount > 0);
-#endif
+            FoundationContract.Requires<ArgumentException>(consumerCount > 0);
 
             _name = name;
             _asyncQueue = asyncQueue;
@@ -111,9 +111,7 @@ namespace Foundation.Threading
         /// <param name="item"></param>
         public void Enqueue(object item)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(item != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(item != null);
 
             lock (_queue)
             {
@@ -143,9 +141,7 @@ namespace Foundation.Threading
 
         private void Consume(ConsumerThread consumerThread, object item)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(consumerThread != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(consumerThread != null);
 
             var args = new AsyncQueueConsumeEventArgs(item);
             var eventHandler = _asyncQueue.BeforeConsume;

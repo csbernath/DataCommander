@@ -1,5 +1,6 @@
 ﻿using System;
 using Foundation.Configuration;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Log
 {
@@ -8,7 +9,7 @@ namespace Foundation.Log
     /// </summary>
     public static class LogFactory
     {
-        private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof (LogFactory));
+        private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(LogFactory));
 
         /// <summary>
         /// 
@@ -27,10 +28,9 @@ namespace Foundation.Log
                 var typeName = node.Attributes["TypeName"].GetValue<string>();
                 var type = Type.GetType(typeName, true);
                 var instance = Activator.CreateInstance(type);
-#if CONTRACTS_FULL
+
                 FoundationContract.Assert(instance is ILogFactory);
-#endif
-                var applicationLog = (ILogFactory)instance;
+                var applicationLog = (ILogFactory) instance;
                 instance = applicationLog;
             }
 

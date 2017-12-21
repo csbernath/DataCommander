@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Foundation.Diagnostics;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
 
 namespace Foundation.IO
@@ -21,9 +22,8 @@ namespace Foundation.IO
         /// <param name="length"></param>
         public SegmentedStreamReader(Stream stream, long length)
         {
-#if CONTRACTS_FULL
+
             FoundationContract.Requires<ArgumentNullException>(stream != null);
-#endif
 
             _stream = stream;
             _length = length;
@@ -79,9 +79,8 @@ namespace Foundation.IO
         /// <returns></returns>
         public override int Read(byte[] buffer, int offset, int count)
         {
-#if CONTRACTS_FULL
+
             FoundationContract.Assert(count >= 0);
-#endif
 
             int read;
             var position = _stream.Position;

@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using Foundation.Collections;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Text;
 
 namespace Foundation.Linq
@@ -86,10 +87,8 @@ namespace Foundation.Linq
             this IEnumerable<TSource> source,
             Func<TSource, TKey> keySelector)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(source != null);
             FoundationContract.Requires<ArgumentNullException>(keySelector != null);
-#endif
 
             return source.Select(keySelector).SelectPreviousAndCurrent();
         }
@@ -107,14 +106,12 @@ namespace Foundation.Linq
             int count,
             int partitionCount)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(source != null);
             FoundationContract.Requires<ArgumentOutOfRangeException>(count >= 0);
             FoundationContract.Requires<ArgumentOutOfRangeException>(partitionCount > 0);
 
             FoundationContract.Ensures(Contract.Result<IEnumerable<List<TSource>>>().Count() <= partitionCount);
             FoundationContract.Ensures(Contract.ForAll(Contract.Result<IEnumerable<List<TSource>>>().ToList(), partition => partition.Count > 0));
-#endif
 
             var partitionSize = count/partitionCount;
             var remainder = count%partitionCount;
@@ -265,10 +262,8 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static SortedDictionary<TKey, TValue> ToSortedDictionary<TKey, TValue>(this IEnumerable<TValue> source, Func<TValue, TKey> keySelector)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(source != null);
             FoundationContract.Requires<ArgumentNullException>(keySelector != null);
-#endif
 
             var dictionary = new SortedDictionary<TKey, TValue>();
             dictionary.Add(source, keySelector);
@@ -297,9 +292,7 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static string ToString<T>(this IEnumerable<T> source, string separator, Func<T, string> toString)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(toString != null);
-#endif
 
             string result;
             if (source != null)
@@ -335,10 +328,8 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static string ToString<TSource>(this IEnumerable<TSource> source, IReadOnlyCollection<StringTableColumnInfo<TSource>> columns)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(source != null);
             FoundationContract.Requires<ArgumentNullException>(columns != null);
-#endif
 
             var table = new StringTable(columns.Count);
 

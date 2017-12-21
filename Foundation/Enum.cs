@@ -1,4 +1,5 @@
 ﻿using System;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation
 {
@@ -16,9 +17,7 @@ namespace Foundation
         /// <returns></returns>
         public static T Parse(string value)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentException>(typeof (T).IsEnum);
-#endif
 
             var type = typeof (T);
             var t = (T)Enum.Parse(type, value);
@@ -32,9 +31,7 @@ namespace Foundation
         /// <returns></returns>
         public static T? ToNullableEnum(int? source)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentException>(typeof (T).IsEnum);
-#endif
 
             T? target;
             if (source != null)

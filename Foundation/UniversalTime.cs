@@ -1,4 +1,5 @@
 ﻿using System;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation
 {
@@ -29,10 +30,8 @@ namespace Foundation
         /// <param name="adjustment">adjustement interval in millseconds</param>
         public UniversalTime(int increment, int adjustment)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentOutOfRangeException>(increment >= 0);
             FoundationContract.Requires<ArgumentOutOfRangeException>(increment <= adjustment);
-#endif
 
             this.increment = increment;
             this.adjustment = adjustment;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
 {
@@ -19,10 +20,10 @@ namespace Foundation.Data
 
         private DataReader(IDbCommand command, IDataReader dataReader)
         {
-#if CONTRACTS_FULL
+
             FoundationContract.Requires<ArgumentNullException>(command != null);
             FoundationContract.Requires<ArgumentNullException>(dataReader != null);
-#endif
+
 
             _command = command;
             _dataReader = dataReader;
@@ -33,10 +34,8 @@ namespace Foundation.Data
             CommandDefinition commandDefinition,
             CommandBehavior commandBehavior)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(transactionScope != null);
             FoundationContract.Requires<ArgumentNullException>(commandDefinition != null);
-#endif
 
             IDbCommand command = null;
             IDataReader dataReader = null;
@@ -73,9 +72,9 @@ namespace Foundation.Data
         /// <returns></returns>
         public IEnumerable<T> Read<T>(Func<IDataRecord, T> read)
         {
-#if CONTRACTS_FULL
+
             FoundationContract.Requires<ArgumentNullException>(read != null);
-#endif
+
             PrivateNextResult();
 
             while (_dataReader.Read())
@@ -90,9 +89,8 @@ namespace Foundation.Data
         /// <param name="read"></param>
         public void Read(Action<IDataRecord> read)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(read != null);
-#endif
+
             PrivateNextResult();
 
             while (_dataReader.Read())
@@ -107,9 +105,8 @@ namespace Foundation.Data
         /// <param name="read"></param>
         public void Read(Func<IDataRecord, bool> read)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(read != null);
-#endif
+
             PrivateNextResult();
 
             while (_dataReader.Read())
@@ -128,10 +125,8 @@ namespace Foundation.Data
         /// <returns></returns>
         public bool NextResult()
         {
-#if CONTRACTS_FULL
-            FoundationContract.Assert(this.dataReader != null);
-            FoundationContract.Assert(!this.nextResultCalled);
-#endif
+            FoundationContract.Assert(this._dataReader != null);
+            FoundationContract.Assert(!this._nextResultCalled);
 
             var nextResult = _dataReader.NextResult();
             _nextResultCalled = true;

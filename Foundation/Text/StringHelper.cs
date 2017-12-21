@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using Foundation.Configuration;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Text
 {
@@ -55,10 +56,8 @@ namespace Foundation.Text
         /// <param name="ch"></param>
         public static unsafe void SetChar(string s, int index, char ch)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(index >= 0);
-            FoundationContract.Requires(index < s.Length);
-#endif
+            FoundationContract.Requires<ArgumentException>(index >= 0);
+            FoundationContract.Requires<ArgumentException>(index < s.Length);
 
             fixed (char* p = s)
             {
@@ -109,10 +108,8 @@ namespace Foundation.Text
             string methodName,
             params object[] parameters)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(textWriter != null);
-            FoundationContract.Requires(obj != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(textWriter != null);
+            FoundationContract.Requires<ArgumentNullException>(obj != null);
 
             var type = obj.GetType();
             var methodInfo = type.GetMethod(methodName);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Foundation.Diagnostics;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Log
 {
@@ -35,9 +36,7 @@ namespace Foundation.Log
         /// <param name="textWriter"></param>
         public TextLogWriter(TextWriter textWriter)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(textWriter != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(textWriter != null);
 
             _textWriter = textWriter;
             _formatter = new TextLogFormatter();

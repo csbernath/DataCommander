@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Linq;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 using Foundation.Text;
 
@@ -18,9 +19,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static string ToStringTableString(this DataTable dataTable)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(dataTable != null);
-#endif
 
             var rows = dataTable.AsEnumerable().Where(dataRow => dataRow.RowState != DataRowState.Deleted);
             var columns = dataTable.Columns.Cast<DataColumn>().Select(ToStringTableColumnInfo).ToArray();

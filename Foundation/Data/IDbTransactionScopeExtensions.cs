@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Threading;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
 {
@@ -17,9 +18,8 @@ namespace Foundation.Data
         /// <returns></returns>
         public static IDbCommand CreateCommand(this IDbTransactionScope transactionScope)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(transactionScope != null);
-#endif
+
             var command = transactionScope.Connection.CreateCommand();
             command.Transaction = transactionScope.Transaction;
             return command;
@@ -33,10 +33,9 @@ namespace Foundation.Data
         /// <returns></returns>
         public static IDbCommand CreateCommand(this IDbTransactionScope transactionScope, CommandDefinition commandDefinition)
         {
-#if CONTRACTS_FULL
+
             FoundationContract.Requires<ArgumentNullException>(transactionScope != null);
             FoundationContract.Requires<ArgumentNullException>(commandDefinition != null);
-#endif
 
             var command = transactionScope.CreateCommand();
             command.CommandText = commandDefinition.CommandText;
@@ -67,10 +66,8 @@ namespace Foundation.Data
             CommandBehavior commandBehavior,
             Func<IDataRecord, T> read)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(transactionScope != null);
             FoundationContract.Requires<ArgumentNullException>(read != null);
-#endif
 
             using (var dataReader = transactionScope.ExecuteReader(commandDefinition, commandBehavior))
             {
@@ -106,10 +103,9 @@ namespace Foundation.Data
             CommandBehavior commandBehavior,
             Action<IDataRecord> read)
         {
-#if CONTRACTS_FULL
+
             FoundationContract.Requires<ArgumentNullException>(transactionScope != null);
             FoundationContract.Requires<ArgumentNullException>(read != null);
-#endif
 
             using (var dataReader = transactionScope.ExecuteReader(commandDefinition, commandBehavior))
             {
@@ -129,10 +125,10 @@ namespace Foundation.Data
             CommandDefinition commandDefinition,
             CancellationToken cancellationToken)
         {
-#if CONTRACTS_FULL
+
             FoundationContract.Requires<ArgumentNullException>(transactionScope != null);
             FoundationContract.Requires<ArgumentNullException>(commandDefinition != null);
-#endif
+
             DataSet dataSet;
 
             using (var command = transactionScope.CreateCommand(commandDefinition))
@@ -155,10 +151,10 @@ namespace Foundation.Data
             CommandDefinition commandDefinition,
             CancellationToken cancellationToken)
         {
-#if CONTRACTS_FULL
+
             FoundationContract.Requires<ArgumentNullException>(transactionScope != null);
             FoundationContract.Requires<ArgumentNullException>(commandDefinition != null);
-#endif
+
             DataTable dataTable;
 
             using (var command = transactionScope.CreateCommand(commandDefinition))
@@ -179,10 +175,10 @@ namespace Foundation.Data
             this IDbTransactionScope transactionScope,
             CommandDefinition commandDefinition)
         {
-#if CONTRACTS_FULL
+
             FoundationContract.Requires<ArgumentNullException>(transactionScope != null);
             FoundationContract.Requires<ArgumentNullException>(commandDefinition != null);
-#endif
+
             int affectedRowCount;
 
             using (var command = transactionScope.CreateCommand(commandDefinition))

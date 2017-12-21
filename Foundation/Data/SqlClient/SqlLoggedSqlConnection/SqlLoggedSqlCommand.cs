@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
 {
@@ -12,10 +13,8 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             SqlLoggedSqlConnection connection,
             IDbCommand command)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(connection != null);
-            FoundationContract.Requires(command != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(connection != null);
+            FoundationContract.Requires<ArgumentNullException>(command != null);
 
             _connection = connection;
             _command = command;

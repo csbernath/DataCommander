@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Configuration
 {
@@ -35,9 +36,7 @@ namespace Foundation.Configuration
         /// <param name="tryGetValue"></param>
         public NameValueCollectionReader(TryGetValue<string, string> tryGetValue)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(tryGetValue != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(tryGetValue != null);
             _tryGetValue = tryGetValue;
         }
 
@@ -135,9 +134,7 @@ namespace Foundation.Configuration
             if (contains)
             {
                 var succeeded = DateTime.TryParse(s, provider, styles, out value);
-#if CONTRACTS_FULL
                 FoundationContract.Assert(succeeded);
-#endif
             }
             else
             {
@@ -161,9 +158,7 @@ namespace Foundation.Configuration
             if (contains)
             {
                 var succeeded = double.TryParse(s, out value);
-#if CONTRACTS_FULL
                 FoundationContract.Assert(succeeded);
-#endif
             }
             else
             {
@@ -189,9 +184,7 @@ namespace Foundation.Configuration
             if (contains)
             {
                 var succeeded = double.TryParse(s, style, provider, out value);
-#if CONTRACTS_FULL
                 FoundationContract.Assert(succeeded);
-#endif
             }
             else
             {
@@ -279,9 +272,7 @@ namespace Foundation.Configuration
             if (contains)
             {
                 var succeeded = float.TryParse(s, style, provider, out value);
-#if CONTRACTS_FULL
                 FoundationContract.Assert(succeeded);
-#endif
             }
             else
             {
@@ -337,18 +328,15 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public bool TryGetValue<T>(string name, TryParse<T> tryParse, out T value)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(tryParse != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(tryParse != null);
+
             string s;
             var contains = _tryGetValue(name, out s);
 
             if (contains)
             {
                 var succeeded = tryParse(s, out value);
-#if CONTRACTS_FULL
                 FoundationContract.Assert(succeeded);
-#endif
             }
             else
             {

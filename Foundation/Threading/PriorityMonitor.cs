@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using Foundation.Collections.IndexableCollection;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
 
 namespace Foundation.Threading
@@ -99,11 +100,9 @@ namespace Foundation.Threading
 
         internal void Exit(LockRequest lockRequest)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(lockRequest != null);
-            FoundationContract.Requires(lockRequest.Monitor == this);
-            FoundationContract.Requires(lockRequest == this.CurrentLockRequest);
-#endif
+            FoundationContract.Requires<ArgumentException>(lockRequest != null);
+            FoundationContract.Requires<ArgumentException>(lockRequest.Monitor == this);
+            FoundationContract.Requires<ArgumentException>(lockRequest == this.CurrentLockRequest);
 
             Log.Trace("Exiting lockRequest... monitoredObject: {0}, priority: {1}", MonitoredObject, lockRequest.Priority);
 
@@ -132,9 +131,7 @@ namespace Foundation.Threading
 
             internal LockRequest(PriorityMonitor<T> monitor, int priority)
             {
-#if CONTRACTS_FULL
-                FoundationContract.Requires(monitor != null);
-#endif
+                FoundationContract.Requires<ArgumentException>(monitor != null);
 
                 Monitor = monitor;
                 Priority = priority;

@@ -1,5 +1,7 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
 using Foundation.Diagnostics;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 using Foundation.Log;
 
@@ -18,9 +20,7 @@ namespace Foundation.Data.LoggedDbConnection
 
         public DbConnectionLogger(LoggedDbConnection connection)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(connection != null);
-#endif
 
             _connection = connection;
 

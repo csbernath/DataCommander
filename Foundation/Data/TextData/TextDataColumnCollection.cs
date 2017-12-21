@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Globalization;
 using Foundation.Collections.IndexableCollection;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data.TextData
 {
@@ -21,12 +22,12 @@ namespace Foundation.Data.TextData
         /// </summary>
         public TextDataColumnCollection()
         {
-            _listIndex = new ListIndex<TextDataColumn>( "List" );
+            _listIndex = new ListIndex<TextDataColumn>("List");
 
             _nameIndex = new UniqueIndex<string, TextDataColumn>(
                 "Name",
-                column => GetKeyResponse.Create( true, column.ColumnName ),
-                SortOrder.None );
+                column => GetKeyResponse.Create(true, column.ColumnName),
+                SortOrder.None);
 
             _collection = new IndexableCollection<TextDataColumn>(_listIndex);
         }
@@ -36,15 +37,13 @@ namespace Foundation.Data.TextData
         /// </summary>
         /// <param name="columnName"></param>
         /// <returns></returns>
-        public TextDataColumn this[ string columnName ]
+        public TextDataColumn this[string columnName]
         {
             get
             {
-#if CONTRACTS_FULL
-                FoundationContract.Requires( this.Contains( columnName ) );
-#endif
+                FoundationContract.Requires<ArgumentNullException>(this.Contains(columnName));
 
-                return _nameIndex[ columnName ];
+                return _nameIndex[columnName];
             }
         }
 
@@ -54,9 +53,9 @@ namespace Foundation.Data.TextData
         /// <param name="columnName"></param>
         /// <returns></returns>
         [Pure]
-        public bool Contains( string columnName )
+        public bool Contains(string columnName)
         {
-            return _nameIndex.ContainsKey( columnName );
+            return _nameIndex.ContainsKey(columnName);
         }
 
         /// <summary>
@@ -64,15 +63,15 @@ namespace Foundation.Data.TextData
         /// </summary>
         /// <param name="columnName"></param>
         /// <returns></returns>
-        public int IndexOf( string columnName )
+        public int IndexOf(string columnName)
         {
             TextDataColumn column;
-            var contains = _nameIndex.TryGetValue( columnName, out column );
+            var contains = _nameIndex.TryGetValue(columnName, out column);
             int index;
 
             if (contains)
             {
-                index = _listIndex.IndexOf( column );
+                index = _listIndex.IndexOf(column);
             }
             else
             {
@@ -82,26 +81,26 @@ namespace Foundation.Data.TextData
             return index;
         }
 
-        internal int IndexOf( string columnName, bool throwException )
+        internal int IndexOf(string columnName, bool throwException)
         {
-            var index = IndexOf( columnName );
+            var index = IndexOf(columnName);
 
             if (index < 0)
             {
-                var message = string.Format( CultureInfo.InvariantCulture, "Column '{0} not found.", columnName );
-                throw new IndexOutOfRangeException( message );
+                var message = string.Format(CultureInfo.InvariantCulture, "Column '{0} not found.", columnName);
+                throw new IndexOutOfRangeException(message);
             }
 
             return index;
         }
 
-        internal int IndexOf( TextDataColumn column, bool throwException )
+        internal int IndexOf(TextDataColumn column, bool throwException)
         {
-            var index = IndexOf( column );
+            var index = IndexOf(column);
 
             if (index < 0)
             {
-                throw new ArgumentException( "Column is not in ColumnList" );
+                throw new ArgumentException("Column is not in ColumnList");
             }
 
             return index;
@@ -112,33 +111,28 @@ namespace Foundation.Data.TextData
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public TextDataColumn this[ int index ]
+        public TextDataColumn this[int index]
         {
             get
             {
-#if CONTRACTS_FULL
-                FoundationContract.Assert( index >= 0 );
-                FoundationContract.Assert( index < this.collection.Count );
-#endif
+                FoundationContract.Assert(index >= 0);
+                FoundationContract.Assert(index < _collection.Count);
 
-                return _listIndex[ index ];
+                return _listIndex[index];
             }
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set { throw new NotImplementedException(); }
         }
 
-#region ICollection<TextDataColumn> Members
+        #region ICollection<TextDataColumn> Members
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="item"></param>
-        public void Add( TextDataColumn item )
+        public void Add(TextDataColumn item)
         {
-            _collection.Add( item );
+            _collection.Add(item);
         }
 
         void ICollection<TextDataColumn>.Clear()
@@ -146,12 +140,12 @@ namespace Foundation.Data.TextData
             throw new NotImplementedException();
         }
 
-        bool ICollection<TextDataColumn>.Contains( TextDataColumn item )
+        bool ICollection<TextDataColumn>.Contains(TextDataColumn item)
         {
             throw new NotImplementedException();
         }
 
-        void ICollection<TextDataColumn>.CopyTo( TextDataColumn[] array, int arrayIndex )
+        void ICollection<TextDataColumn>.CopyTo(TextDataColumn[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
@@ -163,41 +157,41 @@ namespace Foundation.Data.TextData
 
         bool ICollection<TextDataColumn>.IsReadOnly => throw new NotImplementedException();
 
-        bool ICollection<TextDataColumn>.Remove( TextDataColumn item )
+        bool ICollection<TextDataColumn>.Remove(TextDataColumn item)
         {
             throw new NotImplementedException();
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable<TextDataColumn> Members
+        #region IEnumerable<TextDataColumn> Members
 
         IEnumerator<TextDataColumn> IEnumerable<TextDataColumn>.GetEnumerator()
         {
             return _collection.GetEnumerator();
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable Members
+        #region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _collection.GetEnumerator();
         }
 
-#endregion
+        #endregion
 
-#region IList<TextDataColumn> Members
+        #region IList<TextDataColumn> Members
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public int IndexOf( TextDataColumn item )
+        public int IndexOf(TextDataColumn item)
         {
-            return _listIndex.IndexOf( item );
+            return _listIndex.IndexOf(item);
         }
 
         /// <summary>
@@ -205,7 +199,7 @@ namespace Foundation.Data.TextData
         /// </summary>
         /// <param name="index"></param>
         /// <param name="item"></param>
-        public void Insert( int index, TextDataColumn item )
+        public void Insert(int index, TextDataColumn item)
         {
             throw new NotImplementedException();
         }
@@ -214,11 +208,11 @@ namespace Foundation.Data.TextData
         /// 
         /// </summary>
         /// <param name="index"></param>
-        public void RemoveAt( int index )
+        public void RemoveAt(int index)
         {
             throw new NotImplementedException();
         }
 
-#endregion
+        #endregion
     }
 }

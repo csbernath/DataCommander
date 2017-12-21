@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Xml;
 
 namespace Foundation.XmlSpreadsheet
@@ -19,9 +20,7 @@ namespace Foundation.XmlSpreadsheet
         /// <param name="xmlWriter"></param>
         public XmlSpreadsheetWriter(XmlWriter xmlWriter)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(xmlWriter != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(xmlWriter != null);
 
             XmlWriter = xmlWriter;
 
@@ -90,6 +89,7 @@ namespace Foundation.XmlSpreadsheet
                                 }
                             }
                         }
+
                         columnIndex++;
                     }
 
@@ -104,9 +104,7 @@ namespace Foundation.XmlSpreadsheet
         /// <param name="table"></param>
         public void WriteStartTable(XmlSpreadsheetTable table)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(table != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(table != null);
             _tableIndex++;
             _table = table;
 
@@ -127,6 +125,7 @@ namespace Foundation.XmlSpreadsheet
                         XmlWriter.WriteAttributeString("ss:Width", column.Width);
                     }
                 }
+
                 columnIndex++;
             }
 
@@ -190,9 +189,7 @@ namespace Foundation.XmlSpreadsheet
         /// <param name="values"></param>
         public void WriteRow(object[] values)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(values != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(values != null);
 
             WriteStartRow();
 

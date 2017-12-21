@@ -1,4 +1,5 @@
 ﻿using System;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Log
 {
@@ -13,9 +14,7 @@ namespace Foundation.Log
 
         public FoundationLog(FoundationLogFactory applicationLog, string name)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(applicationLog != null);
-#endif
 
             _applicationLog = applicationLog;
             _name = name;

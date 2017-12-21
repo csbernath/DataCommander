@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Foundation.Collections.IndexableCollection;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Configuration
 {
@@ -59,9 +60,7 @@ namespace Foundation.Configuration
         /// <param name="item"></param>
         public void Add(ConfigurationNode item)
         {
-#if CONTRACTS_FULL
             FoundationContract.Assert(item != null);
-#endif
             _collection.Add(item);
         }
 

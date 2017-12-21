@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Common;
 using System.Globalization;
 using System.Linq;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
 {
@@ -24,10 +25,8 @@ namespace Foundation.Data
             DbConnection connection,
             string commandText)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(factory != null);
             FoundationContract.Requires<ArgumentNullException>(connection != null);
-#endif
 
             var command = connection.CreateCommand();
             command.CommandText = commandText;
@@ -58,11 +57,9 @@ namespace Foundation.Data
             CommandBehavior commandBehavior,
             Func<IDataRecord, T> read)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(dbProviderFactory != null);
             FoundationContract.Requires<ArgumentNullException>(commandDefinition != null);
             FoundationContract.Requires<ArgumentNullException>(read != null);
-#endif
 
             using (var connection = dbProviderFactory.CreateConnection())
             {

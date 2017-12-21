@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
 {
@@ -8,9 +9,7 @@ namespace Foundation.Data
     {
         public DbColumn(DataRow schemaTableRow)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(schemaTableRow != null);
-#endif
 
             ColumnName = schemaTableRow.Field<string>(SchemaTableColumn.ColumnName);
             ColumnOrdinal = (int)schemaTableRow[SchemaTableColumn.ColumnOrdinal];

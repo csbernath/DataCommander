@@ -1,4 +1,5 @@
 ﻿using System;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation
 {
@@ -29,10 +30,8 @@ namespace Foundation
 
             public UnaryFunctionComposition(Func<X, Y> func1, Func<Y, Z> func2)
             {
-#if CONTRACTS_FULL
-                FoundationContract.Requires(func1 != null);
-                FoundationContract.Requires(func2 != null);
-#endif
+                FoundationContract.Requires<ArgumentNullException>(func1 != null);
+                FoundationContract.Requires<ArgumentNullException>(func2 != null);
 
                 this.func1 = func1;
                 this.func2 = func2;

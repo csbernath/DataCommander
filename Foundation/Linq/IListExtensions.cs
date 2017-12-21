@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Foundation.Collections;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
 {
@@ -18,10 +19,8 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static int IndexOf<T>(this IList<T> source, Func<T, bool> predicate)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(source != null);
-#endif
-
+            
             const int minIndex = 0;
             var maxIndex = source.Count - 1;
             return LinearSearch.IndexOf(minIndex, maxIndex, index => predicate(source[index]));
@@ -36,9 +35,7 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static int LastIndexOf<T>(this IList<T> source, Func<T, bool> predicate)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(source != null);
-#endif
 
             const int minIndex = 0;
             var maxIndex = source.Count - 1;
@@ -53,10 +50,8 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static T Last<T>(this IList<T> source)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(source != null);
             FoundationContract.Requires<ArgumentException>(source.Count > 0);
-#endif
 
             var lastIndex = source.Count - 1;
             var last = source[lastIndex];

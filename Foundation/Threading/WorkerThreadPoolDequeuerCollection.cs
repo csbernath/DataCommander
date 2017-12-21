@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Threading
 {
@@ -28,9 +29,7 @@ namespace Foundation.Threading
         /// <param name="dequeuer"></param>
         public void Add(WorkerThreadPoolDequeuer dequeuer)
         {
-#if CONTRACTS_FULL
             FoundationContract.Assert(dequeuer != null);
-#endif
 
             Threads.Add(dequeuer.Thread);
             _list.Add(dequeuer);

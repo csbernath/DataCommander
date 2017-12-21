@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Diagnostics
 {
@@ -26,9 +27,7 @@ namespace Foundation.Diagnostics
         /// <param name="toString"></param>
         public Int64PerformanceCounter(string name, Func<long, string> toString)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(toString != null);
-#endif
 
             this.name = name;
             this.toString = toString;

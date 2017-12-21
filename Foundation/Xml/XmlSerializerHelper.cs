@@ -2,6 +2,7 @@
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Xml
 {
@@ -18,9 +19,7 @@ namespace Foundation.Xml
         /// <returns></returns>
         public static object Deserialize( string xml, Type type )
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(type != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(type != null);
 
             var stringReader = new StringReader( xml );
             var xmlSerializer = new XmlSerializer( type );
@@ -36,10 +35,8 @@ namespace Foundation.Xml
         /// <returns></returns>
         public static object Deserialize( XmlReader xmlReader, Type type )
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(xmlReader != null);
-            FoundationContract.Requires(type != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(xmlReader != null);
+            FoundationContract.Requires<ArgumentException>(type != null);
 
             var xmlSerializer = new XmlSerializer( type );
             var obj = xmlSerializer.Deserialize( xmlReader );

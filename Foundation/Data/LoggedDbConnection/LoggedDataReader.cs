@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data.LoggedDbConnection
 {
@@ -13,10 +14,8 @@ namespace Foundation.Data.LoggedDbConnection
             IDataReader dataReader,
             EventHandler<AfterReadEventArgs> afterRead)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(dataReader != null);
-            FoundationContract.Requires(afterRead != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(dataReader != null);
+            FoundationContract.Requires<ArgumentNullException>(afterRead != null);
 
             _dataReader = dataReader;
             _afterRead = afterRead;

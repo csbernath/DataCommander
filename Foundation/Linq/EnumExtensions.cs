@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
 {
@@ -11,15 +12,15 @@ namespace Foundation.Linq
     public static class EnumExtensions
     {
 #if FOUNDATION_3_5
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="container"></param>
-    /// <param name="flag"></param>
-    /// <returns></returns>
+/// <summary>
+/// 
+/// </summary>
+/// <param name="container"></param>
+/// <param name="flag"></param>
+/// <returns></returns>
         public static bool HasFlag( this Enum container, Enum flag )
         {
-            FoundationContract.Requires( container.GetType() == flag.GetType() );
+            FoundationContract.Requires<ArgumentException>( container.GetType() == flag.GetType() );
 
             UInt64 containerUInt64 = Convert.ToUInt64( container );
             UInt64 flagUInt64 = Convert.ToUInt64( flag );
@@ -37,10 +38,9 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static T SetFlag<T>(this T container, T flag)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires<ArgumentException>(typeof (T).IsEnum);
-#endif
-            var type = typeof (T);
+            FoundationContract.Requires<ArgumentException>(typeof(T).IsEnum);
+
+            var type = typeof(T);
 
             var containerUInt64 = Convert.ToUInt64(container, CultureInfo.InvariantCulture);
             var flagUInt64 = Convert.ToUInt64(flag, CultureInfo.InvariantCulture);
@@ -58,10 +58,9 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static T SetFlag<T>(this T container, T flag, bool set)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires<ArgumentException>(typeof (T).IsEnum);
-#endif
-            var type = typeof (T);
+            FoundationContract.Requires<ArgumentException>(typeof(T).IsEnum);
+
+            var type = typeof(T);
 
             var containerUInt64 = Convert.ToUInt64(container);
             var flagUInt64 = Convert.ToUInt64(flag);
@@ -83,10 +82,10 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static T ResetFlag<T>(this T container, T flag)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires<ArgumentNullException>(typeof (T).IsEnum);
-#endif
-            var type = typeof (T);
+
+            FoundationContract.Requires<ArgumentNullException>(typeof(T).IsEnum);
+
+            var type = typeof(T);
             var containerUInt64 = Convert.ToUInt64(container);
             var flagUInt64 = Convert.ToUInt64(flag);
             containerUInt64 &= ~flagUInt64;
@@ -101,7 +100,7 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static IEnumerable<Tuple<string, T>> GetPublicStaticFields<T>(Type type)
         {
-            var typeCode = Type.GetTypeCode(typeof (T));
+            var typeCode = Type.GetTypeCode(typeof(T));
             var fields = type.GetFields(BindingFlags.Public | BindingFlags.Static);
 
             for (var i = 0; i < fields.Length; i++)

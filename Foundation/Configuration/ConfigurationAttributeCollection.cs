@@ -87,9 +87,8 @@ namespace Foundation.Configuration
         /// <param name="description"></param>
         public void Add(string name, object value, string description)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(!this.ContainsKey(name));
-#endif
+            FoundationContract.Requires<ArgumentNullException>(!this.ContainsKey(name));
+
             var attribute = new ConfigurationAttribute(name, value, description);
             _collection.Add(attribute);
         }

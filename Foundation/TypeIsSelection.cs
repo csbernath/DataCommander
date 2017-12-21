@@ -1,4 +1,5 @@
 ﻿using System;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation
 {
@@ -16,9 +17,7 @@ namespace Foundation
         /// <param name="type"></param>
         public TypeIsSelection(Type type)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(type != null);
-#endif
             this.type = type;
         }
 
@@ -30,9 +29,7 @@ namespace Foundation
         /// <returns></returns>
         public TypeIsSelection IfTypeIs<T>(Action action)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(action != null);
-#endif
 
             if (!selected && type == typeof (T))
             {
@@ -49,14 +46,10 @@ namespace Foundation
         /// <param name="action"></param>
         public void Else(Action action)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(action != null);
-#endif
 
             if (!selected)
-            {
                 action();
-            }
         }
     }
 }

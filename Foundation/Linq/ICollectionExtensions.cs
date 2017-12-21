@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
 {
@@ -41,9 +43,9 @@ namespace Foundation.Linq
         /// <param name="items"></param>
         public static void Add<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
-#if CONTRACTS_FULL
+
             FoundationContract.Requires<ArgumentException>(collection != null || items == null);
-#endif
+
 
             if (items != null)
             {
@@ -63,9 +65,7 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static int Remove<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentException>(collection != null || items == null);
-#endif
 
             var count = 0;
 
@@ -93,9 +93,8 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static ICollection<T> AsReadOnly<T>(this ICollection<T> collection)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(collection != null);
-#endif
+
             return new ReadOnlyCollection<T>(collection);
         }
 
@@ -140,9 +139,7 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static T[] ToArray<T>(ICollection<T> source)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(source != null);
-#endif
 
             var target = new T[source.Count];
             source.CopyTo(target, 0);
@@ -172,9 +169,8 @@ namespace Foundation.Linq
             /// <param name="source"></param>
             public CastedCollection(ICollection source)
             {
-#if CONTRACTS_FULL
                 FoundationContract.Requires<ArgumentNullException>(source != null);
-#endif
+
                 this.source = source;
                 sourceAsList = source as IList;
             }
@@ -187,9 +183,7 @@ namespace Foundation.Linq
             /// <param name="item"></param>
             void ICollection<TResult>.Add(TResult item)
             {
-#if CONTRACTS_FULL
                 FoundationContract.Assert(this.sourceAsList != null);
-#endif
 
                 sourceAsList.Add(item);
             }
@@ -199,9 +193,7 @@ namespace Foundation.Linq
             /// </summary>
             void ICollection<TResult>.Clear()
             {
-#if CONTRACTS_FULL
                 FoundationContract.Assert(this.sourceAsList != null);
-#endif
 
                 sourceAsList.Clear();
             }
@@ -307,9 +299,7 @@ namespace Foundation.Linq
             /// <param name="collection"></param>
             public ReadOnlyCollection(ICollection<T> collection)
             {
-#if CONTRACTS_FULL
-                FoundationContract.Requires(collection != null);
-#endif
+                FoundationContract.Requires<ArgumentNullException>(collection != null);
 
                 this.collection = collection;
             }
@@ -340,9 +330,8 @@ namespace Foundation.Linq
             /// <returns></returns>
             bool ICollection<T>.Contains(T item)
             {
-#if CONTRACTS_FULL
                 FoundationContract.Ensures(!Contract.Result<bool>() || this.Count > 0);
-#endif
+
                 return collection.Contains(item);
             }
 

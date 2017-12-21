@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Log
 {
@@ -17,10 +18,8 @@ namespace Foundation.Log
         /// <returns></returns>
         public static ILog GetTypeLog(this ILogFactory applicationLog, Type type)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(applicationLog != null);
             FoundationContract.Requires<ArgumentNullException>(type != null);
-#endif
 
             var name = type.FullName;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
 {
@@ -27,10 +28,8 @@ namespace Foundation.Data
         /// <param name="value"></param>
         public static void SetValue<T>( this IDataParameter parameter, DataParameterValue<T> value )
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires( parameter != null );
-            FoundationContract.Requires( value.Type == DataParameterValueType.Value || value.Type == DataParameterValueType.Null || value.Type == DataParameterValueType.Default );
-#endif
+            FoundationContract.Requires<ArgumentNullException>( parameter != null );
+            FoundationContract.Requires<ArgumentNullException>( value.Type == DataParameterValueType.Value || value.Type == DataParameterValueType.Null || value.Type == DataParameterValueType.Default );
 
             object valueObject;
 

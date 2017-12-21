@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Xml;
 
 namespace Foundation.Linq
@@ -77,9 +78,9 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static bool In<T>(this T item, params T[] collection)
         {
-#if CONTRACTS_FULL
+
             FoundationContract.Requires<ArgumentNullException>(collection != null);
-#endif
+
             return collection.Contains(item);
         }
 

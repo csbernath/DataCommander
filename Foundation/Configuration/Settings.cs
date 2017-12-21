@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Configuration
 {
@@ -164,9 +165,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public static string GetAssemblyConfigFileName(Assembly assembly)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(assembly != null);
-#endif
 
             var codeBase = assembly.CodeBase;
             var uri = new Uri(codeBase);

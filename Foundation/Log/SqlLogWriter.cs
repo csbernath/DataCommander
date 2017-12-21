@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Threading;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 using Foundation.Threading;
 
@@ -40,11 +41,9 @@ namespace Foundation.Log
             int commandTimeout,
             SingleThreadPool singleThreadPool)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(createConnection != null);
             FoundationContract.Requires<ArgumentNullException>(logEntryToCommandText != null);
             FoundationContract.Requires<ArgumentNullException>(singleThreadPool != null);
-#endif
 
             _createConnection = createConnection;
             _logEntryToCommandText = logEntryToCommandText;

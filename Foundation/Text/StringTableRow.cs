@@ -1,4 +1,7 @@
-﻿namespace Foundation.Text
+﻿using System;
+using Foundation.Diagnostics.Contracts;
+
+namespace Foundation.Text
 {
     /// <summary>
     /// Represents a row in the <see cref="StringTable"/>.
@@ -13,9 +16,7 @@
         /// <param name="table"></param>
         internal StringTableRow(StringTable table)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(table != null);
-#endif
 
             Table = table;
             _cells = new string[table.Columns.Count];
@@ -33,18 +34,13 @@
         {
             get
             {
-#if CONTRACTS_FULL
-                FoundationContract.Requires(0 <= columnIndex && columnIndex < this.Table.Columns.Count);
-#endif
-
+                FoundationContract.Requires<ArgumentException>(0 <= columnIndex && columnIndex < this.Table.Columns.Count);
                 return _cells[columnIndex];
             }
 
             set
             {
-#if CONTRACTS_FULL
-                FoundationContract.Requires(0 <= columnIndex && columnIndex < this.Table.Columns.Count);
-#endif
+                FoundationContract.Requires<ArgumentException>(0 <= columnIndex && columnIndex < this.Table.Columns.Count);
                 _cells[columnIndex] = value;
             }
         }

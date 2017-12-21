@@ -3,6 +3,7 @@ using System.Data;
 using System.Globalization;
 using System.Text;
 using System.Threading;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
 {
@@ -29,9 +30,7 @@ namespace Foundation.Data
         /// <param name="value"></param>
         public static void AddParameterIfNotNull(this IDbCommand command, string parameterName, object value)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(command != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(command != null);
 
             if (value != null)
             {
@@ -64,9 +63,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static DataTable ExecuteDataTable(this IDbCommand command, CancellationToken cancellationToken)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(command != null);
-#endif
 
             var dataTable = new DataTable
             {
@@ -85,15 +82,10 @@ namespace Foundation.Data
         /// <returns></returns>
         public static T ExecuteScalarValue<T>(this IDbCommand command)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(command != null);
-#endif
 
             var scalar = command.ExecuteScalar();
-#if CONTRACTS_FULL
             FoundationContract.Assert(scalar is T);
-#endif
-
             return (T)scalar;
         }
 
@@ -105,9 +97,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static T ExecuteScalarValueOrDefault<T>(this IDbCommand command)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(command != null);
-#endif
 
             var scalar = command.ExecuteScalar();
             return Database.GetValueOrDefault<T>(scalar);
@@ -125,10 +115,8 @@ namespace Foundation.Data
             DataSet dataSet,
             CancellationToken cancellationToken)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(command != null);
             FoundationContract.Requires<ArgumentNullException>(dataSet != null);
-#endif
 
             var rowCount = 0;
             var resultIndex = 0;
@@ -204,9 +192,7 @@ namespace Foundation.Data
             DataTable dataTable,
             CancellationToken cancellationToken)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(command != null);
-#endif
 
             var rowCount = 0;
 
@@ -242,9 +228,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static string ToLogString(this IDbCommand command)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(command != null);
-#endif
 
             var sb = new StringBuilder();
 

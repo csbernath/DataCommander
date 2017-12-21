@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
 {
@@ -17,9 +19,8 @@ namespace Foundation.Data
         /// <param name="transaction"></param>
         public DbTransactionScope(IDbConnection connection, IDbTransaction transaction)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(connection != null);
-#endif
+
             _connection = connection;
             _transaction = transaction;
         }

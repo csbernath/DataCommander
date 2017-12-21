@@ -1,4 +1,5 @@
 ﻿using System;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation
 {
@@ -20,10 +21,8 @@ namespace Foundation
         /// <param name="adjustment"></param>
         public LocalTime(int increment, int adjustment)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentOutOfRangeException>(increment >= 0);
             FoundationContract.Requires<ArgumentOutOfRangeException>(increment <= adjustment);
-#endif
 
             _increment = increment;
             _adjustment = adjustment;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management;
 using System.Text;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 
 namespace Foundation.Management
@@ -20,9 +21,7 @@ namespace Foundation.Management
         /// <param name="managementObject"></param>
         public MsvmComputerSystem(ManagementObject managementObject)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(managementObject != null);
-#endif
 
             _managementObject = managementObject;
         }
@@ -35,15 +34,13 @@ namespace Foundation.Management
         /// <returns></returns>
         public static MsvmComputerSystem GetByName(ManagementScope managementScope, string name)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(managementScope != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(managementScope != null);
 
             var query = $"SELECT * FROM Msvm_ComputerSystem WHERE Name='{name}'";
             var list = managementScope.ExecuteQuery(query, mo => new MsvmComputerSystem(mo));
-#if CONTRACTS_FULL
+
             FoundationContract.Assert(list.Count > 0);
-#endif
+
             MsvmComputerSystem item;
 
             if (list.Count == 0)
@@ -66,9 +63,7 @@ namespace Foundation.Management
         /// <returns></returns>
         public static List<MsvmComputerSystem> GetByElementName(ManagementScope managementScope, string elementName)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(managementScope != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(managementScope != null);
 
             var query = $"SELECT * FROM Msvm_ComputerSystem WHERE ElementName='{elementName}'";
             var list = managementScope.ExecuteQuery(query, mo => new MsvmComputerSystem(mo));
@@ -84,10 +79,8 @@ namespace Foundation.Management
         public static List<MsvmComputerSystem> GetByElementNames(ManagementScope managementScope,
             IEnumerable<string> elementNames)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(managementScope != null);
-            FoundationContract.Requires(elementNames != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(managementScope != null);
+            FoundationContract.Requires<ArgumentNullException>(elementNames != null);
 
             var sb = new StringBuilder();
             sb.AppendFormat("SELECT * FROM Msvm_ComputerSystem WHERE");

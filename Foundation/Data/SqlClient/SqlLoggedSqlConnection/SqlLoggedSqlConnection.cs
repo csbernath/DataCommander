@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
 {
@@ -31,9 +32,7 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             string connectionString,
             ISqlLoggedSqlCommandFilter filter)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(sqlLog != null);
-#endif
+            FoundationContract.Requires<ArgumentNullException>(sqlLog != null);
 
             _sqlLog = sqlLog;
             _applicationId = applicationId;

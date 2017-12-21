@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
 {
@@ -20,9 +22,8 @@ namespace Foundation.Linq
 
             if (arrays != null)
             {
-#if CONTRACTS_FULL
-                Contract.ForAll(arrays, a => a != null);
-#endif
+                //Contract.ForAll(arrays, a => a != null);
+
                 var resultLength = arrays.Sum(a => a.Length);
                 result = new T[resultLength];
                 var index = 0;
@@ -98,9 +99,7 @@ namespace Foundation.Linq
 
             if (array != null)
             {
-#if CONTRACTS_FULL
                 FoundationContract.Assert(comparer != null);
-#endif
 
                 for (var i = 0; i < array.Length; i++)
                 {

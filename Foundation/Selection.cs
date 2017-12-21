@@ -1,4 +1,5 @@
 ﻿using System;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation
 {
@@ -47,9 +48,7 @@ namespace Foundation
         /// <returns></returns>
         public static int Select(Func<bool>[] selections)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(selections != null);
-#endif
 
             var selectedIndex = -1;
 
@@ -193,10 +192,7 @@ namespace Foundation
         /// <param name="selections"></param>
         public MultipleDispatchSelection(params Func<TArgument, bool>[] selections)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(selections != null);
-#endif
-
             this.selections = selections;
         }
 

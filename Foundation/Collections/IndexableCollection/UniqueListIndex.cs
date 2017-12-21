@@ -67,9 +67,7 @@ namespace Foundation.Collections.IndexableCollection
         /// </summary>
         public void Clear()
         {
-#if CONTRACTS_FULL
             FoundationContract.Ensures(this.Count == 0);
-#endif
             _list.Clear();
         }
 
@@ -80,9 +78,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool Contains(T item)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Ensures(!Contract.Result<bool>() || this.Count > 0);
-#endif
+            //FoundationContract.Ensures(!Contract.Result<bool>() || this.Count > 0);
             return _list.Contains(item);
         }
 

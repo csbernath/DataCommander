@@ -1,5 +1,6 @@
 ﻿using System;
 using System.CodeDom.Compiler;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.IO
 {
@@ -15,7 +16,7 @@ namespace Foundation.IO
         /// 
         /// </summary>
         /// <param name="textWriter"></param>
-        public Indentation( IndentedTextWriter textWriter )
+        public Indentation(IndentedTextWriter textWriter)
         {
             _textWriter = textWriter;
             _indent = ++_textWriter.Indent;
@@ -25,13 +26,11 @@ namespace Foundation.IO
 
         void IDisposable.Dispose()
         {
-#if CONTRACTS_FULL
-            FoundationContract.Assert( this.textWriter.Indent == this.indent );
-#endif
+            FoundationContract.Assert(_textWriter.Indent == _indent);
 
             _textWriter.Indent--;
         }
 
-#endregion
+        #endregion
     }
 }

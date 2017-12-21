@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
+using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
 {
@@ -16,10 +18,8 @@ namespace Foundation.Data
 
         internal AsyncDbCommand(AsyncDbConnection connection, IDbCommand command)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(connection != null);
             FoundationContract.Requires<ArgumentNullException>(command != null);
-#endif
 
             _connection = connection;
             _command = command;
@@ -50,10 +50,7 @@ namespace Foundation.Data
         {
             get
             {
-#if CONTRACTS_FULL
-                FoundationContract.Assert(this.command != null);
-#endif
-
+                FoundationContract.Assert(_command != null);
                 return _command.CommandType;
             }
 
@@ -96,10 +93,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public int ExecuteNonQuery()
         {
-#if CONTRACTS_FULL
-            FoundationContract.Assert(this.connection != null);
-#endif
-
+            FoundationContract.Assert(_connection != null);
             return _connection.ExecuteNonQuery(this);
         }
 
@@ -171,17 +165,13 @@ namespace Foundation.Data
         {
             get
             {
-#if CONTRACTS_FULL
-                FoundationContract.Assert(this.command != null);
-#endif
+                FoundationContract.Assert(_command != null);
                 return _command.CommandText;
             }
 
             set
             {
-#if CONTRACTS_FULL
-                FoundationContract.Assert(this.command != null);
-#endif
+                FoundationContract.Assert(_command != null);
                 _command.CommandText = value;
             }
         }
@@ -193,9 +183,7 @@ namespace Foundation.Data
         {
             get
             {
-#if CONTRACTS_FULL
-                FoundationContract.Assert(this.command != null);
-#endif
+                FoundationContract.Assert(_command != null);
                 return _command.Parameters;
             }
         }
@@ -207,18 +195,14 @@ namespace Foundation.Data
         {
             get
             {
-#if CONTRACTS_FULL
-                FoundationContract.Assert(this.command != null);
-#endif
+                FoundationContract.Assert(_command != null);
 
                 return _command.Transaction;
             }
 
             set
             {
-#if CONTRACTS_FULL
-                FoundationContract.Assert(this.command != null);
-#endif
+                FoundationContract.Assert(_command != null);
 
                 _command.Transaction = value;
             }
@@ -241,10 +225,8 @@ namespace Foundation.Data
         //[ContractInvariantMethod]
         private void ObjectInvariant()
         {
-#if CONTRACTS_FULL
-            Contract.Invariant(this.connection != null);
-            Contract.Invariant(this.command != null);
-#endif
+            //Contract.Invariant(this.connection != null);
+            //Contract.Invariant(this.command != null);
         }
     }
 }

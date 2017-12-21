@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 using Foundation.Diagnostics;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
 
 namespace Foundation.Threading
@@ -35,9 +36,7 @@ namespace Foundation.Threading
         /// <param name="start"></param>
         public WorkerThread(ThreadStart start)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(start != null);
-#endif
 
             _start = start;
             Thread = new Thread(PrivateStart);
