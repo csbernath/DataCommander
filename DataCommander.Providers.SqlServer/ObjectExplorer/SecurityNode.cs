@@ -1,4 +1,6 @@
-﻿using Foundation.Linq;
+﻿using System;
+using Foundation.Diagnostics.Contracts;
+using Foundation.Linq;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -11,9 +13,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         public SecurityNode(ServerNode serverNode)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires( serverNode != null );
-#endif
+            FoundationContract.Requires<ArgumentException>( serverNode != null );
+
             _server = serverNode;
         }
 

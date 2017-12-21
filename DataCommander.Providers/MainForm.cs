@@ -1,4 +1,5 @@
-﻿using Foundation.Log;
+﻿using Foundation.Diagnostics.Contracts;
+using Foundation.Log;
 
 namespace DataCommander.Providers
 {
@@ -903,9 +904,8 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                 }
 
                 var provider = ProviderFactory.CreateProvider(providerName);
-#if CONTRACTS_FULL
-                Contract.Assert(provider != null);
-#endif
+                FoundationContract.Assert(provider != null);
+
                 var connection = provider.CreateConnection(connectionString);
                 await connection.OpenAsync(CancellationToken.None);
 

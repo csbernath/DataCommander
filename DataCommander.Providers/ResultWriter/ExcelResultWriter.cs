@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using DataCommander.Providers.Connection;
 using Foundation.Data;
+using Foundation.Diagnostics.Contracts;
 using OfficeOpenXml;
 
 namespace DataCommander.Providers.ResultWriter
@@ -19,10 +20,8 @@ namespace DataCommander.Providers.ResultWriter
 
         public ExcelResultWriter(IProvider provider, Action<InfoMessage> addInfoMessage)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(provider != null);
             FoundationContract.Requires<ArgumentNullException>(addInfoMessage != null);
-#endif
 
             _provider = provider;
             _addInfoMessage = addInfoMessage;

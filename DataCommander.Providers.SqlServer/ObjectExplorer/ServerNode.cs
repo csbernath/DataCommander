@@ -1,17 +1,19 @@
-﻿namespace DataCommander.Providers.SqlServer.ObjectExplorer
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+using Foundation;
+using Foundation.Diagnostics.Contracts;
+
+namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data.SqlClient;
-    using System.Windows.Forms;
 
     internal sealed class ServerNode : ITreeNode
     {
         public ServerNode(string connectionString)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(!connectionString.IsNullOrWhiteSpace());
-#endif
+            FoundationContract.Requires<ArgumentException>(!connectionString.IsNullOrWhiteSpace());
+
             ConnectionString = connectionString;
         }
 

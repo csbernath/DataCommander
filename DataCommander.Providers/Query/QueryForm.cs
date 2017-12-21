@@ -24,6 +24,7 @@ using Foundation;
 using Foundation.Configuration;
 using Foundation.Data;
 using Foundation.Diagnostics;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
@@ -1559,9 +1560,7 @@ namespace DataCommander.Providers.Query
             if (_dataAdapter != null)
                 Log.Error("this.dataAdapter == null failed");
 
-#if CONTRACTS_FULL
-            Contract.Assert(this.dataAdapter == null);
-#endif
+            FoundationContract.Assert(this._dataAdapter == null);
 
             Log.Trace("ThreadMonitor:\r\n{0}", ThreadMonitor.ToStringTableString());
             ThreadMonitor.Join(0);

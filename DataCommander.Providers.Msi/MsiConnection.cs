@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.Msi
+﻿using Foundation.Diagnostics.Contracts;
+
+namespace DataCommander.Providers.Msi
 {
     using System;
     using System.Data;
@@ -23,13 +25,13 @@
         {
             var sb = new DbConnectionStringBuilder();
             sb.ConnectionString = _connectionString;
-#if CONTRACTS_FULL
-            Contract.Assert(sb.ContainsKey("Data Source"));
-#endif
+
+            FoundationContract.Assert(sb.ContainsKey("Data Source"));
+
             var dataSourceObject = sb["Data Source"];
-#if CONTRACTS_FULL
-            Contract.Assert(dataSourceObject is string);
-#endif
+
+            FoundationContract.Assert(dataSourceObject is string);
+
             var path = (string)dataSourceObject;
             Database = new Database(path, DatabaseOpenMode.ReadOnly);
             _state = ConnectionState.Open;

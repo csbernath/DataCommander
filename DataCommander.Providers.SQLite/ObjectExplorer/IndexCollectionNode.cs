@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Foundation.Data;
+using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.SQLite.ObjectExplorer
 {
@@ -10,9 +12,7 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
 
         public IndexCollectionNode(TableNode tableNode)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(tableNode != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(tableNode != null);
 
             _tableNode = tableNode;
         }

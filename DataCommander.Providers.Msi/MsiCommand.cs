@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.Msi
+﻿using Foundation.Diagnostics.Contracts;
+
+namespace DataCommander.Providers.Msi
 {
     using System;
     using System.Data;
@@ -13,9 +15,8 @@
 
         public MsiCommand(MsiConnection connection)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(connection != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(connection != null);
+
             Connection = connection;
         }
 

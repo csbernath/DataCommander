@@ -1,4 +1,7 @@
-﻿namespace DataCommander.Providers.SqlServer.ObjectExplorer
+﻿using System;
+using Foundation.Diagnostics.Contracts;
+
+namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     using System.Collections.Generic;
     using System.Windows.Forms;
@@ -9,9 +12,7 @@
 
         public DatabaseSecurityNode(DatabaseNode databaseNode)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(databaseNode != null);
-#endif
             _databaseNode = databaseNode;
         }
 

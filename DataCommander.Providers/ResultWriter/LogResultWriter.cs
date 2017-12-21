@@ -6,6 +6,7 @@ using DataCommander.Providers.Connection;
 using Foundation;
 using Foundation.Data;
 using Foundation.Diagnostics;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 using Foundation.Log;
 
@@ -26,9 +27,7 @@ namespace DataCommander.Providers.ResultWriter
 
         public LogResultWriter(Action<InfoMessage> addInfoMessage)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(addInfoMessage != null);
-#endif
             _addInfoMessage = addInfoMessage;
         }
 

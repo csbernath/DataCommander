@@ -1,5 +1,6 @@
 ﻿using Foundation;
 using Foundation.Data;
+using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.Tfs
 {
@@ -19,9 +20,8 @@ namespace DataCommander.Providers.Tfs
 
         public TfsGetExtendedItemsDataReader(TfsCommand command)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(command != null);
-#endif
+
             this.command = command;
         }
 

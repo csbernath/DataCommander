@@ -1,4 +1,5 @@
 ﻿using Foundation.Configuration;
+using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.Tfs
 {
@@ -16,9 +17,8 @@ namespace DataCommander.Providers.Tfs
 
         public TfsFile(Item item)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(item != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(item != null);
+
             this.item = item;
         }
 

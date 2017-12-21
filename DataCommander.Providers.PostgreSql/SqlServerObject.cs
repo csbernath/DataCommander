@@ -1,9 +1,12 @@
-﻿using Foundation.Data.SqlClient;
+﻿using System;
+using Foundation.Data.SqlClient;
+using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.PostgreSql
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Foundation;
 
     internal static class SqlServerObject
     {
@@ -27,11 +30,9 @@ order by table_name";
 
         public static string GetObjects(string schema, IEnumerable<string> objectTypes)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());
             FoundationContract.Requires<ArgumentException>(objectTypes != null && objectTypes.Any());
-#endif
-
+            
             return
                 $@"declare @schema_id int
 
@@ -57,11 +58,9 @@ end";
             string schema,
             IEnumerable<string> objectTypes)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentException>(!database.IsNullOrWhiteSpace());
             FoundationContract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());
             FoundationContract.Requires<ArgumentException>(objectTypes != null && objectTypes.Any());
-#endif
 
             return string.Format(@"if exists(select * from sys.databases (nolock) where name = '{0}')
 begin

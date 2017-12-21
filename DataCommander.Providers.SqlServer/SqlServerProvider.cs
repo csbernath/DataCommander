@@ -16,6 +16,7 @@ using Foundation;
 using Foundation.Configuration;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 using Foundation.Log;
 
@@ -1034,9 +1035,8 @@ order by ic.index_column_id
 
         internal static List<InfoMessage> ToInfoMessages(SqlErrorCollection sqlErrors)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(sqlErrors != null);
-#endif
+
             var now = LocalTime.Default.Now;
             var count = sqlErrors.Count;
             var messages = new List<InfoMessage>(sqlErrors.Count);

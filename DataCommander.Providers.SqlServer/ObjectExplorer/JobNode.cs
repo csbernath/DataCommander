@@ -1,5 +1,6 @@
 ﻿using Foundation.Data;
 using Foundation.Data.SqlClient;
+using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -23,9 +24,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             JobCollectionNode jobs,
             string name)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(jobs != null);
-#endif
+
             _jobs = jobs;
             _name = name;
         }

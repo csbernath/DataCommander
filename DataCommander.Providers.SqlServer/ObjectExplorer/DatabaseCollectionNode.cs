@@ -1,5 +1,7 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using Foundation.Data;
+using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -10,9 +12,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         public DatabaseCollectionNode(ServerNode server)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(server != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(server != null);
+
             Server = server;
         }
 

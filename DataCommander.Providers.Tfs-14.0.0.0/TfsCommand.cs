@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.Tfs
+﻿using Foundation.Diagnostics.Contracts;
+
+namespace DataCommander.Providers.Tfs
 {
     using System;
     using System.Data;
@@ -7,9 +9,8 @@
     {
         public TfsCommand(TfsConnection connection)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(connection != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(connection != null);
+
             this.Connection = connection;
         }
 

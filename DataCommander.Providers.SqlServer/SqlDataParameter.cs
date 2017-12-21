@@ -1,4 +1,7 @@
-﻿namespace DataCommander.Providers.SqlServer
+﻿using System;
+using Foundation.Diagnostics.Contracts;
+
+namespace DataCommander.Providers.SqlServer
 {
     using System.Data.SqlClient;
 
@@ -9,9 +12,7 @@
         public SqlDataParameter(SqlParameter parameter)
             : base(parameter, parameter.Size, parameter.Precision, parameter.Scale)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(parameter != null);
-#endif
 
             this.parameter = parameter;
         }

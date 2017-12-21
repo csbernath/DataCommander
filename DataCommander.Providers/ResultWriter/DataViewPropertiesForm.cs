@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.ResultWriter
+﻿using Foundation.Diagnostics.Contracts;
+
+namespace DataCommander.Providers.ResultWriter
 {
     using System;
     using System.Windows.Forms;
@@ -9,9 +11,7 @@
 
         public DataViewPropertiesForm(DataViewProperties properties)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(properties != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(properties != null);
 
             _properties = properties;
             InitializeComponent();

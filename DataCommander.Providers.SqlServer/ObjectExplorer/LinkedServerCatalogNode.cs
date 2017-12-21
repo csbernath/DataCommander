@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.SqlServer.ObjectExplorer
+﻿using Foundation.Diagnostics.Contracts;
+
+namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     using System;
     using System.Collections.Generic;
@@ -10,9 +12,8 @@
 
         public LinkedServerCatalogNode(LinkedServerNode linkedServer, string name)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(linkedServer != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(linkedServer != null);
+
             _name = name;
         }
 

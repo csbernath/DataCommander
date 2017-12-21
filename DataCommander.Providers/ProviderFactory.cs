@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ADODB;
 using Foundation.Configuration;
+using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers
 {
@@ -16,13 +17,10 @@ namespace DataCommander.Providers
 
                 foreach (var childNode in node.ChildNodes)
                 {
-                    bool enabled;
-                    childNode.Attributes.TryGetAttributeValue("Enabled", out enabled);
+                    childNode.Attributes.TryGetAttributeValue("Enabled", out bool enabled);
 
                     if (enabled)
-                    {
                         providers.Add(childNode.Name);
-                    }
                 }
 
                 return providers;
@@ -31,10 +29,8 @@ namespace DataCommander.Providers
 
         public static IProvider CreateProvider(string name)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentNullException>(name != null);
-            Contract.Ensures(Contract.Result<IProvider>() != null);
-#endif
+            //Contract.Ensures(Contract.Result<IProvider>() != null);
 
             var folder = Settings.CurrentNamespace;
             folder = folder.ChildNodes[name];
@@ -42,11 +38,9 @@ namespace DataCommander.Providers
             var typeName = attributes["TypeName"].GetValue<string>();
             var type = Type.GetType(typeName, true);
             var instance = Activator.CreateInstance(type);
-#if CONTRACTS_FULL
-            Contract.Assert(instance != null);
-            Contract.Assert(instance is IProvider);
-#endif
-            var provider = (IProvider)instance;
+            FoundationContract.Assert(instance != null);
+            FoundationContract.Assert(instance is IProvider);
+            var provider = (IProvider) instance;
 
             return provider;
         }
@@ -68,9 +62,7 @@ namespace DataCommander.Providers
                 keyWords = new string[dataTable.Rows.Count];
 
                 for (var i = 0; i < dataTable.Rows.Count; i++)
-                {
-                    keyWords[i] = (string)dataTable.Rows[i][0];
-                }
+                    keyWords[i] = (string) dataTable.Rows[i][0];
             }
             catch
             {

@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.Tfs
+﻿using Foundation.Diagnostics.Contracts;
+
+namespace DataCommander.Providers.Tfs
 {
     using System;
     using System.Collections.Generic;
@@ -31,9 +33,8 @@
 
         internal static IEnumerable<ITreeNode> GetChildren( Item item )
 		{
-#if CONTRACTS_FULL
-            FoundationContract.Requires(item != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(item != null);
+
 			var itemSet = item.VersionControlServer.GetItems( item.ServerItem, RecursionType.OneLevel );
 			var folders = new List<ITreeNode>();
 			var files = new List<ITreeNode>();

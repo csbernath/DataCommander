@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
+using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -11,9 +13,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         public LoginCollectionNode(ServerNode server)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(server != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(server != null);
+
             _server = server;
         }
 

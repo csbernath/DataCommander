@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Windows.Forms;
 using Foundation.Data;
+using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.SQLite.ObjectExplorer
 {
@@ -11,9 +13,8 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
 
         public DatabaseCollectionNode(SQLiteConnection connection)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(connection != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(connection != null);
+
             _connection = connection;
         }
 

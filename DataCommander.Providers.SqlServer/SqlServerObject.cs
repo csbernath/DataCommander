@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Foundation;
 using Foundation.Data.SqlClient;
+using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.SqlServer
 {
@@ -18,9 +21,7 @@ namespace DataCommander.Providers.SqlServer
 
         public static string GetSchemas(string database)
         {
-#if CONTRACTS_FULL
             FoundationContract.Requires<ArgumentOutOfRangeException>(!database.IsNullOrWhiteSpace());
-#endif
 
             return string.Format(@"if exists(select * from sys.databases (nolock) where name = '{0}')
 begin
@@ -32,10 +33,8 @@ end", database);
 
         public static string GetObjects(string schema, IEnumerable<string> objectTypes)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(!schema.IsNullOrWhiteSpace());
-            FoundationContract.Requires(objectTypes != null && objectTypes.Any());
-#endif
+            FoundationContract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());
+            FoundationContract.Requires<ArgumentException>(objectTypes != null && objectTypes.Any());
 
             return
                 $@"declare @schema_id int
@@ -62,11 +61,9 @@ end";
             string schema,
             IEnumerable<string> objectTypes)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(!database.IsNullOrWhiteSpace());
-            FoundationContract.Requires(!schema.IsNullOrWhiteSpace());
-            FoundationContract.Requires(objectTypes!=null && objectTypes.Any());
-#endif
+            FoundationContract.Requires<ArgumentException>(!database.IsNullOrWhiteSpace());
+            FoundationContract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());
+            FoundationContract.Requires<ArgumentException>(objectTypes!=null && objectTypes.Any());
 
             return string.Format(@"if exists(select * from sys.databases (nolock) where name = '{0}')
 begin

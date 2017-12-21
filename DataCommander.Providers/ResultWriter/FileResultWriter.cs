@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.ResultWriter
+﻿using Foundation.Diagnostics.Contracts;
+
+namespace DataCommander.Providers.ResultWriter
 {
     using System;
     using System.Data;
@@ -15,9 +17,7 @@
 
         public FileResultWriter(TextWriter messageWriter)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(messageWriter != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(messageWriter != null);
 
             _messageWriter = messageWriter;
         }

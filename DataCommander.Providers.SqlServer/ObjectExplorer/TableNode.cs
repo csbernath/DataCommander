@@ -1,5 +1,6 @@
 ﻿using Foundation.Data;
 using Foundation.Diagnostics;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
 using Foundation.Text;
 using Foundation.Windows.Forms;
@@ -56,10 +57,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             IDbConnection connection,
             DatabaseObjectMultipartName databaseObjectMultipartName)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(connection != null);
-            FoundationContract.Requires(databaseObjectMultipartName != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(connection != null);
+            FoundationContract.Requires<ArgumentException>(databaseObjectMultipartName != null);
 
             var commandText = string.Format(@"select  c.name
 from    [{0}].sys.schemas s (nolock)

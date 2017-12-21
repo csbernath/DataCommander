@@ -1,4 +1,7 @@
-﻿namespace DataCommander.Providers.Tfs
+﻿using System;
+using Foundation.Diagnostics.Contracts;
+
+namespace DataCommander.Providers.Tfs
 {
     using System.Collections.Generic;
     using System.Data;
@@ -13,9 +16,8 @@
 
         public static string GetName(Item item)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(item != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(item != null);
+
             var name = VersionControlPath.GetFileName(item.ServerItem);
             return name;
         }

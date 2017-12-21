@@ -1,4 +1,6 @@
-﻿using Foundation.Data;
+﻿using System;
+using Foundation.Data;
+using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -14,9 +16,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         public SystemDatabaseCollectionNode(DatabaseCollectionNode databaseCollectionNode)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(databaseCollectionNode != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(databaseCollectionNode != null);
+
             _databaseCollectionNode = databaseCollectionNode;
         }
 

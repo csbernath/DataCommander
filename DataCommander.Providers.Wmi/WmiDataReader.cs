@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.Wmi
+﻿using Foundation.Diagnostics.Contracts;
+
+namespace DataCommander.Providers.Wmi
 {
     using System;
     using System.Data;
@@ -15,9 +17,7 @@
 
         public WmiDataReader(WmiCommand command)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(command != null);
-#endif
+            FoundationContract.Requires<ArgumentException>(command != null);
 
             this.command = command;
 

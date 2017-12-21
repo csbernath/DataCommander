@@ -1,4 +1,7 @@
-﻿namespace DataCommander.Providers.Msi
+﻿using System;
+using Foundation.Diagnostics.Contracts;
+
+namespace DataCommander.Providers.Msi
 {
     using System.Data;
     using Field;
@@ -9,9 +12,8 @@
 
         public MsiDataReaderHelper( MsiDataReader dataReader )
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires( dataReader != null );
-#endif
+            FoundationContract.Requires<ArgumentException>( dataReader != null );
+
             var view = dataReader.View;
             var index = 0;
             _dataFieldReaders = new IDataFieldReader[ view.Columns.Count ];

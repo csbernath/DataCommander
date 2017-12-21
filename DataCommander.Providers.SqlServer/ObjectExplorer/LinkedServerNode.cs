@@ -1,4 +1,6 @@
-﻿using Foundation.Linq;
+﻿using System;
+using Foundation.Diagnostics.Contracts;
+using Foundation.Linq;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -11,9 +13,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             LinkedServerCollectionNode linkedServers,
             string name )
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires( linkedServers != null );
-#endif
+            FoundationContract.Requires<ArgumentException>( linkedServers != null );
+
             LinkedServers = linkedServers;
             Name = name;
         }

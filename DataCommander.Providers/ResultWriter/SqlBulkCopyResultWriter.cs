@@ -1,4 +1,5 @@
-﻿using Foundation.Log;
+﻿using Foundation.Diagnostics.Contracts;
+using Foundation.Log;
 
 namespace DataCommander.Providers.ResultWriter
 {
@@ -46,9 +47,8 @@ namespace DataCommander.Providers.ResultWriter
             Action<IDbTransaction> setTransaction,
             CancellationToken cancellationToken)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(destinationProvider.DbProviderFactory == SqlClientFactory.Instance);
-#endif
+            FoundationContract.Requires<ArgumentException>(destinationProvider.DbProviderFactory == SqlClientFactory.Instance);
+
             _destinationSqlConnection = (SqlConnection)destinationConnection.Connection;
 
             _logResultWriter = new LogResultWriter(addInfoMessage);

@@ -1,9 +1,12 @@
-﻿using Foundation.Data.SqlClient;
+﻿using System;
+using Foundation.Data.SqlClient;
+using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.MySql
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Foundation;
 
     internal static class SqlServerObject
     {
@@ -14,11 +17,10 @@ namespace DataCommander.Providers.MySql
 
         public static string GetTables(string tableSchema, IEnumerable<string> tableTypes)
         {
-#if CONTRACTS_FULL
-            FoundationContract.Requires(!tableSchema.IsNullOrWhiteSpace());
-            FoundationContract.Requires(tableTypes != null && tableTypes.Any());
-#endif
 
+            FoundationContract.Requires<ArgumentException>(!tableSchema.IsNullOrWhiteSpace());
+            FoundationContract.Requires<ArgumentException>(tableTypes != null && tableTypes.Any());
+            
             return $@"select TABLE_NAME
 from information_schema.TABLES
 where
