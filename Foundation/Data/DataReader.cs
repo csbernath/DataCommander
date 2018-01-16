@@ -24,7 +24,6 @@ namespace Foundation.Data
             FoundationContract.Requires<ArgumentNullException>(command != null);
             FoundationContract.Requires<ArgumentNullException>(dataReader != null);
 
-
             _command = command;
             _dataReader = dataReader;
         }

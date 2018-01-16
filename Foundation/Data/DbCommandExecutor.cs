@@ -3,7 +3,7 @@ using System.Data;
 
 namespace Foundation.Data
 {
-    internal sealed partial class DbCommandExecutor : IDbCommandExecutor
+    internal sealed class DbCommandExecutor : IDbCommandExecutor
     {
         private readonly IDbConnection _connection;
 

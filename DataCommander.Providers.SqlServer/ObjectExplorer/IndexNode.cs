@@ -41,6 +41,10 @@
                 string typeString;
                 switch (_type)
                 {
+                    case 0:
+                        typeString = "Heap";
+                        break;
+
                     case 1:
                         typeString = "Clustered";
                         break;

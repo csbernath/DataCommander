@@ -29,7 +29,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     i.name,
     i.index_id,
     i.type,
-    i.is_unique    
+    i.is_unique
 from {0}.sys.schemas s (nolock)
 join {0}.sys.objects o (nolock)
     on s.schema_id = o.schema_id
@@ -48,7 +48,7 @@ order by i.name",
 
             var indexNodes = executor.ExecuteReader(request, dataRecord =>
             {
-                var name = dataRecord.GetString(0);
+                var name = dataRecord.GetStringOrDefault(0);
                 var indexId = dataRecord.GetInt32(1);
                 var type = dataRecord.GetByte(2);
                 var isUnique = dataRecord.GetBoolean(3);
