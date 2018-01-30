@@ -13,16 +13,18 @@ namespace Foundation.Diagnostics.Contracts
             None,
             ArgumentException,
             ArgumentNullException,
-            ArgumentOutOfRangeException
+            ArgumentOutOfRangeException,
+            InvalidOperationException
         }
 
-        private static readonly TypeDictionary<ExceptionType> typeDictionary = new TypeDictionary<ExceptionType>();
+        private static readonly TypeDictionary<ExceptionType> TypeDictionary = new TypeDictionary<ExceptionType>();
 
         static FoundationContract()
         {
-            typeDictionary.Add<ArgumentException>(ExceptionType.ArgumentException);
-            typeDictionary.Add<ArgumentNullException>(ExceptionType.ArgumentNullException);
-            typeDictionary.Add<ArgumentOutOfRangeException>(ExceptionType.ArgumentOutOfRangeException);
+            TypeDictionary.Add<ArgumentException>(ExceptionType.ArgumentException);
+            TypeDictionary.Add<ArgumentNullException>(ExceptionType.ArgumentNullException);
+            TypeDictionary.Add<ArgumentOutOfRangeException>(ExceptionType.ArgumentOutOfRangeException);
+            TypeDictionary.Add<InvalidOperationException>(ExceptionType.ArgumentOutOfRangeException);
         }
 
         /// <summary>
@@ -66,17 +68,20 @@ namespace Foundation.Diagnostics.Contracts
         {
             if (!condition)
             {
-                var exceptionType = typeDictionary.GetValueOrDefault<TException>();
+                var exceptionType = TypeDictionary.GetValueOrDefault<TException>();
                 switch (exceptionType)
                 {
                     case ExceptionType.ArgumentException:
                         throw new ArgumentException(userMessage);
 
                     case ExceptionType.ArgumentNullException:
-                        throw new ArgumentNullException(userMessage, (Exception)null);
+                        throw new ArgumentNullException(userMessage, (Exception) null);
 
                     case ExceptionType.ArgumentOutOfRangeException:
-                        throw new ArgumentOutOfRangeException(userMessage, (Exception)null);
+                        throw new ArgumentOutOfRangeException(userMessage, (Exception) null);
+
+                    case ExceptionType.InvalidOperationException:
+                        throw new InvalidOperationException(userMessage);
 
                     default:
                         throw new Exception(userMessage);
