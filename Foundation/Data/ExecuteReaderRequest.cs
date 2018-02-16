@@ -17,13 +17,18 @@ namespace Foundation.Data
             CancellationToken = cancellationToken;
         }
 
-        public ExecuteReaderRequest(string commandText)
-            : this(new CreateCommandRequest(commandText), CommandBehavior.Default, CancellationToken.None)
+        public ExecuteReaderRequest(string commandText, IEnumerable<object> parameters, IDbTransaction transaction)
+            : this(new CreateCommandRequest(commandText, parameters, CommandType.Text, 0, transaction), CommandBehavior.Default, CancellationToken.None)
         {
         }
 
         public ExecuteReaderRequest(string commandText, IEnumerable<object> parameters)
-            : this(new CreateCommandRequest(commandText, parameters), CommandBehavior.Default, CancellationToken.None)
+            : this(commandText, parameters, null)
+        {
+        }
+
+        public ExecuteReaderRequest(string commandText)
+            : this(commandText, null)
         {
         }
     }

@@ -17,6 +17,7 @@ namespace Foundation.Data
             command.CommandType = request.CommandType;
             command.CommandText = request.CommandText;
             command.CommandTimeout = request.CommandTimeout;
+            command.Transaction = request.Transaction;
 
             if (request.Parameters != null)
                 command.Parameters.AddRange(request.Parameters);
