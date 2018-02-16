@@ -450,6 +450,7 @@
     <Compile Include="Data\IDbCommandAsyncExecutorExtensions.cs" />
     <Compile Include="Data\IDbConnectionExtensions.cs" />
     <Compile Include="Data\OrmBuilder.cs" />
+    <Compile Include="Data\SqlClient\SqlParameterCollectionBuilder.cs" />
     <Compile Include="Data\SqlClient\SqlCommandExecutor.cs" />
     <Compile Include="Data\IDbCommandExecutor.cs" />
     <Compile Include="Data\ExecuteReaderResponse.cs" />
@@ -541,6 +542,7 @@
     <Compile Include="DomainDrivenDesign\QueryHandlerFactory.cs" />
     <Compile Include="DomainDrivenDesign\QuerySender.cs" />
     <Compile Include="DomainDrivenDesign\VoidResponse.cs" />
+    <Compile Include="Linq\LinerSearchResult.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="Reference.cs" />
     <Compile Include="ReferenceCounter.cs" />

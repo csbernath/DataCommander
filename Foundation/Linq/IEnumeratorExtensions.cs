@@ -54,9 +54,9 @@ namespace Foundation.Linq
             return list;
         }
 
-#endregion
+        #endregion
 
-#region Private Classes
+        #region Private Classes
 
         private sealed class Enumerable<T> : IEnumerable<T>
         {
@@ -80,6 +80,6 @@ namespace Foundation.Linq
             }
         }
 
-#endregion
+        #endregion
     }
 }

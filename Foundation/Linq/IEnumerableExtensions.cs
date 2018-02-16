@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using Foundation.Collections;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Text;
@@ -145,6 +147,46 @@ namespace Foundation.Linq
                     }
                 }
             }
+        }
+
+        public static LinerSearchResult<TSource, TResult> LinearSearch<TSource, TResult>(
+            this IEnumerable<TSource> source,
+            Func<TSource, TResult> selector,
+            Func<TResult, bool> breaker,
+            Func<TResult, TResult, bool> comparer)
+        {
+            var selectedIndex = -1;
+            var selectedSource = default(TSource);
+            var selectedResult = default(TResult);
+            var currentIndex = 0;
+
+            foreach (var currentSource in source)
+            {
+                if (currentIndex == 0)
+                {
+                    selectedIndex = currentIndex;
+                    selectedSource = currentSource;
+                    selectedResult = selector(currentSource);
+                }
+                else
+                {
+                    var currentResult = selector(currentSource);
+                    if (breaker(currentResult))
+                        break;
+
+                    var comparisonResult = comparer(currentResult, selectedResult);
+                    if (comparisonResult)
+                    {
+                        selectedIndex = currentIndex;
+                        selectedSource = currentSource;
+                        selectedResult = currentResult;
+                    }
+                }
+
+                ++currentIndex;
+            }
+
+            return new LinerSearchResult<TSource, TResult>(selectedIndex, selectedSource, selectedResult);
         }
 
         /// <summary>
