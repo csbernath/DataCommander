@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime;
 using System.Text;
 using Foundation.Linq;
 using Foundation.Log;
@@ -175,6 +176,9 @@ UserName:               {Environment.UserName}
 UserInteractive:        {Environment.UserInteractive}
 CurrentDirectory:       {Environment.CurrentDirectory}
 CommandLine:            {Environment.CommandLine},
+GCSettings.IsServerGC:  {GCSettings.IsServerGC}
+GCSettings.LargeObjectHeapCompactionMode: {GCSettings.LargeObjectHeapCompactionMode}
+GCSettings.LatencyMode: {GCSettings.LatencyMode}
 WorkingSet:             {(double)workingSet/(1024*1024):N} MB ({workingSet} bytes)
 TickCount:              {tickCountString}
 Stopwatch.Frequency:    {Stopwatch.Frequency}";
