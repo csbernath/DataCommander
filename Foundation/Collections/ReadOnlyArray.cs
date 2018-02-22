@@ -1,120 +1,35 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 
 namespace Foundation.Collections
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class ReadOnlyArray<T> : IList<T>
+    public class ReadOnlyArray<T> : IReadOnlyList<T>
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        protected ReadOnlyArray()
+        private readonly T[] _items;
+
+        public ReadOnlyArray(T[] items)
         {
+            _items = items;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        protected T[] Items { get; set; }
-
-        #region IList<T> Members
-
-        int IList<T>.IndexOf(T item)
+        public IEnumerator<T> GetEnumerator()
         {
-            return Array.IndexOf(Items, item);
-        }
-
-        void IList<T>.Insert(int index, T item)
-        {
-            throw new NotSupportedException();
-        }
-
-        void IList<T>.RemoveAt(int index)
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public T this[int index]
-        {
-            get => Items[index];
-
-            set => throw new NotSupportedException();
-        }
-
-        #endregion
-
-        #region ICollection<T> Members
-
-        void ICollection<T>.Add(T item)
-        {
-            throw new NotSupportedException();
-        }
-
-        void ICollection<T>.Clear()
-        {
-            throw new NotSupportedException();
-        }
-
-        bool ICollection<T>.Contains(T item)
-        {
-            var index = Array.IndexOf(Items, item);
-            var contains = index >= 0;
-            return contains;
-        }
-
-        void ICollection<T>.CopyTo(T[] array, int arrayIndex)
-        {
-            Items.CopyTo(array, arrayIndex);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public int Count => Items.Length;
-
-        bool ICollection<T>.IsReadOnly => true;
-
-        bool ICollection<T>.Remove(T item)
-        {
-            throw new NotSupportedException();
-        }
-
-        #endregion
-
-        #region IEnumerable<T> Members
-
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            IEnumerable<T> enumerable = Items;
+            IEnumerable<T> enumerable = _items;
             return enumerable.GetEnumerator();
         }
 
-        #endregion
-
-        #region IEnumerable Members
-
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return Items.GetEnumerator();
+            return _items.GetEnumerator();
         }
 
-        #endregion
+        public int Count => _items.Length;
 
-        //[ContractInvariantMethod]
-        private void ObjectInvariant()
+        public T this[int index]
         {
-            //Contract.Invariant(this.Items != null);
+            get => _items[index];
+            set => throw new NotSupportedException();
         }
     }
 }

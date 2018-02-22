@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using Foundation.Collections;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
@@ -144,6 +145,14 @@ namespace Foundation.Linq
             var target = new T[source.Count];
             source.CopyTo(target, 0);
             return target;
+        }
+
+        public static ReadOnlyArray<T> ToReadOnlyArray<T>(this ICollection<T> source)
+        {
+            FoundationContract.Requires<ArgumentNullException>(source != null);
+
+            var items = source.ToArray();
+            return new ReadOnlyArray<T>(items);
         }
 
         /// <summary>

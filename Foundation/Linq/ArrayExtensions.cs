@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
+using Foundation.Collections;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
@@ -135,6 +135,11 @@ namespace Foundation.Linq
         public static bool IsNullOrEmpty(this Array array)
         {
             return array == null || array.Length == 0;
+        }
+
+        public static ReadOnlyArray<T> ToReadOnlyArray<T>(this T[] items)
+        {
+            return new ReadOnlyArray<T>(items);
         }
     }
 }
