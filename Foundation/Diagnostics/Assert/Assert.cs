@@ -3,7 +3,7 @@ namespace DataCommander.Foundation.Diagnostics
 {
     using System;
     using System.Diagnostics;
-    using DataCommander.Foundation.Linq;
+    using Foundation.Linq;
 
     /// <summary>
     /// 

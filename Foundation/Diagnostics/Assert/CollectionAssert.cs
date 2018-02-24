@@ -7,7 +7,7 @@ namespace DataCommander.Foundation.Diagnostics
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
-    using DataCommander.Foundation.Linq;
+    using Foundation.Linq;
 
     /// <summary>
     /// 

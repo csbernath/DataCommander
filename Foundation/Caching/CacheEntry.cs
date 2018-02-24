@@ -2,7 +2,7 @@
 namespace DataCommander.Foundation.Caching
 {
     using System;
-    using DataCommander.Foundation.Threading;
+    using Foundation.Threading;
 
     internal sealed class CacheEntry
     {

@@ -11,9 +11,9 @@ namespace Foundation.Threading
     using System.Diagnostics;
     using System.Threading;
 
-    using DataCommander.Foundation.Collections;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Linq;
+    using Foundation.Collections;
+    using Foundation.Diagnostics;
+    using Foundation.Linq;
 
     /// <summary>
     /// 

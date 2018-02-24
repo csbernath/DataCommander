@@ -513,6 +513,7 @@
     <Compile Include="Data\MappedDataReader.cs" />
     <Compile Include="Data\ExecuteCommandRequest.cs" />
     <Compile Include="Data\ExecuteReaderRequest.cs" />
+    <Compile Include="DateTimeConstants.cs" />
     <Compile Include="DomainDrivenDesign\CommandHandler.cs" />
     <Compile Include="DomainDrivenDesign\CommandHandlerFactory.cs" />
     <Compile Include="DomainDrivenDesign\EventHandler.cs" />

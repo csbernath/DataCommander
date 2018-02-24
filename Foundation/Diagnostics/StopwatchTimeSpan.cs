@@ -46,21 +46,6 @@ namespace Foundation.Diagnostics
         /// </summary>
         public static readonly long TicksPerDay = 24*TicksPerHour;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly int SecondsPerMinute = 60;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly int SecondsPerHour = 60*SecondsPerMinute;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly int SecondsPerDay = 24*SecondsPerHour;
-
         #endregion
 
         /// <summary>
@@ -204,7 +189,7 @@ namespace Foundation.Diagnostics
 
             if (days != 0)
             {
-                totalSeconds -= SecondsPerDay*days;
+                totalSeconds -= DateTimeConstants.SecondsPerDay*days;
 
                 sb.Append(days);
                 sb.Append('.');

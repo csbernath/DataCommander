@@ -8,10 +8,10 @@ namespace DataCommander.Foundation.Caching
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Threading;
-    using DataCommander.Foundation.Collections;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Linq;
-    using DataCommander.Foundation.Threading;
+    using Foundation.Collections;
+    using Foundation.Diagnostics;
+    using Foundation.Linq;
+    using Foundation.Threading;
 
     /// <summary>
     /// 

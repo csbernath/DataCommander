@@ -5,8 +5,8 @@ namespace DataCommander.Foundation.Threading
     using System;
     using System.Diagnostics.Contracts;
     using System.Threading;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Linq;
+    using Foundation.Diagnostics;
+    using Foundation.Linq;
 
     /// <summary>
     /// 

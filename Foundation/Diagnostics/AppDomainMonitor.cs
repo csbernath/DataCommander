@@ -152,7 +152,7 @@ namespace Foundation.Diagnostics
             get
             {
                 var tickCount = UniversalTime.GetTickCount();
-                var milliSecondsPerDay = StopwatchTimeSpan.SecondsPerDay*1000;
+                var milliSecondsPerDay = DateTimeConstants.SecondsPerDay * 1000;
                 var totalDays = (double)tickCount/milliSecondsPerDay;
                 var zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
                 var tickCountString = $"{tickCount} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";

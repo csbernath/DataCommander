@@ -5,7 +5,7 @@ using Foundation.Diagnostics.Contracts;
 namespace Foundation.Linq
 {
 #if FOUNDATION_3_5
-    using DataCommander.Foundation.Collections;
+    using Foundation.Collections;
 #else
 #endif
 
