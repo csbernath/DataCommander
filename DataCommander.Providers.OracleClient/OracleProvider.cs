@@ -352,7 +352,7 @@ namespace DataCommander.Providers.OracleClient
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType(DbColumn column)
+        Type IProvider.GetColumnType(Foundation.Data.DbColumn column)
         {
             var oracleType = (OracleType)column.ProviderType;
             var type = column.DataType;
@@ -466,7 +466,7 @@ namespace DataCommander.Providers.OracleClient
                     values.Append(',');
                 }
 
-                var column = new DbColumn(schemaRows[i]);
+                var column = new Foundation.Data.DbColumn(schemaRows[i]);
                 insertInto.Append(column.ColumnName);
                 values.AppendFormat(":p{0}", i + 1);
 

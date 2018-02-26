@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Xml;
 using DataCommander.Providers.Connection;
 using Foundation.Data;
+using DbColumn = Foundation.Data.DbColumn;
 
 namespace DataCommander.Providers.Msi
 {
@@ -58,6 +59,11 @@ namespace DataCommander.Providers.Msi
         public string GetExceptionMessage(Exception e)
         {
             return e.ToString();
+        }
+
+        public Type GetColumnType(DbColumn dataColumnSchema)
+        {
+            throw new NotImplementedException();
         }
 
         string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)

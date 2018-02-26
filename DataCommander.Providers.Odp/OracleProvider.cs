@@ -271,7 +271,7 @@ namespace DataCommander.Providers.Odp
             return null;
         }
 
-        Type IProvider.GetColumnType(DbColumn column)
+        Type IProvider.GetColumnType(Foundation.Data.DbColumn column)
         {
             var oracleDbType = (OracleDbType)column.ProviderType;
             Type type;
@@ -802,6 +802,11 @@ order by OBJECT_NAME";
         IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder()
         {
             return new ConnectionStringBuilder();
+        }
+
+        public Type GetColumnType(Foundation.Data.DbColumn dataColumnSchema)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

@@ -213,7 +213,7 @@ namespace DataCommander.Providers.OleDb
             return null;
         }
 
-        Type IProvider.GetColumnType(DbColumn dataColumnSchema)
+        Type IProvider.GetColumnType(Foundation.Data.DbColumn dataColumnSchema)
         {
             var dbType = (OleDbType) dataColumnSchema.ProviderType;
             Type type;

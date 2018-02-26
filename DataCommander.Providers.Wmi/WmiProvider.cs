@@ -158,7 +158,7 @@ namespace DataCommander.Providers.Wmi
             return e.ToString();
         }
 
-        Type IProvider.GetColumnType(DbColumn dataColumnSchema)
+        Type IProvider.GetColumnType(Foundation.Data.DbColumn dataColumnSchema)
         {
             return dataColumnSchema.DataType;
         }

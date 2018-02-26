@@ -197,7 +197,7 @@ namespace DataCommander.Providers.Tfs
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType(DbColumn dataColumnSchema)
+        Type IProvider.GetColumnType(Foundation.Data.DbColumn dataColumnSchema)
         {
             var dbType = (DbType)dataColumnSchema.ProviderType;
             Type type;

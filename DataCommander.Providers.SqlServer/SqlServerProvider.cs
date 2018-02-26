@@ -132,7 +132,7 @@ namespace DataCommander.Providers.SqlServer
 
             var sourceColumnNames =
             (from sourceSchemaRow in sourceSchemaTable.AsEnumerable()
-                select new DbColumn(sourceSchemaRow).ColumnName);
+                select new Foundation.Data.DbColumn(sourceSchemaRow).ColumnName);
 
             using (var command = destinationconnection.CreateCommand())
             {
@@ -169,7 +169,7 @@ namespace DataCommander.Providers.SqlServer
                     values.Append(',');
                 }
 
-                var columnSchema = new DbColumn(schemaRows[i]);
+                var columnSchema = new Foundation.Data.DbColumn(schemaRows[i]);
                 insertInto.AppendFormat("[{0}]", columnSchema.ColumnName);
                 values.AppendFormat("@p{0}", i);
 
@@ -295,7 +295,7 @@ namespace DataCommander.Providers.SqlServer
 
         string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
         {
-            var schemaRow = new DbColumn(sourceSchemaRow);
+            var schemaRow = new Foundation.Data.DbColumn(sourceSchemaRow);
             var columnSize = schemaRow.ColumnSize;
             var allowDbNull = schemaRow.AllowDbNull;
             var dataType = schemaRow.DataType;
@@ -329,7 +329,7 @@ namespace DataCommander.Providers.SqlServer
             return typeName;
         }
 
-        Type IProvider.GetColumnType(DbColumn column)
+        Type IProvider.GetColumnType(Foundation.Data.DbColumn column)
         {
             var dbType = (SqlDbType)column.ProviderType;
             var columnSize = column.ColumnSize;
@@ -803,7 +803,7 @@ order by 1", name.Database);
 
                 foreach (DataRow dataRow in schemaTable.Rows)
                 {
-                    var dataColumnSchema = new DbColumn(dataRow);
+                    var dataColumnSchema = new Foundation.Data.DbColumn(dataRow);
                     var columnOrdinal = dataColumnSchema.ColumnOrdinal;
 
                     if (columnOrdinalAddition == null)

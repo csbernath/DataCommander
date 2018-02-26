@@ -3879,7 +3879,7 @@ namespace DataCommander.Providers.Query
             for (var i = 0; i <= last; i++)
             {
                 var dataRow = schemaTable.Rows[i];
-                var schemaRow = new DbColumn(dataRow);
+                var schemaRow = new Foundation.Data.DbColumn(dataRow);
                 var row = stringTable.NewRow();
                 var typeName = destinationProvider.GetColumnTypeName(Provider, dataRow, dataTypeNames[i]);
                 row[1] = schemaRow.ColumnName;

@@ -114,7 +114,7 @@ namespace DataCommander.Providers.ResultWriter
 
             foreach (DataRow schemaRow in schemaTable.Rows)
             {
-                var dataColumnSchema = new DbColumn(schemaRow);
+                var dataColumnSchema = new Foundation.Data.DbColumn(schemaRow);
 
                 if (first)
                 {
