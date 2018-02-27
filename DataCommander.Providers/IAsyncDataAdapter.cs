@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using DataCommander.Providers.ResultWriter;
+﻿using DataCommander.Providers.ResultWriter;
 
 namespace DataCommander.Providers
 {
@@ -11,15 +9,7 @@ namespace DataCommander.Providers
         long RowCount { get; }
         int TableCount { get; }
 
-        void BeginFill(
-            IProvider provider,
-            IEnumerable<AsyncDataAdapterCommand> commands,
-            int maxRecords,
-            int rowBlockSize,
-            IResultWriter resultWriter,
-            Action<IAsyncDataAdapter, Exception> endFill,
-            Action<IAsyncDataAdapter> writeEnd);
-
+        void Start();
         void Cancel();
     }
 }

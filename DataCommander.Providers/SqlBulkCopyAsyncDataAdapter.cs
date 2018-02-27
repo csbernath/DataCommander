@@ -62,18 +62,8 @@ namespace DataCommander.Providers
 
         int IAsyncDataAdapter.TableCount => 1;
 
-        void IAsyncDataAdapter.BeginFill(IProvider provider, IEnumerable<AsyncDataAdapterCommand> commands, int maxRecords, int rowBlockSize,
-            IResultWriter resultWriter,
-            Action<IAsyncDataAdapter, Exception> endFill, Action<IAsyncDataAdapter> writeEnd)
+        void IAsyncDataAdapter.Start()
         {
-            _provider = provider;
-            _commands = commands;
-            _maxRecords = maxRecords;
-            _rowBlockSize = rowBlockSize;
-            _resultWriter = resultWriter;
-            _endFill = endFill;
-            _writeEnd = writeEnd;
-
             Task.Factory.StartNew(Fill);
         }
 

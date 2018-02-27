@@ -1566,7 +1566,6 @@ namespace DataCommander.Providers.Query
             ThreadMonitor.Join(0);
             Log.Trace(GarbageMonitor.State);
             _openTableMode = false;
-            _dataAdapter = new AsyncDataAdapter();
             _cancel = false;
 
             try
@@ -1695,7 +1694,8 @@ namespace DataCommander.Providers.Query
                 ShowTimer();
 
                 _errorCount = 0;
-                _dataAdapter.BeginFill(Provider, commands, maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
+                _dataAdapter = new AsyncDataAdapter(Provider, commands, maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
+                _dataAdapter.Start();
             }
             catch (Exception ex)
             {
@@ -3711,15 +3711,13 @@ namespace DataCommander.Providers.Query
                 _commandType = CommandType.Text;
                 _openTableMode = true;
                 _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
-                _dataAdapter = new AsyncDataAdapter();
                 AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, "Executing query..."));
                 _stopwatch.Start();
                 _timer.Start();
                 const int maxRecords = int.MaxValue;
                 _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, this, _showSchemaTable);
                 IResultWriter resultWriter = _dataSetResultWriter;
-                _dataAdapter.BeginFill(
-                    Provider,
+                _dataAdapter = new AsyncDataAdapter(Provider,
                     new[]
                     {
                         new AsyncDataAdapterCommand
@@ -3729,6 +3727,7 @@ namespace DataCommander.Providers.Query
                         }
                     },
                     maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
+                _dataAdapter.Start();
             }
             catch (Exception ex)
             {
@@ -3745,12 +3744,10 @@ namespace DataCommander.Providers.Query
         {
             var sqlStatement = new SqlStatement(Query);
             _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
-            IAsyncDataAdapter asyncDataAdatper = new AsyncDataAdapter();
             var maxRecords = int.MaxValue;
             var tableName = sqlStatement.FindTableName();
             var sqlCeResultWriter = new SqlCeResultWriter(_textBoxWriter, tableName);
-            asyncDataAdatper.BeginFill(
-                Provider,
+            IAsyncDataAdapter asyncDataAdatper = new AsyncDataAdapter(Provider,
                 new[]
                 {
                     new AsyncDataAdapterCommand
@@ -3760,6 +3757,7 @@ namespace DataCommander.Providers.Query
                     }
                 },
                 maxRecords, _rowBlockSize, sqlCeResultWriter, EndFillInvoker, WriteEndInvoker);
+            asyncDataAdatper.Start();
         }
 
         private void SetTransaction(IDbTransaction transaction)
@@ -3858,19 +3856,14 @@ namespace DataCommander.Providers.Query
                 dataTypeNames = new string[dataReader.FieldCount];
 
                 for (var i = 0; i < dataReader.FieldCount; i++)
-                {
                     dataTypeNames[i] = dataReader.GetDataTypeName(i);
-                }
             }
             string tableName;
             if (command.CommandType == CommandType.StoredProcedure)
-            {
                 tableName = command.CommandText;
-            }
             else
-            {
                 tableName = sqlStatement.FindTableName();
-            }
+
             var createTable = new StringBuilder();
             createTable.AppendFormat("create table [{0}]\r\n(\r\n", tableName);
             var stringTable = new StringTable(3);
@@ -3946,9 +3939,7 @@ namespace DataCommander.Providers.Query
                 _errorCount = 0;
                 _stopwatch.Start();
                 _timer.Start();
-                _dataAdapter = new AsyncDataAdapter();
-                _dataAdapter.BeginFill(
-                    Provider,
+                _dataAdapter = new AsyncDataAdapter(Provider,
                     new[]
                     {
                         new AsyncDataAdapterCommand
@@ -3958,6 +3949,7 @@ namespace DataCommander.Providers.Query
                         }
                     },
                     maxRecords, rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
+                _dataAdapter.Start();
             }
             else
             {
@@ -3979,13 +3971,9 @@ namespace DataCommander.Providers.Query
                 _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
                 string tableName;
                 if (_command.CommandType == CommandType.StoredProcedure)
-                {
                     tableName = _command.CommandText;
-                }
                 else
-                {
                     tableName = sqlStatement.FindTableName();
-                }
 
                 //IResultWriter resultWriter = new SqlBulkCopyResultWriter( this.AddInfoMessage, destinationProvider, destinationConnection, tableName, nextQueryForm.InvokeSetTransaction );
                 var maxRecords = int.MaxValue;
@@ -3998,17 +3986,17 @@ namespace DataCommander.Providers.Query
                 _stopwatch.Start();
                 _timer.Start();
                 _dataAdapter = new SqlBulkCopyAsyncDataAdapter(destinationConnection, destionationTransaction, tableName, AddInfoMessage);
-                _dataAdapter.BeginFill(
-                    Provider,
-                    new[]
-                    {
-                        new AsyncDataAdapterCommand
-                        {
-                            LineIndex = 0,
-                            Command = _command
-                        }
-                    },
-                    maxRecords, rowBlockSize, null, EndFillInvoker, WriteEndInvoker);
+                    //Provider,
+                    //new[]
+                    //{
+                    //    new AsyncDataAdapterCommand
+                    //    {
+                    //        LineIndex = 0,
+                    //        Command = _command
+                    //    }
+                    //},
+                    //maxRecords, rowBlockSize, null, EndFillInvoker, WriteEndInvoker);
+                _dataAdapter.Start();
             }
             else
             {

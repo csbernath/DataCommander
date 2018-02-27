@@ -302,7 +302,6 @@
     <Compile Include="Connection\InfoMessageSeverity.cs" />
     <Compile Include="GetCompletionResponse.cs" />
     <Compile Include="IAsyncDataAdapter.cs" />
-    <Compile Include="IAsyncDataAdapterContract.cs" />
     <Compile Include="IDataReaderHelper.cs" />
     <Compile Include="IDbConnectionStringBuilder.cs" />
     <Compile Include="IObjectName.cs" />

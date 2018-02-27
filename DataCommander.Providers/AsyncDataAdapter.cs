@@ -33,15 +33,7 @@ namespace DataCommander.Providers
 
         #endregion
 
-        #region IAsyncDataAdapter Members
-
-        IResultWriter IAsyncDataAdapter.ResultWriter => _resultWriter;
-
-        long IAsyncDataAdapter.RowCount => _rowCount;
-
-        int IAsyncDataAdapter.TableCount => _tableCount;
-
-        void IAsyncDataAdapter.BeginFill(
+        public AsyncDataAdapter(
             IProvider provider,
             IEnumerable<AsyncDataAdapterCommand> commands,
             int maxRecords,
@@ -57,8 +49,19 @@ namespace DataCommander.Providers
             _resultWriter = resultWriter;
             _endFill = endFill;
             _writeEnd = writeEnd;
+        }
 
-            if (commands != null)
+        #region IAsyncDataAdapter Members
+
+        IResultWriter IAsyncDataAdapter.ResultWriter => _resultWriter;
+
+        long IAsyncDataAdapter.RowCount => _rowCount;
+
+        int IAsyncDataAdapter.TableCount => _tableCount;
+
+        void IAsyncDataAdapter.Start()
+        {
+            if (_commands != null)
             {
                 _thread = new WorkerThread(Fill)
                 {
@@ -68,9 +71,7 @@ namespace DataCommander.Providers
                 _thread.Start();
             }
             else
-            {
-                writeEnd(this);
-            }
+                _writeEnd(this);
         }
 
         void IAsyncDataAdapter.Cancel()
@@ -82,9 +83,7 @@ namespace DataCommander.Providers
                 {
                     _thread.Stop();
                     if (_provider.IsCommandCancelable)
-                    {
                         ThreadPool.QueueUserWorkItem(CancelWaitCallback);
-                    }
                     else
                     {
                         var joined = _thread.Join(5000);
@@ -120,17 +119,13 @@ namespace DataCommander.Providers
                 var fieldCount = dataReader.FieldCount;
 
                 if (fieldCount < 0)
-                {
                     fieldCount = 0;
-                }
 
                 var rows = new object[_rowBlockSize][];
                 int i;
 
                 for (i = 0; i < _rowBlockSize; i++)
-                {
                     rows[i] = new object[fieldCount];
-                }
 
                 _rowCount = 0;
                 i = 0;
@@ -151,12 +146,8 @@ namespace DataCommander.Providers
                         var dataTypeNames = new string[count];
 
                         if (read)
-                        {
                             for (var j = 0; j < count; j++)
-                            {
                                 dataTypeNames[j] = dataReader.GetDataTypeName(j);
-                            }
-                        }
 
                         _resultWriter.FirstRowReadEnd(dataTypeNames);
                     }
@@ -208,14 +199,10 @@ namespace DataCommander.Providers
                 _resultWriter.WriteTableEnd();
 
                 if (_rowCount > 0)
-                {
                     _tableCount++;
-                }
 
                 if (exception != null)
-                {
                     throw exception;
-                }
             }
         }
 
@@ -244,17 +231,13 @@ namespace DataCommander.Providers
                         {
                             var schemaTable = dataReader.GetSchemaTable();
                             if (schemaTable != null)
-                            {
                                 Log.Trace("schemaTable:\r\n{0}", schemaTable.ToStringTableString());
-                            }
 
                             ReadTable(dataReader, schemaTable, tableIndex);
                         }
 
                         if (_rowCount >= _maxRecords || !dataReader.NextResult())
-                        {
                             break;
-                        }
 
                         tableIndex++;
                     }
@@ -291,9 +274,7 @@ namespace DataCommander.Providers
             finally
             {
                 if (command != null && command.Parameters != null)
-                {
                     _resultWriter.WriteParameters(command.Parameters);
-                }
 
                 var ticks = Stopwatch.GetTimestamp();
                 _endFill(this, exception);
@@ -325,9 +306,7 @@ namespace DataCommander.Providers
         private void CancelWaitCallback(object state)
         {
             using (LogFactory.Instance.GetCurrentMethodLog())
-            {
                 _command.Command.Cancel();
-            }
         }
 
         #endregion
