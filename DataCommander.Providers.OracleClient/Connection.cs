@@ -19,13 +19,13 @@ namespace DataCommander.Providers.OracleClient
 #pragma warning disable 618
             oracleConnection = new OracleConnection(connectionString);
 #pragma warning restore 618
-            this.Connection = oracleConnection;
+            Connection = oracleConnection;
             oracleConnection.InfoMessage += OnInfoMessage;
         }
 
         public override Task OpenAsync(CancellationToken cancellationToken)
         {
-            return this.oracleConnection.OpenAsync(cancellationToken);
+            return oracleConnection.OpenAsync(cancellationToken);
         }
 
         public override string Caption => null;
@@ -43,7 +43,7 @@ namespace DataCommander.Providers.OracleClient
             sb.Append("Source: ");
             sb.Append(e.Source);
 
-            this.InvokeInfoMessage(new InfoMessage[] {new InfoMessage(now, InfoMessageSeverity.Information, sb.ToString())});
+            InvokeInfoMessage(new InfoMessage[] {new InfoMessage(now, InfoMessageSeverity.Information, sb.ToString())});
         }
 
         public override string DataSource => oracleConnection.DataSource;
@@ -67,8 +67,8 @@ namespace DataCommander.Providers.OracleClient
 
         public override string ConnectionName
         {
-            get => this.connectionName;
-            set => this.connectionName = value;
+            get => connectionName;
+            set => connectionName = value;
         }
     }
 }

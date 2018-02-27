@@ -14,13 +14,13 @@
 
         void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
         {
-            this.ConnectionString = connectionString;
+            ConnectionString = connectionString;
             this.connection = (SqlCeConnection)connection;
         }
 
         IEnumerable<ITreeNode> IObjectExplorer.GetChildren(bool refresh)
         {
-            yield return new TableCollectionNode(this, this.connection);
+            yield return new TableCollectionNode(this, connection);
         }
 
         bool IObjectExplorer.Sortable => false;

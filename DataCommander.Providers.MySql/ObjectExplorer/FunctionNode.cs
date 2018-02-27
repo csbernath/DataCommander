@@ -21,7 +21,7 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
             this.name = name;
         }
 
-        string ITreeNode.Name => this.name;
+        string ITreeNode.Name => name;
 
         bool ITreeNode.IsLeaf => true;
 
@@ -40,7 +40,7 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
             {
                 var menu = new ContextMenuStrip();
 
-                var item = new ToolStripMenuItem("Show create function", null, this.ShowCreateFunction_Click);
+                var item = new ToolStripMenuItem("Show create function", null, ShowCreateFunction_Click);
                 menu.Items.Add(item);
 
                 return menu;
@@ -49,9 +49,9 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
 
         private void ShowCreateFunction_Click(object sender, EventArgs e)
         {
-            var commandText = $"show create function {this.databaseNode.Name}.{this.name}";
+            var commandText = $"show create function {databaseNode.Name}.{name}";
             var statement = MySqlClientFactory.Instance.ExecuteReader(
-                this.databaseNode.ObjectExplorer.ConnectionString,
+                databaseNode.ObjectExplorer.ConnectionString,
                 new CommandDefinition {CommandText = commandText},
                 CommandBehavior.Default,
                 dataRecord => dataRecord.GetString(2)).First();

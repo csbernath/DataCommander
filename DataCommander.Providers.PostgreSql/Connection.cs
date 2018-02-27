@@ -19,32 +19,32 @@
         public Connection(string connectionString)
         {
             this.connectionString = connectionString;
-            this.npgsqlConnection = new NpgsqlConnection(connectionString);
-            this.Connection = this.npgsqlConnection;
+            npgsqlConnection = new NpgsqlConnection(connectionString);
+            Connection = npgsqlConnection;
         }
 
         public override Task OpenAsync(CancellationToken cancellationToken)
         {
-            return this.npgsqlConnection.OpenAsync(cancellationToken);
+            return npgsqlConnection.OpenAsync(cancellationToken);
         }
 
         public override IDbCommand CreateCommand()
         {
-            return this.npgsqlConnection.CreateCommand();
+            return npgsqlConnection.CreateCommand();
         }
 
         public override string ConnectionName { get; set; }
 
-        public override string Caption => this.npgsqlConnection.Database;
+        public override string Caption => npgsqlConnection.Database;
 
-        public override string DataSource => this.npgsqlConnection.DataSource;
+        public override string DataSource => npgsqlConnection.DataSource;
 
         protected override void SetDatabase(string database)
         {
             throw new NotImplementedException();
         }
 
-        public override string ServerVersion => this.npgsqlConnection.ServerVersion;
+        public override string ServerVersion => npgsqlConnection.ServerVersion;
 
         public override int TransactionCount => 0;
     }

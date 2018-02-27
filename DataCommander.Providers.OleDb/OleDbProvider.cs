@@ -31,7 +31,7 @@ namespace DataCommander.Providers.OleDb
             get
             {
                 if (keyWords == null)
-                    keyWords = ProviderFactory.GetKeyWords(this.connectionString);
+                    keyWords = ProviderFactory.GetKeyWords(connectionString);
 
                 return keyWords;
             }
@@ -213,7 +213,7 @@ namespace DataCommander.Providers.OleDb
             return null;
         }
 
-        Type IProvider.GetColumnType(Foundation.Data.DbColumn dataColumnSchema)
+        Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
         {
             var dbType = (OleDbType) dataColumnSchema.ProviderType;
             Type type;

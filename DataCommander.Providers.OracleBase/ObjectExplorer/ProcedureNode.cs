@@ -61,7 +61,7 @@ where	owner = '{schemaNode.Name}'
 	and type = 'PROCEDURE'
 order by line";
             var sb = new StringBuilder();
-            var transactionScope = new DbTransactionScope(this.schemaNode.SchemasNode.Connection, null);
+            var transactionScope = new DbTransactionScope(schemaNode.SchemasNode.Connection, null);
 
             transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default, dataRecord =>
             {
@@ -78,7 +78,7 @@ order by line";
             {
                 ContextMenuStrip contextMenu;
 
-                if (this.packageNode != null)
+                if (packageNode != null)
                 {
                     contextMenu = null;
                 }

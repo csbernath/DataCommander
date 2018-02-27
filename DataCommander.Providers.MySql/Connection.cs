@@ -15,35 +15,35 @@
         public Connection(string connectionString)
         {
             this.connectionString = connectionString;
-            this.mySqlConnection = new MySqlConnection(connectionString);
-            this.Connection = this.mySqlConnection;
+            mySqlConnection = new MySqlConnection(connectionString);
+            Connection = mySqlConnection;
         }
 
         public override Task OpenAsync(CancellationToken cancellationToken)
         {
-            return this.mySqlConnection.OpenAsync(cancellationToken);
+            return mySqlConnection.OpenAsync(cancellationToken);
         }
 
         public override System.Data.IDbCommand CreateCommand()
         {
-            return this.mySqlConnection.CreateCommand();
+            return mySqlConnection.CreateCommand();
         }
 
         public override string ConnectionName
         {
-            get => this.connectionName;
+            get => connectionName;
 
-            set => this.connectionName = value;
+            set => connectionName = value;
         }
 
-        public override string Caption => this.connectionName;
+        public override string Caption => connectionName;
 
         public override string DataSource
         {
             get
             {
                 // TODO
-                var csb = new MySqlConnectionStringBuilder(this.connectionString);
+                var csb = new MySqlConnectionStringBuilder(connectionString);
                 return csb.Database;
             }
         }
@@ -53,7 +53,7 @@
             throw new NotImplementedException();
         }
 
-        public override string ServerVersion => this.mySqlConnection.ServerVersion;
+        public override string ServerVersion => mySqlConnection.ServerVersion;
 
         public override int TransactionCount => 0;
     }

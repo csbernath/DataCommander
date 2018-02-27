@@ -27,8 +27,8 @@
                 CreateDataReader createDataReader)
             {
                 this.name = name;
-                this.Parameters = parameters;
-                this.CreateDataReader = createDataReader;
+                Parameters = parameters;
+                CreateDataReader = createDataReader;
             }
 
             public TfsParameterCollection Parameters { get; }

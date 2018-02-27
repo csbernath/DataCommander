@@ -1560,7 +1560,7 @@ namespace DataCommander.Providers.Query
             if (_dataAdapter != null)
                 Log.Error("this.dataAdapter == null failed");
 
-            FoundationContract.Assert(this._dataAdapter == null);
+            FoundationContract.Assert(_dataAdapter == null);
 
             Log.Trace("ThreadMonitor:\r\n{0}", ThreadMonitor.ToStringTableString());
             ThreadMonitor.Join(0);
@@ -3879,7 +3879,7 @@ namespace DataCommander.Providers.Query
             for (var i = 0; i <= last; i++)
             {
                 var dataRow = schemaTable.Rows[i];
-                var schemaRow = new Foundation.Data.DbColumn(dataRow);
+                var schemaRow = new FoundationDbColumn(dataRow);
                 var row = stringTable.NewRow();
                 var typeName = destinationProvider.GetColumnTypeName(Provider, dataRow, dataTypeNames[i]);
                 row[1] = schemaRow.ColumnName;

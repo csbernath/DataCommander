@@ -12,13 +12,13 @@
             this.manClass = manClass;
         }
 
-        public string Name => this.manClass.ClassPath.ClassName;
+        public string Name => manClass.ClassPath.ClassName;
 
         public bool IsLeaf => false;
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
-            var objects = this.manClass.GetSubclasses();
+            var objects = manClass.GetSubclasses();
             var list = new ArrayList();
 
             foreach (ManagementClass subClass in objects)
@@ -35,7 +35,7 @@
     
         public bool Sortable => false;
 
-        public string Query => $"select * from {this.Name}";
+        public string Query => $"select * from {Name}";
 
         public ContextMenuStrip ContextMenu => null;
 

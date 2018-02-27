@@ -10,7 +10,7 @@ namespace DataCommander.Providers.OracleClient
     using System.Data.OracleClient;
     using System.Text;
     using System.Xml;
-    using DataCommander.Providers.OracleBase;
+    using OracleBase;
     using Field;
     using Providers.Connection;
 
@@ -310,7 +310,7 @@ namespace DataCommander.Providers.OracleClient
         {
             get
             {
-                if (keyWords == null && OracleProvider.connectionString != null)
+                if (keyWords == null && connectionString != null)
                 {
                     var connectionString = "Provider=MSDAORA.1;" + OracleProvider.connectionString;
                     keyWords = ProviderFactory.GetKeyWords(connectionString);
@@ -352,7 +352,7 @@ namespace DataCommander.Providers.OracleClient
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType(Foundation.Data.DbColumn column)
+        Type IProvider.GetColumnType(FoundationDbColumn column)
         {
             var oracleType = (OracleType)column.ProviderType;
             var type = column.DataType;
@@ -466,7 +466,7 @@ namespace DataCommander.Providers.OracleClient
                     values.Append(',');
                 }
 
-                var column = new Foundation.Data.DbColumn(schemaRows[i]);
+                var column = new FoundationDbColumn(schemaRows[i]);
                 insertInto.Append(column.ColumnName);
                 values.AppendFormat(":p{0}", i + 1);
 

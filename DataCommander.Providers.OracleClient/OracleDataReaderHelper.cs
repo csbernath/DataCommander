@@ -15,7 +15,7 @@
 
         int IDataReaderHelper.GetValues( object[] values )
         {
-            return this.oracleDataReader.GetValues( values );
+            return oracleDataReader.GetValues( values );
         }
 
         #endregion

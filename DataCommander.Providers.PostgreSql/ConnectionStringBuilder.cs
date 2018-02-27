@@ -2,7 +2,7 @@
 {
     using System.Linq;
     using Npgsql;
-    using DataCommander.Providers;
+    using Providers;
     using Providers.Connection;
 
     internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
@@ -11,9 +11,9 @@
 
         string IDbConnectionStringBuilder.ConnectionString
         {
-            get => this.npgsqlConnectionStringBuilder.ConnectionString;
+            get => npgsqlConnectionStringBuilder.ConnectionString;
 
-            set => this.npgsqlConnectionStringBuilder.ConnectionString = value;
+            set => npgsqlConnectionStringBuilder.ConnectionString = value;
         }
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
@@ -33,15 +33,15 @@
             switch (keyword)
             {
                 case ConnectionStringKeyword.DataSource:
-                    contains = this.npgsqlConnectionStringBuilder.TryGetValue("Host", out value);
+                    contains = npgsqlConnectionStringBuilder.TryGetValue("Host", out value);
                     break;
 
                 case ConnectionStringKeyword.InitialCatalog:
-                    contains = this.npgsqlConnectionStringBuilder.TryGetValue("Database", out value);
+                    contains = npgsqlConnectionStringBuilder.TryGetValue("Database", out value);
                     break;
 
                 default:
-                    contains = this.npgsqlConnectionStringBuilder.TryGetValue(keyword, out value);
+                    contains = npgsqlConnectionStringBuilder.TryGetValue(keyword, out value);
                     break;
             }
 
@@ -53,15 +53,15 @@
             switch (keyword)
             {
                 case ConnectionStringKeyword.DataSource:
-                    this.npgsqlConnectionStringBuilder.Host = (string)value;
+                    npgsqlConnectionStringBuilder.Host = (string)value;
                     break;
 
                 case ConnectionStringKeyword.InitialCatalog:
-                    this.npgsqlConnectionStringBuilder.Database = (string)value;
+                    npgsqlConnectionStringBuilder.Database = (string)value;
                     break;
 
                 default:
-                    this.npgsqlConnectionStringBuilder[keyword] = value;
+                    npgsqlConnectionStringBuilder[keyword] = value;
                     break;
             }
         }

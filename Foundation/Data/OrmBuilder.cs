@@ -15,13 +15,13 @@ namespace Foundation.Data
             _properties = properties;
         }
 
-        public void Add(string objectTypeName, IReadOnlyCollection<DbColumn> columns)
+        public void Add(string objectTypeName, IReadOnlyCollection<FoundationDbColumn> columns)
         {
             AddObject(objectTypeName, columns, _objectStringBuilder, _properties);
             AddReadObject(objectTypeName, columns, _readObjectStringBuilder);
         }
 
-        private static void AddObject(string objectTypeName, IReadOnlyCollection<DbColumn> columns, StringBuilder stringBuilder, bool properties)
+        private static void AddObject(string objectTypeName, IReadOnlyCollection<FoundationDbColumn> columns, StringBuilder stringBuilder, bool properties)
         {
             if (stringBuilder.Length > 0)
                 stringBuilder.Append("\r\n\r\n");
@@ -53,7 +53,7 @@ namespace Foundation.Data
 }");
         }
 
-        private static void AddReadObject(string objectTypeName, IReadOnlyCollection<DbColumn> columns, StringBuilder stringBuilder)
+        private static void AddReadObject(string objectTypeName, IReadOnlyCollection<FoundationDbColumn> columns, StringBuilder stringBuilder)
         {
             const string objectInstanceName = "@object";
 
@@ -188,7 +188,7 @@ namespace Foundation.Data
             return isValueType;
         }
 
-        private static string GetDataRecordMethodName(DbColumn column)
+        private static string GetDataRecordMethodName(FoundationDbColumn column)
         {
             var typeCode = Type.GetTypeCode(column.DataType);
             string methodName = null;

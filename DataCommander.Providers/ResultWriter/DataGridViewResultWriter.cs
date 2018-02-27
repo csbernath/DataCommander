@@ -37,7 +37,7 @@
 
         private static DataGridViewColumn ToDataGridViewColumn(DataRow schemaDataRow)
         {
-            var schema = new DbColumn(schemaDataRow);
+            var schema = new FoundationDbColumn(schemaDataRow);
             var column = new DataGridViewTextBoxColumn()
             {
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.None,

@@ -9,9 +9,9 @@
 
         string IDbConnectionStringBuilder.ConnectionString
         {
-            get => this.sqLiteConnectionStringBuilder.ConnectionString;
+            get => sqLiteConnectionStringBuilder.ConnectionString;
 
-            set => this.sqLiteConnectionStringBuilder.ConnectionString = value;
+            set => sqLiteConnectionStringBuilder.ConnectionString = value;
         }
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
@@ -21,7 +21,7 @@
 
         void IDbConnectionStringBuilder.SetValue(string keyword, object value)
         {
-            this.sqLiteConnectionStringBuilder[keyword] = value;
+            sqLiteConnectionStringBuilder[keyword] = value;
         }
 
         bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value)
@@ -30,7 +30,7 @@
             switch (keyword)
             {
                 case ConnectionStringKeyword.IntegratedSecurity:
-                    contains = this.sqLiteConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out value);
+                    contains = sqLiteConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out value);
                     if (contains)
                     {
                         value = bool.Parse((string) value);
@@ -38,7 +38,7 @@
                     break;
 
                 default:
-                    contains = this.sqLiteConnectionStringBuilder.TryGetValue(keyword, out value);
+                    contains = sqLiteConnectionStringBuilder.TryGetValue(keyword, out value);
                     break;
             }
             return contains;

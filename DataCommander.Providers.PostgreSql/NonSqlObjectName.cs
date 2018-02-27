@@ -9,8 +9,8 @@
             this.objectName = objectName;
         }
 
-        string IObjectName.UnquotedName => this.objectName;
+        string IObjectName.UnquotedName => objectName;
 
-        string IObjectName.QuotedName => this.objectName;
+        string IObjectName.QuotedName => objectName;
     }
 }

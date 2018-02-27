@@ -10,15 +10,15 @@
             OleDbConnection connection,
             string          name)
         {
-            this.Connection = connection;
-            this.Name = name;
+            Connection = connection;
+            Name = name;
         }
 
         string ITreeNode.Name
         {
             get
             {
-                var name = this.Name;
+                var name = Name;
 
                 if (name == null)
                     name = "[No catalogs found]";
@@ -37,8 +37,8 @@
 
             try
             {
-                var restrictions = new object[] {this.Name};
-                var dataTable = this.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Schemata,restrictions);
+                var restrictions = new object[] {Name};
+                var dataTable = Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Schemata,restrictions);
                 var count = dataTable.Rows.Count;
                 var nameColumn = dataTable.Columns["SCHEMA_NAME"];        
                 treeNodes = new ITreeNode[count];

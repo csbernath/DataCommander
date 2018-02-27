@@ -26,19 +26,19 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
                 $@"select r.ROUTINE_NAME
 from information_schema.ROUTINES r
 where
-    r.ROUTINE_SCHEMA = {this.databaseNode.Name.ToTSqlVarChar()
+    r.ROUTINE_SCHEMA = {databaseNode.Name.ToTSqlVarChar()
                     }
     and r.ROUTINE_TYPE = 'FUNCTION'
 order by r.ROUTINE_NAME";
 
             return MySqlClientFactory.Instance.ExecuteReader(
-                this.databaseNode.ObjectExplorer.ConnectionString,
+                databaseNode.ObjectExplorer.ConnectionString,
                 new CommandDefinition {CommandText = commandText},
                 CommandBehavior.Default,
                 dataRecord =>
                 {
                     var name = dataRecord.GetString(0);
-                    return new FunctionNode(this.databaseNode, name);
+                    return new FunctionNode(databaseNode, name);
                 });
         }
 

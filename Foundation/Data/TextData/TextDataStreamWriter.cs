@@ -27,7 +27,7 @@ namespace Foundation.Data.TextData
         public void WriteRow(object[] values)
         {
             FoundationContract.Requires<ArgumentNullException>(values != null);
-            FoundationContract.Requires<ArgumentNullException>(this.Columns.Count == values.Length);
+            FoundationContract.Requires<ArgumentNullException>(Columns.Count == values.Length);
 
             for (var i = 0; i < values.Length; i++)
             {

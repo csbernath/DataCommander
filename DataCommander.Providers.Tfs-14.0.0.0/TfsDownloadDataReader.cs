@@ -48,30 +48,30 @@ namespace DataCommander.Providers.Tfs
         {
             bool read;
 
-            if (this.command.Cancelled)
+            if (command.Cancelled)
             {
                 read = false;
             }
             else
             {
-                if (this.first)
+                if (first)
                 {
-                    this.first = false;
-                    var serverPath = (string) this.command.Parameters["serverPath"].Value;
-                    this.item = this.command.Connection.VersionControlServer.GetItem(serverPath);
-                    this.localPath = Database.GetValueOrDefault<string>(this.command.Parameters["localPath"].Value);
+                    first = false;
+                    var serverPath = (string) command.Parameters["serverPath"].Value;
+                    item = command.Connection.VersionControlServer.GetItem(serverPath);
+                    localPath = Database.GetValueOrDefault<string>(command.Parameters["localPath"].Value);
 
-                    if (this.localPath == null)
+                    if (localPath == null)
                     {
-                        this.localPath = Path.GetTempPath();
-                        this.localPath = Path.Combine(this.localPath, DateTime.Now.ToString("yyyyMMdd HHmmss.fff"));
+                        localPath = Path.GetTempPath();
+                        localPath = Path.Combine(localPath, DateTime.Now.ToString("yyyyMMdd HHmmss.fff"));
 
-                        switch (this.item.ItemType)
+                        switch (item.ItemType)
                         {
                             case ItemType.File:
                             case ItemType.Folder:
-                                var name = VersionControlPath.GetFileName(this.item.ServerItem);
-                                this.localPath = Path.Combine(this.localPath, name);
+                                var name = VersionControlPath.GetFileName(item.ServerItem);
+                                localPath = Path.Combine(localPath, name);
                                 break;
 
                             default:
@@ -80,7 +80,7 @@ namespace DataCommander.Providers.Tfs
                     }
 
                     var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-                    queryForm.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, $"localPath: {this.localPath}"));
+                    queryForm.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, $"localPath: {localPath}"));
 
 
                     if (!VersionControlPath.IsValidPath(serverPath))
@@ -88,30 +88,30 @@ namespace DataCommander.Providers.Tfs
                         throw new ArgumentException($"The parameter serverPath '{serverPath}' is invalid.");
                     }
 
-                    this.queue.Enqueue(this.item);
+                    queue.Enqueue(item);
                 }
 
-                if (this.queue.Count > 0)
+                if (queue.Count > 0)
                 {
-                    var current = this.queue.Dequeue();
+                    var current = queue.Dequeue();
                     var values = new object[4];
                     values[0] = current.ServerItem;
                     values[1] = current.ItemType;
                     values[2] = current.CheckinDate;
                     values[3] = current.ContentLength;
-                    this.Values = values;
+                    Values = values;
                     var name = VersionControlPath.GetFileName(current.ServerItem);
                     string path;
 
-                    if (this.item.ServerItem.Length + 1 <= current.ServerItem.Length)
+                    if (item.ServerItem.Length + 1 <= current.ServerItem.Length)
                     {
-                        var secondPath = current.ServerItem.Substring(this.item.ServerItem.Length + 1);
+                        var secondPath = current.ServerItem.Substring(item.ServerItem.Length + 1);
                         secondPath = secondPath.Replace(VersionControlPath.Separator, Path.DirectorySeparatorChar);
-                        path = Path.Combine(this.localPath, secondPath);
+                        path = Path.Combine(localPath, secondPath);
                     }
                     else
                     {
-                        path = this.localPath;
+                        path = localPath;
                     }
 
                     switch (current.ItemType)
@@ -140,7 +140,7 @@ namespace DataCommander.Providers.Tfs
 
                             foreach (var childItem in itemSet.Items.Skip(1))
                             {
-                                this.queue.Enqueue(childItem);
+                                queue.Enqueue(childItem);
                             }
 
                             break;

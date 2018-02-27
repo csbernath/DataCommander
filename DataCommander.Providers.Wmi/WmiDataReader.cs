@@ -24,7 +24,7 @@ namespace DataCommander.Providers.Wmi
             var query = new ObjectQuery(command.CommandText);
             var searcher = new ManagementObjectSearcher(command.Connection.Scope, query);
             var objects = searcher.Get();
-            this.enumerator = objects.GetEnumerator();
+            enumerator = objects.GetEnumerator();
         }
 
         public void Dispose()
@@ -215,19 +215,19 @@ namespace DataCommander.Providers.Wmi
         {
             PropertyDataCollection properties = null;
 
-            if (this.firstObject == null)
+            if (firstObject == null)
             {
-                var moveNext = this.enumerator.MoveNext();
-                this.firstRead = true;
+                var moveNext = enumerator.MoveNext();
+                firstRead = true;
 
                 if (moveNext)
                 {
-                    this.firstObject = this.enumerator.Current;
-                    properties = this.firstObject.Properties;
+                    firstObject = enumerator.Current;
+                    properties = firstObject.Properties;
                 }
                 else
                 {
-                    var query = this.command.CommandText;
+                    var query = command.CommandText;
                     var index = 0;
                     var fromFound = false;
                     string className = null;
@@ -254,7 +254,7 @@ namespace DataCommander.Providers.Wmi
 
                     query = $"SELECT * FROM meta_class WHERE __this ISA '{className}'";
                     var objectQuery = new ObjectQuery(query);
-                    var searcher = new ManagementObjectSearcher(this.command.Connection.Scope, objectQuery);
+                    var searcher = new ManagementObjectSearcher(command.Connection.Scope, objectQuery);
                     var objects = searcher.Get();
                     var enumerator2 = objects.GetEnumerator();
                     enumerator2.MoveNext();
@@ -347,7 +347,7 @@ namespace DataCommander.Providers.Wmi
                 schemaTable.Rows.Add(values);
             }
 
-            this.FieldCount = schemaTable.Rows.Count;
+            FieldCount = schemaTable.Rows.Count;
 
             return schemaTable;
         }
@@ -361,18 +361,18 @@ namespace DataCommander.Providers.Wmi
         {
             bool read;
 
-            if (this.command.Cancelled)
+            if (command.Cancelled)
             {
                 read = false;
             }
-            else if (this.firstRead)
+            else if (firstRead)
             {
-                read = this.firstObject != null;
-                this.firstRead = false;
+                read = firstObject != null;
+                firstRead = false;
             }
             else
             {
-                read = this.enumerator.MoveNext();
+                read = enumerator.MoveNext();
             }
 
             return read;

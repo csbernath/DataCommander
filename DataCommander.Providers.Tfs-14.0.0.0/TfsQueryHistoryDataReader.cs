@@ -45,10 +45,10 @@ namespace DataCommander.Providers.Tfs
         {
             bool read;
 
-            if (this.first)
+            if (first)
             {
-                this.first = false;
-                var parameters = this.command.Parameters;
+                first = false;
+                var parameters = command.Parameters;
                 var path = (string)parameters["path"].Value;
                 var version = VersionSpec.Latest;
                 var deletionId = 0;
@@ -79,21 +79,21 @@ namespace DataCommander.Providers.Tfs
                 }
                 else
                 {
-                    maxCount = (int)TfsDataReaderFactory.Dictionary[ this.command.CommandText ].Parameters[ "maxCount" ].DefaultValue;
+                    maxCount = (int)TfsDataReaderFactory.Dictionary[ command.CommandText ].Parameters[ "maxCount" ].DefaultValue;
                 }
 
                 parameter = parameters.FirstOrDefault(p => p.ParameterName == "includeChanges");
                 var includeChanges = parameter != null ? Database.GetValueOrDefault<bool>(parameters["includeChanges"].Value) : false;
                 var slotMode = Database.GetValueOrDefault<bool>(parameters["slotMode"].Value);
-                var changesets = this.command.Connection.VersionControlServer.QueryHistory(path, version, deletionId, recursion, user, versionFrom, versionTo, maxCount, includeChanges, slotMode);
-                this.enumerator = this.AsEnumerable(changesets).GetEnumerator();
+                var changesets = command.Connection.VersionControlServer.QueryHistory(path, version, deletionId, recursion, user, versionFrom, versionTo, maxCount, includeChanges, slotMode);
+                enumerator = AsEnumerable(changesets).GetEnumerator();
             }
 
-            var moveNext = this.enumerator.MoveNext();
+            var moveNext = enumerator.MoveNext();
 
             if (moveNext)
             {
-                var pair = this.enumerator.Current;
+                var pair = enumerator.Current;
                 var changeset = pair.Item1;
 
                 var values = new object[]
@@ -115,8 +115,8 @@ namespace DataCommander.Providers.Tfs
                     values[5] = change.Item.ServerItem;
                 }
 
-                this.Values = values;
-                this.recordCount++;
+                Values = values;
+                recordCount++;
                 read = true;
             }
             else

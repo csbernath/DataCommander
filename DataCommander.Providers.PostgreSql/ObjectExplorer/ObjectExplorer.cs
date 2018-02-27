@@ -9,7 +9,7 @@
 
         void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
         {
-            this.ConnectionString = connectionString;
+            ConnectionString = connectionString;
         }
 
         IEnumerable<ITreeNode> IObjectExplorer.GetChildren(bool refresh)

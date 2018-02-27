@@ -11,7 +11,7 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
     {
         public SchemaCollectionNode(ObjectExplorer objectExplorer)
         {
-            this.ObjectExplorer = objectExplorer;
+            ObjectExplorer = objectExplorer;
         }
 
         public ObjectExplorer ObjectExplorer { get; }
@@ -30,7 +30,7 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
         {
             var nodes = new List<ITreeNode>();
 
-            using (var connection = new NpgsqlConnection(this.ObjectExplorer.ConnectionString))
+            using (var connection = new NpgsqlConnection(ObjectExplorer.ConnectionString))
             {
                 connection.Open();
                 var transactionScope = new DbTransactionScope(connection, null);

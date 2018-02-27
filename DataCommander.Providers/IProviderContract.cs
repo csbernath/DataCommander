@@ -67,7 +67,7 @@ namespace DataCommander.Providers
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType(Foundation.Data.DbColumn dataColumnSchema)
+        Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
         {
             FoundationContract.Requires<ArgumentNullException>(dataColumnSchema != null);
 

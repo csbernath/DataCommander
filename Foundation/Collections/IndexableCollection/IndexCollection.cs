@@ -35,7 +35,7 @@ namespace Foundation.Collections.IndexableCollection
         /// </summary>
         public void Clear()
         {
-            FoundationContract.Ensures(this.Count == 0);
+            FoundationContract.Ensures(Count == 0);
 
             _dictionary.Clear();
         }

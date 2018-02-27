@@ -13,7 +13,7 @@
 
         int IDataReaderHelper.GetValues(object[] values)
         {
-            return this.dataReader.GetValues(values);
+            return dataReader.GetValues(values);
         }
 
         #endregion

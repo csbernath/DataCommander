@@ -11,7 +11,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         private IDbConnection connection;
         private SchemaCollectionNode schemasNode;
 
-        public IDbConnection Connection => this.connection;
+        public IDbConnection Connection => connection;
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {

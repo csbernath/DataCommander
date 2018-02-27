@@ -44,7 +44,7 @@
         public void Open()
         {
             var sb = new DbConnectionStringBuilder();
-            sb.ConnectionString = this.connectionString;
+            sb.ConnectionString = connectionString;
             object value;            
             var contains = sb.TryGetValue( ConnectionStringKeyword.DataSource, out value );
             string dataSource;
@@ -58,13 +58,13 @@
                 dataSource = null;
             }
 
-            this.DataSource = dataSource;
+            DataSource = dataSource;
             //ManagementPath path = ManagementPath.DefaultPath;
             //path.Server = dataSource;
             //scope = new ManagementScope( path );
 
-            var path = this.DataSource;
-            this.Scope = new ManagementScope( path );
+            var path = DataSource;
+            Scope = new ManagementScope( path );
         }
 
         public string ConnectionString

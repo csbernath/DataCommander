@@ -13,7 +13,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
     {
         public TriggerCollectionNode(TableNode tableNode)
         {
-            this.table = tableNode;
+            table = tableNode;
         }
 
         public string Name => "Triggers";

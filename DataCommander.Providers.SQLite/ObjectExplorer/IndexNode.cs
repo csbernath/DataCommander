@@ -17,7 +17,7 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
 
         #region ITreeNode Members
 
-        string ITreeNode.Name => this.name;
+        string ITreeNode.Name => name;
 
         bool ITreeNode.IsLeaf => true;
 
@@ -36,8 +36,8 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
 from main.sqlite_master
 where
     type = 'index'
-    and name = '{this.name}'";
-                var executor = DbCommandExecutorFactory.Create(this.tableNode.Database.Connection);
+    and name = '{name}'";
+                var executor = DbCommandExecutorFactory.Create(tableNode.Database.Connection);
                 var sql = (string) executor.ExecuteScalar(new CreateCommandRequest(commandText));
                 return sql;
             }

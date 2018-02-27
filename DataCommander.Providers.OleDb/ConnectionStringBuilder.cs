@@ -8,9 +8,9 @@
 
         string IDbConnectionStringBuilder.ConnectionString
         {
-            get => this.oleDbConnectionStringBuilder.ConnectionString;
+            get => oleDbConnectionStringBuilder.ConnectionString;
 
-            set => this.oleDbConnectionStringBuilder.ConnectionString = value;
+            set => oleDbConnectionStringBuilder.ConnectionString = value;
         }
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
@@ -20,12 +20,12 @@
 
         void IDbConnectionStringBuilder.SetValue(string keyword, object value)
         {
-            this.oleDbConnectionStringBuilder[keyword] = value;
+            oleDbConnectionStringBuilder[keyword] = value;
         }
 
         bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value)
         {
-            return this.oleDbConnectionStringBuilder.TryGetValue(keyword, out value);
+            return oleDbConnectionStringBuilder.TryGetValue(keyword, out value);
         }
     }
 }

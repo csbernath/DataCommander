@@ -7,12 +7,12 @@
     {
         public TfsParameter(string name, Type type, DbType dbType, ParameterDirection direction, bool isNullable, object defaultValue)
         {
-            this.ParameterName = name;
-            this.Type = type;
-            this.DbType = dbType;
-            this.Direction = direction;
-            this.IsNullable = isNullable;
-            this.DefaultValue = defaultValue;
+            ParameterName = name;
+            Type = type;
+            DbType = dbType;
+            Direction = direction;
+            IsNullable = isNullable;
+            DefaultValue = defaultValue;
         }
 
         public Type Type { get; }

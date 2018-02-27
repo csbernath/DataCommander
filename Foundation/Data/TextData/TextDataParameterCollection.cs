@@ -266,7 +266,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public TResult GetParameterValue<TResult>(string parameterName)
         {
-            FoundationContract.Assert(this.Contains(parameterName));
+            FoundationContract.Assert(Contains(parameterName));
 
             var parameter = _nameIndex[parameterName];
             var value = parameter.Value;

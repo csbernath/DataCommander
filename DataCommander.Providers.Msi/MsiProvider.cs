@@ -5,7 +5,7 @@ using System.Data.Common;
 using System.Xml;
 using DataCommander.Providers.Connection;
 using Foundation.Data;
-using DbColumn = Foundation.Data.DbColumn;
+using FoundationDbColumn = Foundation.Data.FoundationDbColumn;
 
 namespace DataCommander.Providers.Msi
 {
@@ -61,7 +61,7 @@ namespace DataCommander.Providers.Msi
             return e.ToString();
         }
 
-        public Type GetColumnType(DbColumn dataColumnSchema)
+        public Type GetColumnType(FoundationDbColumn dataColumnSchema)
         {
             throw new NotImplementedException();
         }
@@ -130,7 +130,7 @@ namespace DataCommander.Providers.Msi
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType(DbColumn dataColumnSchema)
+        Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
         {
             return typeof(object);
         }

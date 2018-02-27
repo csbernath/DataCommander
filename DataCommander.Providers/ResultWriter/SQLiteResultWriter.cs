@@ -61,7 +61,7 @@
 
             for (var i = 0; i < schemaRowCount; i++)
             {
-                var schemaRow = new DbColumn(schemaRows[i]);
+                var schemaRow = new FoundationDbColumn(schemaRows[i]);
                 var stringTableRow = st.NewRow();
 
                 if (i == 0)

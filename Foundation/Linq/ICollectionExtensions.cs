@@ -192,7 +192,7 @@ namespace Foundation.Linq
             /// <param name="item"></param>
             void ICollection<TResult>.Add(TResult item)
             {
-                FoundationContract.Assert(this.sourceAsList != null);
+                FoundationContract.Assert(sourceAsList != null);
 
                 sourceAsList.Add(item);
             }
@@ -202,7 +202,7 @@ namespace Foundation.Linq
             /// </summary>
             void ICollection<TResult>.Clear()
             {
-                FoundationContract.Assert(this.sourceAsList != null);
+                FoundationContract.Assert(sourceAsList != null);
 
                 sourceAsList.Clear();
             }
@@ -339,7 +339,7 @@ namespace Foundation.Linq
             /// <returns></returns>
             bool ICollection<T>.Contains(T item)
             {
-                FoundationContract.Ensures(!Contract.Result<bool>() || this.Count > 0);
+                FoundationContract.Ensures(!Contract.Result<bool>() || Count > 0);
 
                 return collection.Contains(item);
             }

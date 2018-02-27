@@ -61,7 +61,7 @@ namespace DataCommander.Providers.SqlServerCe40
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType(Foundation.Data.DbColumn dataColumnSchema)
+        Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
         {
             throw new NotImplementedException();
             // System.Data.SqlServerCe.SqlCeType
@@ -208,7 +208,7 @@ ORDER BY ORDINAL_POSITION";
 
         string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
         {
-            var schemaRow = new Foundation.Data.DbColumn(sourceSchemaRow);
+            var schemaRow = new FoundationDbColumn(sourceSchemaRow);
             var columnSize = schemaRow.ColumnSize;
             var allowDBNull = schemaRow.AllowDbNull;
             var dataType = schemaRow.DataType;
@@ -431,7 +431,7 @@ ORDER BY ORDINAL_POSITION";
                     values.Append(',');
                 }
 
-                var columnSchema = new Foundation.Data.DbColumn(schemaRows[i]);
+                var columnSchema = new FoundationDbColumn(schemaRows[i]);
                 insertInto.AppendFormat("[{0}]", columnSchema.ColumnName);
                 values.Append('?');
 

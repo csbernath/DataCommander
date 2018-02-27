@@ -59,7 +59,7 @@ namespace DataCommander.Providers.Connection
         {
             get
             {
-                FoundationContract.Assert(this.Connection != null);
+                FoundationContract.Assert(Connection != null);
                 return Connection.State;
             }
         }

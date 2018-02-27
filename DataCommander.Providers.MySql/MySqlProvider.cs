@@ -10,7 +10,7 @@ using DataCommander.Providers.Query;
 using Foundation.Configuration;
 using Foundation.Data;
 using Foundation.Log;
-using global::MySql.Data.MySqlClient;
+using MySql.Data.MySqlClient;
 
 namespace DataCommander.Providers.MySql
 {
@@ -52,12 +52,12 @@ namespace DataCommander.Providers.MySql
         {
             get
             {
-                if (this.objectExplorer == null)
+                if (objectExplorer == null)
                 {
-                    this.objectExplorer = new ObjectExplorer.ObjectExplorer();
+                    objectExplorer = new ObjectExplorer.ObjectExplorer();
                 }
 
-                return this.objectExplorer;
+                return objectExplorer;
             }
         }
 
@@ -102,7 +102,7 @@ namespace DataCommander.Providers.MySql
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType(Foundation.Data.DbColumn dataColumnSchema)
+        Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
         {
             // TODO
 
@@ -246,7 +246,7 @@ namespace DataCommander.Providers.MySql
 
                 foreach (DataRow dataRow in schemaTable.Rows)
                 {
-                    var dataColumnSchema = new Foundation.Data.DbColumn(dataRow);
+                    var dataColumnSchema = new FoundationDbColumn(dataRow);
                     var columnOrdinal = dataColumnSchema.ColumnOrdinal;
 
                     if (columnOrdinalAddition == null)

@@ -26,7 +26,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
             var commandText =
                 $@"select	s.SEQUENCE_NAME
 from	SYS.ALL_SEQUENCES s
-where	s.SEQUENCE_OWNER	= '{this.schemaNode.Name}'
+where	s.SEQUENCE_OWNER	= '{schemaNode.Name}'
 order by s.SEQUENCE_NAME
 ";
             var transactionScope = new DbTransactionScope(schemaNode.SchemasNode.Connection, null);
@@ -34,7 +34,7 @@ order by s.SEQUENCE_NAME
             return transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default, dataRecord =>
             {
                 var name = dataRecord.GetString(0);
-                return (ITreeNode)new SequenceNode(this.schemaNode, name);
+                return (ITreeNode)new SequenceNode(schemaNode, name);
             });
         }
 

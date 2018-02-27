@@ -52,7 +52,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public T GetValue<T>()
         {
-            FoundationContract.Requires<ArgumentOutOfRangeException>((this.Value == null && typeof (T).IsClass) || this.Value is T);
+            FoundationContract.Requires<ArgumentOutOfRangeException>((Value == null && typeof (T).IsClass) || Value is T);
 
             var value = (T)Value;
             return value;

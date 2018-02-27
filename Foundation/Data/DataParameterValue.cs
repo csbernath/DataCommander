@@ -73,7 +73,7 @@ namespace Foundation.Data
         {
             get
             {
-                FoundationContract.Assert( this.Type == DataParameterValueType.Value );
+                FoundationContract.Assert( Type == DataParameterValueType.Value );
                 return _value;
             }
         }

@@ -43,16 +43,16 @@ namespace DataCommander.Providers.Tfs
         {
             bool read;
 
-            if (this.command.Cancelled)
+            if (command.Cancelled)
             {
                 read = false;
             }
             else
             {
-                if (this.first)
+                if (first)
                 {
-                    this.first = false;
-                    var parameters = this.command.Parameters;
+                    first = false;
+                    var parameters = command.Parameters;
                     var path = Database.GetValueOrDefault<string>(parameters["path"].Value);
                     var recursionString = Database.GetValueOrDefault<string>(parameters["recursion"].Value);
                     RecursionType recursion;
@@ -68,16 +68,16 @@ namespace DataCommander.Providers.Tfs
 
                     var workspace = Database.GetValueOrDefault<string>(parameters["workspace"].Value);
                     var user = Database.GetValueOrDefault<string>(parameters["user"].Value);
-                    this.pendingSets = this.command.Connection.VersionControlServer.QueryPendingSets(new string[] {path}, recursion, workspace, user);
-                    this.enumerator = AsEnumerable(this.pendingSets).GetEnumerator();
+                    pendingSets = command.Connection.VersionControlServer.QueryPendingSets(new string[] {path}, recursion, workspace, user);
+                    enumerator = AsEnumerable(pendingSets).GetEnumerator();
                 }
 
-                var moveNext = this.enumerator.MoveNext();
+                var moveNext = enumerator.MoveNext();
 
                 if (moveNext)
                 {
-                    var pair = this.enumerator.Current;
-                    var pendingSet = this.pendingSets[pair.Item1];
+                    var pair = enumerator.Current;
+                    var pendingSet = pendingSets[pair.Item1];
                     var pendingChange = pendingSet.PendingChanges[pair.Item2];
 
                     var values = new object[]
@@ -95,7 +95,7 @@ namespace DataCommander.Providers.Tfs
                         pendingChange.LocalItem
                     };
 
-                    this.Values = values;
+                    Values = values;
                     read = true;
                 }
                 else

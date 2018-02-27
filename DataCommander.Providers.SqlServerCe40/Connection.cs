@@ -13,32 +13,32 @@
 
         public Connection(string connectionString)
         {
-            this.sqlCeConnection = new SqlCeConnection(connectionString);
-            this.Connection = this.sqlCeConnection;
+            sqlCeConnection = new SqlCeConnection(connectionString);
+            Connection = sqlCeConnection;
         }
 
         public override Task OpenAsync(CancellationToken cancellationToken)
         {
-            return this.sqlCeConnection.OpenAsync(cancellationToken);
+            return sqlCeConnection.OpenAsync(cancellationToken);
         }
 
         public override IDbCommand CreateCommand()
         {
-            return this.sqlCeConnection.CreateCommand();
+            return sqlCeConnection.CreateCommand();
         }
 
         public override string ConnectionName { get; set; }
 
-        public override string Caption => this.sqlCeConnection.DataSource;
+        public override string Caption => sqlCeConnection.DataSource;
 
-        public override string DataSource => this.sqlCeConnection.DataSource;
+        public override string DataSource => sqlCeConnection.DataSource;
 
         protected override void SetDatabase(string database)
         {
             throw new NotImplementedException();
         }
 
-        public override string ServerVersion => this.sqlCeConnection.ServerVersion;
+        public override string ServerVersion => sqlCeConnection.ServerVersion;
 
         public override int TransactionCount => 0;
     }

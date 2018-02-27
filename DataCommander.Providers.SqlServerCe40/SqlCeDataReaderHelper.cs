@@ -23,11 +23,11 @@ namespace DataCommander.Providers.SqlServerCe40
             {
                 var schemaRows = schemaTable.Rows;
                 var count = schemaRows.Count;
-                this.dataFieldReaders = new IDataFieldReader[ count ];
+                dataFieldReaders = new IDataFieldReader[ count ];
 
                 for (var i = 0; i < count; i++)
                 {
-                    var schemaRow = new Foundation.Data.DbColumn(schemaRows[i]);
+                    var schemaRow = new FoundationDbColumn(schemaRows[i]);
                     var sqlCeType = (SqlCeType) schemaRows[ i ][ SchemaTableColumn.ProviderType ];
                     var sqlDbType = sqlCeType.SqlDbType;
                     IDataFieldReader dataFieldReader;
@@ -43,7 +43,7 @@ namespace DataCommander.Providers.SqlServerCe40
                             break;
                     }
 
-                    this.dataFieldReaders[ i ] = dataFieldReader;
+                    dataFieldReaders[ i ] = dataFieldReader;
                 }
             }
         }
@@ -54,7 +54,7 @@ namespace DataCommander.Providers.SqlServerCe40
         {
             for (var i = 0; i < values.Length; i++)
             {
-                values[ i ] = this.dataFieldReaders[ i ].Value;
+                values[ i ] = dataFieldReaders[ i ].Value;
             }
 
             return values.Length;
@@ -86,7 +86,7 @@ namespace DataCommander.Providers.SqlServerCe40
                 get
                 {
                     object value;
-                    var isDBNull = this.dataReader.IsDBNull( this.columnOrdinal );
+                    var isDBNull = dataReader.IsDBNull( columnOrdinal );
 
                     if (isDBNull)
                     {
@@ -94,7 +94,7 @@ namespace DataCommander.Providers.SqlServerCe40
                     }
                     else
                     {
-                        var sqlDecimal = this.dataReader.GetSqlDecimal( this.columnOrdinal );
+                        var sqlDecimal = dataReader.GetSqlDecimal( columnOrdinal );
                         decimal decimalValue;
                         string decimalString;
 

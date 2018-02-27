@@ -14,35 +14,35 @@ namespace DataCommander.Providers.OleDb
 
         public Connection(string connectionString)
         {
-            this.oledbConnection = new OleDbConnection(connectionString);
-            this.Connection = this.oledbConnection;
+            oledbConnection = new OleDbConnection(connectionString);
+            Connection = oledbConnection;
 
-            this.oledbConnection.InfoMessage += this.OnInfoMessage;
+            oledbConnection.InfoMessage += OnInfoMessage;
         }
 
         public override string ConnectionName { get; set; }
 
         public override Task OpenAsync(CancellationToken cancellationToken)
         {
-            return this.oledbConnection.OpenAsync(cancellationToken);
+            return oledbConnection.OpenAsync(cancellationToken);
         }
 
-        public override string Caption => this.oledbConnection.ConnectionString;
+        public override string Caption => oledbConnection.ConnectionString;
 
         void OnInfoMessage( object sender, OleDbInfoMessageEventArgs e )
         {
             var now = LocalTime.Default.Now;
             var text = e.Message;
-            this.InvokeInfoMessage( new InfoMessage[] { new InfoMessage( now, InfoMessageSeverity.Information, text ) } );
+            InvokeInfoMessage( new InfoMessage[] { new InfoMessage( now, InfoMessageSeverity.Information, text ) } );
         }
 
-        public override string DataSource => this.oledbConnection.DataSource;
+        public override string DataSource => oledbConnection.DataSource;
 
-        public override string ServerVersion => this.oledbConnection.ServerVersion;
+        public override string ServerVersion => oledbConnection.ServerVersion;
 
         public override IDbCommand CreateCommand()
         {
-            return this.oledbConnection.CreateCommand();
+            return oledbConnection.CreateCommand();
         }
 
         protected override void SetDatabase(string database)

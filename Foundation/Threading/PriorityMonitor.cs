@@ -102,7 +102,7 @@ namespace Foundation.Threading
         {
             FoundationContract.Requires<ArgumentException>(lockRequest != null);
             FoundationContract.Requires<ArgumentException>(lockRequest.Monitor == this);
-            FoundationContract.Requires<ArgumentException>(lockRequest == this.CurrentLockRequest);
+            FoundationContract.Requires<ArgumentException>(lockRequest == CurrentLockRequest);
 
             Log.Trace("Exiting lockRequest... monitoredObject: {0}, priority: {1}", MonitoredObject, lockRequest.Priority);
 

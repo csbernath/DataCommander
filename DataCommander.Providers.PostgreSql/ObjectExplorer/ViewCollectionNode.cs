@@ -24,7 +24,7 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
         {
             var nodes = new List<ITreeNode>();
 
-            using (var connection = new NpgsqlConnection(this.schemaNode.SchemaCollectionNode.ObjectExplorer.ConnectionString))
+            using (var connection = new NpgsqlConnection(schemaNode.SchemaCollectionNode.ObjectExplorer.ConnectionString))
             {
                 connection.Open();
                 var transactionScope = new DbTransactionScope(connection, null);
@@ -32,7 +32,7 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
                 {
                     CommandText = $@"select table_name
 from information_schema.views
-where table_schema = '{this.schemaNode.Name}'
+where table_schema = '{schemaNode.Name}'
 order by table_name"
                 }, CommandBehavior.Default, dataRecord =>
                 {

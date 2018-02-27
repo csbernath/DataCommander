@@ -197,7 +197,7 @@ namespace DataCommander.Providers.Tfs
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType(Foundation.Data.DbColumn dataColumnSchema)
+        Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
         {
             var dbType = (DbType)dataColumnSchema.ProviderType;
             Type type;
@@ -239,12 +239,12 @@ namespace DataCommander.Providers.Tfs
         {
             get
             {
-                if (this.objectBrowser == null)
+                if (objectBrowser == null)
                 {
-                    this.objectBrowser = new TfsObjectExplorer();
+                    objectBrowser = new TfsObjectExplorer();
                 }
 
-                return this.objectBrowser;
+                return objectBrowser;
             }
         }
 

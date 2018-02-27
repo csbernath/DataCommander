@@ -11,9 +11,9 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
     {
         public string ConnectionString { get; private set; }
 
-        void IObjectExplorer.SetConnection(string connectionString, System.Data.IDbConnection connection)
+        void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
         {
-            this.ConnectionString = connectionString;
+            ConnectionString = connectionString;
         }
 
         IEnumerable<ITreeNode> IObjectExplorer.GetChildren(bool refresh)
@@ -23,7 +23,7 @@ from INFORMATION_SCHEMA.SCHEMATA
 order by SCHEMA_NAME";
 
             return MySqlClientFactory.Instance.ExecuteReader(
-                this.ConnectionString,
+                ConnectionString,
                 new CommandDefinition {CommandText = commandText},
                 CommandBehavior.Default,
                 dataRecord =>

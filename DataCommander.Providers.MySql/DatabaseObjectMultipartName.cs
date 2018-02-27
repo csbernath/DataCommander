@@ -15,35 +15,35 @@
 
                 if (i >= 0)
                 {
-                    this.Name = nameParts[i];
+                    Name = nameParts[i];
                     i--;
 
 
                     if (i >= 0)
                     {
-                        this.Database = nameParts[i];
+                        Database = nameParts[i];
                     }
                 }
             }
 
-            if (this.Database == null)
+            if (Database == null)
             {
-                this.Database = currentDatabase;
+                Database = currentDatabase;
             }
 
-            if (this.Name != null)
+            if (Name != null)
             {
-                var length = this.Name.Length;
+                var length = Name.Length;
 
-                if (length > 0 && this.Name[0] == '[')
+                if (length > 0 && Name[0] == '[')
                 {
-                    this.Name = this.Name.Substring(1);
+                    Name = Name.Substring(1);
                     length--;
                 }
 
-                if (length > 0 && this.Name[length - 1] == ']')
+                if (length > 0 && Name[length - 1] == ']')
                 {
-                    this.Name = this.Name.Substring(0, length - 1);
+                    Name = Name.Substring(0, length - 1);
                 }
             }
         }
@@ -55,9 +55,9 @@
         public override string ToString()
         {
             var sb = new StringBuilder();
-            if (this.Database != null)
+            if (Database != null)
             {
-                sb.Append(this.Database);
+                sb.Append(Database);
             }
 
             if (sb.Length > 0)
@@ -65,7 +65,7 @@
                 sb.Append('.');
             }
 
-            sb.Append(this.Name);
+            sb.Append(Name);
             return sb.ToString();
         }
     }

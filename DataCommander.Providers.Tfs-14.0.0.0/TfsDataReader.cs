@@ -143,8 +143,8 @@
 
         public int GetValues(object[] values)
         {
-            this.Values.CopyTo(values, 0);
-            return this.Values.Length;
+            Values.CopyTo(values, 0);
+            return Values.Length;
         }
 
         public bool IsDBNull(int i)

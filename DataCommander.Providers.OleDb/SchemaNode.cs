@@ -10,15 +10,15 @@
     {
         public SchemaNode(CatalogNode catalog,string name)
         {
-            this.Catalog = catalog;
-            this.Name = name;
+            Catalog = catalog;
+            Name = name;
         }
 
         string ITreeNode.Name
         {
             get
             {
-                var name = this.Name;
+                var name = Name;
         
                 if (name == null)
                     name = "[No schemas found]";

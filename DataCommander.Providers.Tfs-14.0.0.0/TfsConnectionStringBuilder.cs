@@ -8,8 +8,8 @@
 
         string IDbConnectionStringBuilder.ConnectionString
         {
-            get => this.connectionStringBuilder.ConnectionString;
-            set => this.connectionStringBuilder.ConnectionString = value;
+            get => connectionStringBuilder.ConnectionString;
+            set => connectionStringBuilder.ConnectionString = value;
         }
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
@@ -19,12 +19,12 @@
 
         void IDbConnectionStringBuilder.SetValue(string keyword, object value)
         {
-            this.connectionStringBuilder[keyword] = value;
+            connectionStringBuilder[keyword] = value;
         }
 
         bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value)
         {
-            return this.connectionStringBuilder.TryGetValue(keyword, out value);
+            return connectionStringBuilder.TryGetValue(keyword, out value);
         }
     }
 }

@@ -47,23 +47,23 @@ namespace DataCommander.Providers.Tfs
         {
             bool read;
 
-            if (this.first)
+            if (first)
             {
-                this.first = false;
-                var parameters = this.command.Parameters;
+                first = false;
+                var parameters = command.Parameters;
                 var workspace = Database.GetValueOrDefault<string>(parameters["workspace"].Value);
                 var owner = Database.GetValueOrDefault<string>(parameters["owner"].Value);
                 var computer = Database.GetValueOrDefault<string>(parameters["computer"].Value);
-                this.workspaces = this.command.Connection.VersionControlServer.QueryWorkspaces(workspace, owner, computer);
-                this.enumerator = AsEnumerable(this.workspaces).GetEnumerator();
+                workspaces = command.Connection.VersionControlServer.QueryWorkspaces(workspace, owner, computer);
+                enumerator = AsEnumerable(workspaces).GetEnumerator();
             }
 
-            var moveNext = this.enumerator.MoveNext();
+            var moveNext = enumerator.MoveNext();
 
             if (moveNext)
             {
-                var pair = this.enumerator.Current;
-                var workspace = this.workspaces[pair.Item1];
+                var pair = enumerator.Current;
+                var workspace = workspaces[pair.Item1];
                 var folderIndex = pair.Item2;
 
                 var values = new object[]
@@ -88,9 +88,9 @@ namespace DataCommander.Providers.Tfs
                     values[8] = folder.LocalItem;
                 }
 
-                this.Values = values;
+                Values = values;
                 read = true;
-                this.index++;
+                index++;
             }
             else
             {

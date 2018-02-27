@@ -12,7 +12,7 @@
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             var treeNodes = new ITreeNode[1];
-            treeNodes[0] = new CatalogsNode(this.connection);
+            treeNodes[0] = new CatalogsNode(connection);
             return treeNodes;
         }
 

@@ -124,8 +124,8 @@ namespace Foundation.Data
         /// <returns></returns>
         public bool NextResult()
         {
-            FoundationContract.Assert(this._dataReader != null);
-            FoundationContract.Assert(!this._nextResultCalled);
+            FoundationContract.Assert(_dataReader != null);
+            FoundationContract.Assert(!_nextResultCalled);
 
             var nextResult = _dataReader.NextResult();
             _nextResultCalled = true;

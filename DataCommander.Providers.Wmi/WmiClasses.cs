@@ -20,7 +20,7 @@
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
-            var manClass = new ManagementClass(this.scope.Path);
+            var manClass = new ManagementClass(scope.Path);
             var objects = manClass.GetSubclasses();
             var list = new List<ITreeNode>();
 

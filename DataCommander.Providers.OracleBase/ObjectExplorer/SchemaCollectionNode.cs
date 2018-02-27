@@ -21,7 +21,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
             this.connection = connection;
             var sb = new DbConnectionStringBuilder();
             sb.ConnectionString = connection.ConnectionString;
-            this.selectedSchema = (string) sb[ConnectionStringKeyword.UserId];
+            selectedSchema = (string) sb[ConnectionStringKeyword.UserId];
         }
 
         public string Name => "Schemas";
@@ -31,7 +31,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             var commandText = "select username from all_users order by username";
-            var transactionScope = new DbTransactionScope(this.Connection, null);
+            var transactionScope = new DbTransactionScope(Connection, null);
             var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
             var count = dataTable.Rows.Count;
             var treeNodes = new ITreeNode[count];
@@ -51,7 +51,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 
         public ContextMenuStrip ContextMenu => null;
 
-        public IDbConnection Connection => this.connection;
+        public IDbConnection Connection => connection;
 
         public string SelectedSchema
         {

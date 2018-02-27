@@ -1,6 +1,6 @@
 ﻿namespace DataCommander.Providers.PostgreSql
 {
-    using DataCommander.Providers;
+    using Providers;
     using Npgsql;
 
     internal sealed class PostgreSqlDataReaderHelper : IDataReaderHelper
@@ -14,7 +14,7 @@
 
         int IDataReaderHelper.GetValues(object[] values)
         {
-            return this.dataReader.GetValues(values);
+            return dataReader.GetValues(values);
         }
     }
 }

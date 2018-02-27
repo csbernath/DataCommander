@@ -150,7 +150,7 @@ namespace Foundation.Collections.IndexableCollection
             {
                 var key = response.Key;
 
-                FoundationContract.Assert(!this._dictionary.ContainsKey(key));
+                FoundationContract.Assert(!_dictionary.ContainsKey(key));
 
                 _dictionary.Add(key, item);
             }

@@ -44,7 +44,7 @@ namespace Foundation.Configuration
         {
             get
             {
-                FoundationContract.Assert(0 <= index && index < this.Count);
+                FoundationContract.Assert(0 <= index && index < Count);
 
                 return _listIndex[index];
             }
@@ -68,7 +68,7 @@ namespace Foundation.Configuration
         {
             get
             {
-                FoundationContract.Requires<ArgumentOutOfRangeException>(this.ContainsKey(name));
+                FoundationContract.Requires<ArgumentOutOfRangeException>(ContainsKey(name));
 
                 return _nameIndex[name];
             }
@@ -87,7 +87,7 @@ namespace Foundation.Configuration
         /// <param name="description"></param>
         public void Add(string name, object value, string description)
         {
-            FoundationContract.Requires<ArgumentNullException>(!this.ContainsKey(name));
+            FoundationContract.Requires<ArgumentNullException>(!ContainsKey(name));
 
             var attribute = new ConfigurationAttribute(name, value, description);
             _collection.Add(attribute);

@@ -52,7 +52,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 
 			for (var i = 0; i < tables.Length; i++)
 			{
-				treeNodes[ i ] = new TableNode( this.schema, tables[ i ], false );
+				treeNodes[ i ] = new TableNode( schema, tables[ i ], false );
 			}
 
 			return treeNodes;

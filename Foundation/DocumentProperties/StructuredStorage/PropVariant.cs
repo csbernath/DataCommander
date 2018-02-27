@@ -49,46 +49,46 @@ namespace Foundation.DocumentProperties.StructuredStorage
         #region union members
 
         sbyte cVal // CHAR cVal;
-            => (sbyte) this.GetDataBytes()[0];
+            => (sbyte) GetDataBytes()[0];
 
         byte bVal // UCHAR bVal;
-            => this.GetDataBytes()[0];
+            => GetDataBytes()[0];
 
         short iVal // SHORT iVal;
-            => BitConverter.ToInt16(this.GetDataBytes(), 0);
+            => BitConverter.ToInt16(GetDataBytes(), 0);
 
         ushort uiVal // USHORT uiVal;
-            => BitConverter.ToUInt16(this.GetDataBytes(), 0);
+            => BitConverter.ToUInt16(GetDataBytes(), 0);
 
         int lVal // LONG lVal;
-            => BitConverter.ToInt32(this.GetDataBytes(), 0);
+            => BitConverter.ToInt32(GetDataBytes(), 0);
 
         uint ulVal // ULONG ulVal;
-            => BitConverter.ToUInt32(this.GetDataBytes(), 0);
+            => BitConverter.ToUInt32(GetDataBytes(), 0);
 
         long hVal // LARGE_INTEGER hVal;
-            => BitConverter.ToInt64(this.GetDataBytes(), 0);
+            => BitConverter.ToInt64(GetDataBytes(), 0);
 
         ulong uhVal // ULARGE_INTEGER uhVal;
-            => BitConverter.ToUInt64(this.GetDataBytes(), 0);
+            => BitConverter.ToUInt64(GetDataBytes(), 0);
 
         float fltVal // FLOAT fltVal;
-            => BitConverter.ToSingle(this.GetDataBytes(), 0);
+            => BitConverter.ToSingle(GetDataBytes(), 0);
 
         double dblVal // DOUBLE dblVal;
-            => BitConverter.ToDouble(this.GetDataBytes(), 0);
+            => BitConverter.ToDouble(GetDataBytes(), 0);
 
         bool boolVal // VARIANT_BOOL boolVal;
-            => (this.iVal == 0 ? false : true);
+            => (iVal == 0 ? false : true);
 
         int scode // SCODE scode;
-            => this.lVal;
+            => lVal;
 
         decimal cyVal // CY cyVal;
-            => decimal.FromOACurrency(this.hVal);
+            => decimal.FromOACurrency(hVal);
 
         DateTime date // DATE date;
-            => DateTime.FromOADate(this.dblVal);
+            => DateTime.FromOADate(dblVal);
 
         #endregion // union members
 
@@ -101,13 +101,13 @@ namespace Foundation.DocumentProperties.StructuredStorage
             var ret = new byte[IntPtr.Size + sizeof(int)];
             if (IntPtr.Size == 4)
             {
-                BitConverter.GetBytes(this.p.ToInt32()).CopyTo(ret, 0);
+                BitConverter.GetBytes(p.ToInt32()).CopyTo(ret, 0);
             }
             else if (IntPtr.Size == 8)
             {
-                BitConverter.GetBytes(this.p.ToInt64()).CopyTo(ret, 0);
+                BitConverter.GetBytes(p.ToInt64()).CopyTo(ret, 0);
             }
-            BitConverter.GetBytes(this.p2).CopyTo(ret, IntPtr.Size);
+            BitConverter.GetBytes(p2).CopyTo(ret, IntPtr.Size);
             return ret;
         }
 
@@ -132,16 +132,16 @@ namespace Foundation.DocumentProperties.StructuredStorage
             // Since we couldn't pass "this" by ref, we need to clear the member fields manually
             // NOTE: PropVariantClear already freed heap data for us, so we are just setting
             //       our references to null.
-            this.vt = (ushort)VarEnum.VT_EMPTY;
-            this.wReserved1 = this.wReserved2 = this.wReserved3 = 0;
-            this.p = IntPtr.Zero;
-            this.p2 = 0;
+            vt = (ushort)VarEnum.VT_EMPTY;
+            wReserved1 = wReserved2 = wReserved3 = 0;
+            p = IntPtr.Zero;
+            p2 = 0;
         }
 
         /// <summary>
         /// Gets the variant type.
         /// </summary>
-        public VarEnum Type => (VarEnum) this.vt;
+        public VarEnum Type => (VarEnum) vt;
 
         /// <summary>
         /// Gets the variant value.
@@ -153,70 +153,70 @@ namespace Foundation.DocumentProperties.StructuredStorage
                 // TODO: Add support for reference types (ie. VT_REF | VT_I1)
                 // TODO: Add support for safe arrays
 
-                switch ((VarEnum) this.vt)
+                switch ((VarEnum) vt)
                 {
                     case VarEnum.VT_I1:
-                        return this.cVal;
+                        return cVal;
                     case VarEnum.VT_UI1:
-                        return this.bVal;
+                        return bVal;
                     case VarEnum.VT_I2:
-                        return this.iVal;
+                        return iVal;
                     case VarEnum.VT_UI2:
-                        return this.uiVal;
+                        return uiVal;
                     case VarEnum.VT_I4:
                     case VarEnum.VT_INT:
-                        return this.lVal;
+                        return lVal;
                     case VarEnum.VT_UI4:
                     case VarEnum.VT_UINT:
-                        return this.ulVal;
+                        return ulVal;
                     case VarEnum.VT_I8:
-                        return this.hVal;
+                        return hVal;
                     case VarEnum.VT_UI8:
-                        return this.uhVal;
+                        return uhVal;
                     case VarEnum.VT_R4:
-                        return this.fltVal;
+                        return fltVal;
                     case VarEnum.VT_R8:
-                        return this.dblVal;
+                        return dblVal;
                     case VarEnum.VT_BOOL:
-                        return this.boolVal;
+                        return boolVal;
                     case VarEnum.VT_ERROR:
-                        return this.scode;
+                        return scode;
                     case VarEnum.VT_CY:
-                        return this.cyVal;
+                        return cyVal;
                     case VarEnum.VT_DATE:
-                        return this.date;
+                        return date;
                     case VarEnum.VT_FILETIME:
-                        return DateTime.FromFileTime(this.hVal);
+                        return DateTime.FromFileTime(hVal);
                     case VarEnum.VT_BSTR:
-                        return Marshal.PtrToStringBSTR(this.p);
+                        return Marshal.PtrToStringBSTR(p);
                     case VarEnum.VT_BLOB:
-                        var blobData = new byte[this.lVal];
+                        var blobData = new byte[lVal];
                         IntPtr pBlobData;
                         if (IntPtr.Size == 4)
                         {
-                            pBlobData = new IntPtr(this.p2);
+                            pBlobData = new IntPtr(p2);
                         }
                         else if (IntPtr.Size == 8)
                         {
                             // In this case, we need to derive a pointer at offset 12,
                             // because the size of the blob is represented as a 4-byte int
                             // but the pointer is immediately after that.
-                            pBlobData = new IntPtr(BitConverter.ToInt64(this.GetDataBytes(), sizeof(int)));
+                            pBlobData = new IntPtr(BitConverter.ToInt64(GetDataBytes(), sizeof(int)));
                         }
                         else
                             throw new NotSupportedException();
-                        Marshal.Copy(pBlobData, blobData, 0, this.lVal);
+                        Marshal.Copy(pBlobData, blobData, 0, lVal);
                         return blobData;
                     case VarEnum.VT_LPSTR:
-                        return Marshal.PtrToStringAnsi(this.p);
+                        return Marshal.PtrToStringAnsi(p);
                     case VarEnum.VT_LPWSTR:
-                        return Marshal.PtrToStringUni(this.p);
+                        return Marshal.PtrToStringUni(p);
                     case VarEnum.VT_UNKNOWN:
-                        return Marshal.GetObjectForIUnknown(this.p);
+                        return Marshal.GetObjectForIUnknown(p);
                     case VarEnum.VT_DISPATCH:
-                        return this.p;
+                        return p;
                     default:
-                        throw new NotSupportedException("The type of this variable is not support ('" + this.vt.ToString() + "')");
+                        throw new NotSupportedException("The type of this variable is not support ('" + vt.ToString() + "')");
                 }
             }
         }

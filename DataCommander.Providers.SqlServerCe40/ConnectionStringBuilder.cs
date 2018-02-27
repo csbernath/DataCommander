@@ -8,9 +8,9 @@
 
         string IDbConnectionStringBuilder.ConnectionString
         {
-            get => this.sqlCeConnectionStringBuilder.ConnectionString;
+            get => sqlCeConnectionStringBuilder.ConnectionString;
 
-            set => this.sqlCeConnectionStringBuilder.ConnectionString = value;
+            set => sqlCeConnectionStringBuilder.ConnectionString = value;
         }
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
@@ -20,12 +20,12 @@
 
         void IDbConnectionStringBuilder.SetValue(string keyword, object value)
         {
-            this.sqlCeConnectionStringBuilder[keyword] = value;
+            sqlCeConnectionStringBuilder[keyword] = value;
         }
 
         bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value)
         {
-            return this.sqlCeConnectionStringBuilder.TryGetValue(keyword, out value);
+            return sqlCeConnectionStringBuilder.TryGetValue(keyword, out value);
         }
     }
 }

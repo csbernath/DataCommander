@@ -26,12 +26,12 @@
             try
             {
                 object [] restrictions = null;
-                var catalog = this.schema.Catalog.Name;
+                var catalog = schema.Catalog.Name;
 
                 if (catalog != null)
-                    restrictions = new object[] {catalog, this.schema.Name};
+                    restrictions = new object[] {catalog, schema.Name};
 
-                DataTable dataTable =  dataTable = this.schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables,restrictions);
+                DataTable dataTable =  dataTable = schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables,restrictions);
                 var count = dataTable.Rows.Count;
                 var nameColumn = dataTable.Columns["TABLE_NAME"];        
                 treeNodes = new ITreeNode[count];
@@ -39,12 +39,12 @@
                 for (var i=0;i<count;i++)
                 {
                     var name = (string)dataTable.Rows[i][nameColumn];
-                    treeNodes[i] = new TableNode(this.schema,name);
+                    treeNodes[i] = new TableNode(schema,name);
                 }
             }
             catch
             {
-                treeNodes = new ITreeNode[] {new TableNode(this.schema,null)};
+                treeNodes = new ITreeNode[] {new TableNode(schema,null)};
             }
 
             return treeNodes;

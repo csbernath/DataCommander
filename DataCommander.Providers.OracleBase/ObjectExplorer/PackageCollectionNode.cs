@@ -32,7 +32,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
             {
                 var commandText = "select object_name from all_objects where owner = '{0}' and object_type = 'PACKAGE' order by object_name";
                 commandText = string.Format(commandText, schema.Name);
-                var transactionScope = new DbTransactionScope(this.Schema.SchemasNode.Connection, null);
+                var transactionScope = new DbTransactionScope(Schema.SchemasNode.Connection, null);
                 var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
                 var count = dataTable.Rows.Count;
                 packages = new string[count];

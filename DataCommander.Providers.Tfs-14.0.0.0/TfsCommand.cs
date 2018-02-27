@@ -11,7 +11,7 @@ namespace DataCommander.Providers.Tfs
         {
             FoundationContract.Requires<ArgumentException>(connection != null);
 
-            this.Connection = connection;
+            Connection = connection;
         }
 
         public TfsConnection Connection { get; private set; }
@@ -20,7 +20,7 @@ namespace DataCommander.Providers.Tfs
 
         public void Cancel()
         {
-            this.Cancelled = true;
+            Cancelled = true;
         }
 
         internal bool Cancelled { get; private set; }
@@ -33,12 +33,12 @@ namespace DataCommander.Providers.Tfs
 
         IDbConnection IDbCommand.Connection
         {
-            get => this.Connection.Connection;
+            get => Connection.Connection;
 
             set
             {
                 var tfsDbConnection = (TfsDbConnection)value;
-                this.Connection = tfsDbConnection.Connection;
+                Connection = tfsDbConnection.Connection;
             }
         }
 
@@ -56,10 +56,10 @@ namespace DataCommander.Providers.Tfs
         {
             IDataReader dataReader;
 
-            switch (this.CommandType)
+            switch (CommandType)
             {
                 case CommandType.StoredProcedure:
-                    dataReader = this.ExecuteStoredProcedure(behavior);
+                    dataReader = ExecuteStoredProcedure(behavior);
                     break;
 
                 default:
@@ -71,7 +71,7 @@ namespace DataCommander.Providers.Tfs
 
         public IDataReader ExecuteReader()
         {
-            return this.ExecuteReader(CommandBehavior.Default);
+            return ExecuteReader(CommandBehavior.Default);
         }
 
         object IDbCommand.ExecuteScalar()
@@ -79,7 +79,7 @@ namespace DataCommander.Providers.Tfs
             throw new NotSupportedException();
         }
 
-        IDataParameterCollection IDbCommand.Parameters => this.Parameters;
+        IDataParameterCollection IDbCommand.Parameters => Parameters;
 
         public TfsParameterCollection Parameters { get; } = new TfsParameterCollection();
 
@@ -121,7 +121,7 @@ namespace DataCommander.Providers.Tfs
         {
             IDataReader dataReader;
             TfsDataReaderFactory.DataReaderInfo info;
-            var contains = TfsDataReaderFactory.Dictionary.TryGetValue(this.CommandText, out info);
+            var contains = TfsDataReaderFactory.Dictionary.TryGetValue(CommandText, out info);
 
             if (contains)
             {

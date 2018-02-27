@@ -1,6 +1,6 @@
 ﻿namespace DataCommander.Providers.MySql
 {
-    using DataCommander.Providers;
+    using Providers;
     using global::MySql.Data.MySqlClient;
 
     internal sealed class MySqlDataReaderHelper : IDataReaderHelper
@@ -14,7 +14,7 @@
 
         int IDataReaderHelper.GetValues(object[] values)
         {
-            return this.dataReader.GetValues(values);
+            return dataReader.GetValues(values);
         }
     }
 }

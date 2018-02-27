@@ -7,8 +7,8 @@
     {
         public TableNode(TableCollectionNode tableCollectionNode, string name)
         {
-            this.TableCollectionNode = tableCollectionNode;
-            this.Name = name;
+            TableCollectionNode = tableCollectionNode;
+            Name = name;
         }
 
         public TableCollectionNode TableCollectionNode { get; }

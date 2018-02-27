@@ -34,13 +34,13 @@ namespace Foundation.Text
         {
             get
             {
-                FoundationContract.Requires<ArgumentException>(0 <= columnIndex && columnIndex < this.Table.Columns.Count);
+                FoundationContract.Requires<ArgumentException>(0 <= columnIndex && columnIndex < Table.Columns.Count);
                 return _cells[columnIndex];
             }
 
             set
             {
-                FoundationContract.Requires<ArgumentException>(0 <= columnIndex && columnIndex < this.Table.Columns.Count);
+                FoundationContract.Requires<ArgumentException>(0 <= columnIndex && columnIndex < Table.Columns.Count);
                 _cells[columnIndex] = value;
             }
         }

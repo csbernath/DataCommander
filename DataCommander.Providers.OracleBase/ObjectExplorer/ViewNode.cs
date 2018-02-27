@@ -16,7 +16,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
             this.name = name;
         }
 
-        public string Name => this.name;
+        public string Name => name;
 
         public bool IsLeaf => true;
 
@@ -31,7 +31,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         {
             get
             {
-                var query = $"select * from {this.parent.SchemaNode.Name}.{name}";
+                var query = $"select * from {parent.SchemaNode.Name}.{name}";
                 return query;
             }
         }
@@ -39,9 +39,9 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         private void menuItemScriptObject_Click(object sender, EventArgs e)
         {
             var commandText = "select text from sys.all_views where owner = '{0}' and view_name = '{1}'";
-            commandText = string.Format(commandText, this.parent.SchemaNode.Name, name);
+            commandText = string.Format(commandText, parent.SchemaNode.Name, name);
 
-            using (var command = this.parent.SchemaNode.SchemasNode.Connection.CreateCommand())
+            using (var command = parent.SchemaNode.SchemasNode.Connection.CreateCommand())
             {
                 command.CommandText = commandText;
                 //  TODO
@@ -74,7 +74,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         {
             get
             {
-                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, this.menuItemScriptObject_Click);
+                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, menuItemScriptObject_Click);
                 var contextMenu = new ContextMenuStrip();
                 contextMenu.Items.Add(menuItemScriptObject);
                 return contextMenu;

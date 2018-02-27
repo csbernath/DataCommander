@@ -16,7 +16,7 @@
             this.dataType = dataType;
         }
 
-        string ITreeNode.Name => $"{this.name} {this.dataType}";
+        string ITreeNode.Name => $"{name} {dataType}";
 
         bool ITreeNode.IsLeaf => true;
 

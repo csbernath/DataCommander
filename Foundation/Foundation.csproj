@@ -462,7 +462,7 @@
     <Compile Include="Data\Database.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data\DbColumn.cs" />
+    <Compile Include="Data\FoundationDbColumn.cs" />
     <Compile Include="Data\DataParameterValue.cs" />
     <Compile Include="Data\DataParameterValueType.cs" />
     <Compile Include="Data\DataReader.cs" />

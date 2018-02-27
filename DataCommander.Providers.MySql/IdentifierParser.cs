@@ -19,7 +19,7 @@
 
             while (true)
             {
-                var peek = this.textReader.Peek();
+                var peek = textReader.Peek();
 
                 if (peek == -1)
                 {
@@ -30,15 +30,15 @@
 
                 if (peekChar == '.')
                 {
-                    this.textReader.Read();
+                    textReader.Read();
                 }
                 else if (peekChar == '\'')
                 {
-                    yield return this.ReadQuotedIdentifier();
+                    yield return ReadQuotedIdentifier();
                 }
                 else
                 {
-                    yield return this.ReadUnquotedIdentifier();
+                    yield return ReadUnquotedIdentifier();
                 }
             }
 
@@ -52,12 +52,12 @@
 
         private string ReadQuotedIdentifier()
         {
-            this.textReader.Read();
+            textReader.Read();
             var identifier = new StringBuilder();
 
             while (true)
             {
-                var peek = this.textReader.Peek();
+                var peek = textReader.Peek();
 
                 if (peek == -1)
                     break;
@@ -66,13 +66,13 @@
 
                 if (peekChar == '\'')
                 {
-                    this.textReader.Read();
+                    textReader.Read();
                     break;
                 }
                 else
                 {
                     identifier.Append(peekChar);
-                    this.textReader.Read();
+                    textReader.Read();
                 }
             }
 
@@ -85,7 +85,7 @@
 
             while (true)
             {
-                var peek = this.textReader.Peek();
+                var peek = textReader.Peek();
 
                 if (peek == -1)
                     break;
@@ -99,7 +99,7 @@
                 else
                 {
                     identifier.Append(peekChar);
-                    this.textReader.Read();
+                    textReader.Read();
                 }
             }
 

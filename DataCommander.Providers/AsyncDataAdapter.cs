@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using System.Threading;
-using DataCommander.Providers.ResultWriter;
+﻿using DataCommander.Providers.ResultWriter;
 using Foundation.Data;
 using Foundation.Diagnostics;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
 using Foundation.Threading;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.Threading;
 using ThreadState = System.Threading.ThreadState;
 
 namespace DataCommander.Providers
@@ -294,6 +294,7 @@ namespace DataCommander.Providers
                 {
                     _resultWriter.WriteParameters(command.Parameters);
                 }
+
                 var ticks = Stopwatch.GetTimestamp();
                 _endFill(this, exception);
                 ticks = Stopwatch.GetTimestamp() - ticks;

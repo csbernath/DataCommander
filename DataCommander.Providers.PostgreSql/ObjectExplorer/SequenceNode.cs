@@ -14,7 +14,7 @@
             this.name = name;
         }
 
-        string ITreeNode.Name => this.name;
+        string ITreeNode.Name => name;
 
         bool ITreeNode.IsLeaf => true;
 

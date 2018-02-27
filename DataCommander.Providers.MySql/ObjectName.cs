@@ -18,13 +18,13 @@
             get
             {
                 var sb = new StringBuilder();
-                if (this.databaseName != null)
+                if (databaseName != null)
                 {
-                    sb.Append(this.databaseName);
+                    sb.Append(databaseName);
                     sb.Append('.');
                 }
 
-                sb.Append(this.objectName);
+                sb.Append(objectName);
 
                 return sb.ToString();
             }
@@ -37,13 +37,13 @@
                 // TODO
 
                 var sb = new StringBuilder();
-                if (this.databaseName != null)
+                if (databaseName != null)
                 {
-                    sb.Append(this.databaseName);
+                    sb.Append(databaseName);
                     sb.Append('.');
                 }
 
-                sb.Append(this.objectName);
+                sb.Append(objectName);
 
                 return sb.ToString();
             }

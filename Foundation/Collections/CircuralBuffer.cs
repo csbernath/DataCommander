@@ -40,7 +40,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public void AddHead(T item)
         {
-            FoundationContract.Requires<ArgumentException>(this.Count < this.Capacity);
+            FoundationContract.Requires<ArgumentException>(Count < Capacity);
 
             if (_head == -1)
             {
@@ -99,7 +99,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public T PeekHead()
         {
-            FoundationContract.Requires<InvalidOperationException>(this.Count > 0);
+            FoundationContract.Requires<InvalidOperationException>(Count > 0);
 
             return _array[_head];
         }
@@ -110,7 +110,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public T RemoveHead()
         {
-            FoundationContract.Requires<InvalidOperationException>(this.Count > 0);
+            FoundationContract.Requires<InvalidOperationException>(Count > 0);
 
             var item = _array[_head];
             _array[_head] = default(T);
@@ -126,7 +126,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public T PeekTail()
         {
-            FoundationContract.Requires<InvalidOperationException>(this.Count > 0);
+            FoundationContract.Requires<InvalidOperationException>(Count > 0);
 
             return _array[_tail];
         }
@@ -137,7 +137,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public T RemoveTail()
         {
-            FoundationContract.Requires<InvalidOperationException>(this.Count > 0);
+            FoundationContract.Requires<InvalidOperationException>(Count > 0);
 
             var item = _array[_tail];
             _array[_tail] = default(T);
@@ -152,7 +152,7 @@ namespace Foundation.Collections
         /// <param name="capacity"></param>
         public void SetCapacity(int capacity)
         {
-            FoundationContract.Requires<InvalidOperationException>(capacity >= this.Count);
+            FoundationContract.Requires<InvalidOperationException>(capacity >= Count);
 
             var target = new T[capacity];
             if (Count > 0)

@@ -58,14 +58,14 @@ namespace Foundation.Collections.IndexableCollection
         {
             get
             {
-                FoundationContract.Assert(index < this.Count);
+                FoundationContract.Assert(index < Count);
 
                 return _list[index];
             }
 
             set
             {
-                FoundationContract.Assert(index < this.Count);
+                FoundationContract.Assert(index < Count);
 
                 _list[index] = value;
             }
@@ -136,7 +136,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool Contains(T item)
         {
-            FoundationContract.Ensures(!Contract.Result<bool>() || this.Count > 0);
+            FoundationContract.Ensures(!Contract.Result<bool>() || Count > 0);
 
             return _list.Contains(item);
         }

@@ -17,7 +17,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 
 		#region ITreeNode Members
 
-		string ITreeNode.Name => this.name;
+		string ITreeNode.Name => name;
 
         bool ITreeNode.IsLeaf => true;
 

@@ -8,8 +8,8 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
     {
         public DatabaseNode(SQLiteConnection connection, string name)
         {
-            this.Connection = connection;
-            this.Name = name;
+            Connection = connection;
+            Name = name;
         }
 
         public SQLiteConnection Connection { get; }

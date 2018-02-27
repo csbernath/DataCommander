@@ -15,10 +15,10 @@ namespace DataCommander.Providers.SQLite
 
         public Connection(string connectionString)
         {
-            this.sqliteConnection = new SQLiteConnection(connectionString);
+            sqliteConnection = new SQLiteConnection(connectionString);
             // this.sqliteConnection.Flags = SQLiteConnectionFlags.LogAll;
             // this.sqliteConnection.Trace += this.sqliteConnection_Trace;
-            this.Connection = this.sqliteConnection;
+            Connection = sqliteConnection;
         }
 
         void SQLiteLog_Log(object sender, LogEventArgs e)
@@ -34,24 +34,24 @@ namespace DataCommander.Providers.SQLite
 
         public override Task OpenAsync(CancellationToken cancellationToken)
         {
-            return this.sqliteConnection.OpenAsync(cancellationToken);
+            return sqliteConnection.OpenAsync(cancellationToken);
         }
 
         public override IDbCommand CreateCommand()
         {
-            return this.sqliteConnection.CreateCommand();
+            return sqliteConnection.CreateCommand();
         }
 
-        public override string Caption => this.sqliteConnection.DataSource;
+        public override string Caption => sqliteConnection.DataSource;
 
-        public override string DataSource => this.sqliteConnection.DataSource;
+        public override string DataSource => sqliteConnection.DataSource;
 
         protected override void SetDatabase(string database)
         {
             throw new Exception("The method or operation is not implemented.");
         }
 
-        public override string ServerVersion => this.sqliteConnection.ServerVersion;
+        public override string ServerVersion => sqliteConnection.ServerVersion;
 
         public override int TransactionCount => 0;
     }

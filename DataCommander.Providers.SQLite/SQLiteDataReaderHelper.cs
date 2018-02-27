@@ -24,7 +24,7 @@
             get
             {
                 object value;
-                var isDBNull = this.dataReader.IsDBNull(this.columnOrdinal );
+                var isDBNull = dataReader.IsDBNull(columnOrdinal );
 
                 if (isDBNull)
                 {
@@ -43,7 +43,7 @@
                     //    value = new DecimalField( null, decimalValue, null );
                     //}
 
-                    var decimalValue = this.dataReader.GetDecimal(this.columnOrdinal );
+                    var decimalValue = dataReader.GetDecimal(columnOrdinal );
                     value = new DecimalField( null, decimalValue, null );
                 }
 
@@ -61,18 +61,18 @@
 
         public SQLiteDataReaderHelper( IDataReader dataReader )
         {
-            this.sqLiteDataReader = (SQLiteDataReader) dataReader;
+            sqLiteDataReader = (SQLiteDataReader) dataReader;
             var schemaTable = dataReader.GetSchemaTable();
 
             if (schemaTable != null)
             {
                 var rows = schemaTable.Rows;
                 var count = rows.Count;
-                this.dataFieldReaders = new IDataFieldReader[ count ];
+                dataFieldReaders = new IDataFieldReader[ count ];
 
                 for (var i = 0; i < count; i++)
                 {
-                    this.dataFieldReaders[ i ] = CreateDataFieldReader( dataReader, rows[ i ] );
+                    dataFieldReaders[ i ] = CreateDataFieldReader( dataReader, rows[ i ] );
                 }
             }
         }
@@ -121,12 +121,12 @@
 
         int IDataReaderHelper.GetValues( object[] values )
         {
-            for (var i = 0; i < this.dataFieldReaders.Length; i++)
+            for (var i = 0; i < dataFieldReaders.Length; i++)
             {
-                values[ i ] = this.dataFieldReaders[ i ].Value;
+                values[ i ] = dataFieldReaders[ i ].Value;
             }
 
-            return this.dataFieldReaders.Length;
+            return dataFieldReaders.Length;
         }
 
         #endregion 

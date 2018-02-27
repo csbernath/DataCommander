@@ -6,7 +6,7 @@
   {
     public WmiCommand(WmiConnection connection)
     {
-      this.Connection = connection;
+      Connection = connection;
     }
 
     public void Dispose()
@@ -15,7 +15,7 @@
 
     public void Cancel()
     {
-        this.Cancelled = true;
+        Cancelled = true;
     }
 
     public IDbDataParameter CreateParameter()
@@ -75,7 +75,7 @@
     {
       get
       {
-        return this.Connection;
+        return Connection;
       }
       set
       {

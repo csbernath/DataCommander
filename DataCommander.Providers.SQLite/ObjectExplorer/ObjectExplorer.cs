@@ -19,7 +19,7 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
         {
             return new ITreeNode[]
             {
-                new DatabaseCollectionNode(this.connection)
+                new DatabaseCollectionNode(connection)
             };
         }
 

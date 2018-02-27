@@ -24,7 +24,7 @@
 
             try
             {
-                var dataTable = this.connection.GetOleDbSchemaTable(OleDbSchemaGuid.Catalogs, null);
+                var dataTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Catalogs, null);
                 var count = dataTable.Rows.Count;
                 var nameColumn = dataTable.Columns["CATALOG_NAME"];
                 treeNodes = new ITreeNode[count];
@@ -32,13 +32,13 @@
                 for (var i = 0; i < count; i++)
                 {
                     var name = (string)dataTable.Rows[i][nameColumn];
-                    treeNodes[i] = new CatalogNode(this.connection, name);
+                    treeNodes[i] = new CatalogNode(connection, name);
                 }
             }
             catch
             {
                 treeNodes = new ITreeNode[1];
-                treeNodes[0] = new CatalogNode(this.connection, null);
+                treeNodes[0] = new CatalogNode(connection, null);
             }
 
             return treeNodes;

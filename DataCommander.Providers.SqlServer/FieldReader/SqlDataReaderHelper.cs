@@ -25,12 +25,12 @@ namespace DataCommander.Providers.SqlServer.FieldReader
 
                 for (var i = 0; i < count; i++)
                 {
-                    _dataFieldReaders[i] = CreateDataFieldReader(dataReader, new DbColumn(rows[i]));
+                    _dataFieldReaders[i] = CreateDataFieldReader(dataReader, new FoundationDbColumn(rows[i]));
                 }
             }
         }
 
-        private static IDataFieldReader CreateDataFieldReader(IDataRecord dataRecord, DbColumn dataColumnSchema)
+        private static IDataFieldReader CreateDataFieldReader(IDataRecord dataRecord, FoundationDbColumn dataColumnSchema)
         {
             var columnOrdinal = dataColumnSchema.ColumnOrdinal;
             var providerType = (SqlDbType)dataColumnSchema.ProviderType;

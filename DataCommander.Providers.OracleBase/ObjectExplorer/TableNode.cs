@@ -22,7 +22,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 			this.showFullName = showFullName;
 		}
 
-		public string Name => showFullName ? this.schema.Name + "." + this.name : this.name;
+		public string Name => showFullName ? schema.Name + "." + name : name;
 
         public bool IsLeaf => false;
 

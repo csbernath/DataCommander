@@ -40,16 +40,16 @@ namespace DataCommander.Providers.Tfs
         {
             bool read;
 
-            if (this.command.Cancelled)
+            if (command.Cancelled)
             {
                 read = false;
             }
             else
             {
-                if (this.first)
+                if (first)
                 {
-                    this.first = false;
-                    var parameters = this.command.Parameters;
+                    first = false;
+                    var parameters = command.Parameters;
                     var path = parameters["path"].GetValueOrDefault<string>();
                     var recursionString = Database.GetValueOrDefault<string>(parameters["recursion"].Value);
                     RecursionType recursion;
@@ -63,7 +63,7 @@ namespace DataCommander.Providers.Tfs
                         recursion = RecursionType.OneLevel;
                     }
 
-                    var itemSet = this.command.Connection.VersionControlServer.GetItems(path, recursion);
+                    var itemSet = command.Connection.VersionControlServer.GetItems(path, recursion);
                     var folders = new List<Item>();
                     var files = new List<Item>();
 
@@ -84,13 +84,13 @@ namespace DataCommander.Providers.Tfs
                         }
                     }
 
-                    this.items = folders;
-                    this.items.AddRange(files);
+                    items = folders;
+                    items.AddRange(files);
                 }
 
-                if (this.index < this.items.Count)
+                if (index < items.Count)
                 {
-                    var item = this.items[this.index];
+                    var item = items[index];
                     var itemEncoding = item.Encoding;
                     string encodingString;
 
@@ -114,9 +114,9 @@ namespace DataCommander.Providers.Tfs
                         item.ItemType.ToString()
                     };
 
-                    this.Values = values;
+                    Values = values;
                     read = true;
-                    this.index++;
+                    index++;
                 }
                 else
                 {

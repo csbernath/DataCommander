@@ -465,7 +465,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public IDbTransaction BeginTransaction(IsolationLevel il)
         {
-            FoundationContract.Requires<ArgumentNullException>(this.Connection != null);
+            FoundationContract.Requires<ArgumentNullException>(Connection != null);
 
             return Connection.BeginTransaction(il);
         }
@@ -481,7 +481,7 @@ namespace Foundation.Data
         /// </returns>
         public IDbCommand CreateCommand()
         {
-            FoundationContract.Requires<ArgumentException>(this.Connection != null);
+            FoundationContract.Requires<ArgumentException>(Connection != null);
 
             Command = Connection.CreateCommand();
             Command.Transaction = Transaction;
@@ -520,7 +520,7 @@ namespace Foundation.Data
         /// <param name="command"></param>
         public void DeriveParameters(IDbCommand command)
         {
-            FoundationContract.Requires<ArgumentNullException>(this.CommandBuilderHelper != null);
+            FoundationContract.Requires<ArgumentNullException>(CommandBuilderHelper != null);
 
             CommandBuilderHelper.DeriveParameters(command);
         }
@@ -679,7 +679,7 @@ namespace Foundation.Data
         public XmlDocument ExecuteXmlDocument(IDbCommand command)
         {
             FoundationContract.Requires<ArgumentNullException>(command != null);
-            FoundationContract.Requires<ArgumentNullException>(this.CommandHelper != null);
+            FoundationContract.Requires<ArgumentNullException>(CommandHelper != null);
 
             return CommandHelper.ExecuteXmlDocument(command);
         }

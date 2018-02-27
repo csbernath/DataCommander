@@ -5,22 +5,22 @@ using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
 {
-    public sealed class DbColumn
+    public sealed class FoundationDbColumn
     {
-        public DbColumn(DataRow schemaTableRow)
+        public FoundationDbColumn(DataRow schemaTableRow)
         {
             FoundationContract.Requires<ArgumentNullException>(schemaTableRow != null);
 
             ColumnName = schemaTableRow.Field<string>(SchemaTableColumn.ColumnName);
-            ColumnOrdinal = (int)schemaTableRow[SchemaTableColumn.ColumnOrdinal];
-            ColumnSize = (int)schemaTableRow[SchemaTableColumn.ColumnSize];
+            ColumnOrdinal = (int) schemaTableRow[SchemaTableColumn.ColumnOrdinal];
+            ColumnSize = (int) schemaTableRow[SchemaTableColumn.ColumnSize];
 
             var columns = schemaTableRow.Table.Columns;
             var column = columns[SchemaTableColumn.NumericPrecision];
             if (column != null)
             {
                 NumericPrecision = schemaTableRow.IsNull(column)
-                    ? (short?)null
+                    ? (short?) null
                     : Convert.ToInt16(schemaTableRow[column]);
             }
 
@@ -28,7 +28,7 @@ namespace Foundation.Data
             if (column != null)
             {
                 NumericScale = schemaTableRow.IsNull(column)
-                    ? (short?)null
+                    ? (short?) null
                     : Convert.ToInt16(schemaTableRow[column]);
             }
 
@@ -39,7 +39,7 @@ namespace Foundation.Data
             BaseColumnName = schemaTableRow.Field<string>(SchemaTableColumn.BaseColumnName);
             BaseSchemaName = schemaTableRow.Field<string>(SchemaTableColumn.BaseSchemaName);
             BaseTableName = schemaTableRow.Field<string>(SchemaTableColumn.BaseTableName);
-            DataType = (Type)schemaTableRow[SchemaTableColumn.DataType];
+            DataType = (Type) schemaTableRow[SchemaTableColumn.DataType];
             AllowDbNull = schemaTableRow.Field<bool?>(SchemaTableColumn.AllowDBNull);
             ProviderType = schemaTableRow.Field<int>(SchemaTableColumn.ProviderType);
 

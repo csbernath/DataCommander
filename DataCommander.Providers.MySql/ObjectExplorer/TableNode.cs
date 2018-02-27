@@ -22,7 +22,7 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
             this.name = name;
         }
 
-        string ITreeNode.Name => this.name;
+        string ITreeNode.Name => name;
 
         bool ITreeNode.IsLeaf => true;
 
@@ -34,15 +34,15 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
         bool ITreeNode.Sortable => throw new NotImplementedException();
 
         string ITreeNode.Query => $@"select *
-from {this.databaseNode.Name}.{this.name}";
+from {databaseNode.Name}.{name}";
 
-        System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu
+        ContextMenuStrip ITreeNode.ContextMenu
         {
             get
             {
                 var menu = new ContextMenuStrip();
 
-                var item = new ToolStripMenuItem("Show create table", null, this.ShowCreateTable_Click);
+                var item = new ToolStripMenuItem("Show create table", null, ShowCreateTable_Click);
                 menu.Items.Add(item);
 
                 return menu;
@@ -51,9 +51,9 @@ from {this.databaseNode.Name}.{this.name}";
 
         private void ShowCreateTable_Click(object sender, EventArgs e)
         {
-            var commandText = $"show create table {this.databaseNode.Name}.{this.name}";
+            var commandText = $"show create table {databaseNode.Name}.{name}";
             var createTableStatement = MySqlClientFactory.Instance.ExecuteReader(
-                this.databaseNode.ObjectExplorer.ConnectionString,
+                databaseNode.ObjectExplorer.ConnectionString,
                 new CommandDefinition {CommandText = commandText},
                 CommandBehavior.Default,
                 dataRecord => dataRecord.GetString(1)).First();

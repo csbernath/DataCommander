@@ -7,7 +7,7 @@
     {
         public TfsDbConnection(TfsConnection connection)
         {
-            this.Connection = connection;
+            Connection = connection;
         }
 
         public TfsConnection Connection { get; }
@@ -35,7 +35,7 @@
 
         string IDbConnection.ConnectionString
         {
-            get => $"Data Source={this.Connection.TfsTeamProjectCollection.Uri}";
+            get => $"Data Source={Connection.TfsTeamProjectCollection.Uri}";
 
             set => throw new NotImplementedException();
         }
@@ -54,7 +54,7 @@
             throw new NotImplementedException();
         }
 
-        ConnectionState IDbConnection.State => this.Connection.ConnectionState;
+        ConnectionState IDbConnection.State => Connection.ConnectionState;
 
         #endregion
 

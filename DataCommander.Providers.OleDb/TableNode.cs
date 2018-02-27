@@ -49,17 +49,17 @@
             {
                 string query;
 
-                if (this.name != null)
+                if (name != null)
                 {
                     string name2;
 
-                    if (this.name.IndexOf(' ') >= 0)
+                    if (name.IndexOf(' ') >= 0)
                     {
-                        name2 = "[" + this.name + "]";
+                        name2 = "[" + name + "]";
                     }
                     else
                     {
-                        name2 = this.name;
+                        name2 = name;
                     }
 
                     query = "select * from " + name2;
@@ -73,8 +73,8 @@
 
         void Columns_Click(object sender, EventArgs e)
         {
-            var restrictions = new object[] {this.schema.Catalog.Name, this.schema.Name, this.name };
-            var dataTable = this.schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, restrictions);
+            var restrictions = new object[] {schema.Catalog.Name, schema.Name, name };
+            var dataTable = schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, restrictions);
             var dataSet = new DataSet();
             dataSet.Tables.Add(dataTable);
 
@@ -87,7 +87,7 @@
             get
             {
                 var contextMenu = new ContextMenuStrip();
-                var menuItem = new ToolStripMenuItem("Columns", null, this.Columns_Click);
+                var menuItem = new ToolStripMenuItem("Columns", null, Columns_Click);
                 contextMenu.Items.Add(menuItem);
                 return contextMenu;
             }

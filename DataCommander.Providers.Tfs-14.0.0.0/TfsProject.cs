@@ -24,7 +24,7 @@ namespace DataCommander.Providers.Tfs
         {
             get
             {
-                var name = VersionControlPath.GetFileName(this.item.ServerItem);
+                var name = VersionControlPath.GetFileName(item.ServerItem);
                 return name;
             }
         }
@@ -65,12 +65,12 @@ namespace DataCommander.Providers.Tfs
 			//var e = from current in itemSet.Items.Skip(1) select ToTreeNode(current);
 			//return e;
 
-			return GetChildren( this.item );
+			return GetChildren( item );
         }
 
         bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query => this.item.ServerItem;
+        string ITreeNode.Query => item.ServerItem;
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 

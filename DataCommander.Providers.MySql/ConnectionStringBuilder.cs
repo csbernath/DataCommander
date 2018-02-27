@@ -9,9 +9,9 @@
 
         string IDbConnectionStringBuilder.ConnectionString
         {
-            get => this.mySqlConnectionStringBuilder.ConnectionString;
+            get => mySqlConnectionStringBuilder.ConnectionString;
 
-            set => this.mySqlConnectionStringBuilder.ConnectionString = value;
+            set => mySqlConnectionStringBuilder.ConnectionString = value;
         }
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
@@ -26,7 +26,7 @@
 
         bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value)
         {
-            return this.mySqlConnectionStringBuilder.TryGetValue(keyword, out value);
+            return mySqlConnectionStringBuilder.TryGetValue(keyword, out value);
         }
     }
 }

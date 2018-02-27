@@ -24,7 +24,7 @@ namespace DataCommander.Providers.Tfs
 
 #region ITreeNode Members
 
-        string ITreeNode.Name => TfsObjectExplorer.GetName(this.item);
+        string ITreeNode.Name => TfsObjectExplorer.GetName(item);
 
         bool ITreeNode.IsLeaf => true;
 
@@ -35,7 +35,7 @@ namespace DataCommander.Providers.Tfs
 
         bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query => this.item.ServerItem;
+        string ITreeNode.Query => item.ServerItem;
 
         ContextMenuStrip ITreeNode.ContextMenu
         {
@@ -43,14 +43,14 @@ namespace DataCommander.Providers.Tfs
             {
                 var contextMenu = new ContextMenuStrip();
                 var items = contextMenu.Items;
-                var menuItem = new ToolStripMenuItem("Open", null, this.Open_Click);
+                var menuItem = new ToolStripMenuItem("Open", null, Open_Click);
                 items.Add(menuItem);
 
                 var node = Settings.CurrentType;
                 var attributes = node.Attributes;
                 var name = attributes["Name"].GetValue<string>();
 
-                menuItem = new ToolStripMenuItem(name, null, this.View_Click);
+                menuItem = new ToolStripMenuItem(name, null, View_Click);
                 items.Add(menuItem);
                 return contextMenu;
             }
@@ -60,20 +60,20 @@ namespace DataCommander.Providers.Tfs
 
         private void Open_Click(object sender, EventArgs e)
         {
-            var name = VersionControlPath.GetFileName(this.item.ServerItem);
+            var name = VersionControlPath.GetFileName(item.ServerItem);
             var localFileName = Path.GetTempPath();
             localFileName = Path.Combine(localFileName, name);
-            this.item.DownloadFile(localFileName);
+            item.DownloadFile(localFileName);
             var startInfo = new ProcessStartInfo(localFileName);
             Process.Start(startInfo);
         }
 
         private void View_Click(object sender, EventArgs e)
         {
-            var name = VersionControlPath.GetFileName(this.item.ServerItem);
+            var name = VersionControlPath.GetFileName(item.ServerItem);
             var localFileName = Path.GetTempPath();
             localFileName = Path.Combine(localFileName, name);
-            this.item.DownloadFile(localFileName);
+            item.DownloadFile(localFileName);
 
             var node = Settings.CurrentType;
             var attributes = node.Attributes;

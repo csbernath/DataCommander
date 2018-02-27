@@ -24,7 +24,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
             this.name = name;
         }
 
-        public string Name => this.name;
+        public string Name => name;
 
         public bool IsLeaf => true;
 
@@ -41,7 +41,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
             {
                 var query = "EXEC " + schemaNode.Name + '.';
 
-				if (this.packageNode != null)
+				if (packageNode != null)
 				{
 					query += packageNode.Name + '.';
 				}

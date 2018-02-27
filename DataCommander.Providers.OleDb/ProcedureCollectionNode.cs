@@ -23,8 +23,8 @@
 
             try
             {
-                var restrictions = new object[] {this.schema.Catalog.Name, this.schema.Name};
-                var dataTable = this.schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Procedures,
+                var restrictions = new object[] {schema.Catalog.Name, schema.Name};
+                var dataTable = schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Procedures,
                     restrictions);
                 var count = dataTable.Rows.Count;
                 var procedureName = dataTable.Columns["PROCEDURE_NAME"];

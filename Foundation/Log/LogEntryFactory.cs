@@ -17,7 +17,7 @@ namespace Foundation.Log
             string message,
             LogLevel logLevel)
         {
-            var id = Interlocked.Increment(ref LogEntryFactory._id);
+            var id = Interlocked.Increment(ref _id);
             var thread = Thread.CurrentThread;
             var threadId = thread.ManagedThreadId;
             var threadName = thread.Name;

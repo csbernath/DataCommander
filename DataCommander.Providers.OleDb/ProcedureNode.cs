@@ -40,8 +40,8 @@
             {
                 string query;
 
-                if (this.name != null)
-                    query = "exec " + this.name;
+                if (name != null)
+                    query = "exec " + name;
                 else
                     query = null;
 

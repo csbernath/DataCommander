@@ -11,7 +11,7 @@ using DataCommander.Providers.Query;
 using Foundation.Data;
 using Foundation.Log;
 using Npgsql;
-using DbColumn = Foundation.Data.DbColumn;
+using FoundationDbColumn = Foundation.Data.FoundationDbColumn;
 
 namespace DataCommander.Providers.PostgreSql
 {
@@ -72,12 +72,12 @@ namespace DataCommander.Providers.PostgreSql
             throw new NotImplementedException();
         }
 
-        public Type GetColumnType(DbColumn dataColumnSchema)
+        public Type GetColumnType(FoundationDbColumn dataColumnSchema)
         {
             throw new NotImplementedException();
         }
 
-        Type IProvider.GetColumnType(DbColumn dataColumnSchema)
+        Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
         {
             // TODO
             return typeof(object);

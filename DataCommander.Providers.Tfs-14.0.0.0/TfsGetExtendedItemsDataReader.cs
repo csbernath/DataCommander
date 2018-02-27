@@ -43,10 +43,10 @@ namespace DataCommander.Providers.Tfs
         {
             bool read;
 
-            if (this.first)
+            if (first)
             {
-                this.first = false;
-                var parameters = this.command.Parameters;
+                first = false;
+                var parameters = command.Parameters;
                 var path = (string) parameters[ "path" ].Value;
                 RecursionType recursion;
                 var parameter = parameters.FirstOrDefault( p => p.ParameterName == "recursion" );
@@ -61,7 +61,7 @@ namespace DataCommander.Providers.Tfs
                     recursion = RecursionType.Full;
                 }
 
-                var versionControlServer = this.command.Connection.VersionControlServer;
+                var versionControlServer = command.Connection.VersionControlServer;
                 var workspaces = versionControlServer.QueryWorkspaces( null, null, Environment.MachineName );
                 Workspace workspace = null;
                 WorkingFolder workingFolder = null;
@@ -75,7 +75,7 @@ namespace DataCommander.Providers.Tfs
                         workspace = currentWorkspace;
                         var itemSpec = new ItemSpec( path, recursion );
                         var extendedItems = currentWorkspace.GetExtendedItems( new ItemSpec[] { itemSpec }, DeletedState.Any, ItemType.Any );
-                        this.items = extendedItems[ 0 ];
+                        items = extendedItems[ 0 ];
                     }
                 }
 
@@ -100,9 +100,9 @@ namespace DataCommander.Providers.Tfs
                     $"\r\nworkspace.Name: {name}\r\nworkingFolder.LocalItem: {workingFolder.LocalItem}") );
             }
 
-            if (this.items != null && this.index < this.items.Length)
+            if (items != null && index < items.Length)
             {
-                var item = this.items[this.index ];
+                var item = items[index ];
 
                 var values = new object[]
                 {
@@ -116,9 +116,9 @@ namespace DataCommander.Providers.Tfs
                     item.VersionLocal
                 };
 
-                this.Values = values;
+                Values = values;
                 read = true;
-                this.index++;
+                index++;
             }
             else
             {

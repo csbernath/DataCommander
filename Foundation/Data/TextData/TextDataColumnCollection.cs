@@ -41,7 +41,7 @@ namespace Foundation.Data.TextData
         {
             get
             {
-                FoundationContract.Requires<ArgumentNullException>(this.Contains(columnName));
+                FoundationContract.Requires<ArgumentNullException>(Contains(columnName));
 
                 return _nameIndex[columnName];
             }

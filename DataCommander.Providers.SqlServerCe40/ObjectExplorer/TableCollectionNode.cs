@@ -29,7 +29,7 @@ namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             var commandText = "SELECT * FROM INFORMATION_SCHEMA.TABLES";
-            var transactionScope = new DbTransactionScope(this.connection, null);
+            var transactionScope = new DbTransactionScope(connection, null);
             var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
             var nodes = new List<ITreeNode>();
 
@@ -52,9 +52,9 @@ namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
             get
             {
                 var contextMenu = new ContextMenuStrip();
-                var menuItem = new ToolStripMenuItem("Shrink database", null, this.ShrinkDatabase);
+                var menuItem = new ToolStripMenuItem("Shrink database", null, ShrinkDatabase);
                 contextMenu.Items.Add(menuItem);
-                menuItem = new ToolStripMenuItem("Compact database", null, this.CompactDatabase);
+                menuItem = new ToolStripMenuItem("Compact database", null, CompactDatabase);
                 contextMenu.Items.Add(menuItem);
                 return contextMenu;
             }
@@ -64,7 +64,7 @@ namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
 
         private void ShrinkDatabase(object sender, EventArgs e)
         {
-            var connectionString = this.objectExplorer.ConnectionString;
+            var connectionString = objectExplorer.ConnectionString;
             var engine = new SqlCeEngine(connectionString);
             engine.Shrink();
         }
@@ -76,11 +76,11 @@ namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
             try
             {
                 form.Cursor = Cursors.WaitCursor;
-                this.connection.Close();
-                var connectionString = this.objectExplorer.ConnectionString;
+                connection.Close();
+                var connectionString = objectExplorer.ConnectionString;
                 var engine = new SqlCeEngine(connectionString);
                 engine.Compact(null);
-                this.connection.Open();
+                connection.Open();
             }
             finally
             {

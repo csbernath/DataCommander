@@ -21,13 +21,13 @@
             get
             {
                 var sb = new StringBuilder();
-                if (this.schemaName != null)
+                if (schemaName != null)
                 {
-                    sb.Append(this.schemaName);
+                    sb.Append(schemaName);
                     sb.Append('.');
                 }
 
-                sb.Append(this.objectName);
+                sb.Append(objectName);
 
                 return sb.ToString();
             }
@@ -40,9 +40,9 @@
                 var sb = new StringBuilder();
                 var sqlCommandBuilder = new SqlCommandBuilder();
 
-                if (this.schemaName != null)
+                if (schemaName != null)
                 {
-                    sb.Append(QuoteIdentifier(this.schemaName));
+                    sb.Append(QuoteIdentifier(schemaName));
                     sb.Append('.');
                 }
                 //else if (this.sqlObject.ParentAlias != null)
@@ -51,7 +51,7 @@
                 //    sb.Append('.');
                 //}
 
-                sb.Append(QuoteIdentifier(this.objectName));
+                sb.Append(QuoteIdentifier(objectName));
 
                 return sb.ToString();
             }

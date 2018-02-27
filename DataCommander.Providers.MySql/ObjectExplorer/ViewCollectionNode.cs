@@ -25,19 +25,19 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
                 $@"select TABLE_NAME
 from INFORMATION_SCHEMA.TABLES
 where
-    TABLE_SCHEMA = '{this.databaseNode.Name
+    TABLE_SCHEMA = '{databaseNode.Name
                     }'
     and TABLE_TYPE = 'SYSTEM VIEW'
 order by TABLE_NAME";
 
             return MySqlClientFactory.Instance.ExecuteReader(
-                this.databaseNode.ObjectExplorer.ConnectionString,
+                databaseNode.ObjectExplorer.ConnectionString,
                 new CommandDefinition {CommandText = commandText},
                 CommandBehavior.Default,
                 dataRecord =>
                 {
                     var name = dataRecord.GetString(0);
-                    return new ViewNode(this.databaseNode, name);
+                    return new ViewNode(databaseNode, name);
                 });
         }
 

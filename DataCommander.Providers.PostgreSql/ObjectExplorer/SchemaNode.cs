@@ -7,8 +7,8 @@
     {
         public SchemaNode(SchemaCollectionNode schemaCollectionNode, string name)
         {
-            this.SchemaCollectionNode = schemaCollectionNode;
-            this.Name = name;
+            SchemaCollectionNode = schemaCollectionNode;
+            Name = name;
         }
 
         public SchemaCollectionNode SchemaCollectionNode { get; }

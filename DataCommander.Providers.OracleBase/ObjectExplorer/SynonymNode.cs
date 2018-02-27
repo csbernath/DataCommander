@@ -18,7 +18,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 
 		#region ITreeNode Members
 
-		string ITreeNode.Name => this.name;
+		string ITreeNode.Name => name;
 
         bool ITreeNode.IsLeaf => false;
 
@@ -29,13 +29,13 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 select	s.TABLE_OWNER,
 	s.TABLE_NAME
 from	SYS.ALL_SYNONYMS s
-where	s.OWNER			= '{this.schema.Name}'
-	and s.SYNONYM_NAME	= '{this.name}'";
-            var transactionScope = new DbTransactionScope(this.schema.SchemasNode.Connection, null);
+where	s.OWNER			= '{schema.Name}'
+	and s.SYNONYM_NAME	= '{name}'";
+            var transactionScope = new DbTransactionScope(schema.SchemasNode.Connection, null);
             var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
             var dataRow = dataTable.Rows[0];
             var schemaName = (string)dataRow["TABLE_OWNER"];
-            var schemaNode = new SchemaNode(this.schema.SchemasNode, schemaName);
+            var schemaNode = new SchemaNode(schema.SchemasNode, schemaName);
             var tableNode = new TableNode(schemaNode, (string)dataRow["TABLE_NAME"], true);
             return new ITreeNode[] {tableNode};
         }

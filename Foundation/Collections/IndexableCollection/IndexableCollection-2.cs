@@ -48,7 +48,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool Contains(T item)
         {
-            FoundationContract.Ensures(!Contract.Result<bool>() || this.Count > 0);
+            FoundationContract.Ensures(!Contract.Result<bool>() || Count > 0);
 
             return _defaultIndex.Contains(item);
         }

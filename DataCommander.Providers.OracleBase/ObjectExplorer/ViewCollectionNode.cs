@@ -43,6 +43,6 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 
         public ContextMenuStrip ContextMenu => null;
 
-        public SchemaNode SchemaNode => this.schemaNode;
+        public SchemaNode SchemaNode => schemaNode;
     }
 }

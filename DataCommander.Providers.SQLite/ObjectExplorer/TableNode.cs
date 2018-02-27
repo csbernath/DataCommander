@@ -11,8 +11,8 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
     {
         public TableNode(DatabaseNode databaseNode, string name)
         {
-            this.Database = databaseNode;
-            this.Name = name;
+            Database = databaseNode;
+            Name = name;
         }
 
         public DatabaseNode Database { get; }
@@ -32,7 +32,7 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
 
         bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query => $"select\t*\r\nfrom\t{this.Database.Name}.{this.Name}";
+        string ITreeNode.Query => $"select\t*\r\nfrom\t{Database.Name}.{Name}";
 
         private static string GetScript(
             SQLiteConnection connection,
@@ -51,7 +51,7 @@ where	name	= '{name}'";
 
         private void Script_Click(object sender, EventArgs e)
         {
-            var script = GetScript(this.Database.Connection, this.Database.Name, this.Name);
+            var script = GetScript(Database.Connection, Database.Name, Name);
             QueryForm.ShowText(script);
         }
 
@@ -61,10 +61,10 @@ where	name	= '{name}'";
             {
                 ContextMenuStrip contextMenu = null;
 
-                if (this.Name != "sqlite_master")
+                if (Name != "sqlite_master")
                 {
                     contextMenu = new ContextMenuStrip();
-                    contextMenu.Items.Add("Script", null, this.Script_Click);
+                    contextMenu.Items.Add("Script", null, Script_Click);
                 }
 
                 return contextMenu;

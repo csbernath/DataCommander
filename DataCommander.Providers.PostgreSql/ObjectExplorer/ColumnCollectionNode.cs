@@ -23,7 +23,7 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             var nodes = new List<ITreeNode>();
-            var schemaNode = this.tableNode.TableCollectionNode.SchemaNode;
+            var schemaNode = tableNode.TableCollectionNode.SchemaNode;
 
             using (var connection = new NpgsqlConnection(schemaNode.SchemaCollectionNode.ObjectExplorer.ConnectionString))
             {
@@ -41,9 +41,8 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
     ,c.numeric_scale
 from information_schema.columns c
 where
-    c.table_schema = '{this
-                            .tableNode.TableCollectionNode.SchemaNode.Name}'
-    and c.table_name = '{this.tableNode.Name}'
+    c.table_schema = '{tableNode.TableCollectionNode.SchemaNode.Name}'
+    and c.table_name = '{tableNode.Name}'
 order by c.ordinal_position"
                 }, CommandBehavior.Default, dataRecord =>
                 {

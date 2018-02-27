@@ -13,9 +13,9 @@
     {
         public TfsConnection(Uri uri)
         {
-            this.TfsTeamProjectCollection = new TfsTeamProjectCollection(uri);
-            this.VersionControlServer = (VersionControlServer)this.TfsTeamProjectCollection.GetService(typeof (VersionControlServer));
-            this.Connection = new TfsDbConnection(this);
+            TfsTeamProjectCollection = new TfsTeamProjectCollection(uri);
+            VersionControlServer = (VersionControlServer)TfsTeamProjectCollection.GetService(typeof (VersionControlServer));
+            Connection = new TfsDbConnection(this);
         }
 
         internal TfsTeamProjectCollection TfsTeamProjectCollection { get; }
@@ -26,8 +26,8 @@
         {
             return Task.Factory.StartNew(() =>
             {
-                this.TfsTeamProjectCollection.Authenticate();
-                this.ConnectionState = ConnectionState.Open;
+                TfsTeamProjectCollection.Authenticate();
+                ConnectionState = ConnectionState.Open;
             });
         }
 
@@ -51,7 +51,7 @@
         {
             get
             {
-                var supportedFeatures = this.VersionControlServer.SupportedFeatures;
+                var supportedFeatures = VersionControlServer.SupportedFeatures;
                 var supportedFeaturesEnum = (SupportedFeatures)supportedFeatures;
                 return $"versionControlServer.SupportedFeatures: {supportedFeaturesEnum.ToString("G")}";
             }

@@ -16,7 +16,7 @@
         {
             return new ITreeNode[]
             {
-                new WmiClasses(this.connection.Scope)
+                new WmiClasses(connection.Scope)
             };
         }
 

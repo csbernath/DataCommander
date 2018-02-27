@@ -6,8 +6,8 @@
     {
         public DatabaseNode(ObjectExplorer objectExplorer, string name)
         {
-            this.ObjectExplorer = objectExplorer;
-            this.Name = name;
+            ObjectExplorer = objectExplorer;
+            Name = name;
         }
 
         public ObjectExplorer ObjectExplorer { get; }

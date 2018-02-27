@@ -11,7 +11,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 
         public IndexeCollectionNode(TableNode tableNode)
         {
-            this.table = tableNode;
+            table = tableNode;
         }
 
         public string Name => "Indexes";
@@ -40,7 +40,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 
             for (var i = 0; i < indexes.Length; i++)
             {
-                treeNodes[i] = new IndexNode(this.table, indexes[i]);
+                treeNodes[i] = new IndexNode(table, indexes[i]);
             }
 
             return treeNodes;

@@ -18,7 +18,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
           SchemaNode schema,
           string name)
         {
-            this.schemaNode = schema;
+            schemaNode = schema;
             this.name = name;
         }
 
@@ -75,7 +75,7 @@ order by procedure_name";
         {
             var commandText = "select text from all_source where owner = '{0}' and name = '{1}' and type = 'PACKAGE BODY'";
             commandText = string.Format(commandText, schemaNode.Name, name);
-            var transactionScope = new DbTransactionScope(this.schemaNode.SchemasNode.Connection, null);
+            var transactionScope = new DbTransactionScope(schemaNode.SchemasNode.Connection, null);
             var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
             var dataRows = dataTable.Rows;
             var count = dataRows.Count;

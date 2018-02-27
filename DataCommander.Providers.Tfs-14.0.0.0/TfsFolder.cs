@@ -16,7 +16,7 @@
 
         #region ITreeNode Members
 
-        string ITreeNode.Name => TfsObjectExplorer.GetName(this.item);
+        string ITreeNode.Name => TfsObjectExplorer.GetName(item);
 
         bool ITreeNode.IsLeaf
         {
@@ -24,7 +24,7 @@
             {
                 bool isLeaf;
 
-                switch (this.item.ItemType)
+                switch (item.ItemType)
                 {
                     case ItemType.File:
                         isLeaf = true;
@@ -67,12 +67,12 @@
 
             //return folders.Concat(files);
 
-            return TfsProject.GetChildren(this.item);
+            return TfsProject.GetChildren(item);
         }
 
         bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query => this.item.ServerItem;
+        string ITreeNode.Query => item.ServerItem;
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 

@@ -11,25 +11,25 @@
 
         public WmiProviderConnection(string connectionString)
         {
-            this.wmiConnection = new WmiConnection(connectionString);
-            this.Connection = this.wmiConnection;
+            wmiConnection = new WmiConnection(connectionString);
+            Connection = wmiConnection;
         }
 
         public override string ConnectionName { get; set; }
 
         public override Task OpenAsync(CancellationToken cancellationToken)
         {
-            return Task.Factory.StartNew(this.wmiConnection.Open);
+            return Task.Factory.StartNew(wmiConnection.Open);
         }
 
         public override IDbCommand CreateCommand()
         {
-            return this.wmiConnection.CreateCommand();
+            return wmiConnection.CreateCommand();
         }
 
-        public override string Caption => $"WMI@{this.wmiConnection.DataSource}";
+        public override string Caption => $"WMI@{wmiConnection.DataSource}";
 
-        public override string DataSource => this.wmiConnection.DataSource;
+        public override string DataSource => wmiConnection.DataSource;
 
         public override string ServerVersion => null;
 

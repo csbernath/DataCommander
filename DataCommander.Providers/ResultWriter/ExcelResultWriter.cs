@@ -119,7 +119,7 @@ namespace DataCommander.Providers.ResultWriter
 
             foreach (DataRow schemaRow in schemaTable.Rows)
             {
-                var dataColumnSchema = new DbColumn(schemaRow);
+                var dataColumnSchema = new FoundationDbColumn(schemaRow);
                 var columnName = dataColumnSchema.ColumnName;
                 var columnSize = dataColumnSchema.ColumnSize;
                 var dataType = _provider.GetColumnType(dataColumnSchema);

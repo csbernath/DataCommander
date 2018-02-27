@@ -31,7 +31,7 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
             var databaseNodes = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
             {
                 var name = dataRecord.GetString(1);
-                return new DatabaseNode(this._connection, name);
+                return new DatabaseNode(_connection, name);
             });
             return databaseNodes;
         }
