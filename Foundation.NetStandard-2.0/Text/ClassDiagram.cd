@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DataCommander.Foundation.Text.StringTable" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAEAEAABAAAAAAAAAAAAACAAAEAkAAAA=</HashCode>
+      <FileName>Text\StringTable.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Columns" />
+      <Property Name="Rows" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="DataCommander.Foundation.Text.StringTableColumnCollection" Collapsed="true">
+    <Position X="3" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AGIAAAAAAAAAIBAQCAgAAAQAAAACAkAACAAAAgAQAAA=</HashCode>
+      <FileName>Text\StringTableColumnCollection.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DataCommander.Foundation.Text.StringTableRowCollection" Collapsed="true">
+    <Position X="2" Y="1.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Text\StringTableRowCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataCommander.Foundation.Text.StringTableColumn" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAQAAAAEAAAAQAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Text\StringTableColumn.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataCommander.Foundation.Text.StringTableRow" Collapsed="true">
+    <Position X="4.25" Y="1.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Text\StringTableRow.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
