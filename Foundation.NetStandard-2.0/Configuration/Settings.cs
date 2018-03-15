@@ -61,6 +61,8 @@ namespace Foundation.Configuration
                     else
                         _configFileName = setup.ConfigurationFile;
 #else
+                    var domain = AppDomain.CurrentDomain;
+                    _configFileName = $"{domain.BaseDirectory}{domain.FriendlyName}.config";
 #endif
                 }
 
