@@ -64,7 +64,7 @@ namespace Foundation.Log
             }
             catch (Exception e)
             {
-                Log.Write(LogLevel.Error, e.ToLogString());
+                Log.Write(LogLevel.Error, e.ToString());
             }
         }
 
@@ -98,7 +98,7 @@ namespace Foundation.Log
             }
             catch (Exception e)
             {
-                Log.Write(LogLevel.Error, e.ToLogString());
+                Log.Write(LogLevel.Error, e.ToString());
             }
         }
 
@@ -110,7 +110,7 @@ namespace Foundation.Log
             }
             catch (Exception e)
             {
-                Log.Write(LogLevel.Error, e.ToLogString());
+                Log.Write(LogLevel.Error, e.ToString());
             }
         }
 

@@ -19,7 +19,7 @@ namespace Foundation.Log
         {
             var logWriters = new List<LogWriter>();
             var node = Settings.CurrentType;
-            
+
             var dateTimeKind = DateTimeKind.Utc;
             node.Attributes.TryGetAttributeValue("DateTimeKind", DateTimeKind.Utc, out dateTimeKind);
             _dateTimeProvider = dateTimeKind == DateTimeKind.Utc
@@ -153,6 +153,7 @@ namespace Foundation.Log
                     };
                     break;
 
+#if FOUNDATION_4_7
                 case "EventLogWriter":
                 {
                     var logName = attributes["LogName"].GetValue<string>();
@@ -166,6 +167,7 @@ namespace Foundation.Log
                 }
 
                     break;
+#endif
 
                 case "FileLogWriter":
                 {
@@ -224,7 +226,7 @@ namespace Foundation.Log
 
             public LogWriter[] LogWriters { get; }
 
-#region IDisposable Members
+            #region IDisposable Members
 
             public void Dispose()
             {
@@ -234,7 +236,7 @@ namespace Foundation.Log
                 }
             }
 
-#endregion
+            #endregion
 
             public void Write(LogEntry logEntry)
             {

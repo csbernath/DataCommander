@@ -81,7 +81,7 @@ namespace Foundation.Threading
                 {
                     exception = e;
                     Log.Write(LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", Thread.Name,
-                        Thread.ManagedThreadId, e.ToLogString());
+                        Thread.ManagedThreadId, e.ToString());
                 }
             }
 
@@ -92,7 +92,7 @@ namespace Foundation.Threading
             catch (Exception e)
             {
                 Log.Write(LogLevel.Error, "LoopThread({0},{1}) exception:\r\n{2}", Thread.Name,
-                    Thread.ManagedThreadId, e.ToLogString());
+                    Thread.ManagedThreadId, e.ToString());
             }
         }
     }

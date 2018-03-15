@@ -43,6 +43,7 @@ namespace Foundation.Configuration
             {
                 if (_configFileName == null)
                 {
+#if FOUNDATION_4_7
                     var setup = AppDomain.CurrentDomain.SetupInformation;
                     bool contains;
 
@@ -56,13 +57,11 @@ namespace Foundation.Configuration
                     }
 
                     if (contains && !string.IsNullOrEmpty(_configFileName))
-                    {
                         _configFileName = Path.Combine(setup.ApplicationBase, _configFileName);
-                    }
                     else
-                    {
                         _configFileName = setup.ConfigurationFile;
-                    }
+#else
+#endif
                 }
 
                 return _configFileName;
@@ -103,9 +102,7 @@ namespace Foundation.Configuration
             get
             {
                 if (_sectionName == null)
-                {
                     _sectionName = ConfigurationSection.DefaultSectionName;
-                }
 
                 return _sectionName;
             }

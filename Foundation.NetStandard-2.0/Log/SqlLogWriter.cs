@@ -157,7 +157,7 @@ namespace Foundation.Log
             }
             catch (Exception e)
             {
-                Log.Error(e.ToLogString());
+                Log.Error(e.ToString());
             }
         }
     }

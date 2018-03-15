@@ -51,7 +51,7 @@ namespace Foundation.Configuration
                     }
                     catch (FileNotFoundException e)
                     {
-                        Log.Trace(e.ToLogString());
+                        Log.Trace(e.ToString());
                         break;
                     }
                     catch (Exception e)
@@ -59,7 +59,7 @@ namespace Foundation.Configuration
                         if (count == 3)
                             throw;
 
-                        Log.Write(LogLevel.Warning, e.ToLogString());
+                        Log.Write(LogLevel.Warning, e.ToString());
                         Thread.Sleep(200);
                         count++;
                     }
