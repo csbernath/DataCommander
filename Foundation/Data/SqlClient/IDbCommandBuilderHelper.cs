@@ -1,4 +1,4 @@
-﻿namespace Binarit.Foundation.Data.SqlClient
+﻿namespace Foundation.Data.SqlClient
 {
     using System.Data;
 

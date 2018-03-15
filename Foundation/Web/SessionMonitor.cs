@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Web
+﻿namespace Foundation.Web
 {
     using System;
     using System.Collections.Generic;
@@ -6,9 +6,9 @@
     using System.Globalization;
     using System.Web;
     using System.Web.SessionState;
-    using DataCommander.Foundation.Collections;
-    using DataCommander.Foundation.Data;
-    using DataCommander.Foundation.Diagnostics;
+    using Foundation.Collections;
+    using Foundation.Data;
+    using Foundation.Diagnostics;
 
     /// <exclude/>
     public static class SessionMonitor

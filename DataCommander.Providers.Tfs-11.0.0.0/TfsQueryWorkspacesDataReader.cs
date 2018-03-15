@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Diagnostics.Contracts;
-    using DataCommander.Foundation.Data;
+    using Foundation.Data;
     using Microsoft.TeamFoundation.VersionControl.Client;
 
     internal sealed class TfsQueryWorkspacesDataReader : TfsDataReader

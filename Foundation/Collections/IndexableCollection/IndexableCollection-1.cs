@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.IndexableCollection

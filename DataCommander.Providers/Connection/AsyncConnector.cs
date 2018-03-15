@@ -4,8 +4,8 @@
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Threading;
-    using DataCommander.Foundation.Diagnostics;
-    using DataCommander.Foundation.Threading;
+    using Foundation.Diagnostics;
+    using Foundation.Threading;
 
     internal sealed class AsyncConnector
     {

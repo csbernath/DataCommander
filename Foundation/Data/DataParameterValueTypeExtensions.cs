@@ -1,4 +1,4 @@
-﻿namespace Binarit.Foundation.Data
+﻿namespace Foundation.Data
 {
     using System;
 

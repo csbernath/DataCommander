@@ -6,7 +6,7 @@
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Text;
-    using DataCommander.Foundation.Data;
+    using Foundation.Data;
     using Microsoft.TeamFoundation.VersionControl.Client;
 
     internal sealed class TfsGetItemsDataReader : TfsDataReader

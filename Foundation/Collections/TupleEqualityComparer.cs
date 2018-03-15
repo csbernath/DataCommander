@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Foundation.Collections
+﻿namespace Foundation.Collections
 {
     using System;
     using System.Collections.Generic;
-    using DataCommander.Foundation.Diagnostics;
+    using Foundation.Diagnostics;
 
 #if FOUNDATION_2_0 || FOUNDATION_3_5
     /// <summary>

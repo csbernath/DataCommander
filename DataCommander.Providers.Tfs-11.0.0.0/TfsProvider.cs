@@ -6,7 +6,7 @@
     using System.Data.Common;
     using System.Linq;
     using System.Xml;
-    using DataCommander.Foundation.Data;
+    using Foundation.Data;
     using Microsoft.TeamFoundation.VersionControl.Client;
 
     public sealed class TfsProvider : IProvider

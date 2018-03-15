@@ -1,6 +1,6 @@
 ﻿#if FOUNDATION_3_5
 
-namespace DataCommander.Foundation.Threading.Tasks
+namespace Foundation.Threading.Tasks
 {
     using System;
     using System.Diagnostics.Contracts;

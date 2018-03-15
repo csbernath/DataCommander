@@ -5,7 +5,7 @@
     using System.Data;
     using System.Windows.Forms;
     using Oracle.DataAccess.Client;
-    using Binarit.Foundation.Data;
+    using Foundation.Data;
 
     internal class IndexesNode : ITreeNode
     {

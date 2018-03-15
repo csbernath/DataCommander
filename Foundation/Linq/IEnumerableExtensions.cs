@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 using Foundation.Collections;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Text;

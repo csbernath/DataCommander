@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Foundation.Threading
+﻿namespace Foundation.Threading
 {
     using System;
     using System.Collections;
     using System.Threading;
-    using DataCommander.Foundation.Diagnostics;
+    using Foundation.Diagnostics;
 }

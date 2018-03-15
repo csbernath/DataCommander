@@ -1,4 +1,4 @@
-﻿//namespace DataCommander.Foundation
+﻿//namespace Foundation
 //{
 //    using System.Diagnostics.Contracts;
     

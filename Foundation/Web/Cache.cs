@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Foundation.Web
+﻿namespace Foundation.Web
 {
     using System;
     using System.Collections.Generic;
     using System.Web;
     using System.Web.Caching;
-    using DataCommander.Foundation.Diagnostics;
+    using Foundation.Diagnostics;
 
     /// <summary>
     /// 

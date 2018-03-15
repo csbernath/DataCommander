@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
 using Foundation.Collections.IndexableCollection;
-using Foundation.Data;
 
 namespace Foundation.Configuration
 {

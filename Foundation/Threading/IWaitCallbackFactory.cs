@@ -1,4 +1,4 @@
-﻿namespace Binarit.Foundation.Threading
+﻿namespace Foundation.Threading
 {
     using System.Threading;
 

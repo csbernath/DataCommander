@@ -1,5 +1,5 @@
 ﻿#if FOUNDATION_3_5
-namespace DataCommander.Foundation.Caching
+namespace Foundation.Caching
 {
     using System;
     using System.Diagnostics.Contracts;

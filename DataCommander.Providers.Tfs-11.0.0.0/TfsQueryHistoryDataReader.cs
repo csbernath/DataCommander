@@ -6,7 +6,7 @@
     using System.Data;
     using System.Diagnostics.Contracts;
     using System.Linq;
-    using DataCommander.Foundation.Data;
+    using Foundation.Data;
     using Foundation;
     using Microsoft.TeamFoundation.VersionControl.Client;
 

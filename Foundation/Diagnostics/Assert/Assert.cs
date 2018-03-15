@@ -1,5 +1,5 @@
 ﻿#if FOUNDATION_3_5
-namespace DataCommander.Foundation.Diagnostics
+namespace Foundation.Diagnostics
 {
     using System;
     using System.Diagnostics;

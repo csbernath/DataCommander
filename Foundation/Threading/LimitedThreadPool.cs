@@ -1,10 +1,10 @@
-﻿namespace Binarit.Foundation.Threading
+﻿namespace Foundation.Threading
 {
     using System;
     using System.Collections.Generic;
     using System.Threading;
 #if FOUNDATION_2_0 || FOUNDATION_3_5
-    using Binarit.Foundation.Diagnostics;
+    using Foundation.Diagnostics;
 #else
     using System.Diagnostics.Contracts;
 #endif

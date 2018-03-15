@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Foundation.DomainDrivenDesign
+﻿namespace Foundation.DomainDrivenDesign
 {
     public interface IEventHandler<in TEvent>
     {

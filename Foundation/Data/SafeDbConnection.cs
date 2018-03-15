@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
 using Foundation.Diagnostics;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;

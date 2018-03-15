@@ -396,7 +396,7 @@
                     //                if (xmlAttribute != null)
                     //                {
                     //                    valueString = "ADODB.Recordset (XML)";
-                    //                    ADODB.Recordset rs = DataCommander.Foundation.Data.AdoDB.XmlToRecordset( text );
+                    //                    ADODB.Recordset rs = Foundation.Data.AdoDB.XmlToRecordset( text );
                     //                    DataTable dataTable = OleDBHelper.Convert( rs );
                     //                    dataTable.TableName = name;
                     //                    queryForm.Invoke( new QueryForm.ShowDataTableDelegate( queryForm.ShowDataTable ), new object[] { dataTable, TableStyle.DataGrid } );

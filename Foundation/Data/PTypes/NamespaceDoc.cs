@@ -2,7 +2,7 @@
 {
 #if DOC
     /// <summary>
-    /// The <b>DataCommander.Foundation.Data.PTypes</b> namespace provides classes (parameter types) for native data types within SQL Server.
+    /// The <b>Foundation.Data.PTypes</b> namespace provides classes (parameter types) for native data types within SQL Server.
     /// These classes wrap and extend classes in <b>System.Data.SqlTypes</b> namespace.
     /// The data access layer generator utility (DataAccesslayerGenerator.exe) generates a class which inherits from <see cref="Database"/>.
     /// Value types for calling Microsoft SQL Server

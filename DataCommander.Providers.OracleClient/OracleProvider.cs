@@ -10,7 +10,6 @@ namespace DataCommander.Providers.OracleClient
     using System.Data.OracleClient;
     using System.Text;
     using System.Xml;
-    using OracleBase;
     using Field;
     using Providers.Connection;
 

@@ -4,8 +4,8 @@
     using System.Data;
     using System.Diagnostics.Contracts;
     using System.Linq;
-    using DataCommander.Foundation;
-    using DataCommander.Foundation.Data;
+    using Foundation;
+    using Foundation.Data;
     using Microsoft.TeamFoundation.VersionControl.Client;
 
     internal sealed class TfsGetExtendedItemsDataReader : TfsDataReader

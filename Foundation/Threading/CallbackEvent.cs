@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Threading
+﻿namespace Foundation.Threading
 {
     a
     using System;
@@ -6,7 +6,7 @@
     using System.Diagnostics.Contracts;
 #endif
     using System.Threading;
-    using DataCommander.Foundation.Diagnostics;
+    using Foundation.Diagnostics;
 
     /// <summary>
     /// 

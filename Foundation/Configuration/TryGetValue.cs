@@ -1,4 +1,4 @@
-﻿namespace Binarit.Foundation.Configuration
+﻿namespace Foundation.Configuration
 {
     using System;
 

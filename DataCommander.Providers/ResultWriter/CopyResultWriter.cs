@@ -14,7 +14,6 @@ namespace DataCommander.Providers.ResultWriter
     using Connection;
     using Foundation;
     using Foundation.Data;
-    using Foundation.Diagnostics;
     using Foundation.Linq;
 
     internal sealed class CopyResultWriter : IResultWriter

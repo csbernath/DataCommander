@@ -1,6 +1,6 @@
 ﻿#if FOUNDATION_3_5
 
-namespace DataCommander.Foundation.Collections
+namespace Foundation.Collections
 {
     using System;
     using System.Collections;

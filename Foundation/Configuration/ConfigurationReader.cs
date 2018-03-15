@@ -17,7 +17,7 @@ namespace Foundation.Configuration
 {
     /// <summary>
     /// config file section reader.
-    /// Reads nodes and attributes in the DataCommander.Foundation.Configuration section.
+    /// Reads nodes and attributes in the Foundation.Configuration section.
     /// </summary>
     public sealed class ConfigurationReader
     {
@@ -87,7 +87,7 @@ namespace Foundation.Configuration
         }
 
         /// <summary>
-        /// Finds the section DataCommander.Foundation.Configuration in the config file.
+        /// Finds the section Foundation.Configuration in the config file.
         /// </summary>
         /// <returns></returns>
         private bool FindSection(string sectionName)

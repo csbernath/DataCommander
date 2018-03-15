@@ -1,6 +1,6 @@
 ﻿#if FOUNDATION_3_5
 
-namespace DataCommander.Foundation.IO
+namespace Foundation.IO
 {
     using System;
     using System.Diagnostics.Contracts;

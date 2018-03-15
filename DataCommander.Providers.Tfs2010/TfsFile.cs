@@ -6,7 +6,7 @@
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Windows.Forms;
-    using DataCommander.Foundation.Configuration;
+    using Foundation.Configuration;
     using Microsoft.TeamFoundation.VersionControl.Client;
     using Microsoft.TeamFoundation.VersionControl.Common;
 

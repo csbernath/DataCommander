@@ -1,4 +1,4 @@
-﻿namespace Binarit.Foundation.DocumentProperties
+﻿namespace Foundation.DocumentProperties
 {
     /// <summary>
     /// 

@@ -1,4 +1,4 @@
-﻿namespace Binarit.Foundation.DocumentProperties
+﻿namespace Foundation.DocumentProperties
 {
     using System;
     using System.Runtime.CompilerServices;

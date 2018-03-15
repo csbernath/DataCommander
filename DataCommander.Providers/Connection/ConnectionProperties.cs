@@ -7,7 +7,6 @@ namespace DataCommander.Providers.Connection
     using System.Security.Cryptography;
     using System.Text;
     using Foundation.Configuration;
-    using Foundation.Diagnostics;
 
     public sealed class ConnectionProperties
     {

@@ -6,9 +6,9 @@
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Linq;
-    using DataCommander.Foundation;
-    using DataCommander.Foundation.Data;
-    using DataCommander.Foundation.Diagnostics;
+    using Foundation;
+    using Foundation.Data;
+    using Foundation.Diagnostics;
     using Microsoft.TeamFoundation.VersionControl.Client;
     using Microsoft.TeamFoundation.VersionControl.Common;
 

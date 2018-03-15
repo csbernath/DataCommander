@@ -7,7 +7,7 @@
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.IO;
-    using DataCommander.Foundation.Data;
+    using Foundation.Data;
     using Microsoft.TeamFoundation.VersionControl.Client;
     using Microsoft.TeamFoundation.VersionControl.Common;
 

@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.Common;
 using System.Xml;
 using DataCommander.Providers.Connection;
-using Foundation.Data;
 using FoundationDbColumn = Foundation.Data.FoundationDbColumn;
 
 namespace DataCommander.Providers.Msi

@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Foundation.Threading
+﻿namespace Foundation.Threading
 {
     using System.ServiceModel;
     using System.ServiceModel.Web;

@@ -12,7 +12,6 @@ namespace DataCommander.Providers.ResultWriter
     using System.Threading.Tasks;
     using Connection;
     using Foundation;
-    using Foundation.Diagnostics;
     using Foundation.Linq;
 
     internal sealed class SqlBulkCopyResultWriter : IResultWriter
