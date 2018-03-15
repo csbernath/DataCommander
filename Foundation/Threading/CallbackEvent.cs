@@ -1,6 +1,5 @@
 ﻿namespace Foundation.Threading
 {
-    a
     using System;
 #if FOUNDATION_4_0
     using System.Diagnostics.Contracts;

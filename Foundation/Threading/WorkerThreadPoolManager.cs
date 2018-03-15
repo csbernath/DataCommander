@@ -9,18 +9,6 @@ namespace Foundation.Threading
     /// <summary>
     /// 
     /// </summary>
-    public interface IWaitCallbackFactory
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        WaitCallback CreateWaitCallback();
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class WorkerThreadPoolManager
     {
         #region Private Fields

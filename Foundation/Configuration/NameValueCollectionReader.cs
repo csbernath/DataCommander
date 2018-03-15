@@ -7,16 +7,6 @@ namespace Foundation.Configuration
     /// <summary>
     /// 
     /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    /// <typeparam name="TValue"></typeparam>
-    /// <param name="key"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    public delegate bool TryGetValue<in TKey, TValue>(TKey key, out TValue value);
-
-    /// <summary>
-    /// 
-    /// </summary>
     public class NameValueCollectionReader
     {
         private readonly TryGetValue<string, string> _tryGetValue;

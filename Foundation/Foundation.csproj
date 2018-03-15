@@ -429,6 +429,7 @@
     <Compile Include="Configuration\Settings.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\TryGetValue.cs" />
     <Compile Include="Configuration\TypeNameCollection.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -440,6 +441,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CSharpTypeName.cs" />
+    <Compile Include="Data\DataParameterValueTypeExtensions.cs" />
     <Compile Include="Data\DbCommandAsyncExecutor.cs" />
     <Compile Include="Data\DbCommandExecutor.cs" />
     <Compile Include="Data\DbCommandExecutorFactory.cs" />
@@ -547,6 +549,7 @@
     <Compile Include="Option.cs" />
     <Compile Include="Reference.cs" />
     <Compile Include="ReferenceCounter.cs" />
+    <Compile Include="Threading\IWaitCallbackFactory.cs" />
     <Compile Include="Threading\Tasks\TaskSyncRunner.cs" />
     <Compile Include="Data\PTypes\NamespaceDoc.cs">
       <SubType>Code</SubType>
