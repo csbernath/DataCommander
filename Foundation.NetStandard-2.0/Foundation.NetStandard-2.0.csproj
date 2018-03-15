@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Foundation</RootNamespace>
-    <AssemblyName>Foundation</AssemblyName>
+    <AssemblyName>Foundation.NetStandard-2.0</AssemblyName>
     <Company>Csaba Bernáth</Company>
     <Authors>Csaba Bernáth</Authors>
   </PropertyGroup>

@@ -1,6 +1,6 @@
 ﻿namespace Foundation
 {
-    internal static class CSharpTypeName
+    public static class CSharpTypeName
     {
         public const string Boolean = "bool";
         public const string Char = "char";
