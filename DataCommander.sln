@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Pos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Tfs-14.0.0.0", "DataCommander.Providers.Tfs-14.0.0.0\DataCommander.Providers.Tfs-14.0.0.0.csproj", "{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Tfs-15.0.0.0", "DataCommander.Providers.Tfs-15.0.0.0\DataCommander.Providers.Tfs-15.0.0.0.csproj", "{3C2A1C8C-66FC-48E0-9B2E-40C697425336}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		ClientRelease|Any CPU = ClientRelease|Any CPU
@@ -313,8 +315,31 @@ Global
 		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Test|Any CPU.Build.0 = Release|Any CPU
 		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Test|x86.ActiveCfg = Release|Any CPU
 		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Test|x86.Build.0 = Release|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.ClientRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.ClientRelease|Any CPU.Build.0 = Release|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.ClientRelease|x86.ActiveCfg = Release|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.ClientRelease|x86.Build.0 = Release|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.Debug|x86.Build.0 = Debug|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.NDoc|Any CPU.ActiveCfg = Release|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.NDoc|Any CPU.Build.0 = Release|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.NDoc|x86.ActiveCfg = Release|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.NDoc|x86.Build.0 = Release|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.Release|x86.ActiveCfg = Release|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.Release|x86.Build.0 = Release|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.Test|Any CPU.Build.0 = Release|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.Test|x86.ActiveCfg = Release|Any CPU
+		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.Test|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {74F966D1-FAC1-45A6-A782-5F02EC995905}
 	EndGlobalSection
 EndGlobal
