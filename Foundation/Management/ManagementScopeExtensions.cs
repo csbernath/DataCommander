@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Management;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Linq;
 
 namespace Foundation.Management
@@ -23,8 +24,7 @@ namespace Foundation.Management
         public static List<T> ExecuteQuery<T>(this ManagementScope managementScope, string query,
             Func<ManagementObject, T> selector)
         {
-
-            FoundationContract.Requires<ArgumentNullException>(managementScope != null);
+            Assert.IsNotNull(managementScope);
 
             var objectQuery = new ObjectQuery(query);
             List<T> list;

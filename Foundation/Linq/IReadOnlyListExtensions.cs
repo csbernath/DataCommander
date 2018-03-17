@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Foundation.Collections;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
@@ -51,7 +53,7 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static TSource First<TSource>(this IReadOnlyList<TSource> source)
         {
-            FoundationContract.Requires<ArgumentNullException>(source != null);
+            Assert.IsNotNull(source);
             FoundationContract.Requires<ArgumentException>(source.Count > 0);
 
             return source[0];

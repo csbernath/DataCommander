@@ -1,5 +1,6 @@
 ﻿using Foundation.Data;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace DataCommander.Providers.Tfs
 {
@@ -19,8 +20,7 @@ namespace DataCommander.Providers.Tfs
 
         public TfsGetItemsDataReader(TfsCommand command)
         {
-            FoundationContract.Requires<ArgumentNullException>(command != null);
-
+            Assert.IsNotNull(command);
             this.command = command;
         }
 

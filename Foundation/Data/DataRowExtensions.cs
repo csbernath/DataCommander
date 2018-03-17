@@ -1,5 +1,6 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Text;
 
@@ -19,7 +20,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static T GetValue<T>(this DataRow dataRow, string name)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataRow != null);
+            Assert.IsNotNull(dataRow);
 
             var valueObject = dataRow[name];
 
@@ -41,7 +42,7 @@ namespace Foundation.Data
             string name,
             T outputNullValue)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataRow != null);
+            Assert.IsNotNull(dataRow);
 
             var valueObject = dataRow[name];
             return Database.GetValue(valueObject, outputNullValue);
@@ -56,7 +57,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static T GetValueOrDefault<T>(this DataRow dataRow, int columnIndex)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataRow != null);
+            Assert.IsNotNull(dataRow);
 
             var value = dataRow[columnIndex];
             return Database.GetValueOrDefault<T>(value);
@@ -71,7 +72,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static T GetValueOrDefault<T>(this DataRow dataRow, string name)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataRow != null);
+            Assert.IsNotNull(dataRow);
 
             var value = dataRow[name];
             return Database.GetValueOrDefault<T>(value);
@@ -84,7 +85,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static StringTable ToStringTable(this DataRow dataRow)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataRow != null);
+            Assert.IsNotNull(dataRow);
 
             var stringTable = new StringTable(2);
             var dataTable = dataRow.Table;

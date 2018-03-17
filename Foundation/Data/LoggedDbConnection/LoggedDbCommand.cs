@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Data;
 using System.Threading;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data.LoggedDbConnection
 {
@@ -24,10 +25,10 @@ namespace Foundation.Data.LoggedDbConnection
             EventHandler<AfterExecuteCommandEventArgs> afterExecuteCommand,
             EventHandler<AfterReadEventArgs> afterRead)
         {
-            FoundationContract.Requires<ArgumentNullException>(command != null);
-            FoundationContract.Requires<ArgumentNullException>(beforeExecuteCommand != null);
-            FoundationContract.Requires<ArgumentNullException>(afterExecuteCommand != null);
-            FoundationContract.Requires<ArgumentNullException>(afterRead != null);
+            Assert.IsNotNull(command);
+            Assert.IsNotNull(beforeExecuteCommand);
+            Assert.IsNotNull(afterExecuteCommand);
+            Assert.IsNotNull(afterRead);
 
             _commandId = Interlocked.Increment(ref _commandIdCounter);
             _command = command;
@@ -36,7 +37,7 @@ namespace Foundation.Data.LoggedDbConnection
             _afterRead = afterRead;
         }
 
-#region IDbCommand Members
+        #region IDbCommand Members
 
         void IDbCommand.Cancel()
         {
@@ -154,7 +155,7 @@ namespace Foundation.Data.LoggedDbConnection
 
         IDataReader IDbCommand.ExecuteReader()
         {
-            var dbCommand = (IDbCommand)this;
+            var dbCommand = (IDbCommand) this;
             return dbCommand.ExecuteReader(CommandBehavior.Default);
         }
 
@@ -216,18 +217,18 @@ namespace Foundation.Data.LoggedDbConnection
             set => _command.UpdatedRowSource = value;
         }
 
-#endregion
+        #endregion
 
-#region IDisposable Members
+        #region IDisposable Members
 
         void IDisposable.Dispose()
         {
             _command.Dispose();
         }
 
-#endregion
+        #endregion
 
-#region Private Methods
+        #region Private Methods
 
         private LoggedDbCommandInfo CreateLoggedDbCommandInfo(LoggedDbCommandExecutionType executionType)
         {
@@ -244,6 +245,6 @@ namespace Foundation.Data.LoggedDbConnection
                 _command.Parameters.ToLogString());
         }
 
-#endregion
+        #endregion
     }
 }

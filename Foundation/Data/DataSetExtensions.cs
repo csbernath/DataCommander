@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data
 {
@@ -17,8 +17,8 @@ namespace Foundation.Data
         /// <param name="dataTableNames"></param>
         public static void SetDataTableNames(this DataSet dataSet, IEnumerable<string> dataTableNames)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataSet != null);
-            FoundationContract.Requires<ArgumentNullException>(dataTableNames != null);
+            Assert.IsNotNull(dataSet);
+            Assert.IsNotNull(dataTableNames);
 
             var dataTables = dataSet.Tables;
             var count = dataTables.Count;

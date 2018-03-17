@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
 
@@ -37,7 +39,7 @@ namespace Foundation.Collections.ObjectPool
             int minSize,
             int maxSize )
         {
-            FoundationContract.Requires<ArgumentNullException>(factory != null);
+            Assert.IsNotNull(factory);
             FoundationContract.Requires<ArgumentOutOfRangeException>(minSize >= 0);
             FoundationContract.Requires<ArgumentOutOfRangeException>(minSize <= maxSize);
 

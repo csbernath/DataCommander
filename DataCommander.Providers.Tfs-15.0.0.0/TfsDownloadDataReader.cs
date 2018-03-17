@@ -7,7 +7,8 @@ using DataCommander.Providers.Connection;
 using DataCommander.Providers.Query;
 using Foundation;
 using Foundation.Data;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Log;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.TeamFoundation.VersionControl.Common;
@@ -25,8 +26,7 @@ namespace DataCommander.Providers.Tfs
 
         public TfsDownloadDataReader(TfsCommand command)
         {
-            FoundationContract.Requires<ArgumentNullException>(command != null);
-
+            Assert.IsNotNull(command);
             this.command = command;
         }
 

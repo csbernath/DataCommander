@@ -1,5 +1,6 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
@@ -18,8 +19,8 @@ namespace Foundation.Data
 
         internal AsyncDbCommand(AsyncDbConnection connection, IDbCommand command)
         {
-            FoundationContract.Requires<ArgumentNullException>(connection != null);
-            FoundationContract.Requires<ArgumentNullException>(command != null);
+            Assert.IsNotNull(connection);
+            Assert.IsNotNull(command);
 
             _connection = connection;
             _command = command;

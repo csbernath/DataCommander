@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Threading;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data
 {
@@ -18,7 +19,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static IDbCommand CreateCommand(this IDbTransactionScope transactionScope)
         {
-            FoundationContract.Requires<ArgumentNullException>(transactionScope != null);
+            Assert.IsNotNull(transactionScope);
 
             var command = transactionScope.Connection.CreateCommand();
             command.Transaction = transactionScope.Transaction;
@@ -33,9 +34,8 @@ namespace Foundation.Data
         /// <returns></returns>
         public static IDbCommand CreateCommand(this IDbTransactionScope transactionScope, CommandDefinition commandDefinition)
         {
-
-            FoundationContract.Requires<ArgumentNullException>(transactionScope != null);
-            FoundationContract.Requires<ArgumentNullException>(commandDefinition != null);
+            Assert.IsNotNull(transactionScope);
+            Assert.IsNotNull(commandDefinition);
 
             var command = transactionScope.CreateCommand();
             command.CommandText = commandDefinition.CommandText;
@@ -66,13 +66,11 @@ namespace Foundation.Data
             CommandBehavior commandBehavior,
             Func<IDataRecord, T> read)
         {
-            FoundationContract.Requires<ArgumentNullException>(transactionScope != null);
-            FoundationContract.Requires<ArgumentNullException>(read != null);
+            Assert.IsNotNull(transactionScope);
+            Assert.IsNotNull(read);
 
             using (var dataReader = transactionScope.ExecuteReader(commandDefinition, commandBehavior))
-            {
                 return dataReader.Read(read);
-            }
         }
 
         /// <summary>
@@ -104,13 +102,11 @@ namespace Foundation.Data
             Action<IDataRecord> read)
         {
 
-            FoundationContract.Requires<ArgumentNullException>(transactionScope != null);
-            FoundationContract.Requires<ArgumentNullException>(read != null);
+            Assert.IsNotNull(transactionScope);
+            Assert.IsNotNull(read);
 
             using (var dataReader = transactionScope.ExecuteReader(commandDefinition, commandBehavior))
-            {
                 dataReader.Read(read);
-            }
         }
 
         /// <summary>
@@ -125,16 +121,13 @@ namespace Foundation.Data
             CommandDefinition commandDefinition,
             CancellationToken cancellationToken)
         {
-
-            FoundationContract.Requires<ArgumentNullException>(transactionScope != null);
-            FoundationContract.Requires<ArgumentNullException>(commandDefinition != null);
+            Assert.IsNotNull(transactionScope);
+            Assert.IsNotNull(commandDefinition);
 
             DataSet dataSet;
 
             using (var command = transactionScope.CreateCommand(commandDefinition))
-            {
                 dataSet = command.ExecuteDataSet(cancellationToken);
-            }
 
             return dataSet;
         }
@@ -151,16 +144,13 @@ namespace Foundation.Data
             CommandDefinition commandDefinition,
             CancellationToken cancellationToken)
         {
-
-            FoundationContract.Requires<ArgumentNullException>(transactionScope != null);
-            FoundationContract.Requires<ArgumentNullException>(commandDefinition != null);
+            Assert.IsNotNull(transactionScope);
+            Assert.IsNotNull(commandDefinition);
 
             DataTable dataTable;
 
             using (var command = transactionScope.CreateCommand(commandDefinition))
-            {
                 dataTable = command.ExecuteDataTable(cancellationToken);
-            }
 
             return dataTable;
         }
@@ -175,16 +165,13 @@ namespace Foundation.Data
             this IDbTransactionScope transactionScope,
             CommandDefinition commandDefinition)
         {
-
-            FoundationContract.Requires<ArgumentNullException>(transactionScope != null);
-            FoundationContract.Requires<ArgumentNullException>(commandDefinition != null);
+            Assert.IsNotNull(transactionScope);
+            Assert.IsNotNull(commandDefinition);
 
             int affectedRowCount;
 
             using (var command = transactionScope.CreateCommand(commandDefinition))
-            {
                 affectedRowCount = command.ExecuteNonQuery();
-            }
 
             return affectedRowCount;
         }

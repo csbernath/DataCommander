@@ -7,7 +7,7 @@
     <ProjectGuid>{3C2A1C8C-66FC-48E0-9B2E-40C697425336}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DataCommander.Providers.Tfs_15._0._0._0</RootNamespace>
+    <RootNamespace>DataCommander.Providers.Tfs</RootNamespace>
     <AssemblyName>DataCommander.Providers.Tfs-15.0.0.0</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -1,6 +1,7 @@
 ﻿using Foundation.Data;
 using Foundation.Data.SqlClient;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -24,7 +25,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             JobCollectionNode jobs,
             string name)
         {
-            FoundationContract.Requires<ArgumentNullException>(jobs != null);
+            Assert.IsNotNull(jobs);
 
             _jobs = jobs;
             _name = name;

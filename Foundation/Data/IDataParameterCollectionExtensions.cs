@@ -4,7 +4,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 using Foundation.Data.SqlClient;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data
 {
@@ -41,7 +42,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static string ToLogString( this IDataParameterCollection parameters )
         {
-            FoundationContract.Requires<ArgumentNullException>( parameters != null );
+            Assert.IsNotNull(parameters);
 
             var sqlParameters = parameters as SqlParameterCollection;
             string s;

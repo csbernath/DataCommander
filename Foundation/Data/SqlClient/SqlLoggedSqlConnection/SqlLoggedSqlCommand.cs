@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
 {
@@ -13,8 +14,8 @@ namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
             SqlLoggedSqlConnection connection,
             IDbCommand command)
         {
-            FoundationContract.Requires<ArgumentNullException>(connection != null);
-            FoundationContract.Requires<ArgumentNullException>(command != null);
+            Assert.IsNotNull(connection);
+            Assert.IsNotNull(command);
 
             _connection = connection;
             _command = command;

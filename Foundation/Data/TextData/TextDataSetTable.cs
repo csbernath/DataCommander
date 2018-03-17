@@ -1,5 +1,5 @@
-﻿using System;
-using Foundation.Diagnostics.Contracts;
+﻿using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data.TextData
 {
@@ -16,7 +16,7 @@ namespace Foundation.Data.TextData
         /// <param name="table"></param>
         public TextDataSetTable( string name, int rowCount, TextDataTable table )
         {
-            FoundationContract.Requires<ArgumentNullException>(rowCount >= 0);
+            Assert.IsValidOperation(rowCount >= 0);
 
             Name = name;
             RowCount = rowCount;

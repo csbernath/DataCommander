@@ -1,5 +1,5 @@
-﻿using System;
-using Foundation.Diagnostics.Contracts;
+﻿using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -12,11 +12,11 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         public DatabaseSecurityNode(DatabaseNode databaseNode)
         {
-            FoundationContract.Requires<ArgumentNullException>(databaseNode != null);
+            Assert.IsNotNull(databaseNode);
             _databaseNode = databaseNode;
         }
 
-#region ITreeNode Members
+        #region ITreeNode Members
 
         string ITreeNode.Name => "Security";
 
@@ -38,6 +38,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-#endregion
+        #endregion
     }
 }

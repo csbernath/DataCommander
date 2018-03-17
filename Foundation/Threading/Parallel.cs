@@ -47,8 +47,8 @@ namespace Foundation.Threading
 
             public Invoker( Action[] actions )
             {
-                FoundationContract.Requires<ArgumentNullException>( actions != null );
-                FoundationContract.Requires<ArgumentNullException>( Contract.ForAll( actions, action => action != null ) );
+                Assert.IsNotNull( actions != null );
+                Assert.IsNotNull( Contract.ForAll( actions, action => action != null ) );
                 this.actions = actions;
             }
 

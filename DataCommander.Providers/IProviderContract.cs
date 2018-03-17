@@ -5,7 +5,8 @@ using System.Data.Common;
 using System.Xml;
 using DataCommander.Providers.Connection;
 using Foundation.Data;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace DataCommander.Providers
 {
@@ -31,34 +32,31 @@ namespace DataCommander.Providers
 
         void IProvider.DeriveParameters(IDbCommand command)
         {
-            FoundationContract.Requires<ArgumentNullException>(command != null);
+            Assert.IsNotNull(command);
         }
 
         DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
         {
-            FoundationContract.Requires<ArgumentNullException>(parameter != null);
+            Assert.IsNotNull(parameter);
 
             return null;
         }
 
         DataTable IProvider.GetParameterTable(IDataParameterCollection parameters)
         {
-            FoundationContract.Requires<ArgumentNullException>(parameters != null);
-
+            Assert.IsNotNull(parameters);
             return null;
         }
 
         XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
         {
-            FoundationContract.Requires<ArgumentNullException>(command != null);
-
+            Assert.IsNotNull(command);
             return null;
         }
 
         DataTable IProvider.GetSchemaTable(IDataReader dataReader)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataReader != null);
-
+            Assert.IsNotNull(dataReader);
             return null;
         }
 
@@ -69,15 +67,13 @@ namespace DataCommander.Providers
 
         Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataColumnSchema != null);
-
+            Assert.IsNotNull(dataColumnSchema);
             return null;
         }
 
         IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataReader != null);
-
+            Assert.IsNotNull(dataReader);
             return null;
         }
 
@@ -90,8 +86,7 @@ namespace DataCommander.Providers
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {
-            FoundationContract.Requires<ArgumentNullException>(connection != null);
-
+            Assert.IsNotNull(connection);
             return null;
         }
 
@@ -101,8 +96,7 @@ namespace DataCommander.Providers
 
         string IProvider.GetExceptionMessage(Exception exception)
         {
-            FoundationContract.Requires<ArgumentNullException>(exception != null);
-
+            Assert.IsNotNull(exception);
             return null;
         }
 

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System.Text;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data.SqlClient
 {
@@ -17,7 +17,7 @@ namespace Foundation.Data.SqlClient
         /// <returns></returns>
         public static string ToLogString(this SqlError error)
         {
-            FoundationContract.Requires<ArgumentNullException>(error != null);
+            Assert.IsNotNull(error);
 
             var sb = new StringBuilder();
 

@@ -2,7 +2,7 @@
 using System.Data;
 using System.Diagnostics;
 using Foundation.Diagnostics;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Linq;
 using Foundation.Log;
 
@@ -13,7 +13,7 @@ namespace Foundation.Data
     /// </summary>
     public class SafeDbConnection : IDbConnection
     {
-        private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof (SafeDbConnection));
+        private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(SafeDbConnection));
         private ISafeDbConnection _safeDbConnection;
 
         /// <summary>
@@ -33,12 +33,10 @@ namespace Foundation.Data
         /// </summary>
         /// <param name="connection"></param>
         /// <param name="safeDbConnection"></param>
-        protected void Initialize(
-            IDbConnection connection,
-            ISafeDbConnection safeDbConnection)
+        protected void Initialize(IDbConnection connection, ISafeDbConnection safeDbConnection)
         {
-            FoundationContract.Requires<ArgumentNullException>(connection != null);
-            FoundationContract.Requires<ArgumentNullException>(safeDbConnection != null);
+            Assert.IsNotNull(connection);
+            Assert.IsNotNull(safeDbConnection);
 
             Connection = connection;
             _safeDbConnection = safeDbConnection;
@@ -178,12 +176,10 @@ namespace Foundation.Data
         /// <returns></returns>
         internal IDataReader ExecuteReader(IDbCommand command, CommandBehavior behavior)
         {
-            FoundationContract.Requires<ArgumentNullException>(command != null);
+            Assert.IsNotNull(command);
 
             if (Connection.State != ConnectionState.Open)
-            {
                 Open();
-            }
 
             IDataReader reader = null;
 
@@ -237,7 +233,7 @@ namespace Foundation.Data
         /// <returns></returns>
         internal object ExecuteScalar(IDbCommand command)
         {
-            FoundationContract.Requires<ArgumentNullException>(command != null);
+            Assert.IsNotNull(command);
 
             object scalar = null;
 

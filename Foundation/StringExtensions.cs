@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Globalization;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation
@@ -210,7 +212,7 @@ namespace Foundation
         /// <returns></returns>
         public static string Right(this string value, int length)
         {
-            FoundationContract.Requires<ArgumentNullException>(value != null);
+            Assert.IsNotNull(value);
             FoundationContract.Requires<ArgumentOutOfRangeException>(value.Length >= length);
 
             var startIndex = value.Length - length;

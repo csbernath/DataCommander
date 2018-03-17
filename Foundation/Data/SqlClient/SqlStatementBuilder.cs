@@ -2,6 +2,8 @@
 using System.Data;
 using System.Data.SqlTypes;
 using System.Text;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Text;
 
@@ -189,7 +191,7 @@ namespace Foundation.Data.SqlClient
             object value,
             SqlDbType sqlDbType)
         {
-            FoundationContract.Requires<ArgumentNullException>(commandText != null);
+            Assert.IsNotNull(commandText);
 
             var s = ToString(value, sqlDbType);
             commandText.Append(s);

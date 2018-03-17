@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Windows.Forms
 {
@@ -17,7 +18,7 @@ namespace Foundation.Windows.Forms
         /// <param name="cursor"></param>
         public CursorManager(Cursor cursor)
         {
-            FoundationContract.Requires<ArgumentNullException>(cursor != null);
+            Assert.IsNotNull(cursor);
 
             originalCursor = Cursor.Current;
             Cursor.Current = cursor;

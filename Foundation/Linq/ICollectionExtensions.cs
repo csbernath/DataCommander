@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using Foundation.Collections;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
@@ -94,7 +96,7 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static ICollection<T> AsReadOnly<T>(this ICollection<T> collection)
         {
-            FoundationContract.Requires<ArgumentNullException>(collection != null);
+            Assert.IsNotNull(collection);
 
             return new ReadOnlyCollection<T>(collection);
         }
@@ -140,7 +142,7 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static T[] ToArray<T>(ICollection<T> source)
         {
-            FoundationContract.Requires<ArgumentNullException>(source != null);
+            Assert.IsNotNull(source);
 
             var target = new T[source.Count];
             source.CopyTo(target, 0);
@@ -149,7 +151,7 @@ namespace Foundation.Linq
 
         public static ReadOnlyArray<T> ToReadOnlyArray<T>(this ICollection<T> source)
         {
-            FoundationContract.Requires<ArgumentNullException>(source != null);
+            Assert.IsNotNull(source);
 
             var items = source.ToArray();
             return new ReadOnlyArray<T>(items);
@@ -178,7 +180,7 @@ namespace Foundation.Linq
             /// <param name="source"></param>
             public CastedCollection(ICollection source)
             {
-                FoundationContract.Requires<ArgumentNullException>(source != null);
+                Assert.IsNotNull(source);
 
                 this.source = source;
                 sourceAsList = source as IList;
@@ -308,7 +310,7 @@ namespace Foundation.Linq
             /// <param name="collection"></param>
             public ReadOnlyCollection(ICollection<T> collection)
             {
-                FoundationContract.Requires<ArgumentNullException>(collection != null);
+                Assert.IsNotNull(collection);
 
                 this.collection = collection;
             }

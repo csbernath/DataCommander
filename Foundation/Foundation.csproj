@@ -713,14 +713,14 @@
     <Compile Include="Diagnostics\AppDomainMonitor.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\Assert\Assert.cs" />
-    <Compile Include="Diagnostics\Assert\AssertFailedEventArgs.cs" />
-    <Compile Include="Diagnostics\Assert\AssertFailedException.cs" />
-    <Compile Include="Diagnostics\Assert\AssertMessage.cs" />
-    <Compile Include="Diagnostics\Assert\AssertMessageParameter.cs" />
-    <Compile Include="Diagnostics\Assert\AssertMessageParameterCollection.cs" />
-    <Compile Include="Diagnostics\Assert\CollectionAssert.cs" />
-    <Compile Include="Diagnostics\Assert\StringAssert.cs" />
+    <Compile Include="Diagnostics\Assertions\Assert.cs" />
+    <Compile Include="Diagnostics\Assertions\AssertFailedEventArgs.cs" />
+    <Compile Include="Diagnostics\Assertions\AssertFailedException.cs" />
+    <Compile Include="Diagnostics\Assertions\AssertMessage.cs" />
+    <Compile Include="Diagnostics\Assertions\AssertMessageParameter.cs" />
+    <Compile Include="Diagnostics\Assertions\AssertMessageParameterCollection.cs" />
+    <Compile Include="Diagnostics\Assertions\CollectionAssert.cs" />
+    <Compile Include="Diagnostics\Assertions\StringAssert.cs" />
     <Compile Include="Diagnostics\Contracts\FoundationContract.cs" />
     <Compile Include="Collections\TypeDictionary.cs" />
     <Compile Include="Diagnostics\DebugWriter.cs">

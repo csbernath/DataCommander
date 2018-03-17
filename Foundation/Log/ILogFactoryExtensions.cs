@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Log
 {
@@ -18,8 +19,8 @@ namespace Foundation.Log
         /// <returns></returns>
         public static ILog GetTypeLog(this ILogFactory applicationLog, Type type)
         {
-            FoundationContract.Requires<ArgumentNullException>(applicationLog != null);
-            FoundationContract.Requires<ArgumentNullException>(type != null);
+            Assert.IsNotNull(applicationLog);
+            Assert.IsNotNull(type);
 
             var name = type.FullName;
 

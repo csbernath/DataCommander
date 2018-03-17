@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using ADODB;
 using Foundation.Configuration;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers
@@ -29,7 +31,7 @@ namespace DataCommander.Providers
 
         public static IProvider CreateProvider(string name)
         {
-            FoundationContract.Requires<ArgumentNullException>(name != null);
+            Assert.IsNotNull(name);
             //Contract.Ensures(Contract.Result<IProvider>() != null);
 
             var folder = Settings.CurrentNamespace;

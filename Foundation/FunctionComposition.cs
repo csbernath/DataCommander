@@ -1,5 +1,6 @@
 ﻿using System;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation
 {
@@ -30,8 +31,8 @@ namespace Foundation
 
             public UnaryFunctionComposition(Func<X, Y> func1, Func<Y, Z> func2)
             {
-                FoundationContract.Requires<ArgumentNullException>(func1 != null);
-                FoundationContract.Requires<ArgumentNullException>(func2 != null);
+                Assert.IsNotNull(func1);
+                Assert.IsNotNull(func2);
 
                 this.func1 = func1;
                 this.func2 = func2;

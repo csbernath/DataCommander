@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
@@ -20,21 +22,17 @@ namespace Foundation.Data
 
         private DataReader(IDbCommand command, IDataReader dataReader)
         {
-
-            FoundationContract.Requires<ArgumentNullException>(command != null);
-            FoundationContract.Requires<ArgumentNullException>(dataReader != null);
+            Assert.IsNotNull(command);
+            Assert.IsNotNull(dataReader);
 
             _command = command;
             _dataReader = dataReader;
         }
 
-        internal static DataReader Create(
-            IDbTransactionScope transactionScope,
-            CommandDefinition commandDefinition,
-            CommandBehavior commandBehavior)
+        internal static DataReader Create(IDbTransactionScope transactionScope, CommandDefinition commandDefinition, CommandBehavior commandBehavior)
         {
-            FoundationContract.Requires<ArgumentNullException>(transactionScope != null);
-            FoundationContract.Requires<ArgumentNullException>(commandDefinition != null);
+            Assert.IsNotNull(transactionScope);
+            Assert.IsNotNull(commandDefinition);
 
             IDbCommand command = null;
             IDataReader dataReader = null;
@@ -48,20 +46,16 @@ namespace Foundation.Data
             catch
             {
                 if (dataReader != null)
-                {
                     dataReader.Dispose();
-                }
 
                 if (command != null)
-                {
                     command.Dispose();
-                }
 
                 throw;
             }
         }
 
-#region Public Methods
+        #region Public Methods
 
         /// <summary>
         /// 
@@ -71,15 +65,12 @@ namespace Foundation.Data
         /// <returns></returns>
         public IEnumerable<T> Read<T>(Func<IDataRecord, T> read)
         {
-
-            FoundationContract.Requires<ArgumentNullException>(read != null);
+            Assert.IsNotNull(read);
 
             PrivateNextResult();
 
             while (_dataReader.Read())
-            {
                 yield return read(_dataReader);
-            }
         }
 
         /// <summary>
@@ -88,14 +79,12 @@ namespace Foundation.Data
         /// <param name="read"></param>
         public void Read(Action<IDataRecord> read)
         {
-            FoundationContract.Requires<ArgumentNullException>(read != null);
+            Assert.IsNotNull(read);
 
             PrivateNextResult();
 
             while (_dataReader.Read())
-            {
                 read(_dataReader);
-            }
         }
 
         /// <summary>
@@ -104,7 +93,7 @@ namespace Foundation.Data
         /// <param name="read"></param>
         public void Read(Func<IDataRecord, bool> read)
         {
-            FoundationContract.Requires<ArgumentNullException>(read != null);
+            Assert.IsNotNull(read);
 
             PrivateNextResult();
 
@@ -133,7 +122,7 @@ namespace Foundation.Data
             return nextResult;
         }
 
-#endregion
+        #endregion
 
         void IDisposable.Dispose()
         {
@@ -144,18 +133,14 @@ namespace Foundation.Data
         private void PrivateNextResult()
         {
             if (_nextResultCalled)
-            {
                 _nextResultCalled = false;
-            }
             else
             {
                 var nextResult = _dataReader.NextResult();
                 _nextResultCalled = true;
 
                 if (!nextResult)
-                {
                     throw new InvalidOperationException();
-                }
             }
         }
     }

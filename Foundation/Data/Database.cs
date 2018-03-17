@@ -8,6 +8,8 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Xml;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
@@ -126,7 +128,7 @@ namespace Foundation.Data
         {
             get
             {
-                FoundationContract.Requires<ArgumentNullException>(Command != null);
+                Assert.IsNotNull(Command);
                 FoundationContract.Requires<ArgumentException>(Command.Parameters.Count > 0);
                 FoundationContract.Requires<ArgumentException>(Command.Parameters[0] is IDataParameter);
                 FoundationContract.Requires<ArgumentException>(((IDataParameter)Command.Parameters[0]).Direction == ParameterDirection.ReturnValue);
@@ -157,8 +159,8 @@ namespace Foundation.Data
             DbConnection connection,
             string commandText)
         {
-            FoundationContract.Requires<ArgumentNullException>(factory != null);
-            FoundationContract.Requires<ArgumentNullException>(connection != null);
+            Assert.IsNotNull(factory);
+            Assert.IsNotNull(connection);
 
             var command = connection.CreateCommand();
             command.CommandText = commandText;
@@ -180,8 +182,8 @@ namespace Foundation.Data
             DataTable dataTable,
             TextWriter textWriter)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataTable != null);
-            FoundationContract.Requires<ArgumentNullException>(textWriter != null);
+            Assert.IsNotNull(dataTable);
+            Assert.IsNotNull(textWriter);
 
             var columns = dataTable.Columns;
 
@@ -228,8 +230,8 @@ namespace Foundation.Data
             string lineSeparator,
             TextWriter textWriter)
         {
-            FoundationContract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(lineSeparator));
-            FoundationContract.Requires<ArgumentNullException>(textWriter != null);
+            Assert.IsValidOperation(!string.IsNullOrEmpty(lineSeparator));
+            Assert.IsNotNull(textWriter);
 
             if (dataView != null)
             {
@@ -303,9 +305,9 @@ namespace Foundation.Data
             DataRow[] dataRows,
             TextWriter textWriter)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataTable != null);
-            FoundationContract.Requires<ArgumentNullException>(dataRows != null);
-            FoundationContract.Requires<ArgumentNullException>(textWriter != null);
+            Assert.IsNotNull(dataTable);
+            Assert.IsNotNull(dataRows);
+            Assert.IsNotNull(textWriter);
 
             var columns = dataTable.Columns;
 
@@ -389,7 +391,7 @@ namespace Foundation.Data
             int columnNumber,
             int rowNumber)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataTable != null);
+            Assert.IsNotNull(dataTable);
 
             var dataColumn = dataTable.Columns[columnNumber];
             var type = dataColumn.DataType;
@@ -453,7 +455,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public IDbTransaction BeginTransaction()
         {
-            FoundationContract.Requires<ArgumentNullException>(Connection != null);
+            Assert.IsNotNull(Connection);
 
             return Connection.BeginTransaction();
         }
@@ -465,7 +467,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public IDbTransaction BeginTransaction(IsolationLevel il)
         {
-            FoundationContract.Requires<ArgumentNullException>(Connection != null);
+            Assert.IsNotNull(Connection);
 
             return Connection.BeginTransaction(il);
         }
@@ -520,7 +522,7 @@ namespace Foundation.Data
         /// <param name="command"></param>
         public void DeriveParameters(IDbCommand command)
         {
-            FoundationContract.Requires<ArgumentNullException>(CommandBuilderHelper != null);
+            Assert.IsNotNull(CommandBuilderHelper);
 
             CommandBuilderHelper.DeriveParameters(command);
         }
@@ -534,7 +536,7 @@ namespace Foundation.Data
         /// </returns>
         public int ExecuteNonQuery(IDbCommand command)
         {
-            FoundationContract.Requires<ArgumentNullException>(command != null);
+            Assert.IsNotNull(command);
 
             Command = command;
             RowCount = command.ExecuteNonQuery();
@@ -574,7 +576,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public object ExecuteScalar(IDbCommand command)
         {
-            FoundationContract.Requires<ArgumentNullException>(command != null);
+            Assert.IsNotNull(command);
 
             Command = command;
             var scalar = command.ExecuteScalar();
@@ -636,7 +638,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public DataTable ExecuteDataTable(IDbCommand command, CancellationToken cancellationToken)
         {
-            FoundationContract.Requires<ArgumentNullException>(command != null);
+            Assert.IsNotNull(command);
 
             Command = command;
             var dataTable = new DataTable();
@@ -678,8 +680,8 @@ namespace Foundation.Data
         /// <returns></returns>
         public XmlDocument ExecuteXmlDocument(IDbCommand command)
         {
-            FoundationContract.Requires<ArgumentNullException>(command != null);
-            FoundationContract.Requires<ArgumentNullException>(CommandHelper != null);
+            Assert.IsNotNull(command);
+            Assert.IsNotNull(CommandHelper);
 
             return CommandHelper.ExecuteXmlDocument(command);
         }
@@ -703,7 +705,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public DataTable FillSchema(IDbCommand command, DataTable dataTable)
         {
-            FoundationContract.Requires<ArgumentNullException>(command != null);
+            Assert.IsNotNull(command);
 
             Command = command;
             DataTable schemaTable;
@@ -725,7 +727,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static DataTable[] FillSchema(IDbCommand command, DataSet dataSet, CancellationToken cancellationToken)
         {
-            FoundationContract.Requires<ArgumentNullException>(command != null);
+            Assert.IsNotNull(command);
 
             DataTable[] schemaTables;
 
@@ -746,9 +748,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public int Fill(string commandText, DataSet dataSet, CancellationToken cancellationToken)
         {
-
-            FoundationContract.Requires<ArgumentNullException>(dataSet != null);
-
+            Assert.IsNotNull(dataSet);
 
             Command = CreateCommand(commandText);
             RowCount = Command.Fill(dataSet, cancellationToken);

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management;
 using System.Text;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 
@@ -21,7 +23,7 @@ namespace Foundation.Management
         /// <param name="managementObject"></param>
         public MsvmComputerSystem(ManagementObject managementObject)
         {
-            FoundationContract.Requires<ArgumentNullException>(managementObject != null);
+            Assert.IsNotNull(managementObject);
 
             _managementObject = managementObject;
         }
@@ -34,7 +36,7 @@ namespace Foundation.Management
         /// <returns></returns>
         public static MsvmComputerSystem GetByName(ManagementScope managementScope, string name)
         {
-            FoundationContract.Requires<ArgumentNullException>(managementScope != null);
+            Assert.IsNotNull(managementScope);
 
             var query = $"SELECT * FROM Msvm_ComputerSystem WHERE Name='{name}'";
             var list = managementScope.ExecuteQuery(query, mo => new MsvmComputerSystem(mo));
@@ -79,8 +81,8 @@ namespace Foundation.Management
         public static List<MsvmComputerSystem> GetByElementNames(ManagementScope managementScope,
             IEnumerable<string> elementNames)
         {
-            FoundationContract.Requires<ArgumentNullException>(managementScope != null);
-            FoundationContract.Requires<ArgumentNullException>(elementNames != null);
+            Assert.IsNotNull(managementScope);
+            Assert.IsNotNull(elementNames);
 
             var sb = new StringBuilder();
             sb.AppendFormat("SELECT * FROM Msvm_ComputerSystem WHERE");

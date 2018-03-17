@@ -1,6 +1,6 @@
-﻿using System;
-using System.Management;
-using Foundation.Diagnostics.Contracts;
+﻿using System.Management;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Management
 {
@@ -17,7 +17,7 @@ namespace Foundation.Management
         /// <param name="managementObject"></param>
         public ManagementJob(ManagementObject managementObject)
         {
-            FoundationContract.Requires<ArgumentNullException>(managementObject != null);
+            Assert.IsNotNull(managementObject);
 
             _managementObject = managementObject;
         }

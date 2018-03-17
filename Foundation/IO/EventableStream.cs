@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.IO
 {
@@ -17,7 +18,7 @@ namespace Foundation.IO
         /// <param name="stream"></param>
         public EventableStream(Stream stream)
         {
-            FoundationContract.Requires<ArgumentNullException>(stream != null);
+            Assert.IsNotNull(stream);
 
             _stream = stream;
         }

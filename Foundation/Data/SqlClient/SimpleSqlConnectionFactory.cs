@@ -5,7 +5,8 @@ using System.Globalization;
 using System.Security.Principal;
 using Foundation.Configuration;
 using Foundation.Data.SqlClient.SqlLoggedSqlConnection;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data.SqlClient
 {
@@ -27,7 +28,7 @@ namespace Foundation.Data.SqlClient
         /// <param name="nodeName"></param>
         public SimpleSqlConnectionFactory(ConfigurationSection section, string nodeName)
         {
-            FoundationContract.Requires<ArgumentNullException>(section != null);
+            Assert.IsNotNull(section);
 
             var node = section.SelectNode(nodeName, true);
             _connectionString = node.Attributes["ConnectionString"].GetValue<string>();

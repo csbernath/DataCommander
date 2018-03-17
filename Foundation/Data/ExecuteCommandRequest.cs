@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data
 {
@@ -11,8 +12,8 @@ namespace Foundation.Data
 
         public ExecuteCommandRequest(CreateCommandRequest createCommandRequest, Action<IDbCommand> execute)
         {
-            FoundationContract.Requires<ArgumentNullException>(createCommandRequest != null);
-            FoundationContract.Requires<ArgumentNullException>(execute != null);
+            Assert.IsNotNull(createCommandRequest);
+            Assert.IsNotNull(execute);
 
             CreateCommandRequest = createCommandRequest;
             Execute = execute;

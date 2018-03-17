@@ -1,5 +1,6 @@
 ﻿using System;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation
 {
@@ -17,7 +18,7 @@ namespace Foundation
         /// <param name="type"></param>
         public TypeIsSelection(Type type)
         {
-            FoundationContract.Requires<ArgumentNullException>(type != null);
+            Assert.IsNotNull(type);
             this.type = type;
         }
 
@@ -29,7 +30,7 @@ namespace Foundation
         /// <returns></returns>
         public TypeIsSelection IfTypeIs<T>(Action action)
         {
-            FoundationContract.Requires<ArgumentNullException>(action != null);
+            Assert.IsNotNull(action);
 
             if (!selected && type == typeof (T))
             {
@@ -46,7 +47,7 @@ namespace Foundation
         /// <param name="action"></param>
         public void Else(Action action)
         {
-            FoundationContract.Requires<ArgumentNullException>(action != null);
+            Assert.IsNotNull(action);
 
             if (!selected)
                 action();

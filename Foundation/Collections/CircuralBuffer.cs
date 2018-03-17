@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
@@ -85,7 +87,7 @@ namespace Foundation.Collections
         /// <param name="items"></param>
         public void AddTail(IEnumerable<T> items)
         {
-            FoundationContract.Requires<ArgumentNullException>(items != null);
+            Assert.IsNotNull(items);
 
             foreach (var item in items)
             {

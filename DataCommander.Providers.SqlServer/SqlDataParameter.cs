@@ -1,5 +1,5 @@
-﻿using System;
-using Foundation.Diagnostics.Contracts;
+﻿using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace DataCommander.Providers.SqlServer
 {
@@ -12,8 +12,7 @@ namespace DataCommander.Providers.SqlServer
         public SqlDataParameter(SqlParameter parameter)
             : base(parameter, parameter.Size, parameter.Precision, parameter.Scale)
         {
-            FoundationContract.Requires<ArgumentNullException>(parameter != null);
-
+            Assert.IsNotNull(parameter);
             this.parameter = parameter;
         }
 

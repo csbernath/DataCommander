@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Diagnostics
 {
@@ -27,7 +27,7 @@ namespace Foundation.Diagnostics
         /// <param name="toString"></param>
         public Int64PerformanceCounter(string name, Func<long, string> toString)
         {
-            FoundationContract.Requires<ArgumentNullException>(toString != null);
+            Assert.IsNotNull(toString);
 
             this.name = name;
             this.toString = toString;

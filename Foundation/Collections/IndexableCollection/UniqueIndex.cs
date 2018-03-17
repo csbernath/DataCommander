@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.IndexableCollection
@@ -324,9 +326,9 @@ namespace Foundation.Collections.IndexableCollection
 
         private void Initialize(string name, Func<T, GetKeyResponse<TKey>> getKey, IDictionary<TKey, T> dictionary)
         {
-            FoundationContract.Requires<ArgumentNullException>(name != null);
-            FoundationContract.Requires<ArgumentNullException>(getKey != null);
-            FoundationContract.Requires<ArgumentNullException>(dictionary != null);
+            Assert.IsNotNull(name);
+            Assert.IsNotNull(getKey);
+            Assert.IsNotNull(dictionary);
 
             Name = name;
             _getKey = getKey;

@@ -2,7 +2,8 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data.SqlClient
 {
@@ -18,7 +19,7 @@ namespace Foundation.Data.SqlClient
         /// <returns></returns>
         public static string ToLogString(this SqlCommand command)
         {
-            FoundationContract.Requires<ArgumentNullException>(command != null);
+            Assert.IsNotNull(command);
 
             var sb = new StringBuilder();
             switch (command.CommandType)

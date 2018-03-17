@@ -1,5 +1,6 @@
 ﻿using System;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Text
 {
@@ -20,7 +21,7 @@ namespace Foundation.Text
             StringTableColumnAlign align,
             Func<T, string> toStringFunction)
         {
-            FoundationContract.Requires<ArgumentNullException>(toStringFunction != null);
+            Assert.IsNotNull(toStringFunction);
 
             ColumnName = columnName;
             Align = align;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Configuration
@@ -119,8 +121,8 @@ namespace Foundation.Configuration
         /// <param name="childNode"></param>
         public void RemoveChildNode(ConfigurationNode childNode)
         {
-            FoundationContract.Requires<ArgumentNullException>(childNode != null);
-            FoundationContract.Requires<ArgumentNullException>(this == childNode.Parent);
+            Assert.IsNotNull(childNode);
+            Assert.IsValidOperation(this == childNode.Parent);
 
             ChildNodes.Remove(childNode);
             childNode.Parent = null;
@@ -156,7 +158,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public ConfigurationNode CreateNode(string nodeName)
         {
-            FoundationContract.Requires<ArgumentNullException>(nodeName != null);
+            Assert.IsNotNull(nodeName);
 
             var node = this;
             var nodeNames = nodeName.Split(Delimiter);
@@ -258,7 +260,7 @@ namespace Foundation.Configuration
         /// <param name="level">Recursion level</param>
         public void WriteDocumentation(TextWriter textWriter, int level)
         {
-            FoundationContract.Requires<ArgumentNullException>(textWriter != null);
+            Assert.IsNotNull(textWriter);
 
             var sb = new StringBuilder();
             var indent = new string(' ', level * 2);

@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Data;
 using System.Data.Common;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data
 {
@@ -28,8 +29,8 @@ namespace Foundation.Data
         /// <param name="getValues"></param>
         public MappedDataReader(IDataReader dataReader, GetValues getValues)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataReader != null);
-            FoundationContract.Requires<ArgumentNullException>(getValues != null);
+            Assert.IsNotNull(dataReader);
+            Assert.IsNotNull(getValues);
 
             _dataReader = dataReader;
             _getValues = getValues;

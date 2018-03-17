@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data.TextData
@@ -28,9 +30,9 @@ namespace Foundation.Data.TextData
         /// <param name="converters"></param>
         public TextDataStreamReader(TextReader textReader, IList<TextDataColumn> columns, IList<ITextDataConverter> converters)
         {
-            FoundationContract.Requires<ArgumentNullException>(textReader != null);
-            FoundationContract.Requires<ArgumentNullException>(columns != null);
-            FoundationContract.Requires<ArgumentNullException>(converters != null);
+            Assert.IsNotNull(textReader);
+            Assert.IsNotNull(columns);
+            Assert.IsNotNull(converters);
 
             _textReader = textReader;
             _columns = columns;

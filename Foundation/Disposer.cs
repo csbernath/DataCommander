@@ -1,5 +1,6 @@
 ﻿using System;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation
 {
@@ -17,7 +18,7 @@ namespace Foundation
         /// <param name="dispose"></param>
         public Disposer(Action dispose)
         {
-            FoundationContract.Requires<ArgumentNullException>(dispose != null);
+            Assert.IsNotNull(dispose);
 
             this.dispose = dispose;
         }

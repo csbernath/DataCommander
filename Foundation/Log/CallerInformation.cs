@@ -7,27 +7,16 @@ namespace Foundation.Log
     /// </summary>
     public sealed class CallerInformation
     {
+        public readonly string CallerMemberName;
+        public readonly string CallerFilePath;
+        public readonly int CallerLineNumber;
+
         private CallerInformation(string callerMemberName, string callerFilePath, int callerLineNumber)
         {
             CallerMemberName = callerMemberName;
             CallerFilePath = callerFilePath;
             CallerLineNumber = callerLineNumber;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string CallerMemberName { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string CallerFilePath { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public int CallerLineNumber { get; }
 
         /// <summary>
         /// 

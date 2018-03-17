@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Threading;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
@@ -102,7 +104,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static IEnumerable<IDataReader> AsEnumerable(this IDataReader dataReader)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataReader != null);
+            Assert.IsNotNull(dataReader);
 
             while (dataReader.Read())
             {
@@ -119,8 +121,8 @@ namespace Foundation.Data
         /// <returns></returns>
         public static int Fill(this IDataReader dataReader, DataSet dataSet, CancellationToken cancellationToken)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataReader != null);
-            FoundationContract.Requires<ArgumentNullException>(dataSet != null);
+            Assert.IsNotNull(dataReader);
+            Assert.IsNotNull(dataSet);
 
             var rowCount = 0;
 
@@ -154,8 +156,8 @@ namespace Foundation.Data
         /// <returns></returns>
         public static int Fill(this IDataReader dataReader, DataTable dataTable, CancellationToken cancellationToken)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataReader != null);
-            FoundationContract.Requires<ArgumentNullException>(dataTable != null);
+            Assert.IsNotNull(dataReader);
+            Assert.IsNotNull(dataTable);
 
             var schemaTable = dataReader.GetSchemaTable();
 

@@ -32,7 +32,7 @@ namespace Foundation.Diagnostics
             string collectionName,
             string itemName )
         {
-            FoundationContract.Requires<ArgumentNullException>( collection != null );
+            Assert.IsNotNull( collection != null );
             bool contains = collection.Contains( item );
             if (!contains)
             {
@@ -63,7 +63,7 @@ namespace Foundation.Diagnostics
             string collectionName,
             string predicateText )
         {
-            FoundationContract.Requires<ArgumentNullException>( predicate != null );
+            Assert.IsNotNull( predicate != null );
             var enumerable = (IEnumerable<T>)collection;
             var indexedItem = enumerable.IndexOf( predicate );
             int index = indexedItem != null ? indexedItem.Index : -1;
@@ -96,7 +96,7 @@ namespace Foundation.Diagnostics
             string dictionaryName,
             string keyName )
         {
-            FoundationContract.Requires<ArgumentNullException>( dictionary != null );
+            Assert.IsNotNull( dictionary != null );
             bool containsKey = dictionary.Contains( key );
 
             if (!containsKey)
@@ -129,7 +129,7 @@ namespace Foundation.Diagnostics
             string dictionaryName,
             string keyName )
         {
-            FoundationContract.Requires<ArgumentNullException>( dictionary != null );
+            Assert.IsNotNull( dictionary != null );
             bool containsKey = dictionary.ContainsKey( key );
 
             if (!containsKey)
@@ -158,7 +158,7 @@ namespace Foundation.Diagnostics
             string collectionName,
             string itemName )
         {
-            FoundationContract.Requires<ArgumentNullException>( collection != null );
+            Assert.IsNotNull( collection != null );
             bool contains = collection.Contains( item );
 
             if (contains)
@@ -191,7 +191,7 @@ namespace Foundation.Diagnostics
             string dictionaryName,
             string keyName )
         {
-            FoundationContract.Requires<ArgumentNullException>( dictionary != null );
+            Assert.IsNotNull( dictionary != null );
             bool containsKey = dictionary.ContainsKey( key );
 
             if (containsKey)

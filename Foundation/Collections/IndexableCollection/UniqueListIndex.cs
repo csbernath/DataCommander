@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.IndexableCollection
@@ -26,9 +28,9 @@ namespace Foundation.Collections.IndexableCollection
             Func<T, TKey> keySelector,
             IList<T> list)
         {
-            FoundationContract.Requires<ArgumentNullException>(name != null);
-            FoundationContract.Requires<ArgumentNullException>(keySelector != null);
-            FoundationContract.Requires<ArgumentNullException>(list != null);
+            Assert.IsNotNull(name);
+            Assert.IsNotNull(keySelector);
+            Assert.IsNotNull(list);
 
             Name = name;
             _keySelector = keySelector;

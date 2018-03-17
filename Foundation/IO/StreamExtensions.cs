@@ -29,8 +29,8 @@ namespace Foundation.IO
         /// <param name="bufferSize"></param>
         public static void CopyTo( this Stream inputStream, Stream outputStream, int bufferSize )
         {
-            FoundationContract.Requires<ArgumentNullException>( inputStream != null );
-            FoundationContract.Requires<ArgumentNullException>( outputStream != null );
+            Assert.IsNotNull( inputStream != null );
+            Assert.IsNotNull( outputStream != null );
             FoundationContract.Requires<ArgumentOutOfRangeException>( bufferSize > 0 );
 
             var buffer = new byte[bufferSize];

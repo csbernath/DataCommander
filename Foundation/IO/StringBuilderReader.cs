@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.IO
 {
@@ -19,7 +20,7 @@ namespace Foundation.IO
         /// <param name="stringBuilder"></param>
         public StringBuilderReader(StringBuilder stringBuilder)
         {
-            FoundationContract.Requires<ArgumentNullException>(stringBuilder != null);
+            Assert.IsNotNull(stringBuilder);
 
             _stringBuilder = stringBuilder;
         }

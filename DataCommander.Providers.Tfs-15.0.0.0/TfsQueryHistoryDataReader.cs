@@ -1,6 +1,7 @@
 ﻿using Foundation;
 using Foundation.Data;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace DataCommander.Providers.Tfs
 {
@@ -24,7 +25,7 @@ namespace DataCommander.Providers.Tfs
 
         public TfsQueryHistoryDataReader(TfsCommand command)
         {
-            FoundationContract.Requires<ArgumentNullException>(command != null);
+            Assert.IsNotNull(command);
 
             this.command = command;
         }
@@ -49,29 +50,29 @@ namespace DataCommander.Providers.Tfs
             {
                 first = false;
                 var parameters = command.Parameters;
-                var path = (string)parameters["path"].Value;
+                var path = (string) parameters["path"].Value;
                 var version = VersionSpec.Latest;
                 var deletionId = 0;
                 var parameter = parameters.FirstOrDefault(p => p.ParameterName == "recursion");
                 RecursionType recursion;
                 if (parameter != null && parameter.Value != null && parameter.Value != DBNull.Value)
                 {
-                    recursion = Enum<RecursionType>.Parse((string)parameter.Value);
+                    recursion = Enum<RecursionType>.Parse((string) parameter.Value);
                 }
                 else
                 {
                     recursion = RecursionType.Full;
                 }
 
-                parameter = parameters.FirstOrDefault(p=>p.ParameterName == "user");
+                parameter = parameters.FirstOrDefault(p => p.ParameterName == "user");
                 var user = parameter != null ? Database.GetValueOrDefault<string>(parameter.Value) : null;
                 VersionSpec versionFrom = null;
                 VersionSpec versionTo = null;
-                parameter = parameters.FirstOrDefault( p => p.ParameterName == "maxCount" );
+                parameter = parameters.FirstOrDefault(p => p.ParameterName == "maxCount");
                 int maxCount;
                 if (parameter != null)
                 {
-                    maxCount = Database.GetValueOrDefault<int>( parameter.Value );
+                    maxCount = Database.GetValueOrDefault<int>(parameter.Value);
                     if (maxCount == 0)
                     {
                         maxCount = (int) parameter.DefaultValue;
@@ -79,13 +80,14 @@ namespace DataCommander.Providers.Tfs
                 }
                 else
                 {
-                    maxCount = (int)TfsDataReaderFactory.Dictionary[ command.CommandText ].Parameters[ "maxCount" ].DefaultValue;
+                    maxCount = (int) TfsDataReaderFactory.Dictionary[command.CommandText].Parameters["maxCount"].DefaultValue;
                 }
 
                 parameter = parameters.FirstOrDefault(p => p.ParameterName == "includeChanges");
                 var includeChanges = parameter != null ? Database.GetValueOrDefault<bool>(parameters["includeChanges"].Value) : false;
                 var slotMode = Database.GetValueOrDefault<bool>(parameters["slotMode"].Value);
-                var changesets = command.Connection.VersionControlServer.QueryHistory(path, version, deletionId, recursion, user, versionFrom, versionTo, maxCount, includeChanges, slotMode);
+                var changesets = command.Connection.VersionControlServer.QueryHistory(path, version, deletionId, recursion, user, versionFrom, versionTo, maxCount, includeChanges,
+                    slotMode);
                 enumerator = AsEnumerable(changesets).GetEnumerator();
             }
 

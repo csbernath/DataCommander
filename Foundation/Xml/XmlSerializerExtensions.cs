@@ -1,8 +1,8 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Xml
 {
@@ -20,7 +20,7 @@ namespace Foundation.Xml
         /// <returns></returns>
         public static string SerializeToXmlString(this XmlSerializer xmlSerializer, XmlWriterSettings xmlWriterSettings, object o)
         {
-            FoundationContract.Requires<ArgumentNullException>(xmlSerializer != null);
+            Assert.IsNotNull(xmlSerializer);
 
             var sb = new StringBuilder();
 

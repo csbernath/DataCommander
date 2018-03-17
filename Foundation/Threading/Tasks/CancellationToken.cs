@@ -15,7 +15,7 @@ namespace Foundation.Threading.Tasks
 
         internal CancellationToken( CancellationTokenSource source )
         {
-            FoundationContract.Requires<ArgumentNullException>( source != null );
+            Assert.IsNotNull( source != null );
             this.source = source;
         }
 

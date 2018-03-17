@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
@@ -23,7 +25,7 @@ namespace Foundation.Collections
         {
             FoundationContract.Requires<ArgumentOutOfRangeException>(minIndex >= 0);
             FoundationContract.Requires<ArgumentOutOfRangeException>(minIndex <= maxIndex);
-            FoundationContract.Requires<ArgumentNullException>(compareTo != null);
+            Assert.IsNotNull(compareTo);
 
             var result = -1;
 

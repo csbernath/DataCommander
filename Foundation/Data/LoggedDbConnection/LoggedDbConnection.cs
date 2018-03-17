@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data.LoggedDbConnection
 {
@@ -22,7 +23,7 @@ namespace Foundation.Data.LoggedDbConnection
         /// <param name="connection"></param>
         public LoggedDbConnection(IDbConnection connection)
         {
-            FoundationContract.Requires<ArgumentNullException>(connection != null);
+            Assert.IsNotNull(connection);
 
             _connection = connection;
         }

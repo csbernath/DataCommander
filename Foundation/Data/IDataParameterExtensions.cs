@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data
 {
@@ -28,8 +29,8 @@ namespace Foundation.Data
         /// <param name="value"></param>
         public static void SetValue<T>( this IDataParameter parameter, DataParameterValue<T> value )
         {
-            FoundationContract.Requires<ArgumentNullException>( parameter != null );
-            FoundationContract.Requires<ArgumentNullException>( value.Type == DataParameterValueType.Value || value.Type == DataParameterValueType.Null || value.Type == DataParameterValueType.Default );
+            Assert.IsNotNull(parameter);
+            Assert.IsInRange(value.Type == DataParameterValueType.Value || value.Type == DataParameterValueType.Null || value.Type == DataParameterValueType.Default);
 
             object valueObject;
 

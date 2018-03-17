@@ -1,5 +1,6 @@
 ﻿using System;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation
 {
@@ -48,7 +49,7 @@ namespace Foundation
         /// <returns></returns>
         public static int Select(Func<bool>[] selections)
         {
-            FoundationContract.Requires<ArgumentNullException>(selections != null);
+            Assert.IsNotNull(selections);
 
             var selectedIndex = -1;
 
@@ -192,7 +193,7 @@ namespace Foundation
         /// <param name="selections"></param>
         public MultipleDispatchSelection(params Func<TArgument, bool>[] selections)
         {
-            FoundationContract.Requires<ArgumentNullException>(selections != null);
+            Assert.IsNotNull(selections);
             this.selections = selections;
         }
 

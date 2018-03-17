@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data
 {
@@ -17,7 +18,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static bool? GetNullableBoolean(this IDataRecord dataRecord, int columnIndex)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataRecord != null);
+            Assert.IsNotNull(dataRecord);
 
             return dataRecord.IsDBNull(columnIndex)
                 ? (bool?)null
@@ -32,7 +33,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static DateTime? GetNullableDateTime(this IDataRecord dataRecord, int columnIndex)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataRecord != null);
+            Assert.IsNotNull(dataRecord);
 
             return dataRecord.IsDBNull(columnIndex)
                 ? (DateTime?)null
@@ -47,7 +48,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static decimal? GetNullableDecimal(this IDataRecord dataRecord, int columnIndex)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataRecord != null);
+            Assert.IsNotNull(dataRecord);
 
             return dataRecord.IsDBNull(columnIndex)
                 ? (decimal?)null
@@ -62,7 +63,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static Guid? GetNullableGuid(this IDataRecord dataRecord, int columnIndex)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataRecord != null);
+            Assert.IsNotNull(dataRecord);
 
             return dataRecord.IsDBNull(columnIndex)
                 ? (Guid?) null
@@ -77,7 +78,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static short? GetNullableInt16(this IDataRecord dataRecord, int columnIndex)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataRecord != null);
+            Assert.IsNotNull(dataRecord);
 
             return dataRecord.IsDBNull(columnIndex)
                 ? (short?)null
@@ -92,7 +93,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static int? GetNullableInt32(this IDataRecord dataRecord, int columnIndex)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataRecord != null);
+            Assert.IsNotNull(dataRecord);
 
             return dataRecord.IsDBNull(columnIndex)
                 ? (int?)null

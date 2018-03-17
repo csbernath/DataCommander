@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.IndexableCollection
@@ -34,9 +36,9 @@ namespace Foundation.Collections.IndexableCollection
             IDictionary<TKey, ICollection<T>> dictionary,
             Func<ICollection<T>> createCollection)
         {
-            FoundationContract.Requires<ArgumentNullException>(getKey != null);
-            FoundationContract.Requires<ArgumentNullException>(dictionary != null);
-            FoundationContract.Requires<ArgumentNullException>(createCollection != null);
+            Assert.IsNotNull(getKey);
+            Assert.IsNotNull(dictionary);
+            Assert.IsNotNull(createCollection);
             
             Initialize(name, getKey, dictionary, createCollection);
         }
@@ -269,9 +271,9 @@ namespace Foundation.Collections.IndexableCollection
             IDictionary<TKey, ICollection<T>> dictionary,
             Func<ICollection<T>> createCollection)
         {
-            FoundationContract.Requires<ArgumentNullException>(getKey != null);
-            FoundationContract.Requires<ArgumentNullException>(dictionary != null);
-            FoundationContract.Requires<ArgumentNullException>(createCollection != null);
+            Assert.IsNotNull(getKey);
+            Assert.IsNotNull(dictionary);
+            Assert.IsNotNull(createCollection);
 
             Name = name;
             _getKey = getKey;

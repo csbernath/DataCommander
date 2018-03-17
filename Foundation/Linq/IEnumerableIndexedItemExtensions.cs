@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Linq
 {
@@ -20,8 +21,8 @@ namespace Foundation.Linq
         [Pure]
         public static IndexedItem<TSource> FirstIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            FoundationContract.Requires<ArgumentNullException>(source != null);
-            FoundationContract.Requires<ArgumentNullException>(predicate != null);
+            Assert.IsNotNull(source);
+            Assert.IsNotNull(predicate);
 
             var firstIndex = -1;
             var firstItem = default(TSource);
@@ -49,8 +50,8 @@ namespace Foundation.Linq
         [Pure]
         public static IndexedItem<TSource> ExtremumIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, TSource, bool> firstArgumentIsExtremum)
         {
-            FoundationContract.Requires<ArgumentNullException>(source != null);
-            FoundationContract.Requires<ArgumentNullException>(firstArgumentIsExtremum != null);
+            Assert.IsNotNull(source);
+            Assert.IsNotNull(firstArgumentIsExtremum);
 
             var extremumIndex = -1;
             var extremumItem = default(TSource);
@@ -79,8 +80,8 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static IndexedItem<TSource> MinIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, int> selector)
         {
-            FoundationContract.Requires<ArgumentNullException>(source != null);
-            FoundationContract.Requires<ArgumentNullException>(selector != null);
+            Assert.IsNotNull(source);
+            Assert.IsNotNull(selector);
 
             var minIndex = -1;
             var minItem = default(TSource);

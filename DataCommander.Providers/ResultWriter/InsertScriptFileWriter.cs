@@ -1,4 +1,5 @@
-﻿using Foundation.Diagnostics.Contracts;
+﻿using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace DataCommander.Providers.ResultWriter
 {
@@ -53,7 +54,7 @@ namespace DataCommander.Providers.ResultWriter
 
         public InsertScriptFileWriter(string tableName, TextWriter messageWriter)
         {
-            FoundationContract.Requires<ArgumentNullException>(messageWriter != null);
+            Assert.IsNotNull(messageWriter);
 
             _tableName = tableName;
             _messageWriter = messageWriter;

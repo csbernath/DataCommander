@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data.TextData
@@ -13,9 +14,9 @@ namespace Foundation.Data.TextData
 
         public TextDataStreamWriter(TextWriter textWriter, IList<TextDataColumn> columns, IList<ITextDataConverter> converters)
         {
-            FoundationContract.Requires<ArgumentNullException>(textWriter != null);
-            FoundationContract.Requires<ArgumentNullException>(columns != null);
-            FoundationContract.Requires<ArgumentNullException>(converters != null);
+            Assert.IsNotNull(textWriter);
+            Assert.IsNotNull(columns);
+            Assert.IsNotNull(converters);
 
             _textWriter = textWriter;
             Columns = columns;
@@ -26,8 +27,8 @@ namespace Foundation.Data.TextData
 
         public void WriteRow(object[] values)
         {
-            FoundationContract.Requires<ArgumentNullException>(values != null);
-            FoundationContract.Requires<ArgumentNullException>(Columns.Count == values.Length);
+            Assert.IsNotNull(values);
+            Assert.IsTrue(Columns.Count == values.Length);
 
             for (var i = 0; i < values.Length; i++)
             {

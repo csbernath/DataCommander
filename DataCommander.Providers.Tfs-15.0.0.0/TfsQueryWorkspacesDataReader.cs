@@ -1,69 +1,68 @@
-﻿using Foundation.Data;
-using Foundation.Diagnostics.Contracts;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using Foundation.Data;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
+using Microsoft.TeamFoundation.VersionControl.Client;
 
 namespace DataCommander.Providers.Tfs
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using Microsoft.TeamFoundation.VersionControl.Client;
-
     internal sealed class TfsQueryWorkspacesDataReader : TfsDataReader
     {
-        private static DataTable schemaTable;
-        private readonly TfsCommand command;
-        private bool first = true;
-        private Workspace[] workspaces;
-        private IEnumerator<Tuple<int, int>> enumerator;
-        private int index;
+        private static readonly DataTable SchemaTable;
+        private readonly TfsCommand _command;
+        private bool _first = true;
+        private Workspace[] _workspaces;
+        private IEnumerator<Tuple<int, int>> _enumerator;
+        private int _index;
 
         static TfsQueryWorkspacesDataReader()
         {
-            schemaTable = CreateSchemaTable();
-            AddSchemaRowString(schemaTable, "Computer", false);
-            AddSchemaRowString(schemaTable, "OwnerName", false);
-            AddSchemaRowString(schemaTable, "Name", false);
-            AddSchemaRowString(schemaTable, "Comment", false);
-            AddSchemaRowString(schemaTable, "DisplayName", false);
-            AddSchemaRowString(schemaTable, "FolderType", false);
-            AddSchemaRowBoolean(schemaTable, "IsCloaked", false);
-            AddSchemaRowString(schemaTable, "FolderServerItem", false);
-            AddSchemaRowString(schemaTable, "FolderLocalItem", false);
+            SchemaTable = CreateSchemaTable();
+            AddSchemaRowString(SchemaTable, "Computer", false);
+            AddSchemaRowString(SchemaTable, "OwnerName", false);
+            AddSchemaRowString(SchemaTable, "Name", false);
+            AddSchemaRowString(SchemaTable, "Comment", false);
+            AddSchemaRowString(SchemaTable, "DisplayName", false);
+            AddSchemaRowString(SchemaTable, "FolderType", false);
+            AddSchemaRowBoolean(SchemaTable, "IsCloaked", false);
+            AddSchemaRowString(SchemaTable, "FolderServerItem", false);
+            AddSchemaRowString(SchemaTable, "FolderLocalItem", false);
         }
 
         public TfsQueryWorkspacesDataReader(TfsCommand command)
         {
-            FoundationContract.Requires<ArgumentNullException>(command != null);
-
-            this.command = command;
+            Assert.IsNotNull(command);
+            this._command = command;
         }
 
         public override DataTable GetSchemaTable()
         {
-            return schemaTable;
+            return SchemaTable;
         }
 
         public override bool Read()
         {
             bool read;
 
-            if (first)
+            if (_first)
             {
-                first = false;
-                var parameters = command.Parameters;
+                _first = false;
+                var parameters = _command.Parameters;
                 var workspace = Database.GetValueOrDefault<string>(parameters["workspace"].Value);
                 var owner = Database.GetValueOrDefault<string>(parameters["owner"].Value);
                 var computer = Database.GetValueOrDefault<string>(parameters["computer"].Value);
-                workspaces = command.Connection.VersionControlServer.QueryWorkspaces(workspace, owner, computer);
-                enumerator = AsEnumerable(workspaces).GetEnumerator();
+                _workspaces = _command.Connection.VersionControlServer.QueryWorkspaces(workspace, owner, computer);
+                _enumerator = AsEnumerable(_workspaces).GetEnumerator();
             }
 
-            var moveNext = enumerator.MoveNext();
+            var moveNext = _enumerator.MoveNext();
 
             if (moveNext)
             {
-                var pair = enumerator.Current;
-                var workspace = workspaces[pair.Item1];
+                var pair = _enumerator.Current;
+                var workspace = _workspaces[pair.Item1];
                 var folderIndex = pair.Item2;
 
                 var values = new object[]
@@ -90,7 +89,7 @@ namespace DataCommander.Providers.Tfs
 
                 Values = values;
                 read = true;
-                index++;
+                _index++;
             }
             else
             {
@@ -112,16 +111,10 @@ namespace DataCommander.Providers.Tfs
                 var folders = workspace.Folders;
 
                 if (folders.Length > 0)
-                {
                     for (var j = 0; j < folders.Length; j++)
-                    {
                         yield return Tuple.Create(i, j);
-                    }
-                }
                 else
-                {
                     yield return Tuple.Create(i, -1);
-                }
             }
         }
     }

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Globalization;
 using Foundation.Collections.IndexableCollection;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data.TextData
@@ -41,7 +43,7 @@ namespace Foundation.Data.TextData
         {
             get
             {
-                FoundationContract.Requires<ArgumentNullException>(Contains(columnName));
+                Assert.IsValidOperation(Contains(columnName));
 
                 return _nameIndex[columnName];
             }

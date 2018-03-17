@@ -23,7 +23,7 @@ namespace Foundation.Threading.Tasks
         /// <param name="taskCreationOptions"></param>
         public Task( Func<object, TResult> function, object state, CancellationToken cancellationToken, TaskCreationOptions taskCreationOptions )
         {
-            FoundationContract.Requires<ArgumentNullException>( function != null );
+            Assert.IsNotNull( function != null );
             this.function = function;
             this.Construct( this.Invoke, state, cancellationToken, taskCreationOptions );
         }

@@ -1,6 +1,8 @@
-﻿#if FOUNDATION_3_5
-namespace Foundation.Diagnostics
+﻿using System;
+
+namespace Foundation.Diagnostics.Assertions
 {
+#if FOUNDATION_3_5
     using System;
     using System.Diagnostics;
     using Foundation.Linq;
@@ -498,5 +500,32 @@ namespace Foundation.Diagnostics
             }
         }
     }
-}
 #endif
+
+    public static class Assert
+    {
+        public static void IsTrue(bool condition)
+        {
+            if (!condition)
+                throw new ArgumentException();
+        }
+
+        public static void IsNotNull<T>(T value) where T : class
+        {
+            if (value == null)
+                throw new ArgumentNullException();
+        }
+
+        public static void IsInRange(bool condition)
+        {
+            if (!condition)
+                throw new ArgumentOutOfRangeException();
+        }
+
+        public static void IsValidOperation(bool condition)
+        {
+            if (!condition)
+                throw new InvalidOperationException();
+        }
+    }
+}

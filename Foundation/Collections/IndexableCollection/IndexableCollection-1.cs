@@ -1,5 +1,5 @@
-﻿using System;
-using Foundation.Diagnostics.Contracts;
+﻿using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Collections.IndexableCollection
 {
@@ -50,7 +50,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="defaultIndex"></param>
         public IndexableCollection(ICollectionIndex<T> defaultIndex)
         {
-            FoundationContract.Requires<ArgumentNullException>(defaultIndex != null);
+            Assert.IsNotNull(defaultIndex);
             //FoundationContract.Ensures(this.Indexes.Count == 1);
 
             _defaultIndex = defaultIndex;

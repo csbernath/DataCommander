@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data.LoggedDbConnection
 {
@@ -10,18 +11,16 @@ namespace Foundation.Data.LoggedDbConnection
         private readonly EventHandler<AfterReadEventArgs> _afterRead;
         private int _rowCount;
 
-        public LoggedDataReader(
-            IDataReader dataReader,
-            EventHandler<AfterReadEventArgs> afterRead)
+        public LoggedDataReader(IDataReader dataReader, EventHandler<AfterReadEventArgs> afterRead)
         {
-            FoundationContract.Requires<ArgumentNullException>(dataReader != null);
-            FoundationContract.Requires<ArgumentNullException>(afterRead != null);
+            Assert.IsNotNull(dataReader);
+            Assert.IsNotNull(afterRead);
 
             _dataReader = dataReader;
             _afterRead = afterRead;
         }
 
-#region IDataReader Members
+        #region IDataReader Members
 
         void IDataReader.Close()
         {
@@ -60,18 +59,18 @@ namespace Foundation.Data.LoggedDbConnection
 
         int IDataReader.RecordsAffected => _dataReader.RecordsAffected;
 
-#endregion
+        #endregion
 
-#region IDisposable Members
+        #region IDisposable Members
 
         void IDisposable.Dispose()
         {
             _dataReader.Dispose();
         }
 
-#endregion
+        #endregion
 
-#region IDataRecord Members
+        #region IDataRecord Members
 
         int IDataRecord.FieldCount => _dataReader.FieldCount;
 
@@ -189,6 +188,6 @@ namespace Foundation.Data.LoggedDbConnection
 
         object IDataRecord.this[int i] => _dataReader[i];
 
-#endregion
+        #endregion
     }
 }
