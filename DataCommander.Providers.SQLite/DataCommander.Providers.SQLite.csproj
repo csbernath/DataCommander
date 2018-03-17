@@ -181,7 +181,7 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.Data.SQLite">
+    <PackageReference Include="System.Data.SQLite.Core">
       <Version>1.0.108</Version>
     </PackageReference>
   </ItemGroup>

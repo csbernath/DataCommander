@@ -30,8 +30,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.MyS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.PostgreSql", "DataCommander.Providers.PostgreSql\DataCommander.Providers.PostgreSql.csproj", "{F4553DD9-F793-4DD1-9D34-98449264018B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Tfs-14.0.0.0", "DataCommander.Providers.Tfs-14.0.0.0\DataCommander.Providers.Tfs-14.0.0.0.csproj", "{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Tfs-15.0.0.0", "DataCommander.Providers.Tfs-15.0.0.0\DataCommander.Providers.Tfs-15.0.0.0.csproj", "{3C2A1C8C-66FC-48E0-9B2E-40C697425336}"
 EndProject
 Global
@@ -295,26 +293,6 @@ Global
 		{F4553DD9-F793-4DD1-9D34-98449264018B}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{F4553DD9-F793-4DD1-9D34-98449264018B}.Test|Any CPU.Build.0 = Release|Any CPU
 		{F4553DD9-F793-4DD1-9D34-98449264018B}.Test|x86.ActiveCfg = Release|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.ClientRelease|Any CPU.ActiveCfg = Release|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.ClientRelease|Any CPU.Build.0 = Release|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.ClientRelease|x86.ActiveCfg = Release|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.ClientRelease|x86.Build.0 = Release|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Debug|x86.Build.0 = Debug|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.NDoc|Any CPU.ActiveCfg = Release|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.NDoc|Any CPU.Build.0 = Release|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.NDoc|x86.ActiveCfg = Release|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.NDoc|x86.Build.0 = Release|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Release|x86.ActiveCfg = Release|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Release|x86.Build.0 = Release|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Test|Any CPU.ActiveCfg = Release|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Test|Any CPU.Build.0 = Release|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Test|x86.ActiveCfg = Release|Any CPU
-		{DEBC416B-1DED-47D1-9012-B25A6BC2CEF8}.Test|x86.Build.0 = Release|Any CPU
 		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.ClientRelease|Any CPU.ActiveCfg = Release|Any CPU
 		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.ClientRelease|Any CPU.Build.0 = Release|Any CPU
 		{3C2A1C8C-66FC-48E0-9B2E-40C697425336}.ClientRelease|x86.ActiveCfg = Release|Any CPU
