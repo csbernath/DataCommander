@@ -1,5 +1,4 @@
 ﻿using System.Management;
-using Foundation.Diagnostics;
 using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Management

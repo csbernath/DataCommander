@@ -2,7 +2,6 @@
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Diagnostics;
-using Foundation.Diagnostics;
 using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Configuration

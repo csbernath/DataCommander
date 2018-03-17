@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using Foundation.Data;
-using Foundation.Diagnostics;
 using Foundation.Diagnostics.Assertions;
 using Microsoft.TeamFoundation.VersionControl.Client;
 

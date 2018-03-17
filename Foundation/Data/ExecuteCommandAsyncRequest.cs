@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data.Common;
 using System.Threading.Tasks;
-using Foundation.Diagnostics;
 using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data

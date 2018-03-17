@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Data;
 using System.Data.Common;
-using Foundation.Diagnostics;
 using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data

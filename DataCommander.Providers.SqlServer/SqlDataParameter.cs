@@ -1,5 +1,4 @@
-﻿using Foundation.Diagnostics;
-using Foundation.Diagnostics.Assertions;
+﻿using Foundation.Diagnostics.Assertions;
 
 namespace DataCommander.Providers.SqlServer
 {

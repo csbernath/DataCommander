@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using Foundation.Diagnostics;
 using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data

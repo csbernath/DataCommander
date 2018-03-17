@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Xml;
-using Foundation.Diagnostics;
 using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Xml

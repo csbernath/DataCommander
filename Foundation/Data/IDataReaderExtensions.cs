@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Threading;
-using Foundation.Diagnostics;
 using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 

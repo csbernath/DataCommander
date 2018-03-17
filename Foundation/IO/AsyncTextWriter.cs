@@ -2,7 +2,6 @@
 using System.IO;
 using System.Text;
 using System.Threading;
-using Foundation.Diagnostics;
 using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.IO

@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
-using Foundation.Diagnostics;
 using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data.SqlClient

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Foundation.Diagnostics;
 using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.IO

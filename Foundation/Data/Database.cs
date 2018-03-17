@@ -8,7 +8,6 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Xml;
-using Foundation.Diagnostics;
 using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 

@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Security.Principal;
 using Foundation.Configuration;
 using Foundation.Data.SqlClient.SqlLoggedSqlConnection;
-using Foundation.Diagnostics;
 using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data.SqlClient

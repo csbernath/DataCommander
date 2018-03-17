@@ -1,20 +1,18 @@
-﻿using Foundation.Diagnostics;
+﻿using System;
+using System.Data;
+using System.Data.Common;
+using System.IO;
+using System.Text;
+using DataCommander.Providers.Field;
+using DataCommander.Providers.Query;
+using Foundation.Collections;
+using Foundation.Data;
+using Foundation.Data.SqlClient;
 using Foundation.Diagnostics.Assertions;
+using Foundation.Text;
 
 namespace DataCommander.Providers.ResultWriter
 {
-    using System;
-    using System.Data;
-    using System.Data.Common;
-    using System.IO;
-    using System.Text;
-    using Field;
-    using Foundation.Collections;
-    using Foundation.Data;
-    using Foundation.Data.SqlClient;
-    using Foundation.Text;
-    using Query;
-
     internal enum FieldType
     {
         None,
