@@ -213,14 +213,6 @@
     <Compile Include="DocumentProperties\StructuredStorage\StgDocumentSummaryPropertyId.cs" />
     <Compile Include="DocumentProperties\StructuredStorage\StgSummaryPropertyId.cs" />
     <Compile Include="Linq\ExceptionExtensions.cs" />
-    <Compile Include="Management\InitiateShutdownReturnValue.cs" />
-    <Compile Include="Management\ManagementJob.cs" />
-    <Compile Include="Management\ManagementJobState.cs" />
-    <Compile Include="Management\ManagementScopeExtensions.cs" />
-    <Compile Include="Management\MsvmComputerSystem.cs" />
-    <Compile Include="Management\MsvmComputerSystemEnabledState.cs" />
-    <Compile Include="Management\MsvmComputerSystemRequestedState.cs" />
-    <Compile Include="Management\MsvmComputerSystemRequestStateChangeReturnValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceProcess\IService.cs" />
     <Compile Include="Windows\Forms\ControlExtensions.cs" />
