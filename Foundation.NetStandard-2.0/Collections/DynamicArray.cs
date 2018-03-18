@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 
@@ -76,16 +77,14 @@ namespace Foundation.Collections
         /// <param name="item"></param>
         public void Add(T item)
         {
-            FoundationContract.Assert(Count < _maxSize);
+            Assert.IsValidOperation(Count < _maxSize);
 
             if (Count == _array.Length)
             {
-                var newSize = Count == 0 ? 1 : 2* Count;
+                var newSize = Count == 0 ? 1 : 2 * Count;
 
                 if (newSize > _maxSize)
-                {
                     newSize = _maxSize;
-                }
 
                 if (newSize > Count)
                 {
@@ -105,9 +104,7 @@ namespace Foundation.Collections
         public void Clear()
         {
             if (Count > 0)
-            {
                 Array.Clear(_array, 0, Count);
-            }
 
             Count = 0;
         }
@@ -122,10 +119,7 @@ namespace Foundation.Collections
             return _array.Contains(item);
         }
 
-        void ICollection<T>.CopyTo(T[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
+        void ICollection<T>.CopyTo(T[] array, int arrayIndex) => throw new NotImplementedException();
 
         /// <summary>
         /// 
@@ -142,9 +136,9 @@ namespace Foundation.Collections
             throw new NotSupportedException();
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable<T> Members
+        #region IEnumerable<T> Members
 
         /// <summary>
         /// 
@@ -153,20 +147,15 @@ namespace Foundation.Collections
         public IEnumerator<T> GetEnumerator()
         {
             for (var i = 0; i < Count; i++)
-            {
                 yield return _array[i];
-            }
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable Members
+        #region IEnumerable Members
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-#endregion
+        #endregion
     }
 }

@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Concurrent;
-using Foundation.Diagnostics.Contracts;
+﻿using System.Collections.Concurrent;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Linq
 {
@@ -23,8 +22,8 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static int Take<T>(this IProducerConsumerCollection<T> collection, T[] target)
         {
-            FoundationContract.Requires<ArgumentNullException>(collection != null);
-            FoundationContract.Requires<ArgumentNullException>(target != null);
+            Assert.IsNotNull(collection);
+            Assert.IsNotNull(target);
 
             var i = 0;
             while (i < target.Length)

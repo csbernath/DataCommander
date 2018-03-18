@@ -1,4 +1,5 @@
 ﻿using System;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Text
@@ -16,7 +17,7 @@ namespace Foundation.Text
         /// <param name="table"></param>
         internal StringTableRow(StringTable table)
         {
-            FoundationContract.Requires<ArgumentNullException>(table != null);
+            Assert.IsNotNull(table);
 
             Table = table;
             _cells = new string[table.Columns.Count];

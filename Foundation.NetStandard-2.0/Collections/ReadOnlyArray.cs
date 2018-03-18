@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
 namespace Foundation.Collections
@@ -25,11 +24,6 @@ namespace Foundation.Collections
         }
 
         public int Count => _items.Length;
-
-        public T this[int index]
-        {
-            get => _items[index];
-            set => throw new NotSupportedException();
-        }
+        public T this[int index] => _items[index];
     }
 }

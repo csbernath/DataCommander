@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using Foundation.Linq;
 
 namespace Foundation.Log
 {

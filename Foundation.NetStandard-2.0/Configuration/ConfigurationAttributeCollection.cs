@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using Foundation.Collections.IndexableCollection;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Configuration
@@ -87,7 +88,7 @@ namespace Foundation.Configuration
         /// <param name="description"></param>
         public void Add(string name, object value, string description)
         {
-            FoundationContract.Requires<ArgumentNullException>(!ContainsKey(name));
+            Assert.IsValidOperation(!ContainsKey(name));
 
             var attribute = new ConfigurationAttribute(name, value, description);
             _collection.Add(attribute);

@@ -19,7 +19,7 @@ namespace Foundation.Linq
         public static T DequeueTail<T>(this Queue<T> queue)
         {
             Assert.IsNotNull(queue);
-            FoundationContract.Requires<ArgumentException>(queue.Count > 0);
+            Assert.IsTrue(queue.Count > 0);
 
             var array = new T[queue.Count];
             queue.CopyTo(array, 0);

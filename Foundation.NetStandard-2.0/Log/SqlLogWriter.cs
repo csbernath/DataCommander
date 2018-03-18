@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Threading;
-using Foundation.Diagnostics.Contracts;
-using Foundation.Linq;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Threading;
 
 namespace Foundation.Log
@@ -16,7 +15,7 @@ namespace Foundation.Log
     {
         #region Private Fields
 
-        private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof (SqlLogWriter));
+        private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(SqlLogWriter));
         private const int Period = 10000;
         private readonly Func<IDbConnection> _createConnection;
         private readonly Func<LogEntry, string> _logEntryToCommandText;
@@ -41,9 +40,9 @@ namespace Foundation.Log
             int commandTimeout,
             SingleThreadPool singleThreadPool)
         {
-            FoundationContract.Requires<ArgumentNullException>(createConnection != null);
-            FoundationContract.Requires<ArgumentNullException>(logEntryToCommandText != null);
-            FoundationContract.Requires<ArgumentNullException>(singleThreadPool != null);
+            Assert.IsNotNull(createConnection);
+            Assert.IsNotNull(logEntryToCommandText);
+            Assert.IsNotNull(singleThreadPool);
 
             _createConnection = createConnection;
             _logEntryToCommandText = logEntryToCommandText;
@@ -51,7 +50,7 @@ namespace Foundation.Log
             _commandTimeout = commandTimeout;
         }
 
-#region ILogWriter Members
+        #region ILogWriter Members
 
         void ILogWriter.Open()
         {
@@ -87,16 +86,16 @@ namespace Foundation.Log
             Flush();
         }
 
-#endregion
+        #endregion
 
-#region IDisposable Members
+        #region IDisposable Members
 
         void IDisposable.Dispose()
         {
             // TODO
         }
 
-#endregion
+        #endregion
 
         private void TimerCallback(object state)
         {
@@ -105,9 +104,7 @@ namespace Foundation.Log
                 if (_entryQueue.Count > 0)
                 {
                     if (_timer != null)
-                    {
                         _timer.Change(Timeout.Infinite, Timeout.Infinite);
-                    }
 
                     LogEntry[] array;
 
@@ -122,9 +119,7 @@ namespace Foundation.Log
                     _singleThreadPool.QueueUserWorkItem(WaitCallback, array);
 
                     if (_timer != null)
-                    {
                         _timer.Change(Period, Period);
-                    }
                 }
             }
         }
@@ -133,7 +128,7 @@ namespace Foundation.Log
         {
             try
             {
-                var array = (LogEntry[])state;
+                var array = (LogEntry[]) state;
                 var sb = new StringBuilder();
                 string commandText;
 

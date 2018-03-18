@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Log
 {
@@ -13,22 +13,19 @@ namespace Foundation.Log
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="applicationLog"></param>
+        /// <param name="logFactory"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static ILog GetTypeLog(this ILogFactory applicationLog, Type type)
+        public static ILog GetTypeLog(this ILogFactory logFactory, Type type)
         {
-            FoundationContract.Requires<ArgumentNullException>(applicationLog != null);
-            FoundationContract.Requires<ArgumentNullException>(type != null);
+            Assert.IsNotNull(logFactory);
+            Assert.IsNotNull(type);
 
             var name = type.FullName;
 
-            var log = applicationLog.GetLog(name);
-            var foundationLog = log as FoundationLog;
-            if (foundationLog != null)
-            {
+            var log = logFactory.GetLog(name);
+            if (log is FoundationLog foundationLog)
                 foundationLog.LoggedName = type.Name;
-            }
 
             return log;
         }
@@ -57,11 +54,8 @@ namespace Foundation.Log
             var type = stackFrame.GetMethod().DeclaringType;
             var name = $"{type.FullName}.{sectionName}";
             var log = applicationLog.GetLog(name);
-            var foundationLog = log as FoundationLog;
-            if (foundationLog != null)
-            {
+            if (log is FoundationLog foundationLog)
                 foundationLog.LoggedName = $"{type.Name}.{sectionName}";
-            }
 
             return log;
         }
@@ -79,11 +73,8 @@ namespace Foundation.Log
             var type = method.DeclaringType;
             var name = $"{type.FullName}.{method.Name}";
             var log = applicationLog.GetLog(name);
-            var foundationLog = log as FoundationLog;
-            if (foundationLog != null)
-            {
+            if (log is FoundationLog foundationLog)
                 foundationLog.LoggedName = $"{type.Name}.{method.Name}";
-            }
 
             if (parameters.Length > 0)
             {
@@ -125,18 +116,13 @@ namespace Foundation.Log
                 parameterString = value as string;
 
                 if (parameterString != null)
-                {
                     parameterString = "\"" + parameterString + '"';
-                }
                 else
-                {
                     parameterString = value.ToString();
-                }
             }
             else
-            {
                 parameterString = "null";
-            }
+
             return parameterString;
         }
     }

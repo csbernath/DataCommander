@@ -48,7 +48,7 @@ namespace Foundation.Log
             _textWriter.Write(s);
         }
 
-#region ILogWriter Members
+        #region ILogWriter Members
 
         void ILogWriter.Open()
         {
@@ -64,15 +64,15 @@ namespace Foundation.Log
             _textWriter.Close();
         }
 
-#endregion
+        #endregion
 
-#region IDisposable Members
+        #region IDisposable Members
 
         void IDisposable.Dispose()
         {
             _textWriter.Dispose();
         }
 
-#endregion
+        #endregion
     }
 }

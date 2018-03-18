@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.IndexableCollection
@@ -19,7 +19,7 @@ namespace Foundation.Collections.IndexableCollection
         /// </summary>
         public ListIndex(string name)
         {
-            FoundationContract.Requires<ArgumentNullException>(name != null);
+            Assert.IsNotNull(name);
 
             Initialize(name, new List<T>());
         }
@@ -31,8 +31,8 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="list"></param>
         public ListIndex(string name, IList<T> list)
         {
-            FoundationContract.Requires<ArgumentNullException>(name != null);
-            FoundationContract.Requires<ArgumentNullException>(list != null);
+            Assert.IsNotNull(name);
+            Assert.IsNotNull(list);
 
             Initialize(name, list);
         }
@@ -177,8 +177,8 @@ namespace Foundation.Collections.IndexableCollection
 
         private void Initialize(string name, IList<T> list)
         {
-            FoundationContract.Requires<ArgumentNullException>(name != null);
-            FoundationContract.Requires<ArgumentNullException>(list != null);
+            Assert.IsNotNull(name);
+            Assert.IsNotNull(list);
 
             Name = name;
             _list = list;

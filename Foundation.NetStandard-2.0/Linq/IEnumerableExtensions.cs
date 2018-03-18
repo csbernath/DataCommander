@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using Foundation.Collections;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Text;
 
@@ -87,8 +88,8 @@ namespace Foundation.Linq
             this IEnumerable<TSource> source,
             Func<TSource, TKey> keySelector)
         {
-            FoundationContract.Requires<ArgumentNullException>(source != null);
-            FoundationContract.Requires<ArgumentNullException>(keySelector != null);
+            Assert.IsNotNull(source);
+            Assert.IsNotNull(keySelector);
 
             return source.Select(keySelector).SelectPreviousAndCurrent();
         }
@@ -106,7 +107,7 @@ namespace Foundation.Linq
             int count,
             int partitionCount)
         {
-            FoundationContract.Requires<ArgumentNullException>(source != null);
+            Assert.IsNotNull(source);
             FoundationContract.Requires<ArgumentOutOfRangeException>(count >= 0);
             FoundationContract.Requires<ArgumentOutOfRangeException>(partitionCount > 0);
 
@@ -302,8 +303,8 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static SortedDictionary<TKey, TValue> ToSortedDictionary<TKey, TValue>(this IEnumerable<TValue> source, Func<TValue, TKey> keySelector)
         {
-            FoundationContract.Requires<ArgumentNullException>(source != null);
-            FoundationContract.Requires<ArgumentNullException>(keySelector != null);
+            Assert.IsNotNull(source);
+            Assert.IsNotNull(keySelector);
 
             var dictionary = new SortedDictionary<TKey, TValue>();
             dictionary.Add(source, keySelector);
@@ -332,7 +333,7 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static string ToString<T>(this IEnumerable<T> source, string separator, Func<T, string> toString)
         {
-            FoundationContract.Requires<ArgumentNullException>(toString != null);
+            Assert.IsNotNull(toString);
 
             string result;
             if (source != null)
@@ -368,8 +369,8 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static string ToString<TSource>(this IEnumerable<TSource> source, IReadOnlyCollection<StringTableColumnInfo<TSource>> columns)
         {
-            FoundationContract.Requires<ArgumentNullException>(source != null);
-            FoundationContract.Requires<ArgumentNullException>(columns != null);
+            Assert.IsNotNull(source);
+            Assert.IsNotNull(columns);
 
             var table = new StringTable(columns.Count);
 

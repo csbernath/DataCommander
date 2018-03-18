@@ -8,19 +8,19 @@ namespace Foundation
     /// </summary>
     public sealed class UniversalTime : IDateTimeProvider
     {
-        private static volatile int sharedTickCount;
-        private static DateTime sharedDateTime;
+        private static volatile int _sharedTickCount;
+        private static DateTime _sharedDateTime;
 
-        private readonly int increment;
-        private readonly int adjustment;
+        private readonly int _increment;
+        private readonly int _adjustment;
 
-        private int incrementedTickCount;
-        private DateTime incrementedDateTime;
+        private int _incrementedTickCount;
+        private DateTime _incrementedDateTime;
 
         static UniversalTime()
         {
-            sharedTickCount = Environment.TickCount;
-            sharedDateTime = DateTime.UtcNow;
+            _sharedTickCount = Environment.TickCount;
+            _sharedDateTime = DateTime.UtcNow;
         }
 
         /// <summary>
@@ -33,24 +33,24 @@ namespace Foundation
             FoundationContract.Requires<ArgumentOutOfRangeException>(increment >= 0);
             FoundationContract.Requires<ArgumentOutOfRangeException>(increment <= adjustment);
 
-            this.increment = increment;
-            this.adjustment = adjustment;
+            this._increment = increment;
+            this._adjustment = adjustment;
 
-            sharedDateTime = DateTime.Now;
+            _sharedDateTime = DateTime.Now;
 
-            incrementedTickCount = sharedTickCount;
-            incrementedDateTime = sharedDateTime;
+            _incrementedTickCount = _sharedTickCount;
+            _incrementedDateTime = _sharedDateTime;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static int TickCount => sharedTickCount;
+        public static int TickCount => _sharedTickCount;
 
         /// <summary>
         /// 
         /// </summary>
-        public static UniversalTime Default { get; } = new UniversalTime(increment: 16, adjustment: 60*1000);
+        public static UniversalTime Default { get; } = new UniversalTime(increment: 16, adjustment: 60 * 1000);
 
         /// <summary>
         /// 
@@ -58,8 +58,8 @@ namespace Foundation
         /// <returns></returns>
         public static int GetTickCount()
         {
-            sharedTickCount = Environment.TickCount;
-            return sharedTickCount;
+            _sharedTickCount = Environment.TickCount;
+            return _sharedTickCount;
         }
 
         /// <summary>
@@ -70,27 +70,27 @@ namespace Foundation
         {
             get
             {
-                var elapsed = GetTickCount() - incrementedTickCount;
-                if (increment <= elapsed)
+                var elapsed = GetTickCount() - _incrementedTickCount;
+                if (_increment <= elapsed)
                 {
-                    if (elapsed < adjustment)
+                    if (elapsed < _adjustment)
                     {
-                        var calculatedDateTime = incrementedDateTime.AddMilliseconds(elapsed);
-                        if (sharedDateTime < calculatedDateTime)
+                        var calculatedDateTime = _incrementedDateTime.AddMilliseconds(elapsed);
+                        if (_sharedDateTime < calculatedDateTime)
                         {
-                            sharedDateTime = calculatedDateTime;
+                            _sharedDateTime = calculatedDateTime;
                         }
                     }
                     else
                     {
-                        sharedDateTime = DateTime.UtcNow;
+                        _sharedDateTime = DateTime.UtcNow;
                     }
 
-                    incrementedTickCount = sharedTickCount;
-                    incrementedDateTime = sharedDateTime;
+                    _incrementedTickCount = _sharedTickCount;
+                    _incrementedDateTime = _sharedDateTime;
                 }
 
-                return sharedDateTime;
+                return _sharedDateTime;
             }
         }
 

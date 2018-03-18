@@ -168,7 +168,7 @@ namespace Foundation.Threading.Tasks
         /// <param name="taskCreationOptions"></param>
         protected void Construct( Action<object> action, object state, CancellationToken cancellationToken, TaskCreationOptions taskCreationOptions )
         {
-            FoundationContract.Requires<ArgumentNullException>( action != null );
+            Assert.IsNotNull( action != null );
             this.action = action;
             this.state = state;
             this.taskCreationOptions = taskCreationOptions;

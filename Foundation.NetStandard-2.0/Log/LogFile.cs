@@ -8,7 +8,7 @@ namespace Foundation.Log
     {
         #region Private Fields
 
-        private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof (LogFile));
+        private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(LogFile));
         private string _path;
         private DateTime _date;
         private FileStream _fileStream;
@@ -78,9 +78,7 @@ namespace Foundation.Log
         public void Write(DateTime dateTime, string text)
         {
             if (_fileStream == null)
-            {
                 Open(dateTime);
-            }
             else if (dateTime.Date != _date)
             {
                 Close();
@@ -91,9 +89,7 @@ namespace Foundation.Log
             _fileStream.Write(array, 0, array.Length);
 
             if (_autoFlush)
-            {
                 _fileStream.Flush();
-            }
         }
 
         #region ILogFile Members
@@ -105,9 +101,7 @@ namespace Foundation.Log
             var begin = _formatter.Begin();
 
             if (begin != null)
-            {
                 Write(LocalTime.Default.Now, begin);
-            }
         }
 
         void ILogFile.Write(LogEntry entry)
@@ -116,10 +110,7 @@ namespace Foundation.Log
             Write(entry.CreationTime, text);
         }
 
-        void ILogFile.Flush()
-        {
-            _fileStream.Flush();
-        }
+        void ILogFile.Flush() => _fileStream.Flush();
 
         public void Close()
         {
@@ -128,9 +119,7 @@ namespace Foundation.Log
                 var end = _formatter.End();
 
                 if (end != null)
-                {
                     Write(LocalTime.Default.Now, end);
-                }
 
                 _fileStream.Close();
                 var name = _fileStream.Name;

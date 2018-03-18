@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Text
 {
@@ -52,7 +52,7 @@ namespace Foundation.Text
 
         internal void Add(StringTableColumn item)
         {
-            FoundationContract.Requires<ArgumentNullException>(item != null);
+            Assert.IsNotNull(item);
 
             _columns.Add(item);
         }

@@ -779,7 +779,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Log\MemoryLogWriter.cs" />
-    <Compile Include="Log\NullApplicationLog.cs" />
+    <Compile Include="Log\NullLogFactory.cs" />
     <Compile Include="Log\NullLog.cs" />
     <Compile Include="Log\SqlLogWriter.cs">
       <SubType>Code</SubType>

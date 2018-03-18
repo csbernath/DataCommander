@@ -21,7 +21,7 @@ namespace Foundation.XmlSpreadsheet
         /// <param name="xmlWriter"></param>
         public XmlSpreadsheetWriter(XmlWriter xmlWriter)
         {
-            FoundationContract.Requires<ArgumentException>(xmlWriter != null);
+            Assert.IsNotNull(xmlWriter);
 
             XmlWriter = xmlWriter;
 

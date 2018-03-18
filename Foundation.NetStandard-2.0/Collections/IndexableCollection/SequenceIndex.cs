@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.IndexableCollection
@@ -30,9 +31,9 @@ namespace Foundation.Collections.IndexableCollection
             Func<T, TKey> getKey,
             IDictionary<TKey, T> dictionary)
         {
-            FoundationContract.Requires<ArgumentNullException>(getNextKey != null);
-            FoundationContract.Requires<ArgumentNullException>(getKey != null);
-            FoundationContract.Requires<ArgumentNullException>(dictionary != null);
+            Assert.IsNotNull(getNextKey);
+            Assert.IsNotNull(getKey);
+            Assert.IsNotNull(dictionary);
 
             _name = name;
             _getNextKey = getNextKey;

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Configuration
@@ -196,7 +197,7 @@ namespace Foundation.Configuration
             /// <returns></returns>        
             public static XmlElement Serialize(object obj)
             {
-                FoundationContract.Requires<ArgumentNullException>(obj != null);
+                Assert.IsNotNull(obj);
 
                 var type = obj.GetType();
                 var xmlSerializer = new XmlSerializer(type);

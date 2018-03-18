@@ -105,8 +105,7 @@ namespace Foundation.Collections.IndexableCollection
 
             if (contains)
             {
-                FoundationContract.Assert(collection != null);
-
+                Assert.IsNotNull(collection);
                 value = collection.First();
             }
             else

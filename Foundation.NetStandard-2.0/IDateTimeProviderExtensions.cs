@@ -1,5 +1,5 @@
 ﻿using System;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation
 {
@@ -15,7 +15,7 @@ namespace Foundation
         /// <returns></returns>
         public static DateTime Today(this IDateTimeProvider dateTimeProvider)
         {
-            FoundationContract.Requires<ArgumentNullException>(dateTimeProvider != null);
+            Assert.IsNotNull(dateTimeProvider);
 
             return dateTimeProvider.Now.Date;
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
@@ -40,7 +41,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public void AddHead(T item)
         {
-            FoundationContract.Requires<ArgumentException>(Count < Capacity);
+            Assert.IsValidOperation(Count < Capacity);
 
             if (_head == -1)
             {
@@ -48,9 +49,7 @@ namespace Foundation.Collections
                 _tail = 0;
             }
             else
-            {
                 _head = (_head - 1) % _array.Length;
-            }
 
             _array[_head] = item;
             Count++;
@@ -85,7 +84,7 @@ namespace Foundation.Collections
         /// <param name="items"></param>
         public void AddTail(IEnumerable<T> items)
         {
-            FoundationContract.Requires<ArgumentNullException>(items != null);
+            Assert.IsNotNull(items);
 
             foreach (var item in items)
             {
@@ -99,8 +98,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public T PeekHead()
         {
-            FoundationContract.Requires<InvalidOperationException>(Count > 0);
-
+            Assert.IsValidOperation(Count > 0);
             return _array[_head];
         }
 
@@ -110,7 +108,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public T RemoveHead()
         {
-            FoundationContract.Requires<InvalidOperationException>(Count > 0);
+            Assert.IsValidOperation(Count > 0);
 
             var item = _array[_head];
             _array[_head] = default(T);
@@ -126,7 +124,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public T PeekTail()
         {
-            FoundationContract.Requires<InvalidOperationException>(Count > 0);
+            Assert.IsValidOperation(Count > 0);
 
             return _array[_tail];
         }
@@ -137,7 +135,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public T RemoveTail()
         {
-            FoundationContract.Requires<InvalidOperationException>(Count > 0);
+            Assert.IsValidOperation(Count > 0);
 
             var item = _array[_tail];
             _array[_tail] = default(T);
@@ -152,7 +150,7 @@ namespace Foundation.Collections
         /// <param name="capacity"></param>
         public void SetCapacity(int capacity)
         {
-            FoundationContract.Requires<InvalidOperationException>(capacity >= Count);
+            Assert.IsValidOperation(capacity >= Count);
 
             var target = new T[capacity];
             if (Count > 0)

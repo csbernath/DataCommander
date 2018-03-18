@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Foundation.Collections.IndexableCollection;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 
@@ -21,7 +22,7 @@ namespace Foundation
         /// <param name="commandLine"></param>
         public CommandLine(string commandLine)
         {
-            FoundationContract.Requires<ArgumentNullException>(commandLine != null);
+            Assert.IsNotNull(commandLine);
 
             this.arguments = new IndexableCollection<CommandLineArgument>(ListIndex);
             var dictionary = new Dictionary<string, ICollection<CommandLineArgument>>(StringComparer.InvariantCultureIgnoreCase);

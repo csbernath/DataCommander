@@ -1,5 +1,4 @@
-﻿using System;
-using Foundation.Diagnostics.Contracts;
+﻿using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Log
 {
@@ -16,8 +15,8 @@ namespace Foundation.Log
         /// <param name="message"></param>
         public static void Trace(this ILog log, CallerInformation callerInformation, string message)
         {
-            FoundationContract.Requires<ArgumentNullException>(log != null);
-            FoundationContract.Requires<ArgumentNullException>(callerInformation != null);
+            Assert.IsNotNull(log);
+            Assert.IsNotNull(callerInformation);
 
             var messageWithCallerInformation =
                 $"CallerInformation: {callerInformation.CallerMemberName},{callerInformation.CallerFilePath},{callerInformation.CallerLineNumber}\r\n{message}";

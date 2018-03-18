@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Linq;
 using Foundation.Text;
 
@@ -99,12 +99,10 @@ namespace Foundation.Threading
 
         internal static void Add(WorkerThread thread)
         {
-            FoundationContract.Requires<ArgumentNullException>(thread != null);
+            Assert.IsNotNull(thread);
 
             lock (Threads)
-            {
                 Threads.Add(thread.ManagedThreadId, thread);
-            }
         }
 
         /// <summary>

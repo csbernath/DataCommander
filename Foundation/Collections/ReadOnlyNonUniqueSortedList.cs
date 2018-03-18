@@ -63,9 +63,9 @@ namespace Foundation.Collections
         {
         }
 
-#endregion
+        #endregion
 
-#region Public Properties
+        #region Public Properties
 
         /// <summary>
         /// 
@@ -119,9 +119,9 @@ namespace Foundation.Collections
             }
         }
 
-#endregion
+        #endregion
 
-#region Public Methods
+        #region Public Methods
 
         /// <summary>
         /// 
@@ -134,24 +134,24 @@ namespace Foundation.Collections
             return IndexOf(key) >= 0;
         }
 
-#endregion
+        #endregion
 
-#region Private Methods
+        #region Private Methods
 
         private void InitializeGroups()
         {
             if (_values.Count > 0)
             {
-#region Create
+                #region Create
 
                 var notEqualsCount = _values.SelectPreviousAndCurrentKey(_keySelector).Count(k => _comparison(k.Previous, k.Current) != 0);
                 var smallArrayMaxLength = LargeObjectHeap.GetSmallArrayMaxLength(sizeof(int));
                 var itemCount = notEqualsCount + 1;
                 var segmentedArrayBuilder = new SegmentedArrayBuilder<int>(itemCount, smallArrayMaxLength);
 
-#endregion
+                #endregion
 
-#region Fill
+                #region Fill
 
                 segmentedArrayBuilder.Add(0);
                 var index = 0;
@@ -168,7 +168,7 @@ namespace Foundation.Collections
 
                 _groups = segmentedArrayBuilder.ToReadOnlyList();
 
-#endregion
+                #endregion
             }
         }
 
@@ -195,6 +195,6 @@ namespace Foundation.Collections
             return index;
         }
 
-#endregion
+        #endregion
     }
 }

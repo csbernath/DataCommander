@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
@@ -82,8 +83,7 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static T ResetFlag<T>(this T container, T flag)
         {
-
-            FoundationContract.Requires<ArgumentNullException>(typeof(T).IsEnum);
+            Assert.IsTrue(typeof(T).IsEnum);
 
             var type = typeof(T);
             var containerUInt64 = Convert.ToUInt64(container);

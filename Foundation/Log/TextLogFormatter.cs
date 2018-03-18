@@ -32,8 +32,7 @@
                     break;
             }
 
-            return
-                $"[{entry.CreationTime.ToString("HH:mm:ss.fff")}|{entry.Id}|{logLevelChar}|{entry.ThreadName},{entry.ManagedThreadId}|{entry.LogName}] {entry.Message}\r\n";
+            return $"[{entry.CreationTime:HH:mm:ss.fff}|{entry.Id}|{logLevelChar}|{entry.ThreadName},{entry.ManagedThreadId}|{entry.LogName}] {entry.Message}\r\n";
         }
 
         string ILogFormatter.Begin()

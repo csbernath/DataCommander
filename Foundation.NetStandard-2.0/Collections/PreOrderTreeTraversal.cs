@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Collections
 {
@@ -18,9 +18,8 @@ namespace Foundation.Collections
         /// <param name="action"></param>
         public static void ForEach<T>(T rootNode, Func<T, IEnumerable<T>> getChildNodes, Action<T> action)
         {
-            FoundationContract.Requires<ArgumentNullException>(rootNode != null);
-            FoundationContract.Requires<ArgumentNullException>(getChildNodes != null);
-            FoundationContract.Requires<ArgumentNullException>(action != null);
+            Assert.IsNotNull(getChildNodes);
+            Assert.IsNotNull(action);
 
             action(rootNode);
 
@@ -38,9 +37,9 @@ namespace Foundation.Collections
         /// <returns></returns>
         public static T FirstOrDefault<T>(T rootNode, Func<T, IEnumerable<T>> getChildNodes, Func<T, bool> predicate) where T : class
         {
-            FoundationContract.Requires<ArgumentNullException>(rootNode != null);
-            FoundationContract.Requires<ArgumentNullException>(getChildNodes != null);
-            FoundationContract.Requires<ArgumentNullException>(predicate != null);
+            Assert.IsNotNull(rootNode);
+            Assert.IsNotNull(getChildNodes);
+            Assert.IsNotNull(predicate);
 
             T firstOrDefault = null;
 

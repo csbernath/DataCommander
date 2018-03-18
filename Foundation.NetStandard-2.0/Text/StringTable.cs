@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Text
@@ -108,7 +109,7 @@ namespace Foundation.Text
         /// <returns></returns>
         public string ToString(IReadOnlyList<int> columnWidths, string columnSeparator)
         {
-            FoundationContract.Requires<ArgumentNullException>(columnWidths != null);
+            Assert.IsNotNull(columnWidths);
 
             var stringBuilder = new StringBuilder();
             var first = true;
@@ -132,9 +133,9 @@ namespace Foundation.Text
             string columnSeparator,
             StringBuilder stringBuilder)
         {
-            FoundationContract.Requires<ArgumentNullException>(row != null);
-            FoundationContract.Requires<ArgumentNullException>(columnWidths != null);
-            FoundationContract.Requires<ArgumentNullException>(stringBuilder != null);
+            Assert.IsNotNull(row);
+            Assert.IsNotNull(columnWidths);
+            Assert.IsNotNull(stringBuilder);
 
             var last = Columns.Count - 1;
 

@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using Foundation.Configuration;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Text
@@ -108,8 +109,8 @@ namespace Foundation.Text
             string methodName,
             params object[] parameters)
         {
-            FoundationContract.Requires<ArgumentNullException>(textWriter != null);
-            FoundationContract.Requires<ArgumentNullException>(obj != null);
+            Assert.IsNotNull(textWriter);
+            Assert.IsNotNull(obj);
 
             var type = obj.GetType();
             var methodInfo = type.GetMethod(methodName);

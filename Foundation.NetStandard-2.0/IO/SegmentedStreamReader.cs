@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Foundation.Diagnostics;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
 
@@ -22,8 +23,7 @@ namespace Foundation.IO
         /// <param name="length"></param>
         public SegmentedStreamReader(Stream stream, long length)
         {
-
-            FoundationContract.Requires<ArgumentNullException>(stream != null);
+            Assert.IsNotNull(stream);
 
             _stream = stream;
             _length = length;

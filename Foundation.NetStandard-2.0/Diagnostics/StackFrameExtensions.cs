@@ -1,7 +1,6 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Diagnostics
 {
@@ -9,7 +8,7 @@ namespace Foundation.Diagnostics
     {
         public static string ToLogString(this StackFrame frame)
         {
-            FoundationContract.Requires<ArgumentNullException>(frame != null);
+            Assert.IsNotNull(frame);
 
             var stringBuilder = new StringBuilder();
             var method = frame.GetMethod();

@@ -53,8 +53,7 @@ namespace Foundation.Linq
         public static TSource First<TSource>(this IReadOnlyList<TSource> source)
         {
             Assert.IsNotNull(source);
-            FoundationContract.Requires<ArgumentException>(source.Count > 0);
-
+            Assert.IsTrue(source.Count > 0);
             return source[0];
         }
 

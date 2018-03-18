@@ -104,9 +104,7 @@ namespace Foundation.Log
                 if (_entryQueue.Count > 0)
                 {
                     if (_timer != null)
-                    {
                         _timer.Change(Timeout.Infinite, Timeout.Infinite);
-                    }
 
                     LogEntry[] array;
 
@@ -121,9 +119,7 @@ namespace Foundation.Log
                     _singleThreadPool.QueueUserWorkItem(WaitCallback, array);
 
                     if (_timer != null)
-                    {
                         _timer.Change(Period, Period);
-                    }
                 }
             }
         }

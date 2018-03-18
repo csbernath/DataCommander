@@ -1,6 +1,5 @@
-﻿using System;
-using System.Xml;
-using Foundation.Diagnostics.Contracts;
+﻿using System.Xml;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Configuration
 {
@@ -17,7 +16,7 @@ namespace Foundation.Configuration
         /// <param name="attributes"></param>
         public XmlAttributeReader(XmlAttributeCollection attributes)
         {
-            FoundationContract.Requires<ArgumentNullException>(attributes != null);
+            Assert.IsNotNull(attributes);
             _attributes = attributes;
         }
 
@@ -30,7 +29,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public static bool TryGetValue(XmlAttributeCollection attributes, string name, out string value)
         {
-            FoundationContract.Requires<ArgumentNullException>(attributes != null);
+            Assert.IsNotNull(attributes);
 
             var attribute = attributes[name];
             var contains = attribute != null;

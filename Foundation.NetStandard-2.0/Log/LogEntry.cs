@@ -7,9 +7,50 @@ namespace Foundation.Log
     /// </summary>
     public class LogEntry
     {
-        #region Private Fields
+        /// <summary>
+        /// 
+        /// </summary>
+        public readonly long Id;
 
-        #endregion
+        /// <summary>
+        /// 
+        /// </summary>
+        public readonly string LogName;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public readonly DateTime CreationTime;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public readonly int ManagedThreadId;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public readonly string ThreadName;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public readonly string HostName;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public readonly string UserName;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public readonly string Message;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public readonly LogLevel LogLevel;
 
         /// <summary>
         /// 
@@ -23,16 +64,7 @@ namespace Foundation.Log
         /// <param name="hostName"></param>
         /// <param name="message"></param>
         /// <param name="logLevel"></param>
-        public LogEntry(
-            long id,
-            string logName,
-            DateTime creationTime,
-            int managedThreadId,
-            string threadName,
-            string userName,
-            string hostName,
-            string message,
-            LogLevel logLevel)
+        public LogEntry(long id, string logName, DateTime creationTime, int managedThreadId, string threadName, string userName, string hostName, string message, LogLevel logLevel)
         {
             Id = id;
             LogName = logName;
@@ -44,50 +76,5 @@ namespace Foundation.Log
             Message = message;
             LogLevel = logLevel;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public long Id { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string LogName { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public DateTime CreationTime { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public int ManagedThreadId { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string ThreadName { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string HostName { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string UserName { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Message { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public LogLevel LogLevel { get; }
     }
 }

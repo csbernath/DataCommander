@@ -20,8 +20,7 @@ namespace Foundation.Log
             var logWriters = new List<LogWriter>();
             var node = Settings.CurrentType;
 
-            var dateTimeKind = DateTimeKind.Utc;
-            node.Attributes.TryGetAttributeValue("DateTimeKind", DateTimeKind.Utc, out dateTimeKind);
+            node.Attributes.TryGetAttributeValue("DateTimeKind", DateTimeKind.Utc, out var dateTimeKind);
             _dateTimeProvider = dateTimeKind == DateTimeKind.Utc
                 ? (IDateTimeProvider) UniversalTime.Default
                 : LocalTime.Default;
@@ -37,10 +36,7 @@ namespace Foundation.Log
                 {
                     var logWriter = ReadLogWriter(childNode);
                     if (logWriter != null)
-                    {
-                        logWriter.LogLevel = attributes["LogLevel"].GetValue<LogLevel>();
                         logWriters.Add(logWriter);
-                    }
                 }
             }
 
@@ -50,50 +46,30 @@ namespace Foundation.Log
                 LogFactory.Instance = this;
 
                 foreach (var logWriter in logWriters)
-                {
                     logWriter.logWriter.Open();
-                }
             }
         }
 
         public FoundationLogFactory(bool forInternalUse)
         {
-            var logWriter = new LogWriter
-            {
-                logWriter = new TextLogWriter(TraceWriter.Instance),
-                LogLevel = LogLevel.Debug
-            };
-
+            var logWriter = new LogWriter(new TextLogWriter(TraceWriter.Instance), LogLevel.Debug);
             _dateTimeProvider = LocalTime.Default;
             _multipeLog = new MultipleLog(logWriter.ItemAsEnumerable());
         }
 
-        #region IApplicationLog Members
+        #region ILogFactory Members
 
         string ILogFactory.FileName
         {
             get
             {
-                string fileName;
                 var fileLogWriter = _multipeLog.LogWriters.Select(w => w.logWriter).OfType<FileLogWriter>().FirstOrDefault();
-
-                if (fileLogWriter != null)
-                {
-                    fileName = fileLogWriter.FileName;
-                }
-                else
-                {
-                    fileName = null;
-                }
-
+                var fileName = fileLogWriter != null ? fileLogWriter.FileName : null;
                 return fileName;
             }
         }
 
-        ILog ILogFactory.GetLog(string name)
-        {
-            return new FoundationLog(this, name);
-        }
+        ILog ILogFactory.GetLog(string name) => new FoundationLog(this, name);
 
         #endregion
 
@@ -102,9 +78,7 @@ namespace Foundation.Log
         void IDisposable.Dispose()
         {
             if (_multipeLog != null)
-            {
                 _multipeLog.Dispose();
-            }
         }
 
         #endregion
@@ -143,14 +117,12 @@ namespace Foundation.Log
             LogWriter logWriter = null;
             var attributes = node.Attributes;
             var type = attributes["Type"].GetValue<string>();
+            var logLevel = attributes["LogLevel"].GetValue<LogLevel>();
 
             switch (type)
             {
                 case "ConsoleLogWriter":
-                    logWriter = new LogWriter
-                    {
-                        logWriter = ConsoleLogWriter.Instance
-                    };
+                    logWriter = new LogWriter(ConsoleLogWriter.Instance, logLevel);
                     break;
 
 #if FOUNDATION_4_7
@@ -160,10 +132,7 @@ namespace Foundation.Log
                     var machineName = attributes["MachineName"].GetValue<string>();
                     var source = attributes["Source"].GetValue<string>();
                     var eventLogWriter = new EventLogWriter(logName, machineName, source);
-                    logWriter = new LogWriter
-                    {
-                        logWriter = eventLogWriter
-                    };
+                    logWriter = new LogWriter(eventLogWriter, logLevel);
                 }
 
                     break;
@@ -174,32 +143,16 @@ namespace Foundation.Log
                     var path = attributes["Path"].GetValue<string>();
                     path = Environment.ExpandEnvironmentVariables(path);
 
-                    var async = true;
-                    attributes.TryGetAttributeValue("Async", async, out async);
-
-                    var bufferSize = 1048576; // 1 MB
-                    attributes.TryGetAttributeValue("BufferSize", bufferSize, out bufferSize);
-
-                    var timerPeriod = TimeSpan.FromSeconds(10);
-                    attributes.TryGetAttributeValue("TimerPeriod", timerPeriod, out timerPeriod);
-
-                    var autoFlush = true;
-                    attributes.TryGetAttributeValue("AutoFlush", autoFlush, out autoFlush);
-
-                    FileAttributes fileAttributes;
-                    attributes.TryGetAttributeValue("FileAttributes", FileAttributes.ReadOnly | FileAttributes.Hidden, out fileAttributes);
-
-                    var dateTimeKind = DateTimeKind.Utc;
-                    node.Attributes.TryGetAttributeValue("DateTimeKind", DateTimeKind.Utc, out dateTimeKind);
+                    attributes.TryGetAttributeValue("Async", true, out var async);
+                    attributes.TryGetAttributeValue("BufferSize", 1048576, out var bufferSize); // 1 MB
+                    attributes.TryGetAttributeValue("TimerPeriod", TimeSpan.FromSeconds(10), out var timerPeriod);
+                    attributes.TryGetAttributeValue("AutoFlush", true, out var autoFlush);
+                    attributes.TryGetAttributeValue("FileAttributes", FileAttributes.ReadOnly | FileAttributes.Hidden, out var fileAttributes);
+                    attributes.TryGetAttributeValue("DateTimeKind", DateTimeKind.Utc, out var dateTimeKind);
 
                     var fileLogWriter = new FileLogWriter(path, Encoding.UTF8, async, bufferSize, timerPeriod, autoFlush, fileAttributes, dateTimeKind);
-
-                    logWriter = new LogWriter
-                    {
-                        logWriter = fileLogWriter
-                    };
+                    logWriter = new LogWriter(fileLogWriter, logLevel);
                 }
-
                     break;
 
                 default:
@@ -211,8 +164,14 @@ namespace Foundation.Log
 
         private sealed class LogWriter
         {
-            public ILogWriter logWriter;
-            public LogLevel LogLevel;
+            public readonly ILogWriter logWriter;
+            public readonly LogLevel LogLevel;
+
+            public LogWriter(ILogWriter logWriter, LogLevel logLevel)
+            {
+                this.logWriter = logWriter;
+                LogLevel = logLevel;
+            }
         }
 
         private sealed class MultipleLog : IDisposable
@@ -220,7 +179,6 @@ namespace Foundation.Log
             public MultipleLog(IEnumerable<LogWriter> logWriters)
             {
                 Assert.IsNotNull(logWriters);
-
                 LogWriters = logWriters.ToArray();
             }
 
@@ -241,13 +199,11 @@ namespace Foundation.Log
             public void Write(LogEntry logEntry)
             {
                 var logLevel = logEntry.LogLevel;
-                for (var i = 0; i < LogWriters.Length; i++)
+                for (var i = 0; i < LogWriters.Length; ++i)
                 {
                     var logWriter = LogWriters[i];
                     if (logWriter.LogLevel >= logLevel)
-                    {
                         logWriter.logWriter.Write(logEntry);
-                    }
                 }
             }
         }

@@ -4,11 +4,11 @@ namespace Foundation.Log
 {
     internal sealed class NullLog : ILog
     {
+        public static readonly NullLog Instance = new NullLog();
+
         private NullLog()
         {
         }
-
-        public static NullLog Instance { get; } = new NullLog();
 
         #region ILog Members
 

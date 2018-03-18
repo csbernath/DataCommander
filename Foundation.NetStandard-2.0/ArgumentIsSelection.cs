@@ -1,5 +1,5 @@
 ﻿using System;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation
 {
@@ -29,7 +29,7 @@ namespace Foundation
         /// <returns></returns>
         public ArgumentIsSelection<TArgument> IfArgumentIs<TArgumentAs>(Action<TArgumentAs> action) where TArgumentAs : class
         {
-            FoundationContract.Requires<ArgumentNullException>(action != null);
+            Assert.IsNotNull(action);
 
             if (!selected)
             {
@@ -51,7 +51,7 @@ namespace Foundation
         /// <returns></returns>
         public ArgumentIsSelection<TArgument> IfArgumentIsNull(Action action)
         {
-            FoundationContract.Requires<ArgumentNullException>(action != null);
+            Assert.IsNotNull(action);
 
             if (!selected)
             {
@@ -73,7 +73,7 @@ namespace Foundation
         /// <returns></returns>
         public ArgumentIsSelection<TArgument> If(Func<bool> condition, Action action)
         {
-            FoundationContract.Requires<ArgumentNullException>(action != null);
+            Assert.IsNotNull(action);
 
             if (!selected)
             {
@@ -93,7 +93,7 @@ namespace Foundation
         /// <param name="action"></param>
         public void Else(Action action)
         {
-            FoundationContract.Requires<ArgumentNullException>(action != null);
+            Assert.IsNotNull(action);
 
             if (!selected)
                 action();

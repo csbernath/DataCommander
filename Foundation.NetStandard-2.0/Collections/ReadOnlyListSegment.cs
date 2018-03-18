@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
@@ -26,7 +27,7 @@ namespace Foundation.Collections
         /// <param name="count"></param>
         public ReadOnlyListSegment(IReadOnlyList<T> list, int offset, int count)
         {
-            FoundationContract.Requires<ArgumentNullException>(list != null);
+            Assert.IsNotNull(list);
             FoundationContract.Requires<ArgumentOutOfRangeException>(offset >= 0);
             FoundationContract.Requires<ArgumentOutOfRangeException>(count >= 0);
             FoundationContract.Requires<ArgumentOutOfRangeException>(0 <= offset && offset < list.Count);

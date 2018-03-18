@@ -88,9 +88,7 @@ namespace Foundation.Diagnostics
                 var nextNode = node.Next;
 
                 if (!item.WeakReference.IsAlive)
-                {
                     items.Remove(node);
-                }
 
                 node = nextNode;
             }
@@ -168,16 +166,16 @@ namespace Foundation.Diagnostics
 
         private sealed class ListItem
         {
-            #region Private Fields
+            public readonly long Id;
+            public readonly string Name;
+            public readonly string TypeName;
+            public readonly int Size;
+            public readonly DateTime Time = LocalTime.Default.Now;
+            public readonly long Timestamp;
+            public readonly WeakReference WeakReference;
+            public DateTime? DisposeTime;
 
-            #endregion
-
-            public ListItem(
-                long id,
-                string name,
-                string typeName,
-                int size,
-                object target)
+            public ListItem(long id, string name, string typeName, int size, object target)
             {
                 Id = id;
                 Name = name;
@@ -186,35 +184,18 @@ namespace Foundation.Diagnostics
                 WeakReference = new WeakReference(target);
                 Timestamp = Stopwatch.GetTimestamp();
             }
-
-            public long Id { get; }
-
-            public string Name { get; }
-
-            public string TypeName { get; }
-
-            public int Size { get; }
-
-            public DateTime Time { get; } = LocalTime.Default.Now;
-
-            public long Timestamp { get; }
-
-            public WeakReference WeakReference { get; }
-
-            public DateTime? DisposeTime { get; set; }
         }
 
         private sealed class ListItemState
         {
-            private readonly long timestamp;
+            private readonly long _timestamp;
 
             public ListItemState(ListItem listItem, long timestamp)
             {
                 ListItem = listItem;
-                this.timestamp = timestamp;
+                _timestamp = timestamp;
 
-                IsAlive = listItem.WeakReference.IsAlive;
-                if (IsAlive)
+                if (listItem.WeakReference.IsAlive)
                 {
                     try
                     {
@@ -222,18 +203,13 @@ namespace Foundation.Diagnostics
                     }
                     catch
                     {
-                        IsAlive = false;
                     }
                 }
             }
 
             public ListItem ListItem { get; }
-
-            public bool IsAlive { get; }
-
             public int? Generation { get; }
-
-            public long Age => timestamp - ListItem.Timestamp;
+            public long Age => _timestamp - ListItem.Timestamp;
         }
     }
 }

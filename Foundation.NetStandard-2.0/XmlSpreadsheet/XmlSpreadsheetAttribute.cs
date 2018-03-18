@@ -1,6 +1,5 @@
-﻿using System;
-using System.Xml;
-using Foundation.Diagnostics.Contracts;
+﻿using System.Xml;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.XmlSpreadsheet
 {
@@ -36,7 +35,7 @@ namespace Foundation.XmlSpreadsheet
         /// <param name="xmlWriter"></param>
         public void Write(XmlWriter xmlWriter)
         {
-            FoundationContract.Requires<ArgumentNullException>(xmlWriter != null);
+            Assert.IsNotNull(xmlWriter);
 
             xmlWriter.WriteAttributeString(LocalName, Value);
         }

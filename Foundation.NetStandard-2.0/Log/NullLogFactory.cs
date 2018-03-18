@@ -2,15 +2,15 @@
 
 namespace Foundation.Log
 {
-    internal sealed class NullApplicationLog : ILogFactory
+    internal sealed class NullLogFactory : ILogFactory
     {
-        private NullApplicationLog()
+        public static readonly NullLogFactory Instance = new NullLogFactory();
+
+        private NullLogFactory()
         {
         }
 
-        public static NullApplicationLog Instance { get; } = new NullApplicationLog();
-
-        #region IApplicationLog Members
+        #region ILogFactory Members
 
         string ILogFactory.FileName => null;
 

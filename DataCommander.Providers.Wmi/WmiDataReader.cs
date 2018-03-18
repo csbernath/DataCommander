@@ -1,30 +1,29 @@
-﻿using Foundation.Diagnostics.Contracts;
+﻿using System;
+using System.Data;
+using System.Management;
+using System.Text;
+using DataCommander.Providers.Query;
+using Foundation.Diagnostics.Assertions;
 
 namespace DataCommander.Providers.Wmi
 {
-    using System;
-    using System.Data;
-    using System.Management;
-    using System.Text;
-    using Query;
-
     internal sealed class WmiDataReader : IDataReader
     {
-        private readonly WmiCommand command;
-        private readonly ManagementObjectCollection.ManagementObjectEnumerator enumerator;
-        private ManagementBaseObject firstObject;
-        private bool firstRead;
+        private readonly WmiCommand _command;
+        private readonly ManagementObjectCollection.ManagementObjectEnumerator _enumerator;
+        private ManagementBaseObject _firstObject;
+        private bool _firstRead;
 
         public WmiDataReader(WmiCommand command)
         {
-            FoundationContract.Requires<ArgumentException>(command != null);
+            Assert.IsNotNull(command);
 
-            this.command = command;
+            this._command = command;
 
             var query = new ObjectQuery(command.CommandText);
             var searcher = new ManagementObjectSearcher(command.Connection.Scope, query);
             var objects = searcher.Get();
-            enumerator = objects.GetEnumerator();
+            _enumerator = objects.GetEnumerator();
         }
 
         public void Dispose()
@@ -133,7 +132,7 @@ namespace DataCommander.Providers.Wmi
 
         public int GetValues(object[] values)
         {
-            var baseObject = this.enumerator.Current;
+            var baseObject = this._enumerator.Current;
             var enumerator = baseObject.Properties.GetEnumerator();
             var i = 0;
 
@@ -215,19 +214,19 @@ namespace DataCommander.Providers.Wmi
         {
             PropertyDataCollection properties = null;
 
-            if (firstObject == null)
+            if (_firstObject == null)
             {
-                var moveNext = enumerator.MoveNext();
-                firstRead = true;
+                var moveNext = _enumerator.MoveNext();
+                _firstRead = true;
 
                 if (moveNext)
                 {
-                    firstObject = enumerator.Current;
-                    properties = firstObject.Properties;
+                    _firstObject = _enumerator.Current;
+                    properties = _firstObject.Properties;
                 }
                 else
                 {
-                    var query = command.CommandText;
+                    var query = _command.CommandText;
                     var index = 0;
                     var fromFound = false;
                     string className = null;
@@ -254,7 +253,7 @@ namespace DataCommander.Providers.Wmi
 
                     query = $"SELECT * FROM meta_class WHERE __this ISA '{className}'";
                     var objectQuery = new ObjectQuery(query);
-                    var searcher = new ManagementObjectSearcher(command.Connection.Scope, objectQuery);
+                    var searcher = new ManagementObjectSearcher(_command.Connection.Scope, objectQuery);
                     var objects = searcher.Get();
                     var enumerator2 = objects.GetEnumerator();
                     enumerator2.MoveNext();
@@ -361,18 +360,18 @@ namespace DataCommander.Providers.Wmi
         {
             bool read;
 
-            if (command.Cancelled)
+            if (_command.Cancelled)
             {
                 read = false;
             }
-            else if (firstRead)
+            else if (_firstRead)
             {
-                read = firstObject != null;
-                firstRead = false;
+                read = _firstObject != null;
+                _firstRead = false;
             }
             else
             {
-                read = enumerator.MoveNext();
+                read = _enumerator.MoveNext();
             }
 
             return read;

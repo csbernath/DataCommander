@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Xml;
 
@@ -20,7 +21,7 @@ namespace Foundation.XmlSpreadsheet
         /// <param name="xmlWriter"></param>
         public XmlSpreadsheetWriter(XmlWriter xmlWriter)
         {
-            FoundationContract.Requires<ArgumentException>(xmlWriter != null);
+            Assert.IsNotNull(xmlWriter);
 
             XmlWriter = xmlWriter;
 
@@ -104,7 +105,7 @@ namespace Foundation.XmlSpreadsheet
         /// <param name="table"></param>
         public void WriteStartTable(XmlSpreadsheetTable table)
         {
-            FoundationContract.Requires<ArgumentNullException>(table != null);
+            Assert.IsNotNull(table);
             _tableIndex++;
             _table = table;
 
@@ -189,7 +190,7 @@ namespace Foundation.XmlSpreadsheet
         /// <param name="values"></param>
         public void WriteRow(object[] values)
         {
-            FoundationContract.Requires<ArgumentNullException>(values != null);
+            Assert.IsNotNull(values);
 
             WriteStartRow();
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Linq
 {
@@ -23,9 +23,9 @@ namespace Foundation.Linq
             IEnumerable<TValue> items,
             Func<TValue, TKey> keySelector)
         {
-            FoundationContract.Requires<ArgumentNullException>(dictionary != null);
-            FoundationContract.Requires<ArgumentNullException>(items != null);
-            FoundationContract.Requires<ArgumentNullException>(keySelector != null);
+            Assert.IsNotNull(dictionary);
+            Assert.IsNotNull(items);
+            Assert.IsNotNull(keySelector);
 
             foreach (var item in items)
             {
@@ -64,8 +64,8 @@ namespace Foundation.Linq
             TKey key,
             Func<TKey, TValue> valueFactory)
         {
-            FoundationContract.Requires<ArgumentNullException>(dictionary != null);
-            FoundationContract.Requires<ArgumentNullException>(valueFactory != null);
+            Assert.IsNotNull(dictionary);
+            Assert.IsNotNull(valueFactory);
 
             TValue value;
 
@@ -88,10 +88,9 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
         {
-            FoundationContract.Requires<ArgumentNullException>(dictionary != null);
+            Assert.IsNotNull(dictionary);
 
-            TValue value;
-            dictionary.TryGetValue(key, out value);
+            dictionary.TryGetValue(key, out var value);
             return value;
         }
 
@@ -113,7 +112,7 @@ namespace Foundation.Linq
             /// <param name="dictionary"></param>
             public ReadOnlyDictionary(IDictionary<TKey, TValue> dictionary)
             {
-                FoundationContract.Requires<ArgumentNullException>(dictionary != null);
+                Assert.IsNotNull(dictionary);
                 this.dictionary = dictionary;
             }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Xml;
 
 namespace Foundation.Linq
@@ -78,8 +78,7 @@ namespace Foundation.Linq
         /// <returns></returns>
         public static bool In<T>(this T item, params T[] collection)
         {
-
-            FoundationContract.Requires<ArgumentNullException>(collection != null);
+            Assert.IsNotNull(collection);
 
             return collection.Contains(item);
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Configuration
@@ -26,7 +27,7 @@ namespace Foundation.Configuration
         /// <param name="tryGetValue"></param>
         public NameValueCollectionReader(TryGetValue<string, string> tryGetValue)
         {
-            FoundationContract.Requires<ArgumentNullException>(tryGetValue != null);
+            Assert.IsNotNull(tryGetValue);
             _tryGetValue = tryGetValue;
         }
 
@@ -318,7 +319,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public bool TryGetValue<T>(string name, TryParse<T> tryParse, out T value)
         {
-            FoundationContract.Requires<ArgumentNullException>(tryParse != null);
+            Assert.IsNotNull(tryParse);
 
             string s;
             var contains = _tryGetValue(name, out s);

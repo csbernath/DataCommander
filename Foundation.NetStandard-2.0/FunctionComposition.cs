@@ -1,5 +1,5 @@
 ﻿using System;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation
 {
@@ -25,22 +25,22 @@ namespace Foundation
 
         private sealed class UnaryFunctionComposition<X, Y, Z>
         {
-            private readonly Func<X, Y> func1;
-            private readonly Func<Y, Z> func2;
+            private readonly Func<X, Y> _func1;
+            private readonly Func<Y, Z> _func2;
 
             public UnaryFunctionComposition(Func<X, Y> func1, Func<Y, Z> func2)
             {
-                FoundationContract.Requires<ArgumentNullException>(func1 != null);
-                FoundationContract.Requires<ArgumentNullException>(func2 != null);
+                Assert.IsNotNull(func1);
+                Assert.IsNotNull(func2);
 
-                this.func1 = func1;
-                this.func2 = func2;
+                this._func1 = func1;
+                this._func2 = func2;
             }
 
             public Z Evaluate(X x)
             {
-                var y = func1(x);
-                var z = func2(y);
+                var y = _func1(x);
+                var z = _func2(y);
                 return z;
             }
         }

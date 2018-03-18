@@ -14,7 +14,7 @@ namespace Foundation.Log
         /// <summary>
         /// 
         /// </summary>
-        public static ILogFactory Instance { get; set; } = NullApplicationLog.Instance;
+        public static ILogFactory Instance { get; set; } = NullLogFactory.Instance;
 
         /// <summary>
         /// 
