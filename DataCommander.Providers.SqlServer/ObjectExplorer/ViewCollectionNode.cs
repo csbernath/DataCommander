@@ -32,30 +32,22 @@ from {databaseName}.sys.schemas s (nolock)
 join {databaseName}.sys.views v (nolock)
     on s.schema_id = v.schema_id
 order by 1,2";
-            using (var connection = new SqlConnection(_database.Databases.Server.ConnectionString))
+            SqlClientFactory.Instance.ExecuteReader(_database.Databases.Server.ConnectionString, new ExecuteReaderRequest(commandText), dataReader =>
             {
-                connection.Open();
-                var transactionScope = new DbTransactionScope(connection, null);
-                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+                dataReader.ReadResult(() =>
                 {
-                    dataReader.Read(dataRecord =>
-                    {
-                        var schema = dataRecord.GetString(0);
-                        var name = dataRecord.GetString(1);
-                        var id = dataRecord.GetInt32(2);
-                        treeNodes.Add(new ViewNode(_database, id, schema, name));
-                    });
-                }
-            }
+                    var schema = dataReader.GetString(0);
+                    var name = dataReader.GetString(1);
+                    var id = dataReader.GetInt32(2);
+                    treeNodes.Add(new ViewNode(_database, id, schema, name));
+                });
+            });
             return treeNodes;
         }
 
         public bool Sortable => false;
-
         public string Query => null;
-
         public ContextMenuStrip ContextMenu => null;
-
         private readonly DatabaseNode _database;
     }
 }

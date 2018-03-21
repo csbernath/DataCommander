@@ -46,16 +46,15 @@ order by s.name,o.name", _database.Name, _isMsShipped
             var connectionString = _database.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
-                var transactionScope = new DbTransactionScope(connection, null);
-                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
+                var executor = connection.CreateCommandExecutor();
+                dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
             }
+
             var dataRows = dataTable.Rows;
             var count = dataRows.Count;
             var treeNodes = new List<ITreeNode>();
             if (!_isMsShipped)
-            {
                 treeNodes.Add(new StoredProcedureCollectionNode(_database, true));
-            }
 
             for (var i = 0; i < count; i++)
             {

@@ -1,17 +1,15 @@
-﻿using Foundation.Data;
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Windows.Forms;
-
     internal sealed class SchemaCollectionNode : ITreeNode
     {
         private readonly DatabaseNode _database;
 
-        public SchemaCollectionNode(DatabaseNode  database)
+        public SchemaCollectionNode(DatabaseNode database)
         {
             _database = database;
         }
@@ -34,25 +32,23 @@ order by s.name";
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                var transactionScope = new DbTransactionScope(connection, null);
-                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+                var executor = connection.CreateCommandExecutor();
+                executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
                 {
-                    dataReader.Read(dataRecord =>
+                    dataReader.ReadResult(() =>
                     {
-                        var name = dataRecord.GetString(0);
+                        var name = dataReader.GetString(0);
                         var treeNode = new SchemaNode(_database, name);
                         treeNodes.Add(treeNode);
                     });
-                }
+                });
             }
 
             return treeNodes;
         }
 
         public bool Sortable => false;
-
         public string Query => null;
-
         public ContextMenuStrip ContextMenu => null;
     }
 }

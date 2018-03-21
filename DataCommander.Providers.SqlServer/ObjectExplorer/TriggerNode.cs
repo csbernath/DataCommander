@@ -43,13 +43,15 @@ from {databaseName}.sys.sql_modules m (nolock)
 where m.object_id = {_id}";
 
             var connectionString = _databaseNode.Databases.Server.ConnectionString;
+
             string definition;
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                var trasnactionScope = new DbTransactionScope(connection, null);
-                definition = (string)trasnactionScope.ExecuteScalar(new CommandDefinition {CommandText = commandText});
+                var executor = connection.CreateCommandExecutor();
+                definition = (string) executor.ExecuteScalar(new CreateCommandRequest(commandText));
             }
+
             QueryForm.ShowText(definition);
         }
 

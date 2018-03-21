@@ -1,10 +1,10 @@
 ﻿using Foundation.Data;
+using System.Collections.Generic;
+using System.Data;
+using System.Windows.Forms;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Windows.Forms;
 
     internal sealed class FunctionCollectionNode : ITreeNode
     {
@@ -23,28 +23,24 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            var commandText =
-                $@"select	OBJECT_NAME
-from	SYS.ALL_OBJECTS
-where	OWNER	= '{_schemaNode.Name}'
-	and OBJECT_TYPE	= 'FUNCTION'
+            var commandText = $@"select	OBJECT_NAME
+from SYS.ALL_OBJECTS
+where OWNER	= '{_schemaNode.Name}'
+    and OBJECT_TYPE	= 'FUNCTION'
 order by OBJECT_NAME";
-            var transactionScope = new DbTransactionScope(_schemaNode.SchemasNode.Connection, null);
 
-            return transactionScope.ExecuteReader(
-                new CommandDefinition {CommandText = commandText},
-                CommandBehavior.Default,
-                dataRecord =>
-                {
-                    var procedureName = dataRecord.GetString(0);
-                    return new FunctionNode(_schemaNode, null, procedureName);
-                });
+
+            var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
+            var functionNodes = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
+            {
+                var procedureName = dataRecord.GetString(0);
+                return new FunctionNode(_schemaNode, null, procedureName);
+            });
+            return functionNodes;
         }
 
         bool ITreeNode.Sortable => false;
-
         string ITreeNode.Query => null;
-
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
         #endregion

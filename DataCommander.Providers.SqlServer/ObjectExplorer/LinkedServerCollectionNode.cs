@@ -39,15 +39,12 @@ order by s.name";
             using (var connection = new SqlConnection(Server.ConnectionString))
             {
                 connection.Open();
-                var transactionScope = new DbTransactionScope(connection, null);
-                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+                var executor = connection.CreateCommandExecutor();
+                treeNodes = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
                 {
-                    treeNodes = dataReader.Read(dataRecord =>
-                    {
-                        var name = dataRecord.GetString(0);
-                        return (ITreeNode)new LinkedServerNode(this, name);
-                    }).ToList();
-                }
+                    var name = dataReader.GetString(0);
+                    return (ITreeNode) new LinkedServerNode(this, name);
+                });
             }
 
             return treeNodes;

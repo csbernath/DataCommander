@@ -9,7 +9,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
     internal sealed class TableCollectionNode : ITreeNode
     {
-        public TableCollectionNode( DatabaseNode databaseNode )
+        public TableCollectionNode(DatabaseNode databaseNode)
         {
             DatabaseNode = databaseNode;
         }
@@ -73,31 +73,24 @@ end
              AS bit)=0)
 order by 1,2", DatabaseNode.Name);
             var connectionString = DatabaseNode.Databases.Server.ConnectionString;
-            using (var connection = new SqlConnection(connectionString))
+            SqlClientFactory.Instance.ExecuteReader(connectionString, new ExecuteReaderRequest(commandText), dataReader =>
             {
-                connection.Open();
-                var transactionScope = new DbTransactionScope(connection, null);
-                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+                while (dataReader.Read())
                 {
-                    dataReader.Read(dataRecord =>
-                    {
-                        var schema = dataRecord.GetString(0);
-                        var name = dataRecord.GetString(1);
-                        var objectId = dataRecord.GetInt32(2);
-                        var tableNode = new TableNode(DatabaseNode, schema, name, objectId);
-                        childNodes.Add(tableNode);
-                    });
+                    var schema = dataReader.GetString(0);
+                    var name = dataReader.GetString(1);
+                    var objectId = dataReader.GetInt32(2);
+                    var tableNode = new TableNode(DatabaseNode, schema, name, objectId);
+                    childNodes.Add(tableNode);
                 }
-            }
+            });
+
             return childNodes;
         }
 
         public bool Sortable => false;
-
         public string Query => null;
-
         public DatabaseNode DatabaseNode { get; }
-
         public ContextMenuStrip ContextMenu => null;
     }
 }

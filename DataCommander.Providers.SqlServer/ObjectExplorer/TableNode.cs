@@ -80,10 +80,10 @@ order by c.column_id",
             if (connection.State != ConnectionState.Open)
                 connection.Open();
 
-            var transactionScope = new DbTransactionScope(connection, null);
-            using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+            var executor = connection.CreateCommandExecutor();
+            executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
             {
-                dataReader.Read(dataRecord =>
+                while (dataReader.Read())
                 {
                     if (first)
                         first = false;
@@ -91,10 +91,10 @@ order by c.column_id",
                         columnNames.Append(",\r\n        ");
 
                     columnNames.Append('[');
-                    columnNames.Append(dataRecord[0]);
+                    columnNames.Append(dataReader[0]);
                     columnNames.Append(']');
-                });
-            }
+                }
+            });
 
             var query =
                 $@"select  {columnNames}
@@ -144,9 +144,10 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                 DataSet dataSet;
                 using (var connection = new SqlConnection(connectionString))
                 {
-                    var transactionScope = new DbTransactionScope(connection, null);
-                    dataSet = transactionScope.ExecuteDataSet(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+                    var executor = connection.CreateCommandExecutor();
+                    dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText));
                 }
+
                 var columns = dataSet.Tables[0];
                 var keys = dataSet.Tables[1];
 

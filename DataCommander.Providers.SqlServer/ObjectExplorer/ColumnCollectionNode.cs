@@ -73,16 +73,16 @@ order by fkc.parent_column_id";
                     var executor = DbCommandExecutorFactory.Create(connection);
                     executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
                     {
-                        columnNodes = dataReader.Read(() => ToColumnNode(dataReader)).ToSortedDictionary(c => c.Id);
+                        columnNodes = dataReader.ReadResult(() => ToColumnNode(dataReader)).ToSortedDictionary(c => c.Id);
                         dataReader.NextResult();
-                        dataReader.Read(() =>
+                        dataReader.ReadResult(() =>
                         {
                             var columnId = dataReader.GetInt32(0);
                             var columnNode = columnNodes[columnId];
                             columnNode.IsPrimaryKey = true;
                         });
                         dataReader.NextResult();
-                        dataReader.Read(() =>
+                        dataReader.ReadResult(() =>
                         {
                             var columnId = dataReader.GetInt32(0);
                             var columnNode = columnNodes[columnId];

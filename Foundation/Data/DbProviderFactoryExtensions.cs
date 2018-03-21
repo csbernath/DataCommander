@@ -20,10 +20,7 @@ namespace Foundation.Data
         /// <param name="connection"></param>
         /// <param name="commandText"></param>
         /// <returns></returns>
-        public static DataTable ExecuteDataTable(
-            this DbProviderFactory factory,
-            DbConnection connection,
-            string commandText)
+        public static DataTable ExecuteDataTable(this DbProviderFactory factory, DbConnection connection, string commandText)
         {
             Assert.IsNotNull(factory);
             Assert.IsNotNull(connection);
@@ -74,19 +71,30 @@ namespace Foundation.Data
             }
         }
 
+        public static void ExecuteReader(
+            this DbProviderFactory dbProviderFactory,
+            string connectionString,
+            ExecuteReaderRequest request,
+            Action<IDataReader> read)
+        {
+            using (var connection = dbProviderFactory.CreateConnection())
+            {
+                connection.ConnectionString = connectionString;
+                connection.Open();
+                var executor = connection.CreateCommandExecutor();
+                executor.ExecuteReader(request, read);
+            }
+        }
+
         public static List<T> ExecuteReader<T>(
             this DbProviderFactory dbProviderFactory,
             string connectionString,
             ExecuteReaderRequest request,
             Func<IDataRecord, T> read)
         {
-            using (var connection = dbProviderFactory.CreateConnection())
-            {
-                connection.ConnectionString = connectionString;
-                connection.Open();
-                var executor = new DbCommandExecutor(connection);
-                return executor.ExecuteReader(request, read);
-            }
+            List<T> rows = null;
+            dbProviderFactory.ExecuteReader(connectionString, request, dataReader => rows = dataReader.ReadResult(read));
+            return rows;
         }
     }
 }

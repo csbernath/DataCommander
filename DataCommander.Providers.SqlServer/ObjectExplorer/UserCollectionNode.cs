@@ -29,17 +29,18 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
-                var transactionScope = new DbTransactionScope(connection, null);
-                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+                var executor = connection.CreateCommandExecutor();
+                dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
             }
+
             var dataRows = dataTable.Rows;
             var count = dataRows.Count;
             var treeNodes = new ITreeNode[count];
 
-            for (var i=0;i<count;i++)
+            for (var i = 0; i < count; ++i)
             {
-                var name = (string)dataRows[i][0];
-                treeNodes[i] = new UserNode(_database,name);
+                var name = (string) dataRows[i][0];
+                treeNodes[i] = new UserNode(_database, name);
             }
 
             return treeNodes;

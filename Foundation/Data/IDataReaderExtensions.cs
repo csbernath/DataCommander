@@ -4,7 +4,6 @@ using System.Data;
 using System.Globalization;
 using System.Threading;
 using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
 {
@@ -13,69 +12,69 @@ namespace Foundation.Data
     /// </summary>
     public static class IDataReaderExtensions
     {
-        public static void Read(this IDataReader dataReader, Action read)
+        public static void ReadResult(this IDataReader dataReader, Action readRecord)
         {
             while (dataReader.Read())
-                read();
+                readRecord();
         }
 
-        public static void Read(this IDataReader dataReader, IEnumerable<Action> reads)
+        public static void ReadResults(this IDataReader dataReader, IEnumerable<Action> readRecords)
         {
-            foreach (var read in reads)
+            foreach (var readRecord in readRecords)
             {
-                dataReader.Read(read);
+                dataReader.ReadResult(readRecord);
                 var nextResult = dataReader.NextResult();
-                FoundationContract.Assert(nextResult);
+                Assert.IsTrue(nextResult);
             }
         }
 
-        public static List<T> Read<T>(this IDataReader dataReader, Func<IDataReader, T> read)
+        public static List<T> ReadResult<T>(this IDataReader dataReader, Func<IDataReader, T> readRecord)
         {
-            var objects = new List<T>();
+            var records = new List<T>();
 
-            dataReader.Read(() =>
+            dataReader.ReadResult(() =>
             {
-                var @object = read(dataReader);
-                objects.Add(@object);
+                var @object = readRecord(dataReader);
+                records.Add(@object);
             });
 
-            return objects;
+            return records;
         }
 
-        public static List<T> ReadNext<T>(this IDataReader dataReader, Func<IDataReader, T> read)
+        public static List<T> ReadNextResult<T>(this IDataReader dataReader, Func<IDataReader, T> readRecord)
         {
             var nextResult = dataReader.NextResult();
-            FoundationContract.Assert(nextResult);
-            return dataReader.Read(read);
+            Assert.IsTrue(nextResult);
+            return dataReader.ReadResult(readRecord);
         }
 
-        public static List<T> Read<T>(this IDataReader dataReader, Func<T> read)
+        public static List<T> ReadResult<T>(this IDataReader dataReader, Func<T> readRecord)
         {
-            var objects = new List<T>();
+            var records = new List<T>();
 
-            dataReader.Read(() =>
+            dataReader.ReadResult(() =>
             {
-                var @object = read();
-                objects.Add(@object);
+                var @object = readRecord();
+                records.Add(@object);
             });
 
-            return objects;
+            return records;
         }
 
         public static ExecuteReaderResponse<T1, T2> Read<T1, T2>(this IDataReader dataReader, Func<T1> read1, Func<T2> read2)
         {
-            List<T1> objects1 = null;
-            List<T2> objects2 = null;
+            List<T1> records1 = null;
+            List<T2> records2 = null;
 
-            var reads = new Action[]
+            var readRecords = new Action[]
             {
-                () => objects1 = dataReader.Read(read1),
-                () => objects2 = dataReader.Read(read2)
+                () => records1 = dataReader.ReadResult(read1),
+                () => records2 = dataReader.ReadResult(read2)
             };
 
-            dataReader.Read(reads);
+            dataReader.ReadResults(readRecords);
 
-            return ExecuteReaderResponse.Create(objects1, objects2);
+            return ExecuteReaderResponse.Create(records1, records2);
         }
 
         public static ExecuteReaderResponse<T1, T2, T3> Read<T1, T2, T3>(this IDataReader dataReader, Func<T1> read1, Func<T2> read2, Func<T3> read3)
@@ -86,12 +85,12 @@ namespace Foundation.Data
 
             var reads = new Action[]
             {
-                () => objects1 = dataReader.Read(read1),
-                () => objects2 = dataReader.Read(read2),
-                () => objects3 = dataReader.Read(read3)
+                () => objects1 = dataReader.ReadResult(read1),
+                () => objects2 = dataReader.ReadResult(read2),
+                () => objects3 = dataReader.ReadResult(read3)
             };
 
-            dataReader.Read(reads);
+            dataReader.ReadResults(reads);
 
             return ExecuteReaderResponse.Create(objects1, objects2, objects3);
         }

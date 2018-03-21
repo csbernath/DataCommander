@@ -498,6 +498,7 @@ namespace DataCommander.Providers.SqlServer
                                         var objectTypes = sqlObject.Type.ToObjectTypes();
                                         statements.Add(SqlServerObject.GetObjects(schema: nameParts[0], objectTypes: objectTypes));
                                     }
+
                                     break;
 
                                 case 3:
@@ -529,6 +530,7 @@ namespace DataCommander.Providers.SqlServer
                             {
                                 owners = new string[] {"dbo", "sys"};
                             }
+
                             var sb = new StringBuilder();
                             for (i = 0; i < owners.Length; i++)
                             {
@@ -536,8 +538,10 @@ namespace DataCommander.Providers.SqlServer
                                 {
                                     sb.Append(',');
                                 }
+
                                 sb.AppendFormat("'{0}'", owners[i]);
                             }
+
                             var ownersString = sb.ToString();
                             commandText = string.Format(@"declare @schema_id int
 select  top 1 @schema_id = s.schema_id
@@ -595,6 +599,7 @@ order by 1", name.Database);
                                 i--;
                                 tableNameOrAlias = items[i];
                             }
+
                             if (tableNameOrAlias != null)
                             {
                                 string tableName;
@@ -612,6 +617,7 @@ order by 1", name.Database);
                                         {
                                             tokenValue = tokenValue.Substring(0, indexofAny);
                                         }
+
                                         string like;
                                         if (tokenValue.Length > 0)
                                         {
@@ -628,15 +634,18 @@ order by 1", name.Database);
                                         {
                                             like = "%";
                                         }
+
                                         @where = $"where {columnName} like N'{like}'";
                                     }
                                     else
                                     {
                                         @where = null;
                                     }
+
                                     commandText = $"select distinct top 100 {columnName} from {tableName} (readpast) {@where} order by 1";
                                 }
                             }
+
                             break;
                     }
                 }
@@ -648,18 +657,16 @@ order by 1", name.Database);
                     try
                     {
                         if (connection.State != ConnectionState.Open)
-                        {
                             connection.OpenAsync(CancellationToken.None).Wait();
-                        }
 
-                        var transactionScope = new DbTransactionScope(connection.Connection, transaction);
-                        using (var reader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+                        var executor = connection.Connection.CreateCommandExecutor();
+                        executor.ExecuteReader(new ExecuteReaderRequest(commandText, null, transaction), dataReader =>
                         {
                             while (true)
                             {
-                                reader.Read(dataRecord =>
+                                dataReader.ReadResult(() =>
                                 {
-                                    var fieldCount = dataRecord.FieldCount;
+                                    var fieldCount = dataReader.FieldCount;
 
                                     string schemaName;
                                     string objectName;
@@ -667,23 +674,21 @@ order by 1", name.Database);
                                     if (fieldCount == 1)
                                     {
                                         schemaName = null;
-                                        objectName = dataRecord[0].ToString();
+                                        objectName = dataReader[0].ToString();
                                     }
                                     else
                                     {
-                                        schemaName = dataRecord.GetStringOrDefault(0);
-                                        objectName = dataRecord.GetString(1);
+                                        schemaName = dataReader.GetStringOrDefault(0);
+                                        objectName = dataReader.GetString(1);
                                     }
 
                                     list.Add(new ObjectName(sqlObject, schemaName, objectName));
                                 });
 
-                                if (!reader.NextResult())
-                                {
+                                if (!dataReader.NextResult())
                                     break;
-                                }
                             }
-                        }
+                        });
                     }
                     catch
                     {

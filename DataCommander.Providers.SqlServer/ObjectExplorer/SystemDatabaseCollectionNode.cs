@@ -1,15 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Windows.Forms;
 using Foundation.Data;
 using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Threading;
-    using System.Windows.Forms;
-
     internal sealed class SystemDatabaseCollectionNode : ITreeNode
     {
         private readonly DatabaseCollectionNode _databaseCollectionNode;
@@ -21,7 +19,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             _databaseCollectionNode = databaseCollectionNode;
         }
 
-#region ITreeNode Members
+        #region ITreeNode Members
 
         string ITreeNode.Name => "System Databases";
 
@@ -33,18 +31,18 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
-                var transactionScope = new DbTransactionScope(connection, null);
+                var executor = connection.CreateCommandExecutor();
                 const string commandText = @"select d.name
 from sys.databases d (nolock)
 where name in('master','model','msdb','tempdb')
 order by d.name";
-                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+                dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
             }
 
             var list = new List<ITreeNode>();
             foreach (DataRow dataRow in dataTable.Rows)
             {
-                var name = (string)dataRow[0];
+                var name = (string) dataRow[0];
                 var node = new DatabaseNode(_databaseCollectionNode, name);
                 list.Add(node);
             }
@@ -53,11 +51,9 @@ order by d.name";
         }
 
         bool ITreeNode.Sortable => false;
-
         string ITreeNode.Query => null;
-
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-#endregion
+        #endregion
     }
 }

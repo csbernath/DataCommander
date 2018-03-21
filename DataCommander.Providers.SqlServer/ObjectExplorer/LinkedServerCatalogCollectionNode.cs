@@ -63,21 +63,14 @@ drop table #catalog";
             using (var connection = new SqlConnection(_linkedServer.LinkedServers.Server.ConnectionString))
             {
                 connection.Open();
-                var transactionScope = new DbTransactionScope(connection, null);
-                var commandDefinition = new CommandDefinition
+                var executor = connection.CreateCommandExecutor();
+                var executeReaderRequest = new ExecuteReaderRequest(commandText, new[]
                 {
-                    CommandText = commandText,
-                    Parameters = new List<object>
-                    {
-                        new SqlParameter("@name", _linkedServer.Name),
-                        new SqlParameter("@getSystemCatalogs", false)
-                    }
-                };
-
-                using (var dataReader = transactionScope.ExecuteReader(commandDefinition, CommandBehavior.Default))
-                {
-                    return dataReader.Read(dataRecord => new LinkedServerCatalogNode(_linkedServer, dataRecord.GetString(0)));
-                }
+                    new SqlParameter("@name", _linkedServer.Name),
+                    new SqlParameter("@getSystemCatalogs", false)
+                });
+                var nodes = executor.ExecuteReader(executeReaderRequest, dataRecord => new LinkedServerCatalogNode(_linkedServer, dataRecord.GetString(0)));
+                return nodes;
             }
         }
 

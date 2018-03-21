@@ -107,7 +107,7 @@ set arithabort on";
         {
             get
             {
-                var executor = DbCommandExecutorFactory.Create(_sqlConnection);
+                var executor = _sqlConnection.CreateCommandExecutor();
                 var commandText = "select @@version";
                 var version = (string) executor.ExecuteScalar(new CreateCommandRequest(commandText));
 
