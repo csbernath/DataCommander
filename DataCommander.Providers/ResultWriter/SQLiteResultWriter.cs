@@ -91,7 +91,7 @@
                 stringTableRow[1] = columnName;
                 insertStatement += columnName;
                 insertValues.Append('?');
-                var columnSize = (int)schemaRow.ColumnSize;
+                var columnSize = (int) schemaRow.ColumnSize;
                 var dataType = schemaRow.DataType;
                 var typeCode = Type.GetTypeCode(dataType);
                 string typeName;
@@ -180,8 +180,8 @@
             var commandText = sb.ToString();
             Trace.WriteLine(commandText);
             Trace.WriteLine(insertStatement);
-            var transactionScope = new DbTransactionScope(_connection, null);
-            transactionScope.ExecuteNonQuery(new CommandDefinition {CommandText = commandText});
+            var executor = _connection.CreateCommandExecutor();
+            executor.ExecuteNonQuery(new CreateCommandRequest(commandText));
             _transaction = _connection.BeginTransaction();
             _insertCommand.Connection = _connection;
             _insertCommand.Transaction = _transaction;

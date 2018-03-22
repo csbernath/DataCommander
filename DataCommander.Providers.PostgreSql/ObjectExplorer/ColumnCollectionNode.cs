@@ -28,11 +28,8 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
             using (var connection = new NpgsqlConnection(schemaNode.SchemaCollectionNode.ObjectExplorer.ConnectionString))
             {
                 connection.Open();
-                var transactionScope = new DbTransactionScope(connection, null);
-                transactionScope.ExecuteReader(new CommandDefinition
-                {
-                    CommandText =
-                        $@"select
+                var executor = connection.CreateCommandExecutor();
+                executor.ExecuteReader(new ExecuteReaderRequest($@"select
      c.column_name
     ,c.is_nullable
     ,c.data_type
@@ -43,8 +40,7 @@ from information_schema.columns c
 where
     c.table_schema = '{tableNode.TableCollectionNode.SchemaNode.Name}'
     and c.table_name = '{tableNode.Name}'
-order by c.ordinal_position"
-                }, CommandBehavior.Default, dataRecord =>
+order by c.ordinal_position"), dataRecord =>
                 {
                     var columnName = dataRecord.GetString(0);
                     var dataType = dataRecord.GetString(2);

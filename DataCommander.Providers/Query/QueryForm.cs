@@ -160,7 +160,7 @@ namespace DataCommander.Providers.Query
             NumberFormat = new NumberFormatInfo {NumberDecimalSeparator = "."};
         }
 
-        public QueryForm(MainForm mainForm,int index,IProvider provider,string connectionString,ConnectionBase connection,StatusStrip parentStatusBar,ColorTheme colorTheme)
+        public QueryForm(MainForm mainForm, int index, IProvider provider, string connectionString, ConnectionBase connection, StatusStrip parentStatusBar, ColorTheme colorTheme)
         {
             GarbageMonitor.Add("QueryForm", this);
 
@@ -330,8 +330,8 @@ namespace DataCommander.Providers.Query
 
         private void CloseResultSetTabPage_Click(object sender, EventArgs e)
         {
-            var toolStripMenuItem = (ToolStripMenuItem)sender;
-            var tabPage = (TabPage)toolStripMenuItem.Tag;
+            var toolStripMenuItem = (ToolStripMenuItem) sender;
+            var tabPage = (TabPage) toolStripMenuItem.Tag;
             CloseResultSetTabPage(tabPage);
             toolStripMenuItem.Tag = null;
         }
@@ -360,6 +360,7 @@ namespace DataCommander.Providers.Query
                         contextMenu.Items.Add(new ToolStripMenuItem("Close all", null, mnuCloseAllTabPages_Click, Keys.Control | Keys.Shift | Keys.F4));
                         contextMenu.Show(_resultSetsTabControl, e.Location);
                     }
+
                     break;
             }
         }
@@ -380,7 +381,7 @@ namespace DataCommander.Providers.Query
                 QueryTextBox.Font = value;
                 var size1 = TextRenderer.MeasureText("1", value);
                 var size2 = TextRenderer.MeasureText("12", value);
-                var width = QueryTextBox.TabSize*(size2.Width - size1.Width);
+                var width = QueryTextBox.TabSize * (size2.Width - size1.Width);
                 var tabs = new int[12];
 
                 for (var i = 0; i < tabs.Length; i++)
@@ -477,6 +478,7 @@ namespace DataCommander.Providers.Query
                         ResultSetCount++;
                         text = $"Set {ResultSetCount}";
                     }
+
                     var resultSetTabPage = new TabPage(text);
                     GarbageMonitor.Add("resultSetTabPage", resultSetTabPage);
                     resultSetTabPage.ToolTipText = null; // TODO
@@ -499,6 +501,7 @@ namespace DataCommander.Providers.Query
                             tabControl.TabPages.Add(tabPage);
                             index++;
                         }
+
                         resultSetTabPage.Controls.Add(tabControl);
                     }
                     else
@@ -535,7 +538,7 @@ namespace DataCommander.Providers.Query
         /// </summary>
         private void InitializeComponent()
         {
-            var resources = new System.ComponentModel.ComponentResourceManager(typeof (QueryForm));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(QueryForm));
             _mainMenu = new System.Windows.Forms.MenuStrip();
             _menuItem9 = new System.Windows.Forms.ToolStripMenuItem();
             _mnuSave = new System.Windows.Forms.ToolStripMenuItem();
@@ -648,7 +651,7 @@ namespace DataCommander.Providers.Query
             _mnuSave.MergeAction = System.Windows.Forms.MergeAction.Insert;
             _mnuSave.MergeIndex = 2;
             _mnuSave.Name = "_mnuSave";
-            _mnuSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            _mnuSave.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             _mnuSave.Size = new System.Drawing.Size(230, 22);
             _mnuSave.Text = "&Save";
             _mnuSave.Click += new System.EventHandler(mnuSave_Click);
@@ -667,7 +670,7 @@ namespace DataCommander.Providers.Query
             _mnuDuplicateConnection.MergeAction = System.Windows.Forms.MergeAction.Insert;
             _mnuDuplicateConnection.MergeIndex = 4;
             _mnuDuplicateConnection.Name = "_mnuDuplicateConnection";
-            _mnuDuplicateConnection.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
+            _mnuDuplicateConnection.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
             _mnuDuplicateConnection.Size = new System.Drawing.Size(230, 22);
             _mnuDuplicateConnection.Text = "Duplicate connection";
             _mnuDuplicateConnection.Click += new System.EventHandler(mnuDuplicateConnection_Click);
@@ -690,19 +693,19 @@ namespace DataCommander.Providers.Query
             // 
             // mnuPaste
             // 
-            _mnuPaste.Image = ((System.Drawing.Image)(resources.GetObject("_mnuPaste.Image")));
+            _mnuPaste.Image = ((System.Drawing.Image) (resources.GetObject("_mnuPaste.Image")));
             _mnuPaste.MergeIndex = 0;
             _mnuPaste.Name = "_mnuPaste";
-            _mnuPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+            _mnuPaste.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
             _mnuPaste.Size = new System.Drawing.Size(166, 22);
             _mnuPaste.Text = "&Paste";
             // 
             // mnuFind
             // 
-            _mnuFind.Image = ((System.Drawing.Image)(resources.GetObject("_mnuFind.Image")));
+            _mnuFind.Image = ((System.Drawing.Image) (resources.GetObject("_mnuFind.Image")));
             _mnuFind.MergeIndex = 1;
             _mnuFind.Name = "_mnuFind";
-            _mnuFind.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
+            _mnuFind.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
             _mnuFind.Size = new System.Drawing.Size(166, 22);
             _mnuFind.Text = "&Find";
             // 
@@ -730,7 +733,7 @@ namespace DataCommander.Providers.Query
             // 
             _mnuListMembers.MergeIndex = 0;
             _mnuListMembers.Name = "_mnuListMembers";
-            _mnuListMembers.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.J)));
+            _mnuListMembers.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.J)));
             _mnuListMembers.Size = new System.Drawing.Size(211, 22);
             _mnuListMembers.Text = "&List Members";
             _mnuListMembers.Click += new System.EventHandler(mnuListMembers_Click);
@@ -739,8 +742,8 @@ namespace DataCommander.Providers.Query
             // 
             _mnuClearCache.MergeIndex = 1;
             _mnuClearCache.Name = "_mnuClearCache";
-            _mnuClearCache.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                                                                            | System.Windows.Forms.Keys.C)));
+            _mnuClearCache.ShortcutKeys = ((System.Windows.Forms.Keys) (((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                                                                         | System.Windows.Forms.Keys.C)));
             _mnuClearCache.Size = new System.Drawing.Size(211, 22);
             _mnuClearCache.Text = "&Clear Cache";
             // 
@@ -748,7 +751,7 @@ namespace DataCommander.Providers.Query
             // 
             _mnuGoTo.MergeIndex = 4;
             _mnuGoTo.Name = "_mnuGoTo";
-            _mnuGoTo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+            _mnuGoTo.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
             _mnuGoTo.Size = new System.Drawing.Size(166, 22);
             _mnuGoTo.Text = "Go To...";
             // 
@@ -823,7 +826,7 @@ namespace DataCommander.Providers.Query
             // 
             _mnuDescribeParameters.MergeIndex = 1;
             _mnuDescribeParameters.Name = "_mnuDescribeParameters";
-            _mnuDescribeParameters.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            _mnuDescribeParameters.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
             _mnuDescribeParameters.Size = new System.Drawing.Size(269, 22);
             _mnuDescribeParameters.Text = "Describe &Parameters";
             _mnuDescribeParameters.Click += new System.EventHandler(mnuDescribeParameters_Click);
@@ -844,7 +847,7 @@ namespace DataCommander.Providers.Query
             // executeQueryToolStripMenuItem
             // 
             _executeQueryToolStripMenuItem.Name = "_executeQueryToolStripMenuItem";
-            _executeQueryToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+            _executeQueryToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
             _executeQueryToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
             _executeQueryToolStripMenuItem.Text = "Execute Query";
             _executeQueryToolStripMenuItem.Click += new System.EventHandler(toolStripMenuItem1_Click);
@@ -853,7 +856,7 @@ namespace DataCommander.Providers.Query
             // 
             _mnuExecuteQuerySingleRow.MergeIndex = 6;
             _mnuExecuteQuerySingleRow.Name = "_mnuExecuteQuerySingleRow";
-            _mnuExecuteQuerySingleRow.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
+            _mnuExecuteQuerySingleRow.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
             _mnuExecuteQuerySingleRow.Size = new System.Drawing.Size(269, 22);
             _mnuExecuteQuerySingleRow.Text = "Execute Query (SingleRow)";
             _mnuExecuteQuerySingleRow.Click += new System.EventHandler(mnuSingleRow_Click);
@@ -862,7 +865,7 @@ namespace DataCommander.Providers.Query
             // 
             _mnuExecuteQuerySchemaOnly.MergeIndex = 7;
             _mnuExecuteQuerySchemaOnly.Name = "_mnuExecuteQuerySchemaOnly";
-            _mnuExecuteQuerySchemaOnly.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            _mnuExecuteQuerySchemaOnly.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
             _mnuExecuteQuerySchemaOnly.Size = new System.Drawing.Size(269, 22);
             _mnuExecuteQuerySchemaOnly.Text = "Execute Query (Schema only)";
             _mnuExecuteQuerySchemaOnly.Click += new System.EventHandler(mnuResultSchema_Click);
@@ -871,7 +874,7 @@ namespace DataCommander.Providers.Query
             // 
             _mnuExecuteQueryKeyInfo.MergeIndex = 8;
             _mnuExecuteQueryKeyInfo.Name = "_mnuExecuteQueryKeyInfo";
-            _mnuExecuteQueryKeyInfo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.K)));
+            _mnuExecuteQueryKeyInfo.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.K)));
             _mnuExecuteQueryKeyInfo.Size = new System.Drawing.Size(269, 22);
             _mnuExecuteQueryKeyInfo.Text = "Execute Query (&KeyInfo)";
             _mnuExecuteQueryKeyInfo.Click += new System.EventHandler(mnuKeyInfo_Click);
@@ -880,8 +883,8 @@ namespace DataCommander.Providers.Query
             // 
             _mnuExecuteQueryXml.MergeIndex = 9;
             _mnuExecuteQueryXml.Name = "_mnuExecuteQueryXml";
-            _mnuExecuteQueryXml.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                                                                                 | System.Windows.Forms.Keys.X)));
+            _mnuExecuteQueryXml.ShortcutKeys = ((System.Windows.Forms.Keys) (((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                                                                              | System.Windows.Forms.Keys.X)));
             _mnuExecuteQueryXml.Size = new System.Drawing.Size(269, 22);
             _mnuExecuteQueryXml.Text = "Execute Query (XML)";
             _mnuExecuteQueryXml.Click += new System.EventHandler(mnuXml_Click);
@@ -890,8 +893,8 @@ namespace DataCommander.Providers.Query
             // 
             _mnuOpenTable.MergeIndex = 10;
             _mnuOpenTable.Name = "_mnuOpenTable";
-            _mnuOpenTable.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                                                                           | System.Windows.Forms.Keys.O)));
+            _mnuOpenTable.ShortcutKeys = ((System.Windows.Forms.Keys) (((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                                                                        | System.Windows.Forms.Keys.O)));
             _mnuOpenTable.Size = new System.Drawing.Size(269, 22);
             _mnuOpenTable.Text = "Open Table";
             _mnuOpenTable.Click += new System.EventHandler(mnuOpenTable_Click);
@@ -901,7 +904,7 @@ namespace DataCommander.Providers.Query
             _mnuCancel.Enabled = false;
             _mnuCancel.MergeIndex = 11;
             _mnuCancel.Name = "_mnuCancel";
-            _mnuCancel.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Pause)));
+            _mnuCancel.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Pause)));
             _mnuCancel.Size = new System.Drawing.Size(269, 22);
             _mnuCancel.Text = "&Cancel Executing Query";
             _mnuCancel.Click += new System.EventHandler(mnuCancel_Click);
@@ -909,7 +912,7 @@ namespace DataCommander.Providers.Query
             // parseToolStripMenuItem
             // 
             _parseToolStripMenuItem.Name = "_parseToolStripMenuItem";
-            _parseToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
+            _parseToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
             _parseToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
             _parseToolStripMenuItem.Text = "Parse";
             _parseToolStripMenuItem.Click += new System.EventHandler(parseToolStripMenuItem_Click);
@@ -942,7 +945,7 @@ namespace DataCommander.Providers.Query
             // 
             _mnuText.MergeIndex = 0;
             _mnuText.Name = "_mnuText";
-            _mnuText.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
+            _mnuText.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
             _mnuText.Size = new System.Drawing.Size(221, 22);
             _mnuText.Text = "&Text";
             _mnuText.Click += new System.EventHandler(mnuText_Click);
@@ -951,7 +954,7 @@ namespace DataCommander.Providers.Query
             // 
             _mnuDataGrid.MergeIndex = 1;
             _mnuDataGrid.Name = "_mnuDataGrid";
-            _mnuDataGrid.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
+            _mnuDataGrid.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
             _mnuDataGrid.Size = new System.Drawing.Size(221, 22);
             _mnuDataGrid.Text = "&DataGrid";
             _mnuDataGrid.Click += new System.EventHandler(mnuDataGrid_Click);
@@ -975,7 +978,7 @@ namespace DataCommander.Providers.Query
             // 
             _mnuListView.MergeIndex = 4;
             _mnuListView.Name = "_mnuListView";
-            _mnuListView.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+            _mnuListView.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
             _mnuListView.Size = new System.Drawing.Size(221, 22);
             _mnuListView.Text = "&ListView";
             _mnuListView.Click += new System.EventHandler(mnuListView_Click);
@@ -1019,8 +1022,8 @@ namespace DataCommander.Providers.Query
             // 
             _mnuGotoQueryEditor.MergeIndex = 15;
             _mnuGotoQueryEditor.Name = "_mnuGotoQueryEditor";
-            _mnuGotoQueryEditor.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                                                                                 | System.Windows.Forms.Keys.Q)));
+            _mnuGotoQueryEditor.ShortcutKeys = ((System.Windows.Forms.Keys) (((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                                                                              | System.Windows.Forms.Keys.Q)));
             _mnuGotoQueryEditor.Size = new System.Drawing.Size(269, 22);
             _mnuGotoQueryEditor.Text = "Goto &Query Editor";
             _mnuGotoQueryEditor.Click += new System.EventHandler(mnuGotoQueryEditor_Click);
@@ -1029,7 +1032,7 @@ namespace DataCommander.Providers.Query
             // 
             _mnuGotoMessageTabPage.MergeIndex = 16;
             _mnuGotoMessageTabPage.Name = "_mnuGotoMessageTabPage";
-            _mnuGotoMessageTabPage.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
+            _mnuGotoMessageTabPage.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
             _mnuGotoMessageTabPage.Size = new System.Drawing.Size(269, 22);
             _mnuGotoMessageTabPage.Text = "Goto &Message TabPage";
             _mnuGotoMessageTabPage.Click += new System.EventHandler(mnuGotoMessageTabPage_Click);
@@ -1047,8 +1050,8 @@ namespace DataCommander.Providers.Query
             // 
             _mnuCloseAllTabPages.MergeIndex = 18;
             _mnuCloseAllTabPages.Name = "_mnuCloseAllTabPages";
-            _mnuCloseAllTabPages.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                                                                                  | System.Windows.Forms.Keys.F4)));
+            _mnuCloseAllTabPages.ShortcutKeys = ((System.Windows.Forms.Keys) (((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                                                                               | System.Windows.Forms.Keys.F4)));
             _mnuCloseAllTabPages.Size = new System.Drawing.Size(269, 22);
             _mnuCloseAllTabPages.Text = "Close &All TabPages";
             _mnuCloseAllTabPages.Click += new System.EventHandler(mnuCloseAllTabPages_Click);
@@ -1057,7 +1060,7 @@ namespace DataCommander.Providers.Query
             // 
             _mnuCreateInsert.MergeIndex = 19;
             _mnuCreateInsert.Name = "_mnuCreateInsert";
-            _mnuCreateInsert.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
+            _mnuCreateInsert.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
             _mnuCreateInsert.Size = new System.Drawing.Size(269, 22);
             _mnuCreateInsert.Text = "Create insert statements";
             _mnuCreateInsert.Click += new System.EventHandler(mnuCreateInsert_Click);
@@ -1197,7 +1200,7 @@ namespace DataCommander.Providers.Query
             // 
             _tvObjectExplorer.Dock = System.Windows.Forms.DockStyle.Left;
             _tvObjectExplorer.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point,
-                ((byte)(238)));
+                ((byte) (238)));
             _tvObjectExplorer.Location = new System.Drawing.Point(0, 0);
             _tvObjectExplorer.Name = "_tvObjectExplorer";
             _tvObjectExplorer.Size = new System.Drawing.Size(300, 565);
@@ -1265,7 +1268,7 @@ namespace DataCommander.Providers.Query
                 _cToolStripMenuItem,
                 _openTableToolStripMenuItem
             });
-            _executeQuerySplitButton.Image = ((System.Drawing.Image)(resources.GetObject("_executeQuerySplitButton.Image")));
+            _executeQuerySplitButton.Image = ((System.Drawing.Image) (resources.GetObject("_executeQuerySplitButton.Image")));
             _executeQuerySplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             _executeQuerySplitButton.Name = "_executeQuerySplitButton";
             _executeQuerySplitButton.Size = new System.Drawing.Size(32, 22);
@@ -1304,7 +1307,7 @@ namespace DataCommander.Providers.Query
             // 
             _cancelQueryButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             _cancelQueryButton.Enabled = false;
-            _cancelQueryButton.Image = ((System.Drawing.Image)(resources.GetObject("_cancelQueryButton.Image")));
+            _cancelQueryButton.Image = ((System.Drawing.Image) (resources.GetObject("_cancelQueryButton.Image")));
             _cancelQueryButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             _cancelQueryButton.Name = "_cancelQueryButton";
             _cancelQueryButton.Size = new System.Drawing.Size(23, 22);
@@ -1314,7 +1317,7 @@ namespace DataCommander.Providers.Query
             // queryTextBox
             // 
             QueryTextBox.Dock = System.Windows.Forms.DockStyle.Top;
-            QueryTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            QueryTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)));
             QueryTextBox.Location = new System.Drawing.Point(303, 0);
             QueryTextBox.Name = "QueryTextBox";
             QueryTextBox.Size = new System.Drawing.Size(713, 279);
@@ -1333,8 +1336,8 @@ namespace DataCommander.Providers.Query
             Controls.Add(_statusBar);
             Controls.Add(_tvObjectExplorer);
             Controls.Add(_mainMenu);
-            Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)));
+            Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
             MainMenuStrip = _mainMenu;
             Name = "QueryForm";
             _mainMenu.ResumeLayout(false);
@@ -1523,11 +1526,11 @@ namespace DataCommander.Providers.Query
             if (e.Button == MouseButtons.Right)
             {
                 var contextMenu = new ContextMenuStrip(components);
-                var values = Enum.GetValues(typeof (ResultWriterType));
+                var values = Enum.GetValues(typeof(ResultWriterType));
 
                 for (var i = 0; i < values.Length; i++)
                 {
-                    var tableStyle = (ResultWriterType)values.GetValue(i);
+                    var tableStyle = (ResultWriterType) values.GetValue(i);
                     var item = new ToolStripMenuItem();
                     item.Text = tableStyle.ToString();
                     item.Tag = tableStyle;
@@ -1591,20 +1594,13 @@ namespace DataCommander.Providers.Query
                     };
                 }
                 else
-                {
-                    var transactionScope = new DbTransactionScope(Connection.Connection, _transaction);
                     commands =
                         from statement in statements
                         select new AsyncDataAdapterCommand
                         {
                             LineIndex = statement.LineIndex,
-                            Command = transactionScope.CreateCommand(new CommandDefinition
-                            {
-                                CommandText = statement.CommandText,
-                                CommandTimeout = _commandTimeout
-                            })
+                            Command = Connection.Connection.CreateCommand(new CreateCommandRequest(statement.CommandText, null, CommandType.Text, _commandTimeout, _transaction))
                         };
-                }
 
                 int maxRecords;
                 IResultWriter resultWriter = null;
@@ -1717,17 +1713,17 @@ namespace DataCommander.Providers.Query
             ShowTabPage("TextResult", GetToolTipText(null), textBox);
 
             TextWriter textWriter = new TextBoxWriter(textBox);
-            var resultWriter = (IResultWriter)new TextResultWriter(AddInfoMessage, textWriter, this);
+            var resultWriter = (IResultWriter) new TextResultWriter(AddInfoMessage, textWriter, this);
 
             resultWriter.Begin(Provider);
 
             var schemaTable = new DataTable();
 
-            schemaTable.Columns.Add(SchemaTableColumn.ColumnName, typeof (string));
-            schemaTable.Columns.Add("ColumnSize", typeof (int));
-            schemaTable.Columns.Add("DataType", typeof (Type));
-            schemaTable.Columns.Add("NumericPrecision", typeof (short));
-            schemaTable.Columns.Add("NumericScale", typeof (short));
+            schemaTable.Columns.Add(SchemaTableColumn.ColumnName, typeof(string));
+            schemaTable.Columns.Add("ColumnSize", typeof(int));
+            schemaTable.Columns.Add("DataType", typeof(Type));
+            schemaTable.Columns.Add("NumericPrecision", typeof(short));
+            schemaTable.Columns.Add("NumericScale", typeof(short));
 
             foreach (DataColumn column in dataTable.Columns)
             {
@@ -1750,6 +1746,7 @@ namespace DataCommander.Providers.Query
                                 maxLength = length;
                             }
                         }
+
                         columnSize = maxLength;
                         break;
 
@@ -1829,6 +1826,7 @@ namespace DataCommander.Providers.Query
                     {
                         columnIndexes[i] = i;
                     }
+
                     HtmlFormatter.Write(dataView, columnIndexes, streamWriter);
                 }
             }
@@ -1898,7 +1896,7 @@ namespace DataCommander.Providers.Query
                     Width = -2
                 };
 
-                var type = (Type)dataColumn.ExtendedProperties[0];
+                var type = (Type) dataColumn.ExtendedProperties[0];
 
                 if (type == null)
                 {
@@ -1964,8 +1962,8 @@ namespace DataCommander.Providers.Query
 
         private void TabPage_Close(object sender, EventArgs e)
         {
-            var tabPage = (TabPage)sender;
-            var tabControl = (TabControl)tabPage.Parent;
+            var tabPage = (TabPage) sender;
+            var tabControl = (TabControl) tabPage.Parent;
             tabControl.TabPages.Remove(tabPage);
         }
 
@@ -2052,7 +2050,7 @@ namespace DataCommander.Providers.Query
                         break;
 
                     case ResultWriterType.DataGridView:
-                        var dataGridViewResultWriter = (DataGridViewResultWriter)dataAdapter.ResultWriter;
+                        var dataGridViewResultWriter = (DataGridViewResultWriter) dataAdapter.ResultWriter;
                         const string text = "TODO";
                         var resultSetTabPage = new TabPage(text);
                         resultSetTabPage.ToolTipText = null; // TODO
@@ -2071,6 +2069,7 @@ namespace DataCommander.Providers.Query
                             tabControl.TabPages.Add(tabPage);
                             index++;
                         }
+
                         resultSetTabPage.Controls.Add(tabControl);
                         break;
                 }
@@ -2304,7 +2303,7 @@ namespace DataCommander.Providers.Query
 
         private void textBox_SelectionChanged(object sender, EventArgs e)
         {
-            var richTextBox = (RichTextBox)sender;
+            var richTextBox = (RichTextBox) sender;
             var charIndex = richTextBox.SelectionStart;
             var line = richTextBox.GetLineFromCharIndex(charIndex) + 1;
             var lineIndex = QueryTextBox.GetLineIndex(richTextBox, -1);
@@ -2378,15 +2377,15 @@ namespace DataCommander.Providers.Query
                                 {
                                     case TypeCode.DateTime:
                                         const long ticksPerMillisecond = 10000;
-                                        const long ticksPerSecond = ticksPerMillisecond*1000;
-                                        const long ticksPerMinute = ticksPerSecond*60;
-                                        const long ticksPerHour = ticksPerMinute*60;
-                                        const long ticksPerDay = ticksPerHour*24;
+                                        const long ticksPerSecond = ticksPerMillisecond * 1000;
+                                        const long ticksPerMinute = ticksPerSecond * 60;
+                                        const long ticksPerHour = ticksPerMinute * 60;
+                                        const long ticksPerDay = ticksPerHour * 24;
 
-                                        var dateTime = (DateTime)value;
+                                        var dateTime = (DateTime) value;
                                         var ticks = dateTime.Ticks;
 
-                                        if (ticks%ticksPerDay == 0)
+                                        if (ticks % ticksPerDay == 0)
                                         {
                                             row["Value"] = dateTime.ToString("yyyy-MM-dd");
                                         }
@@ -2434,6 +2433,7 @@ namespace DataCommander.Providers.Query
             {
                 CloseResultSetTabPage(tabPage);
             }
+
             ResultSetCount = 0;
         }
 
@@ -2481,9 +2481,9 @@ namespace DataCommander.Providers.Query
 
             if (rowCount > 0)
             {
-                var seconds = (double)ticks/Stopwatch.Frequency;
+                var seconds = (double) ticks / Stopwatch.Frequency;
 
-                text += " (" + Math.Round(rowCount/seconds, 0) + " rows/sec)";
+                text += " (" + Math.Round(rowCount / seconds, 0) + " rows/sec)";
             }
 
             _sbPanelRows.Text = text;
@@ -2702,7 +2702,7 @@ namespace DataCommander.Providers.Query
 
             if (treeNode.Nodes.Count > 0)
             {
-                var treeNode2 = (ITreeNode)treeNode.Nodes[0].Tag;
+                var treeNode2 = (ITreeNode) treeNode.Nodes[0].Tag;
 
                 if (treeNode2 == null)
                 {
@@ -2711,7 +2711,7 @@ namespace DataCommander.Providers.Query
                     try
                     {
                         treeNode.Nodes.Clear();
-                        treeNode2 = (ITreeNode)treeNode.Tag;
+                        treeNode2 = (ITreeNode) treeNode.Tag;
                         IEnumerable<ITreeNode> children = null;
 
                         try
@@ -2751,7 +2751,7 @@ namespace DataCommander.Providers.Query
                     var treeNode = _tvObjectExplorer.GetNodeAt(e.X, e.Y);
                     if (treeNode != null)
                     {
-                        var treeNode2 = (ITreeNode)treeNode.Tag;
+                        var treeNode2 = (ITreeNode) treeNode.Tag;
 
                         if (e.Button != MouseButtons.Left)
                         {
@@ -2760,6 +2760,7 @@ namespace DataCommander.Providers.Query
 
                         var text = treeNode.Text;
                     }
+
                     break;
 
                 default:
@@ -2772,7 +2773,7 @@ namespace DataCommander.Providers.Query
             var treeNodeV = _tvObjectExplorer.SelectedNode;
             if (treeNodeV != null)
             {
-                var treeNode = (ITreeNode)treeNodeV.Tag;
+                var treeNode = (ITreeNode) treeNodeV.Tag;
                 treeNodeV.Nodes.Clear();
                 AddNodes(treeNodeV.Nodes, treeNode.GetChildren(true), treeNode.Sortable);
             }
@@ -2802,7 +2803,7 @@ namespace DataCommander.Providers.Query
                     var treeNodeV = _tvObjectExplorer.SelectedNode;
                     if (treeNodeV != null)
                     {
-                        var treeNode = (ITreeNode)treeNodeV.Tag;
+                        var treeNode = (ITreeNode) treeNodeV.Tag;
                         var contextMenu = treeNode.ContextMenu;
 
                         if (!treeNode.IsLeaf)
@@ -2827,6 +2828,7 @@ namespace DataCommander.Providers.Query
                                 components.Add(contextMenu);
                                 GarbageMonitor.Add("contextMenu", contextMenu);
                             }
+
                             var pos = new Point(e.X, e.Y);
                             contextMenu.Show(_tvObjectExplorer, pos);
                         }
@@ -2844,7 +2846,7 @@ namespace DataCommander.Providers.Query
             var selectedNode = _tvObjectExplorer.SelectedNode;
             if (selectedNode != null)
             {
-                var treeNode = (ITreeNode)selectedNode.Tag;
+                var treeNode = (ITreeNode) selectedNode.Tag;
 
                 try
                 {
@@ -2901,7 +2903,7 @@ namespace DataCommander.Providers.Query
             if (form.ShowDialog(this) == DialogResult.OK)
             {
                 var lineNumber = form.LineNumber;
-                charIndex = NativeMethods.SendMessage(richTextBox.Handle.ToInt32(), (int)NativeMethods.Message.EditBox.LineIndex, lineNumber - 1, 0);
+                charIndex = NativeMethods.SendMessage(richTextBox.Handle.ToInt32(), (int) NativeMethods.Message.EditBox.LineIndex, lineNumber - 1, 0);
                 richTextBox.SelectionStart = charIndex;
             }
         }
@@ -2959,6 +2961,7 @@ namespace DataCommander.Providers.Query
                     default:
                         throw new NotImplementedException();
                 }
+
                 IStringMatcher matcher = new StringMatcher(text, comparison);
                 var treeView = control as TreeView;
 
@@ -3244,7 +3247,7 @@ namespace DataCommander.Providers.Query
 
             var intPtr = textBox.RichTextBox.Handle;
             var hWnd = intPtr.ToInt32();
-            NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.Gdi.SetRedraw, 0, 0);
+            NativeMethods.SendMessage(hWnd, (int) NativeMethods.Message.Gdi.SetRedraw, 0, 0);
 
             var objectName = e.ObjectName.QuotedName;
 
@@ -3253,7 +3256,7 @@ namespace DataCommander.Providers.Query
             textBox.RichTextBox.SelectedText = objectName;
             textBox.RichTextBox.SelectionStart = e.StartIndex + objectName.Length;
 
-            NativeMethods.SendMessage(hWnd, (int)NativeMethods.Message.Gdi.SetRedraw, 1, 0);
+            NativeMethods.SendMessage(hWnd, (int) NativeMethods.Message.Gdi.SetRedraw, 1, 0);
         }
 
         private void mnuClearCache_Click(object sender, EventArgs e)
@@ -3371,8 +3374,8 @@ namespace DataCommander.Providers.Query
                             dataReaderHelper.GetValues(values);
 
                             var dataTable = new DataTable("SingleRow(" + rowCount + ")");
-                            dataTable.Columns.Add(" ", typeof (int));
-                            dataTable.Columns.Add("Name", typeof (string));
+                            dataTable.Columns.Add(" ", typeof(int));
+                            dataTable.Columns.Add("Name", typeof(string));
                             dataTable.Columns.Add("Value");
                             var count = schemaTable.Rows.Count;
 
@@ -3442,7 +3445,7 @@ namespace DataCommander.Providers.Query
                                 read = true;
                             }
 
-                            var fragment = (string)dataReader[0];
+                            var fragment = (string) dataReader[0];
                             writer.Write(fragment);
                         }
 
@@ -3534,7 +3537,7 @@ namespace DataCommander.Providers.Query
                                     sb.Append(',');
 
                                 var schemaRow = schemaRows[i];
-                                var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
+                                var columnName = (string) schemaRow[SchemaTableColumn.ColumnName];
                                 sb.Append(columnName);
                             }
                         }
@@ -3563,7 +3566,7 @@ namespace DataCommander.Providers.Query
                             sb.AppendLine(");");
                             ++statementCount;
 
-                            if (statementCount%100 == 0)
+                            if (statementCount % 100 == 0)
                             {
                                 _standardOutput.Write(sb);
                                 sb.Length = 0;
@@ -3616,7 +3619,7 @@ namespace DataCommander.Providers.Query
                                 sb.Append(',');
 
                             var schemaRow = schemaRows[i];
-                            var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
+                            var columnName = (string) schemaRow[SchemaTableColumn.ColumnName];
                             sb.Append(columnName);
                         }
 
@@ -3673,8 +3676,8 @@ namespace DataCommander.Providers.Query
 
         private void tvObjectBrowser_ItemDrag(object sender, ItemDragEventArgs e)
         {
-            var treeNode = (TreeNode)e.Item;
-            var treeNode2 = (ITreeNode)treeNode.Tag;
+            var treeNode = (TreeNode) e.Item;
+            var treeNode2 = (ITreeNode) treeNode.Tag;
             var text = treeNode.Text;
             _tvObjectExplorer.DoDragDrop(text, DragDropEffects.All);
         }
@@ -3839,7 +3842,7 @@ namespace DataCommander.Providers.Query
 
             if (index < forms.Length - 1)
             {
-                var nextQueryForm = (QueryForm)forms[index + 1];
+                var nextQueryForm = (QueryForm) forms[index + 1];
                 destinationProvider = nextQueryForm.Provider;
             }
             else
@@ -3858,6 +3861,7 @@ namespace DataCommander.Providers.Query
                 for (var i = 0; i < dataReader.FieldCount; i++)
                     dataTypeNames[i] = dataReader.GetDataTypeName(i);
             }
+
             string tableName;
             if (command.CommandType == CommandType.StoredProcedure)
                 tableName = command.CommandText;
@@ -3908,7 +3912,7 @@ namespace DataCommander.Providers.Query
             var index = Array.IndexOf(forms, this);
             if (index < forms.Length - 1)
             {
-                var nextQueryForm = (QueryForm)forms[index + 1];
+                var nextQueryForm = (QueryForm) forms[index + 1];
                 var destinationProvider = nextQueryForm.Provider;
                 var destinationConnection = nextQueryForm.Connection;
                 var sqlStatement = new SqlStatement(Query);
@@ -3963,10 +3967,10 @@ namespace DataCommander.Providers.Query
             var index = Array.IndexOf(forms, this);
             if (index < forms.Length - 1)
             {
-                var nextQueryForm = (QueryForm)forms[index + 1];
+                var nextQueryForm = (QueryForm) forms[index + 1];
                 var destinationProvider = nextQueryForm.Provider;
-                var destinationConnection = (SqlConnection)nextQueryForm.Connection.Connection;
-                var destionationTransaction = (SqlTransaction)nextQueryForm._transaction;
+                var destinationConnection = (SqlConnection) nextQueryForm.Connection.Connection;
+                var destionationTransaction = (SqlTransaction) nextQueryForm._transaction;
                 var sqlStatement = new SqlStatement(Query);
                 _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
                 string tableName;
@@ -3986,16 +3990,16 @@ namespace DataCommander.Providers.Query
                 _stopwatch.Start();
                 _timer.Start();
                 _dataAdapter = new SqlBulkCopyAsyncDataAdapter(destinationConnection, destionationTransaction, tableName, AddInfoMessage);
-                    //Provider,
-                    //new[]
-                    //{
-                    //    new AsyncDataAdapterCommand
-                    //    {
-                    //        LineIndex = 0,
-                    //        Command = _command
-                    //    }
-                    //},
-                    //maxRecords, rowBlockSize, null, EndFillInvoker, WriteEndInvoker);
+                //Provider,
+                //new[]
+                //{
+                //    new AsyncDataAdapterCommand
+                //    {
+                //        LineIndex = 0,
+                //        Command = _command
+                //    }
+                //},
+                //maxRecords, rowBlockSize, null, EndFillInvoker, WriteEndInvoker);
                 _dataAdapter.Start();
             }
             else
@@ -4011,8 +4015,8 @@ namespace DataCommander.Providers.Query
 
         private void TableStyleMenuItem_Click(object sender, EventArgs e)
         {
-            var item = (ToolStripMenuItem)sender;
-            var tableStyle = (ResultWriterType)item.Tag;
+            var item = (ToolStripMenuItem) sender;
+            var tableStyle = (ResultWriterType) item.Tag;
             SetResultWriterType(tableStyle);
         }
 
@@ -4020,7 +4024,7 @@ namespace DataCommander.Providers.Query
         {
             var mainForm = DataCommanderApplication.Instance.MainForm;
             mainForm.Cursor = Cursors.WaitCursor;
-            var queryForm = (QueryForm)mainForm.ActiveMdiChild;
+            var queryForm = (QueryForm) mainForm.ActiveMdiChild;
 
             try
             {
@@ -4097,18 +4101,18 @@ namespace DataCommander.Providers.Query
 
         private void parseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var transactionScope = new DbTransactionScope(Connection.Connection, null);
+            var executor = Connection.Connection.CreateCommandExecutor();
             var on = false;
             try
             {
-                transactionScope.ExecuteNonQuery(new CommandDefinition {CommandText = "SET PARSEONLY ON"});
+                executor.ExecuteNonQuery(new CreateCommandRequest("SET PARSEONLY ON"));
                 on = true;
                 var query = Query;
                 bool succeeded;
 
                 try
                 {
-                    transactionScope.ExecuteNonQuery(new CommandDefinition {CommandText = query});
+                    executor.ExecuteNonQuery(new CreateCommandRequest(query));
                     succeeded = _infoMessages.Count == 0;
                 }
                 catch (Exception exception)
@@ -4128,7 +4132,7 @@ namespace DataCommander.Providers.Query
             }
 
             if (on)
-                transactionScope.ExecuteNonQuery(new CommandDefinition {CommandText = "SET PARSEONLY OFF"});
+                executor.ExecuteNonQuery(new CreateCommandRequest("SET PARSEONLY OFF"));
         }
 
         public void SetStatusbarPanelText(string text, Color color)
@@ -4138,6 +4142,6 @@ namespace DataCommander.Providers.Query
             Refresh();
         }
 
-#endregion
+        #endregion
     }
 }

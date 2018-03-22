@@ -49,10 +49,11 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             {
                 var commandText = $@"msdb..sp_help_job @job_name = {_name.ToTSqlNVarChar()}";
                 DataSet dataSet;
+
                 using (var connection = new SqlConnection(_jobs.Server.ConnectionString))
                 {
-                    var transactionScope = new DbTransactionScope(connection, null);
-                    dataSet = transactionScope.ExecuteDataSet(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+                    var executor = connection.CreateCommandExecutor();
+                    dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText));
                 }
 
                 var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;

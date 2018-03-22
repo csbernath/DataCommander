@@ -1,11 +1,10 @@
-﻿using Foundation.Data;
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Windows.Forms;
 
     internal sealed class SystemTableCollectionNode : ITreeNode
     {
@@ -21,12 +20,12 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             var childNodes = new List<ITreeNode>();
-            var commandText = string.Format( @"select
+            var commandText = $@"select
     s.name,
     tbl.name,
     tbl.object_id
-from [{0}].sys.tables AS tbl
-join [{0}].sys.schemas s (nolock)
+from [{DatabaseNode.Name}].sys.tables AS tbl
+join [{DatabaseNode.Name}].sys.schemas s (nolock)
 on tbl.schema_id = s.schema_id
 where
 (CAST(
@@ -36,7 +35,7 @@ where
         select 
             major_id 
         from 
-            [{0}].sys.extended_properties 
+            [{DatabaseNode.Name}].sys.extended_properties 
         where 
             major_id = tbl.object_id and 
             minor_id = 0 and 
@@ -46,32 +45,31 @@ where
     else 0
 end          
              AS bit)=1)
-order by [Schema],[Name]", DatabaseNode.Name);
+order by 1,2";
             var connectionString = DatabaseNode.Databases.Server.ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
-                var transactionScope = new DbTransactionScope(connection, null);
-                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+                connection.Open();
+                var executor = connection.CreateCommandExecutor();
+                executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
                 {
-                    dataReader.Read(dataRecord =>
+                    dataReader.ReadResult(() =>
                     {
-                        var schema = dataRecord.GetString(0);
-                        var name = dataRecord.GetString(1);
-                        var id = dataRecord.GetInt32(2);
+                        var schema = dataReader.GetString(0);
+                        var name = dataReader.GetString(1);
+                        var id = dataReader.GetInt32(2);
                         var tableNode = new TableNode(DatabaseNode, schema, name, id);
                         childNodes.Add(tableNode);
                     });
-                }
+                });
             }
+
             return childNodes;
         }
 
         bool ITreeNode.Sortable => false;
-
         string ITreeNode.Query => null;
-
         public DatabaseNode DatabaseNode { get; }
-
         ContextMenuStrip ITreeNode.ContextMenu => null;
     }
 }

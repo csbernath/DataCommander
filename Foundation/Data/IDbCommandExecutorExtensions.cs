@@ -11,13 +11,8 @@ namespace Foundation.Data
             executor.Execute(connection =>
             {
                 foreach (var request in requests)
-                {
-                    using (var command = connection.CreateCommand())
-                    {
-                        command.Initialize(request.CreateCommandRequest);
+                    using (var command = connection.CreateCommand(request.CreateCommandRequest))
                         request.Execute(command);
-                    }
-                }
             });
         }
 

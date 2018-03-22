@@ -29,8 +29,8 @@ namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             var commandText = "SELECT * FROM INFORMATION_SCHEMA.TABLES";
-            var transactionScope = new DbTransactionScope(connection, null);
-            var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
+            var executor = connection.CreateCommandExecutor();
+            var dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
             var nodes = new List<ITreeNode>();
 
             foreach (DataRow dataRow in dataTable.Rows)

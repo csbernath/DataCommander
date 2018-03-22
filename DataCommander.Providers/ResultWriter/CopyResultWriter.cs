@@ -146,12 +146,8 @@ namespace DataCommander.Providers.ResultWriter
                 var commandText = sb.ToString();
                 try
                 {
-                    var transactionScope = new DbTransactionScope(_destinationConnection.Connection, _insertCommand.Transaction);
-                    transactionScope.ExecuteNonQuery(new CommandDefinition
-                    {
-                        CommandText = commandText,
-                        CommandTimeout = 3600
-                    });
+                    var executor = _destinationConnection.Connection.CreateCommandExecutor();
+                    executor.ExecuteNonQuery(new CreateCommandRequest(commandText, null, CommandType.Text, 3600, _insertCommand.Transaction));
                 }
                 catch (Exception e)
                 {

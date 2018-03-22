@@ -1,12 +1,10 @@
-﻿using Foundation.Data;
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Windows.Forms;
-
     internal sealed class SystemViewCollectionNode : ITreeNode
     {
         private readonly DatabaseNode _databaseNode;
@@ -17,7 +15,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         }
 
         public string Name => "System Views";
-
         public bool IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
@@ -38,26 +35,25 @@ order by 1,2";
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                var transactionScope = new DbTransactionScope(connection, null);
-                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default))
+                var executor = connection.CreateCommandExecutor();
+                executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
                 {
-                    dataReader.Read(dataRecord =>
+                    dataReader.ReadResult(() =>
                     {
-                        var schema = dataRecord.GetString(0);
-                        var name = dataRecord.GetString(1);
-                        var id = dataRecord.GetInt32(2);
+                        var schema = dataReader.GetString(0);
+                        var name = dataReader.GetString(1);
+                        var id = dataReader.GetInt32(2);
                         var viewNode = new ViewNode(_databaseNode, id, schema, name);
                         treeNodes.Add(viewNode);
                     });
-                }
+                });
             }
+
             return treeNodes;
         }
 
         public bool Sortable => false;
-
         public string Query => null;
-
         public ContextMenuStrip ContextMenu => null;
     }
 }

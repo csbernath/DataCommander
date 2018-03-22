@@ -69,10 +69,10 @@ from	[{0}].sys.database_files f", Name);
             DataSet dataSet = null;
             using (var connection = new SqlConnection(connectionString))
             {
-                var transactionScope = new DbTransactionScope(connection, null);
+                var executor = connection.CreateCommandExecutor();
                 try
                 {
-                    dataSet = transactionScope.ExecuteDataSet(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+                    dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText));
                 }
                 catch (SqlException sqlException)
                 {

@@ -1,65 +1,33 @@
-﻿using Foundation.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlServerCe;
+using System.Diagnostics;
+using System.Text;
+using System.Xml;
+using DataCommander.Providers.Connection;
+using DataCommander.Providers.Field;
+using DataCommander.Providers.SqlServerCe40.ObjectExplorer;
+using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServerCe40
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.Data.SqlServerCe;
-    using System.Diagnostics;
-    using System.Text;
-    using System.Xml;
-    using Field;
-    using ObjectExplorer;
-    using Providers.Connection;
-
     public sealed class SqlServerCeProvider : IProvider
     {
         #region IProvider Members
 
         string IProvider.Name => "SqlServerCe40";
-
         DbProviderFactory IProvider.DbProviderFactory => SqlCeProviderFactory.Instance;
-
-        ConnectionBase IProvider.CreateConnection(string connectionString)
-        {
-            return new Connection(connectionString);
-        }
-
+        ConnectionBase IProvider.CreateConnection(string connectionString) => new Connection(connectionString);
         string[] IProvider.KeyWords => null;
-
         bool IProvider.IsCommandCancelable => true;
-
-        void IProvider.DeriveParameters(IDbCommand command)
-        {
-            throw new NotImplementedException();
-        }
-
-        DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        DataTable IProvider.GetParameterTable(IDataParameterCollection parameters)
-        {
-            throw new NotImplementedException();
-        }
-
-        XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
-        {
-            throw new NotImplementedException();
-        }
-
-        DataTable IProvider.GetSchemaTable(IDataReader dataReader)
-        {
-            return dataReader.GetSchemaTable();
-        }
-
-        DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName)
-        {
-            throw new NotImplementedException();
-        }
+        void IProvider.DeriveParameters(IDbCommand command) => throw new NotImplementedException();
+        DataParameterBase IProvider.GetDataParameter(IDataParameter parameter) => throw new NotImplementedException();
+        DataTable IProvider.GetParameterTable(IDataParameterCollection parameters) => throw new NotImplementedException();
+        XmlReader IProvider.ExecuteXmlReader(IDbCommand command) => throw new NotImplementedException();
+        DataTable IProvider.GetSchemaTable(IDataReader dataReader) => dataReader.GetSchemaTable();
+        DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
 
         Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
         {
@@ -85,7 +53,7 @@ namespace DataCommander.Providers.SqlServerCe40
 
         IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
         {
-            var sqlCeDataReader = (SqlCeDataReader)dataReader;
+            var sqlCeDataReader = (SqlCeDataReader) dataReader;
             return new SqlCeDataReaderHelper(sqlCeDataReader);
         }
 
@@ -149,6 +117,7 @@ ORDER BY ORDINAL_POSITION";
                                 i--;
                                 tableNameOrAlias = items[i];
                             }
+
                             if (tableNameOrAlias != null)
                             {
                                 string tableName;
@@ -158,6 +127,7 @@ ORDER BY ORDINAL_POSITION";
                                     commandText = $"select distinct top 10 {columnName} from {tableName} (nolock) order by 1";
                                 }
                             }
+
                             break;
                     }
                 }
@@ -169,15 +139,8 @@ ORDER BY ORDINAL_POSITION";
 
                     try
                     {
-                        var transactionScope = new DbTransactionScope(connection.Connection, null);
-                        //list = 
-                        var x = transactionScope.ExecuteReader(
-                            new CommandDefinition {CommandText = commandText},
-                            CommandBehavior.Default,
-                            dataRecord =>
-                            {
-                                return dataRecord.GetString(0);
-                            });
+                        var executor = connection.Connection.CreateCommandExecutor();
+                        list = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord => dataRecord.GetString(0));
                     }
                     catch
                     {
@@ -280,11 +243,11 @@ ORDER BY ORDINAL_POSITION";
                     {
                         typeName = SqlDataTypeName.Timestamp;
                     }
-                    else if (dataType == typeof (Guid))
+                    else if (dataType == typeof(Guid))
                     {
                         typeName = "uniqueidentifier";
                     }
-                    else if (dataType == typeof (byte[]))
+                    else if (dataType == typeof(byte[]))
                     {
                         if (columnSize <= 8000)
                         {
@@ -299,6 +262,7 @@ ORDER BY ORDINAL_POSITION";
                     {
                         throw new NotImplementedException();
                     }
+
                     break;
 
                 case TypeCode.Single:
@@ -363,9 +327,10 @@ ORDER BY ORDINAL_POSITION";
             }
             else
             {
-                var convertible = (IConvertible)source;
+                var convertible = (IConvertible) source;
                 target = convertible.ToString(null);
             }
+
             return target;
         }
 
@@ -378,9 +343,10 @@ ORDER BY ORDINAL_POSITION";
             }
             else
             {
-                var binaryField = (BinaryField)source;
+                var binaryField = (BinaryField) source;
                 target = binaryField.Value;
             }
+
             return target;
         }
 
@@ -436,7 +402,7 @@ ORDER BY ORDINAL_POSITION";
                 values.Append('?');
 
                 var columnSize = columnSchema.ColumnSize;
-                var sqlCeType = (SqlCeType)schemaRows[i]["ProviderType"];
+                var sqlCeType = (SqlCeType) schemaRows[i]["ProviderType"];
                 var parameter = new SqlCeParameter(null, sqlCeType.SqlDbType);
                 insertCommand.Parameters.Add(parameter);
 

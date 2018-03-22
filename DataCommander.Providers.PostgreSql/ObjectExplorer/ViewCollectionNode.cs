@@ -27,19 +27,17 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
             using (var connection = new NpgsqlConnection(schemaNode.SchemaCollectionNode.ObjectExplorer.ConnectionString))
             {
                 connection.Open();
-                var transactionScope = new DbTransactionScope(connection, null);
-                transactionScope.ExecuteReader(new CommandDefinition
-                {
-                    CommandText = $@"select table_name
+                var executor = connection.CreateCommandExecutor();
+                executor.ExecuteReader(new ExecuteReaderRequest($@"select table_name
 from information_schema.views
 where table_schema = '{schemaNode.Name}'
-order by table_name"
-                }, CommandBehavior.Default, dataRecord =>
-                {
-                    var name = dataRecord.GetString(0);
-                    var viewNode = new ViewNode(this, name);
-                    nodes.Add(viewNode);
-                });
+order by table_name"), dataReader => dataReader.ReadResult(
+                    () =>
+                    {
+                        var name = dataReader.GetString(0);
+                        var viewNode = new ViewNode(this, name);
+                        nodes.Add(viewNode);
+                    }));
             }
 
             return nodes;

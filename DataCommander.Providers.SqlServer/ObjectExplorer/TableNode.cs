@@ -349,17 +349,18 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
 
         private void Indexes_Click(object sender, EventArgs e)
         {
-            var cmdText = $"use [{DatabaseNode.Name}] exec sp_helpindex [{_owner}.{_name}]";
+            var commandText = $"use [{DatabaseNode.Name}] exec sp_helpindex [{_owner}.{_name}]";
             var connectionString = DatabaseNode.Databases.Server.ConnectionString;
             DataTable dataTable;
             using (var connection = new SqlConnection(connectionString))
             {
-                var transactionScope = new DbTransactionScope(connection, null);
-                dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = cmdText }, CancellationToken.None);
+                var executor = connection.CreateCommandExecutor();
+                dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
             }
+
             dataTable.TableName = $"{_name} indexes";
             var mainForm = DataCommanderApplication.Instance.MainForm;
-            var queryForm = (QueryForm)mainForm.ActiveMdiChild;
+            var queryForm = (QueryForm) mainForm.ActiveMdiChild;
             var dataSet = new DataSet();
             dataSet.Tables.Add(dataTable);
             queryForm.ShowDataSet(dataSet);
@@ -401,9 +402,10 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             DataTable table;
             using (var connection = new SqlConnection(connectionString))
             {
-                var transactionScope = new DbTransactionScope(connection, null);
-                table = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+                var executor = connection.CreateCommandExecutor();
+                table = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
             }
+
             var sb = new StringBuilder();
 
             var first = true;

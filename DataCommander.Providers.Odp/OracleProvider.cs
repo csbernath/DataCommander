@@ -513,8 +513,8 @@ order by OBJECT_NAME";
 
                 if (!contains)
                 {
-                    var transactionScope = new DbTransactionScope(connection.Connection, null);
-                    var table = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
+                    var executor = connection.Connection.CreateCommandExecutor();
+                    var table = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
                     var count = table.Rows.Count;
                     items = new string[count];
 
