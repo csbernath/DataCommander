@@ -467,7 +467,6 @@
     <Compile Include="Data\FoundationDbColumn.cs" />
     <Compile Include="Data\DataParameterValue.cs" />
     <Compile Include="Data\DataParameterValueType.cs" />
-    <Compile Include="Data\DataReader.cs" />
     <Compile Include="Data\DataRowExtensions.cs" />
     <Compile Include="Data\DataSetExtensions.cs" />
     <Compile Include="Data\DataTableExtensions.cs" />
@@ -493,9 +492,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data\IDbProviderFactoryHelper.cs" />
-    <Compile Include="Data\IDbTransactionScope.cs" />
-    <Compile Include="Data\IDbTransactionScopeContract.cs" />
-    <Compile Include="Data\IDbTransactionScopeExtensions.cs" />
     <Compile Include="Data\ISafeDbConnection.cs" />
     <Compile Include="Data\ITransactionScope.cs" />
     <Compile Include="Data\LoggedDbConnection\AfterExecuteCommandEventArgs.cs" />
