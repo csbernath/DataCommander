@@ -474,7 +474,6 @@
     <Compile Include="Data\DataViewExtensions.cs" />
     <Compile Include="Data\DbCommandExecutionException.cs" />
     <Compile Include="Data\DbProviderFactoryExtensions.cs" />
-    <Compile Include="Data\DbTransactionScope.cs" />
     <Compile Include="Data\CreateCommandRequest.cs" />
     <Compile Include="Data\IDataParameterCollectionExtensions.cs" />
     <Compile Include="Data\IDataParameterExtensions.cs" />

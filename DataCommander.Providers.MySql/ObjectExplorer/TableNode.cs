@@ -54,12 +54,11 @@ from {databaseNode.Name}.{name}";
             var commandText = $"show create table {databaseNode.Name}.{name}";
             var createTableStatement = MySqlClientFactory.Instance.ExecuteReader(
                 databaseNode.ObjectExplorer.ConnectionString,
-                new CommandDefinition {CommandText = commandText},
-                CommandBehavior.Default,
+                new ExecuteReaderRequest(commandText),
                 dataRecord => dataRecord.GetString(1)).First();
 
             Clipboard.SetText(createTableStatement);
-            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
             queryForm.SetStatusbarPanelText("Copying create table statement to clipboard finished.", SystemColors.ControlText);
         }
     }

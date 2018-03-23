@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Threading;
 using System.Windows.Forms;
 using DataCommander.Providers.Connection;
 using Foundation.Data;
@@ -31,8 +30,8 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             var commandText = "select username from all_users order by username";
-            var transactionScope = new DbTransactionScope(Connection, null);
-            var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
+            var executor = Connection.CreateCommandExecutor();
+            var dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
             var count = dataTable.Rows.Count;
             var treeNodes = new ITreeNode[count];
 
@@ -46,11 +45,8 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         }
 
         public bool Sortable => false;
-
         public string Query => null;
-
         public ContextMenuStrip ContextMenu => null;
-
         public IDbConnection Connection => connection;
 
         public string SelectedSchema

@@ -1,11 +1,9 @@
-﻿using Foundation.Data;
+﻿using System.Collections.Generic;
+using Foundation.Data;
+using MySql.Data.MySqlClient;
 
 namespace DataCommander.Providers.MySql.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Data;
-    using global::MySql.Data.MySqlClient;
-
     internal sealed class TableCollectionNode : ITreeNode
     {
         private readonly DatabaseNode databaseNode;
@@ -21,19 +19,16 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            var commandText =
-                $@"select TABLE_NAME
+            var commandText = $@"select TABLE_NAME
 from INFORMATION_SCHEMA.TABLES
 where
-    TABLE_SCHEMA = '{databaseNode.Name
-                    }'
+    TABLE_SCHEMA = '{databaseNode.Name}'
     and TABLE_TYPE = 'BASE TABLE'
 order by TABLE_NAME";
 
             return MySqlClientFactory.Instance.ExecuteReader(
                 databaseNode.ObjectExplorer.ConnectionString,
-                new CommandDefinition {CommandText = commandText},
-                CommandBehavior.Default,
+                new ExecuteReaderRequest(commandText),
                 dataRecord =>
                 {
                     var name = dataRecord.GetString(0);
@@ -42,9 +37,7 @@ order by TABLE_NAME";
         }
 
         bool ITreeNode.Sortable => false;
-
         string ITreeNode.Query => null;
-
         System.Windows.Forms.ContextMenuStrip ITreeNode.ContextMenu => null;
     }
 }

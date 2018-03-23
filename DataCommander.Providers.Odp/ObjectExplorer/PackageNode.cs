@@ -1,15 +1,13 @@
-﻿using Foundation.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
+using DataCommander.Providers.Query;
+using Foundation.Data;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Text;
-    using System.Threading;
-    using System.Windows.Forms;
-    using Query;
-
     /// <summary>
     /// Summary description for TablesNode.
     /// </summary>
@@ -27,7 +25,6 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         }
 
         public string Name => _name;
-
         public bool IsLeaf => false;
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
@@ -40,16 +37,13 @@ from	all_procedures
 where	owner = '{_schemaNode.Name}'
 	and object_name = '{_name}'
 order by procedure_name";
-            var transactionScope = new DbTransactionScope(_schemaNode.SchemasNode.Connection, null);
+            var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
 
-            return transactionScope.ExecuteReader(
-                new CommandDefinition {CommandText = commandText},
-                CommandBehavior.Default,
-                dataRecord =>
-                {
-                    var procedureName = dataRecord.GetString(0);
-                    return new ProcedureNode(_schemaNode, this, procedureName);
-                });
+            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
+            {
+                var procedureName = dataRecord.GetString(0);
+                return new ProcedureNode(_schemaNode, this, procedureName);
+            });
         }
 
         public bool Sortable => false;
@@ -60,8 +54,8 @@ order by procedure_name";
             {
                 var commandText = "select text from all_source where owner = '{0}' and type = 'PACKAGE' and name = '{1}'";
                 commandText = string.Format(commandText, _schemaNode.Name, _name);
-                var transactionScope = new DbTransactionScope(_schemaNode.SchemasNode.Connection, null);
-                var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+                var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
+                var dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
                 var sb = new StringBuilder();
 
                 for (var i = 0; i < dataTable.Rows.Count; i++)
@@ -82,8 +76,8 @@ order by procedure_name";
         {
             var commandText = "select text from all_source where owner = '{0}' and name = '{1}' and type = 'PACKAGE BODY'";
             commandText = string.Format(commandText, _schemaNode.Name, _name);
-            var transactionScope = new DbTransactionScope(_schemaNode.SchemasNode.Connection, null);
-            var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+            var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
+            var dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
             var dataRows = dataTable.Rows;
             var count = dataRows.Count;
             var sb = new StringBuilder();

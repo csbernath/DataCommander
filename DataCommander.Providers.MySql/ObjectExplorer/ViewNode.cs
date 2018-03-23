@@ -1,16 +1,14 @@
-﻿using Foundation.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+using DataCommander.Providers.Query;
+using Foundation.Data;
+using MySql.Data.MySqlClient;
 
 namespace DataCommander.Providers.MySql.ObjectExplorer
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Drawing;
-    using System.Linq;
-    using System.Windows.Forms;
-    using global::MySql.Data.MySqlClient;
-    using Query;
-
     internal sealed class ViewNode : ITreeNode
     {
         private readonly DatabaseNode databaseNode;
@@ -54,8 +52,7 @@ from {databaseNode.Name}.{name}";
             var commandText = $"show create table {databaseNode.Name}.{name}";
             var createTableStatement = MySqlClientFactory.Instance.ExecuteReader(
                 databaseNode.ObjectExplorer.ConnectionString,
-                new CommandDefinition {CommandText = commandText},
-                CommandBehavior.Default,
+                new ExecuteReaderRequest(commandText),
                 dataRecord => dataRecord.GetString(0)).First();
 
             Clipboard.SetText(createTableStatement);

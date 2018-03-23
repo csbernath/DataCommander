@@ -1,24 +1,19 @@
-﻿using Foundation.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Windows.Forms;
+using DataCommander.Providers.Query;
+using Foundation.Data;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Text;
-    using System.Windows.Forms;
-    using Query;
-
     internal sealed class ProcedureNode : ITreeNode
     {
 		private readonly SchemaNode _schemaNode;
 		private readonly PackageNode _packageNode;
 		private readonly string _name;
 
-        public ProcedureNode(
-            SchemaNode schemaNode,
-            PackageNode packageNode,
-            string name)
+        public ProcedureNode(SchemaNode schemaNode, PackageNode packageNode, string name)
         {
             _schemaNode = schemaNode;
             _packageNode = packageNode;
@@ -26,14 +21,8 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         }
 
         public string Name => _name;
-
         public bool IsLeaf => true;
-
-        public IEnumerable<ITreeNode> GetChildren(bool refresh)
-        {
-            return null;
-        }
-
+        public IEnumerable<ITreeNode> GetChildren(bool refresh) => null;
         public bool Sortable => false;
 
         public string Query
@@ -54,27 +43,25 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 
         private void ScriptObject_Click(object sender, EventArgs e)
         {
-            var commandText =
-                $@"select	text
-from	all_source
-where	owner = '{_schemaNode.Name}'
-	and name = '{_name}'
-	and type = 'PROCEDURE'
+            var commandText = $@"select	text
+from all_source
+where owner = '{_schemaNode.Name}'
+    and name = '{_name}'
+    and type = 'PROCEDURE'
 order by line";
             var sb = new StringBuilder();
-            string text;
-            var transactionScope = new DbTransactionScope(_schemaNode.SchemasNode.Connection, null);
+            var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
 
-            transactionScope.ExecuteReader(
-                new CommandDefinition {CommandText = commandText},
-                CommandBehavior.Default,
-                dataRecord =>
+            executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
+            {
+                dataReader.ReadResult(() =>
                 {
-                    text = dataRecord.GetString(0);
-                    sb.Append(text);
+                    var s = dataReader.GetString(0);
+                    sb.Append(s);
                 });
+            });
 
-            text = sb.ToString();
+            var text = sb.ToString();
             QueryForm.ShowText(text);
         }
 
@@ -85,9 +72,7 @@ order by line";
                 ContextMenuStrip contextMenu;
 
                 if (_packageNode != null)
-                {
                     contextMenu = null;
-                }
                 else
                 {
                     var menuItem = new ToolStripMenuItem("Script Object", null, ScriptObject_Click);

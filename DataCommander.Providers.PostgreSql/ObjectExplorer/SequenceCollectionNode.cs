@@ -1,12 +1,10 @@
-﻿using Foundation.Data;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
+using Foundation.Data;
+using Npgsql;
 
 namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Windows.Forms;
-    using Npgsql;
-
     internal sealed class SequenceCollectionNode : ITreeNode
     {
         private readonly SchemaNode schemaNode;
@@ -27,32 +25,27 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
             using (var connection = new NpgsqlConnection(this.schemaNode.SchemaCollectionNode.ObjectExplorer.ConnectionString))
             {
                 connection.Open();
-                var transactionScope = new DbTransactionScope(connection, null);
-                using (var dataReader = transactionScope.ExecuteReader(new CommandDefinition
-                {
-                    CommandText = $@"select sequence_name
+                var executor = connection.CreateCommandExecutor();
+                var commandText = $@"select sequence_name
 from information_schema.sequences
 where sequence_schema = '{this.schemaNode.Name}'
-order by sequence_name"
-                }, CommandBehavior.Default))
+order by sequence_name";
+                executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
                 {
-                    dataReader.Read(dataRecord =>
+                    dataReader.ReadResult(() =>
                     {
-                        var name = dataRecord.GetString(0);
+                        var name = dataReader.GetString(0);
                         var schemaNode = new SequenceNode(this, name);
                         nodes.Add(schemaNode);
-                        return true;
                     });
-                }
+                });
             }
 
             return nodes;
         }
 
         bool ITreeNode.Sortable => false;
-
         string ITreeNode.Query => null;
-
         ContextMenuStrip ITreeNode.ContextMenu => null;
     }
 }

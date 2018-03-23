@@ -1,27 +1,25 @@
-﻿using Foundation.Data;
+﻿using System;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+using DataCommander.Providers.Query;
+using Foundation.Data;
+using MySql.Data.MySqlClient;
 
 namespace DataCommander.Providers.MySql.ObjectExplorer
 {
-    using System;
-    using System.Data;
-    using System.Drawing;
-    using System.Linq;
-    using System.Windows.Forms;
-    using global::MySql.Data.MySqlClient;
-    using Query;
-
     internal sealed class FunctionNode : ITreeNode
     {
-        private readonly DatabaseNode databaseNode;
-        private readonly string name;
+        private readonly DatabaseNode _databaseNode;
+        private readonly string _name;
 
         public FunctionNode(DatabaseNode databaseNode, string name)
         {
-            this.databaseNode = databaseNode;
-            this.name = name;
+            _databaseNode = databaseNode;
+            _name = name;
         }
 
-        string ITreeNode.Name => name;
+        string ITreeNode.Name => _name;
 
         bool ITreeNode.IsLeaf => true;
 
@@ -49,17 +47,15 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
 
         private void ShowCreateFunction_Click(object sender, EventArgs e)
         {
-            var commandText = $"show create function {databaseNode.Name}.{name}";
+            var commandText = $"show create function {_databaseNode.Name}.{_name}";
             var statement = MySqlClientFactory.Instance.ExecuteReader(
-                databaseNode.ObjectExplorer.ConnectionString,
-                new CommandDefinition {CommandText = commandText},
-                CommandBehavior.Default,
+                _databaseNode.ObjectExplorer.ConnectionString,
+                new ExecuteReaderRequest(commandText),
                 dataRecord => dataRecord.GetString(2)).First();
 
             Clipboard.SetText(statement);
-            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
             queryForm.SetStatusbarPanelText("Copying create function statement to clipboard finished.", SystemColors.ControlText);
         }
-
     }
 }

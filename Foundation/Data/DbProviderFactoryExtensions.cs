@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Globalization;
-using System.Linq;
 using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data
@@ -35,40 +34,6 @@ namespace Foundation.Data
             };
             adapter.Fill(table);
             return table;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dbProviderFactory"></param>
-        /// <param name="connectionString"></param>
-        /// <param name="commandDefinition"></param>
-        /// <param name="commandBehavior"></param>
-        /// <param name="read"></param>
-        /// <returns></returns>
-        public static List<T> ExecuteReader<T>(
-            this DbProviderFactory dbProviderFactory,
-            string connectionString,
-            CommandDefinition commandDefinition,
-            CommandBehavior commandBehavior,
-            Func<IDataRecord, T> read)
-        {
-            Assert.IsNotNull(dbProviderFactory);
-            Assert.IsNotNull(commandDefinition);
-            Assert.IsNotNull(read);
-
-            using (var connection = dbProviderFactory.CreateConnection())
-            {
-                connection.ConnectionString = connectionString;
-                connection.Open();
-                var transactionScope = new DbTransactionScope(connection, null);
-
-                using (var dataReader = transactionScope.ExecuteReader(commandDefinition, commandBehavior))
-                {
-                    return dataReader.Read(read).ToList();
-                }
-            }
         }
 
         public static void ExecuteReader(

@@ -28,8 +28,8 @@ where	s.OWNER	= '{0}'
 order by s.SYNONYM_NAME";
 
             commandText = string.Format(commandText, _schema.Name);
-            var transactionScope = new DbTransactionScope(Schema.SchemasNode.Connection, null);
-            var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+            var executor = Schema.SchemasNode.Connection.CreateCommandExecutor();
+            var dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
             var count = dataTable.Rows.Count;
             var treeNodes = new ITreeNode[count];
 

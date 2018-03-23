@@ -63,16 +63,16 @@ where	owner = '{_schemaNode.Name}'
 order by line";
             var sb = new StringBuilder();
             string text;
-            var transactionScope = new DbTransactionScope(_schemaNode.SchemasNode.Connection, null);
+            var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
 
-            transactionScope.ExecuteReader(
-                new CommandDefinition {CommandText = commandText},
-                CommandBehavior.Default,
-                dataRecord =>
+            executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
+            {
+                dataReader.ReadResult(() =>
                 {
-                    text = dataRecord.GetString(0);
+                    text = dataReader.GetString(0);
                     sb.Append(text);
                 });
+            });
 
             text = sb.ToString();
             QueryForm.ShowText(text);

@@ -1,14 +1,12 @@
-﻿using Foundation.Data;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
+using Foundation.Data;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Windows.Forms;
-
     internal sealed class ViewCollectionNode : ITreeNode
     {
-		private readonly SchemaNode _schemaNode;
+        private readonly SchemaNode _schemaNode;
 
         public ViewCollectionNode(SchemaNode schemaNode)
         {
@@ -23,15 +21,15 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         {
             var commandText = "select view_name from all_views where owner = '{0}' order by view_name";
             commandText = string.Format(commandText, _schemaNode.Name);
-            var transactionScope = new DbTransactionScope(SchemaNode.SchemasNode.Connection, null);
-            var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+            var executor = SchemaNode.SchemasNode.Connection.CreateCommandExecutor();
+            var dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
             var dataRows = dataTable.Rows;
             var count = dataRows.Count;
             var treeNodes = new ITreeNode[count];
 
             for (var i = 0; i < count; i++)
             {
-                var name = (string)dataRows[i][0];
+                var name = (string) dataRows[i][0];
                 treeNodes[i] = new ViewNode(this, name);
             }
 
@@ -39,11 +37,8 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         }
 
         public bool Sortable => false;
-
         public string Query => null;
-
         public ContextMenuStrip ContextMenu => null;
-
         public SchemaNode SchemaNode => _schemaNode;
 
         public void BeforeExpand()

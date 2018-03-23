@@ -1,12 +1,10 @@
-﻿using Foundation.Data;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
+using Foundation.Data;
+using Oracle.ManagedDataAccess.Client;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Windows.Forms;
-    using Oracle.ManagedDataAccess.Client;
-
     /// <summary>
     /// Summary description for SchemaNode.
     /// </summary>
@@ -26,14 +24,14 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             var commandText = "select username from all_users order by username";
-            var transactionScope = new DbTransactionScope(_connection, null);
-            var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+            var executor = _connection.CreateCommandExecutor();
+            var dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
             var count = dataTable.Rows.Count;
             var treeNodes = new ITreeNode[count];
 
             for (var i = 0; i < count; i++)
             {
-                var name = (string)dataTable.Rows[i][0];
+                var name = (string) dataTable.Rows[i][0];
                 treeNodes[i] = new SchemaNode(this, name);
             }
 
@@ -41,11 +39,8 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         }
 
         public bool Sortable => false;
-
         public string Query => null;
-
         public ContextMenuStrip ContextMenu => null;
-
         public OracleConnection Connection => _connection;
 
         public void BeforeExpand()

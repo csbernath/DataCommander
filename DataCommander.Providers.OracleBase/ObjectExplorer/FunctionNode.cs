@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using DataCommander.Providers.Query;
@@ -10,21 +9,18 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 {
     public sealed class FunctionNode : ITreeNode
     {
-		private readonly SchemaNode schemaNode;
-		private readonly PackageNode packageNode;
-		private readonly string name;
+        private readonly SchemaNode _schemaNode;
+        private readonly PackageNode _packageNode;
+        private readonly string _name;
 
-        public FunctionNode(
-            SchemaNode schemaNode,
-            PackageNode packageNode,
-            string name)
+        public FunctionNode(SchemaNode schemaNode, PackageNode packageNode, string name)
         {
-            this.schemaNode = schemaNode;
-            this.packageNode = packageNode;
-            this.name = name;
+            _schemaNode = schemaNode;
+            _packageNode = packageNode;
+            _name = name;
         }
 
-        public string Name => name;
+        public string Name => _name;
 
         public bool IsLeaf => true;
 
@@ -39,14 +35,14 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         {
             get
             {
-                var query = "EXEC " + schemaNode.Name + '.';
+                var query = "EXEC " + _schemaNode.Name + '.';
 
-				if (packageNode != null)
-				{
-					query += packageNode.Name + '.';
-				}
+                if (_packageNode != null)
+                {
+                    query += _packageNode.Name + '.';
+                }
 
-                query += name;
+                query += _name;
                 return query;
             }
         }
@@ -56,16 +52,19 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
             var commandText =
                 $@"select	text
 from	all_source
-where	owner = '{schemaNode.Name}'
-	and name = '{name}'
+where	owner = '{_schemaNode.Name}'
+	and name = '{_name}'
 	and type = 'FUNCTION'
 order by line";
             var sb = new StringBuilder();
-            var transactionScope = new DbTransactionScope(schemaNode.SchemasNode.Connection, null);
-            transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default, dataRecord =>
+            var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
+            executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
             {
-                var text = dataRecord.GetString(0);
-                sb.Append(text);
+                dataReader.ReadResult(() =>
+                {
+                    var text = dataReader.GetString(0);
+                    sb.Append(text);
+                });
             });
 
             QueryForm.ShowText(sb.ToString());
@@ -77,10 +76,8 @@ order by line";
             {
                 ContextMenuStrip contextMenu;
 
-                if (packageNode != null)
-                {
+                if (_packageNode != null)
                     contextMenu = null;
-                }
                 else
                 {
                     var menuItem = new ToolStripMenuItem("Script Object", null, ScriptObject_Click);

@@ -52,8 +52,7 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
             var commandText = $"show create procedure {databaseNode.Name}.{name}";
             var statement = MySqlClientFactory.Instance.ExecuteReader(
                 databaseNode.ObjectExplorer.ConnectionString,
-                new CommandDefinition {CommandText = commandText},
-                CommandBehavior.Default,
+                new ExecuteReaderRequest(commandText),
                 dataRecord => dataRecord.GetString(2)).First();
 
             Clipboard.SetText(statement);

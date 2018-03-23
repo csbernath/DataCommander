@@ -53,20 +53,22 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 
         private void ScriptObject_Click(object sender, EventArgs e)
         {
-            var commandText =
-                $@"select	text
+            var commandText = $@"select	text
 from	all_source
 where	owner = '{schemaNode.Name}'
 	and name = '{name}'
 	and type = 'PROCEDURE'
 order by line";
             var sb = new StringBuilder();
-            var transactionScope = new DbTransactionScope(schemaNode.SchemasNode.Connection, null);
+            var executor = schemaNode.SchemasNode.Connection.CreateCommandExecutor();
 
-            transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default, dataRecord =>
+            executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
             {
-                var text = dataRecord.GetString(0);
-                sb.Append(text);
+                dataReader.ReadResult(() =>
+                {
+                    var text = dataReader.GetString(0);
+                    sb.Append(text);
+                });
             });
 
             QueryForm.ShowText(sb.ToString());

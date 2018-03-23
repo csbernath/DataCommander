@@ -1,24 +1,16 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
 using System.Windows.Forms;
 using Foundation.Data;
 
 namespace DataCommander.Providers.OracleBase.ObjectExplorer
 {
-    /// <summary>
-    /// Summary description for TablesNode.
-    /// </summary>
     public sealed class PackageCollectionNode : ITreeNode
     {
         private readonly SchemaNode schema;
 
-        public PackageCollectionNode(SchemaNode schema)
-        {
-            this.schema = schema;
-        }
+        public PackageCollectionNode(SchemaNode schema) => this.schema = schema;
 
         public string Name => "Packages";
-
         public bool IsLeaf => false;
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
@@ -32,15 +24,13 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
             {
                 var commandText = "select object_name from all_objects where owner = '{0}' and object_type = 'PACKAGE' order by object_name";
                 commandText = string.Format(commandText, schema.Name);
-                var transactionScope = new DbTransactionScope(Schema.SchemasNode.Connection, null);
-                var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+                var executor = Schema.SchemasNode.Connection.CreateCommandExecutor();
+                var dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
                 var count = dataTable.Rows.Count;
                 packages = new string[count];
 
                 for (var i = 0; i < count; i++)
-                {
-                    packages[i] = (string)dataTable.Rows[i][0];
-                }
+                    packages[i] = (string) dataTable.Rows[i][0];
 
                 folder.Attributes.SetAttributeValue(key, packages);
             }
@@ -54,11 +44,8 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         }
 
         public bool Sortable => false;
-
         public string Query => null;
-
         public SchemaNode Schema => schema;
-
         public ContextMenuStrip ContextMenu => null;
     }
 }

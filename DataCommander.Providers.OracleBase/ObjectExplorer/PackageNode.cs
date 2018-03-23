@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 using DataCommander.Providers.Query;
 using Foundation.Data;
@@ -14,16 +12,13 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
     /// </summary>
     public sealed class PackageNode : ITreeNode
     {
-        public PackageNode(
-          SchemaNode schema,
-          string name)
+        public PackageNode(SchemaNode schema, string name)
         {
-            schemaNode = schema;
-            this.name = name;
+            _schemaNode = schema;
+            _name = name;
         }
 
-        public string Name => name;
-
+        public string Name => _name;
         public bool IsLeaf => false;
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
@@ -33,15 +28,15 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
             var commandText =
                 $@"select	procedure_name
 from	all_procedures
-where	owner = '{schemaNode.Name}'
-	and object_name = '{name}'
+where	owner = '{_schemaNode.Name}'
+	and object_name = '{_name}'
 order by procedure_name";
-            var transactionScope = new DbTransactionScope(schemaNode.SchemasNode.Connection, null);
+            var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
 
-            return transactionScope.ExecuteReader(new CommandDefinition {CommandText = commandText}, CommandBehavior.Default, dataRecord =>
+            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
             {
                 var procedureName = dataRecord.GetString(0);
-                return new ProcedureNode(schemaNode, this, procedureName);
+                return new ProcedureNode(_schemaNode, this, procedureName);
             });
         }
 
@@ -52,9 +47,9 @@ order by procedure_name";
             get
             {
                 var commandText = "select text from all_source where owner = '{0}' and type = 'PACKAGE' and name = '{1}'";
-                commandText = string.Format(commandText, schemaNode.Name, name);
-                var transactionScope = new DbTransactionScope(schemaNode.SchemasNode.Connection, null);
-                var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+                commandText = string.Format(commandText, _schemaNode.Name, _name);
+                var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
+                var dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
                 var sb = new StringBuilder();
 
                 for (var i = 0; i < dataTable.Rows.Count; i++)
@@ -74,9 +69,9 @@ order by procedure_name";
         void ScriptPackageBody(object sender, EventArgs e)
         {
             var commandText = "select text from all_source where owner = '{0}' and name = '{1}' and type = 'PACKAGE BODY'";
-            commandText = string.Format(commandText, schemaNode.Name, name);
-            var transactionScope = new DbTransactionScope(schemaNode.SchemasNode.Connection, null);
-            var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+            commandText = string.Format(commandText, _schemaNode.Name, _name);
+            var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
+            var dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
             var dataRows = dataTable.Rows;
             var count = dataRows.Count;
             var sb = new StringBuilder();
@@ -84,12 +79,12 @@ order by procedure_name";
             for (var i = 0; i < count; i++)
             {
                 var dataRow = dataRows[i];
-                var line = (string)dataRow[0];
+                var line = (string) dataRow[0];
                 sb.Append(line);
             }
 
             var mainForm = DataCommanderApplication.Instance.MainForm;
-            var queryForm = (QueryForm)mainForm.ActiveMdiChild;
+            var queryForm = (QueryForm) mainForm.ActiveMdiChild;
             var tbQuery = queryForm.QueryTextBox;
             var selectionStart = tbQuery.RichTextBox.TextLength;
 
@@ -118,9 +113,8 @@ order by procedure_name";
             }
         }
 
-        public SchemaNode SchemaNode => schemaNode;
-
-        readonly SchemaNode schemaNode;
-        readonly string name;
+        public SchemaNode SchemaNode => _schemaNode;
+        private readonly SchemaNode _schemaNode;
+        private readonly string _name;
     }
 }

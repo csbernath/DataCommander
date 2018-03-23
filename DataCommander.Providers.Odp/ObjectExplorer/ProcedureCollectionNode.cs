@@ -1,11 +1,9 @@
-﻿using Foundation.Data;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
+using Foundation.Data;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Windows.Forms;
-
     internal sealed class ProcedureCollectionNode : ITreeNode
     {
         public ProcedureCollectionNode(SchemaNode schemaNode)
@@ -27,22 +25,17 @@ from	SYS.ALL_OBJECTS
 where	OWNER	= '{_schemaNode.Name}'
 	and OBJECT_TYPE	= 'PROCEDURE'
 order by OBJECT_NAME";
-            var transactionScope = new DbTransactionScope(_schemaNode.SchemasNode.Connection, null);
+            var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
 
-            return transactionScope.ExecuteReader(
-                new CommandDefinition {CommandText = commandText},
-                CommandBehavior.Default,
-                dataRecord =>
-                {
-                    var procedureName = dataRecord.GetString(0);
-                    return new ProcedureNode(_schemaNode, null, procedureName);
-                });
+            return executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
+            {
+                var procedureName = dataRecord.GetString(0);
+                return new ProcedureNode(_schemaNode, null, procedureName);
+            });
         }
 
         bool ITreeNode.Sortable => false;
-
         string ITreeNode.Query => null;
-
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
         #endregion

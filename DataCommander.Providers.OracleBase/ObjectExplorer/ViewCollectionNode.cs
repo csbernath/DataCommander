@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
 using System.Windows.Forms;
 using Foundation.Data;
 
@@ -7,11 +6,11 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 {
     public sealed class ViewCollectionNode : ITreeNode
     {
-        private readonly SchemaNode schemaNode;
+        private readonly SchemaNode _schemaNode;
 
         public ViewCollectionNode(SchemaNode schemaNode)
         {
-            this.schemaNode = schemaNode;
+            _schemaNode = schemaNode;
         }
 
         public string Name => "Views";
@@ -21,9 +20,9 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             var commandText = "select view_name from all_views where owner = '{0}' order by view_name";
-            commandText = string.Format(commandText, schemaNode.Name);
-            var transactionScope = new DbTransactionScope(schemaNode.SchemasNode.Connection, null);
-            var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition {CommandText = commandText}, CancellationToken.None);
+            commandText = string.Format(commandText, _schemaNode.Name);
+            var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
+            var dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
             var dataRows = dataTable.Rows;
             var count = dataRows.Count;
             var treeNodes = new ITreeNode[count];
@@ -38,11 +37,8 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         }
 
         public bool Sortable => false;
-
         public string Query => null;
-
         public ContextMenuStrip ContextMenu => null;
-
-        public SchemaNode SchemaNode => schemaNode;
+        public SchemaNode SchemaNode => _schemaNode;
     }
 }

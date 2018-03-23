@@ -31,15 +31,13 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
             {
                 var commandText = "select object_name from all_objects where owner = '{0}' and object_type = 'PACKAGE' order by object_name";
                 commandText = string.Format(commandText, _schema.Name);
-                var transactionScope = new DbTransactionScope(_schema.SchemasNode.Connection, null);
-                var dataTable = transactionScope.ExecuteDataTable(new CommandDefinition { CommandText = commandText }, CancellationToken.None);
+                var executor = _schema.SchemasNode.Connection.CreateCommandExecutor();
+                var dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
                 var count = dataTable.Rows.Count;
                 packages = new string[count];
 
                 for (var i = 0; i < count; i++)
-                {
-                    packages[i] = (string)dataTable.Rows[i][0];
-                }
+                    packages[i] = (string) dataTable.Rows[i][0];
 
                 folder.Attributes.SetAttributeValue(key, packages);
             }
@@ -53,17 +51,14 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         }
 
         public bool Sortable => false;
-
         public string Query => null;
-
         public SchemaNode Schema => _schema;
-
         public ContextMenuStrip ContextMenu => null;
 
         public void BeforeExpand()
         {
         }
 
-        readonly SchemaNode _schema;
+        private readonly SchemaNode _schema;
     }
 }
