@@ -78,7 +78,7 @@ namespace DataCommander.Providers.ResultWriter
 
             var objectId = _tableCount + 1;
             var objectTypeName = $"Object{objectId}";
-            var columns = schemaTable.Rows.Cast<DataRow>().Select(i => new FoundationDbColumn(i)).ToList();
+            var columns = schemaTable.Rows.Cast<DataRow>().Select(FoundationDbColumnFactory.Create).ToList();
             _ormBuilder.Add(objectTypeName, columns);
             Log.Trace($"SchemaTable of table[{_tableCount}]:\r\n{schemaTable.ToStringTableString()}");
             ++_tableCount;

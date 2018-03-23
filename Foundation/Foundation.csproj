@@ -459,7 +459,6 @@
     <Compile Include="Data\ExecuteReaderResponse2.cs" />
     <Compile Include="Data\DbDataReaderExtensions.cs" />
     <Compile Include="Data\IDbCommandExecutorExtensions.cs" />
-    <Compile Include="Data\CommandDefinition.cs" />
     <Compile Include="Data\ConnectionStateManager.cs" />
     <Compile Include="Data\Database.cs">
       <SubType>Code</SubType>
@@ -493,7 +492,6 @@
     </Compile>
     <Compile Include="Data\IDbProviderFactoryHelper.cs" />
     <Compile Include="Data\ISafeDbConnection.cs" />
-    <Compile Include="Data\ITransactionScope.cs" />
     <Compile Include="Data\LoggedDbConnection\AfterExecuteCommandEventArgs.cs" />
     <Compile Include="Data\LoggedDbConnection\AfterOpenDbConnectionEventArgs.cs" />
     <Compile Include="Data\LoggedDbConnection\AfterReadEventArgs.cs" />

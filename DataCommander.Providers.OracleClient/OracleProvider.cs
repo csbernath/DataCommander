@@ -465,7 +465,7 @@ namespace DataCommander.Providers.OracleClient
                     values.Append(',');
                 }
 
-                var column = new FoundationDbColumn(schemaRows[i]);
+                var column = FoundationDbColumnFactory.Create(schemaRows[i]);
                 insertInto.Append(column.ColumnName);
                 values.AppendFormat(":p{0}", i + 1);
 

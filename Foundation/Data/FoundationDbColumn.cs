@@ -7,155 +7,117 @@ namespace Foundation.Data
 {
     public sealed class FoundationDbColumn
     {
-        public FoundationDbColumn(DataRow schemaTableRow)
+        public readonly bool? AllowDbNull;
+        public readonly string BaseColumnName;
+        public readonly string BaseSchemaName;
+        public readonly string BaseTableName;
+        public readonly string ColumnName;
+        public readonly int ColumnOrdinal;
+        public readonly int ColumnSize;
+        public readonly Type DataType;
+        public readonly bool? IsAliased;
+        public readonly bool? IsExpression;
+        public readonly bool? IsKey;
+        public readonly bool? IsIdentity;
+        public readonly bool? IsLong;
+        public readonly bool? IsUnique;
+        public readonly int NonVersionedProviderType;
+        public readonly short? NumericPrecision;
+        public readonly short? NumericScale;
+        public readonly int ProviderType;
+
+        public FoundationDbColumn(bool? allowDbNull, string baseColumnName, string baseSchemaName, string baseTableName, string columnName, int columnOrdinal, int columnSize,
+            Type dataType, bool? isAliased, bool? isExpression, bool? isKey, bool? isIdentity, bool? isLong, bool? isUnique, int nonVersionedProviderType, short? numericPrecision,
+            short? numericScale, int providerType)
+        {
+            AllowDbNull = allowDbNull;
+            BaseColumnName = baseColumnName;
+            BaseSchemaName = baseSchemaName;
+            BaseTableName = baseTableName;
+            ColumnName = columnName;
+            ColumnOrdinal = columnOrdinal;
+            ColumnSize = columnSize;
+            DataType = dataType;
+            IsAliased = isAliased;
+            IsExpression = isExpression;
+            IsKey = isKey;
+            IsIdentity = isIdentity;
+            IsLong = isLong;
+            IsUnique = isUnique;
+            NonVersionedProviderType = nonVersionedProviderType;
+            NumericPrecision = numericPrecision;
+            NumericScale = numericScale;
+            ProviderType = providerType;
+        }
+    }
+
+    public static class FoundationDbColumnFactory
+    {
+        public static FoundationDbColumn Create(DataRow schemaTableRow)
         {
             Assert.IsNotNull(schemaTableRow);
 
-            ColumnName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.ColumnName);
-            ColumnOrdinal = (int) schemaTableRow[SchemaTableColumn.ColumnOrdinal];
-            ColumnSize = (int) schemaTableRow[SchemaTableColumn.ColumnSize];
+            var columnName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.ColumnName);
+            var columnOrdinal = (int) schemaTableRow[SchemaTableColumn.ColumnOrdinal];
+            var columnSize = (int) schemaTableRow[SchemaTableColumn.ColumnSize];
 
             var columns = schemaTableRow.Table.Columns;
+
+            short? numericPrecision = null;
             var column = columns[SchemaTableColumn.NumericPrecision];
             if (column != null)
-            {
-                NumericPrecision = schemaTableRow.IsNull(column)
+                numericPrecision = schemaTableRow.IsNull(column)
                     ? (short?) null
                     : Convert.ToInt16(schemaTableRow[column]);
-            }
 
+            short? numericScale = null;
             column = columns[SchemaTableColumn.NumericScale];
             if (column != null)
-            {
-                NumericScale = schemaTableRow.IsNull(column)
+                numericScale = schemaTableRow.IsNull(column)
                     ? (short?) null
                     : Convert.ToInt16(schemaTableRow[column]);
-            }
 
-            IsUnique = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.IsUnique);
-            IsKey = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.IsKey);
+            var isUnique = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.IsUnique);
+            var isKey = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.IsKey);
             //BaseServerName
             //BaseCatalogName
-            BaseColumnName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.BaseColumnName);
-            BaseSchemaName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.BaseSchemaName);
-            BaseTableName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.BaseTableName);
-            DataType = (Type) schemaTableRow[SchemaTableColumn.DataType];
-            AllowDbNull = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.AllowDBNull);
-            ProviderType = schemaTableRow.GetValueField<int>(SchemaTableColumn.ProviderType);
+            var baseColumnName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.BaseColumnName);
+            var baseSchemaName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.BaseSchemaName);
+            var baseTableName = schemaTableRow.GetReferenceField<string>(SchemaTableColumn.BaseTableName);
+            var dataType = (Type) schemaTableRow[SchemaTableColumn.DataType];
+            var allowDbNull = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.AllowDBNull);
+            var providerType = schemaTableRow.GetValueField<int>(SchemaTableColumn.ProviderType);
 
+            bool? isAliased = null;
             column = columns[SchemaTableColumn.IsAliased];
             if (column != null)
-                IsAliased = schemaTableRow.GetNullableValueField<bool>(column);
+                isAliased = schemaTableRow.GetNullableValueField<bool>(column);
 
+            bool? isExpression = null;
             column = columns[SchemaTableColumn.IsExpression];
             if (column != null)
-                IsExpression = schemaTableRow.GetNullableValueField<bool>(column);
+                isExpression = schemaTableRow.GetNullableValueField<bool>(column);
 
+            bool? isIdentity = null;
             column = columns["IsIdentity"];
             if (column != null)
-                IsIdentity = schemaTableRow.GetNullableValueField<bool>(column);
+                isIdentity = schemaTableRow.GetNullableValueField<bool>(column);
 
             //IsAutoIncrement
             //IsRowVersion
             //IsHidden
-            IsLong = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.IsLong);
+            var isLong = schemaTableRow.GetNullableValueField<bool>(SchemaTableColumn.IsLong);
             //IsReadOnly
             //ProviderSpecificDataType
             //DataTypeName XmlSchemaCollectionDatabase XmlSchemaCollectionOwningSchema XmlSchemaCollectionName UdtAssemblyQualifiedName
+            int nonVersionedProviderType = 0;
             column = columns[SchemaTableColumn.NonVersionedProviderType];
             if (column != null)
-                NonVersionedProviderType = (int) schemaTableRow[column];
+                nonVersionedProviderType = (int) schemaTableRow[column];
             //IsColumnSet
+
+            return new FoundationDbColumn(allowDbNull, baseColumnName, baseSchemaName, baseTableName, columnName, columnOrdinal, columnSize,
+                dataType, isAliased, isExpression, isKey, isIdentity, isLong, isUnique, nonVersionedProviderType, numericPrecision, numericScale, providerType);
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool? AllowDbNull { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string BaseColumnName { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string BaseSchemaName { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string BaseTableName { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string ColumnName { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public int ColumnOrdinal { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public int ColumnSize { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public Type DataType { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool? IsAliased { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool? IsExpression { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool? IsKey { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool? IsIdentity { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool? IsLong { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool? IsUnique { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public int NonVersionedProviderType { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public short? NumericPrecision { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public short? NumericScale { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public int ProviderType { get; }
     }
 }

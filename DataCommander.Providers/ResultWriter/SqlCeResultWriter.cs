@@ -66,7 +66,7 @@
             for (var i = 0; i <= last; i++)
             {
                 var dataRow = schemaTable.Rows[i];
-                var schemaRow = new FoundationDbColumn(dataRow);
+                var schemaRow = FoundationDbColumnFactory.Create(dataRow);
                 var columnName = schemaRow.ColumnName;
                 var columnSize = schemaRow.ColumnSize;
                 var allowDbNull = schemaRow.AllowDbNull;

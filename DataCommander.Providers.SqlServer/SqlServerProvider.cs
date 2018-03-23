@@ -131,8 +131,8 @@ namespace DataCommander.Providers.SqlServer
             int count;
 
             var sourceColumnNames =
-            (from sourceSchemaRow in sourceSchemaTable.AsEnumerable()
-                select new FoundationDbColumn(sourceSchemaRow).ColumnName);
+                from sourceSchemaRow in sourceSchemaTable.AsEnumerable()
+                select FoundationDbColumnFactory.Create(sourceSchemaRow).ColumnName;
 
             using (var command = destinationconnection.CreateCommand())
             {
@@ -169,7 +169,7 @@ namespace DataCommander.Providers.SqlServer
                     values.Append(',');
                 }
 
-                var columnSchema = new FoundationDbColumn(schemaRows[i]);
+                var columnSchema = FoundationDbColumnFactory.Create(schemaRows[i]);
                 insertInto.AppendFormat("[{0}]", columnSchema.ColumnName);
                 values.AppendFormat("@p{0}", i);
 
@@ -295,7 +295,7 @@ namespace DataCommander.Providers.SqlServer
 
         string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
         {
-            var schemaRow = new FoundationDbColumn(sourceSchemaRow);
+            var schemaRow = FoundationDbColumnFactory.Create(sourceSchemaRow);
             var columnSize = schemaRow.ColumnSize;
             var allowDbNull = schemaRow.AllowDbNull;
             var dataType = schemaRow.DataType;
@@ -808,7 +808,7 @@ order by 1", name.Database);
 
                 foreach (DataRow dataRow in schemaTable.Rows)
                 {
-                    var dataColumnSchema = new FoundationDbColumn(dataRow);
+                    var dataColumnSchema = FoundationDbColumnFactory.Create(dataRow);
                     var columnOrdinal = dataColumnSchema.ColumnOrdinal;
 
                     if (columnOrdinalAddition == null)

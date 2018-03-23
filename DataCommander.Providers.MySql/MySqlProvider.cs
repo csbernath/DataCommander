@@ -246,7 +246,7 @@ namespace DataCommander.Providers.MySql
 
                 foreach (DataRow dataRow in schemaTable.Rows)
                 {
-                    var dataColumnSchema = new FoundationDbColumn(dataRow);
+                    var dataColumnSchema = FoundationDbColumnFactory.Create(dataRow);
                     var columnOrdinal = dataColumnSchema.ColumnOrdinal;
 
                     if (columnOrdinalAddition == null)

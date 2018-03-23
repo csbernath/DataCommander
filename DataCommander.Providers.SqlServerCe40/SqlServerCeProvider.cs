@@ -171,7 +171,7 @@ ORDER BY ORDINAL_POSITION";
 
         string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
         {
-            var schemaRow = new FoundationDbColumn(sourceSchemaRow);
+            var schemaRow = FoundationDbColumnFactory.Create(sourceSchemaRow);
             var columnSize = schemaRow.ColumnSize;
             var allowDBNull = schemaRow.AllowDbNull;
             var dataType = schemaRow.DataType;
@@ -397,7 +397,7 @@ ORDER BY ORDINAL_POSITION";
                     values.Append(',');
                 }
 
-                var columnSchema = new FoundationDbColumn(schemaRows[i]);
+                var columnSchema = FoundationDbColumnFactory.Create(schemaRows[i]);
                 insertInto.AppendFormat("[{0}]", columnSchema.ColumnName);
                 values.Append('?');
 

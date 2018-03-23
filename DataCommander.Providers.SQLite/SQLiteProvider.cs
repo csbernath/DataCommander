@@ -76,7 +76,7 @@ namespace DataCommander.Providers.SQLite
                 for (var i = 0; i < schemaTable.Rows.Count; i++)
                 {
                     var row = schemaTable.Rows[i];
-                    var dataColumnSchema = new FoundationDbColumn(row);
+                    var dataColumnSchema = FoundationDbColumnFactory.Create(row);
                     var columnOrdinal = dataColumnSchema.ColumnOrdinal + 1;
                     var isKey = row.GetValueOrDefault<bool>("isKey");
                     var pk = string.Empty;
@@ -243,7 +243,7 @@ order by name collate nocase";
 
         string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
         {
-            var schemaRow = new FoundationDbColumn(sourceSchemaRow);
+            var schemaRow = FoundationDbColumnFactory.Create(sourceSchemaRow);
             var columnSize = schemaRow.ColumnSize;
             var allowDBNull = schemaRow.AllowDbNull;
             string typeName;
@@ -372,7 +372,7 @@ order by name collate nocase";
                     values.Append(',');
                 }
 
-                var columnSchema = new FoundationDbColumn(schemaRows[i]);
+                var columnSchema = FoundationDbColumnFactory.Create(schemaRows[i]);
                 insertInto.AppendFormat("[{0}]", columnSchema.ColumnName);
                 values.Append('?');
 

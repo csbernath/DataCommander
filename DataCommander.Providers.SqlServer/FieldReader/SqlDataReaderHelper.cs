@@ -14,7 +14,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
 
         public SqlDataReaderHelper(IDataReader dataReader)
         {
-            _sqlDataReader = (SqlDataReader)dataReader;
+            _sqlDataReader = (SqlDataReader) dataReader;
             var schemaTable = dataReader.GetSchemaTable();
 
             if (schemaTable != null)
@@ -23,10 +23,8 @@ namespace DataCommander.Providers.SqlServer.FieldReader
                 var count = rows.Count;
                 _dataFieldReaders = new IDataFieldReader[count];
 
-                for (var i = 0; i < count; i++)
-                {
-                    _dataFieldReaders[i] = CreateDataFieldReader(dataReader, new FoundationDbColumn(rows[i]));
-                }
+                for (var i = 0; i < count; ++i)
+                    _dataFieldReaders[i] = CreateDataFieldReader(dataReader, FoundationDbColumnFactory.Create(rows[i]));
             }
         }
 

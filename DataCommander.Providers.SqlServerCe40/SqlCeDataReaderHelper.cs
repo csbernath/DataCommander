@@ -27,7 +27,7 @@ namespace DataCommander.Providers.SqlServerCe40
 
                 for (var i = 0; i < count; i++)
                 {
-                    var schemaRow = new FoundationDbColumn(schemaRows[i]);
+                    var schemaRow = FoundationDbColumnFactory.Create(schemaRows[i]);
                     var sqlCeType = (SqlCeType) schemaRows[ i ][ SchemaTableColumn.ProviderType ];
                     var sqlDbType = sqlCeType.SqlDbType;
                     IDataFieldReader dataFieldReader;

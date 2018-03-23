@@ -113,16 +113,12 @@ namespace DataCommander.Providers.ResultWriter
 
             foreach (DataRow schemaRow in schemaTable.Rows)
             {
-                var dataColumnSchema = new FoundationDbColumn(schemaRow);
+                var dataColumnSchema = FoundationDbColumnFactory.Create(schemaRow);
 
                 if (first)
-                {
                     first = false;
-                }
                 else
-                {
                     sb.Append(",\r\n");
-                }
 
                 var columnSize = dataColumnSchema.ColumnSize;
                 var columnSizeString = columnSize == int.MaxValue ? "max" : columnSize.ToString();
@@ -131,13 +127,9 @@ namespace DataCommander.Providers.ResultWriter
                 var contains = schemaTable.Columns.Contains("DataTypeName");
 
                 if (contains)
-                {
-                    dataTypeName = (string)schemaRow["DataTypeName"];
-                }
+                    dataTypeName = (string) schemaRow["DataTypeName"];
                 else
-                {
                     dataTypeName = GetDataTypeName(dataType);
-                }
 
                 switch (dataTypeName)
                 {
