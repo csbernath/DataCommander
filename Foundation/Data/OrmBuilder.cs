@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace Foundation.Data
@@ -15,10 +16,10 @@ namespace Foundation.Data
             _properties = properties;
         }
 
-        public void Add(string objectTypeName, IReadOnlyCollection<FoundationDbColumn> columns)
+        public void Add(string recordTypeName, IReadOnlyCollection<FoundationDbColumn> columns)
         {
-            AddObject(objectTypeName, columns, _objectStringBuilder, _properties);
-            AddReadObject(objectTypeName, columns, _readObjectStringBuilder);
+            AddObject(recordTypeName, columns, _objectStringBuilder, _properties);
+            AddReadObject(recordTypeName, columns, _readObjectStringBuilder);
         }
 
         private static void AddObject(string objectTypeName, IReadOnlyCollection<FoundationDbColumn> columns, StringBuilder stringBuilder, bool properties)
@@ -53,9 +54,9 @@ namespace Foundation.Data
 }");
         }
 
-        private static void AddReadObject(string objectTypeName, IReadOnlyCollection<FoundationDbColumn> columns, StringBuilder stringBuilder)
+        private static void AddReadObject(string recordTypeName, IReadOnlyCollection<FoundationDbColumn> columns, StringBuilder stringBuilder)
         {
-            const string objectInstanceName = "@object";
+            const string recordInstanceName = "record";
 
             if (stringBuilder.Length > 0)
                 stringBuilder.Append("\r\n\r\n");
@@ -63,7 +64,7 @@ namespace Foundation.Data
             stringBuilder.AppendFormat(@"private static {0} Read{0}(IDataRecord dataRecord)
 {{
     var {1} = new {0}();
-", objectTypeName, objectInstanceName);
+", recordTypeName, recordInstanceName);
 
             var first = true;
             var index = 0;
@@ -74,7 +75,7 @@ namespace Foundation.Data
                 else
                     stringBuilder.AppendLine();
 
-                stringBuilder.AppendFormat("    {0}.", objectInstanceName);
+                stringBuilder.AppendFormat("    {0}.", recordInstanceName);
                 stringBuilder.Append(column.ColumnName);
                 stringBuilder.Append(" = dataRecord.");
                 stringBuilder.Append(GetDataRecordMethodName(column));
@@ -87,7 +88,7 @@ namespace Foundation.Data
 
             stringBuilder.AppendFormat(@"
     return {0};
-}}", objectInstanceName);
+}}", recordInstanceName);
         }
 
         public override string ToString()
@@ -148,10 +149,18 @@ namespace Foundation.Data
                 case TypeCode.String:
                     csharpTypeName = CSharpTypeName.String;
                     break;
+                case TypeCode.DateTime:
+                    csharpTypeName = nameof(DateTime);
+                    break;
                 default:
-                    csharpTypeName = dbColumnDataType.Name;
+                    if (dbColumnDataType == typeof(byte[]))
+                        csharpTypeName = "byte[]";
+                    else
+                        csharpTypeName = dbColumnDataType.Name;
+
                     break;
             }
+
             return csharpTypeName;
         }
 
@@ -196,10 +205,6 @@ namespace Foundation.Data
             {
                 case TypeCode.Empty:
                     break;
-                case TypeCode.Object:
-                    if (column.DataType == typeof(Guid))
-                        methodName = column.AllowDbNull == true ? "GetNullableGuid" : "GetGuid";
-                    break;
                 case TypeCode.DBNull:
                     break;
                 case TypeCode.Boolean:
@@ -242,9 +247,16 @@ namespace Foundation.Data
                 case TypeCode.String:
                     methodName = column.AllowDbNull == true ? "GetStringOrDefault" : "GetString";
                     break;
+                case TypeCode.Object:
+                    if (column.DataType == typeof(Guid))
+                        methodName = column.AllowDbNull == true ? "GetNullableGuid" : "GetGuid";
+                    else if (column.DataType == typeof(byte[]))
+                        methodName = column.AllowDbNull == true ? "GetNullableBytes" : "GetBytes";
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
             return methodName;
         }
     }

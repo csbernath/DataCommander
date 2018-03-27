@@ -49,11 +49,11 @@ namespace Foundation.Data
 
         public static async Task<List<T>> ExecuteReaderAsync<T>(this IDbCommandAsyncExecutor executor, ExecuteReaderRequest request, Func<IDataRecord, T> read)
         {
-            List<T> objects = null;
+            List<T> records = null;
             await executor.ExecuteReaderAsync(
                 request,
-                async dataReader => objects = await dataReader.ReadAsync(read, request.CancellationToken));
-            return objects;
+                async dataReader => records = await dataReader.ReadAsync(read, request.CancellationToken));
+            return records;
         }
 
         public static async Task<ExecuteReaderResponse<T1, T2>> ExecuteReaderAsync<T1, T2>(this IDbCommandAsyncExecutor executor,

@@ -9,6 +9,13 @@ namespace Foundation.Data
     /// </summary>
     public static class IDataRecordExtensions
     {
+        public static byte[] GetBytes(this IDataRecord dataRecord, int fieldIndex)
+        {
+            var valueObject = dataRecord.GetValue(fieldIndex);
+            var value = (byte[]) valueObject;
+            return value;
+        }
+
         /// <summary>
         /// 
         /// </summary>

@@ -13,17 +13,6 @@ namespace Foundation.Data
     /// </summary>
     public static class IDbCommandExtensions
     {
-        public static void Initialize(this IDbCommand command, CreateCommandRequest request)
-        {
-            command.CommandType = request.CommandType;
-            command.CommandText = request.CommandText;
-            command.CommandTimeout = request.CommandTimeout;
-            command.Transaction = request.Transaction;
-
-            if (request.Parameters != null)
-                command.Parameters.AddRange(request.Parameters);
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -250,6 +239,17 @@ namespace Foundation.Data
             }
 
             return sb.ToString();
+        }
+
+        internal static void Initialize(this IDbCommand command, CreateCommandRequest request)
+        {
+            command.CommandType = request.CommandType;
+            command.CommandText = request.CommandText;
+            command.CommandTimeout = request.CommandTimeout;
+            command.Transaction = request.Transaction;
+
+            if (request.Parameters != null)
+                command.Parameters.AddRange(request.Parameters);
         }
     }
 }

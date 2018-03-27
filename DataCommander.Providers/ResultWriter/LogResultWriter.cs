@@ -23,7 +23,7 @@ namespace DataCommander.Providers.ResultWriter
         private long _beforeExecuteReaderTimestamp;
         private long _writeTableBeginTimestamp;
         private long _firstRowReadBeginTimestamp;
-        private readonly OrmBuilder _ormBuilder = new OrmBuilder(true);
+        private readonly OrmBuilder _ormBuilder = new OrmBuilder(false);
 
         public LogResultWriter(Action<InfoMessage> addInfoMessage)
         {
@@ -76,10 +76,10 @@ namespace DataCommander.Providers.ResultWriter
         {
             _writeTableBeginTimestamp = Stopwatch.GetTimestamp();
 
-            var objectId = _tableCount + 1;
-            var objectTypeName = $"Object{objectId}";
+            var recordId = _tableCount + 1;
+            var recordTypeName = $"Record{recordId}";
             var columns = schemaTable.Rows.Cast<DataRow>().Select(FoundationDbColumnFactory.Create).ToList();
-            _ormBuilder.Add(objectTypeName, columns);
+            _ormBuilder.Add(recordTypeName, columns);
             Log.Trace($"SchemaTable of table[{_tableCount}]:\r\n{schemaTable.ToStringTableString()}");
             ++_tableCount;
             _rowCount = 0;

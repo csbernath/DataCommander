@@ -25,7 +25,7 @@ namespace Foundation.Data
             _command = command;
         }
 
-#region IDbCommand Members
+        #region IDbCommand Members
 
         /// <summary>
         /// 
@@ -54,10 +54,7 @@ namespace Foundation.Data
                 return _command.CommandType;
             }
 
-            set
-            {
-                _command.CommandType = value;
-            }
+            set { _command.CommandType = value; }
         }
 
         /// <summary>
@@ -208,9 +205,9 @@ namespace Foundation.Data
             }
         }
 
-#endregion
+        #endregion
 
-#region IDisposable Members
+        #region IDisposable Members
 
         /// <summary>
         /// 
@@ -220,7 +217,7 @@ namespace Foundation.Data
             // TODO:  Add AsyncDbCommand.Dispose implementation
         }
 
-#endregion
+        #endregion
 
         //[ContractInvariantMethod]
         private void ObjectInvariant()

@@ -157,13 +157,13 @@ namespace DataCommander.Providers.Odp
         {
             var table = new DataTable("SchemaTable");
             var columns = table.Columns;
-            columns.Add(" ", typeof (int));
-            columns.Add("  ", typeof (string));
-            columns.Add("Name", typeof (string));
-            columns.Add("Size", typeof (int));
-            columns.Add("DbType", typeof (string));
-            columns.Add("DataType", typeof (Type));
-            columns.Add("OracleDbType", typeof (OracleDbType));
+            columns.Add(" ", typeof(int));
+            columns.Add("  ", typeof(string));
+            columns.Add("Name", typeof(string));
+            columns.Add("Size", typeof(int));
+            columns.Add("DbType", typeof(string));
+            columns.Add("DataType", typeof(Type));
+            columns.Add("OracleDbType", typeof(OracleDbType));
 
             var schemaTable = dataReader.GetSchemaTable();
 
@@ -171,21 +171,17 @@ namespace DataCommander.Providers.Odp
             {
                 var row = schemaTable.Rows[i];
                 var columnOrdinal = (int) row["ColumnOrdinal"] + 1;
-                var isKey = Database.GetValueOrDefault<bool>(row["IsKey"]);
+                var isKey = row.GetValueField<bool>("IsKey");
                 var isRowId = (bool) row["IsRowID"];
                 var pk = string.Empty;
 
                 if (isKey)
-                {
                     pk = "PKEY";
-                }
 
                 if (isRowId)
                 {
                     if (pk.Length > 0)
-                    {
                         pk += ',';
-                    }
 
                     pk += "ROWID";
                 }
@@ -247,29 +243,15 @@ namespace DataCommander.Providers.Odp
                 }
 
                 if (!allowDbNull)
-                {
                     sb.Append(" NOT NULL");
-                }
 
-                table.Rows.Add(new object[]
-                {
-                    columnOrdinal,
-                    pk,
-                    row[SchemaTableColumn.ColumnName],
-                    columnSizeObject,
-                    sb.ToString(),
-                    row["DataType"],
-                    dbType
-                });
+                table.Rows.Add(columnOrdinal, pk, row[SchemaTableColumn.ColumnName], columnSizeObject, sb.ToString(), row["DataType"], dbType);
             }
 
             return table;
         }
 
-        DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName)
-        {
-            return null;
-        }
+        DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName) => null;
 
         Type IProvider.GetColumnType(FoundationDbColumn column)
         {
