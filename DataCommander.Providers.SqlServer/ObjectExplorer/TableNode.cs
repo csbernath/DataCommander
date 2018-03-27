@@ -223,7 +223,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                         sb.Append(" not null");
                     }
 
-                    var collation = Foundation.Data.Database.GetValue(column["collation"], string.Empty);
+                    var collation = ValueReader.GetValue(column["collation"], string.Empty);
                     var formula = string.Empty;
 
                     if (column["text"] != DBNull.Value)

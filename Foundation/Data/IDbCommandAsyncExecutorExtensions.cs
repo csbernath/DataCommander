@@ -9,24 +9,25 @@ namespace Foundation.Data
 {
     public static class IDbCommandAsyncExecutorExtensions
     {
-        private static async Task ExecuteAsync(this IDbCommandAsyncExecutor executor, IEnumerable<ExecuteCommandAsyncRequest> requests,
-            CancellationToken cancellationToken)
+        private static Task ExecuteAsync(this IDbCommandAsyncExecutor executor, IEnumerable<ExecuteCommandAsyncRequest> requests, CancellationToken cancellationToken)
         {
-            await executor.ExecuteAsync(async connection =>
+            return executor.ExecuteAsync(async connection =>
             {
                 foreach (var request in requests)
+                {
                     using (var command = connection.CreateCommand(request.CreateCommandRequest))
                         await request.Execute(command);
+                }
             }, cancellationToken);
         }
 
-        public static async Task ExecuteAsync(this IDbCommandAsyncExecutor executor, ExecuteNonReaderRequest request, Func<DbCommand, Task> execute)
+        public static Task ExecuteAsync(this IDbCommandAsyncExecutor executor, ExecuteNonReaderRequest request, Func<DbCommand, Task> execute)
         {
             var requests = new[]
             {
                 new ExecuteCommandAsyncRequest(request.CreateCommandRequest, execute)
             };
-            await executor.ExecuteAsync(requests, request.CancellationToken);
+            return executor.ExecuteAsync(requests, request.CancellationToken);
         }
 
         public static async Task<int> ExecuteNonQueryAsync(this IDbCommandAsyncExecutor executor, ExecuteNonReaderRequest request)
@@ -76,9 +77,9 @@ namespace Foundation.Data
             return response;
         }
 
-        private static async Task ExecuteReaderAsync(this IDbCommandAsyncExecutor executor, ExecuteReaderRequest request, Func<DbDataReader, Task> read)
+        private static Task ExecuteReaderAsync(this IDbCommandAsyncExecutor executor, ExecuteReaderRequest request, Func<DbDataReader, Task> read)
         {
-            await executor.ExecuteAsync(
+            return executor.ExecuteAsync(
                 new ExecuteNonReaderRequest(request.CreateCommandRequest, request.CancellationToken),
                 async command =>
                 {

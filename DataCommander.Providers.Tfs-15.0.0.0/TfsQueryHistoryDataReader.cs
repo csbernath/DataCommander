@@ -64,14 +64,14 @@ namespace DataCommander.Providers.Tfs
                 }
 
                 parameter = parameters.FirstOrDefault(p => p.ParameterName == "user");
-                var user = parameter != null ? Database.GetValueOrDefault<string>(parameter.Value) : null;
+                var user = parameter != null ? ValueReader.GetValueOrDefault<string>(parameter.Value) : null;
                 VersionSpec versionFrom = null;
                 VersionSpec versionTo = null;
                 parameter = parameters.FirstOrDefault(p => p.ParameterName == "maxCount");
                 int maxCount;
                 if (parameter != null)
                 {
-                    maxCount = Database.GetValueOrDefault<int>(parameter.Value);
+                    maxCount = ValueReader.GetValueOrDefault<int>(parameter.Value);
                     if (maxCount == 0)
                     {
                         maxCount = (int) parameter.DefaultValue;
@@ -83,8 +83,8 @@ namespace DataCommander.Providers.Tfs
                 }
 
                 parameter = parameters.FirstOrDefault(p => p.ParameterName == "includeChanges");
-                var includeChanges = parameter != null ? Database.GetValueOrDefault<bool>(parameters["includeChanges"].Value) : false;
-                var slotMode = Database.GetValueOrDefault<bool>(parameters["slotMode"].Value);
+                var includeChanges = parameter != null ? ValueReader.GetValueOrDefault<bool>(parameters["includeChanges"].Value) : false;
+                var slotMode = ValueReader.GetValueOrDefault<bool>(parameters["slotMode"].Value);
                 var changesets = command.Connection.VersionControlServer.QueryHistory(path, version, deletionId, recursion, user, versionFrom, versionTo, maxCount, includeChanges,
                     slotMode);
                 enumerator = AsEnumerable(changesets).GetEnumerator();

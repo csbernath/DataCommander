@@ -58,7 +58,7 @@ namespace DataCommander.Providers.Tfs
                     first = false;
                     var serverPath = (string) command.Parameters["serverPath"].Value;
                     item = command.Connection.VersionControlServer.GetItem(serverPath);
-                    localPath = Database.GetValueOrDefault<string>(command.Parameters["localPath"].Value);
+                    localPath = ValueReader.GetValueOrDefault<string>(command.Parameters["localPath"].Value);
 
                     if (localPath == null)
                     {

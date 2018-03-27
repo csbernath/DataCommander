@@ -95,13 +95,13 @@ namespace Foundation.Data.SqlClient
                 switch (sqlDbType)
                 {
                     case SqlDbType.Bit:
-                        var b = (bool)value;
+                        var b = (bool) value;
                         var i = b ? 1 : 0;
                         sb.Append(i);
                         break;
 
                     case SqlDbType.Binary:
-                        var bytes = (byte[])value;
+                        var bytes = (byte[]) value;
                         var chars = Hex.Encode(bytes, true);
                         sb.Append("0x");
                         sb.Append(chars);
@@ -113,13 +113,9 @@ namespace Foundation.Data.SqlClient
                         var s = value.ToString();
 
                         if (s.IndexOf('\'') >= 0)
-                        {
                             sb.Append(s.Replace("'", "''"));
-                        }
                         else
-                        {
                             sb.Append(s);
-                        }
 
                         sb.Append('\'');
                         break;
@@ -130,20 +126,16 @@ namespace Foundation.Data.SqlClient
                         s = value.ToString();
 
                         if (s.IndexOf('\'') >= 0)
-                        {
                             sb.Append(s.Replace("'", "''"));
-                        }
                         else
-                        {
                             sb.Append(s);
-                        }
 
                         sb.Append('\'');
                         break;
 
                     case SqlDbType.DateTime:
                     case SqlDbType.SmallDateTime:
-                        var dateTime = (DateTime)value;
+                        var dateTime = (DateTime) value;
                         var dateTimeStr = ToString(dateTime);
                         sb.Append('\'');
                         sb.Append(dateTimeStr);
@@ -151,7 +143,7 @@ namespace Foundation.Data.SqlClient
                         break;
 
                     case SqlDbType.Decimal:
-                        var d = (decimal)value;
+                        var d = (decimal) value;
                         sb.Append(d.ToTSqlDecimal());
                         break;
 
@@ -208,13 +200,9 @@ namespace Foundation.Data.SqlClient
             object obj;
 
             if (sqlBoolean.IsNull)
-            {
                 obj = null;
-            }
             else
-            {
                 obj = sqlBoolean.Value;
-            }
 
             var s = ToString(obj, SqlDbType.Bit);
             commandText.Append(s);
@@ -232,13 +220,9 @@ namespace Foundation.Data.SqlClient
             object obj;
 
             if (value.IsNull)
-            {
                 obj = null;
-            }
             else
-            {
                 obj = value.Value;
-            }
 
             var s = ToString(obj, SqlDbType.SmallInt);
             commandText.Append(s);
@@ -256,13 +240,9 @@ namespace Foundation.Data.SqlClient
             object obj;
 
             if (sqlDateTime.IsNull)
-            {
                 obj = null;
-            }
             else
-            {
                 obj = sqlDateTime.Value;
-            }
 
             var s = ToString(obj, SqlDbType.DateTime);
             commandText.Append(s);

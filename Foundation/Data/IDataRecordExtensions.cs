@@ -22,101 +22,101 @@ namespace Foundation.Data
         /// <param name="dataRecord"></param>
         /// <param name="columnIndex"></param>
         /// <returns></returns>
-        public static bool? GetNullableBoolean(this IDataRecord dataRecord, int columnIndex)
+        public static bool? GetNullableBoolean(this IDataRecord dataRecord, int fieldIndex)
         {
             Assert.IsNotNull(dataRecord);
 
-            return dataRecord.IsDBNull(columnIndex)
-                ? (bool?)null
-                : dataRecord.GetBoolean(columnIndex);
+            return dataRecord.IsDBNull(fieldIndex)
+                ? (bool?) null
+                : dataRecord.GetBoolean(fieldIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="dataRecord"></param>
-        /// <param name="columnIndex"></param>
+        /// <param name="fieldIndex"></param>
         /// <returns></returns>
-        public static DateTime? GetNullableDateTime(this IDataRecord dataRecord, int columnIndex)
+        public static DateTime? GetNullableDateTime(this IDataRecord dataRecord, int fieldIndex)
         {
             Assert.IsNotNull(dataRecord);
 
-            return dataRecord.IsDBNull(columnIndex)
-                ? (DateTime?)null
-                : dataRecord.GetDateTime(columnIndex);
+            return dataRecord.IsDBNull(fieldIndex)
+                ? (DateTime?) null
+                : dataRecord.GetDateTime(fieldIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="dataRecord"></param>
-        /// <param name="columnIndex"></param>
+        /// <param name="fieldIndex"></param>
         /// <returns></returns>
-        public static decimal? GetNullableDecimal(this IDataRecord dataRecord, int columnIndex)
+        public static decimal? GetNullableDecimal(this IDataRecord dataRecord, int fieldIndex)
         {
             Assert.IsNotNull(dataRecord);
 
-            return dataRecord.IsDBNull(columnIndex)
-                ? (decimal?)null
-                : dataRecord.GetDecimal(columnIndex);
+            return dataRecord.IsDBNull(fieldIndex)
+                ? (decimal?) null
+                : dataRecord.GetDecimal(fieldIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="dataRecord"></param>
-        /// <param name="columnIndex"></param>
+        /// <param name="fieldIndex"></param>
         /// <returns></returns>
-        public static Guid? GetNullableGuid(this IDataRecord dataRecord, int columnIndex)
+        public static Guid? GetNullableGuid(this IDataRecord dataRecord, int fieldIndex)
         {
             Assert.IsNotNull(dataRecord);
 
-            return dataRecord.IsDBNull(columnIndex)
+            return dataRecord.IsDBNull(fieldIndex)
                 ? (Guid?) null
-                : dataRecord.GetGuid(columnIndex);
+                : dataRecord.GetGuid(fieldIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="dataRecord"></param>
-        /// <param name="columnIndex"></param>
+        /// <param name="fieldIndex"></param>
         /// <returns></returns>
-        public static short? GetNullableInt16(this IDataRecord dataRecord, int columnIndex)
+        public static short? GetNullableInt16(this IDataRecord dataRecord, int fieldIndex)
         {
             Assert.IsNotNull(dataRecord);
 
-            return dataRecord.IsDBNull(columnIndex)
-                ? (short?)null
-                : dataRecord.GetInt16(columnIndex);
+            return dataRecord.IsDBNull(fieldIndex)
+                ? (short?) null
+                : dataRecord.GetInt16(fieldIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="dataRecord"></param>
-        /// <param name="columnIndex"></param>
+        /// <param name="fieldIndex"></param>
         /// <returns></returns>
-        public static int? GetNullableInt32(this IDataRecord dataRecord, int columnIndex)
+        public static int? GetNullableInt32(this IDataRecord dataRecord, int fieldIndex)
         {
             Assert.IsNotNull(dataRecord);
 
-            return dataRecord.IsDBNull(columnIndex)
-                ? (int?)null
-                : dataRecord.GetInt32(columnIndex);
+            return dataRecord.IsDBNull(fieldIndex)
+                ? (int?) null
+                : dataRecord.GetInt32(fieldIndex);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="dataRecord"></param>
-        /// <param name="columnIndex"></param>
+        /// <param name="fieldIndex"></param>
         /// <returns></returns>
-        public static string GetStringOrDefault(this IDataRecord dataRecord, int columnIndex)
+        public static string GetStringOrDefault(this IDataRecord dataRecord, int fieldIndex)
         {
-            return dataRecord.IsDBNull(columnIndex)
+            return dataRecord.IsDBNull(fieldIndex)
                 ? null
-                : dataRecord.GetString(columnIndex);
+                : dataRecord.GetString(fieldIndex);
         }
     }
 }

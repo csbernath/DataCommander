@@ -91,7 +91,7 @@ namespace Foundation.Data
             Assert.IsNotNull(command);
 
             var scalar = command.ExecuteScalar();
-            return Database.GetValueOrDefault<T>(scalar);
+            return ValueReader.GetValueOrDefault<T>(scalar);
         }
 
         /// <summary>
@@ -195,9 +195,7 @@ namespace Foundation.Data
                     try
                     {
                         using (var dataReader = command.ExecuteReader())
-                        {
                             rowCount = dataReader.Fill(dataTable, cancellationToken);
-                        }
                     }
                     catch (Exception exception)
                     {

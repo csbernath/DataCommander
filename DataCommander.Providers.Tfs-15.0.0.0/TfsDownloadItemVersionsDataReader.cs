@@ -64,12 +64,12 @@ namespace DataCommander.Providers.Tfs
                 var version = VersionSpec.Latest;
                 var deletionId = 0;
                 var recursion = RecursionType.None;
-                var user = Database.GetValueOrDefault<string>( parameters[ "user" ].Value );
+                var user = ValueReader.GetValueOrDefault<string>( parameters[ "user" ].Value );
                 VersionSpec versionFrom = null;
                 VersionSpec versionTo = null;
                 var parameter = parameters[ "maxCount" ];
 
-                var maxCount = Database.GetValueOrDefault<int>( parameter.Value );
+                var maxCount = ValueReader.GetValueOrDefault<int>( parameter.Value );
 
                 if (maxCount == 0)
                 {
@@ -77,8 +77,8 @@ namespace DataCommander.Providers.Tfs
                 }
 
                 const bool includeChanges = true;
-                var slotMode = Database.GetValueOrDefault<bool>( parameters[ "slotMode" ].Value );
-                localPath = Database.GetValueOrDefault<string>( parameters[ "localPath" ].Value );
+                var slotMode = ValueReader.GetValueOrDefault<bool>( parameters[ "slotMode" ].Value );
+                localPath = ValueReader.GetValueOrDefault<string>( parameters[ "localPath" ].Value );
 
                 if (string.IsNullOrEmpty(localPath ))
                 {

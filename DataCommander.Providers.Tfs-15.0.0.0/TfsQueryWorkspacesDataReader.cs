@@ -49,9 +49,9 @@ namespace DataCommander.Providers.Tfs
             {
                 _first = false;
                 var parameters = _command.Parameters;
-                var workspace = Database.GetValueOrDefault<string>(parameters["workspace"].Value);
-                var owner = Database.GetValueOrDefault<string>(parameters["owner"].Value);
-                var computer = Database.GetValueOrDefault<string>(parameters["computer"].Value);
+                var workspace = ValueReader.GetValueOrDefault<string>(parameters["workspace"].Value);
+                var owner = ValueReader.GetValueOrDefault<string>(parameters["owner"].Value);
+                var computer = ValueReader.GetValueOrDefault<string>(parameters["computer"].Value);
                 _workspaces = _command.Connection.VersionControlServer.QueryWorkspaces(workspace, owner, computer);
                 _enumerator = AsEnumerable(_workspaces).GetEnumerator();
             }

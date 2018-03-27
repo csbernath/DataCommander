@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Threading;
+using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data
 {
@@ -12,6 +13,8 @@ namespace Foundation.Data
 
         public ExecuteReaderRequest(CreateCommandRequest createCommandRequest, CommandBehavior commandBehavior, CancellationToken cancellationToken)
         {
+            Assert.IsNotNull(createCommandRequest);
+
             CreateCommandRequest = createCommandRequest;
             CommandBehavior = commandBehavior;
             CancellationToken = cancellationToken;

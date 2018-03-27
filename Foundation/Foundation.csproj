@@ -124,7 +124,8 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE;FOUNDATION_4_6</DefineConstants>
-    <DocumentationFile>DataCommander.Foundation-4.0.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
@@ -441,6 +442,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CSharpTypeName.cs" />
+    <Compile Include="Data\ValueReader.cs" />
     <Compile Include="Data\DataParameterValueTypeExtensions.cs" />
     <Compile Include="Data\DbCommandAsyncExecutor.cs" />
     <Compile Include="Data\DbCommandExecutor.cs" />
@@ -448,6 +450,7 @@
     <Compile Include="Data\DbConnectionExtensions.cs" />
     <Compile Include="Data\ExecuteCommandAsyncRequest.cs" />
     <Compile Include="Data\ExecuteNonReaderRequest.cs" />
+    <Compile Include="Data\FoundationDbColumnFactory.cs" />
     <Compile Include="Data\IDbCommandAsyncExecutor.cs" />
     <Compile Include="Data\IDbCommandAsyncExecutorExtensions.cs" />
     <Compile Include="Data\IDbConnectionExtensions.cs" />

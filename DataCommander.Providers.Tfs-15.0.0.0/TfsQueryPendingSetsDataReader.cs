@@ -53,8 +53,8 @@ namespace DataCommander.Providers.Tfs
                 {
                     first = false;
                     var parameters = command.Parameters;
-                    var path = Database.GetValueOrDefault<string>(parameters["path"].Value);
-                    var recursionString = Database.GetValueOrDefault<string>(parameters["recursion"].Value);
+                    var path = ValueReader.GetValueOrDefault<string>(parameters["path"].Value);
+                    var recursionString = ValueReader.GetValueOrDefault<string>(parameters["recursion"].Value);
                     RecursionType recursion;
 
                     if (recursionString != null)
@@ -66,8 +66,8 @@ namespace DataCommander.Providers.Tfs
                         recursion = RecursionType.Full;
                     }
 
-                    var workspace = Database.GetValueOrDefault<string>(parameters["workspace"].Value);
-                    var user = Database.GetValueOrDefault<string>(parameters["user"].Value);
+                    var workspace = ValueReader.GetValueOrDefault<string>(parameters["workspace"].Value);
+                    var user = ValueReader.GetValueOrDefault<string>(parameters["user"].Value);
                     pendingSets = command.Connection.VersionControlServer.QueryPendingSets(new string[] {path}, recursion, workspace, user);
                     enumerator = AsEnumerable(pendingSets).GetEnumerator();
                 }

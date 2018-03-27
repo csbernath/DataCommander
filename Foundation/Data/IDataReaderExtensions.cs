@@ -164,9 +164,7 @@ namespace Foundation.Data
                 var columns = dataTable.Columns;
 
                 if (columns.Count == 0)
-                {
                     Database.FillSchema(schemaTable, dataTable);
-                }
             }
 
             var fieldCount = dataReader.FieldCount;

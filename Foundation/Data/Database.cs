@@ -21,7 +21,6 @@ namespace Foundation.Data
         #region Private Fields
 
         private IDbProviderFactoryHelper _providerFactoryHelper;
-        internal const string NullString = "null";
 
         #endregion
 
@@ -130,8 +129,8 @@ namespace Foundation.Data
                 Assert.IsNotNull(Command);
                 FoundationContract.Requires<ArgumentException>(Command.Parameters.Count > 0);
                 FoundationContract.Requires<ArgumentException>(Command.Parameters[0] is IDataParameter);
-                FoundationContract.Requires<ArgumentException>(((IDataParameter)Command.Parameters[0]).Direction == ParameterDirection.ReturnValue);
-                FoundationContract.Requires<ArgumentException>(((IDataParameter)Command.Parameters[0]).Value is int);
+                FoundationContract.Requires<ArgumentException>(((IDataParameter) Command.Parameters[0]).Direction == ParameterDirection.ReturnValue);
+                FoundationContract.Requires<ArgumentException>(((IDataParameter) Command.Parameters[0]).Value is int);
 
                 var parameters = Command.Parameters;
                 var parameterObject = parameters[0];
@@ -340,44 +339,6 @@ namespace Foundation.Data
             }
         }
 
-        public static TResult GetValue<TResult>(object value, object inputNullValue, TResult outputNullValue)
-        {
-            TResult returnValue;
-
-            if (value == null || value == inputNullValue)
-                returnValue = outputNullValue;
-            else
-                returnValue = (TResult) value;
-
-            return returnValue;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="value"></param>
-        /// <param name="outputNullValue"></param>
-        /// <returns></returns>
-        public static TResult GetValue<TResult>(object value, TResult outputNullValue)
-        {
-            object inputNullValue = DBNull.Value;
-            return GetValue(value, inputNullValue, outputNullValue);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static TResult GetValueOrDefault<TResult>(object value)
-        {
-            object inputNullValue = DBNull.Value;
-            var outputNullValue = default(TResult);
-            return GetValue(value, inputNullValue, outputNullValue);
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -551,10 +512,6 @@ namespace Foundation.Data
         /// </returns>
         public int ExecuteNonQuery(string commandText)
         {
-            //this.command = this.CreateCommand(commandText);
-            //this.rowCount = this.command.ExecuteNonQuery();
-            //return this.rowCount;
-
             Command = CreateCommand(commandText);
             try
             {
@@ -710,9 +667,7 @@ namespace Foundation.Data
             DataTable schemaTable;
 
             using (var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly | CommandBehavior.KeyInfo))
-            {
                 schemaTable = FillSchema(dataReader, dataTable);
-            }
 
             return schemaTable;
         }
@@ -731,9 +686,7 @@ namespace Foundation.Data
             DataTable[] schemaTables;
 
             using (var dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly | CommandBehavior.KeyInfo))
-            {
                 schemaTables = FillSchema(dataReader, dataSet, cancellationToken);
-            }
 
             return schemaTables;
         }
@@ -761,15 +714,7 @@ namespace Foundation.Data
         /// <summary>
         /// Inherited class must call this method first.
         /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="transaction"></param>
-        /// <param name="commandHelper"></param>
-        /// <param name="commandTimeout"></param>
-        protected void Initialize(
-            IDbConnection connection,
-            IDbTransaction transaction,
-            IDbCommandHelper commandHelper,
-            int commandTimeout)
+        protected void Initialize(IDbConnection connection, IDbTransaction transaction, IDbCommandHelper commandHelper, int commandTimeout)
         {
             Connection = connection;
             Transaction = transaction;
@@ -800,21 +745,17 @@ namespace Foundation.Data
                     if (columns.Contains(columnNameAdd))
                     {
                         columnNameAdd = $"{columnName}{index}";
-                        index++;
+                        ++index;
                     }
                     else
-                    {
                         break;
-                    }
                 }
 
                 var column = new DataColumn(columnNameAdd, dataType);
                 columns.Add(column);
 
                 if (isKey)
-                {
                     primaryKey.Add(column);
-                }
             }
 
             var array = primaryKey.ToArray();

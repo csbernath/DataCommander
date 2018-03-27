@@ -50,7 +50,7 @@ namespace DataCommander.Providers.Tfs
                     first = false;
                     var parameters = command.Parameters;
                     var path = parameters["path"].GetValueOrDefault<string>();
-                    var recursionString = Database.GetValueOrDefault<string>(parameters["recursion"].Value);
+                    var recursionString = ValueReader.GetValueOrDefault<string>(parameters["recursion"].Value);
                     RecursionType recursion;
 
                     if (recursionString != null)

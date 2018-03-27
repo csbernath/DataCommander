@@ -51,7 +51,7 @@ namespace DataCommander.Providers.Tfs
                 var parameter = parameters.FirstOrDefault( p => p.ParameterName == "recursion" );
                 if (parameter != null)
                 {
-                    var recursionString = Database.GetValueOrDefault<string>( parameter.Value );
+                    var recursionString = ValueReader.GetValueOrDefault<string>( parameter.Value );
                     recursion = Enum<RecursionType>.Parse( recursionString );
                     
                 }

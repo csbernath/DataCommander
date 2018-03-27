@@ -4,20 +4,13 @@ namespace Foundation.Data
 {
     public class ExecuteReaderResponse<T1, T2>
     {
-        public ExecuteReaderResponse(List<T1> objects1, List<T2> objects2)
+        public readonly List<T1> Result1;
+        public readonly List<T2> Result2;
+
+        public ExecuteReaderResponse(List<T1> result1, List<T2> result2)
         {
-            Objects1 = objects1;
-            Objects2 = objects2;
+            Result1 = result1;
+            Result2 = result2;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public readonly List<T1> Objects1;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public readonly List<T2> Objects2;
     }
 }

@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
+using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
@@ -26,8 +27,9 @@ namespace Foundation.Data
                 else
                 {
                     var nextResult = await dataReader.NextResultAsync(cancellationToken);
-                    FoundationContract.Assert(nextResult);
+                    Assert.IsTrue(nextResult);
                 }
+
                 await read();
             }
         }
