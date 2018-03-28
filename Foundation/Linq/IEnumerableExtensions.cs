@@ -114,8 +114,8 @@ namespace Foundation.Linq
             FoundationContract.Ensures(Contract.Result<IEnumerable<List<TSource>>>().Count() <= partitionCount);
             FoundationContract.Ensures(Contract.ForAll(Contract.Result<IEnumerable<List<TSource>>>().ToList(), partition => partition.Count > 0));
 
-            var partitionSize = count/partitionCount;
-            var remainder = count%partitionCount;
+            var partitionSize = count / partitionCount;
+            var remainder = count % partitionCount;
 
             using (var enumerator = source.GetEnumerator())
             {
@@ -374,7 +374,7 @@ namespace Foundation.Linq
 
             var table = new StringTable(columns.Count);
 
-#region First row: column names
+            #region First row: column names
 
             var row = table.NewRow();
             var columnIndex = 0;
@@ -384,16 +384,17 @@ namespace Foundation.Linq
                 table.Columns[columnIndex].Align = column.Align;
                 ++columnIndex;
             }
+
             table.Rows.Add(row);
 
-#endregion
+            #endregion
 
-#region Second row: underline first row
+            #region Second row: underline first row
 
             var secondRow = table.NewRow();
             table.Rows.Add(secondRow);
 
-#endregion
+            #endregion
 
             foreach (var item in source)
             {
@@ -404,10 +405,11 @@ namespace Foundation.Linq
                     row[columnIndex] = column.ToStringFunction(item);
                     ++columnIndex;
                 }
+
                 table.Rows.Add(row);
             }
 
-#region Fill second row
+            #region Fill second row
 
             var columnWidths = new int[columns.Count];
             columnIndex = 0;
@@ -419,7 +421,7 @@ namespace Foundation.Linq
                 ++columnIndex;
             }
 
-#endregion
+            #endregion
 
             return table.ToString(columnWidths, " ");
         }
