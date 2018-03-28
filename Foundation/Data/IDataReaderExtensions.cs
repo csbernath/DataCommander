@@ -34,8 +34,8 @@ namespace Foundation.Data
 
             dataReader.ReadResult(() =>
             {
-                var @object = readRecord(dataReader);
-                records.Add(@object);
+                var record = readRecord(dataReader);
+                records.Add(record);
             });
 
             return records;
@@ -54,8 +54,8 @@ namespace Foundation.Data
 
             dataReader.ReadResult(() =>
             {
-                var @object = readRecord();
-                records.Add(@object);
+                var record = readRecord();
+                records.Add(record);
             });
 
             return records;
@@ -63,36 +63,36 @@ namespace Foundation.Data
 
         public static ExecuteReaderResponse<T1, T2> Read<T1, T2>(this IDataReader dataReader, Func<T1> read1, Func<T2> read2)
         {
-            List<T1> records1 = null;
-            List<T2> records2 = null;
+            List<T1> result1 = null;
+            List<T2> result2 = null;
 
             var readRecords = new Action[]
             {
-                () => records1 = dataReader.ReadResult(read1),
-                () => records2 = dataReader.ReadResult(read2)
+                () => result1 = dataReader.ReadResult(read1),
+                () => result2 = dataReader.ReadResult(read2)
             };
 
             dataReader.ReadResults(readRecords);
 
-            return ExecuteReaderResponse.Create(records1, records2);
+            return ExecuteReaderResponse.Create(result1, result2);
         }
 
         public static ExecuteReaderResponse<T1, T2, T3> Read<T1, T2, T3>(this IDataReader dataReader, Func<T1> read1, Func<T2> read2, Func<T3> read3)
         {
-            List<T1> objects1 = null;
-            List<T2> objects2 = null;
-            List<T3> objects3 = null;
+            List<T1> result1 = null;
+            List<T2> result2 = null;
+            List<T3> result3 = null;
 
             var reads = new Action[]
             {
-                () => objects1 = dataReader.ReadResult(read1),
-                () => objects2 = dataReader.ReadResult(read2),
-                () => objects3 = dataReader.ReadResult(read3)
+                () => result1 = dataReader.ReadResult(read1),
+                () => result2 = dataReader.ReadResult(read2),
+                () => result3 = dataReader.ReadResult(read3)
             };
 
             dataReader.ReadResults(reads);
 
-            return ExecuteReaderResponse.Create(objects1, objects2, objects3);
+            return ExecuteReaderResponse.Create(result1, result2, result3);
         }
 
         /// <summary>
@@ -105,9 +105,7 @@ namespace Foundation.Data
             Assert.IsNotNull(dataReader);
 
             while (dataReader.Read())
-            {
                 yield return dataReader;
-            }
         }
 
         /// <summary>
@@ -124,22 +122,21 @@ namespace Foundation.Data
 
             var rowCount = 0;
 
-            while (!cancellationToken.IsCancellationRequested)
+            while (true)
             {
-                var table =
-                    new DataTable
-                    {
-                        Locale = CultureInfo.InvariantCulture
-                    };
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var table = new DataTable
+                {
+                    Locale = CultureInfo.InvariantCulture
+                };
 
                 var count = dataReader.Fill(table, cancellationToken);
                 rowCount += count;
                 dataSet.Tables.Add(table);
 
                 if (!dataReader.NextResult())
-                {
                     break;
-                }
             }
 
             return rowCount;
@@ -171,13 +168,15 @@ namespace Foundation.Data
             var rows = dataTable.Rows;
             var rowCount = 0;
 
-            while (!cancellationToken.IsCancellationRequested && dataReader.Read())
+            while (dataReader.Read())
             {
                 var values = new object[fieldCount];
                 dataReader.GetValues(values);
                 var row = rows.Add(values);
                 row.AcceptChanges();
                 rowCount++;
+
+                cancellationToken.ThrowIfCancellationRequested();
             }
 
             return rowCount;
