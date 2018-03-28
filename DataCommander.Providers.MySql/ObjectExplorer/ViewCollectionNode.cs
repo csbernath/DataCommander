@@ -3,7 +3,6 @@
 namespace DataCommander.Providers.MySql.ObjectExplorer
 {
     using System.Collections.Generic;
-    using System.Data;
     using global::MySql.Data.MySqlClient;
 
     internal sealed class ViewCollectionNode : ITreeNode

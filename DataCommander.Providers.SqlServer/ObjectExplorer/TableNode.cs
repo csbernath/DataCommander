@@ -15,7 +15,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     using System.Drawing;
     using System.Linq;
     using System.Text;
-    using System.Threading;
     using System.Windows.Forms;
     using Microsoft.SqlServer.Management.Common;
     using Microsoft.SqlServer.Management.Smo;

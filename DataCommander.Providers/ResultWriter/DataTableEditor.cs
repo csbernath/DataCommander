@@ -715,23 +715,17 @@
                             case 1:
                                 var columnIndexes = GetColumnIndexes();
                                 using (var streamWriter = new StreamWriter(path, false, Encoding.UTF8))
-                                {
                                     HtmlFormatter.Write(_dataTable.DefaultView, columnIndexes, streamWriter);
-                                }
                                 break;
 
                             case 2:
                                 using (var streamWriter = new StreamWriter(path, false, Encoding.UTF8))
-                                {
                                     streamWriter.Write(_dataTable.DefaultView.ToStringTableString());
-                                }
                                 break;
 
                             case 3:
                                 using (var streamWriter = new StreamWriter(path, false, Encoding.UTF8))
-                                {
-                                    Database.Write(_dataTable.DefaultView, '\t', "\r\n", streamWriter);
-                                }
+                                    Writer.Write(_dataTable.DefaultView, '\t', "\r\n", streamWriter);
                                 break;
 
                             case 4: // XML Spreadsheet 2007(*.xlsx)

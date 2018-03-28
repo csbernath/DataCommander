@@ -1,6 +1,5 @@
 ﻿using Foundation.Data;
 using System.Collections.Generic;
-using System.Data;
 using System.Windows.Forms;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer

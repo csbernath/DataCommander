@@ -37,7 +37,7 @@
             if (format == DataFormats.CommaSeparatedValue)
             {
                 var stringWriter = new StringWriter();
-                Database.Write(_dataView, ',', "\r\n", stringWriter);
+                Writer.Write(_dataView, ',', "\r\n", stringWriter);
                 var c = (char)0;
                 stringWriter.Write(c);
                 var s = stringWriter.ToString();

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
 using System.Windows.Forms;
 using Foundation.Data;
 
@@ -22,9 +21,7 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            var commandText =
-                $@"
-select	name
+            var commandText = $@"select	name
 from
 (
 	select	name
@@ -34,16 +31,16 @@ from
 	select	'sqlite_master'
 ) t
 order by name collate nocase";
-            var database = new Database(databaseNode.Connection);
-            var table = database.ExecuteDataTable(commandText, CancellationToken.None);
+            var executor = databaseNode.Connection.CreateCommandExecutor();
+            var table = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
             var rows = table.Rows;
             var count = rows.Count;
             var nodes = new ITreeNode[count];
 
-            for (var i=0;i<count;i++)
+            for (var i = 0; i < count; i++)
             {
                 var row = rows[i];
-                var name = (string)row["name"];
+                var name = (string) row["name"];
                 nodes[i] = new TableNode(databaseNode, name);
             }
 
@@ -51,9 +48,7 @@ order by name collate nocase";
         }
 
         bool ITreeNode.Sortable => false;
-
         string ITreeNode.Query => null;
-
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
         #endregion

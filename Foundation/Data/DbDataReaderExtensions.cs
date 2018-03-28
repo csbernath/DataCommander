@@ -5,7 +5,6 @@ using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data
 {

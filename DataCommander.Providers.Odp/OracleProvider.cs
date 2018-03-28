@@ -8,7 +8,6 @@ namespace DataCommander.Providers.Odp
     using System.Data;
     using System.Data.Common;
     using System.Text;
-    using System.Threading;
     using System.Xml;
     using DataFieldReader;
     using Oracle.ManagedDataAccess.Client;

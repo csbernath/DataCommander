@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Foundation.Collections;
 using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
 {

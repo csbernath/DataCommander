@@ -5,9 +5,7 @@ using Foundation.Diagnostics.Contracts;
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     using System.Collections.Generic;
-    using System.Data;
     using System.Data.SqlClient;
-    using System.Linq;
     using System.Windows.Forms;
 
     internal sealed class LinkedServerCollectionNode : ITreeNode
