@@ -442,6 +442,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CSharpTypeName.cs" />
+    <Compile Include="Data\SchemaFiller.cs" />
     <Compile Include="Data\ValueReader.cs" />
     <Compile Include="Data\DataParameterValueTypeExtensions.cs" />
     <Compile Include="Data\DbCommandAsyncExecutor.cs" />
@@ -463,7 +464,7 @@
     <Compile Include="Data\DbDataReaderExtensions.cs" />
     <Compile Include="Data\IDbCommandExecutorExtensions.cs" />
     <Compile Include="Data\ConnectionStateManager.cs" />
-    <Compile Include="Data\Database.cs">
+    <Compile Include="Data\Writer.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data\FoundationDbColumn.cs" />
