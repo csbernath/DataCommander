@@ -61,9 +61,9 @@ namespace Foundation.Threading
                     for (int i = 0; i < this.actions.Length; i++)
                     {
                         Action action = this.actions[ i ];
-                        FoundationContract.Assert( action != null, string.Format( "action[{0}]", i ) );
+                        Assert.IsTrue( action != null, string.Format( "action[{0}]", i ) );
                         bool succeeded = ThreadPool.QueueUserWorkItem( this.Callback, action );
-                        FoundationContract.Assert( succeeded, "Adding work item to thread pool failed." );
+                        Assert.IsTrue( succeeded, "Adding work item to thread pool failed." );
                     }
                 }
                 else

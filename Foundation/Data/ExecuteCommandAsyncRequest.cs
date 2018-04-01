@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.Common;
 using System.Threading.Tasks;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 
 namespace Foundation.Data
 {

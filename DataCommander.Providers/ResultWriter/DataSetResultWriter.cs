@@ -106,7 +106,7 @@
         {
             _logResultWriter.WriteTableEnd();
 
-            GarbageMonitor.Add("DataSetResultWriter", "System.Data.DataTable", _dataTable.Rows.Count, _dataTable);
+            GarbageMonitor.Default.Add("DataSetResultWriter", "System.Data.DataTable", _dataTable.Rows.Count, _dataTable);
         }
 
         void IResultWriter.WriteParameters(IDataParameterCollection parameters)
@@ -123,7 +123,7 @@
             //{
             //    DataTable table = dataSet.Tables[ last ];
             //    string name = string.Format( "DataTable({0})", table.Rows.Count );
-            //    GarbageMonitor.Add( name, dataTable );
+            //    GarbageMonitor.Default.Add( name, dataTable );
             //}
         }
 

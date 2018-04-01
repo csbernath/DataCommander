@@ -1,4 +1,5 @@
-﻿using Foundation.Diagnostics.Contracts;
+﻿using Foundation.Assertions;
+using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.Tfs
 {
@@ -9,14 +10,13 @@ namespace DataCommander.Providers.Tfs
     {
         public TfsCommand(TfsConnection connection)
         {
-            FoundationContract.Requires<ArgumentException>(connection != null);
-
+            Assert.IsNotNull(connection);
             Connection = connection;
         }
 
         public TfsConnection Connection { get; private set; }
 
-#region IDbCommand Members
+        #region IDbCommand Members
 
         public void Cancel()
         {
@@ -37,7 +37,7 @@ namespace DataCommander.Providers.Tfs
 
             set
             {
-                var tfsDbConnection = (TfsDbConnection)value;
+                var tfsDbConnection = (TfsDbConnection) value;
                 Connection = tfsDbConnection.Connection;
             }
         }
@@ -90,14 +90,9 @@ namespace DataCommander.Providers.Tfs
 
         IDbTransaction IDbCommand.Transaction
         {
-            get
-            {
-                return null;
-            }
+            get { return null; }
 
-            set
-            {
-            }
+            set { }
         }
 
         public UpdateRowSource UpdatedRowSource
@@ -107,15 +102,15 @@ namespace DataCommander.Providers.Tfs
             set => throw new NotImplementedException();
         }
 
-#endregion
+        #endregion
 
-#region IDisposable Members
+        #region IDisposable Members
 
         public void Dispose()
         {
         }
 
-#endregion
+        #endregion
 
         private IDataReader ExecuteStoredProcedure(CommandBehavior behavior)
         {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management;
 using System.Text;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 
@@ -40,7 +40,7 @@ namespace Foundation.Management
             var query = $"SELECT * FROM Msvm_ComputerSystem WHERE Name='{name}'";
             var list = managementScope.ExecuteQuery(query, mo => new MsvmComputerSystem(mo));
 
-            FoundationContract.Assert(list.Count > 0);
+            Assert.IsTrue(list.Count > 0);
 
             MsvmComputerSystem item;
 

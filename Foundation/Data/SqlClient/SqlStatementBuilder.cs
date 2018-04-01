@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.SqlTypes;
 using System.Text;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Text;
 

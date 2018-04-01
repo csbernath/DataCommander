@@ -1,5 +1,4 @@
-﻿using System;
-using Foundation.Diagnostics.Contracts;
+﻿using Foundation.Assertions;
 
 namespace DataCommander.Providers.Msi
 {
@@ -12,7 +11,7 @@ namespace DataCommander.Providers.Msi
 
         public MsiDataReaderHelper( MsiDataReader dataReader )
         {
-            FoundationContract.Requires<ArgumentException>( dataReader != null );
+            Assert.IsNotNull(dataReader);
 
             var view = dataReader.View;
             var index = 0;

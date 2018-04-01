@@ -1,4 +1,4 @@
-﻿using Foundation.Diagnostics.Contracts;
+﻿using Foundation.Assertions;
 
 namespace Foundation.Data
 {
@@ -14,41 +14,41 @@ namespace Foundation.Data
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public DataParameterValue( T value )
+        public DataParameterValue(T value)
         {
             Type = DataParameterValueType.Value;
             _value = value;
         }
 
-        private DataParameterValue( DataParameterValueType type )
+        private DataParameterValue(DataParameterValueType type)
         {
             Type = type;
-            _value = default( T );
+            _value = default(T);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static DataParameterValue<T> Default { get; } = new DataParameterValue<T>( DataParameterValueType.Default );
+        public static DataParameterValue<T> Default { get; } = new DataParameterValue<T>(DataParameterValueType.Default);
 
         /// <summary>
         /// 
         /// </summary>
-        public static DataParameterValue<T> Null { get; } = new DataParameterValue<T>( DataParameterValueType.Null );
+        public static DataParameterValue<T> Null { get; } = new DataParameterValue<T>(DataParameterValueType.Null);
 
         /// <summary>
         /// 
         /// </summary>
-        public static DataParameterValue<T> Void { get; } = new DataParameterValue<T>( DataParameterValueType.Void );
+        public static DataParameterValue<T> Void { get; } = new DataParameterValue<T>(DataParameterValueType.Void);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator DataParameterValue<T>( T value )
+        public static implicit operator DataParameterValue<T>(T value)
         {
-            return new DataParameterValue<T>( value );
+            return new DataParameterValue<T>(value);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Foundation.Data
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static explicit operator T( DataParameterValue<T> value )
+        public static explicit operator T(DataParameterValue<T> value)
         {
             return value.Value;
         }
@@ -73,7 +73,7 @@ namespace Foundation.Data
         {
             get
             {
-                FoundationContract.Assert( Type == DataParameterValueType.Value );
+                Assert.IsTrue(Type == DataParameterValueType.Value);
                 return _value;
             }
         }

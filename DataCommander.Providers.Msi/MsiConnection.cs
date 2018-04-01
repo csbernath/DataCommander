@@ -1,4 +1,4 @@
-﻿using Foundation.Diagnostics.Contracts;
+﻿using Foundation.Assertions;
 
 namespace DataCommander.Providers.Msi
 {
@@ -26,13 +26,13 @@ namespace DataCommander.Providers.Msi
             var sb = new DbConnectionStringBuilder();
             sb.ConnectionString = _connectionString;
 
-            FoundationContract.Assert(sb.ContainsKey("Data Source"));
+            Assert.IsTrue(sb.ContainsKey("Data Source"));
 
             var dataSourceObject = sb["Data Source"];
 
-            FoundationContract.Assert(dataSourceObject is string);
+            Assert.IsTrue(dataSourceObject is string);
 
-            var path = (string)dataSourceObject;
+            var path = (string) dataSourceObject;
             Database = new Database(path, DatabaseOpenMode.ReadOnly);
             _state = ConnectionState.Open;
         }
@@ -44,7 +44,7 @@ namespace DataCommander.Providers.Msi
 
         internal Database Database { get; private set; }
 
-#region IDbConnection Members
+        #region IDbConnection Members
 
         IDbTransaction IDbConnection.BeginTransaction(IsolationLevel il)
         {
@@ -88,15 +88,15 @@ namespace DataCommander.Providers.Msi
 
         ConnectionState IDbConnection.State => _state;
 
-#endregion
+        #endregion
 
-#region IDisposable Members
+        #region IDisposable Members
 
         void IDisposable.Dispose()
         {
             Database.Dispose();
         }
 
-#endregion
+        #endregion
     }
 }

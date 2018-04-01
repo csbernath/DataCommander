@@ -1,31 +1,30 @@
-﻿using Foundation.Diagnostics.Contracts;
+﻿using System;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Data.Common;
+using System.Data.SqlServerCe;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Principal;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
+using DataCommander.Providers.Connection;
+using DataCommander.Providers.Query;
+using Foundation;
+using Foundation.Assertions;
+using Foundation.Configuration;
+using Foundation.Diagnostics;
+using Foundation.Linq;
 using Foundation.Log;
+using Foundation.Threading;
+using Foundation.Windows.Forms;
 
 namespace DataCommander.Providers
 {
-    using System;
-    using System.Collections.Specialized;
-    using System.ComponentModel;
-    using System.Data.Common;
-    using System.Data.SqlServerCe;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.IO;
-    using System.Linq;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using System.Security.Principal;
-    using System.Text;
-    using System.Threading;
-    using System.Windows.Forms;
-    using Connection;
-    using Foundation;
-    using Foundation.Configuration;
-    using Foundation.Diagnostics;
-    using Foundation.Linq;
-    using Foundation.Threading;
-    using Foundation.Windows.Forms;
-    using Query;
-
     /// <summary>
     /// Summary description for MainForm.
     /// </summary>
@@ -904,7 +903,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                 }
 
                 var provider = ProviderFactory.CreateProvider(providerName);
-                FoundationContract.Assert(provider != null);
+                Assert.IsTrue(provider != null);
 
                 var connection = provider.CreateConnection(connectionString);
                 await connection.OpenAsync(CancellationToken.None);
@@ -1043,7 +1042,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
             var sb = new StringBuilder();
             sb.AppendLine();
-            sb.Append(GarbageMonitor.State);
+            sb.Append(GarbageMonitor.Default.State);
             sb.AppendLine();
             sb.Append(ThreadMonitor.ToStringTableString());
             sb.AppendLine();

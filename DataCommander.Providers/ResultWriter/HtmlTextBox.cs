@@ -104,7 +104,7 @@ namespace DataCommander.Providers.ResultWriter
         {
             var resources = new System.Resources.ResourceManager(typeof (HtmlTextBox));
             this._webBrowser = new WebBrowser();
-            GarbageMonitor.Add("webBrowser", this._webBrowser);
+            GarbageMonitor.Default.Add("webBrowser", this._webBrowser);
             // ((System.ComponentModel.ISupportInitialize)(this.webBrowser)).BeginInit();
             this.SuspendLayout();
             // 

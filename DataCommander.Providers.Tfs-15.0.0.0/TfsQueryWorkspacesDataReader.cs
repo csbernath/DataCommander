@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using Foundation.Assertions;
 using Foundation.Data;
-using Foundation.Diagnostics.Assertions;
 using Microsoft.TeamFoundation.VersionControl.Client;
 
 namespace DataCommander.Providers.Tfs

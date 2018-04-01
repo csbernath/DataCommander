@@ -1,5 +1,5 @@
-﻿using Foundation.Data;
-using Foundation.Diagnostics.Assertions;
+﻿using Foundation.Assertions;
+using Foundation.Data;
 
 namespace DataCommander.Providers.Tfs
 {

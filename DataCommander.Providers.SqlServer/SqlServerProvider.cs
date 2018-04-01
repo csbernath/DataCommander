@@ -13,10 +13,10 @@ using DataCommander.Providers.Field;
 using DataCommander.Providers.Query;
 using DataCommander.Providers.SqlServer.FieldReader;
 using Foundation;
+using Foundation.Assertions;
 using Foundation.Configuration;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
-using Foundation.Diagnostics.Assertions;
 using Foundation.Linq;
 using Foundation.Log;
 

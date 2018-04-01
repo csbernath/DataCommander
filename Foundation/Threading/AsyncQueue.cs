@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Threading;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 
 namespace Foundation.Threading
 {

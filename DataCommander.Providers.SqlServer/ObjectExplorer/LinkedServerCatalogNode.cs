@@ -1,23 +1,21 @@
-﻿using Foundation.Diagnostics.Contracts;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+using Foundation.Assertions;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Windows.Forms;
-
     internal sealed class LinkedServerCatalogNode : ITreeNode
     {
         private readonly string _name;
 
         public LinkedServerCatalogNode(LinkedServerNode linkedServer, string name)
         {
-            FoundationContract.Requires<ArgumentException>(linkedServer != null);
-
+            Assert.IsNotNull(linkedServer);
             _name = name;
         }
 
-#region ITreeNode Members
+        #region ITreeNode Members
 
         string ITreeNode.Name => _name;
 
@@ -34,6 +32,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-#endregion
+        #endregion
     }
 }

@@ -5,7 +5,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Text;
 using System.Threading;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 using Foundation.Linq;
 using Foundation.Log;
 

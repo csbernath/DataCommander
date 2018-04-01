@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using ADODB;
+using Foundation.Assertions;
 using Foundation.Configuration;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers
 {
@@ -39,8 +38,8 @@ namespace DataCommander.Providers
             var typeName = attributes["TypeName"].GetValue<string>();
             var type = Type.GetType(typeName, true);
             var instance = Activator.CreateInstance(type);
-            FoundationContract.Assert(instance != null);
-            FoundationContract.Assert(instance is IProvider);
+            Assert.IsTrue(instance != null);
+            Assert.IsTrue(instance is IProvider);
             var provider = (IProvider) instance;
 
             return provider;

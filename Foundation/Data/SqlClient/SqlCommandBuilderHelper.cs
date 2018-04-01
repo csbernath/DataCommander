@@ -1,6 +1,6 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Data.SqlClient
 {
@@ -26,7 +26,7 @@ namespace Foundation.Data.SqlClient
         /// <param name="command"></param>
         public void DeriveParameters(IDbCommand command)
         {
-            FoundationContract.Assert(command != null);
+            Assert.IsTrue(command != null);
 
             var sqlCommand = (SqlCommand)command;
             SqlCommandBuilder.DeriveParameters(sqlCommand);

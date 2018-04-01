@@ -1,4 +1,4 @@
-﻿using Foundation.Diagnostics.Contracts;
+﻿using Foundation.Assertions;
 
 namespace DataCommander.Providers.Connection
 {
@@ -59,7 +59,7 @@ namespace DataCommander.Providers.Connection
         {
             get
             {
-                FoundationContract.Assert(Connection != null);
+                Assert.IsTrue(Connection != null);
                 return Connection.State;
             }
         }

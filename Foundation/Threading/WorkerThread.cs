@@ -2,8 +2,8 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
+using Foundation.Assertions;
 using Foundation.Diagnostics;
-using Foundation.Diagnostics.Assertions;
 using Foundation.Log;
 
 namespace Foundation.Threading

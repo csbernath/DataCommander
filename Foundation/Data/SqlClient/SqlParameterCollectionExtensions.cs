@@ -6,7 +6,7 @@ using System.Data.SqlTypes;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 using Foundation.Text;
 using Microsoft.SqlServer.Server;
 

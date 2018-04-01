@@ -4,8 +4,8 @@ using System.Data;
 using System.Data.Common;
 using System.Xml;
 using DataCommander.Providers.Connection;
+using Foundation.Assertions;
 using Foundation.Data;
-using Foundation.Diagnostics.Assertions;
 
 namespace DataCommander.Providers
 {

@@ -5,7 +5,7 @@ using System.Data;
 using System.Data.Common;
 using System.Globalization;
 using System.IO;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Data.TextData
 {
@@ -29,13 +29,13 @@ namespace Foundation.Data.TextData
 
         internal TextDataReader( TextDataCommand command, CommandBehavior behavior )
         {
-            FoundationContract.Requires<ArgumentException>(command != null);
+            Assert.IsNotNull(command);
 
             _command = command;
             _behavior = behavior;
             var parameters = command.Parameters;
 
-            FoundationContract.Assert(parameters != null);
+            Assert.IsTrue(parameters != null);
 
             _columns = parameters.GetParameterValue<TextDataColumnCollection>( "columns" );
             var converters = parameters.GetParameterValue<IList<ITextDataConverter>>( "converters" );

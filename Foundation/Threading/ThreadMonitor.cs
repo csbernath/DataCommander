@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Linq;
+using Foundation.Assertions;
 using Foundation.Text;
 
 namespace Foundation.Threading

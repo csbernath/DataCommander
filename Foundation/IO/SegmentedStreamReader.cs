@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
+using Foundation.Assertions;
 using Foundation.Diagnostics;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
 
 namespace Foundation.IO
@@ -27,8 +26,8 @@ namespace Foundation.IO
 
             _stream = stream;
             _length = length;
-            GarbageMonitor.Add(null, "SegmentedStreamReader", 0, this);
-            Log.Trace(GarbageMonitor.State);
+            GarbageMonitor.Default.Add(null, "SegmentedStreamReader", 0, this);
+            Log.Trace(GarbageMonitor.Default.State);
         }
 
         /// <summary>
@@ -38,8 +37,8 @@ namespace Foundation.IO
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            GarbageMonitor.SetDisposeTime(this, LocalTime.Default.Now);
-            Log.Trace(GarbageMonitor.State);
+            GarbageMonitor.Default.SetDisposeTime(this, LocalTime.Default.Now);
+            Log.Trace(GarbageMonitor.Default.State);
         }
 
         /// <summary>
@@ -80,7 +79,7 @@ namespace Foundation.IO
         public override int Read(byte[] buffer, int offset, int count)
         {
 
-            FoundationContract.Assert(count >= 0);
+            Assert.IsTrue(count >= 0);
 
             int read;
             var position = _stream.Position;

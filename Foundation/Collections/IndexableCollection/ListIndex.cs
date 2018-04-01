@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.IndexableCollection
@@ -58,14 +58,14 @@ namespace Foundation.Collections.IndexableCollection
         {
             get
             {
-                FoundationContract.Assert(index < Count);
+                Assert.IsTrue(index < Count);
 
                 return _list[index];
             }
 
             set
             {
-                FoundationContract.Assert(index < Count);
+                Assert.IsTrue(index < Count);
 
                 _list[index] = value;
             }

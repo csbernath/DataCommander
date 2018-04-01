@@ -2,8 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Collections.IndexableCollection
 {
@@ -38,7 +37,7 @@ namespace Foundation.Collections.IndexableCollection
             Assert.IsNotNull(getKey);
             Assert.IsNotNull(dictionary);
             Assert.IsNotNull(createCollection);
-            
+
             Initialize(name, getKey, dictionary, createCollection);
         }
 
@@ -116,7 +115,7 @@ namespace Foundation.Collections.IndexableCollection
             return contains;
         }
 
-#region ICollectionIndex<T> Members
+        #region ICollectionIndex<T> Members
 
         /// <summary>
         /// 
@@ -215,14 +214,12 @@ namespace Foundation.Collections.IndexableCollection
                 if (contains)
                 {
                     var succeeded = collection.Remove(item);
-
-                    FoundationContract.Assert(succeeded, "collection.Remove");
+                    Assert.IsTrue(succeeded);
 
                     if (collection.Count == 0)
                     {
                         succeeded = _dictionary.Remove(key);
-
-                        FoundationContract.Assert(succeeded, "dictionary.Remove");
+                        Assert.IsTrue(succeeded);
                     }
 
                     removed = true;
@@ -232,9 +229,9 @@ namespace Foundation.Collections.IndexableCollection
             return removed;
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable<T> Members
+        #region IEnumerable<T> Members
 
         /// <summary>
         /// 
@@ -251,9 +248,9 @@ namespace Foundation.Collections.IndexableCollection
             }
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable Members
+        #region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -261,7 +258,7 @@ namespace Foundation.Collections.IndexableCollection
             return enumerable.GetEnumerator();
         }
 
-#endregion
+        #endregion
 
         private void Initialize(
             string name,
@@ -279,7 +276,7 @@ namespace Foundation.Collections.IndexableCollection
             _createCollection = createCollection;
         }
 
-#region IDictionary<TKey,ICollection<T>> Members
+        #region IDictionary<TKey,ICollection<T>> Members
 
         void IDictionary<TKey, ICollection<T>>.Add(TKey key, ICollection<T> value)
         {
@@ -323,9 +320,9 @@ namespace Foundation.Collections.IndexableCollection
             set => throw new NotSupportedException();
         }
 
-#endregion
+        #endregion
 
-#region ICollection<KeyValuePair<TKey,ICollection<T>>> Members
+        #region ICollection<KeyValuePair<TKey,ICollection<T>>> Members
 
         void ICollection<KeyValuePair<TKey, ICollection<T>>>.Add(KeyValuePair<TKey, ICollection<T>> item)
         {
@@ -356,15 +353,15 @@ namespace Foundation.Collections.IndexableCollection
             throw new NotSupportedException();
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable<KeyValuePair<TKey,ICollection<T>>> Members
+        #region IEnumerable<KeyValuePair<TKey,ICollection<T>>> Members
 
         IEnumerator<KeyValuePair<TKey, ICollection<T>>> IEnumerable<KeyValuePair<TKey, ICollection<T>>>.GetEnumerator()
         {
             return _dictionary.GetEnumerator();
         }
 
-#endregion
+        #endregion
     }
 }

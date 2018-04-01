@@ -1,6 +1,5 @@
-﻿using System;
+﻿using Foundation.Assertions;
 using Foundation.Data;
-using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -10,16 +9,15 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
     internal sealed class LinkedServerCollectionNode : ITreeNode
     {
-        public LinkedServerCollectionNode( ServerNode serverNode )
+        public LinkedServerCollectionNode(ServerNode serverNode)
         {
-            FoundationContract.Requires<ArgumentException>( serverNode != null );
-
+            Assert.IsNotNull(serverNode);
             Server = serverNode;
         }
 
         public ServerNode Server { get; }
 
-#region ITreeNode Members
+        #region ITreeNode Members
 
         string ITreeNode.Name => "Linked Servers";
 
@@ -54,6 +52,6 @@ order by s.name";
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-#endregion
+        #endregion
     }
 }

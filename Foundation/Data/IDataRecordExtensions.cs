@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 
 namespace Foundation.Data
 {

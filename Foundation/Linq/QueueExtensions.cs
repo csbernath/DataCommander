@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 
 namespace Foundation.Linq
 {

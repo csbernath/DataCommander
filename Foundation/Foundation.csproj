@@ -513,6 +513,10 @@
     <Compile Include="Data\ExecuteCommandRequest.cs" />
     <Compile Include="Data\ExecuteReaderRequest.cs" />
     <Compile Include="DateTimeConstants.cs" />
+    <Compile Include="Diagnostics\InterlockedSequence.cs" />
+    <Compile Include="Diagnostics\MonitoredObject.cs" />
+    <Compile Include="Diagnostics\MonitoredObjectState.cs" />
+    <Compile Include="Diagnostics\MonitorExtensions.cs" />
     <Compile Include="DocumentProperties\DocumentPropertyId.cs" />
     <Compile Include="DomainDrivenDesign\CommandHandler.cs" />
     <Compile Include="DomainDrivenDesign\CommandHandlerFactory.cs" />
@@ -547,6 +551,7 @@
     <Compile Include="Option.cs" />
     <Compile Include="Reference.cs" />
     <Compile Include="ReferenceCounter.cs" />
+    <Compile Include="Text\IEnumerableExtensions.cs" />
     <Compile Include="Threading\IWaitCallbackFactory.cs" />
     <Compile Include="Threading\Tasks\TaskSyncRunner.cs" />
     <Compile Include="Data\PTypes\NamespaceDoc.cs">
@@ -710,14 +715,14 @@
     <Compile Include="Diagnostics\AppDomainMonitor.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Diagnostics\Assertions\Assert.cs" />
-    <Compile Include="Diagnostics\Assertions\AssertFailedEventArgs.cs" />
-    <Compile Include="Diagnostics\Assertions\AssertFailedException.cs" />
-    <Compile Include="Diagnostics\Assertions\AssertMessage.cs" />
-    <Compile Include="Diagnostics\Assertions\AssertMessageParameter.cs" />
-    <Compile Include="Diagnostics\Assertions\AssertMessageParameterCollection.cs" />
-    <Compile Include="Diagnostics\Assertions\CollectionAssert.cs" />
-    <Compile Include="Diagnostics\Assertions\StringAssert.cs" />
+    <Compile Include="Assertions\Assert.cs" />
+    <Compile Include="Assertions\AssertFailedEventArgs.cs" />
+    <Compile Include="Assertions\AssertFailedException.cs" />
+    <Compile Include="Assertions\AssertMessage.cs" />
+    <Compile Include="Assertions\AssertMessageParameter.cs" />
+    <Compile Include="Assertions\AssertMessageParameterCollection.cs" />
+    <Compile Include="Assertions\CollectionAssert.cs" />
+    <Compile Include="Assertions\StringAssert.cs" />
     <Compile Include="Diagnostics\Contracts\FoundationContract.cs" />
     <Compile Include="Collections\TypeDictionary.cs" />
     <Compile Include="Diagnostics\DebugWriter.cs">

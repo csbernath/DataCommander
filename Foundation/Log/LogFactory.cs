@@ -1,6 +1,6 @@
 ﻿using System;
+using Foundation.Assertions;
 using Foundation.Configuration;
-using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Log
 {
@@ -29,7 +29,7 @@ namespace Foundation.Log
                 var type = Type.GetType(typeName, true);
                 var instance = Activator.CreateInstance(type);
 
-                FoundationContract.Assert(instance is ILogFactory);
+                Assert.IsTrue(instance is ILogFactory);
                 var applicationLog = (ILogFactory) instance;
                 instance = applicationLog;
             }

@@ -3,7 +3,7 @@ using System.Data;
 using System.Management;
 using System.Text;
 using DataCommander.Providers.Query;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 
 namespace DataCommander.Providers.Wmi
 {

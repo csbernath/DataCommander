@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Globalization;
+using Foundation.Assertions;
 using Foundation.Collections.IndexableCollection;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data.TextData
 {
@@ -116,8 +115,8 @@ namespace Foundation.Data.TextData
         {
             get
             {
-                FoundationContract.Assert(index >= 0);
-                FoundationContract.Assert(index < _collection.Count);
+                Assert.IsTrue(index >= 0);
+                Assert.IsTrue(index < _collection.Count);
 
                 return _listIndex[index];
             }

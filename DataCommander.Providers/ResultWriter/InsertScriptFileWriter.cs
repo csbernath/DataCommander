@@ -5,10 +5,10 @@ using System.IO;
 using System.Text;
 using DataCommander.Providers.Field;
 using DataCommander.Providers.Query;
+using Foundation.Assertions;
 using Foundation.Collections;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
-using Foundation.Diagnostics.Assertions;
 using Foundation.Text;
 
 namespace DataCommander.Providers.ResultWriter

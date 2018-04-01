@@ -2,7 +2,7 @@
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Diagnostics;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 
 namespace Foundation.Configuration
 {

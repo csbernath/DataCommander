@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 using Microsoft.Deployment.WindowsInstaller;
 
 namespace DataCommander.Providers.Msi
@@ -15,8 +15,7 @@ namespace DataCommander.Providers.Msi
 
         public MsiDataReader(MsiCommand command, CommandBehavior behavior)
         {
-            FoundationContract.Requires<ArgumentException>( command != null );
-
+            Assert.IsNotNull(command);
             _command = command;
             _behavior = behavior;
             View = _command.Connection.Database.OpenView(_command.CommandText);

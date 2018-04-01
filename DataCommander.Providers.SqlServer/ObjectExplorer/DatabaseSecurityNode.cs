@@ -1,4 +1,4 @@
-﻿using Foundation.Diagnostics.Assertions;
+﻿using Foundation.Assertions;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {

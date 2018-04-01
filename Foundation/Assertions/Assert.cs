@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Foundation.Diagnostics.Assertions
+namespace Foundation.Assertions
 {
 #if FOUNDATION_3_5
     using System;

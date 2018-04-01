@@ -7,7 +7,6 @@ using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-
     internal sealed class ServerNode : ITreeNode
     {
         public ServerNode(string connectionString)
@@ -19,7 +18,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         public string ConnectionString { get; }
 
-#region ITreeNode Members
+        #region ITreeNode Members
 
         string ITreeNode.Name
         {
@@ -64,6 +63,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-#endregion
+        #endregion
     }
 }

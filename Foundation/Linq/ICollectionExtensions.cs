@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using Foundation.Assertions;
 using Foundation.Collections;
-using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
@@ -193,7 +193,7 @@ namespace Foundation.Linq
             /// <param name="item"></param>
             void ICollection<TResult>.Add(TResult item)
             {
-                FoundationContract.Assert(sourceAsList != null);
+                Assert.IsTrue(sourceAsList != null);
 
                 sourceAsList.Add(item);
             }
@@ -203,7 +203,7 @@ namespace Foundation.Linq
             /// </summary>
             void ICollection<TResult>.Clear()
             {
-                FoundationContract.Assert(sourceAsList != null);
+                Assert.IsTrue(sourceAsList != null);
 
                 sourceAsList.Clear();
             }

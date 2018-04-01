@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Threading
 {
@@ -150,7 +150,7 @@ namespace Foundation.Threading
         /// <param name="stopEvent"></param>
         public void Stop(EventWaitHandle stopEvent)
         {
-            FoundationContract.Requires<ArgumentException>(stopEvent != null);
+            Assert.IsNotNull(stopEvent);
             var stopper = new Stopper(_threads, stopEvent);
             stopper.Stop();
         }

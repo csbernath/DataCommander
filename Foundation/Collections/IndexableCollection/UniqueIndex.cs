@@ -2,8 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Collections.IndexableCollection
 {
@@ -151,7 +150,7 @@ namespace Foundation.Collections.IndexableCollection
             {
                 var key = response.Key;
 
-                FoundationContract.Assert(!_dictionary.ContainsKey(key));
+                Assert.IsTrue(!_dictionary.ContainsKey(key));
 
                 _dictionary.Add(key, item);
             }
@@ -172,7 +171,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool Contains(T item)
         {
-            FoundationContract.Assert(item != null);
+            Assert.IsTrue(item != null);
 
             var response = _getKey(item);
             bool contains;
@@ -196,7 +195,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         bool ICollection<T>.Remove(T item)
         {
-            FoundationContract.Assert(item != null);
+            Assert.IsTrue(item != null);
 
             var response = _getKey(item);
             bool succeeded;

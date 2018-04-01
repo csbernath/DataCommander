@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.IndexableCollection
@@ -18,7 +19,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <param name="item"></param>
         public void Add(ICollectionIndex<T> item)
         {
-            FoundationContract.Assert(item != null);
+            Assert.IsTrue(item != null);
 
             _dictionary.Add(item.Name, item);
         }

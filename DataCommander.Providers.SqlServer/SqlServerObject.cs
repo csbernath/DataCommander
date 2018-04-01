@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Foundation;
+using Foundation.Assertions;
 using Foundation.Data.SqlClient;
 using Foundation.Diagnostics.Contracts;
 
@@ -34,15 +35,15 @@ end", database);
         public static string GetObjects(string schema, IEnumerable<string> objectTypes)
         {
             FoundationContract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());
-            FoundationContract.Requires<ArgumentException>(objectTypes != null && objectTypes.Any());
+            Assert.IsNotNull(objectTypes);
+            FoundationContract.Requires<ArgumentException>(objectTypes.Any());
 
             return
                 $@"declare @schema_id int
 
 select @schema_id = schema_id
 from sys.schemas (nolock)
-where name = '{schema
-                    }'
+where name = '{schema}'
 
 if @schema_id is not null
 begin
@@ -50,8 +51,7 @@ begin
     from sys.all_objects o (nolock)
     where
         o.schema_id = @schema_id
-        and o.type in({
-                    string.Join(",", objectTypes.Select(o => o.ToTSqlVarChar()))})
+        and o.type in({string.Join(",", objectTypes.Select(o => o.ToTSqlVarChar()))})
     order by o.name
 end";
         }
@@ -63,7 +63,7 @@ end";
         {
             FoundationContract.Requires<ArgumentException>(!database.IsNullOrWhiteSpace());
             FoundationContract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());
-            FoundationContract.Requires<ArgumentException>(objectTypes!=null && objectTypes.Any());
+            FoundationContract.Requires<ArgumentException>(objectTypes != null && objectTypes.Any());
 
             return string.Format(@"if exists(select * from sys.databases (nolock) where name = '{0}')
 begin

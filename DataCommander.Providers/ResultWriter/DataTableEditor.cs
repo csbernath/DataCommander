@@ -59,7 +59,7 @@
             InitializeComponent();
 
             // TODO: Add any initialization after the InitForm call
-            GarbageMonitor.Add("DataTableEditor", this);
+            GarbageMonitor.Default.Add("DataTableEditor", this);
 
             if (colorTheme != null)
                 ColorThemeApplyer.Apply(_dataGrid, colorTheme);
@@ -307,7 +307,7 @@
         {
             var dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this._dataGrid = new DoubleBufferedDataGridView();
-            GarbageMonitor.Add("dataGrid", "DoubleBufferedDataGridView", 0, this._dataGrid);
+            GarbageMonitor.Default.Add("dataGrid", "DoubleBufferedDataGridView", 0, this._dataGrid);
             this._dataGrid.PublicDoubleBuffered = true;
             this._dataGrid.AllowUserToOrderColumns = true;
             ((System.ComponentModel.ISupportInitialize) (this._dataGrid)).BeginInit();

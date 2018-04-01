@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using Foundation.Assertions;
 using Foundation.Data;
-using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -14,8 +13,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         public SystemDatabaseCollectionNode(DatabaseCollectionNode databaseCollectionNode)
         {
-            FoundationContract.Requires<ArgumentException>(databaseCollectionNode != null);
-
+            Assert.IsNotNull(databaseCollectionNode);
             _databaseCollectionNode = databaseCollectionNode;
         }
 

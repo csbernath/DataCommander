@@ -17,7 +17,6 @@ namespace DataCommander.Providers.MySql
 
         public static string GetTables(string tableSchema, IEnumerable<string> tableTypes)
         {
-
             FoundationContract.Requires<ArgumentException>(!tableSchema.IsNullOrWhiteSpace());
             FoundationContract.Requires<ArgumentException>(tableTypes != null && tableTypes.Any());
             

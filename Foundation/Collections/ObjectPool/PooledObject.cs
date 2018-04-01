@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 
 namespace Foundation.Collections.ObjectPool
 {

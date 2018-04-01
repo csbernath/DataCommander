@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.DocumentProperties.StructuredStorage

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
+using Foundation.Assertions;
 using Foundation.Collections.IndexableCollection;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
@@ -100,7 +101,7 @@ namespace Foundation.Threading
 
         internal void Exit(LockRequest lockRequest)
         {
-            FoundationContract.Requires<ArgumentException>(lockRequest != null);
+            Assert.IsNotNull(lockRequest);
             FoundationContract.Requires<ArgumentException>(lockRequest.Monitor == this);
             FoundationContract.Requires<ArgumentException>(lockRequest == CurrentLockRequest);
 
@@ -131,7 +132,7 @@ namespace Foundation.Threading
 
             internal LockRequest(PriorityMonitor<T> monitor, int priority)
             {
-                FoundationContract.Requires<ArgumentException>(monitor != null);
+                Assert.IsNotNull(monitor);
 
                 Monitor = monitor;
                 Priority = priority;

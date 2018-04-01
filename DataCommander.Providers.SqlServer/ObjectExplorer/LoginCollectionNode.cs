@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
+using Foundation.Assertions;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
-using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
@@ -13,8 +12,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         public LoginCollectionNode(ServerNode server)
         {
-            FoundationContract.Requires<ArgumentException>(server != null);
-
+            Assert.IsNotNull(server);
             _server = server;
         }
 

@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using DataCommander.Providers.Connection;
 using Foundation;
+using Foundation.Assertions;
 using Foundation.Data;
 using Foundation.Diagnostics;
-using Foundation.Diagnostics.Assertions;
 using Foundation.Linq;
 using Foundation.Log;
 

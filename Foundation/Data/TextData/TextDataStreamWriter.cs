@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Data.TextData
 {
@@ -36,8 +35,8 @@ namespace Foundation.Data.TextData
                 var column = Columns[i];
                 var valueString = converter.ToString(value, column);
 
-                FoundationContract.Assert(!string.IsNullOrEmpty(valueString));
-                FoundationContract.Assert(column.MaxLength == valueString.Length);
+                Assert.IsTrue(!string.IsNullOrEmpty(valueString));
+                Assert.IsTrue(column.MaxLength == valueString.Length);
 
                 _textWriter.Write(valueString);
             }

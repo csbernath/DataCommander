@@ -1,4 +1,5 @@
-﻿using Foundation.Data;
+﻿using Foundation.Assertions;
+using Foundation.Data;
 using Foundation.Diagnostics;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
@@ -56,8 +57,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             IDbConnection connection,
             DatabaseObjectMultipartName databaseObjectMultipartName)
         {
-            FoundationContract.Requires<ArgumentException>(connection != null);
-            FoundationContract.Requires<ArgumentException>(databaseObjectMultipartName != null);
+            Assert.IsNotNull(connection);
+            Assert.IsNotNull(databaseObjectMultipartName);
 
             var commandText = string.Format(@"select  c.name
 from    [{0}].sys.schemas s (nolock)

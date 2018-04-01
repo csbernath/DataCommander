@@ -1,10 +1,9 @@
-﻿using Foundation.Diagnostics.Contracts;
+﻿using System;
+using System.Data;
+using Foundation.Assertions;
 
 namespace DataCommander.Providers.Msi
 {
-    using System;
-    using System.Data;
-
     internal sealed class MsiCommand : IDbCommand
     {
         #region Private Fields
@@ -15,14 +14,13 @@ namespace DataCommander.Providers.Msi
 
         public MsiCommand(MsiConnection connection)
         {
-            FoundationContract.Requires<ArgumentException>(connection != null);
-
+            Assert.IsNotNull(connection);
             Connection = connection;
         }
 
         public MsiConnection Connection { get; }
 
-#region IDbCommand Members
+        #region IDbCommand Members
 
         void IDbCommand.Cancel()
         {
@@ -75,14 +73,9 @@ namespace DataCommander.Providers.Msi
 
         IDbTransaction IDbCommand.Transaction
         {
-            get
-            {
-                return null;
-            }
+            get { return null; }
 
-            set
-            {
-            }
+            set { }
         }
 
         UpdateRowSource IDbCommand.UpdatedRowSource
@@ -91,14 +84,14 @@ namespace DataCommander.Providers.Msi
             set => throw new NotImplementedException();
         }
 
-#endregion
+        #endregion
 
-#region IDisposable Members
+        #region IDisposable Members
 
         void IDisposable.Dispose()
         {
         }
 
-#endregion
+        #endregion
     }
 }

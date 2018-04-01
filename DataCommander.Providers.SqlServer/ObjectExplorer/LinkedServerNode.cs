@@ -1,5 +1,4 @@
-﻿using System;
-using Foundation.Diagnostics.Contracts;
+﻿using Foundation.Assertions;
 using Foundation.Linq;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
@@ -11,10 +10,9 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         public LinkedServerNode(
             LinkedServerCollectionNode linkedServers,
-            string name )
+            string name)
         {
-            FoundationContract.Requires<ArgumentException>( linkedServers != null );
-
+            Assert.IsNotNull(linkedServers);
             LinkedServers = linkedServers;
             Name = name;
         }
@@ -23,15 +21,15 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         public string Name { get; }
 
-#region ITreeNode Members
+        #region ITreeNode Members
 
         string ITreeNode.Name => Name;
 
         bool ITreeNode.IsLeaf => false;
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            return new LinkedServerCatalogCollectionNode( this ).ItemAsEnumerable();
+            return new LinkedServerCatalogCollectionNode(this).ItemAsEnumerable();
         }
 
         bool ITreeNode.Sortable => false;
@@ -40,6 +38,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-#endregion
+        #endregion
     }
 }

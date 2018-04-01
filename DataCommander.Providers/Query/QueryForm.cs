@@ -21,10 +21,10 @@ using ADODB;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.ResultWriter;
 using Foundation;
+using Foundation.Assertions;
 using Foundation.Configuration;
 using Foundation.Data;
 using Foundation.Diagnostics;
-using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
@@ -162,7 +162,7 @@ namespace DataCommander.Providers.Query
 
         public QueryForm(MainForm mainForm, int index, IProvider provider, string connectionString, ConnectionBase connection, StatusStrip parentStatusBar, ColorTheme colorTheme)
         {
-            GarbageMonitor.Add("QueryForm", this);
+            GarbageMonitor.Default.Add("QueryForm", this);
 
             _mainForm = mainForm;
             Provider = provider;
@@ -179,7 +179,7 @@ namespace DataCommander.Providers.Query
 
             _messagesTextBox = new RichTextBox();
             components.Add(_messagesTextBox);
-            GarbageMonitor.Add("QueryForm.messagesTextBox", _messagesTextBox);
+            GarbageMonitor.Default.Add("QueryForm.messagesTextBox", _messagesTextBox);
             _messagesTextBox.Multiline = true;
             _messagesTextBox.WordWrap = false;
             _messagesTextBox.Dock = DockStyle.Fill;
@@ -189,7 +189,7 @@ namespace DataCommander.Providers.Query
             _messagesTabPage.Controls.Add(_messagesTextBox);
 
             InitializeComponent();
-            GarbageMonitor.Add("queryForm.toolStrip", _toolStrip);
+            GarbageMonitor.Default.Add("queryForm.toolStrip", _toolStrip);
             _mnuFind.Click += mnuFind_Click;
             _mnuFindNext.Click += mnuFindNext_Click;
             _mnuPaste.Click += mnuPaste_Click;
@@ -480,7 +480,7 @@ namespace DataCommander.Providers.Query
                     }
 
                     var resultSetTabPage = new TabPage(text);
-                    GarbageMonitor.Add("resultSetTabPage", resultSetTabPage);
+                    GarbageMonitor.Default.Add("resultSetTabPage", resultSetTabPage);
                     resultSetTabPage.ToolTipText = null; // TODO
                     _resultSetsTabControl.TabPages.Add(resultSetTabPage);
                     _resultSetsTabControl.SelectedTab = resultSetTabPage;
@@ -1563,11 +1563,11 @@ namespace DataCommander.Providers.Query
             if (_dataAdapter != null)
                 Log.Error("this.dataAdapter == null failed");
 
-            FoundationContract.Assert(_dataAdapter == null);
+            Assert.IsTrue(_dataAdapter == null);
 
             Log.Trace("ThreadMonitor:\r\n{0}", ThreadMonitor.ToStringTableString());
             ThreadMonitor.Join(0);
-            Log.Trace(GarbageMonitor.State);
+            Log.Trace(GarbageMonitor.Default.State);
             _openTableMode = false;
             _cancel = false;
 
@@ -1666,7 +1666,7 @@ namespace DataCommander.Providers.Query
                     default:
                         maxRecords = int.MaxValue;
                         var textBox = new RichTextBox();
-                        GarbageMonitor.Add("ExecuteQuery.textBox", textBox);
+                        GarbageMonitor.Default.Add("ExecuteQuery.textBox", textBox);
                         textBox.MaxLength = int.MaxValue;
                         textBox.Multiline = true;
                         textBox.WordWrap = false;
@@ -1703,7 +1703,7 @@ namespace DataCommander.Providers.Query
         private void ShowDataTableText(DataTable dataTable)
         {
             var textBox = new RichTextBox();
-            GarbageMonitor.Add("ShowDataTableText.textBox", textBox);
+            GarbageMonitor.Default.Add("ShowDataTableText.textBox", textBox);
             textBox.MaxLength = int.MaxValue;
             textBox.Multiline = true;
             textBox.WordWrap = false;
@@ -1808,7 +1808,7 @@ namespace DataCommander.Providers.Query
                 dataTableEditor.TableSchema = dataSet;
             }
 
-            GarbageMonitor.Add("dataTableEditor", dataTableEditor);
+            GarbageMonitor.Default.Add("dataTableEditor", dataTableEditor);
             dataTableEditor.StatusBarPanel = _sbPanelText;
             dataTableEditor.DataTable = dataTable;
             ShowTabPage(dataTable.TableName, GetToolTipText(dataTable), dataTableEditor);
@@ -1860,7 +1860,7 @@ namespace DataCommander.Providers.Query
                 var fileName = WordDocumentCreator.CreateWordDocument(dataTable);
 
                 var richTextBox = new RichTextBox();
-                GarbageMonitor.Add("ShowDataTableRtf.richTextBox", richTextBox);
+                GarbageMonitor.Default.Add("ShowDataTableRtf.richTextBox", richTextBox);
                 richTextBox.WordWrap = false;
                 richTextBox.LoadFile(fileName);
                 File.Delete(fileName);
@@ -1998,9 +1998,7 @@ namespace DataCommander.Providers.Query
                 {
                     var now = LocalTime.Default.Now;
                     foreach (IComponent component in components.Components)
-                    {
-                        GarbageMonitor.SetDisposeTime(component, now);
-                    }
+                        GarbageMonitor.Default.SetDisposeTime(component, now);
 
                     components.Dispose();
                 }
@@ -2826,7 +2824,7 @@ namespace DataCommander.Providers.Query
                             if (!contains)
                             {
                                 components.Add(contextMenu);
-                                GarbageMonitor.Add("contextMenu", contextMenu);
+                                GarbageMonitor.Default.Add("contextMenu", contextMenu);
                             }
 
                             var pos = new Point(e.X, e.Y);

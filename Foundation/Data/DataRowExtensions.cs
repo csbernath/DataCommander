@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 using Foundation.Text;
 
 namespace Foundation.Data
@@ -70,7 +69,7 @@ namespace Foundation.Data
         {
             Assert.IsNotNull(dataRow);
             var valueObject = dataRow[name];
-            FoundationContract.Assert(valueObject is T);
+            Assert.IsTrue(valueObject is T);
             return (T)valueObject;
         }
 

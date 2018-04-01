@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 
 namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
 {

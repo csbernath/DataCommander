@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Management;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 using Foundation.Linq;
 
 namespace Foundation.Management

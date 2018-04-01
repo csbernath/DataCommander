@@ -3,8 +3,7 @@ using System.Data;
 using System.Globalization;
 using System.Text;
 using System.Threading;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Data
 {
@@ -76,7 +75,7 @@ namespace Foundation.Data
             Assert.IsNotNull(command);
 
             var scalar = command.ExecuteScalar();
-            FoundationContract.Assert(scalar is T);
+            Assert.IsTrue(scalar is T);
             return (T) scalar;
         }
 

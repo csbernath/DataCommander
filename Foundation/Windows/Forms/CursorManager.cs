@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 
 namespace Foundation.Windows.Forms
 {
