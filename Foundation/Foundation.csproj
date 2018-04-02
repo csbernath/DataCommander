@@ -55,7 +55,6 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
-    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
