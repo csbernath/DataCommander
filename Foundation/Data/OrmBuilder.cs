@@ -1,47 +1,113 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace Foundation.Data
 {
     public sealed class OrmBuilder
     {
-        private readonly bool _properties;
-        private readonly StringBuilder _objectStringBuilder = new StringBuilder();
-        private readonly StringBuilder _readObjectStringBuilder = new StringBuilder();
+        private readonly ReadOnlyCollection<OrmResult> _results;
 
-        public OrmBuilder(bool properties)
+        public OrmBuilder(ReadOnlyCollection<OrmResult> results) => _results = results;
+
+        public string ToString(bool properties)
         {
-            _properties = properties;
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append("public class SqlQueryResult\r\n{\r\n");
+
+            var sequence = new Sequence();
+            foreach (var result in _results)
+            {
+                if (sequence.Next() > 0)
+                    stringBuilder.Append("\r\n");
+
+                var line = $"    public readonly ReadOnlyCollection<{result.RecordTypeName}> {result.RecordTypeName}s;";
+                stringBuilder.Append(line);
+            }
+
+            stringBuilder.Append("\r\n}\r\n\r\n");
+
+            sequence.Reset();
+            foreach (var result in _results)
+            {
+                if (sequence.Next() > 0)
+                    stringBuilder.Append("\r\n\r\n");
+
+                var resultClass = GetResultClass(result, properties);
+                stringBuilder.Append(resultClass);
+            }
+
+            stringBuilder.Append("\r\n\r\npublic class SqlQueryHandler\r\n{\r\n\r\n");
+            stringBuilder.Append("    private readonly IDbConnection _connection;\r\n");
+            stringBuilder.Append("    private readonly IDbTransaction _transaction;\r\n\r\n");
+            stringBuilder.Append("    public SqlQueryHandler(IDbconnection connection, IDbTransaction transaction)\r\n");
+            stringBuilder.Append("    {\r\n");
+            stringBuilder.Append("        _connection = connection;\r\n");
+            stringBuilder.Append("        _transaction = transaction;\r\n");
+            stringBuilder.Append("    }\r\n\r\n");
+            stringBuilder.Append("    public SqlQueryResult Handle()\r\n    {\r\n");
+            stringBuilder.Append("        var executor = _connection.CreateCommandExecutor();\r\n");
+            stringBuilder.Append("        executor.ExecuteReader(new ExecuteReaderRequest(null,null,_transaction), dataReader =>\r\n");
+            stringBuilder.Append("        {\r\n");
+
+            sequence.Reset();
+            foreach (var result in _results)
+            {
+                var index = sequence.Next();
+                if (index > 0)
+                    stringBuilder.Append("\r\n");
+
+                stringBuilder.Append($"            var result{index} = dataReader.ReadResult(ReadRecord{index});");
+            }
+
+            stringBuilder.Append("\r\n            return new SqlQueryResult(");
+
+            sequence.Reset();
+            foreach (var result in _results)
+            {
+                var index = sequence.Next();
+                if (index > 0)
+                    stringBuilder.Append(',');
+
+                stringBuilder.Append($"result{index}");
+            }
+
+            stringBuilder.Append(");\r\n");
+            stringBuilder.Append("        });\r\n");
+            stringBuilder.Append("    }\r\n\r\n");
+
+            sequence.Reset();
+            foreach (var result in _results)
+            {
+                if (sequence.Next() > 0)
+                    stringBuilder.Append("\r\n\r\n");
+
+                var readMethod = GetReadRecordMethod(result);
+                stringBuilder.Append(readMethod.Indent(1));
+            }
+
+            stringBuilder.Append("\r\n}");
+
+            return stringBuilder.ToString();
         }
 
-        public void Add(string recordTypeName, IReadOnlyCollection<FoundationDbColumn> columns)
+        private static string GetResultClass(OrmResult result, bool properties)
         {
-            AddObject(recordTypeName, columns, _objectStringBuilder, _properties);
-            AddReadObject(recordTypeName, columns, _readObjectStringBuilder);
-        }
-
-        private static void AddObject(string objectTypeName, IReadOnlyCollection<FoundationDbColumn> columns, StringBuilder stringBuilder, bool properties)
-        {
-            if (stringBuilder.Length > 0)
-                stringBuilder.Append("\r\n\r\n");
-
-            stringBuilder.Append("internal sealed class ");
-            stringBuilder.Append(objectTypeName);
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append("public class ");
+            stringBuilder.Append(result.RecordTypeName);
             stringBuilder.Append("\r\n{\r\n");
 
-            var first = true;
-            foreach (var column in columns)
+            var sequence = new Sequence();
+            foreach (var column in result.Columns)
             {
-                if (first)
-                    first = false;
-                else
+                if (sequence.Next() > 0)
                     stringBuilder.AppendLine();
 
                 stringBuilder.Append("    public ");
                 stringBuilder.Append(GetCSharpTypeName(column.DataType));
 
-                if (column.AllowDbNull == true && IsValueType(column.DataType))
+                if (column.AllowDbNull && IsValueType(column.DataType))
                     stringBuilder.Append('?');
 
                 stringBuilder.Append(' ');
@@ -51,23 +117,23 @@ namespace Foundation.Data
 
             stringBuilder.Append(@"
 }");
+            return stringBuilder.ToString();
         }
 
-        private static void AddReadObject(string recordTypeName, IReadOnlyCollection<FoundationDbColumn> columns, StringBuilder stringBuilder)
+        private static string GetReadRecordMethod(OrmResult result)
         {
             const string recordInstanceName = "record";
 
-            if (stringBuilder.Length > 0)
-                stringBuilder.Append("\r\n\r\n");
+            var stringBuilder = new StringBuilder();
 
             stringBuilder.AppendFormat(@"private static {0} Read{0}(IDataRecord dataRecord)
 {{
     var {1} = new {0}();
-", recordTypeName, recordInstanceName);
+", result.RecordTypeName, recordInstanceName);
 
             var first = true;
             var index = 0;
-            foreach (var column in columns)
+            foreach (var column in result.Columns)
             {
                 if (first)
                     first = false;
@@ -88,15 +154,7 @@ namespace Foundation.Data
             stringBuilder.AppendFormat(@"
     return {0};
 }}", recordInstanceName);
-        }
 
-        public override string ToString()
-        {
-            var stringBuilder = new StringBuilder();
-            stringBuilder.Append(_objectStringBuilder);
-            stringBuilder.AppendLine();
-            stringBuilder.AppendLine();
-            stringBuilder.Append(_readObjectStringBuilder);
             return stringBuilder.ToString();
         }
 
@@ -196,7 +254,7 @@ namespace Foundation.Data
             return isValueType;
         }
 
-        private static string GetDataRecordMethodName(FoundationDbColumn column)
+        private static string GetDataRecordMethodName(OrmColumn column)
         {
             var typeCode = Type.GetTypeCode(column.DataType);
             string methodName = null;

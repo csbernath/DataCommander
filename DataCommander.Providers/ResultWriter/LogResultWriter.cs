@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace DataCommander.Providers.ResultWriter
         private long _beforeExecuteReaderTimestamp;
         private long _writeTableBeginTimestamp;
         private long _firstRowReadBeginTimestamp;
-        private readonly OrmBuilder _ormBuilder = new OrmBuilder(false);
+        private readonly List<OrmResult> _ormResults = new List<OrmResult>();
 
         public LogResultWriter(Action<InfoMessage> addInfoMessage)
         {
@@ -76,14 +77,23 @@ namespace DataCommander.Providers.ResultWriter
         {
             _writeTableBeginTimestamp = Stopwatch.GetTimestamp();
 
+            Log.Trace($"SchemaTable of table[{_tableCount}]:\r\n{schemaTable.ToStringTableString()}");
+
             var recordId = _tableCount + 1;
             var recordTypeName = $"Record{recordId}";
-            var columns = schemaTable.Rows.Cast<DataRow>().Select(FoundationDbColumnFactory.Create).ToList();
-            _ormBuilder.Add(recordTypeName, columns);
-            Log.Trace($"SchemaTable of table[{_tableCount}]:\r\n{schemaTable.ToStringTableString()}");
+            var ormColumns = schemaTable.Rows
+                .Cast<DataRow>()
+                .Select(FoundationDbColumnFactory.Create)
+                .Select(ToOrmColumn)
+                .ToList();
+            var ormResult = new OrmResult(recordTypeName, ormColumns);
+            _ormResults.Add(ormResult);
+            
             ++_tableCount;
             _rowCount = 0;
         }
+
+        private static OrmColumn ToOrmColumn(FoundationDbColumn column) => new OrmColumn(column.ColumnName, column.DataType, column.AllowDbNull == true);
 
         void IResultWriter.FirstRowReadBegin()
         {
@@ -120,7 +130,9 @@ namespace DataCommander.Providers.ResultWriter
             var message = $"Query completed {_commandCount} command(s) in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
             _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
 
-            Log.Trace($"\r\n{_ormBuilder}");
+            var ormBuilder = new OrmBuilder(_ormResults.AsReadOnly());
+            var orm = ormBuilder.ToString(false);
+            Log.Trace($"\r\n{orm}");
         }
 
         #endregion

@@ -312,6 +312,9 @@
     <Compile Include="Caching\ICache.cs" />
     <Compile Include="Caching\ICacheItem.cs" />
     <Compile Include="Caching\MemoryCache.cs" />
+    <Compile Include="Data\OrmColumn.cs" />
+    <Compile Include="Data\OrmResult.cs" />
+    <Compile Include="Data\Sequence.cs" />
     <Compile Include="TemporalIntervalRelations.cs" />
     <Compile Include="Collections\BinarySearch.cs" />
     <Compile Include="Collections\BitVector64.cs">
