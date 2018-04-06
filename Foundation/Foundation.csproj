@@ -312,6 +312,7 @@
     <Compile Include="Caching\ICache.cs" />
     <Compile Include="Caching\ICacheItem.cs" />
     <Compile Include="Caching\MemoryCache.cs" />
+    <Compile Include="TemporalIntervalRelations.cs" />
     <Compile Include="Collections\BinarySearch.cs" />
     <Compile Include="Collections\BitVector64.cs">
       <SubType>Code</SubType>
