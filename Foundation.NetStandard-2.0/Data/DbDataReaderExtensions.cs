@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Data
 {
@@ -26,23 +26,24 @@ namespace Foundation.Data
                 else
                 {
                     var nextResult = await dataReader.NextResultAsync(cancellationToken);
-                    FoundationContract.Assert(nextResult);
+                    Assert.IsTrue(nextResult);
                 }
+
                 await read();
             }
         }
 
         public static async Task<List<T>> ReadAsync<T>(this DbDataReader dataReader, Func<IDataRecord, T> read, CancellationToken cancellationToken)
         {
-            var objects = new List<T>();
+            var records = new List<T>();
 
             await dataReader.ReadAsync(() =>
             {
-                var @object = read(dataReader);
-                objects.Add(@object);
+                var record = read(dataReader);
+                records.Add(record);
             }, cancellationToken);
 
-            return objects;
+            return records;
         }
 
         public static async Task<ExecuteReaderResponse<T1, T2>> ReadAsync<T1, T2>(

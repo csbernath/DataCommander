@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 using Foundation.Linq;
 
 namespace Foundation.Collections

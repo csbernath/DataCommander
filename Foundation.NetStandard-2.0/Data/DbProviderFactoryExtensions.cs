@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Globalization;
-using System.Linq;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 
 namespace Foundation.Data
 {
@@ -20,10 +19,7 @@ namespace Foundation.Data
         /// <param name="connection"></param>
         /// <param name="commandText"></param>
         /// <returns></returns>
-        public static DataTable ExecuteDataTable(
-            this DbProviderFactory factory,
-            DbConnection connection,
-            string commandText)
+        public static DataTable ExecuteDataTable(this DbProviderFactory factory, DbConnection connection, string commandText)
         {
             Assert.IsNotNull(factory);
             Assert.IsNotNull(connection);
@@ -40,37 +36,18 @@ namespace Foundation.Data
             return table;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dbProviderFactory"></param>
-        /// <param name="connectionString"></param>
-        /// <param name="commandDefinition"></param>
-        /// <param name="commandBehavior"></param>
-        /// <param name="read"></param>
-        /// <returns></returns>
-        public static List<T> ExecuteReader<T>(
+        public static void ExecuteReader(
             this DbProviderFactory dbProviderFactory,
             string connectionString,
-            CommandDefinition commandDefinition,
-            CommandBehavior commandBehavior,
-            Func<IDataRecord, T> read)
+            ExecuteReaderRequest request,
+            Action<IDataReader> read)
         {
-            Assert.IsNotNull(dbProviderFactory);
-            Assert.IsNotNull(commandDefinition);
-            Assert.IsNotNull(read);
-
             using (var connection = dbProviderFactory.CreateConnection())
             {
                 connection.ConnectionString = connectionString;
                 connection.Open();
-                var transactionScope = new DbTransactionScope(connection, null);
-
-                using (var dataReader = transactionScope.ExecuteReader(commandDefinition, commandBehavior))
-                {
-                    return dataReader.Read(read).ToList();
-                }
+                var executor = connection.CreateCommandExecutor();
+                executor.ExecuteReader(request, read);
             }
         }
 
@@ -80,13 +57,9 @@ namespace Foundation.Data
             ExecuteReaderRequest request,
             Func<IDataRecord, T> read)
         {
-            using (var connection = dbProviderFactory.CreateConnection())
-            {
-                connection.ConnectionString = connectionString;
-                connection.Open();
-                var executor = new DbCommandExecutor(connection);
-                return executor.ExecuteReader(request, read);
-            }
+            List<T> rows = null;
+            dbProviderFactory.ExecuteReader(connectionString, request, dataReader => rows = dataReader.ReadResult(read));
+            return rows;
         }
     }
 }

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Collections
 {
@@ -62,7 +61,7 @@ namespace Foundation.Collections
         /// <returns></returns>
         public void AddTail(T item)
         {
-            //FoundationContract.Assert(this.Count < this.array.Length);
+            //Assert.IsTrue(this.Count < this.array.Length);
 
             if (_head == -1)
             {

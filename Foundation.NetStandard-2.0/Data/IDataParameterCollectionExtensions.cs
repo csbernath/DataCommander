@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
+using Foundation.Assertions;
 using Foundation.Data.SqlClient;
-using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data
 {

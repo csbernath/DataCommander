@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Text;
 using System.Threading;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Log
 {
@@ -44,7 +44,7 @@ namespace Foundation.Log
 
         void ILogFile.Open()
         {
-            FoundationContract.Assert(_timer == null);
+            Assert.IsTrue(_timer == null);
 
             _timer = new Timer(TimerCallback, null, _timerPeriod, _timerPeriod);
         }

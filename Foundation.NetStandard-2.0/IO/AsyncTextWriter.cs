@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Threading;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 
 namespace Foundation.IO
 {

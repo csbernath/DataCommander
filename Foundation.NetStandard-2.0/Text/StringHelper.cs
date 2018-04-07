@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using Foundation.Assertions;
 using Foundation.Configuration;
-using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Text

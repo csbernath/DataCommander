@@ -30,7 +30,7 @@ namespace Foundation.Collections
             _segmentLength = segmentLength;
         }
 
-#region ICollection<T> Members
+        #region ICollection<T> Members
 
         /// <summary>
         /// 
@@ -100,9 +100,9 @@ namespace Foundation.Collections
             throw new NotSupportedException();
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable<T> Members
+        #region IEnumerable<T> Members
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
@@ -125,19 +125,19 @@ namespace Foundation.Collections
             }
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable Members
+        #region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            var enumerable = (IEnumerable<T>)this;
+            var enumerable = (IEnumerable<T>) this;
             return enumerable.GetEnumerator();
         }
 
-#endregion
+        #endregion
 
-#region Private Classes
+        #region Private Classes
 
         private sealed class Segment
         {
@@ -145,6 +145,6 @@ namespace Foundation.Collections
             public Segment Next;
         }
 
-#endregion
+        #endregion
     }
 }

@@ -20,9 +20,9 @@ namespace Foundation.Data
             execute(_connection);
         }
 
-        public async Task ExecuteAsync(Func<DbConnection, Task> execute, CancellationToken cancellationToken)
+        public Task ExecuteAsync(Func<DbConnection, Task> execute, CancellationToken cancellationToken)
         {
-            await execute(_connection);
+            return execute(_connection);
         }
     }
 }

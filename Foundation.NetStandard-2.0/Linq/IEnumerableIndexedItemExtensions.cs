@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 
 namespace Foundation.Linq
 {

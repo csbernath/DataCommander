@@ -3,8 +3,7 @@ using System.Data;
 using System.Globalization;
 using System.Text;
 using System.Threading;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Data
 {
@@ -13,17 +12,6 @@ namespace Foundation.Data
     /// </summary>
     public static class IDbCommandExtensions
     {
-        public static void Initialize(this IDbCommand command, CreateCommandRequest request)
-        {
-            command.CommandType = request.CommandType;
-            command.CommandText = request.CommandText;
-            command.CommandTimeout = request.CommandTimeout;
-            command.Transaction = request.Transaction;
-
-            if (request.Parameters != null)
-                command.Parameters.AddRange(request.Parameters);
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -87,7 +75,7 @@ namespace Foundation.Data
             Assert.IsNotNull(command);
 
             var scalar = command.ExecuteScalar();
-            FoundationContract.Assert(scalar is T);
+            Assert.IsTrue(scalar is T);
             return (T) scalar;
         }
 
@@ -102,7 +90,7 @@ namespace Foundation.Data
             Assert.IsNotNull(command);
 
             var scalar = command.ExecuteScalar();
-            return Database.GetValueOrDefault<T>(scalar);
+            return ValueReader.GetValueOrDefault<T>(scalar);
         }
 
         /// <summary>
@@ -206,9 +194,7 @@ namespace Foundation.Data
                     try
                     {
                         using (var dataReader = command.ExecuteReader())
-                        {
                             rowCount = dataReader.Fill(dataTable, cancellationToken);
-                        }
                     }
                     catch (Exception exception)
                     {
@@ -250,6 +236,17 @@ namespace Foundation.Data
             }
 
             return sb.ToString();
+        }
+
+        internal static void Initialize(this IDbCommand command, CreateCommandRequest request)
+        {
+            command.CommandType = request.CommandType;
+            command.CommandText = request.CommandText;
+            command.CommandTimeout = request.CommandTimeout;
+            command.Transaction = request.Transaction;
+
+            if (request.Parameters != null)
+                command.Parameters.AddRange(request.Parameters);
         }
     }
 }

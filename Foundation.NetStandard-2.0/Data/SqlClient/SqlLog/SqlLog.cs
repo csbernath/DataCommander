@@ -227,8 +227,8 @@ namespace Foundation.Data.SqlClient.SqlLog
                     _connection.Connection.Open();
             }
 
-            var transactionScope = new DbTransactionScope(_connection, null);
-            var applicationId = (int)transactionScope.ExecuteScalar(new CommandDefinition { CommandText = commandText });
+            var executor = _connection.CreateCommandExecutor();
+            var applicationId = (int) executor.ExecuteScalar(new CreateCommandRequest(commandText));
             Log.Trace("SqlLog.ApplicationStart({0})", applicationId);
             var commands = new Dictionary<string, SqLoglCommandExecution>();
 

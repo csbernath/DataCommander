@@ -17,6 +17,23 @@ namespace Foundation.Data.SqlClient
         public static readonly SqlDateTime SqlDateTimeZero = new SqlDateTime(1900, 1, 1);
 
         /// <summary>
+        /// Creates the store procedure command.
+        /// </summary>
+        /// <param name="storedProcedureName">Name of the stored procedure.</param>
+        /// <param name="connection">The connection.</param>
+        /// <returns></returns>
+        public static SqlCommand CreateStoreProcedureCommand(
+            string storedProcedureName,
+            SqlConnection connection)
+        {
+            var command = connection.CreateCommand();
+            command.CommandText = storedProcedureName;
+            command.CommandType = CommandType.StoredProcedure;
+            SqlCommandBuilder.DeriveParameters(command);
+            return command;
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="connection"></param>

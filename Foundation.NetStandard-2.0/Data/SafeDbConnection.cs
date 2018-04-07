@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics;
+using Foundation.Assertions;
 using Foundation.Diagnostics;
-using Foundation.Diagnostics.Assertions;
 using Foundation.Linq;
 using Foundation.Log;
 

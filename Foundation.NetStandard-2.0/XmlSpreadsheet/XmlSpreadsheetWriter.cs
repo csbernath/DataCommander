@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 using Foundation.Xml;
 
 namespace Foundation.XmlSpreadsheet

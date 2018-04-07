@@ -8,5 +8,12 @@ namespace Foundation.Data
         {
             return new DbCommandExecutor(connection);
         }
+
+        public static IDbCommand CreateCommand(this IDbConnection connection, CreateCommandRequest request)
+        {
+            var command = connection.CreateCommand();
+            command.Initialize(request);
+            return command;
+        }
     }
 }

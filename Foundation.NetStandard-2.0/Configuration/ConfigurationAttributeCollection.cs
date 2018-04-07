@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
+using Foundation.Assertions;
 using Foundation.Collections.IndexableCollection;
-using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Configuration
@@ -45,7 +45,7 @@ namespace Foundation.Configuration
         {
             get
             {
-                FoundationContract.Assert(0 <= index && index < Count);
+                Assert.IsTrue(0 <= index && index < Count);
 
                 return _listIndex[index];
             }

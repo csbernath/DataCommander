@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Foundation.Assertions;
 using Foundation.Collections.IndexableCollection;
-using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data.TextData
 {
@@ -55,7 +55,7 @@ namespace Foundation.Data.TextData
         {
             get
             {
-                //FoundationContract.Assert(this.nameIndex.ContainsKey(name));
+                //Assert.IsTrue(this.nameIndex.ContainsKey(name));
 
                 return _nameIndex[ name ];
             }
@@ -95,7 +95,7 @@ namespace Foundation.Data.TextData
         /// <param name="item"></param>
         public void Add( TextDataSetTable item )
         {
-            FoundationContract.Assert( item != null );
+            Assert.IsTrue( item != null );
 
             _collection.Add( item );
         }

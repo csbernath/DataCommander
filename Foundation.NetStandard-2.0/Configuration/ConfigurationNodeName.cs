@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 
 namespace Foundation.Configuration
 {

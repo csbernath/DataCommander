@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Configuration
 {
@@ -125,7 +124,7 @@ namespace Foundation.Configuration
             if (contains)
             {
                 var succeeded = DateTime.TryParse(s, provider, styles, out value);
-                FoundationContract.Assert(succeeded);
+                Assert.IsTrue(succeeded);
             }
             else
             {
@@ -149,7 +148,7 @@ namespace Foundation.Configuration
             if (contains)
             {
                 var succeeded = double.TryParse(s, out value);
-                FoundationContract.Assert(succeeded);
+                Assert.IsTrue(succeeded);
             }
             else
             {
@@ -175,7 +174,7 @@ namespace Foundation.Configuration
             if (contains)
             {
                 var succeeded = double.TryParse(s, style, provider, out value);
-                FoundationContract.Assert(succeeded);
+                Assert.IsTrue(succeeded);
             }
             else
             {
@@ -263,7 +262,7 @@ namespace Foundation.Configuration
             if (contains)
             {
                 var succeeded = float.TryParse(s, style, provider, out value);
-                FoundationContract.Assert(succeeded);
+                Assert.IsTrue(succeeded);
             }
             else
             {
@@ -327,7 +326,7 @@ namespace Foundation.Configuration
             if (contains)
             {
                 var succeeded = tryParse(s, out value);
-                FoundationContract.Assert(succeeded);
+                Assert.IsTrue(succeeded);
             }
             else
             {

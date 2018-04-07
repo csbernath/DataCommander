@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 
 namespace Foundation.Log
 {

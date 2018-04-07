@@ -1,6 +1,5 @@
 ﻿using System.Data;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Data
 {
@@ -25,7 +24,7 @@ namespace Foundation.Data
             _command = command;
         }
 
-#region IDbCommand Members
+        #region IDbCommand Members
 
         /// <summary>
         /// 
@@ -50,14 +49,11 @@ namespace Foundation.Data
         {
             get
             {
-                FoundationContract.Assert(_command != null);
+                Assert.IsTrue(_command != null);
                 return _command.CommandType;
             }
 
-            set
-            {
-                _command.CommandType = value;
-            }
+            set { _command.CommandType = value; }
         }
 
         /// <summary>
@@ -93,7 +89,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public int ExecuteNonQuery()
         {
-            FoundationContract.Assert(_connection != null);
+            Assert.IsTrue(_connection != null);
             return _connection.ExecuteNonQuery(this);
         }
 
@@ -165,13 +161,13 @@ namespace Foundation.Data
         {
             get
             {
-                FoundationContract.Assert(_command != null);
+                Assert.IsTrue(_command != null);
                 return _command.CommandText;
             }
 
             set
             {
-                FoundationContract.Assert(_command != null);
+                Assert.IsTrue(_command != null);
                 _command.CommandText = value;
             }
         }
@@ -183,7 +179,7 @@ namespace Foundation.Data
         {
             get
             {
-                FoundationContract.Assert(_command != null);
+                Assert.IsTrue(_command != null);
                 return _command.Parameters;
             }
         }
@@ -195,22 +191,22 @@ namespace Foundation.Data
         {
             get
             {
-                FoundationContract.Assert(_command != null);
+                Assert.IsTrue(_command != null);
 
                 return _command.Transaction;
             }
 
             set
             {
-                FoundationContract.Assert(_command != null);
+                Assert.IsTrue(_command != null);
 
                 _command.Transaction = value;
             }
         }
 
-#endregion
+        #endregion
 
-#region IDisposable Members
+        #region IDisposable Members
 
         /// <summary>
         /// 
@@ -220,7 +216,7 @@ namespace Foundation.Data
             // TODO:  Add AsyncDbCommand.Dispose implementation
         }
 
-#endregion
+        #endregion
 
         //[ContractInvariantMethod]
         private void ObjectInvariant()

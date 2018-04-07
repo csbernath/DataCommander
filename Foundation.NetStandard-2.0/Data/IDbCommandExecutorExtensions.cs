@@ -11,13 +11,8 @@ namespace Foundation.Data
             executor.Execute(connection =>
             {
                 foreach (var request in requests)
-                {
-                    using (var command = connection.CreateCommand())
-                    {
-                        command.Initialize(request.CreateCommandRequest);
+                    using (var command = connection.CreateCommand(request.CreateCommandRequest))
                         request.Execute(command);
-                    }
-                }
             });
         }
 
@@ -56,7 +51,7 @@ namespace Foundation.Data
         public static List<T> ExecuteReader<T>(this IDbCommandExecutor executor, ExecuteReaderRequest request, Func<IDataRecord, T> read)
         {
             List<T> rows = null;
-            executor.ExecuteReader(request, dataReader => rows = dataReader.Read(() => read(dataReader)));
+            executor.ExecuteReader(request, dataReader => rows = dataReader.ReadResult(() => read(dataReader)));
             return rows;
         }
 
@@ -75,6 +70,20 @@ namespace Foundation.Data
             executor.ExecuteReader(request,
                 dataReader => response = dataReader.Read(() => read1(dataReader), () => read2(dataReader), () => read3(dataReader)));
             return response;
+        }
+
+        public static DataTable ExecuteDataTable(this IDbCommandExecutor executor, ExecuteReaderRequest request)
+        {
+            DataTable dataTable = null;
+            executor.Execute(request.CreateCommandRequest, command => { dataTable = command.ExecuteDataTable(request.CancellationToken); });
+            return dataTable;
+        }
+
+        public static DataSet ExecuteDataSet(this IDbCommandExecutor executor, ExecuteReaderRequest request)
+        {
+            DataSet dataSet = null;
+            executor.Execute(request.CreateCommandRequest, command => { dataSet = command.ExecuteDataSet(request.CancellationToken); });
+            return dataSet;
         }
     }
 }

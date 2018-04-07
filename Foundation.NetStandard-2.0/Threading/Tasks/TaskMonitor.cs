@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
-using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;
 

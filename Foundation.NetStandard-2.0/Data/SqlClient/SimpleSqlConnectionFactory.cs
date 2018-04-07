@@ -3,9 +3,9 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Security.Principal;
+using Foundation.Assertions;
 using Foundation.Configuration;
 using Foundation.Data.SqlClient.SqlLoggedSqlConnection;
-using Foundation.Diagnostics.Assertions;
 
 namespace Foundation.Data.SqlClient
 {

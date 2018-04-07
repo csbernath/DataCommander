@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
 

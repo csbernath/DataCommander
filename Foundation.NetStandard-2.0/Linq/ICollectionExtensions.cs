@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using Foundation.Assertions;
 using Foundation.Collections;
-using Foundation.Diagnostics.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
@@ -93,11 +94,10 @@ namespace Foundation.Linq
         /// <typeparam name="T"></typeparam>
         /// <param name="collection"></param>
         /// <returns></returns>
-        public static ICollection<T> AsReadOnly<T>(this ICollection<T> collection)
+        public static ReadOnlyCollection<T> AsReadOnly<T>(this ICollection<T> collection)
         {
             Assert.IsNotNull(collection);
-
-            return new ReadOnlyCollection<T>(collection);
+            return new ReadOnlyCollection<T>(collection.ToList());
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace Foundation.Linq
         /// <typeparam name="TResult"></typeparam>
         private sealed class CastedCollection<TResult> : ICollection<TResult>
         {
-#region Private Fields
+            #region Private Fields
 
             /// <summary>
             /// 
@@ -171,7 +171,7 @@ namespace Foundation.Linq
 
             private readonly IList sourceAsList;
 
-#endregion
+            #endregion
 
             /// <summary>
             /// 
@@ -185,7 +185,7 @@ namespace Foundation.Linq
                 sourceAsList = source as IList;
             }
 
-#region ICollection<TResult> Members
+            #region ICollection<TResult> Members
 
             /// <summary>
             /// 
@@ -193,7 +193,7 @@ namespace Foundation.Linq
             /// <param name="item"></param>
             void ICollection<TResult>.Add(TResult item)
             {
-                FoundationContract.Assert(sourceAsList != null);
+                Assert.IsTrue(sourceAsList != null);
 
                 sourceAsList.Add(item);
             }
@@ -203,7 +203,7 @@ namespace Foundation.Linq
             /// </summary>
             void ICollection<TResult>.Clear()
             {
-                FoundationContract.Assert(sourceAsList != null);
+                Assert.IsTrue(sourceAsList != null);
 
                 sourceAsList.Clear();
             }
@@ -222,7 +222,7 @@ namespace Foundation.Linq
                 }
                 else
                 {
-                    var enumerable = (IEnumerable)source;
+                    var enumerable = (IEnumerable) source;
                     var enumerableT = enumerable.Cast<TResult>();
                     contains = enumerableT.Contains(item);
                 }
@@ -260,9 +260,9 @@ namespace Foundation.Linq
                 throw new NotImplementedException();
             }
 
-#endregion
+            #endregion
 
-#region IEnumerable<TResult> Members
+            #region IEnumerable<TResult> Members
 
             /// <summary>
             /// 
@@ -276,9 +276,9 @@ namespace Foundation.Linq
                 }
             }
 
-#endregion
+            #endregion
 
-#region IEnumerable Members
+            #region IEnumerable Members
 
             /// <summary>
             /// 
@@ -289,119 +289,7 @@ namespace Foundation.Linq
                 return GetEnumerator();
             }
 
-#endregion
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        private sealed class ReadOnlyCollection<T> : ICollection<T>
-        {
-            /// <summary>
-            /// 
-            /// </summary>
-            private readonly ICollection<T> collection;
-
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="collection"></param>
-            public ReadOnlyCollection(ICollection<T> collection)
-            {
-                Assert.IsNotNull(collection);
-
-                this.collection = collection;
-            }
-
-#region ICollection<T> Members
-
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="item"></param>
-            void ICollection<T>.Add(T item)
-            {
-                throw new NotSupportedException();
-            }
-
-            /// <summary>
-            /// 
-            /// </summary>
-            void ICollection<T>.Clear()
-            {
-                throw new NotSupportedException();
-            }
-
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="item"></param>
-            /// <returns></returns>
-            bool ICollection<T>.Contains(T item)
-            {
-                FoundationContract.Ensures(!Contract.Result<bool>() || Count > 0);
-
-                return collection.Contains(item);
-            }
-
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="array"></param>
-            /// <param name="arrayIndex"></param>
-            void ICollection<T>.CopyTo(T[] array, int arrayIndex)
-            {
-                collection.CopyTo(array, arrayIndex);
-            }
-
-            /// <summary>
-            /// 
-            /// </summary>
-            public int Count => collection.Count;
-
-            /// <summary>
-            /// 
-            /// </summary>
-            public bool IsReadOnly => true;
-
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="item"></param>
-            /// <returns></returns>
-            bool ICollection<T>.Remove(T item)
-            {
-                throw new NotSupportedException();
-            }
-
-#endregion
-
-#region IEnumerable<T> Members
-
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <returns></returns>
-            IEnumerator<T> IEnumerable<T>.GetEnumerator()
-            {
-                return collection.GetEnumerator();
-            }
-
-#endregion
-
-#region IEnumerable Members
-
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <returns></returns>
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return collection.GetEnumerator();
-            }
-
-#endregion
+            #endregion
         }
     }
 }

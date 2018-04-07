@@ -3,7 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Globalization;
-using Foundation.Diagnostics.Assertions;
+using System.IO;
+using System.Linq;
+using System.Text;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation
@@ -44,6 +47,47 @@ namespace Foundation
         public static string Format(this string format, IFormatProvider provider, params object[] args)
         {
             return string.Format(provider, format, args);
+        }
+
+        public const string IndentString = "    ";
+
+        public static string Indent(this string source, int indentCount)
+        {
+            return source.Indent(IndentString, indentCount);
+        }
+
+        private static string Indent(this string source, string indentString, int indentCount)
+        {
+            indentString = string.Join(string.Empty, Enumerable.Repeat(indentString, indentCount));
+            var sb = new StringBuilder();
+
+            using (var stringReader = new StringReader(source))
+            {
+                bool first = true;
+
+                while (true)
+                {
+                    string line = stringReader.ReadLine();
+                    if (line == null)
+                    {
+                        break;
+                    }
+
+                    if (first)
+                    {
+                        first = false;
+                    }
+                    else
+                    {
+                        sb.AppendLine();
+                    }
+
+                    sb.Append(indentString);
+                    sb.Append(line);
+                }
+            }
+
+            return sb.ToString();
         }
 
         /// <summary>

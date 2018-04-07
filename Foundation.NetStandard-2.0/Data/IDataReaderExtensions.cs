@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Threading;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Data
 {
@@ -13,87 +12,87 @@ namespace Foundation.Data
     /// </summary>
     public static class IDataReaderExtensions
     {
-        public static void Read(this IDataReader dataReader, Action read)
+        public static void ReadResult(this IDataReader dataReader, Action readRecord)
         {
             while (dataReader.Read())
-                read();
+                readRecord();
         }
 
-        public static void Read(this IDataReader dataReader, IEnumerable<Action> reads)
+        public static void ReadResults(this IDataReader dataReader, IEnumerable<Action> readRecords)
         {
-            foreach (var read in reads)
+            foreach (var readRecord in readRecords)
             {
-                dataReader.Read(read);
+                dataReader.ReadResult(readRecord);
                 var nextResult = dataReader.NextResult();
-                FoundationContract.Assert(nextResult);
+                Assert.IsTrue(nextResult);
             }
         }
 
-        public static List<T> Read<T>(this IDataReader dataReader, Func<IDataReader, T> read)
+        public static List<T> ReadResult<T>(this IDataReader dataReader, Func<IDataReader, T> readRecord)
         {
-            var objects = new List<T>();
+            var records = new List<T>();
 
-            dataReader.Read(() =>
+            dataReader.ReadResult(() =>
             {
-                var @object = read(dataReader);
-                objects.Add(@object);
+                var record = readRecord(dataReader);
+                records.Add(record);
             });
 
-            return objects;
+            return records;
         }
 
-        public static List<T> ReadNext<T>(this IDataReader dataReader, Func<IDataReader, T> read)
+        public static List<T> ReadNextResult<T>(this IDataReader dataReader, Func<IDataReader, T> readRecord)
         {
             var nextResult = dataReader.NextResult();
-            FoundationContract.Assert(nextResult);
-            return dataReader.Read(read);
+            Assert.IsTrue(nextResult);
+            return dataReader.ReadResult(readRecord);
         }
 
-        public static List<T> Read<T>(this IDataReader dataReader, Func<T> read)
+        public static List<T> ReadResult<T>(this IDataReader dataReader, Func<T> readRecord)
         {
-            var objects = new List<T>();
+            var records = new List<T>();
 
-            dataReader.Read(() =>
+            dataReader.ReadResult(() =>
             {
-                var @object = read();
-                objects.Add(@object);
+                var record = readRecord();
+                records.Add(record);
             });
 
-            return objects;
+            return records;
         }
 
         public static ExecuteReaderResponse<T1, T2> Read<T1, T2>(this IDataReader dataReader, Func<T1> read1, Func<T2> read2)
         {
-            List<T1> objects1 = null;
-            List<T2> objects2 = null;
+            List<T1> result1 = null;
+            List<T2> result2 = null;
 
-            var reads = new Action[]
+            var readRecords = new Action[]
             {
-                () => objects1 = dataReader.Read(read1),
-                () => objects2 = dataReader.Read(read2)
+                () => result1 = dataReader.ReadResult(read1),
+                () => result2 = dataReader.ReadResult(read2)
             };
 
-            dataReader.Read(reads);
+            dataReader.ReadResults(readRecords);
 
-            return ExecuteReaderResponse.Create(objects1, objects2);
+            return ExecuteReaderResponse.Create(result1, result2);
         }
 
         public static ExecuteReaderResponse<T1, T2, T3> Read<T1, T2, T3>(this IDataReader dataReader, Func<T1> read1, Func<T2> read2, Func<T3> read3)
         {
-            List<T1> objects1 = null;
-            List<T2> objects2 = null;
-            List<T3> objects3 = null;
+            List<T1> result1 = null;
+            List<T2> result2 = null;
+            List<T3> result3 = null;
 
             var reads = new Action[]
             {
-                () => objects1 = dataReader.Read(read1),
-                () => objects2 = dataReader.Read(read2),
-                () => objects3 = dataReader.Read(read3)
+                () => result1 = dataReader.ReadResult(read1),
+                () => result2 = dataReader.ReadResult(read2),
+                () => result3 = dataReader.ReadResult(read3)
             };
 
-            dataReader.Read(reads);
+            dataReader.ReadResults(reads);
 
-            return ExecuteReaderResponse.Create(objects1, objects2, objects3);
+            return ExecuteReaderResponse.Create(result1, result2, result3);
         }
 
         /// <summary>
@@ -106,9 +105,7 @@ namespace Foundation.Data
             Assert.IsNotNull(dataReader);
 
             while (dataReader.Read())
-            {
                 yield return dataReader;
-            }
         }
 
         /// <summary>
@@ -125,22 +122,21 @@ namespace Foundation.Data
 
             var rowCount = 0;
 
-            while (!cancellationToken.IsCancellationRequested)
+            while (true)
             {
-                var table =
-                    new DataTable
-                    {
-                        Locale = CultureInfo.InvariantCulture
-                    };
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var table = new DataTable
+                {
+                    Locale = CultureInfo.InvariantCulture
+                };
 
                 var count = dataReader.Fill(table, cancellationToken);
                 rowCount += count;
                 dataSet.Tables.Add(table);
 
                 if (!dataReader.NextResult())
-                {
                     break;
-                }
             }
 
             return rowCount;
@@ -165,22 +161,22 @@ namespace Foundation.Data
                 var columns = dataTable.Columns;
 
                 if (columns.Count == 0)
-                {
-                    Database.FillSchema(schemaTable, dataTable);
-                }
+                    SchemaFiller.FillSchema(schemaTable, dataTable);
             }
 
             var fieldCount = dataReader.FieldCount;
             var rows = dataTable.Rows;
             var rowCount = 0;
 
-            while (!cancellationToken.IsCancellationRequested && dataReader.Read())
+            while (dataReader.Read())
             {
                 var values = new object[fieldCount];
                 dataReader.GetValues(values);
                 var row = rows.Add(values);
                 row.AcceptChanges();
                 rowCount++;
+
+                cancellationToken.ThrowIfCancellationRequested();
             }
 
             return rowCount;

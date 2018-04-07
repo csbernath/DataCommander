@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Data.TextData
 {
@@ -58,7 +57,7 @@ namespace Foundation.Data.TextData
                     break;
                 }
 
-                FoundationContract.Assert(count == maxLength);
+                Assert.IsTrue(count == maxLength);
 
                 if (index == 0)
                     values = new object[_columns.Count];
@@ -66,7 +65,7 @@ namespace Foundation.Data.TextData
                 var source = new string(buffer);
                 var converter = _converters[index];
 
-                FoundationContract.Assert(converter != null);
+                Assert.IsTrue(converter != null);
 
                 object value;
 

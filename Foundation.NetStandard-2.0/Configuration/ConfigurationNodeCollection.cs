@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Foundation.Assertions;
 using Foundation.Collections.IndexableCollection;
-using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Configuration
 {
@@ -60,7 +60,7 @@ namespace Foundation.Configuration
         /// <param name="item"></param>
         public void Add(ConfigurationNode item)
         {
-            FoundationContract.Assert(item != null);
+            Assert.IsTrue(item != null);
             _collection.Add(item);
         }
 

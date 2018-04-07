@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 using Foundation.Text;
 
 namespace Foundation.Data
@@ -70,7 +69,7 @@ namespace Foundation.Data
         {
             Assert.IsNotNull(dataRow);
             var valueObject = dataRow[name];
-            FoundationContract.Assert(valueObject is T);
+            Assert.IsTrue(valueObject is T);
             return (T)valueObject;
         }
 
@@ -90,7 +89,7 @@ namespace Foundation.Data
             Assert.IsNotNull(dataRow);
 
             var valueObject = dataRow[name];
-            return Database.GetValue(valueObject, outputNullValue);
+            return ValueReader.GetValue(valueObject, outputNullValue);
         }
 
         /// <summary>
@@ -105,7 +104,7 @@ namespace Foundation.Data
             Assert.IsNotNull(dataRow);
 
             var value = dataRow[columnIndex];
-            return Database.GetValueOrDefault<T>(value);
+            return ValueReader.GetValueOrDefault<T>(value);
         }
 
         /// <summary>
@@ -120,7 +119,7 @@ namespace Foundation.Data
             Assert.IsNotNull(dataRow);
 
             var value = dataRow[name];
-            return Database.GetValueOrDefault<T>(value);
+            return ValueReader.GetValueOrDefault<T>(value);
         }
 
         /// <summary>

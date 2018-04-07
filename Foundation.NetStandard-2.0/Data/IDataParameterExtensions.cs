@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 
 namespace Foundation.Data
 {
@@ -17,7 +17,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static T GetValueOrDefault<T>(this IDataParameter parameter)
         {
-            return Database.GetValueOrDefault<T>(parameter.Value);
+            return ValueReader.GetValueOrDefault<T>(parameter.Value);
         }
 
         /// <summary>

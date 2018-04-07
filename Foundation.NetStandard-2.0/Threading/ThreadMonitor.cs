@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Linq;
+using Foundation.Assertions;
 using Foundation.Text;
 
 namespace Foundation.Threading
@@ -24,7 +23,8 @@ namespace Foundation.Threading
             new StringTableColumnInfo<WorkerThread>("State", StringTableColumnAlign.Left, t => t.ThreadState.ToString()),
             new StringTableColumnInfo<WorkerThread>("StartTime", StringTableColumnAlign.Left, t => ToString(t.StartTime)),
             new StringTableColumnInfo<WorkerThread>("StopTime", StringTableColumnAlign.Left, t => ToString(t.StopTime)),
-            new StringTableColumnInfo<WorkerThread>("Elapsed", StringTableColumnAlign.Left, t => t.ThreadState == ThreadState.Stopped ? (t.StopTime - t.StartTime).ToString() : null),
+            new StringTableColumnInfo<WorkerThread>("Elapsed", StringTableColumnAlign.Left,
+                t => t.ThreadState == ThreadState.Stopped ? (t.StopTime - t.StartTime).ToString() : null),
             new StringTableColumnInfo<WorkerThread>("Priority", StringTableColumnAlign.Left, t => GetPriority(t.Thread)),
             new StringTableColumnInfo<WorkerThread>("IsBackground", StringTableColumnAlign.Left, t => IsBackground(t.Thread)),
             new StringTableColumnInfo<WorkerThread>("IsThreadPoolThread", StringTableColumnAlign.Left, t => t.Thread.IsThreadPoolThread.ToString())
@@ -50,34 +50,15 @@ namespace Foundation.Threading
         /// <returns></returns>
         public static string ThreadPoolToStringTableString()
         {
-            int minWorkerThreads;
-            int minCompletionPortThreads;
-            int maxWorkerThreads;
-            int maxCompletionPortThreads;
-            int availableWorkerThreads;
-            int availableCompletionPortThreads;
-            ThreadPool.GetMinThreads(out minWorkerThreads, out minCompletionPortThreads);
-            ThreadPool.GetMaxThreads(out maxWorkerThreads, out maxCompletionPortThreads);
-            ThreadPool.GetAvailableThreads(out availableWorkerThreads, out availableCompletionPortThreads);
+            ThreadPool.GetMinThreads(out var minWorkerThreads, out var minCompletionPortThreads);
+            ThreadPool.GetMaxThreads(out var maxWorkerThreads, out var maxCompletionPortThreads);
+            ThreadPool.GetAvailableThreads(out var availableWorkerThreads, out var availableCompletionPortThreads);
 
-            var threadPoolRows = new ThreadPoolRow[2];
-
-            threadPoolRows[0] = new ThreadPoolRow
+            var threadPoolRows = new[]
             {
-                Name = "WorkerThreads",
-                Min = minWorkerThreads,
-                Active = maxWorkerThreads - availableWorkerThreads,
-                Available = availableWorkerThreads,
-                Max = maxWorkerThreads
-            };
-
-            threadPoolRows[1] = new ThreadPoolRow
-            {
-                Name = "CompletionPortThreads",
-                Min = minCompletionPortThreads,
-                Active = maxCompletionPortThreads - availableCompletionPortThreads,
-                Available = availableCompletionPortThreads,
-                Max = maxCompletionPortThreads
+                new ThreadPoolRow("WorkerThreads", minWorkerThreads, maxWorkerThreads - availableWorkerThreads, availableWorkerThreads, maxWorkerThreads),
+                new ThreadPoolRow("CompletionPortThreads", minCompletionPortThreads, maxCompletionPortThreads - availableCompletionPortThreads, availableCompletionPortThreads,
+                    maxCompletionPortThreads)
             };
 
             return threadPoolRows.ToString(ThreadPoolColumns);
@@ -90,9 +71,7 @@ namespace Foundation.Threading
         {
             string stringTableString;
             lock (Threads)
-            {
                 stringTableString = Threads.Values.ToString(ThreadColumns);
-            }
 
             return stringTableString;
         }
@@ -108,24 +87,20 @@ namespace Foundation.Threading
         /// <summary>
         /// Tries to join (<see cref="System.Threading.Thread.Join(int)"/>) threads and removes the joined threads from the list of monitored threads.
         /// </summary>
-        public static void Join(int millisecondsTimout)
+        public static void Join(int millisecondsTimeout)
         {
             var removableThreads = new List<WorkerThread>();
 
             WorkerThread[] currentThreads;
             lock (Threads)
-            {
                 currentThreads = Threads.Values.ToArray();
-            }
 
-            var remaining = TimeSpan.FromMilliseconds(millisecondsTimout);
+            var remaining = TimeSpan.FromMilliseconds(millisecondsTimeout);
 
             foreach (var thread in currentThreads)
             {
                 if (thread.ThreadState == ThreadState.Unstarted)
-                {
                     removableThreads.Add(thread);
-                }
                 else
                 {
                     var stopwatch = System.Diagnostics.Stopwatch.StartNew();
@@ -133,46 +108,26 @@ namespace Foundation.Threading
                     stopwatch.Stop();
 
                     if (remaining >= stopwatch.Elapsed)
-                    {
                         remaining -= stopwatch.Elapsed;
-                    }
                     else
-                    {
                         remaining = TimeSpan.Zero;
-                    }
 
                     if (joined)
-                    {
                         removableThreads.Add(thread);
-                    }
                 }
             }
 
             if (removableThreads.Count > 0)
-            {
                 lock (Threads)
-                {
                     foreach (var thread in removableThreads)
-                    {
                         Threads.Remove(thread.ManagedThreadId);
-                    }
-                }
-            }
         }
 
         private static string ToString(DateTime dateTime)
         {
-            string s;
-
-            if (dateTime == DateTime.MinValue)
-            {
-                s = null;
-            }
-            else
-            {
-                s = dateTime.ToString("yyyy.MM.dd HH:mm:ss.ffffff", CultureInfo.InvariantCulture);
-            }
-
+            var s = dateTime == DateTime.MinValue
+                ? null
+                : dateTime.ToString("yyyy.MM.dd HH:mm:ss.ffffff", CultureInfo.InvariantCulture);
             return s;
         }
 
@@ -212,11 +167,20 @@ namespace Foundation.Threading
 
         private sealed class ThreadPoolRow
         {
-            public string Name;
-            public int Min;
-            public int Active;
-            public int Available;
-            public int Max;
+            public readonly string Name;
+            public readonly int Min;
+            public readonly int Active;
+            public readonly int Available;
+            public readonly int Max;
+
+            public ThreadPoolRow(string name, int min, int active, int available, int max)
+            {
+                Name = name;
+                Min = min;
+                Active = active;
+                Available = available;
+                Max = max;
+            }
         }
     }
 }

@@ -3,94 +3,61 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
+using Foundation.Assertions;
 using Foundation.Configuration;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Linq;
 using Foundation.Text;
 
 namespace Foundation.Diagnostics
 {
-    /// <summary>
-    /// Summary description for GcMonitor.
-    /// </summary>
-    public static class GarbageMonitor
+    public sealed class GarbageMonitor
     {
-        #region Private Fields
+        private static readonly StringTableColumnInfo<MonitoredObjectState>[] Columns;
+        public static readonly GarbageMonitor Default = new GarbageMonitor("Default");
 
-        private static readonly LinkedList<ListItem> items = new LinkedList<ListItem>();
-        private static long id;
-        private static readonly StringTableColumnInfo<ListItemState>[] columns;
-
-        #endregion
+        private readonly string _garbageMonitorName;
+        private readonly LinkedList<MonitoredObject> _monitoredObjects = new LinkedList<MonitoredObject>();
+        private readonly InterlockedSequence _interlockedSequence = new InterlockedSequence(0);
 
         static GarbageMonitor()
         {
-            columns = new[]
+            Columns = new[]
             {
-                StringTableColumnInfo.Create<ListItemState, long>("Id", StringTableColumnAlign.Right, i => i.ListItem.Id),
-                new StringTableColumnInfo<ListItemState>("Name", StringTableColumnAlign.Left, i => i.ListItem.Name),
-                new StringTableColumnInfo<ListItemState>("TypeName", StringTableColumnAlign.Left, i => i.ListItem.TypeName),
-                StringTableColumnInfo.Create<ListItemState, int>("Size", StringTableColumnAlign.Right, i => i.ListItem.Size),
-                new StringTableColumnInfo<ListItemState>("Time", StringTableColumnAlign.Right,
-                    i => i.ListItem.Time.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture)),
-                new StringTableColumnInfo<ListItemState>("DisposeTime", StringTableColumnAlign.Right,
-                    i => i.ListItem.DisposeTime?.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture)),
-                new StringTableColumnInfo<ListItemState>("Age", StringTableColumnAlign.Right, i => StopwatchTimeSpan.ToString(i.Age, 3)),
-                StringTableColumnInfo.Create<ListItemState, bool>("IsAlive", StringTableColumnAlign.Left, i => i.ListItem.WeakReference.IsAlive),
-                StringTableColumnInfo.Create<ListItemState, int?>("Generation", StringTableColumnAlign.Right, i => i.Generation)
+                StringTableColumnInfo.CreateRight<MonitoredObjectState, long>("Id", i => i.MonitoredObject.Id),
+                StringTableColumnInfo.CreateLeft<MonitoredObjectState>("Name", i => i.MonitoredObject.Name),
+                StringTableColumnInfo.CreateLeft<MonitoredObjectState>("TypeName", i => i.MonitoredObject.TypeName),
+                StringTableColumnInfo.CreateRight<MonitoredObjectState, int>("Size", i => i.MonitoredObject.Size),
+                StringTableColumnInfo.CreateRight<MonitoredObjectState>("Time", i => i.MonitoredObject.Time.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture)),
+                StringTableColumnInfo.CreateRight<MonitoredObjectState>("DisposeTime", i => i.MonitoredObject.DisposeTime?.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture)),
+                StringTableColumnInfo.CreateRight<MonitoredObjectState>("Age", i => StopwatchTimeSpan.ToString(i.GetAge(), 3)),
+                StringTableColumnInfo.CreateLeft<MonitoredObjectState, bool>("IsAlive", i => i.MonitoredObject.WeakReference.IsAlive),
+                StringTableColumnInfo.CreateRight<MonitoredObjectState, int?>("Generation", i => i.GetGeneration())
             };
         }
 
+        public GarbageMonitor(string garbageMonitorName) => _garbageMonitorName = garbageMonitorName;
+
         #region Public Properties
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static int Count => items.Count;
+        public int Count => _monitoredObjects.Count;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static string State
+        public string State
         {
             get
             {
                 string state;
 
-                lock (items)
+                lock (_monitoredObjects)
                 {
                     var timestamp = Stopwatch.GetTimestamp();
-                    var listItemStates = items.Select(i => new ListItemState(i, timestamp)).ToList();
-                    var stringTable = listItemStates.ToString(columns);
-                    var totalSize = listItemStates.Sum(s => s.ListItem.Size);
-                    state = string.Format(CultureInfo.InvariantCulture, "GarbageMonitor.State:\r\ntotalSize: {0}\r\n{1}", totalSize, stringTable);
+                    var listItemStates = _monitoredObjects.Select(i => new MonitoredObjectState(i, timestamp));
+                    var stringTable = listItemStates.ToString(Columns);
+                    var totalSize = _monitoredObjects.Sum(s => s.Size);
+                    state = $"GarbageMonitor.State:\r\nid: {_garbageMonitorName}r\ntotalSize: {totalSize}\r\n{stringTable}";
                 }
 
-                var entered = Monitor.TryEnter(items);
-                if (entered)
-                {
-                    RemoveGarbageCollectedItems();
-                    Monitor.Exit(items);
-                }
+                MonitorExtensions.TryLock(_monitoredObjects, RemoveGarbageCollectedObjects);
 
                 return state;
-            }
-        }
-
-        private static void RemoveGarbageCollectedItems()
-        {
-            var node = items.First;
-
-            while (node != null)
-            {
-                var item = node.Value;
-                var nextNode = node.Next;
-
-                if (!item.WeakReference.IsAlive)
-                    items.Remove(node);
-
-                node = nextNode;
             }
         }
 
@@ -98,12 +65,7 @@ namespace Foundation.Diagnostics
 
         #region Public Methods
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="target"></param>
-        public static void Add(string name, object target)
+        public void Add(string name, object target)
         {
             Assert.IsNotNull(target);
 
@@ -113,8 +75,7 @@ namespace Foundation.Diagnostics
             var type = target.GetType();
             typeName = TypeNameCollection.GetTypeName(type);
 
-            var targetString = target as string;
-            if (targetString != null)
+            if (target is string targetString)
             {
                 var length = targetString.Length;
                 size = length << 1;
@@ -123,93 +84,49 @@ namespace Foundation.Diagnostics
             Add(name, typeName, size, target);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="typeName"></param>
-        /// <param name="size"></param>
-        /// <param name="target"></param>
-        public static void Add(string name, string typeName, int size, object target)
+        public void Add(string name, string typeName, int size, object target)
         {
             Assert.IsNotNull(target);
 
-            var id = Interlocked.Increment(ref GarbageMonitor.id);
-            var item = new ListItem(id, name, typeName, size, target);
+            var id = _interlockedSequence.Next();
 
-            lock (items)
-            {
-                items.AddLast(item);
-            }
+            var time = LocalTime.Default.Now;
+            var timestamp = Stopwatch.GetTimestamp();
+            var weakReference = new WeakReference(target);
+            var monitoredObject = new MonitoredObject(id, name, typeName, size, time, timestamp, weakReference);
+
+            lock (_monitoredObjects)
+                _monitoredObjects.AddLast(monitoredObject);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="target"></param>
-        /// <param name="disposeTime"></param>
-        public static void SetDisposeTime(object target, DateTime disposeTime)
+        public void SetDisposeTime(object target, DateTime disposeTime)
         {
             Assert.IsNotNull(target);
 
-            lock (items)
+            lock (_monitoredObjects)
             {
-                var item = items.FirstOrDefault(i => i.WeakReference.Target == target);
-                if (item != null)
-                {
-                    item.DisposeTime = disposeTime;
-                }
+                var item = _monitoredObjects.First(i => i.WeakReference.Target == target);
+                item.SetDisposeTime(disposeTime);
             }
         }
 
         #endregion
 
-        private sealed class ListItem
+        private void RemoveGarbageCollectedObjects()
         {
-            public readonly long Id;
-            public readonly string Name;
-            public readonly string TypeName;
-            public readonly int Size;
-            public readonly DateTime Time = LocalTime.Default.Now;
-            public readonly long Timestamp;
-            public readonly WeakReference WeakReference;
-            public DateTime? DisposeTime;
+            var node = _monitoredObjects.First;
 
-            public ListItem(long id, string name, string typeName, int size, object target)
+            while (node != null)
             {
-                Id = id;
-                Name = name;
-                TypeName = typeName;
-                Size = size;
-                WeakReference = new WeakReference(target);
-                Timestamp = Stopwatch.GetTimestamp();
+                var item = node.Value;
+                var nextNode = node.Next;
+
+                if (!item.WeakReference.IsAlive)
+                    _monitoredObjects.Remove(node);
+
+                node = nextNode;
             }
         }
 
-        private sealed class ListItemState
-        {
-            private readonly long _timestamp;
-
-            public ListItemState(ListItem listItem, long timestamp)
-            {
-                ListItem = listItem;
-                _timestamp = timestamp;
-
-                if (listItem.WeakReference.IsAlive)
-                {
-                    try
-                    {
-                        Generation = GC.GetGeneration(ListItem.WeakReference);
-                    }
-                    catch
-                    {
-                    }
-                }
-            }
-
-            public ListItem ListItem { get; }
-            public int? Generation { get; }
-            public long Age => _timestamp - ListItem.Timestamp;
-        }
     }
 }

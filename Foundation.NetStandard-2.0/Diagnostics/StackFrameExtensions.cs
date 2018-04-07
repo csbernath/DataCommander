@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 
 namespace Foundation.Diagnostics
 {
@@ -21,9 +21,7 @@ namespace Foundation.Diagnostics
             for (var j = 0; j < parameters.Length; j++)
             {
                 if (j > 0)
-                {
                     stringBuilder.Append(',');
-                }
 
                 var parameter = parameters[j];
                 type = parameter.ParameterType;

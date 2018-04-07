@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections

@@ -1,5 +1,5 @@
 ﻿using System.Xml;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 
 namespace Foundation.Configuration
 {

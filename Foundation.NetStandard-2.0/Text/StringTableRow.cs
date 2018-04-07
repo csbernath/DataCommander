@@ -1,5 +1,5 @@
 ﻿using System;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Text

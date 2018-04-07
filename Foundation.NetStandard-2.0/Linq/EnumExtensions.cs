@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
-using Foundation.Diagnostics.Assertions;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq

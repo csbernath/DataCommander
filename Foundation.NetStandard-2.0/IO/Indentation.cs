@@ -1,6 +1,6 @@
 ﻿using System;
 using System.CodeDom.Compiler;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.IO
 {
@@ -26,7 +26,7 @@ namespace Foundation.IO
 
         void IDisposable.Dispose()
         {
-            FoundationContract.Assert(_textWriter.Indent == _indent);
+            Assert.IsTrue(_textWriter.Indent == _indent);
 
             _textWriter.Indent--;
         }

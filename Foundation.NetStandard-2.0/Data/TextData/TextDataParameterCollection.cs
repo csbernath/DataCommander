@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics.Contracts;
+using Foundation.Assertions;
 using Foundation.Collections.IndexableCollection;
 using Foundation.Diagnostics.Contracts;
 
@@ -39,11 +40,10 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override int Add(object value)
         {
+            Assert.IsNotNull(value);
+            FoundationContract.Requires<ArgumentException>(value is TextDataParameter);
 
-            FoundationContract.Requires<ArgumentException>( value != null );
-            FoundationContract.Requires<ArgumentException>( value is TextDataParameter );
-
-            var parameter = (TextDataParameter)value;
+            var parameter = (TextDataParameter) value;
             _collection.Add(parameter);
             return _collection.Count - 1;
         }
@@ -55,7 +55,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public TextDataParameter Add(TextDataParameter parameter)
         {
-            FoundationContract.Assert(parameter != null);
+            Assert.IsTrue(parameter != null);
 
             _collection.Add(parameter);
             return parameter;
@@ -266,13 +266,13 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public TResult GetParameterValue<TResult>(string parameterName)
         {
-            FoundationContract.Assert(Contains(parameterName));
+            Assert.IsTrue(Contains(parameterName));
 
             var parameter = _nameIndex[parameterName];
             var value = parameter.Value;
 
-            FoundationContract.Assert(value is TResult);
-            return (TResult)value;
+            Assert.IsTrue(value is TResult);
+            return (TResult) value;
         }
 
         /// <summary>
@@ -286,11 +286,11 @@ namespace Foundation.Data.TextData
             return _nameIndex.TryGetValue(parameterName, out parameter);
         }
 
-#region IList<TextDataParameter> Members
+        #region IList<TextDataParameter> Members
 
         int IList<TextDataParameter>.IndexOf(TextDataParameter item)
         {
-            FoundationContract.Assert(item != null);
+            Assert.IsTrue(item != null);
 
             return _listIndex.IndexOf(item);
         }
@@ -313,13 +313,13 @@ namespace Foundation.Data.TextData
             set => throw new NotSupportedException();
         }
 
-#endregion
+        #endregion
 
-#region ICollection<TextDataParameter> Members
+        #region ICollection<TextDataParameter> Members
 
         void ICollection<TextDataParameter>.Add(TextDataParameter item)
         {
-            FoundationContract.Assert(item != null);
+            Assert.IsTrue(item != null);
 
             _collection.Add(item);
         }
@@ -345,29 +345,29 @@ namespace Foundation.Data.TextData
 
         bool ICollection<TextDataParameter>.Remove(TextDataParameter item)
         {
-            FoundationContract.Assert(item != null);
+            Assert.IsTrue(item != null);
 
             return _collection.Remove(item);
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable<TextDataParameter> Members
+        #region IEnumerable<TextDataParameter> Members
 
         IEnumerator<TextDataParameter> IEnumerable<TextDataParameter>.GetEnumerator()
         {
             return _collection.GetEnumerator();
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable Members
+        #region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _collection.GetEnumerator();
         }
 
-#endregion
+        #endregion
     }
 }

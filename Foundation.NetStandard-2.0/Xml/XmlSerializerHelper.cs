@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Xml
 {
@@ -17,13 +17,13 @@ namespace Foundation.Xml
         /// <param name="xml"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static object Deserialize( string xml, Type type )
+        public static object Deserialize(string xml, Type type)
         {
-            FoundationContract.Requires<ArgumentException>(type != null);
+            Assert.IsNotNull(type);
 
-            var stringReader = new StringReader( xml );
-            var xmlSerializer = new XmlSerializer( type );
-            var obj = xmlSerializer.Deserialize( stringReader );
+            var stringReader = new StringReader(xml);
+            var xmlSerializer = new XmlSerializer(type);
+            var obj = xmlSerializer.Deserialize(stringReader);
             return obj;
         }
 
@@ -33,13 +33,13 @@ namespace Foundation.Xml
         /// <param name="xmlReader"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static object Deserialize( XmlReader xmlReader, Type type )
+        public static object Deserialize(XmlReader xmlReader, Type type)
         {
-            FoundationContract.Requires<ArgumentException>(xmlReader != null);
-            FoundationContract.Requires<ArgumentException>(type != null);
+            Assert.IsNotNull(xmlReader);
+            Assert.IsNotNull(type);
 
-            var xmlSerializer = new XmlSerializer( type );
-            var obj = xmlSerializer.Deserialize( xmlReader );
+            var xmlSerializer = new XmlSerializer(type);
+            var obj = xmlSerializer.Deserialize(xmlReader);
             return obj;
         }
 
@@ -49,9 +49,9 @@ namespace Foundation.Xml
         /// <typeparam name="T"></typeparam>
         /// <param name="xml"></param>
         /// <returns></returns>
-        public static T Deserialize<T>( string xml )
+        public static T Deserialize<T>(string xml)
         {
-            var obj = Deserialize( xml, typeof (T) );
+            var obj = Deserialize(xml, typeof(T));
             return (T) obj;
         }
 
@@ -61,9 +61,9 @@ namespace Foundation.Xml
         /// <typeparam name="T"></typeparam>
         /// <param name="xmlReader"></param>
         /// <returns></returns>
-        public static T Deserialize<T>( XmlReader xmlReader )
+        public static T Deserialize<T>(XmlReader xmlReader)
         {
-            var obj = Deserialize( xmlReader, typeof (T) );
+            var obj = Deserialize(xmlReader, typeof(T));
             return (T) obj;
         }
     }

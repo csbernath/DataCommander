@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Foundation.Assertions;
 using Foundation.Collections.IndexableCollection;
-using Foundation.Diagnostics.Assertions;
-using Foundation.Diagnostics.Contracts;
 using Foundation.Linq;
 
 namespace Foundation
@@ -54,14 +53,14 @@ namespace Foundation
             var read = textReader.Read();
             var c = (char) read;
 
-            FoundationContract.Assert(c == '"');
+            Assert.IsTrue(c == '"');
 
             var sb = new StringBuilder();
 
             while (true)
             {
                 read = textReader.Read();
-                FoundationContract.Assert(read >= 0);
+                Assert.IsTrue(read >= 0);
 
                 c = (char) read;
 
@@ -83,7 +82,7 @@ namespace Foundation
         {
             var read = textReader.Read();
             var c = (char) read;
-            FoundationContract.Assert(c == '/' || c == '-');
+            Assert.IsTrue(c == '/' || c == '-');
 
             var sb = new StringBuilder();
 
