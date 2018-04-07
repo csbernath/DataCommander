@@ -16,6 +16,7 @@ namespace Foundation.Data.SqlClient
         /// </summary>
         public static readonly SqlDateTime SqlDateTimeZero = new SqlDateTime(1900, 1, 1);
 
+#if FOUNDATION_4_7
         /// <summary>
         /// Creates the store procedure command.
         /// </summary>
@@ -32,6 +33,7 @@ namespace Foundation.Data.SqlClient
             SqlCommandBuilder.DeriveParameters(command);
             return command;
         }
+#endif
 
         /// <summary>
         /// 
