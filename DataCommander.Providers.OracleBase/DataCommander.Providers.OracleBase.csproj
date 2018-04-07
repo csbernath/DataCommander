@@ -108,9 +108,9 @@
       <Project>{31A30A80-D1B6-4867-A65E-188DE9E912C8}</Project>
       <Name>DataCommander.Providers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Foundation\Foundation.csproj">
-      <Project>{1bacf0aa-4122-4c10-a8d2-248542af054c}</Project>
-      <Name>Foundation</Name>
+    <ProjectReference Include="..\Foundation.NetStandard-2.0\Foundation.NetStandard-2.0.csproj">
+      <Project>{04996258-f3f5-4eec-9d3e-acae9726f93f}</Project>
+      <Name>Foundation.NetStandard-2.0</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -480,12 +480,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Foundation\Foundation.csproj">
-      <Project>{1bacf0aa-4122-4c10-a8d2-248542af054c}</Project>
-      <Name>Foundation</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="EPPlus">
       <Version>4.5.1</Version>
     </PackageReference>
@@ -495,6 +489,16 @@
     <PackageReference Include="System.Data.SQLite.Core">
       <Version>1.0.108</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Foundation.NetFramework-4.7.1\Foundation.NetFramework-4.7.1.csproj">
+      <Project>{b8934b63-d579-4ee8-b352-13134eb8cc54}</Project>
+      <Name>Foundation.NetFramework-4.7.1</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Foundation.NetStandard-2.0\Foundation.NetStandard-2.0.csproj">
+      <Project>{04996258-f3f5-4eec-9d3e-acae9726f93f}</Project>
+      <Name>Foundation.NetStandard-2.0</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

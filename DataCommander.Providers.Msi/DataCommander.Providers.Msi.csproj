@@ -90,10 +90,10 @@
       <Project>{31a30a80-d1b6-4867-a65e-188de9e912c8}</Project>
       <Name>DataCommander.Providers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Foundation\Foundation.csproj">
-      <Project>{1bacf0aa-4122-4c10-a8d2-248542af054c}</Project>
-      <Name>Foundation</Name>
+    <ProjectReference Include="..\Foundation.NetStandard-2.0\Foundation.NetStandard-2.0.csproj">
+      <Project>{04996258-f3f5-4eec-9d3e-acae9726f93f}</Project>
+      <Name>Foundation.NetStandard-2.0</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />  
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
