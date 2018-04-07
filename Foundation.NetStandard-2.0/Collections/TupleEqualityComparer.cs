@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using Foundation.Diagnostics;
+    using Diagnostics;
 
 #if FOUNDATION_2_0 || FOUNDATION_3_5
     /// <summary>

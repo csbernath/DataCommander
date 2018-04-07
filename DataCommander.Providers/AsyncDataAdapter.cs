@@ -146,7 +146,7 @@ namespace DataCommander.Providers
                         var dataTypeNames = new string[count];
 
                         if (read)
-                            for (var j = 0; j < count; j++)
+                            for (var j = 0; j < count; ++j)
                                 dataTypeNames[j] = dataReader.GetDataTypeName(j);
 
                         _resultWriter.FirstRowReadEnd(dataTypeNames);

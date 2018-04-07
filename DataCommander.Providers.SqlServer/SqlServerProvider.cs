@@ -98,7 +98,7 @@ namespace DataCommander.Providers.SqlServer
 
         string IProvider.CommandToString(IDbCommand command)
         {
-            var sqlCommand = (SqlCommand)command;
+            var sqlCommand = (SqlCommand) command;
             return sqlCommand.ToLogString();
         }
 
@@ -175,7 +175,7 @@ namespace DataCommander.Providers.SqlServer
 
                 var columnSize = columnSchema.ColumnSize;
                 var providerType = columnSchema.ProviderType;
-                var dbType = (DbType)providerType;
+                var dbType = (DbType) providerType;
                 var parameter = new SqlParameter();
                 parameter.ParameterName = $"@p{i}";
                 //parameter.DbType = dbType;
@@ -230,8 +230,8 @@ namespace DataCommander.Providers.SqlServer
 
                     case SqlDataTypeName.Decimal:
                         parameter.SqlDbType = SqlDbType.Decimal;
-                        parameter.Precision = (byte)columnSchema.NumericPrecision.Value;
-                        parameter.Scale = (byte)columnSchema.NumericScale.Value;
+                        parameter.Precision = (byte) columnSchema.NumericPrecision.Value;
+                        parameter.Scale = (byte) columnSchema.NumericScale.Value;
                         converters[i] = ConvertToDecimal;
                         break;
 
@@ -258,7 +258,7 @@ namespace DataCommander.Providers.SqlServer
 
         void IProvider.DeriveParameters(IDbCommand command)
         {
-            var sqlConnection = (SqlConnection)command.Connection;
+            var sqlConnection = (SqlConnection) command.Connection;
             var sqlCommand = new SqlCommand(command.CommandText, sqlConnection)
             {
                 CommandType = command.CommandType,
@@ -289,7 +289,7 @@ namespace DataCommander.Providers.SqlServer
 
         public XmlReader ExecuteXmlReader(IDbCommand command)
         {
-            var sqlCommand = (SqlCommand)command;
+            var sqlCommand = (SqlCommand) command;
             return sqlCommand.ExecuteXmlReader();
         }
 
@@ -331,7 +331,7 @@ namespace DataCommander.Providers.SqlServer
 
         Type IProvider.GetColumnType(FoundationDbColumn column)
         {
-            var dbType = (SqlDbType)column.ProviderType;
+            var dbType = (SqlDbType) column.ProviderType;
             var columnSize = column.ColumnSize;
             Type type;
 
@@ -416,7 +416,7 @@ namespace DataCommander.Providers.SqlServer
                 {
                     if (value.IndexOf("@@") == 0)
                     {
-                        array = _keyWords.Where(k => k.StartsWith(value)).Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
+                        array = _keyWords.Where(k => k.StartsWith(value)).Select(keyWord => (IObjectName) new NonSqlObjectName(keyWord)).ToList();
                     }
                     else
                     {
@@ -436,7 +436,7 @@ namespace DataCommander.Providers.SqlServer
                             }
                         }
 
-                        array = list.Keys.Select(keyWord => (IObjectName)new NonSqlObjectName(keyWord)).ToList();
+                        array = list.Keys.Select(keyWord => (IObjectName) new NonSqlObjectName(keyWord)).ToList();
                     }
                 }
             }
@@ -704,7 +704,7 @@ order by 1", name.Database);
 
         DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
         {
-            var sqlParameter = (SqlParameter)parameter;
+            var sqlParameter = (SqlParameter) parameter;
             return new SqlDataParameter(sqlParameter);
         }
 
@@ -841,7 +841,7 @@ order by 1", name.Database);
                     }
 
                     var columnSize = dataColumnSchema.ColumnSize;
-                    var dbType = (SqlDbType)dataColumnSchema.ProviderType;
+                    var dbType = (SqlDbType) dataColumnSchema.ProviderType;
                     var dataTypeName = dataReader.GetDataTypeName(columnIndex);
                     var sb = new StringBuilder();
                     sb.Append(dataTypeName);
@@ -1024,7 +1024,7 @@ order by ic.index_column_id
             else
             {
                 var message = exception.ToLogString();
-                var infoMessage = new InfoMessage(now, InfoMessageSeverity.Error, message);
+                var infoMessage = new InfoMessage(now, InfoMessageSeverity.Error, null, message);
                 infoMessages = new List<InfoMessage>
                 {
                     infoMessage
@@ -1051,8 +1051,10 @@ order by ic.index_column_id
                 var severity = sqlError.Class == 0
                     ? InfoMessageSeverity.Information
                     : InfoMessageSeverity.Error;
-                var message = sqlError.ToLogString();
-                messages.Add(new InfoMessage(now, severity, message));
+
+                var header = sqlError.GetHeader();
+                var message = sqlError.Message;
+                messages.Add(new InfoMessage(now, severity, header, message));
             }
 
             return messages;
@@ -1069,9 +1071,10 @@ order by ic.index_column_id
             }
             else
             {
-                var convertible = (IConvertible)source;
+                var convertible = (IConvertible) source;
                 target = convertible.ToString(null);
             }
+
             return target;
         }
 
@@ -1084,9 +1087,10 @@ order by ic.index_column_id
             }
             else
             {
-                var decimalField = (DecimalField)source;
+                var decimalField = (DecimalField) source;
                 target = decimalField.DecimalValue;
             }
+
             return target;
         }
 
@@ -1105,6 +1109,7 @@ order by ic.index_column_id
                 {
                     lineEndIndex = commandText.Length - 1;
                 }
+
                 var lineLength = lineEndIndex - lineStartIndex + 1;
                 var line = commandText.Substring(lineStartIndex, lineLength);
                 line = line.Trim();

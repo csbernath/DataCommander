@@ -46,10 +46,10 @@ namespace DataCommander.Providers
         {
             _rowCount += e.RowsCopied;
             var message = $"{_rowCount} rows copied.";
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
+            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
             if (_cancelRequested)
             {
-                _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, "Aborting bulk copy..."));
+                _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, "Aborting bulk copy..."));
                 e.Abort = true;
             }
         }
@@ -57,11 +57,8 @@ namespace DataCommander.Providers
         #region IAsyncDataAdapter Members
 
         IResultWriter IAsyncDataAdapter.ResultWriter => throw new NotImplementedException();
-
         long IAsyncDataAdapter.RowCount => _rowCount;
-
         int IAsyncDataAdapter.TableCount => 1;
-
         void IAsyncDataAdapter.Start()
         {
             Task.Factory.StartNew(Fill);

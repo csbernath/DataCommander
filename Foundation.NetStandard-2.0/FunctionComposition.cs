@@ -33,8 +33,8 @@ namespace Foundation
                 Assert.IsNotNull(func1);
                 Assert.IsNotNull(func2);
 
-                this._func1 = func1;
-                this._func2 = func2;
+                _func1 = func1;
+                _func2 = func2;
             }
 
             public Z Evaluate(X x)

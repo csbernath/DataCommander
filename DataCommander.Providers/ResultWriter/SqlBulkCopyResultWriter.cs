@@ -25,9 +25,12 @@ namespace DataCommander.Providers.ResultWriter
         private readonly string _tableName;
         private readonly Action<IDbTransaction> _setTransaction;
         private readonly CancellationToken _cancellationToken;
+
         private IDbTransaction _transaction;
+
         //private IDbCommand insertCommand;
         private Converter<object, object>[] _converters = null;
+
         //private IDbDataParameter[] parameters;
         private ConcurrentQueue<QueueItem> _queue;
         private Task _task;
@@ -48,7 +51,7 @@ namespace DataCommander.Providers.ResultWriter
         {
             FoundationContract.Requires<ArgumentException>(destinationProvider.DbProviderFactory == SqlClientFactory.Instance);
 
-            _destinationSqlConnection = (SqlConnection)destinationConnection.Connection;
+            _destinationSqlConnection = (SqlConnection) destinationConnection.Connection;
 
             _logResultWriter = new LogResultWriter(addInfoMessage);
             _addInfoMessage = addInfoMessage;
@@ -60,7 +63,7 @@ namespace DataCommander.Providers.ResultWriter
             _cancellationToken = cancellationToken;
         }
 
-#region IResultWriter Members
+        #region IResultWriter Members
 
         void IResultWriter.Begin(IProvider provider)
         {
@@ -91,7 +94,7 @@ namespace DataCommander.Providers.ResultWriter
                 _setTransaction(_transaction);
             }
 
-            var sqlTransaction = (SqlTransaction)_transaction;
+            var sqlTransaction = (SqlTransaction) _transaction;
             _sqlBulkCopy = new SqlBulkCopy(_destinationSqlConnection, SqlBulkCopyOptions.Default, sqlTransaction);
             _sqlBulkCopy.BulkCopyTimeout = int.MaxValue;
             _sqlBulkCopy.DestinationTableName = _tableName;
@@ -102,7 +105,7 @@ namespace DataCommander.Providers.ResultWriter
         private void sqlBulkCopy_SqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
         {
             var message = $"{e.RowsCopied} rows copied to destination.";
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
+            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
 
             if (_cancellationToken.IsCancellationRequested)
             {
@@ -147,7 +150,7 @@ namespace DataCommander.Providers.ResultWriter
             }
 
             var message = $"{_insertedRowCount} rows inserted.";
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
+            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
         }
 
         private void Dequeue()
@@ -224,7 +227,7 @@ namespace DataCommander.Providers.ResultWriter
             _logResultWriter.WriteRows(rows, rowCount);
             _readRowCount += rowCount;
             var message = $"{_readRowCount} row(s) read.";
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message));
+            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
             var targetRows = new object[rowCount][];
             for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {
@@ -242,7 +245,7 @@ namespace DataCommander.Providers.ResultWriter
 
             _queue.Enqueue(queueItem);
             _enqueueEvent.Set();
-            
+
             while (!_cancellationToken.IsCancellationRequested && _queue.Count > 10)
             {
                 _cancellationToken.WaitHandle.WaitOne(500);
@@ -256,6 +259,11 @@ namespace DataCommander.Providers.ResultWriter
 
         void IResultWriter.WriteParameters(IDataParameterCollection parameters)
         {
+        }
+
+        void IResultWriter.WriteInfoMessages(IEnumerable<InfoMessage> infoMessages)
+        {
+            throw new NotImplementedException();
         }
 
         void IResultWriter.End()
@@ -272,7 +280,7 @@ namespace DataCommander.Providers.ResultWriter
             }
         }
 
-#endregion
+        #endregion
 
         private sealed class QueueItem
         {

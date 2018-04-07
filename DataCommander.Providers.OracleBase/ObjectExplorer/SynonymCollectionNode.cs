@@ -11,7 +11,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
     {
         public SynonymCollectionNode(SchemaNode schema)
         {
-            this._schema = schema;
+            _schema = schema;
         }
 
         public string Name => "Synonyms";

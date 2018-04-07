@@ -79,13 +79,10 @@ namespace DataCommander.Providers.Tfs
                     }
 
                     var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-                    queryForm.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, $"localPath: {localPath}"));
-
+                    queryForm.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, $"localPath: {localPath}"));
 
                     if (!VersionControlPath.IsValidPath(serverPath))
-                    {
                         throw new ArgumentException($"The parameter serverPath '{serverPath}' is invalid.");
-                    }
 
                     queue.Enqueue(item);
                 }

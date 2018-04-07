@@ -554,7 +554,7 @@ namespace DataCommander.Providers
                 var message = $@"Connection opened in {StopwatchTimeSpan.ToString(connectionForm.Duration, 3)} seconds.
 ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
-                var infoMessage = new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, message);
+                var infoMessage = new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message);
                 queryForm.AddInfoMessage(infoMessage);
 
                 queryForm.Show();

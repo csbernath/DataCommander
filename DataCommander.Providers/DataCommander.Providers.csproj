@@ -226,6 +226,7 @@
     <Compile Include="AsyncDataAdapterCommand.cs" />
     <Compile Include="Connection\ConnectionStringKeyword.cs" />
     <Compile Include="Connection\DbConnectionStringBuilderExtensions.cs" />
+    <Compile Include="Connection\InfoMessageFactory.cs" />
     <Compile Include="DataCommanderApplication.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -306,6 +307,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ResultWriter\ExcelResultWriter.cs" />
+    <Compile Include="ResultWriter\FieldType.cs" />
+    <Compile Include="ResultWriter\FieldTypeDictionary.cs" />
     <Compile Include="ResultWriter\HtmlEntity.cs" />
     <Compile Include="ResultWriter\MyDataObject.cs" />
     <Compile Include="ResultWriter\SqlBulkCopyResultWriter.cs" />

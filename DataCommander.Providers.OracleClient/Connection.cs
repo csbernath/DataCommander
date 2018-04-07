@@ -43,7 +43,7 @@ namespace DataCommander.Providers.OracleClient
             sb.Append("Source: ");
             sb.Append(e.Source);
 
-            InvokeInfoMessage(new InfoMessage[] {new InfoMessage(now, InfoMessageSeverity.Information, sb.ToString())});
+            InvokeInfoMessage(new[] {new InfoMessage(now, InfoMessageSeverity.Information, null, sb.ToString())});
         }
 
         public override string DataSource => oracleConnection.DataSource;

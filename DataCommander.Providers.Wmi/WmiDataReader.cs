@@ -18,7 +18,7 @@ namespace DataCommander.Providers.Wmi
         {
             Assert.IsNotNull(command);
 
-            this._command = command;
+            _command = command;
 
             var query = new ObjectQuery(command.CommandText);
             var searcher = new ManagementObjectSearcher(command.Connection.Scope, query);
@@ -132,7 +132,7 @@ namespace DataCommander.Providers.Wmi
 
         public int GetValues(object[] values)
         {
-            var baseObject = this._enumerator.Current;
+            var baseObject = _enumerator.Current;
             var enumerator = baseObject.Properties.GetEnumerator();
             var i = 0;
 

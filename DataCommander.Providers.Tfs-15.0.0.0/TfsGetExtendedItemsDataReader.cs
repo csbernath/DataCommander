@@ -1,40 +1,39 @@
 ﻿using Foundation;
 using Foundation.Assertions;
 using Foundation.Data;
+using System;
+using System.Data;
+using System.Linq;
+using DataCommander.Providers.Connection;
+using Microsoft.TeamFoundation.VersionControl.Client;
+using DataCommander.Providers.Query;
 
 namespace DataCommander.Providers.Tfs
 {
-    using System;
-    using System.Data;
-    using System.Linq;
-    using Connection;
-    using Microsoft.TeamFoundation.VersionControl.Client;
-    using Query;
-
     internal sealed class TfsGetExtendedItemsDataReader : TfsDataReader
     {
-        private readonly TfsCommand command;
-        private bool first = true;
-        private ExtendedItem[] items;
-        private int index;
+        private readonly TfsCommand _command;
+        private bool _first = true;
+        private ExtendedItem[] _items;
+        private int _index;
 
         public TfsGetExtendedItemsDataReader(TfsCommand command)
         {
             Assert.IsNotNull(command);
-            this.command = command;
+            _command = command;
         }
 
         public override DataTable GetSchemaTable()
         {
             var table = CreateSchemaTable();
-            AddSchemaRowString( table, "SourceServerItem", false );
-            AddSchemaRowString( table, "ChangeType", false );
-            AddSchemaRowString( table, "LockOwner", false );
-            AddSchemaRowString( table, "LockStatus", false );
-            AddSchemaRowBoolean( table, "IsLatest", false );
-            AddSchemaRowBoolean( table, "HasOtherPendingChange", false );
-            AddSchemaRowInt32( table, "VersionLatest", false );
-            AddSchemaRowInt32( table, "VersionLocal", false );
+            AddSchemaRowString(table, "SourceServerItem", false);
+            AddSchemaRowString(table, "ChangeType", false);
+            AddSchemaRowString(table, "LockOwner", false);
+            AddSchemaRowString(table, "LockStatus", false);
+            AddSchemaRowBoolean(table, "IsLatest", false);
+            AddSchemaRowBoolean(table, "HasOtherPendingChange", false);
+            AddSchemaRowInt32(table, "VersionLatest", false);
+            AddSchemaRowInt32(table, "VersionLocal", false);
             return table;
         }
 
@@ -42,39 +41,39 @@ namespace DataCommander.Providers.Tfs
         {
             bool read;
 
-            if (first)
+            if (_first)
             {
-                first = false;
-                var parameters = command.Parameters;
-                var path = (string) parameters[ "path" ].Value;
+                _first = false;
+                var parameters = _command.Parameters;
+                var path = (string) parameters["path"].Value;
                 RecursionType recursion;
-                var parameter = parameters.FirstOrDefault( p => p.ParameterName == "recursion" );
+                var parameter = parameters.FirstOrDefault(p => p.ParameterName == "recursion");
                 if (parameter != null)
                 {
-                    var recursionString = ValueReader.GetValueOrDefault<string>( parameter.Value );
-                    recursion = Enum<RecursionType>.Parse( recursionString );
-                    
+                    var recursionString = ValueReader.GetValueOrDefault<string>(parameter.Value);
+                    recursion = Enum<RecursionType>.Parse(recursionString);
+
                 }
                 else
                 {
                     recursion = RecursionType.Full;
                 }
 
-                var versionControlServer = command.Connection.VersionControlServer;
-                var workspaces = versionControlServer.QueryWorkspaces( null, null, Environment.MachineName );
+                var versionControlServer = _command.Connection.VersionControlServer;
+                var workspaces = versionControlServer.QueryWorkspaces(null, null, Environment.MachineName);
                 Workspace workspace = null;
                 WorkingFolder workingFolder = null;
 
                 foreach (var currentWorkspace in workspaces)
                 {
-                    workingFolder = currentWorkspace.TryGetWorkingFolderForServerItem( path );
+                    workingFolder = currentWorkspace.TryGetWorkingFolderForServerItem(path);
 
                     if (workingFolder != null)
                     {
                         workspace = currentWorkspace;
-                        var itemSpec = new ItemSpec( path, recursion );
-                        var extendedItems = currentWorkspace.GetExtendedItems( new ItemSpec[] { itemSpec }, DeletedState.Any, ItemType.Any );
-                        items = extendedItems[ 0 ];
+                        var itemSpec = new ItemSpec(path, recursion);
+                        var extendedItems = currentWorkspace.GetExtendedItems(new ItemSpec[] {itemSpec}, DeletedState.Any, ItemType.Any);
+                        _items = extendedItems[0];
                     }
                 }
 
@@ -95,13 +94,13 @@ namespace DataCommander.Providers.Tfs
                 }
 
                 var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-                queryForm.AddInfoMessage( new InfoMessage( LocalTime.Default.Now, InfoMessageSeverity.Information,
-                    $"\r\nworkspace.Name: {name}\r\nworkingFolder.LocalItem: {workingFolder.LocalItem}") );
+                queryForm.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null,
+                    $"\r\nworkspace.Name: {name}\r\nworkingFolder.LocalItem: {workingFolder.LocalItem}"));
             }
 
-            if (items != null && index < items.Length)
+            if (_items != null && _index < _items.Length)
             {
-                var item = items[index ];
+                var item = _items[_index];
 
                 var values = new object[]
                 {
@@ -117,18 +116,15 @@ namespace DataCommander.Providers.Tfs
 
                 Values = values;
                 read = true;
-                index++;
+                _index++;
             }
             else
-            {
                 read = false;
-            }
 
             return read;
         }
 
         public override int RecordsAffected => -1;
-
         public override int FieldCount => 8;
     }
 }

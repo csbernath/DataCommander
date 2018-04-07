@@ -2,7 +2,6 @@
 
 namespace DataCommander.Providers
 {
-    //[ContractClass(typeof (IAsyncDataAdapterContract))]
     internal interface IAsyncDataAdapter
     {
         IResultWriter ResultWriter { get; }

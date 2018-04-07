@@ -1,46 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.IO;
 using System.Text;
+using DataCommander.Providers.Connection;
 using DataCommander.Providers.Field;
 using DataCommander.Providers.Query;
 using Foundation.Assertions;
-using Foundation.Collections;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 using Foundation.Text;
 
 namespace DataCommander.Providers.ResultWriter
 {
-    internal enum FieldType
-    {
-        None,
-        Guid,
-        String,
-        StringArray,
-        BinaryField,
-        StringField,
-        DateTimeField,
-        StreamField
-    }
-
-    internal static class FieldTypeDictionary
-    {
-        static FieldTypeDictionary()
-        {
-            Instance.Add<Guid>(FieldType.Guid);
-            Instance.Add<string>(FieldType.String);
-            Instance.Add<string[]>(FieldType.StringArray);
-            Instance.Add<BinaryField>(FieldType.BinaryField);
-            Instance.Add<DateTimeField>(FieldType.DateTimeField);
-            Instance.Add<StreamField>(FieldType.StreamField);
-            Instance.Add<StringField>(FieldType.StringField);
-        }
-
-        public static TypeDictionary<FieldType> Instance { get; } = new TypeDictionary<FieldType>();
-    }
-
     internal sealed class InsertScriptFileWriter : IResultWriter
     {
         private readonly string _tableName;
@@ -176,7 +149,7 @@ namespace DataCommander.Providers.ResultWriter
                         break;
 
                     case FieldType.BinaryField:
-                        var binaryField = (BinaryField)value;
+                        var binaryField = (BinaryField) value;
                         var sb = new StringBuilder();
                         sb.Append("0x");
                         sb.Append(Hex.Encode(binaryField.Value, true));
@@ -184,12 +157,12 @@ namespace DataCommander.Providers.ResultWriter
                         break;
 
                     case FieldType.StringField:
-                        var stringField = (StringField)value;
+                        var stringField = (StringField) value;
                         s = stringField.Value.ToTSqlNVarChar();
                         break;
 
                     case FieldType.DateTimeField:
-                        var dateTimeField = (DateTimeField)value;
+                        var dateTimeField = (DateTimeField) value;
                         s = dateTimeField.Value.ToTSqlDateTime();
                         break;
 
@@ -203,12 +176,12 @@ namespace DataCommander.Providers.ResultWriter
                                 break;
 
                             case TypeCode.Boolean:
-                                var b = (bool)value;
+                                var b = (bool) value;
                                 s = b ? "1" : "0";
                                 break;
 
                             case TypeCode.Decimal:
-                                var d = (decimal)value;
+                                var d = (decimal) value;
                                 s = d.ToString(QueryForm.NumberFormat);
                                 break;
 
@@ -227,7 +200,7 @@ namespace DataCommander.Providers.ResultWriter
                                 break;
 
                             case TypeCode.String:
-                                s = (string)value;
+                                s = (string) value;
 
                                 if (s == "NULL")
                                 {
@@ -237,6 +210,7 @@ namespace DataCommander.Providers.ResultWriter
                                 {
                                     s = s.ToTSqlNVarChar();
                                 }
+
                                 break;
 
                             default:
@@ -260,8 +234,10 @@ namespace DataCommander.Providers.ResultWriter
                                         s = value.ToString();
                                     }
                                 }
+
                                 break;
                         }
+
                         break;
                 }
             }
@@ -273,7 +249,7 @@ namespace DataCommander.Providers.ResultWriter
             return s;
         }
 
-#region IResultWriter Members
+        #region IResultWriter Members
 
         void IResultWriter.Begin(IProvider provider)
         {
@@ -306,7 +282,7 @@ namespace DataCommander.Providers.ResultWriter
                 }
 
                 var schemaRow = schemaRows[columnIndex];
-                var columnName = (string)schemaRow[SchemaTableColumn.ColumnName];
+                var columnName = (string) schemaRow[SchemaTableColumn.ColumnName];
                 sb.Append(columnName);
             }
 
@@ -387,10 +363,15 @@ namespace DataCommander.Providers.ResultWriter
             // TODO
         }
 
+        void IResultWriter.WriteInfoMessages(IEnumerable<InfoMessage> infoMessages)
+        {
+            throw new NotImplementedException();
+        }
+
         void IResultWriter.End()
         {
         }
 
-#endregion
+        #endregion
     }
 }

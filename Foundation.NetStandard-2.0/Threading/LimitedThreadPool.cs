@@ -30,7 +30,7 @@
             Contract.Requires(maxThreadCount > 0);
 #endif
             this.maxThreadCount = maxThreadCount;
-            this.availableThreadCount = maxThreadCount;
+            availableThreadCount = maxThreadCount;
         }
 
         /// <summary>
@@ -40,7 +40,7 @@
         {
             get
             {
-                return this.queue.Count;
+                return queue.Count;
             }
         }
 
@@ -51,7 +51,7 @@
         {
             get
             {
-                return this.availableThreadCount;
+                return availableThreadCount;
             }
         }
 
@@ -70,16 +70,16 @@
 #endif
             var item = Tuple.Create(waitCallback, state);
             Boolean succeeded;
-            if (this.availableThreadCount > 0)
+            if (availableThreadCount > 0)
             {
-                Interlocked.Decrement(ref this.availableThreadCount);
-                succeeded = ThreadPool.QueueUserWorkItem(this.Callback, item);
+                Interlocked.Decrement(ref availableThreadCount);
+                succeeded = ThreadPool.QueueUserWorkItem(Callback, item);
             }
             else
             {
-                lock (this.queue)
+                lock (queue)
                 {
-                    this.queue.Enqueue(item);
+                    queue.Enqueue(item);
                 }
 
                 succeeded = true;
@@ -93,15 +93,15 @@
         /// </summary>
         public void Pulse()
         {
-            if (this.queue.Count > 0 && this.availableThreadCount > 0)
+            if (queue.Count > 0 && availableThreadCount > 0)
             {
-                lock (this.queue)
+                lock (queue)
                 {
-                    while (this.queue.Count > 0 && this.availableThreadCount > 0)
+                    while (queue.Count > 0 && availableThreadCount > 0)
                     {
-                        var item = this.queue.Dequeue();
-                        Boolean succeeded = ThreadPool.QueueUserWorkItem(this.Callback, item);
-                        Interlocked.Decrement(ref this.availableThreadCount);
+                        var item = queue.Dequeue();
+                        Boolean succeeded = ThreadPool.QueueUserWorkItem(Callback, item);
+                        Interlocked.Decrement(ref availableThreadCount);
                     }
                 }
             }
@@ -118,8 +118,8 @@
             }
             finally
             {
-                Interlocked.Increment(ref this.availableThreadCount);
-                this.Pulse();
+                Interlocked.Increment(ref availableThreadCount);
+                Pulse();
             }
         }
     }

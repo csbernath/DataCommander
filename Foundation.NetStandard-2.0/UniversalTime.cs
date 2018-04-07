@@ -33,8 +33,8 @@ namespace Foundation
             FoundationContract.Requires<ArgumentOutOfRangeException>(increment >= 0);
             FoundationContract.Requires<ArgumentOutOfRangeException>(increment <= adjustment);
 
-            this._increment = increment;
-            this._adjustment = adjustment;
+            _increment = increment;
+            _adjustment = adjustment;
 
             _sharedDateTime = DateTime.Now;
 

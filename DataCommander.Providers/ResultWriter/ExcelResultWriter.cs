@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -96,6 +97,11 @@ namespace DataCommander.Providers.ResultWriter
 
         void IResultWriter.WriteParameters(IDataParameterCollection parameters)
         {
+        }
+
+        void IResultWriter.WriteInfoMessages(IEnumerable<InfoMessage> infoMessages)
+        {
+            throw new NotImplementedException();
         }
 
         void IResultWriter.End()

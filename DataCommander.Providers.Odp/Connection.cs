@@ -37,22 +37,21 @@ namespace DataCommander.Providers.Odp
             }
         }
 
-        private void OnInfoMessage( object sender, OracleInfoMessageEventArgs e )
+        private void OnInfoMessage(object sender, OracleInfoMessageEventArgs e)
         {
             var now = LocalTime.Default.Now;
 
             var sb = new StringBuilder();
-            sb.AppendLine( e.Message );
-            sb.Append( "Source: " );
-            sb.Append( e.Source );
+            sb.AppendLine(e.Message);
+            sb.Append("Source: ");
+            sb.Append(e.Source);
 
-            InvokeInfoMessage( new InfoMessage[] { new InfoMessage( now, InfoMessageSeverity.Information, sb.ToString() ) } );
+            InvokeInfoMessage(new[] {new InfoMessage(now, InfoMessageSeverity.Information, null, sb.ToString())});
         }
 
         public override string ConnectionName
         {
             get => _connectionName;
-
             set => _connectionName = value;
         }
 

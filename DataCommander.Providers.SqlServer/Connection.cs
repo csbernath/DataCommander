@@ -48,7 +48,7 @@ namespace DataCommander.Providers.SqlServer
             var text = $"Connection.State changed. OriginalState: {e.OriginalState}, CurrentState: {e.CurrentState}";
             InvokeInfoMessage(new[]
             {
-                new InfoMessage(now, InfoMessageSeverity.Information, text)
+                new InfoMessage(now, InfoMessageSeverity.Information, null, text)
             });
         }
 

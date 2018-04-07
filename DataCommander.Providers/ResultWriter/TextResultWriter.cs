@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.ResultWriter
+﻿using System.Collections.Generic;
+
+namespace DataCommander.Providers.ResultWriter
 {
     using System;
     using System.Data;
@@ -444,8 +446,12 @@
 
         public void WriteParameters(IDataParameterCollection parameters)
         {
-
             WriteParameters(parameters, _textWriter, _queryForm);
+        }
+
+        void IResultWriter.WriteInfoMessages(IEnumerable<InfoMessage> infoMessages)
+        {
+            throw new NotImplementedException();
         }
 
         public void WriteEnd()

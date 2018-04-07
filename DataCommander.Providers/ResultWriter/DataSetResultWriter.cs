@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.ResultWriter
+﻿using System.Collections.Generic;
+
+namespace DataCommander.Providers.ResultWriter
 {
     using System;
     using System.Data;
@@ -112,6 +114,11 @@
         void IResultWriter.WriteParameters(IDataParameterCollection parameters)
         {
             // TODO TextResultWriter.WriteParameters(parameters, textWriter, queryForm);
+        }
+
+        void IResultWriter.WriteInfoMessages(IEnumerable<InfoMessage> infoMessages)
+        {
+            _logResultWriter.WriteInfoMessages(infoMessages);
         }
 
         void IResultWriter.End()

@@ -69,9 +69,7 @@ namespace DataCommander.Providers.Connection
         protected void InvokeInfoMessage(IEnumerable<InfoMessage> messages)
         {
             if (InfoMessage != null)
-            {
                 InfoMessage(messages);
-            }
         }
 
         protected void InvokeDatabaseChanged(string database)

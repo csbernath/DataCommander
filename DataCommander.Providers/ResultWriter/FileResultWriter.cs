@@ -1,4 +1,6 @@
-﻿using Foundation.Diagnostics.Contracts;
+﻿using System.Collections.Generic;
+using DataCommander.Providers.Connection;
+using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.ResultWriter
 {
@@ -22,7 +24,7 @@ namespace DataCommander.Providers.ResultWriter
             _messageWriter = messageWriter;
         }
 
-#region IResultWriter Members
+        #region IResultWriter Members
 
         void IResultWriter.Begin(IProvider provider)
         {
@@ -56,7 +58,7 @@ namespace DataCommander.Providers.ResultWriter
             {
                 DataWriterBase dataWriter = null;
                 var column = schemaTable.Rows[i];
-                var dataType = (Type)column["DataType"];
+                var dataType = (Type) column["DataType"];
                 var typeCode = Type.GetTypeCode(dataType);
                 string dataTypeName;
                 int length;
@@ -78,8 +80,8 @@ namespace DataCommander.Providers.ResultWriter
                         break;
 
                     case TypeCode.Decimal:
-                        var precision = (short)column["NumericPrecision"];
-                        var scale = (short)column["NumericScale"];
+                        var precision = (short) column["NumericPrecision"];
+                        var scale = (short) column["NumericScale"];
                         length = precision + 1; // +/- sign
 
                         // decimal separator
@@ -112,7 +114,7 @@ namespace DataCommander.Providers.ResultWriter
                         break;
 
                     case TypeCode.String:
-                        length = (int)column["ColumnSize"];
+                        length = (int) column["ColumnSize"];
                         length = Math.Min(1024, length);
                         dataTypeName = $"varchar({length})";
                         dataWriter = new StringDataWriter();
@@ -120,7 +122,7 @@ namespace DataCommander.Providers.ResultWriter
                         break;
 
                     case TypeCode.Object:
-                        if (dataType == typeof (Guid))
+                        if (dataType == typeof(Guid))
                         {
                             length = Guid.Empty.ToString().Length;
                             dataTypeName = "uniqueidentifier";
@@ -139,7 +141,7 @@ namespace DataCommander.Providers.ResultWriter
                 _dataWriters[i] = dataWriter;
 
                 var row = st.NewRow();
-                row[0] = (string)column[SchemaTableColumn.ColumnName];
+                row[0] = (string) column[SchemaTableColumn.ColumnName];
                 row[1] = dataTypeName;
                 row[2] = length.ToString();
                 st.Rows.Add(row);
@@ -190,6 +192,11 @@ namespace DataCommander.Providers.ResultWriter
             // TODO:  Add FileResultWriter.WriteParameters implementation
         }
 
+        void IResultWriter.WriteInfoMessages(IEnumerable<InfoMessage> infoMessages)
+        {
+            throw new NotImplementedException();
+        }
+
         public void WriteEnd()
         {
             // TODO:  Add FileResultWriter.WriteEnd implementation
@@ -199,6 +206,6 @@ namespace DataCommander.Providers.ResultWriter
         {
         }
 
-#endregion
+        #endregion
     }
 }

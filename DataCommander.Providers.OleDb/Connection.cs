@@ -29,11 +29,11 @@ namespace DataCommander.Providers.OleDb
 
         public override string Caption => oledbConnection.ConnectionString;
 
-        void OnInfoMessage( object sender, OleDbInfoMessageEventArgs e )
+        void OnInfoMessage(object sender, OleDbInfoMessageEventArgs e)
         {
             var now = LocalTime.Default.Now;
             var text = e.Message;
-            InvokeInfoMessage( new InfoMessage[] { new InfoMessage( now, InfoMessageSeverity.Information, text ) } );
+            InvokeInfoMessage(new[] {new InfoMessage(now, InfoMessageSeverity.Information, null, text)});
         }
 
         public override string DataSource => oledbConnection.DataSource;

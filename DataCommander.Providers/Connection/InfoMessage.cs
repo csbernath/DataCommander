@@ -1,23 +1,20 @@
-﻿namespace DataCommander.Providers.Connection
-{
-    using System;
+﻿using System;
 
+namespace DataCommander.Providers.Connection
+{
     public sealed class InfoMessage
     {
-        public InfoMessage(
-            DateTime creationTime,
-            InfoMessageSeverity severity,
-            string message)
+        public readonly DateTime CreationTime;
+        public readonly InfoMessageSeverity Severity;
+        public readonly string Header;
+        public readonly string Message;
+
+        public InfoMessage(DateTime creationTime, InfoMessageSeverity severity, string header, string message)
         {
             CreationTime = creationTime;
             Severity = severity;
+            Header = header;
             Message = message;
         }
-
-        public DateTime CreationTime { get; }
-
-        public InfoMessageSeverity Severity { get; }
-
-        public string Message { get; }
     }
 }

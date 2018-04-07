@@ -6,9 +6,14 @@ namespace Foundation.Data
 {
     public sealed class OrmBuilder
     {
+        private readonly string _commandText;
         private readonly ReadOnlyCollection<OrmResult> _results;
 
-        public OrmBuilder(ReadOnlyCollection<OrmResult> results) => _results = results;
+        public OrmBuilder(string commandText, ReadOnlyCollection<OrmResult> results)
+        {
+            _commandText = commandText;
+            _results = results;
+        }
 
         public string ToString(bool properties)
         {
@@ -37,7 +42,8 @@ namespace Foundation.Data
                 stringBuilder.Append(resultClass);
             }
 
-            stringBuilder.Append("\r\n\r\npublic class SqlQueryHandler\r\n{\r\n\r\n");
+            stringBuilder.Append("\r\n\r\npublic class SqlQueryHandler\r\n{\r\n");
+            stringBuilder.Append($"    private const string CommandText = @\"{_commandText}\";\r\n");
             stringBuilder.Append("    private readonly IDbConnection _connection;\r\n");
             stringBuilder.Append("    private readonly IDbTransaction _transaction;\r\n\r\n");
             stringBuilder.Append("    public SqlQueryHandler(IDbconnection connection, IDbTransaction transaction)\r\n");
@@ -47,7 +53,7 @@ namespace Foundation.Data
             stringBuilder.Append("    }\r\n\r\n");
             stringBuilder.Append("    public SqlQueryResult Handle()\r\n    {\r\n");
             stringBuilder.Append("        var executor = _connection.CreateCommandExecutor();\r\n");
-            stringBuilder.Append("        executor.ExecuteReader(new ExecuteReaderRequest(null,null,_transaction), dataReader =>\r\n");
+            stringBuilder.Append("        executor.ExecuteReader(new ExecuteReaderRequest(CommandText, null, _transaction), dataReader =>\r\n");
             stringBuilder.Append("        {\r\n");
 
             sequence.Reset();
