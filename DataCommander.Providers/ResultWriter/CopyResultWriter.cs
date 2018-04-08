@@ -275,11 +275,6 @@ namespace DataCommander.Providers.ResultWriter
         {
         }
 
-        void IResultWriter.WriteInfoMessages(IEnumerable<InfoMessage> infoMessages)
-        {
-            throw new NotImplementedException();
-        }
-
         void IResultWriter.End()
         {
             _logResultWriter.End();

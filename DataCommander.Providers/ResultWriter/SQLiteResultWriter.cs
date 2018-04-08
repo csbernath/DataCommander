@@ -222,10 +222,6 @@ namespace DataCommander.Providers.ResultWriter
         void IResultWriter.WriteParameters(IDataParameterCollection parameters)
         {
         }
-        void IResultWriter.WriteInfoMessages(IEnumerable<InfoMessage> infoMessages)
-        {
-            throw new NotImplementedException();
-        }
 
         void IResultWriter.End()
         {

@@ -1462,7 +1462,6 @@ namespace DataCommander.Providers.Query
         private void Connection_InfoMessage(IEnumerable<InfoMessage> messages)
         {
             AddInfoMessages(messages);
-            _dataAdapter.ResultWriter.WriteInfoMessages(messages);
         }
 
         internal static string DbValue(object value)

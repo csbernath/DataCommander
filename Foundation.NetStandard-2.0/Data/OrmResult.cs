@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 
 namespace Foundation.Data
 {
     public sealed class OrmResult
     {
-        public readonly string RecordTypeName;
-        public readonly IReadOnlyCollection<OrmColumn> Columns;
+        public readonly string RecordClassName;
+        public readonly ReadOnlyCollection<OrmColumn> Columns;
 
-        public OrmResult(string recordTypeName, IReadOnlyCollection<OrmColumn> columns)
+        public OrmResult(string recordClassName, ReadOnlyCollection<OrmColumn> columns)
         {
-            RecordTypeName = recordTypeName;
+            RecordClassName = recordClassName;
             Columns = columns;
         }
     }

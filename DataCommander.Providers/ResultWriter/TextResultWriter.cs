@@ -1,18 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Data;
+using System.Data.Common;
+using System.IO;
+using System.Text;
+using DataCommander.Providers.Connection;
+using DataCommander.Providers.Query;
+using Foundation.Data.SqlClient;
+using Foundation.Diagnostics.MethodProfiler;
+using Foundation.Text;
 
 namespace DataCommander.Providers.ResultWriter
 {
-    using System;
-    using System.Data;
-    using System.Data.Common;
-    using System.IO;
-    using System.Text;
-    using Connection;
-    using Foundation.Data.SqlClient;
-    using Foundation.Diagnostics.MethodProfiler;
-    using Foundation.Text;
-    using Query;
-
     internal sealed class TextResultWriter : IResultWriter
     {
         private readonly IResultWriter _logResultWriter;
@@ -22,10 +20,7 @@ namespace DataCommander.Providers.ResultWriter
         private int _rowIndex;
         private IProvider _provider;
 
-        public TextResultWriter(
-            Action<InfoMessage> addInfoMessage,
-            TextWriter textWriter,
-            QueryForm queryForm)
+        public TextResultWriter(Action<InfoMessage> addInfoMessage, TextWriter textWriter, QueryForm queryForm)
         {
             _logResultWriter = new LogResultWriter(addInfoMessage);
             _textWriter = textWriter;
@@ -38,20 +33,9 @@ namespace DataCommander.Providers.ResultWriter
             _provider = provider;
         }
 
-        void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command)
-        {
-            _logResultWriter.BeforeExecuteReader(command);
-        }
-
-        void IResultWriter.AfterExecuteReader(int fieldCount)
-        {
-            _logResultWriter.AfterExecuteReader(fieldCount);
-        }
-
-        void IResultWriter.AfterCloseReader(int affectedRows)
-        {
-            _logResultWriter.AfterCloseReader(affectedRows);
-        }
+        void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command) => _logResultWriter.BeforeExecuteReader(command);
+        void IResultWriter.AfterExecuteReader(int fieldCount) => _logResultWriter.AfterExecuteReader(fieldCount);
+        void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);
 
         private void Write(
             StringBuilder sb,
@@ -75,7 +59,7 @@ namespace DataCommander.Providers.ResultWriter
             }
         }
 
-        public void WriteTableBegin(DataTable schemaTable)
+        void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
             _logResultWriter.WriteTableBegin(schemaTable);
 
@@ -95,9 +79,9 @@ namespace DataCommander.Providers.ResultWriter
                 for (var i = 0; i < fieldCount; i++)
                 {
                     var schemaRow = schemaTable.Rows[i];
-                    var columnName = (string)schemaRow[columnNameColumn];
-                    var type = (Type)schemaRow[dataTypeColumn];
-                    var numOfBytes = (int)schemaRow[columnSizeColumn];
+                    var columnName = (string) schemaRow[columnNameColumn];
+                    var type = (Type) schemaRow[dataTypeColumn];
+                    var numOfBytes = (int) schemaRow[columnSizeColumn];
 
                     Type elementType;
 
@@ -124,7 +108,7 @@ namespace DataCommander.Providers.ResultWriter
                         case TypeCode.Byte:
                             if (type.IsArray)
                             {
-                                numOfChars = Math.Min(100, numOfBytes)*2 + 2;
+                                numOfChars = Math.Min(100, numOfBytes) * 2 + 2;
                             }
                             else
                             {
@@ -151,7 +135,7 @@ namespace DataCommander.Providers.ResultWriter
 
                         case TypeCode.Decimal:
                             //numOfChars = numOfBytes;
-                            var precision = (short)schemaRow["NumericPrecision"];
+                            var precision = (short) schemaRow["NumericPrecision"];
                             var scale = schemaRow.Field<short>("NumericScale");
                             numOfChars = precision + 3;
                             break;
@@ -165,7 +149,7 @@ namespace DataCommander.Providers.ResultWriter
                             break;
 
                         default:
-                            if (elementType == typeof (Guid))
+                            if (elementType == typeof(Guid))
                             {
                                 numOfChars = Guid.Empty.ToString().Length;
                             }
@@ -224,7 +208,7 @@ namespace DataCommander.Providers.ResultWriter
                 {
                     if (typeCode == TypeCode.Byte)
                     {
-                        var bytes = (byte[])value;
+                        var bytes = (byte[]) value;
                         var sb = new StringBuilder();
                         sb.Append("0x");
 
@@ -252,7 +236,7 @@ namespace DataCommander.Providers.ResultWriter
                             break;
 
                         case TypeCode.DateTime:
-                            var dateTime = (DateTime)value;
+                            var dateTime = (DateTime) value;
                             stringValue = dateTime.ToString("yyyy.MM.dd HH:mm:ss.fff");
                             break;
 
@@ -267,15 +251,8 @@ namespace DataCommander.Providers.ResultWriter
             return stringValue;
         }
 
-        public void FirstRowReadBegin()
-        {
-            _logResultWriter.FirstRowReadBegin();
-        }
-
-        public void FirstRowReadEnd(string[] dataTypeNames)
-        {
-            _logResultWriter.FirstRowReadEnd(dataTypeNames);
-        }
+        void IResultWriter.FirstRowReadBegin() => _logResultWriter.FirstRowReadBegin();
+        void IResultWriter.FirstRowReadEnd(string[] dataTypeNames) => _logResultWriter.FirstRowReadEnd(dataTypeNames);
 
         public void WriteRows(object[][] rows, int rowCount)
         {
@@ -311,10 +288,7 @@ namespace DataCommander.Providers.ResultWriter
             }
         }
 
-        public void WriteTableEnd()
-        {
-            _logResultWriter.WriteTableEnd();
-        }
+        void IResultWriter.WriteTableEnd() => _logResultWriter.WriteTableEnd();
 
         public static void WriteParameters(
             IDataParameterCollection parameters,
@@ -344,7 +318,7 @@ namespace DataCommander.Providers.ResultWriter
                         switch (parameter.DbType)
                         {
                             case DbType.DateTime:
-                                var dateTime = (DateTime)value;
+                                var dateTime = (DateTime) value;
                                 valueString = dateTime.ToTSqlDateTime();
                                 break;
 
@@ -444,23 +418,7 @@ namespace DataCommander.Providers.ResultWriter
             }
         }
 
-        public void WriteParameters(IDataParameterCollection parameters)
-        {
-            WriteParameters(parameters, _textWriter, _queryForm);
-        }
-
-        void IResultWriter.WriteInfoMessages(IEnumerable<InfoMessage> infoMessages)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void WriteEnd()
-        {
-        }
-
-        void IResultWriter.End()
-        {
-            _logResultWriter.End();
-        }
+        void IResultWriter.WriteParameters(IDataParameterCollection parameters) => WriteParameters(parameters, _textWriter, _queryForm);
+        void IResultWriter.End() => _logResultWriter.End();
     }
 }

@@ -363,11 +363,6 @@ namespace DataCommander.Providers.ResultWriter
             // TODO
         }
 
-        void IResultWriter.WriteInfoMessages(IEnumerable<InfoMessage> infoMessages)
-        {
-            throw new NotImplementedException();
-        }
-
         void IResultWriter.End()
         {
         }

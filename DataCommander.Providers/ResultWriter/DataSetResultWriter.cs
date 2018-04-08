@@ -116,11 +116,6 @@ namespace DataCommander.Providers.ResultWriter
             // TODO TextResultWriter.WriteParameters(parameters, textWriter, queryForm);
         }
 
-        void IResultWriter.WriteInfoMessages(IEnumerable<InfoMessage> infoMessages)
-        {
-            _logResultWriter.WriteInfoMessages(infoMessages);
-        }
-
         void IResultWriter.End()
         {
             _logResultWriter.End();

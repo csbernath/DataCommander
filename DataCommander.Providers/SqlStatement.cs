@@ -36,7 +36,6 @@ namespace DataCommander.Providers
         #region Public Properties
 
         public IDictionary<string, string> Tables { get; }
-
         public Token[] Tokens { get; }
 
         #endregion
@@ -55,12 +54,10 @@ namespace DataCommander.Providers
                 var firstToken = Tokens[0];
                 var startTokenIndex = 0;
                 var isVbScript = false;
-                string query2 = null;
 
                 if (firstToken.Type == TokenType.KeyWord)
                 {
                     var keyWord = firstToken.Value.ToLower();
-                    query2 = _text;
 
                     switch (keyWord)
                     {
@@ -92,7 +89,7 @@ namespace DataCommander.Providers
                 switch (commandType2)
                 {
                     case CommandType.Text:
-                        command.CommandText = query2;
+                        command.CommandText = _text;
                         break;
 
                     default:
@@ -102,9 +99,7 @@ namespace DataCommander.Providers
                             //command.CommandText = commandText;
                         }
                         else
-                        {
                             command.CommandText = Tokens[startTokenIndex].Value;
-                        }
 
                         startTokenIndex++;
                         provider.DeriveParameters(command);
@@ -121,15 +116,13 @@ namespace DataCommander.Providers
                                 tokenList.Clear();
                             }
                             else
-                            {
                                 tokenList.Add(token);
-                            }
+
                             i++;
                         }
+
                         if (tokenList.Count > 0)
-                        {
                             parameters.Add(ToParameter(tokenList));
-                        }
 
                         var defaultValues = new List<IDataParameter>();
                         foreach (IDataParameter parameter in command.Parameters)
@@ -145,36 +138,29 @@ namespace DataCommander.Providers
                                     {
                                         first = parameters.FirstOrDefault(p => p.Name == null);
                                         if (first != null)
-                                        {
                                             parameters.Remove(first);
-                                        }
                                     }
+
                                     if (first != null)
                                     {
                                         var value = GetParameterValue(dataParameter, first.Value);
                                         if (value != null)
-                                        {
                                             parameter.Value = value;
-                                        }
                                         else
-                                        {
                                             defaultValues.Add(parameter);
-                                        }
                                     }
+
                                     break;
                             }
                         }
+
                         foreach (var parameter in defaultValues)
-                        {
                             command.Parameters.Remove(parameter);
-                        }
                         break;
                 }
             }
             else
-            {
                 command.CommandText = _text;
-            }
 
             return command;
         }

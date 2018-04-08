@@ -17,7 +17,6 @@ namespace DataCommander.Providers.ResultWriter
         void WriteRows(object[][] rows, int rowCount);
         void WriteTableEnd();
         void WriteParameters(IDataParameterCollection parameters);
-        void WriteInfoMessages(IEnumerable<InfoMessage> infoMessages);
         void End();
     }
 }

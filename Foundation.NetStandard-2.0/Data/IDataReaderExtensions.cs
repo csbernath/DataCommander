@@ -7,9 +7,6 @@ using Foundation.Assertions;
 
 namespace Foundation.Data
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class IDataReaderExtensions
     {
         public static void ReadResult(this IDataReader dataReader, Action readRecord)
@@ -28,7 +25,7 @@ namespace Foundation.Data
             }
         }
 
-        public static List<T> ReadResult<T>(this IDataReader dataReader, Func<IDataReader, T> readRecord)
+        public static List<T> ReadResult<T>(this IDataReader dataReader, Func<IDataRecord, T> readRecord)
         {
             var records = new List<T>();
 
@@ -41,7 +38,7 @@ namespace Foundation.Data
             return records;
         }
 
-        public static List<T> ReadNextResult<T>(this IDataReader dataReader, Func<IDataReader, T> readRecord)
+        public static List<T> ReadNextResult<T>(this IDataReader dataReader, Func<IDataRecord, T> readRecord)
         {
             var nextResult = dataReader.NextResult();
             Assert.IsTrue(nextResult);
@@ -95,11 +92,6 @@ namespace Foundation.Data
             return ExecuteReaderResponse.Create(result1, result2, result3);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataReader"></param>
-        /// <returns></returns>
         public static IEnumerable<IDataReader> AsEnumerable(this IDataReader dataReader)
         {
             Assert.IsNotNull(dataReader);
@@ -108,13 +100,6 @@ namespace Foundation.Data
                 yield return dataReader;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataReader"></param>
-        /// <param name="dataSet"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
         public static int Fill(this IDataReader dataReader, DataSet dataSet, CancellationToken cancellationToken)
         {
             Assert.IsNotNull(dataReader);
@@ -142,13 +127,6 @@ namespace Foundation.Data
             return rowCount;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataReader"></param>
-        /// <param name="dataTable"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
         public static int Fill(this IDataReader dataReader, DataTable dataTable, CancellationToken cancellationToken)
         {
             Assert.IsNotNull(dataReader);

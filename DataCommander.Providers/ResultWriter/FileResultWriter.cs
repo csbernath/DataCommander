@@ -192,11 +192,6 @@ namespace DataCommander.Providers.ResultWriter
             // TODO:  Add FileResultWriter.WriteParameters implementation
         }
 
-        void IResultWriter.WriteInfoMessages(IEnumerable<InfoMessage> infoMessages)
-        {
-            throw new NotImplementedException();
-        }
-
         public void WriteEnd()
         {
             // TODO:  Add FileResultWriter.WriteEnd implementation

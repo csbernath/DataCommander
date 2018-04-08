@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,8 @@ namespace Foundation.Linq
     {
         public static bool CountIsGreaterThan<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate, int count)
         {
+            Assert.IsNotNull(source);
+
             var countIsGreaterThan = false;
             var filteredCount = 0;
 
@@ -35,76 +38,10 @@ namespace Foundation.Linq
             return countIsGreaterThan;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
         [Pure]
-        public static IEnumerable<TSource> EmptyIfNull<TSource>(this IEnumerable<TSource> source)
-        {
-            return source ?? Enumerable.Empty<TSource>();
-        }
+        public static IEnumerable<TSource> EmptyIfNull<TSource>(this IEnumerable<TSource> source) => source ?? Enumerable.Empty<TSource>();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        [Pure]
-        public static IEnumerable<PreviousAndCurrent<TSource>> SelectPreviousAndCurrent<TSource>(this IEnumerable<TSource> source)
-        {
-            if (source != null)
-            {
-                using (var enumerator = source.GetEnumerator())
-                {
-                    if (enumerator.MoveNext())
-                    {
-                        var previous = enumerator.Current;
-                        while (enumerator.MoveNext())
-                        {
-                            var current = enumerator.Current;
-                            yield return new PreviousAndCurrent<TSource>(previous, current);
-                            previous = current;
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <typeparam name="TKey"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="keySelector"></param>
-        /// <returns></returns>
-        [Pure]
-        public static IEnumerable<PreviousAndCurrent<TKey>> SelectPreviousAndCurrentKey<TSource, TKey>(
-            this IEnumerable<TSource> source,
-            Func<TSource, TKey> keySelector)
-        {
-            Assert.IsNotNull(source);
-            Assert.IsNotNull(keySelector);
-
-            return source.Select(keySelector).SelectPreviousAndCurrent();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="count"></param>
-        /// <param name="partitionCount"></param>
-        /// <returns></returns>
-        public static IEnumerable<List<TSource>> GetPartitions<TSource>(
-            this IEnumerable<TSource> source,
-            int count,
-            int partitionCount)
+        public static IEnumerable<List<TSource>> GetPartitions<TSource>(this IEnumerable<TSource> source, int count, int partitionCount)
         {
             Assert.IsNotNull(source);
             FoundationContract.Requires<ArgumentOutOfRangeException>(count >= 0);
@@ -131,21 +68,19 @@ namespace Foundation.Linq
                     {
                         var partition = enumerator.Take(currentPartitionSize);
                         if (partition.Count > 0)
-                        {
                             yield return partition;
-                        }
                         else
-                        {
                             break;
-                        }
                     }
                     else
-                    {
                         break;
-                    }
                 }
             }
         }
+
+        public static bool IsNullOrEmpty<TSource>(this IEnumerable<TSource> source) => source == null || !source.Any();
+
+        public static IOrderedEnumerable<TSource> OrderBy<TSource>(this IEnumerable<TSource> source) => source.OrderBy(IdentityFunction<TSource>.Instance);
 
         public static LinerSearchResult<TSource, TResult> LinearSearch<TSource, TResult>(
             this IEnumerable<TSource> source,
@@ -193,29 +128,34 @@ namespace Foundation.Linq
         /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static bool IsNullOrEmpty<TSource>(this IEnumerable<TSource> source)
+        [Pure]
+        public static IEnumerable<PreviousAndCurrent<TSource>> SelectPreviousAndCurrent<TSource>(this IEnumerable<TSource> source)
         {
-            return source == null || !source.Any();
+            if (source != null)
+                using (var enumerator = source.GetEnumerator())
+                    if (enumerator.MoveNext())
+                    {
+                        var previous = enumerator.Current;
+                        while (enumerator.MoveNext())
+                        {
+                            var current = enumerator.Current;
+                            yield return new PreviousAndCurrent<TSource>(previous, current);
+                            previous = current;
+                        }
+                    }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static IOrderedEnumerable<TSource> OrderBy<TSource>(this IEnumerable<TSource> source)
+        [Pure]
+        public static IEnumerable<PreviousAndCurrent<TKey>> SelectPreviousAndCurrentKey<TSource, TKey>(
+            this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector)
         {
-            return source.OrderBy(IdentityFunction<TSource>.Instance);
+            Assert.IsNotNull(source);
+            Assert.IsNotNull(keySelector);
+
+            return source.Select(keySelector).SelectPreviousAndCurrent();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="isSeparator"></param>
-        /// <returns></returns>
         public static IEnumerable<TSource[]> Split<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> isSeparator)
         {
             var list = new List<TSource>();
@@ -227,25 +167,13 @@ namespace Foundation.Linq
                     list = new List<TSource>();
                 }
                 else
-                {
                     list.Add(item);
-                }
             }
 
             if (list.Count > 0)
-            {
                 yield return list.ToArray();
-            }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="initialSize"></param>
-        /// <param name="maxSize"></param>
-        /// <returns></returns>
         public static DynamicArray<TSource> ToDynamicArray<TSource>(this IEnumerable<TSource> source, int initialSize, int maxSize)
         {
             var dynamicArray = new DynamicArray<TSource>(initialSize, maxSize);
@@ -253,13 +181,6 @@ namespace Foundation.Linq
             return dynamicArray;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="toString"></param>
-        /// <returns></returns>
         public static string ToLogString<TSource>(this IEnumerable<TSource> source, Func<TSource, string> toString)
         {
             var sb = new StringBuilder();
@@ -278,13 +199,12 @@ namespace Foundation.Linq
             return sb.ToString();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="segmentSize"></param>
-        /// <returns></returns>
+        public static ReadOnlyCollection<TSource> ToReadOnlyCollection<TSource>(this IEnumerable<TSource> source)
+        {
+            Assert.IsNotNull(source);
+            return new ReadOnlyCollection<TSource>(source.ToList());
+        }
+
         public static SegmentedCollection<TSource> ToSegmentedCollection<TSource>(this IEnumerable<TSource> source, int segmentSize)
         {
             var collection = new SegmentedCollection<TSource>(segmentSize);
@@ -292,14 +212,6 @@ namespace Foundation.Linq
             return collection;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="keySelector"></param>
-        /// <returns></returns>
         public static SortedDictionary<TKey, TValue> ToSortedDictionary<TKey, TValue>(this IEnumerable<TValue> source, Func<TValue, TKey> keySelector)
         {
             Assert.IsNotNull(source);
@@ -310,26 +222,8 @@ namespace Foundation.Linq
             return dictionary;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="comparer"></param>
-        /// <returns></returns>
-        public static SortedSet<T> ToSortedSet<T>(this IEnumerable<T> source, IComparer<T> comparer)
-        {
-            return new SortedSet<T>(source, comparer);
-        }
+        public static SortedSet<T> ToSortedSet<T>(this IEnumerable<T> source, IComparer<T> comparer) => new SortedSet<T>(source, comparer);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="separator"></param>
-        /// <param name="toString"></param>
-        /// <returns></returns>
         public static string ToString<T>(this IEnumerable<T> source, string separator, Func<T, string> toString)
         {
             Assert.IsNotNull(toString);
@@ -352,9 +246,7 @@ namespace Foundation.Linq
                 result = sb.ToString();
             }
             else
-            {
                 result = null;
-            }
 
             return result;
         }
