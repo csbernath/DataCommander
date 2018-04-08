@@ -7,35 +7,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Foundation.Assertions;
+using Foundation.Data;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class StringExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static IList<char> AsList(this string source)
-        {
-            return new StringAsList(source);
-        }
+        public static IList<char> AsList(this string source) => new StringAsList(source);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="format"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public static string Format(this string format, params object[] args)
-        {
-            return string.Format(format, args);
-        }
+        public static string Format(this string format, params object[] args) => string.Format(format, args);
 
         /// <summary>
         /// 
@@ -59,53 +40,34 @@ namespace Foundation
         private static string Indent(this string source, string indentString, int indentCount)
         {
             indentString = string.Join(string.Empty, Enumerable.Repeat(indentString, indentCount));
-            var sb = new StringBuilder();
+            var stringBuyBuilder = new StringBuilder();
 
             using (var stringReader = new StringReader(source))
             {
-                bool first = true;
-
+                var sequence = new Sequence();
                 while (true)
                 {
                     string line = stringReader.ReadLine();
                     if (line == null)
-                    {
                         break;
-                    }
 
-                    if (first)
-                    {
-                        first = false;
-                    }
-                    else
-                    {
-                        sb.AppendLine();
-                    }
+                    if (sequence.Next() > 0)
+                        stringBuyBuilder.AppendLine();
 
-                    sb.Append(indentString);
-                    sb.Append(line);
+                    stringBuyBuilder.Append(indentString);
+                    stringBuyBuilder.Append(line);
                 }
             }
 
-            return sb.ToString();
+            return stringBuyBuilder.ToString();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
         [Pure]
         public static bool IsNullOrEmpty(this string value)
         {
             return string.IsNullOrEmpty(value);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
         [Pure]
         public static bool IsNullOrWhiteSpace(this string value)
         {
@@ -129,12 +91,12 @@ namespace Foundation
         }
 
 #if FOUNDATION_3_5
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="separator"></param>
-    /// <param name="values"></param>
-    /// <returns></returns>
+/// <summary>
+/// 
+/// </summary>
+/// <param name="separator"></param>
+/// <param name="values"></param>
+/// <returns></returns>
         public static string Join( string separator, IEnumerable<string> values )
         {
             var sb = new StringBuilder();
@@ -158,101 +120,27 @@ namespace Foundation
         }
 #endif
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static DateTime? ParseToNullableDateTime(this string source)
-        {
-            return string.IsNullOrEmpty(source) ? (DateTime?) null : DateTime.Parse(source);
-        }
+        public static DateTime? ParseToNullableDateTime(this string source) => string.IsNullOrEmpty(source) ? (DateTime?) null : DateTime.Parse(source);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="provider"></param>
-        /// <returns></returns>
-        public static DateTime? ParseToNullableDateTime(this string source, IFormatProvider provider)
-        {
-            return string.IsNullOrEmpty(source) ? (DateTime?) null : DateTime.Parse(source, provider);
-        }
+        public static DateTime? ParseToNullableDateTime(this string source, IFormatProvider provider) =>
+            string.IsNullOrEmpty(source) ? (DateTime?) null : DateTime.Parse(source, provider);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="provider"></param>
-        /// <param name="styles"></param>
-        /// <returns></returns>
-        public static DateTime? ParseToNullableDateTime(this string source, IFormatProvider provider,
-            DateTimeStyles styles)
-        {
-            return string.IsNullOrEmpty(source) ? (DateTime?) null : DateTime.Parse(source, provider, styles);
-        }
+        public static DateTime? ParseToNullableDateTime(this string source, IFormatProvider provider, DateTimeStyles styles) =>
+            string.IsNullOrEmpty(source) ? (DateTime?) null : DateTime.Parse(source, provider, styles);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="format"></param>
-        /// <param name="provider"></param>
-        /// <returns></returns>
-        public static DateTime? ParseExactToNullableDateTime(this string source, string format, IFormatProvider provider)
-        {
-            return string.IsNullOrEmpty(source) ? (DateTime?) null : DateTime.ParseExact(source, format, provider);
-        }
+        public static DateTime? ParseExactToNullableDateTime(this string source, string format, IFormatProvider provider) =>
+            string.IsNullOrEmpty(source) ? (DateTime?) null : DateTime.ParseExact(source, format, provider);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static decimal? ParseToNullableDecimal(this string source)
-        {
-            return string.IsNullOrEmpty(source) ? (decimal?) null : decimal.Parse(source);
-        }
+        public static decimal? ParseToNullableDecimal(this string source) => string.IsNullOrEmpty(source) ? (decimal?) null : decimal.Parse(source);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="provider"></param>
-        /// <returns></returns>
-        public static decimal? ParseToNullableDecimal(this string source, IFormatProvider provider)
-        {
-            return string.IsNullOrEmpty(source) ? (decimal?) null : decimal.Parse(source, provider);
-        }
+        public static decimal? ParseToNullableDecimal(this string source, IFormatProvider provider) =>
+            string.IsNullOrEmpty(source) ? (decimal?) null : decimal.Parse(source, provider);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="style"></param>
-        /// <param name="provider"></param>
-        /// <returns></returns>
-        public static decimal? ParseToNullableDecimal(this string source, NumberStyles style, IFormatProvider provider)
-        {
-            return string.IsNullOrEmpty(source) ? (decimal?) null : decimal.Parse(source, style, provider);
-        }
+        public static decimal? ParseToNullableDecimal(this string source, NumberStyles style, IFormatProvider provider) =>
+            string.IsNullOrEmpty(source) ? (decimal?) null : decimal.Parse(source, style, provider);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static int? ParseToNullableInt32(this string source)
-        {
-            return string.IsNullOrEmpty(source) ? (int?) null : int.Parse(source);
-        }
+        public static int? ParseToNullableInt32(this string source) => string.IsNullOrEmpty(source) ? (int?) null : int.Parse(source);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
         public static string Right(this string value, int length)
         {
             Assert.IsNotNull(value);
@@ -271,7 +159,7 @@ namespace Foundation
                 this.source = source;
             }
 
-#region IList<Char> Members
+            #region IList<Char> Members
 
             int IList<char>.IndexOf(char item)
             {
@@ -294,9 +182,9 @@ namespace Foundation
                 set => throw new NotImplementedException();
             }
 
-#endregion
+            #endregion
 
-#region ICollection<Char> Members
+            #region ICollection<Char> Members
 
             void ICollection<char>.Add(char item)
             {
@@ -327,25 +215,25 @@ namespace Foundation
                 throw new NotImplementedException();
             }
 
-#endregion
+            #endregion
 
-#region IEnumerable<Char> Members
+            #region IEnumerable<Char> Members
 
             IEnumerator<char> IEnumerable<char>.GetEnumerator()
             {
                 throw new NotImplementedException();
             }
 
-#endregion
+            #endregion
 
-#region IEnumerable Members
+            #region IEnumerable Members
 
             IEnumerator IEnumerable.GetEnumerator()
             {
                 throw new NotImplementedException();
             }
 
-#endregion
+            #endregion
         }
     }
 }

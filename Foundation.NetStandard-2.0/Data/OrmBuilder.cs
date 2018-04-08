@@ -33,17 +33,19 @@ namespace {_namespace}
 {{
 ");
 
-            stringBuilder.Append(GetResultClass().Indent(1));
+            stringBuilder.Append(GetQueryClass().Indent(1));
+            stringBuilder.Append("\r\n\r\n");
+            stringBuilder.Append(GetQueryResultClass().Indent(1));
             stringBuilder.Append("\r\n\r\n");
             stringBuilder.Append(GetRecordClasses(properties).Indent(1));
-            stringBuilder.Append(GetSqlQueryHandler().Indent(1));
+            stringBuilder.Append(GetHandlerClass().Indent(1));
 
             stringBuilder.Append("\r\n}");
 
             return stringBuilder.ToString();
         }
 
-        private string GetSqlQueryHandler()
+        private string GetHandlerClass()
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append($"\r\n\r\npublic class {_queryName}Handler\r\n{{\r\n");
@@ -56,11 +58,56 @@ namespace {_namespace}
             stringBuilder.Append("        _connection = connection;\r\n");
             stringBuilder.Append("        _transaction = transaction;\r\n");
             stringBuilder.Append("    }\r\n\r\n");
-            stringBuilder.Append($"    public {_queryName}Result Handle()\r\n    {{\r\n");
-            stringBuilder.Append("        var executor = _connection.CreateCommandExecutor();\r\n");
-            stringBuilder.Append($"        {_queryName}Result result = null;\r\n");
-            stringBuilder.Append("        executor.ExecuteReader(new ExecuteReaderRequest(CommandText, null, _transaction), dataReader =>\r\n");
-            stringBuilder.Append("        {\r\n");
+            stringBuilder.Append(GetHandleQueryMethod().Indent(1));
+            stringBuilder.Append("\r\n\r\n");
+            stringBuilder.Append(GetHandleRequestMethod().Indent(1));
+            stringBuilder.Append("\r\n\r\n");
+
+            var sequence = new Sequence();
+            foreach (var result in _results)
+            {
+                if (sequence.Next() > 0)
+                    stringBuilder.Append("\r\n\r\n");
+
+                var readMethod = GetReadRecordMethod(result);
+                stringBuilder.Append(readMethod.Indent(1));
+            }
+
+            stringBuilder.Append("\r\n}");
+            return stringBuilder.ToString();
+        }
+
+        private string GetHandleQueryMethod()
+        {
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.Append($@"public {_queryName}Result Handle({_queryName}Query query)
+{{
+    Assert.IsNotNull(query);
+    var parameters = new SqlParameterCollectionBuilder();
+    //TODO parameters.Add(""Parameter1"",query.Parameter1);
+
+    const int commandTimeout = 0;
+    var createCommandRequest = new CreateCommandRequest(CommandText, parameters.ToReadOnlyCollection(), CommandType.Text, commandTimeout, _transaction);
+    var executeReaderRequest = new ExecuteReaderRequest(createCommandRequest, CommandBehavior.Default, CancellationToken.None);
+
+    return Handle(executeReaderRequest);
+}}");
+
+            return stringBuilder.ToString();
+        }
+
+        private string GetHandleRequestMethod()
+        {
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.Append($@"private GetPersonResult Handle(ExecuteReaderRequest request)
+{{
+    {_queryName}Result result = null;
+    var executor = _connection.CreateCommandExecutor();
+    executor.ExecuteReader(request, dataReader =>
+    {{
+");
 
             var sequence = new Sequence();
             foreach (var result in _results)
@@ -73,10 +120,10 @@ namespace {_namespace}
                     next = "Next";
                 }
 
-                stringBuilder.Append($"            var result{index + 1} = dataReader.Read{next}Result(Read{result.RecordClassName}).AsReadOnly();");
+                stringBuilder.Append($"        var result{index + 1} = dataReader.Read{next}Result(Read{result.RecordClassName}).AsReadOnly();");
             }
 
-            stringBuilder.Append($"\r\n            result = new {_queryName}Result(");
+            stringBuilder.Append($"\r\n        result = new {_queryName}Result(");
 
             sequence.Reset();
             foreach (var result in _results)
@@ -89,21 +136,9 @@ namespace {_namespace}
             }
 
             stringBuilder.Append(");\r\n");
-            stringBuilder.Append("        });\r\n\r\n");
-            stringBuilder.Append("        return result;\r\n");
-            stringBuilder.Append("    }\r\n\r\n");
-
-            sequence.Reset();
-            foreach (var result in _results)
-            {
-                if (sequence.Next() > 0)
-                    stringBuilder.Append("\r\n\r\n");
-
-                var readMethod = GetReadRecordMethod(result);
-                stringBuilder.Append(readMethod.Indent(1));
-            }
-
-            stringBuilder.Append("\r\n}");
+            stringBuilder.Append("    });\r\n\r\n");
+            stringBuilder.Append("    return result;\r\n");
+            stringBuilder.Append("}");
             return stringBuilder.ToString();
         }
 
@@ -123,10 +158,20 @@ namespace {_namespace}
             return stringBuilder.ToString();
         }
 
-        private string GetResultClass()
+        private string GetQueryClass()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"public class {_queryName}Result\r\n{{\r\n");
+            stringBuilder.Append($@"public class {_queryName}Query
+{{
+    // TODO add parameters
+}}");
+            return stringBuilder.ToString();
+        }
+
+        private string GetQueryResultClass()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append($"public class {_queryName}QueryResult\r\n{{\r\n");
 
             var sequence = new Sequence();
             foreach (var result in _results)
@@ -138,12 +183,12 @@ namespace {_namespace}
             }
 
             stringBuilder.Append("\r\n\r\n");
-            stringBuilder.Append(GetSqlQueryResultClassConstructor());
+            stringBuilder.Append(GetQueryResultClassConstructor());
             stringBuilder.Append("\r\n}");
             return stringBuilder.ToString();
         }
 
-        private string GetSqlQueryResultClassConstructor()
+        private string GetQueryResultClassConstructor()
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append($"    public {_queryName}Result(");
