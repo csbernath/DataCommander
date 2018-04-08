@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.Data;
 using System.Threading;
 using Foundation.Assertions;
@@ -20,12 +20,17 @@ namespace Foundation.Data
             CancellationToken = cancellationToken;
         }
 
-        public ExecuteReaderRequest(string commandText, IEnumerable<object> parameters, IDbTransaction transaction)
+        public ExecuteReaderRequest(CreateCommandRequest createCommandRequest)
+            : this(createCommandRequest, CommandBehavior.Default, CancellationToken.None)
+        {
+        }
+
+        public ExecuteReaderRequest(string commandText, ReadOnlyCollection<object> parameters, IDbTransaction transaction)
             : this(new CreateCommandRequest(commandText, parameters, CommandType.Text, 0, transaction), CommandBehavior.Default, CancellationToken.None)
         {
         }
 
-        public ExecuteReaderRequest(string commandText, IEnumerable<object> parameters)
+        public ExecuteReaderRequest(string commandText, ReadOnlyCollection<object> parameters)
             : this(commandText, parameters, null)
         {
         }

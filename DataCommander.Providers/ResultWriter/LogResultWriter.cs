@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using DataCommander.Providers.Connection;
 using Foundation;
 using Foundation.Assertions;
@@ -26,7 +27,9 @@ namespace DataCommander.Providers.ResultWriter
         private long _writeTableBeginTimestamp;
         private long _firstRowReadBeginTimestamp;
         private string _commandText;
-        private Queue<string> _ormTypeNames;
+        private string _namespace;
+        private string _ormQuery;
+        private Queue<string> _ormRecord;
         private readonly List<OrmResult> _ormResults = new List<OrmResult>();
 
         public LogResultWriter(Action<InfoMessage> addInfoMessage)
@@ -47,7 +50,7 @@ namespace DataCommander.Providers.ResultWriter
 
             ++_commandCount;
             _commandText = command.CommandText;
-            _ormTypeNames = GetOrmRecordTypeNames(_commandText);
+            GetOrm(_commandText, out _namespace, out _ormQuery, out _ormRecord);
 
             var parameters = command.Parameters;
             if (!parameters.IsNullOrEmpty())
@@ -81,21 +84,21 @@ namespace DataCommander.Providers.ResultWriter
 
             Log.Trace($"SchemaTable of table[{_tableCount}]:\r\n{schemaTable.ToStringTableString()}");
 
-            string recordTypeName;
-            if (_ormTypeNames.Count > 0)
-                recordTypeName = _ormTypeNames.Dequeue();
+            string recordClassName;
+            if (_ormRecord.Count > 0)
+                recordClassName = _ormRecord.Dequeue();
             else
             {
                 var recordId = _tableCount + 1;
-                recordTypeName = $"Record{recordId}";
+                recordClassName = $"Record{recordId}";
             }
 
-            var ormColumns = schemaTable.Rows
+            var columns = schemaTable.Rows
                 .Cast<DataRow>()
                 .Select(FoundationDbColumnFactory.Create)
                 .Select(ToOrmColumn)
                 .ToReadOnlyCollection();
-            var ormResult = new OrmResult(recordTypeName, ormColumns);
+            var ormResult = new OrmResult(recordClassName, columns);
             _ormResults.Add(ormResult);
 
             ++_tableCount;
@@ -137,32 +140,40 @@ namespace DataCommander.Providers.ResultWriter
             var message = $"Query completed {_commandCount} command(s) in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
             _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
 
-            var ormBuilder = new OrmBuilder(_commandText, _ormResults.AsReadOnly());
+            var ormBuilder = new OrmBuilder(_commandText, _namespace, _ormQuery,_ormResults.AsReadOnly());
             var orm = ormBuilder.ToString(false);
             Log.Trace($"\r\n{orm}");
+
+            var s = LocalTime.Default.Now.ToString("yyyy.MM.dd HHmmss.fff");
+            var path = Path.Combine(Path.GetTempPath(), $"DataCommander.Orm.{s}.cs");
+            File.WriteAllText(path, orm, Encoding.UTF8);
         }
 
         #endregion
 
         #region Private Methods
 
-        private static Queue<string> GetOrmRecordTypeNames(string commandText)
+        private static void GetOrm(string commandText, out string @namespace, out string query, out Queue<string> record)
         {
-            var typeNames = new Queue<string>();
+            @namespace = null;
+            query = null;
+            record = new Queue<string>();
             using (var reader = new StringReader(commandText))
             {
                 while (reader.Peek() >= 0)
                 {
                     var line = reader.ReadLine();
-                    if (line.StartsWith("--OrmRecordTypeName:"))
+                    if (@namespace == null && line.StartsWith("--OrmNamespace:"))
+                        @namespace = line.Substring(15);
+                    if (query == null && line.StartsWith("--OrmQuery:"))
+                        query = line.Substring(11);
+                    else if (line.StartsWith("--OrmRecord:"))
                     {
-                        var typeName = line.Substring(20);
-                        typeNames.Enqueue(typeName);
+                        var typeName = line.Substring(12);
+                        record.Enqueue(typeName);
                     }
                 }
             }
-
-            return typeNames;
         }
 
         private static OrmColumn ToOrmColumn(FoundationDbColumn column) => new OrmColumn(column.ColumnName, column.DataType, column.AllowDbNull == true);

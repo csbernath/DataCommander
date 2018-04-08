@@ -1,28 +1,25 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+using Foundation.Assertions;
 using Foundation.Data;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Data.SqlClient;
-    using System.Windows.Forms;
-
     internal sealed class LinkedServerCatalogCollectionNode : ITreeNode
     {
         private readonly LinkedServerNode _linkedServer;
 
-        public LinkedServerCatalogCollectionNode( LinkedServerNode linkedServer )
+        public LinkedServerCatalogCollectionNode(LinkedServerNode linkedServer)
         {
-            FoundationContract.Requires<ArgumentException>( linkedServer != null );
-
+            Assert.IsNotNull(linkedServer);
             _linkedServer = linkedServer;
         }
 
-#region ITreeNode Members
+        #region ITreeNode Members
 
         string ITreeNode.Name => "Catalogs";
-
         bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
@@ -62,23 +59,22 @@ drop table #catalog";
             using (var connection = new SqlConnection(_linkedServer.LinkedServers.Server.ConnectionString))
             {
                 connection.Open();
+
+                var parameters = new SqlParameterCollectionBuilder();
+                parameters.Add("@name", _linkedServer.Name);
+                parameters.Add("@getSystemCatalogs", false);
+
                 var executor = connection.CreateCommandExecutor();
-                var executeReaderRequest = new ExecuteReaderRequest(commandText, new[]
-                {
-                    new SqlParameter("@name", _linkedServer.Name),
-                    new SqlParameter("@getSystemCatalogs", false)
-                });
+                var executeReaderRequest = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
                 var nodes = executor.ExecuteReader(executeReaderRequest, dataRecord => new LinkedServerCatalogNode(_linkedServer, dataRecord.GetString(0)));
                 return nodes;
             }
         }
 
         bool ITreeNode.Sortable => false;
-
         string ITreeNode.Query => null;
-
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
-#endregion
+        #endregion
     }
 }

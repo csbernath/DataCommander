@@ -7,20 +7,38 @@ namespace Foundation.Data
     public sealed class OrmBuilder
     {
         private readonly string _commandText;
+        private readonly string _namespace;
+        private readonly string _queryName;
         private readonly ReadOnlyCollection<OrmResult> _results;
 
-        public OrmBuilder(string commandText, ReadOnlyCollection<OrmResult> results)
+        public OrmBuilder(string commandText, string @namespace, string queryName, ReadOnlyCollection<OrmResult> results)
         {
             _commandText = commandText;
+            _namespace = @namespace;
+            _queryName = queryName;
             _results = results;
         }
 
         public string ToString(bool properties)
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append(GetSqlQueryResultClass());
-            stringBuilder.Append(GetRecordClasses(properties));
-            stringBuilder.Append(GetSqlQueryHandler());
+
+            stringBuilder.Append($@"using System;
+using System.Collections.ObjectModel;
+using System.Data;
+using Foundation.Assertions;
+using Foundation.Data;
+
+namespace {_namespace}
+{{
+");
+
+            stringBuilder.Append(GetResultClass().Indent(1));
+            stringBuilder.Append("\r\n\r\n");
+            stringBuilder.Append(GetRecordClasses(properties).Indent(1));
+            stringBuilder.Append(GetSqlQueryHandler().Indent(1));
+
+            stringBuilder.Append("\r\n}");
 
             return stringBuilder.ToString();
         }
@@ -28,19 +46,19 @@ namespace Foundation.Data
         private string GetSqlQueryHandler()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append("\r\n\r\npublic class SqlQueryHandler\r\n{\r\n");
+            stringBuilder.Append($"\r\n\r\npublic class {_queryName}Handler\r\n{{\r\n");
             stringBuilder.Append($"    private const string CommandText = @\"{_commandText}\";\r\n");
             stringBuilder.Append("    private readonly IDbConnection _connection;\r\n");
             stringBuilder.Append("    private readonly IDbTransaction _transaction;\r\n\r\n");
-            stringBuilder.Append("    public SqlQueryHandler(IDbConnection connection, IDbTransaction transaction)\r\n");
+            stringBuilder.Append($"    public {_queryName}Handler(IDbConnection connection, IDbTransaction transaction)\r\n");
             stringBuilder.Append("    {\r\n");
-            stringBuilder.Append("        Assert.IsNotNull(_connection);\r\n");
+            stringBuilder.Append("        Assert.IsNotNull(connection);\r\n");
             stringBuilder.Append("        _connection = connection;\r\n");
             stringBuilder.Append("        _transaction = transaction;\r\n");
             stringBuilder.Append("    }\r\n\r\n");
-            stringBuilder.Append("    public SqlQueryResult Handle()\r\n    {\r\n");
+            stringBuilder.Append($"    public {_queryName}Result Handle()\r\n    {{\r\n");
             stringBuilder.Append("        var executor = _connection.CreateCommandExecutor();\r\n");
-            stringBuilder.Append("        SqlQueryResult sqlQueryResult = null;\r\n");
+            stringBuilder.Append($"        {_queryName}Result result = null;\r\n");
             stringBuilder.Append("        executor.ExecuteReader(new ExecuteReaderRequest(CommandText, null, _transaction), dataReader =>\r\n");
             stringBuilder.Append("        {\r\n");
 
@@ -48,27 +66,31 @@ namespace Foundation.Data
             foreach (var result in _results)
             {
                 var index = sequence.Next();
+                string next = null;
                 if (index > 0)
+                {
                     stringBuilder.Append("\r\n");
+                    next = "Next";
+                }
 
-                stringBuilder.Append($"            var result{index} = dataReader.ReadResult(Read{result.RecordClassName}).AsReadOnly();");
+                stringBuilder.Append($"            var result{index + 1} = dataReader.Read{next}Result(Read{result.RecordClassName}).AsReadOnly();");
             }
 
-            stringBuilder.Append("\r\n            sqlQueryResult = new SqlQueryResult(");
+            stringBuilder.Append($"\r\n            result = new {_queryName}Result(");
 
             sequence.Reset();
             foreach (var result in _results)
             {
                 var index = sequence.Next();
                 if (index > 0)
-                    stringBuilder.Append(',');
+                    stringBuilder.Append(", ");
 
-                stringBuilder.Append($"result{index}");
+                stringBuilder.Append($"result{index + 1}");
             }
 
             stringBuilder.Append(");\r\n");
             stringBuilder.Append("        });\r\n\r\n");
-            stringBuilder.Append("        return sqlQueryResult;");
+            stringBuilder.Append("        return result;\r\n");
             stringBuilder.Append("    }\r\n\r\n");
 
             sequence.Reset();
@@ -101,10 +123,10 @@ namespace Foundation.Data
             return stringBuilder.ToString();
         }
 
-        private string GetSqlQueryResultClass()
+        private string GetResultClass()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append("public class SqlQueryResult\r\n{\r\n");
+            stringBuilder.Append($"public class {_queryName}Result\r\n{{\r\n");
 
             var sequence = new Sequence();
             foreach (var result in _results)
@@ -117,28 +139,27 @@ namespace Foundation.Data
 
             stringBuilder.Append("\r\n\r\n");
             stringBuilder.Append(GetSqlQueryResultClassConstructor());
-            stringBuilder.Append("\r\n}\r\n\r\n");
+            stringBuilder.Append("\r\n}");
             return stringBuilder.ToString();
         }
 
         private string GetSqlQueryResultClassConstructor()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"    public SqlQueryResult(");
+            stringBuilder.Append($"    public {_queryName}Result(");
 
             var sequence = new Sequence();
             foreach (var result in _results)
             {
                 var index = sequence.Next();
                 if (index > 0)
-                    stringBuilder.Append(',');
+                    stringBuilder.Append(", ");
 
-                stringBuilder.Append($"ReadOnlyCollection<{result.RecordClassName}> result{index}");
+                stringBuilder.Append($"ReadOnlyCollection<{result.RecordClassName}> result{index + 1}");
             }
 
             stringBuilder.Append(")\r\n");
             stringBuilder.Append("    {\r\n");
-            stringBuilder.Append("    }");
 
             sequence.Reset();
             foreach (var result in _results)
@@ -147,10 +168,10 @@ namespace Foundation.Data
                 if (index > 0)
                     stringBuilder.Append("\r\n");
 
-                stringBuilder.Append($"{result.RecordClassName} = result{index};");
+                stringBuilder.Append($"        {result.RecordClassName} = result{index + 1};");
             }
 
-            stringBuilder.Append("\r\n}");
+            stringBuilder.Append("\r\n    }");
 
             return stringBuilder.ToString();
         }

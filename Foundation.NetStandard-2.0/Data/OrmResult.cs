@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using Foundation.Assertions;
 
 namespace Foundation.Data
 {
@@ -9,6 +10,7 @@ namespace Foundation.Data
 
         public OrmResult(string recordClassName, ReadOnlyCollection<OrmColumn> columns)
         {
+            Assert.IsNotNull(columns);
             RecordClassName = recordClassName;
             Columns = columns;
         }

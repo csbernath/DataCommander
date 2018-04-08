@@ -39,9 +39,9 @@ where o.object_id = @object_id
 order by i.name",
                 cb.QuoteIdentifier(_databaseNode.Name));
 
-            var parameters = new List<SqlParameter>();
+            var parameters = new SqlParameterCollectionBuilder();
             parameters.Add("object_id", _id);
-            var request = new ExecuteReaderRequest(commandText, parameters);
+            var request = new ExecuteReaderRequest(commandText, parameters.ToReadOnlyCollection());
 
             var connectionString = _databaseNode.Databases.Server.ConnectionString;
             var executor = new SqlCommandExecutor(connectionString);

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
+using Foundation.Linq;
 
 namespace Foundation.Data.SqlClient
 {
@@ -35,9 +36,9 @@ namespace Foundation.Data.SqlClient
             Add(parameter);
         }
 
-        public List<object> ToObjectList()
+        public ReadOnlyCollection<object> ToReadOnlyCollection()
         {
-            return _parameters.Cast<object>().ToList();
+            return _parameters.Cast<object>().AsReadOnly();
         }
     }
 }
