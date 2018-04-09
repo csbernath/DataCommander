@@ -28,7 +28,7 @@ namespace DataCommander.Providers.ResultWriter
         private long _firstRowReadBeginTimestamp;
         private string _commandText;
         private string _namespace;
-        private string _ormQuery;
+        private OrmQuery _ormQuery;
         private Queue<string> _ormRecord;
         private readonly List<OrmResult> _ormResults = new List<OrmResult>();
 
@@ -140,7 +140,7 @@ namespace DataCommander.Providers.ResultWriter
             var message = $"Query completed {_commandCount} command(s) in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
             _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
 
-            var ormBuilder = new OrmBuilder(_commandText, _namespace, _ormQuery,_ormResults.AsReadOnly());
+            var ormBuilder = new OrmBuilder(_commandText, _namespace, _ormQuery, _ormResults.AsReadOnly());
             var orm = ormBuilder.ToString(false);
             Log.Trace($"\r\n{orm}");
 
@@ -153,27 +153,55 @@ namespace DataCommander.Providers.ResultWriter
 
         #region Private Methods
 
-        private static void GetOrm(string commandText, out string @namespace, out string query, out Queue<string> record)
+        private static void GetOrm(string commandText, out string @namespace, out OrmQuery query, out Queue<string> record)
         {
             @namespace = null;
-            query = null;
+            string queryName = null;
+            var parameters = new List<OrmParameter>();
             record = new Queue<string>();
             using (var reader = new StringReader(commandText))
             {
                 while (reader.Peek() >= 0)
                 {
                     var line = reader.ReadLine();
-                    if (@namespace == null && line.StartsWith("--OrmNamespace:"))
-                        @namespace = line.Substring(15);
-                    if (query == null && line.StartsWith("--OrmQuery:"))
-                        query = line.Substring(11);
-                    else if (line.StartsWith("--OrmRecord:"))
+                    if (@namespace == null && line.StartsWith("--namespace:"))
+                        @namespace = line.Substring(12);
+                    if (queryName == null && line.StartsWith("--query:"))
+                        queryName = line.Substring(8);
+                    else if (line.StartsWith("--parameter:"))
                     {
-                        var typeName = line.Substring(12);
+                        var parameter = GetOrmParameter(line.Substring(12));
+                        parameters.Add(parameter);
+                    }
+                    else if (line.StartsWith("--record:"))
+                    {
+                        var typeName = line.Substring(9);
                         record.Enqueue(typeName);
                     }
                 }
             }
+
+            query = new OrmQuery(queryName, parameters.AsReadOnly());
+        }
+
+        private static OrmParameter GetOrmParameter(string line)
+        {
+            var items = line.Split(',');
+
+            SqlDbType? sqlDbType = null;
+            if (items[1].Length > 0)
+            {
+                switch (items[1])
+                {
+                    case "date":
+                        sqlDbType = SqlDbType.Date;
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+
+            return new OrmParameter(items[0], sqlDbType, items[2]);
         }
 
         private static OrmColumn ToOrmColumn(FoundationDbColumn column) => new OrmColumn(column.ColumnName, column.DataType, column.AllowDbNull == true);

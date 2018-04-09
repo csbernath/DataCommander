@@ -8,14 +8,14 @@ namespace Foundation.Data
     {
         private readonly string _commandText;
         private readonly string _namespace;
-        private readonly string _queryName;
+        private readonly OrmQuery _query;
         private readonly ReadOnlyCollection<OrmResult> _results;
 
-        public OrmBuilder(string commandText, string @namespace, string queryName, ReadOnlyCollection<OrmResult> results)
+        public OrmBuilder(string commandText, string @namespace, OrmQuery query, ReadOnlyCollection<OrmResult> results)
         {
             _commandText = commandText;
             _namespace = @namespace;
-            _queryName = queryName;
+            _query = query;
             _results = results;
         }
 
@@ -26,8 +26,10 @@ namespace Foundation.Data
             stringBuilder.Append($@"using System;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Threading;
 using Foundation.Assertions;
 using Foundation.Data;
+using Foundation.Data.SqlClient;
 
 namespace {_namespace}
 {{
@@ -38,8 +40,7 @@ namespace {_namespace}
             stringBuilder.Append(GetQueryResultClass().Indent(1));
             stringBuilder.Append("\r\n\r\n");
             stringBuilder.Append(GetRecordClasses(properties).Indent(1));
-            stringBuilder.Append(GetHandlerClass().Indent(1));
-
+            stringBuilder.Append(GetHandlerClass().Indent(1).Replace("\"\"", $"\"{_commandText}\""));
             stringBuilder.Append("\r\n}");
 
             return stringBuilder.ToString();
@@ -48,11 +49,11 @@ namespace {_namespace}
         private string GetHandlerClass()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"\r\n\r\npublic class {_queryName}Handler\r\n{{\r\n");
-            stringBuilder.Append($"    private const string CommandText = @\"{_commandText}\";\r\n");
+            stringBuilder.Append($"\r\n\r\npublic class {_query.Name}Handler\r\n{{\r\n");
+            stringBuilder.Append("    private const string CommandText = @\"\";\r\n");
             stringBuilder.Append("    private readonly IDbConnection _connection;\r\n");
             stringBuilder.Append("    private readonly IDbTransaction _transaction;\r\n\r\n");
-            stringBuilder.Append($"    public {_queryName}Handler(IDbConnection connection, IDbTransaction transaction)\r\n");
+            stringBuilder.Append($"    public {_query.Name}Handler(IDbConnection connection, IDbTransaction transaction)\r\n");
             stringBuilder.Append("    {\r\n");
             stringBuilder.Append("        Assert.IsNotNull(connection);\r\n");
             stringBuilder.Append("        _connection = connection;\r\n");
@@ -77,16 +78,28 @@ namespace {_namespace}
             return stringBuilder.ToString();
         }
 
+        private static string ToUpper(string camelCase) => char.ToUpper(camelCase[0]) + camelCase.Substring(1);
+
         private string GetHandleQueryMethod()
         {
             var stringBuilder = new StringBuilder();
 
-            stringBuilder.Append($@"public {_queryName}Result Handle({_queryName}Query query)
+            stringBuilder.Append($@"public {_query.Name}QueryResult Handle({_query.Name}Query query)
 {{
     Assert.IsNotNull(query);
     var parameters = new SqlParameterCollectionBuilder();
-    //TODO parameters.Add(""Parameter1"",query.Parameter1);
+");
+            foreach (var parameter in _query.Parameters)
+            {
+                stringBuilder.Append($"    parameters.Add({parameter.SqlParameterName}");
 
+                if (parameter.SqlDbType != null)
+                    stringBuilder.Append($", {parameter.SqlDbType}");
+
+                stringBuilder.Append($", query.{ToUpper(parameter.SqlParameterName)});\r\n");
+            }
+
+            stringBuilder.Append($@"
     const int commandTimeout = 0;
     var createCommandRequest = new CreateCommandRequest(CommandText, parameters.ToReadOnlyCollection(), CommandType.Text, commandTimeout, _transaction);
     var executeReaderRequest = new ExecuteReaderRequest(createCommandRequest, CommandBehavior.Default, CancellationToken.None);
@@ -101,9 +114,9 @@ namespace {_namespace}
         {
             var stringBuilder = new StringBuilder();
 
-            stringBuilder.Append($@"private GetPersonResult Handle(ExecuteReaderRequest request)
+            stringBuilder.Append($@"private {_query.Name}QueryResult Handle(ExecuteReaderRequest request)
 {{
-    {_queryName}Result result = null;
+    {_query.Name}QueryResult result = null;
     var executor = _connection.CreateCommandExecutor();
     executor.ExecuteReader(request, dataReader =>
     {{
@@ -123,7 +136,7 @@ namespace {_namespace}
                 stringBuilder.Append($"        var result{index + 1} = dataReader.Read{next}Result(Read{result.RecordClassName}).AsReadOnly();");
             }
 
-            stringBuilder.Append($"\r\n        result = new {_queryName}Result(");
+            stringBuilder.Append($"\r\n        result = new {_query.Name}QueryResult(");
 
             sequence.Reset();
             foreach (var result in _results)
@@ -161,17 +174,47 @@ namespace {_namespace}
         private string GetQueryClass()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($@"public class {_queryName}Query
+            stringBuilder.Append($@"public class {_query.Name}Query
 {{
-    // TODO add parameters
-}}");
+");
+            foreach (var parameter in _query.Parameters)
+                stringBuilder.Append($"    public readonly {parameter.CSharpTypeName} {ToUpper(parameter.SqlParameterName)};\r\n");
+
+            stringBuilder.Append("\r\n");
+            stringBuilder.Append(GetQueryClassConstructor().Indent(1));
+            stringBuilder.Append("\r\n}");
+            return stringBuilder.ToString();
+        }
+
+        private string GetQueryClassConstructor()
+        {
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.Append($"public {_query.Name}Query(");
+
+            var sequence = new Sequence();
+            foreach (var parameter in _query.Parameters)
+            {
+                if (sequence.Next() > 0)
+                    stringBuilder.Append(", ");
+
+                stringBuilder.Append($"{parameter.CSharpTypeName} {parameter.SqlParameterName}");
+            }
+
+            stringBuilder.Append(")\r\n{\r\n");
+
+            foreach (var parameter in _query.Parameters)
+                stringBuilder.Append($"    {ToUpper(parameter.SqlParameterName)} = {parameter.SqlParameterName};\r\n");
+
+            stringBuilder.Append("}");
+
             return stringBuilder.ToString();
         }
 
         private string GetQueryResultClass()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"public class {_queryName}QueryResult\r\n{{\r\n");
+            stringBuilder.Append($"public class {_query.Name}QueryResult\r\n{{\r\n");
 
             var sequence = new Sequence();
             foreach (var result in _results)
@@ -191,7 +234,7 @@ namespace {_namespace}
         private string GetQueryResultClassConstructor()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"    public {_queryName}Result(");
+            stringBuilder.Append($"    public {_query.Name}QueryResult(");
 
             var sequence = new Sequence();
             foreach (var result in _results)
@@ -445,6 +488,18 @@ namespace {_namespace}
             }
 
             return methodName;
+        }
+    }
+
+    public sealed class OrmQuery
+    {
+        public readonly string Name;
+        public readonly ReadOnlyCollection<OrmParameter> Parameters;
+
+        public OrmQuery(string name, ReadOnlyCollection<OrmParameter> parameters)
+        {
+            Name = name;
+            Parameters = parameters;
         }
     }
 }
