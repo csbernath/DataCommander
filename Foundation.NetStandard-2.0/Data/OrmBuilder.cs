@@ -1,9 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Foundation.Data
 {
+    [DataContract]
+    public class Query
+    {
+        [DataMember] public string Namespace;
+        [DataMember] public string Name;
+        [DataMember] public List<Parameter> Parameters;
+        [DataMember] public List<string> Results;
+    }
+
+    [DataContract]
+    public class Parameter
+    {
+        [DataMember] public string Name;
+        [DataMember] public string DataType;
+        [DataMember] public bool IsNullable;
+        [DataMember] public string Value;
+    }
+
     public sealed class OrmBuilder
     {
         private readonly string _commandText;
