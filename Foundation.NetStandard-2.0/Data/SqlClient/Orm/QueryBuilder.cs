@@ -22,7 +22,9 @@ namespace Foundation.Data.SqlClient.Orm
             stringBuilder.Append($@"using System;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Data.Common;
 using System.Threading;
+using System.Threading.Tasks;
 using Foundation.Assertions;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
@@ -57,9 +59,15 @@ namespace {_query.Namespace}
             stringBuilder.Append("    }\r\n\r\n");
             stringBuilder.Append(GetHandleQueryMethod().Indent(1));
             stringBuilder.Append("\r\n\r\n");
-            stringBuilder.Append(GetCreateParametersMethod().Indent(1));
+            stringBuilder.Append(GetHandleQueryAsyncMethod().Indent(1));
             stringBuilder.Append("\r\n\r\n");
-            stringBuilder.Append(GetHandleRequestMethod().Indent(1));
+            stringBuilder.Append(GetToExecuteReaderRequestMethod().Indent(1));
+            stringBuilder.Append("\r\n\r\n");
+            stringBuilder.Append(GetToParametersMethod().Indent(1));
+            stringBuilder.Append("\r\n\r\n");
+            stringBuilder.Append(GetExecuteReaderMethod().Indent(1));
+            stringBuilder.Append("\r\n\r\n");
+            stringBuilder.Append(GetExecuteReaderAsyncMethod().Indent(1));
             stringBuilder.Append("\r\n\r\n");
 
             var sequence = new Sequence();
@@ -82,24 +90,44 @@ namespace {_query.Namespace}
         private string GetHandleQueryMethod()
         {
             var stringBuilder = new StringBuilder();
-
             stringBuilder.Append($@"public {_query.Name}QueryResult Handle({_query.Name}Query query)
 {{
     Assert.IsNotNull(query);
-    var parameters = CreateParameters(query);
-    const int commandTimeout = 0;
-    var createCommandRequest = new CreateCommandRequest(CommandText, parameters, CommandType.Text, commandTimeout, _transaction);
-    var executeReaderRequest = new ExecuteReaderRequest(createCommandRequest, CommandBehavior.Default, CancellationToken.None);
-    return Handle(executeReaderRequest);
+    var request = ToExecuteReaderRequest(query, CancellationToken.None);
+    return ExecuteReader(request);
 }}");
-
             return stringBuilder.ToString();
         }
 
-        private string GetCreateParametersMethod()
+        private string GetHandleQueryAsyncMethod()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"private static ReadOnlyCollection<object> CreateParameters({_query.Name}Query query)\r\n");
+            stringBuilder.Append($@"public Task<{_query.Name}QueryResult> HandleAsync({_query.Name}Query query, CancellationToken cancellationToken)
+{{
+    Assert.IsNotNull(query);
+    var request = ToExecuteReaderRequest(query, cancellationToken);
+    return ExecuteReaderAsync(request);
+}}");
+            return stringBuilder.ToString();
+        }
+
+        private string GetToExecuteReaderRequestMethod()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append($@"private ExecuteReaderRequest ToExecuteReaderRequest({_query.Name}Query query, CancellationToken cancellationToken)
+{{
+    var parameters = ToParameters(query);
+    const int commandTimeout = 0;
+    var createCommandRequest = new CreateCommandRequest(CommandText, parameters, CommandType.Text, commandTimeout, _transaction);
+    return new ExecuteReaderRequest(createCommandRequest, CommandBehavior.Default, cancellationToken);
+}}");
+            return stringBuilder.ToString();
+        }
+
+        private string GetToParametersMethod()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append($"private static ReadOnlyCollection<object> ToParameters({_query.Name}Query query)\r\n");
             stringBuilder.Append("{\r\n");
             stringBuilder.Append("    var parameters = new SqlParameterCollectionBuilder();\r\n");
 
@@ -115,11 +143,10 @@ namespace {_query.Namespace}
             return stringBuilder.ToString();
         }
 
-        private string GetHandleRequestMethod()
+        private string GetExecuteReaderMethod()
         {
             var stringBuilder = new StringBuilder();
-
-            stringBuilder.Append($@"private {_query.Name}QueryResult Handle(ExecuteReaderRequest request)
+            stringBuilder.Append($@"private {_query.Name}QueryResult ExecuteReader(ExecuteReaderRequest request)
 {{
     {_query.Name}QueryResult result = null;
     var executor = _connection.CreateCommandExecutor();
@@ -157,6 +184,40 @@ namespace {_query.Namespace}
             stringBuilder.Append("}");
             return stringBuilder.ToString();
         }
+
+        private string GetExecuteReaderAsyncMethod()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append($@"private async Task<{_query.Name}QueryResult> ExecuteReaderAsync(ExecuteReaderRequest request)
+{{
+    {_query.Name}QueryResult result = null;
+    var connection = (DbConnection) _connection;
+    var executor = connection.CreateCommandAsyncExecutor();
+    await executor.ExecuteReaderAsync(request, async dataReader =>
+    {{
+{GetExecuteReaderAsyncMethodFragment().Indent(2)}
+    }});
+
+    return result;
+}}");
+            return stringBuilder.ToString();
+        }
+
+        private string GetExecuteReaderAsyncMethodFragment()
+        {
+            var stringBuilder = new StringBuilder();
+            var sequence = new Sequence();
+            foreach (var result in _query.Results)
+            {
+                var next = sequence.Next() == 0 ? null : "Next";
+                stringBuilder.Append($"var {ToLower(result.Name)} = (await dataReader.Read{next}ResultAsync(Read{result.Name}, request.CancellationToken)).AsReadOnly();\r\n");
+            }
+
+            stringBuilder.Append($"result = new {_query.Name}QueryResult({GetResultVariableNames()});");
+            return stringBuilder.ToString();
+        }
+
+        private string GetResultVariableNames() => string.Join(", ", _query.Results.Select(i => ToLower(i.Name)));
 
         private string GetRecordClasses()
         {
