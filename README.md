@@ -15,9 +15,7 @@ Create insert statements from select|Yes|No
 Drag & drop: file to binary constant|Yes|No
 Edit rows: generate change script|Yes|No
 Object explorer: find item|Yes|No
-ORM: .NET schema table|Yes|No
-ORM: C# [POCO](https://en.wikipedia.org/wiki/Plain_old_CLR_object) class|Yes|No
-ORM: C# Read method (row to object mapper)|Yes|No
+ORM: result = handler.Handle(query), [POCO](https://en.wikipedia.org/wiki/Plain_old_CLR_object)|Yes|No
 Performance: startup|Fast|Slow
 Result: save as Excel|Yes|No
 Result: save as HTML|Yes|No
@@ -26,61 +24,222 @@ Result: sort in memory|Yes|No
 
 ## [Object-relational mapping (ORM)](https://en.wikipedia.org/wiki/Object-relational_mapping)
 
+The program generates C# (requires .NET Standard 2.0 + Foundation assembly) source code wrapper for a SQL query. The query is similar to a CQRS Query:
+- Query class (query input parameters)
+- QueryResult class (query output)
+- QueryHandler class (the handler which executes the query)
+
 Download and restore the SQL Server 2016 sample database from https://github.com/microsoft/sql-server-samples
 
 Open the database with Data Commander and execute the following command:
 
 ```SQL
+/* Query
+{
+  "Namespace": "Foundation.NetStandard20.Test.GetCustomerInvoicesNamespace",
+  "Name": "GetCustomerInvoices",
+  "Parameters": [
+    {
+      "Name": "customerId",
+      "DataType": "int",
+      "IsNullable": false,
+      "Value": "1"
+    },
+    {
+      "Name": "invoiceDate",
+      "DataType": "date",
+      "IsNullable": false,
+      "Value": "'20160101'"
+    }
+  ],
+  "Results": [
+    "Customer",
+    "Invoice"
+  ]
+}
+*/
 select
     c.CustomerID,
     c.CustomerName
 from Sales.Customers c
+where c.CustomerID = @customerId
 
 select
     i.InvoiceID,
     i.CustomerID,
     i.InvoiceDate
-    from Sales.Invoices i
+from Sales.Invoices i
+where
+    i.CustomerID = @customerId
+    and i.InvoiceDate >= @invoiceDate
 order by i.CustomerID,i.InvoiceID
 ```
 
-The program generates C# ORM code snippets. See them in log file:
+The program generates C# classes in one file:
 
 ```C#
-internal sealed class Customer
-{
-	public int CustomerID;
-	public string CustomerName;
-}
+using System;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.Threading;
+using Foundation.Assertions;
+using Foundation.Data;
+using Foundation.Data.SqlClient;
 
-private static Customer ReadCustomer(IDataRecord dataRecord)
+namespace Foundation.NetStandard20.Test.GetCustomerInvoicesNamespace
 {
-	var @object = new Customer();
-	@object.CustomerID = dataRecord.GetInt32(0);
-	@object.CustomerName = dataRecord.GetString(1);
-	return @object;
-}
+    public sealed class GetCustomerInvoicesQuery
+    {
+        public readonly int CustomerId;
+        public readonly DateTime InvoiceDate;
+    
+        public GetCustomerInvoicesQuery(int customerId, DateTime invoiceDate)
+        {
+            CustomerId = customerId;
+            InvoiceDate = invoiceDate;
+        }
+    }
 
-internal sealed class Invoice
-{
-	public int InvoiceID;
-	public int CustomerID;
-	public DateTime InvoiceDate;
-}
+    public sealed class GetCustomerInvoicesQueryResult
+    {
+        public readonly ReadOnlyCollection<Customer> Customer;
+        public readonly ReadOnlyCollection<Invoice> Invoice;
+    
+        public GetCustomerInvoicesQueryResult(ReadOnlyCollection<Customer> customer, ReadOnlyCollection<Invoice> invoice)
+        {
+            Customer = customer;
+            Invoice = invoice;
+        }
+    }
 
-private static Invoice ReadInvoice(IDataRecord dataRecord)
-{
-	var @object = new Invoice();
-	@object.InvoiceID = dataRecord.GetInt32(0);
-	@object.CustomerID = dataRecord.GetInt32(1);
-	@object.InvoiceDate = dataRecord.GetDateTime(2);
-	return @object;
+    public sealed class Customer
+    {
+        public readonly int CustomerID;
+        public readonly string CustomerName;
+    
+        public Customer(int customerID, string customerName)
+        {
+            CustomerID = customerID;
+            CustomerName = customerName;
+        }
+    }
+    
+    public sealed class Invoice
+    {
+        public readonly int InvoiceID;
+        public readonly int CustomerID;
+        public readonly DateTime InvoiceDate;
+    
+        public Invoice(int invoiceID, int customerID, DateTime invoiceDate)
+        {
+            InvoiceID = invoiceID;
+            CustomerID = customerID;
+            InvoiceDate = invoiceDate;
+        }
+    }    
+    
+    public sealed class GetCustomerInvoicesHandler
+    {
+        private const string CommandText = @"use WideWorldImporters
+
+select
+    c.CustomerID,
+    c.CustomerName
+from Sales.Customers c
+where c.CustomerID = @customerId
+
+select
+    i.InvoiceID,
+    i.CustomerID,
+    i.InvoiceDate
+from Sales.Invoices i
+where
+    i.CustomerID = @customerId
+    and i.InvoiceDate >= @invoiceDate
+order by i.CustomerID,i.InvoiceID";
+        private readonly IDbConnection _connection;
+        private readonly IDbTransaction _transaction;
+    
+        public GetCustomerInvoicesHandler(IDbConnection connection, IDbTransaction transaction)
+        {
+            Assert.IsNotNull(connection);
+            _connection = connection;
+            _transaction = transaction;
+        }
+    
+        public GetCustomerInvoicesQueryResult Handle(GetCustomerInvoicesQuery query)
+        {
+            Assert.IsNotNull(query);
+            var parameters = CreateParameters(query);
+            const int commandTimeout = 0;
+            var createCommandRequest = new CreateCommandRequest(CommandText, parameters, CommandType.Text, commandTimeout, _transaction);
+            var executeReaderRequest = new ExecuteReaderRequest(createCommandRequest, CommandBehavior.Default, CancellationToken.None);
+            return Handle(executeReaderRequest);
+        }
+    
+        private static ReadOnlyCollection<object> CreateParameters(GetPersonQuery query)
+        {
+            var parameters = new SqlParameterCollectionBuilder();
+            parameters.Add("customerId", query.CustomerId);
+            parameters.AddDate("invoiceDate", query.InvoiceDate);
+            return parameters.ToReadOnlyCollection();
+        }
+    
+        private GetCustomerInvoicesQueryResult Handle(ExecuteReaderRequest request)
+        {
+            GetCustomerInvoicesQueryResult result = null;
+            var executor = _connection.CreateCommandExecutor();
+            executor.ExecuteReader(request, dataReader =>
+            {
+                var customer = dataReader.ReadResult(ReadCustomer).AsReadOnly();
+                var invoice = dataReader.ReadNextResult(ReadInvoice).AsReadOnly();
+                result = new GetCustomerInvoicesQueryResult(customer, invoice);
+            });
+        
+            return result;
+        }
+    
+        private static Customer ReadCustomer(IDataRecord dataRecord)
+        {
+            var customerID = dataRecord.GetInt32(0);
+            var customerName = dataRecord.GetString(1);
+        
+            return new Customer(customerID, customerName);
+        }
+    
+        private static Invoice ReadInvoice(IDataRecord dataRecord)
+        {
+            var invoiceID = dataRecord.GetInt32(0);
+            var customerID = dataRecord.GetInt32(1);
+            var invoiceDate = dataRecord.GetDateTime(2);
+        
+            return new Invoice(invoiceID, customerID, invoiceDate);
+        }
+    }
 }
 ```
 
 2. The generated code can be used like this:
 
 ```C#
+public void TestMethod1()
+{
+    var csb = new SqlConnectionStringBuilder();
+    csb.DataSource = @".\SQL2016_001";
+    csb.InitialCatalog = "WideWorldImporters";
+    csb.IntegratedSecurity = true;
+
+    using (var connection = new SqlConnection())
+    {
+        connection.ConnectionString = csb.ConnectionString;
+        connection.Open();
+
+        var query = new GetCustomerInvoicesQuery(1, new DateTime(2016, 01, 01));
+        var handler = new GetCustomerInvoicesHandler(connection, null);
+        var result = handler.Handle(query);
+    }
+}
+
 var connectionStringBuilder = new SqlConnectionStringBuilder();
 connectionStringBuilder.DataSource = @".\SQL2016_001";
 connectionStringBuilder.InitialCatalog = "WideWorldImporters";
@@ -156,8 +315,7 @@ PostgreSQL|[PostgreSQL](https://github.com/npgsql/Npgsql)|
 SQLite|[SQLite .NET Data Provider](http://system.data.sqlite.org)|
 SqlServer|[Microsoft SQL Server](http://www.microsoft.com/en-us/server-cloud/products/sql-server/) 2005 or greater|
 SqlServerCe40|[Microsoft SQL Server Compact Edition 4.0](http://www.microsoft.com/en-us/download/details.aspx?id=17876)|
-Tfs-11.0.0.0|[Microsoft Team Foundation Server](https://msdn.microsoft.com/en-us/vstudio/ff637362.aspx) using TFS client shipped with Visual Studio 2012|
-Tfs-14.0.0.0|[Microsoft Team Foundation Server](https://msdn.microsoft.com/en-us/vstudio/ff637362.aspx) using TFS client shipped with Visual Studio 2015|
+Tfs-15.0.0.0|[Microsoft Team Foundation Server](https://msdn.microsoft.com/en-us/vstudio/ff637362.aspx) using nuget TFS client|
 Wmi|[Windows Management Instrumentation](https://msdn.microsoft.com/en-us/library/aa394582(v=vs.85).aspx)
 
 General functions
