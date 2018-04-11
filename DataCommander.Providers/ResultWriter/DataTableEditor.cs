@@ -1,29 +1,29 @@
-﻿namespace DataCommander.Providers.ResultWriter
-{
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Data;
-    using System.Data.Common;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Windows.Forms;
-    using System.Xml;
-    using Connection;
-    using Field;
-    using Foundation;
-    using Foundation.Data;
-    using Foundation.Data.SqlClient;
-    using Foundation.Diagnostics;
-    using Foundation.Linq;
-    using Foundation.Windows.Forms;
-    using OfficeOpenXml;
-    using Query;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Data.Common;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Xml;
+using DataCommander.Providers.Connection;
+using DataCommander.Providers.FieldNamespace;
+using DataCommander.Providers.Query;
+using Foundation;
+using Foundation.Data;
+using Foundation.Data.SqlClient;
+using Foundation.Diagnostics;
+using Foundation.Linq;
+using Foundation.Windows.Forms;
+using OfficeOpenXml;
 
+namespace DataCommander.Providers.ResultWriter
+{
     /// <summary>
     /// Summary description for DataTableViewer.
     /// </summary>

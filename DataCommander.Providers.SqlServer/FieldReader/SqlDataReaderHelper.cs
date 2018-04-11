@@ -1,11 +1,11 @@
-﻿using Foundation.Data;
+﻿using DataCommander.Providers.FieldNamespace;
+using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.FieldReader
 {
     using System;
     using System.Data;
     using System.Data.SqlClient;
-    using Field;
 
     internal sealed class SqlDataReaderHelper : IDataReaderHelper
     {

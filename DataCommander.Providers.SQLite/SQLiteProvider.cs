@@ -6,7 +6,7 @@ using System.Data.SQLite;
 using System.Text;
 using System.Xml;
 using DataCommander.Providers.Connection;
-using DataCommander.Providers.Field;
+using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.Query;
 using Foundation.Configuration;
 using Foundation.Data;
@@ -138,7 +138,7 @@ namespace DataCommander.Providers.SQLite
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {
             var response = new GetCompletionResponse();
-            var sqlStatement = new SqlStatement(text);
+            var sqlStatement = new SqlParser(text);
             var tokens = sqlStatement.Tokens;
             Token previousToken;
             Token currentToken;

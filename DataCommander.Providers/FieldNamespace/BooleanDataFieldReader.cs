@@ -1,16 +1,14 @@
-﻿namespace DataCommander.Providers.Field
-{
-    using System;
-    using System.Data;
+﻿using System;
+using System.Data;
 
-    public sealed class DateTimeOffsetDataFieldReader : IDataFieldReader
+namespace DataCommander.Providers.FieldNamespace
+{
+    public sealed class BooleanDataFieldReader : IDataFieldReader
     {
         private readonly IDataRecord _dataRecord;
         private readonly int _columnOrdinal;
 
-        public DateTimeOffsetDataFieldReader(
-            IDataRecord dataRecord,
-            int columnOrdinal)
+        public BooleanDataFieldReader(IDataRecord dataRecord, int columnOrdinal)
         {
             _dataRecord = dataRecord;
             _columnOrdinal = columnOrdinal;
@@ -28,9 +26,8 @@
                 }
                 else
                 {
-                    value = _dataRecord[_columnOrdinal];
-                    var dateTimeOffset = (DateTimeOffset)value;
-                    value = new DateTimeOffsetField(dateTimeOffset);
+                    var booleanValue = _dataRecord.GetBoolean(_columnOrdinal);
+                    value = new BooleanField(booleanValue);
                 }
 
                 return value;

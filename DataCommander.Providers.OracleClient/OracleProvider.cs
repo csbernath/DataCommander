@@ -1,4 +1,5 @@
-﻿using DataCommander.Providers.OracleBase.ObjectExplorer;
+﻿using DataCommander.Providers.FieldNamespace;
+using DataCommander.Providers.OracleBase.ObjectExplorer;
 using Foundation.Data;
 
 namespace DataCommander.Providers.OracleClient
@@ -10,7 +11,6 @@ namespace DataCommander.Providers.OracleClient
     using System.Data.OracleClient;
     using System.Text;
     using System.Xml;
-    using Field;
     using Providers.Connection;
 
     public sealed class OracleProvider : IProvider

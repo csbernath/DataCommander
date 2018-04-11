@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using DataCommander.Providers.Query;
+using System;
+using System.Data;
+using DataCommander.Providers.Connection;
+using Foundation.Data;
+using Foundation.Diagnostics;
+using Foundation.Diagnostics.MethodProfiler;
 
 namespace DataCommander.Providers.ResultWriter
 {
-    using System;
-    using System.Data;
-    using Connection;
-    using Foundation.Data;
-    using Foundation.Diagnostics;
-    using Foundation.Diagnostics.MethodProfiler;
-    using Query;
-
     /// <summary>
     /// Summary description for DataSetResultWriter.
     /// </summary>

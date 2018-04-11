@@ -5,7 +5,7 @@ using System.Data.Common;
 using System.IO;
 using System.Text;
 using DataCommander.Providers.Connection;
-using DataCommander.Providers.Field;
+using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.Query;
 using Foundation.Assertions;
 using Foundation.Data;

@@ -125,7 +125,7 @@ namespace DataCommander.Providers.MySql
                 FromCache = false
             };
 
-            var sqlStatement = new SqlStatement(text);
+            var sqlStatement = new SqlParser(text);
             var tokens = sqlStatement.Tokens;
             Token previousToken, currentToken;
             sqlStatement.FindToken(position, out previousToken, out currentToken);

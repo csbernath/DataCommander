@@ -1,34 +1,39 @@
-﻿namespace DataCommander.Providers.Field
+﻿using System;
+using System.Text;
+using Foundation.Text;
+
+namespace DataCommander.Providers.FieldNamespace
 {
-    using System;
-
-    public sealed class StringField : IConvertible
+    public sealed class BinaryField : IConvertible
     {
-        private readonly int _length;
+        private readonly string _s;
 
-        public StringField(string value, int length)
+        public BinaryField(byte[] bytes)
         {
-            Value = value;
-            _length = length;
-        }
+            Value = bytes;
+            var length = Math.Min(bytes.Length, 16);
+            var chars = Hex.Encode(bytes, length, true);
 
-        public string Value { get; }
+            var sb = new StringBuilder();
+            sb.Append("0x");
+            sb.Append(chars);
+
+            if (length < bytes.Length)
+            {
+                sb.Append(" (");
+                sb.Append(bytes.Length);
+                sb.Append(')');
+            }
+
+            _s = sb.ToString();
+        }
 
         public override string ToString()
         {
-            string s;
-
-            if (Value.Length > _length)
-            {
-                s = Value.Substring(0, _length);
-            }
-            else
-            {
-                s = Value;
-            }
-
-            return s;
+            return _s;
         }
+
+        public byte[] Value { get; }
 
         #region IConvertible Members
 
@@ -94,7 +99,7 @@
 
         string IConvertible.ToString(IFormatProvider provider)
         {
-            return Value;
+            return Hex.GetString(Value, true);
         }
 
         object IConvertible.ToType(Type conversionType, IFormatProvider provider)

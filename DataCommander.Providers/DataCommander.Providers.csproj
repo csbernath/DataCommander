@@ -246,15 +246,15 @@
     <Compile Include="ObjectName.cs" />
     <Compile Include="ProviderName.cs" />
     <Compile Include="DataParameterBase.cs" />
-    <Compile Include="Field\BinaryDataFieldReader.cs" />
-    <Compile Include="Field\BooleanDataFieldReader.cs" />
-    <Compile Include="Field\BooleanField.cs" />
-    <Compile Include="Field\DateTimeOffsetField.cs" />
-    <Compile Include="Field\DateTimeOffsetDataFieldReader.cs" />
-    <Compile Include="Field\DateTimeDataFieldReader.cs" />
-    <Compile Include="Field\SingleField.cs" />
-    <Compile Include="Field\StreamField.cs" />
-    <Compile Include="Field\StreamFieldDataReader.cs" />
+    <Compile Include="FieldNamespace\BinaryDataFieldReader.cs" />
+    <Compile Include="FieldNamespace\BooleanDataFieldReader.cs" />
+    <Compile Include="FieldNamespace\BooleanField.cs" />
+    <Compile Include="FieldNamespace\DateTimeOffsetField.cs" />
+    <Compile Include="FieldNamespace\DateTimeOffsetDataFieldReader.cs" />
+    <Compile Include="FieldNamespace\DateTimeDataFieldReader.cs" />
+    <Compile Include="FieldNamespace\SingleField.cs" />
+    <Compile Include="FieldNamespace\StreamField.cs" />
+    <Compile Include="FieldNamespace\StreamFieldDataReader.cs" />
     <Compile Include="IKeyboardHandler.cs" />
     <Compile Include="IObjectExplorer.cs" />
     <Compile Include="IProvider.cs" />
@@ -264,7 +264,7 @@
     <Compile Include="AsyncDataAdapter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Field\BinaryField.cs">
+    <Compile Include="FieldNamespace\BinaryField.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
@@ -311,6 +311,8 @@
     <Compile Include="ResultWriter\FieldTypeDictionary.cs" />
     <Compile Include="ResultWriter\HtmlEntity.cs" />
     <Compile Include="ResultWriter\MyDataObject.cs" />
+    <Compile Include="ResultWriter\QueryConfiguration\Parameter.cs" />
+    <Compile Include="ResultWriter\QueryConfiguration\Query.cs" />
     <Compile Include="ResultWriter\SqlBulkCopyResultWriter.cs" />
     <Compile Include="ResultWriter\CopyResultWriter.cs" />
     <Compile Include="ResultWriter\DataGridViewResultWriter.cs" />
@@ -320,17 +322,17 @@
     <Compile Include="ResultWriter\DataTableEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Field\DateTimeField.cs" />
-    <Compile Include="Field\DecimalField.cs">
+    <Compile Include="FieldNamespace\DateTimeField.cs" />
+    <Compile Include="FieldNamespace\DecimalField.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Field\DecimalString.cs">
+    <Compile Include="FieldNamespace\DecimalString.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Field\DefaultDataFieldReader.cs">
+    <Compile Include="FieldNamespace\DefaultDataFieldReader.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Field\DoubleField.cs" />
+    <Compile Include="FieldNamespace\DoubleField.cs" />
     <Compile Include="ResultWriter\DataViewPropertiesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -352,7 +354,7 @@
     <Compile Include="ResultWriter\HtmlTextBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Field\IDataFieldReader.cs">
+    <Compile Include="FieldNamespace\IDataFieldReader.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IStandardOutput.cs">
@@ -392,15 +394,15 @@
     <Compile Include="SqlBulkCopyAsyncDataAdapter.cs" />
     <Compile Include="SqlObject.cs" />
     <Compile Include="SqlObjectTypes.cs" />
-    <Compile Include="SqlStatement.cs">
+    <Compile Include="SqlParser.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Field\SingleFieldDataReader.cs" />
+    <Compile Include="FieldNamespace\SingleFieldDataReader.cs" />
     <Compile Include="SqlDataTypeName.cs" />
     <Compile Include="StandardOutput.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Field\StringField.cs">
+    <Compile Include="FieldNamespace\StringField.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Statement.cs" />
@@ -488,6 +490,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.SqlServer.Compact">
       <Version>4.0.8876.1</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>11.0.2</Version>
     </PackageReference>
     <PackageReference Include="System.Data.SQLite.Core">
       <Version>1.0.108</Version>

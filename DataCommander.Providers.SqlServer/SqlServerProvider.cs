@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Xml;
 using DataCommander.Providers.Connection;
-using DataCommander.Providers.Field;
+using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.Query;
 using DataCommander.Providers.SqlServer.FieldReader;
 using Foundation;
@@ -395,7 +395,7 @@ namespace DataCommander.Providers.SqlServer
                 FromCache = false
             };
             List<IObjectName> array = null;
-            var sqlStatement = new SqlStatement(text);
+            var sqlStatement = new SqlParser(text);
             var tokens = sqlStatement.Tokens;
             Token previousToken, currentToken;
             sqlStatement.FindToken(position, out previousToken, out currentToken);
@@ -916,7 +916,7 @@ order by 1", name.Database);
 
         List<Statement> IProvider.GetStatements(string commandText)
         {
-            var sqlStatement = new SqlStatement(commandText);
+            var sqlStatement = new SqlParser(commandText);
             var tokens = sqlStatement.Tokens;
             var statements = new List<Statement>();
 

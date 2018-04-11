@@ -1,9 +1,9 @@
-﻿using Foundation.Assertions;
+﻿using DataCommander.Providers.FieldNamespace;
+using Foundation.Assertions;
 
 namespace DataCommander.Providers.Msi
 {
     using System.Data;
-    using Field;
 
     internal sealed class MsiDataReaderHelper : IDataReaderHelper
     {

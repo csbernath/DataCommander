@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers.Field
-{
-    using System.Globalization;
+﻿using System.Globalization;
 
+namespace DataCommander.Providers.FieldNamespace
+{
     public sealed class DoubleField
 	{
 		public DoubleField( double value )

@@ -1,9 +1,10 @@
-﻿namespace DataCommander.Providers.SqlServer.FieldReader
+﻿using DataCommander.Providers.FieldNamespace;
+
+namespace DataCommander.Providers.SqlServer.FieldReader
 {
     using System;
     using System.Data;
     using System.Globalization;
-    using Field;
 
     sealed class MoneyDataFieldReader : IDataFieldReader
     {

@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Providers.Field
+﻿namespace DataCommander.Providers.FieldNamespace
 {
     public interface IDataFieldReader
     {

@@ -1,45 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Runtime.Serialization;
+using System.Linq;
 using System.Text;
+using Foundation.Linq;
 
-namespace Foundation.Data
+namespace Foundation.Data.SqlClient.Orm
 {
-    [DataContract]
-    public class Query
+    public sealed class QueryBuilder
     {
-        [DataMember] public string Namespace;
-        [DataMember] public string Name;
-        [DataMember] public List<Parameter> Parameters;
-        [DataMember] public List<string> Results;
-    }
+        private readonly Query _query;
 
-    [DataContract]
-    public class Parameter
-    {
-        [DataMember] public string Name;
-        [DataMember] public string DataType;
-        [DataMember] public bool IsNullable;
-        [DataMember] public string Value;
-    }
-
-    public sealed class OrmBuilder
-    {
-        private readonly string _commandText;
-        private readonly string _namespace;
-        private readonly OrmQuery _query;
-        private readonly ReadOnlyCollection<OrmResult> _results;
-
-        public OrmBuilder(string commandText, string @namespace, OrmQuery query, ReadOnlyCollection<OrmResult> results)
+        public QueryBuilder(Query query)
         {
-            _commandText = commandText;
-            _namespace = @namespace;
             _query = query;
-            _results = results;
         }
 
-        public string ToString(bool properties)
+        public string Build()
         {
             var stringBuilder = new StringBuilder();
 
@@ -51,7 +27,7 @@ using Foundation.Assertions;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 
-namespace {_namespace}
+namespace {_query.Namespace}
 {{
 ");
 
@@ -59,8 +35,8 @@ namespace {_namespace}
             stringBuilder.Append("\r\n\r\n");
             stringBuilder.Append(GetQueryResultClass().Indent(1));
             stringBuilder.Append("\r\n\r\n");
-            stringBuilder.Append(GetRecordClasses(properties).Indent(1));
-            stringBuilder.Append(GetHandlerClass().Indent(1).Replace("\"\"", $"\"{_commandText}\""));
+            stringBuilder.Append(GetRecordClasses().Indent(1));
+            stringBuilder.Append(GetHandlerClass().Indent(1).Replace("\"\"", $"\"{_query.CommandText}\""));
             stringBuilder.Append("\r\n}");
 
             return stringBuilder.ToString();
@@ -69,7 +45,7 @@ namespace {_namespace}
         private string GetHandlerClass()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"\r\n\r\npublic class {_query.Name}Handler\r\n{{\r\n");
+            stringBuilder.Append($"\r\n\r\npublic sealed class {_query.Name}Handler\r\n{{\r\n");
             stringBuilder.Append("    private const string CommandText = @\"\";\r\n");
             stringBuilder.Append("    private readonly IDbConnection _connection;\r\n");
             stringBuilder.Append("    private readonly IDbTransaction _transaction;\r\n\r\n");
@@ -81,11 +57,13 @@ namespace {_namespace}
             stringBuilder.Append("    }\r\n\r\n");
             stringBuilder.Append(GetHandleQueryMethod().Indent(1));
             stringBuilder.Append("\r\n\r\n");
+            stringBuilder.Append(GetCreateParametersMethod().Indent(1));
+            stringBuilder.Append("\r\n\r\n");
             stringBuilder.Append(GetHandleRequestMethod().Indent(1));
             stringBuilder.Append("\r\n\r\n");
 
             var sequence = new Sequence();
-            foreach (var result in _results)
+            foreach (var result in _query.Results)
             {
                 if (sequence.Next() > 0)
                     stringBuilder.Append("\r\n\r\n");
@@ -99,6 +77,7 @@ namespace {_namespace}
         }
 
         private static string ToUpper(string camelCase) => char.ToUpper(camelCase[0]) + camelCase.Substring(1);
+        private static string ToLower(string pascalCase) => char.ToLower(pascalCase[0]) + pascalCase.Substring(1);
 
         private string GetHandleQueryMethod()
         {
@@ -107,25 +86,31 @@ namespace {_namespace}
             stringBuilder.Append($@"public {_query.Name}QueryResult Handle({_query.Name}Query query)
 {{
     Assert.IsNotNull(query);
-    var parameters = new SqlParameterCollectionBuilder();
-");
-            foreach (var parameter in _query.Parameters)
-            {
-                stringBuilder.Append($"    parameters.Add({parameter.SqlParameterName}");
-
-                if (parameter.SqlDbType != null)
-                    stringBuilder.Append($", {parameter.SqlDbType}");
-
-                stringBuilder.Append($", query.{ToUpper(parameter.SqlParameterName)});\r\n");
-            }
-
-            stringBuilder.Append($@"
+    var parameters = CreateParameters(query);
     const int commandTimeout = 0;
-    var createCommandRequest = new CreateCommandRequest(CommandText, parameters.ToReadOnlyCollection(), CommandType.Text, commandTimeout, _transaction);
+    var createCommandRequest = new CreateCommandRequest(CommandText, parameters, CommandType.Text, commandTimeout, _transaction);
     var executeReaderRequest = new ExecuteReaderRequest(createCommandRequest, CommandBehavior.Default, CancellationToken.None);
-
     return Handle(executeReaderRequest);
 }}");
+
+            return stringBuilder.ToString();
+        }
+
+        private string GetCreateParametersMethod()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append($"private static ReadOnlyCollection<object> CreateParameters(GetPersonQuery query)\r\n");
+            stringBuilder.Append("{\r\n");
+            stringBuilder.Append("    var parameters = new SqlParameterCollectionBuilder();\r\n");
+
+            foreach (var parameter in _query.Parameters)
+            {
+                var method = parameter.DataType == "date" ? "AddDate" : "Add";
+                stringBuilder.Append($"    parameters.{method}(\"{parameter.Name}\", query.{ToUpper(parameter.Name)});\r\n");
+            }
+
+            stringBuilder.Append("    return parameters.ToReadOnlyCollection();\r\n");
+            stringBuilder.Append("}");
 
             return stringBuilder.ToString();
         }
@@ -141,9 +126,8 @@ namespace {_namespace}
     executor.ExecuteReader(request, dataReader =>
     {{
 ");
-
             var sequence = new Sequence();
-            foreach (var result in _results)
+            foreach (var result in _query.Results)
             {
                 var index = sequence.Next();
                 string next = null;
@@ -153,19 +137,18 @@ namespace {_namespace}
                     next = "Next";
                 }
 
-                stringBuilder.Append($"        var result{index + 1} = dataReader.Read{next}Result(Read{result.RecordClassName}).AsReadOnly();");
+                stringBuilder.Append($"        var {ToLower(result.Name)} = dataReader.Read{next}Result(Read{result.Name}).AsReadOnly();");
             }
 
             stringBuilder.Append($"\r\n        result = new {_query.Name}QueryResult(");
 
             sequence.Reset();
-            foreach (var result in _results)
+            foreach (var result in _query.Results)
             {
-                var index = sequence.Next();
-                if (index > 0)
+                if (sequence.Next() > 0)
                     stringBuilder.Append(", ");
 
-                stringBuilder.Append($"result{index + 1}");
+                stringBuilder.Append($"{ToLower(result.Name)}");
             }
 
             stringBuilder.Append(");\r\n");
@@ -175,16 +158,16 @@ namespace {_namespace}
             return stringBuilder.ToString();
         }
 
-        private string GetRecordClasses(bool properties)
+        private string GetRecordClasses()
         {
             var stringBuilder = new StringBuilder();
             var sequence = new Sequence();
-            foreach (var result in _results)
+            foreach (var result in _query.Results)
             {
                 if (sequence.Next() > 0)
                     stringBuilder.Append("\r\n\r\n");
 
-                var recordClass = GetRecordClass(result, properties);
+                var recordClass = GetRecordClass(result);
                 stringBuilder.Append(recordClass);
             }
 
@@ -194,11 +177,11 @@ namespace {_namespace}
         private string GetQueryClass()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($@"public class {_query.Name}Query
+            stringBuilder.Append($@"public sealed class {_query.Name}Query
 {{
 ");
             foreach (var parameter in _query.Parameters)
-                stringBuilder.Append($"    public readonly {parameter.CSharpTypeName} {ToUpper(parameter.SqlParameterName)};\r\n");
+                stringBuilder.Append($"    public readonly {GetCSharpTypeName(parameter.DataType, parameter.IsNullable)} {ToUpper(parameter.Name)};\r\n");
 
             stringBuilder.Append("\r\n");
             stringBuilder.Append(GetQueryClassConstructor().Indent(1));
@@ -218,13 +201,13 @@ namespace {_namespace}
                 if (sequence.Next() > 0)
                     stringBuilder.Append(", ");
 
-                stringBuilder.Append($"{parameter.CSharpTypeName} {parameter.SqlParameterName}");
+                stringBuilder.Append($"{GetCSharpTypeName(parameter.DataType, parameter.IsNullable)} {parameter.Name}");
             }
 
             stringBuilder.Append(")\r\n{\r\n");
 
             foreach (var parameter in _query.Parameters)
-                stringBuilder.Append($"    {ToUpper(parameter.SqlParameterName)} = {parameter.SqlParameterName};\r\n");
+                stringBuilder.Append($"    {ToUpper(parameter.Name)} = {parameter.Name};\r\n");
 
             stringBuilder.Append("}");
 
@@ -234,124 +217,158 @@ namespace {_namespace}
         private string GetQueryResultClass()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"public class {_query.Name}QueryResult\r\n{{\r\n");
+            stringBuilder.Append($"public sealed class {_query.Name}QueryResult\r\n{{\r\n");
 
             var sequence = new Sequence();
-            foreach (var result in _results)
+            foreach (var result in _query.Results)
             {
                 if (sequence.Next() > 0)
                     stringBuilder.Append("\r\n");
 
-                stringBuilder.Append($"    public readonly ReadOnlyCollection<{result.RecordClassName}> {result.RecordClassName};");
+                stringBuilder.Append($"    public readonly ReadOnlyCollection<{result.Name}> {result.Name};");
             }
 
             stringBuilder.Append("\r\n\r\n");
-            stringBuilder.Append(GetQueryResultClassConstructor());
+            stringBuilder.Append(GetQueryResultClassConstructor(_query.Results).Indent(1));
             stringBuilder.Append("\r\n}");
             return stringBuilder.ToString();
         }
 
-        private string GetQueryResultClassConstructor()
+        private string GetQueryResultClassConstructor(ReadOnlyCollection<Result> results)
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"    public {_query.Name}QueryResult(");
+            stringBuilder.Append($"public {_query.Name}QueryResult(");
 
             var sequence = new Sequence();
-            foreach (var result in _results)
+            foreach (var result in results)
             {
-                var index = sequence.Next();
-                if (index > 0)
+                if (sequence.Next() > 0)
                     stringBuilder.Append(", ");
 
-                stringBuilder.Append($"ReadOnlyCollection<{result.RecordClassName}> result{index + 1}");
+                stringBuilder.Append($"ReadOnlyCollection<{result.Name}> {ToLower(result.Name)}");
             }
 
             stringBuilder.Append(")\r\n");
-            stringBuilder.Append("    {\r\n");
+            stringBuilder.Append("{\r\n");
 
-            sequence.Reset();
-            foreach (var result in _results)
-            {
-                var index = sequence.Next();
-                if (index > 0)
-                    stringBuilder.Append("\r\n");
+            foreach (var result in results)
+                stringBuilder.Append($"    {result.Name} = {ToLower(result.Name)};\r\n");
 
-                stringBuilder.Append($"        {result.RecordClassName} = result{index + 1};");
-            }
-
-            stringBuilder.Append("\r\n    }");
+            stringBuilder.Append("}");
 
             return stringBuilder.ToString();
         }
 
-        private static string GetRecordClass(OrmResult result, bool properties)
+        private static string GetRecordClass(Result result)
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append("public class ");
-            stringBuilder.Append(result.RecordClassName);
+            stringBuilder.Append("public sealed class ");
+            stringBuilder.Append(result.Name);
             stringBuilder.Append("\r\n{\r\n");
 
             var sequence = new Sequence();
-            foreach (var column in result.Columns)
+            foreach (var field in result.Fields)
             {
                 if (sequence.Next() > 0)
                     stringBuilder.AppendLine();
 
-                stringBuilder.Append("    public ");
-                stringBuilder.Append(GetCSharpTypeName(column.DataType));
-
-                if (column.AllowDbNull && IsValueType(column.DataType))
-                    stringBuilder.Append('?');
-
+                stringBuilder.Append("    public readonly ");
+                stringBuilder.Append(GetCSharpTypeName(field.DataType,field.IsNullable));
                 stringBuilder.Append(' ');
-                stringBuilder.Append(column.ColumnName);
-                stringBuilder.Append(properties ? " { get; set; }" : ";");
+                stringBuilder.Append(field.Name);
+                stringBuilder.Append(';');
             }
 
+            stringBuilder.Append("\r\n\r\n");
+            stringBuilder.Append(GetRecordClassConstructor(result).Indent(1));
             stringBuilder.Append(@"
 }");
+
             return stringBuilder.ToString();
         }
 
-        private static string GetReadRecordMethod(OrmResult result)
+        private static string GetRecordClassConstructor(Result result)
         {
-            const string recordInstanceName = "record";
-
             var stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendFormat(@"private static {0} Read{0}(IDataRecord dataRecord)
-{{
-    var {1} = new {0}();
-", result.RecordClassName, recordInstanceName);
+            stringBuilder.Append($"public {result.Name}(");
 
-            var first = true;
-            var index = 0;
-            foreach (var column in result.Columns)
+            var sequence = new Sequence();
+            foreach (var field in result.Fields)
             {
-                if (first)
-                    first = false;
-                else
-                    stringBuilder.AppendLine();
+                if (sequence.Next() > 0)
+                    stringBuilder.Append(", ");
 
-                stringBuilder.AppendFormat("    {0}.", recordInstanceName);
-                stringBuilder.Append(column.ColumnName);
-                stringBuilder.Append(" = dataRecord.");
-                stringBuilder.Append(GetDataRecordMethodName(column));
-                stringBuilder.Append('(');
-                stringBuilder.Append(index);
-                stringBuilder.Append(");");
-
-                ++index;
+                stringBuilder.Append($"{GetCSharpTypeName(field.DataType, field.IsNullable)} {ToLower(field.Name)}");
             }
 
-            stringBuilder.AppendFormat(@"
-    return {0};
-}}", recordInstanceName);
+            stringBuilder.Append(")\r\n");
+            stringBuilder.Append("{\r\n");
+
+            foreach (var field in result.Fields)
+                stringBuilder.Append($"    {field.Name} = {ToLower(field.Name)};\r\n");
+
+            stringBuilder.Append("}");
 
             return stringBuilder.ToString();
         }
 
-        private static string GetCSharpTypeName(Type dbColumnDataType)
+        private static string GetReadRecordMethod(Result result)
+        {
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.Append($"private static {result.Name} Read{result.Name}(IDataRecord dataRecord)\r\n");
+            stringBuilder.Append("{\r\n");
+
+            var sequence = new Sequence();
+            foreach (var field in result.Fields)
+            {
+                var index = sequence.Next();
+                stringBuilder.Append($"    var {ToLower(field.Name)} = dataRecord.{GetDataRecordMethodName(field)}({index});\r\n");
+            }
+
+            stringBuilder.Append("\r\n");
+            stringBuilder.Append($"    return new {result.Name}(");
+
+            sequence.Reset();
+            foreach (var field in result.Fields)
+            {
+                if (sequence.Next() > 0)
+                    stringBuilder.Append(", ");
+
+                stringBuilder.Append($"{ToLower(field.Name)}");
+            }
+
+            stringBuilder.Append(");\r\n");
+            stringBuilder.Append("}");
+
+            return stringBuilder.ToString();
+        }
+
+        private static string GetCSharpTypeName(string sqlDataType, bool isNullable)
+        {
+            string csharpTypeName;
+            switch (sqlDataType)
+            {
+                case "int":
+                    csharpTypeName = CSharpTypeName.Int32;
+                    break;
+
+                case "date":
+                    csharpTypeName = nameof(DateTime);
+                    break;
+
+                default:
+                    throw new NotImplementedException();
+            }
+
+            if (isNullable)
+                csharpTypeName += "?";
+
+            return csharpTypeName;
+        }
+
+        private static string GetCSharpTypeName(Type dbColumnDataType, bool isNullable)
         {
             var typeCode = Type.GetTypeCode(dbColumnDataType);
             string csharpTypeName;
@@ -411,6 +428,9 @@ namespace {_namespace}
                     break;
             }
 
+            if (isNullable && IsValueType(dbColumnDataType))
+                csharpTypeName += '?';
+
             return csharpTypeName;
         }
 
@@ -447,9 +467,9 @@ namespace {_namespace}
             return isValueType;
         }
 
-        private static string GetDataRecordMethodName(OrmColumn column)
+        private static string GetDataRecordMethodName(Field field)
         {
-            var typeCode = Type.GetTypeCode(column.DataType);
+            var typeCode = Type.GetTypeCode(field.DataType);
             string methodName = null;
             switch (typeCode)
             {
@@ -458,68 +478,56 @@ namespace {_namespace}
                 case TypeCode.DBNull:
                     break;
                 case TypeCode.Boolean:
-                    methodName = column.AllowDbNull == true ? "GetNullableBoolean" : "GetBoolean";
+                    methodName = field.IsNullable ? "GetNullableBoolean" : "GetBoolean";
                     break;
                 case TypeCode.Char:
                     break;
                 case TypeCode.SByte:
                     break;
                 case TypeCode.Byte:
-                    methodName = column.AllowDbNull == true ? "GetNullableByte" : "GetByte";
+                    methodName = field.IsNullable ? "GetNullableByte" : "GetByte";
                     break;
                 case TypeCode.Int16:
-                    methodName = column.AllowDbNull == true ? "GetNullableInt16" : "GetInt16";
+                    methodName = field.IsNullable ? "GetNullableInt16" : "GetInt16";
                     break;
                 case TypeCode.UInt16:
                     break;
                 case TypeCode.Int32:
-                    methodName = column.AllowDbNull == true ? "GetNullableInt32" : "GetInt32";
+                    methodName = field.IsNullable ? "GetNullableInt32" : "GetInt32";
                     break;
                 case TypeCode.UInt32:
                     break;
                 case TypeCode.Int64:
-                    methodName = column.AllowDbNull == true ? "GetNullableInt64" : "GetInt64";
+                    methodName = field.IsNullable ? "GetNullableInt64" : "GetInt64";
                     break;
                 case TypeCode.UInt64:
                     break;
                 case TypeCode.Single:
-                    methodName = column.AllowDbNull == true ? "GetNullableFloat" : "GetFloat";
+                    methodName = field.IsNullable ? "GetNullableFloat" : "GetFloat";
                     break;
                 case TypeCode.Double:
-                    methodName = column.AllowDbNull == true ? "GetNullableDouble" : "GetDouble";
+                    methodName = field.IsNullable ? "GetNullableDouble" : "GetDouble";
                     break;
                 case TypeCode.Decimal:
-                    methodName = column.AllowDbNull == true ? "GetNullableDecimal" : "GetDecimal";
+                    methodName = field.IsNullable ? "GetNullableDecimal" : "GetDecimal";
                     break;
                 case TypeCode.DateTime:
-                    methodName = column.AllowDbNull == true ? "GetNullableDateTime" : "GetDateTime";
+                    methodName = field.IsNullable ? "GetNullableDateTime" : "GetDateTime";
                     break;
                 case TypeCode.String:
-                    methodName = column.AllowDbNull == true ? "GetStringOrDefault" : "GetString";
+                    methodName = field.IsNullable ? "GetStringOrDefault" : "GetString";
                     break;
                 case TypeCode.Object:
-                    if (column.DataType == typeof(Guid))
-                        methodName = column.AllowDbNull == true ? "GetNullableGuid" : "GetGuid";
-                    else if (column.DataType == typeof(byte[]))
-                        methodName = column.AllowDbNull == true ? "GetNullableBytes" : "GetBytes";
+                    if (field.DataType == typeof(Guid))
+                        methodName = field.IsNullable ? "GetNullableGuid" : "GetGuid";
+                    else if (field.DataType == typeof(byte[]))
+                        methodName = field.IsNullable ? "GetNullableBytes" : "GetBytes";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
 
             return methodName;
-        }
-    }
-
-    public sealed class OrmQuery
-    {
-        public readonly string Name;
-        public readonly ReadOnlyCollection<OrmParameter> Parameters;
-
-        public OrmQuery(string name, ReadOnlyCollection<OrmParameter> parameters)
-        {
-            Name = name;
-            Parameters = parameters;
         }
     }
 }

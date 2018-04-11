@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers.Field
-{
-    using System.IO;
+﻿using System.IO;
 
+namespace DataCommander.Providers.FieldNamespace
+{
     public sealed class StreamField
 	{
         public StreamField( Stream stream )

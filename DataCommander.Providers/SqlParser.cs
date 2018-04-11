@@ -4,14 +4,26 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using DataCommander.Providers.Connection;
-using DataCommander.Providers.Field;
+using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.Query;
 using Foundation.Linq;
 using Foundation.Log;
 
 namespace DataCommander.Providers
 {
-    public sealed class SqlStatement
+    public class DbCommandDefinition
+    {
+        public readonly string CommandText;
+        public readonly CommandType CommandType;
+
+        public DbCommandDefinition(string commandText, CommandType commandType)
+        {
+            CommandText = commandText;
+            CommandType = commandType;
+        }
+    }
+
+    public sealed class SqlParser
     {
         #region Private Fields
 
@@ -21,7 +33,7 @@ namespace DataCommander.Providers
 
         #endregion
 
-        public SqlStatement(string text)
+        public SqlParser(string text)
         {
             _text = text;
             Tokens = Tokenize(text);
@@ -163,6 +175,131 @@ namespace DataCommander.Providers
                 command.CommandText = _text;
 
             return command;
+        }
+
+        public DbCommandDefinition CreateCommandDefinition(IProvider provider, ConnectionBase connection, CommandType commandType)
+        {
+            string commandText = null;
+            var commandType2 = commandType;
+
+            if (Tokens.Length > 0)
+            {
+                var firstToken = Tokens[0];
+                var startTokenIndex = 0;
+                var isVbScript = false;
+
+                if (firstToken.Type == TokenType.KeyWord)
+                {
+                    var keyWord = firstToken.Value.ToLower();
+
+                    switch (keyWord)
+                    {
+                        case "exec":
+                            commandType2 = CommandType.StoredProcedure;
+                            startTokenIndex = 1;
+                            break;
+
+                        case "load":
+                            commandType2 = CommandType.Text;
+                            break;
+
+                        case "main":
+                            commandType2 = CommandType.StoredProcedure;
+                            isVbScript = true;
+                            break;
+
+                        case "select":
+                            commandType2 = CommandType.Text;
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                commandType = commandType2;
+
+                switch (commandType)
+                {
+                    case CommandType.Text:
+                        commandText = _text;
+                        break;
+
+                    default:
+                        if (isVbScript)
+                        {
+                            //string commandText = query.Substring(firstLine.Length);
+                            //command.CommandText = commandText;
+                        }
+                        else
+                            commandText = Tokens[startTokenIndex].Value;
+
+                        startTokenIndex++;
+
+                        var command = connection.CreateCommand();
+                        command.CommandText = commandText;
+                        command.CommandType = commandType;
+                        provider.DeriveParameters(command);
+
+                        var i = startTokenIndex;
+                        var tokenList = new List<Token>();
+                        var parameters = new List<Parameter>();
+                        while (i < Tokens.Length)
+                        {
+                            var token = Tokens[i];
+                            if (token.Type == TokenType.OperatorOrPunctuator && token.Value == ",")
+                            {
+                                parameters.Add(ToParameter(tokenList));
+                                tokenList.Clear();
+                            }
+                            else
+                                tokenList.Add(token);
+
+                            i++;
+                        }
+
+                        if (tokenList.Count > 0)
+                            parameters.Add(ToParameter(tokenList));
+
+                        var defaultValues = new List<IDataParameter>();
+                        foreach (IDataParameter parameter in command.Parameters)
+                        {
+                            switch (parameter.Direction)
+                            {
+                                case ParameterDirection.Input:
+                                case ParameterDirection.InputOutput:
+                                    var dataParameter = provider.GetDataParameter(parameter);
+                                    var first = parameters.FirstOrDefault(
+                                        p => string.Compare(p.Name, parameter.ParameterName, StringComparison.InvariantCultureIgnoreCase) == 0);
+                                    if (first == null)
+                                    {
+                                        first = parameters.FirstOrDefault(p => p.Name == null);
+                                        if (first != null)
+                                            parameters.Remove(first);
+                                    }
+
+                                    if (first != null)
+                                    {
+                                        var value = GetParameterValue(dataParameter, first.Value);
+                                        if (value != null)
+                                            parameter.Value = value;
+                                        else
+                                            defaultValues.Add(parameter);
+                                    }
+
+                                    break;
+                            }
+                        }
+
+                        foreach (var parameter in defaultValues)
+                            command.Parameters.Remove(parameter);
+                        break;
+                }
+            }
+            else
+                commandText = _text;
+
+            return new DbCommandDefinition(commandText, commandType);
         }
 
         public SqlObject FindSqlObject(int index)

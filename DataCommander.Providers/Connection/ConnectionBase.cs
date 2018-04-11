@@ -1,13 +1,12 @@
 ﻿using Foundation.Assertions;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataCommander.Providers.Connection
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     public abstract class ConnectionBase
     {
         public IDbConnection Connection { get; protected set; }

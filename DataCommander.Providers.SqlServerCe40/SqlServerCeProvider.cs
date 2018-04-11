@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Xml;
 using DataCommander.Providers.Connection;
-using DataCommander.Providers.Field;
+using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.SqlServerCe40.ObjectExplorer;
 using Foundation.Data;
 
@@ -68,7 +68,7 @@ namespace DataCommander.Providers.SqlServerCe40
         {
             var response = new GetCompletionResponse();
             string[] array = null;
-            var sqlStatement = new SqlStatement(text);
+            var sqlStatement = new SqlParser(text);
             var tokens = sqlStatement.Tokens;
             var index = sqlStatement.FindToken(position);
 

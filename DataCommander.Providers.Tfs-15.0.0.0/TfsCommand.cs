@@ -115,17 +115,12 @@ namespace DataCommander.Providers.Tfs
         private IDataReader ExecuteStoredProcedure(CommandBehavior behavior)
         {
             IDataReader dataReader;
-            TfsDataReaderFactory.DataReaderInfo info;
-            var contains = TfsDataReaderFactory.Dictionary.TryGetValue(CommandText, out info);
+            var contains = TfsDataReaderFactory.Dictionary.TryGetValue(CommandText, out var info);
 
             if (contains)
-            {
                 dataReader = info.CreateDataReader(this);
-            }
             else
-            {
                 throw new NotSupportedException();
-            }
 
             return dataReader;
         }

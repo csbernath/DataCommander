@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers.Field
-{
-    using System;
-    using System.Globalization;
+﻿using System;
+using System.Globalization;
 
+namespace DataCommander.Providers.FieldNamespace
+{
     /// <summary>
     /// Summary description for DecimalField.
     /// </summary>

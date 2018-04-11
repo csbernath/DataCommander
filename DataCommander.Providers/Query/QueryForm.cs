@@ -95,7 +95,7 @@ namespace DataCommander.Providers.Query
         private readonly IContainer components = new Container();
         private readonly string _connectionString;
         private IDbTransaction _transaction;
-        private SqlStatement _sqlStatement;
+        private SqlParser _sqlStatement;
         private IDbCommand _command;
         private CommandType _commandType = CommandType.Text;
         private IAsyncDataAdapter _dataAdapter;
@@ -1581,26 +1581,20 @@ namespace DataCommander.Providers.Query
 
                 if (statements.Count == 1)
                 {
-                    _sqlStatement = new SqlStatement(statements[0].CommandText);
+                    _sqlStatement = new SqlParser(statements[0].CommandText);
                     var command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
                     command.Transaction = _transaction;
                     commands = new[]
                     {
-                        new AsyncDataAdapterCommand
-                        {
-                            LineIndex = 0,
-                            Command = command
-                        }
+                        new AsyncDataAdapterCommand(0, command)
                     };
                 }
                 else
                     commands =
                         from statement in statements
-                        select new AsyncDataAdapterCommand
-                        {
-                            LineIndex = statement.LineIndex,
-                            Command = Connection.Connection.CreateCommand(new CreateCommandRequest(statement.CommandText, null, CommandType.Text, _commandTimeout, _transaction))
-                        };
+                        select new AsyncDataAdapterCommand(
+                            statement.LineIndex,
+                            Connection.Connection.CreateCommand(new CreateCommandRequest(statement.CommandText, null, CommandType.Text, _commandTimeout, _transaction)));
 
                 int maxRecords;
                 IResultWriter resultWriter = null;
@@ -2343,7 +2337,7 @@ namespace DataCommander.Providers.Query
                 }
                 else
                 {
-                    _sqlStatement = new SqlStatement(Query);
+                    _sqlStatement = new SqlParser(Query);
                     _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
 
                     if (_command != null)
@@ -3257,7 +3251,7 @@ namespace DataCommander.Providers.Query
             try
             {
                 Cursor = Cursors.WaitCursor;
-                _sqlStatement = new SqlStatement(Query);
+                _sqlStatement = new SqlParser(Query);
                 _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
 
                 if (_command != null)
@@ -3341,7 +3335,7 @@ namespace DataCommander.Providers.Query
         {
             try
             {
-                _sqlStatement = new SqlStatement(Query);
+                _sqlStatement = new SqlParser(Query);
                 _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
                 var dataSet = new DataSet();
                 using (var dataReader = _command.ExecuteReader())
@@ -3413,7 +3407,7 @@ namespace DataCommander.Providers.Query
         {
             try
             {
-                _sqlStatement = new SqlStatement(Query);
+                _sqlStatement = new SqlParser(Query);
                 _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
 
                 using (var dataReader = _command.ExecuteReader())
@@ -3486,7 +3480,7 @@ namespace DataCommander.Providers.Query
             {
                 var textWriter = _standardOutput.TextWriter;
 
-                _sqlStatement = new SqlStatement(Query);
+                _sqlStatement = new SqlParser(Query);
                 _command = _sqlStatement.CreateCommand(Provider, Connection, CommandType.Text, _commandTimeout);
                 var tableName = _sqlStatement.FindTableName();
                 var tableIndex = 0;
@@ -3583,7 +3577,7 @@ namespace DataCommander.Providers.Query
         {
             try
             {
-                _sqlStatement = new SqlStatement(Query);
+                _sqlStatement = new SqlParser(Query);
                 _command = _sqlStatement.CreateCommand(Provider, Connection, CommandType.Text, _commandTimeout);
                 var tableName = _sqlStatement.FindTableName();
 
@@ -3695,7 +3689,7 @@ namespace DataCommander.Providers.Query
             try
             {
                 Log.Write(LogLevel.Trace, "Query:\r\n{0}", query);
-                _sqlStatement = new SqlStatement(query);
+                _sqlStatement = new SqlParser(query);
                 _commandType = CommandType.Text;
                 _openTableMode = true;
                 _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
@@ -3708,11 +3702,7 @@ namespace DataCommander.Providers.Query
                 _dataAdapter = new AsyncDataAdapter(Provider,
                     new[]
                     {
-                        new AsyncDataAdapterCommand
-                        {
-                            LineIndex = 0,
-                            Command = _command
-                        }
+                        new AsyncDataAdapterCommand(0,_command)
                     },
                     maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
                 _dataAdapter.Start();
@@ -3730,7 +3720,7 @@ namespace DataCommander.Providers.Query
 
         private void createSqlCeDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var sqlStatement = new SqlStatement(Query);
+            var sqlStatement = new SqlParser(Query);
             _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
             var maxRecords = int.MaxValue;
             var tableName = sqlStatement.FindTableName();
@@ -3738,11 +3728,7 @@ namespace DataCommander.Providers.Query
             IAsyncDataAdapter asyncDataAdatper = new AsyncDataAdapter(Provider,
                 new[]
                 {
-                    new AsyncDataAdapterCommand
-                    {
-                        LineIndex = 0,
-                        Command = _command
-                    }
+                    new AsyncDataAdapterCommand(0,_command)
                 },
                 maxRecords, _rowBlockSize, sqlCeResultWriter, EndFillInvoker, WriteEndInvoker);
             asyncDataAdatper.Start();
@@ -3818,7 +3804,7 @@ namespace DataCommander.Providers.Query
 
         internal void ScriptQueryAsCreateTable()
         {
-            var sqlStatement = new SqlStatement(Query);
+            var sqlStatement = new SqlParser(Query);
             var command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
 
             var forms = DataCommanderApplication.Instance.MainForm.MdiChildren;
@@ -3900,7 +3886,7 @@ namespace DataCommander.Providers.Query
                 var nextQueryForm = (QueryForm) forms[index + 1];
                 var destinationProvider = nextQueryForm.Provider;
                 var destinationConnection = nextQueryForm.Connection;
-                var sqlStatement = new SqlStatement(Query);
+                var sqlStatement = new SqlParser(Query);
                 _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
                 string tableName;
                 if (_command.CommandType == CommandType.StoredProcedure)
@@ -3931,11 +3917,7 @@ namespace DataCommander.Providers.Query
                 _dataAdapter = new AsyncDataAdapter(Provider,
                     new[]
                     {
-                        new AsyncDataAdapterCommand
-                        {
-                            LineIndex = 0,
-                            Command = _command
-                        }
+                        new AsyncDataAdapterCommand(0,_command)
                     },
                     maxRecords, rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
                 _dataAdapter.Start();
@@ -3954,7 +3936,7 @@ namespace DataCommander.Providers.Query
                 var destinationProvider = nextQueryForm.Provider;
                 var destinationConnection = (SqlConnection) nextQueryForm.Connection.Connection;
                 var destionationTransaction = (SqlTransaction) nextQueryForm._transaction;
-                var sqlStatement = new SqlStatement(Query);
+                var sqlStatement = new SqlParser(Query);
                 _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
                 string tableName;
                 if (_command.CommandType == CommandType.StoredProcedure)

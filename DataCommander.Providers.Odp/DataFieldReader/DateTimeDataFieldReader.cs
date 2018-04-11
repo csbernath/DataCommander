@@ -1,7 +1,8 @@
-﻿namespace DataCommander.Providers.Odp.DataFieldReader
+﻿using DataCommander.Providers.FieldNamespace;
+
+namespace DataCommander.Providers.Odp.DataFieldReader
 {
     using System;
-    using Field;
     using Oracle.ManagedDataAccess.Client;
 
     internal sealed class DateTimeDataFieldReader : IDataFieldReader

@@ -341,7 +341,7 @@ namespace DataCommander.Providers.Odp
         {
             var response = new GetCompletionResponse();
             string[] items = null;
-            var sqlStatement = new SqlStatement(text);
+            var sqlStatement = new SqlParser(text);
             Token previousToken, currentToken;
             sqlStatement.FindToken(position, out previousToken, out currentToken);
 

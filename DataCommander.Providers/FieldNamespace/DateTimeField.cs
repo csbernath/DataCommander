@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers.Field
-{
-    using System;
-    using System.Globalization;
+﻿using System;
+using System.Globalization;
 
+namespace DataCommander.Providers.FieldNamespace
+{
     public sealed class DateTimeField : IComparable, IConvertible
     {
         public DateTimeField(DateTime value)

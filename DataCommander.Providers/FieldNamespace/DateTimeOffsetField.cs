@@ -1,45 +1,92 @@
-﻿namespace DataCommander.Providers.Field
+﻿using System;
+using System.Globalization;
+
+namespace DataCommander.Providers.FieldNamespace
 {
-    using System;
-    using System.Text;
-    using Foundation.Text;
-
-    public sealed class BinaryField : IConvertible
+    public sealed class DateTimeOffsetField : IComparable, IConvertible
     {
-        private readonly string _s;
-
-        public BinaryField(byte[] bytes)
+        public DateTimeOffsetField(DateTimeOffset value)
         {
-            Value = bytes;
-            var length = Math.Min(bytes.Length, 16);
-            var chars = Hex.Encode(bytes, length, true);
+            Value = value;
+        }
 
-            var sb = new StringBuilder();
-            sb.Append("0x");
-            sb.Append(chars);
+        public DateTimeOffset Value { get; }
 
-            if (length < bytes.Length)
-            {
-                sb.Append(" (");
-                sb.Append(bytes.Length);
-                sb.Append(')');
-            }
+        private static string ToString(DateTimeOffset value)
+        {
+            //string format;
 
-            _s = sb.ToString();
+            //if (value.TimeOfDay.Ticks == 0)
+            //{
+            //    format = "yyyy-MM-ddZ";
+            //}
+            //else if (value.Date.Ticks == 0)
+            //{
+            //    format = "HH:mm:ss.fffZ";
+            //}
+            //else
+            //{
+            //    format = "yyyy-MM-dd HH:mm:ss.fffZ";
+            //}
+
+            //return value.ToString(format);
+
+            // TODO
+            return value.ToString(CultureInfo.InvariantCulture);
         }
 
         public override string ToString()
         {
-            return _s;
+            return ToString(Value);
         }
 
-        public byte[] Value { get; }
+        #region IComparable Members
+
+        public int CompareTo(object obj)
+        {
+            // TODO
+            return 0;
+            //int result;
+            //Type type = obj.GetType();
+            //TypeCode typeCode = Type.GetTypeCode(type);
+
+            //switch (typeCode)
+            //{
+            //    case TypeCode.String:
+            //        string s = (string)obj;
+            //        DateTime dateTime;
+            //        bool succeeded = TryParse(s, out dateTime);
+
+            //        if (succeeded)
+            //        {
+            //            result = this.value.CompareTo(dateTime);
+            //        }
+            //        else
+            //        {
+            //            result = -1;
+            //        }
+
+            //        break;
+
+            //    case TypeCode.Object:
+            //        DateTimeOffsetField dateTimeField = (DateTimeOffsetField)obj;
+            //        result = this.value.CompareTo(dateTimeField.value);
+            //        break;
+
+            //    default:
+            //        throw new NotImplementedException();
+            //}
+
+            //return result;
+        }
+
+        #endregion
 
         #region IConvertible Members
 
         TypeCode IConvertible.GetTypeCode()
         {
-            throw new NotImplementedException();
+            return TypeCode.Object;
         }
 
         bool IConvertible.ToBoolean(IFormatProvider provider)
@@ -59,7 +106,7 @@
 
         DateTime IConvertible.ToDateTime(IFormatProvider provider)
         {
-            throw new NotImplementedException();
+            return Value.LocalDateTime;
         }
 
         decimal IConvertible.ToDecimal(IFormatProvider provider)
@@ -99,7 +146,7 @@
 
         string IConvertible.ToString(IFormatProvider provider)
         {
-            return Hex.GetString(Value, true);
+            return ToString();
         }
 
         object IConvertible.ToType(Type conversionType, IFormatProvider provider)

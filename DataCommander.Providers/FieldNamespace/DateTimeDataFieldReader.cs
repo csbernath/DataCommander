@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers.Field
-{
-    using System;
-    using System.Data;
+﻿using System;
+using System.Data;
 
+namespace DataCommander.Providers.FieldNamespace
+{
     public sealed class DateTimeDataFieldReader : IDataFieldReader
 	{
 		private readonly IDataRecord _dataRecord;

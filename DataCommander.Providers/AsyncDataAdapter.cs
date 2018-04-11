@@ -18,14 +18,16 @@ namespace DataCommander.Providers
         #region Private Fields
 
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-        private IProvider _provider;
-        private IEnumerable<AsyncDataAdapterCommand> _commands;
+
+        private readonly IProvider _provider;
+        private readonly IEnumerable<AsyncDataAdapterCommand> _commands;
+        private readonly int _maxRecords;
+        private readonly int _rowBlockSize;
+        private readonly IResultWriter _resultWriter;
+        private readonly Action<IAsyncDataAdapter, Exception> _endFill;
+        private readonly Action<IAsyncDataAdapter> _writeEnd;
+
         private AsyncDataAdapterCommand _command;
-        private int _maxRecords;
-        private int _rowBlockSize;
-        private IResultWriter _resultWriter;
-        private Action<IAsyncDataAdapter, Exception> _endFill;
-        private Action<IAsyncDataAdapter> _writeEnd;
         private long _rowCount;
         private WorkerThread _thread;
         private int _tableCount;
@@ -33,14 +35,8 @@ namespace DataCommander.Providers
 
         #endregion
 
-        public AsyncDataAdapter(
-            IProvider provider,
-            IEnumerable<AsyncDataAdapterCommand> commands,
-            int maxRecords,
-            int rowBlockSize,
-            IResultWriter resultWriter,
-            Action<IAsyncDataAdapter, Exception> endFill,
-            Action<IAsyncDataAdapter> writeEnd)
+        public AsyncDataAdapter(IProvider provider, IEnumerable<AsyncDataAdapterCommand> commands, int maxRecords, int rowBlockSize, IResultWriter resultWriter,
+            Action<IAsyncDataAdapter, Exception> endFill, Action<IAsyncDataAdapter> writeEnd)
         {
             _provider = provider;
             _commands = commands;
@@ -54,9 +50,7 @@ namespace DataCommander.Providers
         #region IAsyncDataAdapter Members
 
         IResultWriter IAsyncDataAdapter.ResultWriter => _resultWriter;
-
         long IAsyncDataAdapter.RowCount => _rowCount;
-
         int IAsyncDataAdapter.TableCount => _tableCount;
 
         void IAsyncDataAdapter.Start()
@@ -67,7 +61,6 @@ namespace DataCommander.Providers
                 {
                     Name = "AsyncDataAdapter.Fill"
                 };
-
                 _thread.Start();
             }
             else
@@ -87,11 +80,8 @@ namespace DataCommander.Providers
                     else
                     {
                         var joined = _thread.Join(5000);
-
                         if (!joined)
-                        {
                             _thread.Abort();
-                        }
                     }
                 }
             }

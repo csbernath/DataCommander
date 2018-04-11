@@ -1,92 +1,40 @@
-﻿namespace DataCommander.Providers.Field
-{
-    using System;
-    using System.Globalization;
+﻿using System;
 
-    public sealed class DateTimeOffsetField : IComparable, IConvertible
+namespace DataCommander.Providers.FieldNamespace
+{
+    public sealed class StringField : IConvertible
     {
-        public DateTimeOffsetField(DateTimeOffset value)
+        private readonly int _length;
+
+        public StringField(string value, int length)
         {
             Value = value;
+            _length = length;
         }
 
-        public DateTimeOffset Value { get; }
-
-        private static string ToString(DateTimeOffset value)
-        {
-            //string format;
-
-            //if (value.TimeOfDay.Ticks == 0)
-            //{
-            //    format = "yyyy-MM-ddZ";
-            //}
-            //else if (value.Date.Ticks == 0)
-            //{
-            //    format = "HH:mm:ss.fffZ";
-            //}
-            //else
-            //{
-            //    format = "yyyy-MM-dd HH:mm:ss.fffZ";
-            //}
-
-            //return value.ToString(format);
-
-            // TODO
-            return value.ToString(CultureInfo.InvariantCulture);
-        }
+        public string Value { get; }
 
         public override string ToString()
         {
-            return ToString(Value);
+            string s;
+
+            if (Value.Length > _length)
+            {
+                s = Value.Substring(0, _length);
+            }
+            else
+            {
+                s = Value;
+            }
+
+            return s;
         }
-
-        #region IComparable Members
-
-        public int CompareTo(object obj)
-        {
-            // TODO
-            return 0;
-            //int result;
-            //Type type = obj.GetType();
-            //TypeCode typeCode = Type.GetTypeCode(type);
-
-            //switch (typeCode)
-            //{
-            //    case TypeCode.String:
-            //        string s = (string)obj;
-            //        DateTime dateTime;
-            //        bool succeeded = TryParse(s, out dateTime);
-
-            //        if (succeeded)
-            //        {
-            //            result = this.value.CompareTo(dateTime);
-            //        }
-            //        else
-            //        {
-            //            result = -1;
-            //        }
-
-            //        break;
-
-            //    case TypeCode.Object:
-            //        DateTimeOffsetField dateTimeField = (DateTimeOffsetField)obj;
-            //        result = this.value.CompareTo(dateTimeField.value);
-            //        break;
-
-            //    default:
-            //        throw new NotImplementedException();
-            //}
-
-            //return result;
-        }
-
-        #endregion
 
         #region IConvertible Members
 
         TypeCode IConvertible.GetTypeCode()
         {
-            return TypeCode.Object;
+            throw new NotImplementedException();
         }
 
         bool IConvertible.ToBoolean(IFormatProvider provider)
@@ -106,7 +54,7 @@
 
         DateTime IConvertible.ToDateTime(IFormatProvider provider)
         {
-            return Value.LocalDateTime;
+            throw new NotImplementedException();
         }
 
         decimal IConvertible.ToDecimal(IFormatProvider provider)
@@ -146,7 +94,7 @@
 
         string IConvertible.ToString(IFormatProvider provider)
         {
-            return ToString();
+            return Value;
         }
 
         object IConvertible.ToType(Type conversionType, IFormatProvider provider)

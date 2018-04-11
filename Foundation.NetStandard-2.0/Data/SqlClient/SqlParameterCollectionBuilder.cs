@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
@@ -31,6 +32,17 @@ namespace Foundation.Data.SqlClient
             {
                 ParameterName = parameterName,
                 SqlDbType = sqlDbType,
+                Value = value
+            };
+            Add(parameter);
+        }
+
+        public void AddDate(string parameterName, DateTime value)
+        {
+            var parameter = new SqlParameter
+            {
+                ParameterName = parameterName,
+                SqlDbType = SqlDbType.Date,
                 Value = value
             };
             Add(parameter);

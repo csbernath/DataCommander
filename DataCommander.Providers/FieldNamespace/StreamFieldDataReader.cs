@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Providers.Field
-{
-    using System;
-    using System.Data;
-    using System.IO;
+﻿using System;
+using System.Data;
+using System.IO;
 
+namespace DataCommander.Providers.FieldNamespace
+{
     public sealed class StreamFieldDataReader : IDataFieldReader
 	{
 		private readonly IDataRecord _dataRecord;

@@ -1,4 +1,6 @@
-﻿namespace DataCommander.Providers.Query
+﻿using DataCommander.Providers.FieldNamespace;
+
+namespace DataCommander.Providers.Query
 {
     using System;
     using System.Data;
@@ -7,7 +9,6 @@
     using System.IO;
     using System.Text;
     using System.Windows.Forms;
-    using Field;
     using ResultWriter;
 
     internal static class QueryFormStaticMethods

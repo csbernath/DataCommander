@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Data;
 
-namespace DataCommander.Providers.Field
+namespace DataCommander.Providers.FieldNamespace
 {
-    public sealed class BinaryDataFieldReader : IDataFieldReader
+    public sealed class DateTimeOffsetDataFieldReader : IDataFieldReader
     {
         private readonly IDataRecord _dataRecord;
         private readonly int _columnOrdinal;
 
-        public BinaryDataFieldReader(IDataRecord dataRecord, int columnOrdinal)
+        public DateTimeOffsetDataFieldReader(
+            IDataRecord dataRecord,
+            int columnOrdinal)
         {
             _dataRecord = dataRecord;
             _columnOrdinal = columnOrdinal;
@@ -21,13 +23,14 @@ namespace DataCommander.Providers.Field
                 object value;
 
                 if (_dataRecord.IsDBNull(_columnOrdinal))
+                {
                     value = DBNull.Value;
+                }
                 else
                 {
-                    var length = _dataRecord.GetBytes(_columnOrdinal, 0, null, 0, 0);
-                    var buffer = new byte[length];
-                    length = _dataRecord.GetBytes(_columnOrdinal, 0, buffer, 0, (int) length);
-                    value = new BinaryField(buffer);
+                    value = _dataRecord[_columnOrdinal];
+                    var dateTimeOffset = (DateTimeOffset)value;
+                    value = new DateTimeOffsetField(dateTimeOffset);
                 }
 
                 return value;

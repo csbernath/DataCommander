@@ -22,28 +22,19 @@ namespace DataCommander.Providers.Tfs
             parameters.AddStringInput("serverPath", false, null);
             parameters.AddStringInput("localPath", true, null);
 
-            TfsDataReaderFactory.Add("get", parameters, delegate(TfsCommand command)
-            {
-                return new TfsDownloadDataReader(command);
-            });
+            TfsDataReaderFactory.Add("get", parameters, command => new TfsDownloadDataReader(command));
 
             parameters = new TfsParameterCollection();
             parameters.AddStringInput("path", false, null);
             parameters.AddValueTypeInput("recursion", RecursionType.OneLevel);
 
-            TfsDataReaderFactory.Add("dir", parameters, delegate(TfsCommand command)
-            {
-                return new TfsGetItemsDataReader(command);
-            });
+            TfsDataReaderFactory.Add("dir", parameters, command => new TfsGetItemsDataReader(command));
 
             parameters = new TfsParameterCollection();
             parameters.AddStringInput("path", false, null);
             parameters.AddValueTypeInput("recursion", RecursionType.OneLevel);
 
-            TfsDataReaderFactory.Add("extendeddir", parameters, delegate(TfsCommand command)
-            {
-                return new TfsGetExtendedItemsDataReader(command);
-            });
+            TfsDataReaderFactory.Add("extendeddir", parameters, command => new TfsGetExtendedItemsDataReader(command));
 
             parameters = new TfsParameterCollection();
             parameters.AddStringInput("path", false, null);
@@ -53,10 +44,7 @@ namespace DataCommander.Providers.Tfs
             parameters.AddBooleanInput("includeChanges", true, false);
             parameters.AddBooleanInput("slotMode", true, false);
 
-            TfsDataReaderFactory.Add("history", parameters, delegate(TfsCommand command)
-            {
-                return new TfsQueryHistoryDataReader(command);
-            });
+            TfsDataReaderFactory.Add("history", parameters, command => new TfsQueryHistoryDataReader(command));
 
             parameters = new TfsParameterCollection();
             parameters.AddStringInput("path", false, null);
@@ -64,20 +52,14 @@ namespace DataCommander.Providers.Tfs
             parameters.AddStringInput("workspace", true, null);
             parameters.AddStringInput("user", true, null);
 
-            TfsDataReaderFactory.Add("status", parameters, delegate(TfsCommand command)
-            {
-                return new TfsQueryPendingSetsDataReader(command);
-            });
+            TfsDataReaderFactory.Add("status", parameters, command => new TfsQueryPendingSetsDataReader(command));
 
             parameters = new TfsParameterCollection();
             parameters.AddStringInput("workspace", true, null);
             parameters.AddStringInput("owner", true, null);
             parameters.AddStringInput("computer", true, null);
 
-            TfsDataReaderFactory.Add("workspaces", parameters, delegate(TfsCommand command)
-            {
-                return new TfsQueryWorkspacesDataReader(command);
-            });
+            TfsDataReaderFactory.Add("workspaces", parameters, command => new TfsQueryWorkspacesDataReader(command));
 
             parameters = new TfsParameterCollection();
             parameters.AddStringInput("path", false, null);
@@ -86,10 +68,7 @@ namespace DataCommander.Providers.Tfs
             parameters.AddBooleanInput("slotMode", true, false);
             parameters.AddStringInput("localPath", true, null);
 
-            TfsDataReaderFactory.Add("getversions", parameters, delegate(TfsCommand command)
-            {
-                return new TfsDownloadItemVersionsDataReader(command);
-            });
+            TfsDataReaderFactory.Add("getversions", parameters, command => new TfsDownloadItemVersionsDataReader(command));
         }
 
         #region IProvider Members
@@ -100,12 +79,12 @@ namespace DataCommander.Providers.Tfs
 
         ConnectionBase IProvider.CreateConnection(string connectionString)
         {
-            var connectionStringBuilder = (IDbConnectionStringBuilder)new TfsConnectionStringBuilder();
+            var connectionStringBuilder = (IDbConnectionStringBuilder) new TfsConnectionStringBuilder();
             connectionStringBuilder.ConnectionString = connectionString;
 
             object value;
             connectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out value);
-            var uriString = (string)value;
+            var uriString = (string) value;
             var uri = new Uri(uriString);
             return new TfsConnection(uri);
         }
@@ -131,7 +110,7 @@ namespace DataCommander.Providers.Tfs
 
         void IProvider.DeriveParameters(IDbCommand command)
         {
-            var tfsCommand = (TfsCommand)command;
+            var tfsCommand = (TfsCommand) command;
 
             TfsDataReaderFactory.DataReaderInfo info;
             var contains = TfsDataReaderFactory.Dictionary.TryGetValue(tfsCommand.CommandText, out info);
@@ -149,19 +128,19 @@ namespace DataCommander.Providers.Tfs
 
         DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
         {
-            var tfsParameter = (TfsParameter)parameter;
+            var tfsParameter = (TfsParameter) parameter;
             return new TfsDataParameter(tfsParameter);
         }
 
         DataTable IProvider.GetParameterTable(IDataParameterCollection parameters)
         {
-            var tfsParameters = (TfsParameterCollection)parameters;
+            var tfsParameters = (TfsParameterCollection) parameters;
             var table = new DataTable();
             var columns = table.Columns;
-            columns.Add("ParameterName", typeof (string));
-            columns.Add("DbType", typeof (DbType));
-            columns.Add("Direction", typeof (ParameterDirection));
-            columns.Add("IsNullable", typeof (bool));
+            columns.Add("ParameterName", typeof(string));
+            columns.Add("DbType", typeof(DbType));
+            columns.Add("Direction", typeof(ParameterDirection));
+            columns.Add("IsNullable", typeof(bool));
             columns.Add("DefaultValue");
             columns.Add("Value");
             var rows = table.Rows;
@@ -199,25 +178,25 @@ namespace DataCommander.Providers.Tfs
 
         Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
         {
-            var dbType = (DbType)dataColumnSchema.ProviderType;
+            var dbType = (DbType) dataColumnSchema.ProviderType;
             Type type;
 
             switch (dbType)
             {
                 case DbType.DateTime:
-                    type = typeof (DateTime);
+                    type = typeof(DateTime);
                     break;
 
                 case DbType.String:
-                    type = typeof (string);
+                    type = typeof(string);
                     break;
 
                 case DbType.Int32:
-                    type = typeof (int);
+                    type = typeof(int);
                     break;
 
                 default:
-                    type = typeof (object);
+                    type = typeof(object);
                     break;
             }
 
@@ -226,7 +205,7 @@ namespace DataCommander.Providers.Tfs
 
         IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
         {
-            var tfsDataReader = (TfsDataReader)dataReader;
+            var tfsDataReader = (TfsDataReader) dataReader;
             return new TfsDataReaderHelper(tfsDataReader);
         }
 
@@ -252,7 +231,7 @@ namespace DataCommander.Providers.Tfs
         {
             var response = new GetCompletionResponse();
             string[] values = null;
-            var sqlStatement = new SqlStatement(text);
+            var sqlStatement = new SqlParser(text);
             var tokens = sqlStatement.Tokens;
 
             if (tokens.Length > 0)
@@ -313,7 +292,7 @@ namespace DataCommander.Providers.Tfs
                             if (contains)
                             {
                                 var parameters = info.Parameters;
-                                var parameterIndex = previousToken.Index/2;
+                                var parameterIndex = previousToken.Index / 2;
                                 if (parameterIndex < parameters.Count)
                                 {
                                     var parameter = parameters[parameterIndex];
@@ -330,7 +309,7 @@ namespace DataCommander.Providers.Tfs
                 }
             }
 
-            response.Items = values.Select(value => (IObjectName)new ObjectName(value)).ToList();
+            response.Items = values.Select(value => (IObjectName) new ObjectName(value)).ToList();
             return response;
         }
 
