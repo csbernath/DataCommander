@@ -15,9 +15,7 @@ Create insert statements from select|Yes|No
 Drag & drop: file to binary constant|Yes|No
 Edit rows: generate change script|Yes|No
 Object explorer: find item|Yes|No
-ORM: .NET schema table|Yes|No
-ORM: C# [POCO](https://en.wikipedia.org/wiki/Plain_old_CLR_object) class|Yes|No
-ORM: C# Read method (row to object mapper)|Yes|No
+ORM: result = handler.Handle(query), [POCO](https://en.wikipedia.org/wiki/Plain_old_CLR_object)|Yes|No
 Performance: startup|Fast|Slow
 Result: save as Excel|Yes|No
 Result: save as HTML|Yes|No
@@ -26,8 +24,8 @@ Result: sort in memory|Yes|No
 
 ## [Object-relational mapping (ORM)](https://en.wikipedia.org/wiki/Object-relational_mapping)
 
-The program generates C# source code wrapper for a SQL query. The query is similar to a CQRS Query:
-- Query class (query input parametyers)
+The program generates C# (requires .NET Standard 2.0 + Foundation assembly) source code wrapper for a SQL query. The query is similar to a CQRS Query:
+- Query class (query input parameters)
 - QueryResult class (query output)
 - QueryHandler class (the handler which executes the query)
 
@@ -38,7 +36,7 @@ Open the database with Data Commander and execute the following command:
 ```SQL
 /* Query
 {
-  "Namespace": "Foundation.NetStandard20.Test.GetPersonQueryNamespace",
+  "Namespace": "Foundation.NetStandard20.Test.GetCustomerInvoicesNamespace",
   "Name": "GetCustomerInvoices",
   "Parameters": [
     {
@@ -60,8 +58,6 @@ Open the database with Data Commander and execute the following command:
   ]
 }
 */
-use WideWorldImporters
-
 select
     c.CustomerID,
     c.CustomerName
@@ -90,7 +86,7 @@ using Foundation.Assertions;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 
-namespace Foundation.NetStandard20.Test.GetPersonQueryNamespace
+namespace Foundation.NetStandard20.Test.GetCustomerInvoicesNamespace
 {
     public sealed class GetCustomerInvoicesQuery
     {
@@ -319,8 +315,7 @@ PostgreSQL|[PostgreSQL](https://github.com/npgsql/Npgsql)|
 SQLite|[SQLite .NET Data Provider](http://system.data.sqlite.org)|
 SqlServer|[Microsoft SQL Server](http://www.microsoft.com/en-us/server-cloud/products/sql-server/) 2005 or greater|
 SqlServerCe40|[Microsoft SQL Server Compact Edition 4.0](http://www.microsoft.com/en-us/download/details.aspx?id=17876)|
-Tfs-11.0.0.0|[Microsoft Team Foundation Server](https://msdn.microsoft.com/en-us/vstudio/ff637362.aspx) using TFS client shipped with Visual Studio 2012|
-Tfs-14.0.0.0|[Microsoft Team Foundation Server](https://msdn.microsoft.com/en-us/vstudio/ff637362.aspx) using TFS client shipped with Visual Studio 2015|
+Tfs-15.0.0.0|[Microsoft Team Foundation Server](https://msdn.microsoft.com/en-us/vstudio/ff637362.aspx) using nuget TFS client|
 Wmi|[Windows Management Instrumentation](https://msdn.microsoft.com/en-us/library/aa394582(v=vs.85).aspx)
 
 General functions
