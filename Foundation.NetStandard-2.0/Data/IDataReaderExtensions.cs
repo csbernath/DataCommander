@@ -92,14 +92,6 @@ namespace Foundation.Data
             return ExecuteReaderResponse.Create(result1, result2, result3);
         }
 
-        public static IEnumerable<IDataReader> AsEnumerable(this IDataReader dataReader)
-        {
-            Assert.IsNotNull(dataReader);
-
-            while (dataReader.Read())
-                yield return dataReader;
-        }
-
         public static int Fill(this IDataReader dataReader, DataSet dataSet, CancellationToken cancellationToken)
         {
             Assert.IsNotNull(dataReader);

@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Collections
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
     public class SegmentedCollection<T> : ICollection<T>
     {
         #region Private Fields
@@ -19,14 +15,9 @@ namespace Foundation.Collections
 
         #endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="segmentLength"></param>
         public SegmentedCollection(int segmentLength)
         {
-            FoundationContract.Requires<ArgumentOutOfRangeException>(segmentLength > 0);
-
+            Assert.IsInRange(segmentLength > 0);
             _segmentLength = segmentLength;
         }
 

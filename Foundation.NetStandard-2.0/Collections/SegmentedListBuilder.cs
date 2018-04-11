@@ -54,9 +54,6 @@ namespace Foundation.Collections
             _nextSegmentItemIndex++;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public int Count
         {
             get
@@ -64,19 +61,12 @@ namespace Foundation.Collections
                 var count = 0;
                 var segmentCount = _segments.Count;
                 if (segmentCount > 0)
-                {
-                    count += (segmentCount - 1)* _segmentItemCapacity;
-                }
+                    count += (segmentCount - 1) * _segmentItemCapacity;
                 count += _nextSegmentItemIndex;
-
                 return count;
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public IReadOnlyList<T> ToReadOnlyList()
         {
             var count = Count;
@@ -94,7 +84,7 @@ namespace Foundation.Collections
                 _count = count;
             }
 
-#region IReadOnlyList<T> Members
+            #region IReadOnlyList<T> Members
 
             T IReadOnlyList<T>.this[int index]
             {
@@ -102,10 +92,10 @@ namespace Foundation.Collections
                 {
                     var segmentLength = _segments[0].Length;
 
-                    var segmentIndex = index/segmentLength;
+                    var segmentIndex = index / segmentLength;
                     var segment = _segments[segmentIndex];
 
-                    var segmentItemIndex = index%segmentLength;
+                    var segmentItemIndex = index % segmentLength;
                     var value = segment[segmentItemIndex];
                     return value;
                 }
@@ -134,10 +124,10 @@ namespace Foundation.Collections
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return ((IEnumerable<T>)this).GetEnumerator();
+                return ((IEnumerable<T>) this).GetEnumerator();
             }
 
-#endregion
+            #endregion
         }
     }
 }

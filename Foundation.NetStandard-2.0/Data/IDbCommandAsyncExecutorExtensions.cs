@@ -14,10 +14,8 @@ namespace Foundation.Data
             return executor.ExecuteAsync(async connection =>
             {
                 foreach (var request in requests)
-                {
                     using (var command = connection.CreateCommand(request.CreateCommandRequest))
                         await request.Execute(command);
-                }
             }, cancellationToken);
         }
 
@@ -48,12 +46,23 @@ namespace Foundation.Data
             return scalar;
         }
 
+        public static Task ExecuteReaderAsync(this IDbCommandAsyncExecutor executor, ExecuteReaderRequest request, Func<DbDataReader, Task> read)
+        {
+            return executor.ExecuteAsync(
+                new ExecuteNonReaderRequest(request.CreateCommandRequest, request.CancellationToken),
+                async command =>
+                {
+                    using (var dataReader = await command.ExecuteReaderAsync(request.CommandBehavior, request.CancellationToken))
+                        await read(dataReader);
+                });
+        }
+
         public static async Task<List<T>> ExecuteReaderAsync<T>(this IDbCommandAsyncExecutor executor, ExecuteReaderRequest request, Func<IDataRecord, T> read)
         {
             List<T> records = null;
             await executor.ExecuteReaderAsync(
                 request,
-                async dataReader => records = await dataReader.ReadAsync(read, request.CancellationToken));
+                async dataReader => records = await dataReader.ReadResultAsync(read, request.CancellationToken));
             return records;
         }
 
@@ -63,7 +72,7 @@ namespace Foundation.Data
             ExecuteReaderResponse<T1, T2> response = null;
             await executor.ExecuteReaderAsync(
                 request,
-                async dataReader => response = await dataReader.ReadAsync(read1, read2, request.CancellationToken));
+                async dataReader => response = await dataReader.ReadResultAsync(read1, read2, request.CancellationToken));
             return response;
         }
 
@@ -73,19 +82,8 @@ namespace Foundation.Data
             ExecuteReaderResponse<T1, T2, T3> response = null;
             await executor.ExecuteReaderAsync(
                 request,
-                async dataReader => response = await dataReader.ReadAsync(read1, read2, read3, request.CancellationToken));
+                async dataReader => response = await dataReader.ReadResultAsync(read1, read2, read3, request.CancellationToken));
             return response;
-        }
-
-        private static Task ExecuteReaderAsync(this IDbCommandAsyncExecutor executor, ExecuteReaderRequest request, Func<DbDataReader, Task> read)
-        {
-            return executor.ExecuteAsync(
-                new ExecuteNonReaderRequest(request.CreateCommandRequest, request.CancellationToken),
-                async command =>
-                {
-                    using (var dataReader = await command.ExecuteReaderAsync(request.CommandBehavior, request.CancellationToken))
-                        await read(dataReader);
-                });
         }
     }
 }
