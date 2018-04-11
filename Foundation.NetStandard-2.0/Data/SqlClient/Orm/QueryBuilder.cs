@@ -99,7 +99,7 @@ namespace {_query.Namespace}
         private string GetCreateParametersMethod()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"private static ReadOnlyCollection<object> CreateParameters(GetPersonQuery query)\r\n");
+            stringBuilder.Append($"private static ReadOnlyCollection<object> CreateParameters({_query.Name}Query query)\r\n");
             stringBuilder.Append("{\r\n");
             stringBuilder.Append("    var parameters = new SqlParameterCollectionBuilder();\r\n");
 

@@ -1430,53 +1430,21 @@ namespace DataCommander.Providers.Query
             _enqueueEvent.Set();
         }
 
-        private void AppendMessageText(
-            DateTime dateTime,
-            InfoMessageSeverity severity,
-            string text)
+        private void AppendMessageText(DateTime dateTime, InfoMessageSeverity severity, string header, string text)
         {
             var s = "[" + dateTime.ToString("HH:mm:ss.fff");
-
+            s += ' ' + header;
             if (severity == InfoMessageSeverity.Error)
-            {
                 s += ",Error";
-            }
-
             s += "] " + text + "\r\n";
             _messagesTextBox.AppendText(s);
         }
 
-        private void AddTabPage(
-            TabControl tabControl,
-            string tabPageName,
-            string tooltipText,
-            Control control)
-        {
-            var tabPage = new TabPage(tabPageName);
-            tabPage.ToolTipText = tooltipText;
-            tabPage.Controls.Add(control);
-            control.Dock = DockStyle.Fill;
-            tabControl.TabPages.Add(tabPage);
-        }
-
-        private void Connection_InfoMessage(IEnumerable<InfoMessage> messages)
-        {
-            AddInfoMessages(messages);
-        }
+        private void Connection_InfoMessage(IEnumerable<InfoMessage> messages) => AddInfoMessages(messages);
 
         internal static string DbValue(object value)
         {
-            string s;
-
-            if (value == DBNull.Value)
-            {
-                s = "(null)";
-            }
-            else
-            {
-                s = value.ToString();
-            }
-
+            var s = value == DBNull.Value ? "(null)" : value.ToString();
             return s;
         }
 
@@ -1485,14 +1453,10 @@ namespace DataCommander.Providers.Query
             var sb = new StringBuilder();
 
             if (_command != null)
-            {
                 sb.Append(_command.CommandText + "\n");
-            }
 
             if (dataTable != null)
-            {
                 sb.Append(dataTable.Rows.Count + " row(s)");
-            }
 
             return sb.ToString();
         }
@@ -2250,7 +2214,7 @@ namespace DataCommander.Providers.Query
                                     break;
                             }
 
-                            AppendMessageText(message.CreationTime, message.Severity, message.Message);
+                            AppendMessageText(message.CreationTime, message.Severity, message.Header, message.Message);
 
                             switch (message.Severity)
                             {
