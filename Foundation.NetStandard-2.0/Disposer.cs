@@ -8,8 +8,8 @@ namespace Foundation
     /// </summary>
     public sealed class Disposer : IDisposable
     {
-        private Action dispose;
-        private bool disposed;
+        private Action _dispose;
+        private bool _disposed;
 
         /// <summary>
         /// 
@@ -19,16 +19,16 @@ namespace Foundation
         {
             Assert.IsNotNull(dispose);
 
-            this.dispose = dispose;
+            this._dispose = dispose;
         }
 
         void IDisposable.Dispose()
         {
-            if (!disposed && dispose != null)
+            if (!_disposed && _dispose != null)
             {
-                dispose();
-                disposed = true;
-                dispose = null;
+                _dispose();
+                _disposed = true;
+                _dispose = null;
             }
         }
     }

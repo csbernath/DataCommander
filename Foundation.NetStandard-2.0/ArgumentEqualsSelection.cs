@@ -9,8 +9,8 @@ namespace Foundation
     /// <typeparam name="TArgument"></typeparam>
     public sealed class ArgumentEqualsSelection<TArgument> where TArgument : IEquatable<TArgument>
     {
-        private readonly TArgument argument;
-        private bool selected;
+        private readonly TArgument _argument;
+        private bool _selected;
 
         /// <summary>
         /// 
@@ -18,7 +18,7 @@ namespace Foundation
         /// <param name="argument"></param>
         public ArgumentEqualsSelection(TArgument argument)
         {
-            this.argument = argument;
+            this._argument = argument;
         }
 
         /// <summary>
@@ -31,10 +31,10 @@ namespace Foundation
         {
             Assert.IsNotNull(action);
 
-            if (!selected)
+            if (!_selected)
             {
-                selected = argument.Equals(other);
-                if (selected)
+                _selected = _argument.Equals(other);
+                if (_selected)
                 {
                     action();
                 }
@@ -51,7 +51,7 @@ namespace Foundation
         {
             Assert.IsNotNull(action);
 
-            if (!selected)
+            if (!_selected)
                 action();
         }
     }

@@ -9,7 +9,7 @@ namespace Foundation.Linq
     /// <summary>
     /// 
     /// </summary>
-    public static class IReadOnlyListExtensions
+    public static class ReadOnlyListExtensions
     {
         /// <summary>
         /// 

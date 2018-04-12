@@ -10,7 +10,7 @@ namespace Foundation.Data
     /// <summary>
     /// 
     /// </summary>
-    public static class IDbCommandExtensions
+    public static class DbCommandExtensions
     {
         /// <summary>
         /// 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Foundation.Data
 {
-    public static class IDbCommandAsyncExecutorExtensions
+    public static class DbCommandAsyncExecutorExtensions
     {
         private static Task ExecuteAsync(this IDbCommandAsyncExecutor executor, IEnumerable<ExecuteCommandAsyncRequest> requests, CancellationToken cancellationToken)
         {

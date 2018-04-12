@@ -13,7 +13,7 @@ namespace Foundation.Linq
     /// <summary>
     /// 
     /// </summary>
-    public static class IEnumerableExtensions
+    public static class EnumerableExtensions
     {
         public static bool CountIsGreaterThan<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate, int count)
         {

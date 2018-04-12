@@ -4,7 +4,7 @@ using System.Data;
 
 namespace Foundation.Data
 {
-    public static class IDbCommandExecutorExtensions
+    public static class DbCommandExecutorExtensions
     {
         private static void Execute(this IDbCommandExecutor executor, IEnumerable<ExecuteCommandRequest> requests)
         {

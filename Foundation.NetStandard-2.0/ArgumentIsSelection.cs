@@ -9,8 +9,8 @@ namespace Foundation
     /// <typeparam name="TArgument"></typeparam>
     public sealed class ArgumentIsSelection<TArgument> where TArgument : class
     {
-        private readonly TArgument argument;
-        private bool selected;
+        private readonly TArgument _argument;
+        private bool _selected;
 
         /// <summary>
         /// 
@@ -18,7 +18,7 @@ namespace Foundation
         /// <param name="argument"></param>
         public ArgumentIsSelection(TArgument argument)
         {
-            this.argument = argument;
+            this._argument = argument;
         }
 
         /// <summary>
@@ -31,11 +31,11 @@ namespace Foundation
         {
             Assert.IsNotNull(action);
 
-            if (!selected)
+            if (!_selected)
             {
-                var argumentAs = argument as TArgumentAs;
-                selected = argumentAs != null;
-                if (selected)
+                var argumentAs = _argument as TArgumentAs;
+                _selected = argumentAs != null;
+                if (_selected)
                 {
                     action(argumentAs);
                 }
@@ -53,10 +53,10 @@ namespace Foundation
         {
             Assert.IsNotNull(action);
 
-            if (!selected)
+            if (!_selected)
             {
-                selected = argument == null;
-                if (selected)
+                _selected = _argument == null;
+                if (_selected)
                 {
                     action();
                 }
@@ -75,10 +75,10 @@ namespace Foundation
         {
             Assert.IsNotNull(action);
 
-            if (!selected)
+            if (!_selected)
             {
-                selected = condition();
-                if (selected)
+                _selected = condition();
+                if (_selected)
                 {
                     action();
                 }
@@ -95,7 +95,7 @@ namespace Foundation
         {
             Assert.IsNotNull(action);
 
-            if (!selected)
+            if (!_selected)
                 action();
         }
     }

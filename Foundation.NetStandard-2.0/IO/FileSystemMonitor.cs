@@ -16,7 +16,7 @@ namespace Foundation.IO
     /// </remarks>
     public sealed class FileSystemMonitor : LoopThread, ILoopable
     {
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
         private readonly string _path;
         private readonly string _searchPattern;
         private readonly int _period;
@@ -77,7 +77,7 @@ namespace Foundation.IO
                         {
                             var message = string.Format(CultureInfo.InvariantCulture,
                                 "FileSystemMonitor({0}).Created: {1}", Thread.ManagedThreadId, file);
-                            log.Trace(message);
+                            Log.Trace(message);
 
                             var fileName = Path.GetFileName(file);
                             var e = new FileSystemEventArgs(WatcherChangeTypes.Created, _path,
@@ -93,7 +93,7 @@ namespace Foundation.IO
 
                         if (index < 0)
                         {
-                            log.Trace("{0}.Deleted: {1}", Thread.Name, file);
+                            Log.Trace("{0}.Deleted: {1}", Thread.Name, file);
                         }
                     }
                 }
@@ -101,7 +101,7 @@ namespace Foundation.IO
                 {
                     for (var i = 0; i < current.Length; i++)
                     {
-                        log.Trace("FileSystemMonitor.current[{0}]: {1}", i, current[i]);
+                        Log.Trace("FileSystemMonitor.current[{0}]: {1}", i, current[i]);
                     }
                 }
 
@@ -109,7 +109,7 @@ namespace Foundation.IO
             }
             catch (Exception e)
             {
-                log.Write(LogLevel.Error, e.ToString());
+                Log.Write(LogLevel.Error, e.ToString());
             }
 
             Thread.WaitForStop(_period);

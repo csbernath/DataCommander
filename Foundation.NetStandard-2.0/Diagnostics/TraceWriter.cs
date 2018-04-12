@@ -9,7 +9,7 @@ namespace Foundation.Diagnostics
     /// </summary>
     public class TraceWriter : TextWriter
     {
-        private static TraceWriter instance;
+        private static TraceWriter _instance;
 
         /// <summary>
         /// 
@@ -18,12 +18,12 @@ namespace Foundation.Diagnostics
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = new TraceWriter();
+                    _instance = new TraceWriter();
                 }
 
-                return instance;
+                return _instance;
             }
         }
 

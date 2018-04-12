@@ -11,7 +11,7 @@ namespace Foundation.Linq
     /// <summary>
     /// 
     /// </summary>
-    public static class IProducerConsumerCollectionExtensions
+    public static class ProducerConsumerCollectionExtensions
     {
         /// <summary>
         /// 

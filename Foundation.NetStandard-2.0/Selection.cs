@@ -184,7 +184,7 @@ namespace Foundation
     /// <typeparam name="TArgument"></typeparam>
     public sealed class MultipleDispatchSelection<TArgument>
     {
-        private readonly Func<TArgument, bool>[] selections;
+        private readonly Func<TArgument, bool>[] _selections;
 
         /// <summary>
         /// 
@@ -193,7 +193,7 @@ namespace Foundation
         public MultipleDispatchSelection(params Func<TArgument, bool>[] selections)
         {
             Assert.IsNotNull(selections);
-            this.selections = selections;
+            this._selections = selections;
         }
 
         /// <summary>
@@ -205,9 +205,9 @@ namespace Foundation
         {
             var selectedIndex = -1;
 
-            for (var i = 0; i < selections.Length; ++i)
+            for (var i = 0; i < _selections.Length; ++i)
             {
-                var selection = selections[i];
+                var selection = _selections[i];
                 var selected = selection(argument);
                 if (selected)
                 {

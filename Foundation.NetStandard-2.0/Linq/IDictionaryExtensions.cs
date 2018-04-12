@@ -8,7 +8,7 @@ namespace Foundation.Linq
     /// <summary>
     /// 
     /// </summary>
-    public static class IDictionaryExtensions
+    public static class DictionaryExtensions
     {
         /// <summary>
         /// 
@@ -104,7 +104,7 @@ namespace Foundation.Linq
             /// <summary>
             /// 
             /// </summary>
-            private readonly IDictionary<TKey, TValue> dictionary;
+            private readonly IDictionary<TKey, TValue> _dictionary;
 
             /// <summary>
             /// 
@@ -113,7 +113,7 @@ namespace Foundation.Linq
             public ReadOnlyDictionary(IDictionary<TKey, TValue> dictionary)
             {
                 Assert.IsNotNull(dictionary);
-                this.dictionary = dictionary;
+                this._dictionary = dictionary;
             }
 
             #region IDictionary<TKey,TValue> Members
@@ -125,10 +125,10 @@ namespace Foundation.Linq
 
             bool IDictionary<TKey, TValue>.ContainsKey(TKey key)
             {
-                return dictionary.ContainsKey(key);
+                return _dictionary.ContainsKey(key);
             }
 
-            ICollection<TKey> IDictionary<TKey, TValue>.Keys => dictionary.Keys;
+            ICollection<TKey> IDictionary<TKey, TValue>.Keys => _dictionary.Keys;
 
             bool IDictionary<TKey, TValue>.Remove(TKey key)
             {
@@ -137,16 +137,16 @@ namespace Foundation.Linq
 
             bool IDictionary<TKey, TValue>.TryGetValue(TKey key, out TValue value)
             {
-                return dictionary.TryGetValue(key, out value);
+                return _dictionary.TryGetValue(key, out value);
             }
 
-            ICollection<TValue> IDictionary<TKey, TValue>.Values => dictionary.Values;
+            ICollection<TValue> IDictionary<TKey, TValue>.Values => _dictionary.Values;
 
             TValue IDictionary<TKey, TValue>.this[TKey key]
             {
-                get => dictionary[key];
+                get => _dictionary[key];
 
-                set => dictionary[key] = value;
+                set => _dictionary[key] = value;
             }
 
 #endregion
@@ -165,15 +165,15 @@ namespace Foundation.Linq
 
             bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
             {
-                return dictionary.Contains(item);
+                return _dictionary.Contains(item);
             }
 
             void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
             {
-                dictionary.CopyTo(array, arrayIndex);
+                _dictionary.CopyTo(array, arrayIndex);
             }
 
-            int ICollection<KeyValuePair<TKey, TValue>>.Count => dictionary.Count;
+            int ICollection<KeyValuePair<TKey, TValue>>.Count => _dictionary.Count;
 
             bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly => true;
 
@@ -188,7 +188,7 @@ namespace Foundation.Linq
 
             IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
             {
-                return dictionary.GetEnumerator();
+                return _dictionary.GetEnumerator();
             }
 
 #endregion
@@ -197,7 +197,7 @@ namespace Foundation.Linq
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return dictionary.GetEnumerator();
+                return _dictionary.GetEnumerator();
             }
 
 #endregion

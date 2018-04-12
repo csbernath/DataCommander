@@ -6,7 +6,7 @@ namespace Foundation
     /// <summary>
     /// 
     /// </summary>
-    public static class IDateTimeProviderExtensions
+    public static class DateTimeProviderExtensions
     {
         /// <summary>
         /// 

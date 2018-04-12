@@ -404,7 +404,7 @@ namespace DataCommander.Providers.SqlServer
             {
                 var parts = new IdentifierParser(new StringReader(currentToken.Value)).Parse().ToList();
                 var lastPart = parts.Count > 0
-                    ? IListExtensions.Last(parts)
+                    ? ListExtensions.Last(parts)
                     : null;
                 var lastPartLength = lastPart != null
                     ? lastPart.Length
@@ -923,7 +923,7 @@ order by 1", name.Database);
             foreach (var statementTokens in tokens.Split(token => IsBatchSeparator(commandText, token)).Where(statementTokens => statementTokens.Length > 0))
             {
                 var startIndex = statementTokens[0].StartPosition;
-                var endIndex = IListExtensions.Last(statementTokens).EndPosition;
+                var endIndex = ListExtensions.Last(statementTokens).EndPosition;
                 var length = endIndex - startIndex + 1;
                 var statement = new Statement
                 {

@@ -11,7 +11,7 @@ namespace Foundation.Diagnostics
     /// </summary>
     public static class StackTraceExtensions
     {
-        private static readonly ILog log = InternalLogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog Log = InternalLogFactory.Instance.GetCurrentTypeLog();
 
         /// <summary>
         /// 
@@ -36,7 +36,7 @@ namespace Foundation.Diagnostics
             }
             catch (Exception e)
             {
-                log.Write(LogLevel.Error, e.ToString());
+                Log.Write(LogLevel.Error, e.ToString());
             }
 
             return stringBuilder.ToString();

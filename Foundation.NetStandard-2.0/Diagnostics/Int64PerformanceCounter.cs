@@ -11,12 +11,12 @@ namespace Foundation.Diagnostics
     {
         #region Private Fields
 
-        private readonly string name;
-        private readonly Func<long, string> toString;
-        private long count;
-        private long sum;
-        private long min = long.MaxValue;
-        private long max = long.MinValue;
+        private readonly string _name;
+        private readonly Func<long, string> _toString;
+        private long _count;
+        private long _sum;
+        private long _min = long.MaxValue;
+        private long _max = long.MinValue;
 
         #endregion
 
@@ -29,8 +29,8 @@ namespace Foundation.Diagnostics
         {
             Assert.IsNotNull(toString);
 
-            this.name = name;
-            this.toString = toString;
+            this._name = name;
+            this._toString = toString;
         }
 
         /// <summary>
@@ -39,15 +39,15 @@ namespace Foundation.Diagnostics
         /// <param name="item"></param>
         public void Increment(long item)
         {
-            Interlocked.Increment(ref count);
-            Interlocked.Add(ref sum, item);
+            Interlocked.Increment(ref _count);
+            Interlocked.Add(ref _sum, item);
 
             while (true)
             {
-                var min = this.min;
+                var min = this._min;
                 if (item < min)
                 {
-                    var originalMin = Interlocked.CompareExchange(ref this.min, item, min);
+                    var originalMin = Interlocked.CompareExchange(ref this._min, item, min);
                     if (originalMin == min)
                     {
                         break;
@@ -65,10 +65,10 @@ namespace Foundation.Diagnostics
 
             while (true)
             {
-                var max = this.max;
+                var max = this._max;
                 if (item > max)
                 {
-                    var originalMax = Interlocked.CompareExchange(ref this.max, item, max);
+                    var originalMax = Interlocked.CompareExchange(ref this._max, item, max);
                     if (originalMax == max)
                     {
                         break;
@@ -88,22 +88,22 @@ namespace Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public long Count => count;
+        public long Count => _count;
 
         /// <summary>
         /// 
         /// </summary>
-        public long Sum => sum;
+        public long Sum => _sum;
 
         /// <summary>
         /// 
         /// </summary>
-        public long Min => min;
+        public long Min => _min;
 
         /// <summary>
         /// 
         /// </summary>
-        public long Max => max;
+        public long Max => _max;
 
         /// <summary>
         /// 
@@ -111,12 +111,12 @@ namespace Foundation.Diagnostics
         /// <returns></returns>
         public string ToLogString()
         {
-            return $@"Int64PerformanceCounter '{name}'
-count: {count}
-min: {toString(min)}
-avg: {toString((long)((double)Sum / Count))}
-max: {toString(max)}
-sum: {toString(sum)}";
+            return $@"Int64PerformanceCounter '{_name}'
+count: {_count}
+min: {_toString(_min)}
+avg: {_toString((long)((double)Sum / Count))}
+max: {_toString(_max)}
+sum: {_toString(_sum)}";
         }
     }
 }

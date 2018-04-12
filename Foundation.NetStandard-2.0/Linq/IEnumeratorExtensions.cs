@@ -9,7 +9,7 @@ namespace Foundation.Linq
     /// <summary>
     /// 
     /// </summary>
-    public static class IEnumeratorExtensions
+    public static class EnumeratorExtensions
     {
         #region Public Methods
 
@@ -61,23 +61,23 @@ namespace Foundation.Linq
 
         private sealed class Enumerable<T> : IEnumerable<T>
         {
-            private readonly IEnumerator<T> enumerator;
+            private readonly IEnumerator<T> _enumerator;
 
             public Enumerable(IEnumerator<T> enumerator)
             {
                 Assert.IsNotNull(enumerator);
 
-                this.enumerator = enumerator;
+                this._enumerator = enumerator;
             }
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator()
             {
-                return enumerator;
+                return _enumerator;
             }
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return enumerator;
+                return _enumerator;
             }
         }
 

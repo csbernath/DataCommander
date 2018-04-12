@@ -17,12 +17,12 @@ namespace Foundation.Diagnostics
     /// </summary>
     public static class AppDomainMonitor
     {
-        private static readonly ILog log = LogFactory.Instance.GetTypeLog(typeof(AppDomainMonitor));
-        private static readonly StringTableColumnInfo<AssemblyInfo>[] columns;
+        private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(AppDomainMonitor));
+        private static readonly StringTableColumnInfo<AssemblyInfo>[] Columns;
 
         static AppDomainMonitor()
         {
-            columns = new StringTableColumnInfo<AssemblyInfo>[]
+            Columns = new StringTableColumnInfo<AssemblyInfo>[]
             {
                 new StringTableColumnInfo<AssemblyInfo>("Name", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Name),
                 StringTableColumnInfo.Create<AssemblyInfo, Version>("FileVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.FileVersion),
@@ -220,7 +220,7 @@ Stopwatch.Frequency:    {Stopwatch.Frequency}";
             }
             catch (Exception e)
             {
-                log.Trace("exception:\r\n{0}", e.ToLogString());
+                Log.Trace("exception:\r\n{0}", e.ToLogString());
             }
 
             return fileVersion;
@@ -252,17 +252,17 @@ Stopwatch.Frequency:    {Stopwatch.Frequency}";
                     }
                     catch (Exception e)
                     {
-                        log.Error("{0}\t\n{1}", assemblies[i], e.ToLogString());
+                        Log.Error("{0}\t\n{1}", assemblies[i], e.ToLogString());
                     }
                 }
 
                 assemblyInfos.Sort((info, assemblyInfo) => string.Compare(info.Name, assemblyInfo.Name, StringComparison.InvariantCulture));
 
-                sb.Append(assemblyInfos.ToString(columns));
+                sb.Append(assemblyInfos.ToString(Columns));
             }
             catch (Exception e)
             {
-                log.Write(LogLevel.Error, e.ToLogString());
+                Log.Write(LogLevel.Error, e.ToLogString());
             }
         }
 

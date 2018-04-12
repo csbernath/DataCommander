@@ -13,7 +13,7 @@ namespace Foundation.Linq
     /// <summary>
     /// 
     /// </summary>
-    public static class ICollectionExtensions
+    public static class CollectionExtensions
     {
         /// <summary>
         /// 
@@ -141,9 +141,9 @@ namespace Foundation.Linq
             /// <summary>
             /// 
             /// </summary>
-            private readonly ICollection source;
+            private readonly ICollection _source;
 
-            private readonly IList sourceAsList;
+            private readonly IList _sourceAsList;
 
             #endregion
 
@@ -151,8 +151,8 @@ namespace Foundation.Linq
             {
                 Assert.IsNotNull(source);
 
-                this.source = source;
-                sourceAsList = source as IList;
+                this._source = source;
+                _sourceAsList = source as IList;
             }
 
             #region ICollection<TResult> Members
@@ -163,9 +163,9 @@ namespace Foundation.Linq
             /// <param name="item"></param>
             void ICollection<TResult>.Add(TResult item)
             {
-                Assert.IsTrue(sourceAsList != null);
+                Assert.IsTrue(_sourceAsList != null);
 
-                sourceAsList.Add(item);
+                _sourceAsList.Add(item);
             }
 
             /// <summary>
@@ -173,9 +173,9 @@ namespace Foundation.Linq
             /// </summary>
             void ICollection<TResult>.Clear()
             {
-                Assert.IsTrue(sourceAsList != null);
+                Assert.IsTrue(_sourceAsList != null);
 
-                sourceAsList.Clear();
+                _sourceAsList.Clear();
             }
 
             /// <summary>
@@ -186,13 +186,13 @@ namespace Foundation.Linq
             bool ICollection<TResult>.Contains(TResult item)
             {
                 bool contains;
-                if (sourceAsList != null)
+                if (_sourceAsList != null)
                 {
-                    contains = sourceAsList.Contains(item);
+                    contains = _sourceAsList.Contains(item);
                 }
                 else
                 {
-                    var enumerable = (IEnumerable) source;
+                    var enumerable = (IEnumerable) _source;
                     var enumerableT = enumerable.Cast<TResult>();
                     contains = enumerableT.Contains(item);
                 }
@@ -207,13 +207,13 @@ namespace Foundation.Linq
             /// <param name="arrayIndex"></param>
             void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex)
             {
-                source.CopyTo(array, arrayIndex);
+                _source.CopyTo(array, arrayIndex);
             }
 
             /// <summary>
             /// 
             /// </summary>
-            int ICollection<TResult>.Count => source.Count;
+            int ICollection<TResult>.Count => _source.Count;
 
             /// <summary>
             /// 
@@ -240,7 +240,7 @@ namespace Foundation.Linq
             /// <returns></returns>
             public IEnumerator<TResult> GetEnumerator()
             {
-                foreach (TResult item in source)
+                foreach (TResult item in _source)
                 {
                     yield return item;
                 }

@@ -14,9 +14,9 @@
     /// </summary>
     public sealed class LimitedThreadPool<T>
     {
-        private Int32 maxThreadCount;
-        private Int32 availableThreadCount;
-        private Queue<Tuple<Action<T>, T>> queue = new Queue<Tuple<Action<T>, T>>();
+        private Int32 _maxThreadCount;
+        private Int32 _availableThreadCount;
+        private Queue<Tuple<Action<T>, T>> _queue = new Queue<Tuple<Action<T>, T>>();
 
         /// <summary>
         /// 
@@ -29,8 +29,8 @@
 #else
             Contract.Requires(maxThreadCount > 0);
 #endif
-            this.maxThreadCount = maxThreadCount;
-            availableThreadCount = maxThreadCount;
+            this._maxThreadCount = maxThreadCount;
+            _availableThreadCount = maxThreadCount;
         }
 
         /// <summary>
@@ -40,7 +40,7 @@
         {
             get
             {
-                return queue.Count;
+                return _queue.Count;
             }
         }
 
@@ -51,7 +51,7 @@
         {
             get
             {
-                return availableThreadCount;
+                return _availableThreadCount;
             }
         }
 
@@ -70,16 +70,16 @@
 #endif
             var item = Tuple.Create(waitCallback, state);
             Boolean succeeded;
-            if (availableThreadCount > 0)
+            if (_availableThreadCount > 0)
             {
-                Interlocked.Decrement(ref availableThreadCount);
+                Interlocked.Decrement(ref _availableThreadCount);
                 succeeded = ThreadPool.QueueUserWorkItem(Callback, item);
             }
             else
             {
-                lock (queue)
+                lock (_queue)
                 {
-                    queue.Enqueue(item);
+                    _queue.Enqueue(item);
                 }
 
                 succeeded = true;
@@ -93,15 +93,15 @@
         /// </summary>
         public void Pulse()
         {
-            if (queue.Count > 0 && availableThreadCount > 0)
+            if (_queue.Count > 0 && _availableThreadCount > 0)
             {
-                lock (queue)
+                lock (_queue)
                 {
-                    while (queue.Count > 0 && availableThreadCount > 0)
+                    while (_queue.Count > 0 && _availableThreadCount > 0)
                     {
-                        var item = queue.Dequeue();
+                        var item = _queue.Dequeue();
                         Boolean succeeded = ThreadPool.QueueUserWorkItem(Callback, item);
-                        Interlocked.Decrement(ref availableThreadCount);
+                        Interlocked.Decrement(ref _availableThreadCount);
                     }
                 }
             }
@@ -118,7 +118,7 @@
             }
             finally
             {
-                Interlocked.Increment(ref availableThreadCount);
+                Interlocked.Increment(ref _availableThreadCount);
                 Pulse();
             }
         }

@@ -132,7 +132,7 @@ namespace Foundation.Diagnostics
             return int64;
         }
 
-        private static readonly long[] power10 = new [] 
+        private static readonly long[] Power10 = new [] 
         {
             1,
             10,
@@ -154,7 +154,7 @@ namespace Foundation.Diagnostics
 
         private static long Pow10(int pow)
         {
-            return power10[pow];
+            return Power10[pow];
         }
 
         /// <summary>

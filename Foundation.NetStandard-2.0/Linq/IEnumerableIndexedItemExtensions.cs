@@ -8,7 +8,7 @@ namespace Foundation.Linq
     /// <summary>
     /// 
     /// </summary>
-    public static class IEnumerableIndexedItemExtensions
+    public static class EnumerableIndexedItemExtensions
     {
         /// <summary>
         /// 

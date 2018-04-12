@@ -4,7 +4,7 @@ using Foundation.Assertions;
 
 namespace Foundation.Text
 {
-    public static class IEnumerableExtensions
+    public static class EnumerableExtensions
     {
         public static string ToString<TSource>(this IEnumerable<TSource> source, IReadOnlyCollection<StringTableColumnInfo<TSource>> columns)
         {

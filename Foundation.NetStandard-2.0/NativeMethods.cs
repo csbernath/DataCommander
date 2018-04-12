@@ -93,7 +93,7 @@ namespace Foundation
         public static extern int StgOpenStorage(
             [MarshalAs(UnmanagedType.LPWStr)] string pwcsName,
             IStorage pstgPriority,
-            STGM grfMode,
+            Stgm grfMode,
             IntPtr snbExclude,
             uint reserved,
             out IStorage ppstgOpen);   // Returned Storage

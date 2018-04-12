@@ -152,11 +152,11 @@ namespace Foundation
 
         private sealed class StringAsList : IList<char>
         {
-            private readonly string source;
+            private readonly string _source;
 
             public StringAsList(string source)
             {
-                this.source = source;
+                this._source = source;
             }
 
             #region IList<Char> Members
@@ -178,7 +178,7 @@ namespace Foundation
 
             char IList<char>.this[int index]
             {
-                get => source[index];
+                get => _source[index];
                 set => throw new NotImplementedException();
             }
 
@@ -206,7 +206,7 @@ namespace Foundation
                 throw new NotImplementedException();
             }
 
-            int ICollection<char>.Count => source.Length;
+            int ICollection<char>.Count => _source.Length;
 
             bool ICollection<char>.IsReadOnly => true;
 

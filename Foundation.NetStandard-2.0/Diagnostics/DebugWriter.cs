@@ -6,16 +6,16 @@ namespace Foundation.Diagnostics
 {
     public class DebugWriter : TextWriter
     {
-        private static DebugWriter instance;
+        private static DebugWriter _instance;
 
         public static DebugWriter Instance
         {
             get
             {
-                if (instance == null)
-                    instance = new DebugWriter();
+                if (_instance == null)
+                    _instance = new DebugWriter();
 
-                return instance;
+                return _instance;
             }
         }
 

@@ -9,7 +9,7 @@ namespace Foundation.Linq
     /// <summary>
     /// 
     /// </summary>
-    public static class IListExtensions
+    public static class ListExtensions
     {
         /// <summary>
         /// 

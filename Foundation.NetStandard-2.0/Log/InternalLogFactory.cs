@@ -2,8 +2,6 @@
 {
     internal static class InternalLogFactory
     {
-        private static readonly FoundationLogFactory instance = new FoundationLogFactory(true);
-
-        public static ILogFactory Instance => instance;
+        public static readonly FoundationLogFactory Instance = new FoundationLogFactory(true);
     }
 }

@@ -15,9 +15,13 @@ namespace Foundation.Data
         }
 
         public ExecuteNonReaderRequest(string commandText)
-            : this(new CreateCommandRequest(commandText), CancellationToken.None) => ;
+            : this(new CreateCommandRequest(commandText), CancellationToken.None)
+        {
+        }
 
         public ExecuteNonReaderRequest(string commandText, ReadOnlyCollection<object> parameters)
-            : this(new CreateCommandRequest(commandText, parameters), CancellationToken.None) => ;
+            : this(new CreateCommandRequest(commandText, parameters), CancellationToken.None)
+        {
+        }
     }
 }

@@ -7,8 +7,8 @@ namespace Foundation.Diagnostics
     /// </summary>
     internal sealed class Error
     {
-        private readonly string message;
-        private readonly Exception exception;
+        private readonly string _message;
+        private readonly Exception _exception;
 
         /// <summary>
         /// 
@@ -19,8 +19,8 @@ namespace Foundation.Diagnostics
         public Error( ErrorType type, string message, Exception exception )
         {
             Type = type;
-            this.message = message;
-            this.exception = exception;
+            this._message = message;
+            this._exception = exception;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Foundation.Diagnostics
 
         public override string ToString()
         {
-            return $"{Type}\r\n{message}\r\n{exception}";
+            return $"{Type}\r\n{_message}\r\n{_exception}";
         }
     }
 }

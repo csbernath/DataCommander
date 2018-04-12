@@ -7,7 +7,7 @@ using Foundation.Assertions;
 
 namespace Foundation.Data
 {
-    public static class IDataReaderExtensions
+    public static class DataReaderExtensions
     {
         public static void ReadResult(this IDataReader dataReader, Action readRecord)
         {

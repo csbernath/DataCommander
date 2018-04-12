@@ -7,7 +7,7 @@ namespace Foundation
     /// </summary>
     public sealed class CurrentDirectoryChanger : IDisposable
     {
-        private readonly string currentDirectory;
+        private readonly string _currentDirectory;
 
         /// <summary>
         /// 
@@ -15,7 +15,7 @@ namespace Foundation
         /// <param name="path"></param>
         public CurrentDirectoryChanger( string path )
         {
-            currentDirectory = Environment.CurrentDirectory;
+            _currentDirectory = Environment.CurrentDirectory;
             Environment.CurrentDirectory = path;
         }
 
@@ -23,7 +23,7 @@ namespace Foundation
 
         void IDisposable.Dispose()
         {
-            Environment.CurrentDirectory = currentDirectory;
+            Environment.CurrentDirectory = _currentDirectory;
         }
 
         #endregion

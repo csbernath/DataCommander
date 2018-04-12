@@ -8,8 +8,8 @@ namespace Foundation
     /// </summary>
     public sealed class TypeIsSelection
     {
-        private readonly Type type;
-        private bool selected;
+        private readonly Type _type;
+        private bool _selected;
 
         /// <summary>
         /// 
@@ -18,7 +18,7 @@ namespace Foundation
         public TypeIsSelection(Type type)
         {
             Assert.IsNotNull(type);
-            this.type = type;
+            this._type = type;
         }
 
         /// <summary>
@@ -31,9 +31,9 @@ namespace Foundation
         {
             Assert.IsNotNull(action);
 
-            if (!selected && type == typeof (T))
+            if (!_selected && _type == typeof (T))
             {
-                selected = true;
+                _selected = true;
                 action();
             }
 
@@ -48,7 +48,7 @@ namespace Foundation
         {
             Assert.IsNotNull(action);
 
-            if (!selected)
+            if (!_selected)
                 action();
         }
     }

@@ -5,7 +5,7 @@ namespace Foundation
     /// <exclude/>
     public sealed class Library
     {
-        private readonly int moduleHandle;
+        private readonly int _moduleHandle;
 
         /// <summary>
         /// 
@@ -13,7 +13,7 @@ namespace Foundation
         /// <param name="fileName"></param>
         public Library( string fileName )
         {
-            moduleHandle = NativeMethods.LoadLibrary( fileName );
+            _moduleHandle = NativeMethods.LoadLibrary( fileName );
         }
 
         /// <summary>
@@ -21,9 +21,9 @@ namespace Foundation
         /// </summary>
         ~Library()
         {
-            if (moduleHandle != 0)
+            if (_moduleHandle != 0)
             {
-                NativeMethods.FreeLibrary(moduleHandle);
+                NativeMethods.FreeLibrary(_moduleHandle);
             }
         }
 
@@ -35,7 +35,7 @@ namespace Foundation
         public string LoadString( int id )
         {
             var buffer = new byte[ 1024 ];
-            var n = NativeMethods.LoadString(moduleHandle, id, buffer, buffer.Length );
+            var n = NativeMethods.LoadString(_moduleHandle, id, buffer, buffer.Length );
             string value = null;
 
             if (n > 0)
