@@ -112,7 +112,7 @@ namespace DataCommander.Providers.ResultWriter
             {
                 var parameters = _query.Parameters.Select(ToParameter).ToReadOnlyCollection();
                 var results = _query.Results.Zip(_results, ToResult).ToReadOnlyCollection();
-                var query = new DbQuery(_query.Namespace, _query.Name, _commandText, 0, parameters, results);
+                var query = new DbQuery(_query.Using, _query.Namespace, _query.Name, _commandText, 0, parameters, results);
 
                 var queryBuilder = new DbQueryBuilder(query);
                 var csharpSourceCode = queryBuilder.Build();
