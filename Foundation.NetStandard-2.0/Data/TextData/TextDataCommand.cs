@@ -6,29 +6,12 @@ using System.IO;
 
 namespace Foundation.Data.TextData
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TInput"></typeparam>
-    /// <typeparam name="TOutput"></typeparam>
-    public interface IConverter<in TInput, out TOutput>
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        TOutput Convert( TInput input );
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class TextDataCommand : DbCommand
     {
         private TextDataConnection _connection;
 
         #region Constructors
+
         #endregion
 
         #region Public Properties
@@ -63,7 +46,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public new TextDataReader ExecuteReader()
         {
-            return new TextDataReader( this, CommandBehavior.Default );
+            return new TextDataReader(this, CommandBehavior.Default);
         }
 
         /// <summary>
@@ -71,9 +54,9 @@ namespace Foundation.Data.TextData
         /// </summary>
         /// <param name="behavior"></param>
         /// <returns></returns>
-        public new TextDataReader ExecuteReader( CommandBehavior behavior )
+        public new TextDataReader ExecuteReader(CommandBehavior behavior)
         {
-            return new TextDataReader( this, behavior );
+            return new TextDataReader(this, behavior);
         }
 
         /// <summary>
@@ -133,9 +116,9 @@ namespace Foundation.Data.TextData
         /// </summary>
         /// <param name="behavior"></param>
         /// <returns></returns>
-        protected override DbDataReader ExecuteDbDataReader( CommandBehavior behavior )
+        protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
         {
-            return new TextDataReader( this, behavior );
+            return new TextDataReader(this, behavior);
         }
 
         /// <summary>
@@ -144,17 +127,17 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public override int ExecuteNonQuery()
         {
-            var columns = Parameters.GetParameterValue<IList<TextDataColumn>>( "columns" );
-            var converters = Parameters.GetParameterValue<IList<ITextDataConverter>>( "converters" );
-            var rows = Parameters.GetParameterValue<IEnumerable<object[]>>( "rows" );
-            var getTextWriter = Parameters.GetParameterValue<IConverter<TextDataCommand, TextWriter>>( "getTextWriter" );
-            var textWriter = getTextWriter.Convert( this );
-            var textDataStreamWriter = new TextDataStreamWriter( textWriter, columns, converters );
+            var columns = Parameters.GetParameterValue<IList<TextDataColumn>>("columns");
+            var converters = Parameters.GetParameterValue<IList<ITextDataConverter>>("converters");
+            var rows = Parameters.GetParameterValue<IEnumerable<object[]>>("rows");
+            var getTextWriter = Parameters.GetParameterValue<IConverter<TextDataCommand, TextWriter>>("getTextWriter");
+            var textWriter = getTextWriter.Convert(this);
+            var textDataStreamWriter = new TextDataStreamWriter(textWriter, columns, converters);
             var count = 0;
 
             foreach (var row in rows)
             {
-                textDataStreamWriter.WriteRow( row );
+                textDataStreamWriter.WriteRow(row);
                 count++;
             }
 

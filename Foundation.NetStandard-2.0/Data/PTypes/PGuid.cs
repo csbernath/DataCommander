@@ -121,17 +121,7 @@ namespace Foundation.Data.PTypes
         /// <returns></returns>
         public static PGuid Parse( string s, PValueType type )
         {
-            PGuid sp;
-
-            if (string.IsNullOrEmpty(s))
-            {
-                sp = new PGuid( type );
-            }
-            else
-            {
-                sp = SqlGuid.Parse( s );
-            }
-
+            var sp = string.IsNullOrEmpty(s) ? new PGuid( type ) : SqlGuid.Parse( s );
             return sp;
         }
 

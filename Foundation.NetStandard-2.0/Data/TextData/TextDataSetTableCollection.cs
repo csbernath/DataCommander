@@ -51,17 +51,9 @@ namespace Foundation.Data.TextData
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public TextDataSetTable this[ string name ]
-        {
-            get
-            {
-                //Assert.IsTrue(this.nameIndex.ContainsKey(name));
+        public TextDataSetTable this[ string name ] => _nameIndex[ name ];
 
-                return _nameIndex[ name ];
-            }
-        }
-
-#region IList<TextDataSetTable> Members
+        #region IList<TextDataSetTable> Members
 
         int IList<TextDataSetTable>.IndexOf( TextDataSetTable item )
         {

@@ -51,33 +51,24 @@
 
         public int CommandTimeout
     {
-      get
-      {
-        return 0;
-      }      
-      set
+      get => 0;
+            set
       {
       }
     }
 
     public CommandType CommandType
     {
-      get
-      {
-        return CommandType.Text;
-      }      
-      set
+      get => CommandType.Text;
+        set
       {
       }
     }
     
     IDbConnection IDbCommand.Connection
     {
-      get
-      {
-        return Connection;
-      }
-      set
+      get => Connection;
+        set
       {
       }
     }
@@ -88,22 +79,16 @@
 
         public IDbTransaction Transaction
     {
-      get
-      {
-        return null;
-      }
-      set
+      get => null;
+            set
       {
       }
     }
     
     public UpdateRowSource UpdatedRowSource
     {
-      get
-      {
-        return UpdateRowSource.None;
-      }
-      set
+      get => UpdateRowSource.None;
+        set
       {
       }
     }

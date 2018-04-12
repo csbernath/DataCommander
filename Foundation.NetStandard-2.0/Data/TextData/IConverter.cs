@@ -1,11 +1,11 @@
-﻿namespace Foundation.Data
+﻿namespace Foundation.Data.TextData
 {
     /// <summary>
     /// 
     /// </summary>
     /// <typeparam name="TInput"></typeparam>
     /// <typeparam name="TOutput"></typeparam>
-    public interface IConverter<TInput, TOutput>
+    public interface IConverter<in TInput, out TOutput>
     {
         /// <summary>
         /// 

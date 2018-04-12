@@ -121,17 +121,7 @@ namespace Foundation.Data.PTypes
         /// <returns></returns>
         public static PMoney Parse( string s, PValueType type )
         {
-            PMoney sp;
-
-            if (string.IsNullOrEmpty(s))
-            {
-                sp = new PMoney( type );
-            }
-            else
-            {
-                sp = SqlMoney.Parse( s );
-            }
-
+            var sp = string.IsNullOrEmpty(s) ? new PMoney( type ) : SqlMoney.Parse( s );
             return sp;
         }
 

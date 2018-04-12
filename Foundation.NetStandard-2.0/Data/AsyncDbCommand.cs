@@ -53,7 +53,7 @@ namespace Foundation.Data
                 return _command.CommandType;
             }
 
-            set { _command.CommandType = value; }
+            set => _command.CommandType = value;
         }
 
         /// <summary>
@@ -98,11 +98,7 @@ namespace Foundation.Data
         /// </summary>
         public int CommandTimeout
         {
-            get
-            {
-                // TODO:  Add AsyncDbCommand.CommandTimeout getter implementation
-                return 0;
-            }
+            get => 0;
 
             set
             {
@@ -125,11 +121,7 @@ namespace Foundation.Data
         /// </summary>
         public IDbConnection Connection
         {
-            get
-            {
-                // TODO:  Add AsyncDbCommand.Connection getter implementation
-                return null;
-            }
+            get => null;
 
             set
             {
@@ -142,11 +134,7 @@ namespace Foundation.Data
         /// </summary>
         public UpdateRowSource UpdatedRowSource
         {
-            get
-            {
-                // TODO:  Add AsyncDbCommand.UpdatedRowSource getter implementation
-                return new UpdateRowSource();
-            }
+            get => new UpdateRowSource();
 
             set
             {

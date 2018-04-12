@@ -23,17 +23,17 @@ namespace Foundation
         {
             Assert.IsNotNull(commandLine);
 
-            this._arguments = new IndexableCollection<CommandLineArgument>(ListIndex);
+            _arguments = new IndexableCollection<CommandLineArgument>(ListIndex);
             var dictionary = new Dictionary<string, ICollection<CommandLineArgument>>(StringComparer.InvariantCultureIgnoreCase);
             NameIndex = new NonUniqueIndex<string, CommandLineArgument>(
                 "nameIndex",
                 argument => GetKeyResponse.Create(argument.Name != null, argument.Name),
                 dictionary,
                 () => new List<CommandLineArgument>());
-            this._arguments.Indexes.Add(NameIndex);
+            _arguments.Indexes.Add(NameIndex);
             var stringReader = new StringReader(commandLine);
             var arguments = Parse(stringReader);
-            this._arguments.Add(arguments);
+            _arguments.Add(arguments);
         }
 
         /// <summary>
@@ -108,16 +108,7 @@ namespace Foundation
                 }
             }
 
-            string name;
-
-            if (sb.Length > 0)
-            {
-                name = sb.ToString();
-            }
-            else
-            {
-                name = null;
-            }
+            var name = sb.Length > 0 ? sb.ToString() : null;
 
             return name;
         }

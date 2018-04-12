@@ -53,7 +53,7 @@ namespace DataCommander.Providers
             var colWidth = (int) d;
             colWidth++;
 
-            foreach (ADODB.Field field in rs.Fields)
+            foreach (Field field in rs.Fields)
             {
                 var fieldType = field.Type;
 

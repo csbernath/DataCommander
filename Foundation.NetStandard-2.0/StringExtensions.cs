@@ -156,7 +156,7 @@ namespace Foundation
 
             public StringAsList(string source)
             {
-                this._source = source;
+                _source = source;
             }
 
             #region IList<Char> Members

@@ -151,7 +151,7 @@ namespace Foundation.Linq
             {
                 Assert.IsNotNull(source);
 
-                this._source = source;
+                _source = source;
                 _sourceAsList = source as IList;
             }
 

@@ -16,7 +16,7 @@
     {
         private Int32 _maxThreadCount;
         private Int32 _availableThreadCount;
-        private Queue<Tuple<Action<T>, T>> _queue = new Queue<Tuple<Action<T>, T>>();
+        private readonly Queue<Tuple<Action<T>, T>> _queue = new Queue<Tuple<Action<T>, T>>();
 
         /// <summary>
         /// 
@@ -29,31 +29,19 @@
 #else
             Contract.Requires(maxThreadCount > 0);
 #endif
-            this._maxThreadCount = maxThreadCount;
+            _maxThreadCount = maxThreadCount;
             _availableThreadCount = maxThreadCount;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public Int32 QueuedItemCount
-        {
-            get
-            {
-                return _queue.Count;
-            }
-        }
+        public Int32 QueuedItemCount => _queue.Count;
 
         /// <summary>
         /// 
         /// </summary>
-        public Int32 AvailableThreadCount
-        {
-            get
-            {
-                return _availableThreadCount;
-            }
-        }
+        public Int32 AvailableThreadCount => _availableThreadCount;
 
         /// <summary>
         /// 

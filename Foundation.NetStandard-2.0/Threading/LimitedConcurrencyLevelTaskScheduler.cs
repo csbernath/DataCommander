@@ -216,7 +216,7 @@ namespace Foundation.Threading
 
         /// <summary>Queues a task to the scheduler.</summary>
         /// <param name="task">The task to be queued.</param>
-        protected override sealed void QueueTask(Task task)
+        protected sealed override void QueueTask(Task task)
         {
             // Add the task to the list of tasks to be processed.  If there aren't enough
             // delegates currently queued or running to process tasks, schedule another.
@@ -278,7 +278,7 @@ namespace Foundation.Threading
         /// <param name="task">The task to be executed.</param>
         /// <param name="taskWasPreviouslyQueued"></param>
         /// <returns>Whether the task could be executed on the current thread.</returns>
-        protected override sealed bool TryExecuteTaskInline(Task task, bool taskWasPreviouslyQueued)
+        protected sealed override bool TryExecuteTaskInline(Task task, bool taskWasPreviouslyQueued)
         {
             // If this thread isn't already processing a task, we don't support inlining
             if (!_currentThreadIsProcessingItems)
@@ -295,14 +295,14 @@ namespace Foundation.Threading
         /// <summary>Attempts to remove a previously scheduled task from the scheduler.</summary>
         /// <param name="task">The task to be removed.</param>
         /// <returns>Whether the task could be found and removed.</returns>
-        protected override sealed bool TryDequeue(Task task)
+        protected sealed override bool TryDequeue(Task task)
         {
             lock (_tasks)
                 return _tasks.Remove(task);
         }
 
         /// <summary>Gets the maximum concurrency level supported by this scheduler.</summary>
-        public override sealed int MaximumConcurrencyLevel => _maxDegreeOfParallelism;
+        public sealed override int MaximumConcurrencyLevel => _maxDegreeOfParallelism;
 
         /// <summary>
         /// 
@@ -316,7 +316,7 @@ namespace Foundation.Threading
 
         /// <summary>Gets an enumerable of the tasks currently scheduled on this scheduler.</summary>
         /// <returns>An enumerable of the tasks currently scheduled.</returns>
-        protected override sealed IEnumerable<Task> GetScheduledTasks()
+        protected sealed override IEnumerable<Task> GetScheduledTasks()
         {
             var lockTaken = false;
             try

@@ -16,23 +16,12 @@ namespace Foundation.Data
         private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(SafeDbConnection));
         private ISafeDbConnection _safeDbConnection;
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected SafeDbConnection()
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public IDbConnection Connection { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="safeDbConnection"></param>
         protected void Initialize(IDbConnection connection, ISafeDbConnection safeDbConnection)
         {
             Assert.IsNotNull(connection);
@@ -42,78 +31,33 @@ namespace Foundation.Data
             _safeDbConnection = safeDbConnection;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 if (Connection != null)
                 {
                     Connection.Dispose();
                     Connection = null;
                 }
-            }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public IDbTransaction BeginTransaction()
-        {
-            return Connection.BeginTransaction();
-        }
+        public IDbTransaction BeginTransaction() => Connection.BeginTransaction();
+        IDbTransaction IDbConnection.BeginTransaction(IsolationLevel il) => Connection.BeginTransaction(il);
+        public void ChangeDatabase(string databaseName) => Connection.ChangeDatabase(databaseName);
+        public void Close() => Connection.Close();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        IDbTransaction IDbConnection.BeginTransaction(IsolationLevel il)
-        {
-            return Connection.BeginTransaction(il);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="databaseName"></param>
-        public void ChangeDatabase(string databaseName)
-        {
-            Connection.ChangeDatabase(databaseName);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Close()
-        {
-            Connection.Close();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public IDbCommand CreateCommand()
         {
             var command = Connection.CreateCommand();
             return new SafeDbCommand(this, command);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Open()
         {
             var count = 0;
@@ -153,27 +97,10 @@ namespace Foundation.Data
             set => Connection.ConnectionString = value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public int ConnectionTimeout => Connection.ConnectionTimeout;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public string Database => Connection.Database;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public ConnectionState State => Connection.State;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="behavior"></param>
-        /// <returns></returns>
         internal IDataReader ExecuteReader(IDbCommand command, CommandBehavior behavior)
         {
             Assert.IsNotNull(command);
@@ -226,11 +153,6 @@ namespace Foundation.Data
             return reader;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
         internal object ExecuteScalar(IDbCommand command)
         {
             Assert.IsNotNull(command);
@@ -267,17 +189,10 @@ namespace Foundation.Data
             return scalar;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
         internal int ExecuteNonQuery(IDbCommand command)
         {
             if (Connection.State != ConnectionState.Open)
-            {
                 Open();
-            }
 
             var count = 0;
             var tryCount = 0;
@@ -307,12 +222,6 @@ namespace Foundation.Data
             }
 
             return count;
-        }
-
-        //[ContractInvariantMethod]
-        private void ContractInvariant()
-        {
-            //Contract.Invariant(this.Connection != null);
         }
     }
 }

@@ -83,14 +83,7 @@ namespace Foundation.Collections.IndexableCollection
             bool succeeded;
             var contains = _dictionary.ContainsValue(item);
 
-            if (contains)
-            {
-                succeeded = _dictionary.Remove(item.Name);
-            }
-            else
-            {
-                succeeded = false;
-            }
+            succeeded = contains && _dictionary.Remove(item.Name);
 
             return succeeded;
         }

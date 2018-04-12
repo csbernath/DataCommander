@@ -90,7 +90,7 @@ namespace DataCommander.Providers.Tfs
 
         IDbTransaction IDbCommand.Transaction
         {
-            get { return null; }
+            get => null;
 
             set { }
         }

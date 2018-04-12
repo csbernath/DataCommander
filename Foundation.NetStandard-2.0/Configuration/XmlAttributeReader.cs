@@ -34,14 +34,7 @@ namespace Foundation.Configuration
             var attribute = attributes[name];
             var contains = attribute != null;
 
-            if (contains)
-            {
-                value = attribute.Value;
-            }
-            else
-            {
-                value = null;
-            }
+            value = contains ? attribute.Value : null;
 
             return contains;
         }

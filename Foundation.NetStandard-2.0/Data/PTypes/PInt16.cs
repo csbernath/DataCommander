@@ -107,19 +107,9 @@ namespace Foundation.Data.PTypes
         /// <param name="s"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static PInt16 Parse( string s, PValueType type )
+        public static PInt16 Parse(string s, PValueType type)
         {
-            PInt16 sp;
-
-            if (string.IsNullOrEmpty( s ))
-            {
-                sp = new PInt16( type );
-            }
-            else
-            {
-                sp = SqlInt16.Parse( s );
-            }
-
+            var sp = string.IsNullOrEmpty(s) ? new PInt16(type) : SqlInt16.Parse(s);
             return sp;
         }
 

@@ -121,7 +121,7 @@ namespace Foundation.Data.TextData
                 return _listIndex[index];
             }
 
-            set { throw new NotImplementedException(); }
+            set => throw new NotImplementedException();
         }
 
         #region ICollection<TextDataColumn> Members

@@ -73,7 +73,7 @@ namespace DataCommander.Providers.Msi
 
         IDbTransaction IDbCommand.Transaction
         {
-            get { return null; }
+            get => null;
 
             set { }
         }

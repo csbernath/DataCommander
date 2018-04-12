@@ -29,8 +29,8 @@ namespace Foundation.Diagnostics
         {
             Assert.IsNotNull(toString);
 
-            this._name = name;
-            this._toString = toString;
+            _name = name;
+            _toString = toString;
         }
 
         /// <summary>
@@ -44,10 +44,10 @@ namespace Foundation.Diagnostics
 
             while (true)
             {
-                var min = this._min;
+                var min = _min;
                 if (item < min)
                 {
-                    var originalMin = Interlocked.CompareExchange(ref this._min, item, min);
+                    var originalMin = Interlocked.CompareExchange(ref _min, item, min);
                     if (originalMin == min)
                     {
                         break;
@@ -65,10 +65,10 @@ namespace Foundation.Diagnostics
 
             while (true)
             {
-                var max = this._max;
+                var max = _max;
                 if (item > max)
                 {
-                    var originalMax = Interlocked.CompareExchange(ref this._max, item, max);
+                    var originalMax = Interlocked.CompareExchange(ref _max, item, max);
                     if (originalMax == max)
                     {
                         break;

@@ -67,38 +67,16 @@ namespace Foundation.Configuration
             var isArray = false;
             var length = typeName.Length - 2;
             isArray = typeName != null && typeName.IndexOf("[]") == length;
-
-            string typeName2;
-
-            if (isArray)
-            {
-                typeName2 = typeName.Substring(0, length);
-            }
-            else
-            {
-                typeName2 = typeName;
-            }
-
+            var typeName2 = isArray ? typeName.Substring(0, length) : typeName;
             TypeCollectionItem item;
             var contains = NameIndex.TryGetValue(typeName2, out item);
-
-            if (contains)
-            {
-                type = item.Type;
-            }
-            else
-            {
-                type = Type.GetType(typeName2);
-            }
-
+            type = contains ? item.Type : Type.GetType(typeName2);
             if (type != null)
-            {
                 if (isArray)
                 {
                     typeName2 = type.FullName + "[], " + type.Assembly.FullName;
                     type = Type.GetType(typeName2, true);
                 }
-            }
 
             return type;
         }

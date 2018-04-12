@@ -18,7 +18,7 @@ namespace Foundation
         /// <param name="argument"></param>
         public ArgumentIsSelection(TArgument argument)
         {
-            this._argument = argument;
+            _argument = argument;
         }
 
         /// <summary>

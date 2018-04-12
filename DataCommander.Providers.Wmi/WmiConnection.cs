@@ -69,10 +69,7 @@
 
         public string ConnectionString
         {
-            get
-            {
-                return null;
-            }
+            get => null;
 
             set
             {

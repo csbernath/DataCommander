@@ -12,9 +12,6 @@ namespace Foundation.Data
             _connection = connection;
         }
 
-        public void Execute(Action<IDbConnection> execute)
-        {
-            execute(_connection);
-        }
+        public void Execute(Action<IDbConnection> execute) => execute(_connection);
     }
 }

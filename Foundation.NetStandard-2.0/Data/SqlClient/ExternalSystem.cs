@@ -35,14 +35,7 @@ namespace Foundation.Data.SqlClient
             var currentUser = WindowsIdentity.GetCurrent().Name;
             DataProtectionScope scope;
 
-            if (loginame == currentUser)
-            {
-                scope = DataProtectionScope.CurrentUser;
-            }
-            else
-            {
-                scope = DataProtectionScope.LocalMachine;
-            }
+            scope = loginame == currentUser ? DataProtectionScope.CurrentUser : DataProtectionScope.LocalMachine;
 
             table = dataSet.Tables[1];
 

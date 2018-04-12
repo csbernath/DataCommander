@@ -113,41 +113,18 @@ namespace Foundation.Data.PTypes
             return !(x == y);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="s"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static PDouble Parse( string s, PValueType type )
+        public static PDouble Parse(string s, PValueType type)
         {
-            PDouble sp;
-
-            if (string.IsNullOrEmpty(s))
-            {
-                sp = new PDouble( type );
-            }
-            else
-            {
-                sp = SqlDouble.Parse( s );
-            }
-
+            var sp = string.IsNullOrEmpty(s) ? new PDouble(type) : SqlDouble.Parse(s);
             return sp;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public override bool Equals( object y )
+        public override bool Equals(object y)
         {
             var equals = y is PDouble;
 
             if (equals)
-            {
                 equals = this == (PDouble) y;
-            }
 
             return equals;
         }

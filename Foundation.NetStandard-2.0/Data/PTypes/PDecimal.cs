@@ -108,14 +108,7 @@ namespace Foundation.Data.PTypes
         {
             PDecimal sp;
 
-            if (string.IsNullOrEmpty( s ))
-            {
-                sp = new PDecimal( type );
-            }
-            else
-            {
-                sp = SqlDecimal.Parse( s );
-            }
+            sp = string.IsNullOrEmpty( s ) ? new PDecimal( type ) : SqlDecimal.Parse( s );
 
             return sp;
         }

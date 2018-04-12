@@ -19,8 +19,8 @@ namespace Foundation.Diagnostics
         public Error( ErrorType type, string message, Exception exception )
         {
             Type = type;
-            this._message = message;
-            this._exception = exception;
+            _message = message;
+            _exception = exception;
         }
 
         /// <summary>

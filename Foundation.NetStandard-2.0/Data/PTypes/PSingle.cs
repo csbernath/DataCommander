@@ -13,19 +13,19 @@ namespace Foundation.Data.PTypes
         /// <summary>
         /// 
         /// </summary>
-        public static readonly PSingle Null = new PSingle( PValueType.Null );
+        public static readonly PSingle Null = new PSingle(PValueType.Null);
 
         /// <summary>
         /// 
         /// </summary>
-        public static readonly PSingle Default = new PSingle( PValueType.Default );
+        public static readonly PSingle Default = new PSingle(PValueType.Default);
 
         /// <summary>
         /// 
         /// </summary>
-        public static readonly PSingle Empty = new PSingle( PValueType.Empty );
+        public static readonly PSingle Empty = new PSingle(PValueType.Empty);
 
-        private PSingle( PValueType type )
+        private PSingle(PValueType type)
         {
             ValueType = type;
             _sql = SqlSingle.Null;
@@ -35,7 +35,7 @@ namespace Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public PSingle( long value )
+        public PSingle(long value)
         {
             _sql = value;
             ValueType = PValueType.Value;
@@ -45,7 +45,7 @@ namespace Foundation.Data.PTypes
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public PSingle( SqlSingle value )
+        public PSingle(SqlSingle value)
         {
             _sql = value;
             ValueType = value.IsNull ? PValueType.Null : PValueType.Value;
@@ -56,9 +56,9 @@ namespace Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PSingle( float value )
+        public static implicit operator PSingle(float value)
         {
-            return new PSingle( value );
+            return new PSingle(value);
         }
 
         /// <summary>
@@ -66,9 +66,9 @@ namespace Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PSingle( SqlSingle value )
+        public static implicit operator PSingle(SqlSingle value)
         {
-            return new PSingle( value );
+            return new PSingle(value);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace Foundation.Data.PTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator float( PSingle value )
+        public static implicit operator float(PSingle value)
         {
             return (float) value._sql;
         }
@@ -87,7 +87,7 @@ namespace Foundation.Data.PTypes
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static bool operator ==( PSingle x, PSingle y )
+        public static bool operator ==(PSingle x, PSingle y)
         {
             var isEqual = x.ValueType == y.ValueType;
 
@@ -108,39 +108,18 @@ namespace Foundation.Data.PTypes
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static bool operator !=( PSingle x, PSingle y )
+        public static bool operator !=(PSingle x, PSingle y)
         {
             return !(x == y);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="s"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static PSingle Parse( string s, PValueType type )
+        public static PSingle Parse(string s, PValueType type)
         {
-            PSingle sp;
-
-            if (string.IsNullOrEmpty(s))
-            {
-                sp = new PSingle( type );
-            }
-            else
-            {
-                sp = SqlSingle.Parse( s );
-            }
-
+            var sp = string.IsNullOrEmpty(s) ? new PSingle(type) : SqlSingle.Parse(s);
             return sp;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public override bool Equals( object y )
+        public override bool Equals(object y)
         {
             var equals = y is PSingle;
 
@@ -152,39 +131,18 @@ namespace Foundation.Data.PTypes
             return equals;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public override int GetHashCode()
         {
             var hashCode = _sql.GetHashCode();
             return hashCode;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public PValueType ValueType { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsNull => ValueType == PValueType.Null;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsValue => ValueType == PValueType.Value;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsEmpty => ValueType == PValueType.Empty;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public object Value
         {
             get
@@ -226,10 +184,6 @@ namespace Foundation.Data.PTypes
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public override string ToString()
         {
             return _sql.ToString();

@@ -19,7 +19,7 @@ namespace Foundation
         {
             Assert.IsNotNull(dispose);
 
-            this._dispose = dispose;
+            _dispose = dispose;
         }
 
         void IDisposable.Dispose()

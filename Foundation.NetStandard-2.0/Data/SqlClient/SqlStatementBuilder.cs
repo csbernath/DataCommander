@@ -20,17 +20,7 @@ namespace Foundation.Data.SqlClient
         /// <returns></returns>
         public static string ToString(byte? value)
         {
-            string s;
-
-            if (value != null)
-            {
-                s = value.Value.ToString();
-            }
-            else
-            {
-                s = SqlNull.NullString;
-            }
-
+            var s = value != null ? value.Value.ToString() : SqlNull.NullString;
             return s;
         }
 
@@ -61,14 +51,7 @@ namespace Foundation.Data.SqlClient
             {
                 string format;
 
-                if (value.TimeTicks == 0)
-                {
-                    format = "yyyyMMdd";
-                }
-                else
-                {
-                    format = "yyyyMMdd HH:mm:ss.fff";
-                }
+                format = value.TimeTicks == 0 ? "yyyyMMdd" : "yyyyMMdd HH:mm:ss.fff";
 
                 s = value.Value.ToString(format);
             }

@@ -193,7 +193,7 @@ namespace Foundation
         public MultipleDispatchSelection(params Func<TArgument, bool>[] selections)
         {
             Assert.IsNotNull(selections);
-            this._selections = selections;
+            _selections = selections;
         }
 
         /// <summary>

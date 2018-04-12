@@ -113,7 +113,7 @@ namespace Foundation.Linq
             public ReadOnlyDictionary(IDictionary<TKey, TValue> dictionary)
             {
                 Assert.IsNotNull(dictionary);
-                this._dictionary = dictionary;
+                _dictionary = dictionary;
             }
 
             #region IDictionary<TKey,TValue> Members

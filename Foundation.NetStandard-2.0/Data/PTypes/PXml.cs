@@ -44,14 +44,7 @@ namespace Foundation.Data.PTypes
         {
             _sqlXml = value;
 
-            if (value != null)
-            {
-                _type = PValueType.Value;
-            }
-            else
-            {
-                _type = PValueType.Null;
-            }
+            _type = value != null ? PValueType.Value : PValueType.Null;
         }
 
         /// <summary>

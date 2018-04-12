@@ -67,7 +67,7 @@ namespace Foundation.Linq
             {
                 Assert.IsNotNull(enumerator);
 
-                this._enumerator = enumerator;
+                _enumerator = enumerator;
             }
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator()

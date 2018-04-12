@@ -1,4 +1,4 @@
-﻿namespace Foundation.Data
+﻿namespace Foundation
 {
     public sealed class Sequence
     {

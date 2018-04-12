@@ -18,7 +18,7 @@ namespace Foundation
         public TypeIsSelection(Type type)
         {
             Assert.IsNotNull(type);
-            this._type = type;
+            _type = type;
         }
 
         /// <summary>

@@ -51,7 +51,7 @@
             columns = new OleDbParameter[rs.Fields.Count];
             var index = 0;
 
-            foreach (ADODB.Field field in rs.Fields)
+            foreach (Field field in rs.Fields)
             {
                 var param = new OleDbParameter();
                 param.SourceColumn = field.Name;

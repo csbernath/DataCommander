@@ -3,20 +3,8 @@ using Foundation.Assertions;
 
 namespace Foundation
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class FunctionComposition
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="X"></typeparam>
-        /// <typeparam name="Y"></typeparam>
-        /// <typeparam name="Z"></typeparam>
-        /// <param name="func1"></param>
-        /// <param name="func2"></param>
-        /// <returns></returns>
         public static Func<TX, TZ> Compose<TX, TY, TZ>(Func<TX, TY> func1, Func<TY, TZ> func2)
         {
             var composition = new UnaryFunctionComposition<TX, TY, TZ>(func1, func2);

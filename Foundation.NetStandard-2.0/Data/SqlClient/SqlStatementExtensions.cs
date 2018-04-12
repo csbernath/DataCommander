@@ -45,14 +45,7 @@ namespace Foundation.Data.SqlClient
             }
             else
             {
-                if (source.Millisecond == 0)
-                {
-                    format = "yyyyMMdd HH:mm:ss";
-                }
-                else
-                {
-                    format = "yyyyMMdd HH:mm:ss.fff";
-                }
+                format = source.Millisecond == 0 ? "yyyyMMdd HH:mm:ss" : "yyyyMMdd HH:mm:ss.fff";
             }
 
             return $"'{source.ToString(format, CultureInfo.InvariantCulture)}'";
