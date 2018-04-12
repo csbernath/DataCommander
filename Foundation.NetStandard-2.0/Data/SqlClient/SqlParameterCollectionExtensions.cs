@@ -4,39 +4,14 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using Foundation.Assertions;
 using Foundation.Text;
-using Microsoft.SqlServer.Server;
 
 namespace Foundation.Data.SqlClient
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class SqlParameterCollectionExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <param name="parameterName"></param>
-        /// <param name="sqlDataRecords"></param>
-        public static void AddStructured(this SqlParameterCollection parameters, string parameterName, IEnumerable<SqlDataRecord> sqlDataRecords)
-        {
-            Assert.IsNotNull(parameters);
-
-            var parameter = new SqlParameter(parameterName, SqlDbType.Structured);
-
-            if (sqlDataRecords.Any())
-            {
-                parameter.Value = sqlDataRecords;
-            }
-
-            parameters.Add(parameter);
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -64,18 +39,12 @@ namespace Foundation.Data.SqlClient
 
                         default:
                             if (first)
-                            {
                                 first = false;
-                            }
                             else
-                            {
                                 sb.AppendLine(",");
-                            }
 
                             if (value == DBNull.Value)
-                            {
                                 s = SqlNull.NullString;
-                            }
                             else
                             {
                                 var type = value.GetType();
@@ -84,15 +53,13 @@ namespace Foundation.Data.SqlClient
                                 if (nullable != null)
                                 {
                                     if (nullable.IsNull)
-                                    {
                                         s = SqlNull.NullString;
-                                    }
                                     else
                                     {
                                         switch (parameter.SqlDbType)
                                         {
                                             case SqlDbType.Bit:
-                                                var sqlBoolean = (SqlBoolean)value;
+                                                var sqlBoolean = (SqlBoolean) value;
                                                 s = sqlBoolean.ByteValue.ToString();
                                                 break;
 
@@ -108,15 +75,15 @@ namespace Foundation.Data.SqlClient
                                                 break;
 
                                             case SqlDbType.DateTime:
-                                                var sqlDateTime = (SqlDateTime)value;
+                                                var sqlDateTime = (SqlDateTime) value;
                                                 var dateTime = sqlDateTime.Value;
                                                 s = dateTime.ToTSqlDateTime();
                                                 break;
 
                                             case SqlDbType.Float:
-                                                var sqlDouble = (SqlDouble)value;
+                                                var sqlDouble = (SqlDouble) value;
                                                 var d = sqlDouble.Value;
-                                                var i = (long)d;
+                                                var i = (long) d;
 
                                                 if (i == d)
                                                     s = i.ToString(numberFormatInfo);
@@ -126,29 +93,24 @@ namespace Foundation.Data.SqlClient
                                                 break;
 
                                             case SqlDbType.Real:
-                                                var sqlSingle = (SqlSingle)value;
+                                                var sqlSingle = (SqlSingle) value;
                                                 s = sqlSingle.ToString();
                                                 break;
 
                                             case SqlDbType.Decimal:
-                                                var sqlDecimal = (SqlDecimal)value;
+                                                var sqlDecimal = (SqlDecimal) value;
                                                 s = sqlDecimal.ToString();
                                                 break;
 
                                             case SqlDbType.Money:
-                                                var sqlMoney = (SqlMoney)value;
+                                                var sqlMoney = (SqlMoney) value;
                                                 var dec = sqlMoney.Value;
-                                                i = (long)dec;
-
-                                                if (i == dec)
-                                                    s = i.ToString(numberFormatInfo);
-                                                else
-                                                    s = dec.ToString(numberFormatInfo);
-
+                                                i = (long) dec;
+                                                s = i == dec ? i.ToString(numberFormatInfo) : dec.ToString(numberFormatInfo);
                                                 break;
 
                                             case SqlDbType.SmallDateTime:
-                                                sqlDateTime = (SqlDateTime)value;
+                                                sqlDateTime = (SqlDateTime) value;
                                                 dateTime = sqlDateTime.Value;
                                                 s = dateTime.ToTSqlDateTime();
                                                 break;
@@ -169,7 +131,7 @@ namespace Foundation.Data.SqlClient
                                         switch (elementTypeCode)
                                         {
                                             case TypeCode.Byte:
-                                                var bytes = (byte[])value;
+                                                var bytes = (byte[]) value;
                                                 s = "0x" + Hex.GetString(bytes, true);
                                                 break;
 
@@ -185,25 +147,23 @@ namespace Foundation.Data.SqlClient
                                         switch (typeCode)
                                         {
                                             case TypeCode.Boolean:
-                                                var b = (bool)value;
-                                                s = b
-                                                    ? "1"
-                                                    : "0";
+                                                var b = (bool) value;
+                                                s = b ? "1" : "0";
                                                 break;
 
                                             case TypeCode.String:
-                                                s = (string)value;
+                                                s = (string) value;
                                                 s = s.Replace("\'", "''");
                                                 s = $"'{s}'";
                                                 break;
 
                                             case TypeCode.DateTime:
-                                                var dateTime = (DateTime)value;
+                                                var dateTime = (DateTime) value;
                                                 s = dateTime.ToTSqlDateTime();
                                                 break;
 
                                             case TypeCode.Decimal:
-                                                var decimalValue = (decimal)value;
+                                                var decimalValue = (decimal) value;
                                                 s = decimalValue.ToString(numberFormatInfo);
                                                 break;
 
@@ -224,35 +184,21 @@ namespace Foundation.Data.SqlClient
             s = sb.ToString();
 
             if (s.Length == 0)
-            {
                 s = null;
-            }
 
             return s;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <param name="parameterName"></param>
-        /// <param name="value"></param>
         public static void Add(this ICollection<SqlParameter> parameters, string parameterName, object value)
         {
-            var parameter = new SqlParameter();
-            parameter.ParameterName = parameterName;
-            parameter.Value = value;
-
+            var parameter = new SqlParameter
+            {
+                ParameterName = parameterName,
+                Value = value
+            };
             parameters.Add(parameter);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <param name="parameterName"></param>
-        /// <param name="sqlDbType"></param>
-        /// <param name="value"></param>
         public static void Add(this ICollection<SqlParameter> parameters, string parameterName, SqlDbType sqlDbType, object value)
         {
             var parameter = new SqlParameter();
@@ -263,11 +209,6 @@ namespace Foundation.Data.SqlClient
             parameters.Add(parameter);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
         public static List<object> ToObjectList(this ICollection<SqlParameter> parameters)
         {
             var result = new List<object>(parameters.Count);

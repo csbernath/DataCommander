@@ -1,14 +1,14 @@
 ﻿using System;
 
-namespace Foundation.Data.SqlClient.Orm
+namespace Foundation.DbQueryBuilding
 {
-    public class Field
+    public sealed class DbQueryResultField
     {
         public readonly string Name;
         public readonly Type DataType;
         public readonly bool IsNullable;
 
-        public Field(string name, Type dataType, bool isNullable)
+        public DbQueryResultField(string name, Type dataType, bool isNullable)
         {
             Name = name;
             DataType = dataType;

@@ -1,8 +1,8 @@
 ﻿using System.Data;
 
-namespace DataCommander.Providers.ResultWriter.QueryConfiguration
+namespace Foundation.DbQueryBuilding
 {
-    public class Parameter
+    public sealed class DbQueryParameter
     {
         public readonly string Name;
         public readonly string DataType;
@@ -10,9 +10,8 @@ namespace DataCommander.Providers.ResultWriter.QueryConfiguration
         public readonly string CSharpDataType;
         public readonly bool IsNullable;
         public readonly string CSharpValue;
-        public readonly string Value;
 
-        public Parameter(string name, string dataType, SqlDbType? sqlDbType, string cSharpDataType, bool isNullable, string cSharpValue, string value)
+        public DbQueryParameter(string name, string dataType, SqlDbType? sqlDbType, string cSharpDataType, bool isNullable, string cSharpValue)
         {
             Name = name;
             DataType = dataType;
@@ -20,7 +19,6 @@ namespace DataCommander.Providers.ResultWriter.QueryConfiguration
             CSharpDataType = cSharpDataType;
             IsNullable = isNullable;
             CSharpValue = cSharpValue;
-            Value = value;
         }
     }
 }

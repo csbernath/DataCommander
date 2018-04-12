@@ -88,37 +88,15 @@ namespace Foundation.Linq
             return count;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="collection"></param>
-        /// <returns></returns>
         public static ReadOnlyCollection<T> AsReadOnly<T>(this ICollection<T> collection)
         {
             Assert.IsNotNull(collection);
             return new ReadOnlyCollection<T>(collection.ToList());
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
         public static ICollection<TResult> Cast<TResult>(this ICollection source)
         {
-            ICollection<TResult> collection;
-
-            if (source != null)
-            {
-                collection = new CastedCollection<TResult>(source);
-            }
-            else
-            {
-                collection = null;
-            }
-
+            ICollection<TResult> collection = source != null ? new CastedCollection<TResult>(source) : null;
             return collection;
         }
 
@@ -156,10 +134,6 @@ namespace Foundation.Linq
             return new ReadOnlyArray<T>(items);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TResult"></typeparam>
         private sealed class CastedCollection<TResult> : ICollection<TResult>
         {
             #region Private Fields
@@ -173,10 +147,6 @@ namespace Foundation.Linq
 
             #endregion
 
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="source"></param>
             public CastedCollection(ICollection source)
             {
                 Assert.IsNotNull(source);

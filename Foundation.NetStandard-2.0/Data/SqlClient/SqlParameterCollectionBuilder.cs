@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using Foundation.Linq;
+using Microsoft.SqlServer.Server;
 
 namespace Foundation.Data.SqlClient
 {
@@ -45,6 +46,12 @@ namespace Foundation.Data.SqlClient
                 SqlDbType = SqlDbType.Date,
                 Value = value
             };
+            Add(parameter);
+        }
+
+        public void AddStructured(string parameterName, string typeName, ReadOnlyCollection<SqlDataRecord> sqlDataRecords)
+        {
+            var parameter = SqlParameterFactory.CreateStructured(parameterName, typeName, sqlDataRecords);
             Add(parameter);
         }
 

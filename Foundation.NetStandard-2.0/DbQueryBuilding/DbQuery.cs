@@ -1,17 +1,17 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Foundation.Data.SqlClient.Orm
+namespace Foundation.DbQueryBuilding
 {
-    public class Query
+    public class DbQuery
     {
         public readonly string Namespace;
         public readonly string Name;
         public readonly string CommandText;
         public readonly int CommandTimeout;
-        public readonly ReadOnlyCollection<Parameter> Parameters;
-        public readonly ReadOnlyCollection<Result> Results;
+        public readonly ReadOnlyCollection<DbQueryParameter> Parameters;
+        public readonly ReadOnlyCollection<DbQueryResult> Results;
 
-        public Query(string @namespace, string name, string commandText, int commandTimeout, ReadOnlyCollection<Parameter> parameters, ReadOnlyCollection<Result> results)
+        public DbQuery(string @namespace, string name, string commandText, int commandTimeout, ReadOnlyCollection<DbQueryParameter> parameters, ReadOnlyCollection<DbQueryResult> results)
         {
             Namespace = @namespace;
             Name = name;

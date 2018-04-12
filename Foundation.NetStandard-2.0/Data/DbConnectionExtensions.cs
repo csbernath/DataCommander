@@ -11,9 +11,6 @@ namespace Foundation.Data
             return command;
         }
 
-        public static IDbCommandAsyncExecutor CreateCommandAsyncExecutor(this DbConnection connection)
-        {
-            return new DbCommandAsyncExecutor(connection);
-        }
+        public static IDbCommandAsyncExecutor CreateCommandAsyncExecutor(this DbConnection connection) => new DbCommandAsyncExecutor(connection);
     }
 }

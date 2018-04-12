@@ -10,7 +10,7 @@ using DataCommander.Providers.Connection;
 using Foundation;
 using Foundation.Assertions;
 using Foundation.Data;
-using Foundation.Data.SqlClient.Orm;
+using Foundation.DbQueryBuilding;
 using Foundation.Diagnostics;
 using Foundation.Linq;
 using Foundation.Log;
@@ -23,9 +23,9 @@ namespace DataCommander.Providers.ResultWriter
     {
         private class Result
         {
-            public readonly ReadOnlyCollection<Field> Fields;
+            public readonly ReadOnlyCollection<DbQueryResultField> Fields;
 
-            public Result(ReadOnlyCollection<Field> fields)
+            public Result(ReadOnlyCollection<DbQueryResultField> fields)
             {
                 Fields = fields;
             }
@@ -58,12 +58,10 @@ namespace DataCommander.Providers.ResultWriter
         void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand)
         {
             _beforeExecuteReaderTimestamp = Stopwatch.GetTimestamp();
-            var command = asyncDataAdapterCommand.Command;
-            var message = $"Executing command[{_commandCount}] from line {asyncDataAdapterCommand.LineIndex + 1}...\r\n{command.CommandText}";
-
             ++_commandCount;
 
-            var commandText = asyncDataAdapterCommand.Command.CommandText;
+            var command = asyncDataAdapterCommand.Command;
+            var commandText = command.CommandText;
             if (commandText.StartsWith("/* Query"))
             {
                 var index = command.CommandText.IndexOf("*/");
@@ -71,8 +69,10 @@ namespace DataCommander.Providers.ResultWriter
                 var json = commandText.Substring(10, index - 10);
                 _query = JsonConvert.DeserializeObject<QueryConfiguration.Query>(json);
                 _results = new List<Result>();
-                asyncDataAdapterCommand.Command.CommandText = GetParameterizedCommandText(_query.Parameters, _commandText);
+                command.CommandText = GetParameterizedCommandText(_query.Parameters, _commandText);
             }
+
+            var message = $"Executing command[{_commandCount}] from line {asyncDataAdapterCommand.LineIndex + 1}...\r\n{command.CommandText}";
 
             var parameters = command.Parameters;
             if (!parameters.IsNullOrEmpty())
@@ -85,7 +85,7 @@ namespace DataCommander.Providers.ResultWriter
         {
             var stringBuilder = new StringBuilder();
             foreach (var parameter in parameters)
-                stringBuilder.Append($"declare @{parameter.Name} {parameter.DataType} = {parameter.Value}\r\n");
+                stringBuilder.Append($"declare @{parameter.Name} {parameter.DataType}{parameter.Value}\r\n");
             stringBuilder.Append(commandText);
             return stringBuilder.ToString();
         }
@@ -108,8 +108,23 @@ namespace DataCommander.Providers.ResultWriter
             var message = $"Command[{_commandCount - 1}] completed in {StopwatchTimeSpan.ToString(duration, 3)} seconds. {affected}";
             _addInfoMessage(new InfoMessage(now, InfoMessageSeverity.Verbose, null, message));
 
-            _query = null;
-            _results = null;
+            if (_query != null)
+            {
+                var parameters = _query.Parameters.Select(ToParameter).ToReadOnlyCollection();
+                var results = _query.Results.Zip(_results, ToResult).ToReadOnlyCollection();
+                var query = new DbQuery(_query.Namespace, _query.Name, _commandText, 0, parameters, results);
+
+                var queryBuilder = new DbQueryBuilder(query);
+                var csharpSourceCode = queryBuilder.Build();
+                Log.Trace($"\r\n{csharpSourceCode}");
+
+                var timestamp = LocalTime.Default.Now.ToString("yyyy.MM.dd HHmmss.fff");
+                var path = Path.Combine(Path.GetTempPath(), $"DataCommander.Orm.{timestamp}.cs");
+                File.WriteAllText(path, csharpSourceCode, Encoding.UTF8);
+
+                _query = null;
+                _results = null;
+            }
         }
 
         void IResultWriter.WriteTableBegin(DataTable schemaTable)
@@ -156,21 +171,6 @@ namespace DataCommander.Providers.ResultWriter
             var message =
                 $"Reading {_rowCount} row(s) from command[{_commandCount - 1}] into table[{_tableCount - 1}] finished in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
             _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
-
-            if (_query != null)
-            {
-                var parameters = _query.Parameters.Select(ToParameter).ToReadOnlyCollection();
-                var results = _query.Results.Zip(_results, ToResult).ToReadOnlyCollection();
-                var query = new Foundation.Data.SqlClient.Orm.Query(_query.Namespace, _query.Name, _commandText, 0, parameters, results);
-
-                var queryBuilder = new QueryBuilder(query);
-                var csharpSourceCode = queryBuilder.Build();
-                Log.Trace($"\r\n{csharpSourceCode}");
-
-                var timestamp = LocalTime.Default.Now.ToString("yyyy.MM.dd HHmmss.fff");
-                var path = Path.Combine(Path.GetTempPath(), $"DataCommander.Orm.{timestamp}.cs");
-                File.WriteAllText(path, csharpSourceCode, Encoding.UTF8);
-            }
         }
 
         void IResultWriter.WriteParameters(IDataParameterCollection parameters)
@@ -184,10 +184,9 @@ namespace DataCommander.Providers.ResultWriter
             _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
         }
 
-        private Foundation.Data.SqlClient.Orm.Parameter ToParameter(Parameter source) =>
-            new Foundation.Data.SqlClient.Orm.Parameter(source.Name, source.DataType, source.IsNullable);
-
-        private Foundation.Data.SqlClient.Orm.Result ToResult(string name, Result result) => new Foundation.Data.SqlClient.Orm.Result(name, result.Fields);
+        private DbQueryParameter ToParameter(Parameter source) =>
+            new DbQueryParameter(source.Name, source.DataType, source.SqlDbType, source.CSharpDataType, source.IsNullable, source.CSharpValue);
+        private DbQueryResult ToResult(string name, Result result) => new DbQueryResult(name, result.Fields);
 
         #endregion
 
@@ -224,7 +223,7 @@ namespace DataCommander.Providers.ResultWriter
         //    query = new Query(queryName, parameters.AsReadOnly());
         //}
 
-        private static Field ToField(FoundationDbColumn column) => new Field(column.ColumnName, column.DataType, column.AllowDbNull == true);
+        private static DbQueryResultField ToField(FoundationDbColumn column) => new DbQueryResultField(column.ColumnName, column.DataType, column.AllowDbNull == true);
 
         #endregion
     }
