@@ -31,7 +31,7 @@ namespace DataCommander.Providers
 <a href=""https://github.com/csbernath/DataCommander"">Data Commander</a>
 <br/>
 <br/>
-Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/README.md"">Foundation Class Library</a>
+Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation.NetStandard-2.0/README.md"">Foundation (.NET Standard 2.0) Class Library</a>
 <br/>
 <br/>
 Build date: {lastWriteTime.ToString("yyyy-MM-dd")}
