@@ -8,9 +8,9 @@ namespace DataCommander.Providers.ResultWriter.QueryConfiguration
         public readonly string Namespace;
         public readonly string Name;
         public readonly ReadOnlyCollection<Parameter> Parameters;
-        public readonly ReadOnlyCollection<string> Results;
+        public readonly ReadOnlyCollection<Result> Results;
 
-        public Query(string @using, string @namespace, string name, ReadOnlyCollection<Parameter> parameters, ReadOnlyCollection<string> results)
+        public Query(string @using, string @namespace, string name, ReadOnlyCollection<Parameter> parameters, ReadOnlyCollection<Result> results)
         {
             Using = @using;
             Namespace = @namespace;

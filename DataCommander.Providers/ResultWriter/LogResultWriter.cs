@@ -186,7 +186,8 @@ namespace DataCommander.Providers.ResultWriter
 
         private DbQueryParameter ToParameter(Parameter source) =>
             new DbQueryParameter(source.Name, source.DataType, source.SqlDbType, source.CSharpDataType, source.IsNullable, source.CSharpValue);
-        private DbQueryResult ToResult(string name, Result result) => new DbQueryResult(name, result.Fields);
+
+        private DbQueryResult ToResult(QueryConfiguration.Result config, Result sql) => new DbQueryResult(config.Name, config.FieldName, sql.Fields);
 
         #endregion
 

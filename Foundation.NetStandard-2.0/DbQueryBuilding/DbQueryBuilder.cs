@@ -170,7 +170,7 @@ namespace {_query.Namespace}
                     next = "Next";
                 }
 
-                stringBuilder.Append($"        var {ToLower(result.Name)} = dataReader.Read{next}Result(Read{result.Name}).AsReadOnly();");
+                stringBuilder.Append($"        var {ToLower(result.FieldName)} = dataReader.Read{next}Result(Read{result.Name}).AsReadOnly();");
             }
 
             stringBuilder.Append($"\r\n        result = new {_query.Name}DbQueryResult(");
@@ -181,7 +181,7 @@ namespace {_query.Namespace}
                 if (sequence.Next() > 0)
                     stringBuilder.Append(", ");
 
-                stringBuilder.Append($"{ToLower(result.Name)}");
+                stringBuilder.Append($"{ToLower(result.FieldName)}");
             }
 
             stringBuilder.Append(");\r\n");
@@ -216,14 +216,14 @@ namespace {_query.Namespace}
             foreach (var result in _query.Results)
             {
                 var next = sequence.Next() == 0 ? null : "Next";
-                stringBuilder.Append($"var {ToLower(result.Name)} = (await dataReader.Read{next}ResultAsync(Read{result.Name}, request.CancellationToken)).AsReadOnly();\r\n");
+                stringBuilder.Append($"var {ToLower(result.FieldName)} = (await dataReader.Read{next}ResultAsync(Read{result.Name}, request.CancellationToken)).AsReadOnly();\r\n");
             }
 
             stringBuilder.Append($"result = new {_query.Name}DbQueryResult({GetResultVariableNames()});");
             return stringBuilder.ToString();
         }
 
-        private string GetResultVariableNames() => string.Join(", ", _query.Results.Select(i => ToLower(i.Name)));
+        private string GetResultVariableNames() => string.Join(", ", _query.Results.Select(i => ToLower(i.FieldName)));
 
         private string GetRecordClasses()
         {
@@ -292,7 +292,7 @@ namespace {_query.Namespace}
                 if (sequence.Next() > 0)
                     stringBuilder.Append("\r\n");
 
-                stringBuilder.Append($"    public readonly ReadOnlyCollection<{result.Name}> {result.Name};");
+                stringBuilder.Append($"    public readonly ReadOnlyCollection<{result.Name}> {result.FieldName};");
             }
 
             stringBuilder.Append("\r\n\r\n");
@@ -312,14 +312,14 @@ namespace {_query.Namespace}
                 if (sequence.Next() > 0)
                     stringBuilder.Append(", ");
 
-                stringBuilder.Append($"ReadOnlyCollection<{result.Name}> {ToLower(result.Name)}");
+                stringBuilder.Append($"ReadOnlyCollection<{result.Name}> {ToLower(result.FieldName)}");
             }
 
             stringBuilder.Append(")\r\n");
             stringBuilder.Append("{\r\n");
 
             foreach (var result in results)
-                stringBuilder.Append($"    {result.Name} = {ToLower(result.Name)};\r\n");
+                stringBuilder.Append($"    {result.FieldName} = {ToLower(result.FieldName)};\r\n");
 
             stringBuilder.Append("}");
 
