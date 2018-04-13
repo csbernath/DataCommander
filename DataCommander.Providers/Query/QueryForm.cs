@@ -1549,11 +1549,22 @@ namespace DataCommander.Providers.Query
 
                 if (statements.Count == 1)
                 {
-                    GetQueryConfiguration(statements[0].CommandText, out queryConfiguration, out var commandText);
-                    _sqlStatement = new SqlParser(commandText);
-                    var command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
+                    GetQueryConfiguration(statements[0].CommandText, out queryConfiguration, out var queryCommandTextParameters, out var queryCommandText);
+                    IDbCommand command;
+                    if (queryConfiguration != null)
+                    {
+                        command = Connection.CreateCommand();
+                        command.CommandText = $"{queryCommandTextParameters}\r\n{queryCommandText}";
+                        command.CommandTimeout = _commandTimeout;
+                    }
+                    else
+                    {
+                        _sqlStatement = new SqlParser(statements[0].CommandText);
+                        command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
+                    }
+
                     command.Transaction = _transaction;
-                    commands = new AsyncDataAdapterCommand(0, command, queryConfiguration).ItemToArray();
+                    commands = new AsyncDataAdapterCommand(0, command, queryConfiguration, queryCommandText).ItemToArray();
                 }
                 else
                     commands =
@@ -1561,6 +1572,7 @@ namespace DataCommander.Providers.Query
                         select new AsyncDataAdapterCommand(
                             statement.LineIndex,
                             Connection.Connection.CreateCommand(new CreateCommandRequest(statement.CommandText, null, CommandType.Text, _commandTimeout, _transaction)),
+                            null,
                             null);
 
                 int maxRecords;
@@ -1661,26 +1673,21 @@ namespace DataCommander.Providers.Query
             }
         }
 
-        private static void GetQueryConfiguration(string commandText, out QueryConfiguration.Query query, out string parameterizedCommandText)
+        private static void GetQueryConfiguration(string commandText, out QueryConfiguration.Query query, out string queryCommandTextParameters, out string queryCommandText)
         {
             if (commandText.StartsWith("/* Query"))
             {
                 var index = commandText.IndexOf("*/");
                 var json = commandText.Substring(10, index - 10);
                 query = JsonConvert.DeserializeObject<QueryConfiguration.Query>(json);
-                commandText = commandText.Substring(index + 4);
-
-                var stringBuilder = new StringBuilder();
-                stringBuilder.Append(ToCommandText(query.Parameters));
-                stringBuilder.Append("\r\n");
-                stringBuilder.Append(commandText);
-
-                parameterizedCommandText = stringBuilder.ToString();
+                queryCommandTextParameters = ToCommandText(query.Parameters);
+                queryCommandText = commandText.Substring(index + 4);
             }
             else
             {
                 query = null;
-                parameterizedCommandText = commandText;
+                queryCommandTextParameters = null;
+                queryCommandText = null;
             }
         }
 
@@ -3698,10 +3705,7 @@ namespace DataCommander.Providers.Query
                 _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
                 IResultWriter resultWriter = _dataSetResultWriter;
                 _dataAdapter = new AsyncDataAdapter(Provider,
-                    new[]
-                    {
-                        new AsyncDataAdapterCommand(0, _command, null)
-                    },
+                    new AsyncDataAdapterCommand(0, _command, null, null).ItemToArray(),
                     maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
                 _dataAdapter.Start();
             }
@@ -3725,7 +3729,7 @@ namespace DataCommander.Providers.Query
             var sqlCeResultWriter = new SqlCeResultWriter(_textBoxWriter, tableName);
             IAsyncDataAdapter asyncDataAdatper = new AsyncDataAdapter(
                 Provider,
-                new AsyncDataAdapterCommand(0, _command, null).ItemToArray(),
+                new AsyncDataAdapterCommand(0, _command, null, null).ItemToArray(),
                 maxRecords, _rowBlockSize, sqlCeResultWriter, EndFillInvoker, WriteEndInvoker);
             asyncDataAdatper.Start();
         }
@@ -3884,20 +3888,10 @@ namespace DataCommander.Providers.Query
                 var destinationConnection = nextQueryForm.Connection;
                 var sqlStatement = new SqlParser(Query);
                 _command = sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
-                string tableName;
-                if (_command.CommandType == CommandType.StoredProcedure)
-                {
-                    tableName = _command.CommandText;
-                }
-                else
-                {
-                    tableName = sqlStatement.FindTableName();
-                }
+                var tableName = _command.CommandType == CommandType.StoredProcedure ? _command.CommandText : sqlStatement.FindTableName();
 
                 if (tableName[0] == '[' && destinationProvider.Name == "System.Data.OracleClient")
-                {
                     tableName = tableName.Substring(1, tableName.Length - 2);
-                }
 
                 IResultWriter resultWriter = new CopyResultWriter(AddInfoMessage, destinationProvider, destinationConnection, tableName,
                     nextQueryForm.InvokeSetTransaction, CancellationToken.None);
@@ -3911,10 +3905,8 @@ namespace DataCommander.Providers.Query
                 _stopwatch.Start();
                 _timer.Start();
                 _dataAdapter = new AsyncDataAdapter(Provider,
-                    new[]
-                    {
-                        new AsyncDataAdapterCommand(0, _command, null)
-                    },
+                    new AsyncDataAdapterCommand(0, _command, null, null).ItemToArray(),
+
                     maxRecords, rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
                 _dataAdapter.Start();
             }

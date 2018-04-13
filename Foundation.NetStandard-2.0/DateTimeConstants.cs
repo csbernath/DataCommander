@@ -9,5 +9,6 @@
         public const int SecondsPerHour = MinutesPerHour * SecondsPerMinute;
         public const int SecondsPerMinute = 60;
         public const int SecondsPerDay = SecondsPerMinute * MinutesPerDay;
+        public const int DaysPerWeek = 7;
     }
 }

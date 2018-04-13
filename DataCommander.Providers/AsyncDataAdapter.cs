@@ -6,7 +6,6 @@ using System.Threading;
 using DataCommander.Providers.ResultWriter;
 using Foundation.Assertions;
 using Foundation.Data;
-using Foundation.Diagnostics;
 using Foundation.Log;
 using Foundation.Threading;
 using ThreadState = System.Threading.ThreadState;
@@ -31,7 +30,7 @@ namespace DataCommander.Providers
         private long _rowCount;
         private WorkerThread _thread;
         private int _tableCount;
-        private bool _isCommandCanceled;
+        private bool _isCommandCancelled;
 
         #endregion
 
@@ -71,7 +70,7 @@ namespace DataCommander.Providers
         {
             using (LogFactory.Instance.GetCurrentMethodLog())
             {
-                _isCommandCanceled = true;
+                _isCommandCancelled = true;
                 if (_thread != null)
                 {
                     _thread.Stop();
@@ -123,7 +122,7 @@ namespace DataCommander.Providers
                 var exitFromWhile = false;
                 var stopwatch = Stopwatch.StartNew();
 
-                while (!_isCommandCanceled && !_thread.IsStopRequested && !exitFromWhile)
+                while (!_isCommandCancelled && !_thread.IsStopRequested && !exitFromWhile)
                 {
                     bool read;
 
@@ -205,45 +204,7 @@ namespace DataCommander.Providers
 
             try
             {
-                _resultWriter.BeforeExecuteReader(asyncDataAdapterCommand);
-                IDataReader dataReader = null;
-                try
-                {
-                    dataReader = command.ExecuteReader();
-                    var fieldCount = dataReader.FieldCount;
-                    _resultWriter.AfterExecuteReader(fieldCount);
-                    var tableIndex = 0;
-
-                    while (!_thread.IsStopRequested)
-                    {
-                        if (fieldCount > 0)
-                        {
-                            var schemaTable = dataReader.GetSchemaTable();
-                            if (schemaTable != null)
-                            {
-                                Log.Trace("schemaTable:\r\n{0}", schemaTable.ToStringTableString());
-                                if (asyncDataAdapterCommand.Query != null)
-                                    schemaTable.TableName = asyncDataAdapterCommand.Query.Results[tableIndex].Name;
-                            }
-
-                            ReadTable(dataReader, schemaTable, tableIndex);
-                        }
-
-                        if (_rowCount >= _maxRecords || !dataReader.NextResult())
-                            break;
-
-                        tableIndex++;
-                    }
-                }
-                finally
-                {
-                    if (dataReader != null)
-                    {
-                        dataReader.Close();
-                        var recordsAffected = dataReader.RecordsAffected;
-                        _resultWriter.AfterCloseReader(recordsAffected);
-                    }
-                }
+                ExecuteReader(asyncDataAdapterCommand, command);
             }
             catch (ThreadAbortException)
             {
@@ -269,10 +230,50 @@ namespace DataCommander.Providers
                 if (command != null && command.Parameters != null)
                     _resultWriter.WriteParameters(command.Parameters);
 
-                var ticks = Stopwatch.GetTimestamp();
                 _endFill(this, exception);
-                ticks = Stopwatch.GetTimestamp() - ticks;
-                Log.Write(LogLevel.Trace, "this.endFill( this, exception ); completed in {0} seconds.", StopwatchTimeSpan.ToString(ticks, 3));
+            }
+        }
+
+        private void ExecuteReader(AsyncDataAdapterCommand asyncDataAdapterCommand, IDbCommand command)
+        {
+            _resultWriter.BeforeExecuteReader(asyncDataAdapterCommand);
+            IDataReader dataReader = null;
+            try
+            {
+                dataReader = command.ExecuteReader();
+                var fieldCount = dataReader.FieldCount;
+                _resultWriter.AfterExecuteReader(fieldCount);
+                var tableIndex = 0;
+
+                while (!_thread.IsStopRequested)
+                {
+                    if (fieldCount > 0)
+                    {
+                        var schemaTable = dataReader.GetSchemaTable();
+                        if (schemaTable != null)
+                        {
+                            Log.Trace("schemaTable:\r\n{0}", schemaTable.ToStringTableString());
+                            if (asyncDataAdapterCommand.Query != null)
+                                schemaTable.TableName = asyncDataAdapterCommand.Query.Results[tableIndex].Name;
+                        }
+
+                        ReadTable(dataReader, schemaTable, tableIndex);
+                    }
+
+                    if (_rowCount >= _maxRecords || !dataReader.NextResult())
+                        break;
+
+                    tableIndex++;
+                }
+            }
+            finally
+            {
+                if (dataReader != null)
+                {
+                    dataReader.Close();
+                    var recordsAffected = dataReader.RecordsAffected;
+                    _resultWriter.AfterCloseReader(recordsAffected);
+                }
             }
         }
 

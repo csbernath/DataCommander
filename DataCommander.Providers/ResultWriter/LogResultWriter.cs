@@ -14,7 +14,6 @@ using Foundation.DbQueryBuilding;
 using Foundation.Diagnostics;
 using Foundation.Linq;
 using Foundation.Log;
-using Newtonsoft.Json;
 using Parameter = DataCommander.Providers.QueryConfiguration.Parameter;
 
 namespace DataCommander.Providers.ResultWriter
@@ -41,8 +40,8 @@ namespace DataCommander.Providers.ResultWriter
         private long _writeTableBeginTimestamp;
         private long _firstRowReadBeginTimestamp;
 
-        private string _commandText;
         private QueryConfiguration.Query _query;
+        private string _commandText;
         private List<Result> _results;
 
         public LogResultWriter(Action<InfoMessage> addInfoMessage)
@@ -71,7 +70,10 @@ namespace DataCommander.Providers.ResultWriter
 
             _query = asyncDataAdapterCommand.Query;
             if (_query != null)
+            {
+                _commandText = asyncDataAdapterCommand.CommandText;
                 _results = new List<Result>();
+            }
         }
 
         void IResultWriter.AfterExecuteReader(int fieldCount)
