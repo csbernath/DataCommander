@@ -8,40 +8,11 @@ using Foundation.Xml;
 
 namespace Foundation.Linq
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class Extensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public static T[] ItemToArray<T>(this T item)
-        {
-            return new[] {item};
-        }
+        public static T[] ItemToArray<T>(this T item) => new[] {item};
+        public static IEnumerable<T> ItemAsEnumerable<T>(this T item) => item.ItemToArray();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public static IEnumerable<T> ItemAsEnumerable<T>(this T item)
-        {
-            return item.ItemToArray();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <typeparam name="TTarget"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="action"></param>
         public static void IfArgumentIs<TSource, TTarget>(this TSource source, Action<TTarget> action) where TTarget : class
         {
             if (source is TTarget)
@@ -51,55 +22,24 @@ namespace Foundation.Linq
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <typeparam name="TTarget"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="action"></param>
         public static bool IfAsNotNull<TSource, TTarget>(this TSource source, Action<TTarget> action) where TTarget : class
         {
             var target = source as TTarget;
             var selected = target != null;
             if (selected)
-            {
                 action(target);
-            }
+
             return selected;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
-        /// <param name="collection"></param>
-        /// <returns></returns>
         public static bool In<T>(this T item, params T[] collection)
         {
             Assert.IsNotNull(collection);
-
             return collection.Contains(item);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="objA"></param>
-        /// <param name="objB"></param>
-        /// <returns></returns>
-        public static bool ReferenceEquals<T>(this T objA, T objB) where T : class
-        {
-            return object.ReferenceEquals(objA, objB);
-        }
+        public static bool ReferenceEquals<T>(this T objA, T objB) where T : class => object.ReferenceEquals(objA, objB);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
         public static string ToLogXmlString(this object source)
         {
             string s;
@@ -131,18 +71,11 @@ namespace Foundation.Linq
                 }
             }
             else
-            {
                 s = null;
-            }
 
             return s;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
         public static string SerializeToXmlString(this object source)
         {
             var type = source.GetType();

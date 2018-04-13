@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using DataCommander.Providers.Connection;
+﻿using System.Data;
 
 namespace DataCommander.Providers.ResultWriter
 {
-    using System.Data;
-
     internal interface IResultWriter
     {
         void Begin(IProvider provider);

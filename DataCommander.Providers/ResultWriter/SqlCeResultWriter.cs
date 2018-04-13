@@ -1,17 +1,14 @@
-﻿using System.Collections.Generic;
-using DataCommander.Providers.Connection;
+﻿using System;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlServerCe;
+using System.IO;
+using System.Text;
+using Foundation.Data;
+using Foundation.Text;
 
 namespace DataCommander.Providers.ResultWriter
 {
-    using System;
-    using System.Data;
-    using System.Data.Common;
-    using System.Data.SqlServerCe;
-    using System.IO;
-    using System.Text;
-    using Foundation.Data;
-    using Foundation.Text;
-
     internal sealed class SqlCeResultWriter : IResultWriter
     {
         private readonly TextWriter _messageWriter;

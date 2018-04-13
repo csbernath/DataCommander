@@ -37,10 +37,7 @@ namespace DataCommander.Providers.ResultWriter
         void IResultWriter.AfterExecuteReader(int fieldCount) => _logResultWriter.AfterExecuteReader(fieldCount);
         void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);
 
-        private void Write(
-            StringBuilder sb,
-            string text,
-            int width)
+        private void Write(StringBuilder sb, string text, int width)
         {
             var length = width - text.Length;
 

@@ -15,7 +15,7 @@ using Foundation.Diagnostics;
 using Foundation.Linq;
 using Foundation.Log;
 using Newtonsoft.Json;
-using Parameter = DataCommander.Providers.ResultWriter.QueryConfiguration.Parameter;
+using Parameter = DataCommander.Providers.QueryConfiguration.Parameter;
 
 namespace DataCommander.Providers.ResultWriter
 {
@@ -61,17 +61,6 @@ namespace DataCommander.Providers.ResultWriter
             ++_commandCount;
 
             var command = asyncDataAdapterCommand.Command;
-            var commandText = command.CommandText;
-            if (commandText.StartsWith("/* Query"))
-            {
-                var index = command.CommandText.IndexOf("*/");
-                _commandText = commandText.Substring(index + 4);
-                var json = commandText.Substring(10, index - 10);
-                _query = JsonConvert.DeserializeObject<QueryConfiguration.Query>(json);
-                _results = new List<Result>();
-                command.CommandText = GetParameterizedCommandText(_query.Parameters, _commandText);
-            }
-
             var message = $"Executing command[{_commandCount}] from line {asyncDataAdapterCommand.LineIndex + 1}...\r\n{command.CommandText}";
 
             var parameters = command.Parameters;
@@ -79,15 +68,10 @@ namespace DataCommander.Providers.ResultWriter
                 message += "\r\n" + command.Parameters.ToLogString();
 
             _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
-        }
 
-        private static string GetParameterizedCommandText(ReadOnlyCollection<Parameter> parameters, string commandText)
-        {
-            var stringBuilder = new StringBuilder();
-            foreach (var parameter in parameters)
-                stringBuilder.Append($"declare @{parameter.Name} {parameter.DataType}{parameter.Value}\r\n");
-            stringBuilder.Append(commandText);
-            return stringBuilder.ToString();
+            _query = asyncDataAdapterCommand.Query;
+            if (_query != null)
+                _results = new List<Result>();
         }
 
         void IResultWriter.AfterExecuteReader(int fieldCount)

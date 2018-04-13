@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -37,10 +36,7 @@ namespace DataCommander.Providers.ResultWriter
             _provider = provider;
         }
 
-        void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command)
-        {
-            _logResultWriter.BeforeExecuteReader(command);
-        }
+        void IResultWriter.BeforeExecuteReader(AsyncDataAdapterCommand command) => _logResultWriter.BeforeExecuteReader(command);
 
         void IResultWriter.AfterExecuteReader(int fieldCount)
         {
@@ -50,10 +46,7 @@ namespace DataCommander.Providers.ResultWriter
             _excelPackage = new ExcelPackage(new FileInfo(fileName));
         }
 
-        void IResultWriter.AfterCloseReader(int affectedRows)
-        {
-            _logResultWriter.AfterCloseReader(affectedRows);
-        }
+        void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);
 
         void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
@@ -61,15 +54,8 @@ namespace DataCommander.Providers.ResultWriter
             CreateTable(schemaTable);
         }
 
-        void IResultWriter.FirstRowReadBegin()
-        {
-            _logResultWriter.FirstRowReadBegin();
-        }
-
-        void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
-        {
-            _logResultWriter.FirstRowReadEnd(dataTypeNames);
-        }
+        void IResultWriter.FirstRowReadBegin() => _logResultWriter.FirstRowReadBegin();
+        void IResultWriter.FirstRowReadEnd(string[] dataTypeNames) => _logResultWriter.FirstRowReadEnd(dataTypeNames);
 
         void IResultWriter.WriteRows(object[][] rows, int rowCount)
         {
@@ -90,10 +76,7 @@ namespace DataCommander.Providers.ResultWriter
             _rowCount += rowCount;
         }
 
-        void IResultWriter.WriteTableEnd()
-        {
-            _logResultWriter.WriteTableEnd();
-        }
+        void IResultWriter.WriteTableEnd() => _logResultWriter.WriteTableEnd();
 
         void IResultWriter.WriteParameters(IDataParameterCollection parameters)
         {

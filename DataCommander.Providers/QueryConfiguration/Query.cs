@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace DataCommander.Providers.ResultWriter.QueryConfiguration
+namespace DataCommander.Providers.QueryConfiguration
 {
     public class Query
     {

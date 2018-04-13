@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Providers.ResultWriter.QueryConfiguration
+﻿namespace DataCommander.Providers.QueryConfiguration
 {
     public class Result
     {

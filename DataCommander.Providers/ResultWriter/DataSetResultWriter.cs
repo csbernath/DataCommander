@@ -1,5 +1,4 @@
-﻿using DataCommander.Providers.Query;
-using System;
+﻿using System;
 using System.Data;
 using DataCommander.Providers.Connection;
 using Foundation.Data;
@@ -8,15 +7,11 @@ using Foundation.Diagnostics.MethodProfiler;
 
 namespace DataCommander.Providers.ResultWriter
 {
-    /// <summary>
-    /// Summary description for DataSetResultWriter.
-    /// </summary>
     internal sealed class DataSetResultWriter : IResultWriter
     {
         #region Private Fields
 
         private readonly IResultWriter _logResultWriter;
-        private QueryForm _queryForm;
         private readonly bool _showShemaTable;
         private IProvider _provider;
         private DataTable _dataTable;
@@ -24,13 +19,9 @@ namespace DataCommander.Providers.ResultWriter
 
         #endregion
 
-        public DataSetResultWriter(
-            Action<InfoMessage> addInfoMessage,
-            QueryForm queryForm,
-            bool showShemaTable)
+        public DataSetResultWriter(Action<InfoMessage> addInfoMessage, bool showShemaTable)
         {
             _logResultWriter = new LogResultWriter(addInfoMessage);
-            _queryForm = queryForm;
             _showShemaTable = showShemaTable;
         }
 

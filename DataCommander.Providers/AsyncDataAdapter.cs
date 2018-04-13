@@ -200,9 +200,8 @@ namespace DataCommander.Providers
         {
             Assert.IsNotNull(asyncDataAdapterCommand);
 
-            var command = asyncDataAdapterCommand.Command;
-
             Exception exception = null;
+            var command = asyncDataAdapterCommand.Command;
 
             try
             {
@@ -221,7 +220,11 @@ namespace DataCommander.Providers
                         {
                             var schemaTable = dataReader.GetSchemaTable();
                             if (schemaTable != null)
+                            {
                                 Log.Trace("schemaTable:\r\n{0}", schemaTable.ToStringTableString());
+                                if (asyncDataAdapterCommand.Query != null)
+                                    schemaTable.TableName = asyncDataAdapterCommand.Query.Results[tableIndex].Name;
+                            }
 
                             ReadTable(dataReader, schemaTable, tableIndex);
                         }

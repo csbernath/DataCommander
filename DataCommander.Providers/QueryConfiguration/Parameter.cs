@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace DataCommander.Providers.ResultWriter.QueryConfiguration
+namespace DataCommander.Providers.QueryConfiguration
 {
     public class Parameter
     {

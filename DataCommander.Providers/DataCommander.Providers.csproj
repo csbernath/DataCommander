@@ -311,9 +311,9 @@
     <Compile Include="ResultWriter\FieldTypeDictionary.cs" />
     <Compile Include="ResultWriter\HtmlEntity.cs" />
     <Compile Include="ResultWriter\MyDataObject.cs" />
-    <Compile Include="ResultWriter\QueryConfiguration\Parameter.cs" />
-    <Compile Include="ResultWriter\QueryConfiguration\Query.cs" />
-    <Compile Include="ResultWriter\QueryConfiguration\Result.cs" />
+    <Compile Include="QueryConfiguration\Parameter.cs" />
+    <Compile Include="QueryConfiguration\Query.cs" />
+    <Compile Include="QueryConfiguration\Result.cs" />
     <Compile Include="ResultWriter\SqlBulkCopyResultWriter.cs" />
     <Compile Include="ResultWriter\CopyResultWriter.cs" />
     <Compile Include="ResultWriter\DataGridViewResultWriter.cs" />
