@@ -1,11 +1,11 @@
-﻿namespace DataCommander.Providers.Query
-{
-    using System;
-    using System.Data;
-    using System.IO;
-    using Microsoft.Office.Interop.Word;
-    using DataTable = System.Data.DataTable;
+﻿using System;
+using System.Data;
+using System.IO;
+using Microsoft.Office.Interop.Word;
+using DataTable = System.Data.DataTable;
 
+namespace DataCommander.Providers.Query
+{
     internal static class WordDocumentCreator
     {
         public static string CreateWordDocument(DataTable dataTable)

@@ -62,16 +62,12 @@ namespace Foundation.Configuration
                     fullName = Parent.FullName;
 
                     if (fullName != null)
-                    {
                         fullName += Delimiter;
-                    }
 
                     fullName += Name;
                 }
                 else
-                {
                     fullName = null;
-                }
 
                 return fullName;
             }

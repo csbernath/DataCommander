@@ -75,18 +75,5 @@ namespace Foundation.Linq
 
             return s;
         }
-
-        public static string SerializeToXmlString(this object source)
-        {
-            var type = source.GetType();
-            var xmlSerializer = new XmlSerializer(type);
-
-            var settings = new XmlWriterSettings
-            {
-                OmitXmlDeclaration = true
-            };
-
-            return xmlSerializer.SerializeToXmlString(settings, source);
-        }
     }
 }

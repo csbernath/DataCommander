@@ -5,18 +5,10 @@ using Foundation.Assertions;
 
 namespace Foundation.Configuration
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class ConfigurationNodeTree
     {
         private ConfigurationNode _rootNode = new ConfigurationNode(null);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="xml"></param>
-        /// <param name="sectionName"></param>
         public void LoadXml(string xml, string sectionName)
         {
             var reader = new ConfigurationReader();
@@ -25,11 +17,6 @@ namespace Foundation.Configuration
             _rootNode = reader.Read(xmlReader, null, sectionName, null);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="xmlWriter"></param>
-        /// <param name="sectionName"></param>
         public void Save(XmlWriter xmlWriter, string sectionName)
         {
             Assert.IsNotNull(xmlWriter);
@@ -46,11 +33,6 @@ namespace Foundation.Configuration
             xmlWriter.WriteEndElement();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sectionName"></param>
-        /// <returns></returns>
         public string GetXml(string sectionName)
         {
             string s;
@@ -66,17 +48,10 @@ namespace Foundation.Configuration
             return s;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
         public ConfigurationNode SelectNode(string path)
         {
             if (_rootNode == null)
-            {
                 _rootNode = new ConfigurationNode(null);
-            }
 
             var node = _rootNode;
 

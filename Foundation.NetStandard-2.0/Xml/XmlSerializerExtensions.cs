@@ -5,30 +5,18 @@ using Foundation.Assertions;
 
 namespace Foundation.Xml
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class XmlSerializerExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="xmlSerializer"></param>
-        /// <param name="xmlWriterSettings"></param>
-        /// <param name="o"></param>
-        /// <returns></returns>
         public static string SerializeToXmlString(this XmlSerializer xmlSerializer, XmlWriterSettings xmlWriterSettings, object o)
         {
             Assert.IsNotNull(xmlSerializer);
 
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
-            using (var xmlWriter = XmlWriter.Create(sb, xmlWriterSettings))
-            {
+            using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
                 xmlSerializer.Serialize(xmlWriter, o);
-            }
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
     }
 }

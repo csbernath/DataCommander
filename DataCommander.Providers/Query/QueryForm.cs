@@ -315,8 +315,7 @@ namespace DataCommander.Providers.Query
         {
             _resultSetsTabControl.TabPages.Remove(tabPage);
             var control = tabPage.Controls[0];
-            var tabControl = control as TabControl;
-            if (tabControl != null)
+            if (control is TabControl tabControl)
             {
                 var tabPages = tabControl.TabPages.Cast<TabPage>().ToList();
                 foreach (var subTabPage in tabPages)
@@ -326,9 +325,7 @@ namespace DataCommander.Providers.Query
                 }
             }
             else
-            {
                 CloseResultTabPage(tabPage);
-            }
         }
 
         private void CloseResultSetTabPage_Click(object sender, EventArgs e)
@@ -3817,9 +3814,7 @@ namespace DataCommander.Providers.Query
                 destinationProvider = nextQueryForm.Provider;
             }
             else
-            {
                 destinationProvider = Provider;
-            }
 
             DataTable schemaTable;
             string[] dataTypeNames;
@@ -3833,12 +3828,7 @@ namespace DataCommander.Providers.Query
                     dataTypeNames[i] = dataReader.GetDataTypeName(i);
             }
 
-            string tableName;
-            if (command.CommandType == CommandType.StoredProcedure)
-                tableName = command.CommandText;
-            else
-                tableName = sqlStatement.FindTableName();
-
+            var tableName = command.CommandType == CommandType.StoredProcedure ? command.CommandText : sqlStatement.FindTableName();
             var createTable = new StringBuilder();
             createTable.AppendFormat("create table [{0}]\r\n(\r\n", tableName);
             var stringTable = new StringTable(3);
@@ -3855,22 +3845,15 @@ namespace DataCommander.Providers.Query
                 var allowDbNull = schemaRow.AllowDbNull;
 
                 if (allowDbNull == false)
-                {
                     row[2] += " not null";
-                }
 
                 if (i < last)
-                {
                     row[2] += ',';
-                }
 
                 stringTable.Rows.Add(row);
             }
 
-
-
             createTable.Append(stringTable.ToString(4));
-
             createTable.Append(')');
             var commandText = createTable.ToString();
 
@@ -4025,30 +4008,11 @@ namespace DataCommander.Providers.Query
         [DllImport("user32.dll")]
         private static extern int SendMessage(IntPtr hwnd, int msg, IntPtr wParam, ref Tchittestinfo lParam);
 
-        private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e)
-        {
-            ExecuteQuery();
-        }
-
-        private void aToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ExecuteQuery();
-        }
-
-        private void cancelExecutingQueryButton_Click(object sender, EventArgs e)
-        {
-            CancelCommandQuery();
-        }
-
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            ExecuteQuery();
-        }
-
-        private void openTableToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenTable(Query);
-        }
+        private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e) => ExecuteQuery();
+        private void aToolStripMenuItem_Click(object sender, EventArgs e) => ExecuteQuery();
+        private void cancelExecutingQueryButton_Click(object sender, EventArgs e) => CancelCommandQuery();
+        private void toolStripMenuItem1_Click(object sender, EventArgs e) => ExecuteQuery();
+        private void openTableToolStripMenuItem_Click(object sender, EventArgs e) => OpenTable(Query);
 
         private void parseToolStripMenuItem_Click(object sender, EventArgs e)
         {

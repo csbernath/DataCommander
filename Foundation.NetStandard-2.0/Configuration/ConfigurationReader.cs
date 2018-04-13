@@ -203,7 +203,7 @@ namespace Foundation.Configuration
             else
             {
                 var innerXml = _xmlReader.ReadInnerXml();
-                value = XmlSerializerHelper.Deserialize(innerXml, type);
+                value = XmlSerialization.Deserialize(innerXml, type);
             }
 
             return value;
