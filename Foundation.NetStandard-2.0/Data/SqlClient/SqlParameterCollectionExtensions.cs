@@ -1,22 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using Foundation.Assertions;
+using Foundation.Linq;
 using Foundation.Text;
 
 namespace Foundation.Data.SqlClient
 {
     public static class SqlParameterCollectionExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
+        public static void Add(this ICollection<SqlParameter> parameters, string parameterName, object value)
+        {
+            var parameter = new SqlParameter
+            {
+                ParameterName = parameterName,
+                Value = value
+            };
+            parameters.Add(parameter);
+        }
+
+        public static void Add(this ICollection<SqlParameter> parameters, string parameterName, SqlDbType sqlDbType, object value)
+        {
+            var parameter = new SqlParameter();
+            parameter.ParameterName = parameterName;
+            parameter.SqlDbType = sqlDbType;
+            parameter.Value = value;
+
+            parameters.Add(parameter);
+        }
+
         public static string ToLogString(this SqlParameterCollection parameters)
         {
             Assert.IsNotNull(parameters);
@@ -189,31 +207,14 @@ namespace Foundation.Data.SqlClient
             return s;
         }
 
-        public static void Add(this ICollection<SqlParameter> parameters, string parameterName, object value)
-        {
-            var parameter = new SqlParameter
-            {
-                ParameterName = parameterName,
-                Value = value
-            };
-            parameters.Add(parameter);
-        }
-
-        public static void Add(this ICollection<SqlParameter> parameters, string parameterName, SqlDbType sqlDbType, object value)
-        {
-            var parameter = new SqlParameter();
-            parameter.ParameterName = parameterName;
-            parameter.SqlDbType = sqlDbType;
-            parameter.Value = value;
-
-            parameters.Add(parameter);
-        }
-
         public static List<object> ToObjectList(this ICollection<SqlParameter> parameters)
         {
             var result = new List<object>(parameters.Count);
             result.AddRange(parameters);
             return result;
         }
+
+        public static ReadOnlyCollection<object> ToObjectReadOnlyCollection(this ICollection<SqlParameter> parameters) => parameters.Cast<object>().ToReadOnlyCollection();
+        public static ReadOnlyCollection<object> ToObjectReadOnlyCollection(this IEnumerable<SqlParameter> parameters) => parameters.Cast<object>().ToReadOnlyCollection();
     }
 }

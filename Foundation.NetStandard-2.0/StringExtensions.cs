@@ -7,66 +7,21 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Foundation.Assertions;
-using Foundation.Data;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation
 {
     public static class StringExtensions
     {
-        public static IList<char> AsList(this string source) => new StringAsList(source);
-
-        public static string Format(this string format, params object[] args) => string.Format(format, args);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="format"></param>
-        /// <param name="provider"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public static string Format(this string format, IFormatProvider provider, params object[] args)
-        {
-            return string.Format(provider, format, args);
-        }
-
         public const string IndentString = "    ";
 
-        public static string Indent(this string source, int indentCount)
-        {
-            return source.Indent(IndentString, indentCount);
-        }
-
-        private static string Indent(this string source, string indentString, int indentCount)
-        {
-            indentString = string.Join(string.Empty, Enumerable.Repeat(indentString, indentCount));
-            var stringBuyBuilder = new StringBuilder();
-
-            using (var stringReader = new StringReader(source))
-            {
-                var sequence = new Sequence();
-                while (true)
-                {
-                    string line = stringReader.ReadLine();
-                    if (line == null)
-                        break;
-
-                    if (sequence.Next() > 0)
-                        stringBuyBuilder.AppendLine();
-
-                    stringBuyBuilder.Append(indentString);
-                    stringBuyBuilder.Append(line);
-                }
-            }
-
-            return stringBuyBuilder.ToString();
-        }
+        public static IList<char> AsList(this string source) => new StringAsList(source);
+        public static string Format(this string format, params object[] args) => string.Format(format, args);
+        public static string Format(this string format, IFormatProvider provider, params object[] args) => string.Format(provider, format, args);
+        public static string Indent(this string source, int indentCount) => source.Indent(IndentString, indentCount);
 
         [Pure]
-        public static bool IsNullOrEmpty(this string value)
-        {
-            return string.IsNullOrEmpty(value);
-        }
+        public static bool IsNullOrEmpty(this string value) => string.IsNullOrEmpty(value);
 
         [Pure]
         public static bool IsNullOrWhiteSpace(this string value)
@@ -148,6 +103,31 @@ namespace Foundation
 
             var startIndex = value.Length - length;
             return value.Substring(startIndex);
+        }
+
+        private static string Indent(this string source, string indentString, int indentCount)
+        {
+            indentString = string.Join(string.Empty, Enumerable.Repeat(indentString, indentCount));
+            var stringBuyBuilder = new StringBuilder();
+
+            using (var stringReader = new StringReader(source))
+            {
+                var sequence = new Sequence();
+                while (true)
+                {
+                    string line = stringReader.ReadLine();
+                    if (line == null)
+                        break;
+
+                    if (sequence.Next() > 0)
+                        stringBuyBuilder.AppendLine();
+
+                    stringBuyBuilder.Append(indentString);
+                    stringBuyBuilder.Append(line);
+                }
+            }
+
+            return stringBuyBuilder.ToString();
         }
 
         private sealed class StringAsList : IList<char>

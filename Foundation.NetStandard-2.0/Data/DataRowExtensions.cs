@@ -5,9 +5,6 @@ using Foundation.Text;
 
 namespace Foundation.Data
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class DataRowExtensions
     {
         public static T GetValueField<T>(this DataRow dataRow, string name) where T : struct
@@ -70,7 +67,7 @@ namespace Foundation.Data
             Assert.IsNotNull(dataRow);
             var valueObject = dataRow[name];
             Assert.IsTrue(valueObject is T);
-            return (T)valueObject;
+            return (T) valueObject;
         }
 
         /// <summary>
@@ -92,13 +89,6 @@ namespace Foundation.Data
             return ValueReader.GetValue(valueObject, outputNullValue);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dataRow"></param>
-        /// <param name="columnIndex"></param>
-        /// <returns></returns>
         public static T GetValueOrDefault<T>(this DataRow dataRow, int columnIndex)
         {
             Assert.IsNotNull(dataRow);
@@ -107,13 +97,6 @@ namespace Foundation.Data
             return ValueReader.GetValueOrDefault<T>(value);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dataRow"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
         public static T GetValueOrDefault<T>(this DataRow dataRow, string name)
         {
             Assert.IsNotNull(dataRow);
@@ -122,11 +105,6 @@ namespace Foundation.Data
             return ValueReader.GetValueOrDefault<T>(value);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataRow"></param>
-        /// <returns></returns>
         public static StringTable ToStringTable(this DataRow dataRow)
         {
             Assert.IsNotNull(dataRow);

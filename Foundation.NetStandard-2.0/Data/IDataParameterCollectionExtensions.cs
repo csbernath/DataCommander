@@ -2,44 +2,23 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using Foundation.Assertions;
 using Foundation.Data.SqlClient;
+using Foundation.Linq;
 
 namespace Foundation.Data
 {
-    /// <summary>
-    ///
-    /// </summary>
-    public static class DataParameterCollectionExtensions
+    public static class IDataParameterCollectionExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataParameterCollection"></param>
-        /// <param name="parameters"></param>
         public static void AddRange(this IDataParameterCollection dataParameterCollection, IEnumerable<object> parameters)
         {
             foreach (var parameter in parameters)
                 dataParameterCollection.Add(parameter);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        public static List<object> ToObjectList(this IEnumerable<IDataParameter> parameters)
-        {
-            return new List<object>(parameters);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        public static string ToLogString( this IDataParameterCollection parameters )
+        public static string ToLogString(this IDataParameterCollection parameters)
         {
             Assert.IsNotNull(parameters);
 
@@ -48,7 +27,7 @@ namespace Foundation.Data
 
             if (sqlParameters != null)
             {
-                s = SqlParameterCollectionExtensions.ToLogString( sqlParameters );
+                s = SqlParameterCollectionExtensions.ToLogString(sqlParameters);
             }
             else
             {
@@ -85,7 +64,7 @@ namespace Foundation.Data
                                         break;
 
                                     case DbType.String:
-                                        valueString = "'" + value.ToString().Replace( "'", "''" ) + "'";
+                                        valueString = "'" + value.ToString().Replace("'", "''") + "'";
                                         break;
 
                                     default:
@@ -100,10 +79,10 @@ namespace Foundation.Data
                             }
                             else
                             {
-                                sb.AppendLine( "," );
+                                sb.AppendLine(",");
                             }
 
-                            sb.AppendFormat( "  {0} = {1}", parameter.ParameterName, valueString );
+                            sb.AppendFormat("  {0} = {1}", parameter.ParameterName, valueString);
                         }
                     }
                 }
@@ -113,5 +92,8 @@ namespace Foundation.Data
 
             return s;
         }
+
+        public static List<object> ToObjectList(this IEnumerable<IDataParameter> parameters) => new List<object>(parameters);
+        public static IReadOnlyCollection<object> ToObjectReadOnlyCollection(this IEnumerable<IDataParameter> parameters) => parameters.Cast<object>().ToReadOnlyCollection();
     }
 }

@@ -1561,13 +1561,14 @@ namespace DataCommander.Providers.Query
                     }
 
                     command.Transaction = _transaction;
-                    commands = new AsyncDataAdapterCommand(0, command, queryConfiguration, queryCommandText).ItemToArray();
+                    commands = new AsyncDataAdapterCommand(0, statements[0].CommandText, command, queryConfiguration, queryCommandText).ItemToArray();
                 }
                 else
                     commands =
                         from statement in statements
                         select new AsyncDataAdapterCommand(
                             statement.LineIndex,
+                            null,
                             Connection.Connection.CreateCommand(new CreateCommandRequest(statement.CommandText, null, CommandType.Text, _commandTimeout, _transaction)),
                             null,
                             null);
@@ -3702,7 +3703,7 @@ namespace DataCommander.Providers.Query
                 _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
                 IResultWriter resultWriter = _dataSetResultWriter;
                 _dataAdapter = new AsyncDataAdapter(Provider,
-                    new AsyncDataAdapterCommand(0, _command, null, null).ItemToArray(),
+                    new AsyncDataAdapterCommand(0, null, _command, null, null).ItemToArray(),
                     maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
                 _dataAdapter.Start();
             }
@@ -3726,7 +3727,7 @@ namespace DataCommander.Providers.Query
             var sqlCeResultWriter = new SqlCeResultWriter(_textBoxWriter, tableName);
             IAsyncDataAdapter asyncDataAdatper = new AsyncDataAdapter(
                 Provider,
-                new AsyncDataAdapterCommand(0, _command, null, null).ItemToArray(),
+                new AsyncDataAdapterCommand(0, null, _command, null, null).ItemToArray(),
                 maxRecords, _rowBlockSize, sqlCeResultWriter, EndFillInvoker, WriteEndInvoker);
             asyncDataAdatper.Start();
         }
@@ -3888,8 +3889,7 @@ namespace DataCommander.Providers.Query
                 _stopwatch.Start();
                 _timer.Start();
                 _dataAdapter = new AsyncDataAdapter(Provider,
-                    new AsyncDataAdapterCommand(0, _command, null, null).ItemToArray(),
-
+                    new AsyncDataAdapterCommand(0, null, _command, null, null).ItemToArray(),
                     maxRecords, rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
                 _dataAdapter.Start();
             }
