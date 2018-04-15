@@ -12,10 +12,7 @@ namespace Foundation.Data.SqlClient
     {
         private readonly List<SqlParameter> _parameters = new List<SqlParameter>();
 
-        public void Add(SqlParameter sqlParameter)
-        {
-            _parameters.Add(sqlParameter);
-        }
+        public void Add(SqlParameter sqlParameter) => _parameters.Add(sqlParameter);
 
         public void Add(string parameterName, object value)
         {

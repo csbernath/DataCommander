@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Threading;
+using DataCommander.Providers.QueryConfiguration;
 using DataCommander.Providers.ResultWriter;
 using Foundation.Assertions;
 using Foundation.Data;
@@ -254,7 +255,10 @@ namespace DataCommander.Providers
                         {
                             Log.Trace("schemaTable:\r\n{0}", schemaTable.ToStringTableString());
                             if (asyncDataAdapterCommand.Query != null)
-                                schemaTable.TableName = asyncDataAdapterCommand.Query.Results[tableIndex].Name;
+                            {
+                                Parser.ParseResult(asyncDataAdapterCommand.Query.Results[tableIndex], out var name, out var fieldName);
+                                schemaTable.TableName = name;
+                            }
                         }
 
                         ReadTable(dataReader, schemaTable, tableIndex);

@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using DataCommander.Providers.Connection;
+using DataCommander.Providers.QueryConfiguration;
 using Foundation;
 using Foundation.Assertions;
 using Foundation.Data;
@@ -119,7 +120,7 @@ namespace DataCommander.Providers.ResultWriter
         {
             _writeTableBeginTimestamp = Stopwatch.GetTimestamp();
 
-            Log.Trace($"SchemaTable of table[{_tableCount}]:\r\n{schemaTable.ToStringTableString()}");
+            Log.Trace($"SchemaTable of table[{_tableCount}], {schemaTable.TableName}:\r\n{schemaTable.ToStringTableString()}");
 
             if (_query != null)
             {
@@ -157,7 +158,7 @@ namespace DataCommander.Providers.ResultWriter
         {
             var duration = Stopwatch.GetTimestamp() - _writeTableBeginTimestamp;
             var message =
-                $"Reading {_rowCount} row(s) from command[{_commandCount - 1}] into table[{_tableCount - 1}] finished in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
+                $"Reading {_rowCount} row(s) from command[{_commandCount - 1}] into table[{_tableCount - 1},{_query?.Results[_tableCount - 1]}] finished in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
             _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
         }
 
@@ -175,7 +176,11 @@ namespace DataCommander.Providers.ResultWriter
         private DbQueryParameter ToParameter(Parameter source) =>
             new DbQueryParameter(source.Name, source.DataType, source.SqlDbType, source.CSharpDataType, source.IsNullable, source.CSharpValue);
 
-        private DbQueryResult ToResult(QueryConfiguration.Result config, Result sql) => new DbQueryResult(config.Name, config.FieldName, sql.Fields);
+        private static DbQueryResult ToResult(string result, Result sql)
+        {
+            Parser.ParseResult(result, out var name, out var fieldName);
+            return new DbQueryResult(name, fieldName, sql.Fields);
+        }
 
         #endregion
 
