@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
+using Foundation.DefaultLog;
 using Foundation.Diagnostics;
 using Foundation.Diagnostics.Contracts;
-using Foundation.Log;
 
-namespace Foundation.DefaultLog
+namespace Foundation.Log
 {
     /// <summary>
     /// Writes log events to a <see cref="TextWriter"/>.
@@ -55,24 +55,14 @@ namespace Foundation.DefaultLog
         {
         }
 
-        void ILogWriter.Flush()
-        {
-            _textWriter.Flush();
-        }
-
-        void ILogWriter.Close()
-        {
-            _textWriter.Close();
-        }
+        void ILogWriter.Flush() => _textWriter.Flush();
+        void ILogWriter.Close() => _textWriter.Close();
 
         #endregion
 
         #region IDisposable Members
 
-        void IDisposable.Dispose()
-        {
-            _textWriter.Dispose();
-        }
+        void IDisposable.Dispose() => _textWriter.Dispose();
 
         #endregion
     }
