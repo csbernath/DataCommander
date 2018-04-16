@@ -1,18 +1,19 @@
 ﻿using System;
 using Foundation.Assertions;
+using Foundation.Log;
 
-namespace Foundation.Log
+namespace Foundation.DefaultLog
 {
-    internal sealed class FoundationLog : ILog
+    internal sealed class Log : ILog
     {
         #region Private Fields
 
-        private readonly FoundationLogFactory _applicationLog;
+        private readonly DefaultLog.LogFactory _applicationLog;
         private string _name;
 
         #endregion
 
-        public FoundationLog(FoundationLogFactory applicationLog, string name)
+        public Log(DefaultLog.LogFactory applicationLog, string name)
         {
             Assert.IsNotNull(applicationLog);
 

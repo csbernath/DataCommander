@@ -2,17 +2,8 @@
 
 namespace Foundation.Log
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class LogExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="log"></param>
-        /// <param name="callerInformation"></param>
-        /// <param name="message"></param>
         public static void Trace(this ILog log, CallerInformation callerInformation, string message)
         {
             Assert.IsNotNull(log);
@@ -24,13 +15,6 @@ namespace Foundation.Log
             log.Trace(messageWithCallerInformation);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="log"></param>
-        /// <param name="callerInformation"></param>
-        /// <param name="format"></param>
-        /// <param name="args"></param>
         public static void Trace(
             this ILog log,
             CallerInformation callerInformation,

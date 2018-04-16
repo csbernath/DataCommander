@@ -4,9 +4,11 @@ using System.Data;
 using System.Text;
 using System.Threading;
 using Foundation.Assertions;
+using Foundation.InternalLog;
+using Foundation.Log;
 using Foundation.Threading;
 
-namespace Foundation.Log
+namespace Foundation.DefaultLog
 {
     /// <summary>
     /// 

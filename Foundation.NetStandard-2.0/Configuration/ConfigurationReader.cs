@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Xml;
 using Foundation.Diagnostics;
+using Foundation.InternalLog;
 using Foundation.Linq;
 using Foundation.Log;
 using Foundation.Text;

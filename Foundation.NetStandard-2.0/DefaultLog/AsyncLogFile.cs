@@ -4,8 +4,9 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using Foundation.Assertions;
+using Foundation.Log;
 
-namespace Foundation.Log
+namespace Foundation.DefaultLog
 {
     internal sealed class AsyncLogFile : ILogFile
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using Foundation.Assertions;
 using Foundation.Configuration;
+using Foundation.InternalLog;
 
 namespace Foundation.Log
 {

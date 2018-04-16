@@ -1,7 +1,8 @@
 ﻿using System.IO;
 using System.Xml;
+using Foundation.Log;
 
-namespace Foundation.Log
+namespace Foundation.DefaultLog
 {
     internal sealed class XmlLogFormatter : ILogFormatter
     {

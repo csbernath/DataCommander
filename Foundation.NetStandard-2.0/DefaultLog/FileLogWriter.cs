@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using Foundation.InternalLog;
+using Foundation.Log;
 
-namespace Foundation.Log
+namespace Foundation.DefaultLog
 {
     /// <summary>
     /// <see cref="ILogWriter"/> implementation for logging a multithreaded application into a file.

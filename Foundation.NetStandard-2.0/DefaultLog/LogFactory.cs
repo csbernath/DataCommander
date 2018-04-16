@@ -7,15 +7,16 @@ using Foundation.Assertions;
 using Foundation.Configuration;
 using Foundation.Diagnostics;
 using Foundation.Linq;
+using Foundation.Log;
 
-namespace Foundation.Log
+namespace Foundation.DefaultLog
 {
-    internal sealed class FoundationLogFactory : ILogFactory
+    internal sealed class LogFactory : ILogFactory
     {
         private readonly MultipleLog _multipeLog;
         private readonly IDateTimeProvider _dateTimeProvider;
 
-        public FoundationLogFactory()
+        public LogFactory()
         {
             var logWriters = new List<LogWriter>();
             var node = Settings.CurrentType;
@@ -43,14 +44,14 @@ namespace Foundation.Log
             if (logWriters.Count > 0)
             {
                 _multipeLog = new MultipleLog(logWriters);
-                LogFactory.Instance = this;
+                Foundation.Log.LogFactory.Instance = this;
 
                 foreach (var logWriter in logWriters)
                     logWriter.logWriter.Open();
             }
         }
 
-        public FoundationLogFactory(bool forInternalUse)
+        public LogFactory(bool forInternalUse)
         {
             var logWriter = new LogWriter(new TextLogWriter(TraceWriter.Instance), LogLevel.Debug);
             _dateTimeProvider = LocalTime.Default;
@@ -69,7 +70,7 @@ namespace Foundation.Log
             }
         }
 
-        ILog ILogFactory.GetLog(string name) => new FoundationLog(this, name);
+        ILog ILogFactory.GetLog(string name) => new Log(this, name);
 
         #endregion
 
@@ -83,7 +84,7 @@ namespace Foundation.Log
 
         #endregion
 
-        internal void Write(FoundationLog log, LogLevel logLevel, string message)
+        internal void Write(Log log, LogLevel logLevel, string message)
         {
             if (_multipeLog != null)
             {
@@ -92,7 +93,7 @@ namespace Foundation.Log
             }
         }
 
-        internal void Write(FoundationLog log, LogLevel logLevel, string format, params object[] args)
+        internal void Write(Log log, LogLevel logLevel, string format, params object[] args)
         {
             if (_multipeLog != null)
             {
@@ -102,7 +103,7 @@ namespace Foundation.Log
             }
         }
 
-        internal void Write(FoundationLog log, LogLevel logLevel, Func<string> getMessage)
+        internal void Write(Log log, LogLevel logLevel, Func<string> getMessage)
         {
             if (_multipeLog != null)
             {

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading;
+using Foundation.Log;
+
 #if FOUNDATION_3_5
     using System.Web;
 #endif
 
-namespace Foundation.Log
+namespace Foundation.DefaultLog
 {
     internal static class LogEntryFactory
     {

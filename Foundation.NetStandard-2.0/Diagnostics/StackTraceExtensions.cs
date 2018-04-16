@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 using Foundation.Assertions;
+using Foundation.InternalLog;
 using Foundation.Log;
 
 namespace Foundation.Diagnostics

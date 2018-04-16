@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using System.Xml;
+using Foundation.InternalLog;
 using Foundation.Log;
 using FileSystemWatcher = Foundation.IO.FileSystemWatcher;
 

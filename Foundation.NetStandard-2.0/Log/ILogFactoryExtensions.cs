@@ -24,7 +24,7 @@ namespace Foundation.Log
             var name = type.FullName;
 
             var log = logFactory.GetLog(name);
-            if (log is FoundationLog foundationLog)
+            if (log is DefaultLog.Log foundationLog)
                 foundationLog.LoggedName = type.Name;
 
             return log;
@@ -54,7 +54,7 @@ namespace Foundation.Log
             var type = stackFrame.GetMethod().DeclaringType;
             var name = $"{type.FullName}.{sectionName}";
             var log = applicationLog.GetLog(name);
-            if (log is FoundationLog foundationLog)
+            if (log is DefaultLog.Log foundationLog)
                 foundationLog.LoggedName = $"{type.Name}.{sectionName}";
 
             return log;
@@ -73,7 +73,7 @@ namespace Foundation.Log
             var type = method.DeclaringType;
             var name = $"{type.FullName}.{method.Name}";
             var log = applicationLog.GetLog(name);
-            if (log is FoundationLog foundationLog)
+            if (log is DefaultLog.Log foundationLog)
                 foundationLog.LoggedName = $"{type.Name}.{method.Name}";
 
             if (parameters.Length > 0)

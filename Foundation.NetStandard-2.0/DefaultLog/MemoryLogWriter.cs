@@ -1,26 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using Foundation.Log;
 
-namespace Foundation.Log
+namespace Foundation.DefaultLog
 {
-    /// <summary>
-    /// 
-    /// </summary>
     internal sealed class MemoryLogWriter : ILogWriter
     {
         private readonly ICollection<LogEntry> _logEntries;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public MemoryLogWriter()
         {
             _logEntries = new List<LogEntry>();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public IEnumerable<LogEntry> LogEntries => _logEntries;
 
         #region ILogWriter Members
@@ -29,11 +21,11 @@ namespace Foundation.Log
         {
         }
 
-        void ILogWriter.Write( LogEntry logEntry )
+        void ILogWriter.Write(LogEntry logEntry)
         {
             lock (_logEntries)
             {
-                _logEntries.Add( logEntry );
+                _logEntries.Add(logEntry);
             }
         }
 

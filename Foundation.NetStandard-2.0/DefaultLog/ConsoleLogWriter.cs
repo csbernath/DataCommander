@@ -1,10 +1,8 @@
 ﻿using System;
+using Foundation.Log;
 
-namespace Foundation.Log
+namespace Foundation.DefaultLog
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class ConsoleLogWriter : ILogWriter
     {
         private static readonly object LockObject = new object();
@@ -18,9 +16,6 @@ namespace Foundation.Log
             Instance = new ConsoleLogWriter();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public static ConsoleLogWriter Instance { get; }
 
         #region ILogWriter Members
@@ -29,7 +24,7 @@ namespace Foundation.Log
         {
         }
 
-        void ILogWriter.Write( LogEntry logEntry )
+        void ILogWriter.Write(LogEntry logEntry)
         {
             lock (LockObject)
             {
@@ -46,7 +41,7 @@ namespace Foundation.Log
                         break;
                 }
 
-                Console.WriteLine( logEntry.Message );
+                Console.WriteLine(logEntry.Message);
 
                 switch (logEntry.LogLevel)
                 {

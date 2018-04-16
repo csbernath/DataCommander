@@ -2,9 +2,6 @@
 
 namespace Foundation.Log
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class CallerInformation
     {
         public readonly string CallerMemberName;
@@ -18,13 +15,6 @@ namespace Foundation.Log
             CallerLineNumber = callerLineNumber;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="callerMemberName"></param>
-        /// <param name="callerFilePath"></param>
-        /// <param name="callerLineNumber"></param>
-        /// <returns></returns>
         public static CallerInformation Get(
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,

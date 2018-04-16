@@ -2,8 +2,9 @@
 using System.IO;
 using Foundation.Diagnostics;
 using Foundation.Diagnostics.Contracts;
+using Foundation.Log;
 
-namespace Foundation.Log
+namespace Foundation.DefaultLog
 {
     /// <summary>
     /// Writes log events to a <see cref="TextWriter"/>.
