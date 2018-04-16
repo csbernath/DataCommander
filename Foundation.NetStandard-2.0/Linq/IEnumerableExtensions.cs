@@ -10,10 +10,7 @@ using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public static class EnumerableExtensions
+    public static class IEnumerableExtensions
     {
         public static bool CountIsGreaterThan<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate, int count)
         {
@@ -122,12 +119,6 @@ namespace Foundation.Linq
             return new LinerSearchResult<TSource, TResult>(selectedIndex, selectedSource, selectedResult);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
         [Pure]
         public static IEnumerable<PreviousAndCurrent<TSource>> SelectPreviousAndCurrent<TSource>(this IEnumerable<TSource> source)
         {
@@ -154,6 +145,28 @@ namespace Foundation.Linq
             Assert.IsNotNull(keySelector);
 
             return source.Select(keySelector).SelectPreviousAndCurrent();
+        }
+
+        [Pure]
+        public static IEnumerable<TResult> SelectWhere<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> select, Func<TResult, bool> where)
+        {
+            foreach (var item in source)
+            {
+                var result = select(item);
+                if (where(result))
+                    yield return result;
+            }
+        }
+
+        [Pure]
+        public static IEnumerable<TResult> SelectWhereIsNotNull<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> select)
+        {
+            foreach (var item in source)
+            {
+                var result = select(item);
+                if (result != null)
+                    yield return result;
+            }
         }
 
         public static IEnumerable<TSource[]> Split<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> isSeparator)

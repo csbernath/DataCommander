@@ -7,16 +7,8 @@ using Foundation.Data.SqlClient;
 
 namespace Foundation.Linq
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class ExceptionExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="e"></param>
-        /// <returns></returns>
         public static string ToLogString(this Exception e)
         {
             var sb = new StringBuilder();
@@ -44,11 +36,6 @@ namespace Foundation.Linq
             sb.Append(errors);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="exception"></param>
-        /// <param name="sb"></param>
         private static void Append(StringBuilder sb, Exception exception)
         {
             var current = exception;
@@ -57,39 +44,27 @@ namespace Foundation.Linq
             while (current != null)
             {
                 if (first)
-                {
                     first = false;
-                }
                 else
                 {
                     sb.AppendLine();
                     sb.AppendLine(new string('/', 80));
                 }
 
-                var socketException = current as SocketException;
-                if (socketException != null)
+                switch (current)
                 {
-                    Append(sb, socketException);
-                }
-                else
-                {
-                    var win32Exception = current as Win32Exception;
-                    if (win32Exception != null)
-                    {
+                    case SocketException socketException:
+                        Append(sb, socketException);
+                        break;
+                    case Win32Exception win32Exception:
                         Append(sb, win32Exception);
-                    }
-                    else
-                    {
-                        var sqlException = current as SqlException;
-                        if (sqlException != null)
-                        {
-                            Append(sb, sqlException);
-                        }
-                        else
-                        {
-                            sb.Append(current);
-                        }
-                    }
+                        break;
+                    case SqlException sqlException:
+                        Append(sb, sqlException);
+                        break;
+                    default:
+                        sb.Append(current);
+                        break;
                 }
 
                 current = current.InnerException;

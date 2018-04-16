@@ -4,11 +4,8 @@ using System.Reflection;
 using System.Xml;
 using Foundation.Collections.IndexableCollection;
 
-namespace Foundation.Configuration
+namespace Foundation
 {
-    /// <summary>
-    /// Summary description for TypeNames.
-    /// </summary>
     internal static class TypeNameCollection
     {
         private static readonly IndexableCollection<TypeCollectionItem> Collection;
@@ -63,29 +60,20 @@ namespace Foundation.Configuration
 
         public static Type GetType(string typeName)
         {
-            Type type;
-            var isArray = false;
             var length = typeName.Length - 2;
-            isArray = typeName != null && typeName.IndexOf("[]") == length;
+            var isArray = typeName != null && typeName.IndexOf("[]") == length;
             var typeName2 = isArray ? typeName.Substring(0, length) : typeName;
-            TypeCollectionItem item;
-            var contains = NameIndex.TryGetValue(typeName2, out item);
-            type = contains ? item.Type : Type.GetType(typeName2);
-            if (type != null)
-                if (isArray)
-                {
-                    typeName2 = type.FullName + "[], " + type.Assembly.FullName;
-                    type = Type.GetType(typeName2, true);
-                }
+            var contains = NameIndex.TryGetValue(typeName2, out var item);
+            var type = contains ? item.Type : Type.GetType(typeName2);
+            if (type != null && isArray)
+            {
+                typeName2 = type.FullName + "[], " + type.Assembly.FullName;
+                type = Type.GetType(typeName2, true);
+            }
 
             return type;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
         public static string GetTypeName(Type type)
         {
             string typeName;
@@ -100,9 +88,7 @@ namespace Foundation.Configuration
                 var assembly = type.Assembly;
 
                 if (assembly == SystemAssembly)
-                {
                     typeName = type.FullName;
-                }
                 else
                 {
                     // AssemblyName assemblyName = assembly.GetName();
@@ -114,15 +100,7 @@ namespace Foundation.Configuration
             {
                 TypeCollectionItem item;
                 var contains = TypeIndex.TryGetValue(type, out item);
-
-                if (contains)
-                {
-                    typeName = item.Name;
-                }
-                else
-                {
-                    typeName = type.FullName;
-                }
+                typeName = contains ? item.Name : type.FullName;
             }
 
             return typeName;
@@ -130,15 +108,14 @@ namespace Foundation.Configuration
 
         private sealed class TypeCollectionItem
         {
+            public readonly string Name;
+            public readonly Type Type;
+
             public TypeCollectionItem(string name, Type type)
             {
                 Name = name;
                 Type = type;
             }
-
-            public string Name { get; }
-
-            public Type Type { get; }
         }
 
         private static class TypeName

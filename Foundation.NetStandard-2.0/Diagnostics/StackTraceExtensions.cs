@@ -6,18 +6,10 @@ using Foundation.Log;
 
 namespace Foundation.Diagnostics
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class StackTraceExtensions
     {
         private static readonly ILog Log = InternalLogFactory.Instance.GetCurrentTypeLog();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="trace"></param>
-        /// <returns></returns>
         public static string ToLogString(this StackTrace trace)
         {
             Assert.IsNotNull(trace);
@@ -42,11 +34,6 @@ namespace Foundation.Diagnostics
             return stringBuilder.ToString();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="skipFrames"></param>
-        /// <returns></returns>
         public static string GetTrace(int skipFrames)
         {
             var trace = new StackTrace(skipFrames, true);

@@ -4,21 +4,12 @@ using Foundation.Configuration;
 
 namespace Foundation.Log
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class LogFactory
     {
         private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(LogFactory));
 
-        /// <summary>
-        /// 
-        /// </summary>
         public static ILogFactory Instance { get; set; } = NullLogFactory.Instance;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public static void Read()
         {
             Log.Trace("Reading LogFactory configuration...");

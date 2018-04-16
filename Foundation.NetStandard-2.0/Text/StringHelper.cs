@@ -96,18 +96,7 @@ namespace Foundation.Text
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="textWriter"></param>
-        /// <param name="obj"></param>
-        /// <param name="methodName"></param>
-        /// <param name="parameters"></param>
-        public static void WriteMethod(
-            TextWriter textWriter,
-            object obj,
-            string methodName,
-            params object[] parameters)
+        public static void WriteMethod(TextWriter textWriter, object obj, string methodName, params object[] parameters)
         {
             Assert.IsNotNull(textWriter);
             Assert.IsNotNull(obj);
@@ -142,12 +131,6 @@ namespace Foundation.Text
             textWriter.Write(line);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="nullValue"></param>
-        /// <returns></returns>
         public static bool ParseBoolean(string value, bool nullValue)
         {
             var b = !string.IsNullOrEmpty(value)

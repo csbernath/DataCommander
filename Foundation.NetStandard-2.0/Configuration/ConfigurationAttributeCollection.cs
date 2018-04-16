@@ -9,10 +9,7 @@ using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Configuration
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    [DebuggerTypeProxy(typeof (ConfigurationAttributeCollectionDebugger))]
+    [DebuggerTypeProxy(typeof(ConfigurationAttributeCollectionDebugger))]
     [DebuggerDisplay("Count = {" + nameof(Count) + "}")]
     public class ConfigurationAttributeCollection : IList<ConfigurationAttribute>
     {
@@ -20,9 +17,6 @@ namespace Foundation.Configuration
         private readonly ListIndex<ConfigurationAttribute> _listIndex;
         private readonly UniqueIndex<string, ConfigurationAttribute> _nameIndex;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public ConfigurationAttributeCollection()
         {
             _listIndex = new ListIndex<ConfigurationAttribute>("List");
@@ -221,9 +215,7 @@ namespace Foundation.Configuration
             var contains = _nameIndex.TryGetValue(name, out attribute);
 
             if (contains)
-            {
                 attribute.Value = value;
-            }
             else
             {
                 attribute = new ConfigurationAttribute(name, value, null);
@@ -231,7 +223,7 @@ namespace Foundation.Configuration
             }
         }
 
-#region ICollection<Attribute> Members
+        #region ICollection<Attribute> Members
 
         /// <summary>
         /// 
@@ -290,9 +282,9 @@ namespace Foundation.Configuration
             return _collection.Remove(item);
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable<Attribute> Members
+        #region IEnumerable<Attribute> Members
 
         /// <summary>
         /// 
@@ -303,15 +295,15 @@ namespace Foundation.Configuration
             return _collection.GetEnumerator();
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable Members
+        #region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _collection.GetEnumerator();
         }
 
-#endregion
+        #endregion
     }
 }
