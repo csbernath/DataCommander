@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Threading;
-
-namespace Foundation.Log
-{
 #if FOUNDATION_3_5
     using System.Web;
 #endif
 
+namespace Foundation.Log
+{
     internal static class LogEntryFactory
     {
         private static long _id;
 
-        public static LogEntry Create(
-            string logName,
-            DateTime creationTime,
-            string message,
-            LogLevel logLevel)
+        public static LogEntry Create(string logName, DateTime creationTime, string message, LogLevel logLevel)
         {
             var id = Interlocked.Increment(ref _id);
             var thread = Thread.CurrentThread;

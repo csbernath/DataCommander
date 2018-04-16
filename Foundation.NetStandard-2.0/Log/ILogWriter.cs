@@ -2,14 +2,8 @@
 
 namespace Foundation.Log
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public interface ILogWriter : IDisposable
     {
-        /// <summary>
-        /// 
-        /// </summary>
         void Open();
 
         /// <summary>
@@ -18,9 +12,6 @@ namespace Foundation.Log
         /// <param name="logEntry"></param>
         void Write(LogEntry logEntry);
 
-        /// <summary>
-        /// 
-        /// </summary>
         void Flush();
 
         /// <summary>
