@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using DataCommander.Providers.Connection;
-using Foundation.Diagnostics.Contracts;
+﻿using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.ResultWriter
 {

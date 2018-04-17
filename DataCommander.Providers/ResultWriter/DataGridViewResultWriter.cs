@@ -1,7 +1,4 @@
-﻿using System;
-using DataCommander.Providers.Connection;
-
-namespace DataCommander.Providers.ResultWriter
+﻿namespace DataCommander.Providers.ResultWriter
 {
     using System.Collections.Generic;
     using System.Data;

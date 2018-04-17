@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using Foundation.DefaultLog;
-using Foundation.Diagnostics;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Log

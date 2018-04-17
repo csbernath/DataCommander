@@ -1,5 +1,4 @@
 ﻿using Foundation.Assertions;
-using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.Tfs
 {

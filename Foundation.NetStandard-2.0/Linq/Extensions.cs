@@ -4,7 +4,6 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using Foundation.Assertions;
-using Foundation.Xml;
 
 namespace Foundation.Linq
 {

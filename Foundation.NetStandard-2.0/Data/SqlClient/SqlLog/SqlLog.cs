@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using Foundation.Data.SqlClient.SqlLoggedSqlConnection;
 using Foundation.Diagnostics;
 using Foundation.Log;
 using Foundation.Threading;

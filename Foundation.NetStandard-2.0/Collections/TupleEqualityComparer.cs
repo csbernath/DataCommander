@@ -1,8 +1,5 @@
 ﻿namespace Foundation.Collections
 {
-    using System;
-    using System.Collections.Generic;
-    using Diagnostics;
 
 #if FOUNDATION_2_0 || FOUNDATION_3_5
     /// <summary>
@@ -28,7 +25,7 @@
             this.comparer2 = comparer2;
         }
 
-        #region IEqualityComparer<Tuple<T1,T2>> Members
+    #region IEqualityComparer<Tuple<T1,T2>> Members
 
         Boolean IEqualityComparer<Tuple<T1, T2>>.Equals( Tuple<T1, T2> x, Tuple<T1, T2> y )
         {
@@ -42,7 +39,7 @@
             return Tuple.CombineHashCodes( h1, h2 );
         }
 
-        #endregion
+    #endregion
     }
 #endif
 }

@@ -90,7 +90,7 @@ namespace Foundation.Threading
                     if (!_isStopAccepted)
                     {
                         _isStopAccepted = true;
-                        if (Log.IsTraceEnabled)
+                        if (Log.IsTraceEnabled())
                         {
                             var stackTrace = new StackTrace(1, true);
                             Log.Trace("WorkerThread({0},{1}) accepted stop request.\r\n{2}", Thread.Name,

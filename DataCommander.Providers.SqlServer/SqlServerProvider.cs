@@ -17,7 +17,6 @@ using Foundation.Assertions;
 using Foundation.Configuration;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
-using Foundation.DefaultLog;
 using Foundation.Linq;
 using Foundation.Log;
 

@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Foundation.Assertions;
-using Foundation.Configuration;
 using Foundation.Text;
 
 namespace Foundation.Diagnostics

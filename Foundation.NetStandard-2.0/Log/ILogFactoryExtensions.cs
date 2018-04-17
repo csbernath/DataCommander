@@ -5,17 +5,8 @@ using Foundation.Assertions;
 
 namespace Foundation.Log
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class LogFactoryExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="logFactory"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
         public static ILog GetTypeLog(this ILogFactory logFactory, Type type)
         {
             Assert.IsNotNull(logFactory);
@@ -30,11 +21,6 @@ namespace Foundation.Log
             return log;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="applicationLog"></param>
-        /// <returns></returns>
         public static ILog GetCurrentTypeLog(this ILogFactory applicationLog)
         {
             var stackFrame = new StackFrame(1, false);
@@ -42,12 +28,6 @@ namespace Foundation.Log
             return applicationLog.GetTypeLog(type);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="applicationLog"></param>
-        /// <param name="sectionName"></param>
-        /// <returns></returns>
         public static ILog GetCurrentTypeSectionLog(this ILogFactory applicationLog, string sectionName)
         {
             var stackFrame = new StackFrame(1, false);
@@ -60,12 +40,6 @@ namespace Foundation.Log
             return log;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="applicationLog"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
         public static ILog GetCurrentMethodLog(this ILogFactory applicationLog, params object[] parameters)
         {
             var stackFrame = new StackFrame(1, false);
