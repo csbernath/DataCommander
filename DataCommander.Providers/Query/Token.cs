@@ -1,5 +1,8 @@
-﻿namespace DataCommander.Providers.Query
+﻿using System.Diagnostics;
+
+namespace DataCommander.Providers.Query
 {
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public sealed class Token
     {
         public readonly int Index;
@@ -18,5 +21,7 @@
             Type = type;
             Value = value;
         }
+
+        private string DebuggerDisplay => $"{Value} ({Type})";
     }
 }

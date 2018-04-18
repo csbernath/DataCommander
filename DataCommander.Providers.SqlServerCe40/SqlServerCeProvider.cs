@@ -72,7 +72,7 @@ namespace DataCommander.Providers.SqlServerCe40
             var tokens = sqlStatement.Tokens;
             var index = sqlStatement.FindToken(position);
 
-            if (index >= 0 && index < tokens.Length)
+            if (index >= 0 && index < tokens.Count)
             {
                 var token = sqlStatement.Tokens[index];
                 var value = token.Value;

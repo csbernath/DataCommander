@@ -118,7 +118,7 @@ namespace DataCommander.Providers.PostgreSql
                     {
                         var list = new SortedList<string, object>();
 
-                        for (var i = 0; i < tokens.Length; i++)
+                        for (var i = 0; i < tokens.Count; i++)
                         {
                             var token = tokens[i];
                             var keyWord = token.Value;
@@ -285,7 +285,7 @@ order by 1", name.Database);
                                 {
                                     string where;
                                     var tokenIndex = previousToken.Index + 1;
-                                    if (tokenIndex < tokens.Length)
+                                    if (tokenIndex < tokens.Count)
                                     {
                                         var token = tokens[tokenIndex];
                                         var tokenValue = token.Value;

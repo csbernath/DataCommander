@@ -234,7 +234,7 @@ namespace DataCommander.Providers.Tfs
             var sqlStatement = new SqlParser(text);
             var tokens = sqlStatement.Tokens;
 
-            if (tokens.Length > 0)
+            if (tokens.Count > 0)
             {
                 Token previousToken, currentToken;
                 sqlStatement.FindToken(position, out previousToken, out currentToken);
@@ -264,7 +264,7 @@ namespace DataCommander.Providers.Tfs
 
                         values = names.ToArray();
                     }
-                    else if (tokens.Length > 1)
+                    else if (tokens.Count > 1)
                     {
                         token = tokens[0];
 

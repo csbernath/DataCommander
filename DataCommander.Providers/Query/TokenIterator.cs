@@ -9,7 +9,8 @@ namespace DataCommander.Providers.Query
 
         private static readonly char[] OperatorsOrPunctuators = new char[]
         {
-            '{', '}', '[', ']', '(', ')', '.', ',', ':', ';', '+', '-', '*', '/', '%', '&', '|', '^', '!', '~', '=', '<', '>', '?'
+            '{', '}', '[', ']', '(', ')', '.', ',', ':', ';', '+', '-', '*', '/', '%', '&', '|', '^', '!', '~', '=',
+            '<', '>', '?'
         };
 
         private readonly string _text;
@@ -49,14 +50,17 @@ namespace DataCommander.Providers.Query
                         _index++;
                         value = ReadString();
                         endPosition = _index;
-                        token = new Token(_tokenIndex, startPosition, endPosition - 1, _lineIndex, TokenType.String, value);
+                        token = new Token(_tokenIndex, startPosition, endPosition - 1, _lineIndex, TokenType.String,
+                            value);
                     }
                     else
                     {
                         value = ReadKeyWord();
                         endPosition = _index;
-                        token = new Token(_tokenIndex, startPosition, endPosition - 1, _lineIndex, TokenType.KeyWord, value);
+                        token = new Token(_tokenIndex, startPosition, endPosition - 1, _lineIndex, TokenType.KeyWord,
+                            value);
                     }
+
                     break;
                 }
                 else if (char.IsLetter(c) || c == '[' || c == '@')
@@ -64,7 +68,8 @@ namespace DataCommander.Providers.Query
                     startPosition = _index;
                     value = ReadKeyWord();
                     endPosition = _index;
-                    token = new Token(_tokenIndex, startPosition, endPosition - 1, _lineIndex, TokenType.KeyWord, value);
+                    token = new Token(_tokenIndex, startPosition, endPosition - 1, _lineIndex, TokenType.KeyWord,
+                        value);
                     break;
                 }
                 else if (c == '"' || c == '\'')
@@ -88,7 +93,8 @@ namespace DataCommander.Providers.Query
                     startPosition = _index;
                     value = c.ToString();
                     endPosition = _index;
-                    token = new Token(_tokenIndex, startPosition, endPosition, _lineIndex, TokenType.OperatorOrPunctuator, value);
+                    token = new Token(_tokenIndex, startPosition, endPosition, _lineIndex,
+                        TokenType.OperatorOrPunctuator, value);
                     _index++;
                     break;
                 }
@@ -107,6 +113,7 @@ namespace DataCommander.Providers.Query
             {
                 _tokenIndex++;
             }
+
             return token;
         }
 
@@ -127,6 +134,7 @@ namespace DataCommander.Providers.Query
                 {
                     _index++;
                 }
+
                 sb.Append(c);
             }
 
@@ -176,7 +184,7 @@ namespace DataCommander.Providers.Query
             while (_index < _length)
             {
                 var c = _text[_index];
-                if (char.IsWhiteSpace(c) || c == ',')
+                if (char.IsWhiteSpace(c) || c == ',' || c == ')')
                     break;
                 else
                     _index++;

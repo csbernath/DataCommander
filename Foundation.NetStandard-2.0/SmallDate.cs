@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
-using System.Runtime.Serialization;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation
@@ -9,99 +8,45 @@ namespace Foundation
     /// <summary>
     /// 16 bit date type: 1900-01-01 - 2079-06-06
     /// </summary>
-    [DataContract]
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public struct SmallDate : IComparable<SmallDate>, IEquatable<SmallDate>
     {
-        [DataMember] private readonly ushort _value;
+        private readonly ushort _value;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public static readonly DateTime MinDateTime = new DateTime(1900, 1, 1);
-
-        /// <summary>
-        /// 
-        /// </summary>
         public static readonly DateTime MaxDateTime = new DateTime(2079, 06, 06);
-
-        /// <summary>
-        /// 
-        /// </summary>
         public static readonly SmallDate MinValue = new SmallDate(ushort.MinValue);
-
-        /// <summary>
-        /// 
-        /// </summary>
         public static readonly SmallDate MaxValue = new SmallDate(ushort.MaxValue);
 
-        private SmallDate(ushort value)
+        public SmallDate(ushort value)
         {
             _value = value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dateTime"></param>
+        public ushort Value => _value;
+
         public SmallDate(DateTime dateTime)
         {
+            FoundationContract.Requires<ArgumentOutOfRangeException>(dateTime.TimeOfDay == TimeSpan.Zero);
             _value = ToSmallDateValue(dateTime);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="year"></param>
-        /// <param name="month"></param>
-        /// <param name="day"></param>
         public SmallDate(int year, int month, int day)
         {
             var dateTime = new DateTime(year, month, day);
             _value = ToSmallDateValue(dateTime);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static SmallDate Today(IDateTimeProvider dateTimeProvider)
-        {
-            var today = dateTimeProvider.Today();
-            return new SmallDate(today);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public int Year => ToDateTime(_value).Year;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public int Month => ToDateTime(_value).Month;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public int Day => ToDateTime(_value).Day;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dateTime"></param>
-        /// <returns></returns>
         public static explicit operator SmallDate(DateTime dateTime)
         {
             var value = ToSmallDateValue(dateTime);
             return new SmallDate(value);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="smallDate"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
         public static SmallDate operator +(SmallDate smallDate, int value)
         {
             var result = smallDate._value + value;
@@ -109,15 +54,10 @@ namespace Foundation
             {
                 throw new OverflowException();
             }
+
             return new SmallDate((ushort) result);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="smallDate1"></param>
-        /// <param name="smallDate2"></param>
-        /// <returns></returns>
         public static int operator -(SmallDate smallDate1, SmallDate smallDate2)
         {
             return smallDate1._value - smallDate2._value;
@@ -133,21 +73,28 @@ namespace Foundation
             return smallDate1._value >= smallDate2._value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+        public static bool operator <(SmallDate smallDate1, SmallDate smallDate2)
+        {
+            return smallDate1._value < smallDate2._value;
+        }
+
+        public static bool operator >(SmallDate smallDate1, SmallDate smallDate2)
+        {
+            return smallDate1._value > smallDate2._value;
+        }
+
+        [Pure]
+        public bool In(SmallDateInterval interval)
+        {
+            return interval.Start._value <= _value && _value <= interval.End._value;
+        }
+
         [Pure]
         public DateTime ToDateTime()
         {
             return ToDateTime(_value);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
         [Pure]
         public SmallDate AddDays(short value)
         {
@@ -197,6 +144,12 @@ namespace Foundation
             return dateTime.ToShortDateString();
         }
 
+        public string ToString(string format)
+        {
+            var dateTime = ToDateTime(_value);
+            return dateTime.ToString(format);
+        }
+
         int IComparable<SmallDate>.CompareTo(SmallDate other)
         {
             return _value.CompareTo(other._value);
@@ -223,7 +176,17 @@ namespace Foundation
             return _value == other._value;
         }
 
-        private string DebuggerDisplay
+        public static bool operator ==(SmallDate x, SmallDate y)
+        {
+            return x.Equals(y);
+        }
+
+        public static bool operator !=(SmallDate x, SmallDate y)
+        {
+            return !x.Equals(y);
+        }
+
+        internal string DebuggerDisplay
         {
             get
             {

@@ -11,18 +11,6 @@ using Foundation.Log;
 
 namespace DataCommander.Providers
 {
-    public class DbCommandDefinition
-    {
-        public readonly string CommandText;
-        public readonly CommandType CommandType;
-
-        public DbCommandDefinition(string commandText, CommandType commandType)
-        {
-            CommandText = commandText;
-            CommandType = commandType;
-        }
-    }
-
     public sealed class SqlParser
     {
         #region Private Fields
@@ -37,8 +25,7 @@ namespace DataCommander.Providers
         {
             _text = text;
             Tokens = Tokenize(text);
-            Table[] allTables;
-            Tables = FindTables(Tokens, out allTables);
+            Tables = FindTables(Tokens, out var allTables);
             _allTables = allTables;
 
             foreach (var value in Tables.Values)
@@ -48,20 +35,21 @@ namespace DataCommander.Providers
         #region Public Properties
 
         public IDictionary<string, string> Tables { get; }
-        public Token[] Tokens { get; }
+        public List<Token> Tokens { get; }
 
         #endregion
 
         #region Public Methods
 
-        public IDbCommand CreateCommand(IProvider provider, ConnectionBase connection, CommandType commandType, int commandTimeout)
+        public IDbCommand CreateCommand(IProvider provider, ConnectionBase connection, CommandType commandType,
+            int commandTimeout)
         {
             var command = connection.CreateCommand();
             command.CommandType = commandType;
             command.CommandTimeout = commandTimeout;
             var commandType2 = commandType;
 
-            if (Tokens.Length > 0)
+            if (Tokens.Count > 0)
             {
                 var firstToken = Tokens[0];
                 var startTokenIndex = 0;
@@ -119,7 +107,7 @@ namespace DataCommander.Providers
                         var i = startTokenIndex;
                         var tokenList = new List<Token>();
                         var parameters = new List<Parameter>();
-                        while (i < Tokens.Length)
+                        while (i < Tokens.Count)
                         {
                             var token = Tokens[i];
                             if (token.Type == TokenType.OperatorOrPunctuator && token.Value == ",")
@@ -145,7 +133,8 @@ namespace DataCommander.Providers
                                 case ParameterDirection.InputOutput:
                                     var dataParameter = provider.GetDataParameter(parameter);
                                     var first = parameters.FirstOrDefault(
-                                        p => string.Compare(p.Name, parameter.ParameterName, StringComparison.InvariantCultureIgnoreCase) == 0);
+                                        p => string.Compare(p.Name, parameter.ParameterName,
+                                                 StringComparison.InvariantCultureIgnoreCase) == 0);
                                     if (first == null)
                                     {
                                         first = parameters.FirstOrDefault(p => p.Name == null);
@@ -177,131 +166,6 @@ namespace DataCommander.Providers
             return command;
         }
 
-        public DbCommandDefinition CreateCommandDefinition(IProvider provider, ConnectionBase connection, CommandType commandType)
-        {
-            string commandText = null;
-            var commandType2 = commandType;
-
-            if (Tokens.Length > 0)
-            {
-                var firstToken = Tokens[0];
-                var startTokenIndex = 0;
-                var isVbScript = false;
-
-                if (firstToken.Type == TokenType.KeyWord)
-                {
-                    var keyWord = firstToken.Value.ToLower();
-
-                    switch (keyWord)
-                    {
-                        case "exec":
-                            commandType2 = CommandType.StoredProcedure;
-                            startTokenIndex = 1;
-                            break;
-
-                        case "load":
-                            commandType2 = CommandType.Text;
-                            break;
-
-                        case "main":
-                            commandType2 = CommandType.StoredProcedure;
-                            isVbScript = true;
-                            break;
-
-                        case "select":
-                            commandType2 = CommandType.Text;
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-
-                commandType = commandType2;
-
-                switch (commandType)
-                {
-                    case CommandType.Text:
-                        commandText = _text;
-                        break;
-
-                    default:
-                        if (isVbScript)
-                        {
-                            //string commandText = query.Substring(firstLine.Length);
-                            //command.CommandText = commandText;
-                        }
-                        else
-                            commandText = Tokens[startTokenIndex].Value;
-
-                        startTokenIndex++;
-
-                        var command = connection.CreateCommand();
-                        command.CommandText = commandText;
-                        command.CommandType = commandType;
-                        provider.DeriveParameters(command);
-
-                        var i = startTokenIndex;
-                        var tokenList = new List<Token>();
-                        var parameters = new List<Parameter>();
-                        while (i < Tokens.Length)
-                        {
-                            var token = Tokens[i];
-                            if (token.Type == TokenType.OperatorOrPunctuator && token.Value == ",")
-                            {
-                                parameters.Add(ToParameter(tokenList));
-                                tokenList.Clear();
-                            }
-                            else
-                                tokenList.Add(token);
-
-                            i++;
-                        }
-
-                        if (tokenList.Count > 0)
-                            parameters.Add(ToParameter(tokenList));
-
-                        var defaultValues = new List<IDataParameter>();
-                        foreach (IDataParameter parameter in command.Parameters)
-                        {
-                            switch (parameter.Direction)
-                            {
-                                case ParameterDirection.Input:
-                                case ParameterDirection.InputOutput:
-                                    var dataParameter = provider.GetDataParameter(parameter);
-                                    var first = parameters.FirstOrDefault(
-                                        p => string.Compare(p.Name, parameter.ParameterName, StringComparison.InvariantCultureIgnoreCase) == 0);
-                                    if (first == null)
-                                    {
-                                        first = parameters.FirstOrDefault(p => p.Name == null);
-                                        if (first != null)
-                                            parameters.Remove(first);
-                                    }
-
-                                    if (first != null)
-                                    {
-                                        var value = GetParameterValue(dataParameter, first.Value);
-                                        if (value != null)
-                                            parameter.Value = value;
-                                        else
-                                            defaultValues.Add(parameter);
-                                    }
-
-                                    break;
-                            }
-                        }
-
-                        foreach (var parameter in defaultValues)
-                            command.Parameters.Remove(parameter);
-                        break;
-                }
-            }
-            else
-                commandText = _text;
-
-            return new DbCommandDefinition(commandText, commandType);
-        }
-
         public SqlObject FindSqlObject(int index)
         {
             SqlObject sqlObject = null;
@@ -314,7 +178,7 @@ namespace DataCommander.Providers
                     var value = prev.Value.ToLower();
                     string name = null;
 
-                    if (index < Tokens.Length)
+                    if (index < Tokens.Count)
                     {
                         var token = Tokens[index];
                         name = token.Value;
@@ -335,7 +199,8 @@ namespace DataCommander.Providers
 
                         case "from":
                         case "join":
-                            sqlObject = new SqlObject(null, null, SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function, name);
+                            sqlObject = new SqlObject(null, null,
+                                SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function, name);
                             break;
 
                         case "table":
@@ -370,13 +235,14 @@ namespace DataCommander.Providers
                                 var table = _allTables[index];
                                 sqlObject = new SqlObject(table.Name, null, SqlObjectTypes.Column, name);
                             }
+
                             break;
 
                         default:
                             break;
                     }
 
-                    if (sqlObject == null && index >= 0 && index < Tokens.Length)
+                    if (sqlObject == null && index >= 0 && index < Tokens.Count)
                     {
                         var token = Tokens[index];
                         sqlObject = GetSqlObject(token.Value);
@@ -384,13 +250,11 @@ namespace DataCommander.Providers
                 }
                 else if (prev.Type == TokenType.OperatorOrPunctuator)
                 {
-                    var tokenAfterOperator = index < Tokens.Length
+                    var tokenAfterOperator = index < Tokens.Count
                         ? Tokens[index]
                         : null;
                     if (tokenAfterOperator != null && tokenAfterOperator.Value.Contains('.'))
-                    {
                         sqlObject = GetSqlObject(tokenAfterOperator.Value);
-                    }
                     else if (prev.Value == "=" && index >= 2)
                     {
                         var tokenBeforeOperator = Tokens[index - 2];
@@ -430,7 +294,8 @@ namespace DataCommander.Providers
 
                         case "from":
                         case "join":
-                            sqlObject = new SqlObject(null, null, SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function, name);
+                            sqlObject = new SqlObject(null, null,
+                                SqlObjectTypes.Table | SqlObjectTypes.View | SqlObjectTypes.Function, name);
                             break;
 
                         case "table":
@@ -461,9 +326,8 @@ namespace DataCommander.Providers
                         case "where":
                             //
                             if (currentToken != null)
-                            {
                                 sqlObject = GetSqlObject(currentToken.Value);
-                            }
+
                             if (sqlObject == null)
                             {
                                 var index = _allTables.LastIndexOf(t => t.Index < previousToken.Index - 1);
@@ -473,6 +337,7 @@ namespace DataCommander.Providers
                                     sqlObject = new SqlObject(table.Name, null, SqlObjectTypes.Column, name);
                                 }
                             }
+
                             break;
 
                         default:
@@ -480,9 +345,7 @@ namespace DataCommander.Providers
                     }
 
                     if (sqlObject == null && currentToken != null)
-                    {
                         sqlObject = GetSqlObject(currentToken.Value);
-                    }
                 }
                 else if (previousToken.Type == TokenType.OperatorOrPunctuator)
                 {
@@ -502,14 +365,11 @@ namespace DataCommander.Providers
                             }
                         }
                         else
-                        {
                             sqlObject = GetValue(previousToken);
-                        }
                     }
-                    else if (currentToken != null && currentToken.Type == TokenType.KeyWord && currentToken.Value.Contains('.'))
-                    {
+                    else if (currentToken != null && currentToken.Type == TokenType.KeyWord &&
+                             currentToken.Value.Contains('.'))
                         sqlObject = GetSqlObject(currentToken.Value);
-                    }
                 }
             }
 
@@ -527,29 +387,21 @@ namespace DataCommander.Providers
             string tableName = null;
             int i;
 
-            for (i = 0; i < Tokens.Length; i++)
+            for (i = 0; i < Tokens.Count; i++)
             {
                 var token = Tokens[i];
-
                 if (token.Type == TokenType.KeyWord)
-                {
                     if (string.Compare(token.Value, "from", true) == 0)
-                    {
                         break;
-                    }
-                }
             }
 
             i++;
 
-            if (i < Tokens.Length)
+            if (i < Tokens.Count)
             {
                 var token = Tokens[i];
-
                 if (token.Type == TokenType.KeyWord)
-                {
                     tableName = token.Value;
-                }
             }
 
             return tableName;
@@ -558,7 +410,7 @@ namespace DataCommander.Providers
         public int FindToken(int position)
         {
             var index = -1;
-            var last = Tokens.Length - 1;
+            var last = Tokens.Count - 1;
             for (var i = 0; i <= last; i++)
             {
                 var token = Tokens[i];
@@ -574,14 +426,14 @@ namespace DataCommander.Providers
                     break;
                 }
             }
+
             if (index == -1)
             {
                 var lastToken = Tokens[last];
                 if (lastToken.EndPosition < position)
-                {
                     index = last + 1;
-                }
             }
+
             return index;
         }
 
@@ -590,22 +442,18 @@ namespace DataCommander.Providers
             previousToken = null;
             currentToken = null;
 
-            for (var i = 0; i < Tokens.Length; i++)
+            for (var i = 0; i < Tokens.Count; i++)
             {
                 var token = Tokens[i];
                 if (token.EndPosition + 1 < position)
-                {
                     previousToken = token;
-                }
                 else if (token.StartPosition <= position && position <= token.EndPosition + 1)
                 {
                     currentToken = token;
                     break;
                 }
                 else
-                {
                     break;
-                }
             }
         }
 
@@ -613,9 +461,9 @@ namespace DataCommander.Providers
 
         #region Private Methods
 
-        private static Token[] Tokenize(string text)
+        public static List<Token> Tokenize(string text)
         {
-            var tokenList = new List<Token>();
+            var tokens = new List<Token>();
             var iterator = new TokenIterator(text);
 
             while (true)
@@ -623,16 +471,12 @@ namespace DataCommander.Providers
                 var token = iterator.Next();
 
                 if (token == null)
-                {
                     break;
-                }
 
-                tokenList.Add(token);
+                tokens.Add(token);
             }
 
-            var tokenArray = new Token[tokenList.Count];
-            tokenList.CopyTo(tokenArray);
-            return tokenArray;
+            return tokens;
         }
 
         private object GetParameterValue(
@@ -655,16 +499,7 @@ namespace DataCommander.Providers
                             var valueStr = (string) value;
                             double valueDbl;
                             var ok = double.TryParse(valueStr, NumberStyles.Any, null, out valueDbl);
-
-                            if (ok)
-                            {
-                                value2 = Convert.ToBoolean(valueDbl);
-                            }
-                            else
-                            {
-                                value2 = Convert.ToBoolean(value);
-                            }
-
+                            value2 = ok ? Convert.ToBoolean(valueDbl) : Convert.ToBoolean(value);
                             break;
 
                         case DbType.Int16:
@@ -681,13 +516,9 @@ namespace DataCommander.Providers
                             var decimalString = new DecimalString(value.ToString());
 
                             if (dataParameter.Precision != 0 && decimalString.Precision > dataParameter.Precision)
-                            {
                                 throw new Exception("Invalid precision");
-                            }
                             else if (dataParameter.Scale != 0 && decimalString.Scale > dataParameter.Scale)
-                            {
                                 throw new Exception("Invalid scale");
-                            }
                             else
                             {
                                 IFormatProvider formatProvider = CultureInfo.InvariantCulture;
@@ -707,13 +538,9 @@ namespace DataCommander.Providers
                             valueStr = Convert.ToString(value);
 
                             if (dataParameter.Size > 0 && valueStr.Length > dataParameter.Size)
-                            {
                                 throw new Exception("Length exceeds size of parameter");
-                            }
                             else
-                            {
                                 value2 = valueStr;
-                            }
 
                             break;
 
@@ -731,7 +558,8 @@ namespace DataCommander.Providers
                                 };
 
                                 IFormatProvider formatProvider = CultureInfo.InvariantCulture;
-                                value2 = DateTime.ParseExact(value.ToString(), formats, formatProvider, DateTimeStyles.None);
+                                value2 = DateTime.ParseExact(value.ToString(), formats, formatProvider,
+                                    DateTimeStyles.None);
                             }
 
                             break;
@@ -743,9 +571,7 @@ namespace DataCommander.Providers
                 }
             }
             else
-            {
                 value2 = null;
-            }
 
             return value2;
         }
@@ -776,7 +602,8 @@ namespace DataCommander.Providers
                             }
                             catch (Exception e)
                             {
-                                var message = $"Invalid parameter value: {values[j]}\r\nIndex: {j}.\r\nMessage: {e.Message}";
+                                var message =
+                                    $"Invalid parameter value: {values[j]}\r\nIndex: {j}.\r\nMessage: {e.Message}";
                                 throw new ArgumentException(message, parameter.ParameterName, e);
                             }
 
@@ -824,18 +651,15 @@ namespace DataCommander.Providers
         {
             var tokenValue = token.Value;
             object value;
-            if (token.Type == TokenType.KeyWord && string.Compare(tokenValue, "null", StringComparison.InvariantCultureIgnoreCase) == 0)
-            {
+            if (token.Type == TokenType.KeyWord &&
+                string.Compare(tokenValue, "null", StringComparison.InvariantCultureIgnoreCase) == 0)
                 value = DBNull.Value;
-            }
-            else if (token.Type == TokenType.KeyWord && string.Compare(tokenValue, "default", StringComparison.InvariantCultureIgnoreCase) == 0)
-            {
+            else if (token.Type == TokenType.KeyWord &&
+                     string.Compare(tokenValue, "default", StringComparison.InvariantCultureIgnoreCase) == 0)
                 value = null;
-            }
             else
-            {
                 value = tokenValue;
-            }
+
             return value;
         }
 
@@ -860,23 +684,22 @@ namespace DataCommander.Providers
                 value = ToParameterValue(tokens[2]);
             }
             else
-            {
                 throw new NotImplementedException();
-            }
+
             return new Parameter(name, value);
         }
 
-        private static IDictionary<string, string> FindTables(Token[] tokens, out Table[] allTables)
+        private static IDictionary<string, string> FindTables(List<Token> tokens, out Table[] allTables)
         {
             var tables = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
             var tableList = new List<Table>();
 
-            for (var i = 0; i < tokens.Length; i++)
+            for (var i = 0; i < tokens.Count; i++)
             {
                 var token = tokens[i];
                 var value = token.Value;
 
-                if (token.Type == TokenType.KeyWord && value != null && i < tokens.Length - 1)
+                if (token.Type == TokenType.KeyWord && value != null && i < tokens.Count - 1)
                 {
                     switch (value.ToLower())
                     {
@@ -888,7 +711,7 @@ namespace DataCommander.Providers
                             {
                                 var tableName = token.Value;
 
-                                if (i < tokens.Length - 2)
+                                if (i < tokens.Count - 2)
                                 {
                                     token = tokens[i + 2];
 
@@ -897,9 +720,7 @@ namespace DataCommander.Providers
                                         var alias = token.Value;
                                         tableList.Add(new Table(i, tableName, alias));
                                         if (!tables.ContainsKey(alias))
-                                        {
                                             tables.Add(alias, tableName);
-                                        }
                                     }
                                 }
                             }
@@ -929,10 +750,9 @@ namespace DataCommander.Providers
                     sqlObject = new SqlObject(tableName, alias, SqlObjectTypes.Column, name);
                 }
                 else
-                {
                     sqlObject = new SqlObject(null, null, SqlObjectTypes.Function, value);
-                }
             }
+
             return sqlObject;
         }
 
@@ -944,29 +764,27 @@ namespace DataCommander.Providers
         {
             private string _alias;
 
+            public readonly int Index;
+            public readonly string Name;
+
             public Table(int index, string name, string alias)
             {
                 Index = index;
                 Name = name;
                 _alias = alias;
             }
-
-            public int Index { get; }
-
-            public string Name { get; }
         }
 
         private sealed class Parameter
         {
+            public readonly string Name;
+            public readonly object Value;
+
             public Parameter(string name, object value)
             {
                 Name = name;
                 Value = value;
             }
-
-            public string Name { get; }
-
-            public object Value { get; }
         }
 
         #endregion
