@@ -173,14 +173,17 @@ namespace DataCommander.Providers
                 try
                 {
                     using (var webClient = new WebClient())
-                        remoteVersion = webClient.DownloadString("https://raw.githubusercontent.com/csbernath/DataCommander/master/Version.md");
+                        remoteVersion = webClient.DownloadString("https://raw.githubusercontent.com/csbernath/DataCommander/master/DataCommander/Version.txt");
                 }
                 catch
                 {
                 }
 
                 if (remoteVersion != null && localVersion != remoteVersion)
+                {
+                    _toolStripStatusLabel.ForeColor = Color.Red;
                     _toolStripStatusLabel.Text = $"New version is available. Local version: {localVersion}, remote version: {remoteVersion}";
+                }
             }
 
             UpdateTotalMemory();
