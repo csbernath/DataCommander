@@ -1679,7 +1679,6 @@ namespace DataCommander.Providers.Query
                 var json = commandText.Substring(10, index - 10);
                 query = JsonConvert.DeserializeObject<QueryConfiguration.Query>(json);
                 queryCommandTextParameters = ToCommandText(query.Parameters);
-                queryCommandTextParameters = null;
                 queryCommandText = commandText.Substring(index + 4);
 
                 //var startIndex = commandText.IndexOf("-- Parameters") + 15;

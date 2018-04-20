@@ -218,6 +218,12 @@ namespace Foundation.Linq
             return new ReadOnlyCollection<TSource>(source.ToList());
         }
 
+        public static ReadOnlyDictionary<TKey, TSource> ToReadOnlyDictionary<TKey, TSource>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            var dictionary = source.ToDictionary(keySelector);
+            return new ReadOnlyDictionary<TKey, TSource>(dictionary);
+        }
+
         public static SegmentedCollection<TSource> ToSegmentedCollection<TSource>(this IEnumerable<TSource> source, int segmentSize)
         {
             var collection = new SegmentedCollection<TSource>(segmentSize);
