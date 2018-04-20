@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Principal;
 using System.Text;
@@ -65,6 +66,7 @@ namespace DataCommander.Providers
         private ToolStrip _queryFormToolStrip;
         private System.Windows.Forms.Timer _timer;
         private ColorTheme _colorTheme;
+        private bool _first = true;
 
         /// <summary>
         /// 
@@ -161,6 +163,26 @@ namespace DataCommander.Providers
 
         private void Timer_Tick(object sender, EventArgs e)
         {
+            if (_first)
+            {
+                _first = false;
+
+                var localVersion = File.ReadAllText("Version.txt");
+                string remoteVersion = null;
+
+                try
+                {
+                    using (var webClient = new WebClient())
+                        remoteVersion = webClient.DownloadString("https://raw.githubusercontent.com/csbernath/DataCommander/master/Version.md");
+                }
+                catch
+                {
+                }
+
+                if (remoteVersion != null && localVersion != remoteVersion)
+                    _toolStripStatusLabel.Text = $"New version is available. Local version: {localVersion}, remote version: {remoteVersion}";
+            }
+
             UpdateTotalMemory();
         }
 

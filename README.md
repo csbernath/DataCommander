@@ -5,7 +5,7 @@ The program has a plugin architecture for adding arbitrary data providers.
 
 Special features of Data Commander
 
-Feature|Data Commander|SQL Server Management Studio v17.2
+Feature|Data Commander|SQL Server Management Studio v17.6
 ---|---|---
 Audit: log commands to file|Yes|No
 Auto completion: Pascal case filtering|Yes|No
@@ -15,7 +15,7 @@ Create insert statements from select|Yes|No
 Drag & drop: file to binary constant|Yes|No
 Edit rows: generate change script|Yes|No
 Object explorer: find item|Yes|No
-ORM: result = handler.Handle(query), [POCO](https://en.wikipedia.org/wiki/Plain_old_CLR_object)|Yes|No
+DbQuery (C# micro-ORM query generator)|Yes|No
 Performance: startup|Fast|Slow
 Result: save as Excel|Yes|No
 Result: save as HTML|Yes|No
@@ -53,8 +53,8 @@ Open the database with Data Commander and execute the following command:
     }
   ],
   "Results": [
-    "Customer",
-    "Invoice"
+    "Customer(s)",
+    "Invoice(s)"
   ]
 }
 */
@@ -745,9 +745,9 @@ This program is freeware and released under the [GNU General Public License](htt
 
 ## Development environment
 
-- .NET Framework 4.7
-- C# 7.0
-- Visual Studio Community 2017
+- .NET Framework 4.7.1
+- C# 7.2
+- Visual Studio Community 2017 15.6.6
 
 ## Credits
 
