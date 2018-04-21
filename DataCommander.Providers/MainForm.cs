@@ -48,6 +48,7 @@ namespace DataCommander.Providers
         private ToolStripMenuItem _mnuWindow;
         private ToolStripMenuItem _mnuRecentFileList;
         private ToolStripMenuItem _mnuFont;
+        private ToolStripMenuItem _mnuOptions;
         private ToolStripButton _openButton;
         private ToolStripButton _saveButton;
         private ToolStripSeparator _toolStripSeparator1;
@@ -68,10 +69,21 @@ namespace DataCommander.Providers
         private ColorTheme _colorTheme;
         private bool _first = true;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public MainForm(ColorTheme colorTheme)
+        private void SetColorTheme(bool darkColorTheme)
+        {
+            var colorTheme = darkColorTheme
+                ? new ColorTheme(
+                    Color.FromArgb(220, 220, 220),
+                    Color.FromArgb(30, 30, 30),
+                    Color.DarkOliveGreen,
+                    Color.FromArgb(86, 156, 214),
+                    Color.FromArgb(203, 65, 65))
+                : null;
+
+            _colorTheme = colorTheme;
+        }
+
+        public MainForm()
         {
             //
             // Required for Windows Form Designer support
@@ -94,7 +106,11 @@ namespace DataCommander.Providers
             _toolStripStatusLabel.Text = message;
             Log.Trace(message);
 
-            _colorTheme = colorTheme;
+            if (!DataCommanderApplication.Instance.ApplicationData.CurrentType.Attributes.TryGetAttributeValue<bool>("DarkColorTheme", out var darkColorTheme))
+                darkColorTheme = false;
+
+            SetColorTheme(darkColorTheme);
+
             if (_colorTheme != null)
             {
                 ForeColor = _colorTheme.ForeColor;
@@ -149,7 +165,7 @@ namespace DataCommander.Providers
         public void UpdateTotalMemory()
         {
             var totalMemory = GC.GetTotalMemory(false);
-            var totalMemoryMb = (double)totalMemory / 1024.0 / 1024.0;
+            var totalMemoryMb = (double) totalMemory / 1024.0 / 1024.0;
             var text = $"{Math.Round(totalMemoryMb, 0)} MB";
 
             _managedMemoryToolStripStatusLabel.Text = text;
@@ -225,6 +241,7 @@ namespace DataCommander.Providers
             this._mnuRecentFileList = new System.Windows.Forms.ToolStripMenuItem();
             this._mnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this._mnuFont = new System.Windows.Forms.ToolStripMenuItem();
+            this._mnuOptions = new ToolStripMenuItem();
             this._mnuWindow = new System.Windows.Forms.ToolStripMenuItem();
             this._closeAllDocumentsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
@@ -253,11 +270,13 @@ namespace DataCommander.Providers
             // mainMenu
             // 
             this._mainMenu.Dock = System.Windows.Forms.DockStyle.None;
-            this._mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._menuItem1,
-            this._mnuFont,
-            this._mnuWindow,
-            this._mnuHelp});
+            this._mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this._menuItem1,
+                this._mnuFont, _mnuOptions,
+                this._mnuWindow,
+                this._mnuHelp
+            });
             this._mainMenu.Location = new System.Drawing.Point(0, 0);
             this._mainMenu.MdiWindowListItem = this._mnuWindow;
             this._mainMenu.Name = "_mainMenu";
@@ -266,14 +285,16 @@ namespace DataCommander.Providers
             // 
             // menuItem1
             // 
-            this._menuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._newToolStripMenuItem,
-            this._mnuConnect,
-            this._mnuOpen,
-            this._recentConnectionsToolStripMenuItem,
-            this._saveAllToolStripMenuItem,
-            this._mnuRecentFileList,
-            this._mnuExit});
+            this._menuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this._newToolStripMenuItem,
+                this._mnuConnect,
+                this._mnuOpen,
+                this._recentConnectionsToolStripMenuItem,
+                this._saveAllToolStripMenuItem,
+                this._mnuRecentFileList,
+                this._mnuExit
+            });
             this._menuItem1.MergeIndex = 1;
             this._menuItem1.Name = "_menuItem1";
             this._menuItem1.Size = new System.Drawing.Size(79, 20);
@@ -288,20 +309,20 @@ namespace DataCommander.Providers
             // 
             // mnuConnect
             // 
-            this._mnuConnect.Image = ((System.Drawing.Image)(resources.GetObject("_mnuConnect.Image")));
+            this._mnuConnect.Image = ((System.Drawing.Image) (resources.GetObject("_mnuConnect.Image")));
             this._mnuConnect.MergeIndex = 0;
             this._mnuConnect.Name = "_mnuConnect";
-            this._mnuConnect.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this._mnuConnect.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this._mnuConnect.Size = new System.Drawing.Size(187, 22);
             this._mnuConnect.Text = "&Connect";
             this._mnuConnect.Click += new System.EventHandler(this.mnuConnect_Click);
             // 
             // mnuOpen
             // 
-            this._mnuOpen.Image = ((System.Drawing.Image)(resources.GetObject("_mnuOpen.Image")));
+            this._mnuOpen.Image = ((System.Drawing.Image) (resources.GetObject("_mnuOpen.Image")));
             this._mnuOpen.MergeIndex = 1;
             this._mnuOpen.Name = "_mnuOpen";
-            this._mnuOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this._mnuOpen.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this._mnuOpen.Size = new System.Drawing.Size(187, 22);
             this._mnuOpen.Text = "&Open";
             this._mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
@@ -315,8 +336,8 @@ namespace DataCommander.Providers
             // saveAllToolStripMenuItem
             // 
             this._saveAllToolStripMenuItem.Name = "_saveAllToolStripMenuItem";
-            this._saveAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.S)));
+            this._saveAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys) (((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                                                                                         | System.Windows.Forms.Keys.S)));
             this._saveAllToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this._saveAllToolStripMenuItem.Text = "Save All";
             this._saveAllToolStripMenuItem.Click += new System.EventHandler(this.saveAllToolStripMenuItem_Click);
@@ -331,7 +352,7 @@ namespace DataCommander.Providers
             // mnuExit
             // 
             this._mnuExit.Name = "_mnuExit";
-            this._mnuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
+            this._mnuExit.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
             this._mnuExit.Size = new System.Drawing.Size(187, 22);
             this._mnuExit.Text = "Exit";
             this._mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
@@ -343,11 +364,17 @@ namespace DataCommander.Providers
             this._mnuFont.Size = new System.Drawing.Size(43, 20);
             this._mnuFont.Text = "Font";
             this._mnuFont.Click += new System.EventHandler(this.mnuFont_Click);
+
+            _mnuOptions.MergeIndex = 3;
+            _mnuOptions.Text = "Options";
+            _mnuOptions.Click += _mnuOptions_Click;
             // 
             // mnuWindow
             // 
-            this._mnuWindow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._closeAllDocumentsMenuItem});
+            this._mnuWindow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this._closeAllDocumentsMenuItem
+            });
             this._mnuWindow.MergeIndex = 6;
             this._mnuWindow.Name = "_mnuWindow";
             this._mnuWindow.Size = new System.Drawing.Size(63, 20);
@@ -362,10 +389,12 @@ namespace DataCommander.Providers
             // 
             // mnuHelp
             // 
-            this._mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._contentsToolStripMenuItem,
-            this._checkForToolStripMenuItem,
-            this._mnuAbout});
+            this._mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this._contentsToolStripMenuItem,
+                this._checkForToolStripMenuItem,
+                this._mnuAbout
+            });
             this._mnuHelp.MergeIndex = 7;
             this._mnuHelp.Name = "_mnuHelp";
             this._mnuHelp.Size = new System.Drawing.Size(44, 20);
@@ -398,14 +427,16 @@ namespace DataCommander.Providers
             // 
             this._toolStrip.Dock = System.Windows.Forms.DockStyle.None;
             this._toolStrip.ImageList = this._imageList;
-            this._toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._btnConnect,
-            this._openButton,
-            this._saveButton,
-            this._toolStripSeparator1,
-            this._helpButton,
-            this._toolStripSeparator2,
-            this.ActiveMdiChildToolStripTextBox});
+            this._toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this._btnConnect,
+                this._openButton,
+                this._saveButton,
+                this._toolStripSeparator1,
+                this._helpButton,
+                this._toolStripSeparator2,
+                this.ActiveMdiChildToolStripTextBox
+            });
             this._toolStrip.Location = new System.Drawing.Point(3, 24);
             this._toolStrip.Name = "_toolStrip";
             this._toolStrip.Size = new System.Drawing.Size(518, 25);
@@ -413,7 +444,7 @@ namespace DataCommander.Providers
             // 
             // imageList
             // 
-            this._imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("_imageList.ImageStream")));
+            this._imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer) (resources.GetObject("_imageList.ImageStream")));
             this._imageList.TransparentColor = System.Drawing.Color.Transparent;
             this._imageList.Images.SetKeyName(0, "");
             this._imageList.Images.SetKeyName(1, "");
@@ -422,7 +453,7 @@ namespace DataCommander.Providers
             // 
             // btnConnect
             // 
-            this._btnConnect.Image = ((System.Drawing.Image)(resources.GetObject("_btnConnect.Image")));
+            this._btnConnect.Image = ((System.Drawing.Image) (resources.GetObject("_btnConnect.Image")));
             this._btnConnect.Name = "_btnConnect";
             this._btnConnect.Size = new System.Drawing.Size(23, 22);
             this._btnConnect.ToolTipText = "Connect to database";
@@ -431,7 +462,7 @@ namespace DataCommander.Providers
             // openButton
             // 
             this._openButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this._openButton.Image = ((System.Drawing.Image)(resources.GetObject("_openButton.Image")));
+            this._openButton.Image = ((System.Drawing.Image) (resources.GetObject("_openButton.Image")));
             this._openButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this._openButton.Name = "_openButton";
             this._openButton.Size = new System.Drawing.Size(23, 22);
@@ -443,7 +474,7 @@ namespace DataCommander.Providers
             // 
             this._saveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this._saveButton.Enabled = false;
-            this._saveButton.Image = ((System.Drawing.Image)(resources.GetObject("_saveButton.Image")));
+            this._saveButton.Image = ((System.Drawing.Image) (resources.GetObject("_saveButton.Image")));
             this._saveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this._saveButton.Name = "_saveButton";
             this._saveButton.Size = new System.Drawing.Size(23, 22);
@@ -458,7 +489,7 @@ namespace DataCommander.Providers
             // helpButton
             // 
             this._helpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this._helpButton.Image = ((System.Drawing.Image)(resources.GetObject("_helpButton.Image")));
+            this._helpButton.Image = ((System.Drawing.Image) (resources.GetObject("_helpButton.Image")));
             this._helpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this._helpButton.Name = "_helpButton";
             this._helpButton.Size = new System.Drawing.Size(23, 22);
@@ -477,9 +508,11 @@ namespace DataCommander.Providers
             // 
             // statusBar
             // 
-            this._statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._toolStripStatusLabel,
-            this._managedMemoryToolStripStatusLabel});
+            this._statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this._toolStripStatusLabel,
+                this._managedMemoryToolStripStatusLabel
+            });
             this._statusBar.Location = new System.Drawing.Point(0, 531);
             this._statusBar.Name = "_statusBar";
             this._statusBar.ShowItemToolTips = true;
@@ -520,8 +553,8 @@ namespace DataCommander.Providers
             this.ClientSize = new System.Drawing.Size(792, 553);
             this.Controls.Add(this._toolStripPanel);
             this.Controls.Add(this._statusBar);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)));
+            this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.MainMenuStrip = this._mainMenu;
             this.Name = "MainForm";
@@ -538,6 +571,19 @@ namespace DataCommander.Providers
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+        private void _mnuOptions_Click(object sender, EventArgs e)
+        {
+            var optionsForm = new OptionsForm(_colorTheme != null);
+            if (optionsForm.ShowDialog() == DialogResult.OK)
+            {
+                var darkColorTheme = optionsForm.DarkColorTheme;
+                SetColorTheme(darkColorTheme);
+
+                var attributes = DataCommanderApplication.Instance.ApplicationData.CurrentType.Attributes;
+                attributes.SetAttributeValue("DarkColorTheme", darkColorTheme);
+            }
         }
 
         #endregion
@@ -595,7 +641,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
         {
             if (!e.Cancel)
             {
-                var form = (Form)sender;
+                var form = (Form) sender;
                 // form.MdiParent = null;
 
                 if (_queryFormToolStrip != null)
@@ -636,7 +682,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
         private void mnuRecentFile_Click(object sender, EventArgs e)
         {
-            var menuItem = (ToolStripMenuItem)sender;
+            var menuItem = (ToolStripMenuItem) sender;
             var index = _mnuRecentFileList.DropDownItems.IndexOf(menuItem);
             var count = _recentFileList.Count;
             var path = _recentFileList[count - index - 1];
@@ -847,7 +893,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             var memoryStream = new MemoryStream(bytes);
             var binaryFormatter = new BinaryFormatter();
             var obj = binaryFormatter.Deserialize(memoryStream);
-            var font = (Font)obj;
+            var font = (Font) obj;
             return font;
         }
 
@@ -880,7 +926,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            var queryForm = (QueryForm)ActiveMdiChild;
+            var queryForm = (QueryForm) ActiveMdiChild;
 
             if (queryForm != null)
             {
@@ -966,7 +1012,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                     _toolStripPanel.Controls.Remove(_queryFormToolStrip);
                 }
 
-                var queryForm = (QueryForm)ActiveMdiChild;
+                var queryForm = (QueryForm) ActiveMdiChild;
                 var queryFormToolStrip = queryForm.ToolStrip;
                 if (queryFormToolStrip != null)
                 {
@@ -977,6 +1023,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
                     _queryFormToolStrip = queryFormToolStrip;
                 }
+
                 CreateRecentFileListMenu();
             }
             else
@@ -995,6 +1042,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                 {
                     break;
                 }
+
                 var mdiChild = mdiChildren[length - 1];
                 mdiChild.Close();
 
@@ -1028,6 +1076,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                     }
                 }
             }
+
             _toolStripStatusLabel.Text = $"All items saved to {fileNamePrefix}.";
             Cursor = Cursors.Default;
         }

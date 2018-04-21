@@ -66,16 +66,7 @@ namespace DataCommander.Providers
 
         public void Run()
         {
-            var darkColorTheme = Settings.CurrentType.Attributes["DarkColorTheme"].GetValue<bool>();
-            var colorTheme = darkColorTheme
-                ? new ColorTheme(
-                    Color.FromArgb(220, 220, 220),
-                    Color.FromArgb(30, 30, 30),
-                    Color.DarkOliveGreen,
-                    Color.FromArgb(86, 156, 214),
-                    Color.FromArgb(203, 65, 65))
-                : null;
-            MainForm = new MainForm(colorTheme);
+            MainForm = new MainForm();
 
             Task.Delay(1000).ContinueWith(task =>
             {

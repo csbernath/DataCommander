@@ -17,14 +17,8 @@ namespace Foundation.Configuration
         private string _fileName;
         private string _sectionName;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public ConfigurationNode RootNode { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public ConfigurationNode CurrentNamespace
         {
             get
@@ -36,9 +30,6 @@ namespace Foundation.Configuration
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public ConfigurationNode CurrentType
         {
             get
