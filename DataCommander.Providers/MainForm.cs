@@ -157,7 +157,7 @@ namespace DataCommander.Providers
 
             _timer = new System.Windows.Forms.Timer(components)
             {
-                Interval = 10000, // 10 seconds
+                Interval = 5000, // 10 seconds
             };
             _timer.Tick += Timer_Tick;
             _timer.Start();
@@ -195,14 +195,24 @@ namespace DataCommander.Providers
                 {
                 }
 
-                if (remoteVersion != null && localVersion != remoteVersion)
-                {
-                    _toolStripStatusLabel.ForeColor = Color.Red;
-                    _toolStripStatusLabel.Text = $"New version is available. Local version: {localVersion}, remote version: {remoteVersion}";
-                }
+                //if (remoteVersion != null && localVersion != remoteVersion)
+                _timer.Stop();
+                this.Invoke(() => Download(remoteVersion));
             }
 
             UpdateTotalMemory();
+        }
+
+        private void Download(string remoteVersion)
+        {
+            var text = $"New version {remoteVersion} is avaliable. Do you want to install it?";
+
+            if (MessageBox.Show(text, "Data Commander", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                var uri = new Uri("https://github.com/csbernath/DataCommander/releases/download/2018-04-13/DataCommander.7z");
+                Installer.Download(uri, "Setup.exe");
+                Close();
+            }
         }
 
         /// <summary>

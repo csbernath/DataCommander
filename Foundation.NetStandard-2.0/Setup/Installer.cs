@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace Foundation.Setup
 {
@@ -15,19 +14,19 @@ namespace Foundation.Setup
                 return webClient.DownloadString(address);
         }
 
-        public static async Task Download(Uri address, string setupExeFileName)
+        public static void Download(Uri address, string setupExeFileName)
         {
             var guid = Guid.NewGuid();
             var directory = Path.Combine(Path.GetTempPath(), $"Foundation.Setup.{guid}");
-            var zipFilenName = $"{guid}.zip";
+            Directory.CreateDirectory(directory);
+            var zipFileName = Path.Combine(directory, $"{guid}.zip");
 
             using (var webClient = new WebClient())
-                await webClient.DownloadFileTaskAsync(address, zipFilenName);
+                webClient.DownloadFile(address, zipFileName);
 
-            var sourceArchiveFileName = Path.Combine(directory, zipFilenName);
-            ZipFile.ExtractToDirectory(sourceArchiveFileName, directory);
+            ZipFile.ExtractToDirectory(zipFileName, directory);
 
-            File.Delete(sourceArchiveFileName);
+            File.Delete(zipFileName);
 
             var processStartInfo = new ProcessStartInfo();
             processStartInfo.WorkingDirectory = directory;
