@@ -3,18 +3,8 @@ using Foundation.Assertions;
 
 namespace Foundation.Collections
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class LinearSearch
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="minIndex"></param>
-        /// <param name="maxIndex"></param>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
         public static int IndexOf(int minIndex, int maxIndex, Func<int, bool> predicate)
         {
             Assert.IsNotNull(predicate);
@@ -35,13 +25,6 @@ namespace Foundation.Collections
             return index;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="minIndex"></param>
-        /// <param name="maxIndex"></param>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
         public static int LastIndexOf(int minIndex, int maxIndex, Func<int, bool> predicate)
         {
             Assert.IsNotNull(predicate);

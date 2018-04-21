@@ -89,29 +89,11 @@ namespace Foundation.Data.TextData
             return _nameIndex.ContainsKey(value);
         }
 
-#if FOUNDATION_3_5
-#else
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        [Pure]
-        public bool PureContains(string value)
-        {
-            return Contains(value);
-        }
-#endif
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-#if FOUNDATION_3_5
-#else
-        [Pure]
-#endif
         public override bool Contains(object value)
         {
             throw new NotImplementedException();
