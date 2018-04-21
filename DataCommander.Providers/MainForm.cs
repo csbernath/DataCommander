@@ -21,6 +21,7 @@ using Foundation.Configuration;
 using Foundation.Diagnostics;
 using Foundation.Linq;
 using Foundation.Log;
+using Foundation.Setup;
 using Foundation.Threading;
 using Foundation.Windows.Forms;
 
@@ -188,8 +189,7 @@ namespace DataCommander.Providers
 
                 try
                 {
-                    using (var webClient = new WebClient())
-                        remoteVersion = webClient.DownloadString("https://raw.githubusercontent.com/csbernath/DataCommander/master/DataCommander/Version.txt");
+                    remoteVersion = Installer.DownloadString("https://raw.githubusercontent.com/csbernath/DataCommander/master/DataCommander/Version.txt");
                 }
                 catch
                 {
