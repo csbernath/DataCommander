@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using Foundation;
@@ -17,6 +18,16 @@ namespace DataCommander
 
     public sealed class DownloadingNewVersionStarted : Event
     {
+    }
+
+    public sealed class DownloadProgressChanged : Event
+    {
+        public readonly DownloadProgressChangedEventArgs DownloadProgressChangedEventArgs;
+
+        public DownloadProgressChanged(DownloadProgressChangedEventArgs downloadProgressChangedEventArgs)
+        {
+            DownloadProgressChangedEventArgs = downloadProgressChangedEventArgs;
+        }
     }
 
     public sealed class NewVersionDownloaded : Event
@@ -56,7 +67,8 @@ namespace DataCommander
                     var guid = Guid.NewGuid();
                     var updaterDirectory = Path.Combine(Path.GetTempPath(), guid.ToString());
                     var zipFileName = Path.Combine(updaterDirectory, "Updater.zip");
-                    await DeploymentApplication.DownloadUpdater(address, updaterDirectory, zipFileName);
+                    await DeploymentApplication.DownloadUpdater(address, updaterDirectory, zipFileName,
+                        args => _eventPublisher(new DownloadProgressChanged(args)));
                     _eventPublisher(new NewVersionDownloaded());
                     DeploymentApplication.ExtractZip(zipFileName, updaterDirectory);
 

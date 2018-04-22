@@ -3,9 +3,6 @@ using Foundation.Diagnostics.Contracts;
 
 namespace Foundation
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class UniversalTime : IDateTimeProvider
     {
         private static volatile int _sharedTickCount;
@@ -42,20 +39,10 @@ namespace Foundation
             _incrementedDateTime = _sharedDateTime;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public static int TickCount => _sharedTickCount;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public static UniversalTime Default { get; } = new UniversalTime(increment: 16, adjustment: 60 * 1000);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public static int GetTickCount()
         {
             _sharedTickCount = Environment.TickCount;
@@ -77,14 +64,10 @@ namespace Foundation
                     {
                         var calculatedDateTime = _incrementedDateTime.AddMilliseconds(elapsed);
                         if (_sharedDateTime < calculatedDateTime)
-                        {
                             _sharedDateTime = calculatedDateTime;
-                        }
                     }
                     else
-                    {
                         _sharedDateTime = DateTime.UtcNow;
-                    }
 
                     _incrementedTickCount = _sharedTickCount;
                     _incrementedDateTime = _sharedDateTime;

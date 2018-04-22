@@ -16,6 +16,8 @@ namespace DataCommander
             _updaterForm.Log("Downloading new version...");
             Application.DoEvents();
         });
+
+        private void Handle(DownloadProgressChanged @event) => _updaterForm.Invoke(() => _updaterForm.Log($"{@event.DownloadProgressChangedEventArgs.ProgressPercentage}% complete."));
         private void Handle(NewVersionDownloaded @event) => _updaterForm.Invoke(() => _updaterForm.Log("New version downloaded."));
 
         private void Handle(CheckForUpdateCompleted @event) => _updaterForm.Invoke(() =>

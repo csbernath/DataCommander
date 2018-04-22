@@ -46,7 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Updater.cs" />
     <Compile Include="UpdaterForm.cs">
       <SubType>Form</SubType>
     </Compile>

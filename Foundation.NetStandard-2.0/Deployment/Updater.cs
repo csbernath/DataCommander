@@ -16,7 +16,7 @@ namespace Foundation.Deployment
             Directory.Move(updaterDirectory, applicationDirectory);
             Directory.Delete(backupDirectory);
 
-            DeploymentCommandRepository.Save(ApplicationName, new DeleteUpdater());
+            DeploymentCommandRepository.Save(ApplicationName, new DeleteUpdater {Directory = updaterDirectory});
 
             var processStartInfo = new ProcessStartInfo();
             processStartInfo.WorkingDirectory = applicationDirectory;

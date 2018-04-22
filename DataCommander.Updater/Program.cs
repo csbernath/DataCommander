@@ -12,13 +12,10 @@ namespace DataCommander.Updater
             try
             {
                 Debugger.Launch();
-                MessageBox.Show("Updating Data Commander...");
 
                 var applicationExeFileName = args[0];
-                var updater = new Updater();
-                updater.Update(applicationExeFileName);
-
-                MessageBox.Show("Data Commander updated and started.");
+                var updaterDirectory = Environment.CurrentDirectory;
+                Foundation.Deployment.Updater.Update(updaterDirectory, applicationExeFileName);
 
                 //Application.EnableVisualStyles();
                 //Application.SetCompatibleTextRenderingDefault(false);
