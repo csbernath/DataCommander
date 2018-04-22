@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace Foundation
 {
-    public static class DatContractJsonSerialization
+    public static class DataContractJsonSerialization
     {
         public static string Serialize<T>(T objectGraph)
         {

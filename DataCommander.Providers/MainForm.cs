@@ -18,10 +18,10 @@ using DataCommander.Providers.Query;
 using Foundation;
 using Foundation.Assertions;
 using Foundation.Configuration;
+using Foundation.Deployment;
 using Foundation.Diagnostics;
 using Foundation.Linq;
 using Foundation.Log;
-using Foundation.Setup;
 using Foundation.Threading;
 using Foundation.Windows.Forms;
 
@@ -178,42 +178,7 @@ namespace DataCommander.Providers
                 : Color.Red;
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            if (_first)
-            {
-                _first = false;
-
-                var localVersion = File.ReadAllText("Version.txt");
-                string remoteVersion = null;
-
-                try
-                {
-                    remoteVersion = Installer.DownloadString("https://raw.githubusercontent.com/csbernath/DataCommander/master/DataCommander/Version.txt");
-                }
-                catch
-                {
-                }
-
-                //if (remoteVersion != null && localVersion != remoteVersion)
-                _timer.Stop();
-                this.Invoke(() => Download(remoteVersion));
-            }
-
-            UpdateTotalMemory();
-        }
-
-        private void Download(string remoteVersion)
-        {
-            var text = $"New version {remoteVersion} is avaliable. Do you want to install it?";
-
-            if (MessageBox.Show(text, "Data Commander", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                var uri = new Uri("https://github.com/csbernath/DataCommander/releases/download/2018-04-13/DataCommander.7z");
-                Installer.Download(uri, "Setup.exe");
-                Close();
-            }
-        }
+        private void Timer_Tick(object sender, EventArgs e) => UpdateTotalMemory();
 
         /// <summary>
         /// Clean up any resources being used.

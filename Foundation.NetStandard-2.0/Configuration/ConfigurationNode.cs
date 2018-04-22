@@ -146,11 +146,6 @@ namespace Foundation.Configuration
             return clone;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="nodeName"></param>
-        /// <returns></returns>
         public ConfigurationNode CreateNode(string nodeName)
         {
             Assert.IsNotNull(nodeName);

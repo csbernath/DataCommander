@@ -9,9 +9,6 @@ using Foundation.Assertions;
 
 namespace Foundation.Configuration
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class ApplicationData
     {
         private string _fileName;
@@ -41,11 +38,6 @@ namespace Foundation.Configuration
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="versioned"></param>
-        /// <returns></returns>
         public static string GetApplicationDataFolderPath(bool versioned)
         {
             var sb = new StringBuilder();
@@ -55,7 +47,8 @@ namespace Foundation.Configuration
             string product;
 
             var assembly = Assembly.GetEntryAssembly();
-            var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyCompanyAttribute));
+            var companyAttribute =
+                (AssemblyCompanyAttribute) Attribute.GetCustomAttribute(assembly, typeof(AssemblyCompanyAttribute));
 
             if (companyAttribute != null)
             {
@@ -67,7 +60,8 @@ namespace Foundation.Configuration
             else
                 company = null;
 
-            var productAttribute = (AssemblyProductAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyProductAttribute));
+            var productAttribute =
+                (AssemblyProductAttribute) Attribute.GetCustomAttribute(assembly, typeof(AssemblyProductAttribute));
 
             if (productAttribute != null)
             {
@@ -103,10 +97,6 @@ namespace Foundation.Configuration
             return sb.ToString();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="xmlReader"></param>
         public void Load(XmlReader xmlReader)
         {
             var reader = new ConfigurationReader();
@@ -116,11 +106,6 @@ namespace Foundation.Configuration
                 RootNode = new ConfigurationNode(null);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="sectionName"></param>
         public void Load(string fileName, string sectionName)
         {
             _fileName = fileName;
@@ -136,11 +121,6 @@ namespace Foundation.Configuration
                 RootNode = new ConfigurationNode(null);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="xmlWriter"></param>
-        /// <param name="sectionName"></param>
         public void Save(XmlWriter xmlWriter, string sectionName)
         {
             Assert.IsNotNull(xmlWriter);
@@ -155,11 +135,6 @@ namespace Foundation.Configuration
             xmlWriter.WriteEndElement();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="sectionName"></param>
         public void Save(string fileName, string sectionName)
         {
             var directoryName = Path.GetDirectoryName(fileName);
@@ -177,9 +152,6 @@ namespace Foundation.Configuration
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Save()
         {
             var directoryName = Path.GetDirectoryName(_fileName);
@@ -190,11 +162,6 @@ namespace Foundation.Configuration
             Save(_fileName, _sectionName);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="nodeName"></param>
-        /// <returns></returns>
         public ConfigurationNode CreateNode(string nodeName)
         {
             return RootNode.CreateNode(nodeName);

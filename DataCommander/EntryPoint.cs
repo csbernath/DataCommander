@@ -23,19 +23,22 @@ namespace DataCommander
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 
-                var path = Path.GetTempPath();
                 using (var methodLog = LogFactory.Instance.GetCurrentMethodLog())
                 {
                     try
                     {
-                        var applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(false);
-                        var fileName = applicationDataFolderPath + Path.DirectorySeparatorChar + "ApplicationData.xml";
-                        methodLog.Write(LogLevel.Trace, "fileName: {0}", fileName);
-                        var sectionName = Settings.SectionName;
-                        var dataCommanderApplication = DataCommanderApplication.Instance;
-                        dataCommanderApplication.LoadApplicationData(fileName, sectionName);
-                        dataCommanderApplication.Run();
-                        dataCommanderApplication.SaveApplicationData();
+                        Updater.Update();
+                        if (!Updater.UpdateStarted)
+                        {
+                            var applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(false);
+                            var fileName = applicationDataFolderPath + Path.DirectorySeparatorChar + "ApplicationData.xml";
+                            methodLog.Write(LogLevel.Trace, "fileName: {0}", fileName);
+                            var sectionName = Settings.SectionName;
+                            var dataCommanderApplication = DataCommanderApplication.Instance;
+                            dataCommanderApplication.LoadApplicationData(fileName, sectionName);
+                            dataCommanderApplication.Run();
+                            dataCommanderApplication.SaveApplicationData();
+                        }
                     }
                     catch (Exception e)
                     {

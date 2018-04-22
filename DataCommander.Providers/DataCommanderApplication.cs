@@ -1,12 +1,17 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Reflection;
 using DataCommander.Providers.Connection;
+using Foundation;
 using Foundation.Configuration;
+using Foundation.Deployment;
 using Foundation.Diagnostics;
 using Foundation.Log;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using Application = System.Windows.Forms.Application;
 using Task = System.Threading.Tasks.Task;
 
@@ -18,12 +23,14 @@ namespace DataCommander.Providers
 
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
         private string _sectionName;
+        private bool _updaterStarted;
 
         #endregion
 
         private DataCommanderApplication()
         {
-            var fileName = Assembly.GetEntryAssembly().Location;
+            var entryAssembly = Assembly.GetEntryAssembly();
+            var fileName = entryAssembly.Location;
             var versionInfo = FileVersionInfo.GetVersionInfo(fileName);
             Name = versionInfo.ProductName;
 
@@ -66,14 +73,17 @@ namespace DataCommander.Providers
 
         public void Run()
         {
-            MainForm = new MainForm();
-
-            Task.Delay(1000).ContinueWith(task =>
+            if (!_updaterStarted)
             {
-                Log.Write(LogLevel.Trace, "{0}\r\n{1}", AppDomainMonitor.EnvironmentInfo, AppDomainMonitor.CurrentDomainState);
-            });
+                MainForm = new MainForm();
 
-            Application.Run(MainForm);
+                Task.Delay(1000).ContinueWith(task =>
+                {
+                    Log.Write(LogLevel.Trace, "{0}\r\n{1}", AppDomainMonitor.EnvironmentInfo, AppDomainMonitor.CurrentDomainState);
+                });
+
+                Application.Run(MainForm);
+            }
         }
 
         public void SaveApplicationData()
