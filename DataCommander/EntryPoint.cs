@@ -15,42 +15,54 @@ namespace DataCommander
         [STAThread]
         public static void Main()
         {
-            LogFactory.Read();
-            MethodProfiler.BeginMethod();
-
             try
             {
-                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-                Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
-
-                using (var methodLog = LogFactory.Instance.GetCurrentMethodLog())
+                var updateStarted = Update();
+                if (!updateStarted)
                 {
+                    LogFactory.Read();
+                    MethodProfiler.BeginMethod();
+
                     try
                     {
-                        Updater.Update();
-                        if (!Updater.UpdateStarted)
-                        {
-                            var applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(false);
-                            var fileName = applicationDataFolderPath + Path.DirectorySeparatorChar + "ApplicationData.xml";
-                            methodLog.Write(LogLevel.Trace, "fileName: {0}", fileName);
-                            var sectionName = Settings.SectionName;
-                            var dataCommanderApplication = DataCommanderApplication.Instance;
-                            dataCommanderApplication.LoadApplicationData(fileName, sectionName);
-                            dataCommanderApplication.Run();
-                            dataCommanderApplication.SaveApplicationData();
-                        }
+                        Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+                        Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+                        Run();
                     }
-                    catch (Exception e)
+                    finally
                     {
-                        MessageBox.Show(e.ToString(), "Fatal Application Error in Data Commander!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        LogFactory.Instance.Dispose();
+                        MethodProfiler.EndMethod();
+                        MethodProfiler.Close();
                     }
                 }
             }
-            finally
+            catch (Exception e)
             {
-                LogFactory.Instance.Dispose();
-                MethodProfiler.EndMethod();
-                MethodProfiler.Close();
+                MessageBox.Show(e.ToString(), "Fatal Application Error in Data Commander!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private static bool Update()
+        {
+            var updaterForm = new UpdaterForm();
+            updaterForm.WindowState = FormWindowState.Minimized;
+            Application.Run(updaterForm);
+            return updaterForm.Updater.UpdateStarted;
+        }
+
+        private static void Run()
+        {
+            using (var methodLog = LogFactory.Instance.GetCurrentMethodLog())
+            {
+                var applicationDataFolderPath = ApplicationData.GetApplicationDataFolderPath(false);
+                var fileName = applicationDataFolderPath + Path.DirectorySeparatorChar + "ApplicationData.xml";
+                methodLog.Write(LogLevel.Trace, "fileName: {0}", fileName);
+                var sectionName = Settings.SectionName;
+                var dataCommanderApplication = DataCommanderApplication.Instance;
+                dataCommanderApplication.LoadApplicationData(fileName, sectionName);
+                dataCommanderApplication.Run();
+                dataCommanderApplication.SaveApplicationData();
             }
         }
     }

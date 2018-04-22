@@ -273,7 +273,7 @@ Stopwatch.Frequency:    {Stopwatch.Frequency}";
             string location = null;
             try
             {
-                location = assembly.Location;
+                location = assembly.IsDynamic ? null : assembly.Location;
             }
             catch
             {

@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
-using System.Xml;
 
 namespace Foundation
 {
@@ -22,12 +21,10 @@ namespace Foundation
 
         public static T Deserialize<T>(string json)
         {
-            object objectGraph;
             var serializer = new DataContractJsonSerializer(typeof(T));
-            using (var textReader = new StringReader(json))
-            using (var xmlReader = new XmlTextReader(textReader))
-                objectGraph = serializer.ReadObject(xmlReader, true);
-
+            object objectGraph;
+            using (var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(json)))
+                objectGraph = serializer.ReadObject(memoryStream);
             return (T) objectGraph;
         }
     }

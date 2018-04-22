@@ -34,6 +34,7 @@ namespace DataCommander.Providers
 Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation.NetStandard-2.0/README.md"">Foundation (.NET Standard 2.0) Class Library</a>
 <br/>
 <br/>
+Version: {assembly.GetName().Version}
 Build date: {lastWriteTime.ToString("yyyy-MM-dd")}
 <br/>
 <br/>
