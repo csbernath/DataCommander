@@ -46,6 +46,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <NuGetPackageImportStamp>742b67de</NuGetPackageImportStamp>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>	
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\DataCommander\bin\Debug\</OutputPath>

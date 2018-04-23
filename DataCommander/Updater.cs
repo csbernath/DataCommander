@@ -42,13 +42,14 @@ namespace DataCommander
                     DeploymentApplication.ExtractZip(zipFileName, updaterDirectory);
 
                     var updaterExeFileName = Path.Combine(updaterDirectory, "DataCommander.Updater.exe");
-                    DeploymentApplication.StartUpdater(updaterExeFileName);
+                    var applicationExeFileName = Assembly.GetEntryAssembly().Location;
+                    DeploymentApplication.StartUpdater(updaterExeFileName, applicationExeFileName);
                     _updateStarted = true;
                 }
                 else
                 {
                     var now = UniversalTime.Default.UtcNow;
-                    var when = now.Date.AddDays(1);
+                    var when = now.AddDays(1);
                     DeploymentCommandRepository.Save(ApplicationName, new CheckForUpdates {When = when});
                 }
             }

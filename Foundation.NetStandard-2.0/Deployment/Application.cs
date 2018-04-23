@@ -56,11 +56,11 @@ namespace Foundation.Deployment
             File.Delete(zipFileName);
         }
 
-        public static void StartUpdater(string updaterExeFileName)
+        public static void StartUpdater(string updaterExeFileName, string applicationExeFileName)
         {
             var processStartInfo = new ProcessStartInfo();
             processStartInfo.FileName = updaterExeFileName;
-            processStartInfo.Arguments = $"{Quote(Environment.CurrentDirectory)}";
+            processStartInfo.Arguments = $"{Quote(applicationExeFileName)}";
             Process.Start(processStartInfo);
         }
 
