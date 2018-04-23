@@ -1,4 +1,4 @@
-﻿namespace DataCommander
+﻿namespace DataCommander.Update
 {
     partial class UpdaterForm
     {
@@ -33,21 +33,24 @@
             // 
             // richTextBox
             // 
-            this.richTextBox.Location = new System.Drawing.Point(13, 13);
+            this.richTextBox.Location = new System.Drawing.Point(10, 11);
+            this.richTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.richTextBox.Name = "richTextBox";
-            this.richTextBox.Size = new System.Drawing.Size(775, 181);
+            this.richTextBox.Size = new System.Drawing.Size(582, 148);
             this.richTextBox.TabIndex = 0;
             this.richTextBox.Text = "";
             // 
             // UpdaterForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 214);
+            this.ClientSize = new System.Drawing.Size(600, 174);
             this.Controls.Add(this.richTextBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "UpdaterForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "UpdaterForm";
+            this.Text = "Data Commander Automatic Update";
             this.ResumeLayout(false);
 
         }

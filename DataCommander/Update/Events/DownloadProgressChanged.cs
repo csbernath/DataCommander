@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace DataCommander
+namespace DataCommander.Update.Events
 {
     public sealed class DownloadProgressChanged : Event
     {

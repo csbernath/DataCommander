@@ -1,7 +1,8 @@
 ﻿using System.Windows.Forms;
+using DataCommander.Update.Events;
 using Foundation.Windows.Forms;
 
-namespace DataCommander
+namespace DataCommander.Update
 {
     internal sealed class EventHandler
     {
@@ -9,23 +10,22 @@ namespace DataCommander
         public EventHandler(UpdaterForm updaterForm) => _updaterForm = updaterForm;
         public void Handle(Event @event) => Handle((dynamic) @event);
         private void Handle(CheckForUpdatesStarted @event) => _updaterForm.Invoke(() => _updaterForm.Log("Checking for updates..."));
+
         private void Handle(DownloadingNewVersionStarted @event) => _updaterForm.Invoke(() =>
         {
             _updaterForm.WindowState = FormWindowState.Normal;
-            Application.DoEvents();
             _updaterForm.Log("Downloading new version...");
-            Application.DoEvents();
         });
 
-        private void Handle(DownloadProgressChanged @event) => _updaterForm.Invoke(() => _updaterForm.Log($"{@event.DownloadProgressChangedEventArgs.ProgressPercentage}% complete."));
+        private void Handle(DownloadProgressChanged @event) =>
+            _updaterForm.Invoke(() => _updaterForm.Log($"{@event.DownloadProgressChangedEventArgs.ProgressPercentage}% complete."));
+
         private void Handle(NewVersionDownloaded @event) => _updaterForm.Invoke(() => _updaterForm.Log("New version downloaded."));
 
         private void Handle(CheckForUpdateCompleted @event) => _updaterForm.Invoke(() =>
         {
             _updaterForm.Log("Checking for updates completed.");
-            Application.DoEvents();
             _updaterForm.Close();
-            Application.DoEvents();
         });
     }
 }

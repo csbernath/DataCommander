@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using Foundation.Deployment;
 
 namespace DataCommander.Updater
 {
@@ -15,7 +16,7 @@ namespace DataCommander.Updater
 
                 var applicationExeFileName = args[0];
                 var updaterDirectory = Environment.CurrentDirectory;
-                Foundation.Deployment.Updater.Update(updaterDirectory, applicationExeFileName);
+                DeploymentHelper.Update(updaterDirectory, applicationExeFileName);
 
                 //Application.EnableVisualStyles();
                 //Application.SetCompatibleTextRenderingDefault(false);

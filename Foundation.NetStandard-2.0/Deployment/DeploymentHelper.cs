@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace Foundation.Deployment
 {
-    public static class DeploymentApplication
+    public static class DeploymentHelper
     {
+        private const string ApplicationName = "DataCommander";
+
         public static async Task<Version> GetRemoteVersion(Uri address)
         {
             string text;
@@ -50,28 +52,47 @@ namespace Foundation.Deployment
             }
         }
 
-        public static void ExtractZip(string zipFileName, string updaterDirectory)
+        public static void ExtractZip(string sourceArchiveFileName, string destinationDirectoryName)
         {
-            ZipFile.ExtractToDirectory(zipFileName, updaterDirectory);
-            File.Delete(zipFileName);
+            ZipFile.ExtractToDirectory(sourceArchiveFileName, destinationDirectoryName);
+            File.Delete(sourceArchiveFileName);
         }
 
         public static void StartUpdater(string updaterExeFileName, string applicationExeFileName)
         {
             var processStartInfo = new ProcessStartInfo();
             processStartInfo.FileName = updaterExeFileName;
+            processStartInfo.WorkingDirectory = Path.GetDirectoryName(updaterExeFileName);
             processStartInfo.Arguments = $"{Quote(applicationExeFileName)}";
             Process.Start(processStartInfo);
         }
 
-        private static string Quote(string text)
+        public static void Update(string updaterDirectory, string applicationExeFileName)
         {
-            return $"\"{text}\"";
+            var applicationDirectory = Path.GetDirectoryName(applicationExeFileName);
+            var backupDirectory = $"{applicationDirectory}.Backup";
+
+            Directory.Move(applicationDirectory, backupDirectory);
+            Directory.Move(updaterDirectory, applicationDirectory);
+            Directory.Delete(backupDirectory);
+
+            DeploymentCommandRepository.Save(ApplicationName, new DeleteUpdater { Directory = updaterDirectory });
+
+            var processStartInfo = new ProcessStartInfo();
+            processStartInfo.WorkingDirectory = applicationDirectory;
+            processStartInfo.FileName = applicationExeFileName;
+            processStartInfo.Arguments = applicationDirectory;
+            Process.Start(processStartInfo);
         }
 
         public static void DeleteUpdater(string updaterDirectory)
         {
             Directory.Delete(updaterDirectory, true);
+        }
+
+        private static string Quote(string text)
+        {
+            return $"\"{text}\"";
         }
     }
 }

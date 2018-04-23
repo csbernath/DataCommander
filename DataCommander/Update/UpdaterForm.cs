@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using Foundation;
 
-namespace DataCommander
+namespace DataCommander.Update
 {
     public partial class UpdaterForm : Form
     {

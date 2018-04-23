@@ -2,10 +2,11 @@
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using DataCommander.Update.Events;
 using Foundation;
 using Foundation.Deployment;
 
-namespace DataCommander
+namespace DataCommander.Update
 {
     public sealed class Updater
     {
@@ -26,9 +27,9 @@ namespace DataCommander
             if (checkForUpdates.When <= UniversalTime.Default.UtcNow)
             {
                 var localVersion = Assembly.GetEntryAssembly().GetName().Version;
-                var remoteVersionUri = new Uri("https://raw.githubusercontent.com/csbernath/DataCommander/master/DataCommander/Version.txt");
+                var remoteVersionUri = new Uri("https://raw.githubusercontent.com/csbernath/DataCommander/master/Version.txt");
                 _eventPublisher(new CheckForUpdatesStarted());
-                var remoteVersion = await DeploymentApplication.GetRemoteVersion(remoteVersionUri);
+                var remoteVersion = await DeploymentHelper.GetRemoteVersion(remoteVersionUri);
                 if (localVersion < remoteVersion)
                 {
                     _eventPublisher(new DownloadingNewVersionStarted());
@@ -36,14 +37,14 @@ namespace DataCommander
                     var guid = Guid.NewGuid();
                     var updaterDirectory = Path.Combine(Path.GetTempPath(), guid.ToString());
                     var zipFileName = Path.Combine(updaterDirectory, "Updater.zip");
-                    await DeploymentApplication.DownloadUpdater(address, updaterDirectory, zipFileName,
+                    await DeploymentHelper.DownloadUpdater(address, updaterDirectory, zipFileName,
                         args => _eventPublisher(new DownloadProgressChanged(args)));
                     _eventPublisher(new NewVersionDownloaded());
-                    DeploymentApplication.ExtractZip(zipFileName, updaterDirectory);
+                    DeploymentHelper.ExtractZip(zipFileName, updaterDirectory);
 
                     var updaterExeFileName = Path.Combine(updaterDirectory, "DataCommander.Updater.exe");
                     var applicationExeFileName = Assembly.GetEntryAssembly().Location;
-                    DeploymentApplication.StartUpdater(updaterExeFileName, applicationExeFileName);
+                    DeploymentHelper.StartUpdater(updaterExeFileName, applicationExeFileName);
                     _updateStarted = true;
                 }
                 else
@@ -59,7 +60,7 @@ namespace DataCommander
 
         private Task Handle(DeleteUpdater deleteUpdater)
         {
-            DeploymentApplication.DeleteUpdater(deleteUpdater.Directory);
+            DeploymentHelper.DeleteUpdater(deleteUpdater.Directory);
             return Task.CompletedTask;
         }
     }

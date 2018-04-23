@@ -171,23 +171,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CheckForUpdateCompleted.cs" />
-    <Compile Include="CheckForUpdatesStarted.cs" />
-    <Compile Include="DownloadingNewVersionStarted.cs" />
-    <Compile Include="DownloadProgressChanged.cs" />
-    <Compile Include="Event.cs" />
-    <Compile Include="EventHandler.cs" />
-    <Compile Include="NewVersionDownloaded.cs" />
-    <Compile Include="Updater.cs" />
-    <Compile Include="UpdaterForm.cs">
+    <Compile Include="Update\Events\CheckForUpdateCompleted.cs" />
+    <Compile Include="Update\Events\CheckForUpdatesStarted.cs" />
+    <Compile Include="Update\Events\DownloadingNewVersionStarted.cs" />
+    <Compile Include="Update\Events\DownloadProgressChanged.cs" />
+    <Compile Include="Update\Events\Event.cs" />
+    <Compile Include="Update\EventHandler.cs" />
+    <Compile Include="Update\Events\NewVersionDownloaded.cs" />
+    <Compile Include="Update\Updater.cs" />
+    <Compile Include="Update\UpdaterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UpdaterForm.Designer.cs">
+    <Compile Include="Update\UpdaterForm.Designer.cs">
       <DependentUpon>UpdaterForm.cs</DependentUpon>
     </Compile>
-    <Content Include="Version.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
@@ -232,7 +229,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="UpdaterForm.resx">
+    <EmbeddedResource Include="Update\UpdaterForm.resx">
       <DependentUpon>UpdaterForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
