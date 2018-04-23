@@ -428,6 +428,10 @@ namespace {_query.Namespace}
                         csharpTypeName = nameof(DateTime);
                         break;
 
+                    case "tinyint":
+                        csharpTypeName = CSharpTypeName.Byte;
+                        break;
+
                     default:
                         throw new NotImplementedException();
                 }
