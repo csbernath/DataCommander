@@ -17,7 +17,8 @@ namespace DataCommander
         {
             try
             {
-                var updateStarted = Update();
+                //var updateStarted = Update();
+                var updateStarted = false;
                 if (!updateStarted)
                 {
                     LogFactory.Read();

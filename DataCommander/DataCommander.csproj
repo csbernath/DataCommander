@@ -171,7 +171,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckForUpdateCompleted.cs" />
+    <Compile Include="CheckForUpdatesStarted.cs" />
+    <Compile Include="DownloadingNewVersionStarted.cs" />
+    <Compile Include="DownloadProgressChanged.cs" />
+    <Compile Include="Event.cs" />
     <Compile Include="EventHandler.cs" />
+    <Compile Include="NewVersionDownloaded.cs" />
     <Compile Include="Updater.cs" />
     <Compile Include="UpdaterForm.cs">
       <SubType>Form</SubType>

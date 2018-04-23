@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using Foundation;
@@ -8,36 +7,6 @@ using Foundation.Deployment;
 
 namespace DataCommander
 {
-    public abstract class Event
-    {
-    }
-
-    public sealed class CheckForUpdatesStarted : Event
-    {
-    }
-
-    public sealed class DownloadingNewVersionStarted : Event
-    {
-    }
-
-    public sealed class DownloadProgressChanged : Event
-    {
-        public readonly DownloadProgressChangedEventArgs DownloadProgressChangedEventArgs;
-
-        public DownloadProgressChanged(DownloadProgressChangedEventArgs downloadProgressChangedEventArgs)
-        {
-            DownloadProgressChangedEventArgs = downloadProgressChangedEventArgs;
-        }
-    }
-
-    public sealed class NewVersionDownloaded : Event
-    {
-    }
-
-    public sealed class CheckForUpdateCompleted : Event
-    {
-    }
-
     public sealed class Updater
     {
         private const string ApplicationName = "DataCommander";
