@@ -10,6 +10,7 @@ using DataCommander.Providers.Connection;
 using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.SqlServerCe40.ObjectExplorer;
 using Foundation.Data;
+using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServerCe40
 {

@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using Foundation.Assertions;
+using Foundation.Data.SqlClient;
 
 namespace Foundation.DbQueryBuilding
 {
@@ -215,7 +216,8 @@ namespace {_query.Namespace}
             foreach (var result in _query.Results)
             {
                 var next = sequence.Next() == 0 ? null : "Next";
-                stringBuilder.Append($"var {ToLower(result.FieldName)} = (await dataReader.Read{next}ResultAsync(Read{result.Name}, request.CancellationToken)).AsReadOnly();\r\n");
+                stringBuilder.Append(
+                    $"var {ToLower(result.FieldName)} = (await dataReader.Read{next}ResultAsync(Read{result.Name}, request.CancellationToken)).AsReadOnly();\r\n");
             }
 
             stringBuilder.Append($"result = new {_query.Name}DbQueryResult({GetResultVariableNames()});");
@@ -247,7 +249,8 @@ namespace {_query.Namespace}
 {{
 ");
             foreach (var parameter in _query.Parameters)
-                stringBuilder.Append($"    public readonly {GetCSharpTypeName(parameter.CSharpDataType, parameter.DataType, parameter.IsNullable)} {ToUpper(parameter.Name)};\r\n");
+                stringBuilder.Append(
+                    $"    public readonly {GetCSharpTypeName(parameter.SqlDbType.Value, parameter.CSharpDataType, parameter.DataType, parameter.IsNullable)} {ToUpper(parameter.Name)};\r\n");
 
             stringBuilder.Append("\r\n");
             stringBuilder.Append(GetQueryClassConstructor().Indent(1));
@@ -267,7 +270,8 @@ namespace {_query.Namespace}
                 if (sequence.Next() > 0)
                     stringBuilder.Append(", ");
 
-                stringBuilder.Append($"{GetCSharpTypeName(parameter.CSharpDataType, parameter.DataType, parameter.IsNullable)} {parameter.Name}");
+                stringBuilder.Append(
+                    $"{GetCSharpTypeName(parameter.SqlDbType.Value, parameter.CSharpDataType, parameter.DataType, parameter.IsNullable)} {parameter.Name}");
             }
 
             stringBuilder.Append(")\r\n{\r\n");
@@ -339,7 +343,7 @@ namespace {_query.Namespace}
                     stringBuilder.AppendLine();
 
                 stringBuilder.Append("    public readonly ");
-                stringBuilder.Append(GetCSharpTypeName(field.DataType,field.IsNullable));
+                stringBuilder.Append(GetCSharpTypeName(field.DataType, field.IsNullable));
                 stringBuilder.Append(' ');
                 stringBuilder.Append(field.Name);
                 stringBuilder.Append(';');
@@ -411,31 +415,14 @@ namespace {_query.Namespace}
             return stringBuilder.ToString();
         }
 
-        private static string GetCSharpTypeName(string csharpDataType, string sqlDataType, bool isNullable)
+        private static string GetCSharpTypeName(SqlDbType sqlDbType, string csharpDataType, string sqlDataType, bool isNullable)
         {
             string csharpTypeName;
             if (csharpDataType != null)
                 csharpTypeName = csharpDataType;
             else
             {
-                switch (sqlDataType)
-                {
-                    case "int":
-                        csharpTypeName = CSharpTypeName.Int32;
-                        break;
-
-                    case "date":
-                        csharpTypeName = nameof(DateTime);
-                        break;
-
-                    case "tinyint":
-                        csharpTypeName = CSharpTypeName.Byte;
-                        break;
-
-                    default:
-                        throw new NotImplementedException();
-                }
-
+                csharpTypeName = SqlDataTypeArray.SqlDataTypes.First(i => i.SqlDbType == sqlDbType).CSharpTypeName;
                 if (isNullable)
                     csharpTypeName += "?";
             }

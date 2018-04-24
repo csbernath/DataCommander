@@ -80,7 +80,7 @@ namespace DataCommander.Providers.Query
                     token = new Token(_tokenIndex, startPosition, endPosition - 1, _lineIndex, TokenType.String, value);
                     break;
                 }
-                else if (char.IsDigit(c) || c == '-')
+                else if (char.IsDigit(c))
                 {
                     startPosition = _index;
                     value = ReadDigit();
@@ -184,7 +184,7 @@ namespace DataCommander.Providers.Query
             while (_index < _length)
             {
                 var c = _text[_index];
-                if (char.IsWhiteSpace(c) || c == ',' || c == ')')
+                if (!char.IsDigit(c))
                     break;
                 else
                     _index++;

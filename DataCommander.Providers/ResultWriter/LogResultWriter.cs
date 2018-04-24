@@ -11,6 +11,7 @@ using DataCommander.Providers.QueryConfiguration;
 using Foundation;
 using Foundation.Assertions;
 using Foundation.Data;
+using Foundation.Data.SqlClient;
 using Foundation.DbQueryBuilding;
 using Foundation.Diagnostics;
 using Foundation.Linq;
@@ -173,8 +174,14 @@ namespace DataCommander.Providers.ResultWriter
             _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
         }
 
-        private DbQueryParameter ToParameter(Parameter source) =>
-            new DbQueryParameter(source.Name, source.DataType, source.SqlDbType, source.CSharpDataType, source.IsNullable, source.CSharpValue);
+        private DbQueryParameter ToParameter(Parameter source)
+        {
+            var sqlDbType = source.SqlDbType != null
+                ? source.SqlDbType.Value
+                : SqlDataTypeArray.SqlDataTypes.First(i => i.SqlDataTypeName == source.DataType).SqlDbType;
+
+            return new DbQueryParameter(source.Name, source.DataType, sqlDbType, source.CSharpDataType, source.IsNullable, source.CSharpValue);
+        }
 
         private static DbQueryResult ToResult(string result, Result sql)
         {

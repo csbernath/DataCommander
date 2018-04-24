@@ -10,6 +10,7 @@ using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.Query;
 using Foundation.Configuration;
 using Foundation.Data;
+using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SQLite
 {

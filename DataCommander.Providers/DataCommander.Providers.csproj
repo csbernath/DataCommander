@@ -406,7 +406,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FieldNamespace\SingleFieldDataReader.cs" />
-    <Compile Include="SqlDataTypeName.cs" />
     <Compile Include="StandardOutput.cs">
       <SubType>Code</SubType>
     </Compile>

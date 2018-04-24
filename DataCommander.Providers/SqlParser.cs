@@ -6,6 +6,8 @@ using System.Linq;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.Query;
+using Foundation.Data.SqlClient;
+using Foundation.DbQueryBuilding;
 using Foundation.Linq;
 using Foundation.Log;
 
@@ -26,6 +28,7 @@ namespace DataCommander.Providers
             _text = text;
             Tokens = Tokenize(text);
             Tables = FindTables(Tokens, out var allTables);
+            FindParameters(Tokens);
             _allTables = allTables;
 
             foreach (var value in Tables.Values)
@@ -576,74 +579,59 @@ namespace DataCommander.Providers
             return value2;
         }
 
-        private void SetParameterValues(IProvider provider, IDataParameterCollection parameters, object[] values)
+        private sealed class StructuredInfo
         {
-            if (values.Length > parameters.Count)
-                throw new ArgumentException("Too many arguments");
+            public readonly string DataType;
+            public readonly string CSharpDataType;
+            public readonly string CSharpValue;
 
-            var j = 0;
-
-            for (var i = 0; i < parameters.Count; i++)
+            //"CSharpDataType": "ReadOnlyCollection<int>",
+            //"CSharpValue": "IntegerIdArray.Create(query.{parameterName})",
+            public StructuredInfo(string dataType, string cSharpDataType, string cSharpValue)
             {
-                var parameter = (IDataParameter) parameters[i];
-                var dataParameter = provider.GetDataParameter(parameter);
+                DataType = dataType;
+                CSharpDataType = cSharpDataType;
+                CSharpValue = cSharpValue;
+            }
+        }
 
-                if (j < values.Length)
-                {
-                    switch (parameter.Direction)
+        private void FindParameters(List<Token> tokens)
+        {
+            var structuredInfos = new[]
+            {
+                new StructuredInfo("TIMEDATABASE.IntegerIdArray", "ReadOnlyCollection<int>", "IntegerIdArray.Create(query.{parameterName})")
+            }.ToDictionary(i => i.DataType);
+
+            var declareTokens = tokens.Where(i => i.Type == TokenType.KeyWord && i.Value == "declare").ToList();
+            if (declareTokens.Count > 0)
+            {
+                var x = declareTokens
+                    .Where(i => i.Index + 2 < tokens.Count)
+                    .Select(declareToken =>
                     {
-                        case ParameterDirection.Input:
-                        case ParameterDirection.InputOutput:
-                            try
-                            {
-                                var value = GetParameterValue(dataParameter, values[j]);
-                                parameter.Value = value;
-                                j++;
-                            }
-                            catch (Exception e)
-                            {
-                                var message =
-                                    $"Invalid parameter value: {values[j]}\r\nIndex: {j}.\r\nMessage: {e.Message}";
-                                throw new ArgumentException(message, parameter.ParameterName, e);
-                            }
+                        var index = declareToken.Index;
+                        var name = tokens[index + 1].Value;
+                        name = name.Substring(1);
+                        var dataType = tokens[index + 2].Value;
+                        SqlDbType? sqlDbType = null;
+                        string csharpType = null;
+                        string csharpValue = null;
 
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-                else
-                {
-                    switch (parameter.Direction)
-                    {
-                        case ParameterDirection.Input:
-                        case ParameterDirection.InputOutput:
-                            parameter.Value = DBNull.Value;
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-
-                if (parameter.Direction != ParameterDirection.Input)
-                {
-                    var size = dataParameter.Size;
-                    if (size == 0)
-                        switch (parameter.DbType)
+                        if (structuredInfos.TryGetValue(dataType, out var structuredInfo))
                         {
-                            case DbType.AnsiString:
-                            case DbType.AnsiStringFixedLength:
-                            case DbType.String:
-                            case DbType.StringFixedLength:
-                                dataParameter.Size = 255;
-                                break;
-
-                            default:
-                                break;
+                            sqlDbType = SqlDbType.Structured;
+                            csharpType = structuredInfo.CSharpDataType;
+                            csharpValue = structuredInfo.CSharpValue;
                         }
-                }
+                        else
+                        {
+                            var sqlDataType = SqlDataTypeArray.SqlDataTypes.First(i => i.SqlDataTypeName == dataType);
+                            csharpType = sqlDataType.CSharpTypeName;
+                            sqlDbType = sqlDataType.SqlDbType;
+                        }
+
+                        return new DbQueryParameter(name, dataType, sqlDbType, csharpType, false, csharpValue);
+                    }).ToList();
             }
         }
 
