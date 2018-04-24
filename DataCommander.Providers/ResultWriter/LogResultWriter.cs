@@ -224,7 +224,10 @@ namespace DataCommander.Providers.ResultWriter
         //    query = new Query(queryName, parameters.AsReadOnly());
         //}
 
-        private static DbQueryResultField ToField(FoundationDbColumn column) => new DbQueryResultField(column.ColumnName, column.DataType, column.AllowDbNull == true);
+        private static DbQueryResultField ToField(FoundationDbColumn column)
+        {
+            return new DbQueryResultField(column.ColumnName, column.DataType, column.AllowDbNull == true);
+        }
 
         #endregion
     }
