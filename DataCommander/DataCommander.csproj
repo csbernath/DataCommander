@@ -19,7 +19,7 @@
     <DelaySign>false</DelaySign>
     <OutputType>WinExe</OutputType>
     <RootNamespace>DataCommander</RootNamespace>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
     <FileUpgradeFlags>
@@ -171,12 +171,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Update\Events\CheckForUpdateCompleted.cs" />
     <Compile Include="Update\Events\CheckForUpdatesStarted.cs" />
     <Compile Include="Update\Events\DownloadingNewVersionStarted.cs" />
     <Compile Include="Update\Events\DownloadProgressChanged.cs" />
     <Compile Include="Update\Events\Event.cs" />
     <Compile Include="Update\EventHandler.cs" />
+    <Compile Include="Update\Events\ExceptionOccured.cs" />
     <Compile Include="Update\Events\NewVersionDownloaded.cs" />
     <Compile Include="Update\Updater.cs" />
     <Compile Include="Update\UpdaterForm.cs">
@@ -237,7 +237,20 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>rd /S /Q cs
+rd /S /Q de
+rd /S /Q es
+rd /S /Q fr
+rd /S /Q it
+rd /S /Q ja
+rd /S /Q ko
+rd /S /Q pl
+rd /S /Q pt-BR
+rd /S /Q ru
+rd /S /Q tr
+rd /S /Q zh-Hans
+rd /S /Q zh-Hant
+del System.*.dll
+del System.*.pdb</PostBuildEvent>
   </PropertyGroup>
 </Project>

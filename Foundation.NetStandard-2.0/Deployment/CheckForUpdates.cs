@@ -7,5 +7,10 @@ namespace Foundation.Deployment
     public class CheckForUpdates : DeploymentCommand
     {
         [DataMember] public DateTime When;
+
+        public CheckForUpdates(DateTime @when)
+        {
+            When = when;
+        }
     }
 }

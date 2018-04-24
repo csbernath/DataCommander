@@ -9,7 +9,7 @@ namespace Foundation.Deployment
 {
     public static class DeploymentHelper
     {
-        private const string ApplicationName = "DataCommander";
+        private const string ApplicationName = "Data Commander";
 
         public static async Task<Version> GetRemoteVersion(Uri address)
         {
@@ -72,11 +72,26 @@ namespace Foundation.Deployment
             var applicationDirectory = Path.GetDirectoryName(applicationExeFileName);
             var backupDirectory = $"{applicationDirectory}.Backup";
 
-            Directory.Move(applicationDirectory, backupDirectory);
-            Directory.Move(updaterDirectory, applicationDirectory);
-            Directory.Delete(backupDirectory);
+            while (true)
+            {
+                try
+                {
+                    Directory.Move(applicationDirectory, backupDirectory);
+                    break;
+                }
+                catch (Exception e)
+                {
+                    System.Threading.Thread.Sleep(1000);
+                }
+            }
 
-            DeploymentCommandRepository.Save(ApplicationName, new DeleteUpdater { Directory = updaterDirectory });
+            var applicationName = Path.GetFileName(applicationDirectory);
+            var sourceDirectory = Path.Combine(updaterDirectory, applicationName);
+
+            Directory.Move(sourceDirectory, applicationDirectory);
+            Directory.Delete(backupDirectory, true);
+
+            DeploymentCommandRepository.Save(applicationName, new DeleteUpdater {Directory = updaterDirectory});
 
             var processStartInfo = new ProcessStartInfo();
             processStartInfo.WorkingDirectory = applicationDirectory;

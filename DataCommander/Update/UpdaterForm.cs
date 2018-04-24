@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Foundation;
+using Foundation.Windows.Forms;
 
 namespace DataCommander.Update
 {
@@ -15,19 +16,25 @@ namespace DataCommander.Update
 
         public Updater Updater => _updater;
 
-        protected override void OnShown(EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
-            base.OnShown(e);
+            base.OnLoad(e);
 
             var eventHandler = new EventHandler(this);
             _updater = new Updater(eventHandler.Handle);
-            _updater.Update();
+            _updater.Update().ContinueWith(task =>
+            {
+                if (task.IsFaulted)
+                    MessageBox.Show(task.Exception.ToString());
+
+                this.Invoke(Close);
+            });
         }
 
         public void Log(string message)
         {
-            richTextBox.AppendText($"[{LocalTime.Default.Now.ToString("HH:mm:ss.fff")}] {message}\r\n");
-            Application.DoEvents();
+            var time = LocalTime.Default.Now.ToString("HH:mm:ss.fff");
+            richTextBox.AppendText($"[{time}] {message}\r\n");
         }
     }
 }

@@ -17,7 +17,10 @@ namespace Foundation.Deployment
                 deploymentCommand = DataContractJsonSerialization.Deserialize<DeploymentCommand>(json);
             }
             else
-                deploymentCommand = new CheckForUpdates {When = UniversalTime.Default.UtcNow};
+            {
+                var now = UniversalTime.Default.UtcNow;
+                deploymentCommand = new CheckForUpdates(now);
+            }
 
             return deploymentCommand;
         }

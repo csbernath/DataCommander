@@ -35,6 +35,8 @@ Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Found
 <br/>
 <br/>
 Version: {assembly.GetName().Version}
+<br/>
+<br/>
 Build date: {lastWriteTime.ToString("yyyy-MM-dd")}
 <br/>
 <br/>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Windows.Forms;
 using Foundation.Deployment;
 
@@ -12,8 +11,6 @@ namespace DataCommander.Updater
         {
             try
             {
-                Debugger.Launch();
-
                 var applicationExeFileName = args[0];
                 var updaterDirectory = Environment.CurrentDirectory;
                 DeploymentHelper.Update(updaterDirectory, applicationExeFileName);

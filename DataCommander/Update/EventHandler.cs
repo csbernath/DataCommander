@@ -14,7 +14,7 @@ namespace DataCommander.Update
         private void Handle(DownloadingNewVersionStarted @event) => _updaterForm.Invoke(() =>
         {
             _updaterForm.WindowState = FormWindowState.Normal;
-            _updaterForm.Log("Downloading new version...");
+            _updaterForm.Log($"Downloading new version {@event.Version}...");
         });
 
         private void Handle(DownloadProgressChanged @event) =>
@@ -22,10 +22,6 @@ namespace DataCommander.Update
 
         private void Handle(NewVersionDownloaded @event) => _updaterForm.Invoke(() => _updaterForm.Log("New version downloaded."));
 
-        private void Handle(CheckForUpdateCompleted @event) => _updaterForm.Invoke(() =>
-        {
-            _updaterForm.Log("Checking for updates completed.");
-            _updaterForm.Close();
-        });
+        private void Handle(ExceptionOccured @event) => _updaterForm.Invoke(() => _updaterForm.Log(@event.Exception.ToString()));
     }
 }
