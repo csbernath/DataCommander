@@ -138,7 +138,7 @@ namespace {_query.Namespace}
                     stringBuilder.Append($"    parameters.AddStructured(\"{parameter.Name}\", \"{parameter.DataType}\", {parameter.CSharpValue});\r\n");
                 else
                 {
-                    var method = parameter.DataType == "date" ? "AddDate" : "Add";
+                    var method = parameter.SqlDbType == SqlDbType.Date ? "AddDate" : "Add";
                     stringBuilder.Append($"    parameters.{method}(\"{parameter.Name}\", query.{ToUpper(parameter.Name)});\r\n");
                 }
             }
@@ -250,7 +250,7 @@ namespace {_query.Namespace}
 ");
             foreach (var parameter in _query.Parameters)
                 stringBuilder.Append(
-                    $"    public readonly {GetCSharpTypeName(parameter.SqlDbType, parameter.CSharpDataType, parameter.DataType, parameter.IsNullable)} {ToUpper(parameter.Name)};\r\n");
+                    $"    public readonly {GetCSharpTypeName(parameter.SqlDbType, parameter.CSharpDataType, parameter.IsNullable)} {ToUpper(parameter.Name)};\r\n");
 
             stringBuilder.Append("\r\n");
             stringBuilder.Append(GetQueryClassConstructor().Indent(1));
@@ -271,7 +271,7 @@ namespace {_query.Namespace}
                     stringBuilder.Append(", ");
 
                 stringBuilder.Append(
-                    $"{GetCSharpTypeName(parameter.SqlDbType, parameter.CSharpDataType, parameter.DataType, parameter.IsNullable)} {parameter.Name}");
+                    $"{GetCSharpTypeName(parameter.SqlDbType, parameter.CSharpDataType, parameter.IsNullable)} {parameter.Name}");
             }
 
             stringBuilder.Append(")\r\n{\r\n");
@@ -415,10 +415,10 @@ namespace {_query.Namespace}
             return stringBuilder.ToString();
         }
 
-        private static string GetCSharpTypeName(SqlDbType sqlDbType, string csharpDataType, string sqlDataType, bool isNullable)
+        private static string GetCSharpTypeName(SqlDbType sqlDbType, string csharpDataType, bool isNullable)
         {
             string csharpTypeName;
-            if (csharpDataType != null)
+            if (sqlDbType == SqlDbType.Structured)
                 csharpTypeName = csharpDataType;
             else
             {
