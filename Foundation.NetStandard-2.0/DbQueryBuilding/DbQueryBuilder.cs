@@ -250,7 +250,7 @@ namespace {_query.Namespace}
 ");
             foreach (var parameter in _query.Parameters)
                 stringBuilder.Append(
-                    $"    public readonly {GetCSharpTypeName(parameter.SqlDbType.Value, parameter.CSharpDataType, parameter.DataType, parameter.IsNullable)} {ToUpper(parameter.Name)};\r\n");
+                    $"    public readonly {GetCSharpTypeName(parameter.SqlDbType, parameter.CSharpDataType, parameter.DataType, parameter.IsNullable)} {ToUpper(parameter.Name)};\r\n");
 
             stringBuilder.Append("\r\n");
             stringBuilder.Append(GetQueryClassConstructor().Indent(1));
@@ -271,7 +271,7 @@ namespace {_query.Namespace}
                     stringBuilder.Append(", ");
 
                 stringBuilder.Append(
-                    $"{GetCSharpTypeName(parameter.SqlDbType.Value, parameter.CSharpDataType, parameter.DataType, parameter.IsNullable)} {parameter.Name}");
+                    $"{GetCSharpTypeName(parameter.SqlDbType, parameter.CSharpDataType, parameter.DataType, parameter.IsNullable)} {parameter.Name}");
             }
 
             stringBuilder.Append(")\r\n{\r\n");

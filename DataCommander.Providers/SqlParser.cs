@@ -613,7 +613,7 @@ namespace DataCommander.Providers
                         var name = tokens[index + 1].Value;
                         name = name.Substring(1);
                         var dataType = tokens[index + 2].Value;
-                        SqlDbType? sqlDbType = null;
+                        SqlDbType sqlDbType;
                         string csharpType = null;
                         string csharpValue = null;
 
