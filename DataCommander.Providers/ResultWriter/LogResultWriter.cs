@@ -43,6 +43,7 @@ namespace DataCommander.Providers.ResultWriter
         private long _firstRowReadBeginTimestamp;
 
         private QueryConfiguration.Query _query;
+        private ReadOnlyCollection<DbQueryParameter> _parameters;
         private string _commandText;
         private List<Result> _results;
 
@@ -73,6 +74,7 @@ namespace DataCommander.Providers.ResultWriter
             _query = asyncDataAdapterCommand.Query;
             if (_query != null)
             {
+                _parameters = asyncDataAdapterCommand.Parameters;
                 _commandText = asyncDataAdapterCommand.CommandText;
                 _results = new List<Result>();
             }
@@ -99,9 +101,8 @@ namespace DataCommander.Providers.ResultWriter
             if (_query != null)
             {
                 var directory = Path.GetTempPath();
-                var parameters = _query.Parameters.Select(ToParameter).ToReadOnlyCollection();
                 var results = _query.Results.Zip(_results, ToResult).ToReadOnlyCollection();
-                var query = new DbQuery(directory, _query.Name, _query.Using, _query.Namespace, _commandText, 0, parameters, results);
+                var query = new DbQuery(directory, _query.Name, _query.Using, _query.Namespace, _commandText, 0, _parameters, results);
 
                 var queryBuilder = new DbQueryBuilder(query);
                 var csharpSourceCode = queryBuilder.Build();
@@ -113,6 +114,8 @@ namespace DataCommander.Providers.ResultWriter
                 File.WriteAllText(path, csharpSourceCode, Encoding.UTF8);
 
                 _query = null;
+                _parameters = null;
+                _commandText = null;
                 _results = null;
             }
         }
@@ -172,15 +175,6 @@ namespace DataCommander.Providers.ResultWriter
             var duration = Stopwatch.GetTimestamp() - _beginTimestamp;
             var message = $"Query completed {_commandCount} command(s) in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
             _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
-        }
-
-        private DbQueryParameter ToParameter(Parameter source)
-        {
-            var sqlDbType = source.SqlDbType != null
-                ? source.SqlDbType.Value
-                : SqlDataTypeArray.SqlDataTypes.First(i => i.SqlDataTypeName == source.DataType).SqlDbType;
-
-            return new DbQueryParameter(source.Name, source.DataType, sqlDbType, source.CSharpDataType, source.IsNullable, source.CSharpValue);
         }
 
         private static DbQueryResult ToResult(string result, Result sql)

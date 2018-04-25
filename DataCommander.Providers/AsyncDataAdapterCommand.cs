@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using System.Collections.ObjectModel;
+using System.Data;
+using Foundation.DbQueryBuilding;
 
 namespace DataCommander.Providers
 {
@@ -8,14 +10,17 @@ namespace DataCommander.Providers
         public readonly string Text;
         public readonly IDbCommand Command;
         public readonly QueryConfiguration.Query Query;
+        public readonly ReadOnlyCollection<DbQueryParameter> Parameters;
         public readonly string CommandText;
 
-        public AsyncDataAdapterCommand(int lineIndex, string text, IDbCommand command, QueryConfiguration.Query query, string commandText)
+        public AsyncDataAdapterCommand(int lineIndex, string text, IDbCommand command, QueryConfiguration.Query query,
+            ReadOnlyCollection<DbQueryParameter> parameters, string commandText)
         {
             LineIndex = lineIndex;
             Text = text;
             Command = command;
             Query = query;
+            Parameters = parameters;
             CommandText = commandText;
         }
     }

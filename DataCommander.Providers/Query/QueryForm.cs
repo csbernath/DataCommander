@@ -25,6 +25,8 @@ using Foundation;
 using Foundation.Assertions;
 using Foundation.Configuration;
 using Foundation.Data;
+using Foundation.Data.SqlClient;
+using Foundation.DbQueryBuilding;
 using Foundation.Diagnostics;
 using Foundation.Linq;
 using Foundation.Log;
@@ -32,6 +34,7 @@ using Foundation.Text;
 using Foundation.Threading;
 using Foundation.Windows.Forms;
 using Newtonsoft.Json;
+using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
 using Parameter = DataCommander.Providers.QueryConfiguration.Parameter;
 using Timer = System.Windows.Forms.Timer;
 
@@ -1542,16 +1545,15 @@ namespace DataCommander.Providers.Query
                 var statements = Provider.GetStatements(query);
                 Log.Write(LogLevel.Trace, "Query:\r\n{0}", query);
                 IEnumerable<AsyncDataAdapterCommand> commands;
-                QueryConfiguration.Query queryConfiguration = null;
 
                 if (statements.Count == 1)
                 {
-                    GetQueryConfiguration(statements[0].CommandText, out queryConfiguration, out var queryCommandTextParameters, out var queryCommandText);
+                    GetQueryConfiguration(statements[0].CommandText, out var queryConfiguration, out var parameters, out var queryCommandText);
                     IDbCommand command;
                     if (queryConfiguration != null)
                     {
                         command = Connection.CreateCommand();
-                        command.CommandText = $"{queryCommandTextParameters}\r\n{queryCommandText}";
+                        command.CommandText = statements[0].CommandText;
                         command.CommandTimeout = _commandTimeout;
                     }
                     else
@@ -1561,17 +1563,15 @@ namespace DataCommander.Providers.Query
                     }
 
                     command.Transaction = _transaction;
-                    commands = new AsyncDataAdapterCommand(0, statements[0].CommandText, command, queryConfiguration, queryCommandText).ItemToArray();
+                    commands =
+                        new AsyncDataAdapterCommand(0, statements[0].CommandText, command, queryConfiguration, parameters, queryCommandText).ItemToArray();
                 }
                 else
                     commands =
                         from statement in statements
-                        select new AsyncDataAdapterCommand(
-                            statement.LineIndex,
-                            null,
-                            Connection.Connection.CreateCommand(new CreateCommandRequest(statement.CommandText, null, CommandType.Text, _commandTimeout, _transaction)),
-                            null,
-                            null);
+                        select new AsyncDataAdapterCommand(statement.LineIndex, null,
+                            Connection.Connection.CreateCommand(new CreateCommandRequest(statement.CommandText, null, CommandType.Text, _commandTimeout,
+                                _transaction)), null, null, null);
 
                 int maxRecords;
                 IResultWriter resultWriter = null;
@@ -1671,35 +1671,65 @@ namespace DataCommander.Providers.Query
             }
         }
 
-        private static void GetQueryConfiguration(string commandText, out QueryConfiguration.Query query, out string queryCommandTextParameters, out string queryCommandText)
+        private static void GetQueryConfiguration(string commandText, out QueryConfiguration.Query query, out ReadOnlyCollection<DbQueryParameter> parameters,
+            out string queryCommandText)
         {
-            if (commandText.StartsWith("/* Query"))
+            if (commandText.StartsWith("/* Query Configuration"))
             {
-                var index = commandText.IndexOf("*/");
-                var json = commandText.Substring(10, index - 10);
+                var commentEnd = commandText.IndexOf("*/");
+                var jsonStart = commandText.IndexOf("{");
+                var jsonEnd = commandText.LastIndexOf('}', commentEnd);
+                var json = commandText.Substring(jsonStart, jsonEnd - jsonStart + 1);
                 query = JsonConvert.DeserializeObject<QueryConfiguration.Query>(json);
-                queryCommandTextParameters = ToCommandText(query.Parameters);
-                queryCommandText = commandText.Substring(index + 4);
 
-                //var startIndex = commandText.IndexOf("-- Parameters") + 15;
-                //var endIndex = commandText.IndexOf("-- EndParameters", startIndex);
-                //var parametersText = commandText.Substring(startIndex, endIndex - startIndex - 2);
-                //var tokens = SqlParser.Tokenize(parametersText);
+                var parametersStart = commentEnd + 4;
+                var parametersEnd = commandText.IndexOf("-- CommandText", parametersStart) - 3;
+                var parametersCommandText = commandText.Substring(parametersStart, parametersEnd - parametersStart + 1);
+
+                var tokens = SqlParser.Tokenize(parametersCommandText);
+                parameters = ToDbQueryParameters(query.Parameters, tokens);
+                queryCommandText = commandText.Substring(parametersEnd + 19);
             }
             else
             {
                 query = null;
-                queryCommandTextParameters = null;
+                parameters = null;
                 queryCommandText = null;
             }
         }
 
-        private static string ToCommandText(ReadOnlyCollection<Parameter> parameters)
+        private static ReadOnlyCollection<DbQueryParameter> ToDbQueryParameters(ReadOnlyCollection<Parameter> parameters, List<Token> tokens)
         {
-            var stringBuilder = new StringBuilder();
-            foreach (var parameter in parameters)
-                stringBuilder.Append($"declare @{parameter.Name} {parameter.DataType}{parameter.Value}\r\n");
-            return stringBuilder.ToString();
+            var parametersByName = parameters.ToDictionary(i => i.Name);
+            var declareTokens = tokens.Where(i => i.Type == TokenType.KeyWord && i.Value == "declare").ToList();
+            return declareTokens
+                .Where(i => i.Index + 2 < tokens.Count)
+                .Select(declareToken =>
+                {
+                    var index = declareToken.Index;
+                    var name = tokens[index + 1].Value;
+                    name = name.Substring(1);
+                    var dataType = tokens[index + 2].Value;
+                    SqlDbType sqlDbType;
+                    string csharpType = null;
+                    string csharpValue = null;
+
+                    if (parametersByName.TryGetValue(name, out var parameter))
+                    {
+                        sqlDbType = SqlDbType.Structured;
+                        csharpType = parameter.DataType;
+                        csharpValue = parameter.Value;
+                    }
+                    else
+                    {
+                        var sqlDataType = SqlDataTypeArray.SqlDataTypes.First(i => i.SqlDataTypeName == dataType);
+                        csharpType = sqlDataType.CSharpTypeName;
+                        sqlDbType = sqlDataType.SqlDbType;
+                    }
+
+                    return new DbQueryParameter(name, dataType, sqlDbType, csharpType, false, csharpValue);
+                })
+                .ToReadOnlyCollection();
         }
 
         private void ShowDataTableText(DataTable dataTable)
@@ -3707,9 +3737,8 @@ namespace DataCommander.Providers.Query
                 const int maxRecords = int.MaxValue;
                 _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
                 IResultWriter resultWriter = _dataSetResultWriter;
-                _dataAdapter = new AsyncDataAdapter(Provider,
-                    new AsyncDataAdapterCommand(0, null, _command, null, null).ItemToArray(),
-                    maxRecords, _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
+                _dataAdapter = new AsyncDataAdapter(Provider, new AsyncDataAdapterCommand(0, null, _command, null, null, null).ItemToArray(), maxRecords,
+                    _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
                 _dataAdapter.Start();
             }
             catch (Exception ex)
@@ -3732,7 +3761,7 @@ namespace DataCommander.Providers.Query
             var sqlCeResultWriter = new SqlCeResultWriter(_textBoxWriter, tableName);
             IAsyncDataAdapter asyncDataAdatper = new AsyncDataAdapter(
                 Provider,
-                new AsyncDataAdapterCommand(0, null, _command, null, null).ItemToArray(),
+                new AsyncDataAdapterCommand(0, null, _command, null, null, null).ItemToArray(),
                 maxRecords, _rowBlockSize, sqlCeResultWriter, EndFillInvoker, WriteEndInvoker);
             asyncDataAdatper.Start();
         }
@@ -3893,9 +3922,8 @@ namespace DataCommander.Providers.Query
                 _errorCount = 0;
                 _stopwatch.Start();
                 _timer.Start();
-                _dataAdapter = new AsyncDataAdapter(Provider,
-                    new AsyncDataAdapterCommand(0, null, _command, null, null).ItemToArray(),
-                    maxRecords, rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
+                _dataAdapter = new AsyncDataAdapter(Provider, new AsyncDataAdapterCommand(0, null, _command, null, null, null).ItemToArray(), maxRecords,
+                    rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
                 _dataAdapter.Start();
             }
             else

@@ -6,8 +6,6 @@ using System.Linq;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.Query;
-using Foundation.Data.SqlClient;
-using Foundation.DbQueryBuilding;
 using Foundation.Linq;
 using Foundation.Log;
 
@@ -28,7 +26,6 @@ namespace DataCommander.Providers
             _text = text;
             Tokens = Tokenize(text);
             Tables = FindTables(Tokens, out var allTables);
-            FindParameters(Tokens);
             _allTables = allTables;
 
             foreach (var value in Tables.Values)
@@ -44,8 +41,7 @@ namespace DataCommander.Providers
 
         #region Public Methods
 
-        public IDbCommand CreateCommand(IProvider provider, ConnectionBase connection, CommandType commandType,
-            int commandTimeout)
+        public IDbCommand CreateCommand(IProvider provider, ConnectionBase connection, CommandType commandType, int commandTimeout)
         {
             var command = connection.CreateCommand();
             command.CommandType = commandType;
@@ -592,46 +588,6 @@ namespace DataCommander.Providers
                 DataType = dataType;
                 CSharpDataType = cSharpDataType;
                 CSharpValue = cSharpValue;
-            }
-        }
-
-        private void FindParameters(List<Token> tokens)
-        {
-            var structuredInfos = new[]
-            {
-                new StructuredInfo("TIMEDATABASE.IntegerIdArray", "ReadOnlyCollection<int>", "IntegerIdArray.Create(query.{parameterName})")
-            }.ToDictionary(i => i.DataType);
-
-            var declareTokens = tokens.Where(i => i.Type == TokenType.KeyWord && i.Value == "declare").ToList();
-            if (declareTokens.Count > 0)
-            {
-                var x = declareTokens
-                    .Where(i => i.Index + 2 < tokens.Count)
-                    .Select(declareToken =>
-                    {
-                        var index = declareToken.Index;
-                        var name = tokens[index + 1].Value;
-                        name = name.Substring(1);
-                        var dataType = tokens[index + 2].Value;
-                        SqlDbType sqlDbType;
-                        string csharpType = null;
-                        string csharpValue = null;
-
-                        if (structuredInfos.TryGetValue(dataType, out var structuredInfo))
-                        {
-                            sqlDbType = SqlDbType.Structured;
-                            csharpType = structuredInfo.CSharpDataType;
-                            csharpValue = structuredInfo.CSharpValue;
-                        }
-                        else
-                        {
-                            var sqlDataType = SqlDataTypeArray.SqlDataTypes.First(i => i.SqlDataTypeName == dataType);
-                            csharpType = sqlDataType.CSharpTypeName;
-                            sqlDbType = sqlDataType.SqlDbType;
-                        }
-
-                        return new DbQueryParameter(name, dataType, sqlDbType, csharpType, false, csharpValue);
-                    }).ToList();
             }
         }
 
