@@ -34,8 +34,6 @@ using Foundation.Text;
 using Foundation.Threading;
 using Foundation.Windows.Forms;
 using Newtonsoft.Json;
-using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
-using Parameter = DataCommander.Providers.QueryConfiguration.Parameter;
 using Timer = System.Windows.Forms.Timer;
 
 namespace DataCommander.Providers.Query
@@ -1687,7 +1685,7 @@ namespace DataCommander.Providers.Query
                 var parametersCommandText = commandText.Substring(parametersStart, parametersEnd - parametersStart + 1);
 
                 var tokens = SqlParser.Tokenize(parametersCommandText);
-                parameters = ToDbQueryParameters(query.Parameters, tokens);
+                parameters = ToDbQueryParameters(tokens);
                 queryCommandText = commandText.Substring(parametersEnd + 19);
             }
             else
@@ -1698,9 +1696,8 @@ namespace DataCommander.Providers.Query
             }
         }
 
-        private static ReadOnlyCollection<DbQueryParameter> ToDbQueryParameters(ReadOnlyCollection<Parameter> parameters, List<Token> tokens)
+        private static ReadOnlyCollection<DbQueryParameter> ToDbQueryParameters(List<Token> tokens)
         {
-            var parametersByName = parameters.ToDictionary(i => i.Name);
             var declareTokens = tokens.Where(i => i.Type == TokenType.KeyWord && i.Value == "declare").ToList();
             return declareTokens
                 .Where(i => i.Index + 2 < tokens.Count)
@@ -1711,23 +1708,18 @@ namespace DataCommander.Providers.Query
                     name = name.Substring(1);
                     var dataType = tokens[index + 2].Value;
                     SqlDbType sqlDbType;
-                    string csharpType = null;
                     string csharpValue = null;
 
-                    if (parametersByName.TryGetValue(name, out var parameter))
-                    {
-                        sqlDbType = SqlDbType.Structured;
-                        csharpType = parameter.DataType;
-                        csharpValue = parameter.Value;
-                    }
+                    var sqlDataType = SqlDataTypeArray.SqlDataTypes.FirstOrDefault(i => i.SqlDataTypeName == dataType);
+                    if (sqlDataType != null)
+                        sqlDbType = sqlDataType.SqlDbType;
                     else
                     {
-                        var sqlDataType = SqlDataTypeArray.SqlDataTypes.First(i => i.SqlDataTypeName == dataType);
-                        csharpType = sqlDataType.CSharpTypeName;
-                        sqlDbType = sqlDataType.SqlDbType;
+                        sqlDbType = SqlDbType.Structured;
+                        csharpValue = $"query.{name}.Select(i => i.ToSqlDataRecord()).ToReadOnlyCollection()";
                     }
 
-                    return new DbQueryParameter(name, dataType, sqlDbType, csharpType, false, csharpValue);
+                    return new DbQueryParameter(name, dataType, sqlDbType, false, csharpValue);
                 })
                 .ToReadOnlyCollection();
         }

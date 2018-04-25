@@ -11,12 +11,10 @@ using DataCommander.Providers.QueryConfiguration;
 using Foundation;
 using Foundation.Assertions;
 using Foundation.Data;
-using Foundation.Data.SqlClient;
 using Foundation.DbQueryBuilding;
 using Foundation.Diagnostics;
 using Foundation.Linq;
 using Foundation.Log;
-using Parameter = DataCommander.Providers.QueryConfiguration.Parameter;
 
 namespace DataCommander.Providers.ResultWriter
 {

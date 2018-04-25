@@ -26,6 +26,7 @@ namespace Foundation.DbQueryBuilding
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 {_query.Using}
@@ -135,7 +136,8 @@ namespace {_query.Namespace}
             foreach (var parameter in _query.Parameters)
             {
                 if (parameter.SqlDbType == SqlDbType.Structured)
-                    stringBuilder.Append($"    parameters.AddStructured(\"{parameter.Name}\", \"{parameter.DataType}\", {parameter.CSharpValue});\r\n");
+                    stringBuilder.Append(
+                        $"    parameters.AddStructured(\"{parameter.Name}\", \"{parameter.DataType}\", query.{ToUpper(parameter.Name)}.Select(i => i.ToSqlDataRecord()).ToReadOnlyCollection());\r\n");
                 else
                 {
                     var method = parameter.SqlDbType == SqlDbType.Date ? "AddDate" : "Add";
@@ -197,7 +199,7 @@ namespace {_query.Namespace}
             stringBuilder.Append($@"private async Task<{_query.Name}DbQueryResult> ExecuteReaderAsync(ExecuteReaderRequest request)
 {{
     {_query.Name}DbQueryResult result = null;
-    var connection = (DbConnection) _connection;
+    var connection = (DbConnection)_connection;
     var executor = connection.CreateCommandAsyncExecutor();
     await executor.ExecuteReaderAsync(request, async dataReader =>
     {{
@@ -250,7 +252,7 @@ namespace {_query.Namespace}
 ");
             foreach (var parameter in _query.Parameters)
                 stringBuilder.Append(
-                    $"    public readonly {GetCSharpTypeName(parameter.SqlDbType, parameter.CSharpDataType, parameter.IsNullable)} {ToUpper(parameter.Name)};\r\n");
+                    $"    public readonly {GetCSharpTypeName(parameter.SqlDbType,parameter.DataType, parameter.IsNullable)} {ToUpper(parameter.Name)};\r\n");
 
             stringBuilder.Append("\r\n");
             stringBuilder.Append(GetQueryClassConstructor().Indent(1));
@@ -271,7 +273,7 @@ namespace {_query.Namespace}
                     stringBuilder.Append(", ");
 
                 stringBuilder.Append(
-                    $"{GetCSharpTypeName(parameter.SqlDbType, parameter.CSharpDataType, parameter.IsNullable)} {parameter.Name}");
+                    $"{GetCSharpTypeName(parameter.SqlDbType, parameter.DataType, parameter.IsNullable)} {parameter.Name}");
             }
 
             stringBuilder.Append(")\r\n{\r\n");
@@ -415,11 +417,14 @@ namespace {_query.Namespace}
             return stringBuilder.ToString();
         }
 
-        private static string GetCSharpTypeName(SqlDbType sqlDbType, string csharpDataType, bool isNullable)
+        private static string GetCSharpTypeName(SqlDbType sqlDbType, string dataType, bool isNullable)
         {
             string csharpTypeName;
             if (sqlDbType == SqlDbType.Structured)
-                csharpTypeName = csharpDataType;
+            {
+                var userDefinedTableType = dataType.Split('.')[1];
+                csharpTypeName = $"ReadOnlyCollection<{userDefinedTableType}>";
+            }
             else
             {
                 csharpTypeName = SqlDataTypeArray.SqlDataTypes.First(i => i.SqlDbType == sqlDbType).CSharpTypeName;

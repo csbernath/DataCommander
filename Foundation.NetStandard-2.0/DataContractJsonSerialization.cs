@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
@@ -26,6 +27,22 @@ namespace Foundation
             using (var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(json)))
                 objectGraph = serializer.ReadObject(memoryStream);
             return (T) objectGraph;
+        }
+    }
+
+    public static class DataContractSerialization
+    {
+        public static string Serialize<T>(T objectGraph)
+        {
+            string xml;
+            var serializer = new DataContractSerializer(typeof(T));
+            using (var memoryStream = new MemoryStream())
+            {
+                serializer.WriteObject(memoryStream, objectGraph);
+                xml = Encoding.UTF8.GetString(memoryStream.ToArray());
+            }
+
+            return xml;
         }
     }
 }
