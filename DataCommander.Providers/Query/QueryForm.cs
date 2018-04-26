@@ -1670,7 +1670,7 @@ namespace DataCommander.Providers.Query
             }
         }
 
-        private static void GetQueryConfiguration(string commandText, out QueryConfiguration.Query query, out ReadOnlyCollection<DbQueryParameter> parameters,
+        private static void GetQueryConfiguration(string commandText, out QueryConfiguration.Query query, out ReadOnlyCollection<DbRequestParameter> parameters,
             out string queryCommandText)
         {
             query = null;
@@ -1698,7 +1698,7 @@ namespace DataCommander.Providers.Query
             }
         }
 
-        private static ReadOnlyCollection<DbQueryParameter> ToDbQueryParameters(List<Token> tokens)
+        private static ReadOnlyCollection<DbRequestParameter> ToDbQueryParameters(List<Token> tokens)
         {
             var declareTokens = tokens.Where(i => i.Type == TokenType.KeyWord && i.Value == "declare").ToList();
             return declareTokens
@@ -1721,7 +1721,7 @@ namespace DataCommander.Providers.Query
                         csharpValue = $"query.{name}.Select(i => i.ToSqlDataRecord()).ToReadOnlyCollection()";
                     }
 
-                    return new DbQueryParameter(name, dataType, sqlDbType, false, csharpValue);
+                    return new DbRequestParameter(name, dataType, sqlDbType, false, csharpValue);
                 })
                 .ToReadOnlyCollection();
         }

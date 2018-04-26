@@ -42,7 +42,7 @@ namespace DataCommander.Providers.ResultWriter
 
         private string _fileName;
         private QueryConfiguration.Query _query;
-        private ReadOnlyCollection<DbQueryParameter> _parameters;
+        private ReadOnlyCollection<DbRequestParameter> _parameters;
         private string _commandText;
         private List<Result> _results;
 
@@ -102,9 +102,9 @@ namespace DataCommander.Providers.ResultWriter
             {
                 var directory = _fileName != null ? Path.GetDirectoryName(_fileName) : Path.GetTempPath();
                 var results = _query.Results.EmptyIfNull().Zip(_results, ToResult).ToReadOnlyCollection();
-                var query = new DbQuery(directory, _query.Name, _query.Using, _query.Namespace, _commandText, 0, _parameters, results);
+                var query = new DbRequest(directory, _query.Name, _query.Using, _query.Namespace, _commandText, 0, _parameters, results);
 
-                var queryBuilder = new DbQueryBuilder(query);
+                var queryBuilder = new DbRequestBuilder(query);
                 var csharpSourceCode = queryBuilder.Build();
 
                 var path = Path.Combine(query.Directory, $"{query.Name}.generated.cs");

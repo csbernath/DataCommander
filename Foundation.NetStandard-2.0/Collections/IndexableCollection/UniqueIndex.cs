@@ -6,40 +6,14 @@ using Foundation.Assertions;
 
 namespace Foundation.Collections.IndexableCollection
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    /// <typeparam name="T"></typeparam>
     public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, T>
     {
         private Func<T, GetKeyResponse<TKey>> _getKey;
         private IDictionary<TKey, T> _dictionary;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="getKey"></param>
-        /// <param name="dictionary"></param>
-        public UniqueIndex(
-            string name,
-            Func<T, GetKeyResponse<TKey>> getKey,
-            IDictionary<TKey, T> dictionary)
-        {
-            Initialize(name, getKey, dictionary);
-        }
+        public UniqueIndex(string name,Func<T, GetKeyResponse<TKey>> getKey,IDictionary<TKey, T> dictionary) => Initialize(name, getKey, dictionary);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="getKey"></param>
-        /// <param name="sortOrder"></param>
-        public UniqueIndex(
-            string name,
-            Func<T, GetKeyResponse<TKey>> getKey,
-            SortOrder sortOrder)
+        public UniqueIndex(string name, Func<T, GetKeyResponse<TKey>> getKey, SortOrder sortOrder)
         {
             IDictionary<TKey, T> dictionary;
             switch (sortOrder)
@@ -64,33 +38,16 @@ namespace Foundation.Collections.IndexableCollection
             Initialize(name, getKey, dictionary);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public string Name { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
         public T this[TKey key]
         {
             get => _dictionary[key];
-
             set => throw new NotSupportedException();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
         [Pure]
-        public bool ContainsKey(TKey key)
-        {
-            return _dictionary.ContainsKey(key);
-        }
+        public bool ContainsKey(TKey key) => _dictionary.ContainsKey(key);
 
         #region ICollectionIndex<TKey,T> Members
 
@@ -212,9 +169,9 @@ namespace Foundation.Collections.IndexableCollection
             return succeeded;
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable<T> Members
+        #region IEnumerable<T> Members
 
         /// <summary>
         /// 
@@ -225,9 +182,9 @@ namespace Foundation.Collections.IndexableCollection
             return _dictionary.Values.GetEnumerator();
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable Members
+        #region IEnumerable Members
 
         /// <summary>
         /// 
@@ -238,9 +195,9 @@ namespace Foundation.Collections.IndexableCollection
             return _dictionary.Values.GetEnumerator();
         }
 
-#endregion
+        #endregion
 
-#region IDictionary<TKey,T> Members
+        #region IDictionary<TKey,T> Members
 
         /// <summary>
         /// 
@@ -272,9 +229,9 @@ namespace Foundation.Collections.IndexableCollection
         /// </summary>
         public ICollection<T> Values => _dictionary.Values;
 
-#endregion
+        #endregion
 
-#region ICollection<KeyValuePair<TKey,T>> Members
+        #region ICollection<KeyValuePair<TKey,T>> Members
 
         /// <summary>
         /// 
@@ -320,7 +277,7 @@ namespace Foundation.Collections.IndexableCollection
             throw new NotSupportedException();
         }
 
-#endregion
+        #endregion
 
         private void Initialize(string name, Func<T, GetKeyResponse<TKey>> getKey, IDictionary<TKey, T> dictionary)
         {

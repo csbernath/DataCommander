@@ -2,7 +2,7 @@
 
 namespace Foundation.DbQueryBuilding
 {
-    public class DbQuery
+    public class DbRequest
     {
         public readonly string Directory;
         public readonly string Name;
@@ -10,10 +10,10 @@ namespace Foundation.DbQueryBuilding
         public readonly string Namespace;
         public readonly string CommandText;
         public readonly int? CommandTimeout;
-        public readonly ReadOnlyCollection<DbQueryParameter> Parameters;
+        public readonly ReadOnlyCollection<DbRequestParameter> Parameters;
         public readonly ReadOnlyCollection<DbQueryResult> Results;
 
-        public DbQuery(string directory, string name, string @using, string @namespace, string commandText, int? commandTimeout, ReadOnlyCollection<DbQueryParameter> parameters,
+        public DbRequest(string directory, string name, string @using, string @namespace, string commandText, int? commandTimeout, ReadOnlyCollection<DbRequestParameter> parameters,
             ReadOnlyCollection<DbQueryResult> results)
         {
             Using = @using;
