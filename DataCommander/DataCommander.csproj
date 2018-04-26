@@ -171,18 +171,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Update\Events\CheckForUpdatesStarted.cs" />
-    <Compile Include="Update\Events\DownloadingNewVersionStarted.cs" />
-    <Compile Include="Update\Events\DownloadProgressChanged.cs" />
-    <Compile Include="Update\Events\Event.cs" />
-    <Compile Include="Update\EventHandler.cs" />
-    <Compile Include="Update\Events\ExceptionOccured.cs" />
-    <Compile Include="Update\Events\NewVersionDownloaded.cs" />
-    <Compile Include="Update\Updater.cs" />
-    <Compile Include="Update\UpdaterForm.cs">
+    <Compile Include="Updater\EventHandler.cs" />
+    <Compile Include="Updater\UpdaterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Update\UpdaterForm.Designer.cs">
+    <Compile Include="Updater\UpdaterForm.Designer.cs">
       <DependentUpon>UpdaterForm.cs</DependentUpon>
     </Compile>
     <None Include="App.config">
@@ -229,7 +222,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Update\UpdaterForm.resx">
+    <EmbeddedResource Include="Updater\UpdaterForm.resx">
       <DependentUpon>UpdaterForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

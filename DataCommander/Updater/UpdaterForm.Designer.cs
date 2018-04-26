@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Update
+﻿namespace DataCommander.Updater
 {
     partial class UpdaterForm
     {

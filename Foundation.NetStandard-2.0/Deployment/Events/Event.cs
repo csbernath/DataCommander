@@ -1,4 +1,4 @@
-﻿namespace DataCommander.Update.Events
+﻿namespace Foundation.Deployment.Events
 {
     public abstract class Event
     {

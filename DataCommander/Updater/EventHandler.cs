@@ -1,8 +1,8 @@
 ﻿using System.Windows.Forms;
-using DataCommander.Update.Events;
+using Foundation.Deployment.Events;
 using Foundation.Windows.Forms;
 
-namespace DataCommander.Update
+namespace DataCommander.Updater
 {
     internal sealed class EventHandler
     {
@@ -21,7 +21,5 @@ namespace DataCommander.Update
             _updaterForm.Invoke(() => _updaterForm.Log($"{@event.DownloadProgressChangedEventArgs.ProgressPercentage}% complete."));
 
         private void Handle(NewVersionDownloaded @event) => _updaterForm.Invoke(() => _updaterForm.Log("New version downloaded."));
-
-        private void Handle(ExceptionOccured @event) => _updaterForm.Invoke(() => _updaterForm.Log(@event.Exception.ToString()));
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Foundation.Deployment
+namespace Foundation.Deployment.Commands
 {
     [DataContract]
     public class DeleteUpdater : DeploymentCommand

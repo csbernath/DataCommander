@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataCommander.Update.Events
+namespace Foundation.Deployment.Events
 {
     public sealed class DownloadingNewVersionStarted : Event
     {

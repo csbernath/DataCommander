@@ -3,25 +3,27 @@ using System.Windows.Forms;
 using Foundation;
 using Foundation.Windows.Forms;
 
-namespace DataCommander.Update
+namespace DataCommander.Updater
 {
     public partial class UpdaterForm : Form
     {
-        private Updater _updater;
+        private Foundation.Deployment.ApplicationStartup _updater;
 
         public UpdaterForm()
         {
             InitializeComponent();
         }
 
-        public Updater Updater => _updater;
+        public Foundation.Deployment.ApplicationStartup Updater => _updater;
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
+            var remoteVersionUri = new Uri("https://raw.githubusercontent.com/csbernath/DataCommander/master/Version.txt");
+            var address = "https://github.com/csbernath/DataCommander/releases/download/{0}/DataCommander.Updater.zip";
             var eventHandler = new EventHandler(this);
-            _updater = new Updater(eventHandler.Handle);
+            _updater = new Foundation.Deployment.ApplicationStartup(remoteVersionUri, address, eventHandler.Handle);
             _updater.Update().ContinueWith(task =>
             {
                 if (task.IsFaulted)

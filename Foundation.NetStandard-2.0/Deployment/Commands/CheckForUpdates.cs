@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Foundation.Deployment
+namespace Foundation.Deployment.Commands
 {
     [DataContract]
     public class CheckForUpdates : DeploymentCommand

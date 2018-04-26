@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using DataCommander.Providers;
-using DataCommander.Update;
+using DataCommander.Updater;
 using Foundation.Configuration;
 using Foundation.Diagnostics.MethodProfiler;
 using Foundation.Log;
