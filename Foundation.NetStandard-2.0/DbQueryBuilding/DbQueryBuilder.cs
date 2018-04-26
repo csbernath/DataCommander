@@ -36,10 +36,15 @@ namespace {_query.Namespace}
 ");
 
             stringBuilder.Append(GetQueryClass().Indent(1));
-            stringBuilder.Append("\r\n\r\n");
-            stringBuilder.Append(GetQueryResultClass().Indent(1));
-            stringBuilder.Append("\r\n\r\n");
-            stringBuilder.Append(GetRecordClasses().Indent(1));
+
+            if (_query.Results.Count > 0)
+            {
+                stringBuilder.Append("\r\n\r\n");
+                stringBuilder.Append(GetQueryResultClass().Indent(1));
+                stringBuilder.Append("\r\n\r\n");
+                stringBuilder.Append(GetRecordClasses().Indent(1));
+            }
+
             stringBuilder.Append(GetHandlerClass().Indent(1).Replace("\"\"", $"\"{_query.CommandText}\""));
             stringBuilder.Append("\r\n}");
 
@@ -51,6 +56,10 @@ namespace {_query.Namespace}
             var stringBuilder = new StringBuilder();
             stringBuilder.Append($"\r\n\r\npublic sealed class {_query.Name}DbQueryHandler\r\n{{\r\n");
             stringBuilder.Append("    private const string CommandText = @\"\";\r\n");
+
+            var commandTimeoutString = _query.CommandTimeout != null ? _query.CommandTimeout.Value.ToString() : "null";
+            stringBuilder.Append($"    private static int? CommandTimeout = {commandTimeoutString};");
+
             stringBuilder.Append("    private readonly IDbConnection _connection;\r\n");
             stringBuilder.Append("    private readonly IDbTransaction _transaction;\r\n\r\n");
             stringBuilder.Append($"    public {_query.Name}DbQueryHandler(IDbConnection connection, IDbTransaction transaction)\r\n");
@@ -59,9 +68,9 @@ namespace {_query.Namespace}
             stringBuilder.Append("        _connection = connection;\r\n");
             stringBuilder.Append("        _transaction = transaction;\r\n");
             stringBuilder.Append("    }\r\n\r\n");
-            stringBuilder.Append(GetHandleQueryMethod().Indent(1));
+            stringBuilder.Append(GetHandleMethod().Indent(1));
             stringBuilder.Append("\r\n\r\n");
-            stringBuilder.Append(GetHandleQueryAsyncMethod().Indent(1));
+            stringBuilder.Append(GetHandleAsyncMethod().Indent(1));
             stringBuilder.Append("\r\n\r\n");
             stringBuilder.Append(GetToExecuteReaderRequestMethod().Indent(1));
             stringBuilder.Append("\r\n\r\n");
@@ -89,7 +98,7 @@ namespace {_query.Namespace}
         private static string ToUpper(string camelCase) => char.ToUpper(camelCase[0]) + camelCase.Substring(1);
         private static string ToLower(string pascalCase) => char.ToLower(pascalCase[0]) + pascalCase.Substring(1);
 
-        private string GetHandleQueryMethod()
+        private string GetHandleMethod()
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append($@"public {_query.Name}DbQueryResult Handle({_query.Name}DbQuery query)
@@ -101,7 +110,7 @@ namespace {_query.Namespace}
             return stringBuilder.ToString();
         }
 
-        private string GetHandleQueryAsyncMethod()
+        private string GetHandleAsyncMethod()
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append($@"public Task<{_query.Name}DbQueryResult> HandleAsync({_query.Name}DbQuery query, CancellationToken cancellationToken)
@@ -119,8 +128,7 @@ namespace {_query.Namespace}
             stringBuilder.Append($@"private ExecuteReaderRequest ToExecuteReaderRequest({_query.Name}DbQuery query, CancellationToken cancellationToken)
 {{
     var parameters = ToParameters(query);
-    const int commandTimeout = 0;
-    var createCommandRequest = new CreateCommandRequest(CommandText, parameters, CommandType.Text, commandTimeout, _transaction);
+    var createCommandRequest = new CreateCommandRequest(CommandText, parameters, CommandType.Text, CommandTimeout, _transaction);
     return new ExecuteReaderRequest(createCommandRequest, CommandBehavior.Default, cancellationToken);
 }}");
             return stringBuilder.ToString();

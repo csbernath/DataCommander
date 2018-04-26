@@ -8,10 +8,10 @@ namespace Foundation.Data
         public readonly string CommandText;
         public readonly ReadOnlyCollection<object> Parameters;
         public readonly CommandType CommandType;
-        public readonly int CommandTimeout;
+        public readonly int? CommandTimeout;
         public readonly IDbTransaction Transaction;
 
-        public CreateCommandRequest(string commandText, ReadOnlyCollection<object> parameters, CommandType commandType, int commandTimeout, IDbTransaction transaction)
+        public CreateCommandRequest(string commandText, ReadOnlyCollection<object> parameters, CommandType commandType, int? commandTimeout, IDbTransaction transaction)
         {
             CommandText = commandText;
             Parameters = parameters;
@@ -21,7 +21,7 @@ namespace Foundation.Data
         }
 
         public CreateCommandRequest(string commandText, ReadOnlyCollection<object> parameters)
-            : this(commandText, parameters, CommandType.Text, 0, null)
+            : this(commandText, parameters, CommandType.Text, null, null)
         {
         }
 

@@ -164,7 +164,8 @@ namespace DataCommander.Providers.Query
             NumberFormat = new NumberFormatInfo {NumberDecimalSeparator = "."};
         }
 
-        public QueryForm(MainForm mainForm, int index, IProvider provider, string connectionString, ConnectionBase connection, StatusStrip parentStatusBar, ColorTheme colorTheme)
+        public QueryForm(MainForm mainForm, int index, IProvider provider, string connectionString, ConnectionBase connection, StatusStrip parentStatusBar,
+            ColorTheme colorTheme)
         {
             GarbageMonitor.Default.Add("QueryForm", this);
 
@@ -1561,13 +1562,13 @@ namespace DataCommander.Providers.Query
                     }
 
                     command.Transaction = _transaction;
-                    commands =
-                        new AsyncDataAdapterCommand(0, statements[0].CommandText, command, queryConfiguration, parameters, queryCommandText).ItemToArray();
+                    commands = new AsyncDataAdapterCommand(_fileName, 0, statements[0].CommandText, command, queryConfiguration, parameters, queryCommandText)
+                        .ItemToArray();
                 }
                 else
                     commands =
                         from statement in statements
-                        select new AsyncDataAdapterCommand(statement.LineIndex, null,
+                        select new AsyncDataAdapterCommand(null, statement.LineIndex, null,
                             Connection.Connection.CreateCommand(new CreateCommandRequest(statement.CommandText, null, CommandType.Text, _commandTimeout,
                                 _transaction)), null, null, null);
 
@@ -1672,27 +1673,28 @@ namespace DataCommander.Providers.Query
         private static void GetQueryConfiguration(string commandText, out QueryConfiguration.Query query, out ReadOnlyCollection<DbQueryParameter> parameters,
             out string queryCommandText)
         {
+            query = null;
+            parameters = null;
+            queryCommandText = null;
+
             if (commandText.StartsWith("/* Query Configuration"))
             {
                 var commentEnd = commandText.IndexOf("*/");
-                var jsonStart = commandText.IndexOf("{");
-                var jsonEnd = commandText.LastIndexOf('}', commentEnd);
-                var json = commandText.Substring(jsonStart, jsonEnd - jsonStart + 1);
-                query = JsonConvert.DeserializeObject<QueryConfiguration.Query>(json);
+                if (commentEnd > 0)
+                {
+                    var jsonStart = commandText.IndexOf("{");
+                    var jsonEnd = commandText.LastIndexOf('}', commentEnd);
+                    var json = commandText.Substring(jsonStart, jsonEnd - jsonStart + 1);
+                    query = JsonConvert.DeserializeObject<QueryConfiguration.Query>(json);
 
-                var parametersStart = commentEnd + 4;
-                var parametersEnd = commandText.IndexOf("-- CommandText", parametersStart) - 3;
-                var parametersCommandText = commandText.Substring(parametersStart, parametersEnd - parametersStart + 1);
+                    var parametersStart = commentEnd + 4;
+                    var parametersEnd = commandText.IndexOf("-- CommandText", parametersStart) - 3;
+                    var parametersCommandText = commandText.Substring(parametersStart, parametersEnd - parametersStart + 1);
 
-                var tokens = SqlParser.Tokenize(parametersCommandText);
-                parameters = ToDbQueryParameters(tokens);
-                queryCommandText = commandText.Substring(parametersEnd + 19);
-            }
-            else
-            {
-                query = null;
-                parameters = null;
-                queryCommandText = null;
+                    var tokens = SqlParser.Tokenize(parametersCommandText);
+                    parameters = ToDbQueryParameters(tokens);
+                    queryCommandText = commandText.Substring(parametersEnd + 19);
+                }
             }
         }
 
@@ -2093,7 +2095,8 @@ namespace DataCommander.Providers.Query
                 {
                     if (Connection.State == ConnectionState.Closed)
                     {
-                        AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, "Connection is closed. Opening connection..."));
+                        AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null,
+                            "Connection is closed. Opening connection..."));
 
                         var csb = new SqlConnectionStringBuilder(_connectionString);
                         csb.InitialCatalog = _database;
@@ -3303,7 +3306,8 @@ namespace DataCommander.Providers.Query
                                 {
                                     AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, "Opening connection..."));
                                     await Connection.OpenAsync(CancellationToken.None);
-                                    AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, "Connection opened successfully."));
+                                    AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null,
+                                        "Connection opened successfully."));
                                 }
                                 else
                                     throw;
@@ -3729,7 +3733,7 @@ namespace DataCommander.Providers.Query
                 const int maxRecords = int.MaxValue;
                 _dataSetResultWriter = new DataSetResultWriter(AddInfoMessage, _showSchemaTable);
                 IResultWriter resultWriter = _dataSetResultWriter;
-                _dataAdapter = new AsyncDataAdapter(Provider, new AsyncDataAdapterCommand(0, null, _command, null, null, null).ItemToArray(), maxRecords,
+                _dataAdapter = new AsyncDataAdapter(Provider, new AsyncDataAdapterCommand(null, 0, null, _command, null, null, null).ItemToArray(), maxRecords,
                     _rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
                 _dataAdapter.Start();
             }
@@ -3753,7 +3757,7 @@ namespace DataCommander.Providers.Query
             var sqlCeResultWriter = new SqlCeResultWriter(_textBoxWriter, tableName);
             IAsyncDataAdapter asyncDataAdatper = new AsyncDataAdapter(
                 Provider,
-                new AsyncDataAdapterCommand(0, null, _command, null, null, null).ItemToArray(),
+                new AsyncDataAdapterCommand(null, 0, null, _command, null, null, null).ItemToArray(),
                 maxRecords, _rowBlockSize, sqlCeResultWriter, EndFillInvoker, WriteEndInvoker);
             asyncDataAdatper.Start();
         }
@@ -3914,7 +3918,7 @@ namespace DataCommander.Providers.Query
                 _errorCount = 0;
                 _stopwatch.Start();
                 _timer.Start();
-                _dataAdapter = new AsyncDataAdapter(Provider, new AsyncDataAdapterCommand(0, null, _command, null, null, null).ItemToArray(), maxRecords,
+                _dataAdapter = new AsyncDataAdapter(Provider, new AsyncDataAdapterCommand(null, 0, null, _command, null, null, null).ItemToArray(), maxRecords,
                     rowBlockSize, resultWriter, EndFillInvoker, WriteEndInvoker);
                 _dataAdapter.Start();
             }

@@ -242,7 +242,10 @@ namespace Foundation.Data
         {
             command.CommandType = request.CommandType;
             command.CommandText = request.CommandText;
-            command.CommandTimeout = request.CommandTimeout;
+
+            if (request.CommandTimeout != null)
+                command.CommandTimeout = request.CommandTimeout.Value;
+
             command.Transaction = request.Transaction;
 
             if (request.Parameters != null)

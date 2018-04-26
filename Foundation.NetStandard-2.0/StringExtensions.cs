@@ -122,8 +122,11 @@ namespace Foundation
                     if (sequence.Next() > 0)
                         stringBuyBuilder.AppendLine();
 
-                    stringBuyBuilder.Append(indentString);
-                    stringBuyBuilder.Append(line);
+                    if (line.Length > 0)
+                    {
+                        stringBuyBuilder.Append(indentString);
+                        stringBuyBuilder.Append(line);
+                    }
                 }
             }
 

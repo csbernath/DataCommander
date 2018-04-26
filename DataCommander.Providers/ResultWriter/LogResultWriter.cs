@@ -40,6 +40,7 @@ namespace DataCommander.Providers.ResultWriter
         private long _writeTableBeginTimestamp;
         private long _firstRowReadBeginTimestamp;
 
+        private string _fileName;
         private QueryConfiguration.Query _query;
         private ReadOnlyCollection<DbQueryParameter> _parameters;
         private string _commandText;
@@ -72,6 +73,7 @@ namespace DataCommander.Providers.ResultWriter
             _query = asyncDataAdapterCommand.Query;
             if (_query != null)
             {
+                _fileName = asyncDataAdapterCommand.FileName;
                 _parameters = asyncDataAdapterCommand.Parameters;
                 _commandText = asyncDataAdapterCommand.CommandText;
                 _results = new List<Result>();
@@ -98,17 +100,14 @@ namespace DataCommander.Providers.ResultWriter
 
             if (_query != null)
             {
-                var directory = Path.GetTempPath();
-                var results = _query.Results.Zip(_results, ToResult).ToReadOnlyCollection();
+                var directory = _fileName != null ? Path.GetDirectoryName(_fileName) : Path.GetTempPath();
+                var results = _query.Results.EmptyIfNull().Zip(_results, ToResult).ToReadOnlyCollection();
                 var query = new DbQuery(directory, _query.Name, _query.Using, _query.Namespace, _commandText, 0, _parameters, results);
 
                 var queryBuilder = new DbQueryBuilder(query);
                 var csharpSourceCode = queryBuilder.Build();
 
-                var path = Path.Combine(query.Directory, $"{query.Name}.sql");
-                File.WriteAllText(path, query.CommandText, Encoding.UTF8);
-
-                path = Path.Combine(query.Directory, $"{query.Name}.generated.cs");
+                var path = Path.Combine(query.Directory, $"{query.Name}.generated.cs");
                 File.WriteAllText(path, csharpSourceCode, Encoding.UTF8);
 
                 _query = null;

@@ -6,6 +6,7 @@ namespace DataCommander.Providers
 {
     internal sealed class AsyncDataAdapterCommand
     {
+        public readonly string FileName;
         public readonly int LineIndex;
         public readonly string Text;
         public readonly IDbCommand Command;
@@ -13,7 +14,7 @@ namespace DataCommander.Providers
         public readonly ReadOnlyCollection<DbQueryParameter> Parameters;
         public readonly string CommandText;
 
-        public AsyncDataAdapterCommand(int lineIndex, string text, IDbCommand command, QueryConfiguration.Query query,
+        public AsyncDataAdapterCommand(string fileName, int lineIndex, string text, IDbCommand command, QueryConfiguration.Query query,
             ReadOnlyCollection<DbQueryParameter> parameters, string commandText)
         {
             LineIndex = lineIndex;
@@ -22,6 +23,7 @@ namespace DataCommander.Providers
             Query = query;
             Parameters = parameters;
             CommandText = commandText;
+            FileName = fileName;
         }
     }
 }

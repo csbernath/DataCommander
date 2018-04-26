@@ -9,11 +9,11 @@ namespace Foundation.DbQueryBuilding
         public readonly string Using;
         public readonly string Namespace;
         public readonly string CommandText;
-        public readonly int CommandTimeout;
+        public readonly int? CommandTimeout;
         public readonly ReadOnlyCollection<DbQueryParameter> Parameters;
         public readonly ReadOnlyCollection<DbQueryResult> Results;
 
-        public DbQuery(string directory, string name, string @using, string @namespace, string commandText, int commandTimeout, ReadOnlyCollection<DbQueryParameter> parameters,
+        public DbQuery(string directory, string name, string @using, string @namespace, string commandText, int? commandTimeout, ReadOnlyCollection<DbQueryParameter> parameters,
             ReadOnlyCollection<DbQueryResult> results)
         {
             Using = @using;
