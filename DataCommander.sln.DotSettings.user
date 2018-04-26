@@ -4,5 +4,5 @@
   &lt;Assembly Path="I:\Repositories\GitHub\DataCommander\packages\Microsoft.SqlServer.Dac.1.0.3\lib\Microsoft.Data.Tools.Schema.Sql.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:String x:Key="/Default/Environment/Hierarchy/Build/SolBuilderDuo/UseMsbuildSolutionBuilder/@EntryValue">NewVersion</s:String>
-	<s:Int64 x:Key="/Default/Environment/SearchAndNavigation/DefaultOccurrencesGroupingIndex/@EntryValue">0</s:Int64>
+	<s:Int64 x:Key="/Default/Environment/SearchAndNavigation/DefaultOccurrencesGroupingIndex/@EntryValue">3</s:Int64>
 	</wpf:ResourceDictionary>

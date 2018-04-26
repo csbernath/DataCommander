@@ -3,9 +3,6 @@ using Foundation.Assertions;
 
 namespace Foundation.Data
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class AsyncDbCommand : IDbCommand
     {
         #region Private Fields
@@ -205,12 +202,5 @@ namespace Foundation.Data
         }
 
         #endregion
-
-        //[ContractInvariantMethod]
-        private void ObjectInvariant()
-        {
-            //Contract.Invariant(this.connection != null);
-            //Contract.Invariant(this.command != null);
-        }
     }
 }

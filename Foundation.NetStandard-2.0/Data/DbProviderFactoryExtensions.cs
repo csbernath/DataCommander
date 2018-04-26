@@ -7,18 +7,8 @@ using Foundation.Assertions;
 
 namespace Foundation.Data
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class DbProviderFactoryExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="factory"></param>
-        /// <param name="connection"></param>
-        /// <param name="commandText"></param>
-        /// <returns></returns>
         public static DataTable ExecuteDataTable(this DbProviderFactory factory, DbConnection connection, string commandText)
         {
             Assert.IsNotNull(factory);
@@ -36,10 +26,7 @@ namespace Foundation.Data
             return table;
         }
 
-        public static void ExecuteReader(
-            this DbProviderFactory dbProviderFactory,
-            string connectionString,
-            ExecuteReaderRequest request,
+        public static void ExecuteReader(this DbProviderFactory dbProviderFactory, string connectionString, ExecuteReaderRequest request,
             Action<IDataReader> read)
         {
             using (var connection = dbProviderFactory.CreateConnection())
@@ -51,10 +38,7 @@ namespace Foundation.Data
             }
         }
 
-        public static List<T> ExecuteReader<T>(
-            this DbProviderFactory dbProviderFactory,
-            string connectionString,
-            ExecuteReaderRequest request,
+        public static List<T> ExecuteReader<T>(this DbProviderFactory dbProviderFactory, string connectionString, ExecuteReaderRequest request,
             Func<IDataRecord, T> read)
         {
             List<T> rows = null;

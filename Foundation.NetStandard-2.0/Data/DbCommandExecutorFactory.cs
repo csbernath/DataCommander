@@ -5,14 +5,7 @@ namespace Foundation.Data
 {
     public static class DbCommandExecutorFactory
     {
-        public static IDbCommandExecutor Create(IDbConnection connection)
-        {
-            return new DbCommandExecutor(connection);
-        }
-
-        public static IDbCommandAsyncExecutor Create(DbConnection connection)
-        {
-            return new DbCommandAsyncExecutor(connection);
-        }
+        public static IDbCommandExecutor Create(IDbConnection connection) => new DbCommandExecutor(connection);
+        public static IDbCommandAsyncExecutor Create(DbConnection connection) => new DbCommandAsyncExecutor(connection);
     }
 }

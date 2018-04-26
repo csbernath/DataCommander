@@ -6,10 +6,6 @@ using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
     public sealed class MultipleMemberEqualityComparer<T> : IEqualityComparer<T>
     {
         #region Private Fields

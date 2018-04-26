@@ -4,30 +4,16 @@ using Foundation.Assertions;
 
 namespace Foundation.Collections
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="T1"></typeparam>
     public sealed class MemberEqualityComparer<T, T1> : IEqualityComparer<T>
     {
         private readonly Func<T, T1> _get;
         private readonly IEqualityComparer<T1> _equalityComparer;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="get"></param>
         public MemberEqualityComparer(Func<T, T1> get)
             : this(get, EqualityComparer<T1>.Default)
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="get"></param>
-        /// <param name="equalityComparer"></param>
         public MemberEqualityComparer(Func<T, T1> get, IEqualityComparer<T1> equalityComparer)
         {
             Assert.IsNotNull(get);

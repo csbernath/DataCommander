@@ -4,18 +4,8 @@ using Foundation.Assertions;
 
 namespace Foundation.Collections
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class PreOrderTreeTraversal
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="rootNode"></param>
-        /// <param name="getChildNodes"></param>
-        /// <param name="action"></param>
         public static void ForEach<T>(T rootNode, Func<T, IEnumerable<T>> getChildNodes, Action<T> action)
         {
             Assert.IsNotNull(getChildNodes);
@@ -27,14 +17,6 @@ namespace Foundation.Collections
                 ForEach(childNode, getChildNodes, action);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="rootNode"></param>
-        /// <param name="getChildNodes"></param>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
         public static T FirstOrDefault<T>(T rootNode, Func<T, IEnumerable<T>> getChildNodes, Func<T, bool> predicate) where T : class
         {
             Assert.IsNotNull(rootNode);
