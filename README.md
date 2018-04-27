@@ -34,30 +34,19 @@ Download and restore the SQL Server 2016 sample database from https://github.com
 Open the database with Data Commander and execute the following command:
 
 ```SQL
-/* Query
+/* Query Configuration
 {
-  "Namespace": "Foundation.NetStandard20.Test.GetCustomerInvoicesNamespace",
+  "Namespace": "Foundation.NetStandard20.Test.GetPersonQueryNamespace",
   "Name": "GetCustomerInvoices",
-  "Parameters": [
-    {
-      "Name": "customerId",
-      "DataType": "int",
-      "IsNullable": false,
-      "Value": "1"
-    },
-    {
-      "Name": "invoiceDate",
-      "DataType": "date",
-      "IsNullable": false,
-      "Value": "'20160101'"
-    }
-  ],
   "Results": [
-    "Customer(s)",
-    "Invoice(s)"
+    "Customer",
+    "Invoice"
   ]
 }
 */
+declare @customerId int = 1
+declare @invoiceDate date = '20160101'
+-- CommandText
 select
     c.CustomerID,
     c.CustomerName
@@ -72,8 +61,7 @@ from Sales.Invoices i
 where
     i.CustomerID = @customerId
     and i.InvoiceDate >= @invoiceDate
-order by i.CustomerID,i.InvoiceID
-```
+order by i.CustomerID,i.InvoiceID```
 
 The program generates C# classes in one file:
 
