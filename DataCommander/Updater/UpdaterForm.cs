@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Foundation;
+using Foundation.Deployment;
 using Foundation.Windows.Forms;
 
 namespace DataCommander.Updater
@@ -23,7 +24,9 @@ namespace DataCommander.Updater
             var remoteVersionUri = new Uri("https://raw.githubusercontent.com/csbernath/DataCommander/master/Version.txt");
             var address = "https://github.com/csbernath/DataCommander/releases/download/v{0}/DataCommander.Updater.zip";
             var eventHandler = new EventHandler(this);
-            _updater = new Foundation.Deployment.ApplicationStartup(remoteVersionUri, address, eventHandler.Handle);
+
+            var serializer = new JsonSerializer();
+            _updater = new ApplicationStartup(serializer, remoteVersionUri, address, eventHandler.Handle);
             _updater.Update().ContinueWith(task =>
             {
                 if (task.IsFaulted)

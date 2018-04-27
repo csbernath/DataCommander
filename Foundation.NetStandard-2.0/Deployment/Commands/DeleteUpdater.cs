@@ -6,5 +6,10 @@ namespace Foundation.Deployment.Commands
     public class DeleteUpdater : DeploymentCommand
     {
         [DataMember] public string Directory;
+
+        public DeleteUpdater(string directory)
+        {
+            Directory = directory;
+        }
     }
 }

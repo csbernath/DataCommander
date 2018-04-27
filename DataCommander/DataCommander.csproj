@@ -172,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Updater\EventHandler.cs" />
+    <Compile Include="Updater\JsonSerializer.cs" />
     <Compile Include="Updater\UpdaterForm.cs">
       <SubType>Form</SubType>
     </Compile>

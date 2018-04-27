@@ -13,6 +13,7 @@ namespace Foundation.Deployment
 {
     public sealed class ApplicationStartup
     {
+        private readonly ISerializer _serializer;
         private readonly Uri _remoteVersionUri;
         private readonly string _address;
         private readonly Action<Event> _eventPublisher;
@@ -20,9 +21,11 @@ namespace Foundation.Deployment
 
         public bool UpdateStarted => _updateStarted;
 
-        public ApplicationStartup(Uri remoteVersionUri, string address, Action<Event> eventHandler)
+        public ApplicationStartup(ISerializer serializer, Uri remoteVersionUri, string address,
+            Action<Event> eventHandler)
         {
             _eventPublisher = eventHandler;
+            _serializer = serializer;
             _address = address;
             _remoteVersionUri = remoteVersionUri;
         }
@@ -33,7 +36,8 @@ namespace Foundation.Deployment
             var title = GetTitle(entryAsembly);
             var applicationName = title;
 
-            var command = DeploymentCommandRepository.Get(applicationName);
+            var repository = new DeploymentCommandRepository(_serializer);
+            var command = repository.Get(applicationName);
             return Handle((dynamic) command);
         }
 
@@ -132,27 +136,28 @@ namespace Foundation.Deployment
             return Task.CompletedTask;
         }
 
-        private static string Quote(string text)
-        {
-            return $"\"{text}\"";
-        }
+        private static string Quote(string text) => $"\"{text}\"";
 
-        private static void ScheduleCheckForUpdates()
+        private void ScheduleCheckForUpdates()
         {
             var entryAsembly = Assembly.GetEntryAssembly();
             var title = GetTitle(entryAsembly);
             var applicationName = title;
             var now = UniversalTime.Default.UtcNow;
             var tomorrow = now.AddDays(1);
-            DeploymentCommandRepository.Save(applicationName, new CheckForUpdates(tomorrow));
+
+            var repository = new DeploymentCommandRepository(_serializer);
+            repository.Save(applicationName, new CheckForUpdates(tomorrow));
         }
 
         private static void StartUpdater(string updaterExeFileName, string applicationExeFileName)
         {
-            var processStartInfo = new ProcessStartInfo();
-            processStartInfo.FileName = updaterExeFileName;
-            processStartInfo.WorkingDirectory = Path.GetDirectoryName(updaterExeFileName);
-            processStartInfo.Arguments = $"{Quote(applicationExeFileName)}";
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = updaterExeFileName,
+                WorkingDirectory = Path.GetDirectoryName(updaterExeFileName),
+                Arguments = $"{Quote(applicationExeFileName)}"
+            };
             Process.Start(processStartInfo);
         }
     }

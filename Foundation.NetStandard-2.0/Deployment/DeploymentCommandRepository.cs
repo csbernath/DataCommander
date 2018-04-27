@@ -5,17 +5,24 @@ using Foundation.Deployment.Commands;
 
 namespace Foundation.Deployment
 {
-    public static class DeploymentCommandRepository
+    public sealed class DeploymentCommandRepository
     {
-        public static DeploymentCommand Get(string applicationName)
+        private readonly ISerializer _serializer;
+
+        public DeploymentCommandRepository(ISerializer serializer)
+        {
+            _serializer = serializer;
+        }
+
+        public DeploymentCommand Get(string applicationName)
         {
             var fileName = GetFileName(applicationName);
             DeploymentCommand deploymentCommand;
 
             if (File.Exists(fileName))
             {
-                var json = File.ReadAllText(fileName, Encoding.UTF8);
-                deploymentCommand = DataContractJsonSerialization.Deserialize<DeploymentCommand>(json);
+                var text = File.ReadAllText(fileName, Encoding.UTF8);
+                deploymentCommand = _serializer.Deserialize<DeploymentCommand>(text);
             }
             else
             {
@@ -26,16 +33,17 @@ namespace Foundation.Deployment
             return deploymentCommand;
         }
 
-        public static void Save(string applicationName, DeploymentCommand command)
+        public void Save(string applicationName, DeploymentCommand command)
         {
-            var json = DataContractJsonSerialization.Serialize(command);
+            var text = _serializer.Serialize(command);
             var fileName = GetFileName(applicationName);
-            File.WriteAllText(fileName, json, Encoding.UTF8);
+            File.WriteAllText(fileName, text, Encoding.UTF8);
         }
 
         private static string GetFileName(string applicationName)
         {
-            var locallApplicationDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            var locallApplicationDataDirectory =
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             var directory = Path.Combine(locallApplicationDataDirectory, applicationName);
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
