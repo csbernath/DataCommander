@@ -26,6 +26,6 @@ namespace Foundation.Deployment
             Process.Start(processStartInfo);
         }
 
-        private static void Copy
+        //private static void Copy
     }
 }
