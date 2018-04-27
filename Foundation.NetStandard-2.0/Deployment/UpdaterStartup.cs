@@ -9,14 +9,13 @@ namespace Foundation.Deployment
         public static void Update(string applicationName, string updaterDirectory, string applicationExeFileName)
         {
             var applicationDirectory = Path.GetDirectoryName(applicationExeFileName);
-            var backupDirectory = $"{applicationDirectory}.Backup";
 
-            Directory.Move(applicationDirectory, backupDirectory);
 
             var sourceDirectory = Path.Combine(updaterDirectory, applicationName);
 
             Directory.Move(sourceDirectory, applicationDirectory);
-            Directory.Delete(backupDirectory, true);
+
+
 
             DeploymentCommandRepository.Save(applicationName, new DeleteUpdater {Directory = updaterDirectory});
 
@@ -26,5 +25,7 @@ namespace Foundation.Deployment
             processStartInfo.Arguments = applicationDirectory;
             Process.Start(processStartInfo);
         }
+
+        private static void Copy
     }
 }
