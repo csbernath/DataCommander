@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using Foundation.Linq;
 
 namespace Foundation.Data
 {
@@ -18,10 +19,7 @@ namespace Foundation.Data
 
         public static void Execute(this IDbCommandExecutor executor, CreateCommandRequest request, Action<IDbCommand> execute)
         {
-            var requests = new[]
-            {
-                new ExecuteCommandRequest(request, execute)
-            };
+            var requests = new ExecuteCommandRequest(request, execute).ItemToArray();
             executor.Execute(requests);
         }
 

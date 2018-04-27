@@ -331,19 +331,33 @@ namespace {_request.Namespace}
     return ExecuteReader(request);");
 
             stringBuilder.Append(@"
-}}");
+}");
             return stringBuilder.ToString();
         }
 
         private string GetHandleAsyncMethod()
         {
+            var request = _request.Results.Count == 0 ? "command" : "query";
+            var result = _request.Results.Count == 0 ? "int" : $"{_request.Name}DbQueryResult";
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($@"public Task<{_request.Name}DbQueryResult> HandleAsync({_request.Name}DbQuery query, CancellationToken cancellationToken)
+            stringBuilder.Append($@"public Task<{result}> HandleAsync({_request.Name}Db{GetRequestType()} {request}, CancellationToken cancellationToken)
 {{
-    Assert.IsNotNull(query);
-    var request = ToExecuteReaderRequest(query, cancellationToken);
-    return ExecuteReaderAsync(request);
-}}");
+    Assert.IsNotNull({request});
+");
+
+            if (_request.Results.Count == 0)
+                stringBuilder.Append(@"    var createCommandRequest = ToCreateCommandRequest(command);
+    var executeNonReaderRequest = new ExecuteNonReaderRequest(createCommandRequest, cancellationToken);
+    var dbConnection = (DbConnection)_connection;
+    var executor = dbConnection.CreateCommandAsyncExecutor();
+    return executor.ExecuteNonQueryAsync(executeNonReaderRequest);");
+            else
+                stringBuilder.Append(@"    var request = ToExecuteReaderRequest(query, cancellationToken);
+    return ExecuteReaderAsync(request);");
+
+            stringBuilder.Append(@"
+}");
+
             return stringBuilder.ToString();
         }
 
@@ -569,7 +583,7 @@ namespace {_request.Namespace}
             var stringBuilder = new StringBuilder();
             stringBuilder.Append($@"private ExecuteReaderRequest ToExecuteReaderRequest({_request.Name}DbQuery query, CancellationToken cancellationToken)
 {{    
-    var createCommandRequest = ToCreateCommandRequest();
+    var createCommandRequest = ToCreateCommandRequest(query);
     return new ExecuteReaderRequest(createCommandRequest, CommandBehavior.Default, cancellationToken);
 }}");
             return stringBuilder.ToString();

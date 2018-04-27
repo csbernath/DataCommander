@@ -1,12 +1,11 @@
-﻿using Foundation.Assertions;
+﻿using System;
+using System.Data;
+using System.Data.Common;
+using Foundation.Assertions;
+using Microsoft.Deployment.WindowsInstaller;
 
 namespace DataCommander.Providers.Msi
 {
-    using System;
-    using System.Data;
-    using System.Data.Common;
-    using Microsoft.Deployment.WindowsInstaller;
-
     internal sealed class MsiConnection : IDbConnection
     {
         #region Private Fields

@@ -48,12 +48,6 @@ namespace Foundation.Text
             return formatted;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="s"></param>
-        /// <param name="index"></param>
-        /// <param name="ch"></param>
         public static unsafe void SetChar(string s, int index, char ch)
         {
             FoundationContract.Requires<ArgumentException>(index >= 0);
@@ -65,10 +59,6 @@ namespace Foundation.Text
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="s"></param>
         public static unsafe void ToLower(string s)
         {
             fixed (char* pfixed = s)

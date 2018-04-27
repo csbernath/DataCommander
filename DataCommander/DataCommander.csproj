@@ -230,20 +230,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>rd /S /Q cs
-rd /S /Q de
-rd /S /Q es
-rd /S /Q fr
-rd /S /Q it
-rd /S /Q ja
-rd /S /Q ko
-rd /S /Q pl
-rd /S /Q pt-BR
-rd /S /Q ru
-rd /S /Q tr
-rd /S /Q zh-Hans
-rd /S /Q zh-Hant
-del System.*.dll
-del System.*.pdb</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -26,7 +26,7 @@ namespace Foundation.Data
         }
 
         public ExecuteReaderRequest(string commandText, ReadOnlyCollection<object> parameters, IDbTransaction transaction)
-            : this(new CreateCommandRequest(commandText, parameters, CommandType.Text, 0, transaction), CommandBehavior.Default, CancellationToken.None)
+            : this(new CreateCommandRequest(commandText, parameters, CommandType.Text, null, transaction), CommandBehavior.Default, CancellationToken.None)
         {
         }
 
