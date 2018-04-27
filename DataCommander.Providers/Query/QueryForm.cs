@@ -1547,9 +1547,8 @@ namespace DataCommander.Providers.Query
 
                 if (statements.Count == 1)
                 {
-                    GetQueryConfiguration(statements[0].CommandText, out var queryConfiguration, out var parameters, out var queryCommandText);
                     IDbCommand command;
-                    if (queryConfiguration != null)
+                    if (TryGetQueryConfiguration(statements[0].CommandText, out var queryConfiguration, out var parameters, out var queryCommandText))
                     {
                         command = Connection.CreateCommand();
                         command.CommandText = statements[0].CommandText;
@@ -1670,9 +1669,10 @@ namespace DataCommander.Providers.Query
             }
         }
 
-        private static void GetQueryConfiguration(string commandText, out QueryConfiguration.Query query, out ReadOnlyCollection<DbRequestParameter> parameters,
+        private static bool TryGetQueryConfiguration(string commandText, out QueryConfiguration.Query query, out ReadOnlyCollection<DbRequestParameter> parameters,
             out string queryCommandText)
         {
+            var succeeded = false;
             query = null;
             parameters = null;
             queryCommandText = null;
@@ -1685,17 +1685,25 @@ namespace DataCommander.Providers.Query
                     var jsonStart = commandText.IndexOf("{");
                     var jsonEnd = commandText.LastIndexOf('}', commentEnd);
                     var json = commandText.Substring(jsonStart, jsonEnd - jsonStart + 1);
-                    query = JsonConvert.DeserializeObject<QueryConfiguration.Query>(json);
+                    var query0 = JsonConvert.DeserializeObject<QueryConfiguration.Query>(json);
 
                     var parametersStart = commentEnd + 4;
                     var parametersEnd = commandText.IndexOf("-- CommandText", parametersStart) - 3;
-                    var parametersCommandText = commandText.Substring(parametersStart, parametersEnd - parametersStart + 1);
+                    if (parametersEnd >= 0)
+                    {
+                        var parametersCommandText = commandText.Substring(parametersStart, parametersEnd - parametersStart + 1);
 
-                    var tokens = SqlParser.Tokenize(parametersCommandText);
-                    parameters = ToDbQueryParameters(tokens);
-                    queryCommandText = commandText.Substring(parametersEnd + 19);
+                        var tokens = SqlParser.Tokenize(parametersCommandText);
+                        parameters = ToDbQueryParameters(tokens);
+                        queryCommandText = commandText.Substring(parametersEnd + 19);
+
+                        query = query0;
+                        succeeded = true;
+                    }
                 }
             }
+
+            return succeeded;
         }
 
         private static ReadOnlyCollection<DbRequestParameter> ToDbQueryParameters(List<Token> tokens)

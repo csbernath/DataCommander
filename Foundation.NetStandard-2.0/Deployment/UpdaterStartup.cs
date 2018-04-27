@@ -6,14 +6,13 @@ namespace Foundation.Deployment
 {
     public static class UpdaterStartup
     {
-        public static void Update(string updaterDirectory, string applicationExeFileName)
+        public static void Update(string applicationName, string updaterDirectory, string applicationExeFileName)
         {
             var applicationDirectory = Path.GetDirectoryName(applicationExeFileName);
             var backupDirectory = $"{applicationDirectory}.Backup";
 
             Directory.Move(applicationDirectory, backupDirectory);
 
-            var applicationName = Path.GetFileName(applicationDirectory);
             var sourceDirectory = Path.Combine(updaterDirectory, applicationName);
 
             Directory.Move(sourceDirectory, applicationDirectory);

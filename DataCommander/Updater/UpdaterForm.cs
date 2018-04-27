@@ -21,7 +21,7 @@ namespace DataCommander.Updater
             base.OnLoad(e);
 
             var remoteVersionUri = new Uri("https://raw.githubusercontent.com/csbernath/DataCommander/master/Version.txt");
-            var address = "https://github.com/csbernath/DataCommander/releases/download/{0}/DataCommander.Updater.zip";
+            var address = "https://github.com/csbernath/DataCommander/releases/download/v{0}/DataCommander.Updater.zip";
             var eventHandler = new EventHandler(this);
             _updater = new Foundation.Deployment.ApplicationStartup(remoteVersionUri, address, eventHandler.Handle);
             _updater.Update().ContinueWith(task =>

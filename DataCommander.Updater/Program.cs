@@ -13,7 +13,7 @@ namespace DataCommander.Updater
             {
                 var applicationExeFileName = args[0];
                 var updaterDirectory = Environment.CurrentDirectory;
-                UpdaterStartup.Update(updaterDirectory, applicationExeFileName);
+                UpdaterStartup.Update("Data Commander", updaterDirectory, applicationExeFileName);
 
                 //Application.EnableVisualStyles();
                 //Application.SetCompatibleTextRenderingDefault(false);
