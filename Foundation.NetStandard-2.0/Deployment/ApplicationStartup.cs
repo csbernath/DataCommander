@@ -37,7 +37,18 @@ namespace Foundation.Deployment
             var applicationName = title;
 
             var repository = new DeploymentCommandRepository(_serializer);
-            var command = repository.Get(applicationName);
+
+            DeploymentCommand command;
+            try
+            {
+                command = repository.Get(applicationName);
+            }
+            catch
+            {
+                var now = UniversalTime.Default.UtcNow;
+                command = new CheckForUpdates(now);
+            }
+
             return Handle((dynamic) command);
         }
 

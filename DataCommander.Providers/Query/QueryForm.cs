@@ -1548,7 +1548,9 @@ namespace DataCommander.Providers.Query
                 if (statements.Count == 1)
                 {
                     IDbCommand command;
-                    if (TryGetQueryConfiguration(statements[0].CommandText, out var queryConfiguration, out var parameters, out var queryCommandText))
+                    
+                    var getQueryConfigurationResult = GetQueryConfiguration(statements[0].CommandText);
+                    if (getQueryConfigurationResult.Succeeded)
                     {
                         command = Connection.CreateCommand();
                         command.CommandText = statements[0].CommandText;
@@ -1561,8 +1563,10 @@ namespace DataCommander.Providers.Query
                     }
 
                     command.Transaction = _transaction;
-                    commands = new AsyncDataAdapterCommand(_fileName, 0, statements[0].CommandText, command, queryConfiguration, parameters, queryCommandText)
-                        .ItemToArray();
+                    commands = new AsyncDataAdapterCommand(_fileName, 0, statements[0].CommandText, command,
+                        getQueryConfigurationResult.Succeeded ? getQueryConfigurationResult.Query : null,
+                        getQueryConfigurationResult.Succeeded ? getQueryConfigurationResult.Parameters : null,
+                        getQueryConfigurationResult.Succeeded ? getQueryConfigurationResult.CommandText : null).ItemToArray();
                 }
                 else
                     commands =
@@ -1669,41 +1673,56 @@ namespace DataCommander.Providers.Query
             }
         }
 
-        private static bool TryGetQueryConfiguration(string commandText, out QueryConfiguration.Query query, out ReadOnlyCollection<DbRequestParameter> parameters,
-            out string queryCommandText)
+        private sealed class GetQueryConfigurationResult
         {
-            var succeeded = false;
-            query = null;
-            parameters = null;
-            queryCommandText = null;
+            public readonly bool Succeeded;
+            public readonly QueryConfiguration.Query Query;
+            public readonly ReadOnlyCollection<DbRequestParameter> Parameters;
+            public readonly string CommandText;
 
-            if (commandText.StartsWith("/* Query Configuration"))
+            public GetQueryConfigurationResult(bool succeeded, QueryConfiguration.Query query, ReadOnlyCollection<DbRequestParameter> parameters, string commandText)
             {
-                var commentEnd = commandText.IndexOf("*/");
-                if (commentEnd > 0)
-                {
-                    var jsonStart = commandText.IndexOf("{");
-                    var jsonEnd = commandText.LastIndexOf('}', commentEnd);
-                    var json = commandText.Substring(jsonStart, jsonEnd - jsonStart + 1);
-                    var query0 = JsonConvert.DeserializeObject<QueryConfiguration.Query>(json);
+                Succeeded = succeeded;
+                Query = query;
+                Parameters = parameters;
+                CommandText = commandText;
+            }
+        }
 
-                    var parametersStart = commentEnd + 4;
+        private static GetQueryConfigurationResult GetQueryConfiguration(string commandText)
+        {
+            Assert.IsNotNull(commandText);
+
+            var succeeded = false;
+            QueryConfiguration.Query query = null;
+            ReadOnlyCollection<DbRequestParameter> parameters = null;
+            string resultCommandText = null;
+
+            var configurationStart = commandText.IndexOf("/* Query Configuration");
+            if (configurationStart >= 0)
+            {
+                var configurationEnd = commandText.IndexOf("*/", configurationStart);
+                if (configurationEnd > 0)
+                {
+                    configurationStart = commandText.IndexOf("{", configurationStart);
+                    configurationEnd = commandText.LastIndexOf("}", configurationEnd);
+                    var configuration = commandText.Substring(configurationStart, configurationEnd - configurationStart + 1);
+                    query = JsonConvert.DeserializeObject<QueryConfiguration.Query>(configuration);
+
+                    var parametersStart = configurationEnd + 4;
                     var parametersEnd = commandText.IndexOf("-- CommandText", parametersStart) - 3;
                     if (parametersEnd >= 0)
                     {
                         var parametersCommandText = commandText.Substring(parametersStart, parametersEnd - parametersStart + 1);
-
                         var tokens = SqlParser.Tokenize(parametersCommandText);
                         parameters = ToDbQueryParameters(tokens);
-                        queryCommandText = commandText.Substring(parametersEnd + 19);
-
-                        query = query0;
+                        resultCommandText = commandText.Substring(parametersEnd + 19);
                         succeeded = true;
                     }
                 }
             }
 
-            return succeeded;
+            return new GetQueryConfigurationResult(succeeded, query, parameters, resultCommandText);
         }
 
         private static ReadOnlyCollection<DbRequestParameter> ToDbQueryParameters(List<Token> tokens)
