@@ -1,17 +1,11 @@
-﻿using System;
-using System.Data.Common;
+﻿using System.Data.Common;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
 using System.Reflection;
 using DataCommander.Providers.Connection;
-using Foundation;
 using Foundation.Configuration;
-using Foundation.Deployment;
 using Foundation.Diagnostics;
 using Foundation.Log;
 using Microsoft.Win32;
-using Newtonsoft.Json;
 using Application = System.Windows.Forms.Application;
 using Task = System.Threading.Tasks.Task;
 

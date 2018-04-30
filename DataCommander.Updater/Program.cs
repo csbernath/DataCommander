@@ -14,7 +14,8 @@ namespace DataCommander.Updater
                 var applicationExeFileName = args[0];
                 var updaterDirectory = Environment.CurrentDirectory;
 
-                var updaterStartup = new UpdaterStartup(null);
+                var serializer = new JsonSerializer();
+                var updaterStartup = new UpdaterStartup(serializer);
                 updaterStartup.Update("Data Commander", updaterDirectory, applicationExeFileName);
 
                 //Application.EnableVisualStyles();

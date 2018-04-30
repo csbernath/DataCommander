@@ -8,7 +8,7 @@ namespace DataCommander.Updater
 {
     public partial class UpdaterForm : Form
     {
-        private Foundation.Deployment.ApplicationStartup _updater;
+        private ApplicationStartup _updater;
 
         public UpdaterForm()
         {
@@ -16,6 +16,12 @@ namespace DataCommander.Updater
         }
 
         public Foundation.Deployment.ApplicationStartup Updater => _updater;
+
+        public void Log(string message)
+        {
+            var time = LocalTime.Default.Now.ToString("HH:mm:ss.fff");
+            richTextBox.AppendText($"[{time}] {message}\r\n");
+        }
 
         protected override void OnLoad(EventArgs e)
         {
@@ -34,12 +40,6 @@ namespace DataCommander.Updater
 
                 this.Invoke(Close);
             });
-        }
-
-        public void Log(string message)
-        {
-            var time = LocalTime.Default.Now.ToString("HH:mm:ss.fff");
-            richTextBox.AppendText($"[{time}] {message}\r\n");
         }
     }
 }

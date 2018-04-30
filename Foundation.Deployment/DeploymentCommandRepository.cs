@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using Foundation.Assertions;
 using Foundation.Deployment.Commands;
 
 namespace Foundation.Deployment
@@ -11,6 +12,7 @@ namespace Foundation.Deployment
 
         public DeploymentCommandRepository(ISerializer serializer)
         {
+            Assert.IsNotNull(serializer);
             _serializer = serializer;
         }
 
