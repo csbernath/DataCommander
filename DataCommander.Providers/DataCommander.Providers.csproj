@@ -508,6 +508,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Foundation.Data\Foundation.Data.csproj">
+      <Project>{34f913bc-edee-4385-bae6-c650a0e21878}</Project>
+      <Name>Foundation.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Foundation.NetFramework-4.7.1\Foundation.NetFramework-4.7.1.csproj">
       <Project>{b8934b63-d579-4ee8-b352-13134eb8cc54}</Project>
       <Name>Foundation.NetFramework-4.7.1</Name>

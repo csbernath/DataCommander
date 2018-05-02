@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using Foundation.Data.SqlClient;
 
-namespace Foundation.Linq
+namespace Foundation.Data
 {
     public static class ExceptionExtensions
     {

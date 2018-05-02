@@ -220,7 +220,7 @@ Stopwatch.Frequency:    {Stopwatch.Frequency}";
             }
             catch (Exception e)
             {
-                Log.Trace("exception:\r\n{0}", e.ToLogString());
+                Log.Trace($"exception:\r\n{e}");
             }
 
             return fileVersion;
@@ -252,7 +252,7 @@ Stopwatch.Frequency:    {Stopwatch.Frequency}";
                     }
                     catch (Exception e)
                     {
-                        Log.Error("{0}\t\n{1}", assemblies[i], e.ToLogString());
+                        Log.Error("{0}\t\n{1}", assemblies[i], e);
                     }
                 }
 
@@ -262,7 +262,7 @@ Stopwatch.Frequency:    {Stopwatch.Frequency}";
             }
             catch (Exception e)
             {
-                Log.Write(LogLevel.Error, e.ToLogString());
+                Log.Write(LogLevel.Error, e.ToString());
             }
         }
 

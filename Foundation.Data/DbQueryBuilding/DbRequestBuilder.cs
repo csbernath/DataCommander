@@ -4,10 +4,9 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using Foundation.Assertions;
-using Foundation.Data;
 using Foundation.Data.SqlClient;
 
-namespace Foundation.DbQueryBuilding
+namespace Foundation.Data.DbQueryBuilding
 {
     public sealed class DbRequestBuilder
     {

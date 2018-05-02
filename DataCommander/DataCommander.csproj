@@ -196,6 +196,10 @@
       <Project>{31A30A80-D1B6-4867-A65E-188DE9E912C8}</Project>
       <Name>DataCommander.Providers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Foundation.Data\Foundation.Data.csproj">
+      <Project>{34f913bc-edee-4385-bae6-c650a0e21878}</Project>
+      <Name>Foundation.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Foundation.Deployment\Foundation.Deployment.csproj">
       <Project>{7db3820f-e3e1-4085-8d37-ef64ba9274c8}</Project>
       <Name>Foundation.Deployment</Name>

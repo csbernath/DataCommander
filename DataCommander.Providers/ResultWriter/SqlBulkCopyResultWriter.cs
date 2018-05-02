@@ -1,4 +1,5 @@
-﻿using Foundation.Diagnostics.Contracts;
+﻿using Foundation.Data;
+using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
 
 namespace DataCommander.Providers.ResultWriter

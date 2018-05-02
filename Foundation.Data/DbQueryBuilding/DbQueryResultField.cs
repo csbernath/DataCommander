@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Foundation.DbQueryBuilding
+namespace Foundation.Data.DbQueryBuilding
 {
     public sealed class DbQueryResultField
     {

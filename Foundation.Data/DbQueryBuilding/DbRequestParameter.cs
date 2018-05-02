@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace Foundation.DbQueryBuilding
+namespace Foundation.Data.DbQueryBuilding
 {
     public sealed class DbRequestParameter
     {

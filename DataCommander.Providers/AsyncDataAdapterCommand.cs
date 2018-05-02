@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Data;
-using Foundation.DbQueryBuilding;
+using Foundation.Data.DbQueryBuilding;
 
 namespace DataCommander.Providers
 {

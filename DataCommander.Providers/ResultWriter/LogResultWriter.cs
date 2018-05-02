@@ -11,7 +11,7 @@ using DataCommander.Providers.QueryConfiguration;
 using Foundation;
 using Foundation.Assertions;
 using Foundation.Data;
-using Foundation.DbQueryBuilding;
+using Foundation.Data.DbQueryBuilding;
 using Foundation.Diagnostics;
 using Foundation.Linq;
 using Foundation.Log;
