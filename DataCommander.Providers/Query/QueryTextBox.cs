@@ -7,7 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using Foundation.Diagnostics.MethodProfiler;
+using Foundation.Data.MethodProfiler;
 using Foundation.Linq;
 using Foundation.Text;
 

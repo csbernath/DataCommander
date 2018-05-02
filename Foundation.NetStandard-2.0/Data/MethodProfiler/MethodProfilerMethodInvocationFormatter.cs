@@ -2,7 +2,7 @@
 using Foundation.Data.SqlClient;
 using Foundation.IO;
 
-namespace Foundation.Diagnostics.MethodProfiler
+namespace Foundation.Data.MethodProfiler
 {
     internal sealed class MethodProfilerMethodInvocationFormatter : IFormatter
     {

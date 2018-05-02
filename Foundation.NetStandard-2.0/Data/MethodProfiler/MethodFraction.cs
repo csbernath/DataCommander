@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Reflection;
 
-namespace Foundation.Diagnostics.MethodProfiler
+namespace Foundation.Data.MethodProfiler
 {
     internal sealed class MethodFraction : MethodBase
     {

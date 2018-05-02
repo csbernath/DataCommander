@@ -2,8 +2,8 @@
 using System.Data;
 using DataCommander.Providers.Connection;
 using Foundation.Data;
+using Foundation.Data.MethodProfiler;
 using Foundation.Diagnostics;
-using Foundation.Diagnostics.MethodProfiler;
 
 namespace DataCommander.Providers.ResultWriter
 {

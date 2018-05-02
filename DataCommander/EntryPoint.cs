@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using DataCommander.Providers;
 using DataCommander.Updater;
 using Foundation.Configuration;
-using Foundation.Diagnostics.MethodProfiler;
+using Foundation.Data.MethodProfiler;
 using Foundation.Log;
 
 namespace DataCommander

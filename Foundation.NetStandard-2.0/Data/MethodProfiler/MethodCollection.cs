@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 
-namespace Foundation.Diagnostics.MethodProfiler
+namespace Foundation.Data.MethodProfiler
 {
     internal sealed class MethodCollection : IEnumerable<MethodBase>
     {

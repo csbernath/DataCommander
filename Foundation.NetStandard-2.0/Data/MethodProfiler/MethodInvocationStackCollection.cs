@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 
-namespace Foundation.Diagnostics.MethodProfiler
+namespace Foundation.Data.MethodProfiler
 {
     internal sealed class MethodInvocationStackCollection
     {

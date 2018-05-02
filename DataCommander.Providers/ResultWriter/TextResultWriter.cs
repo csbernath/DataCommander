@@ -5,8 +5,8 @@ using System.IO;
 using System.Text;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.Query;
+using Foundation.Data.MethodProfiler;
 using Foundation.Data.SqlClient;
-using Foundation.Diagnostics.MethodProfiler;
 using Foundation.Text;
 
 namespace DataCommander.Providers.ResultWriter
