@@ -21,6 +21,7 @@ namespace DataCommander.Providers
             var dotNetFrameworkRelease = AppDomainMonitor.GetDotNetFrameworkRelease();
             var dotNetFrameworkVersion = AppDomainMonitor.GetDotNetFrameworkVersion(dotNetFrameworkRelease);
             var targetFrameworkAttribute = assembly.GetCustomAttribute<TargetFrameworkAttribute>();
+            var windowsVersionInfo = AppDomainMonitor.GetWindowsVersionInfo();
 
             var text =
                 $@"
@@ -54,7 +55,9 @@ Target Framework: {targetFrameworkAttribute.FrameworkDisplayName}
 <br/>
 <br/>
 <table style=""font-family:verdana;font-size:9pt"">
-<tr><td>Windows version:</td><td>{AppDomainMonitor.GetWindowsVersion()}</td></tr>
+<tr><td>Windows ProductName:</td><td>{windowsVersionInfo.ProductName}</td></tr>
+<tr><td>Windows ReleaseId:</td><td>{windowsVersionInfo.ReleaseId}</td></tr>
+<tr><td>Windows CurrentBuild:</td><td>{windowsVersionInfo.CurrentBuild}</td></tr>
 <tr><td>.NET CLR version:</td><td>{Environment.Version}</td></tr>
 <tr><td>.NET Framework release:</td><td>{dotNetFrameworkRelease}</td></tr>
 <tr><td>.NET Framework version:</td><td>{dotNetFrameworkVersion}</td></tr>

@@ -40,40 +40,28 @@ namespace Foundation.Diagnostics
             };
         }
 
-        #region Public Properties
+        #region Public Methods
 
-        public static string GetWindowsVersion()
+        public static WindowsVersionInfo GetWindowsVersionInfo()
         {
             using (var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion"))
             {
-                var stringBuilder = new StringBuilder();
-                stringBuilder.AppendFormat("ProductName:{0},ReleaseId:{1},CurrentBuild:{2}",
-                    key.GetValue("ProductName"),
-                    key.GetValue("ReleaseId"),
-                    key.GetValue("CurrentBuild"));
-
-                return stringBuilder.ToString();
+                var productName = (string) key.GetValue("ProductName");
+                var releaseId = (string) key.GetValue("ReleaseId");
+                var currentBuild = (string) key.GetValue("CurrentBuild");
+                return new WindowsVersionInfo(productName, releaseId, currentBuild);
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public static int GetDotNetFrameworkRelease()
         {
             using (var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full"))
             {
-                var release = (int)key.GetValue("Release");
+                var release = (int) key.GetValue("Release");
                 return release;
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="release"></param>
-        /// <returns></returns>
         public static string GetDotNetFrameworkVersion(int release)
         {
             string version;
@@ -144,29 +132,27 @@ namespace Foundation.Diagnostics
             return version;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static string EnvironmentInfo
+        public static string GetEnvironmentInfo()
         {
-            get
-            {
-                var tickCount = UniversalTime.GetTickCount();
-                var totalDays = (double) tickCount / DateTimeConstants.MillisecondsPerDay;
-                var zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
-                var tickCountString = $"{tickCount} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";
-                var workingSet = Environment.WorkingSet;
-                var dotNetFrameworkRelease = GetDotNetFrameworkRelease();
-                var dotNetFrameworkVersion = GetDotNetFrameworkVersion(dotNetFrameworkRelease);
+            var tickCount = UniversalTime.GetTickCount();
+            var totalDays = (double) tickCount / DateTimeConstants.MillisecondsPerDay;
+            var zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
+            var tickCountString = $"{tickCount} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";
+            var workingSet = Environment.WorkingSet;
+            var dotNetFrameworkRelease = GetDotNetFrameworkRelease();
+            var dotNetFrameworkVersion = GetDotNetFrameworkVersion(dotNetFrameworkRelease);
+            var windowsVersionInfo = GetWindowsVersionInfo();
 
-                var message = $@"Environment information
+            var message = $@"Environment information
 MachineName:            {Environment.MachineName}
 ProcessorCount:         {Environment.ProcessorCount}
 OSVersion:              {Environment.OSVersion}
-Windows version:        {GetWindowsVersion()}
+Windows ProductName:    {windowsVersionInfo.ProductName}
+Windows ReleaseId:      {windowsVersionInfo.ReleaseId}
+Windows CurrentBuild:   {windowsVersionInfo.CurrentBuild}
 Is64BitOperatingSystem: {Environment.Is64BitOperatingSystem}
 Is64BitProcess:         {Environment.Is64BitProcess}
-IntPtr.Size:            {IntPtr.Size} ({IntPtr.Size*8} bit)
+IntPtr.Size:            {IntPtr.Size} ({IntPtr.Size * 8} bit)
 CLR version:            {Environment.Version}
 .NET Framework release: {dotNetFrameworkRelease}
 .NET Framework version: {dotNetFrameworkVersion}
@@ -175,29 +161,22 @@ UserName:               {Environment.UserName}
 UserInteractive:        {Environment.UserInteractive}
 CurrentDirectory:       {Environment.CurrentDirectory}
 CommandLine:            {Environment.CommandLine},
-GCSettings.IsServerGC:  {GCSettings.IsServerGC}
-GCSettings.LargeObjectHeapCompactionMode: {GCSettings.LargeObjectHeapCompactionMode}
-GCSettings.LatencyMode: {GCSettings.LatencyMode}
-WorkingSet:             {(double)workingSet/(1024*1024):N} MB ({workingSet} bytes)
+GC IsServerGC:          {GCSettings.IsServerGC}
+GC LargeObjectHeapCompactionMode: {GCSettings.LargeObjectHeapCompactionMode}
+GC LatencyMode:         {GCSettings.LatencyMode}
+WorkingSet:             {(double) workingSet / (1024 * 1024):N} MB ({workingSet} bytes)
 TickCount:              {tickCountString}
 Stopwatch.Frequency:    {Stopwatch.Frequency}";
-                return message;
-            }
+            return message;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static string CurrentDomainState
+        public static string GetCurrentDomainState()
         {
-            get
-            {
-                var stringBuilder = new StringBuilder();
-                stringBuilder.Append("CurrentDomainState:\r\n");
-                var appDomain = AppDomain.CurrentDomain;
-                AppendAppDomainState(appDomain, stringBuilder);
-                return stringBuilder.ToString();
-            }
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append("CurrentDomainState:\r\n");
+            var appDomain = AppDomain.CurrentDomain;
+            AppendAppDomainState(appDomain, stringBuilder);
+            return stringBuilder.ToString();
         }
 
         #endregion
@@ -282,40 +261,44 @@ Stopwatch.Frequency:    {Stopwatch.Frequency}";
             var fileVersion = !string.IsNullOrEmpty(location) ? GetFileVersion(assembly) : null;
             var date = !string.IsNullOrEmpty(location)
                 ? File.GetLastWriteTime(location)
-                : (DateTime?)null;
+                : (DateTime?) null;
 
             var name = assembly.GetName();
 
             var publicKeyToken = name.GetPublicKeyToken();
             var publicKeyTokenString = publicKeyToken != null ? Hex.GetString(publicKeyToken, false) : null;
 
-            return new AssemblyInfo
-            {
-                Name = name.Name,
-                FileVersion = fileVersion,
-                Version = name.Version,
-                ProcessorArchitecture = name.ProcessorArchitecture,
-                Date = date,
-                PublicKeyToken = publicKeyTokenString,
-                ImageRuntimeVersion = assembly.ImageRuntimeVersion,
-                GlobalAssemblyCache = assembly.GlobalAssemblyCache,
-                CodeBase = name.CodeBase,
-                Location = location
-            };
+            return new AssemblyInfo(name.Name, fileVersion, name.Version, name.ProcessorArchitecture, date, publicKeyTokenString, assembly.ImageRuntimeVersion,
+                assembly.GlobalAssemblyCache, name.CodeBase, location);
         }
 
         private sealed class AssemblyInfo
         {
-            public string Name;
-            public Version FileVersion;
-            public Version Version;
-            public ProcessorArchitecture ProcessorArchitecture;
-            public DateTime? Date;
-            public string PublicKeyToken;
-            public string ImageRuntimeVersion;
-            public bool GlobalAssemblyCache;
-            public string CodeBase;
-            public string Location;
+            public readonly string Name;
+            public readonly Version FileVersion;
+            public readonly Version Version;
+            public readonly ProcessorArchitecture ProcessorArchitecture;
+            public readonly DateTime? Date;
+            public readonly string PublicKeyToken;
+            public readonly string ImageRuntimeVersion;
+            public readonly bool GlobalAssemblyCache;
+            public readonly string CodeBase;
+            public readonly string Location;
+
+            public AssemblyInfo(string name, Version fileVersion, Version version, ProcessorArchitecture processorArchitecture, DateTime? date,
+                string publicKeyToken, string imageRuntimeVersion, bool globalAssemblyCache, string codeBase, string location)
+            {
+                Name = name;
+                FileVersion = fileVersion;
+                Version = version;
+                ProcessorArchitecture = processorArchitecture;
+                Date = date;
+                PublicKeyToken = publicKeyToken;
+                ImageRuntimeVersion = imageRuntimeVersion;
+                GlobalAssemblyCache = globalAssemblyCache;
+                CodeBase = codeBase;
+                Location = location;
+            }
         }
     }
 }

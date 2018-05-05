@@ -73,7 +73,7 @@ namespace DataCommander.Providers
 
                 Task.Delay(1000).ContinueWith(task =>
                 {
-                    Log.Write(LogLevel.Trace, "{0}\r\n{1}", AppDomainMonitor.EnvironmentInfo, AppDomainMonitor.CurrentDomainState);
+                    Log.Write(LogLevel.Trace, "{0}\r\n{1}", AppDomainMonitor.GetEnvironmentInfo(), AppDomainMonitor.GetCurrentDomainState());
                 });
 
                 Application.Run(MainForm);

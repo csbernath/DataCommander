@@ -19,9 +19,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Configuration\**" />
     <Compile Remove="Data\**" />
+    <Compile Remove="DefaultLog\**" />
+    <Compile Remove="InternalLog\**" />
+    <Compile Remove="Threading\**" />
+    <Compile Remove="Xml\**" />
+    <EmbeddedResource Remove="Configuration\**" />
     <EmbeddedResource Remove="Data\**" />
+    <EmbeddedResource Remove="DefaultLog\**" />
+    <EmbeddedResource Remove="InternalLog\**" />
+    <EmbeddedResource Remove="Threading\**" />
+    <EmbeddedResource Remove="Xml\**" />
+    <None Remove="Configuration\**" />
     <None Remove="Data\**" />
+    <None Remove="DefaultLog\**" />
+    <None Remove="InternalLog\**" />
+    <None Remove="Threading\**" />
+    <None Remove="Xml\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,14 +46,6 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.4.3" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="4.4.0" />
     <PackageReference Include="System.Security.Principal.Windows" Version="4.4.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Configuration\" />
-    <Folder Include="DefaultLog\" />
-    <Folder Include="InternalLog\" />
-    <Folder Include="Threading\" />
-    <Folder Include="Xml\" />
   </ItemGroup>
 
   <ItemGroup>

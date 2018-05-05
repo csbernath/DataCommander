@@ -1094,7 +1094,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             sb.AppendLine();
             sb.Append(ThreadMonitor.ToStringTableString());
             sb.AppendLine();
-            sb.Append(AppDomainMonitor.CurrentDomainState);
+            sb.Append(AppDomainMonitor.GetCurrentDomainState());
             Log.Trace(sb.ToString());
 
             ThreadMonitor.Join(0);
