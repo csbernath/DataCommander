@@ -21,7 +21,7 @@ namespace DataCommander
                 var updateStarted = Update();
                 if (!updateStarted)
                 {
-                    LogFactory.Read();
+                    LogFactoryReader.Read();
                     MethodProfiler.BeginMethod();
 
                     try

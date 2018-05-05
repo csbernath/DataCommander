@@ -11,7 +11,7 @@
     <AssemblyName>Foundation.NetFramework-4.7.1</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>	
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -68,6 +68,14 @@
     <Compile Include="Windows\Forms\FormPosition.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Foundation.Assertions\Foundation.Assertions.csproj">
+      <Project>{3640355A-6D7C-45B4-8377-1D011DAFD8AA}</Project>
+      <Name>Foundation.Assertions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Foundation.Configuration\Foundation.Configuration.csproj">
+      <Project>{513D0094-7D6B-4453-9D43-23223C51EC4C}</Project>
+      <Name>Foundation.Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Foundation.NetStandard-2.0\Foundation.NetStandard-2.0.csproj">
       <Project>{618d3f05-4d25-4857-ba99-8066c47f749a}</Project>
       <Name>Foundation.NetStandard-2.0</Name>

@@ -120,34 +120,6 @@ namespace Foundation.Linq
         }
 
         [Pure]
-        public static IEnumerable<PreviousAndCurrent<TSource>> SelectPreviousAndCurrent<TSource>(this IEnumerable<TSource> source)
-        {
-            if (source != null)
-                using (var enumerator = source.GetEnumerator())
-                    if (enumerator.MoveNext())
-                    {
-                        var previous = enumerator.Current;
-                        while (enumerator.MoveNext())
-                        {
-                            var current = enumerator.Current;
-                            yield return new PreviousAndCurrent<TSource>(previous, current);
-                            previous = current;
-                        }
-                    }
-        }
-
-        [Pure]
-        public static IEnumerable<PreviousAndCurrent<TKey>> SelectPreviousAndCurrentKey<TSource, TKey>(
-            this IEnumerable<TSource> source,
-            Func<TSource, TKey> keySelector)
-        {
-            Assert.IsNotNull(source);
-            Assert.IsNotNull(keySelector);
-
-            return source.Select(keySelector).SelectPreviousAndCurrent();
-        }
-
-        [Pure]
         public static IEnumerable<TResult> SelectWhere<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> select, Func<TResult, bool> where)
         {
             foreach (var item in source)
@@ -187,13 +159,6 @@ namespace Foundation.Linq
                 yield return list.ToArray();
         }
 
-        public static DynamicArray<TSource> ToDynamicArray<TSource>(this IEnumerable<TSource> source, int initialSize, int maxSize)
-        {
-            var dynamicArray = new DynamicArray<TSource>(initialSize, maxSize);
-            dynamicArray.Add(source);
-            return dynamicArray;
-        }
-
         public static string ToLogString<TSource>(this IEnumerable<TSource> source, Func<TSource, string> toString)
         {
             var sb = new StringBuilder();
@@ -222,13 +187,6 @@ namespace Foundation.Linq
         {
             var dictionary = source.ToDictionary(keySelector);
             return new ReadOnlyDictionary<TKey, TSource>(dictionary);
-        }
-
-        public static SegmentedCollection<TSource> ToSegmentedCollection<TSource>(this IEnumerable<TSource> source, int segmentSize)
-        {
-            var collection = new SegmentedCollection<TSource>(segmentSize);
-            collection.Add(source);
-            return collection;
         }
 
         public static SortedDictionary<TKey, TValue> ToSortedDictionary<TKey, TValue>(this IEnumerable<TValue> source, Func<TValue, TKey> keySelector)

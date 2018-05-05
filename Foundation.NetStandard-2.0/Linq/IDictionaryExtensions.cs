@@ -5,10 +5,7 @@ using Foundation.Assertions;
 
 namespace Foundation.Linq
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public static class DictionaryExtensions
+    public static class IDictionaryExtensions
     {
         /// <summary>
         /// 
@@ -75,22 +72,6 @@ namespace Foundation.Linq
                 dictionary.Add(key, value);
             }
 
-            return value;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="dictionary"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
-        {
-            Assert.IsNotNull(dictionary);
-
-            dictionary.TryGetValue(key, out var value);
             return value;
         }
 

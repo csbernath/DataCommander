@@ -113,6 +113,14 @@
       <Project>{31A30A80-D1B6-4867-A65E-188DE9E912C8}</Project>
       <Name>DataCommander.Providers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Foundation.Assertions\Foundation.Assertions.csproj">
+      <Project>{3640355A-6D7C-45B4-8377-1D011DAFD8AA}</Project>
+      <Name>Foundation.Assertions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Foundation.Configuration\Foundation.Configuration.csproj">
+      <Project>{513D0094-7D6B-4453-9D43-23223C51EC4C}</Project>
+      <Name>Foundation.Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Foundation.Data\Foundation.Data.csproj">
       <Project>{34f913bc-edee-4385-bae6-c650a0e21878}</Project>
       <Name>Foundation.Data</Name>

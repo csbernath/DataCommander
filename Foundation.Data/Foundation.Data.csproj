@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Foundation.NetStandard-2.0\Foundation.NetStandard-2.0.csproj" />
+    <ProjectReference Include="..\Foundation.Threading\Foundation.Threading.csproj" />
   </ItemGroup>
 
 </Project>

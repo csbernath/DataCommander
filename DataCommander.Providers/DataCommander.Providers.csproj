@@ -508,9 +508,37 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Foundation.Assertions\Foundation.Assertions.csproj">
+      <Project>{3640355a-6d7c-45b4-8377-1d011dafd8aa}</Project>
+      <Name>Foundation.Assertions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Foundation.Collections\Foundation.Collections.csproj">
+      <Project>{61b48d70-b14f-462c-8a07-e9db585d3869}</Project>
+      <Name>Foundation.Collections</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Foundation.Configuration\Foundation.Configuration.csproj">
+      <Project>{513d0094-7d6b-4453-9d43-23223c51ec4c}</Project>
+      <Name>Foundation.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Foundation.Core\Foundation.Core.csproj">
+      <Project>{5b3a35c4-cdc3-4ce6-afde-41f980a5a7ec}</Project>
+      <Name>Foundation.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Foundation.Data\Foundation.Data.csproj">
       <Project>{34f913bc-edee-4385-bae6-c650a0e21878}</Project>
       <Name>Foundation.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Foundation.Diagnostics\Foundation.Diagnostics.csproj">
+      <Project>{07E1E003-0877-48E3-81F4-3E0E5ED8CE69}</Project>
+      <Name>Foundation.Diagnostics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Foundation.Linq\Foundation.Linq.csproj">
+      <Project>{e854b2e4-88fc-4fdd-a62e-09a5936d9531}</Project>
+      <Name>Foundation.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Foundation.Log\Foundation.Log.csproj">
+      <Project>{6f50a714-af20-480e-a6ca-548ab4e27e28}</Project>
+      <Name>Foundation.Log</Name>
     </ProjectReference>
     <ProjectReference Include="..\Foundation.NetFramework-4.7.1\Foundation.NetFramework-4.7.1.csproj">
       <Project>{b8934b63-d579-4ee8-b352-13134eb8cc54}</Project>
@@ -519,6 +547,14 @@
     <ProjectReference Include="..\Foundation.NetStandard-2.0\Foundation.NetStandard-2.0.csproj">
       <Project>{04996258-f3f5-4eec-9d3e-acae9726f93f}</Project>
       <Name>Foundation.NetStandard-2.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Foundation.Text\Foundation.Text.csproj">
+      <Project>{c987a1b0-f61d-4985-9bed-7e4c36c7f90e}</Project>
+      <Name>Foundation.Text</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Foundation.Threading\Foundation.Threading.csproj">
+      <Project>{AB3458F4-97B4-42E5-9E48-FA001AE29A2E}</Project>
+      <Name>Foundation.Threading</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

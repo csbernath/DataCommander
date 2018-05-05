@@ -9,10 +9,7 @@ using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public static class CollectionExtensions
+    public static class ICollectionExtensions
     {
         /// <summary>
         /// 
@@ -35,27 +32,6 @@ namespace Foundation.Linq
         {
             var isNullOrEmpty = collection == null || collection.Count == 0;
             return isNullOrEmpty;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="collection"></param>
-        /// <param name="items"></param>
-        public static void Add<T>(this ICollection<T> collection, IEnumerable<T> items)
-        {
-
-            FoundationContract.Requires<ArgumentException>(collection != null || items == null);
-
-
-            if (items != null)
-            {
-                foreach (var item in items)
-                {
-                    collection.Add(item);
-                }
-            }
         }
 
         /// <summary>
@@ -123,14 +99,6 @@ namespace Foundation.Linq
             var target = new T[source.Count];
             source.CopyTo(target, 0);
             return target;
-        }
-
-        public static ReadOnlyArray<T> ToReadOnlyArray<T>(this ICollection<T> source)
-        {
-            Assert.IsNotNull(source);
-
-            var items = source.ToArray();
-            return new ReadOnlyArray<T>(items);
         }
 
         private sealed class CastedCollection<TResult> : ICollection<TResult>

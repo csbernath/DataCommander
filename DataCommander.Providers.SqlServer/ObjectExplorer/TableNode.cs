@@ -1,25 +1,24 @@
-﻿using Foundation.Assertions;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using DataCommander.Providers.Query;
+using Foundation.Assertions;
 using Foundation.Data;
 using Foundation.Diagnostics;
 using Foundation.Log;
 using Foundation.Text;
 using Foundation.Windows.Forms;
+using Microsoft.SqlServer.Management.Common;
+using Microsoft.SqlServer.Management.Smo;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Linq;
-    using System.Text;
-    using System.Windows.Forms;
-    using Microsoft.SqlServer.Management.Common;
-    using Microsoft.SqlServer.Management.Smo;
-    using Query;
-
     internal sealed class TableNode : ITreeNode
     {
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();

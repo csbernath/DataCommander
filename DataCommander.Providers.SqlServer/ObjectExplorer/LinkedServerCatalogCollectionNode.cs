@@ -10,6 +10,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     internal sealed class LinkedServerCatalogCollectionNode : ITreeNode
     {
         private readonly LinkedServerNode _linkedServer;
+        public object ItemAsEnumerable;
 
         public LinkedServerCatalogCollectionNode(LinkedServerNode linkedServer)
         {

@@ -19,6 +19,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\**" />
+    <EmbeddedResource Remove="Data\**" />
+    <None Remove="Data\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="4.4.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.4.1" />
@@ -28,7 +34,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
+    <Folder Include="Configuration\" />
+    <Folder Include="DefaultLog\" />
+    <Folder Include="InternalLog\" />
+    <Folder Include="Threading\" />
+    <Folder Include="Xml\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Foundation.Assertions\Foundation.Assertions.csproj" />
+    <ProjectReference Include="..\Foundation.Collections\Foundation.Collections.csproj" />
+    <ProjectReference Include="..\Foundation.Configuration\Foundation.Configuration.csproj" />
+    <ProjectReference Include="..\Foundation.Diagnostics\Foundation.Diagnostics.csproj" />
+    <ProjectReference Include="..\Foundation.InternalLog\Foundation.InternalLog.csproj" />
+    <ProjectReference Include="..\Foundation.IO\Foundation.IO.csproj" />
+    <ProjectReference Include="..\Foundation.Text\Foundation.Text.csproj" />
+    <ProjectReference Include="..\Foundation.Xml\Foundation.Xml.csproj" />
   </ItemGroup>
 
 </Project>

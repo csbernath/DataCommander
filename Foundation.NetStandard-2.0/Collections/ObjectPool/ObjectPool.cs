@@ -14,11 +14,11 @@ namespace Foundation.Collections.ObjectPool
     {
         #region Private Fields
 
-        private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof (ObjectPool<T>));
+        private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(ObjectPool<T>));
         private readonly IPoolableObjectFactory<T> _factory;
         private LinkedList<ObjectPoolItem<T>> _idleItems = new LinkedList<ObjectPoolItem<T>>();
         private readonly Dictionary<int, ObjectPoolItem<T>> _activeItems = new Dictionary<int, ObjectPoolItem<T>>();
-        private readonly AutoResetEvent _idleEvent = new AutoResetEvent( false );
+        private readonly AutoResetEvent _idleEvent = new AutoResetEvent(false);
         private Timer _timer;
         private int _key;
         private bool _disposed;
@@ -36,7 +36,7 @@ namespace Foundation.Collections.ObjectPool
         public ObjectPool(
             IPoolableObjectFactory<T> factory,
             int minSize,
-            int maxSize )
+            int maxSize)
         {
             Assert.IsNotNull(factory);
             FoundationContract.Requires<ArgumentOutOfRangeException>(minSize >= 0);
@@ -45,7 +45,7 @@ namespace Foundation.Collections.ObjectPool
             _factory = factory;
             MinSize = minSize;
             MaxSize = maxSize;
-            _timer = new Timer(TimerCallback, null, 30000, 30000 );
+            _timer = new Timer(TimerCallback, null, 30000, 30000);
         }
 
         /// <summary>
@@ -53,11 +53,13 @@ namespace Foundation.Collections.ObjectPool
         /// </summary>
         ~ObjectPool()
         {
-            Dispose( false );
+            Dispose(false);
         }
-#endregion
 
-#region Public Properties
+        #endregion
+
+        #region Public Properties
+
         /// <summary>
         /// 
         /// </summary>
@@ -78,16 +80,17 @@ namespace Foundation.Collections.ObjectPool
         /// </summary>
         public int ActiveCount => _activeItems.Count;
 
-#endregion
+        #endregion
 
-#region Public Methods
+        #region Public Methods
+
         /// <summary>
         /// 
         /// </summary>
         public void Dispose()
         {
-            Dispose( true );
-            GC.SuppressFinalize( this );
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -110,8 +113,8 @@ namespace Foundation.Collections.ObjectPool
 
                     if (timeSpan.TotalSeconds >= 10.0)
                     {
-                        obsoleteList.Add( item );
-                        _idleItems.Remove( listNode );
+                        obsoleteList.Add(item);
+                        _idleItems.Remove(listNode);
                     }
 
                     listNode = next;
@@ -120,17 +123,18 @@ namespace Foundation.Collections.ObjectPool
 
             foreach (var item in obsoleteList)
             {
-                FactoryDestroyObject( item );
+                FactoryDestroyObject(item);
             }
 
             if (obsoleteList.Count > 0)
             {
-                Log.Trace("{0} obsolete items destroyed from ObjectPool. idle: {1}, active: {2}.", obsoleteList.Count, _idleItems.Count, _activeItems.Count );
+                Log.Trace("{0} obsolete items destroyed from ObjectPool. idle: {1}, active: {2}.", obsoleteList.Count, _idleItems.Count, _activeItems.Count);
             }
         }
-#endregion
 
-#region Internal Methods
+        #endregion
+
+        #region Internal Methods
 
         internal ObjectPoolItem<T> CreateObject(CancellationToken cancellationToken)
         {
@@ -147,16 +151,16 @@ namespace Foundation.Collections.ObjectPool
                             var last = _idleItems.Last;
                             _idleItems.RemoveLast();
                             item = last.Value;
-                            Log.Trace("Item(key:{0}) reused from object pool. idle: {1}, active: {2}.", item.Key, _idleItems.Count, _activeItems.Count );
+                            Log.Trace("Item(key:{0}) reused from object pool. idle: {1}, active: {2}.", item.Key, _idleItems.Count, _activeItems.Count);
                         }
                     }
 
                     lock (_activeItems)
                     {
-                        _activeItems.Add( item.Key, item );
+                        _activeItems.Add(item.Key, item);
                     }
 
-                    _factory.InitializeObject( item.Value );
+                    _factory.InitializeObject(item.Value);
                     break;
                 }
                 else
@@ -167,20 +171,20 @@ namespace Foundation.Collections.ObjectPool
                     {
                         var creationDate = LocalTime.Default.Now;
                         var value = _factory.CreateObject();
-                        var key = Interlocked.Increment( ref _key);
-                        item = new ObjectPoolItem<T>( key, value, creationDate );
+                        var key = Interlocked.Increment(ref _key);
+                        item = new ObjectPoolItem<T>(key, value, creationDate);
 
                         lock (_activeItems)
                         {
-                            _activeItems.Add( item.Key, item );
+                            _activeItems.Add(item.Key, item);
                         }
 
-                        Log.Trace("New item(key:{0}) created in object pool. idle: {1}, active: {2}.", key, _idleItems.Count, _activeItems.Count );
+                        Log.Trace("New item(key:{0}) created in object pool. idle: {1}, active: {2}.", key, _idleItems.Count, _activeItems.Count);
                         break;
                     }
                     else
                     {
-                        Log.Trace("object pool is active. Waiting for idle item..." );
+                        Log.Trace("object pool is active. Waiting for idle item...");
                         _idleEvent.Reset();
 
                         WaitHandle[] waitHandles =
@@ -189,7 +193,7 @@ namespace Foundation.Collections.ObjectPool
                             _idleEvent
                         };
 
-                        var i = WaitHandle.WaitAny( waitHandles, 30000, false );
+                        var i = WaitHandle.WaitAny(waitHandles, 30000, false);
 
                         if (i == 0)
                         {
@@ -200,7 +204,7 @@ namespace Foundation.Collections.ObjectPool
                         }
                         else if (i == WaitHandle.WaitTimeout)
                         {
-                            throw new ApplicationException( "ObjectPool.CreateObject timeout." );
+                            throw new ApplicationException("ObjectPool.CreateObject timeout.");
                         }
                     }
                 }
@@ -209,13 +213,13 @@ namespace Foundation.Collections.ObjectPool
             return item;
         }
 
-        internal void DestroyObject( ObjectPoolItem<T> item )
+        internal void DestroyObject(ObjectPoolItem<T> item)
         {
             bool idle;
 
             lock (_activeItems)
             {
-                _activeItems.Remove( item.Key );
+                _activeItems.Remove(item.Key);
             }
 
             lock (_idleItems)
@@ -225,7 +229,7 @@ namespace Foundation.Collections.ObjectPool
 
                 if (idle)
                 {
-                    _idleItems.AddLast( item );
+                    _idleItems.AddLast(item);
                 }
             }
 
@@ -235,15 +239,15 @@ namespace Foundation.Collections.ObjectPool
             }
             else
             {
-                FactoryDestroyObject( item );
+                FactoryDestroyObject(item);
             }
         }
 
-#endregion
+        #endregion
 
-#region Private Methods
+        #region Private Methods
 
-        private void Dispose( bool disposing )
+        private void Dispose(bool disposing)
         {
             if (!_disposed)
             {
@@ -259,7 +263,7 @@ namespace Foundation.Collections.ObjectPool
                     {
                         foreach (var item in _idleItems)
                         {
-                            FactoryDestroyObject( item );
+                            FactoryDestroyObject(item);
                         }
 
                         _idleItems.Clear();
@@ -270,7 +274,7 @@ namespace Foundation.Collections.ObjectPool
                     {
                         foreach (var item in _activeItems.Values)
                         {
-                            Log.Trace("object pool item(key:{0}) is active.", item.Key );
+                            Log.Trace("object pool item(key:{0}) is active.", item.Key);
                         }
                     }
                 }
@@ -279,17 +283,17 @@ namespace Foundation.Collections.ObjectPool
             }
         }
 
-        private void TimerCallback( object state )
+        private void TimerCallback(object state)
         {
             Clear();
         }
 
-        private void FactoryDestroyObject( ObjectPoolItem<T> item )
+        private void FactoryDestroyObject(ObjectPoolItem<T> item)
         {
-            _factory.DestroyObject( item.Value );
-            Log.Trace("ObjectPool item(key:{0}) destroyed.", item.Key );
+            _factory.DestroyObject(item.Value);
+            Log.Trace("ObjectPool item(key:{0}) destroyed.", item.Key);
         }
 
-#endregion
+        #endregion
     }
 }
