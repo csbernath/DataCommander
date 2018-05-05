@@ -1,5 +1,4 @@
 ﻿using System;
-using Foundation;
 using Foundation.Log;
 
 namespace Foundation.InternalLog

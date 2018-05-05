@@ -6,7 +6,6 @@ using System.Data.SqlClient;
 using System.Text;
 using System.Threading;
 using Foundation.Assertions;
-using Foundation.Linq;
 using Foundation.Log;
 
 namespace Foundation.Data.SqlClient
