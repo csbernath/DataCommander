@@ -208,6 +208,10 @@
       <Project>{34f913bc-edee-4385-bae6-c650a0e21878}</Project>
       <Name>Foundation.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Foundation.DefaultLog\Foundation.DefaultLog.csproj">
+      <Project>{14aa33eb-053a-4397-86aa-efda2d2b119d}</Project>
+      <Name>Foundation.DefaultLog</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Foundation.Deployment\Foundation.Deployment.csproj">
       <Project>{7db3820f-e3e1-4085-8d37-ef64ba9274c8}</Project>
       <Name>Foundation.Deployment</Name>
