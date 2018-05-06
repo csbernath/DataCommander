@@ -252,7 +252,7 @@ namespace DataCommander.Providers
             this._mainMenu.Location = new System.Drawing.Point(0, 27);
             this._mainMenu.MdiWindowListItem = this._mnuWindow;
             this._mainMenu.Name = "_mainMenu";
-            this._mainMenu.Size = new System.Drawing.Size(792, 28);
+            this._mainMenu.Size = new System.Drawing.Size(982, 28);
             this._mainMenu.TabIndex = 1;
             // 
             // _menuItem1
@@ -480,16 +480,16 @@ namespace DataCommander.Providers
             this._statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._toolStripStatusLabel,
             this._managedMemoryToolStripStatusLabel});
-            this._statusBar.Location = new System.Drawing.Point(0, 526);
+            this._statusBar.Location = new System.Drawing.Point(0, 726);
             this._statusBar.Name = "_statusBar";
             this._statusBar.ShowItemToolTips = true;
-            this._statusBar.Size = new System.Drawing.Size(792, 27);
+            this._statusBar.Size = new System.Drawing.Size(982, 27);
             this._statusBar.TabIndex = 3;
             // 
             // _toolStripStatusLabel
             // 
             this._toolStripStatusLabel.Name = "_toolStripStatusLabel";
-            this._toolStripStatusLabel.Size = new System.Drawing.Size(677, 22);
+            this._toolStripStatusLabel.Size = new System.Drawing.Size(867, 22);
             this._toolStripStatusLabel.Spring = true;
             this._toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -512,12 +512,12 @@ namespace DataCommander.Providers
             this._toolStripPanel.Name = "_toolStripPanel";
             this._toolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
             this._toolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this._toolStripPanel.Size = new System.Drawing.Size(792, 55);
+            this._toolStripPanel.Size = new System.Drawing.Size(982, 55);
             // 
             // MainForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(7, 17);
-            this.ClientSize = new System.Drawing.Size(792, 553);
+            this.ClientSize = new System.Drawing.Size(982, 753);
             this.Controls.Add(this._toolStripPanel);
             this.Controls.Add(this._statusBar);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
