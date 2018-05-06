@@ -48,18 +48,7 @@ namespace DataCommander.Providers.MySql
 
         bool IProvider.IsCommandCancelable => true;
 
-        IObjectExplorer IProvider.ObjectExplorer
-        {
-            get
-            {
-                if (objectExplorer == null)
-                {
-                    objectExplorer = new ObjectExplorer.ObjectExplorer();
-                }
-
-                return objectExplorer;
-            }
-        }
+        public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
 
         void IProvider.ClearCompletionCache()
         {

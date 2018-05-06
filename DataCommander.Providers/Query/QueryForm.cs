@@ -233,7 +233,7 @@ namespace DataCommander.Providers.Query
 
             _textBoxWriter = new TextBoxWriter(_messagesTextBox);
 
-            var objectExplorer = provider.ObjectExplorer;
+            var objectExplorer = provider.CreateObjectExplorer();
             if (objectExplorer != null)
             {
                 objectExplorer.SetConnection(connectionString, connection.Connection);
@@ -2823,7 +2823,7 @@ namespace DataCommander.Providers.Query
 
         private void mnuRefreshObjectExplorer_Click(object sender, EventArgs e)
         {
-            var objectExplorer = Provider.ObjectExplorer;
+            var objectExplorer = Provider.CreateObjectExplorer();
             if (objectExplorer != null)
             {
                 using (new CursorManager(Cursors.WaitCursor))

@@ -24,7 +24,7 @@ namespace DataCommander.Providers.PostgreSql
         string[] IProvider.KeyWords => null;
         bool IProvider.CanConvertCommandToString => throw new NotImplementedException();
         bool IProvider.IsCommandCancelable => true;
-        IObjectExplorer IProvider.ObjectExplorer => new ObjectExplorer.ObjectExplorer();
+        public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
         void IProvider.ClearCompletionCache() => throw new NotImplementedException();
         string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
         ConnectionBase IProvider.CreateConnection(string connectionString) => new Connection(connectionString);

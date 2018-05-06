@@ -241,7 +241,7 @@
     <Compile Include="IDataReaderHelper.cs" />
     <Compile Include="IDbConnectionStringBuilder.cs" />
     <Compile Include="IObjectName.cs" />
-    <Compile Include="IProviderContract.cs" />
+    <Compile Include="IQueryForm.cs" />
     <Compile Include="IStringMatcher.cs" />
     <Compile Include="ITreeNode.cs" />
     <Compile Include="ObjectName.cs" />

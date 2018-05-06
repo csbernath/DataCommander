@@ -131,7 +131,7 @@ namespace DataCommander.Providers.Wmi
             return null;
         }
 
-        IObjectExplorer IProvider.ObjectExplorer => new WmiObjectExplorer();
+        public IObjectExplorer CreateObjectExplorer() => new WmiObjectExplorer();
 
         private static void AddClassNames(ManagementClass manClass, IList list)
         {

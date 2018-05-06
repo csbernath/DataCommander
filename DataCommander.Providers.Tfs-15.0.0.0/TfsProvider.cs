@@ -214,18 +214,7 @@ namespace DataCommander.Providers.Tfs
             throw new NotImplementedException();
         }
 
-        IObjectExplorer IProvider.ObjectExplorer
-        {
-            get
-            {
-                if (objectBrowser == null)
-                {
-                    objectBrowser = new TfsObjectExplorer();
-                }
-
-                return objectBrowser;
-            }
-        }
+        public IObjectExplorer CreateObjectExplorer() => new TfsObjectExplorer();
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {

@@ -18,12 +18,12 @@ namespace DataCommander.Providers
         string[] KeyWords { get; }
         bool CanConvertCommandToString { get; }
         bool IsCommandCancelable { get; }
-        IObjectExplorer ObjectExplorer { get; }
 
         #endregion
 
         #region Methods
 
+        IObjectExplorer CreateObjectExplorer();
         void ClearCompletionCache();
         string CommandToString(IDbCommand command);
         ConnectionBase CreateConnection(string connectionString);

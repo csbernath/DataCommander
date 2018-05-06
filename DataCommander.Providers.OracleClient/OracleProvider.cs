@@ -369,7 +369,7 @@ namespace DataCommander.Providers.OracleClient
             throw new NotImplementedException();
         }
 
-        IObjectExplorer IProvider.ObjectExplorer => new ObjectExplorer();
+        public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer();
 
         void IProvider.ClearCompletionCache()
         {

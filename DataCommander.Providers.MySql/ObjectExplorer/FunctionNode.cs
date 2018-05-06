@@ -20,16 +20,11 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
         }
 
         string ITreeNode.Name => _name;
-
         bool ITreeNode.IsLeaf => true;
 
-        System.Collections.Generic.IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
-        {
-            return null;
-        }
+        System.Collections.Generic.IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => null;
 
         bool ITreeNode.Sortable => false;
-
         string ITreeNode.Query => null;
 
         ContextMenuStrip ITreeNode.ContextMenu

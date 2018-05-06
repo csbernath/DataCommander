@@ -63,7 +63,7 @@ namespace DataCommander.Providers.SqlServerCe40
             throw new NotImplementedException();
         }
 
-        IObjectExplorer IProvider.ObjectExplorer => new SqlCeObjectExplorer();
+        public IObjectExplorer CreateObjectExplorer() => new SqlCeObjectExplorer();
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {

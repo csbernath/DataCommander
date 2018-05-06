@@ -244,7 +244,7 @@ namespace DataCommander.Providers.OleDb
             return null;
         }
 
-        public IObjectExplorer ObjectBrowser => new ObjectExplorer();
+        public IObjectExplorer CreateObjectExplorer () => new ObjectExplorer();
 
         public void ClearCompletionCache()
         {
@@ -303,8 +303,6 @@ namespace DataCommander.Providers.OleDb
         {
             throw new NotImplementedException();
         }
-
-        IObjectExplorer IProvider.ObjectExplorer => new ObjectExplorer();
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text,
             int position)

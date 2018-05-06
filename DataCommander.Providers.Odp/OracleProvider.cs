@@ -335,7 +335,7 @@ namespace DataCommander.Providers.Odp
             return dataAdapter;
         }
 
-        IObjectExplorer IProvider.ObjectExplorer => _objectExplorer;
+        public IObjectExplorer CreateObjectExplorer() => _objectExplorer;
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {

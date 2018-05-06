@@ -27,7 +27,6 @@ namespace DataCommander.Providers.SqlServer
         #region Private Fields
 
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-        private ObjectExplorer.ObjectExplorer _objectBrowser;
         private static string[] _keyWords;
 
         #endregion
@@ -75,22 +74,11 @@ namespace DataCommander.Providers.SqlServer
 
         bool IProvider.IsCommandCancelable => true;
 
-        IObjectExplorer IProvider.ObjectExplorer
-        {
-            get
-            {
-                if (_objectBrowser == null)
-                {
-                    _objectBrowser = new ObjectExplorer.ObjectExplorer();
-                }
-
-                return _objectBrowser;
-            }
-        }
-
         #endregion
 
         #region Methods
+
+        public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
 
         public void ClearCompletionCache()
         {

@@ -134,7 +134,7 @@ namespace DataCommander.Providers.SQLite
             throw new Exception("The method or operation is not implemented.");
         }
 
-        IObjectExplorer IProvider.ObjectExplorer => new ObjectExplorer.ObjectExplorer();
+        public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {

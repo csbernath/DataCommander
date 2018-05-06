@@ -91,12 +91,10 @@ namespace DataCommander.Providers.Msi
         string IProvider.Name => "Msi";
 
         DbProviderFactory IProvider.DbProviderFactory => MsiProviderFactory.Instance;
-
         string[] IProvider.KeyWords => null;
-
         bool IProvider.IsCommandCancelable => false;
 
-        IObjectExplorer IProvider.ObjectExplorer => new MsiObjectExplorer();
+        public IObjectExplorer CreateObjectExplorer() => new MsiObjectExplorer();
 
         void IProvider.ClearCompletionCache()
         {
