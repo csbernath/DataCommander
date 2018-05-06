@@ -34,14 +34,11 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Security" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -75,10 +72,6 @@
     <ProjectReference Include="..\Foundation.Configuration\Foundation.Configuration.csproj">
       <Project>{513D0094-7D6B-4453-9D43-23223C51EC4C}</Project>
       <Name>Foundation.Configuration</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Foundation.NetStandard-2.0\Foundation.NetStandard-2.0.csproj">
-      <Project>{618d3f05-4d25-4857-ba99-8066c47f749a}</Project>
-      <Name>Foundation.NetStandard-2.0</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
