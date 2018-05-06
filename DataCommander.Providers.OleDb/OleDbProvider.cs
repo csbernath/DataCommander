@@ -193,7 +193,7 @@ namespace DataCommander.Providers.OleDb
                 if (!allowDBNull)
                     sb.Append(" NOT NULL");
 
-                table.Rows.Add(new object[]
+                table.Rows.Add(new[]
                 {
                     columnOrdinal,
                     pk,

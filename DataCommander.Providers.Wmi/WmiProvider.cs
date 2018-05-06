@@ -68,7 +68,7 @@ namespace DataCommander.Providers.Wmi
                     var columnOrdinal = i + 1;
                     var columnSize = (int)row["ColumnSize"];
 
-                    table.Rows.Add(new object[]
+                    table.Rows.Add(new[]
                     {
                         columnOrdinal,
                         row["ColumnName"],

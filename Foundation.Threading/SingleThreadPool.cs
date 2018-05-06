@@ -86,7 +86,7 @@ namespace Foundation.Threading
 
         private void Start()
         {
-            var waitHandles = new WaitHandle[]
+            var waitHandles = new[]
             {
                 Thread.StopRequest,
                 _enqueueEvent

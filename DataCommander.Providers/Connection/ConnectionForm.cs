@@ -281,7 +281,7 @@ namespace DataCommander.Providers.Connection
                 }
                 else
                 {
-                    configurationNodes = new ConfigurationNode[] {propertyFolder};
+                    configurationNodes = new[] {propertyFolder};
                 }
 
                 foreach (var configurationNode in configurationNodes)

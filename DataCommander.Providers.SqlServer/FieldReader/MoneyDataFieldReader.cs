@@ -23,7 +23,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
             
             NumberFormatInfo.NumberDecimalSeparator = ".";
             NumberFormatInfo.NumberGroupSeparator = ",";
-            NumberFormatInfo.NumberGroupSizes = new int[] { 3 };
+            NumberFormatInfo.NumberGroupSizes = new[] { 3 };
             NumberFormatInfo.NumberDecimalDigits = 4; 
         }
 

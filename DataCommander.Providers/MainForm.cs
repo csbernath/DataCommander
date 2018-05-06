@@ -187,9 +187,7 @@ namespace DataCommander.Providers
             if (disposing)
             {
                 if (components != null)
-                {
                     components.Dispose();
-                }
             }
 
             base.Dispose(disposing);
@@ -626,15 +624,9 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             }
         }
 
-        private void mnuConnect_Click(object sender, EventArgs e)
-        {
-            Connect();
-        }
+        private void mnuConnect_Click(object sender, EventArgs e) => Connect();
 
-        private void mnuExit_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+        private void mnuExit_Click(object sender, EventArgs e) => Close();
 
         private void mnuAbout_Click(object sender, EventArgs e)
         {
@@ -660,7 +652,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             var index = _mnuRecentFileList.DropDownItems.IndexOf(menuItem);
             var count = _recentFileList.Count;
             var path = _recentFileList[count - index - 1];
-            LoadFiles(new string[] {path});
+            LoadFiles(new[] {path});
         }
 
         private void CreateRecentFileListMenu()
@@ -692,18 +684,14 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                 int i;
 
                 for (i = 0; i < array.Length; i++)
-                {
                     _recentFileList.Add(array[i]);
-                }
             }
 
             string base64;
             contains = folder.Attributes.TryGetAttributeValue("Font", out base64);
 
             if (contains)
-            {
                 SelectedFont = DeserializeFont(base64);
-            }
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -725,9 +713,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                 if (fileDialog.ShowDialog(this) == DialogResult.OK)
                 {
                     if (Environment.CurrentDirectory != currentDirectory)
-                    {
                         Environment.CurrentDirectory = currentDirectory;
-                    }
 
                     var fileName = fileDialog.FileName;
                     var extension = Path.GetExtension(fileName).ToLower();
@@ -752,20 +738,11 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
                         case 4:
                             if (extension == ".xls")
-                            {
-                                if (Environment.Is64BitProcess)
-                                {
-                                    connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={fileName};Extended Properties=Excel 8.0";
-                                }
-                                else
-                                {
-                                    connectionString = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source={fileName};Extended Properties=Excel 8.0";
-                                }
-                            }
+                                connectionString = Environment.Is64BitProcess
+                                    ? $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={fileName};Extended Properties=Excel 8.0"
+                                    : $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source={fileName};Extended Properties=Excel 8.0";
                             else
-                            {
                                 connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={fileName};Extended Properties=Excel 12.0";
-                            }
 
                             provider = ProviderFactory.CreateProvider(ProviderName.OleDb);
                             break;
@@ -841,9 +818,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             var index = _recentFileList.IndexOf(path);
 
             if (index >= 0)
-            {
                 _recentFileList.RemoveAt(index);
-            }
 
             _recentFileList.Add(path);
             CreateRecentFileListMenu();
@@ -888,30 +863,19 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
 
         public Font SelectedFont { get; private set; }
 
-        private void btnConnect_Click(object sender, EventArgs e)
-        {
-            Connect();
-        }
+        private void btnConnect_Click(object sender, EventArgs e) => Connect();
 
-        private void openButton_Click(object sender, EventArgs e)
-        {
-            Open();
-        }
+        private void openButton_Click(object sender, EventArgs e) => Open();
 
         private void saveButton_Click(object sender, EventArgs e)
         {
             var queryForm = (QueryForm) ActiveMdiChild;
 
             if (queryForm != null)
-            {
                 queryForm.Save();
-            }
         }
 
-        private void helpButton_Click(object sender, EventArgs e)
-        {
-            ShowContents();
-        }
+        private void helpButton_Click(object sender, EventArgs e) => ShowContents();
 
         private async void CreateMenuItem_Click(object sender, EventArgs e)
         {
@@ -966,10 +930,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             Process.Start(url);
         }
 
-        private void contentsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ShowContents();
-        }
+        private void contentsToolStripMenuItem_Click(object sender, EventArgs e) => ShowContents();
 
         protected override void OnMdiChildActivate(EventArgs e)
         {
@@ -982,9 +943,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             {
                 _toolStripPanel.ResumeLayout(false);
                 if (_queryFormToolStrip != null)
-                {
                     _toolStripPanel.Controls.Remove(_queryFormToolStrip);
-                }
 
                 var queryForm = (QueryForm) ActiveMdiChild;
                 var queryFormToolStrip = queryForm.ToolStrip;
@@ -1001,9 +960,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                 CreateRecentFileListMenu();
             }
             else
-            {
                 _mnuRecentFileList.DropDownItems.Clear();
-            }
         }
 
         private void closeAllDocumentsMenuItem_Click(object sender, EventArgs e)
@@ -1013,17 +970,13 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                 var mdiChildren = MdiChildren;
                 var length = mdiChildren.Length;
                 if (length == 0)
-                {
                     break;
-                }
 
                 var mdiChild = mdiChildren[length - 1];
                 mdiChild.Close();
 
                 if (MdiChildren.Length == length)
-                {
                     break;
-                }
             }
         }
 
@@ -1055,10 +1008,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             Cursor = Cursors.Default;
         }
 
-        private void saveAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SaveAll();
-        }
+        private void saveAllToolStripMenuItem_Click(object sender, EventArgs e) => SaveAll();
 
         public ToolStripTextBox ActiveMdiChildToolStripTextBox { get; private set; }
 

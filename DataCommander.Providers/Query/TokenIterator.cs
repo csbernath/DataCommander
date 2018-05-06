@@ -7,7 +7,7 @@ namespace DataCommander.Providers.Query
     {
         #region Private Fields
 
-        private static readonly char[] OperatorsOrPunctuators = new char[]
+        private static readonly char[] OperatorsOrPunctuators = new[]
         {
             '{', '}', '[', ']', '(', ')', '.', ',', ':', ';', '+', '-', '*', '/', '%', '&', '|', '^', '!', '~', '=',
             '<', '>', '?'

@@ -229,7 +229,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                         formula = column["text"].ToString();
                     }
 
-                    schema.Rows.Add(new object[]
+                    schema.Rows.Add(new[]
                     {
                         column["col_id"],
                         identity,

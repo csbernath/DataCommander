@@ -204,7 +204,7 @@ namespace DataCommander.Providers.Query
             var sqlKeyWords = Settings.CurrentType.Attributes["Sql92ReservedWords"].GetValue<string[]>();
             var providerKeyWords = provider.KeyWords;
 
-            QueryTextBox.AddKeyWords(new string[] {"exec"}, colorTheme != null
+            QueryTextBox.AddKeyWords(new[] {"exec"}, colorTheme != null
                 ? colorTheme.ExecKeyWordColor
                 : Color.Green);
             QueryTextBox.AddKeyWords(sqlKeyWords, colorTheme != null
@@ -1832,7 +1832,7 @@ namespace DataCommander.Providers.Query
                     values[j] = dataRow[j];
                 }
 
-                resultWriter.WriteRows(new object[][] {values}, 1);
+                resultWriter.WriteRows(new[] {values}, 1);
             }
 
             resultWriter.WriteTableEnd();
@@ -2277,7 +2277,7 @@ namespace DataCommander.Providers.Query
 
         private void ConsumeInfoMessages()
         {
-            var waitHandles = new WaitHandle[]
+            var waitHandles = new[]
             {
                 _enqueueEvent,
                 _cancellationTokenSource.Token.WaitHandle

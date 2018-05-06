@@ -550,7 +550,7 @@ namespace DataCommander.Providers
                             }
                             catch
                             {
-                                var formats = new string[]
+                                var formats = new[]
                                 {
                                     "yyyyMMdd",
                                     "yyyyMMdd HH:mm:ss"

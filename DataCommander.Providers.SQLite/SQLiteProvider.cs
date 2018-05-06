@@ -100,7 +100,7 @@ namespace DataCommander.Providers.SQLite
                         sb.Append(" NOT NULL");
                     }
 
-                    table.Rows.Add(new object[]
+                    table.Rows.Add(new[]
                     {
                         columnOrdinal,
                         pk,

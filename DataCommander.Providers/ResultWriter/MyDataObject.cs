@@ -107,7 +107,7 @@
 
         string[] IDataObject.GetFormats(bool autoConvert)
         {
-            return new string[]
+            return new[]
             {
                 DataFormats.CommaSeparatedValue,
                 DataFormats.Html,

@@ -72,7 +72,7 @@ namespace DataCommander.Providers.Tfs
                     {
                         workspace = currentWorkspace;
                         var itemSpec = new ItemSpec(path, recursion);
-                        var extendedItems = currentWorkspace.GetExtendedItems(new ItemSpec[] {itemSpec}, DeletedState.Any, ItemType.Any);
+                        var extendedItems = currentWorkspace.GetExtendedItems(new[] {itemSpec}, DeletedState.Any, ItemType.Any);
                         _items = extendedItems[0];
                     }
                 }

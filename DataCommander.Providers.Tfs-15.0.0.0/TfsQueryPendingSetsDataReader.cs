@@ -68,7 +68,7 @@ namespace DataCommander.Providers.Tfs
 
                     var workspace = ValueReader.GetValueOrDefault<string>(parameters["workspace"].Value);
                     var user = ValueReader.GetValueOrDefault<string>(parameters["user"].Value);
-                    pendingSets = command.Connection.VersionControlServer.QueryPendingSets(new string[] {path}, recursion, workspace, user);
+                    pendingSets = command.Connection.VersionControlServer.QueryPendingSets(new[] {path}, recursion, workspace, user);
                     enumerator = AsEnumerable(pendingSets).GetEnumerator();
                 }
 

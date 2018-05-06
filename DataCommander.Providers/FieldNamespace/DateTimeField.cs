@@ -5,22 +5,19 @@ namespace DataCommander.Providers.FieldNamespace
 {
     public sealed class DateTimeField : IComparable, IConvertible
     {
-        public DateTimeField(DateTime value)
-        {
-            Value = value;
-        }
+        public DateTimeField(DateTime value) => Value = value;
 
         public DateTime Value { get; }
 
         public static bool TryParse(string s, out DateTime dateTime)
         {
-            var formats = new string[]
-                    {
-                        "yyyyMMdd",
-                        "yyyy-MM-dd",
-                        "yyyy-MM-dd HH:mm:ss",
-                        "yyyy-MM-dd HH:mm:ss.fff"
-                    };
+            var formats = new[]
+            {
+                "yyyyMMdd",
+                "yyyy-MM-dd",
+                "yyyy-MM-dd HH:mm:ss",
+                "yyyy-MM-dd HH:mm:ss.fff"
+            };
 
             var succeeded = DateTime.TryParseExact(s, formats, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out dateTime);
             return succeeded;
@@ -31,17 +28,11 @@ namespace DataCommander.Providers.FieldNamespace
             string format;
 
             if (dateTime.TimeOfDay.Ticks == 0)
-            {
                 format = "yyyy-MM-dd";
-            }
             else if (dateTime.Date.Ticks == 0)
-            {
                 format = "HH:mm:ss.fff";
-            }
             else
-            {
                 format = "yyyy-MM-dd HH:mm:ss.fff";
-            }
 
             return dateTime.ToString(format);
         }
@@ -62,7 +53,7 @@ namespace DataCommander.Providers.FieldNamespace
             switch (typeCode)
             {
                 case TypeCode.String:
-                    var s = (string)obj;
+                    var s = (string) obj;
                     DateTime dateTime;
                     var succeeded = TryParse(s, out dateTime);
 
@@ -78,7 +69,7 @@ namespace DataCommander.Providers.FieldNamespace
                     break;
 
                 case TypeCode.Object:
-                    var dateTimeField = (DateTimeField)obj;
+                    var dateTimeField = (DateTimeField) obj;
                     result = Value.CompareTo(dateTimeField.Value);
                     break;
 

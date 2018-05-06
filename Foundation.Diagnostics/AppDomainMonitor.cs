@@ -21,7 +21,7 @@ namespace Foundation.Diagnostics
 
         static AppDomainMonitor()
         {
-            Columns = new StringTableColumnInfo<AssemblyInfo>[]
+            Columns = new[]
             {
                 new StringTableColumnInfo<AssemblyInfo>("Name", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Name),
                 StringTableColumnInfo.Create<AssemblyInfo, Version>("FileVersion", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.FileVersion),

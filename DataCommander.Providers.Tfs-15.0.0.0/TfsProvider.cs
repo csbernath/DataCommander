@@ -147,7 +147,7 @@ namespace DataCommander.Providers.Tfs
 
             foreach (var tfsParameter in tfsParameters)
             {
-                rows.Add(new object[]
+                rows.Add(new[]
                 {
                     tfsParameter.ParameterName,
                     tfsParameter.DbType,

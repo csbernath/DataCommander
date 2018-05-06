@@ -20,62 +20,23 @@ namespace DataCommander.Providers.PostgreSql
         private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
 
         string IProvider.Name => "PostgreSql";
-
         DbProviderFactory IProvider.DbProviderFactory => NpgsqlFactory.Instance;
-
         string[] IProvider.KeyWords => null;
-
         bool IProvider.CanConvertCommandToString => throw new NotImplementedException();
-
         bool IProvider.IsCommandCancelable => true;
-
         IObjectExplorer IProvider.ObjectExplorer => new ObjectExplorer.ObjectExplorer();
-
-        void IProvider.ClearCompletionCache()
-        {
-            throw new NotImplementedException();
-        }
-
-        string IProvider.CommandToString(IDbCommand command)
-        {
-            throw new NotImplementedException();
-        }
-
-        ConnectionBase IProvider.CreateConnection(string connectionString)
-        {
-            return new Connection(connectionString);
-        }
-
-        DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection)
-        {
-            throw new NotImplementedException();
-        }
-
-        IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
-        {
-            return new PostgreSqlDataReaderHelper((NpgsqlDataReader) dataReader);
-        }
+        void IProvider.ClearCompletionCache() => throw new NotImplementedException();
+        string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
+        ConnectionBase IProvider.CreateConnection(string connectionString) => new Connection(connectionString);
+        DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection) => throw new NotImplementedException();
+        IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader) => new PostgreSqlDataReaderHelper((NpgsqlDataReader) dataReader);
 
         void IProvider.CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationconnection,
-            string destinationTableName, out IDbCommand insertCommand, out Converter<object, object>[] converters)
-        {
-            throw new NotImplementedException();
-        }
+            string destinationTableName, out IDbCommand insertCommand, out Converter<object, object>[] converters) => throw new NotImplementedException();
 
-        void IProvider.DeriveParameters(IDbCommand command)
-        {
-            throw new NotImplementedException();
-        }
-
-        System.Xml.XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Type GetColumnType(FoundationDbColumn dataColumnSchema)
-        {
-            throw new NotImplementedException();
-        }
+        void IProvider.DeriveParameters(IDbCommand command) => throw new NotImplementedException();
+        System.Xml.XmlReader IProvider.ExecuteXmlReader(IDbCommand command) => throw new NotImplementedException();
+        public Type GetColumnType(FoundationDbColumn dataColumnSchema) => throw new NotImplementedException();
 
         Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
         {
@@ -83,10 +44,7 @@ namespace DataCommander.Providers.PostgreSql
             return typeof(object);
         }
 
-        string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
-        {
-            throw new NotImplementedException();
-        }
+        string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName) => throw new NotImplementedException();
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {
@@ -124,12 +82,8 @@ namespace DataCommander.Providers.PostgreSql
                             var keyWord = token.Value;
 
                             if (keyWord != null && keyWord.Length >= 2 && keyWord.IndexOf(value) == 0 && keyWord != value)
-                            {
                                 if (!list.ContainsKey(token.Value))
-                                {
                                     list.Add(token.Value, null);
-                                }
-                            }
                         }
 
                         array = list.Keys.Select(keyWord => (IObjectName) new NonSqlObjectName(keyWord)).ToList();
@@ -216,20 +170,18 @@ namespace DataCommander.Providers.PostgreSql
 
                             if (name.Schema != null)
                             {
-                                owners = new string[] {name.Schema};
+                                owners = new[] {name.Schema};
                             }
                             else
                             {
-                                owners = new string[] {"dbo", "sys"};
+                                owners = new[] {"dbo", "sys"};
                             }
 
                             var sb = new StringBuilder();
                             for (i = 0; i < owners.Length; i++)
                             {
                                 if (i > 0)
-                                {
                                     sb.Append(',');
-                                }
 
                                 sb.AppendFormat("'{0}'", owners[i]);
                             }
@@ -248,9 +200,7 @@ order by c.ordinal_position";
                             name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
 
                             if (name.Schema == null)
-                            {
                                 name.Schema = "dbo";
-                            }
 
                             commandText = string.Format(@"select
      s.name
@@ -289,7 +239,7 @@ order by 1", name.Database);
                                     {
                                         var token = tokens[tokenIndex];
                                         var tokenValue = token.Value;
-                                        var indexofAny = tokenValue.IndexOfAny(new char[] {'\r', '\n'});
+                                        var indexofAny = tokenValue.IndexOfAny(new[] {'\r', '\n'});
                                         if (indexofAny >= 0)
                                         {
                                             tokenValue = tokenValue.Substring(0, indexofAny);
@@ -382,25 +332,10 @@ order by 1", name.Database);
             return response;
         }
 
-        DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        string IProvider.GetExceptionMessage(Exception exception)
-        {
-            return exception.ToString();
-        }
-
-        DataTable IProvider.GetParameterTable(IDataParameterCollection parameters)
-        {
-            throw new NotImplementedException();
-        }
-
-        DataTable IProvider.GetSchemaTable(IDataReader dataReader)
-        {
-            throw new NotImplementedException();
-        }
+        DataParameterBase IProvider.GetDataParameter(IDataParameter parameter) => throw new NotImplementedException();
+        string IProvider.GetExceptionMessage(Exception exception) => exception.ToString();
+        DataTable IProvider.GetParameterTable(IDataParameterCollection parameters) => throw new NotImplementedException();
+        DataTable IProvider.GetSchemaTable(IDataReader dataReader) => throw new NotImplementedException();
 
         List<Statement> IProvider.GetStatements(string commandText)
         {

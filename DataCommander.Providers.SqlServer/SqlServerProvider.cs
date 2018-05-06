@@ -524,11 +524,11 @@ namespace DataCommander.Providers.SqlServer
 
                             if (name.Schema != null)
                             {
-                                owners = new string[] {name.Schema};
+                                owners = new[] {name.Schema};
                             }
                             else
                             {
-                                owners = new string[] {"dbo", "sys"};
+                                owners = new[] {"dbo", "sys"};
                             }
 
                             var sb = new StringBuilder();
@@ -612,7 +612,7 @@ order by 1", name.Database);
                                     {
                                         var token = tokens[tokenIndex];
                                         var tokenValue = token.Value;
-                                        var indexofAny = tokenValue.IndexOfAny(new char[] {'\r', '\n'});
+                                        var indexofAny = tokenValue.IndexOfAny(new[] {'\r', '\n'});
                                         if (indexofAny >= 0)
                                         {
                                             tokenValue = tokenValue.Substring(0, indexofAny);

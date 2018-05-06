@@ -165,11 +165,11 @@ namespace DataCommander.Providers.MySql
                             case 0:
                             case 1:
                                 statements.Add(SqlServerObject.GetDatabases());
-                                statements.Add(SqlServerObject.GetTables(name.Database, new string[] {"BASE TABLE", "SYSTEM VIEW"}));
+                                statements.Add(SqlServerObject.GetTables(name.Database, new[] {"BASE TABLE", "SYSTEM VIEW"}));
                                 break;
 
                             case 2:
-                                statements.Add(SqlServerObject.GetTables(name.Database, new string[] {"BASE TABLE", "SYSTEM VIEW"}));
+                                statements.Add(SqlServerObject.GetTables(name.Database, new[] {"BASE TABLE", "SYSTEM VIEW"}));
                                 break;
                         }
                     }
