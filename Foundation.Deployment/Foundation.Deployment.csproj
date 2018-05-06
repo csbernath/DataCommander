@@ -5,7 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Foundation.NetStandard-2.0\Foundation.NetStandard-2.0.csproj" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Foundation.Core\Foundation.Core.csproj" />
   </ItemGroup>
 
 </Project>
