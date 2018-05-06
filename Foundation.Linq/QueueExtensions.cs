@@ -3,17 +3,8 @@ using Foundation.Assertions;
 
 namespace Foundation.Linq
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class QueueExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="queue"></param>
-        /// <returns></returns>
         public static T DequeueTail<T>(this Queue<T> queue)
         {
             Assert.IsNotNull(queue);

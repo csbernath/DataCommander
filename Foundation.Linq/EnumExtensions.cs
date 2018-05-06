@@ -7,9 +7,6 @@ using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class EnumExtensions
     {
 #if FOUNDATION_3_5
@@ -30,13 +27,6 @@ namespace Foundation.Linq
         }
 #endif
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="container"></param>
-        /// <param name="flag"></param>
-        /// <returns></returns>
         public static T SetFlag<T>(this T container, T flag)
         {
             FoundationContract.Requires<ArgumentException>(typeof(T).IsEnum);
@@ -49,14 +39,6 @@ namespace Foundation.Linq
             return (T) Enum.ToObject(type, containerUInt64);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="container"></param>
-        /// <param name="flag"></param>
-        /// <param name="set"></param>
-        /// <returns></returns>
         public static T SetFlag<T>(this T container, T flag, bool set)
         {
             FoundationContract.Requires<ArgumentException>(typeof(T).IsEnum);
@@ -74,13 +56,6 @@ namespace Foundation.Linq
             return (T) Enum.ToObject(type, containerUInt64);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="container"></param>
-        /// <param name="flag"></param>
-        /// <returns></returns>
         public static T ResetFlag<T>(this T container, T flag)
         {
             Assert.IsTrue(typeof(T).IsEnum);
@@ -92,12 +67,6 @@ namespace Foundation.Linq
             return (T) Enum.ToObject(type, containerUInt64);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="type"></param>
-        /// <returns></returns>
         public static IEnumerable<Tuple<string, T>> GetPublicStaticFields<T>(Type type)
         {
             var typeCode = Type.GetTypeCode(typeof(T));

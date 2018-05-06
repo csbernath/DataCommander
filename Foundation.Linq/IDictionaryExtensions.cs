@@ -130,9 +130,9 @@ namespace Foundation.Linq
                 set => _dictionary[key] = value;
             }
 
-#endregion
+            #endregion
 
-#region ICollection<KeyValuePair<TKey,TValue>> Members
+            #region ICollection<KeyValuePair<TKey,TValue>> Members
 
             void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
             {
@@ -163,25 +163,25 @@ namespace Foundation.Linq
                 throw new NotSupportedException();
             }
 
-#endregion
+            #endregion
 
-#region IEnumerable<KeyValuePair<TKey,TValue>> Members
+            #region IEnumerable<KeyValuePair<TKey,TValue>> Members
 
             IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
             {
                 return _dictionary.GetEnumerator();
             }
 
-#endregion
+            #endregion
 
-#region IEnumerable Members
+            #region IEnumerable Members
 
             IEnumerator IEnumerable.GetEnumerator()
             {
                 return _dictionary.GetEnumerator();
             }
 
-#endregion
+            #endregion
         }
     }
 }

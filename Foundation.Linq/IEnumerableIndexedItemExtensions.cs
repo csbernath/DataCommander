@@ -5,18 +5,8 @@ using Foundation.Assertions;
 
 namespace Foundation.Linq
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class EnumerableIndexedItemExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
         [Pure]
         public static IndexedItem<TSource> FirstIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
@@ -39,13 +29,6 @@ namespace Foundation.Linq
             return IndexedItem.Create(firstIndex, firstItem);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="firstArgumentIsExtremum"></param>
-        /// <returns></returns>
         [Pure]
         public static IndexedItem<TSource> ExtremumIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, TSource, bool> firstArgumentIsExtremum)
         {
@@ -70,13 +53,6 @@ namespace Foundation.Linq
             return IndexedItem.Create(extremumIndex, extremumItem);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="selector"></param>
-        /// <returns></returns>
         public static IndexedItem<TSource> MinIndexedItem<TSource>(this IEnumerable<TSource> source, Func<TSource, int> selector)
         {
             Assert.IsNotNull(source);

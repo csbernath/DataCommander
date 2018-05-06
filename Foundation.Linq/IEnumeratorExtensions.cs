@@ -6,32 +6,16 @@ using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Linq
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public static class EnumeratorExtensions
+    public static class IEnumeratorExtensions
     {
         #region Public Methods
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="enumerator"></param>
-        /// <returns></returns>
         public static IEnumerable<T> AsEnumerable<T>(this IEnumerator<T> enumerator)
         {
             Assert.IsNotNull(enumerator);
-
             return new Enumerable<T>(enumerator);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="enumerator"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
         public static List<T> Take<T>(this IEnumerator<T> enumerator, int count)
         {
             Assert.IsNotNull(enumerator);
@@ -66,19 +50,11 @@ namespace Foundation.Linq
             public Enumerable(IEnumerator<T> enumerator)
             {
                 Assert.IsNotNull(enumerator);
-
                 _enumerator = enumerator;
             }
 
-            IEnumerator<T> IEnumerable<T>.GetEnumerator()
-            {
-                return _enumerator;
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return _enumerator;
-            }
+            IEnumerator<T> IEnumerable<T>.GetEnumerator() => _enumerator;
+            IEnumerator IEnumerable.GetEnumerator() => _enumerator;
         }
 
         #endregion
