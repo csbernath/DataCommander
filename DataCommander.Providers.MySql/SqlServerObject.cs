@@ -1,13 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Foundation;
 using Foundation.Data.SqlClient;
 using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.MySql
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using Foundation;
-
     internal static class SqlServerObject
     {
         public static string GetDatabases()

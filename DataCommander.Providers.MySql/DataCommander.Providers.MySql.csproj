@@ -80,6 +80,10 @@
       <Project>{513D0094-7D6B-4453-9D43-23223C51EC4C}</Project>
       <Name>Foundation.Configuration</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Foundation.Core\Foundation.Core.csproj">
+      <Project>{5b3a35c4-cdc3-4ce6-afde-41f980a5a7ec}</Project>
+      <Name>Foundation.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Foundation.Data\Foundation.Data.csproj">
       <Project>{34f913bc-edee-4385-bae6-c650a0e21878}</Project>
       <Name>Foundation.Data</Name>

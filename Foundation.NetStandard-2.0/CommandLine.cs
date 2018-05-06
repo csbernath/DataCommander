@@ -8,17 +8,10 @@ using Foundation.Linq;
 
 namespace Foundation
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class CommandLine
     {
         private readonly IndexableCollection<CommandLineArgument> _arguments;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="commandLine"></param>
         public CommandLine(string commandLine)
         {
             Assert.IsNotNull(commandLine);
@@ -36,17 +29,10 @@ namespace Foundation
             _arguments.Add(arguments);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public ListIndex<CommandLineArgument> ListIndex { get; } = new ListIndex<CommandLineArgument>("listIndex");
-
-        /// <summary>
-        /// 
-        /// </summary>
         public NonUniqueIndex<string, CommandLineArgument> NameIndex { get; }
 
-#region Private Methods
+        #region Private Methods
 
         private static string ReadString(TextReader textReader)
         {
@@ -225,6 +211,6 @@ namespace Foundation
             }
         }
 
-#endregion
+        #endregion
     }
 }
