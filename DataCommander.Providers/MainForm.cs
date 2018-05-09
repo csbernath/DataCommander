@@ -249,10 +249,10 @@ namespace DataCommander.Providers
             this._mnuOptions,
             this._mnuWindow,
             this._mnuHelp});
-            this._mainMenu.Location = new System.Drawing.Point(0, 27);
+            this._mainMenu.Location = new System.Drawing.Point(0, 0);
             this._mainMenu.MdiWindowListItem = this._mnuWindow;
             this._mainMenu.Name = "_mainMenu";
-            this._mainMenu.Size = new System.Drawing.Size(982, 28);
+            this._mainMenu.Size = new System.Drawing.Size(982, 24);
             this._mainMenu.TabIndex = 1;
             // 
             // _menuItem1
@@ -267,13 +267,13 @@ namespace DataCommander.Providers
             this._mnuExit});
             this._menuItem1.MergeIndex = 1;
             this._menuItem1.Name = "_menuItem1";
-            this._menuItem1.Size = new System.Drawing.Size(84, 24);
+            this._menuItem1.Size = new System.Drawing.Size(67, 20);
             this._menuItem1.Text = "&Database";
             // 
             // _newToolStripMenuItem
             // 
             this._newToolStripMenuItem.Name = "_newToolStripMenuItem";
-            this._newToolStripMenuItem.Size = new System.Drawing.Size(227, 26);
+            this._newToolStripMenuItem.Size = new System.Drawing.Size(191, 26);
             this._newToolStripMenuItem.Text = "&Create";
             this._newToolStripMenuItem.Click += new System.EventHandler(this.CreateMenuItem_Click);
             // 
@@ -283,7 +283,7 @@ namespace DataCommander.Providers
             this._mnuConnect.MergeIndex = 0;
             this._mnuConnect.Name = "_mnuConnect";
             this._mnuConnect.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this._mnuConnect.Size = new System.Drawing.Size(227, 26);
+            this._mnuConnect.Size = new System.Drawing.Size(191, 26);
             this._mnuConnect.Text = "&Connect";
             this._mnuConnect.Click += new System.EventHandler(this.mnuConnect_Click);
             // 
@@ -293,14 +293,14 @@ namespace DataCommander.Providers
             this._mnuOpen.MergeIndex = 1;
             this._mnuOpen.Name = "_mnuOpen";
             this._mnuOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this._mnuOpen.Size = new System.Drawing.Size(227, 26);
+            this._mnuOpen.Size = new System.Drawing.Size(191, 26);
             this._mnuOpen.Text = "&Open";
             this._mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
             // 
             // _recentConnectionsToolStripMenuItem
             // 
             this._recentConnectionsToolStripMenuItem.Name = "_recentConnectionsToolStripMenuItem";
-            this._recentConnectionsToolStripMenuItem.Size = new System.Drawing.Size(227, 26);
+            this._recentConnectionsToolStripMenuItem.Size = new System.Drawing.Size(191, 26);
             this._recentConnectionsToolStripMenuItem.Text = "Recent connections";
             // 
             // _saveAllToolStripMenuItem
@@ -308,7 +308,7 @@ namespace DataCommander.Providers
             this._saveAllToolStripMenuItem.Name = "_saveAllToolStripMenuItem";
             this._saveAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.S)));
-            this._saveAllToolStripMenuItem.Size = new System.Drawing.Size(227, 26);
+            this._saveAllToolStripMenuItem.Size = new System.Drawing.Size(191, 26);
             this._saveAllToolStripMenuItem.Text = "Save All";
             this._saveAllToolStripMenuItem.Click += new System.EventHandler(this.saveAllToolStripMenuItem_Click);
             // 
@@ -316,14 +316,14 @@ namespace DataCommander.Providers
             // 
             this._mnuRecentFileList.MergeIndex = 2;
             this._mnuRecentFileList.Name = "_mnuRecentFileList";
-            this._mnuRecentFileList.Size = new System.Drawing.Size(227, 26);
+            this._mnuRecentFileList.Size = new System.Drawing.Size(191, 26);
             this._mnuRecentFileList.Text = "Recent &File List";
             // 
             // _mnuExit
             // 
             this._mnuExit.Name = "_mnuExit";
             this._mnuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this._mnuExit.Size = new System.Drawing.Size(227, 26);
+            this._mnuExit.Size = new System.Drawing.Size(191, 26);
             this._mnuExit.Text = "Exit";
             this._mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
             // 
@@ -331,7 +331,7 @@ namespace DataCommander.Providers
             // 
             this._mnuFont.MergeIndex = 2;
             this._mnuFont.Name = "_mnuFont";
-            this._mnuFont.Size = new System.Drawing.Size(50, 24);
+            this._mnuFont.Size = new System.Drawing.Size(43, 20);
             this._mnuFont.Text = "Font";
             this._mnuFont.Click += new System.EventHandler(this.mnuFont_Click);
             // 
@@ -339,8 +339,9 @@ namespace DataCommander.Providers
             // 
             this._mnuOptions.MergeIndex = 3;
             this._mnuOptions.Name = "_mnuOptions";
-            this._mnuOptions.Size = new System.Drawing.Size(73, 24);
+            this._mnuOptions.Size = new System.Drawing.Size(61, 20);
             this._mnuOptions.Text = "Options";
+            this._mnuOptions.Click += new System.EventHandler(this._mnuOptions_Click);
             // 
             // _mnuWindow
             // 
@@ -348,13 +349,13 @@ namespace DataCommander.Providers
             this._closeAllDocumentsMenuItem});
             this._mnuWindow.MergeIndex = 6;
             this._mnuWindow.Name = "_mnuWindow";
-            this._mnuWindow.Size = new System.Drawing.Size(76, 24);
+            this._mnuWindow.Size = new System.Drawing.Size(63, 20);
             this._mnuWindow.Text = "&Window";
             // 
             // _closeAllDocumentsMenuItem
             // 
             this._closeAllDocumentsMenuItem.Name = "_closeAllDocumentsMenuItem";
-            this._closeAllDocumentsMenuItem.Size = new System.Drawing.Size(221, 26);
+            this._closeAllDocumentsMenuItem.Size = new System.Drawing.Size(184, 22);
             this._closeAllDocumentsMenuItem.Text = "Close All Documents";
             this._closeAllDocumentsMenuItem.Click += new System.EventHandler(this.closeAllDocumentsMenuItem_Click);
             // 
@@ -366,14 +367,14 @@ namespace DataCommander.Providers
             this._mnuAbout});
             this._mnuHelp.MergeIndex = 7;
             this._mnuHelp.Name = "_mnuHelp";
-            this._mnuHelp.Size = new System.Drawing.Size(53, 24);
+            this._mnuHelp.Size = new System.Drawing.Size(44, 20);
             this._mnuHelp.Text = "&Help";
             // 
             // _contentsToolStripMenuItem
             // 
             this._contentsToolStripMenuItem.Name = "_contentsToolStripMenuItem";
             this._contentsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this._contentsToolStripMenuItem.Size = new System.Drawing.Size(239, 26);
+            this._contentsToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this._contentsToolStripMenuItem.Text = "Contents";
             this._contentsToolStripMenuItem.Click += new System.EventHandler(this.contentsToolStripMenuItem_Click);
             // 
@@ -381,7 +382,7 @@ namespace DataCommander.Providers
             // 
             this._checkForToolStripMenuItem.Name = "_checkForToolStripMenuItem";
             this._checkForToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
-            this._checkForToolStripMenuItem.Size = new System.Drawing.Size(239, 26);
+            this._checkForToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this._checkForToolStripMenuItem.Text = "Check for updates ";
             this._checkForToolStripMenuItem.Click += new System.EventHandler(this.checkForToolStripMenuItem_Click);
             // 
@@ -389,7 +390,7 @@ namespace DataCommander.Providers
             // 
             this._mnuAbout.MergeIndex = 0;
             this._mnuAbout.Name = "_mnuAbout";
-            this._mnuAbout.Size = new System.Drawing.Size(239, 26);
+            this._mnuAbout.Size = new System.Drawing.Size(198, 22);
             this._mnuAbout.Text = "About...";
             // 
             // _toolStrip
@@ -405,9 +406,9 @@ namespace DataCommander.Providers
             this._helpButton,
             this._toolStripSeparator2,
             this._activeMdiChildToolStripTextBox});
-            this._toolStrip.Location = new System.Drawing.Point(4, 0);
+            this._toolStrip.Location = new System.Drawing.Point(3, 24);
             this._toolStrip.Name = "_toolStrip";
-            this._toolStrip.Size = new System.Drawing.Size(682, 27);
+            this._toolStrip.Size = new System.Drawing.Size(522, 27);
             this._toolStrip.TabIndex = 2;
             // 
             // _imageList
@@ -472,7 +473,7 @@ namespace DataCommander.Providers
             // 
             this._activeMdiChildToolStripTextBox.Name = "_activeMdiChildToolStripTextBox";
             this._activeMdiChildToolStripTextBox.ReadOnly = true;
-            this._activeMdiChildToolStripTextBox.Size = new System.Drawing.Size(560, 27);
+            this._activeMdiChildToolStripTextBox.Size = new System.Drawing.Size(400, 27);
             // 
             // _statusBar
             // 
@@ -480,16 +481,16 @@ namespace DataCommander.Providers
             this._statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._toolStripStatusLabel,
             this._managedMemoryToolStripStatusLabel});
-            this._statusBar.Location = new System.Drawing.Point(0, 726);
+            this._statusBar.Location = new System.Drawing.Point(0, 731);
             this._statusBar.Name = "_statusBar";
             this._statusBar.ShowItemToolTips = true;
-            this._statusBar.Size = new System.Drawing.Size(982, 27);
+            this._statusBar.Size = new System.Drawing.Size(982, 22);
             this._statusBar.TabIndex = 3;
             // 
             // _toolStripStatusLabel
             // 
             this._toolStripStatusLabel.Name = "_toolStripStatusLabel";
-            this._toolStripStatusLabel.Size = new System.Drawing.Size(867, 22);
+            this._toolStripStatusLabel.Size = new System.Drawing.Size(867, 17);
             this._toolStripStatusLabel.Spring = true;
             this._toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -498,7 +499,7 @@ namespace DataCommander.Providers
             this._managedMemoryToolStripStatusLabel.AutoSize = false;
             this._managedMemoryToolStripStatusLabel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._managedMemoryToolStripStatusLabel.Name = "_managedMemoryToolStripStatusLabel";
-            this._managedMemoryToolStripStatusLabel.Size = new System.Drawing.Size(100, 22);
+            this._managedMemoryToolStripStatusLabel.Size = new System.Drawing.Size(100, 17);
             this._managedMemoryToolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this._managedMemoryToolStripStatusLabel.ToolTipText = "Managed memory";
             this._managedMemoryToolStripStatusLabel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.managedMemoryToolStripStatusLabel_MouseUp);
@@ -512,11 +513,11 @@ namespace DataCommander.Providers
             this._toolStripPanel.Name = "_toolStripPanel";
             this._toolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
             this._toolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this._toolStripPanel.Size = new System.Drawing.Size(982, 55);
+            this._toolStripPanel.Size = new System.Drawing.Size(982, 51);
             // 
             // MainForm
             // 
-            this.AutoScaleBaseSize = new System.Drawing.Size(7, 17);
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
             this.ClientSize = new System.Drawing.Size(982, 753);
             this.Controls.Add(this._toolStripPanel);
             this.Controls.Add(this._statusBar);
