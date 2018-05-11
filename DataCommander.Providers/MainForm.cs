@@ -47,8 +47,7 @@ namespace DataCommander.Providers
         private ToolStripButton _btnConnect;
         private ToolStripMenuItem _mnuWindow;
         private ToolStripMenuItem _mnuRecentFileList;
-        private ToolStripMenuItem _mnuFont;
-        private ToolStripMenuItem _mnuOptions;
+        private ToolStripMenuItem optionsMenuItem;
         private ToolStripButton _openButton;
         private ToolStripButton _saveButton;
         private ToolStripSeparator _toolStripSeparator1;
@@ -212,8 +211,7 @@ namespace DataCommander.Providers
             this._saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._mnuRecentFileList = new System.Windows.Forms.ToolStripMenuItem();
             this._mnuExit = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuFont = new System.Windows.Forms.ToolStripMenuItem();
-            this._mnuOptions = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._mnuWindow = new System.Windows.Forms.ToolStripMenuItem();
             this._closeAllDocumentsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
@@ -245,8 +243,7 @@ namespace DataCommander.Providers
             this._mainMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this._mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._menuItem1,
-            this._mnuFont,
-            this._mnuOptions,
+            this.optionsMenuItem,
             this._mnuWindow,
             this._mnuHelp});
             this._mainMenu.Location = new System.Drawing.Point(0, 0);
@@ -327,21 +324,13 @@ namespace DataCommander.Providers
             this._mnuExit.Text = "Exit";
             this._mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
             // 
-            // _mnuFont
+            // optionsMenuItem
             // 
-            this._mnuFont.MergeIndex = 2;
-            this._mnuFont.Name = "_mnuFont";
-            this._mnuFont.Size = new System.Drawing.Size(43, 20);
-            this._mnuFont.Text = "Font";
-            this._mnuFont.Click += new System.EventHandler(this.mnuFont_Click);
-            // 
-            // _mnuOptions
-            // 
-            this._mnuOptions.MergeIndex = 3;
-            this._mnuOptions.Name = "_mnuOptions";
-            this._mnuOptions.Size = new System.Drawing.Size(61, 20);
-            this._mnuOptions.Text = "Options";
-            this._mnuOptions.Click += new System.EventHandler(this._mnuOptions_Click);
+            this.optionsMenuItem.MergeIndex = 5;
+            this.optionsMenuItem.Name = "optionsMenuItem";
+            this.optionsMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.optionsMenuItem.Text = "Options";
+            this.optionsMenuItem.Click += new System.EventHandler(this.optionsMenuItem_Click);
             // 
             // _mnuWindow
             // 
@@ -506,8 +495,8 @@ namespace DataCommander.Providers
             // 
             // _toolStripPanel
             // 
-            this._toolStripPanel.Controls.Add(this._toolStrip);
             this._toolStripPanel.Controls.Add(this._mainMenu);
+            this._toolStripPanel.Controls.Add(this._toolStrip);
             this._toolStripPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this._toolStripPanel.Location = new System.Drawing.Point(0, 0);
             this._toolStripPanel.Name = "_toolStripPanel";
@@ -541,16 +530,18 @@ namespace DataCommander.Providers
 
         }
 
-        private void _mnuOptions_Click(object sender, EventArgs e)
+        private void optionsMenuItem_Click(object sender, EventArgs e)
         {
-            var optionsForm = new OptionsForm(_colorTheme != null);
+            var optionsForm = new OptionsForm(_colorTheme != null, SelectedFont);
             if (optionsForm.ShowDialog() == DialogResult.OK)
             {
                 var darkColorTheme = optionsForm.DarkColorTheme;
                 SetColorTheme(darkColorTheme);
+                SelectedFont = optionsForm.SelectedFont;
 
                 var attributes = DataCommanderApplication.Instance.ApplicationData.CurrentType.Attributes;
                 attributes.SetAttributeValue("DarkColorTheme", darkColorTheme);
+                attributes.SetAttributeValue("Font", Serialize(SelectedFont));
             }
         }
 
@@ -840,21 +831,6 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             var obj = binaryFormatter.Deserialize(memoryStream);
             var font = (Font) obj;
             return font;
-        }
-
-        private void mnuFont_Click(object sender, EventArgs e)
-        {
-            var fontDialog = new FontDialog();
-            fontDialog.Font = SelectedFont;
-            var dialogResult = fontDialog.ShowDialog();
-
-            if (dialogResult == DialogResult.OK)
-            {
-                SelectedFont = fontDialog.Font;
-                var applicationData = DataCommanderApplication.Instance.ApplicationData;
-                var propertyFolder = applicationData.CurrentType;
-                propertyFolder.Attributes.SetAttributeValue("Font", Serialize(SelectedFont));
-            }
         }
 
         public Font SelectedFont { get; private set; }

@@ -179,40 +179,16 @@ namespace Foundation.Configuration
             return TryGetAttributeValue(name, default(T), out value);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="name"></param>
-        /// <param name="defaultValue"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
         public bool TryGetAttributeValue<T>(string name, T defaultValue, out T value)
         {
-            ConfigurationAttribute attribute;
-            var contains = _nameIndex.TryGetValue(name, out attribute);
-
-            if (contains)
-            {
-                value = attribute.GetValue<T>();
-            }
-            else
-            {
-                value = defaultValue;
-            }
-
+            var contains = _nameIndex.TryGetValue(name, out var attribute);
+            value = contains ? attribute.GetValue<T>() : defaultValue;
             return contains;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
         public void SetAttributeValue(string name, object value)
         {
-            ConfigurationAttribute attribute;
-            var contains = _nameIndex.TryGetValue(name, out attribute);
+            var contains = _nameIndex.TryGetValue(name, out var attribute);
 
             if (contains)
                 attribute.Value = value;

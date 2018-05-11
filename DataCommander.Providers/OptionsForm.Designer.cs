@@ -32,6 +32,7 @@
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.colorThemeComboBox = new System.Windows.Forms.ComboBox();
+            this.changeFontButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // colorThemeLabel
@@ -76,6 +77,16 @@
             this.colorThemeComboBox.Size = new System.Drawing.Size(121, 21);
             this.colorThemeComboBox.TabIndex = 4;
             // 
+            // changeFontButton
+            // 
+            this.changeFontButton.Location = new System.Drawing.Point(106, 55);
+            this.changeFontButton.Name = "changeFontButton";
+            this.changeFontButton.Size = new System.Drawing.Size(88, 23);
+            this.changeFontButton.TabIndex = 5;
+            this.changeFontButton.Text = "Change Font";
+            this.changeFontButton.UseVisualStyleBackColor = true;
+            this.changeFontButton.Click += new System.EventHandler(this.changeFontButton_Click);
+            // 
             // OptionsForm
             // 
             this.AcceptButton = this.okButton;
@@ -83,6 +94,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(392, 128);
+            this.Controls.Add(this.changeFontButton);
             this.Controls.Add(this.colorThemeComboBox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
@@ -104,5 +116,6 @@
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.ComboBox colorThemeComboBox;
+        private System.Windows.Forms.Button changeFontButton;
     }
 }
