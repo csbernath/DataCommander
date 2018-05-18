@@ -11,9 +11,6 @@ using Microsoft.Win32;
 
 namespace Foundation.Diagnostics
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class AppDomainMonitor
     {
         private static readonly ILog Log = LogFactory.Instance.GetTypeLog(typeof(AppDomainMonitor));
@@ -35,7 +32,8 @@ namespace Foundation.Diagnostics
                 StringTableColumnInfo.Create<AssemblyInfo, bool>("GlobalAssemblyCache", StringTableColumnAlign.Left,
                     assemblyInfo => assemblyInfo.GlobalAssemblyCache),
                 new StringTableColumnInfo<AssemblyInfo>("CodeBase", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.CodeBase),
-                new StringTableColumnInfo<AssemblyInfo>("Location", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Location)
+                new StringTableColumnInfo<AssemblyInfo>("Location", StringTableColumnAlign.Left, assemblyInfo => assemblyInfo.Location),
+                StringTableColumnInfo.CreateLeft<AssemblyInfo, bool>("IsDynamic", i => i.IsDynamic)
             };
         }
 
@@ -186,33 +184,6 @@ Stopwatch.Frequency:    {Stopwatch.Frequency}";
 
         #region Private Methods
 
-        private static Version GetFileVersion(Assembly assembly)
-        {
-            Version fileVersion = null;
-
-            try
-            {
-                var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-
-                fileVersion = new Version(
-                    fileVersionInfo.FileMajorPart,
-                    fileVersionInfo.FileMinorPart,
-                    fileVersionInfo.FileBuildPart,
-                    fileVersionInfo.FilePrivatePart);
-            }
-            catch (Exception e)
-            {
-                Log.Trace($"exception:\r\n{e}");
-            }
-
-            return fileVersion;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="appDomain"></param>
-        /// <param name="sb"></param>
         private static void AppendAppDomainState(AppDomain appDomain, StringBuilder sb)
         {
             try
@@ -248,31 +219,48 @@ Stopwatch.Frequency:    {Stopwatch.Frequency}";
             }
         }
 
-        #endregion
-
         private static AssemblyInfo GetAssemblyInfo(Assembly assembly)
         {
+            var isDynamic = assembly.IsDynamic;
             string location = null;
-            try
-            {
-                location = assembly.IsDynamic ? null : assembly.Location;
-            }
-            catch
-            {
-            }
+            Version fileVersion = null;
+            DateTime? date = null;
 
-            var fileVersion = !string.IsNullOrEmpty(location) ? GetFileVersion(assembly) : null;
-            var date = !string.IsNullOrEmpty(location)
-                ? File.GetLastWriteTime(location)
-                : (DateTime?) null;
+            if (!isDynamic)
+            {
+                location = assembly.Location;
+                fileVersion = GetFileVersion(location);
+                date = File.GetLastWriteTime(location);
+            }
 
             var name = assembly.GetName();
-
             var publicKeyToken = name.GetPublicKeyToken();
             var publicKeyTokenString = publicKeyToken != null ? Hex.GetString(publicKeyToken, false) : null;
 
             return new AssemblyInfo(name.Name, fileVersion, name.Version, name.ProcessorArchitecture, date, publicKeyTokenString, assembly.ImageRuntimeVersion,
-                assembly.GlobalAssemblyCache, name.CodeBase, location);
+                assembly.GlobalAssemblyCache, name.CodeBase, location, isDynamic);
+        }
+
+        private static Version GetFileVersion(string fileName)
+        {
+            Version fileVersion = null;
+
+            try
+            {
+                var fileVersionInfo = FileVersionInfo.GetVersionInfo(fileName);
+
+                fileVersion = new Version(
+                    fileVersionInfo.FileMajorPart,
+                    fileVersionInfo.FileMinorPart,
+                    fileVersionInfo.FileBuildPart,
+                    fileVersionInfo.FilePrivatePart);
+            }
+            catch (Exception e)
+            {
+                Log.Trace($"exception:\r\n{e}");
+            }
+
+            return fileVersion;
         }
 
         private sealed class AssemblyInfo
@@ -287,9 +275,10 @@ Stopwatch.Frequency:    {Stopwatch.Frequency}";
             public readonly bool GlobalAssemblyCache;
             public readonly string CodeBase;
             public readonly string Location;
+            public readonly bool IsDynamic;
 
             public AssemblyInfo(string name, Version fileVersion, Version version, ProcessorArchitecture processorArchitecture, DateTime? date,
-                string publicKeyToken, string imageRuntimeVersion, bool globalAssemblyCache, string codeBase, string location)
+                string publicKeyToken, string imageRuntimeVersion, bool globalAssemblyCache, string codeBase, string location, bool isDynamic)
             {
                 Name = name;
                 FileVersion = fileVersion;
@@ -301,7 +290,10 @@ Stopwatch.Frequency:    {Stopwatch.Frequency}";
                 GlobalAssemblyCache = globalAssemblyCache;
                 CodeBase = codeBase;
                 Location = location;
+                IsDynamic = isDynamic;
             }
         }
+
+        #endregion
     }
 }
