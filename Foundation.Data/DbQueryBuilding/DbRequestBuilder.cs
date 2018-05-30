@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Text;
-using Foundation;
 using Foundation.Assertions;
 using Foundation.Data.SqlClient;
 
@@ -449,7 +448,7 @@ namespace {_request.Namespace}
 ");
             foreach (var parameter in _request.Parameters)
                 stringBuilder.Append(
-                    $"    public readonly {GetCSharpTypeName(parameter.SqlDbType,parameter.DataType, parameter.IsNullable)} {ToUpper(parameter.Name)};\r\n");
+                    $"    public readonly {GetCSharpTypeName(parameter.SqlDbType, parameter.DataType, parameter.IsNullable)} {ToUpper(parameter.Name)};\r\n");
 
             stringBuilder.Append("\r\n");
             stringBuilder.Append(GetRequestClassConstructor().Indent(1));
@@ -592,7 +591,8 @@ namespace {_request.Namespace}
         private string GetToParametersMethod()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"private static ReadOnlyCollection<object> ToParameters({_request.Name}Db{GetRequestType()} {ToLower(GetRequestType())})\r\n");
+            stringBuilder.Append(
+                $"private static ReadOnlyCollection<object> ToParameters({_request.Name}Db{GetRequestType()} {ToLower(GetRequestType())})\r\n");
             stringBuilder.Append("{\r\n");
             stringBuilder.Append("    var parameters = new SqlParameterCollectionBuilder();\r\n");
 
@@ -647,7 +647,18 @@ namespace {_request.Namespace}
             return isValueType;
         }
 
-        private static string ToLower(string pascalCase) => char.ToLower(pascalCase[0]) + pascalCase.Substring(1);
-        private static string ToUpper(string camelCase) => char.ToUpper(camelCase[0]) + camelCase.Substring(1);
+        private static string ToLower(string pascalCase)
+        {
+            return !pascalCase.IsNullOrEmpty()
+                ? char.ToLower(pascalCase[0]) + pascalCase.Substring(1)
+                : pascalCase;
+        }
+
+        private static string ToUpper(string camelCase)
+        {
+            return !camelCase.IsNullOrEmpty()
+                ? char.ToUpper(camelCase[0]) + camelCase.Substring(1)
+                : camelCase;
+        }
     }
 }
