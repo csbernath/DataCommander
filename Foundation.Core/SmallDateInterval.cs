@@ -41,7 +41,7 @@ namespace Foundation
             var intersects = start <= end;
             return intersects
                 ? new SmallDateInterval(start, end)
-                : (SmallDateInterval?)null;
+                : (SmallDateInterval?) null;
         }
 
         [Pure]

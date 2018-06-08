@@ -51,49 +51,21 @@ namespace Foundation
         {
             var result = smallDate._value + value;
             if (result < ushort.MinValue || ushort.MaxValue < result)
-            {
                 throw new OverflowException();
-            }
-
             return new SmallDate((ushort) result);
         }
 
-        public static int operator -(SmallDate smallDate1, SmallDate smallDate2)
-        {
-            return smallDate1._value - smallDate2._value;
-        }
-
-        public static bool operator <=(SmallDate smallDate1, SmallDate smallDate2)
-        {
-            return smallDate1._value <= smallDate2._value;
-        }
-
-        public static bool operator >=(SmallDate smallDate1, SmallDate smallDate2)
-        {
-            return smallDate1._value >= smallDate2._value;
-        }
-
-        public static bool operator <(SmallDate smallDate1, SmallDate smallDate2)
-        {
-            return smallDate1._value < smallDate2._value;
-        }
-
-        public static bool operator >(SmallDate smallDate1, SmallDate smallDate2)
-        {
-            return smallDate1._value > smallDate2._value;
-        }
+        public static int operator -(SmallDate smallDate1, SmallDate smallDate2) => smallDate1._value - smallDate2._value;
+        public static bool operator <=(SmallDate smallDate1, SmallDate smallDate2) => smallDate1._value <= smallDate2._value;
+        public static bool operator >=(SmallDate smallDate1, SmallDate smallDate2) => smallDate1._value >= smallDate2._value;
+        public static bool operator <(SmallDate smallDate1, SmallDate smallDate2) => smallDate1._value < smallDate2._value;
+        public static bool operator >(SmallDate smallDate1, SmallDate smallDate2) => smallDate1._value > smallDate2._value;
 
         [Pure]
-        public bool In(SmallDateInterval interval)
-        {
-            return interval.Start._value <= _value && _value <= interval.End._value;
-        }
+        public bool In(SmallDateInterval interval) => interval.Start._value <= _value && _value <= interval.End._value;
 
         [Pure]
-        public DateTime ToDateTime()
-        {
-            return ToDateTime(_value);
-        }
+        public DateTime ToDateTime() => ToDateTime(_value);
 
         [Pure]
         public SmallDate AddDays(short value)
@@ -111,11 +83,6 @@ namespace Foundation
             return new SmallDate(valueUInt16);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="months"></param>
-        /// <returns></returns>
         [Pure]
         public SmallDate AddMonths(int months)
         {
@@ -125,19 +92,8 @@ namespace Foundation
             return new SmallDate(result);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return _value;
-        }
+        public override int GetHashCode() => _value;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public override string ToString()
         {
             var dateTime = ToDateTime(_value);
@@ -150,15 +106,8 @@ namespace Foundation
             return dateTime.ToString(format);
         }
 
-        int IComparable<SmallDate>.CompareTo(SmallDate other)
-        {
-            return _value.CompareTo(other._value);
-        }
-
-        private static DateTime ToDateTime(ushort value)
-        {
-            return MinDateTime.AddDays(value);
-        }
+        int IComparable<SmallDate>.CompareTo(SmallDate other) => _value.CompareTo(other._value);
+        private static DateTime ToDateTime(ushort value) => MinDateTime.AddDays(value);
 
         private static ushort ToSmallDateValue(DateTime dateTime)
         {
@@ -171,20 +120,9 @@ namespace Foundation
             return value;
         }
 
-        bool IEquatable<SmallDate>.Equals(SmallDate other)
-        {
-            return _value == other._value;
-        }
-
-        public static bool operator ==(SmallDate x, SmallDate y)
-        {
-            return x.Equals(y);
-        }
-
-        public static bool operator !=(SmallDate x, SmallDate y)
-        {
-            return !x.Equals(y);
-        }
+        bool IEquatable<SmallDate>.Equals(SmallDate other) => _value == other._value;
+        public static bool operator ==(SmallDate x, SmallDate y) => x.Equals(y);
+        public static bool operator !=(SmallDate x, SmallDate y) => !x.Equals(y);
 
         internal string DebuggerDisplay
         {

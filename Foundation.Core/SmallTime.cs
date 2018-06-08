@@ -68,5 +68,7 @@ namespace Foundation
         public static bool operator !=(SmallTime x, SmallTime y) => !(x == y);
         public static bool operator <(SmallTime x, SmallTime y) => x.CompareTo(y) < 0;
         public static bool operator >(SmallTime x, SmallTime y) => x.CompareTo(y) > 0;
+        public static bool operator <=(SmallTime x, SmallTime y) => x.CompareTo(y) <= 0;
+        public static bool operator >=(SmallTime x, SmallTime y) => x.CompareTo(y) >= 0;
     }
 }
