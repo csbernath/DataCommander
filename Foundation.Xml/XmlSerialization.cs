@@ -8,12 +8,6 @@ namespace Foundation.Xml
 {
     public static class XmlSerialization
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="xml"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
         public static object Deserialize(string xml, Type type)
         {
             Assert.IsNotNull(type);
@@ -24,12 +18,6 @@ namespace Foundation.Xml
             return obj;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="xmlReader"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
         public static object Deserialize(XmlReader xmlReader, Type type)
         {
             Assert.IsNotNull(xmlReader);
@@ -40,24 +28,12 @@ namespace Foundation.Xml
             return obj;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="xml"></param>
-        /// <returns></returns>
         public static T Deserialize<T>(string xml)
         {
             var obj = Deserialize(xml, typeof(T));
             return (T) obj;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="xmlReader"></param>
-        /// <returns></returns>
         public static T Deserialize<T>(XmlReader xmlReader)
         {
             var obj = Deserialize(xmlReader, typeof(T));

@@ -11,19 +11,19 @@ namespace DataCommander.Providers.SqlServerCe40
 
     internal sealed class SqlCeDataReaderHelper : IDataReaderHelper
     {
-        private SqlCeDataReader dataReader;
-        private readonly IDataFieldReader[] dataFieldReaders;
+        private SqlCeDataReader _dataReader;
+        private readonly IDataFieldReader[] _dataFieldReaders;
 
         public SqlCeDataReaderHelper( SqlCeDataReader dataReader )
         {
-            this.dataReader = dataReader;
+            this._dataReader = dataReader;
             var schemaTable = dataReader.GetSchemaTable();
 
             if (schemaTable != null)
             {
                 var schemaRows = schemaTable.Rows;
                 var count = schemaRows.Count;
-                dataFieldReaders = new IDataFieldReader[ count ];
+                _dataFieldReaders = new IDataFieldReader[ count ];
 
                 for (var i = 0; i < count; i++)
                 {
@@ -43,7 +43,7 @@ namespace DataCommander.Providers.SqlServerCe40
                             break;
                     }
 
-                    dataFieldReaders[ i ] = dataFieldReader;
+                    _dataFieldReaders[ i ] = dataFieldReader;
                 }
             }
         }
@@ -54,7 +54,7 @@ namespace DataCommander.Providers.SqlServerCe40
         {
             for (var i = 0; i < values.Length; i++)
             {
-                values[ i ] = dataFieldReaders[ i ].Value;
+                values[ i ] = _dataFieldReaders[ i ].Value;
             }
 
             return values.Length;
@@ -64,19 +64,19 @@ namespace DataCommander.Providers.SqlServerCe40
 
         private sealed class SqlDecimalFieldReader : IDataFieldReader
         {
-            private static readonly NumberFormatInfo numberFormatInfo;
-            private readonly SqlCeDataReader dataReader;
-            private readonly int columnOrdinal;
+            private static readonly NumberFormatInfo NumberFormatInfo;
+            private readonly SqlCeDataReader _dataReader;
+            private readonly int _columnOrdinal;
 
             static SqlDecimalFieldReader()
             {
-                numberFormatInfo = (NumberFormatInfo) CultureInfo.InvariantCulture.NumberFormat.Clone();
+                NumberFormatInfo = (NumberFormatInfo) CultureInfo.InvariantCulture.NumberFormat.Clone();
             }
 
             public SqlDecimalFieldReader( SqlCeDataReader dataReader, int columnOrdinal )
             {
-                this.dataReader = dataReader;
-                this.columnOrdinal = columnOrdinal;
+                this._dataReader = dataReader;
+                this._columnOrdinal = columnOrdinal;
             }
 
             #region IDataFieldReader Members
@@ -86,15 +86,15 @@ namespace DataCommander.Providers.SqlServerCe40
                 get
                 {
                     object value;
-                    var isDBNull = dataReader.IsDBNull( columnOrdinal );
+                    var isDbNull = _dataReader.IsDBNull( _columnOrdinal );
 
-                    if (isDBNull)
+                    if (isDbNull)
                     {
                         value = DBNull.Value;
                     }
                     else
                     {
-                        var sqlDecimal = dataReader.GetSqlDecimal( columnOrdinal );
+                        var sqlDecimal = _dataReader.GetSqlDecimal( _columnOrdinal );
                         decimal decimalValue;
                         string decimalString;
 
@@ -110,7 +110,7 @@ namespace DataCommander.Providers.SqlServerCe40
                         }
 
 
-                        var decimalField = new DecimalField( numberFormatInfo, decimalValue, decimalString );
+                        var decimalField = new DecimalField( NumberFormatInfo, decimalValue, decimalString );
                         value = decimalField;
                     }
 

@@ -12,10 +12,6 @@ namespace Foundation.Text
     /// </summary>
     public class StringTable
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="columnCount"></param>
         public StringTable(int columnCount)
         {
             FoundationContract.Requires<ArgumentOutOfRangeException>(columnCount >= 0);
@@ -24,24 +20,9 @@ namespace Foundation.Text
                 Columns.Add(new StringTableColumn());
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public StringTableColumnCollection Columns { get; } = new StringTableColumnCollection();
-
-        /// <summary>
-        /// 
-        /// </summary>
         public StringTableRowCollection Rows { get; } = new StringTableRowCollection();
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public StringTableRow NewRow()
-        {
-            return new StringTableRow(this);
-        }
+        public StringTableRow NewRow() => new StringTableRow(this);
 
         private int GetMaxColumnWidth(int columnIndex)
         {
@@ -58,10 +39,6 @@ namespace Foundation.Text
             return maxColumnWidth;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public override string ToString()
         {
             var count = Columns.Count;
@@ -73,11 +50,6 @@ namespace Foundation.Text
             return ToString(columnWidths, " ");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="indent"></param>
-        /// <returns></returns>
         public string ToString(int indent)
         {
             var columnWidths = new int[Columns.Count];

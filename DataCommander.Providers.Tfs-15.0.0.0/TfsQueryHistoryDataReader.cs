@@ -1,24 +1,23 @@
-﻿using Foundation;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using Foundation;
 using Foundation.Assertions;
 using Foundation.Data;
+using Microsoft.TeamFoundation.VersionControl.Client;
 
 namespace DataCommander.Providers.Tfs
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Linq;
-    using Microsoft.TeamFoundation.VersionControl.Client;
-
     internal class TfsQueryHistoryDataReader : TfsDataReader
     {
         #region Private Fields
 
-        private readonly TfsCommand command;
-        private bool first = true;
-        private IEnumerator<Tuple<Changeset, int>> enumerator;
-        private int recordCount;
+        private readonly TfsCommand _command;
+        private bool _first = true;
+        private IEnumerator<Tuple<Changeset, int>> _enumerator;
+        private int _recordCount;
 
         #endregion
 
@@ -26,7 +25,7 @@ namespace DataCommander.Providers.Tfs
         {
             Assert.IsNotNull(command);
 
-            this.command = command;
+            this._command = command;
         }
 
         public override DataTable GetSchemaTable()
@@ -45,10 +44,10 @@ namespace DataCommander.Providers.Tfs
         {
             bool read;
 
-            if (first)
+            if (_first)
             {
-                first = false;
-                var parameters = command.Parameters;
+                _first = false;
+                var parameters = _command.Parameters;
                 var path = (string) parameters["path"].Value;
                 var version = VersionSpec.Latest;
                 var deletionId = 0;
@@ -79,22 +78,22 @@ namespace DataCommander.Providers.Tfs
                 }
                 else
                 {
-                    maxCount = (int) TfsDataReaderFactory.Dictionary[command.CommandText].Parameters["maxCount"].DefaultValue;
+                    maxCount = (int) TfsDataReaderFactory.Dictionary[_command.CommandText].Parameters["maxCount"].DefaultValue;
                 }
 
                 parameter = parameters.FirstOrDefault(p => p.ParameterName == "includeChanges");
                 var includeChanges = parameter != null ? ValueReader.GetValueOrDefault<bool>(parameters["includeChanges"].Value) : false;
                 var slotMode = ValueReader.GetValueOrDefault<bool>(parameters["slotMode"].Value);
-                var changesets = command.Connection.VersionControlServer.QueryHistory(path, version, deletionId, recursion, user, versionFrom, versionTo, maxCount, includeChanges,
+                var changesets = _command.Connection.VersionControlServer.QueryHistory(path, version, deletionId, recursion, user, versionFrom, versionTo, maxCount, includeChanges,
                     slotMode);
-                enumerator = AsEnumerable(changesets).GetEnumerator();
+                _enumerator = AsEnumerable(changesets).GetEnumerator();
             }
 
-            var moveNext = enumerator.MoveNext();
+            var moveNext = _enumerator.MoveNext();
 
             if (moveNext)
             {
-                var pair = enumerator.Current;
+                var pair = _enumerator.Current;
                 var changeset = pair.Item1;
 
                 var values = new object[]
@@ -117,7 +116,7 @@ namespace DataCommander.Providers.Tfs
                 }
 
                 Values = values;
-                recordCount++;
+                _recordCount++;
                 read = true;
             }
             else

@@ -10,14 +10,14 @@
             : base(parameter, parameter.Size, parameter.Precision, parameter.Scale)
 #pragma warning restore CS0618 // Type or member is obsolete
         {
-            this.parameter = parameter;
+            this._parameter = parameter;
         }
 
         protected override void SetSize(int size)
         {
-            parameter.Size = size;
+            _parameter.Size = size;
         }
 
-        private readonly OracleParameter parameter;
+        private readonly OracleParameter _parameter;
     }
 }

@@ -5,15 +5,15 @@
 
     internal sealed class ObjectName : IObjectName
     {
-        private SqlObject sqlObject;
-        private readonly string schemaName;
-        private readonly string objectName;
+        private SqlObject _sqlObject;
+        private readonly string _schemaName;
+        private readonly string _objectName;
 
         public ObjectName(SqlObject sqlObject, string schemaName, string objectName)
         {
-            this.sqlObject = sqlObject;
-            this.schemaName = schemaName;
-            this.objectName = objectName;
+            this._sqlObject = sqlObject;
+            this._schemaName = schemaName;
+            this._objectName = objectName;
         }
 
         string IObjectName.UnquotedName
@@ -21,13 +21,13 @@
             get
             {
                 var sb = new StringBuilder();
-                if (schemaName != null)
+                if (_schemaName != null)
                 {
-                    sb.Append(schemaName);
+                    sb.Append(_schemaName);
                     sb.Append('.');
                 }
 
-                sb.Append(objectName);
+                sb.Append(_objectName);
 
                 return sb.ToString();
             }
@@ -40,9 +40,9 @@
                 var sb = new StringBuilder();
                 var sqlCommandBuilder = new SqlCommandBuilder();
 
-                if (schemaName != null)
+                if (_schemaName != null)
                 {
-                    sb.Append(QuoteIdentifier(schemaName));
+                    sb.Append(QuoteIdentifier(_schemaName));
                     sb.Append('.');
                 }
                 //else if (this.sqlObject.ParentAlias != null)
@@ -51,7 +51,7 @@
                 //    sb.Append('.');
                 //}
 
-                sb.Append(QuoteIdentifier(objectName));
+                sb.Append(QuoteIdentifier(_objectName));
 
                 return sb.ToString();
             }

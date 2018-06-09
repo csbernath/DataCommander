@@ -7,11 +7,11 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
 
     internal sealed class ViewCollectionNode : ITreeNode
     {
-        private readonly DatabaseNode databaseNode;
+        private readonly DatabaseNode _databaseNode;
 
         public ViewCollectionNode(DatabaseNode databaseNode)
         {
-            this.databaseNode = databaseNode;
+            this._databaseNode = databaseNode;
         }
 
         string ITreeNode.Name => "Views";
@@ -24,17 +24,17 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
                 $@"select TABLE_NAME
 from INFORMATION_SCHEMA.TABLES
 where
-    TABLE_SCHEMA = '{databaseNode.Name}'
+    TABLE_SCHEMA = '{_databaseNode.Name}'
     and TABLE_TYPE = 'SYSTEM VIEW'
 order by TABLE_NAME";
 
             return MySqlClientFactory.Instance.ExecuteReader(
-                databaseNode.ObjectExplorer.ConnectionString,
+                _databaseNode.ObjectExplorer.ConnectionString,
                 new ExecuteReaderRequest(commandText),
                 dataRecord =>
                 {
                     var name = dataRecord.GetString(0);
-                    return new ViewNode(databaseNode, name);
+                    return new ViewNode(_databaseNode, name);
                 });
         }
 

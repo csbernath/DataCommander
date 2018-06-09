@@ -30,14 +30,7 @@ namespace Foundation
             }
         }
 
-        ~Reference()
-        {
-            Dispose();
-        }
-
-        public void Dispose()
-        {
-            Remove();
-        }
+        ~Reference() => Dispose();
+        public void Dispose() => Remove();
     }
 }

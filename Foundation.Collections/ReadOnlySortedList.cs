@@ -7,11 +7,6 @@ using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    /// <typeparam name="TValue"></typeparam>
     public sealed class ReadOnlySortedList<TKey, TValue> : IReadOnlyDictionary<TKey, TValue>
     {
         #region Private Fields
@@ -22,16 +17,7 @@ namespace Foundation.Collections
 
         #endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="values"></param>
-        /// <param name="keySelector"></param>
-        /// <param name="comparison"></param>
-        public ReadOnlySortedList(
-            IReadOnlyList<TValue> values,
-            Func<TValue, TKey> keySelector,
-            Comparison<TKey> comparison)
+        public ReadOnlySortedList(IReadOnlyList<TValue> values, Func<TValue, TKey> keySelector, Comparison<TKey> comparison)
         {
             Assert.IsNotNull(values);
             Assert.IsNotNull(keySelector);
@@ -45,44 +31,15 @@ namespace Foundation.Collections
             _comparison = comparison;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="values"></param>
-        /// <param name="keySelector"></param>
-        public ReadOnlySortedList(
-            IReadOnlyList<TValue> values,
-            Func<TValue, TKey> keySelector)
-            : this(values, keySelector, Comparer<TKey>.Default.Compare)
+        public ReadOnlySortedList(IReadOnlyList<TValue> values, Func<TValue, TKey> keySelector) : this(values, keySelector, Comparer<TKey>.Default.Compare)
         {
         }
 
         #region IReadOnlyDictionary Members
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public bool ContainsKey(TKey key)
-        {
-            return IndexOfKey(key) >= 0;
-        }
+        public bool ContainsKey(TKey key) => IndexOfKey(key) >= 0;
+        public IEnumerable<TKey> Keys => _values.Select(v => _keySelector(v));
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public IEnumerable<TKey> Keys
-        {
-            get { return _values.Select(v => _keySelector(v)); }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
         public bool TryGetValue(TKey key, out TValue value)
         {
             bool succeeded;
@@ -102,16 +59,8 @@ namespace Foundation.Collections
             return succeeded;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public IEnumerable<TValue> Values => _values;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
         public TValue this[TKey key]
         {
             get
@@ -119,32 +68,18 @@ namespace Foundation.Collections
                 var index = IndexOfKey(key);
 
                 if (index < 0)
-                {
                     throw new KeyNotFoundException();
-                }
 
                 return _values[index];
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public int Count => _values.Count;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
-        {
-            return _values.Select(value => KeyValuePair.Create(_keySelector(value), value)).GetEnumerator();
-        }
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() =>
+            _values.Select(value => KeyValuePair.Create(_keySelector(value), value)).GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         #endregion
 

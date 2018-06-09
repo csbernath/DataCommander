@@ -1,20 +1,11 @@
-﻿namespace DataCommander.Providers.MySql
-{
-    using Providers;
-    using global::MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 
+namespace DataCommander.Providers.MySql
+{
     internal sealed class MySqlDataReaderHelper : IDataReaderHelper
     {
-        private readonly MySqlDataReader dataReader;
-
-        public MySqlDataReaderHelper(MySqlDataReader dataReader)
-        {
-            this.dataReader = dataReader;
-        }
-
-        int IDataReaderHelper.GetValues(object[] values)
-        {
-            return dataReader.GetValues(values);
-        }
+        private readonly MySqlDataReader _dataReader;
+        public MySqlDataReaderHelper(MySqlDataReader dataReader) => this._dataReader = dataReader;
+        int IDataReaderHelper.GetValues(object[] values) => _dataReader.GetValues(values);
     }
 }

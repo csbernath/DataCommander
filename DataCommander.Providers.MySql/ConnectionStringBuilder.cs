@@ -5,13 +5,13 @@
 
     internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
     {
-        private readonly MySqlConnectionStringBuilder mySqlConnectionStringBuilder = new MySqlConnectionStringBuilder();
+        private readonly MySqlConnectionStringBuilder _mySqlConnectionStringBuilder = new MySqlConnectionStringBuilder();
 
         string IDbConnectionStringBuilder.ConnectionString
         {
-            get => mySqlConnectionStringBuilder.ConnectionString;
+            get => _mySqlConnectionStringBuilder.ConnectionString;
 
-            set => mySqlConnectionStringBuilder.ConnectionString = value;
+            set => _mySqlConnectionStringBuilder.ConnectionString = value;
         }
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
@@ -26,7 +26,7 @@
 
         bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value)
         {
-            return mySqlConnectionStringBuilder.TryGetValue(keyword, out value);
+            return _mySqlConnectionStringBuilder.TryGetValue(keyword, out value);
         }
     }
 }

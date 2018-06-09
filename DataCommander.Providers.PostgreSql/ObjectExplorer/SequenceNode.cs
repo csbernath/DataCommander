@@ -5,16 +5,16 @@
 
     internal sealed class SequenceNode : ITreeNode
     {
-        private readonly SequenceCollectionNode sequenceCollectionNode;
-        private readonly string name;
+        private readonly SequenceCollectionNode _sequenceCollectionNode;
+        private readonly string _name;
 
         public SequenceNode(SequenceCollectionNode sequenceCollectionNode, string name)
         {
-            this.sequenceCollectionNode = sequenceCollectionNode;
-            this.name = name;
+            this._sequenceCollectionNode = sequenceCollectionNode;
+            this._name = name;
         }
 
-        string ITreeNode.Name => name;
+        string ITreeNode.Name => _name;
 
         bool ITreeNode.IsLeaf => true;
 

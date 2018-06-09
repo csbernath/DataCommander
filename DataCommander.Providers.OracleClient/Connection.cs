@@ -1,32 +1,31 @@
-﻿using Foundation;
+﻿using System;
+using System.Data;
+using System.Data.OracleClient;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using DataCommander.Providers.Connection;
+using Foundation;
 
 namespace DataCommander.Providers.OracleClient
 {
-    using System;
-    using System.Data;
-    using System.Data.OracleClient;
-    using System.Text;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Providers.Connection;
-
     internal sealed class Connection : ConnectionBase
     {
-        private string connectionName;
+#pragma warning disable 618
+        private readonly OracleConnection _oracleConnection;
+#pragma warning restore 618
+        private string _connectionName;
 
         public Connection(string connectionString)
         {
 #pragma warning disable 618
-            oracleConnection = new OracleConnection(connectionString);
+            _oracleConnection = new OracleConnection(connectionString);
 #pragma warning restore 618
-            Connection = oracleConnection;
-            oracleConnection.InfoMessage += OnInfoMessage;
+            Connection = _oracleConnection;
+            _oracleConnection.InfoMessage += OnInfoMessage;
         }
 
-        public override Task OpenAsync(CancellationToken cancellationToken)
-        {
-            return oracleConnection.OpenAsync(cancellationToken);
-        }
+        public override Task OpenAsync(CancellationToken cancellationToken) => _oracleConnection.OpenAsync(cancellationToken);
 
         public override string Caption => null;
 
@@ -46,29 +45,19 @@ namespace DataCommander.Providers.OracleClient
             InvokeInfoMessage(new[] {new InfoMessage(now, InfoMessageSeverity.Information, null, sb.ToString())});
         }
 
-        public override string DataSource => oracleConnection.DataSource;
-
-        public override string ServerVersion => oracleConnection.ServerVersion;
-
+        public override string DataSource => _oracleConnection.DataSource;
+        public override string ServerVersion => _oracleConnection.ServerVersion;
         public override int TransactionCount => 0;
-
-        public override IDbCommand CreateCommand()
-        {
-            return oracleConnection.CreateCommand();
-        }
+        public override IDbCommand CreateCommand() => _oracleConnection.CreateCommand();
 
         protected override void SetDatabase(string database)
         {
         }
 
-#pragma warning disable 618
-        private readonly OracleConnection oracleConnection;
-#pragma warning restore 618
-
         public override string ConnectionName
         {
-            get => connectionName;
-            set => connectionName = value;
+            get => _connectionName;
+            set => _connectionName = value;
         }
     }
 }

@@ -1,26 +1,25 @@
-﻿using Foundation.Assertions;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using Foundation.Assertions;
 using Foundation.Data;
+using Microsoft.TeamFoundation.VersionControl.Client;
 
 namespace DataCommander.Providers.Tfs
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Linq;
-    using System.Text;
-    using Microsoft.TeamFoundation.VersionControl.Client;
-
     internal sealed class TfsGetItemsDataReader : TfsDataReader
     {
-        private readonly TfsCommand command;
-        private bool first = true;
-        private List<Item> items;
-        private int index;
+        private readonly TfsCommand _command;
+        private bool _first = true;
+        private List<Item> _items;
+        private int _index;
 
         public TfsGetItemsDataReader(TfsCommand command)
         {
             Assert.IsNotNull(command);
-            this.command = command;
+            this._command = command;
         }
 
         public override DataTable GetSchemaTable()
@@ -39,30 +38,28 @@ namespace DataCommander.Providers.Tfs
         {
             bool read;
 
-            if (command.Cancelled)
-            {
+            if (_command.Cancelled)
                 read = false;
-            }
             else
             {
-                if (first)
+                if (_first)
                 {
-                    first = false;
-                    var parameters = command.Parameters;
+                    _first = false;
+                    var parameters = _command.Parameters;
                     var path = parameters["path"].GetValueOrDefault<string>();
                     var recursionString = ValueReader.GetValueOrDefault<string>(parameters["recursion"].Value);
                     RecursionType recursion;
 
                     if (recursionString != null)
                     {
-                        recursion = (RecursionType)Enum.Parse(typeof(RecursionType), recursionString);
+                        recursion = (RecursionType) Enum.Parse(typeof(RecursionType), recursionString);
                     }
                     else
                     {
                         recursion = RecursionType.OneLevel;
                     }
 
-                    var itemSet = command.Connection.VersionControlServer.GetItems(path, recursion);
+                    var itemSet = _command.Connection.VersionControlServer.GetItems(path, recursion);
                     var folders = new List<Item>();
                     var files = new List<Item>();
 
@@ -83,13 +80,13 @@ namespace DataCommander.Providers.Tfs
                         }
                     }
 
-                    items = folders;
-                    items.AddRange(files);
+                    _items = folders;
+                    _items.AddRange(files);
                 }
 
-                if (index < items.Count)
+                if (_index < _items.Count)
                 {
-                    var item = items[index];
+                    var item = _items[_index];
                     var itemEncoding = item.Encoding;
                     string encodingString;
 
@@ -115,7 +112,7 @@ namespace DataCommander.Providers.Tfs
 
                     Values = values;
                     read = true;
-                    index++;
+                    _index++;
                 }
                 else
                 {
@@ -127,7 +124,6 @@ namespace DataCommander.Providers.Tfs
         }
 
         public override int RecordsAffected => -1;
-
         public override int FieldCount => 6;
     }
 }

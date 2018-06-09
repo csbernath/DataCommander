@@ -1,13 +1,12 @@
-﻿using Foundation;
+﻿using System.Data;
+using System.Data.OleDb;
+using System.Threading;
+using System.Threading.Tasks;
+using DataCommander.Providers.Connection;
+using Foundation;
 
 namespace DataCommander.Providers.OleDb
 {
-    using System.Data;
-    using System.Data.OleDb;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Providers.Connection;
-
     internal sealed class Connection : ConnectionBase
     {
         private readonly OleDbConnection oledbConnection;
@@ -21,12 +20,7 @@ namespace DataCommander.Providers.OleDb
         }
 
         public override string ConnectionName { get; set; }
-
-        public override Task OpenAsync(CancellationToken cancellationToken)
-        {
-            return oledbConnection.OpenAsync(cancellationToken);
-        }
-
+        public override Task OpenAsync(CancellationToken cancellationToken) => oledbConnection.OpenAsync(cancellationToken);
         public override string Caption => oledbConnection.ConnectionString;
 
         void OnInfoMessage(object sender, OleDbInfoMessageEventArgs e)
@@ -37,13 +31,9 @@ namespace DataCommander.Providers.OleDb
         }
 
         public override string DataSource => oledbConnection.DataSource;
-
         public override string ServerVersion => oledbConnection.ServerVersion;
 
-        public override IDbCommand CreateCommand()
-        {
-            return oledbConnection.CreateCommand();
-        }
+        public override IDbCommand CreateCommand() => oledbConnection.CreateCommand();
 
         protected override void SetDatabase(string database)
         {

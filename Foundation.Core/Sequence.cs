@@ -11,9 +11,6 @@
             return next;
         }
 
-        public void Reset()
-        {
-            _index = 0;
-        }
+        public void Reset() => _index = 0;
     }
 }

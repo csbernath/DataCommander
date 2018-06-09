@@ -11,8 +11,8 @@ namespace DataCommander.Providers.Tfs
 
     internal sealed class TfsObjectExplorer : IObjectExplorer
     {
-        private TfsConnection connection;
-        private VersionControlServer versionControlServer;
+        private TfsConnection _connection;
+        private VersionControlServer _versionControlServer;
 
         public static string GetName(Item item)
         {
@@ -29,9 +29,9 @@ namespace DataCommander.Providers.Tfs
         void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
         {
             var tfsDbConnection = (TfsDbConnection)connection;
-            this.connection = tfsDbConnection.Connection;
-            var tfsTeamProjectCollection = this.connection.TfsTeamProjectCollection;
-            versionControlServer = (VersionControlServer)tfsTeamProjectCollection.GetService(typeof(VersionControlServer));
+            this._connection = tfsDbConnection.Connection;
+            var tfsTeamProjectCollection = this._connection.TfsTeamProjectCollection;
+            _versionControlServer = (VersionControlServer)tfsTeamProjectCollection.GetService(typeof(VersionControlServer));
         }
 
 #endregion
@@ -41,7 +41,7 @@ namespace DataCommander.Providers.Tfs
             // TFS 2005 and 2008 behavior is different:
             //  - TFS 2005 does not return the rootfolder
             //  - TFS 2008 returns the rootfolder
-            var itemSet = versionControlServer.GetItems(VersionControlPath.RootFolder, RecursionType.OneLevel);
+            var itemSet = _versionControlServer.GetItems(VersionControlPath.RootFolder, RecursionType.OneLevel);
             var items = itemSet.Items;
             IEnumerable<Item> enumerable;
 

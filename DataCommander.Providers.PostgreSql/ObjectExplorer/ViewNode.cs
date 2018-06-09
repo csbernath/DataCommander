@@ -5,16 +5,16 @@
 
     internal sealed class ViewNode : ITreeNode
     {
-        private readonly ViewCollectionNode viewCollectionNode;
-        private readonly string name;
+        private readonly ViewCollectionNode _viewCollectionNode;
+        private readonly string _name;
 
         public ViewNode(ViewCollectionNode viewCollectionNode, string name)
         {
-            this.viewCollectionNode = viewCollectionNode;
-            this.name = name;
+            this._viewCollectionNode = viewCollectionNode;
+            this._name = name;
         }
 
-        string ITreeNode.Name => name;
+        string ITreeNode.Name => _name;
 
         bool ITreeNode.IsLeaf => true;
 

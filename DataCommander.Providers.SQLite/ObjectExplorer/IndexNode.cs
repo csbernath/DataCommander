@@ -6,18 +6,18 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
 {
     internal sealed class IndexNode : ITreeNode
     {
-        private readonly TableNode tableNode;
-        private readonly string name;
+        private readonly TableNode _tableNode;
+        private readonly string _name;
 
         public IndexNode(TableNode tableNode, string name)
         {
-            this.tableNode = tableNode;
-            this.name = name;
+            this._tableNode = tableNode;
+            this._name = name;
         }
 
         #region ITreeNode Members
 
-        string ITreeNode.Name => name;
+        string ITreeNode.Name => _name;
 
         bool ITreeNode.IsLeaf => true;
 
@@ -36,8 +36,8 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
 from main.sqlite_master
 where
     type = 'index'
-    and name = '{name}'";
-                var executor = DbCommandExecutorFactory.Create(tableNode.Database.Connection);
+    and name = '{_name}'";
+                var executor = DbCommandExecutorFactory.Create(_tableNode.Database.Connection);
                 var sql = (string) executor.ExecuteScalar(new CreateCommandRequest(commandText));
                 return sql;
             }

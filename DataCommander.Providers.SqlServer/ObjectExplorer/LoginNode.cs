@@ -1,17 +1,14 @@
-﻿namespace DataCommander.Providers.SqlServer.ObjectExplorer
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Windows.Forms;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.SqlServer.ObjectExplorer
+{
     internal sealed class LoginNode : ITreeNode
     {
         private readonly string _name;
 
-        public LoginNode( string name )
-        {
-            _name = name;
-        }
+        public LoginNode(string name) => _name = name;
 
         #region ITreeNode Members
 
@@ -19,7 +16,7 @@
 
         bool ITreeNode.IsLeaf => true;
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             throw new NotImplementedException();
         }

@@ -7,55 +7,19 @@ using System.Xml;
 
 namespace Foundation.Xml
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class SimpleXmlTextWriter : XmlWriter
     {
         private readonly IndentedTextWriter _textWriter;
         private readonly Stack<StackItem> _stack = new Stack<StackItem>();
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SimpleXmlTextWriter"/> class.
-        /// </summary>
-        /// <param name="textWriter">The text writer.</param>
         public SimpleXmlTextWriter(TextWriter textWriter)
         {
             _textWriter = new IndentedTextWriter(textWriter, "    ");
         }
 
-        /// <summary>
-        /// When overridden in a derived class, closes this stream and the underlying stream.
-        /// </summary>
-        /// <exception cref="T:System.InvalidOperationException">A call is made to write more output after <see langword="Close"/> has been called or the result of this call is an invalid XML document.</exception>
-        public override void Close()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// When overridden in a derived class, flushes whatever is in the buffer to the underlying streams and also flushes the
-        /// underlying stream.
-        /// </summary>
-        public override void Flush()
-        {
-            _textWriter.Flush();
-        }
-
-        /// <summary>
-        /// When overridden in a derived class, returns the closest prefix defined in the
-        /// current namespace scope for the namespace URI.
-        /// </summary>
-        /// <param name="ns">The namespace URI whose prefix you want to find.</param>
-        /// <returns>
-        /// The matching prefix or <see langword="null"/> if no matching namespace URI is found in the current scope.
-        /// </returns>
-        /// <exception cref="T:System.ArgumentException">
-        /// <paramref name="ns"/> is either <see langword="null"/> or string.Empty.</exception>
-        public override string LookupPrefix(string ns)
-        {
-            throw new NotImplementedException();
-        }
+        public override void Close() => throw new NotImplementedException();
+        public override void Flush() => _textWriter.Flush();
+        public override string LookupPrefix(string ns) => throw new NotImplementedException();
 
         /// <summary>
         /// When overridden in a derived class, writes out all the attributes found at the

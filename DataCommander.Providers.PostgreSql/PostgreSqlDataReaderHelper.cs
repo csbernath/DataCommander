@@ -1,20 +1,11 @@
-﻿namespace DataCommander.Providers.PostgreSql
-{
-    using Providers;
-    using Npgsql;
+﻿using Npgsql;
 
+namespace DataCommander.Providers.PostgreSql
+{
     internal sealed class PostgreSqlDataReaderHelper : IDataReaderHelper
     {
-        private readonly NpgsqlDataReader dataReader;
-
-        public PostgreSqlDataReaderHelper(NpgsqlDataReader dataReader)
-        {
-            this.dataReader = dataReader;
-        }
-
-        int IDataReaderHelper.GetValues(object[] values)
-        {
-            return dataReader.GetValues(values);
-        }
+        private readonly NpgsqlDataReader _dataReader;
+        public PostgreSqlDataReaderHelper(NpgsqlDataReader dataReader) => this._dataReader = dataReader;
+        int IDataReaderHelper.GetValues(object[] values) => _dataReader.GetValues(values);
     }
 }

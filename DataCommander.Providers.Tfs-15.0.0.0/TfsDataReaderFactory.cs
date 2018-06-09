@@ -6,10 +6,7 @@
     {
         public delegate TfsDataReader CreateDataReader(TfsCommand command);
 
-        public static void Add(
-            string name,
-            TfsParameterCollection parameters,
-            CreateDataReader createDataReader)
+        public static void Add(string name, TfsParameterCollection parameters, CreateDataReader createDataReader)
         {
             var info = new DataReaderInfo(name, parameters, createDataReader);
             Dictionary.Add(name, info);
@@ -19,20 +16,16 @@
 
         public sealed class DataReaderInfo
         {
-            private string name;
+            private string _name;
 
-            public DataReaderInfo(
-                string name,
-                TfsParameterCollection parameters,
-                CreateDataReader createDataReader)
+            public DataReaderInfo(string name, TfsParameterCollection parameters, CreateDataReader createDataReader)
             {
-                this.name = name;
+                this._name = name;
                 Parameters = parameters;
                 CreateDataReader = createDataReader;
             }
 
             public TfsParameterCollection Parameters { get; }
-
             public CreateDataReader CreateDataReader { get; }
         }
     }

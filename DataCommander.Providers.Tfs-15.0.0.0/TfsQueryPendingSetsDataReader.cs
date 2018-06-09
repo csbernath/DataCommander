@@ -1,25 +1,24 @@
-﻿using Foundation;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using Foundation;
 using Foundation.Assertions;
 using Foundation.Data;
+using Microsoft.TeamFoundation.VersionControl.Client;
 
 namespace DataCommander.Providers.Tfs
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using Microsoft.TeamFoundation.VersionControl.Client;
-
     internal sealed class TfsQueryPendingSetsDataReader : TfsDataReader
     {
-        private readonly TfsCommand command;
-        private bool first = true;
-        private PendingSet[] pendingSets;
-        private IEnumerator<Tuple<int, int>> enumerator;
+        private readonly TfsCommand _command;
+        private bool _first = true;
+        private PendingSet[] _pendingSets;
+        private IEnumerator<Tuple<int, int>> _enumerator;
 
         public TfsQueryPendingSetsDataReader(TfsCommand command)
         {
             Assert.IsNotNull(command);
-            this.command = command;
+            this._command = command;
         }
 
         public override DataTable GetSchemaTable()
@@ -43,16 +42,16 @@ namespace DataCommander.Providers.Tfs
         {
             bool read;
 
-            if (command.Cancelled)
+            if (_command.Cancelled)
             {
                 read = false;
             }
             else
             {
-                if (first)
+                if (_first)
                 {
-                    first = false;
-                    var parameters = command.Parameters;
+                    _first = false;
+                    var parameters = _command.Parameters;
                     var path = ValueReader.GetValueOrDefault<string>(parameters["path"].Value);
                     var recursionString = ValueReader.GetValueOrDefault<string>(parameters["recursion"].Value);
                     RecursionType recursion;
@@ -68,16 +67,16 @@ namespace DataCommander.Providers.Tfs
 
                     var workspace = ValueReader.GetValueOrDefault<string>(parameters["workspace"].Value);
                     var user = ValueReader.GetValueOrDefault<string>(parameters["user"].Value);
-                    pendingSets = command.Connection.VersionControlServer.QueryPendingSets(new[] {path}, recursion, workspace, user);
-                    enumerator = AsEnumerable(pendingSets).GetEnumerator();
+                    _pendingSets = _command.Connection.VersionControlServer.QueryPendingSets(new[] {path}, recursion, workspace, user);
+                    _enumerator = AsEnumerable(_pendingSets).GetEnumerator();
                 }
 
-                var moveNext = enumerator.MoveNext();
+                var moveNext = _enumerator.MoveNext();
 
                 if (moveNext)
                 {
-                    var pair = enumerator.Current;
-                    var pendingSet = pendingSets[pair.Item1];
+                    var pair = _enumerator.Current;
+                    var pendingSet = _pendingSets[pair.Item1];
                     var pendingChange = pendingSet.PendingChanges[pair.Item2];
 
                     var values = new object[]

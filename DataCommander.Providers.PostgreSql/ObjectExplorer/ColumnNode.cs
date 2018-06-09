@@ -5,18 +5,18 @@
 
     internal sealed class ColumnNode : ITreeNode
     {
-        private readonly ColumnCollectionNode columnCollectionNode;
-        private readonly string name;
-        private readonly string dataType;
+        private readonly ColumnCollectionNode _columnCollectionNode;
+        private readonly string _name;
+        private readonly string _dataType;
 
         public ColumnNode(ColumnCollectionNode columnCollectionNode, string name, string dataType)
         {
-            this.columnCollectionNode = columnCollectionNode;
-            this.name = name;
-            this.dataType = dataType;
+            this._columnCollectionNode = columnCollectionNode;
+            this._name = name;
+            this._dataType = dataType;
         }
 
-        string ITreeNode.Name => $"{name} {dataType}";
+        string ITreeNode.Name => $"{_name} {_dataType}";
 
         bool ITreeNode.IsLeaf => true;
 

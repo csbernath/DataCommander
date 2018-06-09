@@ -14,7 +14,7 @@ using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SQLite
 {
-    public sealed class SQLiteProvider : IProvider
+    public sealed class SqLiteProvider : IProvider
     {
         #region IProvider Members
 
@@ -89,13 +89,13 @@ namespace DataCommander.Providers.SQLite
 
                     var columnSize = dataColumnSchema.ColumnSize;
                     var dbType = (DbType)row["ProviderType"];
-                    var allowDBNull = (bool)row["AllowDBNull"];
+                    var allowDbNull = (bool)row["AllowDBNull"];
                     var sb = new StringBuilder();
 
                     var dataTypeName = dataReader.GetDataTypeName(i);
                     sb.Append(dataTypeName);
 
-                    if (!allowDBNull)
+                    if (!allowDbNull)
                     {
                         sb.Append(" NOT NULL");
                     }
@@ -126,7 +126,7 @@ namespace DataCommander.Providers.SQLite
 
         IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
         {
-            return new SQLiteDataReaderHelper(dataReader);
+            return new SqLiteDataReaderHelper(dataReader);
         }
 
         DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection)
@@ -246,7 +246,7 @@ order by name collate nocase";
         {
             var schemaRow = FoundationDbColumnFactory.Create(sourceSchemaRow);
             var columnSize = schemaRow.ColumnSize;
-            var allowDBNull = schemaRow.AllowDbNull;
+            var allowDbNull = schemaRow.AllowDbNull;
             string typeName;
 
             switch (sourceDataTypeName.ToLower())

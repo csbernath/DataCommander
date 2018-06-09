@@ -22,9 +22,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
                 object value;
 
                 if (_dataRecord.IsDBNull(_columnOrdinal))
-                {
                     value = DBNull.Value;
-                }
                 else
                 {
                     var s = _dataRecord.GetString(_columnOrdinal);

@@ -16,17 +16,17 @@ namespace DataCommander.Providers.Tfs
 {
     internal sealed class TfsDownloadDataReader : TfsDataReader
     {
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private readonly TfsCommand command;
-        private Item item;
-        private string localPath;
-        private bool first = true;
-        private readonly Queue<Item> queue = new Queue<Item>();
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly TfsCommand _command;
+        private Item _item;
+        private string _localPath;
+        private bool _first = true;
+        private readonly Queue<Item> _queue = new Queue<Item>();
 
         public TfsDownloadDataReader(TfsCommand command)
         {
             Assert.IsNotNull(command);
-            this.command = command;
+            this._command = command;
         }
 
         public override int FieldCount => 4;
@@ -47,30 +47,30 @@ namespace DataCommander.Providers.Tfs
         {
             bool read;
 
-            if (command.Cancelled)
+            if (_command.Cancelled)
             {
                 read = false;
             }
             else
             {
-                if (first)
+                if (_first)
                 {
-                    first = false;
-                    var serverPath = (string) command.Parameters["serverPath"].Value;
-                    item = command.Connection.VersionControlServer.GetItem(serverPath);
-                    localPath = ValueReader.GetValueOrDefault<string>(command.Parameters["localPath"].Value);
+                    _first = false;
+                    var serverPath = (string) _command.Parameters["serverPath"].Value;
+                    _item = _command.Connection.VersionControlServer.GetItem(serverPath);
+                    _localPath = ValueReader.GetValueOrDefault<string>(_command.Parameters["localPath"].Value);
 
-                    if (localPath == null)
+                    if (_localPath == null)
                     {
-                        localPath = Path.GetTempPath();
-                        localPath = Path.Combine(localPath, DateTime.Now.ToString("yyyyMMdd HHmmss.fff"));
+                        _localPath = Path.GetTempPath();
+                        _localPath = Path.Combine(_localPath, DateTime.Now.ToString("yyyyMMdd HHmmss.fff"));
 
-                        switch (item.ItemType)
+                        switch (_item.ItemType)
                         {
                             case ItemType.File:
                             case ItemType.Folder:
-                                var name = VersionControlPath.GetFileName(item.ServerItem);
-                                localPath = Path.Combine(localPath, name);
+                                var name = VersionControlPath.GetFileName(_item.ServerItem);
+                                _localPath = Path.Combine(_localPath, name);
                                 break;
 
                             default:
@@ -79,17 +79,17 @@ namespace DataCommander.Providers.Tfs
                     }
 
                     var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-                    queryForm.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, $"localPath: {localPath}"));
+                    queryForm.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, $"localPath: {_localPath}"));
 
                     if (!VersionControlPath.IsValidPath(serverPath))
                         throw new ArgumentException($"The parameter serverPath '{serverPath}' is invalid.");
 
-                    queue.Enqueue(item);
+                    _queue.Enqueue(_item);
                 }
 
-                if (queue.Count > 0)
+                if (_queue.Count > 0)
                 {
-                    var current = queue.Dequeue();
+                    var current = _queue.Dequeue();
                     var values = new object[4];
                     values[0] = current.ServerItem;
                     values[1] = current.ItemType;
@@ -99,21 +99,21 @@ namespace DataCommander.Providers.Tfs
                     var name = VersionControlPath.GetFileName(current.ServerItem);
                     string path;
 
-                    if (item.ServerItem.Length + 1 <= current.ServerItem.Length)
+                    if (_item.ServerItem.Length + 1 <= current.ServerItem.Length)
                     {
-                        var secondPath = current.ServerItem.Substring(item.ServerItem.Length + 1);
+                        var secondPath = current.ServerItem.Substring(_item.ServerItem.Length + 1);
                         secondPath = secondPath.Replace(VersionControlPath.Separator, Path.DirectorySeparatorChar);
-                        path = Path.Combine(localPath, secondPath);
+                        path = Path.Combine(_localPath, secondPath);
                     }
                     else
                     {
-                        path = localPath;
+                        path = _localPath;
                     }
 
                     switch (current.ItemType)
                     {
                         case ItemType.File:
-                            log.Write(LogLevel.Trace, "Downloading {0}...", current.ServerItem);
+                            Log.Write(LogLevel.Trace, "Downloading {0}...", current.ServerItem);
                             current.DownloadFile(path);
                             var checkingDate = current.CheckinDate;
                             var fileInfo = new FileInfo(path);
@@ -136,7 +136,7 @@ namespace DataCommander.Providers.Tfs
 
                             foreach (var childItem in itemSet.Items.Skip(1))
                             {
-                                queue.Enqueue(childItem);
+                                _queue.Enqueue(childItem);
                             }
 
                             break;

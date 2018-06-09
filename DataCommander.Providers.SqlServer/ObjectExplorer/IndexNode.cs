@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Providers.SqlServer.ObjectExplorer
-{
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Text;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.SqlServer.ObjectExplorer
+{
     internal sealed class IndexNode : ITreeNode
     {
         private readonly DatabaseNode _databaseNode;

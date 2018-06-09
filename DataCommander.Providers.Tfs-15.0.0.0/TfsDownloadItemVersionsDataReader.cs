@@ -14,16 +14,16 @@ namespace DataCommander.Providers.Tfs
 
     internal class TfsDownloadItemVersionsDataReader : TfsDataReader
     {
-        private readonly TfsCommand command;
-        private string path;
-        private string localPath;
-        private bool first = true;
-        private IEnumerator<Tuple<Changeset, int>> enumerator;
+        private readonly TfsCommand _command;
+        private string _path;
+        private string _localPath;
+        private bool _first = true;
+        private IEnumerator<Tuple<Changeset, int>> _enumerator;
 
         public TfsDownloadItemVersionsDataReader(TfsCommand command)
         {
             Assert.IsNotNull(command);
-            this.command = command;
+            this._command = command;
         }
 
         public override DataTable GetSchemaTable()
@@ -56,11 +56,11 @@ namespace DataCommander.Providers.Tfs
         {
             bool read;
 
-            if (first)
+            if (_first)
             {
-                first = false;
-                var parameters = command.Parameters;
-                path = (string) parameters[ "path" ].Value;
+                _first = false;
+                var parameters = _command.Parameters;
+                _path = (string) parameters[ "path" ].Value;
                 var version = VersionSpec.Latest;
                 var deletionId = 0;
                 var recursion = RecursionType.None;
@@ -78,25 +78,25 @@ namespace DataCommander.Providers.Tfs
 
                 const bool includeChanges = true;
                 var slotMode = ValueReader.GetValueOrDefault<bool>( parameters[ "slotMode" ].Value );
-                localPath = ValueReader.GetValueOrDefault<string>( parameters[ "localPath" ].Value );
+                _localPath = ValueReader.GetValueOrDefault<string>( parameters[ "localPath" ].Value );
 
-                if (string.IsNullOrEmpty(localPath ))
+                if (string.IsNullOrEmpty(_localPath ))
                 {
-                    localPath = Path.GetTempPath();
-                    localPath += Path.DirectorySeparatorChar;
-                    localPath += $"getversions [{DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss.fff")}]";
-                    Directory.CreateDirectory(localPath );
+                    _localPath = Path.GetTempPath();
+                    _localPath += Path.DirectorySeparatorChar;
+                    _localPath += $"getversions [{DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss.fff")}]";
+                    Directory.CreateDirectory(_localPath );
                 }
 
-                var changesets = command.Connection.VersionControlServer.QueryHistory(path, version, deletionId, recursion, user, versionFrom, versionTo, maxCount, includeChanges, slotMode );
-                enumerator = AsEnumerable( changesets ).GetEnumerator();
+                var changesets = _command.Connection.VersionControlServer.QueryHistory(_path, version, deletionId, recursion, user, versionFrom, versionTo, maxCount, includeChanges, slotMode );
+                _enumerator = AsEnumerable( changesets ).GetEnumerator();
             }
 
-            var moveNext = enumerator.MoveNext();
+            var moveNext = _enumerator.MoveNext();
 
             if (moveNext)
             {
-                var pair = enumerator.Current;
+                var pair = _enumerator.Current;
                 var changeset = pair.Item1;
 
                 var values = new object[]
@@ -127,7 +127,7 @@ namespace DataCommander.Providers.Tfs
                     var change = changeset.Changes[ i ];
                     Trace.WriteLine( change.ChangeType );
                     Trace.WriteLine( change.Item.ServerItem );
-                    path = change.Item.ServerItem;
+                    _path = change.Item.ServerItem;
 
                     if (i > 0)
                     {
@@ -140,11 +140,11 @@ namespace DataCommander.Providers.Tfs
                 var creationDate = changeset.CreationDate;
                 var deletionId = 0;
                 var versionSpec = new ChangesetVersionSpec( changesetId );
-                var fileName = VersionControlPath.GetFileName( path );
+                var fileName = VersionControlPath.GetFileName( _path );
                 var fileNameWithoutExtension = Path.GetFileNameWithoutExtension( fileName );
-                var extension = VersionControlPath.GetExtension( path );
-                var localFileName = localPath + Path.DirectorySeparatorChar + changesetId.ToString().PadLeft( 5, '0' ) + ';' + changeType + ';' + changeset.Committer.Replace( '\\', ' ' ) + extension;
-                command.Connection.VersionControlServer.DownloadFile( path, deletionId, versionSpec, localFileName );
+                var extension = VersionControlPath.GetExtension( _path );
+                var localFileName = _localPath + Path.DirectorySeparatorChar + changesetId.ToString().PadLeft( 5, '0' ) + ';' + changeType + ';' + changeset.Committer.Replace( '\\', ' ' ) + extension;
+                _command.Connection.VersionControlServer.DownloadFile( _path, deletionId, versionSpec, localFileName );
                 File.SetLastWriteTime( localFileName, creationDate );
                 File.SetAttributes( localFileName, FileAttributes.ReadOnly );
 

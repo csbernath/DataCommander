@@ -19,10 +19,7 @@ namespace Foundation
         }
 
         [Pure]
-        public bool Contains(FoundationDateTimeInterval other)
-        {
-            return Start <= other.Start && other.End <= End;
-        }
+        public bool Contains(FoundationDateTimeInterval other) => Start <= other.Start && other.End <= End;
 
         [Pure]
         public FoundationDateTimeInterval? Intersect(FoundationDateTimeInterval other)
@@ -51,10 +48,7 @@ namespace Foundation
             return length;
         }
 
-        private static string ToString(DateTime dateTime)
-        {
-            return dateTime.ToString("yyyy.MM.dd. HH:mm:ss");
-        }
+        private static string ToString(DateTime dateTime) => dateTime.ToString("yyyy.MM.dd. HH:mm:ss");
 
         private string DebuggerDisplay => $"{ToString(Start)}-{ToString(End)}";
     }

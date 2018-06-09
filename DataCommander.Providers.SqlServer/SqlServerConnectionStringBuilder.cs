@@ -1,9 +1,8 @@
 ﻿using Foundation.Linq;
+using System.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer
 {
-    using System.Data.SqlClient;
-
     internal sealed class SqlServerConnectionStringBuilder : IDbConnectionStringBuilder
     {
         private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder = new SqlConnectionStringBuilder();

@@ -1,22 +1,19 @@
-﻿namespace DataCommander.Providers.Tfs
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Windows.Forms;
-    using Microsoft.TeamFoundation.VersionControl.Client;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+using Microsoft.TeamFoundation.VersionControl.Client;
 
+namespace DataCommander.Providers.Tfs
+{
     internal sealed class TfsFolder : ITreeNode
     {
-        private readonly Item item;
+        private readonly Item _item;
 
-        public TfsFolder(Item item)
-        {
-            this.item = item;
-        }
+        public TfsFolder(Item item) => this._item = item;
 
         #region ITreeNode Members
 
-        string ITreeNode.Name => TfsObjectExplorer.GetName(item);
+        string ITreeNode.Name => TfsObjectExplorer.GetName(_item);
 
         bool ITreeNode.IsLeaf
         {
@@ -24,7 +21,7 @@
             {
                 bool isLeaf;
 
-                switch (item.ItemType)
+                switch (_item.ItemType)
                 {
                     case ItemType.File:
                         isLeaf = true;
@@ -67,12 +64,12 @@
 
             //return folders.Concat(files);
 
-            return TfsProject.GetChildren(item);
+            return TfsProject.GetChildren(_item);
         }
 
         bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query => item.ServerItem;
+        string ITreeNode.Query => _item.ServerItem;
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 

@@ -10,15 +10,8 @@ namespace DataCommander.Providers.SqlServer
 {
     internal static class SqlServerObject
     {
-        public static string GetDatabases()
-        {
-            return "select name from sys.databases (nolock) order by name";
-        }
-
-        public static string GetSchemas()
-        {
-            return "select name from sys.schemas (nolock) order by name";
-        }
+        public static string GetDatabases() => "select name from sys.databases (nolock) order by name";
+        public static string GetSchemas() => "select name from sys.schemas (nolock) order by name";
 
         public static string GetSchemas(string database)
         {
@@ -56,10 +49,7 @@ begin
 end";
         }
 
-        public static string GetObjects(
-            string database,
-            string schema,
-            IEnumerable<string> objectTypes)
+        public static string GetObjects(string database, string schema, IEnumerable<string> objectTypes)
         {
             FoundationContract.Requires<ArgumentException>(!database.IsNullOrWhiteSpace());
             FoundationContract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());

@@ -10,11 +10,11 @@
     /// </summary>
     internal sealed class DatabaseObjectMultipartName
     {
-        private string server;
+        private string _server;
 
         public DatabaseObjectMultipartName(string server, string database, string schema, string name)
         {
-            this.server = server;
+            this._server = server;
             Database = database;
             Schema = schema;
             Name = name;
@@ -47,7 +47,7 @@
 
                             if (i >= 0)
                             {
-                                server = parts[i];
+                                _server = parts[i];
                             }
                         }
                     }

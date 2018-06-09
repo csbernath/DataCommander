@@ -1,19 +1,18 @@
-﻿namespace DataCommander.Providers.PostgreSql
-{
-    using System.Linq;
-    using Npgsql;
-    using Providers;
-    using Providers.Connection;
+﻿using System.Linq;
+using DataCommander.Providers.Connection;
+using Npgsql;
 
+namespace DataCommander.Providers.PostgreSql
+{
     internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
     {
-        private readonly NpgsqlConnectionStringBuilder npgsqlConnectionStringBuilder = new NpgsqlConnectionStringBuilder();
+        private readonly NpgsqlConnectionStringBuilder _npgsqlConnectionStringBuilder = new NpgsqlConnectionStringBuilder();
 
         string IDbConnectionStringBuilder.ConnectionString
         {
-            get => npgsqlConnectionStringBuilder.ConnectionString;
+            get => _npgsqlConnectionStringBuilder.ConnectionString;
 
-            set => npgsqlConnectionStringBuilder.ConnectionString = value;
+            set => _npgsqlConnectionStringBuilder.ConnectionString = value;
         }
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
@@ -33,15 +32,15 @@
             switch (keyword)
             {
                 case ConnectionStringKeyword.DataSource:
-                    contains = npgsqlConnectionStringBuilder.TryGetValue("Host", out value);
+                    contains = _npgsqlConnectionStringBuilder.TryGetValue("Host", out value);
                     break;
 
                 case ConnectionStringKeyword.InitialCatalog:
-                    contains = npgsqlConnectionStringBuilder.TryGetValue("Database", out value);
+                    contains = _npgsqlConnectionStringBuilder.TryGetValue("Database", out value);
                     break;
 
                 default:
-                    contains = npgsqlConnectionStringBuilder.TryGetValue(keyword, out value);
+                    contains = _npgsqlConnectionStringBuilder.TryGetValue(keyword, out value);
                     break;
             }
 
@@ -53,15 +52,15 @@
             switch (keyword)
             {
                 case ConnectionStringKeyword.DataSource:
-                    npgsqlConnectionStringBuilder.Host = (string)value;
+                    _npgsqlConnectionStringBuilder.Host = (string) value;
                     break;
 
                 case ConnectionStringKeyword.InitialCatalog:
-                    npgsqlConnectionStringBuilder.Database = (string)value;
+                    _npgsqlConnectionStringBuilder.Database = (string) value;
                     break;
 
                 default:
-                    npgsqlConnectionStringBuilder[keyword] = value;
+                    _npgsqlConnectionStringBuilder[keyword] = value;
                     break;
             }
         }

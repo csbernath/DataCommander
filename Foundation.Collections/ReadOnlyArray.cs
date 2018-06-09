@@ -18,10 +18,7 @@ namespace Foundation.Collections
             return enumerable.GetEnumerator();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _items.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => _items.GetEnumerator();
 
         public int Count => _items.Length;
         public T this[int index] => _items[index];

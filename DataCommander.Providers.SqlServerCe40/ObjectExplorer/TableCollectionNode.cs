@@ -1,22 +1,21 @@
-﻿using Foundation.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlServerCe;
+using System.Windows.Forms;
+using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlServerCe;
-    using System.Windows.Forms;
-
     internal sealed class TableCollectionNode : ITreeNode
     {
-        private readonly SqlCeObjectExplorer objectExplorer;
-        private readonly SqlCeConnection connection;
+        private readonly SqlCeObjectExplorer _objectExplorer;
+        private readonly SqlCeConnection _connection;
 
         public TableCollectionNode(SqlCeObjectExplorer objectExplorer, SqlCeConnection connection)
         {
-            this.objectExplorer = objectExplorer;
-            this.connection = connection;
+            this._objectExplorer = objectExplorer;
+            this._connection = connection;
         }
 
         #region ITreeNode Members
@@ -28,7 +27,7 @@ namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             var commandText = "SELECT * FROM INFORMATION_SCHEMA.TABLES";
-            var executor = connection.CreateCommandExecutor();
+            var executor = _connection.CreateCommandExecutor();
             var dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
             var nodes = new List<ITreeNode>();
 
@@ -63,7 +62,7 @@ namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
 
         private void ShrinkDatabase(object sender, EventArgs e)
         {
-            var connectionString = objectExplorer.ConnectionString;
+            var connectionString = _objectExplorer.ConnectionString;
             var engine = new SqlCeEngine(connectionString);
             engine.Shrink();
         }
@@ -75,11 +74,11 @@ namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
             try
             {
                 form.Cursor = Cursors.WaitCursor;
-                connection.Close();
-                var connectionString = objectExplorer.ConnectionString;
+                _connection.Close();
+                var connectionString = _objectExplorer.ConnectionString;
                 var engine = new SqlCeEngine(connectionString);
                 engine.Compact(null);
-                connection.Open();
+                _connection.Open();
             }
             finally
             {

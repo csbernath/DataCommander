@@ -18,9 +18,9 @@ namespace DataCommander.Providers.MySql
     {
         #region Private Fields
 
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private static string[] keyWords;
-        private ObjectExplorer.ObjectExplorer objectExplorer;
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+        private static string[] _keyWords;
+        private ObjectExplorer.ObjectExplorer _objectExplorer;
 
         #endregion
 
@@ -34,13 +34,13 @@ namespace DataCommander.Providers.MySql
         {
             get
             {
-                if (keyWords == null)
+                if (_keyWords == null)
                 {
                     var folder = Settings.CurrentType;
-                    keyWords = folder.Attributes["MySqlKeyWords"].GetValue<string[]>();
+                    _keyWords = folder.Attributes["MySqlKeyWords"].GetValue<string[]>();
                 }
 
-                return keyWords;
+                return _keyWords;
             }
         }
 
@@ -220,7 +220,7 @@ namespace DataCommander.Providers.MySql
 
             if (schemaTable != null)
             {
-                log.Trace("\r\n" + schemaTable.ToStringTableString().ToString());
+                Log.Trace("\r\n" + schemaTable.ToStringTableString().ToString());
 
                 table = new DataTable("SchemaTable");
                 var columns = table.Columns;
@@ -327,8 +327,8 @@ namespace DataCommander.Providers.MySql
                             break;
                     }
 
-                    var allowDBNull = dataColumnSchema.AllowDbNull.GetValueOrDefault();
-                    if (!allowDBNull)
+                    var allowDbNull = dataColumnSchema.AllowDbNull.GetValueOrDefault();
+                    if (!allowDbNull)
                     {
                         sb.Append(" not null");
                     }

@@ -1,23 +1,21 @@
-﻿using Foundation.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.OleDb;
+using System.Text;
+using System.Xml;
+using DataCommander.Providers.Connection;
+using Foundation.Data;
 
 namespace DataCommander.Providers.OleDb
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.Data.OleDb;
-    using System.Text;
-    using System.Xml;
-    using Providers.Connection;
-
     internal sealed class OleDbProvider : IProvider
     {
         private string connectionString;
         private static string[] keyWords;
 
         string IProvider.Name => ProviderName.OleDb;
-
         DbProviderFactory IProvider.DbProviderFactory => OleDbFactory.Instance;
 
         public ConnectionBase CreateConnection(string connectionString)
@@ -38,7 +36,6 @@ namespace DataCommander.Providers.OleDb
         }
 
         bool IProvider.CanConvertCommandToString => false;
-
         bool IProvider.IsCommandCancelable => false;
 
         public void DeriveParameters(IDbCommand command)
@@ -134,13 +131,13 @@ namespace DataCommander.Providers.OleDb
 
             var table = new DataTable("SchemaTable");
             var columns = table.Columns;
-            columns.Add(" ", typeof (int));
-            columns.Add("  ", typeof (string));
-            columns.Add("Name", typeof (string));
-            columns.Add("Size", typeof (int));
-            columns.Add("DbType", typeof (string));
-            columns.Add("DataType", typeof (Type));
-            columns.Add("ProviderType", typeof (int));
+            columns.Add(" ", typeof(int));
+            columns.Add("  ", typeof(string));
+            columns.Add("Name", typeof(string));
+            columns.Add("Size", typeof(int));
+            columns.Add("DbType", typeof(string));
+            columns.Add("DataType", typeof(Type));
+            columns.Add("ProviderType", typeof(int));
 
             var schemaTable = dataReader.GetSchemaTable();
 
@@ -221,7 +218,7 @@ namespace DataCommander.Providers.OleDb
             switch (dbType)
             {
                 default:
-                    type = typeof (object);
+                    type = typeof(object);
                     break;
             }
 
@@ -244,7 +241,7 @@ namespace DataCommander.Providers.OleDb
             return null;
         }
 
-        public IObjectExplorer CreateObjectExplorer () => new ObjectExplorer();
+        public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer();
 
         public void ClearCompletionCache()
         {
@@ -304,11 +301,8 @@ namespace DataCommander.Providers.OleDb
             throw new NotImplementedException();
         }
 
-        GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text,
-            int position)
-        {
+        GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position) =>
             throw new NotImplementedException();
-        }
 
         void IProvider.ClearCompletionCache()
         {
@@ -325,10 +319,7 @@ namespace DataCommander.Providers.OleDb
             return e.ToString();
         }
 
-        string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
-        {
-            return null;
-        }
+        string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName) => null;
 
         void IProvider.CreateInsertCommand(
             DataTable sourceSchemaTable,
@@ -342,10 +333,7 @@ namespace DataCommander.Providers.OleDb
             converters = null;
         }
 
-        string IProvider.CommandToString(IDbCommand command)
-        {
-            throw new NotImplementedException();
-        }
+        string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
 
         List<Statement> IProvider.GetStatements(string commandText)
         {
@@ -359,10 +347,7 @@ namespace DataCommander.Providers.OleDb
             };
         }
 
-        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder()
-        {
-            return new ConnectionStringBuilder();
-        }
+        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder() => new ConnectionStringBuilder();
 
         #endregion
     }

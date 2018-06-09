@@ -1,30 +1,29 @@
-﻿using Foundation.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Windows.Forms;
+using Foundation.Configuration;
 using Foundation.Diagnostics.Contracts;
+using Microsoft.TeamFoundation.VersionControl.Client;
+using Microsoft.TeamFoundation.VersionControl.Common;
 
 namespace DataCommander.Providers.Tfs
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Windows.Forms;
-    using Microsoft.TeamFoundation.VersionControl.Client;
-    using Microsoft.TeamFoundation.VersionControl.Common;
-
     internal sealed class TfsFile : ITreeNode
     {
-        private readonly Item item;
+        private readonly Item _item;
 
         public TfsFile(Item item)
         {
             FoundationContract.Requires<ArgumentException>(item != null);
 
-            this.item = item;
+            this._item = item;
         }
 
-#region ITreeNode Members
+        #region ITreeNode Members
 
-        string ITreeNode.Name => TfsObjectExplorer.GetName(item);
+        string ITreeNode.Name => TfsObjectExplorer.GetName(_item);
 
         bool ITreeNode.IsLeaf => true;
 
@@ -35,7 +34,7 @@ namespace DataCommander.Providers.Tfs
 
         bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query => item.ServerItem;
+        string ITreeNode.Query => _item.ServerItem;
 
         ContextMenuStrip ITreeNode.ContextMenu
         {
@@ -56,24 +55,24 @@ namespace DataCommander.Providers.Tfs
             }
         }
 
-#endregion
+        #endregion
 
         private void Open_Click(object sender, EventArgs e)
         {
-            var name = VersionControlPath.GetFileName(item.ServerItem);
+            var name = VersionControlPath.GetFileName(_item.ServerItem);
             var localFileName = Path.GetTempPath();
             localFileName = Path.Combine(localFileName, name);
-            item.DownloadFile(localFileName);
+            _item.DownloadFile(localFileName);
             var startInfo = new ProcessStartInfo(localFileName);
             Process.Start(startInfo);
         }
 
         private void View_Click(object sender, EventArgs e)
         {
-            var name = VersionControlPath.GetFileName(item.ServerItem);
+            var name = VersionControlPath.GetFileName(_item.ServerItem);
             var localFileName = Path.GetTempPath();
             localFileName = Path.Combine(localFileName, name);
-            item.DownloadFile(localFileName);
+            _item.DownloadFile(localFileName);
 
             var node = Settings.CurrentType;
             var attributes = node.Attributes;

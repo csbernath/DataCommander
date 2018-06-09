@@ -1,13 +1,12 @@
-﻿using Foundation.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Windows.Forms;
+using DataCommander.Providers.Query;
+using Foundation.Data;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Windows.Forms;
-    using Query;
-
     internal sealed class FunctionNode : ITreeNode
     {
         private readonly SchemaNode _schemaNode;

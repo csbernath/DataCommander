@@ -48,13 +48,8 @@ namespace DataCommander.Providers.SqlServer
         #region Properties
 
         string IProvider.Name => "SqlServer";
-
         DbProviderFactory IProvider.DbProviderFactory => SqlClientFactory.Instance;
-
-        ConnectionBase IProvider.CreateConnection(string connectionString)
-        {
-            return new Connection(connectionString);
-        }
+        ConnectionBase IProvider.CreateConnection(string connectionString) => new Connection(connectionString);
 
         string[] IProvider.KeyWords
         {
@@ -101,10 +96,7 @@ namespace DataCommander.Providers.SqlServer
             return sqlDataReaderHelper;
         }
 
-        public DbDataAdapter CreateDataAdapter(string selectCommandText, IDbConnection connection)
-        {
-            return null;
-        }
+        public DbDataAdapter CreateDataAdapter(string selectCommandText, IDbConnection connection) => null;
 
         void IProvider.CreateInsertCommand(
             DataTable sourceSchemaTable,

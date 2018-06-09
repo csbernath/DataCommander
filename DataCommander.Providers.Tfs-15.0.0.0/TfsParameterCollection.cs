@@ -8,15 +8,15 @@
 
     internal sealed class TfsParameterCollection : IDataParameterCollection, IEnumerable<TfsParameter>
     {
-        private readonly List<TfsParameter> list = new List<TfsParameter>();
+        private readonly List<TfsParameter> _list = new List<TfsParameter>();
 
-        public TfsParameter this[int index] => list[index];
+        public TfsParameter this[int index] => _list[index];
 
         public TfsParameter this[string parameterName] => GetParameter(parameterName);
 
         public void Add(TfsParameter parameter)
         {
-            list.Add(parameter);
+            _list.Add(parameter);
         }
 
         public void AddBooleanInput(string name, bool isNullable, bool defaultValue)
@@ -66,7 +66,7 @@
 
         private TfsParameter GetParameter(string parameterName)
         {
-            var parameter = list.First(p => p.ParameterName == parameterName);
+            var parameter = _list.First(p => p.ParameterName == parameterName);
             return parameter;
         }
 
@@ -93,7 +93,7 @@
 
         void IList.Clear()
         {
-            list.Clear();
+            _list.Clear();
         }
 
         bool IList.Contains(object value)
@@ -118,7 +118,7 @@
         void IList.Remove(object value)
         {
             var parameter = (TfsParameter)value;
-            list.Remove(parameter);
+            _list.Remove(parameter);
         }
 
         void IList.RemoveAt(int index)
@@ -128,12 +128,12 @@
 
         object IList.this[int index]
         {
-            get => list[index];
+            get => _list[index];
 
             set
             {
                 var parameter = (TfsParameter)value;
-                list[index] = parameter;
+                _list[index] = parameter;
             }
         }
 
@@ -146,7 +146,7 @@
             throw new NotImplementedException();
         }
 
-        public int Count => list.Count;
+        public int Count => _list.Count;
 
         bool ICollection.IsSynchronized => throw new NotImplementedException();
 
@@ -158,7 +158,7 @@
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return list.GetEnumerator();
+            return _list.GetEnumerator();
         }
 
         #endregion
@@ -167,7 +167,7 @@
 
         IEnumerator<TfsParameter> IEnumerable<TfsParameter>.GetEnumerator()
         {
-            return list.GetEnumerator();
+            return _list.GetEnumerator();
         }
 
         #endregion

@@ -1,27 +1,25 @@
-﻿using Foundation.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Text;
+using System.Xml;
+using DataCommander.Providers.Connection;
+using DataCommander.Providers.Odp.DataFieldReader;
+using DataCommander.Providers.Query;
+using Foundation.Configuration;
 using Foundation.Data;
+using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 
 namespace DataCommander.Providers.Odp
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.Text;
-    using System.Xml;
-    using DataFieldReader;
-    using Oracle.ManagedDataAccess.Client;
-    using Oracle.ManagedDataAccess.Types;
-    using Providers.Connection;
-    using Query;
-
     internal sealed class OracleProvider : IProvider
     {
         private string _connectionString;
         private readonly ObjectExplorer.ObjectExplorer _objectExplorer = new ObjectExplorer.ObjectExplorer();
 
         string IProvider.Name => "Odp";
-
         DbProviderFactory IProvider.DbProviderFactory => OracleClientFactory.Instance;
 
         string[] IProvider.KeyWords
@@ -34,7 +32,6 @@ namespace DataCommander.Providers.Odp
         }
 
         bool IProvider.CanConvertCommandToString => false;
-
         bool IProvider.IsCommandCancelable => true;
 
         public void DeriveParameters(IDbCommand command)
@@ -623,9 +620,7 @@ order by OBJECT_NAME";
                 message = sb.ToString();
             }
             else
-            {
                 message = e.ToString();
-            }
 
             return message;
         }

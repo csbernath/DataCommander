@@ -4,13 +4,13 @@
 
     internal sealed class ObjectName : IObjectName
     {
-        private readonly string databaseName;
-        private readonly string objectName;
+        private readonly string _databaseName;
+        private readonly string _objectName;
 
         public ObjectName(string databaseName, string objectName)
         {
-            this.databaseName = databaseName;
-            this.objectName = objectName;
+            this._databaseName = databaseName;
+            this._objectName = objectName;
         }
 
         string IObjectName.UnquotedName
@@ -18,13 +18,13 @@
             get
             {
                 var sb = new StringBuilder();
-                if (databaseName != null)
+                if (_databaseName != null)
                 {
-                    sb.Append(databaseName);
+                    sb.Append(_databaseName);
                     sb.Append('.');
                 }
 
-                sb.Append(objectName);
+                sb.Append(_objectName);
 
                 return sb.ToString();
             }
@@ -37,13 +37,13 @@
                 // TODO
 
                 var sb = new StringBuilder();
-                if (databaseName != null)
+                if (_databaseName != null)
                 {
-                    sb.Append(databaseName);
+                    sb.Append(_databaseName);
                     sb.Append('.');
                 }
 
-                sb.Append(objectName);
+                sb.Append(_objectName);
 
                 return sb.ToString();
             }

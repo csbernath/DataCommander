@@ -6,20 +6,20 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
 {
     internal sealed class ObjectExplorer : IObjectExplorer
     {
-        private SQLiteConnection connection;
+        private SQLiteConnection _connection;
 
         #region IObjectExplorer Members
 
         void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
         {
-            this.connection = (SQLiteConnection)connection;
+            this._connection = (SQLiteConnection)connection;
         }
 
         IEnumerable<ITreeNode> IObjectExplorer.GetChildren(bool refresh)
         {
             return new ITreeNode[]
             {
-                new DatabaseCollectionNode(connection)
+                new DatabaseCollectionNode(_connection)
             };
         }
 

@@ -6,11 +6,11 @@
 
     internal sealed class IdentifierParser
     {
-        private readonly TextReader textReader;
+        private readonly TextReader _textReader;
 
         public IdentifierParser(TextReader textReader)
         {
-            this.textReader = textReader;
+            this._textReader = textReader;
         }
 
         public IEnumerable<string> Parse()
@@ -19,7 +19,7 @@
 
             while (true)
             {
-                var peek = textReader.Peek();
+                var peek = _textReader.Peek();
 
                 if (peek == -1)
                 {
@@ -30,7 +30,7 @@
 
                 if (peekChar == '.')
                 {
-                    textReader.Read();
+                    _textReader.Read();
                 }
                 else if (peekChar == '\'')
                 {
@@ -52,12 +52,12 @@
 
         private string ReadQuotedIdentifier()
         {
-            textReader.Read();
+            _textReader.Read();
             var identifier = new StringBuilder();
 
             while (true)
             {
-                var peek = textReader.Peek();
+                var peek = _textReader.Peek();
 
                 if (peek == -1)
                     break;
@@ -66,13 +66,13 @@
 
                 if (peekChar == '\'')
                 {
-                    textReader.Read();
+                    _textReader.Read();
                     break;
                 }
                 else
                 {
                     identifier.Append(peekChar);
-                    textReader.Read();
+                    _textReader.Read();
                 }
             }
 
@@ -85,7 +85,7 @@
 
             while (true)
             {
-                var peek = textReader.Peek();
+                var peek = _textReader.Peek();
 
                 if (peek == -1)
                     break;
@@ -99,7 +99,7 @@
                 else
                 {
                     identifier.Append(peekChar);
-                    textReader.Read();
+                    _textReader.Read();
                 }
             }
 

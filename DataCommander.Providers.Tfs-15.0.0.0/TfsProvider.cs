@@ -1,20 +1,19 @@
-﻿using Foundation.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Linq;
+using System.Xml;
+using DataCommander.Providers.Connection;
+using DataCommander.Providers.Query;
+using Foundation.Data;
+using Microsoft.TeamFoundation.VersionControl.Client;
 
 namespace DataCommander.Providers.Tfs
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.Linq;
-    using System.Xml;
-    using Connection;
-    using Microsoft.TeamFoundation.VersionControl.Client;
-    using Query;
-
     public sealed class TfsProvider : IProvider
     {
-        private TfsObjectExplorer objectBrowser;
+        private TfsObjectExplorer _objectBrowser;
 
         static TfsProvider()
         {
@@ -73,8 +72,7 @@ namespace DataCommander.Providers.Tfs
 
         #region IProvider Members
 
-        string IProvider.Name => "Tfs-14.0.0.0";
-
+        string IProvider.Name => "Tfs-15.0.0.0";
         DbProviderFactory IProvider.DbProviderFactory => TfsProviderFactory.Instance;
 
         ConnectionBase IProvider.CreateConnection(string connectionString)
@@ -96,9 +94,7 @@ namespace DataCommander.Providers.Tfs
                 var names = new List<string>();
 
                 foreach (var name in TfsDataReaderFactory.Dictionary.Keys)
-                {
                     names.Add(name);
-                }
 
                 return names.ToArray();
             }
@@ -302,25 +298,11 @@ namespace DataCommander.Providers.Tfs
             return response;
         }
 
-        void IProvider.ClearCompletionCache()
-        {
-            throw new NotImplementedException();
-        }
+        void IProvider.ClearCompletionCache() => throw new NotImplementedException();
+        List<InfoMessage> IProvider.ToInfoMessages(Exception exception) => throw new NotImplementedException();
+        string IProvider.GetExceptionMessage(Exception e) => e.ToString();
 
-        List<InfoMessage> IProvider.ToInfoMessages(Exception exception)
-        {
-            throw new NotImplementedException();
-        }
-
-        string IProvider.GetExceptionMessage(Exception e)
-        {
-            return e.ToString();
-        }
-
-        string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
-        {
-            throw new NotImplementedException();
-        }
+        string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName) => throw new NotImplementedException();
 
         void IProvider.CreateInsertCommand(
             DataTable sourceSchemaTable,
@@ -328,15 +310,9 @@ namespace DataCommander.Providers.Tfs
             IDbConnection destinationconnection,
             string destinationTableName,
             out IDbCommand insertCommand,
-            out Converter<object, object>[] converters)
-        {
-            throw new NotImplementedException();
-        }
+            out Converter<object, object>[] converters) => throw new NotImplementedException();
 
-        string IProvider.CommandToString(IDbCommand command)
-        {
-            throw new NotImplementedException();
-        }
+        string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
 
         List<Statement> IProvider.GetStatements(string commandText)
         {
@@ -350,10 +326,7 @@ namespace DataCommander.Providers.Tfs
             };
         }
 
-        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder()
-        {
-            return new TfsConnectionStringBuilder();
-        }
+        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder() => new TfsConnectionStringBuilder();
 
         #endregion
     }

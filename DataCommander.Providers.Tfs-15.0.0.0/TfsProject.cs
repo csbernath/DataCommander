@@ -1,22 +1,18 @@
-﻿using Foundation.Diagnostics.Contracts;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
+using Foundation.Diagnostics.Contracts;
+using Microsoft.TeamFoundation.VersionControl.Client;
+using Microsoft.TeamFoundation.VersionControl.Common;
 
 namespace DataCommander.Providers.Tfs
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Windows.Forms;
-    using Microsoft.TeamFoundation.VersionControl.Client;
-    using Microsoft.TeamFoundation.VersionControl.Common;
-
     internal sealed class TfsProject : ITreeNode
     {
-        private readonly Item item;
+        private readonly Item _item;
 
-        public TfsProject(Item item)
-        {
-            this.item = item;
-        }
+        public TfsProject(Item item) => this._item = item;
 
         #region ITreeNode Members
 
@@ -24,7 +20,7 @@ namespace DataCommander.Providers.Tfs
         {
             get
             {
-                var name = VersionControlPath.GetFileName(item.ServerItem);
+                var name = VersionControlPath.GetFileName(_item.ServerItem);
                 return name;
             }
         }
@@ -65,12 +61,12 @@ namespace DataCommander.Providers.Tfs
 			//var e = from current in itemSet.Items.Skip(1) select ToTreeNode(current);
 			//return e;
 
-			return GetChildren( item );
+			return GetChildren( _item );
         }
 
         bool ITreeNode.Sortable => false;
 
-        string ITreeNode.Query => item.ServerItem;
+        string ITreeNode.Query => _item.ServerItem;
 
         ContextMenuStrip ITreeNode.ContextMenu => null;
 

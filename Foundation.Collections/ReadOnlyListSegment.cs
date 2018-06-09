@@ -15,12 +15,6 @@ namespace Foundation.Collections
 
         #endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="list"></param>
-        /// <param name="offset"></param>
-        /// <param name="count"></param>
         public ReadOnlyListSegment(IReadOnlyList<T> list, int offset, int count)
         {
             Assert.IsNotNull(list);
@@ -34,35 +28,18 @@ namespace Foundation.Collections
             Count = count;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
         public T this[int index] => _list[_offset + index];
 
-        /// <summary>
-        /// 
-        /// </summary>
         public int Count { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
             var end = _offset + Count;
 
             for (var i = _offset; i < end; i++)
-            {
                 yield return _list[i];
-            }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

@@ -1,12 +1,11 @@
-﻿using Foundation.Assertions;
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+using Foundation.Assertions;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Data.SqlClient;
-    using System.Windows.Forms;
-
     internal sealed class LinkedServerCollectionNode : ITreeNode
     {
         public LinkedServerCollectionNode(ServerNode serverNode)

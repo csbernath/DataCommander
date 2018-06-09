@@ -8,11 +8,11 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 
     internal sealed class ViewCollectionNode : ITreeNode
     {
-        private readonly SchemaNode schemaNode;
+        private readonly SchemaNode _schemaNode;
 
         public ViewCollectionNode(SchemaNode schemaNode)
         {
-            this.schemaNode = schemaNode;
+            this._schemaNode = schemaNode;
         }
 
         string ITreeNode.Name => "Views";
@@ -23,13 +23,13 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
         {
             var nodes = new List<ITreeNode>();
 
-            using (var connection = new NpgsqlConnection(schemaNode.SchemaCollectionNode.ObjectExplorer.ConnectionString))
+            using (var connection = new NpgsqlConnection(_schemaNode.SchemaCollectionNode.ObjectExplorer.ConnectionString))
             {
                 connection.Open();
                 var executor = connection.CreateCommandExecutor();
                 executor.ExecuteReader(new ExecuteReaderRequest($@"select table_name
 from information_schema.views
-where table_schema = '{schemaNode.Name}'
+where table_schema = '{_schemaNode.Name}'
 order by table_name"), dataReader => dataReader.ReadResult(
                     () =>
                     {

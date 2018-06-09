@@ -2,15 +2,15 @@
 {
     internal sealed class NonSqlObjectName : IObjectName
     {
-        private readonly string objectName;
+        private readonly string _objectName;
 
         public NonSqlObjectName(string objectName)
         {
-            this.objectName = objectName;
+            this._objectName = objectName;
         }
 
-        string IObjectName.UnquotedName => objectName;
+        string IObjectName.UnquotedName => _objectName;
 
-        string IObjectName.QuotedName => objectName;
+        string IObjectName.QuotedName => _objectName;
     }
 }

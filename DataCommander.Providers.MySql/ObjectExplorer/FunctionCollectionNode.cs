@@ -7,11 +7,11 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
 {
     internal sealed class FunctionCollectionNode : ITreeNode
     {
-        private readonly DatabaseNode databaseNode;
+        private readonly DatabaseNode _databaseNode;
 
         public FunctionCollectionNode(DatabaseNode databaseNode)
         {
-            this.databaseNode = databaseNode;
+            this._databaseNode = databaseNode;
         }
 
         string ITreeNode.Name => "Functions";
@@ -24,17 +24,17 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
                 $@"select r.ROUTINE_NAME
 from information_schema.ROUTINES r
 where
-    r.ROUTINE_SCHEMA = {databaseNode.Name.ToTSqlVarChar()}
+    r.ROUTINE_SCHEMA = {_databaseNode.Name.ToTSqlVarChar()}
     and r.ROUTINE_TYPE = 'FUNCTION'
 order by r.ROUTINE_NAME";
 
             return MySqlClientFactory.Instance.ExecuteReader(
-                databaseNode.ObjectExplorer.ConnectionString,
+                _databaseNode.ObjectExplorer.ConnectionString,
                 new ExecuteReaderRequest(commandText),
                 dataRecord =>
                 {
                     var name = dataRecord.GetString(0);
-                    return new FunctionNode(databaseNode, name);
+                    return new FunctionNode(_databaseNode, name);
                 });
         }
 

@@ -1,18 +1,17 @@
-﻿using DataCommander.Providers.FieldNamespace;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.OracleClient;
+using System.Text;
+using System.Xml;
+using DataCommander.Providers.Connection;
+using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.OracleBase.ObjectExplorer;
 using Foundation.Data;
 
 namespace DataCommander.Providers.OracleClient
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.Data.OracleClient;
-    using System.Text;
-    using System.Xml;
-    using Providers.Connection;
-
     public sealed class OracleProvider : IProvider
     {
         //void IProvider.DeriveParameters( IDbCommand command )
@@ -282,8 +281,8 @@ namespace DataCommander.Providers.OracleClient
 
         //#endregion
 
-        private static string connectionString;
-        private static string[] keyWords;
+        private static string _connectionString;
+        private static string[] _keyWords;
 
         #region IProvider Members
 
@@ -301,7 +300,7 @@ namespace DataCommander.Providers.OracleClient
 
         ConnectionBase IProvider.CreateConnection(string connectionString)
         {
-            OracleProvider.connectionString = connectionString;
+            OracleProvider._connectionString = connectionString;
             return new Connection(connectionString);
         }
 
@@ -309,13 +308,13 @@ namespace DataCommander.Providers.OracleClient
         {
             get
             {
-                if (keyWords == null && connectionString != null)
+                if (_keyWords == null && _connectionString != null)
                 {
-                    var connectionString = "Provider=MSDAORA.1;" + OracleProvider.connectionString;
-                    keyWords = ProviderFactory.GetKeyWords(connectionString);
+                    var connectionString = "Provider=MSDAORA.1;" + OracleProvider._connectionString;
+                    _keyWords = ProviderFactory.GetKeyWords(connectionString);
                 }
 
-                return keyWords;
+                return _keyWords;
             }
         }
 

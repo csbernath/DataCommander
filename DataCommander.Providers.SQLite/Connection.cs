@@ -10,15 +10,15 @@ namespace DataCommander.Providers.SQLite
 {
     internal sealed class Connection : ConnectionBase
     {
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
-        private readonly SQLiteConnection sqliteConnection;
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+        private readonly SQLiteConnection _sqliteConnection;
 
         public Connection(string connectionString)
         {
-            sqliteConnection = new SQLiteConnection(connectionString);
+            _sqliteConnection = new SQLiteConnection(connectionString);
             // this.sqliteConnection.Flags = SQLiteConnectionFlags.LogAll;
             // this.sqliteConnection.Trace += this.sqliteConnection_Trace;
-            Connection = sqliteConnection;
+            Connection = _sqliteConnection;
         }
 
         void SQLiteLog_Log(object sender, LogEventArgs e)
@@ -27,31 +27,31 @@ namespace DataCommander.Providers.SQLite
 
         private void sqliteConnection_Trace(object sender, TraceEventArgs e)
         {
-            log.Write(LogLevel.Trace, e.Statement);
+            Log.Write(LogLevel.Trace, e.Statement);
         }
 
         public override string ConnectionName { get; set; }
 
         public override Task OpenAsync(CancellationToken cancellationToken)
         {
-            return sqliteConnection.OpenAsync(cancellationToken);
+            return _sqliteConnection.OpenAsync(cancellationToken);
         }
 
         public override IDbCommand CreateCommand()
         {
-            return sqliteConnection.CreateCommand();
+            return _sqliteConnection.CreateCommand();
         }
 
-        public override string Caption => sqliteConnection.DataSource;
+        public override string Caption => _sqliteConnection.DataSource;
 
-        public override string DataSource => sqliteConnection.DataSource;
+        public override string DataSource => _sqliteConnection.DataSource;
 
         protected override void SetDatabase(string database)
         {
             throw new Exception("The method or operation is not implemented.");
         }
 
-        public override string ServerVersion => sqliteConnection.ServerVersion;
+        public override string ServerVersion => _sqliteConnection.ServerVersion;
 
         public override int TransactionCount => 0;
     }

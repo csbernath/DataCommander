@@ -2,18 +2,18 @@
 {
     internal sealed class TfsDataReaderHelper : IDataReaderHelper
     {
-        private readonly TfsDataReader dataReader;
+        private readonly TfsDataReader _dataReader;
 
         public TfsDataReaderHelper(TfsDataReader dataReader)
         {
-            this.dataReader = dataReader;
+            this._dataReader = dataReader;
         }
 
         #region IDataReaderHelper Members
 
         int IDataReaderHelper.GetValues(object[] values)
         {
-            return dataReader.GetValues(values);
+            return _dataReader.GetValues(values);
         }
 
         #endregion

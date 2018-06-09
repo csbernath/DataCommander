@@ -1,28 +1,20 @@
-﻿namespace DataCommander.Providers.SQLite
-{
-    using System.Data.SQLite;
-    using Providers.Connection;
+﻿using System.Data.SQLite;
+using DataCommander.Providers.Connection;
 
+namespace DataCommander.Providers.SQLite
+{
     internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
     {
-        private readonly SQLiteConnectionStringBuilder sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder();
+        private readonly SQLiteConnectionStringBuilder _sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder();
 
         string IDbConnectionStringBuilder.ConnectionString
         {
-            get => sqLiteConnectionStringBuilder.ConnectionString;
-
-            set => sqLiteConnectionStringBuilder.ConnectionString = value;
+            get => _sqLiteConnectionStringBuilder.ConnectionString;
+            set => _sqLiteConnectionStringBuilder.ConnectionString = value;
         }
 
-        bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
-        {
-            return true;
-        }
-
-        void IDbConnectionStringBuilder.SetValue(string keyword, object value)
-        {
-            sqLiteConnectionStringBuilder[keyword] = value;
-        }
+        bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword) => true;
+        void IDbConnectionStringBuilder.SetValue(string keyword, object value) => _sqLiteConnectionStringBuilder[keyword] = value;
 
         bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value)
         {
@@ -30,17 +22,19 @@
             switch (keyword)
             {
                 case ConnectionStringKeyword.IntegratedSecurity:
-                    contains = sqLiteConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out value);
+                    contains = _sqLiteConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out value);
                     if (contains)
                     {
                         value = bool.Parse((string) value);
                     }
+
                     break;
 
                 default:
-                    contains = sqLiteConnectionStringBuilder.TryGetValue(keyword, out value);
+                    contains = _sqLiteConnectionStringBuilder.TryGetValue(keyword, out value);
                     break;
             }
+
             return contains;
         }
     }

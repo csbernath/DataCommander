@@ -1,10 +1,9 @@
-﻿using Foundation.Linq;
+﻿using System.Collections.Generic;
+using System.Data;
+using Foundation.Linq;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Data;
-
     internal sealed class ObjectExplorer : IObjectExplorer
     {
         public string ConnectionString { get; private set; }

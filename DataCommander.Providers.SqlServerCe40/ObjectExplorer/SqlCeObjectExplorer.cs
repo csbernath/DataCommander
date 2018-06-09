@@ -1,12 +1,12 @@
-﻿namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
-{
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlServerCe;
+﻿using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlServerCe;
 
+namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
+{
     internal sealed class SqlCeObjectExplorer : IObjectExplorer
     {
-        private SqlCeConnection connection;
+        private SqlCeConnection _connection;
 
         public string ConnectionString { get; private set; }
 
@@ -15,12 +15,12 @@
         void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
         {
             ConnectionString = connectionString;
-            this.connection = (SqlCeConnection)connection;
+            this._connection = (SqlCeConnection) connection;
         }
 
         IEnumerable<ITreeNode> IObjectExplorer.GetChildren(bool refresh)
         {
-            yield return new TableCollectionNode(this, connection);
+            yield return new TableCollectionNode(this, _connection);
         }
 
         bool IObjectExplorer.Sortable => false;

@@ -1,26 +1,22 @@
-﻿using Foundation.Data.SqlClient;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms;
+using DataCommander.Providers.Query;
+using Foundation.Data.SqlClient;
 using Foundation.Diagnostics;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data.SqlClient;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using Query;
-
     internal sealed class StoredProcedureNode : ITreeNode
     {
         private readonly DatabaseNode _database;
         private readonly string _owner;
         private readonly string _name;
 
-        public StoredProcedureNode(
-            DatabaseNode database,
-            string owner,
-            string name )
+        public StoredProcedureNode(DatabaseNode database, string owner, string name)
         {
             _database = database;
             _owner = owner;
@@ -28,14 +24,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         }
 
         public string Name => _owner + '.' + _name;
-
         public bool IsLeaf => true;
-
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
-        {
-            return null;
-        }
-
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => null;
         public bool Sortable => false;
 
         public string Query
@@ -60,7 +50,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
             Clipboard.SetText(text);
 
-            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
 
             queryForm.SetStatusbarPanelText(
                 $"Copying stored prcoedure script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.",
@@ -71,9 +61,9 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         {
             get
             {
-                var menuItemScriptObject = new ToolStripMenuItem( "Script Object", null, menuItemScriptObject_Click );
+                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, menuItemScriptObject_Click);
                 var contextMenu = new ContextMenuStrip();
-                contextMenu.Items.Add( menuItemScriptObject );
+                contextMenu.Items.Add(menuItemScriptObject);
                 return contextMenu;
             }
         }

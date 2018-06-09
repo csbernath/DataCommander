@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Providers.Tfs
-{
-    using System;
-    using System.Data;
-    using System.Data.Common;
+﻿using System;
+using System.Data;
+using System.Data.Common;
 
+namespace DataCommander.Providers.Tfs
+{
     internal abstract class TfsDataReader : IDataReader
     {
         #region IDataReader Members
@@ -193,7 +193,7 @@
             return table;
         }
 
-        private static object[] CreateDataRowValues(string columnName, int columnSize, Type dataType, DbType providerType, bool allowDBNull)
+        private static object[] CreateDataRowValues(string columnName, int columnSize, Type dataType, DbType providerType, bool allowDbNull)
         {
             return new object[]
             {
@@ -208,7 +208,7 @@
                 null,
                 null,
                 dataType,
-                allowDBNull,
+                allowDbNull,
                 providerType,
                 null,
                 null,
@@ -216,29 +216,19 @@
             };
         }
 
-        internal static void AddSchemaRowBoolean(DataTable schemaTable, string name, bool allowDBNull)
-        {
-            schemaTable.Rows.Add(CreateDataRowValues(name, sizeof(bool), typeof(bool), DbType.Boolean, allowDBNull));
-        }
+        internal static void AddSchemaRowBoolean(DataTable schemaTable, string name, bool allowDbNull) =>
+            schemaTable.Rows.Add(CreateDataRowValues(name, sizeof(bool), typeof(bool), DbType.Boolean, allowDbNull));
 
-        internal static void AddSchemaRowDateTime(DataTable schemaTable, string name, bool allowDBNull)
-        {
-            schemaTable.Rows.Add(CreateDataRowValues(name, 8, typeof(DateTime), DbType.DateTime, allowDBNull));
-        }
+        internal static void AddSchemaRowDateTime(DataTable schemaTable, string name, bool allowDbNull) =>
+            schemaTable.Rows.Add(CreateDataRowValues(name, 8, typeof(DateTime), DbType.DateTime, allowDbNull));
 
-        internal static void AddSchemaRowString(DataTable schemaTable, string name, bool allowDBNull)
-        {
-            schemaTable.Rows.Add(CreateDataRowValues(name, 8096, typeof(string), DbType.String, allowDBNull));
-        }
+        internal static void AddSchemaRowString(DataTable schemaTable, string name, bool allowDbNull) =>
+            schemaTable.Rows.Add(CreateDataRowValues(name, 8096, typeof(string), DbType.String, allowDbNull));
 
-        internal static void AddSchemaRowInt32(DataTable schemaTable, string name, bool allowDBNull)
-        {
-            schemaTable.Rows.Add(CreateDataRowValues(name, sizeof(int), typeof(int), DbType.Int32, allowDBNull));
-        }
+        internal static void AddSchemaRowInt32(DataTable schemaTable, string name, bool allowDbNull) =>
+            schemaTable.Rows.Add(CreateDataRowValues(name, sizeof(int), typeof(int), DbType.Int32, allowDbNull));
 
-        internal static void AddSchemaRowInt64(DataTable schemaTable, string name, bool allowDBNull)
-        {
-            schemaTable.Rows.Add(CreateDataRowValues(name, sizeof(long), typeof(long), DbType.Int64, allowDBNull));
-        }
+        internal static void AddSchemaRowInt64(DataTable schemaTable, string name, bool allowDbNull) =>
+            schemaTable.Rows.Add(CreateDataRowValues(name, sizeof(long), typeof(long), DbType.Int64, allowDbNull));
     }
 }

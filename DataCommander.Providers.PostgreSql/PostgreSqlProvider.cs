@@ -17,7 +17,7 @@ namespace DataCommander.Providers.PostgreSql
 {
     internal sealed class PostgreSqlProvider : IProvider
     {
-        private static readonly ILog log = LogFactory.Instance.GetCurrentTypeLog();
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
 
         string IProvider.Name => "PostgreSql";
         DbProviderFactory IProvider.DbProviderFactory => NpgsqlFactory.Instance;
@@ -279,7 +279,7 @@ order by 1", name.Database);
 
                 if (commandText != null)
                 {
-                    log.Write(LogLevel.Trace, "commandText:\r\n{0}", commandText);
+                    Log.Write(LogLevel.Trace, "commandText:\r\n{0}", commandText);
                     var list = new List<IObjectName>();
                     try
                     {

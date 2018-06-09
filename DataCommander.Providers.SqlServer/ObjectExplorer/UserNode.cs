@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers.SqlServer.ObjectExplorer
-{
-    using System.Collections.Generic;
-    using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.SqlServer.ObjectExplorer
+{
     sealed class UserNode : ITreeNode
     {
         public UserNode(DatabaseNode database,string name)

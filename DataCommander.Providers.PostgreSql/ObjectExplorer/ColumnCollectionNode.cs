@@ -8,11 +8,11 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 
     internal sealed class ColumnCollectionNode : ITreeNode
     {
-        private readonly TableNode tableNode;
+        private readonly TableNode _tableNode;
 
         public ColumnCollectionNode(TableNode tableNode)
         {
-            this.tableNode = tableNode;
+            this._tableNode = tableNode;
         }
 
         string ITreeNode.Name => "Columns";
@@ -22,7 +22,7 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             var nodes = new List<ITreeNode>();
-            var schemaNode = tableNode.TableCollectionNode.SchemaNode;
+            var schemaNode = _tableNode.TableCollectionNode.SchemaNode;
 
             using (var connection = new NpgsqlConnection(schemaNode.SchemaCollectionNode.ObjectExplorer.ConnectionString))
             {
@@ -37,8 +37,8 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
     ,c.numeric_scale
 from information_schema.columns c
 where
-    c.table_schema = '{tableNode.TableCollectionNode.SchemaNode.Name}'
-    and c.table_name = '{tableNode.Name}'
+    c.table_schema = '{_tableNode.TableCollectionNode.SchemaNode.Name}'
+    and c.table_name = '{_tableNode.Name}'
 order by c.ordinal_position"), dataRecord =>
                 {
                     var columnName = dataRecord.GetString(0);

@@ -1,39 +1,30 @@
-﻿using Foundation.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+using DataCommander.Providers.Query;
+using Foundation.Data;
+using MySql.Data.MySqlClient;
 
 namespace DataCommander.Providers.MySql.ObjectExplorer
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Drawing;
-    using System.Linq;
-    using System.Windows.Forms;
-    using global::MySql.Data.MySqlClient;
-    using Query;
-
     internal sealed class TableNode : ITreeNode
     {
-        private readonly DatabaseNode databaseNode;
-        private readonly string name;
+        private readonly DatabaseNode _databaseNode;
+        private readonly string _name;
 
         public TableNode(DatabaseNode databaseNode, string name)
         {
-            this.databaseNode = databaseNode;
-            this.name = name;
+            this._databaseNode = databaseNode;
+            this._name = name;
         }
 
-        string ITreeNode.Name => name;
-
+        string ITreeNode.Name => _name;
         bool ITreeNode.IsLeaf => true;
-
-        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
-        {
-            throw new NotImplementedException();
-        }
-
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => throw new NotImplementedException();
         bool ITreeNode.Sortable => throw new NotImplementedException();
-
-        string ITreeNode.Query => $@"select *
-from {databaseNode.Name}.{name}";
+        string ITreeNode.Query => $@"select * from {_databaseNode.Name}.{_name}";
 
         ContextMenuStrip ITreeNode.ContextMenu
         {
@@ -50,9 +41,9 @@ from {databaseNode.Name}.{name}";
 
         private void ShowCreateTable_Click(object sender, EventArgs e)
         {
-            var commandText = $"show create table {databaseNode.Name}.{name}";
+            var commandText = $"show create table {_databaseNode.Name}.{_name}";
             var createTableStatement = MySqlClientFactory.Instance.ExecuteReader(
-                databaseNode.ObjectExplorer.ConnectionString,
+                _databaseNode.ObjectExplorer.ConnectionString,
                 new ExecuteReaderRequest(commandText),
                 dataRecord => dataRecord.GetString(1)).First();
 

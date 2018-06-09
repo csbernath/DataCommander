@@ -4,18 +4,18 @@
 
     internal sealed class OracleDataReaderHelper : IDataReaderHelper
     {
-        private readonly OracleDataReader oracleDataReader;
+        private readonly OracleDataReader _oracleDataReader;
 
         public OracleDataReaderHelper( OracleDataReader oracleDataReader )
         {
-            this.oracleDataReader = oracleDataReader;
+            this._oracleDataReader = oracleDataReader;
         }
 
         #region IDataReaderHelper Members
 
         int IDataReaderHelper.GetValues( object[] values )
         {
-            return oracleDataReader.GetValues( values );
+            return _oracleDataReader.GetValues( values );
         }
 
         #endregion

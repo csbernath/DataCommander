@@ -9,13 +9,13 @@ namespace DataCommander.Providers.SQLite
 
     internal sealed class DecimalDataFieldReader : IDataFieldReader
     {
-        readonly SQLiteDataReader dataReader;
-        readonly int columnOrdinal;
+        readonly SQLiteDataReader _dataReader;
+        readonly int _columnOrdinal;
 
         public DecimalDataFieldReader( SQLiteDataReader dataReader, int columnOrdinal )
         {
-            this.dataReader = dataReader;
-            this.columnOrdinal = columnOrdinal;
+            this._dataReader = dataReader;
+            this._columnOrdinal = columnOrdinal;
         }
 
         #region IDataFieldReader Members
@@ -25,9 +25,9 @@ namespace DataCommander.Providers.SQLite
             get
             {
                 object value;
-                var isDBNull = dataReader.IsDBNull(columnOrdinal );
+                var isDbNull = _dataReader.IsDBNull(_columnOrdinal );
 
-                if (isDBNull)
+                if (isDbNull)
                 {
                     value = DBNull.Value;
                 }
@@ -44,7 +44,7 @@ namespace DataCommander.Providers.SQLite
                     //    value = new DecimalField( null, decimalValue, null );
                     //}
 
-                    var decimalValue = dataReader.GetDecimal(columnOrdinal );
+                    var decimalValue = _dataReader.GetDecimal(_columnOrdinal );
                     value = new DecimalField( null, decimalValue, null );
                 }
 
@@ -55,25 +55,25 @@ namespace DataCommander.Providers.SQLite
         #endregion
     }
 
-    internal sealed class SQLiteDataReaderHelper : IDataReaderHelper
+    internal sealed class SqLiteDataReaderHelper : IDataReaderHelper
     {
-        private SQLiteDataReader sqLiteDataReader;
-        private readonly IDataFieldReader[] dataFieldReaders;
+        private SQLiteDataReader _sqLiteDataReader;
+        private readonly IDataFieldReader[] _dataFieldReaders;
 
-        public SQLiteDataReaderHelper( IDataReader dataReader )
+        public SqLiteDataReaderHelper( IDataReader dataReader )
         {
-            sqLiteDataReader = (SQLiteDataReader) dataReader;
+            _sqLiteDataReader = (SQLiteDataReader) dataReader;
             var schemaTable = dataReader.GetSchemaTable();
 
             if (schemaTable != null)
             {
                 var rows = schemaTable.Rows;
                 var count = rows.Count;
-                dataFieldReaders = new IDataFieldReader[ count ];
+                _dataFieldReaders = new IDataFieldReader[ count ];
 
                 for (var i = 0; i < count; i++)
                 {
-                    dataFieldReaders[ i ] = CreateDataFieldReader( dataReader, rows[ i ] );
+                    _dataFieldReaders[ i ] = CreateDataFieldReader( dataReader, rows[ i ] );
                 }
             }
         }
@@ -122,12 +122,12 @@ namespace DataCommander.Providers.SQLite
 
         int IDataReaderHelper.GetValues( object[] values )
         {
-            for (var i = 0; i < dataFieldReaders.Length; i++)
+            for (var i = 0; i < _dataFieldReaders.Length; i++)
             {
-                values[ i ] = dataFieldReaders[ i ].Value;
+                values[ i ] = _dataFieldReaders[ i ].Value;
             }
 
-            return dataFieldReaders.Length;
+            return _dataFieldReaders.Length;
         }
 
         #endregion 

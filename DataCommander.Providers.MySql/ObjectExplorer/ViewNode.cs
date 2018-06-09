@@ -11,16 +11,16 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
 {
     internal sealed class ViewNode : ITreeNode
     {
-        private readonly DatabaseNode databaseNode;
-        private readonly string name;
+        private readonly DatabaseNode _databaseNode;
+        private readonly string _name;
 
         public ViewNode(DatabaseNode databaseNode, string name)
         {
-            this.databaseNode = databaseNode;
-            this.name = name;
+            this._databaseNode = databaseNode;
+            this._name = name;
         }
 
-        string ITreeNode.Name => name;
+        string ITreeNode.Name => _name;
 
         bool ITreeNode.IsLeaf => true;
 
@@ -32,7 +32,7 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
         bool ITreeNode.Sortable => throw new NotImplementedException();
 
         string ITreeNode.Query => $@"select *
-from {databaseNode.Name}.{name}";
+from {_databaseNode.Name}.{_name}";
 
         ContextMenuStrip ITreeNode.ContextMenu
         {
@@ -49,9 +49,9 @@ from {databaseNode.Name}.{name}";
 
         private void ShowCreateTable_Click(object sender, EventArgs e)
         {
-            var commandText = $"show create table {databaseNode.Name}.{name}";
+            var commandText = $"show create table {_databaseNode.Name}.{_name}";
             var createTableStatement = MySqlClientFactory.Instance.ExecuteReader(
-                databaseNode.ObjectExplorer.ConnectionString,
+                _databaseNode.ObjectExplorer.ConnectionString,
                 new ExecuteReaderRequest(commandText),
                 dataRecord => dataRecord.GetString(0)).First();
 

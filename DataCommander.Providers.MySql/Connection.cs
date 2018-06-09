@@ -1,49 +1,41 @@
-﻿namespace DataCommander.Providers.MySql
-{
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using global::MySql.Data.MySqlClient;
-    using Providers.Connection;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using DataCommander.Providers.Connection;
+using MySql.Data.MySqlClient;
 
+namespace DataCommander.Providers.MySql
+{
     internal sealed class Connection : ConnectionBase
     {
-        private readonly string connectionString;
-        private readonly MySqlConnection mySqlConnection;
-        private string connectionName;
+        private readonly string _connectionString;
+        private readonly MySqlConnection _mySqlConnection;
+        private string _connectionName;
 
         public Connection(string connectionString)
         {
-            this.connectionString = connectionString;
-            mySqlConnection = new MySqlConnection(connectionString);
-            Connection = mySqlConnection;
+            this._connectionString = connectionString;
+            _mySqlConnection = new MySqlConnection(connectionString);
+            Connection = _mySqlConnection;
         }
 
-        public override Task OpenAsync(CancellationToken cancellationToken)
-        {
-            return mySqlConnection.OpenAsync(cancellationToken);
-        }
-
-        public override System.Data.IDbCommand CreateCommand()
-        {
-            return mySqlConnection.CreateCommand();
-        }
+        public override Task OpenAsync(CancellationToken cancellationToken) => _mySqlConnection.OpenAsync(cancellationToken);
+        public override System.Data.IDbCommand CreateCommand() => _mySqlConnection.CreateCommand();
 
         public override string ConnectionName
         {
-            get => connectionName;
-
-            set => connectionName = value;
+            get => _connectionName;
+            set => _connectionName = value;
         }
 
-        public override string Caption => connectionName;
+        public override string Caption => _connectionName;
 
         public override string DataSource
         {
             get
             {
                 // TODO
-                var csb = new MySqlConnectionStringBuilder(connectionString);
+                var csb = new MySqlConnectionStringBuilder(_connectionString);
                 return csb.Database;
             }
         }
@@ -53,7 +45,7 @@
             throw new NotImplementedException();
         }
 
-        public override string ServerVersion => mySqlConnection.ServerVersion;
+        public override string ServerVersion => _mySqlConnection.ServerVersion;
 
         public override int TransactionCount => 0;
     }

@@ -4,25 +4,16 @@ using System.Collections.Generic;
 using Foundation.Assertions;
 using Foundation.Linq;
 
-//using Foundation.Linq;
-
 namespace Foundation.Collections
 {
     /// <summary>
     /// https://en.wikipedia.org/wiki/Dynamic_array
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     public class DynamicArray<T> : IList<T>
     {
         private readonly int _maxSize;
-
         private T[] _array;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="initialSize"></param>
-        /// <param name="maxSize"></param>
         public DynamicArray(int initialSize, int maxSize)
         {
             _array = new T[initialSize];

@@ -1,13 +1,12 @@
-﻿using Foundation.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+using DataCommander.Providers.Query;
+using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data.SqlClient;
-    using System.Windows.Forms;
-    using Query;
-
     internal sealed class TriggerNode : ITreeNode
     {
         private readonly DatabaseNode _databaseNode;

@@ -1,25 +1,22 @@
-﻿namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Windows.Forms;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
+{
     internal sealed class TableNode : ITreeNode
     {
-        readonly string name;
+        readonly string _name;
 
-        public TableNode( string name )
-        {
-            this.name = name;
-        }
+        public TableNode(string name) => this._name = name;
 
         #region ITreeNode Members
 
-        string ITreeNode.Name => name;
+        string ITreeNode.Name => _name;
 
         bool ITreeNode.IsLeaf => true;
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             throw new NotImplementedException();
         }

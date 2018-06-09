@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers.Tfs
-{
-    using System;
-    using System.Data;
+﻿using System;
+using System.Data;
 
+namespace DataCommander.Providers.Tfs
+{
     internal sealed class TfsParameter : IDataParameter
     {
         public TfsParameter(string name, Type type, DbType dbType, ParameterDirection direction, bool isNullable, object defaultValue)
@@ -16,7 +16,6 @@
         }
 
         public Type Type { get; }
-
         public object DefaultValue { get; }
 
         #region IDataParameter Members

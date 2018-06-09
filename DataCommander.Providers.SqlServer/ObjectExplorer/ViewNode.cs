@@ -1,13 +1,12 @@
-﻿using Foundation.Data.SqlClient;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+using DataCommander.Providers.Query;
+using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data.SqlClient;
-    using System.Windows.Forms;
-    using Query;
-
     internal sealed class ViewNode : ITreeNode
     {
         private readonly DatabaseNode _database;
@@ -24,7 +23,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         }
 
         public string Name => $"{_schema}.{_name}";
-
         public bool IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
@@ -50,6 +48,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
                 {
                     text = TableNode.GetSelectStatement(connection, name);
                 }
+
                 return text;
             }
         }
@@ -63,6 +62,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
                 connection.Open();
                 text = SqlDatabase.GetSysComments(connection, _database.Name, _schema, _name);
             }
+
             QueryForm.ShowText(text);
         }
 

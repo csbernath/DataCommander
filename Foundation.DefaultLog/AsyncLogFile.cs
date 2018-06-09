@@ -78,9 +78,9 @@ namespace Foundation.DefaultLog
             _logFile.Close();
         }
 
-#endregion
+        #endregion
 
-#region Private Methods
+        #region Private Methods
 
         private void TimerCallback(object state)
         {
@@ -90,15 +90,15 @@ namespace Foundation.DefaultLog
             Flush();
         }
 
-#endregion
+        #endregion
 
-#region IDisposable Members
+        #region IDisposable Members
 
         void IDisposable.Dispose()
         {
             Close();
         }
 
-#endregion
+        #endregion
     }
 }

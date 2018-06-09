@@ -1,15 +1,12 @@
-﻿namespace DataCommander.Providers.OleDb
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.OleDb;
-    using System.Windows.Forms;
-    using Query;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.OleDb;
+using System.Windows.Forms;
+using DataCommander.Providers.Query;
 
-    /// <summary>
-    /// Summary description for CatalogsNode.
-    /// </summary>
+namespace DataCommander.Providers.OleDb
+{
     sealed class TableNode : ITreeNode
     {
         private readonly SchemaNode schema;
@@ -73,12 +70,12 @@
 
         void Columns_Click(object sender, EventArgs e)
         {
-            var restrictions = new object[] {schema.Catalog.Name, schema.Name, name };
+            var restrictions = new object[] {schema.Catalog.Name, schema.Name, name};
             var dataTable = schema.Catalog.Connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, restrictions);
             var dataSet = new DataSet();
             dataSet.Tables.Add(dataTable);
 
-            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
             queryForm.ShowDataSet(dataSet);
         }
 

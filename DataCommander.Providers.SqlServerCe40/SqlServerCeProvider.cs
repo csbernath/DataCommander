@@ -174,7 +174,7 @@ ORDER BY ORDINAL_POSITION";
         {
             var schemaRow = FoundationDbColumnFactory.Create(sourceSchemaRow);
             var columnSize = schemaRow.ColumnSize;
-            var allowDBNull = schemaRow.AllowDbNull;
+            var allowDbNull = schemaRow.AllowDbNull;
             var dataType = schemaRow.DataType;
             var typeCode = Type.GetTypeCode(dataType);
             string typeName;

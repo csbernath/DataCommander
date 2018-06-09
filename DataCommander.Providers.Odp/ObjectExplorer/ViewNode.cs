@@ -1,11 +1,11 @@
-﻿namespace DataCommander.Providers.Odp.ObjectExplorer
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Windows.Forms;
-    using Oracle.ManagedDataAccess.Client;
-    using Query;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+using DataCommander.Providers.Query;
+using Oracle.ManagedDataAccess.Client;
 
+namespace DataCommander.Providers.Odp.ObjectExplorer
+{
     internal sealed class ViewNode : ITreeNode
 	{
 		private readonly ViewCollectionNode _parent;
