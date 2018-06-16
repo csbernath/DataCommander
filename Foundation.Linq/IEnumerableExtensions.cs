@@ -37,6 +37,22 @@ namespace Foundation.Linq
         [Pure]
         public static IEnumerable<TSource> EmptyIfNull<TSource>(this IEnumerable<TSource> source) => source ?? Enumerable.Empty<TSource>();
 
+        public static TSource? FirstOrNull<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) where TSource : struct
+        {
+            TSource? result = null;
+
+            foreach (var item in source)
+            {
+                if (predicate(item))
+                {
+                    result = item;
+                    break;
+                }
+            }
+
+            return result;
+        }
+
         public static IEnumerable<List<TSource>> GetPartitions<TSource>(this IEnumerable<TSource> source, int count, int partitionCount)
         {
             Assert.IsNotNull(source);
@@ -121,19 +137,17 @@ namespace Foundation.Linq
             string result;
             if (source != null)
             {
-                var sb = new StringBuilder();
+                var stringBuilder = new StringBuilder();
                 foreach (var item in source)
                 {
-                    if (sb.Length > 0)
-                    {
-                        sb.Append(separator);
-                    }
+                    if (stringBuilder.Length > 0)
+                        stringBuilder.Append(separator);
 
                     var itemString = toString(item);
-                    sb.Append(itemString);
+                    stringBuilder.Append(itemString);
                 }
 
-                result = sb.ToString();
+                result = stringBuilder.ToString();
             }
             else
                 result = null;
@@ -188,20 +202,18 @@ namespace Foundation.Linq
 
         public static string ToLogString<TSource>(this IEnumerable<TSource> source, Func<TSource, string> toString)
         {
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             var index = 0;
             foreach (var item in source)
             {
-                if (sb.Length > 0)
-                {
-                    sb.AppendLine();
-                }
+                if (stringBuilder.Length > 0)
+                    stringBuilder.AppendLine();
 
-                sb.AppendFormat("[{0}] = {1}", index, toString(item));
+                stringBuilder.AppendFormat("[{0}] = {1}", index, toString(item));
                 index++;
             }
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
 
         public static ReadOnlyCollection<TSource> ToReadOnlyCollection<TSource>(this IEnumerable<TSource> source)

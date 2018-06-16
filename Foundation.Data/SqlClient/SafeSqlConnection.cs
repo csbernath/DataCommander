@@ -29,14 +29,7 @@ namespace Foundation.Data.SqlClient
             Initialize(connection, this);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="connection"></param>
-        public SafeSqlConnection(IDbConnection connection)
-        {
-            Initialize(connection, this);
-        }
+        public SafeSqlConnection(IDbConnection connection) => Initialize(connection, this);
 
         #region ICloneable Members
 
@@ -73,19 +66,13 @@ namespace Foundation.Data.SqlClient
             get
             {
                 if (_id == 0)
-                {
                     _id = GetId(Connection);
-                }
 
                 return _id;
             }
         }
 
-        internal static void HandleException(
-            IDbConnection connection,
-            Exception exception,
-            TimeSpan elapsed,
-            CancellationToken cancellationToken)
+        internal static void HandleException(IDbConnection connection, Exception exception, TimeSpan elapsed, CancellationToken cancellationToken)
         {
             var separator = new string('-', 80);
             var sb = new StringBuilder();
@@ -116,10 +103,7 @@ namespace Foundation.Data.SqlClient
 
                     default:
                         if (connection.State != ConnectionState.Open)
-                        {
                             handled = true;
-                        }
-
                         break;
                 }
             }
@@ -130,14 +114,10 @@ namespace Foundation.Data.SqlClient
                 {
                     // The wait operation timed out
                     if (win32Exception.NativeErrorCode == 258)
-                    {
                         timeout = 0;
-                    }
                 }
                 else if (connection.State != ConnectionState.Open)
-                {
                     handled = true;
-                }
             }
 
             if (handled)
@@ -146,20 +126,13 @@ namespace Foundation.Data.SqlClient
                 Log.Error(sb.ToString());
 
                 if (timeout > 0)
-                {
                     cancellationToken.WaitHandle.WaitOne(timeout);
-                }
             }
             else
-            {
                 throw exception;
-            }
         }
 
-        void ISafeDbConnection.HandleException(Exception exception, TimeSpan elapsed)
-        {
-            HandleException(Connection, exception, elapsed, _cancellationToken);
-        }
+        void ISafeDbConnection.HandleException(Exception exception, TimeSpan elapsed) => HandleException(Connection, exception, elapsed, _cancellationToken);
 
         internal static void HandleException(Exception exception, IDbCommand command, CancellationToken cancellationToken)
         {
@@ -202,18 +175,11 @@ namespace Foundation.Data.SqlClient
             Log.Write(LogLevel.Error, sb.ToString());
 
             if (handled)
-            {
                 cancellationToken.WaitHandle.WaitOne(1 * 60 * 1000); // 1 minutes
-            }
             else
-            {
                 throw exception;
-            }
         }
 
-        void ISafeDbConnection.HandleException(Exception exception, IDbCommand command)
-        {
-            HandleException(exception, command, _cancellationToken);
-        }
+        void ISafeDbConnection.HandleException(Exception exception, IDbCommand command) => HandleException(exception, command, _cancellationToken);
     }
 }
