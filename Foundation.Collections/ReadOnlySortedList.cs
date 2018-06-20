@@ -99,9 +99,7 @@ namespace Foundation.Collections
                 });
             }
             else
-            {
                 indexOfKey = -1;
-            }
 
             return indexOfKey;
         }

@@ -106,7 +106,7 @@ namespace Foundation
             return dateTime.ToString(format);
         }
 
-        int IComparable<SmallDate>.CompareTo(SmallDate other) => _value.CompareTo(other._value);
+        public int CompareTo(SmallDate other) => _value.CompareTo(other._value);
         private static DateTime ToDateTime(ushort value) => MinDateTime.AddDays(value);
 
         private static ushort ToSmallDateValue(DateTime dateTime)

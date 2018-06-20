@@ -252,6 +252,21 @@ namespace Foundation.Linq
             return dictionary;
         }
 
+        public static SortedList<TKey, TValue> ToSortedList<TKey, TValue>(this IEnumerable<TValue> source, Func<TValue, TKey> keySelector)
+        {
+            Assert.IsNotNull(source);
+            Assert.IsNotNull(keySelector);
+
+            var list = new SortedList<TKey, TValue>();
+            foreach (var sourceItem in source)
+            {
+                var key = keySelector(sourceItem);
+                list.Add(key, sourceItem);
+            }
+
+            return list;
+        }
+
         public static SortedSet<T> ToSortedSet<T>(this IEnumerable<T> source, IComparer<T> comparer) => new SortedSet<T>(source, comparer);
     }
 }

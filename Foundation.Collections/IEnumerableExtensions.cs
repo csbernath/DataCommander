@@ -50,5 +50,8 @@ namespace Foundation.Collections
             collection.Add(source);
             return collection;
         }
+
+        public static SortedArray<TKey, TValue> AsSortedArray<TKey, TValue>(this TValue[] values, Func<TValue, TKey> keySelector) where TKey : IComparable<TKey> =>
+            new SortedArray<TKey, TValue>(values, keySelector, (i, j) => i.CompareTo(j));
     }
 }
