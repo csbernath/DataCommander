@@ -30,39 +30,10 @@ namespace Foundation.Threading
             new StringTableColumnInfo<WorkerThread>("IsThreadPoolThread", StringTableColumnAlign.Left, t => t.Thread.IsThreadPoolThread.ToString())
         };
 
-        private static readonly StringTableColumnInfo<ThreadPoolRow>[] ThreadPoolColumns =
-        {
-            new StringTableColumnInfo<ThreadPoolRow>("Name", StringTableColumnAlign.Left, t => t.Name),
-            new StringTableColumnInfo<ThreadPoolRow>("Min", StringTableColumnAlign.Right, t => t.Min.ToString()),
-            new StringTableColumnInfo<ThreadPoolRow>("Active", StringTableColumnAlign.Right, t => t.Active.ToString()),
-            new StringTableColumnInfo<ThreadPoolRow>("Available", StringTableColumnAlign.Right, t => t.Available.ToString()),
-            new StringTableColumnInfo<ThreadPoolRow>("Max", StringTableColumnAlign.Right, t => t.Max.ToString())
-        };
-
         /// <summary>
         /// 
         /// </summary>
         public static int Count => Threads.Count;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public static string ThreadPoolToStringTableString()
-        {
-            ThreadPool.GetMinThreads(out var minWorkerThreads, out var minCompletionPortThreads);
-            ThreadPool.GetMaxThreads(out var maxWorkerThreads, out var maxCompletionPortThreads);
-            ThreadPool.GetAvailableThreads(out var availableWorkerThreads, out var availableCompletionPortThreads);
-
-            var threadPoolRows = new[]
-            {
-                new ThreadPoolRow("WorkerThreads", minWorkerThreads, maxWorkerThreads - availableWorkerThreads, availableWorkerThreads, maxWorkerThreads),
-                new ThreadPoolRow("CompletionPortThreads", minCompletionPortThreads, maxCompletionPortThreads - availableCompletionPortThreads, availableCompletionPortThreads,
-                    maxCompletionPortThreads)
-            };
-
-            return threadPoolRows.ToString(ThreadPoolColumns);
-        }
 
         /// <summary>
         /// Retrieves the state of the threads in table format.
@@ -163,24 +134,6 @@ namespace Foundation.Threading
             }
 
             return isBackground;
-        }
-
-        private sealed class ThreadPoolRow
-        {
-            public readonly string Name;
-            public readonly int Min;
-            public readonly int Active;
-            public readonly int Available;
-            public readonly int Max;
-
-            public ThreadPoolRow(string name, int min, int active, int available, int max)
-            {
-                Name = name;
-                Min = min;
-                Active = active;
-                Available = available;
-                Max = max;
-            }
         }
     }
 }
