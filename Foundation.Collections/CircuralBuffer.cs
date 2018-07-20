@@ -177,7 +177,7 @@ namespace Foundation.Collections
             _array = target;
         }
 
-#region IList<T> Members
+        #region IList<T> Members
 
         int IList<T>.IndexOf(T item)
         {
@@ -214,9 +214,9 @@ namespace Foundation.Collections
             }
         }
 
-#endregion
+        #endregion
 
-#region ICollection<T> Members
+        #region ICollection<T> Members
 
         void ICollection<T>.Add(T item)
         {
@@ -250,9 +250,9 @@ namespace Foundation.Collections
             throw new NotImplementedException();
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable<T> Members
+        #region IEnumerable<T> Members
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
@@ -273,16 +273,16 @@ namespace Foundation.Collections
             }
         }
 
-#endregion
+        #endregion
 
-#region IEnumerable Members
+        #region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            var enumerable = (IEnumerable<T>)this;
+            var enumerable = (IEnumerable<T>) this;
             return enumerable.GetEnumerator();
         }
 
-#endregion
+        #endregion
     }
 }
