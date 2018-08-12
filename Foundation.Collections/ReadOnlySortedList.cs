@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Foundation.Assertions;
-using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
 {
@@ -22,9 +21,7 @@ namespace Foundation.Collections
             Assert.IsNotNull(values);
             Assert.IsNotNull(keySelector);
             Assert.IsNotNull(comparison);
-            FoundationContract.Requires<ArgumentException>(
-                values.Select(keySelector).SelectPreviousAndCurrent().All(k => comparison(k.Previous, k.Current) < 0),
-                "keys must be unique and ordered");
+            Assert.IsTrue(values.Select(keySelector).SelectPreviousAndCurrent().All(k => comparison(k.Previous, k.Current) < 0));
 
             _values = values;
             _keySelector = keySelector;

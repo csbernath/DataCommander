@@ -6,12 +6,9 @@ using Foundation.Assertions;
 
 namespace Foundation.Configuration
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class AppSettings
     {
-        private static readonly Lazy<NameValueCollectionReader> instance = new Lazy<NameValueCollectionReader>(CreateInstance);
+        public static readonly Lazy<NameValueCollectionReader> Instance = new Lazy<NameValueCollectionReader>(CreateInstance);
 
         private static NameValueCollectionReader CreateInstance()
         {
@@ -19,14 +16,6 @@ namespace Foundation.Configuration
             return new NameValueCollectionReader(reader.TryGetValue);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static NameValueCollectionReader Instance => instance.Value;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public static NameValueCollectionReader CurrentType
         {
             get
@@ -44,9 +33,6 @@ namespace Foundation.Configuration
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         private sealed class Reader
         {
             private readonly NameValueCollection _nameValueCollection;
@@ -66,9 +52,6 @@ namespace Foundation.Configuration
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         private sealed class PrefixedReader
         {
             private readonly NameValueCollection _nameValueCollection;
@@ -85,17 +68,7 @@ namespace Foundation.Configuration
 
             public bool TryGetValue(string name, out string value)
             {
-                string prefixedName;
-
-                if (_prefix != null)
-                {
-                    prefixedName = _prefix + name;
-                }
-                else
-                {
-                    prefixedName = name;
-                }
-
+                var prefixedName = _prefix != null ? _prefix + name : name;
                 value = _nameValueCollection[prefixedName];
                 var contains = value != null;
                 return contains;

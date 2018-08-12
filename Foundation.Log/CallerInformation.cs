@@ -18,9 +18,6 @@ namespace Foundation.Log
         public static CallerInformation Get(
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
-            [CallerLineNumber] int callerLineNumber = 0)
-        {
-            return new CallerInformation(callerMemberName, callerFilePath, callerLineNumber);
-        }
+            [CallerLineNumber] int callerLineNumber = 0) => new CallerInformation(callerMemberName, callerFilePath, callerLineNumber);
     }
 }

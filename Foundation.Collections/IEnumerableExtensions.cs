@@ -44,6 +44,12 @@ namespace Foundation.Collections
             return dynamicArray;
         }
 
+        public static ReadOnlySortedSet<T> ToReadOnlySortedSet<T>(this IEnumerable<T> source)
+        {
+            var comparer = Comparer<T>.Default;
+            return new ReadOnlySortedSet<T>(source.ToReadOnlyCollection(), comparer.Compare);
+        }
+
         public static SegmentedCollection<TSource> ToSegmentedCollection<TSource>(this IEnumerable<TSource> source, int segmentSize)
         {
             var collection = new SegmentedCollection<TSource>(segmentSize);
