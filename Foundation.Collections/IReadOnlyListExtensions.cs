@@ -15,6 +15,8 @@ namespace Foundation.Collections
         public static ReadOnlySortedList<TKey, TValue> AsReadOnlySortedList<TKey, TValue>(this IReadOnlyList<TValue> values, Func<TValue, TKey> keySelector) =>
             new ReadOnlySortedList<TKey, TValue>(values, keySelector);
 
+        public static ReadOnlySortedSet<T> AsReadOnlySortedSet<T>(this IReadOnlyList<T> items) => new ReadOnlySortedSet<T>(items);
+
         public static TSource First<TSource>(this IReadOnlyList<TSource> source)
         {
             Assert.IsNotNull(source);

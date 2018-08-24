@@ -20,6 +20,10 @@ namespace Foundation.Collections
             _comparison = comparison;
         }
 
+        public ReadOnlySortedSet(IReadOnlyList<T> items) : this(items, Comparer<T>.Default.Compare)
+        {
+        }
+
         public bool Contains(T item) => IndexOf(item) >= 0;
 
         private int IndexOf(T item)
