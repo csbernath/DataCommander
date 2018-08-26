@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Foundation.Assertions;
 
 namespace Foundation.Collections
 {
-    public class ReadOnlySortedSet<T>
+    public class ReadOnlySortedSet<T> : IReadOnlySortedSet<T>
     {
         private readonly IReadOnlyList<T> _items;
         private readonly Comparison<T> _comparison;
@@ -24,20 +25,21 @@ namespace Foundation.Collections
         {
         }
 
+        public int Count => _items.Count;
         public bool Contains(T item) => IndexOf(item) >= 0;
+        public IEnumerator<T> GetEnumerator() => _items.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         private int IndexOf(T item)
         {
             int indexOfKey;
 
             if (_items.Count > 0)
-            {
                 indexOfKey = BinarySearch.IndexOf(0, _items.Count - 1, index =>
                 {
                     var otherItem = _items[index];
                     return _comparison(item, otherItem);
                 });
-            }
             else
                 indexOfKey = -1;
 
