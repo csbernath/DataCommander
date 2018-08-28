@@ -6,16 +6,18 @@
 
 |Class name|Author|Unique|Sorted|T this[int index]|TValue this[TKey key]|
 |-|-|-|-|-|-|
-|[```ReadOnlyArray<T>```]()|Foundation|No|No|Yes|No
 |[```ReadOnlyCollection<T>```](https://docs.microsoft.com/en-us/dotnet/api/system.collections.objectmodel.readonlycollection-1?view=netframework-4.7.2)|.NET|No|No|Yes|No
 |[```ReadOnlyDictionary<TKey,TValue>```](https://docs.microsoft.com/en-us/dotnet/api/system.collections.objectmodel.readonlydictionary-2?view=netframework-4.7.2)|.NET|Yes|No|No|Yes
-|[```ReadOnlySortedArray<TKey,TValue>```]()|Foundation|Yes|Yes|Yes|Yes
-|[```ReadOnlySortedList<TKey,TValue>```]()|Foundation|Yes|Yes|Yes|Yes
-|[```ReadOnlySortedSet<T>```]()|Foundation|Yes|Yes|Yes|No
-|[```ReadOnlyNonUniqueSortedList<TKey,TValue>```]()|Foundation|No|Yes|Yes|Yes
+|[```ILookup<TKey,TElement>```](https://docs.microsoft.com/en-us/dotnet/api/system.linq.ilookup-2?view=netframework-4.7.2)|.NET|No|No|No|Yes
+|[```ReadOnlyArray<T>```]()|Foundation|No|No|Yes|No
+|[```ReadOnlySortedArray<TKey,TValue>```](../Foundation.Collections/ReadOnlySortedArray.cs)|Foundation|Yes|Yes|Yes|Yes
+|[```ReadOnlySortedList<TKey,TValue>```](../Foundation.Collections/ReadOnlySortedList.cs)|Foundation|Yes|Yes|Yes|Yes
+|[```ReadOnlySortedSet<T>```](../Foundation.Collections/ReadOnlySortedSet.cs)|Foundation|Yes|Yes|Yes|No
+|[```ReadOnlyNonUniqueSortedList<TKey,TValue>```](../Foundation.Collections/ReadOnlyNonUniqueSortedList.cs)|Foundation|No|Yes|Yes|Yes
 
 ### How to create memory indexes for dynamic (not read only) collections
 Input: a collection
+
 Output: an indexable collection which follows add/remove operations in the indexes
 See [```IndexableCollection<T>```](Collections/IndexableCollection/IndexableCollection-1.cs).
 
@@ -31,6 +33,7 @@ See [```IndexableCollection<T>```](Collections/IndexableCollection/IndexableColl
 
 ### How to create memory indexes for static (read only) collections
 Input: an enumerable item collection (sorted/not sorted, unique/not unique)
+
 Output: a read only index of the input by a key
 
 |Unique|Sorted|Create index method|Class implementing the index|
