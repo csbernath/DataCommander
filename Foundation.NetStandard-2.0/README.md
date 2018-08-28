@@ -1,13 +1,26 @@
-#Foundation Class Library
 
-##Collections
+# Foundation Class Library
 
-###How to create memory indexes for dynamic (not read only) collections
+## Collections
 
+### Read only collection classes (Method input parameters,  return values)
+|Class name|Author|Unique|Sorted|T this[int index]|TValue this[TKey key]|Add method
+|-|-|-|-|-|-|-|
+|[```ReadOnlyCollection<T>```](https://docs.microsoft.com/en-us/dotnet/api/system.collections.objectmodel.readonlycollection-1?view=netframework-4.7.2)|.NET|No|No|Yes|No|Yes
+|[```ReadOnlyDictionary<TKey,TValue>```](https://docs.microsoft.com/en-us/dotnet/api/system.collections.objectmodel.readonlydictionary-2?view=netframework-4.7.2)|.NET|Yes|No|No|Yes|Yes
+|[```ReadOnlyDictionary<TKey,TValue>```](../Foundation.Collections/ReadOnlySortedDictionary.cs)|Foundation|Yes|No|No|Yes|No
+|[```ILookup<TKey,TElement>```](https://docs.microsoft.com/en-us/dotnet/api/system.linq.ilookup-2?view=netframework-4.7.2)|.NET|No|No|No|Yes|No
+|[```ReadOnlyArray<T>```]()|Foundation|No|No|Yes|No|No
+|[```ReadOnlyList<T>```]()|Foundation|No|No|Yes|No|No
+|[```ReadOnlySortedArray<TKey,TValue>```](../Foundation.Collections/ReadOnlySortedArray.cs)|Foundation|Yes|Yes|Yes|Yes|No
+|[```ReadOnlySortedList<TKey,TValue>```](../Foundation.Collections/ReadOnlySortedList.cs)|Foundation|Yes|Yes|Yes|Yes|No
+|[```ReadOnlySortedSet<T>```](../Foundation.Collections/ReadOnlySortedSet.cs)|Foundation|Yes|Yes|Yes|No|No
+|[```ReadOnlyNonUniqueSortedList<TKey,TValue>```](../Foundation.Collections/ReadOnlyNonUniqueSortedList.cs)|Foundation|No|Yes|Yes|Yes|No
+
+### How to create memory indexes for dynamic (not read only) collections
 Input: a collection
 
 Output: an indexable collection which follows add/remove operations in the indexes
-
 See [```IndexableCollection<T>```](Collections/IndexableCollection/IndexableCollection-1.cs).
 
 |Index class|Class implementing the index|Unique|Sorted|Enumerable|T this[int index]|
@@ -20,8 +33,7 @@ See [```IndexableCollection<T>```](Collections/IndexableCollection/IndexableColl
 |```UniqueIndex<TKey,T>```|SortedDictionary<>|false|true|false|false|
 |[```UniqueListIndex<T>```](Collections/IndexableCollection/UniqueListIndex.cs)|[```IList<T>```](https://msdn.microsoft.com/en-us/library/5y536ey6(v=vs.110).aspx)|true|true/false|true|false|
 
-###How to create memory indexes for static (read only) collections
-
+### How to create memory indexes for static (read only) collections
 Input: an enumerable item collection (sorted/not sorted, unique/not unique)
 
 Output: a read only index of the input by a key
@@ -33,7 +45,7 @@ Output: a read only index of the input by a key
 |true|true|[`AsReadOnlySortedList`](Linq/IEnumerableExtensions.cs)|[`ReadOnlySortedList<TKey,TValue>`](Collections/ReadOnlySortedList.cs)|
 |false|true|[`AsReadOnlyNonUniqueSortedList`](Linq/IEnumerableExtensions.cs)|[`ReadOnlyNonUniqueSortedList<TKey,TValue>`](Collections/ReadOnlyNonUniqueSortedList.cs)
 
-###How to create large (large object heap friendly, segmented) collections
+### How to create large (large object heap friendly, segmented) collections
 
 SegmentedArrayBuilder - build an array of segments
 
@@ -48,7 +60,7 @@ SegmentedListBuilder - build a list of segments
 |IEnumerable|no|yes|no|
 |ToReadOnlyList|yes|no|yes|
 
-###Configuration
+### Configuration
 
 The library defines a configuration section handler.
 ```xml
@@ -78,7 +90,7 @@ The schema of the configuration section is a tree of nodes. The node can contain
 Reserved xml element names: node, attribute.
 If the name of the xml element is not node or attribute then the type of the element is node and the name of the node is the name of the xml element.
 
-####Nodes
+#### Nodes
 
 ```xml
 <node name="<name>" description="<description>">
@@ -88,7 +100,7 @@ If the name of the xml element is not node or attribute then the type of the ele
 - name: optional
 - description: optional
 
-####Attributes
+#### Attributes
 
 ```xml
 <attribute name="<name>" type="<type>" isNull="<isNull>" description="<description>" value="<value>"/>
@@ -100,7 +112,7 @@ If the name of the xml element is not node or attribute then the type of the ele
 - description: optional
 - value: required
 
-#####Array value
+##### Array value
 
 ```xml
 <attribute name="MyArray" type="int[]">
@@ -114,7 +126,7 @@ If the name of the xml element is not node or attribute then the type of the ele
 - the name of the of the array item xml element: required, arbitrary (in this sample: 'a')
 - value: required (3,5,7,9)
 
-#####Byte array value
+##### Byte array value
 
 ```xml
 <attribute name="EncryptedPassword" type="byte[]">
@@ -126,7 +138,7 @@ Y3JldCBwYXNzd29yZA0KVGhpcyBpcyBhIHNlY3JldCBwYXNzd29yZA==
 </attribute>
 ```
 
-####Simplified syntax
+#### Simplified syntax
 
 |Full syntax|Simplified syntax|
 |-----------|-----------------|
@@ -154,12 +166,12 @@ Additional reserved type names:
    - datetime
    - xmlnode
 
-###[IDateTimeProvider](IDateTimeProvider.cs)
+### [IDateTimeProvider](IDateTimeProvider.cs)
 This is the unified abstract version of retrieving the current date and time.
 The concrete implementations are using the [`DateTime.Now`](https://msdn.microsoft.com/en-us/library/system.datetime.now(v=vs.110).aspx) and `DateTime.UtcNow` properties.
 The implementation uses the idea from [NLog's cached time source](https://github.com/NLog/NLog/blob/master/src/NLog/Time/CachedTimeSource.cs). The idea is that the Environment.TickCount is much faster then DateTime.(Utc)Now.
 
-###Logging
+### Logging
 The library defines interfaces for logging:
   - [`ILog`](Diagnostics/Log/ILog.cs)
   - [`ILogFactory`](Diagnostics/Log/ILogFactory.cs)
@@ -192,5 +204,3 @@ See the default configuration in Data Commander as an example:
 </Diagnostics>
 ```
 The log factory class is the built-in FoundationLogFactory. The configuration of this class is in the FoundationLogFactory xml element. The factory creates a file log writer. The log files will be written into the %TEMP% directory. One file per application start.
-
- 
