@@ -46,8 +46,7 @@ namespace Foundation.Collections
 
         public static ReadOnlySortedSet<T> ToReadOnlySortedSet<T>(this IEnumerable<T> source)
         {
-            var comparer = Comparer<T>.Default;
-            return new ReadOnlySortedSet<T>(source.ToReadOnlyCollection(), comparer.Compare);
+            return new ReadOnlySortedSet<T>(source.ToReadOnlyCollection());
         }
 
         public static SegmentedCollection<TSource> ToSegmentedCollection<TSource>(this IEnumerable<TSource> source, int segmentSize)

@@ -9,9 +9,6 @@ namespace Foundation.Linq
 {
     public static class Extensions
     {
-        public static T[] ItemToArray<T>(this T item) => new[] {item};
-        public static IEnumerable<T> ItemAsEnumerable<T>(this T item) => item.ItemToArray();
-
         public static void IfArgumentIs<TSource, TTarget>(this TSource source, Action<TTarget> action) where TTarget : class
         {
             if (source is TTarget)
@@ -37,7 +34,8 @@ namespace Foundation.Linq
             return collection.Contains(item);
         }
 
-        public static bool ReferenceEquals<T>(this T objA, T objB) where T : class => object.ReferenceEquals(objA, objB);
+        public static T[] ItemToArray<T>(this T item) => new[] {item};
+        public static IEnumerable<T> ItemAsEnumerable<T>(this T item) => item.ItemToArray();
 
         public static string ToLogXmlString(this object source)
         {
@@ -74,5 +72,7 @@ namespace Foundation.Linq
 
             return s;
         }
+
+        public static bool ReferenceEquals<T>(this T objA, T objB) where T : class => object.ReferenceEquals(objA, objB);
     }
 }
