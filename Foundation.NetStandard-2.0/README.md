@@ -1,21 +1,20 @@
-
 # Foundation Class Library
 
 ## Collections
 
 ### Read only collection classes (Method input parameters,  return values)
-|Class name|Author|Unique|Sorted|T this[int index]|TValue this[TKey key]|Add method
-|-|-|-|-|-|-|-|
-|[```ReadOnlyCollection<T>```](https://docs.microsoft.com/en-us/dotnet/api/system.collections.objectmodel.readonlycollection-1?view=netframework-4.7.2)|.NET|No|No|Yes|No|Yes
-|[```ReadOnlyDictionary<TKey,TValue>```](https://docs.microsoft.com/en-us/dotnet/api/system.collections.objectmodel.readonlydictionary-2?view=netframework-4.7.2)|.NET|Yes|No|No|Yes|Yes
-|[```ReadOnlyDictionary<TKey,TValue>```](../Foundation.Collections/ReadOnlySortedDictionary.cs)|Foundation|Yes|No|No|Yes|No
-|[```ILookup<TKey,TElement>```](https://docs.microsoft.com/en-us/dotnet/api/system.linq.ilookup-2?view=netframework-4.7.2)|.NET|No|No|No|Yes|No
-|[```ReadOnlyArray<T>```]()|Foundation|No|No|Yes|No|No
-|[```ReadOnlyList<T>```]()|Foundation|No|No|Yes|No|No
-|[```ReadOnlySortedArray<TKey,TValue>```](../Foundation.Collections/ReadOnlySortedArray.cs)|Foundation|Yes|Yes|Yes|Yes|No
-|[```ReadOnlySortedList<TKey,TValue>```](../Foundation.Collections/ReadOnlySortedList.cs)|Foundation|Yes|Yes|Yes|Yes|No
-|[```ReadOnlySortedSet<T>```](../Foundation.Collections/ReadOnlySortedSet.cs)|Foundation|Yes|Yes|Yes|No|No
-|[```ReadOnlyNonUniqueSortedList<TKey,TValue>```](../Foundation.Collections/ReadOnlyNonUniqueSortedList.cs)|Foundation|No|Yes|Yes|Yes|No
+|Class name|Author|Implements|Unique|Sorted|T this[int index]|TValue this[TKey key]|Add method
+|-|-|-|-|-|-|-|-|
+|[```ReadOnlyCollection<T>```](https://docs.microsoft.com/en-us/dotnet/api/system.collections.objectmodel.readonlycollection-1?view=netframework-4.7.2)|.NET|[```IReadOnlyList<T>```](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1?view=netframework-4.7.2),```IList<T>```|No|No|Yes|No|Yes
+|[```ReadOnlyDictionary<TKey,TValue>```](https://docs.microsoft.com/en-us/dotnet/api/system.collections.objectmodel.readonlydictionary-2?view=netframework-4.7.2)|.NET|```IReadOnlyDictionary<TKey,TValue>```,```IDictionary<TKey,TValue>```|Yes|No|No|Yes|Yes
+|[```ReadOnlyDictionary<TKey,TValue>```](../Foundation.Collections/ReadOnlySortedDictionary.cs)|Foundation||Yes|No|No|Yes|No
+|[```ILookup<TKey,TElement>```](https://docs.microsoft.com/en-us/dotnet/api/system.linq.ilookup-2?view=netframework-4.7.2)|.NET|[```ILookup<TKey,TElement>```](https://docs.microsoft.com/en-us/dotnet/api/system.linq.ilookup-2?view=netframework-4.7.2)|No|No|No|Yes|No
+|[```ReadOnlyArray<T>```]()|Foundation|[```IReadOnlyList<T>```](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1?view=netframework-4.7.2)|No|No|Yes|No|No
+|[```ReadOnlyList<T>```]()|Foundation|[```IReadOnlyList<T>```](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1?view=netframework-4.7.2)|No|No|Yes|No|No
+|[```ReadOnlySortedArray<TKey,TValue>```](../Foundation.Collections/ReadOnlySortedArray.cs)|Foundation||Yes|Yes|Yes|Yes|No
+|[```ReadOnlySortedList<TKey,TValue>```](../Foundation.Collections/ReadOnlySortedList.cs)|Foundation|IReadOnlyDictionary<TKey, TValue>|Yes|Yes|Yes|Yes|No
+|[```ReadOnlySortedSet<T>```](../Foundation.Collections/ReadOnlySortedSet.cs)|Foundation|```IReadOnlySortedSet<T>```|Yes|Yes|Yes|No|No
+|[```ReadOnlyNonUniqueSortedList<TKey,TValue>```](../Foundation.Collections/ReadOnlyNonUniqueSortedList.cs)|Foundation||No|Yes|Yes|Yes|No
 
 ### How to create memory indexes for dynamic (not read only) collections
 Input: a collection
