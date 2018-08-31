@@ -10,6 +10,7 @@ using DataCommander.Providers.Connection;
 using DataCommander.Providers.QueryConfiguration;
 using Foundation;
 using Foundation.Assertions;
+using Foundation.Collections;
 using Foundation.Data;
 using Foundation.Data.DbQueryBuilding;
 using Foundation.Diagnostics;
@@ -22,12 +23,9 @@ namespace DataCommander.Providers.ResultWriter
     {
         private class Result
         {
-            public readonly ReadOnlyCollection<DbQueryResultField> Fields;
+            public readonly ReadOnlyList<DbQueryResultField> Fields;
 
-            public Result(ReadOnlyCollection<DbQueryResultField> fields)
-            {
-                Fields = fields;
-            }
+            public Result(ReadOnlyList<DbQueryResultField> fields) => Fields = fields;
         }
 
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
@@ -42,7 +40,7 @@ namespace DataCommander.Providers.ResultWriter
 
         private string _fileName;
         private QueryConfiguration.Query _query;
-        private ReadOnlyCollection<DbRequestParameter> _parameters;
+        private ReadOnlyList<DbRequestParameter> _parameters;
         private string _commandText;
         private List<Result> _results;
 
@@ -101,7 +99,7 @@ namespace DataCommander.Providers.ResultWriter
             if (_query != null)
             {
                 var directory = _fileName != null ? Path.GetDirectoryName(_fileName) : Path.GetTempPath();
-                var results = _query.Results.EmptyIfNull().Zip(_results, ToResult).ToReadOnlyCollection();
+                var results = _query.Results.EmptyIfNull().Zip(_results, ToResult).ToReadOnlyList();
                 var query = new DbRequest(directory, _query.Name, _query.Using, _query.Namespace, _commandText, 0, _parameters, results);
 
                 var queryBuilder = new DbRequestBuilder(query);
@@ -129,7 +127,7 @@ namespace DataCommander.Providers.ResultWriter
                     .Cast<DataRow>()
                     .Select(FoundationDbColumnFactory.Create)
                     .Select(ToField)
-                    .ToReadOnlyCollection();
+                    .ToReadOnlyList();
                 var result = new Result(fields);
                 _results.Add(result);
             }

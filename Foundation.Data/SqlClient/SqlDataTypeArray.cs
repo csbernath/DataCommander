@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Data;
+using Foundation.Collections;
 
 namespace Foundation.Data.SqlClient
 {
     public static class SqlDataTypeArray
     {
-        public static readonly ReadOnlyCollection<SqlDataType> SqlDataTypes = new ReadOnlyCollection<SqlDataType>(new[]
+        public static readonly ReadOnlyList<SqlDataType> SqlDataTypes = new ReadOnlyList<SqlDataType>(new[]
         {
             new SqlDataType(SqlDbType.BigInt, SqlDataTypeName.BigInt, CSharpTypeName.Int64),
             new SqlDataType(SqlDbType.Bit, SqlDataTypeName.Bit, CSharpTypeName.Boolean),

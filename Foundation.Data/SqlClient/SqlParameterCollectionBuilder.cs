@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
+using Foundation.Collections;
 using Foundation.Linq;
 using Microsoft.SqlServer.Server;
 
@@ -46,15 +47,12 @@ namespace Foundation.Data.SqlClient
             Add(parameter);
         }
 
-        public void AddStructured(string parameterName, string typeName, ReadOnlyCollection<SqlDataRecord> sqlDataRecords)
+        public void AddStructured(string parameterName, string typeName, ReadOnlyList<SqlDataRecord> sqlDataRecords)
         {
             var parameter = SqlParameterFactory.CreateStructured(parameterName, typeName, sqlDataRecords);
             Add(parameter);
         }
 
-        public ReadOnlyCollection<object> ToReadOnlyCollection()
-        {
-            return _parameters.Cast<object>().AsReadOnly();
-        }
+        public ReadOnlyList<object> ToReadOnlyList() => _parameters.Cast<object>().ToReadOnlyList();
     }
 }

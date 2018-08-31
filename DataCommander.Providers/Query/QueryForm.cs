@@ -23,6 +23,7 @@ using DataCommander.Providers.Connection;
 using DataCommander.Providers.ResultWriter;
 using Foundation;
 using Foundation.Assertions;
+using Foundation.Collections;
 using Foundation.Configuration;
 using Foundation.Data;
 using Foundation.Data.DbQueryBuilding;
@@ -1677,10 +1678,10 @@ namespace DataCommander.Providers.Query
         {
             public readonly bool Succeeded;
             public readonly QueryConfiguration.Query Query;
-            public readonly ReadOnlyCollection<DbRequestParameter> Parameters;
+            public readonly ReadOnlyList<DbRequestParameter> Parameters;
             public readonly string CommandText;
 
-            public GetQueryConfigurationResult(bool succeeded, QueryConfiguration.Query query, ReadOnlyCollection<DbRequestParameter> parameters, string commandText)
+            public GetQueryConfigurationResult(bool succeeded, QueryConfiguration.Query query, ReadOnlyList<DbRequestParameter> parameters, string commandText)
             {
                 Succeeded = succeeded;
                 Query = query;
@@ -1695,7 +1696,7 @@ namespace DataCommander.Providers.Query
 
             var succeeded = false;
             QueryConfiguration.Query query = null;
-            ReadOnlyCollection<DbRequestParameter> parameters = null;
+            ReadOnlyList<DbRequestParameter> parameters = null;
             string resultCommandText = null;
 
             var configurationStart = commandText.IndexOf("/* Query Configuration");
@@ -1725,7 +1726,7 @@ namespace DataCommander.Providers.Query
             return new GetQueryConfigurationResult(succeeded, query, parameters, resultCommandText);
         }
 
-        private static ReadOnlyCollection<DbRequestParameter> ToDbQueryParameters(List<Token> tokens)
+        private static ReadOnlyList<DbRequestParameter> ToDbQueryParameters(List<Token> tokens)
         {
             var declareTokens = tokens.Where(i => i.Type == TokenType.KeyWord && i.Value == "declare").ToList();
             return declareTokens
@@ -1750,7 +1751,7 @@ namespace DataCommander.Providers.Query
 
                     return new DbRequestParameter(name, dataType, sqlDbType, false, csharpValue);
                 })
-                .ToReadOnlyCollection();
+                .ToReadOnlyList();
         }
 
         private void ShowDataTableText(DataTable dataTable)

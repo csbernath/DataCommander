@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using Foundation.Collections;
 
 namespace Foundation.Data.DbQueryBuilding
 {
@@ -6,9 +7,9 @@ namespace Foundation.Data.DbQueryBuilding
     {
         public readonly string Name;
         public readonly string FieldName;
-        public readonly ReadOnlyCollection<DbQueryResultField> Fields;
+        public readonly ReadOnlyList<DbQueryResultField> Fields;
 
-        public DbQueryResult(string name, string fieldName, ReadOnlyCollection<DbQueryResultField> fields)
+        public DbQueryResult(string name, string fieldName, ReadOnlyList<DbQueryResultField> fields)
         {
             Name = name;
             FieldName = fieldName;

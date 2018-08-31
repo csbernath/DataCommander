@@ -31,7 +31,7 @@ namespace Foundation.Data.SqlClient.AppLock
                 Direction = ParameterDirection.ReturnValue
             };
             builder.Add(returnCodeParameter);
-            var parameters = builder.ToReadOnlyCollection();
+            var parameters = builder.ToReadOnlyList();
 
             var createCommandRequest = new CreateCommandRequest(commandText, parameters, CommandType.StoredProcedure, null, transaction);
             connection.CreateCommandExecutor().ExecuteNonQuery(createCommandRequest);

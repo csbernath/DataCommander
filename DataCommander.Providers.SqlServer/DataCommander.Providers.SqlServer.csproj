@@ -145,6 +145,10 @@
       <Project>{3640355A-6D7C-45B4-8377-1D011DAFD8AA}</Project>
       <Name>Foundation.Assertions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Foundation.Collections\Foundation.Collections.csproj">
+      <Project>{61B48D70-B14F-462C-8A07-E9DB585D3869}</Project>
+      <Name>Foundation.Collections</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Foundation.Configuration\Foundation.Configuration.csproj">
       <Project>{513D0094-7D6B-4453-9D43-23223C51EC4C}</Project>
       <Name>Foundation.Configuration</Name>

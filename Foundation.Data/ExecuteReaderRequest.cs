@@ -1,7 +1,7 @@
-﻿using System.Collections.ObjectModel;
-using System.Data;
+﻿using System.Data;
 using System.Threading;
 using Foundation.Assertions;
+using Foundation.Collections;
 
 namespace Foundation.Data
 {
@@ -25,12 +25,12 @@ namespace Foundation.Data
         {
         }
 
-        public ExecuteReaderRequest(string commandText, ReadOnlyCollection<object> parameters, IDbTransaction transaction)
+        public ExecuteReaderRequest(string commandText, ReadOnlyList<object> parameters, IDbTransaction transaction)
             : this(new CreateCommandRequest(commandText, parameters, CommandType.Text, null, transaction), CommandBehavior.Default, CancellationToken.None)
         {
         }
 
-        public ExecuteReaderRequest(string commandText, ReadOnlyCollection<object> parameters)
+        public ExecuteReaderRequest(string commandText, ReadOnlyList<object> parameters)
             : this(commandText, parameters, null)
         {
         }

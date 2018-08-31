@@ -44,6 +44,12 @@ namespace Foundation.Collections
             return dynamicArray;
         }
 
+        public static ReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source)
+        {
+            var list = source.ToList();
+            return new ReadOnlyList<T>(list);
+        }
+
         public static ReadOnlySortedSet<T> ToReadOnlySortedSet<T>(this IEnumerable<T> source)
         {
             return new ReadOnlySortedSet<T>(source.ToReadOnlyCollection());

@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Text;
 using Foundation.Assertions;
+using Foundation.Collections;
 using Foundation.Data.SqlClient;
 
 namespace Foundation.Data.DbQueryBuilding
@@ -395,7 +395,7 @@ namespace {_request.Namespace}
             return stringBuilder.ToString();
         }
 
-        private string GetQueryResultClassConstructor(ReadOnlyCollection<DbQueryResult> results)
+        private string GetQueryResultClassConstructor(ReadOnlyList<DbQueryResult> results)
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append($"public {_request.Name}DbQueryResult(");

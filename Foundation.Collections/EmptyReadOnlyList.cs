@@ -13,11 +13,8 @@ namespace Foundation.Collections
         }
 
         T IReadOnlyList<T>.this[int index] => throw new ArgumentOutOfRangeException();
-
-        int IReadOnlyCollection<T>.Count => 0;
-
+        public int Count => 0;
         public IEnumerator<T> GetEnumerator() => EmptyEnumerator<T>.Value;
-
         IEnumerator IEnumerable.GetEnumerator() => EmptyNonGenericEnumerator.Value;
     }
 }
