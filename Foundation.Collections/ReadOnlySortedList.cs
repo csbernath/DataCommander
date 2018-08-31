@@ -6,36 +6,44 @@ using Foundation.Assertions;
 
 namespace Foundation.Collections
 {
-    public sealed class ReadOnlySortedList<TKey, TValue> : IReadOnlyDictionary<TKey, TValue>
+    public sealed class ReadOnlySortedList<TKey, TValue> : IReadOnlyDictionary<TKey, TValue>, IReadOnlyList<KeyValuePair<TKey, TValue>>
     {
         #region Private Fields
 
-        private readonly IReadOnlyList<TValue> _values;
-        private readonly Func<TValue, TKey> _keySelector;
+        private readonly IReadOnlyList<KeyValuePair<TKey, TValue>> _items;
         private readonly Comparison<TKey> _comparison;
 
         #endregion
 
-        public ReadOnlySortedList(IReadOnlyList<TValue> values, Func<TValue, TKey> keySelector, Comparison<TKey> comparison)
+        public ReadOnlySortedList(IReadOnlyList<KeyValuePair<TKey, TValue>> items, Comparison<TKey> comparison)
         {
-            Assert.IsNotNull(values);
-            Assert.IsNotNull(keySelector);
+            Assert.IsNotNull(items);
             Assert.IsNotNull(comparison);
-            Assert.IsTrue(values.Select(keySelector).SelectPreviousAndCurrent().All(k => comparison(k.Previous, k.Current) < 0));
+            Assert.IsTrue(items.Select(i => i.Key).SelectPreviousAndCurrent().All(k => comparison(k.Previous, k.Current) < 0));
 
-            _values = values;
-            _keySelector = keySelector;
+            _items = items;
             _comparison = comparison;
-        }
-
-        public ReadOnlySortedList(IReadOnlyList<TValue> values, Func<TValue, TKey> keySelector) : this(values, keySelector, Comparer<TKey>.Default.Compare)
-        {
         }
 
         #region IReadOnlyDictionary Members
 
+        public IEnumerable<TKey> Keys => _items.Select(i => i.Key);
+
+        public TValue this[TKey key]
+        {
+            get
+            {
+                var index = IndexOfKey(key);
+
+                if (index < 0)
+                    throw new KeyNotFoundException();
+
+                return _items[index].Value;
+            }
+        }
+
+        public IEnumerable<TValue> Values => _items.Select(i => i.Value);
         public bool ContainsKey(TKey key) => IndexOfKey(key) >= 0;
-        public IEnumerable<TKey> Keys => _values.Select(v => _keySelector(v));
 
         public bool TryGetValue(TKey key, out TValue value)
         {
@@ -44,7 +52,7 @@ namespace Foundation.Collections
 
             if (index >= 0)
             {
-                value = _values[index];
+                value = _items[index].Value;
                 succeeded = true;
             }
             else
@@ -56,26 +64,13 @@ namespace Foundation.Collections
             return succeeded;
         }
 
-        public IEnumerable<TValue> Values => _values;
+        #endregion
 
-        public TValue this[TKey key]
-        {
-            get
-            {
-                var index = IndexOfKey(key);
+        #region IReadOnlyList Members
 
-                if (index < 0)
-                    throw new KeyNotFoundException();
-
-                return _values[index];
-            }
-        }
-
-        public int Count => _values.Count;
-
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() =>
-            _values.Select(value => KeyValuePair.Create(_keySelector(value), value)).GetEnumerator();
-
+        public int Count => _items.Count;
+        public KeyValuePair<TKey, TValue> this[int index] => _items[index];
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => _items.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         #endregion
@@ -86,13 +81,12 @@ namespace Foundation.Collections
         {
             int indexOfKey;
 
-            if (_values.Count > 0)
+            if (_items.Count > 0)
             {
-                indexOfKey = BinarySearch.IndexOf(0, _values.Count - 1, index =>
+                indexOfKey = BinarySearch.IndexOf(0, _items.Count - 1, index =>
                 {
-                    var otherValue = _values[index];
-                    var otherKey = _keySelector(otherValue);
-                    return _comparison(key, otherKey);
+                    var otherItem = _items[index];
+                    return _comparison(key, otherItem.Key);
                 });
             }
             else

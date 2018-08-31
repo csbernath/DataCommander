@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using Foundation.Assertions;
 
 namespace Foundation.Collections
@@ -12,8 +13,12 @@ namespace Foundation.Collections
             Func<TValue, TKey> keySelector) => new ReadOnlyNonUniqueSortedList<TKey, TValue>(values, keySelector);
 
         [Pure]
-        public static ReadOnlySortedList<TKey, TValue> AsReadOnlySortedList<TKey, TValue>(this IReadOnlyList<TValue> values, Func<TValue, TKey> keySelector) =>
-            new ReadOnlySortedList<TKey, TValue>(values, keySelector);
+        public static ReadOnlySortedList<TKey, TValue> AsReadOnlySortedList<TKey, TValue>(this IReadOnlyList<TValue> values, Func<TValue, TKey> keySelector)
+        {
+            var items = values.Select(value => KeyValuePair.Create(keySelector(value), value)).ToList();
+            var comparer = Comparer<TKey>.Default;
+            return new ReadOnlySortedList<TKey, TValue>(items, comparer.Compare);
+        }
 
         public static ReadOnlySortedSet<T> AsReadOnlySortedSet<T>(this IReadOnlyList<T> items) => new ReadOnlySortedSet<T>(items);
 
