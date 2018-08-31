@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using Foundation.Collections;
+﻿using Foundation.Collections;
 
 namespace Foundation.Data.DbQueryBuilding
 {

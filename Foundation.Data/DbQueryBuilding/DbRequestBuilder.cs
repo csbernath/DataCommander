@@ -23,7 +23,6 @@ namespace Foundation.Data.DbQueryBuilding
             var stringBuilder = new StringBuilder();
 
             stringBuilder.Append($@"using System;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
@@ -57,7 +56,7 @@ namespace {_request.Namespace}
             if (sqlDbType == SqlDbType.Structured)
             {
                 var userDefinedTableType = dataType.Split('.')[1];
-                csharpTypeName = $"ReadOnlyCollection<{userDefinedTableType}>";
+                csharpTypeName = $"ReadOnlyList<{userDefinedTableType}>";
             }
             else
             {
@@ -287,7 +286,7 @@ namespace {_request.Namespace}
                     next = "Next";
                 }
 
-                stringBuilder.Append($"        var {ToLower(result.FieldName)} = dataReader.Read{next}Result(Read{result.Name}).AsReadOnly();");
+                stringBuilder.Append($"        var {ToLower(result.FieldName)} = dataReader.Read{next}Result(Read{result.Name}).ToReadOnlyList();");
             }
 
             stringBuilder.Append($"\r\n        result = new {_request.Name}DbQueryResult(");
@@ -368,7 +367,7 @@ namespace {_request.Namespace}
             {
                 var next = sequence.Next() == 0 ? null : "Next";
                 stringBuilder.Append(
-                    $"var {ToLower(result.FieldName)} = (await dataReader.Read{next}ResultAsync(Read{result.Name}, request.CancellationToken)).AsReadOnly();\r\n");
+                    $"var {ToLower(result.FieldName)} = (await dataReader.Read{next}ResultAsync(Read{result.Name}, request.CancellationToken)).ToReadOnlyList();\r\n");
             }
 
             stringBuilder.Append($"result = new {_request.Name}DbQueryResult({GetResultVariableNames()});");
@@ -386,7 +385,7 @@ namespace {_request.Namespace}
                 if (sequence.Next() > 0)
                     stringBuilder.Append("\r\n");
 
-                stringBuilder.Append($"    public readonly ReadOnlyCollection<{result.Name}> {result.FieldName};");
+                stringBuilder.Append($"    public readonly ReadOnlyList<{result.Name}> {result.FieldName};");
             }
 
             stringBuilder.Append("\r\n\r\n");
@@ -406,7 +405,7 @@ namespace {_request.Namespace}
                 if (sequence.Next() > 0)
                     stringBuilder.Append(", ");
 
-                stringBuilder.Append($"ReadOnlyCollection<{result.Name}> {ToLower(result.FieldName)}");
+                stringBuilder.Append($"ReadOnlyList<{result.Name}> {ToLower(result.FieldName)}");
             }
 
             stringBuilder.Append(")\r\n");
@@ -592,7 +591,7 @@ namespace {_request.Namespace}
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append(
-                $"private static ReadOnlyCollection<object> ToParameters({_request.Name}Db{GetRequestType()} {ToLower(GetRequestType())})\r\n");
+                $"private static ReadOnlyList<object> ToParameters({_request.Name}Db{GetRequestType()} {ToLower(GetRequestType())})\r\n");
             stringBuilder.Append("{\r\n");
             stringBuilder.Append("    var parameters = new SqlParameterCollectionBuilder();\r\n");
 
@@ -600,7 +599,7 @@ namespace {_request.Namespace}
             {
                 if (parameter.SqlDbType == SqlDbType.Structured)
                     stringBuilder.Append(
-                        $"    parameters.AddStructured(\"{parameter.Name}\", \"{parameter.DataType}\", {ToLower(GetRequestType())}.{ToUpper(parameter.Name)}.Select(i => i.ToSqlDataRecord()).ToReadOnlyCollection());\r\n");
+                        $"    parameters.AddStructured(\"{parameter.Name}\", \"{parameter.DataType}\", {ToLower(GetRequestType())}.{ToUpper(parameter.Name)}.Select(i => i.ToSqlDataRecord()).ToReadOnlyList());\r\n");
                 else
                 {
                     var method = parameter.SqlDbType == SqlDbType.Date ? "AddDate" : "Add";
@@ -608,7 +607,7 @@ namespace {_request.Namespace}
                 }
             }
 
-            stringBuilder.Append("    return parameters.ToReadOnlyCollection();\r\n");
+            stringBuilder.Append("    return parameters.ToReadOnlyList();\r\n");
             stringBuilder.Append("}");
 
             return stringBuilder.ToString();

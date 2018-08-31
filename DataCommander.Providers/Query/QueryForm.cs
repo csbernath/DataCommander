@@ -1746,7 +1746,7 @@ namespace DataCommander.Providers.Query
                     else
                     {
                         sqlDbType = SqlDbType.Structured;
-                        csharpValue = $"query.{name}.Select(i => i.ToSqlDataRecord()).ToReadOnlyCollection()";
+                        csharpValue = $"query.{name}.Select(i => i.ToSqlDataRecord()).ToReadOnlyList()";
                     }
 
                     return new DbRequestParameter(name, dataType, sqlDbType, false, csharpValue);

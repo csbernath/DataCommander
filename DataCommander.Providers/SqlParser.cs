@@ -575,22 +575,6 @@ namespace DataCommander.Providers
             return value2;
         }
 
-        private sealed class StructuredInfo
-        {
-            public readonly string DataType;
-            public readonly string CSharpDataType;
-            public readonly string CSharpValue;
-
-            //"CSharpDataType": "ReadOnlyCollection<int>",
-            //"CSharpValue": "IntegerIdArray.Create(query.{parameterName})",
-            public StructuredInfo(string dataType, string cSharpDataType, string cSharpValue)
-            {
-                DataType = dataType;
-                CSharpDataType = cSharpDataType;
-                CSharpValue = cSharpValue;
-            }
-        }
-
         private static object ToParameterValue(Token token)
         {
             var tokenValue = token.Value;
