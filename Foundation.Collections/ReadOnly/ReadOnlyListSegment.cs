@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 
-namespace Foundation.Collections
+namespace Foundation.Collections.ReadOnly
 {
     internal sealed class ReadOnlyListSegment<T> : IReadOnlyList<T>
     {

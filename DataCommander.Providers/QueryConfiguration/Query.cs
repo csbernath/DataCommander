@@ -1,4 +1,5 @@
 ﻿using Foundation.Collections;
+using Foundation.Collections.ReadOnly;
 
 namespace DataCommander.Providers.QueryConfiguration
 {

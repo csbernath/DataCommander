@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Foundation.Assertions;
 
-namespace Foundation.Collections
+namespace Foundation.Collections.ReadOnly
 {
     public class ReadOnlySortedSetArray<T> : IReadOnlySortedSet<T>
     {

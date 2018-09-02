@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Foundation.Assertions;
 
-namespace Foundation.Collections
+namespace Foundation.Collections.ReadOnly
 {
     public class ReadOnlyDictionary<TKey, TValue> : IReadOnlyDictionary<TKey, TValue>
     {

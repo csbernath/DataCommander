@@ -1,16 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace Foundation.Collections
+namespace Foundation.Collections.ReadOnly
 {
     public class ReadOnlyArray<T> : IReadOnlyList<T>
     {
         private readonly T[] _items;
 
-        public ReadOnlyArray(T[] items)
-        {
-            _items = items;
-        }
+        public ReadOnlyArray(T[] items) => _items = items;
+
+        public int Count => _items.Length;
+        public T this[int index] => _items[index];
 
         public IEnumerator<T> GetEnumerator()
         {
@@ -19,8 +19,5 @@ namespace Foundation.Collections
         }
 
         IEnumerator IEnumerable.GetEnumerator() => _items.GetEnumerator();
-
-        public int Count => _items.Length;
-        public T this[int index] => _items[index];
     }
 }

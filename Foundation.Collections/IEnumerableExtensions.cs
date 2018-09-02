@@ -44,25 +44,11 @@ namespace Foundation.Collections
             return dynamicArray;
         }
 
-        public static ReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source)
-        {
-            var list = source.ToList();
-            return new ReadOnlyList<T>(list);
-        }
-
-        public static ReadOnlySortedSet<T> ToReadOnlySortedSet<T>(this IEnumerable<T> source)
-        {
-            return new ReadOnlySortedSet<T>(source.ToReadOnlyCollection());
-        }
-
         public static SegmentedCollection<TSource> ToSegmentedCollection<TSource>(this IEnumerable<TSource> source, int segmentSize)
         {
             var collection = new SegmentedCollection<TSource>(segmentSize);
             collection.Add(source);
             return collection;
         }
-
-        public static SortedArray<TKey, TValue> AsSortedArray<TKey, TValue>(this TValue[] values, Func<TValue, TKey> keySelector) where TKey : IComparable<TKey> =>
-            new SortedArray<TKey, TValue>(values, keySelector, (i, j) => i.CompareTo(j));
     }
 }

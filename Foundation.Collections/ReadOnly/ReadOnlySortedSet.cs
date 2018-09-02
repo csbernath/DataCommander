@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Foundation.Assertions;
 
-namespace Foundation.Collections
+namespace Foundation.Collections.ReadOnly
 {
     public class ReadOnlySortedSet<T> : IReadOnlySortedSet<T>
     {

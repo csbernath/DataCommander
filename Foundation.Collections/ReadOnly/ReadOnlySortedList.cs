@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Foundation.Assertions;
 
-namespace Foundation.Collections
+namespace Foundation.Collections.ReadOnly
 {
     public sealed class ReadOnlySortedList<TKey, TValue> : IReadOnlyDictionary<TKey, TValue>, IReadOnlyList<KeyValuePair<TKey, TValue>>
     {

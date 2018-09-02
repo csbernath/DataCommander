@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Foundation.Collections
+namespace Foundation.Collections.ReadOnly
 {
     public static class EmptyReadOnlyCollection<T>
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Foundation.Collections
+namespace Foundation.Collections.ReadOnly
 {
     public class ReadOnlySortedArray<TKey, TValue>
     {

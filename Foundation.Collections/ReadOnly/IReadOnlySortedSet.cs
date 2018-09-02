@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Foundation.Collections
+namespace Foundation.Collections.ReadOnly
 {
     public interface IReadOnlySortedSet<T> : IReadOnlyCollection<T>
     {

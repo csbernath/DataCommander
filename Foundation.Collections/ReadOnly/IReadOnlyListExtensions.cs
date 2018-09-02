@@ -4,7 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using Foundation.Assertions;
 
-namespace Foundation.Collections
+namespace Foundation.Collections.ReadOnly
 {
     public static class IReadOnlyListExtensions
     {

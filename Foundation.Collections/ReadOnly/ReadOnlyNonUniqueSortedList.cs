@@ -5,7 +5,7 @@ using System.Linq;
 using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 
-namespace Foundation.Collections
+namespace Foundation.Collections.ReadOnly
 {
     public sealed class ReadOnlyNonUniqueSortedList<TKey, TValue>
     {

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Foundation.Collections
+namespace Foundation.Collections.ReadOnly
 {
     public sealed class EmptyReadOnlyList<T> : IReadOnlyList<T>
     {
