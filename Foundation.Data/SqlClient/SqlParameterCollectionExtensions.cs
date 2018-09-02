@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using Foundation.Assertions;
-using Foundation.Linq;
 using Foundation.Text;
 
 namespace Foundation.Data.SqlClient
@@ -17,21 +14,13 @@ namespace Foundation.Data.SqlClient
     {
         public static void Add(this ICollection<SqlParameter> parameters, string parameterName, object value)
         {
-            var parameter = new SqlParameter
-            {
-                ParameterName = parameterName,
-                Value = value
-            };
+            var parameter = new SqlParameter(parameterName, value);
             parameters.Add(parameter);
         }
 
         public static void Add(this ICollection<SqlParameter> parameters, string parameterName, SqlDbType sqlDbType, object value)
         {
-            var parameter = new SqlParameter();
-            parameter.ParameterName = parameterName;
-            parameter.SqlDbType = sqlDbType;
-            parameter.Value = value;
-
+            var parameter = SqlParameterFactory.Create(parameterName, sqlDbType, value);
             parameters.Add(parameter);
         }
 
@@ -39,7 +28,7 @@ namespace Foundation.Data.SqlClient
         {
             Assert.IsNotNull(parameters);
 
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             var first = true;
             string s;
             var numberFormatInfo = NumberFormatInfo.InvariantInfo;
@@ -59,16 +48,14 @@ namespace Foundation.Data.SqlClient
                             if (first)
                                 first = false;
                             else
-                                sb.AppendLine(",");
+                                stringBuilder.AppendLine(",");
 
                             if (value == DBNull.Value)
                                 s = SqlNull.NullString;
                             else
                             {
                                 var type = value.GetType();
-                                var nullable = value as INullable;
-
-                                if (nullable != null)
+                                if (value is INullable nullable)
                                 {
                                     if (nullable.IsNull)
                                         s = SqlNull.NullString;
@@ -193,28 +180,18 @@ namespace Foundation.Data.SqlClient
                                 }
                             }
 
-                            sb.AppendFormat("{0} = {1}", parameter.ParameterName, s);
+                            stringBuilder.AppendFormat("{0} = {1}", parameter.ParameterName, s);
                             break;
                     }
                 }
             }
 
-            s = sb.ToString();
+            s = stringBuilder.ToString();
 
             if (s.Length == 0)
                 s = null;
 
             return s;
         }
-
-        public static List<object> ToObjectList(this ICollection<SqlParameter> parameters)
-        {
-            var result = new List<object>(parameters.Count);
-            result.AddRange(parameters);
-            return result;
-        }
-
-        public static ReadOnlyCollection<object> ToObjectReadOnlyCollection(this ICollection<SqlParameter> parameters) => parameters.Cast<object>().ToReadOnlyCollection();
-        public static ReadOnlyCollection<object> ToObjectReadOnlyCollection(this IEnumerable<SqlParameter> parameters) => parameters.Cast<object>().ToReadOnlyCollection();
     }
 }

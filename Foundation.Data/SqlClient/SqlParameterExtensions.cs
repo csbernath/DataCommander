@@ -4,32 +4,20 @@ using System.Text;
 
 namespace Foundation.Data.SqlClient
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class SqlParameterExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="parameter"></param>
-        /// <returns></returns>
         public static string GetDataTypeName(this SqlParameter parameter)
         {
-            var sb = new StringBuilder();
-            sb.Append(parameter.SqlDbType.ToString().ToLowerInvariant());
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append(parameter.SqlDbType.ToString().ToLowerInvariant());
 
             switch (parameter.SqlDbType)
             {
                 case SqlDbType.Decimal:
                     if (parameter.Scale == 0)
-                    {
-                        sb.AppendFormat("({0})", parameter.Precision);
-                    }
+                        stringBuilder.AppendFormat("({0})", parameter.Precision);
                     else
-                    {
-                        sb.AppendFormat("({0},{1})", parameter.Precision, parameter.Scale);
-                    }
+                        stringBuilder.AppendFormat("({0},{1})", parameter.Precision, parameter.Scale);
                     break;
 
                 case SqlDbType.Char:
@@ -40,19 +28,15 @@ namespace Foundation.Data.SqlClient
                     string sizeString;
 
                     if (size == -1 || size == int.MaxValue)
-                    {
                         sizeString = "max";
-                    }
                     else
-                    {
                         sizeString = size.ToString();
-                    }
 
-                    sb.AppendFormat("({0})", sizeString);
+                    stringBuilder.AppendFormat("({0})", sizeString);
                     break;
             }
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
     }
 }

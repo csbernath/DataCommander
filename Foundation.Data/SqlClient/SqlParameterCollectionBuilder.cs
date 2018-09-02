@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using Foundation.Collections;
 using Foundation.Collections.ReadOnly;
 using Foundation.Linq;
 using Microsoft.SqlServer.Server;
@@ -17,33 +16,19 @@ namespace Foundation.Data.SqlClient
 
         public void Add(string parameterName, object value)
         {
-            var parameter = new SqlParameter
-            {
-                ParameterName = parameterName,
-                Value = value
-            };
+            var parameter = new SqlParameter(parameterName, value);
             Add(parameter);
         }
 
         public void Add(string parameterName, SqlDbType sqlDbType, object value)
         {
-            var parameter = new SqlParameter
-            {
-                ParameterName = parameterName,
-                SqlDbType = sqlDbType,
-                Value = value
-            };
+            var parameter = SqlParameterFactory.Create(parameterName, sqlDbType, value);
             Add(parameter);
         }
 
         public void AddDate(string parameterName, DateTime value)
         {
-            var parameter = new SqlParameter
-            {
-                ParameterName = parameterName,
-                SqlDbType = SqlDbType.Date,
-                Value = value
-            };
+            var parameter = SqlParameterFactory.CreateDate(parameterName, value);
             Add(parameter);
         }
 

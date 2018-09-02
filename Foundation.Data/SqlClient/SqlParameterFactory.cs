@@ -1,7 +1,7 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.SqlClient;
 using Foundation.Assertions;
-using Foundation.Collections;
 using Foundation.Collections.ReadOnly;
 using Microsoft.SqlServer.Server;
 
@@ -9,6 +9,15 @@ namespace Foundation.Data.SqlClient
 {
     public static class SqlParameterFactory
     {
+        public static SqlParameter Create(string parameterName, SqlDbType sqlDbType, object value)
+        {
+            var parameter = new SqlParameter(parameterName, sqlDbType);
+            parameter.Value = value;
+            return parameter;
+        }
+
+        public static SqlParameter CreateDate(string parameterName, DateTime value) => Create(parameterName, SqlDbType.Date, value);
+
         public static SqlParameter CreateStructured(string parameterName, string typeName, ReadOnlyList<SqlDataRecord> sqlDataRecords)
         {
             Assert.IsNotNull(sqlDataRecords);
