@@ -22,6 +22,7 @@ namespace Foundation.Data.SqlClient
             new SqlDataType(SqlDbType.TinyInt, SqlDataTypeName.TinyInt, CSharpTypeName.Byte),
             new SqlDataType(SqlDbType.UniqueIdentifier, SqlDataTypeName.UniqueIdentifier, nameof(Guid)),
             new SqlDataType(SqlDbType.VarChar, SqlDataTypeName.VarChar, CSharpTypeName.String),
+            new SqlDataType(SqlDbType.Xml, SqlDataTypeName.Xml, CSharpTypeName.String)
         });
     }
 }

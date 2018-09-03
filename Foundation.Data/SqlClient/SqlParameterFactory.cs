@@ -33,5 +33,7 @@ namespace Foundation.Data.SqlClient
 
             return parameter;
         }
+
+        public static SqlParameter CreateXml(string parameterName, string value) => Create(parameterName, SqlDbType.Xml, value);
     }
 }

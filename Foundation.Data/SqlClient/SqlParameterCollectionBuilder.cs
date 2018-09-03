@@ -38,6 +38,12 @@ namespace Foundation.Data.SqlClient
             Add(parameter);
         }
 
+        public void AddXml(string parameterName, string value)
+        {
+            var parameter = SqlParameterFactory.CreateXml(parameterName, value);
+            Add(parameter);
+        }
+
         public ReadOnlyList<object> ToReadOnlyList() => _parameters.Cast<object>().ToReadOnlyList();
     }
 }

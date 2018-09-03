@@ -229,18 +229,18 @@ namespace {_request.Namespace}
                 stringBuilder.Append(GetExecuteReaderMethod().Indent(1));
                 stringBuilder.Append("\r\n\r\n");
                 stringBuilder.Append(GetExecuteReaderAsyncMethod().Indent(1));
-            }
 
-            stringBuilder.Append("\r\n\r\n");
+                stringBuilder.Append("\r\n\r\n");
 
-            var sequence = new Sequence();
-            foreach (var result in _request.Results)
-            {
-                if (sequence.Next() > 0)
-                    stringBuilder.Append("\r\n\r\n");
+                var sequence = new Sequence();
+                foreach (var result in _request.Results)
+                {
+                    if (sequence.Next() > 0)
+                        stringBuilder.Append("\r\n\r\n");
 
-                var readMethod = GetReadRecordMethod(result);
-                stringBuilder.Append(readMethod.Indent(1));
+                    var readMethod = GetReadRecordMethod(result);
+                    stringBuilder.Append(readMethod.Indent(1));
+                }
             }
 
             stringBuilder.Append("\r\n}");
@@ -602,7 +602,22 @@ namespace {_request.Namespace}
                         $"    parameters.AddStructured(\"{parameter.Name}\", \"{parameter.DataType}\", {ToLower(GetRequestType())}.{ToUpper(parameter.Name)}.Select(i => i.ToSqlDataRecord()).ToReadOnlyList());\r\n");
                 else
                 {
-                    var method = parameter.SqlDbType == SqlDbType.Date ? "AddDate" : "Add";
+                    string method;
+                    switch (parameter.SqlDbType)
+                    {
+                        case SqlDbType.Date:
+                            method = "AddDate";
+                            break;
+
+                        case SqlDbType.Xml:
+                            method = "AddXml";
+                            break;
+
+                        default:
+                            method = "Add";
+                            break;
+                    }
+
                     stringBuilder.Append($"    parameters.{method}(\"{parameter.Name}\", {ToLower(GetRequestType())}.{ToUpper(parameter.Name)});\r\n");
                 }
             }
