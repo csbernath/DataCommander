@@ -30,7 +30,7 @@ namespace Foundation.Linq
 
         public static bool In<T>(this T item, params T[] collection)
         {
-            Assert.IsNotNull(collection);
+            Assert.IsNotNull(collection, nameof(collection));
             return collection.Contains(item);
         }
 

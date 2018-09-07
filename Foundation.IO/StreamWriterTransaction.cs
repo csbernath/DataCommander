@@ -5,9 +5,6 @@ using System.Text;
 
 namespace Foundation.IO
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class StreamWriterTransaction : IDisposable
     {
         #region Private Fields
@@ -18,44 +15,22 @@ namespace Foundation.IO
 
         #endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="tempPath"></param>
-        public StreamWriterTransaction(
-            string path,
-            string tempPath)
+        public StreamWriterTransaction(string path, string tempPath)
         {
             _path = path;
             _tempPath = tempPath;
             Writer = new StreamWriter(tempPath, false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="tempPath"></param>
-        /// <param name="encoding"></param>
-        public StreamWriterTransaction(
-            string path,
-            string tempPath,
-            Encoding encoding)
+        public StreamWriterTransaction(string path, string tempPath, Encoding encoding)
         {
             _path = path;
             _tempPath = tempPath;
             Writer = new StreamWriter(tempPath, false, encoding);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public StreamWriter Writer { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Commit()
         {
             Writer.Close();
@@ -70,9 +45,6 @@ namespace Foundation.IO
             _commited = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         void IDisposable.Dispose()
         {
             Writer.Dispose();

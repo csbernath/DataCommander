@@ -73,12 +73,6 @@ namespace Foundation.Text
             return ToString(columnWidths, " ");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="columnWidths"></param>
-        /// <param name="columnSeparator"></param>
-        /// <returns></returns>
         public string ToString(IReadOnlyList<int> columnWidths, string columnSeparator)
         {
             Assert.IsNotNull(columnWidths);

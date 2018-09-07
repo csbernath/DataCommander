@@ -50,7 +50,7 @@ namespace Foundation.Linq
 
         public static ReadOnlyCollection<T> AsReadOnly<T>(this ICollection<T> collection)
         {
-            Assert.IsNotNull(collection);
+            Assert.IsNotNull(collection, nameof(collection));
             return new ReadOnlyCollection<T>(collection.ToList());
         }
 
@@ -64,7 +64,7 @@ namespace Foundation.Linq
 
         public static T[] ToArray<T>(ICollection<T> source)
         {
-            Assert.IsNotNull(source);
+            Assert.IsNotNull(source, nameof(source));
 
             var target = new T[source.Count];
             source.CopyTo(target, 0);

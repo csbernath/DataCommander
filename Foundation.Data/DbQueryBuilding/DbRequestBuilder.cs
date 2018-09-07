@@ -445,11 +445,15 @@ namespace {_request.Namespace}
             stringBuilder.Append($@"public sealed class {_request.Name}Db{GetRequestType()}
 {{
 ");
-            foreach (var parameter in _request.Parameters)
-                stringBuilder.Append(
-                    $"    public readonly {GetCSharpTypeName(parameter.SqlDbType, parameter.DataType, parameter.IsNullable)} {ToUpper(parameter.Name)};\r\n");
+            if (_request.Parameters.Count > 0)
+            {
+                foreach (var parameter in _request.Parameters)
+                    stringBuilder.Append(
+                        $"    public readonly {GetCSharpTypeName(parameter.SqlDbType, parameter.DataType, parameter.IsNullable)} {ToUpper(parameter.Name)};\r\n");
 
-            stringBuilder.Append("\r\n");
+                stringBuilder.Append("\r\n");
+            }
+
             stringBuilder.Append(GetRequestClassConstructor().Indent(1));
             stringBuilder.Append("\r\n}");
             return stringBuilder.ToString();

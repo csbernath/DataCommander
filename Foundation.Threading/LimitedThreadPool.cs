@@ -1,28 +1,25 @@
-﻿namespace Foundation.Threading
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 #if FOUNDATION_2_0 || FOUNDATION_3_5
     using Foundation.Diagnostics;
 #else
-    using System.Diagnostics.Contracts;
+using System.Diagnostics.Contracts;
 #endif
 
-    /// <summary>
-    /// 
-    /// </summary>
+namespace Foundation.Threading
+{
     public sealed class LimitedThreadPool<T>
     {
-        private Int32 _maxThreadCount;
-        private Int32 _availableThreadCount;
+        private int _maxThreadCount;
+        private int _availableThreadCount;
         private readonly Queue<Tuple<Action<T>, T>> _queue = new Queue<Tuple<Action<T>, T>>();
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="maxThreadCount"></param>
-        public LimitedThreadPool(Int32 maxThreadCount)
+        public LimitedThreadPool(int maxThreadCount)
         {
 #if FOUNDATION_2_0 || FOUNDATION_3_5
             Assert.Compare<Int32>( maxThreadCount, Comparers.GreaterThan, 0, "maxThreadCount", null );
@@ -36,12 +33,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public Int32 QueuedItemCount => _queue.Count;
+        public int QueuedItemCount => _queue.Count;
 
         /// <summary>
         /// 
         /// </summary>
-        public Int32 AvailableThreadCount => _availableThreadCount;
+        public int AvailableThreadCount => _availableThreadCount;
 
         /// <summary>
         /// 
@@ -49,7 +46,7 @@
         /// <param name="waitCallback"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public Boolean QueueUserWorkItem(Action<T> waitCallback, T state)
+        public bool QueueUserWorkItem(Action<T> waitCallback, T state)
         {
 #if FOUNDATION_2_0 || FOUNDATION_3_5
             Assert.IsNotNull(waitCallback, "waitCallback");           
@@ -57,7 +54,7 @@
             Contract.Requires(waitCallback != null);
 #endif
             var item = Tuple.Create(waitCallback, state);
-            Boolean succeeded;
+            bool succeeded;
             if (_availableThreadCount > 0)
             {
                 Interlocked.Decrement(ref _availableThreadCount);
@@ -88,18 +85,18 @@
                     while (_queue.Count > 0 && _availableThreadCount > 0)
                     {
                         var item = _queue.Dequeue();
-                        Boolean succeeded = ThreadPool.QueueUserWorkItem(Callback, item);
+                        bool succeeded = ThreadPool.QueueUserWorkItem(Callback, item);
                         Interlocked.Decrement(ref _availableThreadCount);
                     }
                 }
             }
         }
 
-        private void Callback(Object stateObject)
+        private void Callback(object stateObject)
         {
             try
             {
-                var item = (Tuple<Action<T>, T>)stateObject;
+                var item = (Tuple<Action<T>, T>) stateObject;
                 Action<T> waitCallback = item.Item1;
                 T state = item.Item2;
                 waitCallback(state);

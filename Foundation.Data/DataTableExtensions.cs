@@ -7,9 +7,6 @@ using Foundation.Text;
 
 namespace Foundation.Data
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class DataTableExtensions
     {
         /// <summary>
@@ -19,7 +16,7 @@ namespace Foundation.Data
         /// <returns></returns>
         public static string ToStringTableString(this DataTable dataTable)
         {
-            Assert.IsNotNull(dataTable);
+            Assert.IsNotNull(dataTable, nameof(dataTable));
             var rows = dataTable.Rows.Cast<DataRow>().Where(dataRow => dataRow.RowState != DataRowState.Deleted);
             var columns = dataTable.Columns.Cast<DataColumn>().Select(ToStringTableColumnInfo).ToArray();
             return rows.ToString(columns);
@@ -54,10 +51,8 @@ namespace Foundation.Data
                     break;
 
                 case TypeCode.Object:
-                    if (dataType == typeof (TimeSpan))
-                    {
+                    if (dataType == typeof(TimeSpan))
                         stringTableColumnAlign = StringTableColumnAlign.Right;
-                    }
 
                     break;
             }

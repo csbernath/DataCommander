@@ -4,9 +4,6 @@ using System.IO;
 
 namespace Foundation.IO
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class TreeTextWriter
     {
         private readonly TextWriter _textWriter;
@@ -15,11 +12,6 @@ namespace Foundation.IO
         private State _state;
         private readonly ConsoleColor _originalForegroundColor;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="textWriter"></param>
-        /// <param name="indentation"></param>
         public TreeTextWriter(TextWriter textWriter, int indentation)
         {
             _textWriter = textWriter;
@@ -29,9 +21,6 @@ namespace Foundation.IO
             ForegroundColor = _originalForegroundColor;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public ConsoleColor ForegroundColor { get; set; }
 
         private enum State
@@ -53,10 +42,6 @@ namespace Foundation.IO
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
         public void WriteStartElement(string value)
         {
             if (_state == State.WriteStartElement)
@@ -70,21 +55,12 @@ namespace Foundation.IO
             _state = State.WriteStartElement;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="format"></param>
-        /// <param name="arguments"></param>
         public void WriteStartElement(string format, params object[] arguments)
         {
             var value = string.Format(CultureInfo.InvariantCulture, format, arguments);
             WriteStartElement(value);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
         public void WriteEndElement(string value)
         {
             _level--;
@@ -103,60 +79,36 @@ namespace Foundation.IO
             _state = State.WriteEndElement;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="format"></param>
-        /// <param name="arguments"></param>
         public void WriteEndElement(string format, params object[] arguments)
         {
             var value = string.Format(CultureInfo.InvariantCulture, format, arguments);
             WriteEndElement(value);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
         public void WriteElement(string value)
         {
             if (_state == State.WriteStartElement)
-            {
                 _textWriter.WriteLine();
-            }
 
             WritePrefix(_level);
 
             if (_originalForegroundColor != ForegroundColor)
-            {
                 Console.ForegroundColor = ForegroundColor;
-            }
 
             _textWriter.WriteLine(value);
 
             if (_originalForegroundColor != ForegroundColor)
-            {
                 Console.ForegroundColor = _originalForegroundColor;
-            }
 
             _state = State.WriteEndElement;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="format"></param>
-        /// <param name="arguments"></param>
         public void WriteElement(string format, params object[] arguments)
         {
             var value = string.Format(CultureInfo.InvariantCulture, format, arguments);
             WriteElement(value);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
         public void WriteElement(object value)
         {
             var s = value != null ? value.ToString() : null;

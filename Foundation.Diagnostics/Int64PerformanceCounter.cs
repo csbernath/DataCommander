@@ -4,9 +4,6 @@ using Foundation.Assertions;
 
 namespace Foundation.Diagnostics
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class Int64PerformanceCounter
     {
         #region Private Fields
@@ -20,11 +17,6 @@ namespace Foundation.Diagnostics
 
         #endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="toString"></param>
         public Int64PerformanceCounter(string name, Func<long, string> toString)
         {
             Assert.IsNotNull(toString);
@@ -33,10 +25,6 @@ namespace Foundation.Diagnostics
             _toString = toString;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
         public void Increment(long item)
         {
             Interlocked.Increment(ref _count);
@@ -85,36 +73,17 @@ namespace Foundation.Diagnostics
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public long Count => _count;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public long Sum => _sum;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public long Min => _min;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public long Max => _max;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public string ToLogString()
         {
             return $@"Int64PerformanceCounter '{_name}'
 count: {_count}
 min: {_toString(_min)}
-avg: {_toString((long)((double)Sum / Count))}
+avg: {_toString((long) ((double) Sum / Count))}
 max: {_toString(_max)}
 sum: {_toString(_sum)}";
         }

@@ -6,20 +6,9 @@ using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Text
 {
-    /// <exclude/>
     public static class StringHelper
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="col"></param>
-        /// <param name="colWidth"></param>
-        /// <param name="alignRight"></param>
-        /// <returns></returns>
-        public static string FormatColumn(
-            string col,
-            int colWidth,
-            bool alignRight)
+        public static string FormatColumn(string col, int colWidth, bool alignRight)
         {
             var length = col != null
                 ? col.Length
@@ -93,11 +82,8 @@ namespace Foundation.Text
             var type = obj.GetType();
             var methodInfo = type.GetMethod(methodName);
             var parameterInfos = methodInfo.GetParameters();
-
             var typeName = TypeNameCollection.GetTypeName(methodInfo.ReturnType);
-
             var line = typeName + " " + methodName + "(" + Environment.NewLine;
-
             var length = Math.Min(parameters.Length, parameterInfos.Length);
 
             for (var i = 0; i < length; i++)
@@ -110,9 +96,7 @@ namespace Foundation.Text
                     parameters[i];
 
                 if (i < length - 1)
-                {
                     line += "," + Environment.NewLine;
-                }
             }
 
             line += ')';

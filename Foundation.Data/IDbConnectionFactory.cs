@@ -3,30 +3,10 @@ using Foundation.Threading;
 
 namespace Foundation.Data
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public interface IDbConnectionFactory
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        WorkerThread Thread
-        {
-            get;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        IDbConnection CreateConnection(
-            string connectionString,
-            string userName,
-            string hostName);
-
-        /// <summary>
-        /// 
-        /// </summary>
+        WorkerThread Thread { get; }
+        IDbConnection CreateConnection(string connectionString, string userName, string hostName);
         IDbConnectionHelper CreateConnectionHelper(IDbConnection connection);
     }
 }

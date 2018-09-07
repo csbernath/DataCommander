@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Log
 {
@@ -11,8 +11,8 @@ namespace Foundation.Log
 
         public TextLogWriter(TextWriter textWriter, ILogFormatter logFormatter)
         {
-            FoundationContract.Requires<ArgumentException>(textWriter != null);
-
+            Assert.IsNotNull(textWriter, nameof(textWriter));
+            Assert.IsNotNull(logFormatter, nameof(logFormatter));
             _textWriter = textWriter;
             _formatter = logFormatter;
         }

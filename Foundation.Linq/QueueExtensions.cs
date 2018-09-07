@@ -7,7 +7,7 @@ namespace Foundation.Linq
     {
         public static T DequeueTail<T>(this Queue<T> queue)
         {
-            Assert.IsNotNull(queue);
+            Assert.IsNotNull(queue, nameof(queue));
             Assert.IsTrue(queue.Count > 0);
 
             var array = new T[queue.Count];

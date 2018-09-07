@@ -7,18 +7,7 @@ namespace Foundation.Linq
 {
     public static class IDictionaryExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="dictionary"></param>
-        /// <param name="items"></param>
-        /// <param name="keySelector"></param>
-        public static void Add<TKey, TValue>(
-            this IDictionary<TKey, TValue> dictionary,
-            IEnumerable<TValue> items,
-            Func<TValue, TKey> keySelector)
+        public static void Add<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, IEnumerable<TValue> items, Func<TValue, TKey> keySelector)
         {
             Assert.IsNotNull(dictionary);
             Assert.IsNotNull(items);
@@ -31,13 +20,6 @@ namespace Foundation.Linq
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="dictionary"></param>
-        /// <returns></returns>
         public static IDictionary<TKey, TValue> AsReadOnly<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
         {
             var readOnlyDictionary = dictionary != null
@@ -47,15 +29,6 @@ namespace Foundation.Linq
             return readOnlyDictionary;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="dictionary"></param>
-        /// <param name="key"></param>
-        /// <param name="valueFactory"></param>
-        /// <returns></returns>
         public static TValue GetOrAdd<TKey, TValue>(
             this IDictionary<TKey, TValue> dictionary,
             TKey key,
@@ -75,22 +48,10 @@ namespace Foundation.Linq
             return value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
         private sealed class ReadOnlyDictionary<TKey, TValue> : IDictionary<TKey, TValue>
         {
-            /// <summary>
-            /// 
-            /// </summary>
             private readonly IDictionary<TKey, TValue> _dictionary;
 
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="dictionary"></param>
             public ReadOnlyDictionary(IDictionary<TKey, TValue> dictionary)
             {
                 Assert.IsNotNull(dictionary);

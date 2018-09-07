@@ -24,14 +24,14 @@ namespace Foundation.Data
 
         public static T? GetNullableValueField<T>(this DataRow dataRow, string name) where T : struct
         {
-            Assert.IsNotNull(dataRow);
+            Assert.IsNotNull(dataRow, nameof(dataRow));
             var value = dataRow[name];
             return GetNullableValue<T>(value);
         }
 
         public static T? GetNullableValueField<T>(this DataRow dataRow, DataColumn column) where T : struct
         {
-            Assert.IsNotNull(dataRow);
+            Assert.IsNotNull(dataRow, nameof(dataRow));
             Assert.IsNotNull(column);
             var value = dataRow[column];
             return GetNullableValue<T>(value);
@@ -48,72 +48,51 @@ namespace Foundation.Data
 
         public static T GetReferenceField<T>(this DataRow dataRow, int columnIndex) where T : class
         {
-            Assert.IsNotNull(dataRow);
+            Assert.IsNotNull(dataRow, nameof(dataRow));
             var value = dataRow[columnIndex];
             return value == DBNull.Value
                 ? default(T)
                 : (T) value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dataRow"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
         public static T GetValue<T>(this DataRow dataRow, string name)
         {
-            Assert.IsNotNull(dataRow);
+            Assert.IsNotNull(dataRow, nameof(dataRow));
             var valueObject = dataRow[name];
             Assert.IsTrue(valueObject is T);
             return (T) valueObject;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dataRow"></param>
-        /// <param name="name"></param>
-        /// <param name="outputNullValue"></param>
-        /// <returns></returns>
-        public static T GetValue<T>(
-            this DataRow dataRow,
-            string name,
-            T outputNullValue)
+        public static T GetValue<T>(this DataRow dataRow, string name, T outputNullValue)
         {
-            Assert.IsNotNull(dataRow);
-
+            Assert.IsNotNull(dataRow, nameof(dataRow));
             var valueObject = dataRow[name];
             return ValueReader.GetValue(valueObject, outputNullValue);
         }
 
         public static T GetValueOrDefault<T>(this DataRow dataRow, int columnIndex)
         {
-            Assert.IsNotNull(dataRow);
-
+            Assert.IsNotNull(dataRow, nameof(dataRow));
             var value = dataRow[columnIndex];
             return ValueReader.GetValueOrDefault<T>(value);
         }
 
         public static T GetValueOrDefault<T>(this DataRow dataRow, string name)
         {
-            Assert.IsNotNull(dataRow);
-
+            Assert.IsNotNull(dataRow, nameof(dataRow));
             var value = dataRow[name];
             return ValueReader.GetValueOrDefault<T>(value);
         }
 
         public static StringTable ToStringTable(this DataRow dataRow)
         {
-            Assert.IsNotNull(dataRow);
+            Assert.IsNotNull(dataRow, nameof(dataRow));
 
             var stringTable = new StringTable(2);
             var dataTable = dataRow.Table;
             var itemArray = dataRow.ItemArray;
 
-            for (var i = 0; i < itemArray.Length; i++)
+            for (var i = 0; i < itemArray.Length; ++i)
             {
                 var row = stringTable.NewRow();
                 row[0] = dataTable.Columns[i].ColumnName;

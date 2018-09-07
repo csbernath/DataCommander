@@ -5,9 +5,6 @@ using Foundation.Assertions;
 
 namespace Foundation.Text
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class StringTableColumnCollection : IList<StringTableColumn>
     {
         private readonly List<StringTableColumn> _columns = new List<StringTableColumn>();

@@ -6,6 +6,18 @@ namespace Foundation.DefaultLog
     {
         internal static string Format(LogEntry entry)
         {
+            var logLevelChar = GetLogLevelChar(entry);
+            var result =
+                $"[{entry.CreationTime:HH:mm:ss.fff}|{entry.Id}|{logLevelChar}|{entry.ThreadName},{entry.ManagedThreadId}|{entry.LogName}] {entry.Message}\r\n";
+            return result;
+        }
+
+        string ILogFormatter.Begin() => null;
+        string ILogFormatter.Format(LogEntry entry) => Format(entry);
+        string ILogFormatter.End() => null;
+
+        private static char GetLogLevelChar(LogEntry entry)
+        {
             char logLevelChar;
             switch (entry.LogLevel)
             {
@@ -34,22 +46,7 @@ namespace Foundation.DefaultLog
                     break;
             }
 
-            return $"[{entry.CreationTime:HH:mm:ss.fff}|{entry.Id}|{logLevelChar}|{entry.ThreadName},{entry.ManagedThreadId}|{entry.LogName}] {entry.Message}\r\n";
-        }
-
-        string ILogFormatter.Begin()
-        {
-            return null;
-        }
-
-        string ILogFormatter.Format(LogEntry entry)
-        {
-            return Format(entry);
-        }
-
-        string ILogFormatter.End()
-        {
-            return null;
+            return logLevelChar;
         }
     }
 }

@@ -49,7 +49,7 @@ namespace Foundation.Linq
 
             public Enumerable(IEnumerator<T> enumerator)
             {
-                Assert.IsNotNull(enumerator);
+                Assert.IsNotNull(enumerator, nameof(enumerator));
                 _enumerator = enumerator;
             }
 

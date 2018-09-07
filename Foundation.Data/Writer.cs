@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.IO;
 using System.Text;
 using Foundation.Assertions;
@@ -65,7 +64,7 @@ namespace Foundation.Data
             string lineSeparator,
             TextWriter textWriter)
         {
-            Assert.IsValidOperation(!String.IsNullOrEmpty(lineSeparator));
+            Assert.IsValidOperation(!string.IsNullOrEmpty(lineSeparator));
             Assert.IsNotNull(textWriter);
 
             if (dataView != null)
@@ -80,13 +79,9 @@ namespace Foundation.Data
                     textWriter.Write(dataColumn.ColumnName);
 
                     if (i < last)
-                    {
                         textWriter.Write(columnSeparator);
-                    }
                     else
-                    {
                         textWriter.Write(lineSeparator);
-                    }
                 }
 
                 for (var i = 0; i < rowCount; i++)
@@ -99,13 +94,9 @@ namespace Foundation.Data
                         textWriter.Write(itemArray[j]);
 
                         if (j < last)
-                        {
                             textWriter.Write(columnSeparator);
-                        }
                         else
-                        {
                             textWriter.Write(lineSeparator);
-                        }
                     }
                 }
             }

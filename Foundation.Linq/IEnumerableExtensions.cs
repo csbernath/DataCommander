@@ -13,7 +13,7 @@ namespace Foundation.Linq
     {
         public static bool CountIsGreaterThan<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate, int count)
         {
-            Assert.IsNotNull(source);
+            Assert.IsNotNull(source, nameof(source));
 
             var countIsGreaterThan = false;
             var filteredCount = 0;

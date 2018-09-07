@@ -4,9 +4,6 @@ using Foundation.Assertions;
 
 namespace Foundation.Data
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class DataRecordExtensions
     {
         public static byte[] GetBytes(this IDataRecord dataRecord, int fieldIndex)

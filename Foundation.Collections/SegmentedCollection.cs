@@ -23,10 +23,6 @@ namespace Foundation.Collections
 
         #region ICollection<T> Members
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
         public void Add(T item)
         {
             var index = Count % _segmentLength;
@@ -54,9 +50,6 @@ namespace Foundation.Collections
             Count++;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Clear()
         {
             Count = 0;
@@ -64,32 +57,14 @@ namespace Foundation.Collections
             _last = null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public bool Contains(T item)
-        {
-            throw new NotSupportedException();
-        }
+        public bool Contains(T item) => throw new NotSupportedException();
+        void ICollection<T>.CopyTo(T[] array, int arrayIndex) => throw new NotImplementedException();
 
-        void ICollection<T>.CopyTo(T[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public int Count { get; private set; }
 
         bool ICollection<T>.IsReadOnly => false;
 
-        bool ICollection<T>.Remove(T item)
-        {
-            throw new NotSupportedException();
-        }
+        bool ICollection<T>.Remove(T item) => throw new NotSupportedException();
 
         #endregion
 

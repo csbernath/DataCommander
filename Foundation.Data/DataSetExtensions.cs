@@ -4,20 +4,12 @@ using Foundation.Assertions;
 
 namespace Foundation.Data
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class DataSetExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataSet"></param>
-        /// <param name="dataTableNames"></param>
         public static void SetDataTableNames(this DataSet dataSet, IEnumerable<string> dataTableNames)
         {
-            Assert.IsNotNull(dataSet);
-            Assert.IsNotNull(dataTableNames);
+            Assert.IsNotNull(dataSet, nameof(dataSet));
+            Assert.IsNotNull(dataTableNames, nameof(dataTableNames));
 
             var dataTables = dataSet.Tables;
             var count = dataTables.Count;
