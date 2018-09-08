@@ -1,0 +1,557 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{31A30A80-D1B6-4867-A65E-188DE9E912C8}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>DataCommander.Providers</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>DataCommander.Providers</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;FOUNDATION_LOG;FOUNDATION_ASSERT</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>pdbonly</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>True</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>True</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>True</CodeContractsRedundantAssumptions>
+    <CodeContractsAssertsToContractsCheckBox>True</CodeContractsAssertsToContractsCheckBox>
+    <CodeContractsRedundantTests>True</CodeContractsRedundantTests>
+    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
+    <CodeContractsMissingPublicEnsuresAsWarnings>False</CodeContractsMissingPublicEnsuresAsWarnings>
+    <CodeContractsInferRequires>True</CodeContractsInferRequires>
+    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
+    <CodeContractsInferEnsuresAutoProperties>True</CodeContractsInferEnsuresAutoProperties>
+    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
+    <CodeContractsSuggestAssumptionsForCallees>False</CodeContractsSuggestAssumptionsForCallees>
+    <CodeContractsSuggestRequires>False</CodeContractsSuggestRequires>
+    <CodeContractsNecessaryEnsures>True</CodeContractsNecessaryEnsures>
+    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
+    <CodeContractsSuggestReadonly>True</CodeContractsSuggestReadonly>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsSQLServerOption />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
+    <CodeContractsSkipAnalysisIfCannotConnectToCache>False</CodeContractsSkipAnalysisIfCannotConnectToCache>
+    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
+    <CodeContractsBeingOptimisticOnExternal>True</CodeContractsBeingOptimisticOnExternal>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeContractsEnableRuntimeChecking>False</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>False</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>False</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>False</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>False</CodeContractsCacheAnalysisResults>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="adodb, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DataCommander\Foreign\Binaries\adodb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.Word, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DataCommander\Foreign\Binaries\Microsoft.Office.Interop.Word.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web">
+      <Name>System.Web</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AdoDB.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AsyncDataAdapterCommand.cs" />
+    <Compile Include="Connection\ConnectionStringKeyword.cs" />
+    <Compile Include="Connection\DbConnectionStringBuilderExtensions.cs" />
+    <Compile Include="Connection\InfoMessageFactory.cs" />
+    <Compile Include="DataCommanderApplication.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Connection\DatabaseChangedEventArgs.cs" />
+    <Compile Include="Connection\DataRowSelector.cs" />
+    <Compile Include="Connection\InfoMessage.cs" />
+    <Compile Include="Connection\InfoMessageEventHandler.cs" />
+    <Compile Include="Connection\InfoMessageSeverity.cs" />
+    <Compile Include="GetCompletionResponse.cs" />
+    <Compile Include="IAsyncDataAdapter.cs" />
+    <Compile Include="IDataReaderHelper.cs" />
+    <Compile Include="IDbConnectionStringBuilder.cs" />
+    <Compile Include="IObjectName.cs" />
+    <Compile Include="IQueryForm.cs" />
+    <Compile Include="IStringMatcher.cs" />
+    <Compile Include="ITreeNode.cs" />
+    <Compile Include="ObjectName.cs" />
+    <Compile Include="OptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OptionsForm.Designer.cs">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProviderName.cs" />
+    <Compile Include="DataParameterBase.cs" />
+    <Compile Include="FieldNamespace\BinaryDataFieldReader.cs" />
+    <Compile Include="FieldNamespace\BooleanDataFieldReader.cs" />
+    <Compile Include="FieldNamespace\BooleanField.cs" />
+    <Compile Include="FieldNamespace\DateTimeOffsetField.cs" />
+    <Compile Include="FieldNamespace\DateTimeOffsetDataFieldReader.cs" />
+    <Compile Include="FieldNamespace\DateTimeDataFieldReader.cs" />
+    <Compile Include="FieldNamespace\SingleField.cs" />
+    <Compile Include="FieldNamespace\StreamField.cs" />
+    <Compile Include="FieldNamespace\StreamFieldDataReader.cs" />
+    <Compile Include="IKeyboardHandler.cs" />
+    <Compile Include="IObjectExplorer.cs" />
+    <Compile Include="IProvider.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AsyncDataAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FieldNamespace\BinaryField.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="QueryConfiguration\Parser.cs" />
+    <Compile Include="Query\ButtonState.cs" />
+    <Compile Include="ColorTheme.cs" />
+    <Compile Include="Query\CompletionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Connection\ConnectionBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Connection\ConnectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Connection\ConnectionProperties.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Connection\ConnectionStringBuilderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Connection\ConnectionStringBuilderForm.Designer.cs">
+      <DependentUpon>ConnectionStringBuilderForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Query\ItemSelectedEventArgs.cs" />
+    <Compile Include="Query\ListBoxItem.cs" />
+    <Compile Include="Query\QueryFormStaticMethods.cs" />
+    <Compile Include="Query\TokenIterator.cs" />
+    <Compile Include="Query\TokenType.cs" />
+    <Compile Include="Query\WordDocumentCreator.cs" />
+    <Compile Include="ResultWriter\BooleanDataWriter.cs" />
+    <Compile Include="ResultWriter\DataViewProperties.cs" />
+    <Compile Include="ResultWriter\DataWriterBase.cs" />
+    <Compile Include="ResultWriter\DateTimeDataWriter.cs" />
+    <Compile Include="ResultWriter\DecimalDataWriter.cs" />
+    <Compile Include="ResultWriter\DoubleBufferedDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ResultWriter\ExcelResultWriter.cs" />
+    <Compile Include="ResultWriter\FieldType.cs" />
+    <Compile Include="ResultWriter\FieldTypeDictionary.cs" />
+    <Compile Include="ResultWriter\HtmlEntity.cs" />
+    <Compile Include="ResultWriter\MyDataObject.cs" />
+    <Compile Include="QueryConfiguration\Query.cs" />
+    <Compile Include="ResultWriter\SqlBulkCopyResultWriter.cs" />
+    <Compile Include="ResultWriter\CopyResultWriter.cs" />
+    <Compile Include="ResultWriter\DataGridViewResultWriter.cs" />
+    <Compile Include="ResultWriter\DataSetResultWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ResultWriter\DataTableEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FieldNamespace\DateTimeField.cs" />
+    <Compile Include="FieldNamespace\DecimalField.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FieldNamespace\DecimalString.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FieldNamespace\DefaultDataFieldReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FieldNamespace\DoubleField.cs" />
+    <Compile Include="ResultWriter\DataViewPropertiesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ResultWriter\DataViewPropertiesForm.Designer.cs">
+      <DependentUpon>DataViewPropertiesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ResultWriter\FileResultWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\FindTextForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Query\GotoLineForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ResultWriter\HtmlFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ResultWriter\HtmlTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FieldNamespace\IDataFieldReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IStandardOutput.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Query\MemberListBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="NativeMethods.cs" />
+    <Compile Include="OleDbHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Connection\OpenConnectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Connection\PasswordForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProviderFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\QueryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Query\QueryTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ResultWriter\InsertScriptFileWriter.cs" />
+    <Compile Include="ResultWriter\IResultWriter.cs" />
+    <Compile Include="ResultWriter\LogResultWriter.cs" />
+    <Compile Include="ResultWriter\SqlCeResultWriter.cs" />
+    <Compile Include="ResultWriter\SQLiteResultWriter.cs" />
+    <Compile Include="ResultWriter\StringDataWriter.cs" />
+    <Compile Include="SqlBulkCopyAsyncDataAdapter.cs" />
+    <Compile Include="SqlObject.cs" />
+    <Compile Include="SqlObjectTypes.cs" />
+    <Compile Include="SqlParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FieldNamespace\SingleFieldDataReader.cs" />
+    <Compile Include="StandardOutput.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FieldNamespace\StringField.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Statement.cs" />
+    <Compile Include="StringMatcher.cs" />
+    <Compile Include="Query\TableStyle.cs" />
+    <Compile Include="ResultWriter\TextResultWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\Token.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TextBoxWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsForm.resx">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Query\CompletionForm.resx">
+      <DependentUpon>CompletionForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Connection\ConnectionForm.resx">
+      <DependentUpon>ConnectionForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Connection\ConnectionStringBuilderForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ConnectionStringBuilderForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResultWriter\DataTableEditor.resx">
+      <DependentUpon>DataTableEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Query\FindTextForm.resx">
+      <DependentUpon>FindTextForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Query\GotoLineForm.resx">
+      <DependentUpon>GotoLineForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResultWriter\DataViewPropertiesForm.resx">
+      <DependentUpon>DataViewPropertiesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResultWriter\HtmlTextBox.resx">
+      <DependentUpon>HtmlTextBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Query\MemberListBox.resx">
+      <DependentUpon>MemberListBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Connection\OpenConnectionForm.resx">
+      <DependentUpon>OpenConnectionForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Connection\PasswordForm.resx">
+      <DependentUpon>PasswordForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Query\QueryForm.resx">
+      <DependentUpon>QueryForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Query\QueryTextBox.resx">
+      <DependentUpon>QueryTextBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="EPPlus">
+      <Version>4.5.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.SqlServer.Compact">
+      <Version>4.0.8876.1</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>11.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="System.Data.SQLite.Core">
+      <Version>1.0.109.1</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.Assertions\Foundation.Assertions.csproj">
+      <Project>{3640355a-6d7c-45b4-8377-1d011dafd8aa}</Project>
+      <Name>Foundation.Assertions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.Collections\Foundation.Collections.csproj">
+      <Project>{61B48D70-B14F-462C-8A07-E9DB585D3869}</Project>
+      <Name>Foundation.Collections</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.Configuration\Foundation.Configuration.csproj">
+      <Project>{513d0094-7d6b-4453-9d43-23223c51ec4c}</Project>
+      <Name>Foundation.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.Core\Foundation.Core.csproj">
+      <Project>{5b3a35c4-cdc3-4ce6-afde-41f980a5a7ec}</Project>
+      <Name>Foundation.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.Data\Foundation.Data.csproj">
+      <Project>{34f913bc-edee-4385-bae6-c650a0e21878}</Project>
+      <Name>Foundation.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.Diagnostics\Foundation.Diagnostics.csproj">
+      <Project>{07E1E003-0877-48E3-81F4-3E0E5ED8CE69}</Project>
+      <Name>Foundation.Diagnostics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.Linq\Foundation.Linq.csproj">
+      <Project>{e854b2e4-88fc-4fdd-a62e-09a5936d9531}</Project>
+      <Name>Foundation.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.Log\Foundation.Log.csproj">
+      <Project>{6f50a714-af20-480e-a6ca-548ab4e27e28}</Project>
+      <Name>Foundation.Log</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.NetFramework-4.7.1\Foundation.NetFramework-4.7.1.csproj">
+      <Project>{b8934b63-d579-4ee8-b352-13134eb8cc54}</Project>
+      <Name>Foundation.NetFramework-4.7.1</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.Text\Foundation.Text.csproj">
+      <Project>{c987a1b0-f61d-4985-9bed-7e4c36c7f90e}</Project>
+      <Name>Foundation.Text</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.Threading\Foundation.Threading.csproj">
+      <Project>{AB3458F4-97B4-42E5-9E48-FA001AE29A2E}</Project>
+      <Name>Foundation.Threading</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>
