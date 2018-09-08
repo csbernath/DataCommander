@@ -5,16 +5,14 @@ using Foundation.Assertions;
 
 namespace Foundation.Configuration
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class ConfigurationNodeName
     {
-        private static string FromTypeDelimitedName(string name)
+        public static string FromType(Type type)
         {
-            Assert.IsNotNull(name);
+            Assert.IsNotNull(type, nameof(type));
 
-            var nodeName = name.Replace(Type.Delimiter, ConfigurationNode.Delimiter);
+            var name = type.FullName;
+            var nodeName = FromTypeDelimitedName(name);
             return nodeName;
         }
 
@@ -27,12 +25,24 @@ namespace Foundation.Configuration
             return method;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="trace"></param>
-        /// <param name="frameIndex"></param>
-        /// <returns></returns>
+        internal static string FromMethod(MethodBase method)
+        {
+            Assert.IsNotNull(method, nameof(method));
+
+            var name = method.DeclaringType.FullName + Type.Delimiter + method.Name;
+            var nodeName = FromTypeDelimitedName(name);
+            return nodeName;
+        }
+
+        internal static string FromMethod(StackTrace trace, int frameIndex)
+        {
+            Assert.IsNotNull(trace, nameof(trace));
+
+            var method = GetMethod(trace, frameIndex);
+            var nodeName = FromMethod(method);
+            return nodeName;
+        }
+
         internal static string FromNamespace(StackTrace trace, int frameIndex)
         {
             Assert.IsNotNull(trace);
@@ -43,23 +53,9 @@ namespace Foundation.Configuration
             return nodeName;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static string FromType(Type type)
-        {
-            Assert.IsNotNull(type);
-
-            var name = type.FullName;
-            var nodeName = FromTypeDelimitedName(name);
-            return nodeName;
-        }
-
         internal static string FromType(StackTrace trace, int frameIndex)
         {
-            Assert.IsNotNull(trace);
+            Assert.IsNotNull(trace, nameof(trace));
 
             var method = GetMethod(trace, frameIndex);
             var type = method.DeclaringType;
@@ -67,21 +63,11 @@ namespace Foundation.Configuration
             return nodeName;
         }
 
-        internal static string FromMethod(MethodBase method)
+        private static string FromTypeDelimitedName(string name)
         {
-            Assert.IsNotNull(method);
+            Assert.IsNotNull(name, nameof(name));
 
-            var name = method.DeclaringType.FullName + Type.Delimiter + method.Name;
-            var nodeName = FromTypeDelimitedName(name);
-            return nodeName;
-        }
-
-        internal static string FromMethod(StackTrace trace, int frameIndex)
-        {
-            Assert.IsNotNull(trace);
-
-            var method = GetMethod(trace, frameIndex);
-            var nodeName = FromMethod(method);
+            var nodeName = name.Replace(Type.Delimiter, ConfigurationNode.Delimiter);
             return nodeName;
         }
     }

@@ -24,7 +24,7 @@ namespace Foundation
         /// 
         /// </summary>
         /// <param name="increment">increment interval in milliseconds</param>
-        /// <param name="adjustment">adjustement interval in millseconds</param>
+        /// <param name="adjustment">adjustment interval in milliseconds</param>
         public UniversalTime(int increment, int adjustment)
         {
             FoundationContract.Requires<ArgumentOutOfRangeException>(increment >= 0);
@@ -51,7 +51,7 @@ namespace Foundation
 
         /// <summary>
         /// Gets the current date and time on this computer, expressed as the local time.
-        /// The system clock resolution can be 1.000 - 15.600 millseconds.
+        /// The system clock resolution can be 1.000 - 15.600 milliseconds.
         /// </summary>
         public DateTime UtcNow
         {

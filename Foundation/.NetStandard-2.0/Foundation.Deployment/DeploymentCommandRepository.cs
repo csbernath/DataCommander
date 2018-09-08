@@ -44,9 +44,8 @@ namespace Foundation.Deployment
 
         private static string GetFileName(string applicationName)
         {
-            var locallApplicationDataDirectory =
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            var directory = Path.Combine(locallApplicationDataDirectory, applicationName);
+            var localApplicationDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            var directory = Path.Combine(localApplicationDataDirectory, applicationName);
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
 

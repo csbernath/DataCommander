@@ -39,17 +39,6 @@ namespace Foundation.Diagnostics
 
         #region Public Methods
 
-        public static WindowsVersionInfo GetWindowsVersionInfo()
-        {
-            using (var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion"))
-            {
-                var productName = (string) key.GetValue("ProductName");
-                var releaseId = (string) key.GetValue("ReleaseId");
-                var currentBuild = (string) key.GetValue("CurrentBuild");
-                return new WindowsVersionInfo(productName, releaseId, currentBuild);
-            }
-        }
-
         public static int GetDotNetFrameworkRelease()
         {
             using (var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full"))
@@ -57,80 +46,6 @@ namespace Foundation.Diagnostics
                 var release = (int) key.GetValue("Release");
                 return release;
             }
-        }
-
-        public static string GetDotNetFrameworkVersion(int release)
-        {
-            string version;
-
-            switch (release)
-            {
-                #region 4.5
-
-                case 378389:
-                    version = "4.5";
-                    break;
-
-                case 378675:
-                    version = "4.5.1 (server)";
-                    break;
-
-                case 378758:
-                    version = "4.5.1 (client)";
-                    break;
-
-                case 379893:
-                    version = "4.5.2";
-                    break;
-
-                #endregion
-
-                #region 4.6
-
-                case 394254:
-                    version = "4.6.1 (Windows 10)";
-                    break;
-
-                case 394271:
-                    version = "4.6.1";
-                    break;
-
-                case 394802:
-                    version = "4.6.2 (Windows 10 Anniversary Update)";
-                    break;
-
-                case 394806:
-                    version = "4.6.2";
-                    break;
-
-                #endregion
-
-                #region 4.7
-
-                case 460798:
-                    version = "4.7 (Windows 10 Creators Update)";
-                    break;
-
-                case 460805:
-                    version = "4.7";
-                    break;
-
-                case 461308:
-                    version = "4.7.1 (Windows 10 Fall Creators Update 1709)";
-                    break;
-
-                case 461808:
-                    version = "4.7.2 (Windows 10 April 2018 Update)";
-                    break;
-
-                #endregion
-
-                default:
-                    version = null;
-                    break;
-            }
-
-            return version;
         }
 
         public static string GetEnvironmentInfo()
@@ -141,8 +56,8 @@ namespace Foundation.Diagnostics
             var tickCountString = $"{tickCount} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";
             var workingSet = Environment.WorkingSet;
             var dotNetFrameworkRelease = GetDotNetFrameworkRelease();
-            var dotNetFrameworkVersion = GetDotNetFrameworkVersion(dotNetFrameworkRelease);
-            var windowsVersionInfo = GetWindowsVersionInfo();
+            DotNetFrameworkVersionStore.TryGet(dotNetFrameworkRelease, out var dotNetFrameworkVersion);
+            var windowsVersionInfo = WindowsVersionInfo.Get();
 
             var message = $@"Environment information
 MachineName:            {Environment.MachineName}

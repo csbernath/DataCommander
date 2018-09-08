@@ -89,7 +89,7 @@ namespace Foundation.Configuration
     /// </remarks>
     public sealed class ConfigurationSection
     {
-        private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof (ConfigurationSection));
+        private static readonly ILog Log = InternalLogFactory.Instance.GetTypeLog(typeof(ConfigurationSection));
         private int _changed;
 
         /// <summary>
@@ -104,10 +104,6 @@ namespace Foundation.Configuration
             Initialize();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="configFileName"></param>
         public ConfigurationSection(string configFileName)
         {
             ConfigFileName = configFileName;
@@ -115,9 +111,6 @@ namespace Foundation.Configuration
             Initialize();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public static string DefaultSectionName
         {
             get
@@ -132,14 +125,8 @@ namespace Foundation.Configuration
         /// </summary>
         public event EventHandler Changed;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public ConfigurationNode RootNode { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public ConfigurationNode CurrentNamespace
         {
             get
@@ -152,7 +139,7 @@ namespace Foundation.Configuration
         }
 
         /// <summary>
-        /// Gets the node correspoding to the caller's type.
+        /// Gets the node corresponding to the caller's type.
         /// </summary>
         public ConfigurationNode CurrentType
         {
@@ -184,14 +171,8 @@ namespace Foundation.Configuration
         /// </summary>
         public string ConfigFileName { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public string SectionName { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsFileSystemWatcherEnabled { get; private set; }
 
         private void Check(string nodeName, ConfigurationNode node)
@@ -209,42 +190,23 @@ namespace Foundation.Configuration
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="nodeName"></param>
-        /// <param name="throwOnError"></param>
-        /// <returns></returns>
         public ConfigurationNode SelectNode(string nodeName, bool throwOnError)
         {
             if (_changed != 0)
             {
                 lock (this)
                 {
-                    ConfigurationNode rootNode;
-                    StringCollection fileNames;
-                    Load(out rootNode, out fileNames);
+                    Load(out var rootNode, out _);
                     RootNode = rootNode;
                 }
 
                 Interlocked.Exchange(ref _changed, 0);
             }
 
-            ConfigurationNode node;
-
-            if (RootNode != null)
-            {
-                node = RootNode.SelectNode(nodeName);
-            }
-            else
-            {
-                node = null;
-            }
+            var node = RootNode != null ? RootNode.SelectNode(nodeName) : null;
 
             if (throwOnError)
-            {
                 Check(nodeName, node);
-            }
 
             return node;
         }
@@ -255,8 +217,7 @@ namespace Foundation.Configuration
 
             try
             {
-                ConfigurationNode rootNode = null;
-                Load(out rootNode, out fileNames);
+                Load(out var rootNode, out fileNames);
                 RootNode = rootNode;
             }
             catch (Exception e)
@@ -291,9 +252,7 @@ namespace Foundation.Configuration
             Interlocked.Increment(ref _changed);
 
             if (Changed != null)
-            {
                 Changed(this, e);
-            }
         }
 
         private void Load(out ConfigurationNode rootNode, out StringCollection fileNames)

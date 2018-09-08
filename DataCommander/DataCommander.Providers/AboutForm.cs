@@ -19,9 +19,9 @@ namespace DataCommander.Providers
             var path = assembly.Location;
             var lastWriteTime = File.GetLastWriteTime(path);
             var dotNetFrameworkRelease = AppDomainMonitor.GetDotNetFrameworkRelease();
-            var dotNetFrameworkVersion = AppDomainMonitor.GetDotNetFrameworkVersion(dotNetFrameworkRelease);
+            DotNetFrameworkVersionStore.TryGet(dotNetFrameworkRelease, out var dotNetFrameworkVersion);
             var targetFrameworkAttribute = assembly.GetCustomAttribute<TargetFrameworkAttribute>();
-            var windowsVersionInfo = AppDomainMonitor.GetWindowsVersionInfo();
+            var windowsVersionInfo = WindowsVersionInfo.Get();
 
             var text =
                 $@"

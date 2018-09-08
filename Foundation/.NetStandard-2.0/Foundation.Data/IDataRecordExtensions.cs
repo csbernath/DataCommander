@@ -4,10 +4,11 @@ using Foundation.Assertions;
 
 namespace Foundation.Data
 {
-    public static class DataRecordExtensions
+    public static class IDataRecordExtensions
     {
         public static byte[] GetBytes(this IDataRecord dataRecord, int fieldIndex)
         {
+            Assert.IsNotNull(dataRecord, nameof(dataRecord));
             var valueObject = dataRecord.GetValue(fieldIndex);
             var value = (byte[]) valueObject;
             return value;
@@ -15,8 +16,7 @@ namespace Foundation.Data
 
         public static bool? GetNullableBoolean(this IDataRecord dataRecord, int fieldIndex)
         {
-            Assert.IsNotNull(dataRecord);
-
+            Assert.IsNotNull(dataRecord, nameof(dataRecord));
             return dataRecord.IsDBNull(fieldIndex)
                 ? (bool?) null
                 : dataRecord.GetBoolean(fieldIndex);
@@ -24,8 +24,7 @@ namespace Foundation.Data
 
         public static DateTime? GetNullableDateTime(this IDataRecord dataRecord, int fieldIndex)
         {
-            Assert.IsNotNull(dataRecord);
-
+            Assert.IsNotNull(dataRecord, nameof(dataRecord));
             return dataRecord.IsDBNull(fieldIndex)
                 ? (DateTime?) null
                 : dataRecord.GetDateTime(fieldIndex);
@@ -33,8 +32,7 @@ namespace Foundation.Data
 
         public static decimal? GetNullableDecimal(this IDataRecord dataRecord, int fieldIndex)
         {
-            Assert.IsNotNull(dataRecord);
-
+            Assert.IsNotNull(dataRecord, nameof(dataRecord));
             return dataRecord.IsDBNull(fieldIndex)
                 ? (decimal?) null
                 : dataRecord.GetDecimal(fieldIndex);
@@ -42,8 +40,7 @@ namespace Foundation.Data
 
         public static Guid? GetNullableGuid(this IDataRecord dataRecord, int fieldIndex)
         {
-            Assert.IsNotNull(dataRecord);
-
+            Assert.IsNotNull(dataRecord, nameof(dataRecord));
             return dataRecord.IsDBNull(fieldIndex)
                 ? (Guid?) null
                 : dataRecord.GetGuid(fieldIndex);
@@ -51,8 +48,7 @@ namespace Foundation.Data
 
         public static short? GetNullableInt16(this IDataRecord dataRecord, int fieldIndex)
         {
-            Assert.IsNotNull(dataRecord);
-
+            Assert.IsNotNull(dataRecord, nameof(dataRecord));
             return dataRecord.IsDBNull(fieldIndex)
                 ? (short?) null
                 : dataRecord.GetInt16(fieldIndex);
@@ -60,8 +56,7 @@ namespace Foundation.Data
 
         public static int? GetNullableInt32(this IDataRecord dataRecord, int fieldIndex)
         {
-            Assert.IsNotNull(dataRecord);
-
+            Assert.IsNotNull(dataRecord, nameof(dataRecord));
             return dataRecord.IsDBNull(fieldIndex)
                 ? (int?) null
                 : dataRecord.GetInt32(fieldIndex);
@@ -69,6 +64,7 @@ namespace Foundation.Data
 
         public static string GetStringOrDefault(this IDataRecord dataRecord, int fieldIndex)
         {
+            Assert.IsNotNull(dataRecord, nameof(dataRecord));
             return dataRecord.IsDBNull(fieldIndex)
                 ? null
                 : dataRecord.GetString(fieldIndex);

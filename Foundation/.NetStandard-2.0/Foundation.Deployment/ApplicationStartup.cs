@@ -32,8 +32,8 @@ namespace Foundation.Deployment
 
         public Task Update()
         {
-            var entryAsembly = Assembly.GetEntryAssembly();
-            var title = GetTitle(entryAsembly);
+            var entryAssembly = Assembly.GetEntryAssembly();
+            var title = GetTitle(entryAssembly);
             var applicationName = title;
 
             var repository = new DeploymentCommandRepository(_serializer);
@@ -151,8 +151,8 @@ namespace Foundation.Deployment
 
         private void ScheduleCheckForUpdates()
         {
-            var entryAsembly = Assembly.GetEntryAssembly();
-            var title = GetTitle(entryAsembly);
+            var entryAssembly = Assembly.GetEntryAssembly();
+            var title = GetTitle(entryAssembly);
             var applicationName = title;
             var now = UniversalTime.Default.UtcNow;
             var tomorrow = now.AddDays(1);
