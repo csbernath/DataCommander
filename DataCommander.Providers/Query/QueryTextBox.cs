@@ -630,14 +630,22 @@ namespace DataCommander.Providers.Query
         {
             var dataObject = e.Data;
 
+            var formats = e.Data.GetFormats();
+
             if (GetDataPresent(dataObject, DataFormats.UnicodeText))
             {
                 var text = (string)GetData(dataObject, DataFormats.UnicodeText);
-                var startIndex = RichTextBox.SelectionStart;
-                RichTextBox.SelectionLength = 0;
-                RichTextBox.SelectedText = text;
-                RichTextBox.SelectionStart = startIndex + text.Length;
-                RichTextBox.Focus();
+                var path = text;
+                if (File.Exists(path))
+                    DataCommanderApplication.Instance.MainForm.LoadFiles(path.ItemToArray());
+                else
+                {
+                    var startIndex = RichTextBox.SelectionStart;
+                    RichTextBox.SelectionLength = 0;
+                    RichTextBox.SelectedText = text;
+                    RichTextBox.SelectionStart = startIndex + text.Length;
+                    RichTextBox.Focus();
+                }
             }
             else if (GetDataPresent(dataObject, DataFormats.FileDrop))
             {
