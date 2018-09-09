@@ -4,59 +4,23 @@ using System.Text;
 
 namespace Foundation.Diagnostics
 {
-    /// <summary>
-    /// Summary description for TraceWriter.
-    /// </summary>
     public class TraceWriter : TextWriter
     {
         private static TraceWriter _instance;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public static TraceWriter Instance
         {
             get
             {
                 if (_instance == null)
-                {
                     _instance = new TraceWriter();
-                }
-
                 return _instance;
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override Encoding Encoding => null;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="c"></param>
-        public override void Write(char c)
-        {
-            Trace.Write(c);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="str"></param>
-        public override void Write(string str)
-        {
-            Trace.Write(str);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="str"></param>
-        public override void WriteLine(string str)
-        {
-            Trace.WriteLine(str);
-        }
+        public override void Write(char c) => Trace.Write(c);
+        public override void Write(string str) => Trace.Write(str);
+        public override void WriteLine(string str) => Trace.WriteLine(str);
     }
 }

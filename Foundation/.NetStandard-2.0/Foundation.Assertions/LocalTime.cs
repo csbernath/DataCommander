@@ -3,9 +3,6 @@ using Foundation.Diagnostics.Contracts;
 
 namespace Foundation
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class LocalTime : IDateTimeProvider
     {
         private readonly int _increment;
@@ -14,11 +11,6 @@ namespace Foundation
         private int _lastTickCount;
         private DateTime _lastDateTime;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="increment"></param>
-        /// <param name="adjustment"></param>
         public LocalTime(int increment, int adjustment)
         {
             FoundationContract.Requires<ArgumentOutOfRangeException>(increment >= 0);
@@ -31,14 +23,11 @@ namespace Foundation
             _lastDateTime = DateTime.Now;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public static LocalTime Default { get; } = new LocalTime(increment: 16, adjustment: 1000);
 
         /// <summary>
         /// Gets the current date and time on this computer, expressed as the local time.
-        /// The system clock resolution can be 1.000 - 15.600 millseconds.
+        /// The system clock resolution can be 1.000 - 15.600 milliseconds.
         /// </summary>
         public DateTime Now
         {

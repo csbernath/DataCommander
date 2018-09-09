@@ -4,9 +4,6 @@ using System.Text;
 
 namespace Foundation.Diagnostics
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public struct StopwatchTimeSpan
     {
         #region Public Fields
@@ -14,17 +11,17 @@ namespace Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public static readonly double TicksPerTick = (double)TimeSpan.TicksPerSecond/Stopwatch.Frequency;
+        public static readonly double TicksPerTick = (double) TimeSpan.TicksPerSecond / Stopwatch.Frequency;
 
         /// <summary>
         /// 
         /// </summary>
-        public static readonly double TicksPerMicrosecond = Stopwatch.Frequency/1000000.0;
+        public static readonly double TicksPerMicrosecond = Stopwatch.Frequency / 1000000.0;
 
         /// <summary>
         /// 
         /// </summary>
-        public static readonly double TicksPerMillisecond = Stopwatch.Frequency/1000.0;
+        public static readonly double TicksPerMillisecond = Stopwatch.Frequency / 1000.0;
 
         /// <summary>
         /// 
@@ -34,105 +31,49 @@ namespace Foundation.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        public static readonly long TicksPerMinute = 60*TicksPerSecond;
+        public static readonly long TicksPerMinute = 60 * TicksPerSecond;
 
         /// <summary>
         /// 
         /// </summary>
-        public static readonly long TicksPerHour = 60*TicksPerMinute;
+        public static readonly long TicksPerHour = 60 * TicksPerMinute;
 
         /// <summary>
         /// 
         /// </summary>
-        public static readonly long TicksPerDay = 24*TicksPerHour;
+        public static readonly long TicksPerDay = 24 * TicksPerHour;
 
         #endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ticks"></param>
-        public StopwatchTimeSpan(long ticks)
-        {
-            Ticks = ticks;
-        }
+        public StopwatchTimeSpan(long ticks) => Ticks = ticks;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="timeSpan"></param>
-        public StopwatchTimeSpan(TimeSpan timeSpan)
-        {
-            Ticks = ToTicks(timeSpan);
-        }
+        public StopwatchTimeSpan(TimeSpan timeSpan) => Ticks = ToTicks(timeSpan);
 
-        /// <summary>
-        /// 
-        /// </summary>
         public long Ticks { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public TimeSpan Elapsed => ToTimeSpan(Ticks);
+        public double TotalHours => (double) Ticks / TicksPerHour;
+        public double TotalMinutes => (double) Ticks / TicksPerMinute;
+        public double TotalSeconds => (double) Ticks / TicksPerSecond;
+        public double TotalMilliseconds => (double) Ticks * 1000 / TicksPerSecond;
+        public double TotalMicroseconds => (double) Ticks * 1000000 / TicksPerSecond;
+        public double TotalNanoseconds => (double) Ticks * 1000000000 / TicksPerSecond;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public double TotalHours => (double)Ticks / TicksPerHour;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public double TotalMinutes => (double)Ticks / TicksPerMinute;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public double TotalSeconds => (double)Ticks / TicksPerSecond;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public double TotalMilliseconds => (double)Ticks * 1000/TicksPerSecond;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public double TotalMicroseconds => (double)Ticks * 1000000/TicksPerSecond;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public double TotalNanoseconds => (double)Ticks * 1000000000/TicksPerSecond;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ticks"></param>
-        /// <param name="multiplier"></param>
-        /// <returns></returns>
         public static int ToInt32(long ticks, int multiplier)
         {
-            var d = (double)multiplier*ticks/TicksPerSecond;
-            var int32 = (int)Math.Round(d);
+            var d = (double) multiplier * ticks / TicksPerSecond;
+            var int32 = (int) Math.Round(d);
             return int32;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ticks"></param>
-        /// <param name="multiplier"></param>
-        /// <returns></returns>
         public static long ToInt64(long ticks, long multiplier)
         {
-            var d = (double)multiplier*ticks/Stopwatch.Frequency;
-            var int64 = (long)Math.Round(d);
+            var d = (double) multiplier * ticks / Stopwatch.Frequency;
+            var int64 = (long) Math.Round(d);
             return int64;
         }
 
-        private static readonly long[] Power10 = new [] 
+        private static readonly long[] Power10 = new[]
         {
             1,
             10,
@@ -152,106 +93,69 @@ namespace Foundation.Diagnostics
             1000000000000000
         };
 
-        private static long Pow10(int pow)
-        {
-            return Power10[pow];
-        }
+        private static long Pow10(int pow) => Power10[pow];
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ticks"></param>
-        /// <param name="scale"></param>
-        /// <returns></returns>
         public static string ToString(long ticks, int scale)
         {
-            var totalSeconds = ticks/TicksPerSecond;
+            var totalSeconds = ticks / TicksPerSecond;
             string fractionString = null;
 
             if (scale > 0)
             {
-                var fractionTicks = ticks - (totalSeconds*TicksPerSecond);
+                var fractionTicks = ticks - (totalSeconds * TicksPerSecond);
                 var multiplier = Pow10(scale);
-                var fraction = (double)multiplier*fractionTicks/TicksPerSecond;
+                var fraction = (double) multiplier * fractionTicks / TicksPerSecond;
                 fraction = Math.Round(fraction);
-                var fractionInt64 = (long)fraction;
+                var fractionInt64 = (long) fraction;
                 if (fractionInt64 == multiplier)
                 {
                     fractionInt64 = 0;
                     totalSeconds++;
 
                 }
+
                 fractionString = $".{fractionInt64.ToString().PadLeft(scale, '0')}";
             }
 
-            var sb = new StringBuilder();
-            var days = ticks/TicksPerDay;
+            var stringBuilder = new StringBuilder();
+            var days = ticks / TicksPerDay;
 
             if (days != 0)
             {
-                totalSeconds -= DateTimeConstants.SecondsPerDay*days;
+                totalSeconds -= DateTimeConstants.SecondsPerDay * days;
 
-                sb.Append(days);
-                sb.Append('.');
+                stringBuilder.Append(days);
+                stringBuilder.Append('.');
             }
 
-            var hours = totalSeconds/3600;
-            var seconds = (int)(totalSeconds - (hours*3600));
-            var minutes = seconds/60;
-            seconds -= minutes*60;
+            var hours = totalSeconds / 3600;
+            var seconds = (int) (totalSeconds - (hours * 3600));
+            var minutes = seconds / 60;
+            seconds -= minutes * 60;
 
-            if (sb.Length > 0 || hours > 0)
+            if (stringBuilder.Length > 0 || hours > 0)
             {
-                sb.Append(hours.ToString().PadLeft(2, '0'));
-                sb.Append(':');
+                stringBuilder.Append(hours.ToString().PadLeft(2, '0'));
+                stringBuilder.Append(':');
             }
 
-            sb.Append(minutes.ToString().PadLeft(2, '0'));
-            sb.Append(':');
-            sb.Append(seconds.ToString().PadLeft(2, '0'));
+            stringBuilder.Append(minutes.ToString().PadLeft(2, '0'));
+            stringBuilder.Append(':');
+            stringBuilder.Append(seconds.ToString().PadLeft(2, '0'));
 
-            var s = $"{sb}{fractionString}";
+            var s = $"{stringBuilder}{fractionString}";
             return s;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="timeSpan"></param>
-        /// <returns></returns>
-        public static long ToTicks(TimeSpan timeSpan)
-        {
-            return (long)(timeSpan.TotalSeconds*Stopwatch.Frequency);
-        }
+        public static long ToTicks(TimeSpan timeSpan) => (long) (timeSpan.TotalSeconds * Stopwatch.Frequency);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="elapsed"></param>
-        /// <returns></returns>
         public static TimeSpan ToTimeSpan(long elapsed)
         {
-            var ticks = (long)(elapsed*TicksPerTick);
+            var ticks = (long) (elapsed * TicksPerTick);
             return new TimeSpan(ticks);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="scale"></param>
-        /// <returns></returns>
-        public string ToString(int scale)
-        {
-            return ToString(Ticks, scale);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return ToString(Ticks, 9);
-        }
+        public string ToString(int scale) => ToString(Ticks, scale);
+        public override string ToString() => ToString(Ticks, 9);
     }
 }
