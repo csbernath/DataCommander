@@ -141,43 +141,43 @@
       <Project>{31a30a80-d1b6-4867-a65e-188de9e912c8}</Project>
       <Name>DataCommander.Providers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.Assertions\Foundation.Assertions.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Assertions\Foundation.Assertions.csproj">
       <Project>{3640355A-6D7C-45B4-8377-1D011DAFD8AA}</Project>
       <Name>Foundation.Assertions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.Collections\Foundation.Collections.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Collections\Foundation.Collections.csproj">
       <Project>{61B48D70-B14F-462C-8A07-E9DB585D3869}</Project>
       <Name>Foundation.Collections</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.Configuration\Foundation.Configuration.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Configuration\Foundation.Configuration.csproj">
       <Project>{513D0094-7D6B-4453-9D43-23223C51EC4C}</Project>
       <Name>Foundation.Configuration</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.Core\Foundation.Core.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Core\Foundation.Core.csproj">
       <Project>{5B3A35C4-CDC3-4CE6-AFDE-41F980A5A7EC}</Project>
       <Name>Foundation.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.Data\Foundation.Data.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Data\Foundation.Data.csproj">
       <Project>{34f913bc-edee-4385-bae6-c650a0e21878}</Project>
       <Name>Foundation.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.Linq\Foundation.Linq.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Linq\Foundation.Linq.csproj">
       <Project>{e854b2e4-88fc-4fdd-a62e-09a5936d9531}</Project>
       <Name>Foundation.Linq</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.Log\Foundation.Log.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Log\Foundation.Log.csproj">
       <Project>{6F50A714-AF20-480E-A6CA-548AB4E27E28}</Project>
       <Name>Foundation.Log</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.NetFramework-4.7.1\Foundation.NetFramework-4.7.1.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\.NetFramework-4.7.1\Foundation.NetFramework-4.7.1.csproj">
       <Project>{b8934b63-d579-4ee8-b352-13134eb8cc54}</Project>
       <Name>Foundation.NetFramework-4.7.1</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.NetStandard-2.0\Foundation.NetStandard-2.0.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\.NetStandard-2.0\Foundation.NetStandard-2.0.csproj">
       <Project>{04996258-f3f5-4eec-9d3e-acae9726f93f}</Project>
       <Name>Foundation.NetStandard-2.0</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Foundation.Text\Foundation.Text.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Text\Foundation.Text.csproj">
       <Project>{C987A1B0-F61D-4985-9BED-7E4C36C7F90E}</Project>
       <Name>Foundation.Text</Name>
     </ProjectReference>
