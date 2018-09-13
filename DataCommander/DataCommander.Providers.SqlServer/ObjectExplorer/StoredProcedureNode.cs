@@ -5,8 +5,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using DataCommander.Providers.Query;
+using Foundation.Core;
 using Foundation.Data.SqlClient;
-using Foundation.Diagnostics;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {

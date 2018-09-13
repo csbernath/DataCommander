@@ -1,4 +1,4 @@
-﻿namespace Foundation
+﻿namespace Foundation.Core
 {
     public static class NotNullableExtensions
     {

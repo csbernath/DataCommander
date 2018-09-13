@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using Foundation;
 using Foundation.Assertions;
+using Foundation.Core;
 using Foundation.Data;
 using Microsoft.TeamFoundation.VersionControl.Client;
 

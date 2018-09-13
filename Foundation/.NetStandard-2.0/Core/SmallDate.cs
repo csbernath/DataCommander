@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using Foundation.Diagnostics.Contracts;
 
-namespace Foundation
+namespace Foundation.Core
 {
     /// <summary>
     /// 16 bit date type: 1900-01-01 - 2079-06-06
@@ -18,12 +18,7 @@ namespace Foundation
         public static readonly SmallDate MinValue = new SmallDate(ushort.MinValue);
         public static readonly SmallDate MaxValue = new SmallDate(ushort.MaxValue);
 
-        public SmallDate(ushort value)
-        {
-            _value = value;
-        }
-
-        public ushort Value => _value;
+        public SmallDate(ushort value) => _value = value;
 
         public SmallDate(DateTime dateTime)
         {
@@ -37,6 +32,7 @@ namespace Foundation
             _value = ToSmallDateValue(dateTime);
         }
 
+        public ushort Value => _value;
         public int Year => ToDateTime(_value).Year;
         public int Month => ToDateTime(_value).Month;
         public int Day => ToDateTime(_value).Day;

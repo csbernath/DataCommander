@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using Foundation;
 using Foundation.Core;
 using Foundation.Deployment;
 using Foundation.Windows.Forms;

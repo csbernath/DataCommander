@@ -12,7 +12,6 @@ namespace DataCommander.Providers.Connection
     using System.Windows.Forms;
     using System.Xml;
     using Foundation.Configuration;
-    using Foundation.Diagnostics;
     using Foundation.Linq;
     using Foundation.Windows.Forms;
     using ResultWriter;

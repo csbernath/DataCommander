@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 
-namespace Foundation.Diagnostics
+namespace Foundation.Core
 {
     public struct StopwatchTimeSpan
     {

@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Threading;
 using Foundation.Assertions;
 using Foundation.Core;
-using Foundation.Diagnostics;
 using Foundation.Log;
 
 namespace Foundation.Threading

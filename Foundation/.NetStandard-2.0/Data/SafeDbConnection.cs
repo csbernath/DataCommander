@@ -2,7 +2,7 @@
 using System.Data;
 using System.Diagnostics;
 using Foundation.Assertions;
-using Foundation.Diagnostics;
+using Foundation.Core;
 using Foundation.Log;
 
 namespace Foundation.Data

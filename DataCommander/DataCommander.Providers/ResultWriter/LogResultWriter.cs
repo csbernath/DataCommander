@@ -7,14 +7,11 @@ using System.Linq;
 using System.Text;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.QueryConfiguration;
-using Foundation;
 using Foundation.Assertions;
-using Foundation.Collections;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Data.DbQueryBuilding;
-using Foundation.Diagnostics;
 using Foundation.Linq;
 using Foundation.Log;
 

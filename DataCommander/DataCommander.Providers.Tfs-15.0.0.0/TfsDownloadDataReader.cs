@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.Query;
-using Foundation;
 using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Data;

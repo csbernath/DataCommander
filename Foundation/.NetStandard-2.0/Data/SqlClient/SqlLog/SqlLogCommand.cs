@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Text;
-using Foundation.Diagnostics;
+using Foundation.Core;
 
 namespace Foundation.Data.SqlClient.SqlLog
 {

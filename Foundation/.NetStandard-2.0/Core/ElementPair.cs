@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Foundation
+namespace Foundation.Core
 {
     public static class ElementPair
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using Foundation.Diagnostics;
+using Foundation.Core;
 
 namespace Foundation.Data.SqlClient.SqlLog
 {

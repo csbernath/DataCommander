@@ -6,9 +6,6 @@ using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Configuration
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class ConfigurationNode
     {
         /// <summary>
@@ -18,19 +15,12 @@ namespace Foundation.Configuration
 
         private int _index;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
         public ConfigurationNode(string name)
         {
             Name = name;
             HasName = name != null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public bool HasName { get; }
 
         /// <summary>
@@ -73,10 +63,6 @@ namespace Foundation.Configuration
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="childNode"></param>
         public void AddChildNode(ConfigurationNode childNode)
         {
             FoundationContract.Requires<ArgumentException>(childNode.Parent == null);
@@ -91,11 +77,6 @@ namespace Foundation.Configuration
             childNode.Parent = this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="childNode"></param>
         public void InsertChildNode(int index, ConfigurationNode childNode)
         {
             FoundationContract.Requires<ArgumentException>(childNode.Parent == null);
@@ -110,10 +91,6 @@ namespace Foundation.Configuration
             childNode.Parent = this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="childNode"></param>
         public void RemoveChildNode(ConfigurationNode childNode)
         {
             Assert.IsNotNull(childNode);
@@ -123,10 +100,6 @@ namespace Foundation.Configuration
             childNode.Parent = null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public ConfigurationNode Clone()
         {
             var clone = new ConfigurationNode(Name);
@@ -231,16 +204,12 @@ namespace Foundation.Configuration
             textWriter.WriteLine("[" + FullName + "]");
 
             foreach (var attribute in Attributes)
-            {
                 attribute.Write(textWriter);
-            }
 
             textWriter.WriteLine();
 
             foreach (var childNode in ChildNodes)
-            {
                 childNode.Write(textWriter);
-            }
         }
 
         /// <summary>

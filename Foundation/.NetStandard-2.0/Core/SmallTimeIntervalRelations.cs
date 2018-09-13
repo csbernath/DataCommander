@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Foundation
+namespace Foundation.Core
 {
     public static class SmallTimeIntervalRelations
     {

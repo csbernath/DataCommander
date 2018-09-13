@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Xml;
+using Foundation.Core;
 using Foundation.Diagnostics;
 using Foundation.InternalLog;
 using Foundation.Linq;

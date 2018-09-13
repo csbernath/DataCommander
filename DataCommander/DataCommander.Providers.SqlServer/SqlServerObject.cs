@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Foundation;
 using Foundation.Assertions;
+using Foundation.Core;
 using Foundation.Data.SqlClient;
 using Foundation.Diagnostics.Contracts;
 

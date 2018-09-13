@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
+using Foundation.Core;
 using Foundation.Deployment.Commands;
 using Foundation.Deployment.Events;
 

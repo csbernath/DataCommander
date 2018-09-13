@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml;
 using Foundation.Assertions;
+using Foundation.Core;
 
 namespace Foundation.Xml
 {

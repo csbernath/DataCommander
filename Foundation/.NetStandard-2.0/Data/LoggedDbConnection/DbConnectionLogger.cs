@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
 using Foundation.Assertions;
-using Foundation.Diagnostics;
+using Foundation.Core;
 using Foundation.Log;
 
 namespace Foundation.Data.LoggedDbConnection

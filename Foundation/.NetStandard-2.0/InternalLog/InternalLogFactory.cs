@@ -1,7 +1,6 @@
 ﻿using System;
 using Foundation.Core;
 using Foundation.DefaultLog;
-using Foundation.Diagnostics;
 using Foundation.Log;
 
 namespace Foundation.InternalLog
@@ -20,9 +19,6 @@ namespace Foundation.InternalLog
 
         string ILogFactory.FileName => null;
 
-        ILog ILogFactory.GetLog(string name)
-        {
-            return new InternalLog(_textLogWriter, LocalTime.Default, name);
-        }
+        ILog ILogFactory.GetLog(string name) => new InternalLog(_textLogWriter, LocalTime.Default, name);
     }
 }

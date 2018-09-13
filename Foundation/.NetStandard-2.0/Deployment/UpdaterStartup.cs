@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using Foundation.Assertions;
+using Foundation.Core;
 using Foundation.Deployment.Commands;
 
 namespace Foundation.Deployment

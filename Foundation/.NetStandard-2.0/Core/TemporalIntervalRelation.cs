@@ -1,4 +1,4 @@
-﻿namespace Foundation
+﻿namespace Foundation.Core
 {
     /// <summary>
     /// JAMES F. ALLEN: Maintaining Knowledge about Temporal Intervals

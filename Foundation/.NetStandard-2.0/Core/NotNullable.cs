@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Foundation
+namespace Foundation.Core
 {
     [DebuggerDisplay("{" + nameof(_value) + "}")]
     public struct NotNullable<T> where T : class

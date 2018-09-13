@@ -1,4 +1,5 @@
-﻿using Foundation.Log;
+﻿using Foundation.Core;
+using Foundation.Log;
 
 namespace DataCommander.Providers.Connection
 {
@@ -9,7 +10,6 @@ namespace DataCommander.Providers.Connection
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Forms;
-    using Foundation.Diagnostics;
     using Foundation.Windows.Forms;
     using Timer = System.Windows.Forms.Timer;
 

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using Foundation.Assertions;
+using Foundation.Core;
 using Foundation.Deployment.Commands;
 
 namespace Foundation.Deployment

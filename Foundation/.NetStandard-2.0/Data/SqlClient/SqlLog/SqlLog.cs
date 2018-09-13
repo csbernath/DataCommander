@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Foundation.Core;
-using Foundation.Diagnostics;
 using Foundation.Log;
 using Foundation.Threading;
 

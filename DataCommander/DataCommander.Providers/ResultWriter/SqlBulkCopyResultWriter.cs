@@ -13,7 +13,6 @@ namespace DataCommander.Providers.ResultWriter
     using System.Threading;
     using System.Threading.Tasks;
     using Connection;
-    using Foundation;
 
     internal sealed class SqlBulkCopyResultWriter : IResultWriter
     {

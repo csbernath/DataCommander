@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Foundation
+namespace Foundation.Core
 {
     public sealed class CurrentDirectoryChanger : IDisposable
     {

@@ -5,7 +5,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using Foundation.Diagnostics.Contracts;
 
-namespace Foundation
+namespace Foundation.Core
 {
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public struct SmallTimeInterval : IEquatable<SmallTimeInterval>, IComparable<SmallTimeInterval>

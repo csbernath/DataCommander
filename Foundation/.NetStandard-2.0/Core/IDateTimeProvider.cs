@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Foundation
+namespace Foundation.Core
 {
     public interface IDateTimeProvider
     {

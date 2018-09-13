@@ -13,7 +13,6 @@ namespace DataCommander.Providers.ResultWriter
     using System.Threading;
     using System.Threading.Tasks;
     using Connection;
-    using Foundation;
     using Foundation.Data;
     using Foundation.Linq;
 

@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace Foundation
+namespace Foundation.Core
 {
     public sealed class ReferenceCounter
     {

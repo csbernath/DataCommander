@@ -1,7 +1,7 @@
 ﻿using System;
 using Foundation.Assertions;
 
-namespace Foundation
+namespace Foundation.Core
 {
     public sealed class Disposer : IDisposable
     {

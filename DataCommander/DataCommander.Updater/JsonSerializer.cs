@@ -1,4 +1,4 @@
-﻿using Foundation;
+﻿using Foundation.Core;
 using Newtonsoft.Json;
 
 namespace DataCommander.Updater

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using Foundation.Diagnostics.Contracts;
 
-namespace Foundation
+namespace Foundation.Core
 {
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public struct SmallDateInterval

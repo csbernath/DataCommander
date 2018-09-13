@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Foundation
+namespace Foundation.Core
 {
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public struct MinuteSpan : IComparable<MinuteSpan>

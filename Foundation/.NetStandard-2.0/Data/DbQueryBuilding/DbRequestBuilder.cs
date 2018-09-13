@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Foundation.Assertions;
 using Foundation.Collections.ReadOnly;
+using Foundation.Core;
 using Foundation.Data.SqlClient;
 
 namespace Foundation.Data.DbQueryBuilding

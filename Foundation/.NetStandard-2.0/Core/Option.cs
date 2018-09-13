@@ -1,4 +1,4 @@
-﻿namespace Foundation
+﻿namespace Foundation.Core
 {
     public sealed class Option<T>
     {

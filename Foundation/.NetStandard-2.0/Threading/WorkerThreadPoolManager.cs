@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
-using Foundation.Diagnostics;
+using Foundation.Core;
 
 namespace Foundation.Threading
 {

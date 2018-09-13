@@ -14,7 +14,6 @@ using System.Xml;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.Query;
-using Foundation;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Data.SqlClient;

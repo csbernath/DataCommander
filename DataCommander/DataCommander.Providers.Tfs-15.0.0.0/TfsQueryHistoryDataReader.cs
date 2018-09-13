@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using Foundation;
 using Foundation.Assertions;
+using Foundation.Core;
 using Foundation.Data;
 using Microsoft.TeamFoundation.VersionControl.Client;
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using Foundation.Core;
 using Foundation.Data.SqlClient;
 using Foundation.Diagnostics.Contracts;
 
@@ -6,7 +7,6 @@ namespace DataCommander.Providers.PostgreSql
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Foundation;
 
     internal static class SqlServerObject
     {
