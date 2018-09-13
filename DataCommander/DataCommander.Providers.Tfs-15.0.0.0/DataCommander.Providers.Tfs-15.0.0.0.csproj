@@ -92,10 +92,6 @@
       <Project>{6F50A714-AF20-480E-A6CA-548AB4E27E28}</Project>
       <Name>Foundation.Log</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\.NetStandard-2.0\Foundation.NetStandard-2.0.csproj">
-      <Project>{04996258-f3f5-4eec-9d3e-acae9726f93f}</Project>
-      <Name>Foundation.NetStandard-2.0</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.TeamFoundationServer.ExtendedClient">
