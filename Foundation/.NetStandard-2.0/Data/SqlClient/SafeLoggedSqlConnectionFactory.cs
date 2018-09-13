@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Threading;
+using Foundation.Core;
 using Foundation.Data.SqlClient.SqlLoggedSqlConnection;
 using Foundation.Threading;
 

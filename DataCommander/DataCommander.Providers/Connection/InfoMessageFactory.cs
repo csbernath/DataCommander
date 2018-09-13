@@ -1,4 +1,5 @@
 ﻿using Foundation;
+using Foundation.Core;
 
 namespace DataCommander.Providers.Connection
 {

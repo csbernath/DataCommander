@@ -1,7 +1,7 @@
 ﻿using System;
 using Foundation.Diagnostics.Contracts;
 
-namespace Foundation
+namespace Foundation.Core
 {
     public sealed class LocalTime : IDateTimeProvider
     {

@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Foundation.Core;
 using Foundation.Threading;
 
 namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection

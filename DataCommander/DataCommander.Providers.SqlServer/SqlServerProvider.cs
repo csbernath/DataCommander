@@ -15,6 +15,7 @@ using DataCommander.Providers.SqlServer.FieldReader;
 using Foundation;
 using Foundation.Assertions;
 using Foundation.Configuration;
+using Foundation.Core;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 using Foundation.Linq;

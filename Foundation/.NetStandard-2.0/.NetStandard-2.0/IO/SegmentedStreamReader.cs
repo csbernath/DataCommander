@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Foundation.Assertions;
+using Foundation.Core;
 using Foundation.Diagnostics;
 using Foundation.Log;
 

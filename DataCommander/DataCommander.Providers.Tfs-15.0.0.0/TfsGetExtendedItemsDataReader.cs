@@ -7,6 +7,7 @@ using System.Linq;
 using DataCommander.Providers.Connection;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using DataCommander.Providers.Query;
+using Foundation.Core;
 
 namespace DataCommander.Providers.Tfs
 {

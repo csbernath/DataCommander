@@ -1,4 +1,5 @@
-﻿using Foundation.Data;
+﻿using Foundation.Core;
+using Foundation.Data;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
 

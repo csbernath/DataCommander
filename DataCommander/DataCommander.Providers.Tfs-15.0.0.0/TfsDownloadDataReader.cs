@@ -7,6 +7,7 @@ using DataCommander.Providers.Connection;
 using DataCommander.Providers.Query;
 using Foundation;
 using Foundation.Assertions;
+using Foundation.Core;
 using Foundation.Data;
 using Foundation.Log;
 using Microsoft.TeamFoundation.VersionControl.Client;

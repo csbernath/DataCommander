@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Providers.Connection;
 using Foundation;
+using Foundation.Core;
 using Oracle.ManagedDataAccess.Client;
 
 namespace DataCommander.Providers.Odp

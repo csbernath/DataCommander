@@ -17,6 +17,7 @@ using DataCommander.Providers.Query;
 using Foundation;
 using Foundation.Assertions;
 using Foundation.Configuration;
+using Foundation.Core;
 using Foundation.Data;
 using Foundation.Diagnostics;
 using Foundation.Linq;

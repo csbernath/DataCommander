@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics;
+using Foundation.Core;
 using Foundation.Diagnostics;
 
 namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection

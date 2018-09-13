@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Foundation.Core;
 
 namespace Foundation.Data.LoggedDbConnection
 {

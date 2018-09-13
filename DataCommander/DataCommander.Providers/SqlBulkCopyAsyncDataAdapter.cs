@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.ResultWriter;
 using Foundation;
+using Foundation.Core;
 
 namespace DataCommander.Providers
 {

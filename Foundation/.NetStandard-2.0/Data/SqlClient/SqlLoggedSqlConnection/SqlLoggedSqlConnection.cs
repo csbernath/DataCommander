@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using Foundation.Assertions;
+using Foundation.Core;
 
 namespace Foundation.Data.SqlClient.SqlLoggedSqlConnection
 {

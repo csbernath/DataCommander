@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using Foundation.Core;
 using Foundation.Data.SqlClient;
 using Foundation.IO;
 

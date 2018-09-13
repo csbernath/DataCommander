@@ -86,6 +86,10 @@
     <Compile Include="OracleProvider.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Core\Foundation.Core.csproj">
+      <Project>{5B3A35C4-CDC3-4CE6-AFDE-41F980A5A7EC}</Project>
+      <Name>Foundation.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataCommander.Providers.OracleBase\DataCommander.Providers.OracleBase.csproj">
       <Project>{E64206C7-76FA-4C4E-9DAD-D4ACECA24F55}</Project>
       <Name>DataCommander.Providers.OracleBase</Name>

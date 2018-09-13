@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime;
 using System.Text;
+using Foundation.Core;
 using Foundation.Log;
 using Foundation.Text;
 using Microsoft.Win32;

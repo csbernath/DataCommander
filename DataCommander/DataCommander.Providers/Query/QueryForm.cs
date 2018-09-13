@@ -25,6 +25,7 @@ using Foundation.Assertions;
 using Foundation.Collections;
 using Foundation.Collections.ReadOnly;
 using Foundation.Configuration;
+using Foundation.Core;
 using Foundation.Data;
 using Foundation.Data.DbQueryBuilding;
 using Foundation.Data.SqlClient;
