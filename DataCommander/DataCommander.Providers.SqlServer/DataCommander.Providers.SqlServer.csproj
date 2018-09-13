@@ -173,10 +173,6 @@
       <Project>{b8934b63-d579-4ee8-b352-13134eb8cc54}</Project>
       <Name>Foundation.NetFramework-4.7.1</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\.NetStandard-2.0\Foundation.NetStandard-2.0.csproj">
-      <Project>{04996258-f3f5-4eec-9d3e-acae9726f93f}</Project>
-      <Name>Foundation.NetStandard-2.0</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Text\Foundation.Text.csproj">
       <Project>{C987A1B0-F61D-4985-9BED-7E4C36C7F90E}</Project>
       <Name>Foundation.Text</Name>
