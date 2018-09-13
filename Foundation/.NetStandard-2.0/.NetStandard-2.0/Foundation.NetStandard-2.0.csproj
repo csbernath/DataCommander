@@ -59,4 +59,8 @@
     <ProjectReference Include="..\Xml\Foundation.Xml.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Log\" />
+  </ItemGroup>
+
 </Project>

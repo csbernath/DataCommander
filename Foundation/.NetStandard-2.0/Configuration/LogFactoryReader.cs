@@ -1,9 +1,9 @@
 ﻿using System;
 using Foundation.Assertions;
-using Foundation.Configuration;
 using Foundation.InternalLog;
+using Foundation.Log;
 
-namespace Foundation.Log
+namespace Foundation.Configuration
 {
     public static class LogFactoryReader
     {

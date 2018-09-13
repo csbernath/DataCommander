@@ -1,4 +1,4 @@
-﻿namespace Foundation.Diagnostics
+﻿namespace Foundation.Configuration
 {
     internal enum ErrorType
     {

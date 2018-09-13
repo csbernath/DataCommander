@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace Foundation
+namespace Foundation.Core
 {
     public static class DataContractSerialization
     {

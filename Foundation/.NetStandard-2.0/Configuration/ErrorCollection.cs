@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text;
 
-namespace Foundation.Diagnostics
+namespace Foundation.Configuration
 {
     internal sealed class ErrorCollection : Collection<Error>
     {

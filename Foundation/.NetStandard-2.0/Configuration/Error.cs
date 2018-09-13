@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Foundation.Diagnostics
+namespace Foundation.Configuration
 {
     internal sealed class Error
     {
