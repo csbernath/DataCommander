@@ -1,5 +1,6 @@
 ﻿using System;
 using DataCommander.Providers.FieldNamespace;
+using Foundation.Assertions;
 using Foundation.Collections;
 
 namespace DataCommander.Providers.ResultWriter

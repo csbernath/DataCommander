@@ -1,4 +1,5 @@
-﻿using Foundation.Log;
+﻿using Foundation.Core;
+using Foundation.Log;
 
 namespace DataCommander.Providers.Connection
 {

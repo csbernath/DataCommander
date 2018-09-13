@@ -1,5 +1,5 @@
 ﻿using System;
-using Foundation.Collections;
+using Foundation.Assertions;
 
 namespace Foundation.Diagnostics.Contracts
 {
