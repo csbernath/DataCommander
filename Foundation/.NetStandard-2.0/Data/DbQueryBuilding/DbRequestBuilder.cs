@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using Foundation.Assertions;
+using Foundation.Collections;
 using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data.SqlClient;

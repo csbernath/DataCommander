@@ -6,7 +6,7 @@ using Foundation.Assertions;
 using Foundation.Collections.IndexableCollection;
 using Foundation.Linq;
 
-namespace Foundation
+namespace Foundation.Collections
 {
     public sealed class CommandLine
     {

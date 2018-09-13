@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml;
 using System.Xml.Serialization;
+using Foundation.Collections;
 using Foundation.Xml;
 
 namespace Foundation.Configuration

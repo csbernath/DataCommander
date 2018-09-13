@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Foundation.Assertions;
+using Foundation.Collections;
 using Foundation.Core;
 using Foundation.Text;
 

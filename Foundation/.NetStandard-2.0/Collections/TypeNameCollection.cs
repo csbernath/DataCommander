@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Xml;
 using Foundation.Collections.IndexableCollection;
 
-namespace Foundation
+namespace Foundation.Collections
 {
     public static class TypeNameCollection
     {
