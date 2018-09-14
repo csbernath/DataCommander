@@ -1,7 +1,7 @@
 ﻿using System.Xml;
 using Foundation.Assertions;
 
-namespace Foundation.XmlSpreadsheet
+namespace Foundation.Xml.XmlSpreadsheet
 {
     /// <summary>
     /// 

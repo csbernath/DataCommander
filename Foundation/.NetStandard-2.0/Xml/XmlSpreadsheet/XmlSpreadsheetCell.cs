@@ -1,32 +1,20 @@
 ﻿using System.Xml;
 using Foundation.Assertions;
-using Foundation.Xml;
 
-namespace Foundation.XmlSpreadsheet
+namespace Foundation.Xml.XmlSpreadsheet
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class XmlSpreadsheetCell
     {
         private readonly XmlSpreadsheetAttributeCollection _attributes = new XmlSpreadsheetAttributeCollection();
         private readonly XmlSpreadsheetDataType _dataType;
         private readonly string _value;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataType"></param>
-        /// <param name="value"></param>
         public XmlSpreadsheetCell(XmlSpreadsheetDataType dataType, string value)
         {
             _dataType = dataType;
             _value = value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public string StyleId
         {
             set
@@ -36,9 +24,6 @@ namespace Foundation.XmlSpreadsheet
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public int MergeAcross
         {
             set
@@ -48,10 +33,6 @@ namespace Foundation.XmlSpreadsheet
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="xmlWriter"></param>
         public void Write(XmlWriter xmlWriter)
         {
             Assert.IsNotNull(xmlWriter);

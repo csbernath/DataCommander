@@ -2,22 +2,14 @@
 using System.Collections.Generic;
 using System.Xml;
 using Foundation.Assertions;
-using Foundation.Xml;
 
-namespace Foundation.XmlSpreadsheet
+namespace Foundation.Xml.XmlSpreadsheet
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class XmlSpreadsheetWriter
     {
         private XmlSpreadsheetTable _table;
         private int _tableIndex = -1;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="xmlWriter"></param>
         public XmlSpreadsheetWriter(XmlWriter xmlWriter)
         {
             Assert.IsNotNull(xmlWriter);
@@ -31,15 +23,8 @@ namespace Foundation.XmlSpreadsheet
             XmlWriter.WriteAttributeString("xmlns:ss", "urn:schemas-microsoft-com:office:spreadsheet");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public XmlWriter XmlWriter { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="tables"></param>
         public void WriteStyles(IEnumerable<XmlSpreadsheetTable> tables)
         {
             using (XmlWriter.WriteElement("Styles"))

@@ -23,18 +23,21 @@
     <Compile Remove="Data\**" />
     <Compile Remove="DefaultLog\**" />
     <Compile Remove="InternalLog\**" />
+    <Compile Remove="Log\**" />
     <Compile Remove="Threading\**" />
     <Compile Remove="Xml\**" />
     <EmbeddedResource Remove="Configuration\**" />
     <EmbeddedResource Remove="Data\**" />
     <EmbeddedResource Remove="DefaultLog\**" />
     <EmbeddedResource Remove="InternalLog\**" />
+    <EmbeddedResource Remove="Log\**" />
     <EmbeddedResource Remove="Threading\**" />
     <EmbeddedResource Remove="Xml\**" />
     <None Remove="Configuration\**" />
     <None Remove="Data\**" />
     <None Remove="DefaultLog\**" />
     <None Remove="InternalLog\**" />
+    <None Remove="Log\**" />
     <None Remove="Threading\**" />
     <None Remove="Xml\**" />
   </ItemGroup>
@@ -57,10 +60,6 @@
     <ProjectReference Include="..\IO\Foundation.IO.csproj" />
     <ProjectReference Include="..\Text\Foundation.Text.csproj" />
     <ProjectReference Include="..\Xml\Foundation.Xml.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Log\" />
   </ItemGroup>
 
 </Project>
