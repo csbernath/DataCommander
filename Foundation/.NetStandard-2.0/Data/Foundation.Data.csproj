@@ -13,9 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Configuration\Configuration.csproj" />
-    <ProjectReference Include="..\Core\Core.csproj" />
-    <ProjectReference Include="..\Threading\Threading.csproj" />
+    <ProjectReference Include="..\Configuration\Foundation.Configuration.csproj" />
+    <ProjectReference Include="..\Core\Foundation.Core.csproj" />
+    <ProjectReference Include="..\Threading\Foundation.Threading.csproj" />
   </ItemGroup>
 
 </Project>

@@ -188,21 +188,21 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Core\Core.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Core\Foundation.Core.csproj">
       <Project>{5b3a35c4-cdc3-4ce6-afde-41f980a5a7ec}</Project>
-      <Name>Core</Name>
+      <Name>Foundation.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\DataCommander.Providers\DataCommander.Providers.csproj">
       <Project>{31a30a80-d1b6-4867-a65e-188de9e912c8}</Project>
       <Name>DataCommander.Providers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Assertions\Assertions.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Assertions\Foundation.Assertions.csproj">
       <Project>{3640355A-6D7C-45B4-8377-1D011DAFD8AA}</Project>
-      <Name>Assertions</Name>
+      <Name>Foundation.Assertions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Data\Data.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Data\Foundation.Data.csproj">
       <Project>{34f913bc-edee-4385-bae6-c650a0e21878}</Project>
-      <Name>Data</Name>
+      <Name>Foundation.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

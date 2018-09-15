@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Foundation.Xml</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Assertions\Foundation.Assertions.csproj" />
+    <ProjectReference Include="..\Collections\Foundation.Collections.csproj" />
+    <ProjectReference Include="..\Core\Foundation.Core.csproj" />
+  </ItemGroup>
+
+</Project>

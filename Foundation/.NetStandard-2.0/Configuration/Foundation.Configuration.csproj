@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Foundation.Configuration</AssemblyName>
+    <RootNamespace>Foundation.Configuration</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Assertions\Foundation.Assertions.csproj" />
+    <ProjectReference Include="..\Collections\Foundation.Collections.csproj" />
+    <ProjectReference Include="..\InternalLog\Foundation.InternalLog.csproj" />
+    <ProjectReference Include="..\IO\Foundation.IO.csproj" />
+    <ProjectReference Include="..\Text\Foundation.Text.csproj" />
+    <ProjectReference Include="..\Xml\Foundation.Xml.csproj" />
+  </ItemGroup>
+
+</Project>

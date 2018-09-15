@@ -82,9 +82,9 @@
       <Project>{31A30A80-D1B6-4867-A65E-188DE9E912C8}</Project>
       <Name>DataCommander.Providers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Data\Data.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Data\Foundation.Data.csproj">
       <Project>{34f913bc-edee-4385-bae6-c650a0e21878}</Project>
-      <Name>Data</Name>
+      <Name>Foundation.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

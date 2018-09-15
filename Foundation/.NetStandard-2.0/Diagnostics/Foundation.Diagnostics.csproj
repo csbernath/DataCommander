@@ -11,10 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj" />
-    <ProjectReference Include="..\Linq\Linq.csproj" />
-    <ProjectReference Include="..\Log\Log.csproj" />
-    <ProjectReference Include="..\Text\Text.csproj" />
+    <ProjectReference Include="..\Core\Foundation.Core.csproj" />
+    <ProjectReference Include="..\Linq\Foundation.Linq.csproj" />
+    <ProjectReference Include="..\Log\Foundation.Log.csproj" />
+    <ProjectReference Include="..\Text\Foundation.Text.csproj" />
   </ItemGroup>
 
 </Project>
