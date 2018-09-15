@@ -76,21 +76,21 @@
       <Project>{3640355A-6D7C-45B4-8377-1D011DAFD8AA}</Project>
       <Name>Assertions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Configuration\Foundation.Configuration.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Configuration\Configuration.csproj">
       <Project>{513D0094-7D6B-4453-9D43-23223C51EC4C}</Project>
-      <Name>Foundation.Configuration</Name>
+      <Name>Configuration</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Core\Foundation.Core.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Core\Core.csproj">
       <Project>{5b3a35c4-cdc3-4ce6-afde-41f980a5a7ec}</Project>
-      <Name>Foundation.Core</Name>
+      <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Data\Foundation.Data.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Data\Data.csproj">
       <Project>{34f913bc-edee-4385-bae6-c650a0e21878}</Project>
-      <Name>Foundation.Data</Name>
+      <Name>Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Log\Foundation.Log.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Log\Log.csproj">
       <Project>{6F50A714-AF20-480E-A6CA-548AB4E27E28}</Project>
-      <Name>Foundation.Log</Name>
+      <Name>Log</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

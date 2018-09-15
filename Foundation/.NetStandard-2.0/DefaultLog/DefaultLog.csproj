@@ -6,9 +6,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Assertions\Assertions.csproj" />
-    <ProjectReference Include="..\Configuration\Foundation.Configuration.csproj" />
-    <ProjectReference Include="..\InternalLog\Foundation.InternalLog.csproj" />
-    <ProjectReference Include="..\Log\Foundation.Log.csproj" />
+    <ProjectReference Include="..\Configuration\Configuration.csproj" />
+    <ProjectReference Include="..\InternalLog\InternalLog.csproj" />
+    <ProjectReference Include="..\Log\Log.csproj" />
     <ProjectReference Include="..\Threading\Foundation.Threading.csproj" />
   </ItemGroup>
 

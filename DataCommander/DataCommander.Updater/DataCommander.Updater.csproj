@@ -83,13 +83,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Core\Foundation.Core.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Core\Core.csproj">
       <Project>{5b3a35c4-cdc3-4ce6-afde-41f980a5a7ec}</Project>
-      <Name>Foundation.Core</Name>
+      <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Deployment\Foundation.Deployment.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Deployment\Deployment.csproj">
       <Project>{7db3820f-e3e1-4085-8d37-ef64ba9274c8}</Project>
-      <Name>Foundation.Deployment</Name>
+      <Name>Deployment</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

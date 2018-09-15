@@ -200,29 +200,29 @@
       <Project>{3640355A-6D7C-45B4-8377-1D011DAFD8AA}</Project>
       <Name>Assertions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Configuration\Foundation.Configuration.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Configuration\Configuration.csproj">
       <Project>{513d0094-7d6b-4453-9d43-23223c51ec4c}</Project>
-      <Name>Foundation.Configuration</Name>
+      <Name>Configuration</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Core\Foundation.Core.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Core\Core.csproj">
       <Project>{5b3a35c4-cdc3-4ce6-afde-41f980a5a7ec}</Project>
-      <Name>Foundation.Core</Name>
+      <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Data\Foundation.Data.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Data\Data.csproj">
       <Project>{34f913bc-edee-4385-bae6-c650a0e21878}</Project>
-      <Name>Foundation.Data</Name>
+      <Name>Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\DefaultLog\Foundation.DefaultLog.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\DefaultLog\DefaultLog.csproj">
       <Project>{14aa33eb-053a-4397-86aa-efda2d2b119d}</Project>
-      <Name>Foundation.DefaultLog</Name>
+      <Name>DefaultLog</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Deployment\Foundation.Deployment.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Deployment\Deployment.csproj">
       <Project>{7db3820f-e3e1-4085-8d37-ef64ba9274c8}</Project>
-      <Name>Foundation.Deployment</Name>
+      <Name>Deployment</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Log\Foundation.Log.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Log\Log.csproj">
       <Project>{6f50a714-af20-480e-a6ca-548ab4e27e28}</Project>
-      <Name>Foundation.Log</Name>
+      <Name>Log</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\.NetFramework-4.7.1\Foundation.NetFramework-4.7.1.csproj">
       <Project>{b8934b63-d579-4ee8-b352-13134eb8cc54}</Project>

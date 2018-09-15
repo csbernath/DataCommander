@@ -69,9 +69,9 @@
       <Project>{3640355A-6D7C-45B4-8377-1D011DAFD8AA}</Project>
       <Name>Assertions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Configuration\Foundation.Configuration.csproj">
+    <ProjectReference Include="..\Configuration\Configuration.csproj">
       <Project>{513D0094-7D6B-4453-9D43-23223C51EC4C}</Project>
-      <Name>Foundation.Configuration</Name>
+      <Name>Configuration</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

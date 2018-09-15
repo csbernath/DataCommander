@@ -109,9 +109,9 @@
     <Compile Include="ObjectExplorer\ViewCollectionNode.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Core\Foundation.Core.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Core\Core.csproj">
       <Project>{5B3A35C4-CDC3-4CE6-AFDE-41F980A5A7EC}</Project>
-      <Name>Foundation.Core</Name>
+      <Name>Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\DataCommander.Providers\DataCommander.Providers.csproj">
       <Project>{31A30A80-D1B6-4867-A65E-188DE9E912C8}</Project>
@@ -121,13 +121,13 @@
       <Project>{3640355A-6D7C-45B4-8377-1D011DAFD8AA}</Project>
       <Name>Assertions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Configuration\Foundation.Configuration.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Configuration\Configuration.csproj">
       <Project>{513D0094-7D6B-4453-9D43-23223C51EC4C}</Project>
-      <Name>Foundation.Configuration</Name>
+      <Name>Configuration</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Data\Foundation.Data.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Data\Data.csproj">
       <Project>{34f913bc-edee-4385-bae6-c650a0e21878}</Project>
-      <Name>Foundation.Data</Name>
+      <Name>Data</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

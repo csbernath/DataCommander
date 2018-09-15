@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Assertions\Assertions.csproj" />
-    <ProjectReference Include="..\Linq\Foundation.Linq.csproj" />
+    <ProjectReference Include="..\Linq\Linq.csproj" />
   </ItemGroup>
 
 </Project>

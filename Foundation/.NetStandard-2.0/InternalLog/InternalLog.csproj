@@ -6,8 +6,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Assertions\Assertions.csproj" />
-    <ProjectReference Include="..\Core\Foundation.Core.csproj" />
-    <ProjectReference Include="..\Log\Foundation.Log.csproj" />
+    <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\Log\Log.csproj" />
   </ItemGroup>
 
 </Project>

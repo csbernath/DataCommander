@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Assertions\Assertions.csproj" />
-    <ProjectReference Include="..\Log\Foundation.Log.csproj" />
+    <ProjectReference Include="..\Log\Log.csproj" />
   </ItemGroup>
 
 </Project>
