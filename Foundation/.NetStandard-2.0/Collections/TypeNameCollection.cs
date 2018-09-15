@@ -90,11 +90,7 @@ namespace Foundation.Collections
                 if (assembly == SystemAssembly)
                     typeName = type.FullName;
                 else
-                {
-                    // AssemblyName assemblyName = assembly.GetName();
-                    // typeName = type.FullName + "," + assemblyName.Name;
                     typeName = type.AssemblyQualifiedName;
-                }
             }
             else
             {

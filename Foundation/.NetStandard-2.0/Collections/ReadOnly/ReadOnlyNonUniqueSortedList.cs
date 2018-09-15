@@ -9,6 +9,20 @@ namespace Foundation.Collections.ReadOnly
 {
     public sealed class ReadOnlyNonUniqueSortedList<TKey, TValue>
     {
+        #region Public Methods
+
+        /// <summary>
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        [Pure]
+        public bool ContainsKey(TKey key)
+        {
+            return IndexOf(key) >= 0;
+        }
+
+        #endregion
+
         #region Private Fields
 
         private readonly IReadOnlyList<TValue> _values;
@@ -21,7 +35,6 @@ namespace Foundation.Collections.ReadOnly
         #region Constructors
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="values"></param>
         /// <param name="keySelector"></param>
@@ -46,7 +59,6 @@ namespace Foundation.Collections.ReadOnly
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="values"></param>
         /// <param name="keySelector"></param>
@@ -62,13 +74,11 @@ namespace Foundation.Collections.ReadOnly
         #region Public Properties
 
         /// <summary>
-        /// 
         /// </summary>
         [Pure]
         public int Count => _groups?.Count ?? 0;
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
@@ -91,14 +101,15 @@ namespace Foundation.Collections.ReadOnly
                     readOnlyList = new ReadOnlyListSegment<TValue>(_values, currentGroupIndex, count);
                 }
                 else
+                {
                     readOnlyList = EmptyReadOnlyList<TValue>.Value;
+                }
 
                 return readOnlyList;
             }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         public IEnumerable<IReadOnlyList<TValue>> GetGroups()
@@ -111,21 +122,6 @@ namespace Foundation.Collections.ReadOnly
                 var valueCount = valueNextStartIndex - valueStartIndex;
                 yield return new ReadOnlyListSegment<TValue>(_values, valueStartIndex, valueCount);
             }
-        }
-
-        #endregion
-
-        #region Public Methods
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        [Pure]
-        public bool ContainsKey(TKey key)
-        {
-            return IndexOf(key) >= 0;
         }
 
         #endregion
@@ -154,10 +150,7 @@ namespace Foundation.Collections.ReadOnly
                 {
                     index++;
 
-                    if (_comparison(key.Previous, key.Current) != 0)
-                    {
-                        segmentedArrayBuilder.Add(index);
-                    }
+                    if (_comparison(key.Previous, key.Current) != 0) segmentedArrayBuilder.Add(index);
                 }
 
                 _groups = segmentedArrayBuilder.ToReadOnlyList();
@@ -172,7 +165,6 @@ namespace Foundation.Collections.ReadOnly
             int index;
 
             if (_groups != null)
-            {
                 index = BinarySearch.IndexOf(0, _groups.Count - 1, currentIndex =>
                 {
                     var valueIndex = _groups[currentIndex];
@@ -180,11 +172,8 @@ namespace Foundation.Collections.ReadOnly
                     var otherKey = _keySelector(otherValue);
                     return _comparison(key, otherKey);
                 });
-            }
             else
-            {
                 index = -1;
-            }
 
             return index;
         }

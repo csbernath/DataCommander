@@ -7,7 +7,10 @@ namespace Foundation.Collections.ReadOnly
     {
         private readonly T[] _items;
 
-        public ReadOnlyArray(T[] items) => _items = items;
+        public ReadOnlyArray(T[] items)
+        {
+            _items = items;
+        }
 
         public int Count => _items.Length;
         public T this[int index] => _items[index];
@@ -18,6 +21,9 @@ namespace Foundation.Collections.ReadOnly
             return enumerable.GetEnumerator();
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => _items.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _items.GetEnumerator();
+        }
     }
 }

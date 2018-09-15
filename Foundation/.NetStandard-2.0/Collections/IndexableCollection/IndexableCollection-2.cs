@@ -11,40 +11,29 @@ namespace Foundation.Collections.IndexableCollection
     public partial class IndexableCollection<T> : ICollection<T>
     {
         /// <summary>
-        /// 
         /// </summary>
         public int Count => _defaultIndex.Count;
 
         /// <summary>
-        /// 
         /// </summary>
         public bool IsReadOnly => _defaultIndex.IsReadOnly;
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         public void Add(T item)
         {
-            foreach (var index in Indexes)
-            {
-                index.Add(item);
-            }
+            foreach (var index in Indexes) index.Add(item);
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public void Clear()
         {
-            foreach (var index in Indexes)
-            {
-                index.Clear();
-            }
+            foreach (var index in Indexes) index.Clear();
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -56,7 +45,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
@@ -66,7 +54,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -76,7 +63,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()

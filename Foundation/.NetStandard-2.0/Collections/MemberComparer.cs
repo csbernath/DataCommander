@@ -5,8 +5,8 @@ namespace Foundation.Collections
 {
     public sealed class MemberComparer<T, T1> : IComparer<T>
     {
-        private readonly Func<T, T1> _get;
         private readonly IComparer<T1> _comparer;
+        private readonly Func<T, T1> _get;
 
         public MemberComparer(Func<T, T1> get, IComparer<T1> comparer)
         {

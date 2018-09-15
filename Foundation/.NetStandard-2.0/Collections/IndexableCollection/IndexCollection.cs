@@ -8,7 +8,6 @@ using Foundation.Diagnostics.Contracts;
 namespace Foundation.Collections.IndexableCollection
 {
     /// <summary>
-    /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class IndexCollection<T> : ICollection<ICollectionIndex<T>>
@@ -16,7 +15,12 @@ namespace Foundation.Collections.IndexableCollection
         private readonly Dictionary<string, ICollectionIndex<T>> _dictionary = new Dictionary<string, ICollectionIndex<T>>();
 
         /// <summary>
-        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public ICollectionIndex<T> this[string name] => _dictionary[name];
+
+        /// <summary>
         /// </summary>
         /// <param name="item"></param>
         public void Add(ICollectionIndex<T> item)
@@ -27,14 +31,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public ICollectionIndex<T> this[string name] => _dictionary[name];
-
-        /// <summary>
-        /// 
         /// </summary>
         public void Clear()
         {
@@ -44,7 +40,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -56,7 +51,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
@@ -66,17 +60,14 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public int Count => _dictionary.Count;
 
         /// <summary>
-        /// 
         /// </summary>
         public bool IsReadOnly => false;
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -90,8 +81,28 @@ namespace Foundation.Collections.IndexableCollection
             return succeeded;
         }
 
+        #region IEnumerable<ICollectionIndex<T>> Members
+
         /// <summary>
-        /// 
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator<ICollectionIndex<T>> GetEnumerator()
+        {
+            return _dictionary.Values.GetEnumerator();
+        }
+
+        #endregion
+
+        #region IEnumerable Members
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _dictionary.Values.GetEnumerator();
+        }
+
+        #endregion
+
+        /// <summary>
         /// </summary>
         /// <param name="name"></param>
         /// <param name="item"></param>
@@ -100,27 +111,5 @@ namespace Foundation.Collections.IndexableCollection
         {
             return _dictionary.TryGetValue(name, out item);
         }
-
-#region IEnumerable<ICollectionIndex<T>> Members
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator<ICollectionIndex<T>> GetEnumerator()
-        {
-            return _dictionary.Values.GetEnumerator();
-        }
-
-#endregion
-
-#region IEnumerable Members
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _dictionary.Values.GetEnumerator();
-        }
-
-#endregion
     }
 }

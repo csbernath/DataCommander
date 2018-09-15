@@ -7,7 +7,6 @@ using Foundation.Diagnostics.Contracts;
 namespace Foundation.Collections.IndexableCollection
 {
     /// <summary>
-    /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class ListIndex<T> : ICollectionIndex<T>, IList<T>
@@ -15,7 +14,6 @@ namespace Foundation.Collections.IndexableCollection
         private IList<T> _list;
 
         /// <summary>
-        /// 
         /// </summary>
         public ListIndex(string name)
         {
@@ -25,7 +23,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="name"></param>
         /// <param name="list"></param>
@@ -38,19 +35,46 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public string Name { get; private set; }
 
         /// <summary>
-        /// 
         /// </summary>
         public int Count => _list.Count;
 
         bool ICollection<T>.IsReadOnly => false;
 
         /// <summary>
-        /// 
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="arrayIndex"></param>
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            _list.CopyTo(array, arrayIndex);
+        }
+
+        #region IEnumerable<T> Members
+
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator<T> GetEnumerator()
+        {
+            return _list.GetEnumerator();
+        }
+
+        #endregion
+
+        #region IEnumerable Members
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _list.GetEnumerator();
+        }
+
+        #endregion
+
+        /// <summary>
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -72,17 +96,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="array"></param>
-        /// <param name="arrayIndex"></param>
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            _list.CopyTo(array, arrayIndex);
-        }
-
-        /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -92,7 +105,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="index"></param>
         /// <param name="item"></param>
@@ -102,7 +114,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="index"></param>
         public void RemoveAt(int index)
@@ -110,10 +121,18 @@ namespace Foundation.Collections.IndexableCollection
             _list.RemoveAt(index);
         }
 
+        private void Initialize(string name, IList<T> list)
+        {
+            Assert.IsNotNull(name);
+            Assert.IsNotNull(list);
+
+            Name = name;
+            _list = list;
+        }
+
         #region ICollectionIndex<T> Members
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         public void Add(T item)
@@ -122,7 +141,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public void Clear()
         {
@@ -130,7 +148,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -142,7 +159,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -152,36 +168,5 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         #endregion
-
-        #region IEnumerable<T> Members
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator<T> GetEnumerator()
-        {
-            return _list.GetEnumerator();
-        }
-
-        #endregion
-
-        #region IEnumerable Members
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _list.GetEnumerator();
-        }
-
-        #endregion
-
-        private void Initialize(string name, IList<T> list)
-        {
-            Assert.IsNotNull(name);
-            Assert.IsNotNull(list);
-
-            Name = name;
-            _list = list;
-        }
     }
 }

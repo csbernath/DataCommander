@@ -29,17 +29,21 @@ namespace Foundation.Collections
                     result = midIndex;
                     break;
                 }
-                else if (comparisonResult < 0)
+
+                if (comparisonResult < 0)
+                {
                     maxIndex = midIndex - 1;
+                }
                 else
+                {
                     minIndex = midIndex + 1;
+                }
             }
 
             return result;
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="minIndex"></param>
         /// <param name="maxIndex"></param>
@@ -80,7 +84,9 @@ namespace Foundation.Collections
                 else if (currentMaxIndex == maxIndex)
                 {
                     if (lessThan(maxIndex))
+                    {
                         Debug.WriteLine($"[{maxIndex}] < key");
+                    }
                     else
                     {
                         Debug.WriteLine($"key <= [{maxIndex}]");

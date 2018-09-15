@@ -11,7 +11,14 @@ namespace Foundation.Collections
         {
         }
 
-        public IEnumerator<T> GetEnumerator() => EmptyEnumerator<T>.Value;
-        IEnumerator IEnumerable.GetEnumerator() => EmptyNonGenericEnumerator.Value;
+        public IEnumerator<T> GetEnumerator()
+        {
+            return EmptyEnumerator<T>.Value;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return EmptyNonGenericEnumerator.Value;
+        }
     }
 }

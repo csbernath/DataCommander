@@ -1,7 +1,7 @@
 ﻿namespace Foundation.Collections
 {
     /// <summary>
-    /// Discrete union
+    ///     Discrete union
     /// </summary>
     public struct Variant<T1, T2, T3>
     {
@@ -23,7 +23,10 @@
         {
         }
 
-        public static implicit operator Variant<T1, T2, T3>(T1 value) => new Variant<T1, T2, T3>(value, 0);
+        public static implicit operator Variant<T1, T2, T3>(T1 value)
+        {
+            return new Variant<T1, T2, T3>(value, 0);
+        }
 
         public object Value { get; }
         public byte Type { get; }

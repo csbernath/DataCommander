@@ -51,13 +51,8 @@ namespace Foundation.Collections
                 c = (char) read;
 
                 if (c == '"')
-                {
                     break;
-                }
-                else
-                {
-                    sb.Append(c);
-                }
+                sb.Append(c);
             }
 
             var value = sb.ToString();
@@ -76,22 +71,14 @@ namespace Foundation.Collections
             {
                 var peek = textReader.Peek();
 
-                if (peek == -1)
-                {
-                    break;
-                }
+                if (peek == -1) break;
 
                 c = (char) peek;
 
-                if (c == ':' || c == '=' || char.IsWhiteSpace(c))
-                {
-                    break;
-                }
-                else
-                {
-                    sb.Append(c);
-                    textReader.Read();
-                }
+                if (c == ':' || c == '=' || char.IsWhiteSpace(c)) break;
+
+                sb.Append(c);
+                textReader.Read();
             }
 
             var name = sb.Length > 0 ? sb.ToString() : null;
@@ -107,21 +94,13 @@ namespace Foundation.Collections
             {
                 var peek = textReader.Peek();
 
-                if (peek == -1)
-                {
-                    break;
-                }
+                if (peek == -1) break;
 
                 var c = (char) peek;
 
                 if (char.IsWhiteSpace(c))
-                {
                     break;
-                }
-                else
-                {
-                    sb.Append(c);
-                }
+                sb.Append(c);
 
                 textReader.Read();
             }
@@ -146,24 +125,15 @@ namespace Foundation.Collections
                     peek = textReader.Peek();
                     c = (char) peek;
 
-                    if (peek == '"')
-                    {
-                        value = ReadString(textReader);
-                    }
-                    else
-                    {
-                        value = ReadValue(textReader);
-                    }
+                    value = peek == '"'
+                        ? ReadString(textReader)
+                        : ReadValue(textReader);
                 }
                 else
-                {
                     value = null;
-                }
             }
             else
-            {
                 value = null;
-            }
 
             return Tuple.Create(name, value);
         }
@@ -176,10 +146,7 @@ namespace Foundation.Collections
             {
                 var peek = textReader.Peek();
 
-                if (peek == -1)
-                {
-                    break;
-                }
+                if (peek == -1) break;
 
                 var c = (char) peek;
 

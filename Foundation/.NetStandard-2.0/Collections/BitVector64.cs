@@ -2,14 +2,12 @@
 
 namespace Foundation.Collections
 {
-    /// <exclude/>
+    /// <exclude />
     /// <summary>
-    /// 
     /// </summary>
     public struct BitVector64
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="data"></param>
         [CLSCompliant(false)]
@@ -19,13 +17,11 @@ namespace Foundation.Collections
         }
 
         /// <summary>
-        /// 
         /// </summary>
         [CLSCompliant(false)]
         public ulong Value { get; private set; }
 
         /// <summary>
-        /// 
         /// </summary>
         public bool this[int index]
         {
@@ -40,18 +36,13 @@ namespace Foundation.Collections
                 var bit = 1UL << index;
 
                 if (value)
-                {
                     Value |= bit;
-                }
                 else
-                {
                     Value &= ~bit;
-                }
             }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         public override string ToString()

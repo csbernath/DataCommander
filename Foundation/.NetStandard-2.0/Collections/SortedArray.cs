@@ -6,9 +6,9 @@ namespace Foundation.Collections
 {
     public class SortedArray<TKey, TValue>
     {
-        private readonly TValue[] _values;
-        private readonly Func<TValue, TKey> _keySelector;
         private readonly Comparison<TKey> _comparison;
+        private readonly Func<TValue, TKey> _keySelector;
+        private readonly TValue[] _values;
 
         public SortedArray(TValue[] values, Func<TValue, TKey> keySelector, Comparison<TKey> comparison)
         {
@@ -49,7 +49,10 @@ namespace Foundation.Collections
 
         public IEnumerable<TValue> Values => _values;
 
-        public bool ContainsKey(TKey key) => IndexOfKey(key) >= 0;
+        public bool ContainsKey(TKey key)
+        {
+            return IndexOfKey(key) >= 0;
+        }
 
         public bool TryGetValue(TKey key, out TValue value)
         {
@@ -75,14 +78,12 @@ namespace Foundation.Collections
             int indexOfKey;
 
             if (_values.Length > 0)
-            {
                 indexOfKey = BinarySearch.IndexOf(0, _values.Length - 1, index =>
                 {
                     var otherValue = _values[index];
                     var otherKey = _keySelector(otherValue);
                     return _comparison(key, otherKey);
                 });
-            }
             else
                 indexOfKey = -1;
 

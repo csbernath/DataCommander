@@ -3,7 +3,6 @@
 namespace Foundation.Collections
 {
     /// <summary>
-    /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public sealed class MultipleMemberComparer<T> : IComparer<T>
@@ -11,7 +10,6 @@ namespace Foundation.Collections
         private readonly IComparer<T>[] _comparers;
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="comparers"></param>
         public MultipleMemberComparer(params IComparer<T>[] comparers)

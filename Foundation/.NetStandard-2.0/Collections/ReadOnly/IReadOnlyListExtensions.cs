@@ -10,7 +10,10 @@ namespace Foundation.Collections.ReadOnly
     {
         [Pure]
         public static ReadOnlyNonUniqueSortedList<TKey, TValue> AsReadOnlyNonUniqueSortedList<TKey, TValue>(this IReadOnlyList<TValue> values,
-            Func<TValue, TKey> keySelector) => new ReadOnlyNonUniqueSortedList<TKey, TValue>(values, keySelector);
+            Func<TValue, TKey> keySelector)
+        {
+            return new ReadOnlyNonUniqueSortedList<TKey, TValue>(values, keySelector);
+        }
 
         [Pure]
         public static ReadOnlySortedList<TKey, TValue> AsReadOnlySortedList<TKey, TValue>(this IReadOnlyList<TValue> values, Func<TValue, TKey> keySelector)
@@ -20,7 +23,10 @@ namespace Foundation.Collections.ReadOnly
             return new ReadOnlySortedList<TKey, TValue>(items, comparer.Compare);
         }
 
-        public static ReadOnlySortedSet<T> AsReadOnlySortedSet<T>(this IReadOnlyList<T> items) => new ReadOnlySortedSet<T>(items);
+        public static ReadOnlySortedSet<T> AsReadOnlySortedSet<T>(this IReadOnlyList<T> items)
+        {
+            return new ReadOnlySortedSet<T>(items);
+        }
 
         public static TSource First<TSource>(this IReadOnlyList<TSource> source)
         {

@@ -7,6 +7,54 @@ namespace Foundation.Collections
 {
     public class SegmentedCollection<T> : ICollection<T>
     {
+        public SegmentedCollection(int segmentLength)
+        {
+            Assert.IsInRange(segmentLength > 0);
+            _segmentLength = segmentLength;
+        }
+
+        #region IEnumerable<T> Members
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            var segment = _first;
+
+            while (segment != null)
+            {
+                int count;
+                if (segment != _last)
+                    count = _segmentLength;
+                else
+                    count = Count <= _segmentLength ? Count : Count % _segmentLength;
+
+                for (var i = 0; i < count; i++) yield return segment.Items[i];
+
+                segment = segment.Next;
+            }
+        }
+
+        #endregion
+
+        #region IEnumerable Members
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            var enumerable = (IEnumerable<T>) this;
+            return enumerable.GetEnumerator();
+        }
+
+        #endregion
+
+        #region Private Classes
+
+        private sealed class Segment
+        {
+            public T[] Items;
+            public Segment Next;
+        }
+
+        #endregion
+
         #region Private Fields
 
         private readonly int _segmentLength;
@@ -14,12 +62,6 @@ namespace Foundation.Collections
         private Segment _last;
 
         #endregion
-
-        public SegmentedCollection(int segmentLength)
-        {
-            Assert.IsInRange(segmentLength > 0);
-            _segmentLength = segmentLength;
-        }
 
         #region ICollection<T> Members
 
@@ -57,58 +99,23 @@ namespace Foundation.Collections
             _last = null;
         }
 
-        public bool Contains(T item) => throw new NotSupportedException();
-        void ICollection<T>.CopyTo(T[] array, int arrayIndex) => throw new NotImplementedException();
+        public bool Contains(T item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<T>.CopyTo(T[] array, int arrayIndex)
+        {
+            throw new NotImplementedException();
+        }
 
         public int Count { get; private set; }
 
         bool ICollection<T>.IsReadOnly => false;
 
-        bool ICollection<T>.Remove(T item) => throw new NotSupportedException();
-
-        #endregion
-
-        #region IEnumerable<T> Members
-
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        bool ICollection<T>.Remove(T item)
         {
-            var segment = _first;
-
-            while (segment != null)
-            {
-                int count;
-                if (segment != _last)
-                    count = _segmentLength;
-                else
-                    count = Count <= _segmentLength ? Count : Count % _segmentLength;
-
-                for (var i = 0; i < count; i++)
-                {
-                    yield return segment.Items[i];
-                }
-
-                segment = segment.Next;
-            }
-        }
-
-        #endregion
-
-        #region IEnumerable Members
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            var enumerable = (IEnumerable<T>) this;
-            return enumerable.GetEnumerator();
-        }
-
-        #endregion
-
-        #region Private Classes
-
-        private sealed class Segment
-        {
-            public T[] Items;
-            public Segment Next;
+            throw new NotSupportedException();
         }
 
         #endregion

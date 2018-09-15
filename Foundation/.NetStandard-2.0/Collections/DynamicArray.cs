@@ -7,7 +7,7 @@ using Foundation.Linq;
 namespace Foundation.Collections
 {
     /// <summary>
-    /// https://en.wikipedia.org/wiki/Dynamic_array
+    ///     https://en.wikipedia.org/wiki/Dynamic_array
     /// </summary>
     public class DynamicArray<T> : IList<T>
     {
@@ -20,10 +20,31 @@ namespace Foundation.Collections
             _maxSize = maxSize;
         }
 
+        #region IEnumerable<T> Members
+
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (var i = 0; i < Count; i++)
+                yield return _array[i];
+        }
+
+        #endregion
+
+        #region IEnumerable Members
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        #endregion
+
         #region IList<T> Members
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -33,7 +54,6 @@ namespace Foundation.Collections
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="index"></param>
         /// <param name="item"></param>
@@ -48,7 +68,6 @@ namespace Foundation.Collections
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -87,7 +106,6 @@ namespace Foundation.Collections
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public void Clear()
         {
@@ -98,7 +116,6 @@ namespace Foundation.Collections
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -107,15 +124,16 @@ namespace Foundation.Collections
             return _array.Contains(item);
         }
 
-        void ICollection<T>.CopyTo(T[] array, int arrayIndex) => throw new NotImplementedException();
+        void ICollection<T>.CopyTo(T[] array, int arrayIndex)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
-        /// 
         /// </summary>
         public int Count { get; private set; }
 
         /// <summary>
-        /// 
         /// </summary>
         public bool IsReadOnly => _array.IsReadOnly;
 
@@ -123,26 +141,6 @@ namespace Foundation.Collections
         {
             throw new NotSupportedException();
         }
-
-        #endregion
-
-        #region IEnumerable<T> Members
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator<T> GetEnumerator()
-        {
-            for (var i = 0; i < Count; i++)
-                yield return _array[i];
-        }
-
-        #endregion
-
-        #region IEnumerable Members
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         #endregion
     }

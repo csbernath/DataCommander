@@ -1,12 +1,10 @@
 ﻿namespace Foundation.Collections
 {
     /// <summary>
-    /// 
     /// </summary>
     public sealed class CommandLineArgument
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="index"></param>
         /// <param name="name"></param>
@@ -22,17 +20,14 @@
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public int Index { get; }
 
         /// <summary>
-        /// 
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// 
         /// </summary>
         public string Value { get; }
     }

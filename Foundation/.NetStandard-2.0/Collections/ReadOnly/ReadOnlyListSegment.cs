@@ -8,13 +8,6 @@ namespace Foundation.Collections.ReadOnly
 {
     internal sealed class ReadOnlyListSegment<T> : IReadOnlyList<T>
     {
-        #region Private Fields
-
-        private readonly IReadOnlyList<T> _list;
-        private readonly int _offset;
-
-        #endregion
-
         public ReadOnlyListSegment(IReadOnlyList<T> list, int offset, int count)
         {
             Assert.IsNotNull(list);
@@ -40,6 +33,16 @@ namespace Foundation.Collections.ReadOnly
                 yield return _list[i];
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        #region Private Fields
+
+        private readonly IReadOnlyList<T> _list;
+        private readonly int _offset;
+
+        #endregion
     }
 }

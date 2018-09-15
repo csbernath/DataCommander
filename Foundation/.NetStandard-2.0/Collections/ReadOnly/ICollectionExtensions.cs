@@ -13,6 +13,5 @@ namespace Foundation.Collections.ReadOnly
             var items = source.ToArray();
             return new ReadOnlyArray<T>(items);
         }
-
     }
 }

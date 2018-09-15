@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Foundation.Log</AssemblyName>
+    <RootNamespace>Foundation.Log</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -28,14 +28,12 @@ namespace Foundation.Collections
             if (predicate(rootNode))
                 firstOrDefault = rootNode;
             else
-            {
                 foreach (var childNode in getChildNodes(rootNode))
                 {
-                    firstOrDefault = FirstOrDefault<T>(childNode, getChildNodes, predicate);
+                    firstOrDefault = FirstOrDefault(childNode, getChildNodes, predicate);
                     if (firstOrDefault != null)
                         break;
                 }
-            }
 
             return firstOrDefault;
         }

@@ -7,16 +7,7 @@ namespace Foundation.Collections
 {
     public sealed class SegmentedListBuilder<T>
     {
-        #region Private Fields
-
-        private readonly int _segmentItemCapacity;
-        private readonly List<T[]> _segments = new List<T[]>();
-        private int _nextSegmentItemIndex;
-
-        #endregion
-
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="segmentItemCapacity"></param>
         public SegmentedListBuilder(int segmentItemCapacity)
@@ -26,8 +17,20 @@ namespace Foundation.Collections
             _segmentItemCapacity = segmentItemCapacity;
         }
 
+        public int Count
+        {
+            get
+            {
+                var count = 0;
+                var segmentCount = _segments.Count;
+                if (segmentCount > 0)
+                    count += (segmentCount - 1) * _segmentItemCapacity;
+                count += _nextSegmentItemIndex;
+                return count;
+            }
+        }
+
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         public void Add(T item)
@@ -50,19 +53,6 @@ namespace Foundation.Collections
             _nextSegmentItemIndex++;
         }
 
-        public int Count
-        {
-            get
-            {
-                var count = 0;
-                var segmentCount = _segments.Count;
-                if (segmentCount > 0)
-                    count += (segmentCount - 1) * _segmentItemCapacity;
-                count += _nextSegmentItemIndex;
-                return count;
-            }
-        }
-
         public IReadOnlyList<T> ToReadOnlyList()
         {
             var count = Count;
@@ -71,8 +61,8 @@ namespace Foundation.Collections
 
         private sealed class ReadOnlySegmentedList : IReadOnlyList<T>
         {
-            private readonly IList<T[]> _segments;
             private readonly int _count;
+            private readonly IList<T[]> _segments;
 
             public ReadOnlySegmentedList(IList<T[]> segments, int count)
             {
@@ -109,10 +99,7 @@ namespace Foundation.Collections
                     var segmentLength = segment.Length;
                     var segmentItemCount = segmentIndex < lastSegmentIndex ? segmentLength : _count % segmentLength;
 
-                    for (var i = 0; i < segmentItemCount; i++)
-                    {
-                        yield return segment[i];
-                    }
+                    for (var i = 0; i < segmentItemCount; i++) yield return segment[i];
 
                     segmentIndex++;
                 }
@@ -125,5 +112,13 @@ namespace Foundation.Collections
 
             #endregion
         }
+
+        #region Private Fields
+
+        private readonly int _segmentItemCapacity;
+        private readonly List<T[]> _segments = new List<T[]>();
+        private int _nextSegmentItemIndex;
+
+        #endregion
     }
 }

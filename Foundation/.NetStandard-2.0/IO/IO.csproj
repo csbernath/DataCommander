@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Foundation.IO</AssemblyName>
+    <RootNamespace>Foundation.IO</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

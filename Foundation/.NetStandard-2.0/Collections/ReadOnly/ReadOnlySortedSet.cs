@@ -8,8 +8,8 @@ namespace Foundation.Collections.ReadOnly
 {
     public class ReadOnlySortedSet<T> : IReadOnlySortedSet<T>
     {
-        private readonly IReadOnlyList<T> _items;
         private readonly Comparison<T> _comparison;
+        private readonly IReadOnlyList<T> _items;
 
         public ReadOnlySortedSet(IReadOnlyList<T> items, Comparison<T> comparison)
         {
@@ -26,9 +26,21 @@ namespace Foundation.Collections.ReadOnly
         }
 
         public int Count => _items.Count;
-        public bool Contains(T item) => IndexOf(item) >= 0;
-        public IEnumerator<T> GetEnumerator() => _items.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public bool Contains(T item)
+        {
+            return IndexOf(item) >= 0;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return _items.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         private int IndexOf(T item)
         {

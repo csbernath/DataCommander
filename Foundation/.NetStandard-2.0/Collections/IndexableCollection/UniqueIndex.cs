@@ -8,10 +8,13 @@ namespace Foundation.Collections.IndexableCollection
 {
     public sealed class UniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, T>
     {
-        private Func<T, GetKeyResponse<TKey>> _getKey;
         private IDictionary<TKey, T> _dictionary;
+        private Func<T, GetKeyResponse<TKey>> _getKey;
 
-        public UniqueIndex(string name,Func<T, GetKeyResponse<TKey>> getKey,IDictionary<TKey, T> dictionary) => Initialize(name, getKey, dictionary);
+        public UniqueIndex(string name, Func<T, GetKeyResponse<TKey>> getKey, IDictionary<TKey, T> dictionary)
+        {
+            Initialize(name, getKey, dictionary);
+        }
 
         public UniqueIndex(string name, Func<T, GetKeyResponse<TKey>> getKey, SortOrder sortOrder)
         {
@@ -40,6 +43,30 @@ namespace Foundation.Collections.IndexableCollection
 
         public string Name { get; private set; }
 
+        #region IEnumerable<T> Members
+
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            return _dictionary.Values.GetEnumerator();
+        }
+
+        #endregion
+
+        #region IEnumerable Members
+
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _dictionary.Values.GetEnumerator();
+        }
+
+        #endregion
+
         public T this[TKey key]
         {
             get => _dictionary[key];
@@ -47,22 +74,33 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         [Pure]
-        public bool ContainsKey(TKey key) => _dictionary.ContainsKey(key);
+        public bool ContainsKey(TKey key)
+        {
+            return _dictionary.ContainsKey(key);
+        }
+
+        private void Initialize(string name, Func<T, GetKeyResponse<TKey>> getKey, IDictionary<TKey, T> dictionary)
+        {
+            Assert.IsNotNull(name);
+            Assert.IsNotNull(getKey);
+            Assert.IsNotNull(dictionary);
+
+            Name = name;
+            _getKey = getKey;
+            _dictionary = dictionary;
+        }
 
         #region ICollectionIndex<TKey,T> Members
 
         /// <summary>
-        /// 
         /// </summary>
         public bool IsReadOnly => _dictionary.IsReadOnly;
 
         /// <summary>
-        /// 
         /// </summary>
         public int Count => _dictionary.Count;
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
@@ -72,7 +110,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <param name="item"></param>
@@ -83,7 +120,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         public IEnumerator<KeyValuePair<TKey, T>> GetEnumerator()
@@ -96,7 +132,6 @@ namespace Foundation.Collections.IndexableCollection
         #region ICollectionIndex<T> Members
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         void ICollection<T>.Add(T item)
@@ -114,7 +149,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         void ICollection<T>.Clear()
         {
@@ -122,7 +156,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -134,19 +167,14 @@ namespace Foundation.Collections.IndexableCollection
             bool contains;
 
             if (response.HasKey)
-            {
                 contains = _dictionary.ContainsKey(response.Key);
-            }
             else
-            {
                 contains = false;
-            }
 
             return contains;
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -158,41 +186,11 @@ namespace Foundation.Collections.IndexableCollection
             bool succeeded;
 
             if (response.HasKey)
-            {
                 succeeded = _dictionary.Remove(response.Key);
-            }
             else
-            {
                 succeeded = false;
-            }
 
             return succeeded;
-        }
-
-        #endregion
-
-        #region IEnumerable<T> Members
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            return _dictionary.Values.GetEnumerator();
-        }
-
-        #endregion
-
-        #region IEnumerable Members
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _dictionary.Values.GetEnumerator();
         }
 
         #endregion
@@ -200,7 +198,6 @@ namespace Foundation.Collections.IndexableCollection
         #region IDictionary<TKey,T> Members
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -210,12 +207,10 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public ICollection<TKey> Keys => _dictionary.Keys;
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
@@ -225,7 +220,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public ICollection<T> Values => _dictionary.Values;
 
@@ -234,7 +228,6 @@ namespace Foundation.Collections.IndexableCollection
         #region ICollection<KeyValuePair<TKey,T>> Members
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         void ICollection<KeyValuePair<TKey, T>>.Add(KeyValuePair<TKey, T> item)
@@ -243,7 +236,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -258,7 +250,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
@@ -268,7 +259,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -278,16 +268,5 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         #endregion
-
-        private void Initialize(string name, Func<T, GetKeyResponse<TKey>> getKey, IDictionary<TKey, T> dictionary)
-        {
-            Assert.IsNotNull(name);
-            Assert.IsNotNull(getKey);
-            Assert.IsNotNull(dictionary);
-
-            Name = name;
-            _getKey = getKey;
-            _dictionary = dictionary;
-        }
     }
 }

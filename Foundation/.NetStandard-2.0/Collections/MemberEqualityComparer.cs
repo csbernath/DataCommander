@@ -6,8 +6,8 @@ namespace Foundation.Collections
 {
     public sealed class MemberEqualityComparer<T, T1> : IEqualityComparer<T>
     {
-        private readonly Func<T, T1> _get;
         private readonly IEqualityComparer<T1> _equalityComparer;
+        private readonly Func<T, T1> _get;
 
         public MemberEqualityComparer(Func<T, T1> get)
             : this(get, EqualityComparer<T1>.Default)

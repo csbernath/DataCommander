@@ -4,7 +4,6 @@ using System.Collections.Generic;
 namespace Foundation.Collections.IndexableCollection
 {
     /// <summary>
-    /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public sealed class ReversedComparer<T> : IComparer<T>
@@ -20,7 +19,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public static IComparer<T> Default => Instance.Value;
 

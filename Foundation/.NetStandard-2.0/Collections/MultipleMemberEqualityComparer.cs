@@ -17,7 +17,6 @@ namespace Foundation.Collections
         #region Constructors
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="equalityComparers"></param>
         public MultipleMemberEqualityComparer(params IEqualityComparer<T>[] equalityComparers)
@@ -27,6 +26,15 @@ namespace Foundation.Collections
             //Assert.IsNotNull(Contract.ForAll(equalityComparers, c => c != null));
 
             _equalityComparers = equalityComparers;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private static int CombineHashCodes(int h1, int h2)
+        {
+            return ((h1 << 5) + h1) ^ h2;
         }
 
         #endregion
@@ -43,15 +51,6 @@ namespace Foundation.Collections
             var hashCodes = _equalityComparers.Select(c => c.GetHashCode(obj));
             var hashCode = hashCodes.Aggregate(CombineHashCodes);
             return hashCode;
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private static int CombineHashCodes(int h1, int h2)
-        {
-            return (h1 << 5) + h1 ^ h2;
         }
 
         #endregion

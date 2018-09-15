@@ -7,22 +7,12 @@ using Foundation.Assertions;
 namespace Foundation.Collections.IndexableCollection
 {
     /// <summary>
-    /// 
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="T"></typeparam>
     public class NonUniqueIndex<TKey, T> : ICollectionIndex<T>, IDictionary<TKey, ICollection<T>>
     {
-        #region Private Fields
-
-        private IDictionary<TKey, ICollection<T>> _dictionary;
-        private Func<T, GetKeyResponse<TKey>> _getKey;
-        private Func<ICollection<T>> _createCollection;
-
-        #endregion
-
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="name"></param>
         /// <param name="getKey"></param>
@@ -42,7 +32,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="name"></param>
         /// <param name="getKey"></param>
@@ -80,19 +69,49 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        public string Name { get; private set; }
-
-        /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
         public ICollection<T> this[TKey key] => _dictionary[key];
 
         /// <summary>
-        /// 
+        /// </summary>
+        public string Name { get; private set; }
+
+        #region IEnumerable<T> Members
+
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator<T> GetEnumerator()
+        {
+            foreach (var collection in _dictionary.Values)
+            foreach (var item in collection)
+                yield return item;
+        }
+
+        #endregion
+
+        #region IEnumerable Members
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            IEnumerable<T> enumerable = this;
+            return enumerable.GetEnumerator();
+        }
+
+        #endregion
+
+        #region IEnumerable<KeyValuePair<TKey,ICollection<T>>> Members
+
+        IEnumerator<KeyValuePair<TKey, ICollection<T>>> IEnumerable<KeyValuePair<TKey, ICollection<T>>>.GetEnumerator()
+        {
+            return _dictionary.GetEnumerator();
+        }
+
+        #endregion
+
+        /// <summary>
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -115,17 +134,39 @@ namespace Foundation.Collections.IndexableCollection
             return contains;
         }
 
+        private void Initialize(
+            string name,
+            Func<T, GetKeyResponse<TKey>> getKey,
+            IDictionary<TKey, ICollection<T>> dictionary,
+            Func<ICollection<T>> createCollection)
+        {
+            Assert.IsNotNull(getKey);
+            Assert.IsNotNull(dictionary);
+            Assert.IsNotNull(createCollection);
+
+            Name = name;
+            _getKey = getKey;
+            _dictionary = dictionary;
+            _createCollection = createCollection;
+        }
+
+        #region Private Fields
+
+        private IDictionary<TKey, ICollection<T>> _dictionary;
+        private Func<T, GetKeyResponse<TKey>> _getKey;
+        private Func<ICollection<T>> _createCollection;
+
+        #endregion
+
         #region ICollectionIndex<T> Members
 
         /// <summary>
-        /// 
         /// </summary>
         public int Count => _dictionary.Count;
 
         bool ICollection<T>.IsReadOnly => false;
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         public void Add(T item)
@@ -149,7 +190,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         void ICollection<T>.Clear()
         {
@@ -157,7 +197,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -172,10 +211,7 @@ namespace Foundation.Collections.IndexableCollection
                 ICollection<T> collection;
                 contains = _dictionary.TryGetValue(key, out collection);
 
-                if (contains)
-                {
-                    contains = collection.Contains(item);
-                }
+                if (contains) contains = collection.Contains(item);
             }
             else
             {
@@ -186,7 +222,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
@@ -196,7 +231,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -231,51 +265,6 @@ namespace Foundation.Collections.IndexableCollection
 
         #endregion
 
-        #region IEnumerable<T> Members
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator<T> GetEnumerator()
-        {
-            foreach (var collection in _dictionary.Values)
-            {
-                foreach (var item in collection)
-                {
-                    yield return item;
-                }
-            }
-        }
-
-        #endregion
-
-        #region IEnumerable Members
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            IEnumerable<T> enumerable = this;
-            return enumerable.GetEnumerator();
-        }
-
-        #endregion
-
-        private void Initialize(
-            string name,
-            Func<T, GetKeyResponse<TKey>> getKey,
-            IDictionary<TKey, ICollection<T>> dictionary,
-            Func<ICollection<T>> createCollection)
-        {
-            Assert.IsNotNull(getKey);
-            Assert.IsNotNull(dictionary);
-            Assert.IsNotNull(createCollection);
-
-            Name = name;
-            _getKey = getKey;
-            _dictionary = dictionary;
-            _createCollection = createCollection;
-        }
-
         #region IDictionary<TKey,ICollection<T>> Members
 
         void IDictionary<TKey, ICollection<T>>.Add(TKey key, ICollection<T> value)
@@ -284,7 +273,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
@@ -301,7 +289,6 @@ namespace Foundation.Collections.IndexableCollection
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -351,15 +338,6 @@ namespace Foundation.Collections.IndexableCollection
         bool ICollection<KeyValuePair<TKey, ICollection<T>>>.Remove(KeyValuePair<TKey, ICollection<T>> item)
         {
             throw new NotSupportedException();
-        }
-
-        #endregion
-
-        #region IEnumerable<KeyValuePair<TKey,ICollection<T>>> Members
-
-        IEnumerator<KeyValuePair<TKey, ICollection<T>>> IEnumerable<KeyValuePair<TKey, ICollection<T>>>.GetEnumerator()
-        {
-            return _dictionary.GetEnumerator();
         }
 
         #endregion

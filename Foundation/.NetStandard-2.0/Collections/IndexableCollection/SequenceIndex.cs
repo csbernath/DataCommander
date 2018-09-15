@@ -7,19 +7,17 @@ using Foundation.Diagnostics.Contracts;
 namespace Foundation.Collections.IndexableCollection
 {
     /// <summary>
-    /// 
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="T"></typeparam>
     public class SequenceIndex<TKey, T> : ICollectionIndex<T>
     {
-        private readonly string _name;
-        private readonly Func<TKey> _getNextKey;
-        private readonly Func<T, TKey> _getKey;
         private readonly IDictionary<TKey, T> _dictionary;
+        private readonly Func<T, TKey> _getKey;
+        private readonly Func<TKey> _getNextKey;
+        private readonly string _name;
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="name"></param>
         /// <param name="getNextKey"></param>
@@ -41,13 +39,31 @@ namespace Foundation.Collections.IndexableCollection
             _dictionary = dictionary;
         }
 
-#region ICollectionIndex<T> Members
+        #region ICollectionIndex<T> Members
 
         string ICollectionIndex<T>.Name => _name;
 
-#endregion
+        #endregion
 
-#region ICollection<T> Members
+        #region IEnumerable<T> Members
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            return _dictionary.Values.GetEnumerator();
+        }
+
+        #endregion
+
+        #region IEnumerable Members
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _dictionary.Values.GetEnumerator();
+        }
+
+        #endregion
+
+        #region ICollection<T> Members
 
         void ICollection<T>.Add(T item)
         {
@@ -83,24 +99,6 @@ namespace Foundation.Collections.IndexableCollection
             return removed;
         }
 
-#endregion
-
-#region IEnumerable<T> Members
-
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            return _dictionary.Values.GetEnumerator();
-        }
-
-#endregion
-
-#region IEnumerable Members
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _dictionary.Values.GetEnumerator();
-        }
-
-#endregion
+        #endregion
     }
 }

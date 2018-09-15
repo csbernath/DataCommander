@@ -1,13 +1,11 @@
 ﻿namespace Foundation.Collections.IndexableCollection
 {
     /// <summary>
-    /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public struct GetKeyResponse<T>
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="hasKey"></param>
         /// <param name="key"></param>
@@ -18,23 +16,19 @@
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public bool HasKey { get; }
 
         /// <summary>
-        /// 
         /// </summary>
         public T Key { get; }
     }
 
     /// <summary>
-    /// 
     /// </summary>
     public static class GetKeyResponse
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="hasKey"></param>
         /// <param name="key"></param>

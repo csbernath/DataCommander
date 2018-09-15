@@ -6,21 +6,11 @@ using Foundation.Diagnostics.Contracts;
 namespace Foundation.Collections
 {
     /// <summary>
-    /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public sealed class SegmentedArrayBuilder<T>
     {
-        #region Private Fields
-
-        private readonly T[][] _segments;
-        private int _currentSegmentArrayIndex;
-        private int _currentSegmentIndex;
-
-        #endregion
-
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="length"></param>
         /// <param name="segmentLength"></param>
@@ -33,22 +23,18 @@ namespace Foundation.Collections
 
             if (length > 0)
             {
-                var segmentArrayLength = (length + segmentLength - 1)/segmentLength;
+                var segmentArrayLength = (length + segmentLength - 1) / segmentLength;
                 _segments = new T[segmentArrayLength][];
                 var lastSegmentArrayIndex = segmentArrayLength - 1;
 
-                for (var i = 0; i < lastSegmentArrayIndex; i++)
-                {
-                    _segments[i] = new T[segmentLength];
-                }
+                for (var i = 0; i < lastSegmentArrayIndex; i++) _segments[i] = new T[segmentLength];
 
-                var lastSegmentLength = length - lastSegmentArrayIndex*segmentLength;
+                var lastSegmentLength = length - lastSegmentArrayIndex * segmentLength;
                 _segments[lastSegmentArrayIndex] = new T[lastSegmentLength];
             }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         public void Add(T item)
@@ -68,7 +54,6 @@ namespace Foundation.Collections
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         public IReadOnlyList<T> ToReadOnlyList()
@@ -90,9 +75,9 @@ namespace Foundation.Collections
                 get
                 {
                     var segmentLength = _segments[0].Length;
-                    var segmentArrayIndex = index/segmentLength;
+                    var segmentArrayIndex = index / segmentLength;
                     var segment = _segments[segmentArrayIndex];
-                    var segmentIndex = index%segmentLength;
+                    var segmentIndex = index % segmentLength;
                     var value = segment[segmentIndex];
                     return value;
                 }
@@ -113,17 +98,22 @@ namespace Foundation.Collections
                 for (var segmentArrayIndex = 0; segmentArrayIndex < _segments.Length; segmentArrayIndex++)
                 {
                     var segment = _segments[segmentArrayIndex];
-                    for (var segmentIndex = 0; segmentIndex < segment.Length; segmentIndex++)
-                    {
-                        yield return segment[segmentIndex];
-                    }
+                    for (var segmentIndex = 0; segmentIndex < segment.Length; segmentIndex++) yield return segment[segmentIndex];
                 }
             }
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return ((IEnumerable<T>)this).GetEnumerator();
+                return ((IEnumerable<T>) this).GetEnumerator();
             }
         }
+
+        #region Private Fields
+
+        private readonly T[][] _segments;
+        private int _currentSegmentArrayIndex;
+        private int _currentSegmentIndex;
+
+        #endregion
     }
 }

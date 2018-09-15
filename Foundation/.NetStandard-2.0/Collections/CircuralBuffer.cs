@@ -6,21 +6,12 @@ using Foundation.Assertions;
 namespace Foundation.Collections
 {
     /// <summary>
-    /// https://en.wikipedia.org/wiki/Circular_buffer
+    ///     https://en.wikipedia.org/wiki/Circular_buffer
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public sealed class CircularBuffer<T> : IList<T>
     {
-        #region Private Fields
-
-        private T[] _array;
-        private int _head;
-        private int _tail;
-
-        #endregion
-
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="capacity"></param>
         public CircularBuffer(int capacity)
@@ -29,12 +20,40 @@ namespace Foundation.Collections
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public int Capacity => _array.Length;
 
+        #region IEnumerable<T> Members
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            if (Count > 0)
+            {
+                var current = _head;
+                while (true)
+                {
+                    var item = _array[current];
+                    yield return item;
+                    if (current == _tail) break;
+
+                    current = (current + 1) % _array.Length;
+                }
+            }
+        }
+
+        #endregion
+
+        #region IEnumerable Members
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            var enumerable = (IEnumerable<T>) this;
+            return enumerable.GetEnumerator();
+        }
+
+        #endregion
+
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -48,14 +67,15 @@ namespace Foundation.Collections
                 _tail = 0;
             }
             else
+            {
                 _head = (_head - 1) % _array.Length;
+            }
 
             _array[_head] = item;
             Count++;
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -78,21 +98,16 @@ namespace Foundation.Collections
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="items"></param>
         public void AddTail(IEnumerable<T> items)
         {
             Assert.IsNotNull(items);
 
-            foreach (var item in items)
-            {
-                AddTail(item);
-            }
+            foreach (var item in items) AddTail(item);
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         public T PeekHead()
@@ -102,7 +117,6 @@ namespace Foundation.Collections
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         public T RemoveHead()
@@ -118,7 +132,6 @@ namespace Foundation.Collections
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         public T PeekTail()
@@ -129,7 +142,6 @@ namespace Foundation.Collections
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         public T RemoveTail()
@@ -144,7 +156,6 @@ namespace Foundation.Collections
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="capacity"></param>
         public void SetCapacity(int capacity)
@@ -177,6 +188,14 @@ namespace Foundation.Collections
             _array = target;
         }
 
+        #region Private Fields
+
+        private T[] _array;
+        private int _head;
+        private int _tail;
+
+        #endregion
+
         #region IList<T> Members
 
         int IList<T>.IndexOf(T item)
@@ -195,7 +214,6 @@ namespace Foundation.Collections
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -239,7 +257,6 @@ namespace Foundation.Collections
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public int Count { get; private set; }
 
@@ -248,39 +265,6 @@ namespace Foundation.Collections
         bool ICollection<T>.Remove(T item)
         {
             throw new NotImplementedException();
-        }
-
-        #endregion
-
-        #region IEnumerable<T> Members
-
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            if (Count > 0)
-            {
-                var current = _head;
-                while (true)
-                {
-                    var item = _array[current];
-                    yield return item;
-                    if (current == _tail)
-                    {
-                        break;
-                    }
-
-                    current = (current + 1) % _array.Length;
-                }
-            }
-        }
-
-        #endregion
-
-        #region IEnumerable Members
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            var enumerable = (IEnumerable<T>) this;
-            return enumerable.GetEnumerator();
         }
 
         #endregion

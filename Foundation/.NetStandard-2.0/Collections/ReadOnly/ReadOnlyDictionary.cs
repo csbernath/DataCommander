@@ -18,9 +18,25 @@ namespace Foundation.Collections.ReadOnly
         public IEnumerable<TKey> Keys => _dictionary.Keys;
         public IEnumerable<TValue> Values => _dictionary.Values;
         public int Count => _dictionary.Count;
-        public bool ContainsKey(TKey key) => _dictionary.ContainsKey(key);
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => _dictionary.GetEnumerator();
-        public bool TryGetValue(TKey key, out TValue value) => _dictionary.TryGetValue(key, out value);
-        IEnumerator IEnumerable.GetEnumerator() => _dictionary.GetEnumerator();
+
+        public bool ContainsKey(TKey key)
+        {
+            return _dictionary.ContainsKey(key);
+        }
+
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+        {
+            return _dictionary.GetEnumerator();
+        }
+
+        public bool TryGetValue(TKey key, out TValue value)
+        {
+            return _dictionary.TryGetValue(key, out value);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _dictionary.GetEnumerator();
+        }
     }
 }
