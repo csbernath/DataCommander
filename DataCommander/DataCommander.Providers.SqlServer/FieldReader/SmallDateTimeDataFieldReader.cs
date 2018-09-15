@@ -1,14 +1,13 @@
-﻿using DataCommander.Providers.FieldNamespace;
+﻿using System;
+using System.Data;
+using DataCommander.Providers.FieldNamespace;
 
 namespace DataCommander.Providers.SqlServer.FieldReader
 {
-    using System;
-    using System.Data;
-
     internal sealed class SmallDateTimeDataFieldReader : IDataFieldReader
     {
-        private readonly IDataRecord _dataRecord;
         private readonly int _columnOrdinal;
+        private readonly IDataRecord _dataRecord;
 
         public SmallDateTimeDataFieldReader(
             IDataRecord dataRecord,

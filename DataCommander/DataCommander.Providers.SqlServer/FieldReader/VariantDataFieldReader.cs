@@ -1,18 +1,21 @@
-﻿using DataCommander.Providers.FieldNamespace;
+﻿using System;
+using System.Data;
+using System.Data.SqlClient;
+using DataCommander.Providers.FieldNamespace;
 
 namespace DataCommander.Providers.SqlServer.FieldReader
 {
-    using System;
-    using System.Data;
-    using System.Data.SqlClient;
-
-    sealed class VariantDataFieldReader : IDataFieldReader
+    internal sealed class VariantDataFieldReader : IDataFieldReader
     {
+        private readonly int _columnOrdinal;
+
+        private readonly SqlDataReader _sqlDataReader;
+
         public VariantDataFieldReader(
             IDataRecord dataRecord,
             int columnOrdinal)
         {
-            _sqlDataReader = (SqlDataReader)dataRecord;
+            _sqlDataReader = (SqlDataReader) dataRecord;
             _columnOrdinal = columnOrdinal;
         }
 
@@ -39,7 +42,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
                         switch (elementTypeCode)
                         {
                             case TypeCode.Byte:
-                                var bytes = (byte[])value;
+                                var bytes = (byte[]) value;
                                 value = new BinaryField(bytes);
                                 break;
                         }
@@ -51,7 +54,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
                         switch (typeCode)
                         {
                             case TypeCode.DateTime:
-                                var dateTime = (DateTime)value;
+                                var dateTime = (DateTime) value;
                                 value = DateTimeField.ToString(dateTime);
                                 break;
                         }
@@ -61,8 +64,5 @@ namespace DataCommander.Providers.SqlServer.FieldReader
                 return value;
             }
         }
-
-        readonly SqlDataReader _sqlDataReader;
-        readonly int _columnOrdinal;
     }
 }

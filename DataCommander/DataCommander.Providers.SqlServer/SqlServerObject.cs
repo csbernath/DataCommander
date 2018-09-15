@@ -10,8 +10,15 @@ namespace DataCommander.Providers.SqlServer
 {
     internal static class SqlServerObject
     {
-        public static string GetDatabases() => "select name from sys.databases (nolock) order by name";
-        public static string GetSchemas() => "select name from sys.schemas (nolock) order by name";
+        public static string GetDatabases()
+        {
+            return "select name from sys.databases (nolock) order by name";
+        }
+
+        public static string GetSchemas()
+        {
+            return "select name from sys.schemas (nolock) order by name";
+        }
 
         public static string GetSchemas(string database)
         {

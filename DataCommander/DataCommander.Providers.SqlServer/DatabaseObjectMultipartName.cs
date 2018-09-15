@@ -1,12 +1,12 @@
-﻿namespace DataCommander.Providers.SqlServer
-{
-    using System.Data.SqlClient;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
+﻿using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
+using System.Text;
 
+namespace DataCommander.Providers.SqlServer
+{
     /// <summary>
-    /// See <see cref="http://msdn.microsoft.com/en-us/library/ms177563.aspx"/>.
+    ///     See <see cref="http://msdn.microsoft.com/en-us/library/ms177563.aspx" />.
     /// </summary>
     internal sealed class DatabaseObjectMultipartName
     {
@@ -45,24 +45,15 @@
                             Database = parts[i];
                             i--;
 
-                            if (i >= 0)
-                            {
-                                _server = parts[i];
-                            }
+                            if (i >= 0) _server = parts[i];
                         }
                     }
                 }
             }
 
-            if (Database == null)
-            {
-                Database = currentDatabase;
-            }
+            if (Database == null) Database = currentDatabase;
 
-            if (string.IsNullOrEmpty(Schema))
-            {
-                Schema = null;
-            }
+            if (string.IsNullOrEmpty(Schema)) Schema = null;
 
             if (Name != null)
             {
@@ -74,10 +65,7 @@
                     length--;
                 }
 
-                if (length > 0 && Name[length - 1] == ']')
-                {
-                    Name = Name.Substring(0, length - 1);
-                }
+                if (length > 0 && Name[length - 1] == ']') Name = Name.Substring(0, length - 1);
             }
         }
 
@@ -90,24 +78,15 @@
         public override string ToString()
         {
             var sb = new StringBuilder();
-            if (Database != null)
-            {
-                sb.Append(Database);
-            }
+            if (Database != null) sb.Append(Database);
 
             if (Schema != null)
             {
-                if (sb.Length > 0)
-                {
-                    sb.Append('.');
-                }
+                if (sb.Length > 0) sb.Append('.');
                 sb.Append(Schema);
             }
 
-            if (sb.Length > 0)
-            {
-                sb.Append('.');
-            }
+            if (sb.Length > 0) sb.Append('.');
 
             sb.Append(Name);
             return sb.ToString();

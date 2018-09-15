@@ -22,20 +22,20 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     internal sealed class TableNode : ITreeNode
     {
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-        private readonly string _owner;
         private readonly string _name;
-        private readonly int _id;
+        private readonly string _owner;
 
         public TableNode(DatabaseNode databaseNode, string owner, string name, int id)
         {
             DatabaseNode = databaseNode;
             _owner = owner;
             _name = name;
-            _id = id;
+            Id = id;
         }
 
         public DatabaseNode DatabaseNode { get; }
-        public int Id => _id;
+        public int Id { get; }
+
         public string Name => $"{_owner}.{_name}";
         public bool IsLeaf => false;
 
@@ -43,13 +43,57 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         {
             return new ITreeNode[]
             {
-                new ColumnCollectionNode(DatabaseNode, _id),
-                new TriggerCollectionNode(DatabaseNode, _id),
-                new IndexCollectionNode(DatabaseNode, _id)
+                new ColumnCollectionNode(DatabaseNode, Id),
+                new TriggerCollectionNode(DatabaseNode, Id),
+                new IndexCollectionNode(DatabaseNode, Id)
             };
         }
 
         public bool Sortable => false;
+
+        public string Query
+        {
+            get
+            {
+                var name = new DatabaseObjectMultipartName(null, DatabaseNode.Name, _owner, _name);
+                var connectionString = DatabaseNode.Databases.Server.ConnectionString;
+                string text;
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    text = GetSelectStatement(connection, name);
+                }
+
+                return text;
+            }
+        }
+
+        public ContextMenuStrip ContextMenu
+        {
+            get
+            {
+                var menu = new ContextMenuStrip();
+                var item = new ToolStripMenuItem("Open", null, Open_Click);
+                menu.Items.Add(item);
+
+                item = new ToolStripMenuItem("Script Table", null, ScriptTable_Click);
+                menu.Items.Add(item);
+
+                item = new ToolStripMenuItem("Schema", null, Schema_Click);
+                menu.Items.Add(item);
+
+                item = new ToolStripMenuItem("Indexes", null, Indexes_Click);
+                menu.Items.Add(item);
+
+                item = new ToolStripMenuItem("Select script", null, SelectScript_Click);
+                menu.Items.Add(item);
+
+                item = new ToolStripMenuItem("Insert script", null, InsertScript_Click);
+                menu.Items.Add(item);
+
+                return menu;
+            }
+        }
 
         internal static string GetSelectStatement(
             IDbConnection connection,
@@ -102,26 +146,10 @@ from    [{databaseObjectMultipartName.Database}].[{databaseObjectMultipartName.S
             return query;
         }
 
-        public string Query
-        {
-            get
-            {
-                var name = new DatabaseObjectMultipartName(null, DatabaseNode.Name, _owner, _name);
-                var connectionString = DatabaseNode.Databases.Server.ConnectionString;
-                string text;
-                using (var connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-                    text = GetSelectStatement(connection, name);
-                }
-                return text;
-            }
-        }
-
         private void Open_Click(object sender, EventArgs e)
         {
             var mainForm = DataCommanderApplication.Instance.MainForm;
-            var queryForm = (QueryForm)mainForm.ActiveMdiChild;
+            var queryForm = (QueryForm) mainForm.ActiveMdiChild;
             var name = DatabaseNode.Name + "." + _owner + "." + _name;
             var query = "select * from " + name;
             queryForm.OpenTable(query);
@@ -150,25 +178,21 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                 var keys = dataSet.Tables[1];
 
                 var schema = new DataTable();
-                schema.Columns.Add(" ", typeof (int));
-                schema.Columns.Add("  ", typeof (string));
-                schema.Columns.Add("Name", typeof (string));
-                schema.Columns.Add("Type", typeof (string));
-                schema.Columns.Add("Collation", typeof (string));
-                schema.Columns.Add("Formula", typeof (string));
+                schema.Columns.Add(" ", typeof(int));
+                schema.Columns.Add("  ", typeof(string));
+                schema.Columns.Add("Name", typeof(string));
+                schema.Columns.Add("Type", typeof(string));
+                schema.Columns.Add("Collation", typeof(string));
+                schema.Columns.Add("Formula", typeof(string));
 
                 foreach (DataRow column in columns.Rows)
                 {
                     string identity;
 
                     if (Convert.ToBoolean(column["col_identity"]))
-                    {
                         identity = "IDENTITY";
-                    }
                     else
-                    {
                         identity = string.Empty;
-                    }
 
                     var sb = new StringBuilder();
                     var dbType = column["col_typename"].ToString();
@@ -182,13 +206,9 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                             var scale = Convert.ToInt32(column["col_scale"]);
 
                             if (scale == 0)
-                            {
                                 sb.AppendFormat("({0})", precision);
-                            }
                             else
-                            {
                                 sb.AppendFormat("({0},{1})", precision, scale);
-                            }
 
                             break;
 
@@ -197,47 +217,26 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                         case "varchar":
                         case "nvarchar":
                         case "varbinary":
-                            var columnLength = (int)column["col_len"];
+                            var columnLength = (int) column["col_len"];
                             string columnlengthString;
 
                             if (columnLength == -1)
-                            {
                                 columnlengthString = "max";
-                            }
                             else
-                            {
                                 columnlengthString = columnLength.ToString();
-                            }
 
                             sb.AppendFormat("({0})", columnlengthString);
                             break;
-
-                        default:
-                            break;
                     }
 
-                    if (!Convert.ToBoolean(column["col_null"]))
-                    {
-                        sb.Append(" not null");
-                    }
+                    if (!Convert.ToBoolean(column["col_null"])) sb.Append(" not null");
 
                     var collation = ValueReader.GetValue(column["collation"], string.Empty);
                     var formula = string.Empty;
 
-                    if (column["text"] != DBNull.Value)
-                    {
-                        formula = column["text"].ToString();
-                    }
+                    if (column["text"] != DBNull.Value) formula = column["text"].ToString();
 
-                    schema.Rows.Add(new[]
-                    {
-                        column["col_id"],
-                        identity,
-                        column["col_name"],
-                        sb.ToString(),
-                        collation,
-                        formula,
-                    });
+                    schema.Rows.Add(column["col_id"], identity, column["col_name"], sb.ToString(), collation, formula);
                 }
 
                 if (keys.Rows.Count > 0)
@@ -247,15 +246,11 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                         select row).FirstOrDefault();
 
                     if (pk != null)
-                    {
                         for (var i = 1; i <= 16; i++)
                         {
                             var keyColObj = pk["cKeyCol" + i];
 
-                            if (keyColObj == DBNull.Value)
-                            {
-                                break;
-                            }
+                            if (keyColObj == DBNull.Value) break;
 
                             var keyCol = keyColObj.ToString();
 
@@ -264,21 +259,16 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                             var identity = dataRow[1].ToString();
 
                             if (identity.Length > 0)
-                            {
                                 dataRow[1] = "PKEY," + dataRow[1];
-                            }
                             else
-                            {
                                 dataRow[1] = "PKEY";
-                            }
                         }
-                    }
                 }
 
                 dataSet.Tables.Add(schema);
 
                 var mainForm = DataCommanderApplication.Instance.MainForm;
-                var queryForm = (QueryForm)mainForm.ActiveMdiChild;
+                var queryForm = (QueryForm) mainForm.ActiveMdiChild;
                 queryForm.ShowDataSet(dataSet);
             }
         }
@@ -287,7 +277,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
         {
             using (new CursorManager(Cursors.WaitCursor))
             {
-                var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+                var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
                 queryForm.SetStatusbarPanelText("Copying table script to clipboard...", SystemColors.ControlText);
                 var stopwatch = Stopwatch.StartNew();
 
@@ -311,6 +301,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
                     connectionInfo.UserName = csb.UserID;
                     connectionInfo.Password = csb.Password;
                 }
+
                 var connection = new ServerConnection(connectionInfo);
                 connection.Connect();
                 var server = new Server(connection);
@@ -373,6 +364,7 @@ exec sp_MStablechecks N'{1}.[{2}]'", DatabaseNode.Name, _owner, _name);
             {
                 selectStatement = GetSelectStatement(connection, name);
             }
+
             QueryForm.ShowText(selectStatement);
         }
 
@@ -423,9 +415,9 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                     prefix = ',';
                 }
 
-                var variableName = (string)row["name"];
+                var variableName = (string) row["name"];
                 variableName = char.ToLower(variableName[0]) + variableName.Substring(1);
-                var typeName = (string)row["TypeName"];
+                var typeName = (string) row["TypeName"];
 
                 switch (typeName)
                 {
@@ -435,18 +427,15 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                     case "varchar":
                         var precision = row.Field<short>("max_length");
                         var precisionString = precision >= 0 ? precision.ToString() : "max";
-                        typeName += "(" + precisionString.ToString() + ")";
+                        typeName += "(" + precisionString + ")";
                         break;
 
                     case "decimal":
                         var scale = row.Field<byte>("scale");
                         if (scale == 0)
-                            typeName += "(" + row["precision"].ToString() + ")";
+                            typeName += "(" + row["precision"] + ")";
                         else
-                            typeName += "(" + row["precision"].ToString() + ',' + scale + ")";
-                        break;
-
-                    default:
+                            typeName += "(" + row["precision"] + ',' + scale + ")";
                         break;
                 }
 
@@ -476,7 +465,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             {
                 var dataRow = table.Rows[i];
                 var stringTableRow = st.NewRow();
-                var variableName = (string)dataRow["name"];
+                var variableName = (string) dataRow["name"];
                 variableName = char.ToLower(variableName[0]) + variableName.Substring(1);
                 var prefix = i == 0 ? ' ' : ',';
                 stringTableRow[1] = $"{prefix}@{variableName}";
@@ -489,35 +478,8 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             sb.Append(st.ToString(4));
 
             Clipboard.SetText(sb.ToString());
-            var queryForm = (QueryForm)DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
+            var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
             queryForm.SetStatusbarPanelText("Copying script to clipboard finished.", SystemColors.ControlText);
-        }
-
-        public ContextMenuStrip ContextMenu
-        {
-            get
-            {
-                var menu = new ContextMenuStrip();
-                var item = new ToolStripMenuItem("Open", null, Open_Click);
-                menu.Items.Add(item);
-
-                item = new ToolStripMenuItem("Script Table", null, ScriptTable_Click);
-                menu.Items.Add(item);
-
-                item = new ToolStripMenuItem("Schema", null, Schema_Click);
-                menu.Items.Add(item);
-
-                item = new ToolStripMenuItem("Indexes", null, Indexes_Click);
-                menu.Items.Add(item);
-
-                item = new ToolStripMenuItem("Select script", null, SelectScript_Click);
-                menu.Items.Add(item);
-
-                item = new ToolStripMenuItem("Insert script", null, InsertScript_Click);
-                menu.Items.Add(item);
-
-                return menu;
-            }
         }
     }
 }

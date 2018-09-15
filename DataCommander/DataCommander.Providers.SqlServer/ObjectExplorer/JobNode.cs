@@ -27,7 +27,12 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         string ITreeNode.Name => _name;
         bool ITreeNode.IsLeaf => true;
-        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => throw new NotImplementedException();
+
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+        {
+            throw new NotImplementedException();
+        }
+
         bool ITreeNode.Sortable => false;
 
         string ITreeNode.Query

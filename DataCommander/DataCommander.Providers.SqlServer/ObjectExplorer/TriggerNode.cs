@@ -11,16 +11,16 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         private readonly DatabaseNode _databaseNode;
         private readonly int _id;
-        private readonly string _name;
 
         public TriggerNode(DatabaseNode databaseNode, int id, string name)
         {
             _databaseNode = databaseNode;
             _id = id;
-            _name = name;
+            Name = name;
         }
 
-        public string Name => _name;
+        public string Name { get; }
+
         public bool IsLeaf => true;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
@@ -32,7 +32,18 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         public string Query => null;
 
-        void menuItemScriptObject_Click(object sender, EventArgs e)
+        public ContextMenuStrip ContextMenu
+        {
+            get
+            {
+                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, menuItemScriptObject_Click);
+                var contextMenu = new ContextMenuStrip();
+                contextMenu.Items.Add(menuItemScriptObject);
+                return contextMenu;
+            }
+        }
+
+        private void menuItemScriptObject_Click(object sender, EventArgs e)
         {
             var cb = new SqlCommandBuilder();
             var databaseName = cb.QuoteIdentifier(_databaseNode.Name);
@@ -52,17 +63,6 @@ where m.object_id = {_id}";
             }
 
             QueryForm.ShowText(definition);
-        }
-
-        public ContextMenuStrip ContextMenu
-        {
-            get
-            {
-                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, menuItemScriptObject_Click);
-                var contextMenu = new ContextMenuStrip();
-                contextMenu.Items.Add(menuItemScriptObject);
-                return contextMenu;
-            }
         }
     }
 }

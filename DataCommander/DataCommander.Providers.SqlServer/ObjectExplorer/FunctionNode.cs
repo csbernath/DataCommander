@@ -7,19 +7,18 @@ using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-
     internal sealed class FunctionNode : ITreeNode
     {
         private readonly DatabaseNode _database;
-        private readonly string _owner;
         private readonly string _name;
+        private readonly string _owner;
         private readonly string _xtype;
 
         public FunctionNode(
             DatabaseNode database,
             string owner,
             string name,
-            string xtype )
+            string xtype)
         {
             _database = database;
             _owner = owner;
@@ -31,7 +30,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         public bool IsLeaf => true;
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren( bool refresh )
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
             return null;
         }
@@ -66,27 +65,28 @@ from	{_database.Name}.{_owner}.[{_name}]()";
             }
         }
 
-        void menuItemScriptObject_Click( object sender, EventArgs e )
-        {
-            var connectionString = _database.Databases.Server.ConnectionString;
-            string text;
-            using (var connection = new SqlConnection( connectionString ))
-            {
-                connection.Open();
-                text = SqlDatabase.GetSysComments( connection, _database.Name, _owner, _name );
-            }
-            QueryForm.ShowText( text );
-        }
-
         public ContextMenuStrip ContextMenu
         {
             get
             {
-                var menuItemScriptObject = new ToolStripMenuItem( "Script Object", null, menuItemScriptObject_Click );
+                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, menuItemScriptObject_Click);
                 var contextMenu = new ContextMenuStrip();
-                contextMenu.Items.Add( menuItemScriptObject );
+                contextMenu.Items.Add(menuItemScriptObject);
                 return contextMenu;
             }
+        }
+
+        private void menuItemScriptObject_Click(object sender, EventArgs e)
+        {
+            var connectionString = _database.Databases.Server.ConnectionString;
+            string text;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                text = SqlDatabase.GetSysComments(connection, _database.Name, _owner, _name);
+            }
+
+            QueryForm.ShowText(text);
         }
     }
 }

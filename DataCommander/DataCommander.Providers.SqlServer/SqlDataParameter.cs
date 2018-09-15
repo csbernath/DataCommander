@@ -1,9 +1,8 @@
-﻿using Foundation.Assertions;
+﻿using System.Data.SqlClient;
+using Foundation.Assertions;
 
 namespace DataCommander.Providers.SqlServer
 {
-    using System.Data.SqlClient;
-
     internal sealed class SqlDataParameter : DataParameterBase
     {
         private readonly SqlParameter parameter;

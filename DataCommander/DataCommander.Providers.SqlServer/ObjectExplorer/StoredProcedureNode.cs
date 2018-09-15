@@ -13,8 +13,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     internal sealed class StoredProcedureNode : ITreeNode
     {
         private readonly DatabaseNode _database;
-        private readonly string _owner;
         private readonly string _name;
+        private readonly string _owner;
 
         public StoredProcedureNode(DatabaseNode database, string owner, string name)
         {
@@ -25,7 +25,12 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         public string Name => _owner + '.' + _name;
         public bool IsLeaf => true;
-        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => null;
+
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
+        {
+            return null;
+        }
+
         public bool Sortable => false;
 
         public string Query
@@ -34,6 +39,17 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             {
                 var query = "exec " + _name;
                 return query;
+            }
+        }
+
+        public ContextMenuStrip ContextMenu
+        {
+            get
+            {
+                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, menuItemScriptObject_Click);
+                var contextMenu = new ContextMenuStrip();
+                contextMenu.Items.Add(menuItemScriptObject);
+                return contextMenu;
             }
         }
 
@@ -55,17 +71,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             queryForm.SetStatusbarPanelText(
                 $"Copying stored prcoedure script to clipboard finished in {StopwatchTimeSpan.ToString(stopwatch.ElapsedTicks, 3)} seconds.",
                 SystemColors.ControlText);
-        }
-
-        public ContextMenuStrip ContextMenu
-        {
-            get
-            {
-                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, menuItemScriptObject_Click);
-                var contextMenu = new ContextMenuStrip();
-                contextMenu.Items.Add(menuItemScriptObject);
-                return contextMenu;
-            }
         }
     }
 }

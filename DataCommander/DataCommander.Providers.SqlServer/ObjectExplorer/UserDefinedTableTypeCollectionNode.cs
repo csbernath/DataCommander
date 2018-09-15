@@ -9,7 +9,10 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         private readonly DatabaseNode _database;
 
-        public UserDefinedTableTypeCollectionNode(DatabaseNode database) => _database = database;
+        public UserDefinedTableTypeCollectionNode(DatabaseNode database)
+        {
+            _database = database;
+        }
 
         string ITreeNode.Name => "User-Defined Table Types";
         bool ITreeNode.IsLeaf => false;

@@ -7,6 +7,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     internal sealed class ViewCollectionNode : ITreeNode
     {
+        private readonly DatabaseNode _database;
+
         public ViewCollectionNode(DatabaseNode database)
         {
             _database = database;
@@ -46,6 +48,5 @@ order by 1,2";
         public bool Sortable => false;
         public string Query => null;
         public ContextMenuStrip ContextMenu => null;
-        private readonly DatabaseNode _database;
     }
 }

@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Providers.SqlServer
-{
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Text;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
+namespace DataCommander.Providers.SqlServer
+{
     internal sealed class IdentifierParser
     {
         private readonly TextReader _textReader;
@@ -21,31 +21,19 @@
             {
                 var peek = _textReader.Peek();
 
-                if (peek == -1)
-                {
-                    break;
-                }
+                if (peek == -1) break;
 
-                peekChar = (char)peek;
+                peekChar = (char) peek;
 
                 if (peekChar == '.')
-                {
                     _textReader.Read();
-                }
                 else if (peekChar == '[')
-                {
                     yield return ReadQuotedIdentifier();
-                }
                 else
-                {
                     yield return ReadUnquotedIdentifier();
-                }
             }
 
-            if (peekChar == '.')
-            {
-                yield return null;
-            }
+            if (peekChar == '.') yield return null;
         }
 
         #region Private Methods
@@ -62,18 +50,16 @@
                 if (peek == -1)
                     break;
 
-                var peekChar = (char)peek;
+                var peekChar = (char) peek;
 
                 if (peekChar == ']')
                 {
                     _textReader.Read();
                     break;
                 }
-                else
-                {
-                    identifier.Append(peekChar);
-                    _textReader.Read();
-                }
+
+                identifier.Append(peekChar);
+                _textReader.Read();
             }
 
             return identifier.ToString();
@@ -90,17 +76,15 @@
                 if (peek == -1)
                     break;
 
-                var peekChar = (char)peek;
+                var peekChar = (char) peek;
 
                 if (peekChar == '.')
                 {
                     break;
                 }
-                else
-                {
-                    identifier.Append(peekChar);
-                    _textReader.Read();
-                }
+
+                identifier.Append(peekChar);
+                _textReader.Read();
             }
 
             return identifier.ToString();

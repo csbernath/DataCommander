@@ -11,7 +11,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         public JobCollectionNode(ServerNode server)
         {
-            FoundationContract.Requires<ArgumentException>( server != null );
+            FoundationContract.Requires<ArgumentException>(server != null);
 
             Server = server;
         }

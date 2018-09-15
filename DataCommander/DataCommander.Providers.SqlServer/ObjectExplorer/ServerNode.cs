@@ -34,13 +34,9 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
                 var csb = new SqlConnectionStringBuilder(ConnectionString);
                 string userName;
                 if (csb.IntegratedSecurity)
-                {
                     userName = Environment.UserDomainName + "\\" + Environment.UserName;
-                }
                 else
-                {
                     userName = csb.UserID;
-                }
 
                 return $"{csb.DataSource}(SQL Server {serverVersion} - {userName})";
             }

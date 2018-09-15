@@ -5,9 +5,9 @@ namespace DataCommander.Providers.SqlServer
 {
     internal sealed class ObjectName : IObjectName
     {
-        private SqlObject _sqlObject;
-        private readonly string _schemaName;
         private readonly string _objectName;
+        private readonly string _schemaName;
+        private SqlObject _sqlObject;
 
         public ObjectName(SqlObject sqlObject, string schemaName, string objectName)
         {

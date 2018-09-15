@@ -1,10 +1,12 @@
-﻿namespace DataCommander.Providers.SqlServer.ObjectExplorer
-{
-    using System.Collections.Generic;
-    using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.SqlServer.ObjectExplorer
+{
     internal sealed class FunctionCollectionNode : ITreeNode
     {
+        private readonly DatabaseNode _database;
+
         public FunctionCollectionNode(DatabaseNode database)
         {
             _database = database;
@@ -28,7 +30,5 @@
         public string Query => null;
 
         public ContextMenuStrip ContextMenu => null;
-
-        readonly DatabaseNode _database;
     }
 }

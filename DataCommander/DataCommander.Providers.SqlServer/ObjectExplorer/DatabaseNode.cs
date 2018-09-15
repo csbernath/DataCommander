@@ -39,6 +39,18 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         string ITreeNode.Query => null;
 
+        ContextMenuStrip ITreeNode.ContextMenu
+        {
+            get
+            {
+                var menuItemGetInformation = new ToolStripMenuItem("Get information", null,
+                    menuItemGetInformation_Click);
+                var contextMenu = new ContextMenuStrip();
+                contextMenu.Items.Add(menuItemGetInformation);
+                return contextMenu;
+            }
+        }
+
         private void menuItemGetInformation_Click(object sender, EventArgs e)
         {
             var commandText = string.Format(@"select
@@ -77,22 +89,8 @@ from	[{0}].sys.database_files f", Name);
                     queryForm.ShowMessage(sqlException);
                 }
             }
-            if (dataSet != null)
-            {
-                queryForm.ShowDataSet(dataSet);
-            }
-        }
 
-        ContextMenuStrip ITreeNode.ContextMenu
-        {
-            get
-            {
-                var menuItemGetInformation = new ToolStripMenuItem("Get information", null,
-                    menuItemGetInformation_Click);
-                var contextMenu = new ContextMenuStrip();
-                contextMenu.Items.Add(menuItemGetInformation);
-                return contextMenu;
-            }
+            if (dataSet != null) queryForm.ShowDataSet(dataSet);
         }
     }
 }

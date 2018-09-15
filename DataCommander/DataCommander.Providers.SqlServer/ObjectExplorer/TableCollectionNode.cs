@@ -12,6 +12,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             DatabaseNode = databaseNode;
         }
 
+        public DatabaseNode DatabaseNode { get; }
+
         public string Name => "Tables";
 
         public bool IsLeaf => false;
@@ -88,7 +90,6 @@ order by 1,2", DatabaseNode.Name);
 
         public bool Sortable => false;
         public string Query => null;
-        public DatabaseNode DatabaseNode { get; }
         public ContextMenuStrip ContextMenu => null;
     }
 }

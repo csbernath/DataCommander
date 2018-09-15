@@ -10,15 +10,33 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     internal sealed class ColumnCollectionNode : ITreeNode
     {
-        private ILog _log = LogFactory.Instance.GetCurrentTypeLog();
         private readonly DatabaseNode _databaseNode;
         private readonly int _id;
+        private ILog _log = LogFactory.Instance.GetCurrentTypeLog();
 
         public ColumnCollectionNode(DatabaseNode databaseNode, int id)
         {
             _databaseNode = databaseNode;
             _id = id;
         }
+
+        #region Private Methods
+
+        private static ColumnNode ToColumnNode(IDataRecord dataRecord)
+        {
+            var id = dataRecord.GetInt32(0);
+            var columnName = dataRecord.GetString(1);
+            var systemTypeId = dataRecord.GetByte(2);
+            var maxLength = dataRecord.GetInt16(3);
+            var precision = dataRecord.GetByte(4);
+            var scale = dataRecord.GetByte(5);
+            var isNullable = dataRecord.GetBoolean(6);
+            var userTypeName = dataRecord.GetString(7);
+
+            return new ColumnNode(id, columnName, systemTypeId, maxLength, precision, scale, isNullable, userTypeName);
+        }
+
+        #endregion
 
         #region ITreeNode Members
 
@@ -98,24 +116,6 @@ order by fkc.parent_column_id";
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
         ContextMenuStrip ITreeNode.ContextMenu => null;
-
-        #endregion
-
-        #region Private Methods
-
-        private static ColumnNode ToColumnNode(IDataRecord dataRecord)
-        {
-            var id = dataRecord.GetInt32(0);
-            var columnName = dataRecord.GetString(1);
-            var systemTypeId = dataRecord.GetByte(2);
-            var maxLength = dataRecord.GetInt16(3);
-            var precision = dataRecord.GetByte(4);
-            var scale = dataRecord.GetByte(5);
-            var isNullable = dataRecord.GetBoolean(6);
-            var userTypeName = dataRecord.GetString(7);
-
-            return new ColumnNode(id, columnName, systemTypeId, maxLength, precision, scale, isNullable, userTypeName);
-        }
 
         #endregion
     }

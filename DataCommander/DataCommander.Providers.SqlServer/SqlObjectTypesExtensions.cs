@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers.SqlServer
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace DataCommander.Providers.SqlServer
+{
     internal static class SqlObjectTypesExtensions
     {
         public static List<string> ToObjectTypes(this SqlObjectTypes sqlObjectTypes)
@@ -14,10 +14,7 @@
                 list.Add(SqlServerObjectType.SystemTable);
             }
 
-            if (sqlObjectTypes.HasFlag(SqlObjectTypes.View))
-            {
-                list.Add(SqlServerObjectType.View);
-            }
+            if (sqlObjectTypes.HasFlag(SqlObjectTypes.View)) list.Add(SqlServerObjectType.View);
 
             if (sqlObjectTypes.HasFlag(SqlObjectTypes.Function))
             {

@@ -24,13 +24,6 @@ namespace DataCommander.Providers.SqlServer
 {
     internal sealed class SqlServerProvider : IProvider
     {
-        #region Private Fields
-
-        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
-        private static string[] _keyWords;
-
-        #endregion
-
         #region Constructors
 
         static SqlServerProvider()
@@ -43,13 +36,46 @@ namespace DataCommander.Providers.SqlServer
 
         public static int ShortStringSize { get; }
 
+        internal static List<InfoMessage> ToInfoMessages(SqlErrorCollection sqlErrors)
+        {
+            Assert.IsNotNull(sqlErrors);
+
+            var now = LocalTime.Default.Now;
+            var count = sqlErrors.Count;
+            var messages = new List<InfoMessage>(sqlErrors.Count);
+
+            foreach (SqlError sqlError in sqlErrors)
+            {
+                var severity = sqlError.Class == 0
+                    ? InfoMessageSeverity.Information
+                    : InfoMessageSeverity.Error;
+
+                var header = sqlError.GetHeader();
+                var message = sqlError.Message;
+                messages.Add(new InfoMessage(now, severity, header, message));
+            }
+
+            return messages;
+        }
+
+        #region Private Fields
+
+        private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
+        private static string[] _keyWords;
+
+        #endregion
+
         #region IProvider Members
 
         #region Properties
 
         string IProvider.Name => "SqlServer";
         DbProviderFactory IProvider.DbProviderFactory => SqlClientFactory.Instance;
-        ConnectionBase IProvider.CreateConnection(string connectionString) => new Connection(connectionString);
+
+        ConnectionBase IProvider.CreateConnection(string connectionString)
+        {
+            return new Connection(connectionString);
+        }
 
         string[] IProvider.KeyWords
         {
@@ -73,7 +99,10 @@ namespace DataCommander.Providers.SqlServer
 
         #region Methods
 
-        public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
+        public IObjectExplorer CreateObjectExplorer()
+        {
+            return new ObjectExplorer.ObjectExplorer();
+        }
 
         public void ClearCompletionCache()
         {
@@ -96,7 +125,10 @@ namespace DataCommander.Providers.SqlServer
             return sqlDataReaderHelper;
         }
 
-        public DbDataAdapter CreateDataAdapter(string selectCommandText, IDbConnection connection) => null;
+        public DbDataAdapter CreateDataAdapter(string selectCommandText, IDbConnection connection)
+        {
+            return null;
+        }
 
         void IProvider.CreateInsertCommand(
             DataTable sourceSchemaTable,
@@ -125,10 +157,7 @@ namespace DataCommander.Providers.SqlServer
                     count = dataReader.FieldCount;
                     dataTypeNames = new string[count];
 
-                    for (var i = 0; i < count; i++)
-                    {
-                        dataTypeNames[i] = dataReader.GetDataTypeName(i);
-                    }
+                    for (var i = 0; i < count; i++) dataTypeNames[i] = dataReader.GetDataTypeName(i);
                 }
             }
 
@@ -223,9 +252,6 @@ namespace DataCommander.Providers.SqlServer
                     case SqlDataTypeName.Xml:
                         parameter.SqlDbType = SqlDbType.Xml;
                         converters[i] = ConvertToString;
-                        break;
-
-                    default:
                         break;
                 }
             }
@@ -341,14 +367,9 @@ namespace DataCommander.Providers.SqlServer
                 case SqlDbType.Text:
                 case SqlDbType.NText:
                     if (columnSize <= 8000)
-                    {
                         type = typeof(string);
-                    }
                     else
-                    {
-                        //type = typeof(StringField);
                         type = typeof(object);
-                    }
 
                     break;
 
@@ -408,12 +429,8 @@ namespace DataCommander.Providers.SqlServer
                             var keyWord = token.Value;
 
                             if (keyWord != null && keyWord.Length >= 2 && keyWord.IndexOf(value) == 0 && keyWord != value)
-                            {
                                 if (!list.ContainsKey(token.Value))
-                                {
                                     list.Add(token.Value, null);
-                                }
-                            }
                         }
 
                         array = list.Keys.Select(keyWord => (IObjectName) new NonSqlObjectName(keyWord)).ToList();
@@ -466,17 +483,17 @@ namespace DataCommander.Providers.SqlServer
                                     statements.Add(SqlServerObject.GetSchemas());
 
                                     var objectTypes = sqlObject.Type.ToObjectTypes();
-                                    statements.Add(SqlServerObject.GetObjects(schema: "dbo", objectTypes: objectTypes));
+                                    statements.Add(SqlServerObject.GetObjects("dbo", objectTypes));
                                 }
                                     break;
 
                                 case 2:
                                     if (nameParts[0] != null)
                                     {
-                                        statements.Add(SqlServerObject.GetSchemas(database: nameParts[0]));
+                                        statements.Add(SqlServerObject.GetSchemas(nameParts[0]));
 
                                         var objectTypes = sqlObject.Type.ToObjectTypes();
-                                        statements.Add(SqlServerObject.GetObjects(schema: nameParts[0], objectTypes: objectTypes));
+                                        statements.Add(SqlServerObject.GetObjects(nameParts[0], objectTypes));
                                     }
 
                                     break;
@@ -486,7 +503,7 @@ namespace DataCommander.Providers.SqlServer
                                     if (nameParts[0] != null && nameParts[1] != null)
                                     {
                                         var objectTypes = sqlObject.Type.ToObjectTypes();
-                                        statements.Add(SqlServerObject.GetObjects(database: nameParts[0], schema: nameParts[1], objectTypes: objectTypes));
+                                        statements.Add(SqlServerObject.GetObjects(nameParts[0], nameParts[1], objectTypes));
                                     }
                                 }
                                     break;
@@ -503,21 +520,14 @@ namespace DataCommander.Providers.SqlServer
                             string[] owners;
 
                             if (name.Schema != null)
-                            {
                                 owners = new[] {name.Schema};
-                            }
                             else
-                            {
                                 owners = new[] {"dbo", "sys"};
-                            }
 
                             var sb = new StringBuilder();
                             for (i = 0; i < owners.Length; i++)
                             {
-                                if (i > 0)
-                                {
-                                    sb.Append(',');
-                                }
+                                if (i > 0) sb.Append(',');
 
                                 sb.AppendFormat("'{0}'", owners[i]);
                             }
@@ -550,10 +560,7 @@ end", name.Database, ownersString, name.Name);
                         case SqlObjectTypes.Procedure:
                             name = new DatabaseObjectMultipartName(connection.Database, sqlObject.Name);
 
-                            if (name.Schema == null)
-                            {
-                                name.Schema = "dbo";
-                            }
+                            if (name.Schema == null) name.Schema = "dbo";
 
                             commandText = string.Format(@"select
      s.name
@@ -593,36 +600,29 @@ order by 1", name.Database);
                                         var token = tokens[tokenIndex];
                                         var tokenValue = token.Value;
                                         var indexofAny = tokenValue.IndexOfAny(new[] {'\r', '\n'});
-                                        if (indexofAny >= 0)
-                                        {
-                                            tokenValue = tokenValue.Substring(0, indexofAny);
-                                        }
+                                        if (indexofAny >= 0) tokenValue = tokenValue.Substring(0, indexofAny);
 
                                         string like;
                                         if (tokenValue.Length > 0)
                                         {
                                             if (tokenValue.Contains('%'))
-                                            {
                                                 like = tokenValue;
-                                            }
                                             else
-                                            {
                                                 like = tokenValue + '%';
-                                            }
                                         }
                                         else
                                         {
                                             like = "%";
                                         }
 
-                                        @where = $"where {columnName} like N'{like}'";
+                                        where = $"where {columnName} like N'{like}'";
                                     }
                                     else
                                     {
-                                        @where = null;
+                                        where = null;
                                     }
 
-                                    commandText = $"select distinct top 100 {columnName} from {tableName} (readpast) {@where} order by 1";
+                                    commandText = $"select distinct top 100 {columnName} from {tableName} (readpast) {where} order by 1";
                                 }
                             }
 
@@ -694,13 +694,9 @@ order by 1", name.Database);
             var sqlException = exception as SqlException;
 
             if (sqlException != null)
-            {
                 message = sqlException.Errors.ToLogString();
-            }
             else
-            {
                 message = exception.ToString();
-            }
 
             return message;
         }
@@ -794,28 +790,18 @@ order by 1", name.Database);
                     if (columnOrdinalAddition == null)
                     {
                         if (columnOrdinal == 0)
-                        {
                             columnOrdinalAddition = 1;
-                        }
                         else
-                        {
                             columnOrdinalAddition = 0;
-                        }
                     }
 
                     var pk = string.Empty;
 
-                    if (dataColumnSchema.IsKey == true)
-                    {
-                        pk = "PKEY";
-                    }
+                    if (dataColumnSchema.IsKey == true) pk = "PKEY";
 
                     if (dataColumnSchema.IsIdentity == true)
                     {
-                        if (pk.Length > 0)
-                        {
-                            pk += ',';
-                        }
+                        if (pk.Length > 0) pk += ',';
 
                         pk += "IDENTITY";
                     }
@@ -837,13 +823,9 @@ order by 1", name.Database);
                             string columnSizeString;
 
                             if (columnSize == int.MaxValue)
-                            {
                                 columnSizeString = "max";
-                            }
                             else
-                            {
                                 columnSizeString = columnSize.ToString();
-                            }
 
                             sb.AppendFormat("({0})", columnSizeString);
                             break;
@@ -866,26 +848,13 @@ order by 1", name.Database);
                             else
                                 columnSize = 17;
                             break;
-
-                        default:
-                            break;
                     }
 
                     var allowDbNull = dataColumnSchema.AllowDbNull.GetValueOrDefault();
-                    if (!allowDbNull)
-                    {
-                        sb.Append(" not null");
-                    }
+                    if (!allowDbNull) sb.Append(" not null");
 
-                    table.Rows.Add(new object[]
-                    {
-                        columnOrdinal + columnOrdinalAddition,
-                        pk,
-                        dataColumnSchema.ColumnName,
-                        columnSize,
-                        sb.ToString(),
-                        dataColumnSchema.DataType
-                    });
+                    table.Rows.Add(columnOrdinal + columnOrdinalAddition, pk, dataColumnSchema.ColumnName, columnSize, sb.ToString(),
+                        dataColumnSchema.DataType);
 
                     columnIndex++;
                 }
@@ -922,10 +891,7 @@ order by 1", name.Database);
 
             var fourPartName = new DatabaseObjectMultipartName(connection.Database, tableName);
             var owner = fourPartName.Schema;
-            if (owner == null)
-            {
-                owner = "dbo";
-            }
+            if (owner == null) owner = "dbo";
 
             var commandText = string.Format(@"declare @id int
 
@@ -1018,28 +984,6 @@ order by ic.index_column_id
 
         #endregion
 
-        internal static List<InfoMessage> ToInfoMessages(SqlErrorCollection sqlErrors)
-        {
-            Assert.IsNotNull(sqlErrors);
-
-            var now = LocalTime.Default.Now;
-            var count = sqlErrors.Count;
-            var messages = new List<InfoMessage>(sqlErrors.Count);
-
-            foreach (SqlError sqlError in sqlErrors)
-            {
-                var severity = sqlError.Class == 0
-                    ? InfoMessageSeverity.Information
-                    : InfoMessageSeverity.Error;
-
-                var header = sqlError.GetHeader();
-                var message = sqlError.Message;
-                messages.Add(new InfoMessage(now, severity, header, message));
-            }
-
-            return messages;
-        }
-
         #region Private Methods
 
         private static object ConvertToString(object source)
@@ -1085,10 +1029,7 @@ order by ic.index_column_id
                 var lineStartIndex = commandText.LastIndexOf('\n', token.StartPosition);
                 lineStartIndex++;
                 var lineEndIndex = commandText.IndexOf('\n', token.EndPosition + 1);
-                if (lineEndIndex == -1)
-                {
-                    lineEndIndex = commandText.Length - 1;
-                }
+                if (lineEndIndex == -1) lineEndIndex = commandText.Length - 1;
 
                 var lineLength = lineEndIndex - lineStartIndex + 1;
                 var line = commandText.Substring(lineStartIndex, lineLength);

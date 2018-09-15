@@ -5,13 +5,14 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-
     internal sealed class SystemTableCollectionNode : ITreeNode
     {
         public SystemTableCollectionNode(DatabaseNode databaseNode)
         {
             DatabaseNode = databaseNode;
         }
+
+        public DatabaseNode DatabaseNode { get; }
 
         string ITreeNode.Name => "System Tables";
 
@@ -69,7 +70,6 @@ order by 1,2";
 
         bool ITreeNode.Sortable => false;
         string ITreeNode.Query => null;
-        public DatabaseNode DatabaseNode { get; }
         ContextMenuStrip ITreeNode.ContextMenu => null;
     }
 }

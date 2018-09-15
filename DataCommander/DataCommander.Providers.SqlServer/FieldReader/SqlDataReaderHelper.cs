@@ -1,16 +1,15 @@
-﻿using DataCommander.Providers.FieldNamespace;
+﻿using System;
+using System.Data;
+using System.Data.SqlClient;
+using DataCommander.Providers.FieldNamespace;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.FieldReader
 {
-    using System;
-    using System.Data;
-    using System.Data.SqlClient;
-
     internal sealed class SqlDataReaderHelper : IDataReaderHelper
     {
-        private SqlDataReader _sqlDataReader;
         private readonly IDataFieldReader[] _dataFieldReaders;
+        private SqlDataReader _sqlDataReader;
 
         public SqlDataReaderHelper(IDataReader dataReader)
         {
@@ -28,10 +27,17 @@ namespace DataCommander.Providers.SqlServer.FieldReader
             }
         }
 
+        int IDataReaderHelper.GetValues(object[] values)
+        {
+            for (var i = 0; i < _dataFieldReaders.Length; i++) values[i] = _dataFieldReaders[i].Value;
+
+            return _dataFieldReaders.Length;
+        }
+
         private static IDataFieldReader CreateDataFieldReader(IDataRecord dataRecord, FoundationDbColumn dataColumnSchema)
         {
             var columnOrdinal = dataColumnSchema.ColumnOrdinal;
-            var providerType = (SqlDbType)dataColumnSchema.ProviderType;
+            var providerType = (SqlDbType) dataColumnSchema.ProviderType;
             IDataFieldReader dataFieldReader;
 
             switch (providerType)
@@ -60,13 +66,9 @@ namespace DataCommander.Providers.SqlServer.FieldReader
                     var columnSize = dataColumnSchema.ColumnSize;
 
                     if (columnSize <= SqlServerProvider.ShortStringSize)
-                    {
                         dataFieldReader = new ShortStringFieldReader(dataRecord, columnOrdinal, providerType);
-                    }
                     else
-                    {
                         dataFieldReader = new LongStringFieldReader(dataRecord, columnOrdinal);
-                    }
 
                     break;
 
@@ -121,16 +123,6 @@ namespace DataCommander.Providers.SqlServer.FieldReader
             }
 
             return dataFieldReader;
-        }
-
-        int IDataReaderHelper.GetValues(object[] values)
-        {
-            for (var i = 0; i < _dataFieldReaders.Length; i++)
-            {
-                values[i] = _dataFieldReaders[i].Value;
-            }
-
-            return _dataFieldReaders.Length;
         }
     }
 }

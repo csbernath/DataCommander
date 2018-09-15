@@ -1,13 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Windows.Forms;
 using Foundation.Data;
 using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Windows.Forms;
-
     internal sealed class DatabaseCollectionNode : ITreeNode
     {
         public DatabaseCollectionNode(ServerNode server)

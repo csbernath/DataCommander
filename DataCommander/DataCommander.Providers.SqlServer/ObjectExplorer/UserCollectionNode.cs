@@ -10,7 +10,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         private readonly DatabaseNode _database;
 
-        public UserCollectionNode(DatabaseNode  database)
+        public UserCollectionNode(DatabaseNode database)
         {
             _database = database;
         }

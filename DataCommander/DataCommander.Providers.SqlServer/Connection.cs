@@ -11,15 +11,6 @@ namespace DataCommander.Providers.SqlServer
 {
     internal sealed class Connection : ConnectionBase
     {
-        #region Private Fields
-
-        private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder;
-        private SqlConnection _sqlConnection;
-        private string _serverName;
-        private short _spid;
-
-        #endregion
-
         public Connection(string connectionString)
         {
             _sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString)
@@ -33,47 +24,6 @@ namespace DataCommander.Providers.SqlServer
 
         public override string ConnectionName { get; set; }
 
-        private void CreateConnection()
-        {
-            _sqlConnection = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
-            Connection = _sqlConnection;
-            _sqlConnection.FireInfoMessageEventOnUserErrors = true;
-            _sqlConnection.InfoMessage += OnInfoMessage;
-            _sqlConnection.StateChange += OnStateChange;
-        }
-
-        private void OnStateChange(object sender, StateChangeEventArgs e)
-        {
-            var now = LocalTime.Default.Now;
-            var text = $"Connection.State changed. OriginalState: {e.OriginalState}, CurrentState: {e.CurrentState}";
-            InvokeInfoMessage(new[]
-            {
-                new InfoMessage(now, InfoMessageSeverity.Information, null, text)
-            });
-        }
-
-        public override async Task OpenAsync(CancellationToken cancellationToken)
-        {
-            await _sqlConnection.OpenAsync(cancellationToken);
-
-            if (!cancellationToken.IsCancellationRequested)
-            {
-                const string commandText = @"select @@servername,@@spid
-set arithabort on";
-
-                var executor = DbCommandExecutorFactory.Create(_sqlConnection);
-
-                var item = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord => new
-                {
-                    ServerName = dataRecord.GetString(0),
-                    Spid = dataRecord.GetInt16(1)
-                })[0];
-
-                _serverName = item.ServerName;
-                _spid = item.Spid;
-            }
-        }
-
         public override string Caption
         {
             get
@@ -81,24 +31,14 @@ set arithabort on";
                 string userName = null;
 
                 if (_sqlConnectionStringBuilder.IntegratedSecurity)
-                {
                     userName = WindowsIdentity.GetCurrent().Name;
-                }
                 else
-                {
                     userName = _sqlConnectionStringBuilder.UserID;
-                }
 
                 var caption = $"{_sqlConnection.DataSource}.{_sqlConnection.Database} ({userName} ({_spid}))";
 
                 return caption;
             }
-        }
-
-        private void OnInfoMessage(object sender, SqlInfoMessageEventArgs e)
-        {
-            var infoMessages = SqlServerProvider.ToInfoMessages(e.Errors);
-            InvokeInfoMessage(infoMessages);
         }
 
         public override string DataSource => _sqlConnection.DataSource;
@@ -276,6 +216,53 @@ set arithabort on";
             }
         }
 
+        private void CreateConnection()
+        {
+            _sqlConnection = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
+            Connection = _sqlConnection;
+            _sqlConnection.FireInfoMessageEventOnUserErrors = true;
+            _sqlConnection.InfoMessage += OnInfoMessage;
+            _sqlConnection.StateChange += OnStateChange;
+        }
+
+        private void OnStateChange(object sender, StateChangeEventArgs e)
+        {
+            var now = LocalTime.Default.Now;
+            var text = $"Connection.State changed. OriginalState: {e.OriginalState}, CurrentState: {e.CurrentState}";
+            InvokeInfoMessage(new[]
+            {
+                new InfoMessage(now, InfoMessageSeverity.Information, null, text)
+            });
+        }
+
+        public override async Task OpenAsync(CancellationToken cancellationToken)
+        {
+            await _sqlConnection.OpenAsync(cancellationToken);
+
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                const string commandText = @"select @@servername,@@spid
+set arithabort on";
+
+                var executor = DbCommandExecutorFactory.Create(_sqlConnection);
+
+                var item = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord => new
+                {
+                    ServerName = dataRecord.GetString(0),
+                    Spid = dataRecord.GetInt16(1)
+                })[0];
+
+                _serverName = item.ServerName;
+                _spid = item.Spid;
+            }
+        }
+
+        private void OnInfoMessage(object sender, SqlInfoMessageEventArgs e)
+        {
+            var infoMessages = SqlServerProvider.ToInfoMessages(e.Errors);
+            InvokeInfoMessage(infoMessages);
+        }
+
         public override IDbCommand CreateCommand()
         {
             return _sqlConnection.CreateCommand();
@@ -288,5 +275,14 @@ set arithabort on";
             _sqlConnection = null;
             CreateConnection();
         }
+
+        #region Private Fields
+
+        private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder;
+        private SqlConnection _sqlConnection;
+        private string _serverName;
+        private short _spid;
+
+        #endregion
     }
 }

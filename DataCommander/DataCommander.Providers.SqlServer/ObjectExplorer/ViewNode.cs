@@ -11,8 +11,8 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         private readonly DatabaseNode _database;
         private readonly int _id;
-        private readonly string _schema;
         private readonly string _name;
+        private readonly string _schema;
 
         public ViewNode(DatabaseNode database, int id, string schema, string name)
         {
@@ -31,7 +31,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             {
                 new ColumnCollectionNode(_database, _id),
                 new TriggerCollectionNode(_database, _id),
-                new IndexCollectionNode(_database, _id),
+                new IndexCollectionNode(_database, _id)
             };
         }
 
@@ -53,6 +53,17 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             }
         }
 
+        public ContextMenuStrip ContextMenu
+        {
+            get
+            {
+                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, menuItemScriptObject_Click);
+                var contextMenu = new ContextMenuStrip();
+                contextMenu.Items.Add(menuItemScriptObject);
+                return contextMenu;
+            }
+        }
+
         private void menuItemScriptObject_Click(object sender, EventArgs e)
         {
             var connectionString = _database.Databases.Server.ConnectionString;
@@ -64,17 +75,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             }
 
             QueryForm.ShowText(text);
-        }
-
-        public ContextMenuStrip ContextMenu
-        {
-            get
-            {
-                var menuItemScriptObject = new ToolStripMenuItem("Script Object", null, menuItemScriptObject_Click);
-                var contextMenu = new ContextMenuStrip();
-                contextMenu.Items.Add(menuItemScriptObject);
-                return contextMenu;
-            }
         }
     }
 }

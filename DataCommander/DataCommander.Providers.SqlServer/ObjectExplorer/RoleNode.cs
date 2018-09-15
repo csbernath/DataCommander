@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers.SqlServer.ObjectExplorer
-{
-    using System.Collections.Generic;
-    using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.SqlServer.ObjectExplorer
+{
     internal sealed class RoleNode : ITreeNode
     {
         private readonly DatabaseNode _database;

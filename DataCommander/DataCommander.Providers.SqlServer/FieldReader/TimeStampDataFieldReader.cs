@@ -1,17 +1,20 @@
-﻿using DataCommander.Providers.FieldNamespace;
+﻿using System.Data;
+using System.Data.SqlClient;
+using DataCommander.Providers.FieldNamespace;
 
 namespace DataCommander.Providers.SqlServer.FieldReader
 {
-    using System.Data;
-    using System.Data.SqlClient;
-
-    sealed class TimeStampDataFieldReader : IDataFieldReader
+    internal sealed class TimeStampDataFieldReader : IDataFieldReader
     {
+        private readonly int _columnOrdinal;
+
+        private readonly SqlDataReader _sqlDataReader;
+
         public TimeStampDataFieldReader(
             IDataRecord dataRecord,
             int columnOrdinal)
         {
-            _sqlDataReader = (SqlDataReader)dataRecord;
+            _sqlDataReader = (SqlDataReader) dataRecord;
             _columnOrdinal = columnOrdinal;
         }
 
@@ -23,8 +26,5 @@ namespace DataCommander.Providers.SqlServer.FieldReader
                 return o;
             }
         }
-
-        readonly SqlDataReader _sqlDataReader;
-        readonly int _columnOrdinal;
     }
 }

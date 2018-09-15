@@ -4,10 +4,10 @@ using DataCommander.Providers.FieldNamespace;
 
 namespace DataCommander.Providers.SqlServer.FieldReader
 {
-    sealed class ShortStringFieldReader : IDataFieldReader
+    internal sealed class ShortStringFieldReader : IDataFieldReader
     {
-        private readonly IDataRecord _dataRecord;
         private readonly int _columnOrdinal;
+        private readonly IDataRecord _dataRecord;
         private readonly SqlDbType _sqlDbType;
 
         public ShortStringFieldReader(
@@ -38,9 +38,7 @@ namespace DataCommander.Providers.SqlServer.FieldReader
 
                     if (_sqlDbType == SqlDbType.Char ||
                         _sqlDbType == SqlDbType.NChar)
-                    {
                         s = s.TrimEnd();
-                    }
 
                     value = s;
                 }

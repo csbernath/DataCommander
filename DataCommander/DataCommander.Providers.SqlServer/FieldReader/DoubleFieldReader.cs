@@ -6,8 +6,8 @@ namespace DataCommander.Providers.SqlServer.FieldReader
 {
     internal sealed class DoubleFieldReader : IDataFieldReader
     {
-        private readonly IDataRecord _dataRecord;
         private readonly int _columnOrdinal;
+        private readonly IDataRecord _dataRecord;
 
         public DoubleFieldReader(IDataRecord dataRecord, int columnOrdinal)
         {
@@ -22,7 +22,9 @@ namespace DataCommander.Providers.SqlServer.FieldReader
                 object value;
 
                 if (_dataRecord.IsDBNull(_columnOrdinal))
+                {
                     value = DBNull.Value;
+                }
                 else
                 {
                     var d = _dataRecord.GetDouble(_columnOrdinal);

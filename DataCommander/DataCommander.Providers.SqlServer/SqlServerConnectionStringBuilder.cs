@@ -1,5 +1,5 @@
-﻿using Foundation.Linq;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
+using Foundation.Linq;
 
 namespace DataCommander.Providers.SqlServer
 {

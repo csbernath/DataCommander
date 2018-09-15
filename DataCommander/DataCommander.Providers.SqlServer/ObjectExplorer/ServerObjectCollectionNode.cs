@@ -1,11 +1,10 @@
-﻿using Foundation.Assertions;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
+using Foundation.Assertions;
 using Foundation.Linq;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Windows.Forms;
-
     internal sealed class ServerObjectCollectionNode : ITreeNode
     {
         private readonly ServerNode _server;

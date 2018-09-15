@@ -1,11 +1,10 @@
-﻿using Foundation.Data;
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using System.Data.SqlClient;
-    using System.Windows.Forms;
-
     internal sealed class TableValuedFunctionCollectionNode : ITreeNode
     {
         private readonly DatabaseNode _database;

@@ -3,9 +3,11 @@ using System.Windows.Forms;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
-    sealed class UserNode : ITreeNode
+    internal sealed class UserNode : ITreeNode
     {
-        public UserNode(DatabaseNode database,string name)
+        private readonly DatabaseNode _database;
+
+        public UserNode(DatabaseNode database, string name)
         {
             _database = database;
             Name = name;
@@ -40,7 +42,5 @@ group by u.name", _database.Name, Name);
         }
 
         public ContextMenuStrip ContextMenu => null;
-
-        readonly DatabaseNode _database;
     }
 }

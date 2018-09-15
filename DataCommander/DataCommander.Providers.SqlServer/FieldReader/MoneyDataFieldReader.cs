@@ -1,30 +1,29 @@
-﻿using DataCommander.Providers.FieldNamespace;
+﻿using System;
+using System.Data;
+using System.Globalization;
+using DataCommander.Providers.FieldNamespace;
 
 namespace DataCommander.Providers.SqlServer.FieldReader
 {
-    using System;
-    using System.Data;
-    using System.Globalization;
-
-    sealed class MoneyDataFieldReader : IDataFieldReader
+    internal sealed class MoneyDataFieldReader : IDataFieldReader
     {
         private static readonly NumberFormatInfo NumberFormatInfo;
-        private readonly IDataRecord _dataRecord;
         private readonly int _columnOrdinal;
+        private readonly IDataRecord _dataRecord;
 
         static MoneyDataFieldReader()
         {
-            NumberFormatInfo = (NumberFormatInfo)NumberFormatInfo.CurrentInfo.Clone();
+            NumberFormatInfo = (NumberFormatInfo) NumberFormatInfo.CurrentInfo.Clone();
             //numberFormatInfo.CurrencySymbol = string.Empty;
             //numberFormatInfo.CurrencyDecimalSeparator = ".";
             //numberFormatInfo.CurrencyGroupSeparator = ",";
             //numberFormatInfo.CurrencyGroupSizes = new int[] { 3, 3, 3, 3, 3, 3, 3 };
             //numberFormatInfo.CurrencyDecimalDigits = 6;
-            
+
             NumberFormatInfo.NumberDecimalSeparator = ".";
             NumberFormatInfo.NumberGroupSeparator = ",";
-            NumberFormatInfo.NumberGroupSizes = new[] { 3 };
-            NumberFormatInfo.NumberDecimalDigits = 4; 
+            NumberFormatInfo.NumberGroupSizes = new[] {3};
+            NumberFormatInfo.NumberDecimalDigits = 4;
         }
 
         public MoneyDataFieldReader(
