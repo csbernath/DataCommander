@@ -49,7 +49,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Deployment", "..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Data", "..\Foundation\.NetStandard-2.0\Data\Foundation.Data.csproj", "{34F913BC-EDEE-4385-BAE6-C650A0E21878}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Collections", "..\Foundation\.NetStandard-2.0\Collections\Foundation.Collections.csproj", "{61B48D70-B14F-462C-8A07-E9DB585D3869}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collections", "..\Foundation\.NetStandard-2.0\Collections\Collections.csproj", "{61B48D70-B14F-462C-8A07-E9DB585D3869}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Text", "..\Foundation\.NetStandard-2.0\Text\Foundation.Text.csproj", "{C987A1B0-F61D-4985-9BED-7E4C36C7F90E}"
 EndProject
@@ -57,7 +57,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Diagnostics", ".
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Configuration", "..\Foundation\.NetStandard-2.0\Configuration\Foundation.Configuration.csproj", "{513D0094-7D6B-4453-9D43-23223C51EC4C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Assertions", "..\Foundation\.NetStandard-2.0\Assertions\Foundation.Assertions.csproj", "{3640355A-6D7C-45B4-8377-1D011DAFD8AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assertions", "..\Foundation\.NetStandard-2.0\Assertions\Assertions.csproj", "{3640355A-6D7C-45B4-8377-1D011DAFD8AA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Log", "..\Foundation\.NetStandard-2.0\Log\Foundation.Log.csproj", "{6F50A714-AF20-480E-A6CA-548AB4E27E28}"
 EndProject
@@ -69,11 +69,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.IO", "..\Foundat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Threading", "..\Foundation\.NetStandard-2.0\Threading\Foundation.Threading.csproj", "{AB3458F4-97B4-42E5-9E48-FA001AE29A2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.Xml", "..\Foundation\.NetStandard-2.0\Xml\Foundation.Xml.csproj", "{AD17D060-1FBC-472F-AD67-74051B18BC1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Xml", "..\Foundation\.NetStandard-2.0\Xml\Foundation.Xml.csproj", "{AD17D060-1FBC-472F-AD67-74051B18BC1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.Core", "..\Foundation\.NetStandard-2.0\Core\Foundation.Core.csproj", "{5B3A35C4-CDC3-4CE6-AFDE-41F980A5A7EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Core", "..\Foundation\.NetStandard-2.0\Core\Foundation.Core.csproj", "{5B3A35C4-CDC3-4CE6-AFDE-41F980A5A7EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.Linq", "..\Foundation\.NetStandard-2.0\Linq\Foundation.Linq.csproj", "{E854B2E4-88FC-4FDD-A62E-09A5936D9531}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Linq", "..\Foundation\.NetStandard-2.0\Linq\Foundation.Linq.csproj", "{E854B2E4-88FC-4FDD-A62E-09A5936D9531}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Foundation", "Foundation", "{CA72301B-FA8A-419D-A362-D618EC33EB61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -704,6 +706,25 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{04996258-F3F5-4EEC-9D3E-ACAE9726F93F} = {CA72301B-FA8A-419D-A362-D618EC33EB61}
+		{B8934B63-D579-4EE8-B352-13134EB8CC54} = {CA72301B-FA8A-419D-A362-D618EC33EB61}
+		{7DB3820F-E3E1-4085-8D37-EF64BA9274C8} = {CA72301B-FA8A-419D-A362-D618EC33EB61}
+		{34F913BC-EDEE-4385-BAE6-C650A0E21878} = {CA72301B-FA8A-419D-A362-D618EC33EB61}
+		{61B48D70-B14F-462C-8A07-E9DB585D3869} = {CA72301B-FA8A-419D-A362-D618EC33EB61}
+		{C987A1B0-F61D-4985-9BED-7E4C36C7F90E} = {CA72301B-FA8A-419D-A362-D618EC33EB61}
+		{07E1E003-0877-48E3-81F4-3E0E5ED8CE69} = {CA72301B-FA8A-419D-A362-D618EC33EB61}
+		{513D0094-7D6B-4453-9D43-23223C51EC4C} = {CA72301B-FA8A-419D-A362-D618EC33EB61}
+		{3640355A-6D7C-45B4-8377-1D011DAFD8AA} = {CA72301B-FA8A-419D-A362-D618EC33EB61}
+		{6F50A714-AF20-480E-A6CA-548AB4E27E28} = {CA72301B-FA8A-419D-A362-D618EC33EB61}
+		{947187B0-1A08-4AB0-AE53-237A1ECDC93C} = {CA72301B-FA8A-419D-A362-D618EC33EB61}
+		{14AA33EB-053A-4397-86AA-EFDA2D2B119D} = {CA72301B-FA8A-419D-A362-D618EC33EB61}
+		{C2A08E9B-3BFD-485F-8569-0CEAF38DB0D9} = {CA72301B-FA8A-419D-A362-D618EC33EB61}
+		{AB3458F4-97B4-42E5-9E48-FA001AE29A2E} = {CA72301B-FA8A-419D-A362-D618EC33EB61}
+		{AD17D060-1FBC-472F-AD67-74051B18BC1F} = {CA72301B-FA8A-419D-A362-D618EC33EB61}
+		{5B3A35C4-CDC3-4CE6-AFDE-41F980A5A7EC} = {CA72301B-FA8A-419D-A362-D618EC33EB61}
+		{E854B2E4-88FC-4FDD-A62E-09A5936D9531} = {CA72301B-FA8A-419D-A362-D618EC33EB61}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {74F966D1-FAC1-45A6-A782-5F02EC995905}

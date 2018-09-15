@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Assertions\Foundation.Assertions.csproj" />
-    <ProjectReference Include="..\Collections\Foundation.Collections.csproj" />
+    <ProjectReference Include="..\Assertions\Assertions.csproj" />
+    <ProjectReference Include="..\Collections\Collections.csproj" />
     <ProjectReference Include="..\Core\Foundation.Core.csproj" />
   </ItemGroup>
 

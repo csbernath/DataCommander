@@ -9,8 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Assertions\Foundation.Assertions.csproj" />
-    <ProjectReference Include="..\Collections\Foundation.Collections.csproj" />
+    <ProjectReference Include="..\Assertions\Assertions.csproj" />
+    <ProjectReference Include="..\Collections\Collections.csproj" />
     <ProjectReference Include="..\InternalLog\Foundation.InternalLog.csproj" />
     <ProjectReference Include="..\IO\Foundation.IO.csproj" />
     <ProjectReference Include="..\Text\Foundation.Text.csproj" />

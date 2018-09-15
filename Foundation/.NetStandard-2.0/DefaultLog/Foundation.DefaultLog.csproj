@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Assertions\Foundation.Assertions.csproj" />
+    <ProjectReference Include="..\Assertions\Assertions.csproj" />
     <ProjectReference Include="..\Configuration\Foundation.Configuration.csproj" />
     <ProjectReference Include="..\InternalLog\Foundation.InternalLog.csproj" />
     <ProjectReference Include="..\Log\Foundation.Log.csproj" />

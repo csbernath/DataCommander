@@ -508,13 +508,13 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Assertions\Foundation.Assertions.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Assertions\Assertions.csproj">
       <Project>{3640355a-6d7c-45b4-8377-1d011dafd8aa}</Project>
-      <Name>Foundation.Assertions</Name>
+      <Name>Assertions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Collections\Foundation.Collections.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Collections\Collections.csproj">
       <Project>{61B48D70-B14F-462C-8A07-E9DB585D3869}</Project>
-      <Name>Foundation.Collections</Name>
+      <Name>Collections</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Configuration\Foundation.Configuration.csproj">
       <Project>{513d0094-7d6b-4453-9d43-23223c51ec4c}</Project>

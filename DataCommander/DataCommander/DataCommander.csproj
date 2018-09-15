@@ -196,9 +196,9 @@
       <Project>{31A30A80-D1B6-4867-A65E-188DE9E912C8}</Project>
       <Name>DataCommander.Providers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Assertions\Foundation.Assertions.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Assertions\Assertions.csproj">
       <Project>{3640355A-6D7C-45B4-8377-1D011DAFD8AA}</Project>
-      <Name>Foundation.Assertions</Name>
+      <Name>Assertions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Configuration\Foundation.Configuration.csproj">
       <Project>{513d0094-7d6b-4453-9d43-23223c51ec4c}</Project>
