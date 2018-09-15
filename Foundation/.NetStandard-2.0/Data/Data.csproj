@@ -13,7 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Configuration\Configuration.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
-    <ProjectReference Include="..\Threading\Foundation.Threading.csproj" />
+    <ProjectReference Include="..\Threading\Threading.csproj" />
   </ItemGroup>
 
 </Project>

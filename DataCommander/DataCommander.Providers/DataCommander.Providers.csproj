@@ -540,17 +540,17 @@
       <Project>{6f50a714-af20-480e-a6ca-548ab4e27e28}</Project>
       <Name>Log</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\.NetFramework-4.7.1\Foundation.NetFramework-4.7.1.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\.NetFramework-4.7.1\NetFramework-4.7.1.csproj">
       <Project>{b8934b63-d579-4ee8-b352-13134eb8cc54}</Project>
-      <Name>Foundation.NetFramework-4.7.1</Name>
+      <Name>NetFramework-4.7.1</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Text\Text.csproj">
       <Project>{c987a1b0-f61d-4985-9bed-7e4c36c7f90e}</Project>
       <Name>Text</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Threading\Foundation.Threading.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Threading\Threading.csproj">
       <Project>{AB3458F4-97B4-42E5-9E48-FA001AE29A2E}</Project>
-      <Name>Foundation.Threading</Name>
+      <Name>Threading</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

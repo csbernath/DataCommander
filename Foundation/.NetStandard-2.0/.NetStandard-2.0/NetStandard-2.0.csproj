@@ -59,7 +59,7 @@
     <ProjectReference Include="..\InternalLog\InternalLog.csproj" />
     <ProjectReference Include="..\IO\IO.csproj" />
     <ProjectReference Include="..\Text\Text.csproj" />
-    <ProjectReference Include="..\Xml\Foundation.Xml.csproj" />
+    <ProjectReference Include="..\Xml\Xml.csproj" />
   </ItemGroup>
 
 </Project>

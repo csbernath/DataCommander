@@ -169,9 +169,9 @@
       <Project>{6F50A714-AF20-480E-A6CA-548AB4E27E28}</Project>
       <Name>Log</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\.NetFramework-4.7.1\Foundation.NetFramework-4.7.1.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\.NetFramework-4.7.1\NetFramework-4.7.1.csproj">
       <Project>{b8934b63-d579-4ee8-b352-13134eb8cc54}</Project>
-      <Name>Foundation.NetFramework-4.7.1</Name>
+      <Name>NetFramework-4.7.1</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Text\Text.csproj">
       <Project>{C987A1B0-F61D-4985-9BED-7E4C36C7F90E}</Project>

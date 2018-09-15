@@ -9,7 +9,7 @@
     <ProjectReference Include="..\Configuration\Configuration.csproj" />
     <ProjectReference Include="..\InternalLog\InternalLog.csproj" />
     <ProjectReference Include="..\Log\Log.csproj" />
-    <ProjectReference Include="..\Threading\Foundation.Threading.csproj" />
+    <ProjectReference Include="..\Threading\Threading.csproj" />
   </ItemGroup>
 
 </Project>
