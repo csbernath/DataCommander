@@ -1,10 +1,9 @@
-﻿using Foundation.Assertions;
+﻿using System;
+using System.Data;
+using Foundation.Assertions;
 
 namespace DataCommander.Providers.Tfs
 {
-    using System;
-    using System.Data;
-
     internal class TfsCommand : IDbCommand
     {
         public TfsCommand(TfsConnection connection)

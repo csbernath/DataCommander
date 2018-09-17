@@ -1,11 +1,11 @@
-﻿namespace DataCommander.Providers.Tfs
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Linq;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 
+namespace DataCommander.Providers.Tfs
+{
     internal sealed class TfsParameterCollection : IDataParameterCollection, IEnumerable<TfsParameter>
     {
         private readonly List<TfsParameter> _list = new List<TfsParameter>();

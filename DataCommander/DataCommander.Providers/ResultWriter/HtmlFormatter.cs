@@ -1,13 +1,13 @@
-﻿namespace DataCommander.Providers.ResultWriter
-{
-    using System;
-    using System.Data;
-    using System.IO;
-    using System.Text;
-    using System.Web;
-    using System.Web.UI;
-    using System.Web.UI.HtmlControls;
+﻿using System;
+using System.Data;
+using System.IO;
+using System.Text;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
 
+namespace DataCommander.Providers.ResultWriter
+{
     /// <summary>
     /// Summary description for HtmlFormatter.
     /// </summary>

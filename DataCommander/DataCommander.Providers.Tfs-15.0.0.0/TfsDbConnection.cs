@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers.Tfs
-{
-    using System;
-    using System.Data;
+﻿using System;
+using System.Data;
 
+namespace DataCommander.Providers.Tfs
+{
     internal sealed class TfsDbConnection : IDbConnection
     {
         public TfsDbConnection(TfsConnection connection)

@@ -1,14 +1,13 @@
-﻿using Foundation.Assertions;
+﻿using System;
+using System.Data;
+using System.Data.Common;
+using System.IO;
+using System.Text;
+using Foundation.Assertions;
+using Foundation.Text;
 
 namespace DataCommander.Providers.ResultWriter
 {
-    using System;
-    using System.Data;
-    using System.Data.Common;
-    using System.IO;
-    using System.Text;
-    using Foundation.Text;
-
     internal sealed class FileResultWriter : IResultWriter
     {
         private readonly TextWriter _messageWriter;

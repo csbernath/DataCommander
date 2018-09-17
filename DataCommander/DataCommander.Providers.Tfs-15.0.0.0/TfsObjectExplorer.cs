@@ -1,13 +1,12 @@
-﻿using Foundation.Assertions;
+﻿using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using Foundation.Assertions;
+using Microsoft.TeamFoundation.VersionControl.Client;
+using Microsoft.TeamFoundation.VersionControl.Common;
 
 namespace DataCommander.Providers.Tfs
 {
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Linq;
-    using Microsoft.TeamFoundation.VersionControl.Client;
-    using Microsoft.TeamFoundation.VersionControl.Common;
-
     internal sealed class TfsObjectExplorer : IObjectExplorer
     {
         private TfsConnection _connection;

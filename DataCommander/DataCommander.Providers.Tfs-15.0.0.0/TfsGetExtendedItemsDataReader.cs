@@ -1,12 +1,12 @@
-﻿using Foundation.Assertions;
-using Foundation.Data;
-using System;
+﻿using System;
 using System.Data;
 using System.Linq;
 using DataCommander.Providers.Connection;
-using Microsoft.TeamFoundation.VersionControl.Client;
 using DataCommander.Providers.Query;
+using Foundation.Assertions;
 using Foundation.Core;
+using Foundation.Data;
+using Microsoft.TeamFoundation.VersionControl.Client;
 
 namespace DataCommander.Providers.Tfs
 {

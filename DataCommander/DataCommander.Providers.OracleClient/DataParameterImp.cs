@@ -10,7 +10,7 @@
             : base(parameter, parameter.Size, parameter.Precision, parameter.Scale)
 #pragma warning restore CS0618 // Type or member is obsolete
         {
-            this._parameter = parameter;
+            _parameter = parameter;
         }
 
         protected override void SetSize(int size)

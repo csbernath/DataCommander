@@ -1,21 +1,20 @@
-﻿using Foundation.Core;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using DataCommander.Providers.Connection;
+using Foundation.Core;
+using Foundation.Data;
+using Foundation.Linq;
 using Foundation.Log;
 
 namespace DataCommander.Providers.ResultWriter
 {
-    using System;
-    using System.Collections.Concurrent;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Text;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Connection;
-    using Foundation.Data;
-    using Foundation.Linq;
-
     internal sealed class CopyResultWriter : IResultWriter
     {
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();

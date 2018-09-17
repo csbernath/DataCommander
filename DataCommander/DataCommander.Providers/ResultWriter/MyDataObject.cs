@@ -1,12 +1,12 @@
-﻿namespace DataCommander.Providers.ResultWriter
-{
-    using System;
-    using System.Data;
-    using System.IO;
-    using System.Text;
-    using System.Windows.Forms;
-    using Foundation.Data;
+﻿using System;
+using System.Data;
+using System.IO;
+using System.Text;
+using System.Windows.Forms;
+using Foundation.Data;
 
+namespace DataCommander.Providers.ResultWriter
+{
     internal sealed class MyDataObject : IDataObject
     {
         private readonly DataView _dataView;

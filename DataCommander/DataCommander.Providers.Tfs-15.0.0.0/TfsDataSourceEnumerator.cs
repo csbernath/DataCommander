@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Providers.Tfs
-{
-    using System.Data;
-    using System.Data.Common;
-    using Microsoft.TeamFoundation.Client;
+﻿using System.Data;
+using System.Data.Common;
+using Microsoft.TeamFoundation.Client;
 
+namespace DataCommander.Providers.Tfs
+{
     internal sealed class TfsDataSourceEnumerator : DbDataSourceEnumerator
     {
         public override DataTable GetDataSources()

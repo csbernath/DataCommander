@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers.Tfs
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace DataCommander.Providers.Tfs
+{
     internal static class TfsDataReaderFactory
     {
         public delegate TfsDataReader CreateDataReader(TfsCommand command);

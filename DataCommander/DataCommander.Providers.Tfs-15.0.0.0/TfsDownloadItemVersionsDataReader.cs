@@ -1,17 +1,16 @@
-﻿using Foundation.Assertions;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.IO;
+using Foundation.Assertions;
 using Foundation.Data;
+using Microsoft.TeamFoundation.VersionControl.Client;
+using Microsoft.TeamFoundation.VersionControl.Common;
 
 namespace DataCommander.Providers.Tfs
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Diagnostics;
-    using System.IO;
-    using Microsoft.TeamFoundation.VersionControl.Client;
-    using Microsoft.TeamFoundation.VersionControl.Common;
-
     internal class TfsDownloadItemVersionsDataReader : TfsDataReader
     {
         private readonly TfsCommand _command;

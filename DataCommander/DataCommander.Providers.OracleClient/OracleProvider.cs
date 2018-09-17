@@ -300,7 +300,7 @@ namespace DataCommander.Providers.OracleClient
 
         ConnectionBase IProvider.CreateConnection(string connectionString)
         {
-            OracleProvider._connectionString = connectionString;
+            _connectionString = connectionString;
             return new Connection(connectionString);
         }
 
@@ -310,7 +310,7 @@ namespace DataCommander.Providers.OracleClient
             {
                 if (_keyWords == null && _connectionString != null)
                 {
-                    var connectionString = "Provider=MSDAORA.1;" + OracleProvider._connectionString;
+                    var connectionString = "Provider=MSDAORA.1;" + _connectionString;
                     _keyWords = ProviderFactory.GetKeyWords(connectionString);
                 }
 
