@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Diagnostics.Contracts;
 
@@ -11,7 +12,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         public ServerNode(string connectionString)
         {
-            FoundationContract.Requires<ArgumentException>(!connectionString.IsNullOrWhiteSpace());
+            Assert.IsTrue(!connectionString.IsNullOrWhiteSpace());
 
             ConnectionString = connectionString;
         }

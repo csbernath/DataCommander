@@ -1,4 +1,5 @@
 ﻿using System;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.Tfs
@@ -16,7 +17,7 @@ namespace DataCommander.Providers.Tfs
 
         public static string GetName(Item item)
         {
-            FoundationContract.Requires<ArgumentException>(item != null);
+            Assert.IsTrue(item != null);
 
             var name = VersionControlPath.GetFileName(item.ServerItem);
             return name;

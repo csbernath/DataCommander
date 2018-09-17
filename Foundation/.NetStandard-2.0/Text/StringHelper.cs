@@ -40,8 +40,8 @@ namespace Foundation.Text
 
         public static unsafe void SetChar(string s, int index, char ch)
         {
-            FoundationContract.Requires<ArgumentException>(index >= 0);
-            FoundationContract.Requires<ArgumentException>(index < s.Length);
+            Assert.IsTrue(index >= 0);
+            Assert.IsTrue(index < s.Length);
 
             fixed (char* p = s)
             {

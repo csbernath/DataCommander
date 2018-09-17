@@ -1,24 +1,16 @@
 ﻿using System;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Data.TextData
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class TextDataRow
     {
         private readonly Convert _convert;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="columns"></param>
-        /// <param name="convert"></param>
         public TextDataRow(TextDataColumnCollection columns, Convert convert)
         {
-            FoundationContract.Requires<ArgumentException>(columns != null);
-            FoundationContract.Requires<ArgumentException>(convert != null);
+            Assert.IsNotNull(columns);
+            Assert.IsNotNull(convert);
 
             Columns = columns;
             _convert = convert;

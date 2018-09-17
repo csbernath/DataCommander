@@ -1,4 +1,5 @@
-﻿using Foundation.Core;
+﻿using Foundation.Assertions;
+using Foundation.Core;
 using Foundation.Data;
 using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
@@ -49,7 +50,7 @@ namespace DataCommander.Providers.ResultWriter
             Action<IDbTransaction> setTransaction,
             CancellationToken cancellationToken)
         {
-            FoundationContract.Requires<ArgumentException>(destinationProvider.DbProviderFactory == SqlClientFactory.Instance);
+            Assert.IsTrue(destinationProvider.DbProviderFactory == SqlClientFactory.Instance);
 
             _destinationSqlConnection = (SqlConnection) destinationConnection.Connection;
 

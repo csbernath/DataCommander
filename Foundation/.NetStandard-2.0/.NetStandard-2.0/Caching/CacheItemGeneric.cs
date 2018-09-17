@@ -17,9 +17,9 @@ namespace Foundation.Caching
 
         internal CacheItem( string key, Func<T> getValue, TimeSpan slidingExpiration )
         {
-            FoundationContract.Requires<ArgumentException>( key != null );
-            FoundationContract.Requires<ArgumentException>( getValue != null );
-            FoundationContract.Requires<ArgumentException>( slidingExpiration > TimeSpan.Zero );
+            Assert.IsTrue( key != null );
+            Assert.IsTrue( getValue != null );
+            Assert.IsTrue( slidingExpiration > TimeSpan.Zero );
 
             this.key = key;
             this.slidingExpiration = slidingExpiration;

@@ -4,6 +4,7 @@ using System.IO.Packaging;
 using System.Runtime.InteropServices;
 using System.Xml;
 using System.Xml.Linq;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 using Foundation.DocumentProperties.StructuredStorage;
 
@@ -16,7 +17,7 @@ namespace Foundation.DocumentProperties
     {
         internal Document( DocumentPropertyCollection properties )
         {
-            FoundationContract.Requires<ArgumentException>(properties != null);
+            Assert.IsTrue(properties != null);
 
             Properties = properties;
         }

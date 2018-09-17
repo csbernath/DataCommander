@@ -1,4 +1,4 @@
-﻿using Foundation.Diagnostics.Contracts;
+﻿using Foundation.Assertions;
 
 namespace DataCommander.Providers.ResultWriter
 {
@@ -11,7 +11,7 @@ namespace DataCommander.Providers.ResultWriter
 
         public DataViewPropertiesForm(DataViewProperties properties)
         {
-            FoundationContract.Requires<ArgumentException>(properties != null);
+            Assert.IsNotNull(properties);
 
             _properties = properties;
             InitializeComponent();

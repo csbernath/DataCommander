@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using Foundation.Configuration;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.TeamFoundation.VersionControl.Common;
@@ -16,7 +17,7 @@ namespace DataCommander.Providers.Tfs
 
         public TfsFile(Item item)
         {
-            FoundationContract.Requires<ArgumentException>(item != null);
+            Assert.IsTrue(item != null);
 
             this._item = item;
         }

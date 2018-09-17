@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Core
@@ -14,7 +15,7 @@ namespace Foundation.Core
 
         public SmallDateInterval(SmallDate start, SmallDate end)
         {
-            FoundationContract.Requires<ArgumentException>(start <= end);
+            Assert.IsTrue(start <= end);
             Start = start;
             End = end;
         }

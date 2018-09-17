@@ -34,9 +34,9 @@ end", database);
 
         public static string GetObjects(string schema, IEnumerable<string> objectTypes)
         {
-            FoundationContract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());
+            Assert.IsTrue(!schema.IsNullOrWhiteSpace());
             Assert.IsNotNull(objectTypes);
-            FoundationContract.Requires<ArgumentException>(objectTypes.Any());
+            Assert.IsTrue(objectTypes.Any());
 
             return
                 $@"declare @schema_id int
@@ -58,9 +58,9 @@ end";
 
         public static string GetObjects(string database, string schema, IEnumerable<string> objectTypes)
         {
-            FoundationContract.Requires<ArgumentException>(!database.IsNullOrWhiteSpace());
-            FoundationContract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());
-            FoundationContract.Requires<ArgumentException>(objectTypes != null && objectTypes.Any());
+            Assert.IsTrue(!database.IsNullOrWhiteSpace());
+            Assert.IsTrue(!schema.IsNullOrWhiteSpace());
+            Assert.IsTrue(objectTypes != null && objectTypes.Any());
 
             return string.Format(@"if exists(select * from sys.databases (nolock) where name = '{0}')
 begin

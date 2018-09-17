@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Core
 {
@@ -15,7 +15,7 @@ namespace Foundation.Core
 
         public SmallTimeInterval(SmallTime start, SmallTime end)
         {
-            FoundationContract.Requires<ArgumentException>(start.Value <= end.Value);
+            Assert.IsTrue(start.Value <= end.Value);
 
             Start = start;
             End = end;

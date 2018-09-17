@@ -1,4 +1,5 @@
 ﻿using System;
+using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Data.SqlClient;
 using Foundation.Diagnostics.Contracts;
@@ -30,8 +31,8 @@ order by table_name";
 
         public static string GetObjects(string schema, IEnumerable<string> objectTypes)
         {
-            FoundationContract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());
-            FoundationContract.Requires<ArgumentException>(objectTypes != null && objectTypes.Any());
+            Assert.IsTrue(!schema.IsNullOrWhiteSpace());
+            Assert.IsTrue(objectTypes != null && objectTypes.Any());
             
             return
                 $@"declare @schema_id int
@@ -58,9 +59,9 @@ end";
             string schema,
             IEnumerable<string> objectTypes)
         {
-            FoundationContract.Requires<ArgumentException>(!database.IsNullOrWhiteSpace());
-            FoundationContract.Requires<ArgumentException>(!schema.IsNullOrWhiteSpace());
-            FoundationContract.Requires<ArgumentException>(objectTypes != null && objectTypes.Any());
+            Assert.IsTrue(!database.IsNullOrWhiteSpace());
+            Assert.IsTrue(!schema.IsNullOrWhiteSpace());
+            Assert.IsTrue(objectTypes != null && objectTypes.Any());
 
             return string.Format(@"if exists(select * from sys.databases (nolock) where name = '{0}')
 begin

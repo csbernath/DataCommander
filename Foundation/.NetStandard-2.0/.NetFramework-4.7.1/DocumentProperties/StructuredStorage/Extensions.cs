@@ -9,7 +9,7 @@ namespace Foundation.DocumentProperties.StructuredStorage
     {
         public static IEnumerable<STATPROPSETSTG> AsEnumerable( this IPropertySetStorage propertySetStorage )
         {
-            FoundationContract.Requires<ArgumentException>(propertySetStorage != null);
+            Assert.IsTrue(propertySetStorage != null);
 
             IEnumSTATPROPSETSTG enumStatPropSetStg;
             propertySetStorage.Enum( out enumStatPropSetStg );

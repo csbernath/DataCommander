@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using Foundation.Assertions;
 using Foundation.Data;
 using Foundation.Diagnostics.Contracts;
 
@@ -11,7 +12,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         public DatabaseCollectionNode(ServerNode server)
         {
-            FoundationContract.Requires<ArgumentException>(server != null);
+            Assert.IsTrue(server != null);
 
             Server = server;
         }

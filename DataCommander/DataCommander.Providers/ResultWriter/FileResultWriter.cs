@@ -1,4 +1,5 @@
-﻿using Foundation.Diagnostics.Contracts;
+﻿using Foundation.Assertions;
+using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.ResultWriter
 {
@@ -17,7 +18,7 @@ namespace DataCommander.Providers.ResultWriter
 
         public FileResultWriter(TextWriter messageWriter)
         {
-            FoundationContract.Requires<ArgumentException>(messageWriter != null);
+            Assert.IsTrue(messageWriter != null);
 
             _messageWriter = messageWriter;
         }

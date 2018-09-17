@@ -47,7 +47,7 @@ namespace Foundation.Collections.ReadOnly
             Assert.IsNotNull(values);
             Assert.IsNotNull(keySelector);
             Assert.IsNotNull(comparison);
-            FoundationContract.Requires<ArgumentException>(
+            Assert.IsTrue(
                 values.SelectPreviousAndCurrentKey(keySelector).All(key => comparison(key.Previous, key.Current) <= 0),
                 "keys must be ordered");
 

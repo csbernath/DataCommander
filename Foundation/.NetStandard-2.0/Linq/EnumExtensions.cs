@@ -18,7 +18,7 @@ namespace Foundation.Linq
 /// <returns></returns>
         public static bool HasFlag( this Enum container, Enum flag )
         {
-            FoundationContract.Requires<ArgumentException>( container.GetType() == flag.GetType() );
+            Assert.IsTrue( container.GetType() == flag.GetType() );
 
             UInt64 containerUInt64 = Convert.ToUInt64( container );
             UInt64 flagUInt64 = Convert.ToUInt64( flag );
@@ -29,7 +29,7 @@ namespace Foundation.Linq
 
         public static T SetFlag<T>(this T container, T flag)
         {
-            FoundationContract.Requires<ArgumentException>(typeof(T).IsEnum);
+            Assert.IsTrue(typeof(T).IsEnum);
 
             var type = typeof(T);
 
@@ -41,7 +41,7 @@ namespace Foundation.Linq
 
         public static T SetFlag<T>(this T container, T flag, bool set)
         {
-            FoundationContract.Requires<ArgumentException>(typeof(T).IsEnum);
+            Assert.IsTrue(typeof(T).IsEnum);
 
             var type = typeof(T);
 

@@ -12,7 +12,7 @@ namespace Foundation.Linq
     {
         public static void Add<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
-            //FoundationContract.Requires<ArgumentException>(collection != null || items == null);
+            //Assert.IsTrue(collection != null || items == null);
 
             if (items != null)
                 foreach (var item in items)
@@ -33,7 +33,7 @@ namespace Foundation.Linq
 
         public static int Remove<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
-            FoundationContract.Requires<ArgumentException>(collection != null || items == null);
+            Assert.IsTrue(collection != null || items == null);
 
             var count = 0;
 

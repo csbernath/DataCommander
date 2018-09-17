@@ -65,7 +65,7 @@ namespace Foundation.Configuration
 
         public void AddChildNode(ConfigurationNode childNode)
         {
-            FoundationContract.Requires<ArgumentException>(childNode.Parent == null);
+            Assert.IsTrue(childNode.Parent == null);
 
             if (childNode.Name == null)
             {
@@ -79,7 +79,7 @@ namespace Foundation.Configuration
 
         public void InsertChildNode(int index, ConfigurationNode childNode)
         {
-            FoundationContract.Requires<ArgumentException>(childNode.Parent == null);
+            Assert.IsTrue(childNode.Parent == null);
 
             if (childNode.Name == null)
             {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Assertions;
 
 namespace Foundation.Core
 {
@@ -13,7 +13,7 @@ namespace Foundation.Core
 
         public FoundationDateTimeInterval(DateTime start, DateTime end)
         {
-            FoundationContract.Requires<ArgumentException>(start <= end);
+            Assert.IsTrue(start <= end);
             Start = start;
             End = end;
         }

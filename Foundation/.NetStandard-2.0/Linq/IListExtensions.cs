@@ -29,7 +29,7 @@ namespace Foundation.Linq
         public static T Last<T>(this IList<T> source)
         {
             Assert.IsNotNull(source);
-            FoundationContract.Requires<ArgumentException>(source.Count > 0);
+            Assert.IsTrue(source.Count > 0);
 
             var lastIndex = source.Count - 1;
             var last = source[lastIndex];

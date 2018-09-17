@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
+using Foundation.Assertions;
 using Foundation.Data;
-using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.SQLite.ObjectExplorer
 {
@@ -12,8 +11,7 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
 
         public IndexCollectionNode(TableNode tableNode)
         {
-            FoundationContract.Requires<ArgumentException>(tableNode != null);
-
+            Assert.IsNotNull(tableNode);
             _tableNode = tableNode;
         }
 

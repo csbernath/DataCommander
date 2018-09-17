@@ -41,7 +41,7 @@ namespace Foundation.Data.TextData
         public override int Add(object value)
         {
             Assert.IsNotNull(value);
-            FoundationContract.Requires<ArgumentException>(value is TextDataParameter);
+            Assert.IsTrue(value is TextDataParameter);
 
             var parameter = (TextDataParameter) value;
             _collection.Add(parameter);

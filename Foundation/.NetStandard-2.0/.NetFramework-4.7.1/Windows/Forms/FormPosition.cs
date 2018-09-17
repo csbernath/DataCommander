@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Foundation.Assertions;
 using Foundation.Configuration;
 using Foundation.Diagnostics.Contracts;
 
@@ -42,8 +43,8 @@ namespace Foundation.Windows.Forms
         /// <param name="form"></param>
         public static void Load(ApplicationData applicationData, Form form)
         {
-            FoundationContract.Requires<ArgumentException>(applicationData != null);
-            FoundationContract.Requires<ArgumentException>(form != null);
+            Assert.IsTrue(applicationData != null);
+            Assert.IsTrue(form != null);
 
             var type = form.GetType();
             var nodeName = ConfigurationNodeName.FromType(type);

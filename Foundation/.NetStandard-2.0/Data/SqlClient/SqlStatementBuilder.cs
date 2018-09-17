@@ -148,7 +148,7 @@ namespace Foundation.Data.SqlClient
             StringBuilder commandText,
             string value)
         {
-            FoundationContract.Requires<ArgumentException>(commandText != null);
+            Assert.IsTrue(commandText != null);
 
             var s = value.ToTSqlNVarChar();
             commandText.Append(s);

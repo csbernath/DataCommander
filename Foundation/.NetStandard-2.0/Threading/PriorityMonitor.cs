@@ -102,8 +102,8 @@ namespace Foundation.Threading
         internal void Exit(LockRequest lockRequest)
         {
             Assert.IsNotNull(lockRequest);
-            FoundationContract.Requires<ArgumentException>(lockRequest.Monitor == this);
-            FoundationContract.Requires<ArgumentException>(lockRequest == CurrentLockRequest);
+            Assert.IsTrue(lockRequest.Monitor == this);
+            Assert.IsTrue(lockRequest == CurrentLockRequest);
 
             Log.Trace("Exiting lockRequest... monitoredObject: {0}, priority: {1}", MonitoredObject, lockRequest.Priority);
 
