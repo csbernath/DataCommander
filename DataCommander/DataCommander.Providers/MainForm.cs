@@ -64,7 +64,7 @@ namespace DataCommander.Providers
         private ToolStripMenuItem _checkForToolStripMenuItem;
         private ToolStripStatusLabel _managedMemoryToolStripStatusLabel;
         private ToolStrip _queryFormToolStrip;
-        private System.Windows.Forms.Timer _timer;
+        private readonly System.Windows.Forms.Timer _timer;
         private ColorTheme _colorTheme;
         private bool _first = true;
 

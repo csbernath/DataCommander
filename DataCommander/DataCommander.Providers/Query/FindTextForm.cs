@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Providers.Query
-{
-    using System;
-    using System.ComponentModel;
-    using System.Windows.Forms;
+﻿using System;
+using System.ComponentModel;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.Query
+{
     /// <summary>
     /// Summary description for FindForm.
     /// </summary>

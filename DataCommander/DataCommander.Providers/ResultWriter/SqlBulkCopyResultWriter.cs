@@ -28,7 +28,7 @@ namespace DataCommander.Providers.ResultWriter
         private IDbTransaction _transaction;
 
         //private IDbCommand insertCommand;
-        private Converter<object, object>[] _converters = null;
+        private readonly Converter<object, object>[] _converters = null;
 
         //private IDbDataParameter[] parameters;
         private ConcurrentQueue<QueueItem> _queue;

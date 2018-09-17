@@ -1,9 +1,8 @@
-﻿using DataCommander.Providers.FieldNamespace;
+﻿using System;
+using DataCommander.Providers.FieldNamespace;
 
 namespace DataCommander.Providers.ResultWriter
 {
-    using System;
-
     internal sealed class DateTimeDataWriter : DataWriterBase
     {
         public override string ToString(object value)

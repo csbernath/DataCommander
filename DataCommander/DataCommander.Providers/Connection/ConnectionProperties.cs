@@ -1,13 +1,12 @@
-﻿using Foundation.Log;
+﻿using System;
+using System.Data.Common;
+using System.Security.Cryptography;
+using System.Text;
+using Foundation.Configuration;
+using Foundation.Log;
 
 namespace DataCommander.Providers.Connection
 {
-    using System;
-    using System.Data.Common;
-    using System.Security.Cryptography;
-    using System.Text;
-    using Foundation.Configuration;
-
     public sealed class ConnectionProperties
     {
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();

@@ -1,16 +1,15 @@
-﻿using Foundation.Core;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.OleDb;
+using System.Text;
+using System.Windows.Forms;
+using Foundation.Core;
+using Foundation.Data;
 
 namespace DataCommander.Providers.Connection
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.Data.OleDb;
-    using System.Text;
-    using System.Windows.Forms;
-    using Foundation.Data;
-
     internal partial class ConnectionStringBuilderForm : Form
     {
         private readonly ConnectionProperties _tempConnectionProperties = new ConnectionProperties();

@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Providers.Connection
-{
-    using System;
-    using System.ComponentModel;
-    using System.Windows.Forms;
+﻿using System;
+using System.ComponentModel;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.Connection
+{
     /// <summary>
     /// Summary description for PasswordForm.
     /// </summary>

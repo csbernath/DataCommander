@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers
-{
-    using System.Collections.Generic;
-    using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 
+namespace DataCommander.Providers
+{
     public interface IObjectExplorer
     {
         bool Sortable { get; }

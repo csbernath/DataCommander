@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers.ResultWriter
-{
-    using System;
-    using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.ResultWriter
+{
     internal class DoubleBufferedDataGridView : DataGridView
     {
         public DoubleBufferedDataGridView()

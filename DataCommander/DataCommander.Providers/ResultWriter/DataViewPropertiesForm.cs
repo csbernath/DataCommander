@@ -1,10 +1,9 @@
-﻿using Foundation.Assertions;
+﻿using System;
+using System.Windows.Forms;
+using Foundation.Assertions;
 
 namespace DataCommander.Providers.ResultWriter
 {
-    using System;
-    using System.Windows.Forms;
-
     internal partial class DataViewPropertiesForm : Form
     {
         private readonly DataViewProperties _properties = new DataViewProperties();

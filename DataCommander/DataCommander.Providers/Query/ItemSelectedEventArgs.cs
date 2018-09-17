@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers.Query
-{
-    using System;
+﻿using System;
 
+namespace DataCommander.Providers.Query
+{
     internal sealed class ItemSelectedEventArgs : EventArgs
     {
         public ItemSelectedEventArgs(int startIndex, int length, IObjectName objectName)

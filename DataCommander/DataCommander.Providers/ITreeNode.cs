@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers
-{
-    using System.Collections.Generic;
-    using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers
+{
     public interface ITreeNode
     {
         string Name { get; }

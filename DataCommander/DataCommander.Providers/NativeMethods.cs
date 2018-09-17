@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers
-{
-    using System;
-    using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
+namespace DataCommander.Providers
+{
     internal static class NativeMethods
     {
         public static class Message

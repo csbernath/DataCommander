@@ -1,21 +1,20 @@
-﻿using Foundation.Core;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+using System.Xml;
+using DataCommander.Providers.ResultWriter;
+using Foundation.Configuration;
+using Foundation.Core;
+using Foundation.Linq;
 using Foundation.Log;
+using Foundation.Windows.Forms;
 
 namespace DataCommander.Providers.Connection
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Data;
-    using System.IO;
-    using System.Linq;
-    using System.Windows.Forms;
-    using System.Xml;
-    using Foundation.Configuration;
-    using Foundation.Linq;
-    using Foundation.Windows.Forms;
-    using ResultWriter;
-
     internal sealed class ConnectionForm : Form
     {
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();

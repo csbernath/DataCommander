@@ -1,13 +1,13 @@
 ﻿using System.Data.Common;
 using System.Diagnostics;
 using System.Reflection;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using DataCommander.Providers.Connection;
 using Foundation.Configuration;
 using Foundation.Diagnostics;
 using Foundation.Log;
 using Microsoft.Win32;
-using Application = System.Windows.Forms.Application;
-using Task = System.Threading.Tasks.Task;
 
 namespace DataCommander.Providers
 {

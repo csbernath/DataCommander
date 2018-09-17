@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers.Connection
-{
-    using System.Data.Common;
+﻿using System.Data.Common;
 
+namespace DataCommander.Providers.Connection
+{
     internal static class DbConnectionStringBuilderExtensions
     {
         public static string GetValue(this DbConnectionStringBuilder dbConnectionStringBuilder, string keyword)

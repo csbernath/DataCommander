@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers
-{
-    using System.Data;
+﻿using System.Data;
 
+namespace DataCommander.Providers
+{
     public abstract class DataParameterBase
     {
         private readonly IDataParameter _parameter;

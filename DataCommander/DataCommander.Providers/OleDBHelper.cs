@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Providers
-{
-    using System;
-    using System.Data;
-    using System.Data.OleDb;
-    using ADODB;
+﻿using System;
+using System.Data;
+using System.Data.OleDb;
+using ADODB;
 
+namespace DataCommander.Providers
+{
     /// <summary>
     /// 
     /// </summary>

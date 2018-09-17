@@ -1,18 +1,17 @@
-﻿using Foundation.Core;
+﻿using System;
+using System.ComponentModel;
+using System.Data.Common;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Foundation.Core;
 using Foundation.Log;
+using Foundation.Windows.Forms;
+using Timer = System.Windows.Forms.Timer;
 
 namespace DataCommander.Providers.Connection
 {
-    using System;
-    using System.ComponentModel;
-    using System.Data.Common;
-    using System.Diagnostics;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using System.Windows.Forms;
-    using Foundation.Windows.Forms;
-    using Timer = System.Windows.Forms.Timer;
-
     internal sealed class OpenConnectionForm : Form
     {
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();

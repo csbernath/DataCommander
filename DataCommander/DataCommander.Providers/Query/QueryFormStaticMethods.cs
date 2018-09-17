@@ -1,16 +1,15 @@
-﻿using DataCommander.Providers.FieldNamespace;
+﻿using System;
+using System.Data;
+using System.Data.Common;
+using System.Drawing;
+using System.IO;
+using System.Text;
+using System.Windows.Forms;
+using DataCommander.Providers.FieldNamespace;
+using DataCommander.Providers.ResultWriter;
 
 namespace DataCommander.Providers.Query
 {
-    using System;
-    using System.Data;
-    using System.Data.Common;
-    using System.Drawing;
-    using System.IO;
-    using System.Text;
-    using System.Windows.Forms;
-    using ResultWriter;
-
     internal static class QueryFormStaticMethods
     {
         private static HtmlTextBox CreateHtmlTextBoxFromDataTable(DataTable dataTable)

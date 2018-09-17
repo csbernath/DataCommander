@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers
-{
-    using System;
+﻿using System;
 
+namespace DataCommander.Providers
+{
     [Flags]
     public enum SqlObjectTypes
     {

@@ -1,11 +1,11 @@
-﻿namespace DataCommander.Providers.ResultWriter
-{
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Linq;
-    using System.Windows.Forms;
-    using Foundation.Data;
+﻿using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Windows.Forms;
+using Foundation.Data;
 
+namespace DataCommander.Providers.ResultWriter
+{
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
