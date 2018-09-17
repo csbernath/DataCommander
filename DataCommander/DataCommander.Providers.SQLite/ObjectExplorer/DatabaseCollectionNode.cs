@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Windows.Forms;
 using Foundation.Assertions;
 using Foundation.Data;
-using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.SQLite.ObjectExplorer
 {

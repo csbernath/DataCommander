@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using Foundation.Assertions;
-using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Core
 {

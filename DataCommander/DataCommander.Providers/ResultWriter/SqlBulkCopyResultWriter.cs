@@ -1,20 +1,18 @@
-﻿using Foundation.Assertions;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Threading;
+using System.Threading.Tasks;
+using DataCommander.Providers.Connection;
+using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Data;
-using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
 
 namespace DataCommander.Providers.ResultWriter
 {
-    using System;
-    using System.Collections.Concurrent;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Connection;
-
     internal sealed class SqlBulkCopyResultWriter : IResultWriter
     {
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();

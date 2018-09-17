@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using Foundation.Assertions;
-using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
 {

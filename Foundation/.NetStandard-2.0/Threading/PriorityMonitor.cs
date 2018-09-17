@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using Foundation.Assertions;
 using Foundation.Collections.IndexableCollection;
-using Foundation.Diagnostics.Contracts;
 using Foundation.Log;
 
 namespace Foundation.Threading

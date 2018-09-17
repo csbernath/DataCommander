@@ -6,7 +6,6 @@ using System.Xml;
 using System.Xml.Serialization;
 using Foundation.Assertions;
 using Foundation.Collections;
-using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Configuration
 {

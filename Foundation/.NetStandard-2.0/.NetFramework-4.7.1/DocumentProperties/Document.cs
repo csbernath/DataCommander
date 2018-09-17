@@ -5,7 +5,6 @@ using System.Runtime.InteropServices;
 using System.Xml;
 using System.Xml.Linq;
 using Foundation.Assertions;
-using Foundation.Diagnostics.Contracts;
 using Foundation.DocumentProperties.StructuredStorage;
 
 namespace Foundation.DocumentProperties

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 using Foundation.Assertions;
 using Foundation.Configuration;
-using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Windows.Forms
 {

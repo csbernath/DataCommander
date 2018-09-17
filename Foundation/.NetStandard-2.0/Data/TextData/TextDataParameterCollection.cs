@@ -5,7 +5,6 @@ using System.Data.Common;
 using System.Diagnostics.Contracts;
 using Foundation.Assertions;
 using Foundation.Collections.IndexableCollection;
-using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Data.TextData
 {

@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Foundation.Assertions;
-using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.IndexableCollection
 {

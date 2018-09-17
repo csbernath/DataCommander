@@ -9,7 +9,6 @@ using System.Threading;
 using System.Xml;
 using Foundation.Collections;
 using Foundation.Core;
-using Foundation.Diagnostics;
 using Foundation.InternalLog;
 using Foundation.Linq;
 using Foundation.Log;

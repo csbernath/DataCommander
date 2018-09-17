@@ -1,6 +1,4 @@
-﻿using System;
-using Foundation.Assertions;
-using Foundation.Diagnostics.Contracts;
+﻿using Foundation.Assertions;
 
 namespace Foundation.Collections
 {

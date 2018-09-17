@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using System.Windows.Forms;
 using Foundation.Assertions;
 using Foundation.Core;
-using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {

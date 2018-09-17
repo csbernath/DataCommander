@@ -3,7 +3,6 @@ using System.Globalization;
 using System.IO;
 using Foundation.Assertions;
 using Foundation.Collections;
-using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Text
 {

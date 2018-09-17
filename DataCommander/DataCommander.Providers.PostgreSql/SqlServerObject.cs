@@ -1,8 +1,6 @@
-﻿using System;
-using Foundation.Assertions;
+﻿using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Data.SqlClient;
-using Foundation.Diagnostics.Contracts;
 
 namespace DataCommander.Providers.PostgreSql
 {

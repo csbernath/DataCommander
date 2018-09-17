@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
-using Foundation.Configuration;
 using Foundation.Assertions;
-using Foundation.Diagnostics.Contracts;
+using Foundation.Configuration;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.TeamFoundation.VersionControl.Common;
 

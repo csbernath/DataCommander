@@ -2,7 +2,6 @@
 using System.IO;
 using System.Text;
 using Foundation.Assertions;
-using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Configuration
 {
