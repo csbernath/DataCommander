@@ -6,7 +6,7 @@ namespace Foundation.Data.SqlClient.SqlLog
     {
         private readonly int _applicationId;
         private readonly int _connectionNo;
-        private DateTime _endDate;
+        private readonly DateTime _endDate;
 
         public SqlLogConnectionClose(
             int applicationId,

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Foundation.Configuration
+﻿namespace Foundation.Configuration
 {
-    public delegate Boolean TryGetValue<in TKey, TValue>(TKey key, out TValue value);
+    public delegate bool TryGetValue<in TKey, TValue>(TKey key, out TValue value);
 }

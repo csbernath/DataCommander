@@ -114,7 +114,7 @@ namespace Foundation.Core
                 var sequence = new Sequence();
                 while (true)
                 {
-                    string line = stringReader.ReadLine();
+                    var line = stringReader.ReadLine();
                     if (line == null)
                         break;
 

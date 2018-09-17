@@ -1,7 +1,7 @@
-﻿namespace Foundation.Threading
-{
-    using System.Threading;
+﻿using System.Threading;
 
+namespace Foundation.Threading
+{
     /// <summary>
     /// 
     /// </summary>

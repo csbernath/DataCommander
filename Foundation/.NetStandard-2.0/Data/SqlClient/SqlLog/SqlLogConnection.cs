@@ -9,7 +9,7 @@ namespace Foundation.Data.SqlClient.SqlLog
         private readonly string _name;
         private readonly string _userName;
         private readonly string _hostName;
-        private DateTime _startDate;
+        private readonly DateTime _startDate;
         private readonly long _duration;
         private readonly Exception _exception;
 

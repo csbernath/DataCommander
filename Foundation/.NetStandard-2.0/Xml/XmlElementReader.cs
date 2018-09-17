@@ -1,9 +1,9 @@
-﻿using System.Xml;
+﻿using System.Diagnostics;
+using System.Xml;
 
 namespace Foundation.Xml
 {
 #if DEBUG
-    using System.Diagnostics;
 #endif
 
     /// <summary>

@@ -19,7 +19,7 @@ namespace Foundation.Data.SqlClient.SqlLog
         private readonly CommandType _commandType;
         private string _commandText;
         private string _parameters;
-        private DateTime _startDate;
+        private readonly DateTime _startDate;
         private readonly long _duration;
         private readonly Exception _exception;
 

@@ -5,7 +5,7 @@ namespace Foundation.Data.SqlClient.SqlLog
     internal sealed class SqlLogApplicationEnd : ISqlLogItem
     {
         private readonly int _applicationId;
-        private DateTime _endDate;
+        private readonly DateTime _endDate;
 
         public SqlLogApplicationEnd( int applicationId, DateTime endDate )
         {

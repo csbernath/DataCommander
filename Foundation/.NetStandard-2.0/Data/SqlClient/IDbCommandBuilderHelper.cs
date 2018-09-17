@@ -1,7 +1,7 @@
-﻿namespace Foundation.Data.SqlClient
-{
-    using System.Data;
+﻿using System.Data;
 
+namespace Foundation.Data.SqlClient
+{
     /// <summary>
     /// 
     /// </summary>

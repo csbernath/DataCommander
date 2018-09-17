@@ -64,7 +64,7 @@ namespace Foundation.Data
             //IsReadOnly
             //ProviderSpecificDataType
             //DataTypeName XmlSchemaCollectionDatabase XmlSchemaCollectionOwningSchema XmlSchemaCollectionName UdtAssemblyQualifiedName
-            int nonVersionedProviderType = 0;
+            var nonVersionedProviderType = 0;
             column = columns[SchemaTableColumn.NonVersionedProviderType];
             if (column != null)
                 nonVersionedProviderType = (int) schemaTableRow[column];

@@ -8,8 +8,6 @@ using Foundation.Log;
 
 namespace Foundation.Configuration
 {
-    using FileSystemWatcher = FileSystemWatcher;
-
     /// <summary>
     /// Loads and parses the <c><Foundation.Configuration /></c> xml element from the config file.
     /// </summary>

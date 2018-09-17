@@ -5,11 +5,10 @@ using System.Threading;
 using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Log;
+using ThreadState = System.Threading.ThreadState;
 
 namespace Foundation.Threading
 {
-    using ThreadState = System.Threading.ThreadState;
-
     /// <summary>
     /// 
     /// </summary>

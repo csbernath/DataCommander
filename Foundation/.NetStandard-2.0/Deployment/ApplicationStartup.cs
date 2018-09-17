@@ -122,7 +122,7 @@ namespace Foundation.Deployment
                 if (localVersion < remoteVersion)
                 {
                     _eventPublisher(new DownloadingNewVersionStarted(remoteVersion));
-                    var address = new Uri(String.Format(_address, (object) remoteVersion));
+                    var address = new Uri(string.Format(_address, (object) remoteVersion));
                     var guid = Guid.NewGuid();
                     var updaterDirectory = Path.Combine(Path.GetTempPath(), guid.ToString());
                     var zipFileName = Path.Combine(updaterDirectory, "Updater.zip");
