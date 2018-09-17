@@ -1,4 +1,5 @@
 ﻿using System;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Core
@@ -13,8 +14,8 @@ namespace Foundation.Core
 
         public LocalTime(int increment, int adjustment)
         {
-            FoundationContract.Requires<ArgumentOutOfRangeException>(increment >= 0);
-            FoundationContract.Requires<ArgumentOutOfRangeException>(increment <= adjustment);
+            Assert.IsInRange(increment >= 0);
+            Assert.IsInRange(increment <= adjustment);
 
             _increment = increment;
             _adjustment = adjustment;

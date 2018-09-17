@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Core
@@ -22,7 +23,7 @@ namespace Foundation.Core
 
         public SmallDate(DateTime dateTime)
         {
-            FoundationContract.Requires<ArgumentOutOfRangeException>(dateTime.TimeOfDay == TimeSpan.Zero);
+            Assert.IsInRange(dateTime.TimeOfDay == TimeSpan.Zero);
             _value = ToSmallDateValue(dateTime);
         }
 
@@ -107,8 +108,8 @@ namespace Foundation.Core
 
         private static ushort ToSmallDateValue(DateTime dateTime)
         {
-            FoundationContract.Requires<ArgumentOutOfRangeException>(MinDateTime <= dateTime);
-            FoundationContract.Requires<ArgumentOutOfRangeException>(dateTime <= MaxDateTime);
+            Assert.IsInRange(MinDateTime <= dateTime);
+            Assert.IsInRange(dateTime <= MaxDateTime);
 
             var timeSpan = dateTime - MinDateTime;
             var totalDays = timeSpan.TotalDays;

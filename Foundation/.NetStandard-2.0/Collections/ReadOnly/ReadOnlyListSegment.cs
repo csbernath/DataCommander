@@ -11,10 +11,10 @@ namespace Foundation.Collections.ReadOnly
         public ReadOnlyListSegment(IReadOnlyList<T> list, int offset, int count)
         {
             Assert.IsNotNull(list);
-            FoundationContract.Requires<ArgumentOutOfRangeException>(offset >= 0);
-            FoundationContract.Requires<ArgumentOutOfRangeException>(count >= 0);
-            FoundationContract.Requires<ArgumentOutOfRangeException>(0 <= offset && offset < list.Count);
-            FoundationContract.Requires<ArgumentOutOfRangeException>(0 <= offset + count && offset + count <= list.Count);
+            Assert.IsInRange(offset >= 0);
+            Assert.IsInRange(count >= 0);
+            Assert.IsInRange(0 <= offset && offset < list.Count);
+            Assert.IsInRange(0 <= offset + count && offset + count <= list.Count);
 
             _list = list;
             _offset = offset;

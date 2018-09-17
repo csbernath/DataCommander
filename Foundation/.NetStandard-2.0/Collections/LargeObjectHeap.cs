@@ -1,4 +1,5 @@
 ﻿using System;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
@@ -10,7 +11,7 @@ namespace Foundation.Collections
 
         public static int GetSmallArrayMaxLength(int itemSize)
         {
-            FoundationContract.Requires<ArgumentOutOfRangeException>(itemSize > 0);
+            Assert.IsInRange(itemSize > 0);
 
             return (MaxSmallObjectSize - 16) / itemSize;
         }

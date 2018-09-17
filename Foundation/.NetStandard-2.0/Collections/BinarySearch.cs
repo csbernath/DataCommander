@@ -3,8 +3,6 @@ using System.Diagnostics;
 using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 
-//using Foundation.Diagnostics.Contracts;
-
 namespace Foundation.Collections
 {
     public static class BinarySearch
@@ -14,8 +12,8 @@ namespace Foundation.Collections
             int maxIndex,
             Func<int, int> compareTo)
         {
-            FoundationContract.Requires<ArgumentOutOfRangeException>(minIndex >= 0);
-            FoundationContract.Requires<ArgumentOutOfRangeException>(minIndex <= maxIndex);
+            Assert.IsInRange(minIndex >= 0);
+            Assert.IsInRange(minIndex <= maxIndex);
             Assert.IsNotNull(compareTo);
 
             var result = -1;

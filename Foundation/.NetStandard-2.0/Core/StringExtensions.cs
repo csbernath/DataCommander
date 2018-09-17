@@ -99,7 +99,7 @@ namespace Foundation.Core
         public static string Right(this string value, int length)
         {
             Assert.IsNotNull(value);
-            FoundationContract.Requires<ArgumentOutOfRangeException>(value.Length >= length);
+            Assert.IsInRange(value.Length >= length);
 
             var startIndex = value.Length - length;
             return value.Substring(startIndex);

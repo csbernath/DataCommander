@@ -40,8 +40,8 @@ namespace Foundation.Collections.ObjectPool
             int maxSize)
         {
             Assert.IsNotNull(factory);
-            FoundationContract.Requires<ArgumentOutOfRangeException>(minSize >= 0);
-            FoundationContract.Requires<ArgumentOutOfRangeException>(minSize <= maxSize);
+            Assert.IsInRange(minSize >= 0);
+            Assert.IsInRange(minSize <= maxSize);
 
             _factory = factory;
             MinSize = minSize;

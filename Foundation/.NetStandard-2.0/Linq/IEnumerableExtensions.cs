@@ -56,8 +56,8 @@ namespace Foundation.Linq
         public static IEnumerable<List<TSource>> GetPartitions<TSource>(this IEnumerable<TSource> source, int count, int partitionCount)
         {
             Assert.IsNotNull(source);
-            FoundationContract.Requires<ArgumentOutOfRangeException>(count >= 0);
-            FoundationContract.Requires<ArgumentOutOfRangeException>(partitionCount > 0);
+            Assert.IsInRange(count >= 0);
+            Assert.IsInRange(partitionCount > 0);
 
             FoundationContract.Ensures(Contract.Result<IEnumerable<List<TSource>>>().Count() <= partitionCount);
             FoundationContract.Ensures(Contract.ForAll(Contract.Result<IEnumerable<List<TSource>>>().ToList(), partition => partition.Count > 0));

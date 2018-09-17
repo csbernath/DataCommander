@@ -22,7 +22,7 @@ namespace Foundation.Collections
         public MultipleMemberEqualityComparer(params IEqualityComparer<T>[] equalityComparers)
         {
             Assert.IsNotNull(equalityComparers);
-            FoundationContract.Requires<ArgumentOutOfRangeException>(equalityComparers.Length > 0);
+            Assert.IsInRange(equalityComparers.Length > 0);
             //Assert.IsNotNull(Contract.ForAll(equalityComparers, c => c != null));
 
             _equalityComparers = equalityComparers;

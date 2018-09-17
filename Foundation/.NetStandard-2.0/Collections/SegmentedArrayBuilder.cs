@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
@@ -18,8 +19,8 @@ namespace Foundation.Collections
             int length,
             int segmentLength)
         {
-            FoundationContract.Requires<ArgumentOutOfRangeException>(length >= 0);
-            FoundationContract.Requires<ArgumentOutOfRangeException>(segmentLength >= 0);
+            Assert.IsInRange(length >= 0);
+            Assert.IsInRange(segmentLength >= 0);
 
             if (length > 0)
             {

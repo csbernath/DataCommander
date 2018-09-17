@@ -19,7 +19,7 @@ namespace Foundation.Linq
         public static List<T> Take<T>(this IEnumerator<T> enumerator, int count)
         {
             Assert.IsNotNull(enumerator);
-            FoundationContract.Requires<ArgumentOutOfRangeException>(count >= 0);
+            Assert.IsInRange(count >= 0);
 
             var list = new List<T>(count);
 

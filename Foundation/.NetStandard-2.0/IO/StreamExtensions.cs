@@ -31,7 +31,7 @@ namespace Foundation.IO
         {
             Assert.IsNotNull( inputStream != null );
             Assert.IsNotNull( outputStream != null );
-            FoundationContract.Requires<ArgumentOutOfRangeException>( bufferSize > 0 );
+            Assert.IsInRange( bufferSize > 0 );
 
             var buffer = new byte[bufferSize];
 

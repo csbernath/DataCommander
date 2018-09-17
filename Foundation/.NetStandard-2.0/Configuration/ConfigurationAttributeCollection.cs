@@ -63,7 +63,7 @@ namespace Foundation.Configuration
         {
             get
             {
-                FoundationContract.Requires<ArgumentOutOfRangeException>(ContainsKey(name));
+                Assert.IsInRange(ContainsKey(name));
 
                 return _nameIndex[name];
             }

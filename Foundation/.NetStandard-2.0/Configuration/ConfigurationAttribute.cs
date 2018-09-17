@@ -54,7 +54,7 @@ namespace Foundation.Configuration
         /// <returns></returns>
         public T GetValue<T>()
         {
-            FoundationContract.Requires<ArgumentOutOfRangeException>((Value == null && typeof (T).IsClass) || Value is T);
+            Assert.IsInRange((Value == null && typeof (T).IsClass) || Value is T);
 
             var value = (T)Value;
             return value;

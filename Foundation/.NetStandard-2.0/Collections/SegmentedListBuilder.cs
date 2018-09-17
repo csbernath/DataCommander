@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Foundation.Assertions;
 using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections
@@ -12,7 +13,7 @@ namespace Foundation.Collections
         /// <param name="segmentItemCapacity"></param>
         public SegmentedListBuilder(int segmentItemCapacity)
         {
-            FoundationContract.Requires<ArgumentOutOfRangeException>(segmentItemCapacity > 0);
+            Assert.IsInRange(segmentItemCapacity > 0);
 
             _segmentItemCapacity = segmentItemCapacity;
         }

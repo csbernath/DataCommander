@@ -22,7 +22,7 @@ namespace DataCommander.Providers.SqlServer
 
         public static string GetSchemas(string database)
         {
-            FoundationContract.Requires<ArgumentOutOfRangeException>(!database.IsNullOrWhiteSpace());
+            Assert.IsTrue(!database.IsNullOrWhiteSpace());
 
             return string.Format(@"if exists(select * from sys.databases (nolock) where name = '{0}')
 begin

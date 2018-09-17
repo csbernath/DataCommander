@@ -14,7 +14,7 @@ namespace Foundation.Text
     {
         public StringTable(int columnCount)
         {
-            FoundationContract.Requires<ArgumentOutOfRangeException>(columnCount >= 0);
+            Assert.IsInRange(columnCount >= 0);
 
             for (var i = 0; i < columnCount; i++)
                 Columns.Add(new StringTableColumn());
