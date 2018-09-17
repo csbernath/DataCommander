@@ -32,7 +32,7 @@ namespace DataCommander.Providers
 <a href=""https://github.com/csbernath/DataCommander"">Data Commander</a>
 <br/>
 <br/>
-Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation.NetStandard-2.0/README.md"">Foundation (.NET Standard 2.0) Class Library</a>
+Including <a href=""https://github.com/csbernath/DataCommander/blob/master/Foundation/.NetStandard-2.0/README.md"">Foundation (.NET Standard 2.0) Class Library</a>
 <br/>
 <br/>
 Version: {assembly.GetName().Version}
@@ -69,7 +69,7 @@ Credits:
 <ul style=""list-style-type:none"">
     <li><a href=""https://www.visualstudio.com/vs/community/"">Visual Studio Community 2017</a></li>
     <li><a href=""https://www.jetbrains.com/resharper/"">JetBrains R# ReSharper</a></li>
-    <li><a href=""http://epplus.codeplex.com"">EPPlus Excel generator</a></li>
+    <li><a href=""https://github.com/JanKallman/EPPlus"">EPPlus Excel generator</a></li>
     <li><a href=""https://system.data.sqlite.org"">SQLite provider</a></li>
     <li><a href=""https://www.nuget.org/packages/MySql.Data/"">MySQL provider</a></li>
     <li><a href=""http://npgsql.projects.pgfoundry.org/"">PostgreSQL provider</a></li>  
