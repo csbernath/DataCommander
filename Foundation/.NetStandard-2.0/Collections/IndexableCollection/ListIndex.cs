@@ -1,31 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using Foundation.Assertions;
-using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.IndexableCollection
 {
-    /// <summary>
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
     public class ListIndex<T> : ICollectionIndex<T>, IList<T>
     {
         private IList<T> _list;
 
-        /// <summary>
-        /// </summary>
         public ListIndex(string name)
         {
             Assert.IsNotNull(name);
-
             Initialize(name, new List<T>());
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="list"></param>
         public ListIndex(string name, IList<T> list)
         {
             Assert.IsNotNull(name);
@@ -34,24 +22,10 @@ namespace Foundation.Collections.IndexableCollection
             Initialize(name, list);
         }
 
-        /// <summary>
-        /// </summary>
         public string Name { get; private set; }
-
-        /// <summary>
-        /// </summary>
         public int Count => _list.Count;
-
         bool ICollection<T>.IsReadOnly => false;
-
-        /// <summary>
-        /// </summary>
-        /// <param name="array"></param>
-        /// <param name="arrayIndex"></param>
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            _list.CopyTo(array, arrayIndex);
-        }
+        public void CopyTo(T[] array, int arrayIndex) => _list.CopyTo(array, arrayIndex);
 
         #region IEnumerable<T> Members
 
@@ -74,52 +48,24 @@ namespace Foundation.Collections.IndexableCollection
 
         #endregion
 
-        /// <summary>
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
         public T this[int index]
         {
             get
             {
                 Assert.IsTrue(index < Count);
-
                 return _list[index];
             }
 
             set
             {
                 Assert.IsTrue(index < Count);
-
                 _list[index] = value;
             }
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public int IndexOf(T item)
-        {
-            return _list.IndexOf(item);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="item"></param>
-        public void Insert(int index, T item)
-        {
-            _list.Insert(index, item);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="index"></param>
-        public void RemoveAt(int index)
-        {
-            _list.RemoveAt(index);
-        }
+        public int IndexOf(T item) => _list.IndexOf(item);
+        public void Insert(int index, T item) => _list.Insert(index, item);
+        public void RemoveAt(int index) => _list.RemoveAt(index);
 
         private void Initialize(string name, IList<T> list)
         {
@@ -140,32 +86,9 @@ namespace Foundation.Collections.IndexableCollection
             _list.Add(item);
         }
 
-        /// <summary>
-        /// </summary>
-        public void Clear()
-        {
-            _list.Clear();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public bool Contains(T item)
-        {
-            FoundationContract.Ensures(!Contract.Result<bool>() || Count > 0);
-
-            return _list.Contains(item);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public bool Remove(T item)
-        {
-            return _list.Remove(item);
-        }
+        public void Clear() => _list.Clear();
+        public bool Contains(T item) => _list.Contains(item);
+        public bool Remove(T item) => _list.Remove(item);
 
         #endregion
     }

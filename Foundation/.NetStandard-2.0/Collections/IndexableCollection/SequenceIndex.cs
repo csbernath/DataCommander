@@ -71,25 +71,10 @@ namespace Foundation.Collections.IndexableCollection
             _dictionary.Add(key, item);
         }
 
-        void ICollection<T>.Clear()
-        {
-            FoundationContract.Ensures(_dictionary.Count == 0);
-
-            _dictionary.Clear();
-        }
-
-        bool ICollection<T>.Contains(T item)
-        {
-            return _dictionary.Values.Contains(item);
-        }
-
-        void ICollection<T>.CopyTo(T[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
-
+        void ICollection<T>.Clear() => _dictionary.Clear();
+        bool ICollection<T>.Contains(T item) => _dictionary.Values.Contains(item);
+        void ICollection<T>.CopyTo(T[] array, int arrayIndex) => throw new NotImplementedException();
         int ICollection<T>.Count => _dictionary.Count;
-
         bool ICollection<T>.IsReadOnly => _dictionary.IsReadOnly;
 
         bool ICollection<T>.Remove(T item)

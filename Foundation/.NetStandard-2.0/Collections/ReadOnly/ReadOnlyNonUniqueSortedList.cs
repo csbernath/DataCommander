@@ -3,26 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using Foundation.Assertions;
-using Foundation.Diagnostics.Contracts;
 
 namespace Foundation.Collections.ReadOnly
 {
     public sealed class ReadOnlyNonUniqueSortedList<TKey, TValue>
     {
-        #region Public Methods
-
-        /// <summary>
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        [Pure]
-        public bool ContainsKey(TKey key)
-        {
-            return IndexOf(key) >= 0;
-        }
-
-        #endregion
-
         #region Private Fields
 
         private readonly IReadOnlyList<TValue> _values;
@@ -34,15 +19,7 @@ namespace Foundation.Collections.ReadOnly
 
         #region Constructors
 
-        /// <summary>
-        /// </summary>
-        /// <param name="values"></param>
-        /// <param name="keySelector"></param>
-        /// <param name="comparison"></param>
-        public ReadOnlyNonUniqueSortedList(
-            IReadOnlyList<TValue> values,
-            Func<TValue, TKey> keySelector,
-            Comparison<TKey> comparison)
+        public ReadOnlyNonUniqueSortedList(IReadOnlyList<TValue> values, Func<TValue, TKey> keySelector, Comparison<TKey> comparison)
         {
             Assert.IsNotNull(values);
             Assert.IsNotNull(keySelector);
@@ -71,26 +48,15 @@ namespace Foundation.Collections.ReadOnly
 
         #endregion
 
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
         [Pure]
         public int Count => _groups?.Count ?? 0;
 
-        /// <summary>
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
         [Pure]
         public IReadOnlyList<TValue> this[TKey key]
         {
             get
             {
-                FoundationContract.Ensures(Contract.Result<IReadOnlyList<TValue>>() != null);
-
                 IReadOnlyList<TValue> readOnlyList;
-
                 var index = IndexOf(key);
                 if (index >= 0)
                 {
@@ -101,17 +67,19 @@ namespace Foundation.Collections.ReadOnly
                     readOnlyList = new ReadOnlyListSegment<TValue>(_values, currentGroupIndex, count);
                 }
                 else
-                {
                     readOnlyList = EmptyReadOnlyList<TValue>.Value;
-                }
 
+                Assert.IsNotNull(readOnlyList);
                 return readOnlyList;
             }
         }
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
+        [Pure]
+        public bool ContainsKey(TKey key)
+        {
+            return IndexOf(key) >= 0;
+        }
+
         public IEnumerable<IReadOnlyList<TValue>> GetGroups()
         {
             var lastGroupIndex = _groups.Count - 1;
@@ -123,8 +91,6 @@ namespace Foundation.Collections.ReadOnly
                 yield return new ReadOnlyListSegment<TValue>(_values, valueStartIndex, valueCount);
             }
         }
-
-        #endregion
 
         #region Private Methods
 

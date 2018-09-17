@@ -59,8 +59,8 @@ namespace Foundation.Linq
             Assert.IsInRange(count >= 0);
             Assert.IsInRange(partitionCount > 0);
 
-            FoundationContract.Ensures(Contract.Result<IEnumerable<List<TSource>>>().Count() <= partitionCount);
-            FoundationContract.Ensures(Contract.ForAll(Contract.Result<IEnumerable<List<TSource>>>().ToList(), partition => partition.Count > 0));
+            //FoundationContract.Ensures(Contract.Result<IEnumerable<List<TSource>>>().Count() <= partitionCount);
+            //FoundationContract.Ensures(Contract.ForAll(Contract.Result<IEnumerable<List<TSource>>>().ToList(), partition => partition.Count > 0));
 
             var partitionSize = count / partitionCount;
             var remainder = count % partitionCount;
