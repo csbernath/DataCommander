@@ -4,14 +4,14 @@
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A24A2AE0-CB55-460D-9305-3F426DA3B3A6}</ProjectGuid>
+    <ProjectGuid>{28022DDE-613C-4A13-AE06-27C784E7919B}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ApplicationIcon>
     </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>DataCommander.Providers.OleDb</AssemblyName>
+    <AssemblyName>DataCommander.Providers.Wmi</AssemblyName>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
@@ -19,7 +19,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
-    <RootNamespace>DataCommander.Providers.OleDb</RootNamespace>
+    <RootNamespace>DataCommander.Providers.Wmi</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -28,12 +28,13 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <TargetFrameworkProfile />
-    <PublishUrl>publish\</PublishUrl>
+    <PublishUrl>http://localhost/DataCommander.Providers.Wmi/</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
@@ -42,14 +43,12 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>742b67de</NuGetPackageImportStamp>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>..\DataCommander\bin\Debug\</OutputPath>
+    <OutputPath>..\..\DataCommander\bin\Debug\</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
@@ -74,7 +73,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>..\DataCommander\bin\Release\</OutputPath>
+    <OutputPath>..\..\DataCommander\bin\Release\</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
@@ -100,7 +99,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>..\DataCommander\bin\Debug\</OutputPath>
+    <OutputPath>bin\x86\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
@@ -121,7 +120,9 @@
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
-    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management">
+      <Name>System.Management</Name>
+    </Reference>
     <Reference Include="System.Windows.Forms">
       <Name>System.Windows.Forms</Name>
     </Reference>
@@ -130,42 +131,57 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CatalogNode.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CatalogsNode.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Connection.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ConnectionStringBuilder.cs" />
-    <Compile Include="DataParameterImp.cs" />
-    <Compile Include="ObjectExplorer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OleDbDataReaderHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OleDbProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ProcedureNode.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ProcedureCollectionNode.cs">
+    <Compile Include="ManagementDateTimeConverter.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SchemaNode.cs">
+    <Compile Include="WmiClass.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TableNode.cs">
+    <Compile Include="WmiClasses.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TableCollectionNode.cs">
+    <Compile Include="WmiCommand.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WmiConnection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WmiDataReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WmiDataReaderHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WmiObjectBrowser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WmiProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WmiProviderConnection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WmiProviderFactory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\DataCommander.Providers\DataCommander.Providers.csproj">
+      <Project>{31A30A80-D1B6-4867-A65E-188DE9E912C8}</Project>
+      <Name>DataCommander.Providers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Foundation\.NetStandard-2.0\Assertions\Foundation.Assertions.csproj">
+      <Project>{3640355A-6D7C-45B4-8377-1D011DAFD8AA}</Project>
+      <Name>Foundation.Assertions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Foundation\.NetStandard-2.0\Configuration\Foundation.Configuration.csproj">
+      <Project>{513D0094-7D6B-4453-9D43-23223C51EC4C}</Project>
+      <Name>Foundation.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Foundation\.NetStandard-2.0\Data\Foundation.Data.csproj">
+      <Project>{34f913bc-edee-4385-bae6-c650a0e21878}</Project>
+      <Name>Foundation.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -173,37 +189,29 @@
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
+      <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Core\Foundation.Core.csproj">
-      <Project>{5b3a35c4-cdc3-4ce6-afde-41f980a5a7ec}</Project>
-      <Name>Foundation.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DataCommander.Providers\DataCommander.Providers.csproj">
-      <Project>{31a30a80-d1b6-4867-a65e-188de9e912c8}</Project>
-      <Name>DataCommander.Providers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Assertions\Foundation.Assertions.csproj">
-      <Project>{3640355A-6D7C-45B4-8377-1D011DAFD8AA}</Project>
-      <Name>Foundation.Assertions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Data\Foundation.Data.csproj">
-      <Project>{34f913bc-edee-4385-bae6-c650a0e21878}</Project>
-      <Name>Foundation.Data</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

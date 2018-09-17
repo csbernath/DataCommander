@@ -6,29 +6,29 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander", "DataComman
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers", "DataCommander.Providers\DataCommander.Providers.csproj", "{31A30A80-D1B6-4867-A65E-188DE9E912C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.SqlServer", "DataCommander.Providers.SqlServer\DataCommander.Providers.SqlServer.csproj", "{97F3ACFC-06D7-494F-ADA0-FDF1693DE112}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.SqlServer", "Providers\DataCommander.Providers.SqlServer\DataCommander.Providers.SqlServer.csproj", "{97F3ACFC-06D7-494F-ADA0-FDF1693DE112}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.SqlServerCe40", "DataCommander.Providers.SqlServerCe40\DataCommander.Providers.SqlServerCe40.csproj", "{72E6A694-639F-41B0-AD3B-4C82C1C230A8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.SqlServerCe40", "Providers\DataCommander.Providers.SqlServerCe40\DataCommander.Providers.SqlServerCe40.csproj", "{72E6A694-639F-41B0-AD3B-4C82C1C230A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Wmi", "DataCommander.Providers.Wmi\DataCommander.Providers.Wmi.csproj", "{28022DDE-613C-4A13-AE06-27C784E7919B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Wmi", "Providers\DataCommander.Providers.Wmi\DataCommander.Providers.Wmi.csproj", "{28022DDE-613C-4A13-AE06-27C784E7919B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.SQLite", "DataCommander.Providers.SQLite\DataCommander.Providers.SQLite.csproj", "{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.SQLite", "Providers\DataCommander.Providers.SQLite\DataCommander.Providers.SQLite.csproj", "{C7B6913B-9B3E-4A09-A053-5B18D8BDAD4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.OracleBase", "DataCommander.Providers.OracleBase\DataCommander.Providers.OracleBase.csproj", "{E64206C7-76FA-4C4E-9DAD-D4ACECA24F55}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.OracleBase", "Providers\DataCommander.Providers.OracleBase\DataCommander.Providers.OracleBase.csproj", "{E64206C7-76FA-4C4E-9DAD-D4ACECA24F55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.OracleClient", "DataCommander.Providers.OracleClient\DataCommander.Providers.OracleClient.csproj", "{FFF4F73F-507F-4021-AEE6-2DE70658D3A1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.OracleClient", "Providers\DataCommander.Providers.OracleClient\DataCommander.Providers.OracleClient.csproj", "{FFF4F73F-507F-4021-AEE6-2DE70658D3A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Odp", "DataCommander.Providers.Odp\DataCommander.Providers.Odp.csproj", "{C61C7CE8-690C-4AD3-9A81-62911D8E47DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Odp", "Providers\DataCommander.Providers.Odp\DataCommander.Providers.Odp.csproj", "{C61C7CE8-690C-4AD3-9A81-62911D8E47DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Msi", "DataCommander.Providers.Msi\DataCommander.Providers.Msi.csproj", "{31D78874-9C6E-4239-828A-1385A90DC16F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Msi", "Providers\DataCommander.Providers.Msi\DataCommander.Providers.Msi.csproj", "{31D78874-9C6E-4239-828A-1385A90DC16F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.OleDb", "DataCommander.Providers.OleDb\DataCommander.Providers.OleDb.csproj", "{A24A2AE0-CB55-460D-9305-3F426DA3B3A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.OleDb", "Providers\DataCommander.Providers.OleDb\DataCommander.Providers.OleDb.csproj", "{A24A2AE0-CB55-460D-9305-3F426DA3B3A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.MySql", "DataCommander.Providers.MySql\DataCommander.Providers.MySql.csproj", "{CEE8D8F8-B448-49A4-A8F8-C7CA4549172E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.MySql", "Providers\DataCommander.Providers.MySql\DataCommander.Providers.MySql.csproj", "{CEE8D8F8-B448-49A4-A8F8-C7CA4549172E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.PostgreSql", "DataCommander.Providers.PostgreSql\DataCommander.Providers.PostgreSql.csproj", "{F4553DD9-F793-4DD1-9D34-98449264018B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.PostgreSql", "Providers\DataCommander.Providers.PostgreSql\DataCommander.Providers.PostgreSql.csproj", "{F4553DD9-F793-4DD1-9D34-98449264018B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Tfs-15.0.0.0", "DataCommander.Providers.Tfs-15.0.0.0\DataCommander.Providers.Tfs-15.0.0.0.csproj", "{3C2A1C8C-66FC-48E0-9B2E-40C697425336}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCommander.Providers.Tfs-15.0.0.0", "Providers\DataCommander.Providers.Tfs-15.0.0.0\DataCommander.Providers.Tfs-15.0.0.0.csproj", "{3C2A1C8C-66FC-48E0-9B2E-40C697425336}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.NetStandard-2.0", "..\Foundation\.NetStandard-2.0\.NetStandard-2.0\Foundation.NetStandard-2.0.csproj", "{04996258-F3F5-4EEC-9D3E-ACAE9726F93F}"
 EndProject
