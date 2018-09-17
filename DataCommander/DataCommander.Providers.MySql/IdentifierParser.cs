@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Providers.MySql
-{
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Text;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
+namespace DataCommander.Providers.MySql
+{
     internal sealed class IdentifierParser
     {
         private readonly TextReader _textReader;

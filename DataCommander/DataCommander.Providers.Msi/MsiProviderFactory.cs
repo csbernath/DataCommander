@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers.Msi
-{
-    using System.Data.Common;
+﻿using System.Data.Common;
 
+namespace DataCommander.Providers.Msi
+{
     internal sealed class MsiProviderFactory : DbProviderFactory
 	{
         private MsiProviderFactory()

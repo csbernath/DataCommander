@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Providers.Wmi
-{
-    using System.Data;
-    using System.Data.Common;
-    using System.Management;
-    using Connection;
+﻿using System.Data;
+using System.Data.Common;
+using System.Management;
+using DataCommander.Providers.Connection;
 
+namespace DataCommander.Providers.Wmi
+{
     internal sealed class WmiConnection : IDbConnection
     {
         private readonly string connectionString;

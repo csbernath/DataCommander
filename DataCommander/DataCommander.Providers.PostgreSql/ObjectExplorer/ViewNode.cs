@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers.PostgreSql.ObjectExplorer
-{
-    using System.Collections.Generic;
-    using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.PostgreSql.ObjectExplorer
+{
     internal sealed class ViewNode : ITreeNode
     {
         private readonly ViewCollectionNode _viewCollectionNode;

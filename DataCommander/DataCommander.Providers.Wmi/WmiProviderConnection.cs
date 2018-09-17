@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Providers.Wmi
-{
-    using System.Data;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Connection;
+﻿using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
+using DataCommander.Providers.Connection;
 
+namespace DataCommander.Providers.Wmi
+{
     internal sealed class WmiProviderConnection : ConnectionBase
     {
         private readonly WmiConnection wmiConnection;

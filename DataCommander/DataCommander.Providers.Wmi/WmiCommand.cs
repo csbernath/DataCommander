@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers.Wmi
-{
-    using System.Data;
+﻿using System.Data;
 
+namespace DataCommander.Providers.Wmi
+{
     class WmiCommand : IDbCommand
   {
     public WmiCommand(WmiConnection connection)

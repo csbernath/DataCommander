@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Providers.Odp.DataFieldReader
-{
-    using Oracle.ManagedDataAccess.Types;
+﻿using Oracle.ManagedDataAccess.Types;
 
+namespace DataCommander.Providers.Odp.DataFieldReader
+{
     internal sealed class OracleTimeStampField
     {
-        private OracleTimeStamp _value;
+        private readonly OracleTimeStamp _value;
 
         public OracleTimeStampField (OracleTimeStamp value)
         {

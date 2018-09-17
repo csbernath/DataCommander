@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Providers.Msi
-{
-    using System.Collections.Generic;
-    using System.Windows.Forms;
-    using Microsoft.Deployment.WindowsInstaller;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
+using Microsoft.Deployment.WindowsInstaller;
 
+namespace DataCommander.Providers.Msi
+{
     internal sealed class MsiTableNode : ITreeNode
 	{
 		private MsiConnection _connection;

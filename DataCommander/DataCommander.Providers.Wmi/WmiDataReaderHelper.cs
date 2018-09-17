@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers.Wmi
-{
-    using System.Data;
+﻿using System.Data;
 
+namespace DataCommander.Providers.Wmi
+{
     /// <summary>
     /// Summary description for WmiDataReaderHelper.
     /// </summary>

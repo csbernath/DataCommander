@@ -1,6 +1,6 @@
-﻿using Foundation.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
+using Foundation.Data;
 using MySql.Data.MySqlClient;
 
 namespace DataCommander.Providers.MySql.ObjectExplorer

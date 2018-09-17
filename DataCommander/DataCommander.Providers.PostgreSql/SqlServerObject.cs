@@ -1,12 +1,11 @@
-﻿using Foundation.Assertions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Data.SqlClient;
 
 namespace DataCommander.Providers.PostgreSql
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
     internal static class SqlServerObject
     {
         public static string GetSchemas()

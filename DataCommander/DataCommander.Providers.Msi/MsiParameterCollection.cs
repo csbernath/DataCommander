@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Providers.Msi
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Data;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
 
+namespace DataCommander.Providers.Msi
+{
     internal sealed class MsiParameterCollection : IDataParameterCollection
 	{
 		private readonly List<object> _parameters = new List<object>();

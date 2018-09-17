@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers.Wmi
-{
-    using System.Data.Common;
+﻿using System.Data.Common;
 
+namespace DataCommander.Providers.Wmi
+{
     internal sealed class WmiProviderFactory : DbProviderFactory
     {
         public static WmiProviderFactory Instance = new WmiProviderFactory();

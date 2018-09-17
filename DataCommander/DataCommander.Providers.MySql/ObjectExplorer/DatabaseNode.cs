@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers.MySql.ObjectExplorer
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace DataCommander.Providers.MySql.ObjectExplorer
+{
     internal sealed class DatabaseNode : ITreeNode
     {
         public DatabaseNode(ObjectExplorer objectExplorer, string name)

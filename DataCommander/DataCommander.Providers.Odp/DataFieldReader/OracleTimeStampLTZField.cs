@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Providers.Odp.DataFieldReader
-{
-    using Oracle.ManagedDataAccess.Types;
+﻿using Oracle.ManagedDataAccess.Types;
 
+namespace DataCommander.Providers.Odp.DataFieldReader
+{
     internal sealed class OracleTimeStampLtzField
     {
-        private OracleTimeStampLTZ _value;
+        private readonly OracleTimeStampLTZ _value;
 
         public OracleTimeStampLtzField( OracleTimeStampLTZ value )
         {

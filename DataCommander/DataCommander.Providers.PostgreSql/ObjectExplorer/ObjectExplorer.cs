@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers.PostgreSql.ObjectExplorer
-{
-    using System.Collections.Generic;
-    using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 
+namespace DataCommander.Providers.PostgreSql.ObjectExplorer
+{
     internal sealed class ObjectExplorer : IObjectExplorer
     {
         public string ConnectionString { get; private set; }

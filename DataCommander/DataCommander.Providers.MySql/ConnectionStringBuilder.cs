@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers.MySql
-{
-    using System;
-    using global::MySql.Data.MySqlClient;
+﻿using System;
+using MySql.Data.MySqlClient;
 
+namespace DataCommander.Providers.MySql
+{
     internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
     {
         private readonly MySqlConnectionStringBuilder _mySqlConnectionStringBuilder = new MySqlConnectionStringBuilder();

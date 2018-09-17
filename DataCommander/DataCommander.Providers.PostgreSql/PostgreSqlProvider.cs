@@ -11,7 +11,6 @@ using DataCommander.Providers.Query;
 using Foundation.Data;
 using Foundation.Log;
 using Npgsql;
-using FoundationDbColumn = Foundation.Data.FoundationDbColumn;
 
 namespace DataCommander.Providers.PostgreSql
 {

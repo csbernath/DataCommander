@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers.OleDb
-{
-    using System.Collections.Generic;
-    using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.OleDb
+{
     /// <summary>
     /// Summary description for CatalogsNode.
     /// </summary>

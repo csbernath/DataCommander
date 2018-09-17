@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Providers.Wmi
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Management;
-    using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Management;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.Wmi
+{
     internal sealed class WmiClasses : ITreeNode
     {
         private readonly ManagementScope scope;

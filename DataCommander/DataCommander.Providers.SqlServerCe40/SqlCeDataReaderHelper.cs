@@ -1,14 +1,13 @@
-﻿using DataCommander.Providers.FieldNamespace;
+﻿using System;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlServerCe;
+using System.Globalization;
+using DataCommander.Providers.FieldNamespace;
 using Foundation.Data;
 
 namespace DataCommander.Providers.SqlServerCe40
 {
-    using System;
-    using System.Data;
-    using System.Data.Common;
-    using System.Data.SqlServerCe;
-    using System.Globalization;
-
     internal sealed class SqlCeDataReaderHelper : IDataReaderHelper
     {
         private SqlCeDataReader _dataReader;

@@ -1,11 +1,11 @@
-﻿namespace DataCommander.Providers.Msi
-{
-    using System;
-    using System.Data;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Connection;
+﻿using System;
+using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
+using DataCommander.Providers.Connection;
 
+namespace DataCommander.Providers.Msi
+{
     internal sealed class MsiProviderConnection : ConnectionBase
 	{
 		private string _connectionString;

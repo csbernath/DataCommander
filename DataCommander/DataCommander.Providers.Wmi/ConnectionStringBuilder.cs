@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers.Wmi
-{
-    using System.Data.Common;
-    using System.Data.SqlClient;
+﻿using System.Data.Common;
+using System.Data.SqlClient;
 
+namespace DataCommander.Providers.Wmi
+{
     internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
     {
         private readonly DbConnectionStringBuilder dbConnectionStringBuilder = new SqlConnectionStringBuilder();

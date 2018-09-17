@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers.OleDb
-{
-    using System.Collections.Generic;
-    using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.OleDb
+{
     internal sealed class ProcedureNode : ITreeNode
     {
         private readonly string name;

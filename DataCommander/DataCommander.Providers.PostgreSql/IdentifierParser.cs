@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Providers.PostgreSql
-{
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Text;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
+namespace DataCommander.Providers.PostgreSql
+{
     internal sealed class IdentifierParser
     {
         private readonly TextReader _textReader;

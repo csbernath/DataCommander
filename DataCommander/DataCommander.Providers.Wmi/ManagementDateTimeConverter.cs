@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers.Wmi
-{
-    using System;
+﻿using System;
 
+namespace DataCommander.Providers.Wmi
+{
     internal static class ManagementDateTimeConverter
     {
         public static DateTime ToDateTime( string dmtfDate )

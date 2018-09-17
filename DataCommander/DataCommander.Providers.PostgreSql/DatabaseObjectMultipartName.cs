@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Providers.PostgreSql
-{
-    using System.Data.SqlClient;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
+﻿using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
+using System.Text;
 
+namespace DataCommander.Providers.PostgreSql
+{
     /// <summary>
     /// See <see cref="http://msdn.microsoft.com/en-us/library/ms177563.aspx"/>.
     /// </summary>

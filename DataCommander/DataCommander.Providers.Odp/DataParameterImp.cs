@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers.Odp
-{
-    using Oracle.ManagedDataAccess.Client;
+﻿using Oracle.ManagedDataAccess.Client;
 
+namespace DataCommander.Providers.Odp
+{
     internal sealed class DataParameterImp : DataParameterBase
     {
         public DataParameterImp( OracleParameter parameter )

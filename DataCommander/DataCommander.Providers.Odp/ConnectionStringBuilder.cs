@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers.Odp
-{
-    using System;
+﻿using System;
 
+namespace DataCommander.Providers.Odp
+{
     internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
     {
         string IDbConnectionStringBuilder.ConnectionString

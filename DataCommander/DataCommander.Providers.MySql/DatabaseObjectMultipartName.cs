@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Providers.MySql
-{
-    using System.Collections.Generic;
-    using System.Data.SqlClient;
-    using System.Text;
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Text;
 
+namespace DataCommander.Providers.MySql
+{
     internal sealed class DatabaseObjectMultipartName
     {
         public DatabaseObjectMultipartName(string currentDatabase, List<string> nameParts)

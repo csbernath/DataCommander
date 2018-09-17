@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers.PostgreSql
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace DataCommander.Providers.PostgreSql
+{
     internal static class SqlObjectTypesExtensions
     {
         public static List<string> ToTableTypes(this SqlObjectTypes sqlObjectTypes)

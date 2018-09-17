@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Providers.OleDb
-{
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.OleDb;
-    using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Data;
+using System.Data.OleDb;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.OleDb
+{
     /// <summary>
     /// Summary description for TablesNode.
     /// </summary>

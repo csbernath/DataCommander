@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Providers.Odp.ObjectExplorer
-{
-    using System.Collections.Generic;
-    using System.Data;
-    using Oracle.ManagedDataAccess.Client;
+﻿using System.Collections.Generic;
+using System.Data;
+using Oracle.ManagedDataAccess.Client;
 
+namespace DataCommander.Providers.Odp.ObjectExplorer
+{
     /// <summary>
     /// Summary description for ObjectBrowser.
     /// </summary>

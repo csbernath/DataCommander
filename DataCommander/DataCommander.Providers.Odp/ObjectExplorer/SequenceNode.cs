@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Providers.Odp.ObjectExplorer
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Windows.Forms;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.Odp.ObjectExplorer
+{
     internal sealed class SequenceNode : ITreeNode
 	{
 		private SchemaNode _schemaNode;

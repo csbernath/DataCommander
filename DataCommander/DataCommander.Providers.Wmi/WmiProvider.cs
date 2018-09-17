@@ -1,16 +1,15 @@
-﻿using Foundation.Data;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Management;
+using System.Xml;
+using DataCommander.Providers.Connection;
+using Foundation.Data;
 
 namespace DataCommander.Providers.Wmi
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.Management;
-    using System.Xml;
-    using Connection;
-
     internal sealed class WmiProvider : IProvider
     {
         string IProvider.Name => "WmiProvider";

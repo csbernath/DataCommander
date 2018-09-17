@@ -1,12 +1,11 @@
-﻿using DataCommander.Providers.FieldNamespace;
+﻿using System;
+using System.Data;
+using System.Data.Common;
+using System.Data.SQLite;
+using DataCommander.Providers.FieldNamespace;
 
 namespace DataCommander.Providers.SQLite
 {
-    using System;
-    using System.Data;
-    using System.Data.Common;
-    using System.Data.SQLite;
-
     internal sealed class DecimalDataFieldReader : IDataFieldReader
     {
         readonly SQLiteDataReader _dataReader;

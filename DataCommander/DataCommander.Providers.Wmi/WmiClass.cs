@@ -1,10 +1,10 @@
-﻿namespace DataCommander.Providers.Wmi
-{
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Management;
-    using System.Windows.Forms;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Management;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.Wmi
+{
     class WmiClass : ITreeNode
     {
         public WmiClass(ManagementClass manClass)

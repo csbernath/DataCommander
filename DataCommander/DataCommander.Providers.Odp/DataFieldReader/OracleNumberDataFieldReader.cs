@@ -1,10 +1,9 @@
-﻿using DataCommander.Providers.FieldNamespace;
+﻿using System;
+using DataCommander.Providers.FieldNamespace;
+using Oracle.ManagedDataAccess.Client;
 
 namespace DataCommander.Providers.Odp.DataFieldReader
 {
-    using System;
-    using Oracle.ManagedDataAccess.Client;
-
     internal sealed class OracleNumberDataFieldReader : IDataFieldReader
     {
         private readonly OracleDataReader _oracleDataReader;

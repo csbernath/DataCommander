@@ -1,10 +1,9 @@
-﻿using DataCommander.Providers.FieldNamespace;
+﻿using System;
+using System.Data;
+using DataCommander.Providers.FieldNamespace;
 
 namespace DataCommander.Providers.Odp.DataFieldReader
 {
-    using System;
-    using System.Data;
-
     internal sealed class LongStringFieldReader : IDataFieldReader
     {
         private readonly IDataRecord _dataRecord;

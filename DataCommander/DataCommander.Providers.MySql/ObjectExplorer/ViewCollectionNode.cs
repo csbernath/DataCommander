@@ -1,10 +1,9 @@
-﻿using Foundation.Data;
+﻿using System.Collections.Generic;
+using Foundation.Data;
+using MySql.Data.MySqlClient;
 
 namespace DataCommander.Providers.MySql.ObjectExplorer
 {
-    using System.Collections.Generic;
-    using global::MySql.Data.MySqlClient;
-
     internal sealed class ViewCollectionNode : ITreeNode
     {
         private readonly DatabaseNode _databaseNode;

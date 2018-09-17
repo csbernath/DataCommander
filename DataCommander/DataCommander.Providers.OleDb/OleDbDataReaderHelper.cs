@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers.OleDb
-{
-    using System.Data.OleDb;
+﻿using System.Data.OleDb;
 
+namespace DataCommander.Providers.OleDb
+{
     internal sealed class OleDbDataReaderHelper : IDataReaderHelper
     {
         public OleDbDataReaderHelper(OleDbDataReader dataReader)

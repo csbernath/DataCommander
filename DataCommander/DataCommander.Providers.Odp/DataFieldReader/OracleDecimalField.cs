@@ -1,11 +1,11 @@
-﻿namespace DataCommander.Providers.Odp.DataFieldReader
-{
-    using System;
-    using Oracle.ManagedDataAccess.Types;
+﻿using System;
+using Oracle.ManagedDataAccess.Types;
 
+namespace DataCommander.Providers.Odp.DataFieldReader
+{
     internal sealed class OracleDecimalField : IConvertible
     {
-        private OracleDecimal _oracleDecimal;
+        private readonly OracleDecimal _oracleDecimal;
 
         public OracleDecimalField( OracleDecimal oracleDecimal )
         {

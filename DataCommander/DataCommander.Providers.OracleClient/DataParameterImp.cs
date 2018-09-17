@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers.OracleClient
-{
-    using System.Data.OracleClient;
+﻿using System.Data.OracleClient;
 
+namespace DataCommander.Providers.OracleClient
+{
     internal class DataParameterImp : DataParameterBase
     {
         public DataParameterImp(OracleParameter parameter)

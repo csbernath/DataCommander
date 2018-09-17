@@ -1,9 +1,9 @@
-﻿namespace DataCommander.Providers.Msi
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.Msi
+{
     internal sealed class MsiTableCollectionNode : ITreeNode
 	{
 		private readonly MsiConnection _connection;

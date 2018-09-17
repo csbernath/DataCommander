@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers.Odp.ObjectExplorer
-{
-    using System.Collections.Generic;
-    using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.Odp.ObjectExplorer
+{
     /// <summary>
     /// Summary description for SchemaNode.
     /// </summary>

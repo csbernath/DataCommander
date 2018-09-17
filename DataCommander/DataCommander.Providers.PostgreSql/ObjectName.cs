@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers.PostgreSql
-{
-    using System.Data.SqlClient;
-    using System.Text;
+﻿using System.Data.SqlClient;
+using System.Text;
 
+namespace DataCommander.Providers.PostgreSql
+{
     internal sealed class ObjectName : IObjectName
     {
         private SqlObject _sqlObject;

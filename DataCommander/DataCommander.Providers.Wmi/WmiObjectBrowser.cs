@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers.Wmi
-{
-    using System.Collections.Generic;
-    using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 
+namespace DataCommander.Providers.Wmi
+{
     sealed class WmiObjectExplorer : IObjectExplorer
     {
         private WmiConnection connection;

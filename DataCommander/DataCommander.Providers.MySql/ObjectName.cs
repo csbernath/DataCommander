@@ -1,7 +1,7 @@
-﻿namespace DataCommander.Providers.MySql
-{
-    using System.Text;
+﻿using System.Text;
 
+namespace DataCommander.Providers.MySql
+{
     internal sealed class ObjectName : IObjectName
     {
         private readonly string _databaseName;

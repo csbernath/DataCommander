@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers.Odp.ObjectExplorer
-{
-    using System.Collections.Generic;
-    using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers.Odp.ObjectExplorer
+{
     internal sealed class IndexNode : ITreeNode
     {
         public IndexNode(
