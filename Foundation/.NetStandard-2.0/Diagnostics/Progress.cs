@@ -1,40 +1,39 @@
 ﻿using System;
+using Foundation.Assertions;
 
 namespace Foundation.Diagnostics
 {
-    public sealed class Progress
+    public class Progress
     {
-        private readonly int _count;
-        private readonly int _timeout;
-        private int _value;
-        private int _reportedTimestamp;
+        private readonly int _startPercent;
+        private readonly int _endPercent;
+        private readonly int _taskCount;
+        private readonly Action<ProgressChangedEvent> _handleEvent;
+        private int _currentTaskCount;
+        private int _currentPercent;
 
-        public Progress(int count, int timeout)
+        public Progress(int startPercent, int endPercent, int taskCount, Action<ProgressChangedEvent> handleEvent)
         {
-            _count = count;
-            _timeout = timeout;
+            _startPercent = startPercent;
+            _endPercent = endPercent;
+            _taskCount = taskCount;
+            _handleEvent = handleEvent;
+
+            _currentTaskCount = 0;
+            _currentPercent = _startPercent;
         }
 
-        public event EventHandler<UpdatedEventArgs> Updated;
-
-        public void Increment()
+        public void Add(int value)
         {
-            _value++;
-
-            var timestamp = Environment.TickCount;
-            var elapsed = timestamp - _reportedTimestamp;
-            if (_timeout < elapsed)
-            {
-                Updated(this, new UpdatedEventArgs(_value));
-                _reportedTimestamp = timestamp;
-            }
-        }
-
-        public sealed class UpdatedEventArgs : EventArgs
-        {
-            public UpdatedEventArgs(int value) => Value = value;
-
-            public int Value { get; }
+            Assert.IsTrue(value >= 0);
+            var newTaskCount = _currentTaskCount + value;
+            Assert.IsTrue(newTaskCount <= _taskCount);
+            var newPercent = _startPercent + (int) ((double) newTaskCount / _taskCount * 100.0 / (_endPercent - _startPercent));
+            var changed = _currentPercent < newPercent;
+            _currentPercent = newPercent;
+            _currentTaskCount = newTaskCount;
+            if (changed)
+                _handleEvent(new ProgressChangedEvent(newTaskCount, newPercent));
         }
     }
 }
