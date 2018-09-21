@@ -8,6 +8,9 @@ namespace Foundation.Collections.ReadOnly
 {
     public sealed class ReadOnlySortedList<TKey, TValue> : IReadOnlyDictionary<TKey, TValue>, IReadOnlyList<KeyValuePair<TKey, TValue>>
     {
+        private readonly Comparison<TKey> _comparison;
+        private readonly IReadOnlyList<KeyValuePair<TKey, TValue>> _items;
+
         public ReadOnlySortedList(IReadOnlyList<KeyValuePair<TKey, TValue>> items, Comparison<TKey> comparison)
         {
             Assert.IsNotNull(items);
@@ -17,35 +20,6 @@ namespace Foundation.Collections.ReadOnly
             _items = items;
             _comparison = comparison;
         }
-
-        #region Private Methods
-
-        private int IndexOfKey(TKey key)
-        {
-            int indexOfKey;
-
-            if (_items.Count > 0)
-                indexOfKey = BinarySearch.IndexOf(0, _items.Count - 1, index =>
-                {
-                    var otherItem = _items[index];
-                    return _comparison(key, otherItem.Key);
-                });
-            else
-                indexOfKey = -1;
-
-            return indexOfKey;
-        }
-
-        #endregion
-
-        #region Private Fields
-
-        private readonly IReadOnlyList<KeyValuePair<TKey, TValue>> _items;
-        private readonly Comparison<TKey> _comparison;
-
-        #endregion
-
-        #region IReadOnlyDictionary Members
 
         public IEnumerable<TKey> Keys => _items.Select(i => i.Key);
 
@@ -88,23 +62,25 @@ namespace Foundation.Collections.ReadOnly
             return succeeded;
         }
 
-        #endregion
-
-        #region IReadOnlyList Members
-
         public int Count => _items.Count;
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => _items.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         public KeyValuePair<TKey, TValue> this[int index] => _items[index];
 
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+        private int IndexOfKey(TKey key)
         {
-            return _items.GetEnumerator();
-        }
+            int indexOfKey;
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+            if (_items.Count > 0)
+                indexOfKey = BinarySearch.IndexOf(0, _items.Count - 1, index =>
+                {
+                    var otherItem = _items[index];
+                    return _comparison(key, otherItem.Key);
+                });
+            else
+                indexOfKey = -1;
 
-        #endregion
+            return indexOfKey;
+        }
     }
 }

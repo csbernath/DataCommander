@@ -6,9 +6,9 @@ namespace Foundation.Collections.ReadOnly
 {
     public class ReadOnlyList<T> : IReadOnlyList<T>
     {
-        private readonly IList<T> _items;
+        private readonly IReadOnlyList<T> _items;
 
-        public ReadOnlyList(IList<T> items)
+        public ReadOnlyList(IReadOnlyList<T> items)
         {
             Assert.IsNotNull(items);
             _items = items;
@@ -16,15 +16,7 @@ namespace Foundation.Collections.ReadOnly
 
         public int Count => _items.Count;
         public T this[int index] => _items[index];
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return _items.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        public IEnumerator<T> GetEnumerator() => _items.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

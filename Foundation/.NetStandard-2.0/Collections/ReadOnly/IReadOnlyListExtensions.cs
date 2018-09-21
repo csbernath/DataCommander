@@ -23,10 +23,7 @@ namespace Foundation.Collections.ReadOnly
             return new ReadOnlySortedList<TKey, TValue>(items, comparer.Compare);
         }
 
-        public static ReadOnlySortedSet<T> AsReadOnlySortedSet<T>(this IReadOnlyList<T> items)
-        {
-            return new ReadOnlySortedSet<T>(items);
-        }
+        public static ReadOnlySortedSet<T> AsReadOnlySortedSet<T>(this IReadOnlyList<T> items) => new ReadOnlySortedSet<T>(items);
 
         public static TSource First<TSource>(this IReadOnlyList<TSource> source)
         {
@@ -41,5 +38,7 @@ namespace Foundation.Collections.ReadOnly
                 ? source[0]
                 : default(TSource);
         }
+
+        public static ReadOnlyList<T> ToReadOnlyList<T>(this IReadOnlyList<T> source) => new ReadOnlyList<T>(source);
     }
 }
