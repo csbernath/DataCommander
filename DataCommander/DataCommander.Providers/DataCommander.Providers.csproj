@@ -508,6 +508,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\.NetFramework-4.7.2\Foundation.NetFramework-4.7.2.csproj">
+      <Project>{B8934B63-D579-4EE8-B352-13134EB8CC54}</Project>
+      <Name>Foundation.NetFramework-4.7.2</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Assertions\Foundation.Assertions.csproj">
       <Project>{3640355a-6d7c-45b4-8377-1d011dafd8aa}</Project>
       <Name>Foundation.Assertions</Name>
@@ -539,10 +543,6 @@
     <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Log\Foundation.Log.csproj">
       <Project>{6f50a714-af20-480e-a6ca-548ab4e27e28}</Project>
       <Name>Foundation.Log</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\.NetFramework-4.7.1\Foundation.NetFramework-4.7.1.csproj">
-      <Project>{b8934b63-d579-4ee8-b352-13134eb8cc54}</Project>
-      <Name>Foundation.NetFramework-4.7.1</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Text\Foundation.Text.csproj">
       <Project>{c987a1b0-f61d-4985-9bed-7e4c36c7f90e}</Project>

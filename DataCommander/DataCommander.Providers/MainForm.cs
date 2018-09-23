@@ -26,9 +26,6 @@ using Foundation.Windows.Forms;
 
 namespace DataCommander.Providers
 {
-    /// <summary>
-    /// Summary description for MainForm.
-    /// </summary>
     public class MainForm : Form
     {
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();

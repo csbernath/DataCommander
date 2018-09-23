@@ -224,9 +224,9 @@
       <Project>{6f50a714-af20-480e-a6ca-548ab4e27e28}</Project>
       <Name>Foundation.Log</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\.NetFramework-4.7.1\Foundation.NetFramework-4.7.1.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\.NetFramework-4.7.1\Foundation.NetFramework-4.7.2.csproj">
       <Project>{b8934b63-d579-4ee8-b352-13134eb8cc54}</Project>
-      <Name>Foundation.NetFramework-4.7.1</Name>
+      <Name>Foundation.NetFramework-4.7.2</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

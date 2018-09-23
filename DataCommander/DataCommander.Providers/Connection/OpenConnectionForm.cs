@@ -71,10 +71,6 @@ namespace DataCommander.Providers.Connection
             DialogResult = dialogResult;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="exception"></param>
         private void EndConnectionOpen(Exception exception)
         {
             _timer.Enabled = false;
@@ -82,10 +78,6 @@ namespace DataCommander.Providers.Connection
             this.Invoke(() => EndConnectionOpenInvoke(exception));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="connectionProperties"></param>
         public OpenConnectionForm(ConnectionProperties connectionProperties)
         {
             InitializeComponent();

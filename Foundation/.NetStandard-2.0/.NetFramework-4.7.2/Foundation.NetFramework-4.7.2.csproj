@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Foundation</RootNamespace>
-    <AssemblyName>Foundation.NetFramework-4.7.1</AssemblyName>
+    <AssemblyName>Foundation.NetFramework-4.7.2</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>

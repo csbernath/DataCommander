@@ -74,8 +74,7 @@ namespace DataCommander.Providers
                     }
                 }
 
-                _queryForm.Invoke( () => _queryForm.ShowDataSet( dataSet ) );
-            
+                _queryForm.Invoke(() => _queryForm.ShowDataSet(dataSet));
             }
             else
             {

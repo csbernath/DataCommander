@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27428.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.NetStandard-2.0", "Foundation.NetStandard-2.0\Foundation.NetStandard-2.0.csproj", "{618D3F05-4D25-4857-BA99-8066C47F749A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.NetFramework-4.7.1", "Foundation.NetFramework-4.7.1\Foundation.NetFramework-4.7.1.csproj", "{B8934B63-D579-4EE8-B352-13134EB8CC54}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.NetFramework-4.7.2", "Foundation.NetFramework-4.7.2\Foundation.NetFramework-4.7.2.csproj", "{B8934B63-D579-4EE8-B352-13134EB8CC54}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation", "Foundation\Foundation.csproj", "{1BACF0AA-4122-4C10-A8D2-248542AF054C}"
 EndProject
