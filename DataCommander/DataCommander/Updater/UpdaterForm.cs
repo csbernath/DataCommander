@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Foundation.Core;
 using Foundation.Deployment;
+using Foundation.Windows.Forms;
 
 namespace DataCommander.Updater
 {
