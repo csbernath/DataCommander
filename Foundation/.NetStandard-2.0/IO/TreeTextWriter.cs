@@ -35,23 +35,19 @@ namespace Foundation.IO
             {
                 var prefix = '|' + new string(' ', _indentation - 1);
 
-                for (var i = 0; i < level; i++)
-                {
+                for (var i = 0; i < level; ++i)
                     _textWriter.Write(prefix);
-                }
             }
         }
 
         public void WriteStartElement(string value)
         {
             if (_state == State.WriteStartElement)
-            {
                 _textWriter.WriteLine();
-            }
 
             WritePrefix(_level);
             _textWriter.Write(value);
-            _level++;
+            ++_level;
             _state = State.WriteStartElement;
         }
 
@@ -63,12 +59,10 @@ namespace Foundation.IO
 
         public void WriteEndElement(string value)
         {
-            _level--;
+            --_level;
 
             if (_state == State.WriteEndElement)
-            {
                 WritePrefix(_level);
-            }
 
             _textWriter.WriteLine(value);
 

@@ -2,43 +2,13 @@
 
 namespace Foundation.ServiceProcess
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public interface IService
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        bool CanPauseAndContinue
-        {
-            get;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="serviceBase"></param>
-        void Initialize( ServiceBase serviceBase );
-
-        /// <summary>
-        /// 
-        /// </summary>
-        void Start( string[] args );
-
-        /// <summary>
-        /// 
-        /// </summary>
+        bool CanPauseAndContinue { get; }
+        void Initialize(ServiceBase serviceBase);
+        void Start(string[] args);
         void Stop();
-
-        /// <summary>
-        /// 
-        /// </summary>
         void Pause();
-
-        /// <summary>
-        /// 
-        /// </summary>
         void Continue();
     }
 }

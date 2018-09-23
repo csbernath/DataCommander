@@ -6,9 +6,6 @@ using Foundation.Assertions;
 
 namespace Foundation.IO
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class AsyncTextWriter
     {
         #region Private Fields
@@ -21,14 +18,9 @@ namespace Foundation.IO
 
         #endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="textWriter"></param>
         public AsyncTextWriter(TextWriter textWriter)
         {
             Assert.IsNotNull(textWriter);
-
             _textWriter = textWriter;
         }
 
@@ -47,10 +39,8 @@ namespace Foundation.IO
                     _list.Clear();
                 }
 
-                for (var i = 0; i < items.Length; i++)
-                {
+                for (var i = 0; i < items.Length; ++i)
                     items[i].AppendTo(sb);
-                }
             }
 
             _textWriter.Write(sb);
@@ -74,21 +64,15 @@ namespace Foundation.IO
         private void Callback(object state, bool timedOut)
         {
             if (_list.Count > 0)
-            {
                 Flush();
-            }
             else
-            {
                 Unregister();
-            }
         }
 
         private void Write(AsyncTextWriterListItem item)
         {
             lock (_list)
-            {
                 _list.Add(item);
-            }
 
             const int timeout = 10000; // 10 seconds
 
@@ -103,30 +87,18 @@ namespace Foundation.IO
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
         public void Write(string value)
         {
             var item = new AsyncTextWriterListItem(DefaultFormatter.Instance, value);
             Write(item);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="formatter"></param>
-        /// <param name="args"></param>
         public void Write(IFormatter formatter, params object[] args)
         {
             var item = new AsyncTextWriterListItem(formatter, args);
             Write(item);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Close()
         {
             Unregister();
