@@ -6,16 +6,8 @@ using Foundation.Xml;
 
 namespace Foundation.Configuration
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class ConfigurationWriter
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="xmlWriter"></param>
-        /// <param name="node"></param>
         public static void WriteNode(XmlWriter xmlWriter, ConfigurationNode node)
         {
             string xmlElementName;
@@ -55,11 +47,6 @@ namespace Foundation.Configuration
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="xmlWriter"></param>
-        /// <param name="attributes"></param>
         public static void Write(XmlWriter xmlWriter, ConfigurationAttributeCollection attributes)
         {
             foreach (var attribute in attributes)

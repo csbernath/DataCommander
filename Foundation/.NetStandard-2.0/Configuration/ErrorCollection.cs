@@ -7,14 +7,12 @@ namespace Foundation.Configuration
     {
         public override string ToString()
         {
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
             foreach (var error in this)
-            {
-                sb.AppendLine(error.ToString());
-            }
+                stringBuilder.AppendLine(error.ToString());
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
     }
 }

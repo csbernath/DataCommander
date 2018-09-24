@@ -21,7 +21,7 @@ namespace Foundation.Configuration
 
                 Assert.IsTrue(instance is ILogFactory);
                 var applicationLog = (ILogFactory) instance;
-                instance = applicationLog;
+                LogFactory.Set(applicationLog);
             }
 
             Log.Trace("LogFactory configuration has been read successfully.");

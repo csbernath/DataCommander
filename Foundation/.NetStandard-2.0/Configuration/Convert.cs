@@ -6,10 +6,7 @@ namespace Foundation.Configuration
 {
     internal static class Convert
     {
-        public static object ParseNumber(
-            string source,
-            NumberStyles style,
-            Type conversionType)
+        public static object ParseNumber(string source, NumberStyles style, Type conversionType)
         {
             object value;
             var typeCode = Type.GetTypeCode(conversionType);
@@ -60,7 +57,7 @@ namespace Foundation.Configuration
             string source2;
             NumberStyles style;
 
-            if (source.IndexOf("0x") == 0)
+            if (source.StartsWith("0x"))
             {
                 source2 = source.Substring(2);
                 style = NumberStyles.HexNumber;
@@ -74,17 +71,12 @@ namespace Foundation.Configuration
             return ParseNumber(source2, style, conversionType);
         }
 
-        public static object ChangeType(
-            string source,
-            Type conversionType,
-            IFormatProvider formatProvider)
+        public static object ChangeType(string source, Type conversionType, IFormatProvider formatProvider)
         {
             object value;
 
             if (conversionType.IsEnum)
-            {
                 value = Enum.Parse(conversionType, source);
-            }
             else
             {
                 var typeCode = Type.GetTypeCode(conversionType);
@@ -103,15 +95,11 @@ namespace Foundation.Configuration
                         break;
 
                     default:
-                        if (conversionType == typeof (TimeSpan))
-                        {
+                        if (conversionType == typeof(TimeSpan))
                             value = TimeSpan.Parse(source);
-                        }
-                        else if (conversionType == typeof (Version))
-                        {
+                        else if (conversionType == typeof(Version))
                             value = new Version(source);
-                        }
-                        else if (conversionType == typeof (Encoding))
+                        else if (conversionType == typeof(Encoding))
                         {
                             bool isInt32;
                             var codepage = 0;
@@ -132,9 +120,7 @@ namespace Foundation.Configuration
                                 value = Encoding.GetEncoding(source);
                         }
                         else
-                        {
                             value = System.Convert.ChangeType(source, conversionType, formatProvider);
-                        }
 
                         break;
                 }

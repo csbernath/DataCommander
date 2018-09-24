@@ -1,7 +1,17 @@
-﻿namespace Foundation.Log
+﻿using Foundation.Assertions;
+
+namespace Foundation.Log
 {
     public static class LogFactory
     {
-        public static ILogFactory Instance { get; set; } = NullLogFactory.Instance;
+        private static ILogFactory _logFactory = NullLogFactory.Instance;
+
+        public static ILogFactory Instance => _logFactory;
+
+        public static void Set(ILogFactory logFactory)
+        {
+            Assert.IsNotNull(logFactory);
+            _logFactory = logFactory;
+        }
     }
 }

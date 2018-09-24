@@ -127,9 +127,7 @@ namespace Foundation.Configuration
 
             for (var i = 0; i < nodeNames.Length; i++)
             {
-                ConfigurationNode childNode;
-                var contains = node.ChildNodes.TryGetValue(nodeNames[i], out childNode);
-
+                var contains = node.ChildNodes.TryGetValue(nodeNames[i], out var childNode);
                 if (!contains)
                 {
                     childNode = new ConfigurationNode(nodeNames[i]);
@@ -169,15 +167,11 @@ namespace Foundation.Configuration
                         depth++;
                     }
                     else
-                    {
                         break;
-                    }
                 }
 
                 if (depth != childNodeNames.Length)
-                {
                     node = null;
-                }
             }
 
             return node;

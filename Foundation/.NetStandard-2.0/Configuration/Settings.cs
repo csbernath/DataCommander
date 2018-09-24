@@ -24,13 +24,9 @@ namespace Foundation.Configuration
         /// </summary>
         private static ConfigurationSection _section;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public static event EventHandler Changed
         {
             add => Section.Changed += value;
-
             remove => Section.Changed -= value;
         }
 
@@ -72,9 +68,6 @@ namespace Foundation.Configuration
             set => _configFileName = value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public static ConfigurationNode RootNode => Section.RootNode;
 
         /// <summary>
@@ -112,9 +105,6 @@ namespace Foundation.Configuration
             set => _sectionName = value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public static ConfigurationNode CurrentMethod
         {
             [MethodImpl(MethodImplOptions.NoInlining)]
@@ -142,9 +132,6 @@ namespace Foundation.Configuration
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public static ConfigurationNode CurrentNamespace
         {
             [MethodImpl(MethodImplOptions.NoInlining)]
@@ -175,16 +162,7 @@ namespace Foundation.Configuration
             return configFilename;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="nodeName"></param>
-        /// <param name="throwOnError"></param>
-        /// <returns></returns>
-        public static ConfigurationNode SelectNode(string nodeName, bool throwOnError)
-        {
-            return Section.SelectNode(nodeName, throwOnError);
-        }
+        public static ConfigurationNode SelectNode(string nodeName, bool throwOnError) => Section.SelectNode(nodeName, throwOnError);
 
         internal static ConfigurationNode SelectNode(Type type, bool throwOnError)
         {

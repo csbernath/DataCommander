@@ -44,8 +44,6 @@ namespace Foundation.DefaultLog
             if (logWriters.Count > 0)
             {
                 _multipeLog = new MultipleLog(logWriters);
-                Foundation.Log.LogFactory.Instance = this;
-
                 foreach (var logWriter in logWriters)
                     logWriter.logWriter.Open();
             }
@@ -53,7 +51,7 @@ namespace Foundation.DefaultLog
 
         public LogFactory(bool forInternalUse)
         {
-            var logWriter = new LogWriter(new TextLogWriter(TraceWriter.Instance,new TextLogFormatter()), LogLevel.Debug);
+            var logWriter = new LogWriter(new TextLogWriter(TraceWriter.Instance, new TextLogFormatter()), LogLevel.Debug);
             _dateTimeProvider = LocalTime.Default;
             _multipeLog = new MultipleLog(logWriter.ItemToArray());
         }

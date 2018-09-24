@@ -9,70 +9,34 @@ using Foundation.Collections;
 
 namespace Foundation.Configuration
 {
-    /// <summary>
-    /// 
-    /// </summary>
     [DebuggerDisplay("Name = {Name}, Value = {Value}, Description = {Description}")]
     public sealed class ConfigurationAttribute
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        /// <param name="description"></param>
-        public ConfigurationAttribute(
-            string name,
-            object value,
-            string description)
+        public ConfigurationAttribute(string name, object value, string description)
         {
             Name = name;
             Value = value;
             Description = description;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public string Name { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public object Value { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public string Description { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
         public T GetValue<T>()
         {
-            Assert.IsInRange((Value == null && typeof (T).IsClass) || Value is T);
+            Assert.IsInRange((Value == null && typeof(T).IsClass) || Value is T);
 
-            var value = (T)Value;
+            var value = (T) Value;
             return value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public ConfigurationAttribute Clone()
         {
             var clone = new ConfigurationAttribute(Name, Value, Description);
             return clone;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="textWriter"></param>
         public void Write(TextWriter textWriter)
         {
             string typeName;
@@ -96,15 +60,15 @@ namespace Foundation.Configuration
                 {
                     var elementType = type.GetElementType();
 
-                    if (elementType == typeof (byte))
+                    if (elementType == typeof(byte))
                     {
-                        var inArray = (byte[])Value;
+                        var inArray = (byte[]) Value;
                         var base64 = System.Convert.ToBase64String(inArray);
                         textWriter.WriteLine(base64);
                     }
                     else
                     {
-                        var array = (Array)Value;
+                        var array = (Array) Value;
 
                         if (array.Length > 0)
                         {
@@ -150,18 +114,12 @@ namespace Foundation.Configuration
 
                     case TypeCode.Object:
                     {
-                        if (type == typeof (TimeSpan))
-                        {
+                        if (type == typeof(TimeSpan))
                             attibuteValueString = attributeValue.ToString();
-                        }
                         else
                         {
-                            var xmlNode = attributeValue as XmlNode;
-
-                            if (xmlNode != null)
-                            {
+                            if (attributeValue is XmlNode xmlNode)
                                 attibuteValueString = xmlNode.OuterXml;
-                            }
                             else
                             {
                                 xmlNode = XmlHelper.Serialize(attributeValue);
@@ -169,7 +127,6 @@ namespace Foundation.Configuration
                             }
                         }
                     }
-
                         break;
 
                     default:
@@ -178,23 +135,13 @@ namespace Foundation.Configuration
                 }
             }
             else
-            {
                 attibuteValueString = "null";
-            }
 
             textWriter.WriteLine(attibuteValueString);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         private static class XmlHelper
         {
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="obj"></param>
-            /// <returns></returns>        
             public static XmlElement Serialize(object obj)
             {
                 Assert.IsNotNull(obj);

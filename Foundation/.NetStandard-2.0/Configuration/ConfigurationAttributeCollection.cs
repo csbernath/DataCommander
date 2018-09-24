@@ -28,17 +28,11 @@ namespace Foundation.Configuration
             _collection.Indexes.Add(_nameIndex);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
         public ConfigurationAttribute this[int index]
         {
             get
             {
                 Assert.IsTrue(0 <= index && index < Count);
-
                 return _listIndex[index];
             }
 
@@ -52,32 +46,17 @@ namespace Foundation.Configuration
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
         public ConfigurationAttribute this[string name]
         {
             get
             {
                 Assert.IsInRange(ContainsKey(name));
-
                 return _nameIndex[name];
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public string Name { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        /// <param name="description"></param>
         public void Add(string name, object value, string description)
         {
             Assert.IsValidOperation(!ContainsKey(name));
@@ -86,32 +65,10 @@ namespace Foundation.Configuration
             _collection.Add(attribute);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
         [Pure]
-        public bool ContainsKey(string name)
-        {
-            return _nameIndex.ContainsKey(name);
-        }
+        public bool ContainsKey(string name) => _nameIndex.ContainsKey(name);
+        public int IndexOf(ConfigurationAttribute item) => _listIndex.IndexOf(item);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public int IndexOf(ConfigurationAttribute item)
-        {
-            return _listIndex.IndexOf(item);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="item"></param>
         public void Insert(int index, ConfigurationAttribute item)
         {
             ICollection<ConfigurationAttribute> collection = _nameIndex;
@@ -119,11 +76,6 @@ namespace Foundation.Configuration
             _listIndex.Insert(index, item);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
         public bool Remove(string name)
         {
             ConfigurationAttribute attribute;
@@ -131,21 +83,13 @@ namespace Foundation.Configuration
             bool succeeded;
 
             if (contains)
-            {
                 succeeded = _collection.Remove(attribute);
-            }
             else
-            {
                 succeeded = false;
-            }
 
             return succeeded;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
         public void RemoveAt(int index)
         {
             var item = _listIndex[index];
@@ -154,28 +98,8 @@ namespace Foundation.Configuration
             collection.Remove(item);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="attribute"></param>
-        /// <returns></returns>
-        public bool TryGetValue(string name, out ConfigurationAttribute attribute)
-        {
-            return _nameIndex.TryGetValue(name, out attribute);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public bool TryGetAttributeValue<T>(string name, out T value)
-        {
-            return TryGetAttributeValue(name, default(T), out value);
-        }
+        public bool TryGetValue(string name, out ConfigurationAttribute attribute) => _nameIndex.TryGetValue(name, out attribute);
+        public bool TryGetAttributeValue<T>(string name, out T value) => TryGetAttributeValue(name, default(T), out value);
 
         public bool TryGetAttributeValue<T>(string name, T defaultValue, out T value)
         {
@@ -187,7 +111,6 @@ namespace Foundation.Configuration
         public void SetAttributeValue(string name, object value)
         {
             var contains = _nameIndex.TryGetValue(name, out var attribute);
-
             if (contains)
                 attribute.Value = value;
             else
