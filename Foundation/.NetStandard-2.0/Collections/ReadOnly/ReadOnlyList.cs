@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Foundation.Assertions;
 
 namespace Foundation.Collections.ReadOnly
@@ -12,6 +13,12 @@ namespace Foundation.Collections.ReadOnly
         {
             Assert.IsNotNull(items);
             _items = items;
+        }
+
+        public ReadOnlyList(IEnumerable<T> items)
+        {
+            Assert.IsNotNull(items);
+            _items = items.ToList();
         }
 
         public int Count => _items.Count;
