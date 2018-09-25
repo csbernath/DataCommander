@@ -1434,12 +1434,22 @@ namespace DataCommander.Providers.Query
 
         private void AppendMessageText(DateTime dateTime, InfoMessageSeverity severity, string header, string text)
         {
-            var s = "[" + dateTime.ToString("HH:mm:ss.fff");
-            s += ' ' + header;
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append('[');
+            stringBuilder.Append(dateTime.ToString("HH:mm:ss.fff"));
+            if (!string.IsNullOrEmpty(header))
+            {
+                stringBuilder.Append(' ');
+                stringBuilder.Append(header);
+            }
+
             if (severity == InfoMessageSeverity.Error)
-                s += ",Error";
-            s += "] " + text + "\r\n";
-            _messagesTextBox.AppendText(s);
+                stringBuilder.Append(",Error");
+            stringBuilder.Append("] ");
+            stringBuilder.Append(text);
+            stringBuilder.AppendLine();
+
+            _messagesTextBox.AppendText(stringBuilder.ToString());
         }
 
         private void Connection_InfoMessage(IEnumerable<InfoMessage> messages) => AddInfoMessages(messages);

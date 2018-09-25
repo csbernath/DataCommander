@@ -19,17 +19,11 @@ namespace DataCommander.Providers.ResultWriter
 {
     internal sealed class LogResultWriter : IResultWriter
     {
-        private class Result
-        {
-            public readonly ReadOnlyList<DbQueryResultField> Fields;
-
-            public Result(ReadOnlyList<DbQueryResultField> fields) => Fields = fields;
-        }
-
         private static readonly ILog Log = LogFactory.Instance.GetCurrentTypeLog();
         private readonly Action<InfoMessage> _addInfoMessage;
         private int _commandCount;
         private int _tableCount;
+        private int _fieldCount;
         private int _rowCount;
         private long _beginTimestamp;
         private long _beforeExecuteReaderTimestamp;
@@ -58,8 +52,7 @@ namespace DataCommander.Providers.ResultWriter
             ++_commandCount;
 
             var command = asyncDataAdapterCommand.Command;
-            var message = $"Executing command[{_commandCount}] from line {asyncDataAdapterCommand.LineIndex + 1}...\r\n{command.CommandText}";
-
+            var message = $"Command[{_commandCount - 1}] executing from line {asyncDataAdapterCommand.LineIndex + 1}...\r\n{command.CommandText}";
             var parameters = command.Parameters;
             if (!parameters.IsNullOrEmpty())
                 message += "\r\n" + command.Parameters.ToLogString();
@@ -79,20 +72,31 @@ namespace DataCommander.Providers.ResultWriter
         void IResultWriter.AfterExecuteReader(int fieldCount)
         {
             var duration = Stopwatch.GetTimestamp() - _beforeExecuteReaderTimestamp;
-            var message = $"Command[{_commandCount - 1}] started in {StopwatchTimeSpan.ToString(duration, 3)} seconds. Field count: {fieldCount}";
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
+
+            var header = StopwatchTimeSpan.ToString(duration, 3);
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append($"Command[{_commandCount - 1}] started.");
+            if (fieldCount > 0)
+                stringBuilder.Append($" Field count: {fieldCount}");
+            var message = stringBuilder.ToString();
+            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, header, message));
+
             _tableCount = 0;
+            _fieldCount = fieldCount;
         }
 
         void IResultWriter.AfterCloseReader(int affectedRows)
         {
             var duration = Stopwatch.GetTimestamp() - _beforeExecuteReaderTimestamp;
             var now = LocalTime.Default.Now;
-            var affected = affectedRows >= 0
-                ? $"{affectedRows} row(s) affected."
-                : null;
-            var message = $"Command[{_commandCount - 1}] completed in {StopwatchTimeSpan.ToString(duration, 3)} seconds. {affected}";
-            _addInfoMessage(new InfoMessage(now, InfoMessageSeverity.Verbose, null, message));
+
+            var header = StopwatchTimeSpan.ToString(duration, 3);
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append($"Command[{_commandCount - 1}] completed.");
+            if (affectedRows >= 0)
+                stringBuilder.Append($" {affectedRows} row(s) affected.");
+            var message = stringBuilder.ToString();
+            _addInfoMessage(new InfoMessage(now, InfoMessageSeverity.Verbose, header, message));
 
             if (_query != null)
             {
@@ -117,7 +121,7 @@ namespace DataCommander.Providers.ResultWriter
         {
             _writeTableBeginTimestamp = Stopwatch.GetTimestamp();
 
-            Log.Trace($"SchemaTable of table[{_tableCount}], {schemaTable.TableName}:\r\n{schemaTable.ToStringTableString()}");
+            Log.Trace($"SchemaTable of table[{_tableCount - 1}], {schemaTable.TableName}:\r\n{schemaTable.ToStringTableString()}");
 
             if (_query != null)
             {
@@ -134,29 +138,26 @@ namespace DataCommander.Providers.ResultWriter
             _rowCount = 0;
         }
 
-        void IResultWriter.FirstRowReadBegin()
-        {
-            _firstRowReadBeginTimestamp = Stopwatch.GetTimestamp();
-        }
+        void IResultWriter.FirstRowReadBegin() => _firstRowReadBeginTimestamp = Stopwatch.GetTimestamp();
 
         void IResultWriter.FirstRowReadEnd(string[] dataTypeNames)
         {
             var duration = Stopwatch.GetTimestamp() - _firstRowReadBeginTimestamp;
-            var message = $"First row read completed in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
+            var header = StopwatchTimeSpan.ToString(duration, 3);
+            var message =
+                $"Command[{_commandCount - 1}] result[{_tableCount - 1}] first row read completed.";
+            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, header, message));
         }
 
-        void IResultWriter.WriteRows(object[][] rows, int rowCount)
-        {
-            _rowCount += rowCount;
-        }
+        void IResultWriter.WriteRows(object[][] rows, int rowCount) => _rowCount += rowCount;
 
         void IResultWriter.WriteTableEnd()
         {
             var duration = Stopwatch.GetTimestamp() - _writeTableBeginTimestamp;
+            var header = StopwatchTimeSpan.ToString(duration, 3);
             var message =
-                $"Reading {_rowCount} row(s) from command[{_commandCount - 1}] into table[{_tableCount - 1},{_query?.Results[_tableCount - 1]}] finished in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
+                $"Command[{_commandCount - 1}] result[{_tableCount - 1}] finished. Table[{_tableCount - 1},{_query?.Results[_tableCount - 1]}] has {_fieldCount} column(s), {_rowCount} row(s).";
+            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, header, message));
         }
 
         void IResultWriter.WriteParameters(IDataParameterCollection parameters)
@@ -166,9 +167,14 @@ namespace DataCommander.Providers.ResultWriter
         void IResultWriter.End()
         {
             var duration = Stopwatch.GetTimestamp() - _beginTimestamp;
-            var message = $"Query completed {_commandCount} command(s) in {StopwatchTimeSpan.ToString(duration, 3)} seconds.";
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
+            var header = StopwatchTimeSpan.ToString(duration, 3);
+            var message = $"Query completed {_commandCount} command(s).";
+            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, header, message));
         }
+
+        #endregion
+
+        #region Private Methods
 
         private static DbQueryResult ToResult(string result, Result sql)
         {
@@ -176,46 +182,17 @@ namespace DataCommander.Providers.ResultWriter
             return new DbQueryResult(name, fieldName, sql.Fields);
         }
 
-        #endregion
-
-        #region Private Methods
-
-        //private static Foundation.Data.SqlClient.Orm.Query GetQuery(string commandText, out string @namespace, out Foundation.Data.SqlClient.Orm.Query query, out Queue<string> record)
-        //{
-        //    @namespace = null;
-        //    string queryName = null;
-        //    var parameters = new List<OrmParameter>();
-        //    record = new Queue<string>();
-        //    using (var reader = new StringReader(commandText))
-        //    {
-        //        while (reader.Peek() >= 0)
-        //        {
-        //            var line = reader.ReadLine();
-        //            if (@namespace == null && line.StartsWith("--namespace:"))
-        //                @namespace = line.Substring(12);
-        //            if (queryName == null && line.StartsWith("--query:"))
-        //                queryName = line.Substring(8);
-        //            else if (line.StartsWith("--parameter:"))
-        //            {
-        //                var parameter = GetOrmParameter(line.Substring(12));
-        //                parameters.Add(parameter);
-        //            }
-        //            else if (line.StartsWith("--record:"))
-        //            {
-        //                var typeName = line.Substring(9);
-        //                record.Enqueue(typeName);
-        //            }
-        //        }
-        //    }
-
-        //    query = new Query(queryName, parameters.AsReadOnly());
-        //}
-
         private static DbQueryResultField ToField(FoundationDbColumn column)
         {
             return new DbQueryResultField(column.ColumnName, column.DataType, column.AllowDbNull == true);
         }
 
         #endregion
+
+        private class Result
+        {
+            public readonly ReadOnlyList<DbQueryResultField> Fields;
+            public Result(ReadOnlyList<DbQueryResultField> fields) => Fields = fields;
+        }
     }
 }
