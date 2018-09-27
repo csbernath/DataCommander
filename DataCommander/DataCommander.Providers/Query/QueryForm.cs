@@ -2184,7 +2184,10 @@ namespace DataCommander.Providers.Query
         private void WriteEnd(IAsyncDataAdapter dataAdapter)
         {
             _timer.Stop();
-            WriteRows(dataAdapter.RowCount, 3);
+
+            if (dataAdapter != null)
+                WriteRows(dataAdapter.RowCount, 3);
+
             _stopwatch.Reset();
 
             if (_cancel)
