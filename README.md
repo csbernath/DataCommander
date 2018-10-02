@@ -3,8 +3,9 @@
 Data Commander is a front-end for SQL and other databases.
 The program has a plugin architecture for adding arbitrary data providers.
 
-Special features of Data Commander
-
+## How to build executable from source code
+Open <git repository>\DataCommander\DataCommander.sln in Visual Studio 2017. Build the solution.
+## Special features of Data Commander
 Feature|Data Commander|SQL Server Management Studio v17.6
 ---|---|---
 Audit: log commands to file|Yes|No
@@ -62,9 +63,8 @@ where
     i.CustomerID = @customerId
     and i.InvoiceDate >= @invoiceDate
 order by i.CustomerID,i.InvoiceID```
-
+```
 The program generates C# classes in one file:
-
 ```C#
 using System;
 using System.Collections.ObjectModel;
