@@ -7,22 +7,12 @@ namespace Foundation.Text
     /// </summary>
     public static class Hex
     {
-        private static readonly char[] HexCharsUpper =
-        {
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
-        };
-
-        private static readonly char[] HexCharsLower =
-        {
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
-        };
+        private static readonly char[] HexCharsUpper = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+        private static readonly char[] HexCharsLower = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
         /// <summary>
         /// byte -> Char[2]
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="isUpper"></param>
-        /// <returns></returns>
         public static char[] Encode(byte value, bool isUpper)
         {
             var d1 = (value & 0xF0) >> 4;
@@ -40,9 +30,6 @@ namespace Foundation.Text
         /// <summary>
         /// UInt16 --> Char[4]
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="isUpper"></param>
-        /// <returns></returns>
         [CLSCompliant(false)]
         public static char[] Encode(ushort value, bool isUpper)
         {
@@ -65,9 +52,6 @@ namespace Foundation.Text
         /// <summary>
         /// int -> Char[8]
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="isUpper"></param>
-        /// <returns></returns>
         public static char[] Encode(int value, bool isUpper)
         {
             var d7 = value >> 28;
@@ -93,25 +77,12 @@ namespace Foundation.Text
             return digits;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bytes"></param>
-        /// <param name="isUpper"></param>
-        /// <returns></returns>
         public static char[] Encode(byte[] bytes, bool isUpper)
         {
             var length = bytes.Length;
             return Encode(bytes, length, isUpper);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bytes"></param>
-        /// <param name="length"></param>
-        /// <param name="isUpper"></param>
-        /// <returns></returns>
         public static char[] Encode(byte[] bytes, int length, bool isUpper)
         {
             var chars = new char[length << 1];
@@ -133,12 +104,6 @@ namespace Foundation.Text
             return chars;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="isUpper"></param>
-        /// <returns></returns>
         [CLSCompliant(false)]
         public static string GetString(ushort value, bool isUpper)
         {
@@ -147,12 +112,6 @@ namespace Foundation.Text
             return s;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="isUpper"></param>
-        /// <returns></returns>
         public static string GetString(int value, bool isUpper)
         {
             var chars = Encode(value, isUpper);
@@ -160,36 +119,14 @@ namespace Foundation.Text
             return s;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="isUpper"></param>
-        /// <returns></returns>
         [CLSCompliant(false)]
         public static string GetString(ulong value, bool isUpper)
         {
-            string format;
-
-            if (isUpper)
-            {
-                format = "X";
-            }
-            else
-            {
-                format = "x";
-            }
-
+            var format = isUpper ? "X" : "x";
             var s = value.ToString(format).PadLeft(16, '0');
             return s;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bytes"></param>
-        /// <param name="isUpper"></param>
-        /// <returns></returns>
         public static string GetString(byte[] bytes, bool isUpper)
         {
             var chars = Encode(bytes, isUpper);

@@ -11,6 +11,7 @@ using DataCommander.Providers.Query;
 using Foundation.Assertions;
 using Foundation.Core;
 using Foundation.Data;
+using Foundation.Data.SqlClient;
 using Foundation.Log;
 using Foundation.Text;
 using Foundation.Windows.Forms;
@@ -396,8 +397,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                 table = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
             }
 
-            var sb = new StringBuilder();
-
+            var stringBuilder = new StringBuilder();
             var first = true;
             foreach (DataRow row in table.Rows)
             {
@@ -406,12 +406,12 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                 if (first)
                 {
                     first = false;
-                    sb.Append("declare\r\n");
+                    stringBuilder.Append("declare\r\n");
                     prefix = ' ';
                 }
                 else
                 {
-                    sb.Append("\r\n");
+                    stringBuilder.Append("\r\n");
                     prefix = ',';
                 }
 
@@ -421,16 +421,16 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
 
                 switch (typeName)
                 {
-                    case "char":
-                    case "nchar":
-                    case "nvarchar":
-                    case "varchar":
+                    case SqlDataTypeName.Char:
+                    case SqlDataTypeName.NChar:
+                    case SqlDataTypeName.NVarChar:
+                    case SqlDataTypeName.VarChar:
                         var precision = row.Field<short>("max_length");
                         var precisionString = precision >= 0 ? precision.ToString() : "max";
                         typeName += "(" + precisionString + ")";
                         break;
 
-                    case "decimal":
+                    case SqlDataTypeName.Decimal:
                         var scale = row.Field<byte>("scale");
                         if (scale == 0)
                             typeName += "(" + row["precision"] + ")";
@@ -439,10 +439,10 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                         break;
                 }
 
-                sb.AppendFormat("    {0}@{1} {2}", prefix, variableName, typeName);
+                stringBuilder.AppendFormat("    {0}@{1} {2}", prefix, variableName, typeName);
             }
 
-            sb.AppendFormat("\r\n\r\ninsert into {0}.{1}\r\n(\r\n    ", _owner, _name);
+            stringBuilder.AppendFormat("\r\n\r\ninsert into {0}.{1}\r\n(\r\n    ", _owner, _name);
             first = true;
 
             foreach (DataRow row in table.Rows)
@@ -450,34 +450,36 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                 if (first)
                     first = false;
                 else
-                    sb.Append(',');
+                    stringBuilder.Append(',');
 
-                sb.Append(row["name"]);
+                stringBuilder.Append(row["name"]);
             }
 
-            sb.Append("\r\n)\r\nselect\r\n");
+            stringBuilder.Append("\r\n)\r\nselect\r\n");
             first = true;
 
-            var st = new StringTable(3);
+            var stringTable = new StringTable(3);
             var last = table.Rows.Count - 1;
 
-            for (var i = 0; i < table.Rows.Count; i++)
+            for (var i = 0; i < table.Rows.Count; ++i)
             {
                 var dataRow = table.Rows[i];
-                var stringTableRow = st.NewRow();
+                var stringTableRow = stringTable.NewRow();
                 var variableName = (string) dataRow["name"];
                 variableName = char.ToLower(variableName[0]) + variableName.Substring(1);
-                var prefix = i == 0 ? ' ' : ',';
-                stringTableRow[1] = $"{prefix}@{variableName}";
-                var s2 = $"as {dataRow["name"]}";
+                stringTableRow[1] = $"@{variableName}";
 
-                stringTableRow[2] = s2;
-                st.Rows.Add(stringTableRow);
+                var text = $"as {dataRow["name"]}";
+                if (i < table.Rows.Count - 1)
+                    text += ',';
+
+                stringTableRow[2] = text;
+                stringTable.Rows.Add(stringTableRow);
             }
 
-            sb.Append(st.ToString(4));
+            stringBuilder.Append(stringTable.ToString(4));
 
-            Clipboard.SetText(sb.ToString());
+            Clipboard.SetText(stringBuilder.ToString());
             var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
             queryForm.SetStatusbarPanelText("Copying script to clipboard finished.", SystemColors.ControlText);
         }

@@ -25,10 +25,7 @@ namespace Foundation.Collections.ReadOnly
 
         public int Count => _items.Length;
 
-        public bool Contains(T item)
-        {
-            return IndexOf(item) >= 0;
-        }
+        public bool Contains(T item) => IndexOf(item) >= 0;
 
         public IEnumerator<T> GetEnumerator()
         {
@@ -36,10 +33,7 @@ namespace Foundation.Collections.ReadOnly
                 yield return item;
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _items.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => _items.GetEnumerator();
 
         private int IndexOf(T item)
         {

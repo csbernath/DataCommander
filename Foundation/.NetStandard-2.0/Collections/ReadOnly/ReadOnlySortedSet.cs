@@ -26,21 +26,9 @@ namespace Foundation.Collections.ReadOnly
         }
 
         public int Count => _items.Count;
-
-        public bool Contains(T item)
-        {
-            return IndexOf(item) >= 0;
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return _items.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        public bool Contains(T item) => IndexOf(item) >= 0;
+        public IEnumerator<T> GetEnumerator() => _items.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         private int IndexOf(T item)
         {

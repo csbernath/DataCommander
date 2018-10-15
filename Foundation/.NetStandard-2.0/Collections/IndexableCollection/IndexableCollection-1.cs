@@ -54,28 +54,14 @@ namespace Foundation.Collections.IndexableCollection
     {
         private readonly ICollectionIndex<T> _defaultIndex;
 
-        /// <summary>
-        /// </summary>
-        /// <param name="defaultIndex"></param>
         public IndexableCollection(ICollectionIndex<T> defaultIndex)
         {
             Assert.IsNotNull(defaultIndex);
-            //FoundationContract.Ensures(this.Indexes.Count == 1);
 
             _defaultIndex = defaultIndex;
             Indexes.Add(defaultIndex);
         }
 
-        /// <summary>
-        /// </summary>
         public IndexCollection<T> Indexes { get; } = new IndexCollection<T>();
-
-        //[ContractInvariantMethod]
-        private void ContractInvariant()
-        {
-            //Contract.Invariant(this.Indexes != null);
-            //Contract.Invariant(this.defaultIndex != null);
-            //Contract.Invariant(this.Indexes.Count > 0);
-        }
     }
 }

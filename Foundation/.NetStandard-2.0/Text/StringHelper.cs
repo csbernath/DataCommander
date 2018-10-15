@@ -59,10 +59,6 @@ namespace Foundation.Text
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="s"></param>
         public static unsafe void ToUpper(string s)
         {
             fixed (char* pfixed = s)

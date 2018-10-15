@@ -37,11 +37,7 @@ namespace Foundation.Collections.ReadOnly
         }
 
         public IEnumerable<TValue> Values => _items.Select(i => i.Value);
-
-        public bool ContainsKey(TKey key)
-        {
-            return IndexOfKey(key) >= 0;
-        }
+        public bool ContainsKey(TKey key) => IndexOfKey(key) >= 0;
 
         public bool TryGetValue(TKey key, out TValue value)
         {

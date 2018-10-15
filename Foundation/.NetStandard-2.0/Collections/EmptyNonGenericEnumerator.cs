@@ -11,10 +11,7 @@ namespace Foundation.Collections
         {
         }
 
-        public bool MoveNext()
-        {
-            return false;
-        }
+        public bool MoveNext() => false;
 
         public void Reset()
         {

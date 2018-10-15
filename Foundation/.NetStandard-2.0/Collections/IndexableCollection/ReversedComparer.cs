@@ -3,23 +3,14 @@ using System.Collections.Generic;
 
 namespace Foundation.Collections.IndexableCollection
 {
-    /// <summary>
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
     public sealed class ReversedComparer<T> : IComparer<T>
     {
-        private static readonly Lazy<ReversedComparer<T>> Instance =
-            new Lazy<ReversedComparer<T>>(CreateReversedComparer);
+        private static readonly Lazy<ReversedComparer<T>> Instance = new Lazy<ReversedComparer<T>>(CreateReversedComparer);
 
         private readonly IComparer<T> _comparer;
 
-        private ReversedComparer(IComparer<T> comparer)
-        {
-            _comparer = comparer;
-        }
+        private ReversedComparer(IComparer<T> comparer) => _comparer = comparer;
 
-        /// <summary>
-        /// </summary>
         public static IComparer<T> Default => Instance.Value;
 
         #region IComparer<T> Members
