@@ -46,10 +46,17 @@ namespace DataCommander
 
         private static bool Update()
         {
-            var updaterForm = new UpdaterForm();
-            updaterForm.WindowState = FormWindowState.Minimized;
-            Application.Run(updaterForm);
-            return updaterForm.Updater.UpdateStarted;
+            var updateStarted = false;
+            var random = new Random().Next(10);
+            if (random == 0)
+            {
+                var updaterForm = new UpdaterForm();
+                updaterForm.WindowState = FormWindowState.Minimized;
+                Application.Run(updaterForm);
+                updateStarted = updaterForm.Updater.UpdateStarted;
+            }
+
+            return updateStarted;
         }
 
         private static void Run()
