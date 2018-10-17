@@ -924,12 +924,25 @@ where	o.parent_obj	= @id
 order by k.keyno*/
 
 declare @index_id int
-
-select  @index_id = i.index_id
-from    {0}.sys.indexes i (readpast)
+select top 1
+    @index_id = i.index_id
+from {0}.sys.indexes i (readpast)
+cross apply
+(
+    select count(1) as [Count]
+    from {0}.sys.index_columns ic (readpast)
+    join {0}.sys.columns c (readpast)
+        on ic.object_id = c.object_id
+        and ic.column_id = c.column_id
+    where
+        ic.object_id = i.object_id
+        and ic.index_id = i.index_id
+        and c.is_identity = 1
+) c
 where
     i.object_id = @id
-    and i.is_primary_key = 1
+    and i.is_unique = 1
+order by c.[Count]
 
 if @index_id is null
 begin
