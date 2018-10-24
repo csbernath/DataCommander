@@ -10,7 +10,7 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
 
         public TableCollectionNode(DatabaseNode databaseNode)
         {
-            this._databaseNode = databaseNode;
+            _databaseNode = databaseNode;
         }
 
         string ITreeNode.Name => "Tables";

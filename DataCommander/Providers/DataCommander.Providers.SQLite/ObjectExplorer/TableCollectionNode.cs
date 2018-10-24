@@ -10,7 +10,7 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
 
         public TableCollectionNode(DatabaseNode databaseNode)
         {
-            this._databaseNode = databaseNode;
+            _databaseNode = databaseNode;
         }
 
         #region ITreeNode Members

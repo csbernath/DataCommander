@@ -15,7 +15,7 @@ namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
         void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
         {
             ConnectionString = connectionString;
-            this._connection = (SqlCeConnection) connection;
+            _connection = (SqlCeConnection) connection;
         }
 
         IEnumerable<ITreeNode> IObjectExplorer.GetChildren(bool refresh)

@@ -1,6 +1,5 @@
 ﻿namespace DataCommander.Providers.Odp
 {
-
     internal sealed class OracleName
     {
         private readonly string _owner;
@@ -31,7 +30,6 @@
         }
 
         public string Owner => _owner;
-
         public string Name => _name;
     }
 }

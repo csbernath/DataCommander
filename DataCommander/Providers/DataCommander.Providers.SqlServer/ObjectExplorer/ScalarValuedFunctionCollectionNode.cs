@@ -9,13 +9,9 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         private readonly DatabaseNode _database;
 
-        public ScalarValuedFunctionCollectionNode(DatabaseNode database)
-        {
-            _database = database;
-        }
+        public ScalarValuedFunctionCollectionNode(DatabaseNode database) => _database = database;
 
         public string Name => "Scalar-valued Functions";
-
         public bool IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)

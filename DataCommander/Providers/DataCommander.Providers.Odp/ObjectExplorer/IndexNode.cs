@@ -31,11 +31,7 @@ order by column_position";
 
         public ContextMenuStrip ContextMenu => null;
 
-        public void BeforeExpand()
-        {
-        }
-
-        readonly TableNode _table;
-        readonly string _name;
+        private readonly TableNode _table;
+        private readonly string _name;
     }
 }

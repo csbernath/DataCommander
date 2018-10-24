@@ -26,7 +26,7 @@ namespace DataCommander.Providers.Tfs
         public TfsDownloadDataReader(TfsCommand command)
         {
             Assert.IsNotNull(command);
-            this._command = command;
+            _command = command;
         }
 
         public override int FieldCount => 4;

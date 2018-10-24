@@ -36,7 +36,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         public DatabaseNode DatabaseNode { get; }
         public int Id { get; }
-
         public string Name => $"{_owner}.{_name}";
         public bool IsLeaf => false;
 
@@ -96,9 +95,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
             }
         }
 
-        internal static string GetSelectStatement(
-            IDbConnection connection,
-            DatabaseObjectMultipartName databaseObjectMultipartName)
+        internal static string GetSelectStatement(IDbConnection connection, DatabaseObjectMultipartName databaseObjectMultipartName)
         {
             Assert.IsNotNull(connection);
             Assert.IsNotNull(databaseObjectMultipartName);

@@ -41,7 +41,6 @@ namespace DataCommander.Providers.SqlServer
             Assert.IsNotNull(sqlErrors);
 
             var now = LocalTime.Default.Now;
-            var count = sqlErrors.Count;
             var messages = new List<InfoMessage>(sqlErrors.Count);
 
             foreach (SqlError sqlError in sqlErrors)

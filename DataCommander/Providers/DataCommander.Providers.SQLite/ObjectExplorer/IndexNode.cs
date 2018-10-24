@@ -11,8 +11,8 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
 
         public IndexNode(TableNode tableNode, string name)
         {
-            this._tableNode = tableNode;
-            this._name = name;
+            _tableNode = tableNode;
+            _name = name;
         }
 
         #region ITreeNode Members

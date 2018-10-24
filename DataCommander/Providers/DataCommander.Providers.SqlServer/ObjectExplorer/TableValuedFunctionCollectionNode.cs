@@ -9,13 +9,9 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         private readonly DatabaseNode _database;
 
-        public TableValuedFunctionCollectionNode(DatabaseNode database)
-        {
-            _database = database;
-        }
+        public TableValuedFunctionCollectionNode(DatabaseNode database) => _database = database;
 
         public string Name => "Table-valued Functions";
-
         public bool IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)

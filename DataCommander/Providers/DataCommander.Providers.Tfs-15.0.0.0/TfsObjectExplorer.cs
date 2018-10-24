@@ -27,8 +27,8 @@ namespace DataCommander.Providers.Tfs
         void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
         {
             var tfsDbConnection = (TfsDbConnection)connection;
-            this._connection = tfsDbConnection.Connection;
-            var tfsTeamProjectCollection = this._connection.TfsTeamProjectCollection;
+            _connection = tfsDbConnection.Connection;
+            var tfsTeamProjectCollection = _connection.TfsTeamProjectCollection;
             _versionControlServer = (VersionControlServer)tfsTeamProjectCollection.GetService(typeof(VersionControlServer));
         }
 

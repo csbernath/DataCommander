@@ -12,7 +12,7 @@ namespace DataCommander.Providers.SQLite.ObjectExplorer
 
         void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
         {
-            this._connection = (SQLiteConnection)connection;
+            _connection = (SQLiteConnection)connection;
         }
 
         IEnumerable<ITreeNode> IObjectExplorer.GetChildren(bool refresh)

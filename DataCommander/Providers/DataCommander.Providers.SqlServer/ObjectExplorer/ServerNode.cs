@@ -54,9 +54,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         }
 
         bool ITreeNode.Sortable => false;
-
         string ITreeNode.Query => null;
-
         ContextMenuStrip ITreeNode.ContextMenu => null;
 
         #endregion

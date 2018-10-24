@@ -14,18 +14,11 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         }
 
         public string Name { get; }
-
         public bool IsLeaf => true;
 
-        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
-        {
-            return null;
-        }
-
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => null;
         public bool Sortable => false;
-
         public string Query => null;
-
         public ContextMenuStrip ContextMenu => null;
     }
 }

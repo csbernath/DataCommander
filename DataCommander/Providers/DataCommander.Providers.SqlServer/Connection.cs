@@ -194,6 +194,10 @@ namespace DataCommander.Providers.SqlServer
                         description = "Microsoft SQL Server 2016 Service Pack 1 (SP1)";
                         break;
 
+                    case "13.00.5026":
+                        description = "Microsoft SQL Server 2016 Service Pack 2 (SP2)";
+                        break;
+
                     #endregion
 
                     default:

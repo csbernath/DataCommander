@@ -48,10 +48,6 @@ order by s.SYNONYM_NAME";
 
         public ContextMenuStrip ContextMenu => null;
 
-        public void BeforeExpand()
-        {
-        }
-
-        readonly SchemaNode _schema;
+        private readonly SchemaNode _schema;
     }
 }

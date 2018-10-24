@@ -7,42 +7,14 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 {
     internal sealed class TableCollectionNode : ITreeNode
     {
-        public TableCollectionNode(DatabaseNode databaseNode)
-        {
-            DatabaseNode = databaseNode;
-        }
+        public TableCollectionNode(DatabaseNode databaseNode) => DatabaseNode = databaseNode;
 
         public DatabaseNode DatabaseNode { get; }
-
         public string Name => "Tables";
-
         public bool IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-//            string commandText = @"select	u.name,o.name
-//from	{0}.dbo.sysobjects o
-//join	{0}.dbo.sysusers u
-//on	o.uid	= u.uid
-//where	o.type='{1}'
-//order by u.name,o.name";
-//            string databaseName = databaseNode.Name;
-//            commandText = string.Format( commandText, databaseName, type );
-//            DataTable dataTable = new DataTable();
-//            SqlDatabase.Fill( commandText, databaseNode.Connection, dataTable );
-//            int count = dataTable.Rows.Count;
-//            ITreeNode[] treeNodes = new ITreeNode[ count ];
-
-//            for (int i = 0; i < count; i++)
-//            {
-//                DataRow row = dataTable.Rows[ i ];
-//                string owner = (string) row[ 0 ];
-//                string name = (string) row[ 1 ];
-//                treeNodes[ i ] = new TableNode( databaseNode, owner, name );
-//            }
-
-//            return treeNodes;
-
             var childNodes = new List<ITreeNode>();
             childNodes.Add(new SystemTableCollectionNode(DatabaseNode));
 

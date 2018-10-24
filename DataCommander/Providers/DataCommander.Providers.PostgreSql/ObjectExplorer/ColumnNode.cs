@@ -11,9 +11,9 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 
         public ColumnNode(ColumnCollectionNode columnCollectionNode, string name, string dataType)
         {
-            this._columnCollectionNode = columnCollectionNode;
-            this._name = name;
-            this._dataType = dataType;
+            _columnCollectionNode = columnCollectionNode;
+            _name = name;
+            _dataType = dataType;
         }
 
         string ITreeNode.Name => $"{_name} {_dataType}";

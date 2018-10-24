@@ -7,13 +7,9 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         private readonly DatabaseNode _database;
 
-        public ProgrammabilityNode(DatabaseNode database)
-        {
-            _database = database;
-        }
+        public ProgrammabilityNode(DatabaseNode database) => _database = database;
 
         string ITreeNode.Name => "Programmability";
-
         bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
@@ -27,9 +23,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         }
 
         bool ITreeNode.Sortable => false;
-
         string ITreeNode.Query => null;
-
         ContextMenuStrip ITreeNode.ContextMenu => null;
     }
 }

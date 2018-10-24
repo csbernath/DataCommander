@@ -50,9 +50,5 @@ namespace DataCommander.Providers.OleDb
         }
 
         public ContextMenuStrip ContextMenu => null;
-
-        public void BeforeExpand()
-        {
-        }
     }
 }

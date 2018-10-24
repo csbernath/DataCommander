@@ -40,16 +40,8 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         }
 
         public bool Sortable => false;
-
         public string Query => null;
-
         public ContextMenuStrip ContextMenu => null;
-
-        public void BeforeExpand()
-        {
-            _schemasNode.SelectedSchema = _name;
-        }
-
         public SchemaCollectionNode SchemasNode => _schemasNode;
     }
 }

@@ -15,7 +15,7 @@ namespace DataCommander.Updater
             InitializeComponent();
         }
 
-        public Foundation.Deployment.ApplicationStartup Updater => _updater;
+        public ApplicationStartup Updater => _updater;
 
         public void Log(string message)
         {

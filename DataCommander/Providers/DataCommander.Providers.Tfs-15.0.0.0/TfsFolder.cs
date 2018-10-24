@@ -9,7 +9,7 @@ namespace DataCommander.Providers.Tfs
     {
         private readonly Item _item;
 
-        public TfsFolder(Item item) => this._item = item;
+        public TfsFolder(Item item) => _item = item;
 
         #region ITreeNode Members
 
@@ -41,42 +41,13 @@ namespace DataCommander.Providers.Tfs
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            //ItemSet itemSet = item.VersionControlServer.GetItems(this.item.ServerItem, RecursionType.OneLevel);
-            //List<ITreeNode> folders = new List<ITreeNode>();
-            //List<ITreeNode> files = new List<ITreeNode>();
-
-            //foreach (Item current in itemSet.Items.Skip(1))
-            //{
-            //    switch (current.ItemType)
-            //    {
-            //        case ItemType.File:
-            //            files.Add(new TfsFile(current));
-            //            break;
-
-            //        case ItemType.Folder:
-            //            folders.Add(new TfsFolder(current));
-            //            break;
-
-            //        default:
-            //            throw new NotImplementedException();
-            //    }
-            //}
-
-            //return folders.Concat(files);
-
             return TfsProject.GetChildren(_item);
         }
 
         bool ITreeNode.Sortable => false;
-
         string ITreeNode.Query => _item.ServerItem;
-
         ContextMenuStrip ITreeNode.ContextMenu => null;
-
-        private static TfsFolder ToTfsItem(Item item)
-        {
-            return new TfsFolder(item);
-        }
+        private static TfsFolder ToTfsItem(Item item) => new TfsFolder(item);
 
         #endregion
     }

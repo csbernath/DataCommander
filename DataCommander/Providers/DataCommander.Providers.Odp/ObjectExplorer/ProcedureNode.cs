@@ -83,9 +83,5 @@ order by line";
                 return contextMenu;
             }
         }
-
-        public void BeforeExpand()
-        {
-        }
     }
 }

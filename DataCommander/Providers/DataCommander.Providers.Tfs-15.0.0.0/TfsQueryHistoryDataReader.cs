@@ -25,7 +25,7 @@ namespace DataCommander.Providers.Tfs
         {
             Assert.IsNotNull(command);
 
-            this._command = command;
+            _command = command;
         }
 
         public override DataTable GetSchemaTable()

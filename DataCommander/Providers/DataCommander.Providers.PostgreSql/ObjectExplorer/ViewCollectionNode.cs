@@ -11,7 +11,7 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 
         public ViewCollectionNode(SchemaNode schemaNode)
         {
-            this._schemaNode = schemaNode;
+            _schemaNode = schemaNode;
         }
 
         string ITreeNode.Name => "Views";

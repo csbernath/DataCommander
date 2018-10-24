@@ -40,9 +40,5 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         public string Query => null;
         public ContextMenuStrip ContextMenu => null;
         public SchemaNode SchemaNode => _schemaNode;
-
-        public void BeforeExpand()
-        {
-        }
     }
 }

@@ -11,7 +11,7 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
 
         public StoredProcedureCollectionNode(DatabaseNode databaseNode)
         {
-            this._databaseNode = databaseNode;
+            _databaseNode = databaseNode;
         }
 
         string ITreeNode.Name => "Stored Procedures";

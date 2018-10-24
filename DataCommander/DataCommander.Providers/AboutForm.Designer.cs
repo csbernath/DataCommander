@@ -1,8 +1,8 @@
-﻿namespace DataCommander.Providers
-{
-    using System.ComponentModel;
-    using System.Windows.Forms;
+﻿using System.ComponentModel;
+using System.Windows.Forms;
 
+namespace DataCommander.Providers
+{
     partial class AboutForm
     {
         /// <summary>

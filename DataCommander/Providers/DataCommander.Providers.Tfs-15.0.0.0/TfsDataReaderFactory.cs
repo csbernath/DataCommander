@@ -20,7 +20,7 @@ namespace DataCommander.Providers.Tfs
 
             public DataReaderInfo(string name, TfsParameterCollection parameters, CreateDataReader createDataReader)
             {
-                this._name = name;
+                _name = name;
                 Parameters = parameters;
                 CreateDataReader = createDataReader;
             }

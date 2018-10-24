@@ -8,7 +8,7 @@ namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
     {
         readonly string _name;
 
-        public TableNode(string name) => this._name = name;
+        public TableNode(string name) => _name = name;
 
         #region ITreeNode Members
 

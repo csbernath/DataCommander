@@ -14,7 +14,7 @@ namespace DataCommander.Providers.PostgreSql
 
         public DatabaseObjectMultipartName(string server, string database, string schema, string name)
         {
-            this._server = server;
+            _server = server;
             Database = database;
             Schema = schema;
             Name = name;

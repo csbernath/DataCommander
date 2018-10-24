@@ -6,7 +6,7 @@
 
         public NonSqlObjectName(string objectName)
         {
-            this._objectName = objectName;
+            _objectName = objectName;
         }
 
         string IObjectName.UnquotedName => _objectName;

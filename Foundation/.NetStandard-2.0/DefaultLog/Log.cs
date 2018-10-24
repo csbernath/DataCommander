@@ -8,12 +8,12 @@ namespace Foundation.DefaultLog
     {
         #region Private Fields
 
-        private readonly DefaultLog.LogFactory _applicationLog;
+        private readonly LogFactory _applicationLog;
         private string _name;
 
         #endregion
 
-        public Log(DefaultLog.LogFactory applicationLog, string name)
+        public Log(LogFactory applicationLog, string name)
         {
             Assert.IsNotNull(applicationLog);
 

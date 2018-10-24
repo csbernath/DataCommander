@@ -4,13 +4,9 @@
     {
         private readonly string _objectName;
 
-        public NonSqlObjectName(string objectName)
-        {
-            _objectName = objectName;
-        }
+        public NonSqlObjectName(string objectName) => _objectName = objectName;
 
         string IObjectName.UnquotedName => _objectName;
-
         string IObjectName.QuotedName => _objectName;
     }
 }

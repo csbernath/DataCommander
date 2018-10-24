@@ -18,7 +18,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         }
 
         public string Name => "Triggers";
-
         public bool IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)

@@ -48,15 +48,9 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         }
 
         public bool Sortable => false;
-
         public string Query => null;
-
         public ContextMenuStrip ContextMenu => null;
 
-        public void BeforeExpand()
-        {
-        }
-
-        readonly TableNode _table;
+        private readonly TableNode _table;
     }
 }

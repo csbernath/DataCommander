@@ -38,14 +38,9 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 		}
 
 		public bool Sortable => false;
-
 	    public string Query => "select * from " + _schema.Name + "." + _name;
-
 	    public ContextMenuStrip ContextMenu => null;
 
-	    public void BeforeExpand()
-		{
-		}
 
 		public SchemaNode Schema => _schema;
 	}

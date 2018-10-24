@@ -12,7 +12,7 @@ namespace DataCommander.Providers.Tfs
     {
         private readonly Item _item;
 
-        public TfsProject(Item item) => this._item = item;
+        public TfsProject(Item item) => _item = item;
 
         #region ITreeNode Members
 
@@ -29,7 +29,7 @@ namespace DataCommander.Providers.Tfs
 
         internal static IEnumerable<ITreeNode> GetChildren( Item item )
 		{
-            Assert.IsTrue(item != null);
+            Assert.IsNotNull(item);
 
 			var itemSet = item.VersionControlServer.GetItems( item.ServerItem, RecursionType.OneLevel );
 			var folders = new List<ITreeNode>();

@@ -11,7 +11,7 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 
         public SequenceCollectionNode(SchemaNode schemaNode)
         {
-            this._schemaNode = schemaNode;
+            _schemaNode = schemaNode;
         }
 
         string ITreeNode.Name => "Sequences";
@@ -22,13 +22,13 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
         {
             var nodes = new List<ITreeNode>();
 
-            using (var connection = new NpgsqlConnection(this._schemaNode.SchemaCollectionNode.ObjectExplorer.ConnectionString))
+            using (var connection = new NpgsqlConnection(_schemaNode.SchemaCollectionNode.ObjectExplorer.ConnectionString))
             {
                 connection.Open();
                 var executor = connection.CreateCommandExecutor();
                 var commandText = $@"select sequence_name
 from information_schema.sequences
-where sequence_schema = '{this._schemaNode.Name}'
+where sequence_schema = '{_schemaNode.Name}'
 order by sequence_name";
                 executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
                 {

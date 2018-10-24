@@ -8,10 +8,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         private readonly string _name;
 
-        public LoginNode(string name)
-        {
-            _name = name;
-        }
+        public LoginNode(string name) => _name = name;
 
         #region ITreeNode Members
 

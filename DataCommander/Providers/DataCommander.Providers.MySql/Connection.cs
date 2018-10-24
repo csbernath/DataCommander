@@ -14,7 +14,7 @@ namespace DataCommander.Providers.MySql
 
         public Connection(string connectionString)
         {
-            this._connectionString = connectionString;
+            _connectionString = connectionString;
             _mySqlConnection = new MySqlConnection(connectionString);
             Connection = _mySqlConnection;
         }

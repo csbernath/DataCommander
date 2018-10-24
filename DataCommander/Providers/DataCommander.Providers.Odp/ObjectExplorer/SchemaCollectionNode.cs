@@ -43,10 +43,6 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         public ContextMenuStrip ContextMenu => null;
         public OracleConnection Connection => _connection;
 
-        public void BeforeExpand()
-        {
-        }
-
         public string SelectedSchema
         {
             get => _selectedSchema;

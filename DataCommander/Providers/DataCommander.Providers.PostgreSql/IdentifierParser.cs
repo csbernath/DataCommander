@@ -10,7 +10,7 @@ namespace DataCommander.Providers.PostgreSql
 
         public IdentifierParser(TextReader textReader)
         {
-            this._textReader = textReader;
+            _textReader = textReader;
         }
 
         public IEnumerable<string> Parse()

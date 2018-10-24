@@ -13,10 +13,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         private readonly PackageNode _packageNode;
         private readonly string _name;
 
-        public FunctionNode(
-            SchemaNode schemaNode,
-            PackageNode packageNode,
-            string name)
+        public FunctionNode(SchemaNode schemaNode, PackageNode packageNode, string name)
         {
             _schemaNode = schemaNode;
             _packageNode = packageNode;
@@ -95,10 +92,6 @@ order by line";
 
                 return contextMenu;
             }
-        }
-
-        public void BeforeExpand()
-        {
         }
     }
 }

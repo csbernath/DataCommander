@@ -9,10 +9,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         private readonly DatabaseNode _database;
 
-        public RoleCollectionNode(DatabaseNode database)
-        {
-            _database = database;
-        }
+        public RoleCollectionNode(DatabaseNode database) => _database = database;
 
         public string Name => "Roles";
         public bool IsLeaf => false;

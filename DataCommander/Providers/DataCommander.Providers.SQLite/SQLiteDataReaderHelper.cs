@@ -13,8 +13,8 @@ namespace DataCommander.Providers.SQLite
 
         public DecimalDataFieldReader( SQLiteDataReader dataReader, int columnOrdinal )
         {
-            this._dataReader = dataReader;
-            this._columnOrdinal = columnOrdinal;
+            _dataReader = dataReader;
+            _columnOrdinal = columnOrdinal;
         }
 
         #region IDataFieldReader Members

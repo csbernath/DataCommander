@@ -79,9 +79,5 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 				return contextMenu;
 			}
 		}
-
-		public void BeforeExpand()
-		{
-		}
 	}
 }

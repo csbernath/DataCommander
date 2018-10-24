@@ -45,10 +45,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
                 var connectionString = _database.Databases.Server.ConnectionString;
                 string text;
                 using (var connection = new SqlConnection(connectionString))
-                {
                     text = TableNode.GetSelectStatement(connection, name);
-                }
-
                 return text;
             }
         }

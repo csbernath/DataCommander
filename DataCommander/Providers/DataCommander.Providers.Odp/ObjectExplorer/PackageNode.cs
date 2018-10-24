@@ -15,9 +15,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         private readonly SchemaNode _schemaNode;
         private readonly string _name;
 
-        public PackageNode(
-            SchemaNode schema,
-            string name)
+        public PackageNode(SchemaNode schema, string name)
         {
             _schemaNode = schema;
             _name = name;
@@ -84,12 +82,12 @@ order by procedure_name";
             for (var i = 0; i < count; i++)
             {
                 var dataRow = dataRows[i];
-                var line = (string)dataRow[0];
+                var line = (string) dataRow[0];
                 sb.Append(line);
             }
 
             var mainForm = DataCommanderApplication.Instance.MainForm;
-            var queryForm = (QueryForm)mainForm.ActiveMdiChild;
+            var queryForm = (QueryForm) mainForm.ActiveMdiChild;
             var tbQuery = queryForm.QueryTextBox;
             var selectionStart = tbQuery.RichTextBox.TextLength;
 
@@ -116,10 +114,6 @@ order by procedure_name";
 
                 return contextMenu;
             }
-        }
-
-        public void BeforeExpand()
-        {
         }
 
         public SchemaNode SchemaNode => _schemaNode;

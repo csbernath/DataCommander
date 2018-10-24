@@ -10,13 +10,9 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         private readonly DatabaseNode _database;
 
-        public UserCollectionNode(DatabaseNode database)
-        {
-            _database = database;
-        }
+        public UserCollectionNode(DatabaseNode database) => _database = database;
 
         public string Name => "Users";
-
         public bool IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
@@ -45,9 +41,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         }
 
         public bool Sortable => false;
-
         public string Query => null;
-
         public ContextMenuStrip ContextMenu => null;
     }
 }

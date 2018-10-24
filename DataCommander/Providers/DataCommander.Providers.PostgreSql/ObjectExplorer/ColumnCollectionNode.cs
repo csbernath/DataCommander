@@ -11,7 +11,7 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 
         public ColumnCollectionNode(TableNode tableNode)
         {
-            this._tableNode = tableNode;
+            _tableNode = tableNode;
         }
 
         string ITreeNode.Name => "Columns";

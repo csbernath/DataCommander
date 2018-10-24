@@ -25,17 +25,7 @@ namespace DataCommander.Providers.Connection
 
         public static string ProtectPassword(string password)
         {
-            byte[] bytes;
-
-            if (!string.IsNullOrEmpty(password))
-            {
-                bytes = Encoding.UTF8.GetBytes(password);
-            }
-            else
-            {
-                bytes = new byte[0];
-            }
-
+            var bytes = !string.IsNullOrEmpty(password) ? Encoding.UTF8.GetBytes(password) : new byte[0];
             var protectedBytes = ProtectedData.Protect(bytes, Entropy, DataProtectionScope.CurrentUser);
             var protectedPassword = Convert.ToBase64String(protectedBytes);
             return protectedPassword;
@@ -55,9 +45,9 @@ namespace DataCommander.Providers.Connection
             attributes.SetAttributeValue("ConnectionName", ConnectionName);
             attributes.SetAttributeValue("ProviderName", ProviderName);
             attributes.SetAttributeValue(ConnectionStringKeyword.DataSource, DataSource);
-            attributes.SetAttributeValue(ConnectionStringKeyword.InitialCatalog,InitialCatalog);
-            attributes.SetAttributeValue(ConnectionStringKeyword.IntegratedSecurity,IntegratedSecurity);
-            attributes.SetAttributeValue(ConnectionStringKeyword.UserId,UserId);
+            attributes.SetAttributeValue(ConnectionStringKeyword.InitialCatalog, InitialCatalog);
+            attributes.SetAttributeValue(ConnectionStringKeyword.IntegratedSecurity, IntegratedSecurity);
+            attributes.SetAttributeValue(ConnectionStringKeyword.UserId, UserId);
             attributes.SetAttributeValue("ConnectionString", ConnectionString);
         }
 
@@ -70,31 +60,21 @@ namespace DataCommander.Providers.Connection
 
             ConfigurationAttribute attribute;
             if (attributes.TryGetValue(ConnectionStringKeyword.DataSource, out attribute))
-            {
                 DataSource = attribute.GetValue<string>();
-            }
 
             if (attributes.TryGetValue(ConnectionStringKeyword.InitialCatalog, out attribute))
-            {
                 InitialCatalog = attribute.GetValue<string>();
-            }
 
             if (attributes.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out attribute))
             {
                 if (attribute.Value != null)
-                {
                     IntegratedSecurity = attribute.GetValue<bool>();
-                }
                 else
-                {
                     IntegratedSecurity = null;
-                }
             }
 
             if (attributes.TryGetValue(ConnectionStringKeyword.UserId, out attribute))
-            {
                 UserId = attribute.GetValue<string>();
-            }
         }
 
         public void LoadProtectedPassword(ConfigurationNode node)

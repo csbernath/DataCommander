@@ -8,10 +8,7 @@ namespace DataCommander.Providers.SqlServer
     {
         private readonly TextReader _textReader;
 
-        public IdentifierParser(TextReader textReader)
-        {
-            _textReader = textReader;
-        }
+        public IdentifierParser(TextReader textReader) => _textReader = textReader;
 
         public IEnumerable<string> Parse()
         {

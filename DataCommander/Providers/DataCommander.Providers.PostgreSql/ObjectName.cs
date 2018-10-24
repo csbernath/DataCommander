@@ -11,9 +11,9 @@ namespace DataCommander.Providers.PostgreSql
 
         public ObjectName(SqlObject sqlObject, string schemaName, string objectName)
         {
-            this._sqlObject = sqlObject;
-            this._schemaName = schemaName;
-            this._objectName = objectName;
+            _sqlObject = sqlObject;
+            _schemaName = schemaName;
+            _objectName = objectName;
         }
 
         string IObjectName.UnquotedName

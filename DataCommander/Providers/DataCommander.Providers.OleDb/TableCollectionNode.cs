@@ -51,15 +51,9 @@ namespace DataCommander.Providers.OleDb
         }
 
         public bool Sortable => false;
-
         public string Query => null;
-
         public ContextMenuStrip ContextMenu => null;
 
-        public void BeforeExpand()
-        {
-        }
-
-        readonly SchemaNode schema;
+        private readonly SchemaNode schema;
     }
 }

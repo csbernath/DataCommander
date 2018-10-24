@@ -13,14 +13,8 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         private SchemaCollectionNode _schemasNode;
 
         public OracleConnection OracleConnection => _connection;
-
-        public IEnumerable<ITreeNode> GetChildren(bool refresh)
-        {
-            return new ITreeNode[] { _schemasNode };
-        }
-
+        public IEnumerable<ITreeNode> GetChildren(bool refresh) => new ITreeNode[] { _schemasNode };
         public bool Sortable => false;
-
         public SchemaCollectionNode SchemasNode => _schemasNode;
 
         #region IObjectExplorer Members

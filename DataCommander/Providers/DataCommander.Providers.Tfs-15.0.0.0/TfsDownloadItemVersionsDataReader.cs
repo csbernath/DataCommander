@@ -22,7 +22,7 @@ namespace DataCommander.Providers.Tfs
         public TfsDownloadItemVersionsDataReader(TfsCommand command)
         {
             Assert.IsNotNull(command);
-            this._command = command;
+            _command = command;
         }
 
         public override DataTable GetSchemaTable()

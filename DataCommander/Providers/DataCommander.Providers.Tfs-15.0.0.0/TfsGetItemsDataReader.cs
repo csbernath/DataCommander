@@ -19,7 +19,7 @@ namespace DataCommander.Providers.Tfs
         public TfsGetItemsDataReader(TfsCommand command)
         {
             Assert.IsNotNull(command);
-            this._command = command;
+            _command = command;
         }
 
         public override DataTable GetSchemaTable()

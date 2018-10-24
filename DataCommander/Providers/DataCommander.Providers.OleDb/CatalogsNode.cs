@@ -45,15 +45,9 @@ namespace DataCommander.Providers.OleDb
         }
 
         public bool Sortable => false;
-
         public string Query => null;
-
         public ContextMenuStrip ContextMenu => null;
 
-        public void BeforeExpand()
-        {
-        }
-
-        readonly OleDbConnection connection;
+        private readonly OleDbConnection connection;
     }
 }

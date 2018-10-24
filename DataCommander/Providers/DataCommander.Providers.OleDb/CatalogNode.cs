@@ -59,17 +59,9 @@ namespace DataCommander.Providers.OleDb
         }
 
         public bool Sortable => false;
-
         public string Query => null;
-
         public OleDbConnection Connection { get; }
-
         public string Name { get; }
-
         public ContextMenuStrip ContextMenu => null;
-
-        public void BeforeExpand()
-        {
-        }
     }
 }

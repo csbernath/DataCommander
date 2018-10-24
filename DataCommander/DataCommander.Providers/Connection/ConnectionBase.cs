@@ -35,17 +35,7 @@ namespace DataCommander.Providers.Connection
         {
             get
             {
-                string database;
-
-                if (Connection != null)
-                {
-                    database = Connection.Database;
-                }
-                else
-                {
-                    database = null;
-                }
-
+                var database = Connection?.Database;
                 return database;
             }
 
@@ -65,20 +55,13 @@ namespace DataCommander.Providers.Connection
 
         public abstract int TransactionCount { get; }
 
-        protected void InvokeInfoMessage(IEnumerable<InfoMessage> messages)
-        {
-            if (InfoMessage != null)
-                InfoMessage(messages);
-        }
+        protected void InvokeInfoMessage(IEnumerable<InfoMessage> messages) => InfoMessage?.Invoke(messages);
 
         protected void InvokeDatabaseChanged(string database)
         {
             if (DatabaseChanged != null)
             {
-                var args = new DatabaseChangedEventArgs
-                {
-                    Database = database
-                };
+                var args = new DatabaseChangedEventArgs {Database = database};
                 DatabaseChanged(this, args);
             }
         }

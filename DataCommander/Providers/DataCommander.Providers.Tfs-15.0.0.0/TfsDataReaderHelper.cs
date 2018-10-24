@@ -4,18 +4,8 @@
     {
         private readonly TfsDataReader _dataReader;
 
-        public TfsDataReaderHelper(TfsDataReader dataReader)
-        {
-            this._dataReader = dataReader;
-        }
+        public TfsDataReaderHelper(TfsDataReader dataReader) => _dataReader = dataReader;
 
-        #region IDataReaderHelper Members
-
-        int IDataReaderHelper.GetValues(object[] values)
-        {
-            return _dataReader.GetValues(values);
-        }
-
-        #endregion
+        int IDataReaderHelper.GetValues(object[] values) => _dataReader.GetValues(values);
     }
 }

@@ -10,8 +10,8 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 
         public SequenceNode(SequenceCollectionNode sequenceCollectionNode, string name)
         {
-            this._sequenceCollectionNode = sequenceCollectionNode;
-            this._name = name;
+            _sequenceCollectionNode = sequenceCollectionNode;
+            _name = name;
         }
 
         string ITreeNode.Name => _name;

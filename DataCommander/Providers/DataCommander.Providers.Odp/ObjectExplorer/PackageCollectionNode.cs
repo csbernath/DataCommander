@@ -4,18 +4,13 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.Odp.ObjectExplorer
 {
-    /// <summary>
-    /// Summary description for TablesNode.
-    /// </summary>
     internal sealed class PackageCollectionNode : ITreeNode
     {
-        public PackageCollectionNode(SchemaNode schema)
-        {
-            _schema = schema;
-        }
+        private readonly SchemaNode _schema;
+
+        public PackageCollectionNode(SchemaNode schema) => _schema = schema;
 
         public string Name => "Packages";
-
         public bool IsLeaf => false;
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
@@ -53,10 +48,5 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
         public SchemaNode Schema => _schema;
         public ContextMenuStrip ContextMenu => null;
 
-        public void BeforeExpand()
-        {
-        }
-
-        private readonly SchemaNode _schema;
     }
 }

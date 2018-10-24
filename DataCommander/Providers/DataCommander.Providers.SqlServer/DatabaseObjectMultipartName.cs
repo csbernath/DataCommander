@@ -70,9 +70,7 @@ namespace DataCommander.Providers.SqlServer
         }
 
         public string Database { get; }
-
         public string Schema { get; set; }
-
         public string Name { get; }
 
         public override string ToString()

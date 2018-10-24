@@ -16,8 +16,8 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
 
         public ViewNode(DatabaseNode databaseNode, string name)
         {
-            this._databaseNode = databaseNode;
-            this._name = name;
+            _databaseNode = databaseNode;
+            _name = name;
         }
 
         string ITreeNode.Name => _name;

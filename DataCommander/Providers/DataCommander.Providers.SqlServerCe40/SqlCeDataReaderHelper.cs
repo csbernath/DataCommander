@@ -15,7 +15,7 @@ namespace DataCommander.Providers.SqlServerCe40
 
         public SqlCeDataReaderHelper( SqlCeDataReader dataReader )
         {
-            this._dataReader = dataReader;
+            _dataReader = dataReader;
             var schemaTable = dataReader.GetSchemaTable();
 
             if (schemaTable != null)
@@ -74,8 +74,8 @@ namespace DataCommander.Providers.SqlServerCe40
 
             public SqlDecimalFieldReader( SqlCeDataReader dataReader, int columnOrdinal )
             {
-                this._dataReader = dataReader;
-                this._columnOrdinal = columnOrdinal;
+                _dataReader = dataReader;
+                _columnOrdinal = columnOrdinal;
             }
 
             #region IDataFieldReader Members

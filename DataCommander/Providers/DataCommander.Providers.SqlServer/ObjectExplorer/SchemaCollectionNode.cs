@@ -9,13 +9,9 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
     {
         private readonly DatabaseNode _database;
 
-        public SchemaCollectionNode(DatabaseNode database)
-        {
-            _database = database;
-        }
+        public SchemaCollectionNode(DatabaseNode database) => _database = database;
 
         public string Name => "Schemas";
-
         public bool IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)

@@ -24,9 +24,7 @@ namespace DataCommander.Providers.SQLite
                 case ConnectionStringKeyword.IntegratedSecurity:
                     contains = _sqLiteConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out value);
                     if (contains)
-                    {
                         value = bool.Parse((string) value);
-                    }
 
                     break;
 

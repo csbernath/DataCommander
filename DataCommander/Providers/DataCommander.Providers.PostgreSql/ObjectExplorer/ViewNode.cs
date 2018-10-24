@@ -10,8 +10,8 @@ namespace DataCommander.Providers.PostgreSql.ObjectExplorer
 
         public ViewNode(ViewCollectionNode viewCollectionNode, string name)
         {
-            this._viewCollectionNode = viewCollectionNode;
-            this._name = name;
+            _viewCollectionNode = viewCollectionNode;
+            _name = name;
         }
 
         string ITreeNode.Name => _name;

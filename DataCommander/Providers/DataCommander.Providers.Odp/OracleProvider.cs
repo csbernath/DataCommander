@@ -470,9 +470,7 @@ order by OBJECT_NAME";
                 var parentName = sqlObject.ParentName;
 
                 if (parentName != null)
-                {
                     sb.Append(parentName.ToUpper());
-                }
 
                 var name = sqlObject.Name;
 
@@ -592,9 +590,7 @@ order by OBJECT_NAME";
             var folder2 = folder.ChildNodes["CompletionCache"];
 
             if (folder2 != null)
-            {
                 folder.RemoveChildNode(folder2);
-            }
         }
 
         public string GetExceptionMessage(Exception e)
@@ -716,20 +712,9 @@ order by OBJECT_NAME";
             return new Connection(connectionString);
         }
 
-        void IProvider.DeriveParameters(IDbCommand command)
-        {
-            throw new NotImplementedException();
-        }
-
-        DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        DataTable IProvider.GetParameterTable(IDataParameterCollection parameters)
-        {
-            throw new NotImplementedException();
-        }
+        void IProvider.DeriveParameters(IDbCommand command) => throw new NotImplementedException();
+        DataParameterBase IProvider.GetDataParameter(IDataParameter parameter) => throw new NotImplementedException();
+        DataTable IProvider.GetParameterTable(IDataParameterCollection parameters) => throw new NotImplementedException();
 
         DataTable IProvider.GetSchemaTable(IDataReader dataReader)
         {
@@ -753,15 +738,8 @@ order by OBJECT_NAME";
             return e.ToString();
         }
 
-        List<InfoMessage> IProvider.ToInfoMessages(Exception e)
-        {
-            throw new NotImplementedException();
-        }
-
-        string IProvider.CommandToString(IDbCommand command)
-        {
-            throw new NotImplementedException();
-        }
+        List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
+        string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
 
         List<Statement> IProvider.GetStatements(string commandText)
         {
@@ -775,15 +753,8 @@ order by OBJECT_NAME";
             };
         }
 
-        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder()
-        {
-            return new ConnectionStringBuilder();
-        }
-
-        public Type GetColumnType(FoundationDbColumn dataColumnSchema)
-        {
-            throw new NotImplementedException();
-        }
+        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder() => new ConnectionStringBuilder();
+        public Type GetColumnType(FoundationDbColumn dataColumnSchema) => throw new NotImplementedException();
 
         #endregion
     }

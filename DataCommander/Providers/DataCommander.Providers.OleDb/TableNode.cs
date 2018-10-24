@@ -89,9 +89,5 @@ namespace DataCommander.Providers.OleDb
                 return contextMenu;
             }
         }
-
-        public void BeforeExpand()
-        {
-        }
     }
 }

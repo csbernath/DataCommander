@@ -9,8 +9,8 @@ namespace DataCommander.Providers.MySql
 
         public ObjectName(string databaseName, string objectName)
         {
-            this._databaseName = databaseName;
-            this._objectName = objectName;
+            _databaseName = databaseName;
+            _objectName = objectName;
         }
 
         string IObjectName.UnquotedName

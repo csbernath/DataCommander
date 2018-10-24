@@ -18,7 +18,7 @@ namespace DataCommander.Providers.PostgreSql
 
         public Connection(string connectionString)
         {
-            this._connectionString = connectionString;
+            _connectionString = connectionString;
             _npgsqlConnection = new NpgsqlConnection(connectionString);
             Connection = _npgsqlConnection;
         }

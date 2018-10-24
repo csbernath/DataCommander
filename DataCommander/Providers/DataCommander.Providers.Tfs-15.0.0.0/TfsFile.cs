@@ -17,23 +17,15 @@ namespace DataCommander.Providers.Tfs
         public TfsFile(Item item)
         {
             Assert.IsTrue(item != null);
-
-            this._item = item;
+            _item = item;
         }
 
         #region ITreeNode Members
 
         string ITreeNode.Name => TfsObjectExplorer.GetName(_item);
-
         bool ITreeNode.IsLeaf => true;
-
-        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
-        {
-            throw new NotImplementedException();
-        }
-
+        IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh) => throw new NotImplementedException();
         bool ITreeNode.Sortable => false;
-
         string ITreeNode.Query => _item.ServerItem;
 
         ContextMenuStrip ITreeNode.ContextMenu
@@ -76,8 +68,7 @@ namespace DataCommander.Providers.Tfs
 
             var node = Settings.CurrentType;
             var attributes = node.Attributes;
-            string fileName;
-            var contains = attributes.TryGetAttributeValue("FileName", out fileName);
+            var contains = attributes.TryGetAttributeValue("FileName", out string fileName);
             var arguments = '"' + localFileName + '"';
             var startInfo = new ProcessStartInfo(fileName, arguments);
             Process.Start(startInfo);

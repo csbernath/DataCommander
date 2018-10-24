@@ -10,7 +10,7 @@ namespace DataCommander.Providers.MySql.ObjectExplorer
 
         public ViewCollectionNode(DatabaseNode databaseNode)
         {
-            this._databaseNode = databaseNode;
+            _databaseNode = databaseNode;
         }
 
         string ITreeNode.Name => "Views";

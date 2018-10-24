@@ -18,7 +18,7 @@ namespace DataCommander.Providers.Tfs
         public TfsQueryPendingSetsDataReader(TfsCommand command)
         {
             Assert.IsNotNull(command);
-            this._command = command;
+            _command = command;
         }
 
         public override DataTable GetSchemaTable()
@@ -56,14 +56,7 @@ namespace DataCommander.Providers.Tfs
                     var recursionString = ValueReader.GetValueOrDefault<string>(parameters["recursion"].Value);
                     RecursionType recursion;
 
-                    if (recursionString != null)
-                    {
-                        recursion = Enum<RecursionType>.Parse(recursionString);
-                    }
-                    else
-                    {
-                        recursion = RecursionType.Full;
-                    }
+                    recursion = recursionString != null ? Enum<RecursionType>.Parse(recursionString) : RecursionType.Full;
 
                     var workspace = ValueReader.GetValueOrDefault<string>(parameters["workspace"].Value);
                     var user = ValueReader.GetValueOrDefault<string>(parameters["user"].Value);

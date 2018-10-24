@@ -14,8 +14,8 @@ namespace DataCommander.Providers.SqlServerCe40.ObjectExplorer
 
         public TableCollectionNode(SqlCeObjectExplorer objectExplorer, SqlCeConnection connection)
         {
-            this._objectExplorer = objectExplorer;
-            this._connection = connection;
+            _objectExplorer = objectExplorer;
+            _connection = connection;
         }
 
         #region ITreeNode Members
