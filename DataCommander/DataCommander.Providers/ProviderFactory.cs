@@ -30,8 +30,6 @@ namespace DataCommander.Providers
         public static IProvider CreateProvider(string name)
         {
             Assert.IsNotNull(name);
-            //Contract.Ensures(Contract.Result<IProvider>() != null);
-
             var folder = Settings.CurrentNamespace;
             folder = folder.ChildNodes[name];
             var attributes = folder.Attributes;
@@ -41,7 +39,7 @@ namespace DataCommander.Providers
             Assert.IsTrue(instance != null);
             Assert.IsTrue(instance is IProvider);
             var provider = (IProvider) instance;
-
+            Assert.IsNotNull(provider);
             return provider;
         }
 
@@ -51,13 +49,13 @@ namespace DataCommander.Providers
 
             try
             {
-                var c = new ConnectionClass();
+                var connection = new ConnectionClass();
 
-                c.Open(connectionString, null, null, 0);
-                var rs = c.OpenSchema(SchemaEnum.adSchemaDBInfoKeywords, Type.Missing, Type.Missing);
-                var dataTable = OleDbHelper.Convert(rs);
-                rs.Close();
-                c.Close();
+                connection.Open(connectionString, null, null, 0);
+                var schema = connection.OpenSchema(SchemaEnum.adSchemaDBInfoKeywords, Type.Missing, Type.Missing);
+                var dataTable = OleDbHelper.Convert(schema);
+                schema.Close();
+                connection.Close();
 
                 keyWords = new string[dataTable.Rows.Count];
 

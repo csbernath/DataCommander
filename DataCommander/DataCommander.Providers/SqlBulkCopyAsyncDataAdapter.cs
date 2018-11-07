@@ -28,10 +28,7 @@ namespace DataCommander.Providers
 
         #endregion
 
-        public SqlBulkCopyAsyncDataAdapter(
-            SqlConnection destinationConnection,
-            SqlTransaction destionationTransaction,
-            string destinationTableName,
+        public SqlBulkCopyAsyncDataAdapter(SqlConnection destinationConnection, SqlTransaction destionationTransaction, string destinationTableName,
             Action<InfoMessage> addInfoMessage)
         {
             _sqlBulkCopy = new SqlBulkCopy(destinationConnection, SqlBulkCopyOptions.Default, destionationTransaction);
@@ -59,6 +56,7 @@ namespace DataCommander.Providers
         IResultWriter IAsyncDataAdapter.ResultWriter => throw new NotImplementedException();
         long IAsyncDataAdapter.RowCount => _rowCount;
         int IAsyncDataAdapter.TableCount => 1;
+
         void IAsyncDataAdapter.Start()
         {
             Task.Factory.StartNew(Fill);

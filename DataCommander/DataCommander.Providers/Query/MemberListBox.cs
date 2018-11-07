@@ -59,9 +59,7 @@ namespace DataCommander.Providers.Query
         public void Initialize(GetCompletionResponse response)
         {
             _response = response;
-
             LoadItems();
-
             _textBox.KeyboardHandler = this;
 
             if (response.Items.Count > 0)
@@ -72,15 +70,15 @@ namespace DataCommander.Providers.Query
                     var items = _prefix.Split('.');
 
                     var count = response.Items[0].UnquotedName.Count(c => c == '.') + 1;
-                    var sb = new StringBuilder();
+                    var stringBuilder = new StringBuilder();
                     for (var i = Math.Max(items.Length - count, 0); i < items.Length; i++)
                     {
-                        if (sb.Length > 0)
-                            sb.Append('.');
-                        sb.Append(items[i]);
+                        if (stringBuilder.Length > 0)
+                            stringBuilder.Append('.');
+                        stringBuilder.Append(items[i]);
                     }
 
-                    _prefix = sb.ToString().ToLower();
+                    _prefix = stringBuilder.ToString().ToLower();
                     Find(_prefix, 0);
                 }
             }
@@ -148,7 +146,6 @@ namespace DataCommander.Providers.Query
             if (listBoxItem != null)
             {
                 var selectedItem = listBoxItem.Item.UnquotedName;
-
                 var startIndex = _response.StartPosition;
                 var tokenIterator = new TokenIterator(_textBox.Text.Substring(startIndex));
                 var token = tokenIterator.Next();
@@ -168,12 +165,14 @@ namespace DataCommander.Providers.Query
                         sb.Append('.');
                     sb.Append(originalItems[i]);
                 }
+
                 for (var i = 0; i < newItems.Length; i++)
                 {
                     if (sb.Length > 0)
                         sb.Append('.');
                     sb.Append(newItems[i]);
                 }
+
                 var newText = sb.ToString();
 
                 // TODO
@@ -195,8 +194,7 @@ namespace DataCommander.Providers.Query
             var hWnd = ListBox.Handle.ToInt32();
             NativeMethods.SendMessage(hWnd, (int) NativeMethods.Message.Keyboard.KeyDown, (int) e.KeyCode, 0);
 
-            if (
-                e.KeyCode == Keys.Down ||
+            if (e.KeyCode == Keys.Down ||
                 e.KeyCode == Keys.Up ||
                 e.KeyCode == Keys.PageDown ||
                 e.KeyCode == Keys.PageUp ||
@@ -237,7 +235,8 @@ namespace DataCommander.Providers.Query
 
         private void Find(string prefix, int startIndex)
         {
-            var filteredItems = ListBox.Items.Cast<ListBoxItem<IObjectName>>()
+            var filteredItems = ListBox.Items
+                .Cast<ListBoxItem<IObjectName>>()
                 .Select((listBoxItem, i) => new
                 {
                     Index = i,
@@ -270,20 +269,20 @@ namespace DataCommander.Providers.Query
         private static int IndexOf(string item, string searchPattern)
         {
             var index = item.IndexOf(searchPattern, StringComparison.InvariantCultureIgnoreCase);
-            if (index < 0)
+            if (index == -1)
             {
-                var camelCase = GetCamelCase(item);
-                index = camelCase.IndexOf(searchPattern, StringComparison.InvariantCultureIgnoreCase);
+                var camelHumps = GetCamelHumps(item);
+                index = camelHumps.IndexOf(searchPattern, StringComparison.InvariantCultureIgnoreCase);
             }
 
             return index;
         }
 
-        private static string GetCamelCase(string source)
+        private static string GetCamelHumps(string source)
         {
             var sb = new StringBuilder();
 
-            for (var i = 0; i < source.Length; i++)
+            for (var i = 0; i < source.Length; ++i)
             {
                 var c = source[i];
 
@@ -351,17 +350,13 @@ namespace DataCommander.Providers.Query
                 {
                     // Backspace
                     var length = _prefix.Length;
-
                     if (length > 0)
-                    {
                         _prefix = _prefix.Substring(0, length - 1);
-                    }
                 }
                 else
                     _prefix += char.ToLower(e.KeyChar);
 
                 LoadItems();
-
                 Find(_prefix, 0);
             }
 
