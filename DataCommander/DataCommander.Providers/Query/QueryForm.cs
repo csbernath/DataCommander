@@ -1746,10 +1746,11 @@ namespace DataCommander.Providers.Query
                     var name = tokens[index + 1].Value;
                     name = name.Substring(1);
                     var dataType = tokens[index + 2].Value;
+                    var dataTypeLower = dataType.ToLower();
                     SqlDbType sqlDbType;
                     string csharpValue = null;
 
-                    var sqlDataType = SqlDataTypeArray.SqlDataTypes.FirstOrDefault(i => i.SqlDataTypeName == dataType);
+                    var sqlDataType = SqlDataTypeArray.SqlDataTypes.FirstOrDefault(i => i.SqlDataTypeName == dataTypeLower);
                     if (sqlDataType != null)
                         sqlDbType = sqlDataType.SqlDbType;
                     else
