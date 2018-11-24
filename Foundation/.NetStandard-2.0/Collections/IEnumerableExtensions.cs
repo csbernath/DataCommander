@@ -45,6 +45,42 @@ namespace Foundation.Collections
             return source.Select(keySelector).SelectPreviousAndCurrent();
         }
 
+        public static int SequenceCompare<T>(this IEnumerable<T> enumerable1, IEnumerable<T> enumerable2, Comparer<T> comparer)
+        {
+            int result;
+            using (IEnumerator<T>
+                enumerator1 = enumerable1.GetEnumerator(),
+                enumerator2 = enumerable2.GetEnumerator())
+            {
+                while (true)
+                {
+                    var moveNext1 = enumerator1.MoveNext();
+                    var moveNext2 = enumerator2.MoveNext();
+
+                    if (moveNext1)
+                    {
+                        if (moveNext2)
+                        {
+                            result = comparer.Compare(enumerator1.Current, enumerator2.Current);
+                            if (result != 0)
+                                break;
+                        }
+                        else
+                        {
+                            result = 1;
+                        }
+                    }
+                    else
+                    {
+                        result = -1;
+                        break;
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public static DynamicArray<TSource> ToDynamicArray<TSource>(this IEnumerable<TSource> source, int initialSize, int maxSize)
         {
             var dynamicArray = new DynamicArray<TSource>(initialSize, maxSize);

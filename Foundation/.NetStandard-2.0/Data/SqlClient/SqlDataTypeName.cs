@@ -20,6 +20,7 @@
         public const string Timestamp = "timestamp";
         public const string TinyInt = "tinyint";
         public const string UniqueIdentifier = "uniqueidentifier";
+        public const string VarBinary = "varbinary";
         public const string VarChar = "varchar";
         public const string Xml = "xml";
     }

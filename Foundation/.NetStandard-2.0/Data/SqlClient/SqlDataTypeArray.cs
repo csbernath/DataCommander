@@ -22,6 +22,7 @@ namespace Foundation.Data.SqlClient
             new SqlDataType(SqlDbType.Timestamp, SqlDataTypeName.Timestamp, CSharpTypeName.Byte + "[]"),
             new SqlDataType(SqlDbType.TinyInt, SqlDataTypeName.TinyInt, CSharpTypeName.Byte),
             new SqlDataType(SqlDbType.UniqueIdentifier, SqlDataTypeName.UniqueIdentifier, nameof(Guid)),
+            new SqlDataType(SqlDbType.VarBinary, SqlDataTypeName.VarBinary, CSharpTypeName.Byte + "[]"),
             new SqlDataType(SqlDbType.VarChar, SqlDataTypeName.VarChar, CSharpTypeName.String),
             new SqlDataType(SqlDbType.Xml, SqlDataTypeName.Xml, CSharpTypeName.String)
         });

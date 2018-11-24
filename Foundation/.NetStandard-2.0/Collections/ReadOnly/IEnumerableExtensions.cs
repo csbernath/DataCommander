@@ -12,9 +12,6 @@ namespace Foundation.Collections.ReadOnly
             return new ReadOnlyList<T>(list);
         }
 
-        public static ReadOnlySortedSet<T> ToReadOnlySortedSet<T>(this IEnumerable<T> source)
-        {
-            return new ReadOnlySortedSet<T>(source.ToReadOnlyCollection());
-        }
+        public static ReadOnlySortedSet<T> ToReadOnlySortedSet<T>(this IEnumerable<T> source) => new ReadOnlySortedSet<T>(source.ToReadOnlyCollection());
     }
 }
