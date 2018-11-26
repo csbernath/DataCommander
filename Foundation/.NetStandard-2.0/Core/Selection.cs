@@ -3,49 +3,17 @@ using Foundation.Assertions;
 
 namespace Foundation.Core
 {
-    /// <summary>
-    /// 
-    /// </summary>
     [Obsolete]
     public static class Selection
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TArgument"></typeparam>
-        /// <param name="argument"></param>
-        /// <returns></returns>
-        public static ArgumentEqualsSelection<TArgument> CreateArgumentEqualsSelection<TArgument>(TArgument argument) where TArgument : IEquatable<TArgument>
-        {
-            return new ArgumentEqualsSelection<TArgument>(argument);
-        }
+        public static ArgumentEqualsSelection<TArgument> CreateArgumentEqualsSelection<TArgument>(TArgument argument) where TArgument : IEquatable<TArgument> =>
+            new ArgumentEqualsSelection<TArgument>(argument);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TArgument"></typeparam>
-        /// <param name="argument"></param>
-        /// <returns></returns>
-        public static ArgumentIsSelection<TArgument> CreateArgumentIsSelection<TArgument>(TArgument argument) where TArgument : class
-        {
-            return new ArgumentIsSelection<TArgument>(argument);
-        }
+        public static ArgumentIsSelection<TArgument> CreateArgumentIsSelection<TArgument>(TArgument argument) where TArgument : class =>
+            new ArgumentIsSelection<TArgument>(argument);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static TypeIsSelection CreateTypeIsSelection(Type type)
-        {
-            return new TypeIsSelection(type);
-        }
+        public static TypeIsSelection CreateTypeIsSelection(Type type) => new TypeIsSelection(type);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="selections"></param>
-        /// <returns></returns>
         public static int Select(Func<bool>[] selections)
         {
             Assert.IsNotNull(selections);
@@ -67,56 +35,18 @@ namespace Foundation.Core
             return selectedIndex;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TArgument"></typeparam>
-        /// <typeparam name="TActionArgument"></typeparam>
-        /// <param name="argument"></param>
-        /// <param name="actionArgument"></param>
-        /// <param name="getAction"></param>
-        public static void Select<TArgument, TActionArgument>(
-            TArgument argument,
-            TActionArgument actionArgument,
-            Func<Type, Action<TActionArgument>> getAction)
+        public static void Select<TArgument, TActionArgument>(TArgument argument, TActionArgument actionArgument, Func<Type, Action<TActionArgument>> getAction)
         {
-            var argumentType = typeof (TArgument);
+            var argumentType = typeof(TArgument);
             var action = getAction(argumentType);
             action(actionArgument);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TArgument"></typeparam>
-        /// <typeparam name="TArgumentAs"></typeparam>
-        /// <param name="argument"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        public static Func<bool> IfArgumentAsNotNull<TArgument, TArgumentAs>(TArgument argument, Action<TArgumentAs> action) where TArgumentAs : class
-        {
-            return () => ExecuteIfArgumentAsNotNull(argument, action);
-        }
+        public static Func<bool> IfArgumentAsNotNull<TArgument, TArgumentAs>(TArgument argument, Action<TArgumentAs> action) where TArgumentAs : class =>
+            () => ExecuteIfArgumentAsNotNull(argument, action);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TArgument"></typeparam>
-        /// <param name="type"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        public static Func<bool> IfArgumentTypeEquals<TArgument>(Type type, Action action)
-        {
-            return () => ExecuteIfArgumentTypeEquals<TArgument>(type, action);
-        }
+        public static Func<bool> IfArgumentTypeEquals<TArgument>(Type type, Action action) => () => ExecuteIfArgumentTypeEquals<TArgument>(type, action);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TSourceType"></typeparam>
-        /// <typeparam name="TTargetType"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="action"></param>
         public static void IfArgumentIs<TSourceType, TTargetType>(TSourceType source, Action<TTargetType> action) where TTargetType : class
         {
             if (source is TTargetType)
@@ -126,15 +56,7 @@ namespace Foundation.Core
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        public static Func<bool> Else(Action action)
-        {
-            return () => ExecuteElse(action);
-        }
+        public static Func<bool> Else(Action action) => () => ExecuteElse(action);
 
         private static bool ExecuteIfArgumentAsNotNull<TArgument, TArgumentAs>(TArgument argument, Action<TArgumentAs> action) where TArgumentAs : class
         {
@@ -142,28 +64,17 @@ namespace Foundation.Core
             var selected = argumentAs != null;
 
             if (selected)
-            {
                 action(argumentAs);
-            }
 
             return selected;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TArgument"></typeparam>
-        /// <param name="type"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
         public static bool ExecuteIfArgumentTypeEquals<TArgument>(Type type, Action action)
         {
-            var selected = typeof (TArgument) == type;
+            var selected = typeof(TArgument) == type;
 
             if (selected)
-            {
                 action();
-            }
 
             return selected;
         }
@@ -178,29 +89,16 @@ namespace Foundation.Core
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TArgument"></typeparam>
     public sealed class MultipleDispatchSelection<TArgument>
     {
         private readonly Func<TArgument, bool>[] _selections;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="selections"></param>
         public MultipleDispatchSelection(params Func<TArgument, bool>[] selections)
         {
             Assert.IsNotNull(selections);
             _selections = selections;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="argument"></param>
-        /// <returns></returns>
         public int Select(TArgument argument)
         {
             var selectedIndex = -1;

@@ -398,19 +398,13 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
             var first = true;
             foreach (DataRow row in table.Rows)
             {
-                char prefix;
-
                 if (first)
                 {
                     first = false;
                     stringBuilder.Append("declare\r\n");
-                    prefix = ' ';
                 }
                 else
-                {
-                    stringBuilder.Append("\r\n");
-                    prefix = ',';
-                }
+                    stringBuilder.Append(",\r\n");
 
                 var variableName = (string) row["name"];
                 variableName = char.ToLower(variableName[0]) + variableName.Substring(1);
@@ -436,7 +430,7 @@ order by c.column_id", DatabaseNode.Name, _owner, _name);
                         break;
                 }
 
-                stringBuilder.AppendFormat("    {0}@{1} {2}", prefix, variableName, typeName);
+                stringBuilder.Append($"    @{variableName} {typeName}");
             }
 
             stringBuilder.AppendFormat("\r\n\r\ninsert into {0}.{1}\r\n(\r\n    ", _owner, _name);
