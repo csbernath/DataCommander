@@ -62,6 +62,14 @@ namespace Foundation.Data
                 : dataRecord.GetInt32(fieldIndex);
         }
 
+        public static long? GetNullableInt64(this IDataRecord dataRecord, int fieldIndex)
+        {
+            Assert.IsNotNull(dataRecord, nameof(dataRecord));
+            return dataRecord.IsDBNull(fieldIndex)
+                ? (long?) null
+                : dataRecord.GetInt64(fieldIndex);
+        }
+
         public static string GetStringOrDefault(this IDataRecord dataRecord, int fieldIndex)
         {
             Assert.IsNotNull(dataRecord, nameof(dataRecord));
