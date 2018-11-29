@@ -3415,25 +3415,26 @@ namespace DataCommander.Providers.Query
                 var dataSet = new DataSet();
                 using (var dataReader = _command.ExecuteReader())
                 {
-                    do
+                    var tableIndex = 0;
+
+                    while (true)
                     {
                         var schemaTable = Provider.GetSchemaTable(dataReader);
                         var dataReaderHelper = Provider.CreateDataReaderHelper(dataReader);
-                        var rowCount = 0;
+                        var rowIndex = 0;
 
                         while (dataReader.Read())
                         {
-                            rowCount++;
                             var values = new object[dataReader.FieldCount];
                             dataReaderHelper.GetValues(values);
 
-                            var dataTable = new DataTable("SingleRow(" + rowCount + ")");
+                            var dataTable = new DataTable($"Table[{tableIndex}].Rows[{rowIndex}]");
                             dataTable.Columns.Add(" ", typeof(int));
                             dataTable.Columns.Add("Name", typeof(string));
                             dataTable.Columns.Add("Value");
                             var count = schemaTable.Rows.Count;
 
-                            for (var i = 0; i < count; i++)
+                            for (var i = 0; i < count; ++i)
                             {
                                 var schemaRow = schemaTable.Rows[i];
                                 var columnName = schemaRow["Name"].ToString();
@@ -3445,17 +3446,19 @@ namespace DataCommander.Providers.Query
                                 dataTable.Rows.Add(dataRow);
                             }
 
-                            //ShowDataTable(dataTable, tableStyle);
                             dataSet.Tables.Add(dataTable);
 
-                            if (rowCount == 20)
-                            {
+                            if (rowIndex == 100)
                                 break;
-                            }
-                        }
-                    } while (dataReader.NextResult());
 
-                    dataReader.Close();
+                            ++rowIndex;
+                        }
+
+                        if (!dataReader.NextResult())
+                            break;
+
+                        ++tableIndex;
+                    }
                 }
 
                 ShowDataSet(dataSet);
