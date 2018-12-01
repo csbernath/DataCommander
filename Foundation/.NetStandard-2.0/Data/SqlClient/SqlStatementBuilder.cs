@@ -7,71 +7,37 @@ using Foundation.Text;
 
 namespace Foundation.Data.SqlClient
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class SqlStatementBuilder
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
         public static string ToString(byte? value)
         {
             var s = value != null ? value.Value.ToString() : SqlNull.NullString;
             return s;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static string ToString(DBNull value)
-        {
-            return SqlNull.NullString;
-        }
+        public static string ToString(DBNull value) => SqlNull.NullString;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
         public static string ToString(SqlDateTime value)
         {
             string s;
 
             if (value.IsNull)
-            {
                 s = SqlNull.NullString;
-            }
             else
             {
-                string format;
-
-                format = value.TimeTicks == 0 ? "yyyyMMdd" : "yyyyMMdd HH:mm:ss.fff";
-
+                var format = value.TimeTicks == 0 ? "yyyyMMdd" : "yyyyMMdd HH:mm:ss.fff";
                 s = value.Value.ToString(format);
             }
 
             return s;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="sqlDbType"></param>
-        /// <returns></returns>
         public static string ToString(object value, SqlDbType sqlDbType)
         {
             var sb = new StringBuilder();
 
             if (value == null)
-            {
                 sb.Append(SqlNull.NullString);
-            }
             else
             {
                 switch (sqlDbType)
@@ -106,12 +72,7 @@ namespace Foundation.Data.SqlClient
                     case SqlDbType.NVarChar:
                         sb.Append("N'");
                         s = value.ToString();
-
-                        if (s.IndexOf('\'') >= 0)
-                            sb.Append(s.Replace("'", "''"));
-                        else
-                            sb.Append(s);
-
+                        sb.Append(s.IndexOf('\'') >= 0 ? s.Replace("'", "''") : s);
                         sb.Append('\'');
                         break;
 
@@ -138,31 +99,15 @@ namespace Foundation.Data.SqlClient
             return sb.ToString();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="commandText"></param>
-        /// <param name="value"></param>
-        public static void AppendToCommandText(
-            StringBuilder commandText,
-            string value)
+        public static void AppendToCommandText(StringBuilder commandText, string value)
         {
-            Assert.IsTrue(commandText != null);
+            Assert.IsNotNull(commandText);
 
             var s = value.ToTSqlNVarChar();
             commandText.Append(s);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="commandText"></param>
-        /// <param name="value"></param>
-        /// <param name="sqlDbType"></param>
-        public static void AppendToCommandText(
-            StringBuilder commandText,
-            object value,
-            SqlDbType sqlDbType)
+        public static void AppendToCommandText(StringBuilder commandText, object value, SqlDbType sqlDbType)
         {
             Assert.IsNotNull(commandText);
 
@@ -170,62 +115,23 @@ namespace Foundation.Data.SqlClient
             commandText.Append(s);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="commandText"></param>
-        /// <param name="sqlBoolean"></param>
-        public static void AppendToCommandText(
-            StringBuilder commandText,
-            SqlBoolean sqlBoolean)
+        public static void AppendToCommandText(StringBuilder commandText, SqlBoolean sqlBoolean)
         {
-            object obj;
-
-            if (sqlBoolean.IsNull)
-                obj = null;
-            else
-                obj = sqlBoolean.Value;
-
+            var obj = sqlBoolean.IsNull ? (object) null : sqlBoolean.Value;
             var s = ToString(obj, SqlDbType.Bit);
             commandText.Append(s);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="commandText"></param>
-        /// <param name="value"></param>
-        public static void AppendToCommandText(
-            StringBuilder commandText,
-            SqlInt16 value)
+        public static void AppendToCommandText(StringBuilder commandText, SqlInt16 value)
         {
-            object obj;
-
-            if (value.IsNull)
-                obj = null;
-            else
-                obj = value.Value;
-
+            var obj = value.IsNull ? (object) null : value.Value;
             var s = ToString(obj, SqlDbType.SmallInt);
             commandText.Append(s);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="commandText"></param>
-        /// <param name="sqlDateTime"></param>
-        public static void AppendToCommandText(
-            StringBuilder commandText,
-            SqlDateTime sqlDateTime)
+        public static void AppendToCommandText(StringBuilder commandText, SqlDateTime sqlDateTime)
         {
-            object obj;
-
-            if (sqlDateTime.IsNull)
-                obj = null;
-            else
-                obj = sqlDateTime.Value;
-
+            var obj = sqlDateTime.IsNull ? (object) null : sqlDateTime.Value;
             var s = ToString(obj, SqlDbType.DateTime);
             commandText.Append(s);
         }
