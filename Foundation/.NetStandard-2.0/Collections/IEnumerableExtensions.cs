@@ -68,11 +68,12 @@ namespace Foundation.Collections
                         else
                         {
                             result = 1;
+                            break;
                         }
                     }
                     else
                     {
-                        result = -1;
+                        result = moveNext2 ? -1 : 0;
                         break;
                     }
                 }
