@@ -5,8 +5,10 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Foundation.Core;
 using Foundation.Data.MethodProfiler;
 using Foundation.Linq;
 using Foundation.Text;
@@ -567,13 +569,62 @@ namespace DataCommander.Providers.Query
                     {
                         e.Handled = true;
 
-                        var length = -((_columnIndex - 1)%TabSize) + TabSize;
-                        var text = new string(' ', length);
-                        length = RichTextBox.SelectionLength;
-
-                        if (length == 0)
+                        if (e.Modifiers == Keys.None)
                         {
-                            RichTextBox.SelectedText = text;
+                            var selectionLength = RichTextBox.SelectionLength;
+                            if (selectionLength == 0)
+                            {
+                                selectionLength = -((_columnIndex - 1) % TabSize) + TabSize;
+                                var text = new string(' ', selectionLength);
+                                RichTextBox.SelectedText = text;
+                            }
+                            else
+                            {
+                                var selectionStart = RichTextBox.SelectionStart;
+                                var startLine = RichTextBox.GetLineFromCharIndex(selectionStart);
+                                var endLine = RichTextBox.GetLineFromCharIndex(selectionStart + selectionLength - 1);
+
+                                var startCharIndex = RichTextBox.GetFirstCharIndexFromLine(startLine);
+                                var firstCharIndex = RichTextBox.GetFirstCharIndexFromLine(endLine + 1);
+                                var endCharIndex = firstCharIndex >= 0 ? firstCharIndex - 1 : RichTextBox.TextLength;
+
+                                RichTextBox.SelectionStart = startCharIndex;
+                                RichTextBox.SelectionLength = endCharIndex - startCharIndex + 1;
+
+                                var selectedText = RichTextBox.SelectedText;
+                                selectedText = selectedText.Indent(1);
+                                selectedText += Environment.NewLine;
+                                RichTextBox.SelectedText = selectedText;
+
+                                RichTextBox.SelectionStart = startCharIndex;
+                                RichTextBox.SelectionLength = selectedText.Length - (endLine - startLine + 1);
+                            }
+                        }
+                        else if (e.Modifiers == Keys.Shift)
+                        {
+                            var selectionStart = RichTextBox.SelectionStart;
+                            var selectionLength = RichTextBox.SelectionLength;
+                            var startLine = RichTextBox.GetLineFromCharIndex(selectionStart);
+                            var endLine = RichTextBox.GetLineFromCharIndex(selectionStart + selectionLength - 1);
+
+                            var startCharIndex = RichTextBox.GetFirstCharIndexFromLine(startLine);
+                            var firstCharIndex = RichTextBox.GetFirstCharIndexFromLine(endLine + 1);
+                            var endCharIndex = firstCharIndex >= 0 ? firstCharIndex - 1 : RichTextBox.TextLength;
+
+                            RichTextBox.SelectionStart = startCharIndex;
+                            RichTextBox.SelectionLength = endCharIndex - startCharIndex + 1;
+
+                            var selectedText = RichTextBox.SelectedText;
+
+                            var lines = selectedText.GetLines().ToList();
+                            var indentString = new string(' ', TabSize);
+                            lines = lines.Select(i => i.DecreaseLineIndent(indentString)).ToList();
+                            selectedText = lines.Join("\n");
+                            selectedText += Environment.NewLine;
+                            RichTextBox.SelectedText = selectedText;
+
+                            RichTextBox.SelectionStart = startCharIndex;
+                            RichTextBox.SelectionLength = selectedText.Length - (endLine - startLine);
                         }
                     }
                     else if (e.KeyCode == Keys.E && e.Control)

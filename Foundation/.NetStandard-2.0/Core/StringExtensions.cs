@@ -19,6 +19,30 @@ namespace Foundation.Core
         public static string Format(this string format, IFormatProvider provider, params object[] args) => string.Format(provider, format, args);
         public static string Indent(this string source, int indentCount) => source.Indent(IndentString, indentCount);
 
+        public static IEnumerable<string> GetLines(this string source)
+        {
+            using (var stringReader = new StringReader(source))
+            {
+                while (true)
+                {
+                    var line = stringReader.ReadLine();
+                    if (line == null)
+                        break;
+
+                    yield return line;
+                }
+            }
+        }
+
+        public static string DecreaseLineIndent(this string line, string indentString)
+        {
+            Assert.IsTrue(!string.IsNullOrEmpty(line));
+            Assert.IsTrue(!string.IsNullOrEmpty(indentString));
+            var startIndex = line.IndexOf(indentString);
+            var decreasedLine = startIndex == 0 ? line.Substring(indentString.Length) : line;
+            return decreasedLine;
+        }
+
         [Pure]
         public static bool IsNullOrEmpty(this string value) => string.IsNullOrEmpty(value);
 
@@ -107,7 +131,7 @@ namespace Foundation.Core
         private static string Indent(this string source, string indentString, int indentCount)
         {
             indentString = string.Join(string.Empty, Enumerable.Repeat(indentString, indentCount));
-            var stringBuyBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
             using (var stringReader = new StringReader(source))
             {
@@ -119,17 +143,17 @@ namespace Foundation.Core
                         break;
 
                     if (sequence.Next() > 0)
-                        stringBuyBuilder.AppendLine();
+                        stringBuilder.AppendLine();
 
                     if (line.Length > 0)
                     {
-                        stringBuyBuilder.Append(indentString);
-                        stringBuyBuilder.Append(line);
+                        stringBuilder.Append(indentString);
+                        stringBuilder.Append(line);
                     }
                 }
             }
 
-            return stringBuyBuilder.ToString();
+            return stringBuilder.ToString();
         }
 
         private sealed class StringAsList : IList<char>
