@@ -34,13 +34,46 @@ namespace Foundation.Core
             }
         }
 
-        public static string DecreaseLineIndent(this string line, string indentString)
+        public static string IncreaseLineIndent(this string line, int indentSize)
+        {
+            Assert.IsNotNull(line);
+            Assert.IsInRange(indentSize > 0);
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append(new string(' ', indentSize));
+            stringBuilder.Append(line);
+            return stringBuilder.ToString();
+        }
+
+        public static string DecreaseLineIndent(this string line, int indentSize)
         {
             Assert.IsTrue(!string.IsNullOrEmpty(line));
-            Assert.IsTrue(!string.IsNullOrEmpty(indentString));
-            var startIndex = line.IndexOf(indentString);
-            var decreasedLine = startIndex == 0 ? line.Substring(indentString.Length) : line;
+            Assert.IsInRange(indentSize > 0);
+            var index = line.IndexOf(c => !char.IsWhiteSpace(c));
+            string decreasedLine;
+            if (index > 0)
+            {
+                index = Math.Min(index, indentSize);
+                decreasedLine = line.Substring(index);
+            }
+            else
+                decreasedLine = line;
+
             return decreasedLine;
+        }
+
+        public static int IndexOf(this string source, Func<char, bool> predicate)
+        {
+            var result = -1;
+            for (var index = 0; index < source.Length; ++index)
+            {
+                if (predicate(source[index]))
+                {
+                    result = index;
+                    break;
+                }
+            }
+
+            return result;
         }
 
         [Pure]
