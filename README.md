@@ -386,6 +386,8 @@ Edit/Find|Ctrl+F
 Edit/Find Next|F3
 Edit/List Members|Ctrl+J
 Edit/Goto|Ctrl+G
+Edit/Increase Line Indent|Tab
+Edit/Decrease Line Indent|Shift+Tab
 Query/Describe Parameters|Ctrl+P
 Query/Execute Query|Ctrl+E or F5
 Query/Execute Query (Single Row)|Ctrl+1
