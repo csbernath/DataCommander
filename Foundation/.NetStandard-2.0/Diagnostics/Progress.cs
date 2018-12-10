@@ -28,7 +28,10 @@ namespace Foundation.Diagnostics
             Assert.IsTrue(value >= 0);
             var newTaskCount = _currentTaskCount + value;
             Assert.IsTrue(newTaskCount <= _taskCount);
-            var newPercent = _startPercent + (int) ((double) newTaskCount / _taskCount * 100.0 / (_endPercent - _startPercent));
+
+            var newRatio = (double) newTaskCount / _taskCount;
+            var newPercentDouble = _startPercent + newRatio * (_endPercent - _startPercent);
+            var newPercent = (int) newPercentDouble;
             var changed = _currentPercent < newPercent;
             _currentPercent = newPercent;
             _currentTaskCount = newTaskCount;
