@@ -200,6 +200,14 @@ namespace DataCommander.Providers.SqlServer
 
                     #endregion
 
+                    #region SQL Server 2017
+
+                    case "14.00.1000":
+                        description = "Microsoft SQL Server 2017 (RTM)";
+                        break;
+
+                    #endregion
+
                     default:
                         description = null;
                         break;
