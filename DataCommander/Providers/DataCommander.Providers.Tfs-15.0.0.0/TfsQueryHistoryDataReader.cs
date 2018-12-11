@@ -50,17 +50,13 @@ namespace DataCommander.Providers.Tfs
                 var parameters = _command.Parameters;
                 var path = (string) parameters["path"].Value;
                 var version = VersionSpec.Latest;
-                var deletionId = 0;
+                const int deletionId = 0;
                 var parameter = parameters.FirstOrDefault(p => p.ParameterName == "recursion");
                 RecursionType recursion;
                 if (parameter != null && parameter.Value != null && parameter.Value != DBNull.Value)
-                {
                     recursion = Enum<RecursionType>.Parse((string) parameter.Value);
-                }
                 else
-                {
                     recursion = RecursionType.Full;
-                }
 
                 parameter = parameters.FirstOrDefault(p => p.ParameterName == "user");
                 var user = parameter != null ? ValueReader.GetValueOrDefault<string>(parameter.Value) : null;
@@ -72,14 +68,10 @@ namespace DataCommander.Providers.Tfs
                 {
                     maxCount = ValueReader.GetValueOrDefault<int>(parameter.Value);
                     if (maxCount == 0)
-                    {
                         maxCount = (int) parameter.DefaultValue;
-                    }
                 }
                 else
-                {
                     maxCount = (int) TfsDataReaderFactory.Dictionary[_command.CommandText].Parameters["maxCount"].DefaultValue;
-                }
 
                 parameter = parameters.FirstOrDefault(p => p.ParameterName == "includeChanges");
                 var includeChanges = parameter != null ? ValueReader.GetValueOrDefault<bool>(parameters["includeChanges"].Value) : false;
@@ -128,7 +120,6 @@ namespace DataCommander.Providers.Tfs
         }
 
         public override int RecordsAffected => -1;
-
         public override int FieldCount => 6;
 
         private IEnumerable<Tuple<Changeset, int>> AsEnumerable(IEnumerable changesets)

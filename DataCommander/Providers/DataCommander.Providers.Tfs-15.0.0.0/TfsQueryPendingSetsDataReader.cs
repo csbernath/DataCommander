@@ -43,9 +43,7 @@ namespace DataCommander.Providers.Tfs
             bool read;
 
             if (_command.Cancelled)
-            {
                 read = false;
-            }
             else
             {
                 if (_first)
@@ -91,16 +89,13 @@ namespace DataCommander.Providers.Tfs
                     read = true;
                 }
                 else
-                {
                     read = false;
-                }
             }
 
             return read;
         }
 
         public override int RecordsAffected => -1;
-
         public override int FieldCount => 11;
 
         private static IEnumerable<Tuple<int, int>> AsEnumerable(PendingSet[] pendingSets)

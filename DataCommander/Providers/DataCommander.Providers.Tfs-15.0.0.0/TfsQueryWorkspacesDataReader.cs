@@ -14,7 +14,6 @@ namespace DataCommander.Providers.Tfs
         private bool _first = true;
         private Workspace[] _workspaces;
         private IEnumerator<Tuple<int, int>> _enumerator;
-        private int _index;
 
         static TfsQueryWorkspacesDataReader()
         {
@@ -36,10 +35,7 @@ namespace DataCommander.Providers.Tfs
             _command = command;
         }
 
-        public override DataTable GetSchemaTable()
-        {
-            return SchemaTable;
-        }
+        public override DataTable GetSchemaTable() => SchemaTable;
 
         public override bool Read()
         {
@@ -88,18 +84,14 @@ namespace DataCommander.Providers.Tfs
 
                 Values = values;
                 read = true;
-                _index++;
             }
             else
-            {
                 read = false;
-            }
 
             return read;
         }
 
         public override int RecordsAffected => -1;
-
         public override int FieldCount => 9;
 
         private static IEnumerable<Tuple<int, int>> AsEnumerable(Workspace[] workspaces)
