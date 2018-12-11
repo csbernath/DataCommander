@@ -9,7 +9,7 @@ namespace Foundation.Collections.ReadOnly
         public static ReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source)
         {
             var list = source.ToList();
-            return new ReadOnlyList<T>(list);
+            return ReadOnlyListFactory.Create(list);
         }
 
         public static ReadOnlySortedSet<T> ToReadOnlySortedSet<T>(this IEnumerable<T> source) => new ReadOnlySortedSet<T>(source.ToReadOnlyCollection());

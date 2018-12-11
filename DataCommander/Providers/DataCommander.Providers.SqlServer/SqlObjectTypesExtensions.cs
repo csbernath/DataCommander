@@ -14,7 +14,8 @@ namespace DataCommander.Providers.SqlServer
                 list.Add(SqlServerObjectType.SystemTable);
             }
 
-            if (sqlObjectTypes.HasFlag(SqlObjectTypes.View)) list.Add(SqlServerObjectType.View);
+            if (sqlObjectTypes.HasFlag(SqlObjectTypes.View))
+                list.Add(SqlServerObjectType.View);
 
             if (sqlObjectTypes.HasFlag(SqlObjectTypes.Function))
             {

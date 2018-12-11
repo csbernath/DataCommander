@@ -35,14 +35,8 @@ namespace Foundation.Collections.ReadOnly
             InitializeGroups();
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="values"></param>
-        /// <param name="keySelector"></param>
-        public ReadOnlyNonUniqueSortedList(
-            IReadOnlyList<TValue> values,
-            Func<TValue, TKey> keySelector)
-            : this(values, keySelector, Comparer<TKey>.Default.Compare)
+        public ReadOnlyNonUniqueSortedList(IReadOnlyList<TValue> values, Func<TValue, TKey> keySelector) : this(values, keySelector,
+            Comparer<TKey>.Default.Compare)
         {
         }
 
@@ -67,7 +61,7 @@ namespace Foundation.Collections.ReadOnly
                     readOnlyList = new ReadOnlyListSegment<TValue>(_values, currentGroupIndex, count);
                 }
                 else
-                    readOnlyList = EmptyReadOnlyList<TValue>.Value;
+                    readOnlyList = ReadOnlyList<TValue>.Empty;
 
                 Assert.IsNotNull(readOnlyList);
                 return readOnlyList;
@@ -75,10 +69,7 @@ namespace Foundation.Collections.ReadOnly
         }
 
         [Pure]
-        public bool ContainsKey(TKey key)
-        {
-            return IndexOf(key) >= 0;
-        }
+        public bool ContainsKey(TKey key) => IndexOf(key) >= 0;
 
         public IEnumerable<IReadOnlyList<TValue>> GetGroups()
         {

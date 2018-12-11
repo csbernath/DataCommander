@@ -11,6 +11,15 @@ namespace DataCommander.Providers.SqlServer
 {
     internal sealed class Connection : ConnectionBase
     {
+        #region Private Fields
+
+        private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder;
+        private SqlConnection _sqlConnection;
+        private string _serverName;
+        private short _spid;
+
+        #endregion
+
         public Connection(string connectionString)
         {
             _sqlConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString)
@@ -206,6 +215,10 @@ namespace DataCommander.Providers.SqlServer
                         description = "Microsoft SQL Server 2017 (RTM)";
                         break;
 
+                    case "14.00.3045":
+                        description = "Microsoft SQL Server 2017 (RTM-CU12) (KB4464082)";
+                        break;
+
                     #endregion
 
                     default:
@@ -287,14 +300,5 @@ set arithabort on";
             _sqlConnection = null;
             CreateConnection();
         }
-
-        #region Private Fields
-
-        private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder;
-        private SqlConnection _sqlConnection;
-        private string _serverName;
-        private short _spid;
-
-        #endregion
     }
 }

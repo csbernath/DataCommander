@@ -12,29 +12,17 @@ namespace DataCommander.Providers.SqlServer
         string IDbConnectionStringBuilder.ConnectionString
         {
             get => _sqlConnectionStringBuilder.ConnectionString;
-
             set => _sqlConnectionStringBuilder.ConnectionString = value;
         }
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
         {
-            var suppoertedKeywords = new[]
-            {
-                "Integrated Security"
-            };
-
+            var suppoertedKeywords = new[] {"Integrated Security"};
             return suppoertedKeywords.Contains(keyword);
         }
 
-        bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value)
-        {
-            return _sqlConnectionStringBuilder.TryGetValue(keyword, out value);
-        }
-
-        void IDbConnectionStringBuilder.SetValue(string keyword, object value)
-        {
-            _sqlConnectionStringBuilder[keyword] = value;
-        }
+        bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value) => _sqlConnectionStringBuilder.TryGetValue(keyword, out value);
+        void IDbConnectionStringBuilder.SetValue(string keyword, object value) => _sqlConnectionStringBuilder[keyword] = value;
 
         #endregion
     }

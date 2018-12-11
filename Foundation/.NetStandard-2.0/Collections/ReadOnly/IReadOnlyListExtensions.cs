@@ -39,6 +39,6 @@ namespace Foundation.Collections.ReadOnly
                 : default(TSource);
         }
 
-        public static ReadOnlyList<T> ToReadOnlyList<T>(this IReadOnlyList<T> source) => new ReadOnlyList<T>(source);
+        public static ReadOnlyList<T> ToReadOnlyList<T>(this IReadOnlyList<T> source) => ReadOnlyListFactory.Create(source);
     }
 }

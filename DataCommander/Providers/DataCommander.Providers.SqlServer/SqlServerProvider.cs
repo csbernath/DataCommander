@@ -71,10 +71,7 @@ namespace DataCommander.Providers.SqlServer
         string IProvider.Name => "SqlServer";
         DbProviderFactory IProvider.DbProviderFactory => SqlClientFactory.Instance;
 
-        ConnectionBase IProvider.CreateConnection(string connectionString)
-        {
-            return new Connection(connectionString);
-        }
+        ConnectionBase IProvider.CreateConnection(string connectionString) => new Connection(connectionString);
 
         string[] IProvider.KeyWords
         {
@@ -98,10 +95,7 @@ namespace DataCommander.Providers.SqlServer
 
         #region Methods
 
-        public IObjectExplorer CreateObjectExplorer()
-        {
-            return new ObjectExplorer.ObjectExplorer();
-        }
+        public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer.ObjectExplorer();
 
         public void ClearCompletionCache()
         {
@@ -113,10 +107,7 @@ namespace DataCommander.Providers.SqlServer
             return sqlCommand.ToLogString();
         }
 
-        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder()
-        {
-            return new SqlServerConnectionStringBuilder();
-        }
+        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder() => new SqlServerConnectionStringBuilder();
 
         IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
         {
@@ -124,10 +115,7 @@ namespace DataCommander.Providers.SqlServer
             return sqlDataReaderHelper;
         }
 
-        public DbDataAdapter CreateDataAdapter(string selectCommandText, IDbConnection connection)
-        {
-            return null;
-        }
+        public DbDataAdapter CreateDataAdapter(string selectCommandText, IDbConnection connection) => null;
 
         void IProvider.CreateInsertCommand(
             DataTable sourceSchemaTable,
@@ -270,20 +258,8 @@ namespace DataCommander.Providers.SqlServer
                 CommandTimeout = command.CommandTimeout
             };
 
-            //try
-            //{
-            //    SqlCommandBuilder.DeriveParameters(sqlCommand);
-            //}
-            //catch (Exception e)
-            //{
-            //    var message = ((IProvider)this).GetExceptionMessage(e);
-            //    Log.Write(LogLevel.Error, message);
-            //}
-
             SqlCommandBuilder.DeriveParameters(sqlCommand);
-
             command.Parameters.Clear();
-
             while (sqlCommand.Parameters.Count > 0)
             {
                 var parameter = sqlCommand.Parameters[0];
@@ -661,7 +637,7 @@ order by 1", name.Database);
                                         objectName = dataReader.GetString(1);
                                     }
 
-                                    list.Add(new ObjectName(sqlObject, schemaName, objectName));
+                                    list.Add(new ObjectName(schemaName, objectName));
                                 });
 
                                 if (!dataReader.NextResult())

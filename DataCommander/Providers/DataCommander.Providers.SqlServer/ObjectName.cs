@@ -7,11 +7,9 @@ namespace DataCommander.Providers.SqlServer
     {
         private readonly string _objectName;
         private readonly string _schemaName;
-        private SqlObject _sqlObject;
 
-        public ObjectName(SqlObject sqlObject, string schemaName, string objectName)
+        public ObjectName(string schemaName, string objectName)
         {
-            _sqlObject = sqlObject;
             _schemaName = schemaName;
             _objectName = objectName;
         }
@@ -45,11 +43,6 @@ namespace DataCommander.Providers.SqlServer
                     sb.Append(QuoteIdentifier(_schemaName));
                     sb.Append('.');
                 }
-                //else if (this.sqlObject.ParentAlias != null)
-                //{
-                //    sb.Append(this.sqlObject.ParentAlias);
-                //    sb.Append('.');
-                //}
 
                 sb.Append(QuoteIdentifier(_objectName));
 
@@ -59,12 +52,9 @@ namespace DataCommander.Providers.SqlServer
 
         private static string QuoteIdentifier(string unquotedIdentifier)
         {
-            string quotedIdentifier;
-
-            if (unquotedIdentifier.IndexOfAny(new[] {'.', '-'}) >= 0)
-                quotedIdentifier = new SqlCommandBuilder().QuoteIdentifier(unquotedIdentifier);
-            else
-                quotedIdentifier = unquotedIdentifier;
+            var quotedIdentifier = unquotedIdentifier.IndexOfAny(new[] {'.', '-'}) >= 0
+                ? new SqlCommandBuilder().QuoteIdentifier(unquotedIdentifier)
+                : unquotedIdentifier;
 
             return quotedIdentifier;
         }

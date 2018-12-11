@@ -17,9 +17,7 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         }
 
         public DatabaseCollectionNode Databases { get; }
-
         public string Name { get; }
-
         bool ITreeNode.IsLeaf => false;
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
@@ -36,7 +34,6 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
         }
 
         public bool Sortable => false;
-
         string ITreeNode.Query => null;
 
         ContextMenuStrip ITreeNode.ContextMenu
