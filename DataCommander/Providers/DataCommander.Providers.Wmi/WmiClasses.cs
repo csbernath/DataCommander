@@ -7,11 +7,11 @@ namespace DataCommander.Providers.Wmi
 {
     internal sealed class WmiClasses : ITreeNode
     {
-        private readonly ManagementScope scope;
+        private readonly ManagementScope _scope;
 
         public WmiClasses(ManagementScope scope)
         {
-            this.scope = scope;
+            _scope = scope;
         }
 
         public string Name => "Classes";
@@ -20,7 +20,7 @@ namespace DataCommander.Providers.Wmi
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
-            var manClass = new ManagementClass(scope.Path);
+            var manClass = new ManagementClass(_scope.Path);
             var objects = manClass.GetSubclasses();
             var list = new List<ITreeNode>();
 

@@ -5,18 +5,18 @@ namespace DataCommander.Providers.Wmi
 {
     sealed class WmiObjectExplorer : IObjectExplorer
     {
-        private WmiConnection connection;
+        private WmiConnection _connection;
 
         void IObjectExplorer.SetConnection( string connectionString, IDbConnection connection )
         {
-            this.connection = (WmiConnection) connection;
+            _connection = (WmiConnection) connection;
         }
 
         public IEnumerable<ITreeNode> GetChildren( bool refresh )
         {
             return new ITreeNode[]
             {
-                new WmiClasses(connection.Scope)
+                new WmiClasses(_connection.Scope)
             };
         }
 

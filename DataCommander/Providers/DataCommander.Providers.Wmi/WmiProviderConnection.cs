@@ -7,29 +7,29 @@ namespace DataCommander.Providers.Wmi
 {
     internal sealed class WmiProviderConnection : ConnectionBase
     {
-        private readonly WmiConnection wmiConnection;
+        private readonly WmiConnection _wmiConnection;
 
         public WmiProviderConnection(string connectionString)
         {
-            wmiConnection = new WmiConnection(connectionString);
-            Connection = wmiConnection;
+            _wmiConnection = new WmiConnection(connectionString);
+            Connection = _wmiConnection;
         }
 
         public override string ConnectionName { get; set; }
 
         public override Task OpenAsync(CancellationToken cancellationToken)
         {
-            return Task.Factory.StartNew(wmiConnection.Open);
+            return Task.Factory.StartNew(_wmiConnection.Open);
         }
 
         public override IDbCommand CreateCommand()
         {
-            return wmiConnection.CreateCommand();
+            return _wmiConnection.CreateCommand();
         }
 
-        public override string Caption => $"WMI@{wmiConnection.DataSource}";
+        public override string Caption => $"WMI@{_wmiConnection.DataSource}";
 
-        public override string DataSource => wmiConnection.DataSource;
+        public override string DataSource => _wmiConnection.DataSource;
 
         public override string ServerVersion => null;
 

@@ -12,15 +12,15 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
     /// </summary>
     public sealed class SchemaCollectionNode : ITreeNode
     {
-        private readonly IDbConnection connection;
-        private string selectedSchema;
+        private readonly IDbConnection _connection;
+        private string _selectedSchema;
 
         public SchemaCollectionNode(IDbConnection connection)
         {
-            this.connection = connection;
+            _connection = connection;
             var sb = new DbConnectionStringBuilder();
             sb.ConnectionString = connection.ConnectionString;
-            selectedSchema = (string) sb[ConnectionStringKeyword.UserId];
+            _selectedSchema = (string) sb[ConnectionStringKeyword.UserId];
         }
 
         public string Name => "Schemas";
@@ -47,12 +47,12 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         public bool Sortable => false;
         public string Query => null;
         public ContextMenuStrip ContextMenu => null;
-        public IDbConnection Connection => connection;
+        public IDbConnection Connection => _connection;
 
         public string SelectedSchema
         {
-            get => selectedSchema;
-            set => selectedSchema = value;
+            get => _selectedSchema;
+            set => _selectedSchema = value;
         }
     }
 }

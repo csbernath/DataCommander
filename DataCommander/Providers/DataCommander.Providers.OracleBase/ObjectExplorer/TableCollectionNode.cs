@@ -12,7 +12,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 	{
 		public TableCollectionNode( SchemaNode schema )
 		{
-			this.schema = schema;
+			_schema = schema;
 		}
 
 		public string Name => "Tables";
@@ -22,16 +22,16 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         public IEnumerable<ITreeNode> GetChildren( bool refresh )
 		{
 			var folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
-			var key = schema.SchemasNode.Connection.Database + "." + schema.Name;
+			var key = _schema.SchemasNode.Connection.Database + "." + _schema.Name;
 			string[] tables;
 			var contains = folder.Attributes.TryGetAttributeValue( key, out tables );
 
 			if (!contains || refresh)
 			{
 				var commandText = "select table_name from all_tables where owner = '{0}' order by table_name";
-				commandText = string.Format( commandText, schema.Name );
+				commandText = string.Format( commandText, _schema.Name );
 
-                var command = schema.SchemasNode.Connection.CreateCommand();
+                var command = _schema.SchemasNode.Connection.CreateCommand();
                 command.CommandText = commandText;
 				// TODO
                 // command.FetchSize = 256 * 1024;
@@ -52,7 +52,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 
 			for (var i = 0; i < tables.Length; i++)
 			{
-				treeNodes[ i ] = new TableNode( schema, tables[ i ], false );
+				treeNodes[ i ] = new TableNode( _schema, tables[ i ], false );
 			}
 
 			return treeNodes;
@@ -64,6 +64,6 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 
         public ContextMenuStrip ContextMenu => null;
 
-        readonly SchemaNode schema;
+        readonly SchemaNode _schema;
 	}
 }

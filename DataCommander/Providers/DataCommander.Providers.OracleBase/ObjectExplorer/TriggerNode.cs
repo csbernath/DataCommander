@@ -8,18 +8,18 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
     /// </summary>
     public sealed class TriggerNode : ITreeNode
     {
-		private readonly TableNode tableNode;
-		private readonly string name;
+		private readonly TableNode _tableNode;
+		private readonly string _name;
 
         public TriggerNode(
           TableNode tableNode,
           string name)
         {
-            this.tableNode = tableNode;
-            this.name = name;
+            _tableNode = tableNode;
+            _name = name;
         }
 
-        public string Name => name;
+        public string Name => _name;
 
         public bool IsLeaf => true;
 
@@ -30,7 +30,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 
         public bool Sortable => false;
 
-        public string Query => "select * from " + tableNode.Schema.Name + "." + name;
+        public string Query => "select * from " + _tableNode.Schema.Name + "." + _name;
 
         public ContextMenuStrip ContextMenu => null;
     }

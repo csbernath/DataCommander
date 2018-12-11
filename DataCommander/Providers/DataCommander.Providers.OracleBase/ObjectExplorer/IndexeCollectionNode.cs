@@ -7,11 +7,11 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 {
     internal class IndexeCollectionNode : ITreeNode
     {
-        private readonly TableNode table;
+        private readonly TableNode _table;
 
         public IndexeCollectionNode(TableNode tableNode)
         {
-            table = tableNode;
+            _table = tableNode;
         }
 
         public string Name => "Indexes";
@@ -21,8 +21,8 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             var commandText = "select index_name from sys.all_indexes where owner = '{0}' and table_name = '{1}' order by index_name";
-            commandText = string.Format(commandText, table.Schema.Name, table.Name);
-            var command = table.Schema.SchemasNode.Connection.CreateCommand();
+            commandText = string.Format(commandText, _table.Schema.Name, _table.Name);
+            var command = _table.Schema.SchemasNode.Connection.CreateCommand();
             command.CommandText = commandText;
             // TODO
             // command.FetchSize = 256 * 1024;
@@ -40,7 +40,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 
             for (var i = 0; i < indexes.Length; i++)
             {
-                treeNodes[i] = new IndexNode(table, indexes[i]);
+                treeNodes[i] = new IndexNode(_table, indexes[i]);
             }
 
             return treeNodes;

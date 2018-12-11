@@ -7,18 +7,15 @@ namespace DataCommander.Providers.Wmi
 {
     class WmiClass : ITreeNode
     {
-        public WmiClass(ManagementClass manClass)
-        {
-            this.manClass = manClass;
-        }
+        public WmiClass(ManagementClass manClass) => _manClass = manClass;
 
-        public string Name => manClass.ClassPath.ClassName;
+        public string Name => _manClass.ClassPath.ClassName;
 
         public bool IsLeaf => false;
 
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
-            var objects = manClass.GetSubclasses();
+            var objects = _manClass.GetSubclasses();
             var list = new ArrayList();
 
             foreach (ManagementClass subClass in objects)
@@ -39,6 +36,6 @@ namespace DataCommander.Providers.Wmi
 
         public ContextMenuStrip ContextMenu => null;
 
-        readonly ManagementClass manClass;
+        private readonly ManagementClass _manClass;
     }
 }

@@ -7,11 +7,11 @@ namespace DataCommander.Providers.Wmi
 {
     internal sealed class WmiConnection : IDbConnection
     {
-        private readonly string connectionString;
+        private readonly string _connectionString;
 
         public WmiConnection( string connectionString )
         {
-            this.connectionString = connectionString;
+            _connectionString = connectionString;
         }
 
         public void Dispose()
@@ -44,7 +44,7 @@ namespace DataCommander.Providers.Wmi
         public void Open()
         {
             var sb = new DbConnectionStringBuilder();
-            sb.ConnectionString = connectionString;
+            sb.ConnectionString = _connectionString;
             object value;            
             var contains = sb.TryGetValue( ConnectionStringKeyword.DataSource, out value );
             string dataSource;

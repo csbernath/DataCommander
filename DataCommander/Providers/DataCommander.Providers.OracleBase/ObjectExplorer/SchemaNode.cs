@@ -8,18 +8,18 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
     /// </summary>
     public sealed class SchemaNode : ITreeNode
     {
-        private readonly SchemaCollectionNode schemasNode;
-        private readonly string name;
+        private readonly SchemaCollectionNode _schemasNode;
+        private readonly string _name;
 
         public SchemaNode(
             SchemaCollectionNode schemasNode,
             string name)
         {
-            this.schemasNode = schemasNode;
-            this.name = name;
+            _schemasNode = schemasNode;
+            _name = name;
         }
 
-        public string Name => name;
+        public string Name => _name;
 
         public bool IsLeaf => false;
 
@@ -42,6 +42,6 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         public bool Sortable => false;
         public string Query => null;
         public ContextMenuStrip ContextMenu => null;
-        public SchemaCollectionNode SchemasNode => schemasNode;
+        public SchemaCollectionNode SchemasNode => _schemasNode;
     }
 }

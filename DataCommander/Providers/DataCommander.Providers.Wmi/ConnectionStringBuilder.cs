@@ -5,13 +5,13 @@ namespace DataCommander.Providers.Wmi
 {
     internal sealed class ConnectionStringBuilder : IDbConnectionStringBuilder
     {
-        private readonly DbConnectionStringBuilder dbConnectionStringBuilder = new SqlConnectionStringBuilder();
+        private readonly DbConnectionStringBuilder _dbConnectionStringBuilder = new SqlConnectionStringBuilder();
 
         string IDbConnectionStringBuilder.ConnectionString
         {
-            get => dbConnectionStringBuilder.ConnectionString;
+            get => _dbConnectionStringBuilder.ConnectionString;
 
-            set => dbConnectionStringBuilder.ConnectionString = value;
+            set => _dbConnectionStringBuilder.ConnectionString = value;
         }
 
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
@@ -21,12 +21,12 @@ namespace DataCommander.Providers.Wmi
 
         void IDbConnectionStringBuilder.SetValue(string keyword, object value)
         {
-            dbConnectionStringBuilder[keyword] = value;
+            _dbConnectionStringBuilder[keyword] = value;
         }
 
         bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value)
         {
-            return dbConnectionStringBuilder.TryGetValue(keyword, out value);
+            return _dbConnectionStringBuilder.TryGetValue(keyword, out value);
         }
     }
 }

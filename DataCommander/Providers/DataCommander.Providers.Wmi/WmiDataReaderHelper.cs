@@ -9,14 +9,14 @@ namespace DataCommander.Providers.Wmi
     {
         public WmiDataReaderHelper(IDataReader dataReader)
         {
-            this.dataReader = dataReader;
+            _dataReader = dataReader;
         }
 
         int IDataReaderHelper.GetValues(object[] values)
         {
-            return dataReader.GetValues(values);
+            return _dataReader.GetValues(values);
         }
 
-        readonly IDataReader dataReader;
+        readonly IDataReader _dataReader;
     }
 }

@@ -6,9 +6,9 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 {
     public sealed class PackageCollectionNode : ITreeNode
     {
-        private readonly SchemaNode schema;
+        private readonly SchemaNode _schema;
 
-        public PackageCollectionNode(SchemaNode schema) => this.schema = schema;
+        public PackageCollectionNode(SchemaNode schema) => _schema = schema;
 
         public string Name => "Packages";
         public bool IsLeaf => false;
@@ -16,14 +16,14 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         public IEnumerable<ITreeNode> GetChildren(bool refresh)
         {
             var folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
-            var key = schema.SchemasNode.Connection.Database + "." + schema.Name;
+            var key = _schema.SchemasNode.Connection.Database + "." + _schema.Name;
             string[] packages;
             var contains = folder.Attributes.TryGetAttributeValue(key, out packages);
 
             if (!contains || refresh)
             {
                 var commandText = "select object_name from all_objects where owner = '{0}' and object_type = 'PACKAGE' order by object_name";
-                commandText = string.Format(commandText, schema.Name);
+                commandText = string.Format(commandText, _schema.Name);
                 var executor = Schema.SchemasNode.Connection.CreateCommandExecutor();
                 var dataTable = executor.ExecuteDataTable(new ExecuteReaderRequest(commandText));
                 var count = dataTable.Rows.Count;
@@ -38,14 +38,14 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
             var treeNodes = new ITreeNode[packages.Length];
 
             for (var i = 0; i < packages.Length; i++)
-                treeNodes[i] = new PackageNode(schema, packages[i]);
+                treeNodes[i] = new PackageNode(_schema, packages[i]);
 
             return treeNodes;
         }
 
         public bool Sortable => false;
         public string Query => null;
-        public SchemaNode Schema => schema;
+        public SchemaNode Schema => _schema;
         public ContextMenuStrip ContextMenu => null;
     }
 }

@@ -3,31 +3,22 @@ using System.Data;
 
 namespace DataCommander.Providers.OracleBase.ObjectExplorer
 {
-    /// <summary>
-    /// Summary description for ObjectBrowser.
-    /// </summary>
     public sealed class ObjectExplorer : IObjectExplorer
     {
-        private IDbConnection connection;
-        private SchemaCollectionNode schemasNode;
+        private IDbConnection _connection;
+        private SchemaCollectionNode _schemasNode;
 
-        public IDbConnection Connection => connection;
-
-        public IEnumerable<ITreeNode> GetChildren(bool refresh)
-        {
-            return new ITreeNode[] { schemasNode };
-        }
-
+        public IDbConnection Connection => _connection;
+        public IEnumerable<ITreeNode> GetChildren(bool refresh) => new ITreeNode[] {_schemasNode};
         public bool Sortable => false;
-
-        public SchemaCollectionNode SchemasNode => schemasNode;
+        public SchemaCollectionNode SchemasNode => _schemasNode;
 
         #region IObjectExplorer Members
 
-        void IObjectExplorer.SetConnection( string connectionString, IDbConnection connection )
+        void IObjectExplorer.SetConnection(string connectionString, IDbConnection connection)
         {
-            this.connection = connection;
-            schemasNode = new SchemaCollectionNode( this.connection );
+            _connection = connection;
+            _schemasNode = new SchemaCollectionNode(_connection);
         }
 
         #endregion

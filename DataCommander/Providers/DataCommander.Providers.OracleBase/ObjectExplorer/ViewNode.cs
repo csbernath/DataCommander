@@ -7,16 +7,16 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 {
     public sealed class ViewNode : ITreeNode
     {
-        private readonly ViewCollectionNode parent;
-        private readonly string name;
+        private readonly ViewCollectionNode _parent;
+        private readonly string _name;
 
         public ViewNode(ViewCollectionNode parent, string name)
         {
-            this.parent = parent;
-            this.name = name;
+            _parent = parent;
+            _name = name;
         }
 
-        public string Name => name;
+        public string Name => _name;
 
         public bool IsLeaf => true;
 
@@ -31,7 +31,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         {
             get
             {
-                var query = $"select * from {parent.SchemaNode.Name}.{name}";
+                var query = $"select * from {_parent.SchemaNode.Name}.{_name}";
                 return query;
             }
         }
@@ -39,9 +39,9 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         private void menuItemScriptObject_Click(object sender, EventArgs e)
         {
             var commandText = "select text from sys.all_views where owner = '{0}' and view_name = '{1}'";
-            commandText = string.Format(commandText, parent.SchemaNode.Name, name);
+            commandText = string.Format(commandText, _parent.SchemaNode.Name, _name);
 
-            using (var command = parent.SchemaNode.SchemasNode.Connection.CreateCommand())
+            using (var command = _parent.SchemaNode.SchemasNode.Connection.CreateCommand())
             {
                 command.CommandText = commandText;
                 //  TODO

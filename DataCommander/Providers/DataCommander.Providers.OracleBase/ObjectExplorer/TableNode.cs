@@ -8,21 +8,21 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 	/// </summary>
     public sealed class TableNode : ITreeNode
 	{
-		private readonly SchemaNode schema;
-		private readonly string name;
-		private readonly bool showFullName;
+		private readonly SchemaNode _schema;
+		private readonly string _name;
+		private readonly bool _showFullName;
 
 		public TableNode(
 			SchemaNode schema,
 			string name,
 			bool showFullName )
 		{
-			this.schema = schema;
-			this.name = name;
-			this.showFullName = showFullName;
+			_schema = schema;
+			_name = name;
+			_showFullName = showFullName;
 		}
 
-		public string Name => showFullName ? schema.Name + "." + name : name;
+		public string Name => _showFullName ? _schema.Name + "." + _name : _name;
 
         public bool IsLeaf => false;
 
@@ -37,10 +37,10 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 
 		public bool Sortable => false;
 
-        public string Query => "select * from " + schema.Name + "." + name;
+        public string Query => "select * from " + _schema.Name + "." + _name;
 
         public ContextMenuStrip ContextMenu => null;
 
-        public SchemaNode Schema => schema;
+        public SchemaNode Schema => _schema;
 	}
 }

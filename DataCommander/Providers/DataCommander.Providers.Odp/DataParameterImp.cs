@@ -4,17 +4,11 @@ namespace DataCommander.Providers.Odp
 {
     internal sealed class DataParameterImp : DataParameterBase
     {
-        public DataParameterImp( OracleParameter parameter )
-            : base( parameter, parameter.Size, parameter.Precision, parameter.Scale )
-        {
-            this.parameter = parameter;
-        }
+        public DataParameterImp(OracleParameter parameter)
+            : base(parameter, parameter.Size, parameter.Precision, parameter.Scale) => this._parameter = parameter;
 
-        protected override void SetSize( int size )
-        {
-            parameter.Size = size;
-        }
+        protected override void SetSize(int size) => _parameter.Size = size;
 
-        readonly OracleParameter parameter;
+        private readonly OracleParameter _parameter;
     }
 }

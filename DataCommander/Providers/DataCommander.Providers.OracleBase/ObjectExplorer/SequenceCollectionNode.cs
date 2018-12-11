@@ -7,11 +7,11 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
 {
     internal sealed class SequenceCollectionNode : ITreeNode
     {
-        private readonly SchemaNode schemaNode;
+        private readonly SchemaNode _schemaNode;
 
         public SequenceCollectionNode(SchemaNode schemaNode)
         {
-            this.schemaNode = schemaNode;
+            _schemaNode = schemaNode;
         }
 
         #region ITreeNode Members
@@ -25,15 +25,15 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
             var commandText =
                 $@"select	s.SEQUENCE_NAME
 from	SYS.ALL_SEQUENCES s
-where	s.SEQUENCE_OWNER	= '{schemaNode.Name}'
+where	s.SEQUENCE_OWNER	= '{_schemaNode.Name}'
 order by s.SEQUENCE_NAME
 ";
-            var executor = schemaNode.SchemasNode.Connection.CreateCommandExecutor();
+            var executor = _schemaNode.SchemasNode.Connection.CreateCommandExecutor();
 
             return executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord =>
             {
                 var name = dataRecord.GetString(0);
-                return (ITreeNode) new SequenceNode(schemaNode, name);
+                return (ITreeNode) new SequenceNode(_schemaNode, name);
             });
         }
 
