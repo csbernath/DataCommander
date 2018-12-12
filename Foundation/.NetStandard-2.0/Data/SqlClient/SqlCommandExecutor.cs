@@ -11,10 +11,7 @@ namespace Foundation.Data.SqlClient
     {
         private readonly string _connectionString;
 
-        public SqlCommandExecutor(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
+        public SqlCommandExecutor(string connectionString) => _connectionString = connectionString;
 
         public void Execute(Action<IDbConnection> execute)
         {

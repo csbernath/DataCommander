@@ -5,17 +5,8 @@ using ADODB;
 
 namespace DataCommander.Providers
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class OleDbHelper
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="commandText"></param>
-        /// <param name="connection"></param>
-        /// <returns></returns>
         public static int ExecuteNonQuery(string commandText, OleDbConnection connection)
         {
             var command = connection.CreateCommand();
@@ -23,11 +14,6 @@ namespace DataCommander.Providers
             return command.ExecuteNonQuery();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="adodbRecordset"></param>
-        /// <returns></returns>
         public static DataTable Convert(object adodbRecordset)
         {
             var adapter = new OleDbDataAdapter();
@@ -36,12 +22,6 @@ namespace DataCommander.Providers
             return dataTable;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="rs"></param>
-        /// <param name="columns"></param>
-        /// <returns></returns>
         [CLSCompliant(false)]
         public static DataTable Convert(_Recordset rs, out OleDbParameter[] columns)
         {

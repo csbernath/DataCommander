@@ -47,8 +47,7 @@ namespace Foundation.Log
             log.Trace(messageWithCallerInformation);
         }
 
-        public static void Trace(this ILog log, CallerInformation callerInformation, string format,
-            params object[] args)
+        public static void Trace(this ILog log, CallerInformation callerInformation, string format, params object[] args)
         {
             Assert.IsNotNull(log, nameof(log));
             Assert.IsNotNull(callerInformation, nameof(callerInformation));

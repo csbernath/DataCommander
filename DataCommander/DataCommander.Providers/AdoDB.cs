@@ -6,16 +6,8 @@ using Foundation.Text;
 
 namespace DataCommander.Providers
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class AdoDb
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="xml"></param>
-        /// <returns></returns>
         [CLSCompliant(false)]
         public static RecordsetClass XmlToRecordset(string xml)
         {

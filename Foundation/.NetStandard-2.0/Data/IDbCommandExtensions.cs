@@ -7,17 +7,8 @@ using Foundation.Assertions;
 
 namespace Foundation.Data
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class DbCommandExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="parameterName"></param>
-        /// <param name="value"></param>
         public static void AddParameterIfNotNull(this IDbCommand command, string parameterName, object value)
         {
             Assert.IsNotNull(command);
@@ -32,12 +23,6 @@ namespace Foundation.Data
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
         public static DataSet ExecuteDataSet(this IDbCommand command, CancellationToken cancellationToken)
         {
             var dataSet = new DataSet();
@@ -45,12 +30,6 @@ namespace Foundation.Data
             return dataSet;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
         public static DataTable ExecuteDataTable(this IDbCommand command, CancellationToken cancellationToken)
         {
             Assert.IsNotNull(command);
@@ -64,12 +43,6 @@ namespace Foundation.Data
             return dataTable;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="command"></param>
-        /// <returns></returns>
         public static T ExecuteScalarValue<T>(this IDbCommand command)
         {
             Assert.IsNotNull(command);
@@ -79,12 +52,6 @@ namespace Foundation.Data
             return (T) scalar;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="command"></param>
-        /// <returns></returns>
         public static T ExecuteScalarValueOrDefault<T>(this IDbCommand command)
         {
             Assert.IsNotNull(command);
@@ -93,17 +60,7 @@ namespace Foundation.Data
             return ValueReader.GetValueOrDefault<T>(scalar);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="dataSet"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public static int Fill(
-            this IDbCommand command,
-            DataSet dataSet,
-            CancellationToken cancellationToken)
+        public static int Fill(this IDbCommand command, DataSet dataSet, CancellationToken cancellationToken)
         {
             Assert.IsNotNull(command);
             Assert.IsNotNull(dataSet);
@@ -206,11 +163,6 @@ namespace Foundation.Data
             return rowCount;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
         public static string ToLogString(this IDbCommand command)
         {
             Assert.IsNotNull(command);

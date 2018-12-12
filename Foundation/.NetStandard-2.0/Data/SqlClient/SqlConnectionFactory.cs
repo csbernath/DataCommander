@@ -10,17 +10,12 @@ namespace Foundation.Data.SqlClient
 
         public event EventHandler InfoMessage;
 
-        public SqlConnectionFactory(
-            SqlConnection sqlConnection,
-            IDbConnection connection)
+        public SqlConnectionFactory(SqlConnection sqlConnection, IDbConnection connection)
         {
             sqlConnection.InfoMessage += InfoMessageEvent;
             _connection = connection;
         }
 
-        private void InfoMessageEvent(object sender, SqlInfoMessageEventArgs e)
-        {
-            InfoMessage?.Invoke(_connection, e);
-        }
+        private void InfoMessageEvent(object sender, SqlInfoMessageEventArgs e) => InfoMessage?.Invoke(_connection, e);
     }
 }

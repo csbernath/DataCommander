@@ -37,18 +37,12 @@ namespace Foundation.Diagnostics
                 {
                     var originalMin = Interlocked.CompareExchange(ref _min, item, min);
                     if (originalMin == min)
-                    {
                         break;
-                    }
                     else
-                    {
                         Thread.SpinWait(1);
-                    }
                 }
                 else
-                {
                     break;
-                }
             }
 
             while (true)
@@ -58,18 +52,12 @@ namespace Foundation.Diagnostics
                 {
                     var originalMax = Interlocked.CompareExchange(ref _max, item, max);
                     if (originalMax == max)
-                    {
                         break;
-                    }
                     else
-                    {
                         Thread.SpinWait(1);
-                    }
                 }
                 else
-                {
                     break;
-                }
             }
         }
 
