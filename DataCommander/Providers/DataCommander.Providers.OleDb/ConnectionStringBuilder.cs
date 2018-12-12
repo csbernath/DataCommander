@@ -1,4 +1,5 @@
-﻿using System.Data.OleDb;
+﻿using System;
+using System.Data.OleDb;
 
 namespace DataCommander.Providers.OleDb
 {
@@ -13,19 +14,9 @@ namespace DataCommander.Providers.OleDb
             set => oleDbConnectionStringBuilder.ConnectionString = value;
         }
 
-        bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
-        {
-            return true;
-        }
-
-        void IDbConnectionStringBuilder.SetValue(string keyword, object value)
-        {
-            oleDbConnectionStringBuilder[keyword] = value;
-        }
-
-        bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value)
-        {
-            return oleDbConnectionStringBuilder.TryGetValue(keyword, out value);
-        }
+        bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword) => true;
+        void IDbConnectionStringBuilder.SetValue(string keyword, object value) => oleDbConnectionStringBuilder[keyword] = value;
+        bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value) => oleDbConnectionStringBuilder.TryGetValue(keyword, out value);
+        bool IDbConnectionStringBuilder.Remove(string keyword) => throw new NotImplementedException();
     }
 }

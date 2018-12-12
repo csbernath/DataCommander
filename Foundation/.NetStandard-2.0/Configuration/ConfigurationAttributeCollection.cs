@@ -78,8 +78,7 @@ namespace Foundation.Configuration
 
         public bool Remove(string name)
         {
-            ConfigurationAttribute attribute;
-            var contains = _nameIndex.TryGetValue(name, out attribute);
+            var contains = _nameIndex.TryGetValue(name, out var attribute);
             bool succeeded;
 
             if (contains)

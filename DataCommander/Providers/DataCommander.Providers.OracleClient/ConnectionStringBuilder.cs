@@ -13,5 +13,6 @@ namespace DataCommander.Providers.OracleClient
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword) => throw new NotImplementedException();
         void IDbConnectionStringBuilder.SetValue(string keyword, object value) => throw new NotImplementedException();
         bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value) => throw new NotImplementedException();
+        bool IDbConnectionStringBuilder.Remove(string keyword) => throw new NotImplementedException();
     }
 }

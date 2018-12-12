@@ -225,6 +225,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AsyncDataAdapterCommand.cs" />
+    <Compile Include="Connection\ConnectionPropertiesRepository.cs" />
     <Compile Include="Connection\ConnectionStringKeyword.cs" />
     <Compile Include="Connection\DbConnectionStringBuilderExtensions.cs" />
     <Compile Include="Connection\InfoMessageFactory.cs" />

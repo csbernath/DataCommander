@@ -25,5 +25,7 @@ namespace DataCommander.Providers.Odp
         {
             throw new NotImplementedException();
         }
+
+        bool IDbConnectionStringBuilder.Remove(string keyword) => throw new NotImplementedException();
     }
 }

@@ -131,7 +131,7 @@ namespace DataCommander.Providers.Connection
             this._btnCancel = new System.Windows.Forms.Button();
             this._newButton = new System.Windows.Forms.Button();
             this._dataGrid = new DoubleBufferedDataGridView();
-            ((System.ComponentModel.ISupportInitialize)(this._dataGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this._dataGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // btnOK
@@ -156,7 +156,8 @@ namespace DataCommander.Providers.Connection
             // 
             // newButton
             // 
-            this._newButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this._newButton.Anchor =
+                ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this._newButton.Location = new System.Drawing.Point(12, 637);
             this._newButton.Name = "_newButton";
             this._newButton.Size = new System.Drawing.Size(75, 24);
@@ -167,9 +168,9 @@ namespace DataCommander.Providers.Connection
             // dataGrid
             // 
             this._dataGrid.AllowUserToAddRows = false;
-            this._dataGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                                                                          | System.Windows.Forms.AnchorStyles.Left)
-                                                                         | System.Windows.Forms.AnchorStyles.Right)));
+            this._dataGrid.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                                                                            | System.Windows.Forms.AnchorStyles.Left)
+                                                                           | System.Windows.Forms.AnchorStyles.Right)));
             this._dataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this._dataGrid.Location = new System.Drawing.Point(8, 8);
             this._dataGrid.Name = "_dataGrid";
@@ -192,14 +193,14 @@ namespace DataCommander.Providers.Connection
             this.Controls.Add(this._btnCancel);
             this.Controls.Add(this._dataGrid);
             this.Controls.Add(this._btnOk);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ConnectionForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Connect to database";
-            ((System.ComponentModel.ISupportInitialize)(this._dataGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this._dataGrid)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -208,29 +209,15 @@ namespace DataCommander.Providers.Connection
 
         public long Duration { get; private set; }
 
-        private void LoadConnection(ConfigurationNode folder, DataRow row)
+        private void LoadConnection(ConfigurationNode configurationNode, DataRow row)
         {
-            var connectionProperties = new ConnectionProperties();
-            connectionProperties.Load(folder);
+            var connectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(configurationNode);
             row["ConnectionName"] = connectionProperties.ConnectionName;
             row["ProviderName"] = connectionProperties.ProviderName;
             row[ConnectionStringKeyword.DataSource] = connectionProperties.DataSource;
             row[ConnectionStringKeyword.InitialCatalog] = connectionProperties.InitialCatalog;
             row[ConnectionStringKeyword.IntegratedSecurity] = connectionProperties.IntegratedSecurity;
             row[ConnectionStringKeyword.UserId] = connectionProperties.UserId;
-
-            //var provider = ProviderFactory.CreateProvider(connectionProperties.ProviderName);
-            //var connectionStringBuilder = provider.CreateConnectionStringBuilder();
-            //connectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
-
-            //foreach (DataColumn dataColumn in this.dataTable.Columns.Cast<DataColumn>().Skip(2))
-            //{
-            //    object value;
-            //    if (connectionStringBuilder.TryGetValue(dataColumn.ColumnName, out value))
-            //    {
-            //        row[dataColumn.ColumnName] = value;
-            //    }
-            //}
         }
 
         private void btnOK_Click(object sender, EventArgs e)
@@ -253,8 +240,7 @@ namespace DataCommander.Providers.Connection
 
             foreach (var node in SelectedConfigurationNodes)
             {
-                var connectionProperties = new ConnectionProperties();
-                connectionProperties.Load(node);
+                var connectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(node);
                 ConfigurationWriter.WriteNode(xmlTextWriter, node);
             }
 
@@ -285,8 +271,7 @@ namespace DataCommander.Providers.Connection
 
                 foreach (var configurationNode in configurationNodes)
                 {
-                    var connectionProperties = new ConnectionProperties();
-                    connectionProperties.Load(configurationNode);
+                    var connectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(configurationNode);
                     Add(connectionProperties);
                 }
             }
@@ -317,18 +302,15 @@ namespace DataCommander.Providers.Connection
 
         private void Edit_Click(object sender, EventArgs e)
         {
-            var folder = SelectedConfigurationNode;
-            var connectionProperties = new ConnectionProperties();
-            connectionProperties.Load(folder);
+            var configurationNode = SelectedConfigurationNode;
             var form = new ConnectionStringBuilderForm();
-            form.ConnectionProperties = connectionProperties;
+            form.ConnectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(configurationNode);
             var dialogResult = form.ShowDialog();
             if (dialogResult == DialogResult.OK)
             {
-                connectionProperties = form.ConnectionProperties;
-                connectionProperties.Save(folder);
+                ConnectionPropertiesRepository.Save(form.ConnectionProperties, configurationNode);
                 var row = _dataTable.DefaultView[_dataGrid.CurrentCell.RowIndex].Row;
-                LoadConnection(folder, row);
+                LoadConnection(configurationNode, row);
             }
         }
 
@@ -446,7 +428,7 @@ namespace DataCommander.Providers.Connection
 
                 foreach (DataGridViewRow dataGridViewRow in _dataGrid.SelectedRows)
                 {
-                    var dataRowView = (DataRowView)dataGridViewRow.DataBoundItem;
+                    var dataRowView = (DataRowView) dataGridViewRow.DataBoundItem;
                     var row = dataRowView.Row;
                     var index = _dataTable.Rows.IndexOf(row);
                     selectedCount++;
@@ -503,18 +485,12 @@ namespace DataCommander.Providers.Connection
         private void Connect(ConfigurationNode folder)
         {
             if (_isDirty)
-            {
                 if (MessageBox.Show(this, "Do you want to save changes?", null, MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
                     DataCommanderApplication.Instance.SaveApplicationData();
-                }
-            }
 
             using (new CursorManager(Cursors.WaitCursor))
             {
-                var connectionProperties = new ConnectionProperties();
-                connectionProperties.Load(folder);
-                connectionProperties.LoadProtectedPassword(folder);
+                var connectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(folder);
                 var form = new OpenConnectionForm(connectionProperties);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
@@ -592,7 +568,7 @@ namespace DataCommander.Providers.Connection
             var node = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
             var subFolder = new ConfigurationNode(null);
             node.AddChildNode(subFolder);
-            connectionProperties.Save(subFolder);
+            ConnectionPropertiesRepository.Save(connectionProperties,subFolder);
             var row = _dataTable.NewRow();
             LoadConnection(subFolder, row);
             _dataTable.Rows.Add(row);

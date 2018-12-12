@@ -33,19 +33,14 @@ namespace DataCommander.Providers.Connection
             _providers = list;
 
             foreach (var provider in _providers)
-            {
                 providersComboBox.Items.Add(provider);
-            }
         }
 
         private static string TryGetValue(IDbConnectionStringBuilder connectionStringBuilder, string keyword)
         {
-            object value;
-
-            string valueString = connectionStringBuilder.TryGetValue(keyword, out value)
-                ? valueString = (string)value
+            string valueString = connectionStringBuilder.TryGetValue(keyword, out var value)
+                ? (string) value
                 : null;
-
             return valueString;
         }
 
@@ -316,7 +311,11 @@ namespace DataCommander.Providers.Connection
             }
 
             SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.UserId, userIdTextBox.Text);
-            SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.Password, passwordTextBox.Text);
+
+            if (passwordTextBox.Text.Length > 0)
+                SetValue(dbConnectionStringBuilder, ConnectionStringKeyword.Password, passwordTextBox.Text);
+            else
+                dbConnectionStringBuilder.Remove(ConnectionStringKeyword.Password);
         }
 
         private void SaveTo(ConnectionProperties connectionProperties)
@@ -326,33 +325,6 @@ namespace DataCommander.Providers.Connection
             _dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
             SaveTo(_dbConnectionStringBuilder);
 
-            //var keywords = new List<string>();
-
-            //foreach (string keyword in this.dbConnectionStringBuilder.Keys)
-            //{
-            //    object obj;
-            //    bool contains = this.dbConnectionStringBuilder.TryGetValue(keyword, out obj);
-
-            //    if (contains && obj != null)
-            //    {
-            //        string s = obj.ToString();
-            //        if (s.Length == 0)
-            //        {
-            //            contains = false;
-            //        }
-            //    }
-
-            //    if (!contains)
-            //    {
-            //        keywords.Add(keyword);
-            //    }
-            //}
-
-            //foreach (string keyword in keywords)
-            //{
-            //    this.dbConnectionStringBuilder.Remove(keyword);
-            //}
-
             connectionProperties.ConnectionName = connectionNameTextBox.Text;
             connectionProperties.ProviderName = providersComboBox.Text;
             connectionProperties.DataSource = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.DataSource);
@@ -361,12 +333,20 @@ namespace DataCommander.Providers.Connection
             bool? integratedSecurity = null;
             object value;
             if (_dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out value))
-            {
-                integratedSecurity = (bool)value;
-            }
+                integratedSecurity = (bool) value;
 
             connectionProperties.IntegratedSecurity = integratedSecurity;
             connectionProperties.UserId = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.UserId);
+
+            if (_dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.Password, out value))
+            {
+                var password = (string) value;
+                connectionProperties.Password = password.Length > 0
+                    ? new Option<string>(password)
+                    : null;
+            }
+            else
+                connectionProperties.Password = null;
 
             connectionProperties.ConnectionString = _dbConnectionStringBuilder.ConnectionString;
         }
@@ -380,9 +360,7 @@ namespace DataCommander.Providers.Connection
                 var form = new OpenConnectionForm(connectionProperties);
 
                 if (form.ShowDialog() == DialogResult.OK)
-                {
                     MessageBox.Show("The connection was tested successfully.");
-                }
             }
             catch (Exception ex)
             {

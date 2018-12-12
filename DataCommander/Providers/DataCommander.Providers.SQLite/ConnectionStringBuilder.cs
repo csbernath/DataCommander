@@ -1,4 +1,5 @@
-﻿using System.Data.SQLite;
+﻿using System;
+using System.Data.SQLite;
 using DataCommander.Providers.Connection;
 
 namespace DataCommander.Providers.SQLite
@@ -35,5 +36,7 @@ namespace DataCommander.Providers.SQLite
 
             return contains;
         }
+
+        bool IDbConnectionStringBuilder.Remove(string keyword) => throw new NotImplementedException();
     }
 }

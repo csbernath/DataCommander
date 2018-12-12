@@ -1,4 +1,5 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
 
 namespace DataCommander.Providers.Tfs
 {
@@ -15,5 +16,6 @@ namespace DataCommander.Providers.Tfs
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword) => false;
         void IDbConnectionStringBuilder.SetValue(string keyword, object value) => _connectionStringBuilder[keyword] = value;
         bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value) => _connectionStringBuilder.TryGetValue(keyword, out value);
+        bool IDbConnectionStringBuilder.Remove(string keyword) => throw new NotImplementedException();
     }
 }

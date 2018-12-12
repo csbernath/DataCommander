@@ -8,5 +8,6 @@
 
         void SetValue(string keyword, object value);
         bool TryGetValue(string keyword, out object value);
+        bool Remove(string keyword);
     }
 }

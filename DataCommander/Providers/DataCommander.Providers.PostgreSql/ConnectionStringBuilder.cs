@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using DataCommander.Providers.Connection;
 using Npgsql;
 
@@ -64,5 +65,7 @@ namespace DataCommander.Providers.PostgreSql
                     break;
             }
         }
+
+        bool IDbConnectionStringBuilder.Remove(string keyword) => throw new NotImplementedException();
     }
 }

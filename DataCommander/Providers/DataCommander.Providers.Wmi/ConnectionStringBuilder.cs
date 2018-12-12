@@ -1,4 +1,5 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
 using System.Data.SqlClient;
 
 namespace DataCommander.Providers.Wmi
@@ -14,19 +15,9 @@ namespace DataCommander.Providers.Wmi
             set => _dbConnectionStringBuilder.ConnectionString = value;
         }
 
-        bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword)
-        {
-            return false;
-        }
-
-        void IDbConnectionStringBuilder.SetValue(string keyword, object value)
-        {
-            _dbConnectionStringBuilder[keyword] = value;
-        }
-
-        bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value)
-        {
-            return _dbConnectionStringBuilder.TryGetValue(keyword, out value);
-        }
+        bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword) => false;
+        void IDbConnectionStringBuilder.SetValue(string keyword, object value) => _dbConnectionStringBuilder[keyword] = value;
+        bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value) => _dbConnectionStringBuilder.TryGetValue(keyword, out value);
+        bool IDbConnectionStringBuilder.Remove(string keyword) => throw new NotImplementedException();
     }
 }

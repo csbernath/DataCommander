@@ -16,5 +16,6 @@ namespace DataCommander.Providers.Msi
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword) => false;
         void IDbConnectionStringBuilder.SetValue(string keyword, object value) => _dbConnectionStringBuilder[keyword] = value;
         bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value) => _dbConnectionStringBuilder.TryGetValue(keyword, out value);
+        bool IDbConnectionStringBuilder.Remove(string keyword) => _dbConnectionStringBuilder.Remove(keyword);
     }
 }

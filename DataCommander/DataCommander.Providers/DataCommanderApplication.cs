@@ -1,9 +1,7 @@
-﻿using System.Data.Common;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DataCommander.Providers.Connection;
 using Foundation.Configuration;
 using Foundation.Diagnostics;
 using Foundation.Log;
@@ -82,30 +80,6 @@ namespace DataCommander.Providers
 
         public void SaveApplicationData()
         {
-            var folder = ConnectionsConfigurationNode;
-
-            foreach (var subFolder in folder.ChildNodes)
-            {
-                var connectionProperties = new ConnectionProperties();
-                connectionProperties.Load(subFolder);
-
-                var dbConnectionStringBuilder = new DbConnectionStringBuilder();
-                dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
-                object obj;
-                var contains = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out obj);
-
-                if (contains)
-                {
-                    var password = dbConnectionStringBuilder.GetValue(ConnectionStringKeyword.Password);
-                    dbConnectionStringBuilder.Remove(ConnectionStringKeyword.Password);
-                    connectionProperties.ConnectionString = dbConnectionStringBuilder.ConnectionString;
-                    password = ConnectionProperties.ProtectPassword(password);
-                    subFolder.Attributes.SetAttributeValue(ConnectionStringKeyword.Password, password);
-                }
-
-                connectionProperties.Save(subFolder);
-            }
-
             var tempFileName = FileName + ".temp";
             ApplicationData.Save(tempFileName, _sectionName);
             var succeeded = NativeMethods.MoveFileEx(tempFileName, FileName,
@@ -116,19 +90,6 @@ namespace DataCommander.Providers
         public void LoadApplicationData(string fileName, string sectionName)
         {
             ApplicationData.Load(fileName, sectionName);
-
-            //var writer = new ConfigurationJsonWriter();
-            //writer.Write(this.ApplicationData.RootNode);
-
-            var folder = ConnectionsConfigurationNode;
-
-            foreach (var subFolder in folder.ChildNodes)
-            {
-                var connectionProperties = new ConnectionProperties();
-                connectionProperties.Load(subFolder);
-                connectionProperties.LoadProtectedPassword(subFolder);
-            }
-
             FileName = fileName;
             _sectionName = sectionName;
         }

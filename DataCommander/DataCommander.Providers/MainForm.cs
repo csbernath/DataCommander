@@ -770,7 +770,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                         var node = DataCommanderApplication.Instance.ConnectionsConfigurationNode;
                         var subNode = new ConfigurationNode(null);
                         node.AddChildNode(subNode);
-                        connectionProperties.Save(subNode);
+                        ConnectionPropertiesRepository.Save(connectionProperties,subNode);
 
                         var queryForm = new QueryForm(this, MdiChildren.Length, provider, connectionString, connection, _statusBar, _colorTheme);
 

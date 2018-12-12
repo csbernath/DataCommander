@@ -126,7 +126,6 @@ namespace Foundation.Configuration
                         var value = Convert.ChangeType(valueStr, elementType, _formatProvider);
                         list.Add(value);
                     }
-
                         break;
 
                     case XmlNodeType.EndElement:
@@ -318,9 +317,7 @@ namespace Foundation.Configuration
                     {
                     }
                     else if (attributeName == "description")
-                    {
                         node.Description = attributeValue;
-                    }
                     else
                     {
                         var attribute = new ConfigurationAttribute(attributeName, attributeValue, null);
@@ -342,7 +339,7 @@ namespace Foundation.Configuration
                         switch (elementName)
                         {
                             case ConfigurationElementName.Attribute:
-                                    ReadAttribute(node);
+                                ReadAttribute(node);
                                 break;
 
                             case ConfigurationElementName.Node:
@@ -350,7 +347,7 @@ namespace Foundation.Configuration
                                 var nodeName = _xmlReader.GetAttribute("name");
                                 var childNode = new ConfigurationNode(nodeName);
                                 node.AddChildNode(childNode);
-                                        Read(childNode, fileNames);
+                                Read(childNode, fileNames);
                             }
 
                                 break;
@@ -382,7 +379,7 @@ namespace Foundation.Configuration
                                 var nodeName = XmlConvert.DecodeName(elementName);
                                 var childNode = new ConfigurationNode(nodeName);
                                 node.AddChildNode(childNode);
-                                        Read(childNode, fileNames);
+                                Read(childNode, fileNames);
                             }
 
                                 break;
@@ -394,9 +391,6 @@ namespace Foundation.Configuration
                     case XmlNodeType.EndElement:
                         endOfNode = true;
                         break;
-
-                    default:
-                        break;
                 }
             }
         }
@@ -404,7 +398,6 @@ namespace Foundation.Configuration
         private void InitCultureInfo()
         {
             var cultureInfo = _xmlReader["cultureInfo"];
-
             if (cultureInfo != null)
             {
                 try
@@ -426,24 +419,10 @@ namespace Foundation.Configuration
                 }
             }
             else
-            {
                 _formatProvider = CultureInfo.InvariantCulture;
-            }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="xmlReader"></param>
-        /// <param name="configFilename"></param>
-        /// <param name="sectionName"></param>
-        /// <param name="fileNames"></param>
-        /// <returns></returns>
-        public ConfigurationNode Read(
-            XmlReader xmlReader,
-            string configFilename,
-            string sectionName,
-            StringCollection fileNames)
+        public ConfigurationNode Read(XmlReader xmlReader, string configFilename, string sectionName, StringCollection fileNames)
         {
             Log.Trace("ConfigurationReader.Read({0},{1})...", configFilename, sectionName);
             var startTick = Stopwatch.GetTimestamp();
@@ -528,11 +507,6 @@ namespace Foundation.Configuration
             return node;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="xmlReader"></param>
-        /// <returns></returns>
         public ConfigurationNode Read(XmlReader xmlReader)
         {
             _xmlReader = xmlReader;

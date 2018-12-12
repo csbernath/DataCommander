@@ -1,4 +1,5 @@
-﻿using System.Data.SqlServerCe;
+﻿using System;
+using System.Data.SqlServerCe;
 
 namespace DataCommander.Providers.SqlServerCe40
 {
@@ -15,5 +16,6 @@ namespace DataCommander.Providers.SqlServerCe40
         bool IDbConnectionStringBuilder.IsKeywordSupported(string keyword) => true;
         void IDbConnectionStringBuilder.SetValue(string keyword, object value) => _sqlCeConnectionStringBuilder[keyword] = value;
         bool IDbConnectionStringBuilder.TryGetValue(string keyword, out object value) => _sqlCeConnectionStringBuilder.TryGetValue(keyword, out value);
+        bool IDbConnectionStringBuilder.Remove(string keyword) => throw new NotImplementedException();
     }
 }
