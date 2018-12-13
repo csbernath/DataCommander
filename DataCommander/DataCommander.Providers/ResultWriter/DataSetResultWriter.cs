@@ -15,6 +15,7 @@ namespace DataCommander.Providers.ResultWriter
         private readonly bool _showShemaTable;
         private IProvider _provider;
         private DataTable _dataTable;
+        private int _tableIndex = -1;
         private int _rowIndex;
 
         #endregion
@@ -57,6 +58,7 @@ namespace DataCommander.Providers.ResultWriter
 
         void IResultWriter.WriteTableBegin(DataTable schemaTable)
         {
+            ++_tableIndex;
             _logResultWriter.WriteTableBegin(schemaTable);
             CreateTable(schemaTable);
         }
@@ -124,22 +126,18 @@ namespace DataCommander.Providers.ResultWriter
 
         private void CreateTable(DataTable schemaTable)
         {
-            var tableIndex = DataSet.Tables.Count;
             var tableName = schemaTable.TableName;
             if (tableName == "SchemaTable")
-            {
-                tableName = $"Table {tableIndex}";
-            }
+                tableName = $"Table {_tableIndex}";
             if (_showShemaTable)
             {
-                schemaTable.TableName = $"Schema {tableIndex}";
+                schemaTable.TableName = $"Schema {_tableIndex}";
                 DataSet.Tables.Add(schemaTable);
             }
             _dataTable = DataSet.Tables.Add();
             if (!string.IsNullOrEmpty(tableName))
-            {
                 _dataTable.TableName = tableName;
-            }
+
             foreach (DataRow schemaRow in schemaTable.Rows)
             {
                 var dataColumnSchema = FoundationDbColumnFactory.Create(schemaRow);
@@ -163,13 +161,9 @@ namespace DataCommander.Providers.ResultWriter
                         columnName = columnName2;
 
                         if (dataType != null)
-                        {
                             dataColumn = _dataTable.Columns.Add(columnName, dataType);
-                        }
                         else
-                        {
                             dataColumn = _dataTable.Columns.Add(columnName);
-                        }
 
                         dataColumn.ExtendedProperties.Add("ColumnName", dataColumnSchema.ColumnName);
 

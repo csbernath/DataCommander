@@ -38,7 +38,7 @@ namespace DataCommander.Providers.Connection
 
         private static string TryGetValue(IDbConnectionStringBuilder connectionStringBuilder, string keyword)
         {
-            string valueString = connectionStringBuilder.TryGetValue(keyword, out var value)
+            var valueString = connectionStringBuilder.TryGetValue(keyword, out var value)
                 ? (string) value
                 : null;
             return valueString;
@@ -57,27 +57,12 @@ namespace DataCommander.Providers.Connection
                 var provider = ProviderFactory.CreateProvider(providerName);
                 _dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
                 _dbConnectionStringBuilder.ConnectionString = _connectionProperties.ConnectionString;
-
-                //if (providerName == ProviderName.OleDb)
-                //{
-                //    string oleDbProviderName = TryGetValue(ConnectionStringKeywor.Provider);
-                //    this.InitializeOleDbProvidersComboBox();
-                //    int index = this.oleDbProviders.IndexOf(i => i.Name == oleDbProviderName);
-
-                //    this.oleDbProvidersComboBox.SelectedIndex = index;
-                //}
-
                 dataSourcesComboBox.Text = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.DataSource);
                 initialCatalogComboBox.Text = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.InitialCatalog);
 
-                if (_dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity))
-                {
-                    object valueObject;
-                    if (_dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out valueObject))
-                    {
-                        integratedSecurityCheckBox.Checked = (bool)valueObject;
-                    }
-                }
+                if (_dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity) &&
+                    _dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var valueObject))
+                    integratedSecurityCheckBox.Checked = (bool) valueObject;
 
                 userIdTextBox.Text = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.UserId);
                 passwordTextBox.Text = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.Password);
@@ -99,7 +84,7 @@ namespace DataCommander.Providers.Connection
                 {
                     var name = dataReader.GetString(sourceName);
                     var description = dataReader.GetString(sourceDescription);
-                    var item = new OleDbProviderInfo(name, description);
+                    var item = new OleDbProviderInfo(name);
                     _oleDbProviders.Add(item);
                     oleDbProvidersComboBox.Items.Add(description);
                 }
@@ -115,12 +100,9 @@ namespace DataCommander.Providers.Connection
                 var provider = ProviderFactory.CreateProvider(providerName);
                 _tempConnectionProperties.Provider = provider;
                 _dbProviderFactory = provider.DbProviderFactory;
-                var oleDbFactory = _dbProviderFactory as OleDbFactory;
 
-                if (oleDbFactory != null)
-                {
+                if (_dbProviderFactory is OleDbFactory oleDbFactory)
                     InitializeOleDbProvidersComboBox();
-                }
 
                 _dbConnectionStringBuilder = provider.CreateConnectionStringBuilder();
                 integratedSecurityCheckBox.Enabled = _dbConnectionStringBuilder.IsKeywordSupported(ConnectionStringKeyword.IntegratedSecurity);
@@ -254,7 +236,7 @@ namespace DataCommander.Providers.Connection
 
                         foreach (DataRow row in schema.Rows)
                         {
-                            var database = (string)row["database_name"];
+                            var database = (string) row["database_name"];
                             _initialCatalogs.Add(database);
                         }
 
@@ -374,14 +356,8 @@ namespace DataCommander.Providers.Connection
 
         private sealed class OleDbProviderInfo
         {
-            public OleDbProviderInfo(string name, string description)
-            {
-                Name = name;
-                _description = description;
-            }
-
             public readonly string Name;
-            private string _description;
+            public OleDbProviderInfo(string name) => Name = name;
         }
     }
 }
