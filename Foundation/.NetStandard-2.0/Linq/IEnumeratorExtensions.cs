@@ -14,14 +14,14 @@ namespace Foundation.Linq
             return new Enumerable<T>(enumerator);
         }
 
-        public static List<T> Take<T>(this IEnumerator<T> enumerator, int count)
+        public static List<T> TakeRange<T>(this IEnumerator<T> enumerator, int count)
         {
             Assert.IsNotNull(enumerator);
             Assert.IsInRange(count >= 0);
 
             var list = new List<T>(count);
 
-            for (var i = 0; i < count; i++)
+            for (var i = 0; i < count; ++i)
             {
                 if (enumerator.MoveNext())
                 {
@@ -29,9 +29,7 @@ namespace Foundation.Linq
                     list.Add(item);
                 }
                 else
-                {
                     break;
-                }
             }
 
             return list;

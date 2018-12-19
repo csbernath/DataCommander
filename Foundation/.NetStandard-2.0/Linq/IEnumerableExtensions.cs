@@ -58,9 +58,6 @@ namespace Foundation.Linq
             Assert.IsInRange(count >= 0);
             Assert.IsInRange(partitionCount > 0);
 
-            //FoundationContract.Ensures(Contract.Result<IEnumerable<List<TSource>>>().Count() <= partitionCount);
-            //FoundationContract.Ensures(Contract.ForAll(Contract.Result<IEnumerable<List<TSource>>>().ToList(), partition => partition.Count > 0));
-
             var partitionSize = count / partitionCount;
             var remainder = count % partitionCount;
 
@@ -77,7 +74,7 @@ namespace Foundation.Linq
 
                     if (currentPartitionSize > 0)
                     {
-                        var partition = enumerator.Take(currentPartitionSize);
+                        var partition = enumerator.TakeRange(currentPartitionSize);
                         if (partition.Count > 0)
                             yield return partition;
                         else
@@ -197,6 +194,20 @@ namespace Foundation.Linq
 
             if (list.Count > 0)
                 yield return list.ToArray();
+        }
+
+        public static IEnumerable<List<TSource>> TakeRanges<TSource>(this IEnumerable<TSource> source, int rangeSize)
+        {
+            using (var enumerator = source.GetEnumerator())
+            {
+                while (true)
+                {
+                    var range = enumerator.TakeRange(rangeSize);
+                    if (range.Count == 0)
+                        break;
+                    yield return range;
+                }
+            }
         }
 
         public static string ToLogString<TSource>(this IEnumerable<TSource> source, Func<TSource, string> toString)
