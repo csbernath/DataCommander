@@ -147,6 +147,7 @@ namespace DataCommander.Providers.Query
         private ToolStripMenuItem _executeQueryToolStripMenuItem;
         private ToolStripMenuItem _openTableToolStripMenuItem;
         private ToolStripMenuItem _parseToolStripMenuItem;
+        private QueryTextBox _queryTextBox;
 
         private readonly ConcurrentQueue<InfoMessage> _infoMessages = new ConcurrentQueue<InfoMessage>();
         private int _errorCount;
@@ -204,17 +205,18 @@ namespace DataCommander.Providers.Query
             var sqlKeyWords = Settings.CurrentType.Attributes["Sql92ReservedWords"].GetValue<string[]>();
             var providerKeyWords = provider.KeyWords;
 
-            QueryTextBox.AddKeyWords(new[] {"exec"}, colorTheme != null
+            _queryTextBox.SetColorTheme(colorTheme);
+            _queryTextBox.AddKeyWords(new[] {"exec"}, colorTheme != null
                 ? colorTheme.ExecKeyWordColor
                 : Color.Green);
-            QueryTextBox.AddKeyWords(sqlKeyWords, colorTheme != null
+            _queryTextBox.AddKeyWords(sqlKeyWords, colorTheme != null
                 ? colorTheme.SqlKeyWordColor
                 : Color.Blue);
-            QueryTextBox.AddKeyWords(providerKeyWords, colorTheme != null
+            _queryTextBox.AddKeyWords(providerKeyWords, colorTheme != null
                 ? colorTheme.ProviderKeyWordColor
                 : Color.Red);
 
-            QueryTextBox.CaretPositionPanel = _sbPanelCaretPosition;
+            _queryTextBox.CaretPositionPanel = _sbPanelCaretPosition;
 
             SetText();
 
@@ -380,17 +382,17 @@ namespace DataCommander.Providers.Query
             set
             {
                 _font = value;
-                QueryTextBox.Font = value;
+                _queryTextBox.Font = value;
                 var size1 = TextRenderer.MeasureText("1", value);
                 var size2 = TextRenderer.MeasureText("12", value);
-                var width = QueryTextBox.TabSize * (size2.Width - size1.Width);
+                var width = _queryTextBox.TabSize * (size2.Width - size1.Width);
                 var tabs = new int[12];
 
                 for (var i = 0; i < tabs.Length; i++)
                     tabs[i] = (i + 1) * width;
 
-                QueryTextBox.RichTextBox.Font = value;
-                QueryTextBox.RichTextBox.SelectionTabs = tabs;
+                _queryTextBox.RichTextBox.Font = value;
+                _queryTextBox.RichTextBox.SelectionTabs = tabs;
 
                 _messagesTextBox.Font = value;
                 _messagesTextBox.SelectionTabs = tabs;
@@ -405,17 +407,17 @@ namespace DataCommander.Providers.Query
         {
             get
             {
-                var query = QueryTextBox.SelectedText;
-
+                var query = _queryTextBox.SelectedText;
+                
                 if (query.Length == 0)
-                    query = QueryTextBox.Text;
+                    query = _queryTextBox.Text;
 
                 query = query.Replace("\n", "\r\n");
                 return query;
             }
         }
 
-        public QueryTextBox QueryTextBox { get; private set; }
+        public QueryTextBox QueryTextBox => _queryTextBox;
         internal int ResultSetCount { get; private set; }
         public ResultWriterType TableStyle { get; private set; }
 
@@ -613,7 +615,7 @@ namespace DataCommander.Providers.Query
             _cToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             _openTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             _cancelQueryButton = new System.Windows.Forms.ToolStripButton();
-            QueryTextBox = new QueryTextBox(_colorTheme);
+            _queryTextBox = new QueryTextBox();
             _mainMenu.SuspendLayout();
             _statusBar.SuspendLayout();
             _toolStrip.SuspendLayout();
@@ -1318,13 +1320,13 @@ namespace DataCommander.Providers.Query
             // 
             // queryTextBox
             // 
-            QueryTextBox.Dock = System.Windows.Forms.DockStyle.Top;
-            QueryTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)));
-            QueryTextBox.Location = new System.Drawing.Point(303, 0);
-            QueryTextBox.Name = "QueryTextBox";
-            QueryTextBox.Size = new System.Drawing.Size(713, 279);
-            QueryTextBox.TabIndex = 1;
-            QueryTextBox.TabSize = 4;
+            _queryTextBox.Dock = System.Windows.Forms.DockStyle.Top;
+            _queryTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (238)));
+            _queryTextBox.Location = new System.Drawing.Point(303, 0);
+            _queryTextBox.Name = "QueryTextBox";
+            _queryTextBox.Size = new System.Drawing.Size(713, 279);
+            _queryTextBox.TabIndex = 1;
+            _queryTextBox.TabSize = 4;
             // 
             // QueryForm
             // 
@@ -1333,7 +1335,7 @@ namespace DataCommander.Providers.Query
             Controls.Add(_toolStrip);
             Controls.Add(_tabControl);
             Controls.Add(_splitterQuery);
-            Controls.Add(QueryTextBox);
+            Controls.Add(_queryTextBox);
             Controls.Add(_splitterObjectExplorer);
             Controls.Add(_statusBar);
             Controls.Add(_tvObjectExplorer);

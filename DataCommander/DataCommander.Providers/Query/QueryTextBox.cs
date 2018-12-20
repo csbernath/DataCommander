@@ -25,7 +25,7 @@ namespace DataCommander.Providers.Query
         private bool _changeEventEnabled = true;
         private ToolStripStatusLabel _sbPanel;
         private int _columnIndex;
-        private readonly ColorTheme _colorTheme;
+        private ColorTheme _colorTheme;
 
         public RichTextBox RichTextBox { get; private set; }
 
@@ -34,11 +34,15 @@ namespace DataCommander.Providers.Query
         /// </summary>
         private readonly Container _components = new Container();
 
-        public QueryTextBox(ColorTheme colorTheme)
+        public QueryTextBox()
         {
-            _colorTheme = colorTheme;
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
+        }
+
+        public void SetColorTheme(ColorTheme colorTheme)
+        {
+            _colorTheme = colorTheme;
 
             if (colorTheme != null)
             {
