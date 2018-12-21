@@ -38,13 +38,8 @@ namespace DataCommander.Providers.ResultWriter
         private long _insertedRowCount;
         private long _waitMilliseconds;
 
-        public CopyResultWriter(
-            Action<InfoMessage> addInfoMessage,
-            IProvider destinationProvider,
-            ConnectionBase destinationConnection,
-            string tableName,
-            Action<IDbTransaction> setTransaction,
-            CancellationToken cancellationToken)
+        public CopyResultWriter(Action<InfoMessage> addInfoMessage, IProvider destinationProvider, ConnectionBase destinationConnection, string tableName,
+            Action<IDbTransaction> setTransaction, CancellationToken cancellationToken)
         {
             _logResultWriter = new LogResultWriter(addInfoMessage);
             _addInfoMessage = addInfoMessage;
@@ -79,6 +74,7 @@ namespace DataCommander.Providers.ResultWriter
                 _transaction = _destinationConnection.Connection.BeginTransaction();
                 _setTransaction(_transaction);
             }
+
             _insertCommand.Transaction = _transaction;
         }
 

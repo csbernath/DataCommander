@@ -2,9 +2,6 @@
 {
     internal sealed class DecimalDataWriter : DataWriterBase
     {
-        public override string ToString( object value )
-        {
-            return value.ToString().PadLeft(Width, ' ' );
-        }
+        public override string ToString( object value ) => value.ToString().PadLeft(Width, ' ' );
     }
 }

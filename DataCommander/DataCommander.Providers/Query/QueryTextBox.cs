@@ -470,22 +470,14 @@ namespace DataCommander.Providers.Query
                         }
 
                         if (startIndex > 0)
-                        {
                             startIndex--;
-                        }
                         else
-                        {
                             startIndex = 0;
-                        }
 
                         if (endIndex > 0)
-                        {
                             endIndex--;
-                        }
                         else
-                        {
                             endIndex = 0;
-                        }
 
                         if (startIndex >= 0)
                         {
@@ -496,27 +488,18 @@ namespace DataCommander.Providers.Query
                             if (_selectionStart > 0)
                             {
                                 var c = text[_selectionStart - 1];
-
                                 if (IsSeparator(c))
-                                {
                                     if (_selectionStart < text.Length)
                                     {
                                         var c2 = text[_selectionStart];
-
                                         if (!IsSeparator(c2))
-                                        {
                                             endIndex = WordEnd(text, _selectionStart);
-                                        }
                                     }
-                                }
                             }
 
                             var length = endIndex - startIndex;
-
                             if (endIndex < text.Length - 1)
-                            {
                                 length++;
-                            }
 
                             var s = text.Substring(startIndex, length);
                             Colorize(text, startIndex, endIndex);
@@ -559,9 +542,7 @@ namespace DataCommander.Providers.Query
             try
             {
                 if (KeyboardHandler != null)
-                {
                     e.Handled = KeyboardHandler.HandleKeyDown(e);
-                }
                 else
                 {
                     if (e.KeyCode == Keys.Insert && e.Shift)
@@ -628,9 +609,7 @@ namespace DataCommander.Providers.Query
                         }
                     }
                     else if (e.KeyCode == Keys.E && e.Control)
-                    {
                         e.Handled = true;
-                    }
                 }
             }
             catch (Exception ex)
@@ -646,16 +625,9 @@ namespace DataCommander.Providers.Query
         private void richTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (KeyboardHandler != null)
-            {
                 e.Handled = KeyboardHandler.HandleKeyPress(e);
-            }
-            else
-            {
-                if (e.KeyChar == '\t')
-                {
-                    e.Handled = true;
-                }
-            }
+            else if (e.KeyChar == '\t')
+                e.Handled = true;
         }
 
         private static bool GetDataPresent(IDataObject dataObject, string format)
@@ -672,16 +644,11 @@ namespace DataCommander.Providers.Query
             return dataObject.GetData(name);
         }
 
-        private void richTextBox_DragEnter(object sender, DragEventArgs e)
-        {
-            e.Effect = DragDropEffects.All;
-        }
+        private void richTextBox_DragEnter(object sender, DragEventArgs e) => e.Effect = DragDropEffects.All;
 
         private void richTextBox_DragDrop(object sender, DragEventArgs e)
         {
             var dataObject = e.Data;
-
-            var formats = e.Data.GetFormats();
 
             if (GetDataPresent(dataObject, DataFormats.UnicodeText))
             {

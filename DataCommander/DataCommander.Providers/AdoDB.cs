@@ -12,23 +12,12 @@ namespace DataCommander.Providers
         public static RecordsetClass XmlToRecordset(string xml)
         {
             var stream = new StreamClass();
-
-            stream.Open(
-                Missing.Value,
-                ConnectModeEnum.adModeUnknown,
-                StreamOpenOptionsEnum.adOpenStreamUnspecified,
-                null, null);
-
+            stream.Open(Missing.Value, ConnectModeEnum.adModeUnknown, StreamOpenOptionsEnum.adOpenStreamUnspecified, null, null);
             stream.WriteText(xml, 0);
             stream.Position = 0;
-            var rs = new RecordsetClass();
-
-            rs.Open(
-                stream, Missing.Value,
-                CursorTypeEnum.adOpenUnspecified,
-                LockTypeEnum.adLockUnspecified, 0);
-
-            return rs;
+            var recordset = new RecordsetClass();
+            recordset.Open(stream, Missing.Value, CursorTypeEnum.adOpenUnspecified, LockTypeEnum.adLockUnspecified, 0);
+            return recordset;
         }
 
         /// <summary>
@@ -70,13 +59,9 @@ namespace DataCommander.Providers
                 }
 
                 if ((field.Attributes & (int) FieldAttributeEnum.adFldMayBeNull) != 0)
-                {
                     fileTypeStr += " NULL";
-                }
                 else
-                {
                     fileTypeStr += " NOT NULL";
-                }
 
                 line += StringHelper.FormatColumn(fileTypeStr, 30, false);
 
@@ -85,58 +70,24 @@ namespace DataCommander.Providers
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="adodbRecordset"></param>
-        /// <param name="writer"></param>
-        public static void WriteSchema(object adodbRecordset, TextWriter writer)
-        {
-            WriteSchema((Recordset) adodbRecordset, writer);
-        }
+        public static void WriteSchema(object adodbRecordset, TextWriter writer) => WriteSchema((Recordset) adodbRecordset, writer);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="rs"></param>
-        /// <param name="maxRowCount"></param>
-        /// <param name="writer"></param>
         [CLSCompliant(false)]
-        public static void WriteRows(
-            _Recordset rs,
-            int maxRowCount,
-            TextWriter writer)
+        public static void WriteRows(_Recordset recordset, int maxRowCount, TextWriter writer)
         {
-            var recordCount = rs.RecordCount;
+            var recordCount = recordset.RecordCount;
             writer.WriteLine("RecordCount: " + recordCount);
 
-            if (!rs.EOF)
+            if (!recordset.EOF)
             {
-                var rsStr = rs.GetString(StringFormatEnum.adClipString, maxRowCount, "\t", "\r\n", "<NULL>");
+                var rsStr = recordset.GetString(StringFormatEnum.adClipString, maxRowCount, "\t", "\r\n", "<NULL>");
                 writer.WriteLine(rsStr);
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="adodbRecordset"></param>
-        /// <param name="writer"></param>
-        public static void WriteRows(object adodbRecordset, TextWriter writer)
-        {
-            WriteRows((Recordset) adodbRecordset, int.MaxValue, writer);
-        }
+        public static void WriteRows(object adodbRecordset, TextWriter writer) => WriteRows((Recordset) adodbRecordset, int.MaxValue, writer);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="adodbRecordset"></param>
-        /// <param name="maxRowCount"></param>
-        /// <param name="writer"></param>
-        public static void Write(
-            object adodbRecordset,
-            int maxRowCount,
-            TextWriter writer)
+        public static void Write(object adodbRecordset, int maxRowCount, TextWriter writer)
         {
             if (adodbRecordset != null)
             {
@@ -146,14 +97,7 @@ namespace DataCommander.Providers
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="adodbRecordset"></param>
-        /// <param name="writer"></param>
-        public static void Write(
-            object adodbRecordset,
-            TextWriter writer)
+        public static void Write(object adodbRecordset, TextWriter writer)
         {
             if (adodbRecordset != null)
             {

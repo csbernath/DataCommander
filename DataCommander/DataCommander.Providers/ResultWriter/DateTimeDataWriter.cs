@@ -7,19 +7,17 @@ namespace DataCommander.Providers.ResultWriter
     {
         public override string ToString(object value)
         {
-            string s;
+            string result;
 
             if (value == DBNull.Value)
-            {
-                s = new string(' ', Width);
-            }
+                result = new string(' ', Width);
             else
             {
                 var field = (DateTimeField) value;
-                s = field.ToString().PadLeft(Width, ' ');
+                result = field.ToString().PadLeft(Width, ' ');
             }
 
-            return s;
+            return result;
         }
     }
 }

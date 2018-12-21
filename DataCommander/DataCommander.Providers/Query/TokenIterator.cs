@@ -104,15 +104,11 @@ namespace DataCommander.Providers.Query
                     _index += 2;
                 }
                 else
-                {
                     _index++;
-                }
             }
 
             if (token != null)
-            {
                 _tokenIndex++;
-            }
 
             return token;
         }

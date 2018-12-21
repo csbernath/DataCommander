@@ -30,18 +30,14 @@ namespace DataCommander.Providers.Query
             const string separator = "\t";
 
             for (var i = 0; i < numOfColumns - 1; i++)
-            {
                 text += dataTable.Columns[i].ColumnName + separator;
-            }
 
             text += dataTable.Columns[numOfColumns - 1].ColumnName + Environment.NewLine;
 
             foreach (DataRow dataRow in dataTable.Rows)
             {
                 for (var i = 0; i < numOfColumns - 1; i++)
-                {
                     text += QueryForm.DbValue(dataRow[i]) + separator;
-                }
 
                 text += QueryForm.DbValue(dataRow[numOfColumns - 1]) + Environment.NewLine;
             }
