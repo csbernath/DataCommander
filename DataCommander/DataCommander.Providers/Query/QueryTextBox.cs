@@ -38,6 +38,11 @@ namespace DataCommander.Providers.Query
         {
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
+
+            // TODO: Add any initialization after the InitForm call
+            RichTextBox.SelectionChanged += richTextBox_SelectionChanged;
+            RichTextBox.DragEnter += richTextBox_DragEnter;
+            RichTextBox.DragDrop += richTextBox_DragDrop;
         }
 
         public void SetColorTheme(ColorTheme colorTheme)
@@ -52,11 +57,6 @@ namespace DataCommander.Providers.Query
                 RichTextBox.BackColor = colorTheme.BackColor;
                 RichTextBox.ForeColor = colorTheme.ForeColor;
             }
-
-            // TODO: Add any initialization after the InitForm call
-            RichTextBox.SelectionChanged += richTextBox_SelectionChanged;
-            RichTextBox.DragEnter += richTextBox_DragEnter;
-            RichTextBox.DragDrop += richTextBox_DragDrop;
         }
 
         public void AddKeyWords(string[] keyWords, Color color)
