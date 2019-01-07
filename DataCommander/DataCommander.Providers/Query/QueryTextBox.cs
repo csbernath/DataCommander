@@ -618,8 +618,11 @@ namespace DataCommander.Providers.Query
                             RichTextBox.SelectionStart = startCharIndex;
                             RichTextBox.SelectionLength = endCharIndex - startCharIndex + 1;
 
+                            var tabString = new string(' ', TabSize);
                             var selectedText = RichTextBox.SelectedText;
-                            selectedText = selectedText.GetLines().Select(i => i.DecreaseLineIndent(TabSize)).Join("\n");
+                            selectedText = selectedText.GetLines()
+                                .Select(i=>i.Replace("\t",tabString))
+                                .Select(i => i.DecreaseLineIndent(TabSize)).Join("\n");
                             selectedText += '\n';
                             RichTextBox.SelectedText = selectedText;
 
