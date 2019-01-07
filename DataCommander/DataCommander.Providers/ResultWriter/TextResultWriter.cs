@@ -37,23 +37,19 @@ namespace DataCommander.Providers.ResultWriter
         void IResultWriter.AfterExecuteReader(int fieldCount) => _logResultWriter.AfterExecuteReader(fieldCount);
         void IResultWriter.AfterCloseReader(int affectedRows) => _logResultWriter.AfterCloseReader(affectedRows);
 
-        private void Write(StringBuilder sb, string text, int width)
+        private void Write(StringBuilder stringBuilder, string text, int width)
         {
             var length = width - text.Length;
 
             if (length > 0)
             {
-                sb.Append(text);
+                stringBuilder.Append(text);
 
                 if (text.IndexOf(Environment.NewLine) < 0)
-                {
-                    sb.Append(' ', length);
-                }
+                    stringBuilder.Append(' ', length);
             }
             else
-            {
-                sb.Append(text.Substring(0, width));
-            }
+                stringBuilder.Append(text.Substring(0, width));
         }
 
         void IResultWriter.WriteTableBegin(DataTable schemaTable)
@@ -71,7 +67,7 @@ namespace DataCommander.Providers.ResultWriter
                 var fieldCount = schemaTable.Rows.Count;
                 _columnSize = new int[fieldCount];
 
-                var sb = new StringBuilder();
+                var stringBuilder = new StringBuilder();
 
                 for (var i = 0; i < fieldCount; i++)
                 {
@@ -87,14 +83,10 @@ namespace DataCommander.Providers.ResultWriter
                         elementType = type.GetElementType();
 
                         if (numOfBytes > 2048)
-                        {
                             numOfBytes = 2048;
-                        }
                     }
                     else
-                    {
                         elementType = type;
-                    }
 
                     var typeCode = Type.GetTypeCode(elementType);
 
@@ -104,14 +96,9 @@ namespace DataCommander.Providers.ResultWriter
                     {
                         case TypeCode.Byte:
                             if (type.IsArray)
-                            {
                                 numOfChars = Math.Min(100, numOfBytes) * 2 + 2;
-                            }
                             else
-                            {
                                 numOfChars = 4;
-                            }
-
                             break;
 
                         case TypeCode.Boolean:
@@ -147,38 +134,34 @@ namespace DataCommander.Providers.ResultWriter
 
                         default:
                             if (elementType == typeof(Guid))
-                            {
                                 numOfChars = Guid.Empty.ToString().Length;
-                            }
                             else
-                            {
                                 numOfChars = numOfBytes;
-                            }
 
                             break;
                     }
 
                     _columnSize[i] = Math.Max(numOfChars, columnName.Length);
-                    Write(sb, columnName, _columnSize[i]);
-                    sb.Append(' ');
+                    Write(stringBuilder, columnName, _columnSize[i]);
+                    stringBuilder.Append(' ');
                 }
 
-                _textWriter.WriteLine(sb.ToString());
+                _textWriter.WriteLine(stringBuilder.ToString());
 
                 if (fieldCount > 0)
                 {
-                    sb = new StringBuilder();
+                    stringBuilder = new StringBuilder();
                     var last = fieldCount - 1;
 
                     for (var i = 0; i < last; i++)
                     {
-                        sb.Append('-', _columnSize[i]);
-                        sb.Append(' ');
+                        stringBuilder.Append('-', _columnSize[i]);
+                        stringBuilder.Append(' ');
                     }
 
-                    sb.Append('-', _columnSize[last]);
+                    stringBuilder.Append('-', _columnSize[last]);
 
-                    _textWriter.WriteLine(sb.ToString());
+                    _textWriter.WriteLine(stringBuilder.ToString());
                 }
             }
         }

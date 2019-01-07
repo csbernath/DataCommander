@@ -24,9 +24,6 @@ using OfficeOpenXml;
 
 namespace DataCommander.Providers.ResultWriter
 {
-    /// <summary>
-    /// Summary description for DataTableViewer.
-    /// </summary>
     internal class DataTableEditor : UserControl
     {
         #region Private Fields
@@ -283,9 +280,7 @@ namespace DataCommander.Providers.ResultWriter
             if (disposing)
             {
                 if (_components != null)
-                {
                     _components.Dispose();
-                }
 
                 if (_dataGrid != null)
                 {
@@ -350,17 +345,13 @@ namespace DataCommander.Providers.ResultWriter
             string valueString;
 
             if (value == DBNull.Value)
-            {
                 valueString = "null";
-            }
             else
             {
                 var type = (Type) column.ExtendedProperties[0];
 
                 if (type == null)
-                {
                     type = column.DataType;
-                }
 
                 var typeCode = Type.GetTypeCode(type);
 
@@ -377,9 +368,7 @@ namespace DataCommander.Providers.ResultWriter
                         var succeeded = DateTimeField.TryParse(valueString, out dateTime);
 
                         if (succeeded)
-                        {
                             valueString = dateTime.ToTSqlDateTime();
-                        }
 
                         break;
 
@@ -395,9 +384,7 @@ namespace DataCommander.Providers.ResultWriter
                             valueString = guid.ToString().ToTSqlVarChar();
                         }
                         else
-                        {
                             valueString = value.ToString();
-                        }
 
                         break;
                 }
@@ -409,7 +396,7 @@ namespace DataCommander.Providers.ResultWriter
         private string GetWhere(DataRow row)
         {
             var columns = _tableSchema.Tables[0];
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             var first = true;
             var uniqueIndexColumns = UniqueIndexColumns.ToArray();
 
@@ -426,15 +413,12 @@ namespace DataCommander.Providers.ResultWriter
                 if (first)
                 {
                     first = false;
-                    sb.Append(" where ");
+                    stringBuilder.Append(" where ");
                 }
                 else
-                {
-                    sb.Append(" and ");
-                }
+                    stringBuilder.Append(" and ");
 
                 var contains = row.Table.Columns.Contains(columnName);
-
                 if (contains)
                 {
                     var dataColumn = _dataTable.Columns[columnName];
@@ -442,21 +426,19 @@ namespace DataCommander.Providers.ResultWriter
                     var valueString = ToString(dataColumn, value);
                     var operatorString = value == DBNull.Value ? "is" : "=";
                     var quotedColumnName = _commandBuilder.QuoteIdentifier(columnName);
-                    sb.AppendFormat("{0} {1} {2}", quotedColumnName, operatorString, valueString);
+                    stringBuilder.AppendFormat("{0} {1} {2}", quotedColumnName, operatorString, valueString);
                 }
                 else
-                {
-                    sb.AppendFormat("/* the column {0} is part of the primary key but it is missing from the query. */", columnName);
-                }
+                    stringBuilder.AppendFormat("/* the column {0} is part of the primary key but it is missing from the query. */", columnName);
             }
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
 
         private void HandleDataRowAddAction(DataRow dataRow)
         {
-            var sb = new StringBuilder();
-            sb.AppendLine();
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine();
             var valid = true;
 
             foreach (DataRow schemaRow in _tableSchema.Tables[0].Rows)
@@ -470,15 +452,15 @@ namespace DataCommander.Providers.ResultWriter
                 if (value == DBNull.Value && !isNullable && !hasDefault && !hasAutomaticValue)
                 {
                     valid = false;
-                    sb.AppendFormat("Column '{0}' is not nullable, has not default, has not automatic value.\r\n", columnName);
+                    stringBuilder.AppendFormat("Column '{0}' is not nullable, has not default, has not automatic value.\r\n", columnName);
                 }
             }
 
             if (valid)
             {
                 var table = dataRow.Table;
-                sb = new StringBuilder();
-                sb.AppendFormat("\r\ninsert into {0}(", _tableName);
+                stringBuilder = new StringBuilder();
+                stringBuilder.AppendFormat("\r\ninsert into {0}(", _tableName);
                 var first = true;
                 var schemaRows = _tableSchema.Tables[0].Rows;
 
@@ -490,19 +472,15 @@ namespace DataCommander.Providers.ResultWriter
                     if (!hasAutomaticValue)
                     {
                         if (first)
-                        {
                             first = false;
-                        }
                         else
-                        {
-                            sb.Append(',');
-                        }
+                            stringBuilder.Append(',');
 
-                        sb.Append(column.ColumnName);
+                        stringBuilder.Append(column.ColumnName);
                     }
                 }
 
-                sb.Append(") values(");
+                stringBuilder.Append(") values(");
                 first = true;
 
                 foreach (DataColumn column in table.Columns)
@@ -515,35 +493,27 @@ namespace DataCommander.Providers.ResultWriter
                         var hasDeafult = schemaRow.Field<bool>("HasDefault");
 
                         if (first)
-                        {
                             first = false;
-                        }
                         else
-                        {
-                            sb.Append(',');
-                        }
+                            stringBuilder.Append(',');
 
                         var value = dataRow[column];
                         string valueString;
 
                         if (value == DBNull.Value && hasDeafult)
-                        {
                             valueString = "default";
-                        }
                         else
-                        {
                             valueString = ToString(column, value);
-                        }
 
-                        sb.Append(valueString);
+                        stringBuilder.Append(valueString);
                     }
                 }
 
-                sb.Append(')');
+                stringBuilder.Append(')');
             }
 
             var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-            queryForm.AppendQueryText(sb.ToString());
+            queryForm.AppendQueryText(stringBuilder.ToString());
         }
 
         private void HandleDataRowChangeAction(DataRow dataRow)
@@ -567,9 +537,7 @@ namespace DataCommander.Providers.ResultWriter
                 if (comparable != null)
                 {
                     if (proposedValue == DBNull.Value)
-                    {
                         @equals = currentValue == DBNull.Value;
-                    }
                     else
                     {
                         var currentType = currentValue.GetType();
@@ -590,9 +558,7 @@ namespace DataCommander.Providers.ResultWriter
                     }
                 }
                 else
-                {
                     @equals = Equals(currentValue, proposedValue);
-                }
 
                 if (!@equals)
                 {
@@ -604,9 +570,7 @@ namespace DataCommander.Providers.ResultWriter
                         sb.Append(" set ");
                     }
                     else
-                    {
                         sb.Append(", ");
-                    }
 
                     var valueString = ToString(column, proposedValue);
                     var quotedColumnName = _commandBuilder.QuoteIdentifier(column.ColumnName);
@@ -644,9 +608,7 @@ namespace DataCommander.Providers.ResultWriter
         private void dataTable_RowDeleting(object sender, DataRowChangeEventArgs e)
         {
             if (_statementStringBuilder == null)
-            {
                 _statementStringBuilder = new StringBuilder();
-            }
 
             _statementStringBuilder.AppendFormat("\r\ndelete from {0}", _tableName);
             var where = GetWhere(e.Row);
@@ -664,26 +626,23 @@ namespace DataCommander.Providers.ResultWriter
         private void CopyColumnNames_Click(object sender, EventArgs e)
         {
             var columnNames =
-            (from c in _dataGrid.Columns.Cast<DataGridViewColumn>()
-                where c.Visible
-                orderby c.DisplayIndex
-                select c.DataPropertyName);
+                (from c in _dataGrid.Columns.Cast<DataGridViewColumn>()
+                    where c.Visible
+                    orderby c.DisplayIndex
+                    select c.DataPropertyName);
             var s = string.Join(",", columnNames);
             Clipboard.SetDataObject(s, true, 5, 200);
         }
 
-        private void CopyColumnName_Click(object sender, EventArgs e)
-        {
-            Clipboard.SetDataObject(_columnName, true, 5, 200);
-        }
+        private void CopyColumnName_Click(object sender, EventArgs e) => Clipboard.SetDataObject(_columnName, true, 5, 200);
 
         private int[] GetColumnIndexes()
         {
             return
-            (from c in _dataGrid.Columns.Cast<DataGridViewColumn>()
-                where c.Visible
-                orderby c.DisplayIndex
-                select c.Index).ToArray();
+                (from c in _dataGrid.Columns.Cast<DataGridViewColumn>()
+                    where c.Visible
+                    orderby c.DisplayIndex
+                    select c.Index).ToArray();
         }
 
         private void SaveTableAs_Click(object sender, EventArgs e)
@@ -772,6 +731,7 @@ namespace DataCommander.Providers.ResultWriter
 
                                     excelPackage.Save();
                                 }
+
                                 break;
 
                             default:
@@ -1108,6 +1068,7 @@ namespace DataCommander.Providers.ResultWriter
                             }
                         }
                     }
+
                     xmlWriter.WriteEndElement();
                 }
 
@@ -1188,12 +1149,14 @@ namespace DataCommander.Providers.ResultWriter
                             menuItem = new ToolStripMenuItem("Unhide all columns", null, UnhideAllColumns_Click);
                             menu.Items.Add(menuItem);
                         }
+
                         any = _dataGrid.Rows.Cast<DataGridViewRow>().Any(r => !r.Visible);
                         if (any)
                         {
                             menuItem = new ToolStripMenuItem("Unhide all rows", null, UnhideRows_Click);
                             menu.Items.Add(menuItem);
                         }
+
                         break;
 
                     case DataGridViewHitTestType.ColumnHeader:
@@ -1233,11 +1196,8 @@ namespace DataCommander.Providers.ResultWriter
                         {
                             case FieldType.StringField:
                                 var value = ((StringField) _cellValue).Value;
-
                                 if (value != null && value.Length < 256)
-                                {
                                     rowFilter = $"[{_columnName}] = '{value}'";
-                                }
                                 break;
 
                             case FieldType.DateTimeField:
@@ -1246,9 +1206,7 @@ namespace DataCommander.Providers.ResultWriter
 
                             default:
                                 if (_cellValue == DBNull.Value)
-                                {
                                     rowFilter = $"[{_columnName}] is null";
-                                }
                                 else
                                 {
                                     var typeCode = Type.GetTypeCode(type);
@@ -1286,6 +1244,7 @@ namespace DataCommander.Providers.ResultWriter
                                             break;
                                     }
                                 }
+
                                 break;
                         }
 

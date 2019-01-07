@@ -18,7 +18,6 @@ namespace DataCommander.Providers
         public DbType DbType
         {
             get => _parameter.DbType;
-
             set => _parameter.DbType = value;
         }
 
@@ -27,12 +26,10 @@ namespace DataCommander.Providers
         public int Size
         {
             get => _size;
-
             set => SetSize(value);
         }
 
         public byte Precision { get; }
-
         public byte Scale { get; }
     }
 }

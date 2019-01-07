@@ -6,9 +6,6 @@ using Foundation.Data;
 
 namespace DataCommander.Providers.ResultWriter
 {
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
     internal sealed class DataGridViewResultWriter : IResultWriter
     {
         public DataGridViewResultWriter()
@@ -84,6 +81,7 @@ namespace DataCommander.Providers.ResultWriter
                     cell.Value = sourceValue;
                     cells.Add(cell);
                 }
+
                 targetRows.Add(targetRow);
             }
         }
