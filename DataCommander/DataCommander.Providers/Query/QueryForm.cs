@@ -155,6 +155,8 @@ namespace DataCommander.Providers.Query
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private readonly EventWaitHandle _enqueueEvent = new EventWaitHandle(false, EventResetMode.AutoReset);
         private ToolStripMenuItem createCCommandQueryToolStripMenuItem;
+        private ToolStripMenuItem undoToolStripMenuItem;
+        private ToolStripMenuItem redoToolStripMenuItem;
         private readonly ColorTheme _colorTheme;
 
         #endregion
@@ -392,8 +394,10 @@ namespace DataCommander.Providers.Query
                 for (var i = 0; i < tabs.Length; i++)
                     tabs[i] = (i + 1) * width;
 
+                _queryTextBox.EnableChangeEvent(false);
                 _queryTextBox.RichTextBox.Font = value;
                 _queryTextBox.RichTextBox.SelectionTabs = tabs;
+                _queryTextBox.EnableChangeEvent(true);
 
                 _messagesTextBox.Font = value;
                 _messagesTextBox.SelectionTabs = tabs;
@@ -409,7 +413,7 @@ namespace DataCommander.Providers.Query
             get
             {
                 var query = _queryTextBox.SelectedText;
-                
+
                 if (query.Length == 0)
                     query = _queryTextBox.Text;
 
@@ -557,6 +561,8 @@ namespace DataCommander.Providers.Query
             this._mnuListMembers = new System.Windows.Forms.ToolStripMenuItem();
             this._mnuClearCache = new System.Windows.Forms.ToolStripMenuItem();
             this._mnuGoTo = new System.Windows.Forms.ToolStripMenuItem();
+            this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.redoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._menuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this._menuItem7 = new System.Windows.Forms.ToolStripMenuItem();
             this._mnuCommandTypeText = new System.Windows.Forms.ToolStripMenuItem();
@@ -595,6 +601,7 @@ namespace DataCommander.Providers.Query
             this._beginTransactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._commitTransactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._rollbackTransactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createCCommandQueryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._menuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this._mnuObjectExplorer = new System.Windows.Forms.ToolStripMenuItem();
             this._mnuRefreshObjectExplorer = new System.Windows.Forms.ToolStripMenuItem();
@@ -617,7 +624,6 @@ namespace DataCommander.Providers.Query
             this._openTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._cancelQueryButton = new System.Windows.Forms.ToolStripButton();
             this._queryTextBox = new DataCommander.Providers.Query.QueryTextBox();
-            this.createCCommandQueryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._mainMenu.SuspendLayout();
             this._statusBar.SuspendLayout();
             this._toolStrip.SuspendLayout();
@@ -684,7 +690,9 @@ namespace DataCommander.Providers.Query
             this._mnuFind,
             this._mnuFindNext,
             this._mnuCodeCompletion,
-            this._mnuGoTo});
+            this._mnuGoTo,
+            this.undoToolStripMenuItem,
+            this.redoToolStripMenuItem});
             this._menuItem8.MergeAction = System.Windows.Forms.MergeAction.Insert;
             this._menuItem8.MergeIndex = 2;
             this._menuItem8.Name = "_menuItem8";
@@ -697,7 +705,7 @@ namespace DataCommander.Providers.Query
             this._mnuPaste.MergeIndex = 0;
             this._mnuPaste.Name = "_mnuPaste";
             this._mnuPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this._mnuPaste.Size = new System.Drawing.Size(166, 22);
+            this._mnuPaste.Size = new System.Drawing.Size(180, 22);
             this._mnuPaste.Text = "&Paste";
             // 
             // _mnuFind
@@ -706,7 +714,7 @@ namespace DataCommander.Providers.Query
             this._mnuFind.MergeIndex = 1;
             this._mnuFind.Name = "_mnuFind";
             this._mnuFind.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            this._mnuFind.Size = new System.Drawing.Size(166, 22);
+            this._mnuFind.Size = new System.Drawing.Size(180, 22);
             this._mnuFind.Text = "&Find";
             // 
             // _mnuFindNext
@@ -714,7 +722,7 @@ namespace DataCommander.Providers.Query
             this._mnuFindNext.MergeIndex = 2;
             this._mnuFindNext.Name = "_mnuFindNext";
             this._mnuFindNext.ShortcutKeys = System.Windows.Forms.Keys.F3;
-            this._mnuFindNext.Size = new System.Drawing.Size(166, 22);
+            this._mnuFindNext.Size = new System.Drawing.Size(180, 22);
             this._mnuFindNext.Text = "Find &Next";
             // 
             // _mnuCodeCompletion
@@ -724,7 +732,7 @@ namespace DataCommander.Providers.Query
             this._mnuClearCache});
             this._mnuCodeCompletion.MergeIndex = 3;
             this._mnuCodeCompletion.Name = "_mnuCodeCompletion";
-            this._mnuCodeCompletion.Size = new System.Drawing.Size(166, 22);
+            this._mnuCodeCompletion.Size = new System.Drawing.Size(180, 22);
             this._mnuCodeCompletion.Text = "&Code completion";
             // 
             // _mnuListMembers
@@ -750,8 +758,24 @@ namespace DataCommander.Providers.Query
             this._mnuGoTo.MergeIndex = 4;
             this._mnuGoTo.Name = "_mnuGoTo";
             this._mnuGoTo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-            this._mnuGoTo.Size = new System.Drawing.Size(166, 22);
+            this._mnuGoTo.Size = new System.Drawing.Size(180, 22);
             this._mnuGoTo.Text = "Go To...";
+            // 
+            // undoToolStripMenuItem
+            // 
+            this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
+            this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
+            this.undoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.undoToolStripMenuItem.Text = "Undo";
+            this.undoToolStripMenuItem.Click += new System.EventHandler(this.undoToolStripMenuItem_Click);
+            // 
+            // redoToolStripMenuItem
+            // 
+            this.redoToolStripMenuItem.Name = "redoToolStripMenuItem";
+            this.redoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
+            this.redoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.redoToolStripMenuItem.Text = "Redo";
+            this.redoToolStripMenuItem.Click += new System.EventHandler(this.redoToolStripMenuItem_Click);
             // 
             // _menuItem1
             // 
@@ -796,7 +820,7 @@ namespace DataCommander.Providers.Query
             this._mnuCommandTypeStoredProcedure});
             this._menuItem7.MergeIndex = 0;
             this._menuItem7.Name = "_menuItem7";
-            this._menuItem7.Size = new System.Drawing.Size(297, 22);
+            this._menuItem7.Size = new System.Drawing.Size(298, 22);
             this._menuItem7.Text = "Command&Type";
             // 
             // _mnuCommandTypeText
@@ -822,20 +846,20 @@ namespace DataCommander.Providers.Query
             this._mnuDescribeParameters.MergeIndex = 1;
             this._mnuDescribeParameters.Name = "_mnuDescribeParameters";
             this._mnuDescribeParameters.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this._mnuDescribeParameters.Size = new System.Drawing.Size(297, 22);
+            this._mnuDescribeParameters.Size = new System.Drawing.Size(298, 22);
             this._mnuDescribeParameters.Text = "Describe &Parameters";
             this._mnuDescribeParameters.Click += new System.EventHandler(this.mnuDescribeParameters_Click);
             // 
             // _toolStripSeparator2
             // 
             this._toolStripSeparator2.Name = "_toolStripSeparator2";
-            this._toolStripSeparator2.Size = new System.Drawing.Size(294, 6);
+            this._toolStripSeparator2.Size = new System.Drawing.Size(295, 6);
             // 
             // _mnuShowShemaTable
             // 
             this._mnuShowShemaTable.MergeIndex = 3;
             this._mnuShowShemaTable.Name = "_mnuShowShemaTable";
-            this._mnuShowShemaTable.Size = new System.Drawing.Size(297, 22);
+            this._mnuShowShemaTable.Size = new System.Drawing.Size(298, 22);
             this._mnuShowShemaTable.Text = "Show SchemaTable";
             this._mnuShowShemaTable.Click += new System.EventHandler(this.mnuShowShemaTable_Click);
             // 
@@ -843,7 +867,7 @@ namespace DataCommander.Providers.Query
             // 
             this._executeQueryToolStripMenuItem.Name = "_executeQueryToolStripMenuItem";
             this._executeQueryToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-            this._executeQueryToolStripMenuItem.Size = new System.Drawing.Size(297, 22);
+            this._executeQueryToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
             this._executeQueryToolStripMenuItem.Text = "Execute Query";
             this._executeQueryToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
@@ -852,7 +876,7 @@ namespace DataCommander.Providers.Query
             this._mnuExecuteQuerySingleRow.MergeIndex = 6;
             this._mnuExecuteQuerySingleRow.Name = "_mnuExecuteQuerySingleRow";
             this._mnuExecuteQuerySingleRow.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
-            this._mnuExecuteQuerySingleRow.Size = new System.Drawing.Size(297, 22);
+            this._mnuExecuteQuerySingleRow.Size = new System.Drawing.Size(298, 22);
             this._mnuExecuteQuerySingleRow.Text = "Execute Query (SingleRow)";
             this._mnuExecuteQuerySingleRow.Click += new System.EventHandler(this.mnuSingleRow_Click);
             // 
@@ -861,7 +885,7 @@ namespace DataCommander.Providers.Query
             this._mnuExecuteQuerySchemaOnly.MergeIndex = 7;
             this._mnuExecuteQuerySchemaOnly.Name = "_mnuExecuteQuerySchemaOnly";
             this._mnuExecuteQuerySchemaOnly.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this._mnuExecuteQuerySchemaOnly.Size = new System.Drawing.Size(297, 22);
+            this._mnuExecuteQuerySchemaOnly.Size = new System.Drawing.Size(298, 22);
             this._mnuExecuteQuerySchemaOnly.Text = "Execute Query (Schema only)";
             this._mnuExecuteQuerySchemaOnly.Click += new System.EventHandler(this.mnuResultSchema_Click);
             // 
@@ -870,7 +894,7 @@ namespace DataCommander.Providers.Query
             this._mnuExecuteQueryKeyInfo.MergeIndex = 8;
             this._mnuExecuteQueryKeyInfo.Name = "_mnuExecuteQueryKeyInfo";
             this._mnuExecuteQueryKeyInfo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.K)));
-            this._mnuExecuteQueryKeyInfo.Size = new System.Drawing.Size(297, 22);
+            this._mnuExecuteQueryKeyInfo.Size = new System.Drawing.Size(298, 22);
             this._mnuExecuteQueryKeyInfo.Text = "Execute Query (&KeyInfo)";
             this._mnuExecuteQueryKeyInfo.Click += new System.EventHandler(this.mnuKeyInfo_Click);
             // 
@@ -880,7 +904,7 @@ namespace DataCommander.Providers.Query
             this._mnuExecuteQueryXml.Name = "_mnuExecuteQueryXml";
             this._mnuExecuteQueryXml.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.X)));
-            this._mnuExecuteQueryXml.Size = new System.Drawing.Size(297, 22);
+            this._mnuExecuteQueryXml.Size = new System.Drawing.Size(298, 22);
             this._mnuExecuteQueryXml.Text = "Execute Query (XML)";
             this._mnuExecuteQueryXml.Click += new System.EventHandler(this.mnuXml_Click);
             // 
@@ -890,7 +914,7 @@ namespace DataCommander.Providers.Query
             this._mnuOpenTable.Name = "_mnuOpenTable";
             this._mnuOpenTable.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.O)));
-            this._mnuOpenTable.Size = new System.Drawing.Size(297, 22);
+            this._mnuOpenTable.Size = new System.Drawing.Size(298, 22);
             this._mnuOpenTable.Text = "Open Table";
             this._mnuOpenTable.Click += new System.EventHandler(this.mnuOpenTable_Click);
             // 
@@ -900,7 +924,7 @@ namespace DataCommander.Providers.Query
             this._mnuCancel.MergeIndex = 11;
             this._mnuCancel.Name = "_mnuCancel";
             this._mnuCancel.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Pause)));
-            this._mnuCancel.Size = new System.Drawing.Size(297, 22);
+            this._mnuCancel.Size = new System.Drawing.Size(298, 22);
             this._mnuCancel.Text = "&Cancel Executing Query";
             this._mnuCancel.Click += new System.EventHandler(this.mnuCancel_Click);
             // 
@@ -908,14 +932,14 @@ namespace DataCommander.Providers.Query
             // 
             this._parseToolStripMenuItem.Name = "_parseToolStripMenuItem";
             this._parseToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
-            this._parseToolStripMenuItem.Size = new System.Drawing.Size(297, 22);
+            this._parseToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
             this._parseToolStripMenuItem.Text = "Parse";
             this._parseToolStripMenuItem.Click += new System.EventHandler(this.parseToolStripMenuItem_Click);
             // 
             // _toolStripSeparator1
             // 
             this._toolStripSeparator1.Name = "_toolStripSeparator1";
-            this._toolStripSeparator1.Size = new System.Drawing.Size(294, 6);
+            this._toolStripSeparator1.Size = new System.Drawing.Size(295, 6);
             // 
             // _menuItem2
             // 
@@ -931,7 +955,7 @@ namespace DataCommander.Providers.Query
             this._insertScriptFileToolStripMenuItem});
             this._menuItem2.MergeIndex = 13;
             this._menuItem2.Name = "_menuItem2";
-            this._menuItem2.Size = new System.Drawing.Size(297, 22);
+            this._menuItem2.Size = new System.Drawing.Size(298, 22);
             this._menuItem2.Text = "Result &Mode";
             // 
             // _mnuText
@@ -1009,7 +1033,7 @@ namespace DataCommander.Providers.Query
             // _toolStripSeparator3
             // 
             this._toolStripSeparator3.Name = "_toolStripSeparator3";
-            this._toolStripSeparator3.Size = new System.Drawing.Size(294, 6);
+            this._toolStripSeparator3.Size = new System.Drawing.Size(295, 6);
             // 
             // _mnuGotoQueryEditor
             // 
@@ -1017,7 +1041,7 @@ namespace DataCommander.Providers.Query
             this._mnuGotoQueryEditor.Name = "_mnuGotoQueryEditor";
             this._mnuGotoQueryEditor.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.Q)));
-            this._mnuGotoQueryEditor.Size = new System.Drawing.Size(297, 22);
+            this._mnuGotoQueryEditor.Size = new System.Drawing.Size(298, 22);
             this._mnuGotoQueryEditor.Text = "Goto &Query Editor";
             this._mnuGotoQueryEditor.Click += new System.EventHandler(this.mnuGotoQueryEditor_Click);
             // 
@@ -1026,7 +1050,7 @@ namespace DataCommander.Providers.Query
             this._mnuGotoMessageTabPage.MergeIndex = 16;
             this._mnuGotoMessageTabPage.Name = "_mnuGotoMessageTabPage";
             this._mnuGotoMessageTabPage.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
-            this._mnuGotoMessageTabPage.Size = new System.Drawing.Size(297, 22);
+            this._mnuGotoMessageTabPage.Size = new System.Drawing.Size(298, 22);
             this._mnuGotoMessageTabPage.Text = "Goto &Message TabPage";
             this._mnuGotoMessageTabPage.Click += new System.EventHandler(this.mnuGotoMessageTabPage_Click);
             // 
@@ -1034,7 +1058,7 @@ namespace DataCommander.Providers.Query
             // 
             this._mnuCloseTabPage.MergeIndex = 17;
             this._mnuCloseTabPage.Name = "_mnuCloseTabPage";
-            this._mnuCloseTabPage.Size = new System.Drawing.Size(297, 22);
+            this._mnuCloseTabPage.Size = new System.Drawing.Size(298, 22);
             this._mnuCloseTabPage.Text = "Close Current &TabPage";
             this._mnuCloseTabPage.Click += new System.EventHandler(this.mnuCloseTabPage_Click);
             // 
@@ -1044,7 +1068,7 @@ namespace DataCommander.Providers.Query
             this._mnuCloseAllTabPages.Name = "_mnuCloseAllTabPages";
             this._mnuCloseAllTabPages.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.F4)));
-            this._mnuCloseAllTabPages.Size = new System.Drawing.Size(297, 22);
+            this._mnuCloseAllTabPages.Size = new System.Drawing.Size(298, 22);
             this._mnuCloseAllTabPages.Text = "Close &All TabPages";
             this._mnuCloseAllTabPages.Click += new System.EventHandler(this.mnuCloseAllTabPages_Click);
             // 
@@ -1053,7 +1077,7 @@ namespace DataCommander.Providers.Query
             this._mnuCreateInsert.MergeIndex = 19;
             this._mnuCreateInsert.Name = "_mnuCreateInsert";
             this._mnuCreateInsert.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
-            this._mnuCreateInsert.Size = new System.Drawing.Size(297, 22);
+            this._mnuCreateInsert.Size = new System.Drawing.Size(298, 22);
             this._mnuCreateInsert.Text = "Create insert statements";
             this._mnuCreateInsert.Click += new System.EventHandler(this.mnuCreateInsert_Click);
             // 
@@ -1061,26 +1085,26 @@ namespace DataCommander.Providers.Query
             // 
             this._mnuCreateInsertSelect.MergeIndex = 20;
             this._mnuCreateInsertSelect.Name = "_mnuCreateInsertSelect";
-            this._mnuCreateInsertSelect.Size = new System.Drawing.Size(297, 22);
+            this._mnuCreateInsertSelect.Size = new System.Drawing.Size(298, 22);
             this._mnuCreateInsertSelect.Text = "Create \'insert select\' statements";
             this._mnuCreateInsertSelect.Click += new System.EventHandler(this.mnuCreateInsertSelect_Click);
             // 
             // _createSqlCeDatabaseToolStripMenuItem
             // 
             this._createSqlCeDatabaseToolStripMenuItem.Name = "_createSqlCeDatabaseToolStripMenuItem";
-            this._createSqlCeDatabaseToolStripMenuItem.Size = new System.Drawing.Size(297, 22);
+            this._createSqlCeDatabaseToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
             this._createSqlCeDatabaseToolStripMenuItem.Text = "Create SQL Server Compact database";
             this._createSqlCeDatabaseToolStripMenuItem.Click += new System.EventHandler(this.createSqlCeDatabaseToolStripMenuItem_Click);
             // 
             // _exportToolStripMenuItem
             // 
             this._exportToolStripMenuItem.Name = "_exportToolStripMenuItem";
-            this._exportToolStripMenuItem.Size = new System.Drawing.Size(297, 22);
+            this._exportToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
             // 
             // _beginTransactionToolStripMenuItem
             // 
             this._beginTransactionToolStripMenuItem.Name = "_beginTransactionToolStripMenuItem";
-            this._beginTransactionToolStripMenuItem.Size = new System.Drawing.Size(297, 22);
+            this._beginTransactionToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
             this._beginTransactionToolStripMenuItem.Text = "Begin Transaction";
             this._beginTransactionToolStripMenuItem.Click += new System.EventHandler(this.beginTransactionToolStripMenuItem_Click);
             // 
@@ -1088,7 +1112,7 @@ namespace DataCommander.Providers.Query
             // 
             this._commitTransactionToolStripMenuItem.Enabled = false;
             this._commitTransactionToolStripMenuItem.Name = "_commitTransactionToolStripMenuItem";
-            this._commitTransactionToolStripMenuItem.Size = new System.Drawing.Size(297, 22);
+            this._commitTransactionToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
             this._commitTransactionToolStripMenuItem.Text = "Commit Transaction";
             this._commitTransactionToolStripMenuItem.Click += new System.EventHandler(this.commitTransactionToolStripMenuItem_Click);
             // 
@@ -1096,9 +1120,18 @@ namespace DataCommander.Providers.Query
             // 
             this._rollbackTransactionToolStripMenuItem.Enabled = false;
             this._rollbackTransactionToolStripMenuItem.Name = "_rollbackTransactionToolStripMenuItem";
-            this._rollbackTransactionToolStripMenuItem.Size = new System.Drawing.Size(297, 22);
+            this._rollbackTransactionToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
             this._rollbackTransactionToolStripMenuItem.Text = "Rollback Transaction";
             this._rollbackTransactionToolStripMenuItem.Click += new System.EventHandler(this.rollbackTransactionToolStripMenuItem_Click);
+            // 
+            // createCCommandQueryToolStripMenuItem
+            // 
+            this.createCCommandQueryToolStripMenuItem.Name = "createCCommandQueryToolStripMenuItem";
+            this.createCCommandQueryToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.Q)));
+            this.createCCommandQueryToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
+            this.createCCommandQueryToolStripMenuItem.Text = "Create C# Command/Query";
+            this.createCCommandQueryToolStripMenuItem.Click += new System.EventHandler(this.createCCommandQueryToolStripMenuItem_Click);
             // 
             // _menuItem3
             // 
@@ -1306,15 +1339,6 @@ namespace DataCommander.Providers.Query
             this._queryTextBox.Size = new System.Drawing.Size(713, 279);
             this._queryTextBox.TabIndex = 1;
             this._queryTextBox.TabSize = 4;
-            // 
-            // createCCommandQueryToolStripMenuItem
-            // 
-            this.createCCommandQueryToolStripMenuItem.Name = "createCCommandQueryToolStripMenuItem";
-            this.createCCommandQueryToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.Q)));
-            this.createCCommandQueryToolStripMenuItem.Size = new System.Drawing.Size(297, 22);
-            this.createCCommandQueryToolStripMenuItem.Text = "Create C# Command/Query";
-            this.createCCommandQueryToolStripMenuItem.Click += new System.EventHandler(this.createCCommandQueryToolStripMenuItem_Click);
             // 
             // QueryForm
             // 
@@ -1548,7 +1572,7 @@ namespace DataCommander.Providers.Query
                 if (statements.Count == 1)
                 {
                     IDbCommand command;
-                    
+
                     var getQueryConfigurationResult = GetQueryConfiguration(statements[0].CommandText);
                     if (getQueryConfigurationResult.Succeeded)
                     {
@@ -4150,6 +4174,33 @@ select
     @date as [Date]";
 
             AppendQueryText(text);
+        }
+
+        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //var canUndo = _queryTextBox.RichTextBox.CanUndo;
+            //if (canUndo)
+            //{
+            //    var actionName = _queryTextBox.RichTextBox.UndoActionName;
+            //    Trace.WriteLine($"UndoActionName:{actionName}");
+            //    _queryTextBox.RichTextBox.Undo();
+            //    _queryTextBox.RichTextBox.ClearUndo();
+            //}
+
+            _queryTextBox.Undo();
+        }
+
+        private void redoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //var canRedo = _queryTextBox.RichTextBox.CanRedo;
+            //if (canRedo)
+            //{
+            //    var actionName = _queryTextBox.RichTextBox.RedoActionName;
+            //    Trace.WriteLine($"RedoActionName:{actionName}");
+            //    _queryTextBox.RichTextBox.Redo();
+            //}
+
+            _queryTextBox.Redo();
         }
     }
 }

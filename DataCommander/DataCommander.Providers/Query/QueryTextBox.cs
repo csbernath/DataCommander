@@ -26,8 +26,11 @@ namespace DataCommander.Providers.Query
         private ToolStripStatusLabel _sbPanel;
         private int _columnIndex;
         private ColorTheme _colorTheme;
+        private UndoRedoState<string> _undoRedoState = new UndoRedoState<string>(new List<string>(), 0);
 
         public RichTextBox RichTextBox { get; private set; }
+
+        public bool EnableChangeEvent(bool enabled) => _changeEventEnabled = enabled;
 
         /// <summary> 
         /// Required designer variable.
@@ -54,8 +57,10 @@ namespace DataCommander.Providers.Query
                 BackColor = colorTheme.BackColor;
                 ForeColor = colorTheme.ForeColor;
 
+                EnableChangeEvent(false);
                 RichTextBox.BackColor = colorTheme.BackColor;
                 RichTextBox.ForeColor = colorTheme.ForeColor;
+                EnableChangeEvent(true);
             }
         }
 
@@ -506,6 +511,8 @@ namespace DataCommander.Providers.Query
                         }
                     }
 
+                    _undoRedoState.Do(new[] {text});
+
                     RichTextBox.SelectionChanged += richTextBox_SelectionChanged;
                 }
             }
@@ -743,6 +750,30 @@ namespace DataCommander.Providers.Query
 
                 contextMenu.Show(this, e.Location);
             }
+        }
+
+        public void Undo()
+        {
+            _undoRedoState.Undo(1, items =>
+            {
+                var item = items.Last();
+
+                EnableChangeEvent(false);
+                RichTextBox.Text = item;
+                EnableChangeEvent(true);
+            });
+        }
+
+        public void Redo()
+        {
+            _undoRedoState.Redo(1, items =>
+            {
+                var item = items.First();
+
+                EnableChangeEvent(false);
+                RichTextBox.Text = item;
+                EnableChangeEvent(true);
+            });
         }
 
         private sealed class KeyWordList

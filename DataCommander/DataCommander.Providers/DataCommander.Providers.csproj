@@ -306,6 +306,8 @@
     <Compile Include="Query\QueryFormStaticMethods.cs" />
     <Compile Include="Query\TokenIterator.cs" />
     <Compile Include="Query\TokenType.cs" />
+    <Compile Include="Query\UndoRedoService.cs" />
+    <Compile Include="Query\UndoRedoState.cs" />
     <Compile Include="Query\WordDocumentCreator.cs" />
     <Compile Include="ResultWriter\BooleanDataWriter.cs" />
     <Compile Include="ResultWriter\DataViewProperties.cs" />
