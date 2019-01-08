@@ -57,10 +57,10 @@ namespace DataCommander.Providers.Query
                 BackColor = colorTheme.BackColor;
                 ForeColor = colorTheme.ForeColor;
 
-                EnableChangeEvent(false);
+                //EnableChangeEvent(false);
                 RichTextBox.BackColor = colorTheme.BackColor;
                 RichTextBox.ForeColor = colorTheme.ForeColor;
-                EnableChangeEvent(true);
+                //EnableChangeEvent(true);
             }
         }
 
@@ -511,7 +511,7 @@ namespace DataCommander.Providers.Query
                         }
                     }
 
-                    _undoRedoState.Do(new[] {text});
+                    //_undoRedoState.Do(new[] {text});
 
                     RichTextBox.SelectionChanged += richTextBox_SelectionChanged;
                 }
@@ -754,26 +754,26 @@ namespace DataCommander.Providers.Query
 
         public void Undo()
         {
-            _undoRedoState.Undo(1, items =>
-            {
-                var item = items.Last();
+            //_undoRedoState.Undo(1, items =>
+            //{
+            //    var item = items.Last();
 
-                EnableChangeEvent(false);
-                RichTextBox.Text = item;
-                EnableChangeEvent(true);
-            });
+            //    EnableChangeEvent(false);
+            //    RichTextBox.Text = item;
+            //    EnableChangeEvent(true);
+            //});
         }
 
         public void Redo()
         {
-            _undoRedoState.Redo(1, items =>
-            {
-                var item = items.First();
+            //_undoRedoState.Redo(1, items =>
+            //{
+            //    var item = items.First();
 
-                EnableChangeEvent(false);
-                RichTextBox.Text = item;
-                EnableChangeEvent(true);
-            });
+            //    EnableChangeEvent(false);
+            //    RichTextBox.Text = item;
+            //    EnableChangeEvent(true);
+            //});
         }
 
         private sealed class KeyWordList

@@ -394,10 +394,10 @@ namespace DataCommander.Providers.Query
                 for (var i = 0; i < tabs.Length; i++)
                     tabs[i] = (i + 1) * width;
 
-                _queryTextBox.EnableChangeEvent(false);
+                //_queryTextBox.EnableChangeEvent(false);
                 _queryTextBox.RichTextBox.Font = value;
                 _queryTextBox.RichTextBox.SelectionTabs = tabs;
-                _queryTextBox.EnableChangeEvent(true);
+                //_queryTextBox.EnableChangeEvent(true);
 
                 _messagesTextBox.Font = value;
                 _messagesTextBox.SelectionTabs = tabs;
