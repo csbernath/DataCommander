@@ -29,6 +29,7 @@ namespace DataCommander.Providers.SqlServerCe40
         XmlReader IProvider.ExecuteXmlReader(IDbCommand command) => throw new NotImplementedException();
         DataTable IProvider.GetSchemaTable(IDataReader dataReader) => dataReader.GetSchemaTable();
         DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
+        GetTableSchemaResult IProvider.GetTableSchema2(IDbConnection connection, string tableName) => throw new NotImplementedException();
 
         Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
         {

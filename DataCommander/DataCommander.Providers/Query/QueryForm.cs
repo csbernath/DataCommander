@@ -473,14 +473,14 @@ namespace DataCommander.Providers.Query
             {
                 if (dataSet != null && dataSet.Tables.Count > 0)
                 {
-                    DataSet tableSchema = null;
+                    GetTableSchemaResult getTableSchemaResult = null;
                     string text;
                     if (_openTableMode)
                     {
                         var tableName = _sqlStatement.FindTableName();
                         text = tableName;
                         dataSet.Tables[0].TableName = tableName;
-                        tableSchema = Provider.GetTableSchema(Connection.Connection, tableName);
+                        getTableSchemaResult = Provider.GetTableSchema2(Connection.Connection, tableName);
                     }
                     else
                     {
@@ -500,7 +500,7 @@ namespace DataCommander.Providers.Query
                         foreach (DataTable dataTable in dataSet.Tables)
                         {
                             var commandBuilder = Provider.DbProviderFactory.CreateCommandBuilder();
-                            var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataTable, tableSchema, TableStyle,
+                            var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataTable, getTableSchemaResult, TableStyle,
                                 !_openTableMode, _sbPanelText, _colorTheme);
                             control.Dock = DockStyle.Fill;
                             text = dataTable.TableName;
@@ -516,7 +516,7 @@ namespace DataCommander.Providers.Query
                     else
                     {
                         var commandBuilder = Provider.DbProviderFactory.CreateCommandBuilder();
-                        var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataSet.Tables[0], tableSchema, TableStyle,
+                        var control = QueryFormStaticMethods.CreateControlFromDataTable(commandBuilder, dataSet.Tables[0], getTableSchemaResult, TableStyle,
                             !_openTableMode, _sbPanelText, _colorTheme);
                         control.Dock = DockStyle.Fill;
                         resultSetTabPage.Controls.Add(control);
@@ -1876,14 +1876,8 @@ namespace DataCommander.Providers.Query
             {
                 var tableName = _sqlStatement.FindTableName();
                 dataTableEditor.TableName = tableName;
-                var dataSet = Provider.GetTableSchema(Connection.Connection, tableName);
-
-                foreach (DataTable schemaTable in dataSet.Tables)
-                {
-                    Log.Write(LogLevel.Trace, "tableSchema:\r\n{0}", schemaTable.ToStringTableString());
-                }
-
-                dataTableEditor.TableSchema = dataSet;
+                var getTableSchemaResult = Provider.GetTableSchema2(Connection.Connection, tableName);
+                dataTableEditor.TableSchema = getTableSchemaResult;
             }
 
             GarbageMonitor.Default.Add("dataTableEditor", dataTableEditor);

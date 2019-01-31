@@ -132,30 +132,11 @@ namespace DataCommander.Providers.Msi
             return typeof(object);
         }
 
-        GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
-        {
-            throw new NotImplementedException();
-        }
-
-        DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        string IProvider.GetExceptionMessage(Exception exception)
-        {
-            throw new NotImplementedException();
-        }
-
-        DataTable IProvider.GetParameterTable(IDataParameterCollection parameters)
-        {
-            throw new NotImplementedException();
-        }
-
-        DataTable IProvider.GetSchemaTable(IDataReader dataReader)
-        {
-            return dataReader.GetSchemaTable();
-        }
+        GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position) => throw new NotImplementedException();
+        DataParameterBase IProvider.GetDataParameter(IDataParameter parameter) => throw new NotImplementedException();
+        string IProvider.GetExceptionMessage(Exception exception) => throw new NotImplementedException();
+        DataTable IProvider.GetParameterTable(IDataParameterCollection parameters) => throw new NotImplementedException();
+        DataTable IProvider.GetSchemaTable(IDataReader dataReader) => dataReader.GetSchemaTable();
 
         List<Statement> IProvider.GetStatements(string commandText)
         {
@@ -169,19 +150,9 @@ namespace DataCommander.Providers.Msi
             };
         }
 
-        DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName)
-        {
-            throw new NotImplementedException();
-        }
-
-        List<InfoMessage> IProvider.ToInfoMessages(Exception e)
-        {
-            throw new NotImplementedException();
-        }
-
-        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder()
-        {
-            return new ConnectionStringBuilder();
-        }
+        DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
+        GetTableSchemaResult IProvider.GetTableSchema2(IDbConnection connection, string tableName) => throw new NotImplementedException();
+        List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
+        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder() => new ConnectionStringBuilder();
     }
 }

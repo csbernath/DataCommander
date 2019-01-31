@@ -335,20 +335,10 @@ namespace DataCommander.Providers.OracleClient
             throw new NotImplementedException();
         }
 
-        XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
-        {
-            throw new NotImplementedException();
-        }
-
-        DataTable IProvider.GetSchemaTable(IDataReader dataReader)
-        {
-            return dataReader.GetSchemaTable();
-        }
-
-        DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName)
-        {
-            throw new NotImplementedException();
-        }
+        XmlReader IProvider.ExecuteXmlReader(IDbCommand command) => throw new NotImplementedException();
+        DataTable IProvider.GetSchemaTable(IDataReader dataReader) => dataReader.GetSchemaTable();
+        DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
+        GetTableSchemaResult IProvider.GetTableSchema2(IDbConnection connection, string tableName) => throw new NotImplementedException();
 
         Type IProvider.GetColumnType(FoundationDbColumn column)
         {
@@ -363,10 +353,7 @@ namespace DataCommander.Providers.OracleClient
             return new OracleDataReaderHelper(oracleDataReader);
         }
 
-        DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection)
-        {
-            throw new NotImplementedException();
-        }
+        DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection) => throw new NotImplementedException();
 
         public IObjectExplorer CreateObjectExplorer() => new ObjectExplorer();
 
@@ -374,15 +361,8 @@ namespace DataCommander.Providers.OracleClient
         {
         }
 
-        string IProvider.GetExceptionMessage(Exception e)
-        {
-            return e.ToString();
-        }
-
-        string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
-        {
-            return null;
-        }
+        string IProvider.GetExceptionMessage(Exception e) => e.ToString();
+        string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName) => null;
 
         private static object ConvertDecimalField(object value)
         {

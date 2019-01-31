@@ -247,15 +247,9 @@ namespace DataCommander.Providers.OleDb
         {
         }
 
-        List<InfoMessage> IProvider.ToInfoMessages(Exception e)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetExceptionMessage(Exception e)
-        {
-            return e.ToString();
-        }
+        GetTableSchemaResult IProvider.GetTableSchema2(IDbConnection connection, string tableName) => throw new NotImplementedException();
+        List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
+        public string GetExceptionMessage(Exception e) => e.ToString();
 
         #region IProvider Members
 

@@ -52,7 +52,7 @@ namespace DataCommander.Providers.Query
             table.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitContent);
             table.Columns.AutoFit();
 
-            foreach (Column column in table.Columns)
+            foreach (Microsoft.Office.Interop.Word.Column column in table.Columns)
             {
                 column.Select();
                 column.AutoFit();

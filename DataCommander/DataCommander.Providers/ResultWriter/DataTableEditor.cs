@@ -14,6 +14,7 @@ using System.Xml;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.Query;
+using Foundation.Collections.ReadOnly;
 using Foundation.Core;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
@@ -31,7 +32,7 @@ namespace DataCommander.Providers.ResultWriter
         private readonly DbCommandBuilder _commandBuilder;
         private DoubleBufferedDataGridView _dataGrid;
         private string _tableName;
-        private DataSet _tableSchema;
+        private GetTableSchemaResult _tableSchema;
         private DataTable _dataTable;
         private ToolStripStatusLabel _statusBarPanel;
         private int _columnIndex;
@@ -212,7 +213,7 @@ namespace DataCommander.Providers.ResultWriter
             set => _tableName = value;
         }
 
-        public DataSet TableSchema
+        public GetTableSchemaResult TableSchema
         {
             set
             {
@@ -224,14 +225,10 @@ namespace DataCommander.Providers.ResultWriter
                     string message;
 
                     if (uniqueIndexColumns.Length > 0)
-                    {
                         message = "The table has a primary key/unique index. Columns: " +
-                                  uniqueIndexColumns.Select(r => (string) r["ColumnName"]).Aggregate((n1, n2) => $"{n1},{n2}");
-                    }
+                                  uniqueIndexColumns.Select(r => r.ColumnName).Aggregate((n1, n2) => $"{n1},{n2}");
                     else
-                    {
                         message = "WARNING: The table has no primary key/unique index.";
-                    }
 
                     var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
                     queryForm.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, message));
@@ -244,18 +241,12 @@ namespace DataCommander.Providers.ResultWriter
             set => _statusBarPanel = value;
         }
 
-        private IEnumerable<DataRow> UniqueIndexColumns
-        {
-            get
+        private IEnumerable<Column> UniqueIndexColumns =>
+            _tableSchema.UniqueIndexColumns.Select(i =>
             {
-                foreach (DataRow dataRow in _tableSchema.Tables[1].Rows)
-                {
-                    var columnOrdinal = dataRow.Field<int>(0);
-                    var column = _tableSchema.Tables[0].Rows[columnOrdinal - 1];
-                    yield return column;
-                }
-            }
-        }
+                var column = _tableSchema.Columns.First(j => j.ColumnId == i.ColumnId);
+                return column;
+            });
 
         private object CurrentCellValue
         {
@@ -395,20 +386,17 @@ namespace DataCommander.Providers.ResultWriter
 
         private string GetWhere(DataRow row)
         {
-            var columns = _tableSchema.Tables[0];
+            var columns = _tableSchema.Columns;
             var stringBuilder = new StringBuilder();
             var first = true;
-            var uniqueIndexColumns = UniqueIndexColumns.ToArray();
+            var uniqueIndexColumns = UniqueIndexColumns.ToReadOnlyList();
+            if (uniqueIndexColumns.Count == 0)
+                uniqueIndexColumns = columns.ToReadOnlyList();
 
-            var schema = uniqueIndexColumns.Length > 0
-                ? uniqueIndexColumns
-                : _tableSchema.Tables[0].Rows.Cast<DataRow>().ToArray();
-
-            foreach (var uniqueIndexColumn in schema)
+            foreach (var uniqueIndexColumn in uniqueIndexColumns)
             {
-                var columnOrdinal = (short) uniqueIndexColumn["Columnordinal"];
-                var column = columns.Rows[columnOrdinal - 1];
-                var columnName = (string) column[SchemaTableColumn.ColumnName];
+                var columnId = uniqueIndexColumn.ColumnId;
+                var columnName = uniqueIndexColumn.ColumnName;
 
                 if (first)
                 {
@@ -441,12 +429,12 @@ namespace DataCommander.Providers.ResultWriter
             stringBuilder.AppendLine();
             var valid = true;
 
-            foreach (DataRow schemaRow in _tableSchema.Tables[0].Rows)
+            foreach (var column in _tableSchema.Columns)
             {
-                var columnName = (string) schemaRow["ColumnName"];
-                var hasDefault = schemaRow.Field<bool>("HasDefault");
-                var isNullable = schemaRow.Field<bool>("IsNullable");
-                var hasAutomaticValue = schemaRow.Field<bool>("HasAutomaticValue");
+                var columnName = column.ColumnName;
+                var hasDefault = column.HasDefault;
+                var isNullable = column.IsNullable;
+                var hasAutomaticValue = column.HasAutomaticValue;
                 var value = dataRow[columnName];
 
                 if (value == DBNull.Value && !isNullable && !hasDefault && !hasAutomaticValue)
@@ -462,14 +450,9 @@ namespace DataCommander.Providers.ResultWriter
                 stringBuilder = new StringBuilder();
                 stringBuilder.AppendFormat("\r\ninsert into {0}(", _tableName);
                 var first = true;
-                var schemaRows = _tableSchema.Tables[0].Rows;
-
-                foreach (DataColumn column in table.Columns)
+                foreach (var column in _tableSchema.Columns)
                 {
-                    var schemaRow = schemaRows[column.Ordinal];
-                    var hasAutomaticValue = schemaRow.Field<bool>("HasAutomaticValue");
-
-                    if (!hasAutomaticValue)
+                    if (!column.HasAutomaticValue)
                     {
                         if (first)
                             first = false;
@@ -483,27 +466,29 @@ namespace DataCommander.Providers.ResultWriter
                 stringBuilder.Append(") values(");
                 first = true;
 
-                foreach (DataColumn column in table.Columns)
+                var sequence = new Sequence();
+                foreach (var column in _tableSchema.Columns)
                 {
-                    var schemaRow = schemaRows[column.Ordinal];
-                    var hasAutomaticValue = schemaRow.Field<bool>("HasAutomaticValue");
-
-                    if (!hasAutomaticValue)
+                    var columnIndex = sequence.Next();
+                    if (!column.HasAutomaticValue)
                     {
-                        var hasDeafult = schemaRow.Field<bool>("HasDefault");
+                        var hasDeafult = column.HasDefault;
 
                         if (first)
                             first = false;
                         else
                             stringBuilder.Append(',');
 
-                        var value = dataRow[column];
+                        var value = dataRow[columnIndex];
                         string valueString;
 
                         if (value == DBNull.Value && hasDeafult)
                             valueString = "default";
                         else
-                            valueString = ToString(column, value);
+                        {
+                            var dataColumn = _dataTable.Columns[columnIndex];
+                            valueString = ToString(dataColumn, value);
+                        }
 
                         stringBuilder.Append(valueString);
                     }

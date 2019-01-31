@@ -79,10 +79,8 @@ namespace DataCommander.Providers.Wmi
             return table;
         }
 
-        DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName)
-        {
-            return null;
-        }
+        DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName) => null;
+        GetTableSchemaResult IProvider.GetTableSchema2(IDbConnection connection, string tableName) => throw new NotImplementedException();
 
         //Type IProvider.ToDataType(int providerType, int columnSize)
         //{

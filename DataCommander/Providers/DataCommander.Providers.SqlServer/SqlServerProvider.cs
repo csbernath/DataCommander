@@ -13,6 +13,7 @@ using DataCommander.Providers.FieldNamespace;
 using DataCommander.Providers.Query;
 using DataCommander.Providers.SqlServer.FieldReader;
 using Foundation.Assertions;
+using Foundation.Collections.ReadOnly;
 using Foundation.Configuration;
 using Foundation.Core;
 using Foundation.Data;
@@ -866,37 +867,29 @@ order by 1", name.Database);
 
             var fourPartName = new DatabaseObjectMultipartName(connection.Database, tableName);
             var owner = fourPartName.Schema;
-            if (owner == null) owner = "dbo";
+            if (owner == null)
+                owner = "dbo";
 
             var commandText = string.Format(@"declare @id int
 
-select  @id = o.object_id
-from    {0}.sys.objects o
-join    {0}.sys.schemas s
-on      o.schema_id = s.schema_id
-where   s.name = {1}
-        and o.name = {2}
+select
+    @id = o.object_id
+from {0}.sys.objects o
+join {0}.sys.schemas s
+    on o.schema_id = s.schema_id
+where
+    s.name = {1}
+    and o.name = {2}
 
 select
     c.name                                                                              as ColumnName,
-    c.colid                                                                             as ColumnOrdinal,
+    c.colid                                                                             as ColumnId,
     convert(bit,case when c.cdefault <> 0 then 1 else 0 end)                            as HasDefault,
     convert(bit,c.isnullable)                                                           as IsNullable,
     convert(bit,case when c.autoval is not null or c.status = 128 then 1 else 0 end)    as HasAutomaticValue 
-from	{0}.dbo.syscolumns c
-where	c.id		= @id
+from {0}.dbo.syscolumns c
+where c.id = @id
 order by c.colid
-
-/*select	k.colid		as ColumnOrdinal
-from	{0}.dbo.sysobjects o
-join	{0}.dbo.sysindexes i
-on	o.name		= i.name
-join	{0}.dbo.sysindexkeys k
-on	i.id		= k.id
-	and i.indid	= k.indid
-where	o.parent_obj	= @id
-	and xtype	= 'PK'
-order by k.keyno*/
 
 declare @index_id int
 select top 1
@@ -917,33 +910,128 @@ cross apply
 where
     i.object_id = @id
     and i.is_unique = 1
+    and i.has_filter = 0
 order by c.[Count]
 
 if @index_id is null
-begin
-    select  @index_id = i.index_id
-    from    {0}.sys.indexes i (readpast)
+    select @index_id = i.index_id
+    from  {0}.sys.indexes i (readpast)
     where
         i.object_id = @id
         and i.is_unique = 1
-end
 
-select  ic.column_id as ColumnOrdinal
-from    {0}.sys.index_columns ic
+select ic.column_id as ColumnId
+from {0}.sys.index_columns ic
 where
     ic.object_id    = @id
     and ic.index_id = @index_id
-order by ic.index_column_id
-",
+order by ic.index_column_id",
                 sqlCommandBuilder.QuoteIdentifier(fourPartName.Database),
                 owner.ToTSqlNVarChar(),
                 fourPartName.Name.ToTSqlNVarChar());
             Log.Write(LogLevel.Trace, commandText);
 
             var executor = DbCommandExecutorFactory.Create(connection);
-            DataSet dataSet = null;
-            executor.Execute(new CreateCommandRequest(commandText), command => dataSet = command.ExecuteDataSet(CancellationToken.None));
+            var dataSet = executor.ExecuteDataSet(new ExecuteReaderRequest(commandText));
             return dataSet;
+        }
+
+        GetTableSchemaResult IProvider.GetTableSchema2(IDbConnection connection, string tableName)
+        {
+            var sqlCommandBuilder = new SqlCommandBuilder();
+
+            var fourPartName = new DatabaseObjectMultipartName(connection.Database, tableName);
+            var owner = fourPartName.Schema;
+            if (owner == null)
+                owner = "dbo";
+
+            var commandText = string.Format(@"declare @id int
+
+select
+    @id = o.object_id
+from {0}.sys.objects o
+join {0}.sys.schemas s
+    on o.schema_id = s.schema_id
+where
+    s.name = {1}
+    and o.name = {2}
+
+select
+    c.name                                                                              as ColumnName,
+    c.colid                                                                             as ColumnId,
+    convert(bit,case when c.cdefault <> 0 then 1 else 0 end)                            as HasDefault,
+    convert(bit,c.isnullable)                                                           as IsNullable,
+    convert(bit,case when c.autoval is not null or c.status = 128 then 1 else 0 end)    as HasAutomaticValue 
+from {0}.dbo.syscolumns c
+where c.id = @id
+order by c.colid
+
+declare @index_id int
+select top 1
+    @index_id = i.index_id
+from {0}.sys.indexes i (readpast)
+cross apply
+(
+    select count(1) as [Count]
+    from {0}.sys.index_columns ic (readpast)
+    join {0}.sys.columns c (readpast)
+        on ic.object_id = c.object_id
+        and ic.column_id = c.column_id
+    where
+        ic.object_id = i.object_id
+        and ic.index_id = i.index_id
+        and c.is_identity = 1
+) c
+where
+    i.object_id = @id
+    and i.is_unique = 1
+    and i.has_filter = 0
+order by c.[Count]
+
+if @index_id is null
+    select @index_id = i.index_id
+    from  {0}.sys.indexes i (readpast)
+    where
+        i.object_id = @id
+        and i.is_unique = 1
+
+select ic.column_id as ColumnId
+from {0}.sys.index_columns ic
+where
+    ic.object_id    = @id
+    and ic.index_id = @index_id
+order by ic.index_column_id",
+                sqlCommandBuilder.QuoteIdentifier(fourPartName.Database),
+                owner.ToTSqlNVarChar(),
+                fourPartName.Name.ToTSqlNVarChar());
+            Log.Write(LogLevel.Trace, commandText);
+
+            var executor = DbCommandExecutorFactory.Create(connection);
+
+            GetTableSchemaResult getTableSchemaResult = null;
+            executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataReader =>
+            {
+                var columns = dataReader.ReadResult(ReadColumn).ToReadOnlyList();
+                var uniqueIndexColumns = dataReader.ReadNextResult(ReadUniqueIndexColumn).ToReadOnlyList();
+                getTableSchemaResult = new GetTableSchemaResult(columns, uniqueIndexColumns);
+            });
+            return getTableSchemaResult;
+        }
+
+        private static Column ReadColumn(IDataRecord dataRecord)
+        {
+            var columnName = dataRecord.GetString(0);
+            var columnId = (int)dataRecord.GetInt16(1);
+            var hasDefault = dataRecord.GetBoolean(2);
+            var isNullable = dataRecord.GetBoolean(3);
+            var hasAutomaticValue = dataRecord.GetBoolean(4);
+            return new Column(columnName, columnId, hasDefault, isNullable, hasAutomaticValue);
+        }
+
+        private static UniqueIndexColumn ReadUniqueIndexColumn(IDataRecord dataRecord)
+        {
+            var columnId = dataRecord.GetInt32(0);
+            return new UniqueIndexColumn(columnId);
         }
 
         List<InfoMessage> IProvider.ToInfoMessages(Exception exception)
@@ -952,9 +1040,7 @@ order by ic.index_column_id
             List<InfoMessage> infoMessages;
             var sqlException = exception as SqlException;
             if (sqlException != null)
-            {
                 infoMessages = ToInfoMessages(sqlException.Errors);
-            }
             else
             {
                 var message = exception.ToLogString();

@@ -40,7 +40,7 @@ namespace DataCommander.Providers.Query
         public static Control CreateControlFromDataTable(
             DbCommandBuilder commandBuilder,
             DataTable dataTable,
-            DataSet schemaTable,
+            GetTableSchemaResult getTableSchemaResult,
             ResultWriterType tableStyle,
             bool readOnly,
             ToolStripStatusLabel toolStripStatusLabel,
@@ -51,7 +51,7 @@ namespace DataCommander.Providers.Query
             switch (tableStyle)
             {
                 case ResultWriterType.DataGrid:
-                    control = CreateDataTableEditorFromDataTable(commandBuilder, dataTable, schemaTable, readOnly, toolStripStatusLabel, colorTheme);
+                    control = CreateDataTableEditorFromDataTable(commandBuilder, dataTable, getTableSchemaResult, readOnly, toolStripStatusLabel, colorTheme);
                     break;
 
                 case ResultWriterType.Html:
@@ -71,7 +71,7 @@ namespace DataCommander.Providers.Query
         private static DataTableEditor CreateDataTableEditorFromDataTable(
             DbCommandBuilder commandBuilder,
             DataTable dataTable,
-            DataSet tableSchema,
+            GetTableSchemaResult getTableSchemaResult,
             bool readOnly,
             ToolStripStatusLabel toolStripStatusLabel,
             ColorTheme colorTheme)
@@ -80,7 +80,7 @@ namespace DataCommander.Providers.Query
             editor.ReadOnly = readOnly;
             editor.DataTable = dataTable;
             editor.TableName = dataTable.TableName;
-            editor.TableSchema = tableSchema;
+            editor.TableSchema = getTableSchemaResult;
             editor.StatusBarPanel = toolStripStatusLabel;
             return editor;
         }
