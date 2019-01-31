@@ -9,7 +9,6 @@ using Foundation.Data;
 
 namespace DataCommander.Providers
 {
-    //[ContractClass(typeof (IProviderContract))]
     public interface IProvider
     {
         #region Properties
@@ -41,7 +40,6 @@ namespace DataCommander.Providers
             out Converter<object, object>[] converters);
 
         void DeriveParameters(IDbCommand command);
-        XmlReader ExecuteXmlReader(IDbCommand command);
 
         Type GetColumnType(FoundationDbColumn dataColumnSchema);
         string GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName);

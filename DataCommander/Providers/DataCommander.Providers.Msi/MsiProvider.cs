@@ -122,11 +122,6 @@ namespace DataCommander.Providers.Msi
             throw new NotImplementedException();
         }
 
-        XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
-        {
-            throw new NotImplementedException();
-        }
-
         Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
         {
             return typeof(object);

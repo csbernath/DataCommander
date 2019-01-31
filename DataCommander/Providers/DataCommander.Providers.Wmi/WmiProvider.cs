@@ -30,7 +30,6 @@ namespace DataCommander.Providers.Wmi
 
         DataParameterBase IProvider.GetDataParameter(IDataParameter parameter) => null;
         DataTable IProvider.GetParameterTable(IDataParameterCollection parameters) => null;
-        XmlReader IProvider.ExecuteXmlReader(IDbCommand command) => null;
 
         DataTable IProvider.GetSchemaTable(IDataReader dataReader)
         {

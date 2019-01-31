@@ -86,11 +86,6 @@ namespace DataCommander.Providers.MySql
             throw new NotImplementedException();
         }
 
-        System.Xml.XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
-        {
-            throw new NotImplementedException();
-        }
-
         Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
         {
             // TODO

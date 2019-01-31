@@ -34,7 +34,6 @@ namespace DataCommander.Providers.PostgreSql
             string destinationTableName, out IDbCommand insertCommand, out Converter<object, object>[] converters) => throw new NotImplementedException();
 
         void IProvider.DeriveParameters(IDbCommand command) => throw new NotImplementedException();
-        System.Xml.XmlReader IProvider.ExecuteXmlReader(IDbCommand command) => throw new NotImplementedException();
         public Type GetColumnType(FoundationDbColumn dataColumnSchema) => throw new NotImplementedException();
 
         Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)

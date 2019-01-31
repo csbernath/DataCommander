@@ -285,12 +285,6 @@ namespace DataCommander.Providers.Odp
             return type;
         }
 
-        XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
-        {
-            var oracleCommand = (OracleCommand)command;
-            return oracleCommand.ExecuteXmlReader();
-        }
-
         IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
         {
             //OracleGlobalization globalization = OracleGlobalization.GetThreadInfo();

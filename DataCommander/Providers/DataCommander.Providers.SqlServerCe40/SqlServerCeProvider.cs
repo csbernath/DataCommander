@@ -26,7 +26,6 @@ namespace DataCommander.Providers.SqlServerCe40
         void IProvider.DeriveParameters(IDbCommand command) => throw new NotImplementedException();
         DataParameterBase IProvider.GetDataParameter(IDataParameter parameter) => throw new NotImplementedException();
         DataTable IProvider.GetParameterTable(IDataParameterCollection parameters) => throw new NotImplementedException();
-        XmlReader IProvider.ExecuteXmlReader(IDbCommand command) => throw new NotImplementedException();
         DataTable IProvider.GetSchemaTable(IDataReader dataReader) => dataReader.GetSchemaTable();
         GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
 

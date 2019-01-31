@@ -335,7 +335,6 @@ namespace DataCommander.Providers.OracleClient
             throw new NotImplementedException();
         }
 
-        XmlReader IProvider.ExecuteXmlReader(IDbCommand command) => throw new NotImplementedException();
         DataTable IProvider.GetSchemaTable(IDataReader dataReader) => dataReader.GetSchemaTable();
         GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
 

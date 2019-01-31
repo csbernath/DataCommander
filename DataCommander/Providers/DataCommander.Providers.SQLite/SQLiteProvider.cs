@@ -52,11 +52,6 @@ namespace DataCommander.Providers.SQLite
             throw new Exception("The method or operation is not implemented.");
         }
 
-        XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-
         DataTable IProvider.GetSchemaTable(IDataReader dataReader)
         {
             DataTable table = null;

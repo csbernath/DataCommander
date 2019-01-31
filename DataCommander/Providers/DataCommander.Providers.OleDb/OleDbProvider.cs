@@ -275,7 +275,6 @@ namespace DataCommander.Providers.OleDb
             throw new NotImplementedException();
         }
 
-        XmlReader IProvider.ExecuteXmlReader(IDbCommand command) => throw new NotImplementedException();
         DataTable IProvider.GetSchemaTable(IDataReader dataReader) => throw new NotImplementedException();
         DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection) => throw new NotImplementedException();
 

@@ -157,7 +157,6 @@ namespace DataCommander.Providers.Tfs
             return table;
         }
 
-        XmlReader IProvider.ExecuteXmlReader(IDbCommand command) => throw new NotImplementedException();
         DataTable IProvider.GetSchemaTable(IDataReader dataReader) => new DataTable();
         GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
 
