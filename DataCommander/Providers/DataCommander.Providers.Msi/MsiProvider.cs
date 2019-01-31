@@ -150,8 +150,7 @@ namespace DataCommander.Providers.Msi
             };
         }
 
-        DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
-        GetTableSchemaResult IProvider.GetTableSchema2(IDbConnection connection, string tableName) => throw new NotImplementedException();
+        GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
         List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
         IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder() => new ConnectionStringBuilder();
     }

@@ -247,7 +247,7 @@ namespace DataCommander.Providers.OleDb
         {
         }
 
-        GetTableSchemaResult IProvider.GetTableSchema2(IDbConnection connection, string tableName) => throw new NotImplementedException();
+        GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
         List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
         public string GetExceptionMessage(Exception e) => e.ToString();
 
@@ -275,25 +275,9 @@ namespace DataCommander.Providers.OleDb
             throw new NotImplementedException();
         }
 
-        XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
-        {
-            throw new NotImplementedException();
-        }
-
-        DataTable IProvider.GetSchemaTable(IDataReader dataReader)
-        {
-            throw new NotImplementedException();
-        }
-
-        DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName)
-        {
-            throw new NotImplementedException();
-        }
-
-        DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection)
-        {
-            throw new NotImplementedException();
-        }
+        XmlReader IProvider.ExecuteXmlReader(IDbCommand command) => throw new NotImplementedException();
+        DataTable IProvider.GetSchemaTable(IDataReader dataReader) => throw new NotImplementedException();
+        DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection) => throw new NotImplementedException();
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position) =>
             throw new NotImplementedException();

@@ -480,7 +480,7 @@ namespace DataCommander.Providers.Query
                         var tableName = _sqlStatement.FindTableName();
                         text = tableName;
                         dataSet.Tables[0].TableName = tableName;
-                        getTableSchemaResult = Provider.GetTableSchema2(Connection.Connection, tableName);
+                        getTableSchemaResult = Provider.GetTableSchema(Connection.Connection, tableName);
                     }
                     else
                     {
@@ -1876,7 +1876,7 @@ namespace DataCommander.Providers.Query
             {
                 var tableName = _sqlStatement.FindTableName();
                 dataTableEditor.TableName = tableName;
-                var getTableSchemaResult = Provider.GetTableSchema2(Connection.Connection, tableName);
+                var getTableSchemaResult = Provider.GetTableSchema(Connection.Connection, tableName);
                 dataTableEditor.TableSchema = getTableSchemaResult;
             }
 

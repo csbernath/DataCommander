@@ -22,31 +22,15 @@ namespace DataCommander.Providers.Wmi
         }
 
         string[] IProvider.KeyWords => null;
-
-        //void IProvider.SetStandardOutput(IDbCommand command, IStandardOutput standardOutput)
-        //{
-        //}
-
         bool IProvider.IsCommandCancelable => false;
 
         void IProvider.DeriveParameters(IDbCommand command)
         {
         }
 
-        DataParameterBase IProvider.GetDataParameter(IDataParameter parameter)
-        {
-            return null;
-        }
-
-        DataTable IProvider.GetParameterTable(IDataParameterCollection parameters)
-        {
-            return null;
-        }
-
-        XmlReader IProvider.ExecuteXmlReader(IDbCommand command)
-        {
-            return null;
-        }
+        DataParameterBase IProvider.GetDataParameter(IDataParameter parameter) => null;
+        DataTable IProvider.GetParameterTable(IDataParameterCollection parameters) => null;
+        XmlReader IProvider.ExecuteXmlReader(IDbCommand command) => null;
 
         DataTable IProvider.GetSchemaTable(IDataReader dataReader)
         {
@@ -57,15 +41,15 @@ namespace DataCommander.Providers.Wmi
             {
                 table = new DataTable("SchemaTable");
                 var columns = table.Columns;
-                columns.Add(" ", typeof (int));
-                columns.Add("Name", typeof (string));
-                columns.Add("CimType", typeof (string));
+                columns.Add(" ", typeof(int));
+                columns.Add("Name", typeof(string));
+                columns.Add("CimType", typeof(string));
 
                 for (var i = 0; i < schemaTable.Rows.Count; i++)
                 {
                     var row = schemaTable.Rows[i];
                     var columnOrdinal = i + 1;
-                    var columnSize = (int)row["ColumnSize"];
+                    var columnSize = (int) row["ColumnSize"];
 
                     table.Rows.Add(new[]
                     {
@@ -79,55 +63,9 @@ namespace DataCommander.Providers.Wmi
             return table;
         }
 
-        DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName) => null;
-        GetTableSchemaResult IProvider.GetTableSchema2(IDbConnection connection, string tableName) => throw new NotImplementedException();
-
-        //Type IProvider.ToDataType(int providerType, int columnSize)
-        //{
-        //    bool isArray = (providerType & 0x1000) == 0x1000;
-        //    CimType cimType = new CimType();
-
-        //    if (isArray)
-        //    {
-        //        cimType = (CimType)(providerType & ~0x1000);
-        //    }
-        //    else
-        //    {
-        //        cimType = (CimType)providerType;
-        //    }
-
-        //    Type type;
-
-        //    switch (cimType)
-        //    {
-        //        case CimType.String:
-        //            type = isArray ? typeof (string[]) : typeof (string);
-        //            break;
-
-        //        default:
-        //            type = null;
-        //            break;
-
-        //    }
-
-        //    return type;
-        //}
-
-        IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader)
-        {
-            return new WmiDataReaderHelper(dataReader);
-        }
-
-        //    public void GetValues(IDataReader dataReader,object[] values)
-        //    {
-        //      dataReader.GetValues(values);
-        //    }
-
-        DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection)
-        {
-            return null;
-        }
-
+        GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
+        IDataReaderHelper IProvider.CreateDataReaderHelper(IDataReader dataReader) => new WmiDataReaderHelper(dataReader);
+        DbDataAdapter IProvider.CreateDataAdapter(string selectCommandText, IDbConnection connection) => null;
         public IObjectExplorer CreateObjectExplorer() => new WmiObjectExplorer();
 
         private static void AddClassNames(ManagementClass manClass, IList list)
@@ -138,9 +76,7 @@ namespace DataCommander.Providers.Wmi
             var objects = manClass.GetSubclasses();
 
             foreach (ManagementClass subClass in objects)
-            {
                 AddClassNames(subClass, list);
-            }
         }
 
         void IProvider.ClearCompletionCache()
@@ -150,20 +86,9 @@ namespace DataCommander.Providers.Wmi
             node.Attributes.Remove(key);
         }
 
-        string IProvider.GetExceptionMessage(Exception e)
-        {
-            return e.ToString();
-        }
-
-        Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema)
-        {
-            return dataColumnSchema.DataType;
-        }
-
-        string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
-        {
-            throw new NotImplementedException();
-        }
+        string IProvider.GetExceptionMessage(Exception e) => e.ToString();
+        Type IProvider.GetColumnType(FoundationDbColumn dataColumnSchema) => dataColumnSchema.DataType;
+        string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName) => throw new NotImplementedException();
 
         void IProvider.CreateInsertCommand(
             DataTable sourceSchemaTable,
@@ -171,16 +96,10 @@ namespace DataCommander.Providers.Wmi
             IDbConnection destinationconnection,
             string destinationTableName,
             out IDbCommand insertCommand,
-            out Converter<object, object>[] converters)
-        {
+            out Converter<object, object>[] converters) =>
             throw new NotImplementedException();
-        }
 
-        List<InfoMessage> IProvider.ToInfoMessages(Exception exception)
-        {
-            throw new NotImplementedException();
-        }
-
+        List<InfoMessage> IProvider.ToInfoMessages(Exception exception) => throw new NotImplementedException();
         bool IProvider.CanConvertCommandToString => throw new NotImplementedException();
 
         GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
@@ -223,10 +142,7 @@ namespace DataCommander.Providers.Wmi
             return response;
         }
 
-        string IProvider.CommandToString(IDbCommand command)
-        {
-            throw new NotImplementedException();
-        }
+        string IProvider.CommandToString(IDbCommand command) => throw new NotImplementedException();
 
         List<Statement> IProvider.GetStatements(string commandText)
         {
@@ -240,9 +156,6 @@ namespace DataCommander.Providers.Wmi
             };
         }
 
-        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder()
-        {
-            return new ConnectionStringBuilder();
-        }
+        IDbConnectionStringBuilder IProvider.CreateConnectionStringBuilder() => new ConnectionStringBuilder();
     }
 }

@@ -230,10 +230,9 @@ order by name collate nocase";
             return message;
         }
 
-        GetTableSchemaResult IProvider.GetTableSchema2(IDbConnection connection, string tableName) => throw new NotImplementedException();
+        GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
         List<InfoMessage> IProvider.ToInfoMessages(Exception e) => throw new NotImplementedException();
         DbProviderFactory IProvider.DbProviderFactory => SQLiteFactory.Instance;
-        DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
 
         string IProvider.GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName)
         {

@@ -52,8 +52,7 @@ namespace DataCommander.Providers
         DataTable GetParameterTable(IDataParameterCollection parameters);
         DataTable GetSchemaTable(IDataReader dataReader);
         List<Statement> GetStatements(string commandText);
-        DataSet GetTableSchema(IDbConnection connection, string tableName);
-        GetTableSchemaResult GetTableSchema2(IDbConnection connection, string tableName);
+        GetTableSchemaResult GetTableSchema(IDbConnection connection, string tableName);
         List<InfoMessage> ToInfoMessages(Exception e);
 
         #endregion

@@ -247,8 +247,7 @@ namespace DataCommander.Providers.Odp
             return table;
         }
 
-        DataSet IProvider.GetTableSchema(IDbConnection connection, string tableName) => null;
-        GetTableSchemaResult IProvider.GetTableSchema2(IDbConnection connection, string tableName) => throw new NotImplementedException();
+        GetTableSchemaResult IProvider.GetTableSchema(IDbConnection connection, string tableName) => throw new NotImplementedException();
 
         Type IProvider.GetColumnType(FoundationDbColumn column)
         {
