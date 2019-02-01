@@ -32,6 +32,12 @@ namespace Foundation.Data.SqlClient
             Add(parameter);
         }
 
+        public void AddString(string parameterName, string value)
+        {
+            var parameter = SqlParameterFactory.CreateString(parameterName, value);
+            Add(parameter);
+        }
+
         public void AddStructured(string parameterName, string typeName, ReadOnlyList<SqlDataRecord> sqlDataRecords)
         {
             var parameter = SqlParameterFactory.CreateStructured(parameterName, typeName, sqlDataRecords);

@@ -615,6 +615,11 @@ namespace {_request.Namespace}
                             method = "AddDate";
                             break;
 
+                        case SqlDbType.VarChar:
+                        case SqlDbType.NVarChar:
+                            method = "AddString";
+                            break;
+
                         case SqlDbType.Xml:
                             method = "AddXml";
                             break;

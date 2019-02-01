@@ -18,6 +18,13 @@ namespace Foundation.Data.SqlClient
 
         public static SqlParameter CreateDate(string parameterName, DateTime value) => Create(parameterName, SqlDbType.Date, value);
 
+        public static SqlParameter CreateString(string parameterName, string value)
+        {
+            var parameterValue = value != null ? (object) value : DBNull.Value;
+            var parameter = new SqlParameter(parameterName, parameterValue);
+            return parameter;
+        }
+
         public static SqlParameter CreateStructured(string parameterName, string typeName, ReadOnlyList<SqlDataRecord> sqlDataRecords)
         {
             Assert.IsNotNull(sqlDataRecords);
