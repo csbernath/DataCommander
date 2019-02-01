@@ -7,14 +7,16 @@ namespace Foundation.Data.DbQueryBuilding
         public readonly string Name;
         public readonly string DataType;
         public readonly SqlDbType SqlDbType;
+        public readonly int Size;
         public readonly bool IsNullable;
         public readonly string CSharpValue;
 
-        public DbRequestParameter(string name, string dataType, SqlDbType sqlDbType, bool isNullable, string cSharpValue)
+        public DbRequestParameter(string name, string dataType, SqlDbType sqlDbType, int size, bool isNullable, string cSharpValue)
         {
             Name = name;
             DataType = dataType;
             SqlDbType = sqlDbType;
+            Size = size;
             IsNullable = isNullable;
             CSharpValue = cSharpValue;
         }

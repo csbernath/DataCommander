@@ -1762,18 +1762,26 @@ namespace DataCommander.Providers.Query
                     var dataType = tokens[index + 2].Value;
                     var dataTypeLower = dataType.ToLower();
                     SqlDbType sqlDbType;
+                    var size = 0;
                     string csharpValue = null;
 
                     var sqlDataType = SqlDataTypeArray.SqlDataTypes.FirstOrDefault(i => i.SqlDataTypeName == dataTypeLower);
                     if (sqlDataType != null)
+                    {
                         sqlDbType = sqlDataType.SqlDbType;
+                        if (tokens.Count > index + 5 && tokens[index + 3].Value == "(" && tokens[index + 5].Value == ")")
+                        {
+                            var sizeString = tokens[index + 4].Value;
+                            size = int.Parse(sizeString);
+                        }
+                    }
                     else
                     {
                         sqlDbType = SqlDbType.Structured;
                         csharpValue = $"query.{name}.Select(i => i.ToSqlDataRecord()).ToReadOnlyList()";
                     }
 
-                    return new DbRequestParameter(name, dataType, sqlDbType, false, csharpValue);
+                    return new DbRequestParameter(name, dataType, sqlDbType, size, false, csharpValue);
                 })
                 .ToReadOnlyList();
         }

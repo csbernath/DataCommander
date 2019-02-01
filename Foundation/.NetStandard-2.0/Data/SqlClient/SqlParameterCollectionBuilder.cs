@@ -32,9 +32,9 @@ namespace Foundation.Data.SqlClient
             Add(parameter);
         }
 
-        public void AddString(string parameterName, string value)
+        public void AddNVarChar(string parameterName, int size, string value)
         {
-            var parameter = SqlParameterFactory.CreateString(parameterName, value);
+            var parameter = SqlParameterFactory.CreateNVarChar(parameterName, size, value);
             Add(parameter);
         }
 
