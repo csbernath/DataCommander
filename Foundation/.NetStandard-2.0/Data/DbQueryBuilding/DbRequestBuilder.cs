@@ -606,6 +606,9 @@ namespace {_request.Namespace}
                 if (parameter.SqlDbType == SqlDbType.Structured)
                     stringBuilder.Append(
                         $"    parameters.AddStructured(\"{parameter.Name}\", \"{parameter.DataType}\", {ToLower(GetRequestType())}.{ToUpper(parameter.Name)}.Select(i => i.ToSqlDataRecord()).ToReadOnlyList());\r\n");
+                else if (parameter.SqlDbType == SqlDbType.Char)
+                    stringBuilder.Append(
+                        $"    parameters.AddChar(\"{parameter.Name}\", {parameter.Size}, {ToLower(GetRequestType())}.{ToUpper(parameter.Name)});\r\n");
                 else if (parameter.SqlDbType == SqlDbType.NVarChar)
                     stringBuilder.Append(
                         $"    parameters.AddNVarChar(\"{parameter.Name}\", {parameter.Size}, {ToLower(GetRequestType())}.{ToUpper(parameter.Name)});\r\n");

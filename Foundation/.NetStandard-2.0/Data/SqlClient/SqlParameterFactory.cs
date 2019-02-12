@@ -16,6 +16,14 @@ namespace Foundation.Data.SqlClient
             return parameter;
         }
 
+        public static SqlParameter CreateChar(string parameterName, int size, string value)
+        {
+            var parameterValue = value != null ? (object) value : DBNull.Value;
+            var parameter = new SqlParameter(parameterName, SqlDbType.Char, size);
+            parameter.Value = parameterValue;
+            return parameter;
+        }
+
         public static SqlParameter CreateDate(string parameterName, DateTime value) => Create(parameterName, SqlDbType.Date, value);
 
         public static SqlParameter CreateNVarChar(string parameterName, int size, string value)

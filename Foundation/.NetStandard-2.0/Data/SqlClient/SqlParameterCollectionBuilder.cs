@@ -26,6 +26,12 @@ namespace Foundation.Data.SqlClient
             Add(parameter);
         }
 
+        public void AddChar(string parameterName, int size, string value)
+        {
+            var parameter = SqlParameterFactory.CreateChar(parameterName, size, value);
+            Add(parameter);
+        }
+
         public void AddDate(string parameterName, DateTime value)
         {
             var parameter = SqlParameterFactory.CreateDate(parameterName, value);
