@@ -1772,7 +1772,10 @@ namespace DataCommander.Providers.Query
                         if (tokens.Count > index + 5 && tokens[index + 3].Value == "(" && tokens[index + 5].Value == ")")
                         {
                             var sizeString = tokens[index + 4].Value;
-                            size = int.Parse(sizeString);
+                            if (sizeString.ToLower() == "max")
+                                size = -1;
+                            else
+                                size = int.Parse(sizeString);
                         }
                     }
                     else

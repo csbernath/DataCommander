@@ -612,6 +612,9 @@ namespace {_request.Namespace}
                 else if (parameter.SqlDbType == SqlDbType.NVarChar)
                     stringBuilder.Append(
                         $"    parameters.AddNVarChar(\"{parameter.Name}\", {parameter.Size}, {ToLower(GetRequestType())}.{ToUpper(parameter.Name)});\r\n");
+                else if (parameter.SqlDbType == SqlDbType.VarChar)
+                    stringBuilder.Append(
+                        $"    parameters.AddVarChar(\"{parameter.Name}\", {parameter.Size}, {ToLower(GetRequestType())}.{ToUpper(parameter.Name)});\r\n");
                 else
                 {
                     string method;
