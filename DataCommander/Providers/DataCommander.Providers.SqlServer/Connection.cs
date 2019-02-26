@@ -219,6 +219,10 @@ namespace DataCommander.Providers.SqlServer
                         description = "Microsoft SQL Server 2017 (RTM-CU12) (KB4464082)";
                         break;
 
+                    case "14.00.3048":
+                        description = "Microsoft SQL Server 2017 (RTM-CU13) (KB4466404)";
+                        break;
+
                     #endregion
 
                     default:
