@@ -45,5 +45,19 @@ namespace Foundation.Data
             dbProviderFactory.ExecuteReader(connectionString, request, dataReader => rows = dataReader.ReadResult(read));
             return rows;
         }
+
+        public static void ExecuteTransaction(this DbProviderFactory dbProviderFactory, string connectionString, Action<IDbTransaction> action)
+        {
+            using (var connection = dbProviderFactory.CreateConnection())
+            {
+                connection.ConnectionString = connectionString;
+                connection.Open();
+                using (var transaction = connection.BeginTransaction())
+                {
+                    action(transaction);
+                    transaction.Commit();
+                }
+            }
+        }
     }
 }
