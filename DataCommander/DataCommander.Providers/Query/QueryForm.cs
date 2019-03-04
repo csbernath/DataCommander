@@ -2031,11 +2031,10 @@ namespace DataCommander.Providers.Query
             // tabPage.Refresh();
         }
 
-        public void ShowMessage(Exception e)
+        public void ShowMessage(Exception exception)
         {
-            var message = Provider.GetExceptionMessage(e);
-            var infoMessage = new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Error, null, message);
-            AddInfoMessage(infoMessage);
+            var infoMessages = Provider.ToInfoMessages(exception);
+            AddInfoMessages(infoMessages);
 
             _tabControl.SelectedTab = _messagesTabPage;
 
