@@ -6,7 +6,7 @@ using Foundation.Assertions;
 
 namespace Foundation.Collections.ReadOnly
 {
-    public sealed class ReadOnlySortedList<TKey, TValue> : IReadOnlyDictionary<TKey, TValue>, IReadOnlyList<KeyValuePair<TKey, TValue>>
+    public sealed class ReadOnlySortedList<TKey, TValue> : IReadOnlyDictionary<TKey, TValue>
     {
         private readonly Comparison<TKey> _comparison;
         private readonly IReadOnlyList<KeyValuePair<TKey, TValue>> _items;
@@ -61,7 +61,6 @@ namespace Foundation.Collections.ReadOnly
         public int Count => _items.Count;
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => _items.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        public KeyValuePair<TKey, TValue> this[int index] => _items[index];
 
         private int IndexOfKey(TKey key)
         {
