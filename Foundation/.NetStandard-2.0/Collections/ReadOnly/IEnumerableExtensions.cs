@@ -10,8 +10,9 @@ namespace Foundation.Collections.ReadOnly
     {
         public static ReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source)
         {
+            Assert.IsNotNull(source);
             var list = source.ToList();
-            return ReadOnlyListFactory.Create(list);
+            return list.ToReadOnlyList();
         }
 
         public static ReadOnlySortedList<TKey, TValue> ToReadOnlySortedList<TKey, TValue>(this IEnumerable<TValue> values, Func<TValue, TKey> keySelector)

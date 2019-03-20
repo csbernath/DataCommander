@@ -10,12 +10,9 @@ namespace Foundation.Collections.ReadOnly
         private readonly IReadOnlyList<T> _items;
         public static ReadOnlyList<T> Empty = new ReadOnlyList<T>();
 
-        public ReadOnlyList(IReadOnlyList<T> items)
-        {
-            Assert.IsNotNull(items);
-            _items = items.Count > 0 ? items : EmptyArray<T>.Value;
-        }
-
+        /// <summary>
+        /// ctor for Newtonsoft.JSON deserializing
+        /// </summary>
         public ReadOnlyList(IEnumerable<T> items)
         {
             Assert.IsNotNull(items);
@@ -23,6 +20,7 @@ namespace Foundation.Collections.ReadOnly
             _items = list.Count > 0 ? (IReadOnlyList<T>) list : EmptyArray<T>.Value;
         }
 
+        internal ReadOnlyList(IReadOnlyList<T> items) => _items = items;
         private ReadOnlyList() => _items = EmptyArray<T>.Value;
 
         public int Count => _items.Count;
