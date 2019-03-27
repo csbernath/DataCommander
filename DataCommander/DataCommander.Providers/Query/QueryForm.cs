@@ -2071,9 +2071,9 @@ namespace DataCommander.Providers.Query
             {
                 if (components != null)
                 {
-                    var now = LocalTime.Default.Now;
-                    foreach (IComponent component in components.Components)
-                        GarbageMonitor.Default.SetDisposeTime(component, now);
+                    //var now = LocalTime.Default.Now;
+                    //foreach (IComponent component in components.Components)
+                    //    GarbageMonitor.Default.SetDisposeTime(component, now);
 
                     components.Dispose();
                 }
