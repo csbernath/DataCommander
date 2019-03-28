@@ -14,12 +14,16 @@ namespace DataCommander.Providers.SqlServer.ObjectExplorer
 
         IEnumerable<ITreeNode> ITreeNode.GetChildren(bool refresh)
         {
-            return new ITreeNode[]
-            {
-                new StoredProcedureCollectionNode(_database, false),
-                new FunctionCollectionNode(_database),
-                new UserDefinedTableTypeCollectionNode(_database)
-            };
+            var childNodes = new List<ITreeNode>();
+            childNodes.Add(new StoredProcedureCollectionNode(_database, false));
+            childNodes.Add(new FunctionCollectionNode(_database));
+
+            if (_database.Name == "master")
+                childNodes.Add(new ExtendedStoreProcedureCollectionNode(_database));
+
+            childNodes.Add(new UserDefinedTableTypeCollectionNode(_database));
+
+            return childNodes;
         }
 
         bool ITreeNode.Sortable => false;
