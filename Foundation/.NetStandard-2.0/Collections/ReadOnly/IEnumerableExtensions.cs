@@ -15,6 +15,18 @@ namespace Foundation.Collections.ReadOnly
             return list.ToReadOnlyList();
         }
 
+        public static ReadOnlySegmentLinkedList<T> ToReadOnlySegmentLinkedList<T>(this IEnumerable<T> source, int segmentLength)
+        {
+            Assert.IsNotNull(source);
+            var segmentLinkedListBuilder = new SegmentLinkedListBuilder<T>(segmentLength);
+
+            foreach (var item in source)
+                segmentLinkedListBuilder.Add(item);
+
+            var readOnlySegmentLinkedList = segmentLinkedListBuilder.ToReadOnlySegmentLinkedList();
+            return readOnlySegmentLinkedList;
+        }
+
         public static ReadOnlySortedList<TKey, TValue> ToReadOnlySortedList<TKey, TValue>(this IEnumerable<TValue> values, Func<TValue, TKey> keySelector)
         {
             Assert.IsNotNull(values);

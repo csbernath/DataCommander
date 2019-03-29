@@ -288,7 +288,8 @@ namespace {_request.Namespace}
                     next = "Next";
                 }
 
-                stringBuilder.Append($"        var {ToLower(result.FieldName)} = dataReader.Read{next}Result(Read{result.Name}).ToReadOnlyList();");
+                stringBuilder.Append(
+                    $"        var {ToLower(result.FieldName)} = dataReader.Read{next}Result(Read{result.Name}).ToReadOnlySegmentLinkedList(128);");
             }
 
             stringBuilder.Append($"\r\n        result = new {_request.Name}DbQueryResult(");
@@ -369,7 +370,7 @@ namespace {_request.Namespace}
             {
                 var next = sequence.Next() == 0 ? null : "Next";
                 stringBuilder.Append(
-                    $"var {ToLower(result.FieldName)} = (await dataReader.Read{next}ResultAsync(Read{result.Name}, request.CancellationToken)).ToReadOnlyList();\r\n");
+                    $"var {ToLower(result.FieldName)} = (await dataReader.Read{next}ResultAsync(Read{result.Name}, request.CancellationToken)).ToReadOnlySegmentLinkedList(128);\r\n");
             }
 
             stringBuilder.Append($"result = new {_request.Name}DbQueryResult({GetResultVariableNames()});");
@@ -387,7 +388,7 @@ namespace {_request.Namespace}
                 if (sequence.Next() > 0)
                     stringBuilder.Append("\r\n");
 
-                stringBuilder.Append($"    public readonly ReadOnlyList<{result.Name}> {result.FieldName};");
+                stringBuilder.Append($"    public readonly ReadOnlySegmentLinkedList<{result.Name}> {result.FieldName};");
             }
 
             stringBuilder.Append("\r\n\r\n");
@@ -407,7 +408,7 @@ namespace {_request.Namespace}
                 if (sequence.Next() > 0)
                     stringBuilder.Append(", ");
 
-                stringBuilder.Append($"ReadOnlyList<{result.Name}> {ToLower(result.FieldName)}");
+                stringBuilder.Append($"ReadOnlySegmentLinkedList<{result.Name}> {ToLower(result.FieldName)}");
             }
 
             stringBuilder.Append(")\r\n");

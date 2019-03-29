@@ -26,6 +26,16 @@ namespace Foundation.Data
             return table;
         }
 
+        public static DataTable ExecuteDataTable(this DbProviderFactory dbProviderFactory, string connectionString, string commandText)
+        {
+            using (var connection = dbProviderFactory.CreateConnection())
+            {
+                connection.ConnectionString = connectionString;
+                connection.Open();
+                return ExecuteDataTable(dbProviderFactory, connection, commandText);
+            }
+        }
+
         public static void ExecuteReader(this DbProviderFactory dbProviderFactory, string connectionString, ExecuteReaderRequest request,
             Action<IDataReader> read)
         {
