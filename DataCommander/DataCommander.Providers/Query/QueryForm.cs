@@ -21,6 +21,7 @@ using ADODB;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.ResultWriter;
 using Foundation.Assertions;
+using Foundation.Collections;
 using Foundation.Collections.ReadOnly;
 using Foundation.Configuration;
 using Foundation.Core;
@@ -1733,7 +1734,7 @@ namespace DataCommander.Providers.Query
                     var configuration = commandText.Substring(configurationStart, configurationEnd - configurationStart + 1);
                     query = JsonConvert.DeserializeObject<QueryConfiguration.Query>(configuration);
 
-                    var parametersStart = configurationEnd + 4;
+                    var parametersStart = configurationEnd + 7;
                     var parametersEnd = commandText.IndexOf("-- CommandText", parametersStart) - 3;
                     if (parametersEnd >= 0)
                     {
@@ -1749,44 +1750,81 @@ namespace DataCommander.Providers.Query
             return new GetQueryConfigurationResult(succeeded, query, parameters, resultCommandText);
         }
 
+        private static DbRequestParameter ToDbRequestParameter(List<Token> declaration)
+        {
+            var name = declaration[1].Value;
+            name = name.Substring(1);
+            var dataType = declaration[2].Value;
+            if (declaration[3].Value == ".")
+                dataType += "." + declaration[4].Value;
+            var dataTypeLower = dataType.ToLower();
+            SqlDbType sqlDbType;
+            var size = 0;
+            bool isNullable;
+            string csharpValue = null;
+
+            var sqlDataType = SqlDataTypeArray.SqlDataTypes.FirstOrDefault(i => i.SqlDataTypeName == dataTypeLower);
+            if (sqlDataType != null)
+            {
+                sqlDbType = sqlDataType.SqlDbType;
+                if (declaration.Count > 5 && declaration[3].Value == "(" && declaration[5].Value == ")")
+                {
+                    var sizeString = declaration[4].Value;
+                    if (sizeString.ToLower() == "max")
+                        size = -1;
+                    else
+                        size = int.Parse(sizeString);
+                }
+
+                isNullable = true;
+
+                for (var i = 0; i < declaration.Count - 6; ++i)
+                {
+                    if (declaration[i].Value == "/" && declaration[i + 1].Value == "*" &&
+                        declaration[i + 2].Value.ToLower() == "not" && declaration[i + 3].Value.ToLower() == "null" &&
+                        declaration[i + 4].Value == "*" && declaration[i + 5].Value == "/")
+                    {
+                        isNullable = false;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                sqlDbType = SqlDbType.Structured;
+                isNullable = false;
+                csharpValue = $"query.{name}.Select(i => i.ToSqlDataRecord()).ToReadOnlyList()";
+            }
+
+            return new DbRequestParameter(name, dataType, sqlDbType, size, isNullable, csharpValue);
+        }
+
         private static ReadOnlyList<DbRequestParameter> ToDbQueryParameters(List<Token> tokens)
         {
-            var declareTokens = tokens.Where(i => i.Type == TokenType.KeyWord && i.Value == "declare").ToList();
-            return declareTokens
-                .Where(i => i.Index + 2 < tokens.Count)
-                .Select(declareToken =>
+            var declarations = GetDeclarations(tokens);
+            return declarations.Select(ToDbRequestParameter).ToReadOnlyList();
+        }
+
+        private static List<List<Token>> GetDeclarations(List<Token> tokens)
+        {
+            var declarations = new List<List<Token>>();
+            List<Token> declaration = null;
+            foreach (var token in tokens)
+            {
+                if (token.Type == TokenType.KeyWord && token.Value.ToLower() == "declare")
                 {
-                    var index = declareToken.Index;
-                    var name = tokens[index + 1].Value;
-                    name = name.Substring(1);
-                    var dataType = tokens[index + 2].Value;
-                    var dataTypeLower = dataType.ToLower();
-                    SqlDbType sqlDbType;
-                    var size = 0;
-                    string csharpValue = null;
+                    if (declaration != null)
+                        declarations.Add(declaration);
 
-                    var sqlDataType = SqlDataTypeArray.SqlDataTypes.FirstOrDefault(i => i.SqlDataTypeName == dataTypeLower);
-                    if (sqlDataType != null)
-                    {
-                        sqlDbType = sqlDataType.SqlDbType;
-                        if (tokens.Count > index + 5 && tokens[index + 3].Value == "(" && tokens[index + 5].Value == ")")
-                        {
-                            var sizeString = tokens[index + 4].Value;
-                            if (sizeString.ToLower() == "max")
-                                size = -1;
-                            else
-                                size = int.Parse(sizeString);
-                        }
-                    }
-                    else
-                    {
-                        sqlDbType = SqlDbType.Structured;
-                        csharpValue = $"query.{name}.Select(i => i.ToSqlDataRecord()).ToReadOnlyList()";
-                    }
+                    declaration = new List<Token>();
+                }
 
-                    return new DbRequestParameter(name, dataType, sqlDbType, size, false, csharpValue);
-                })
-                .ToReadOnlyList();
+                declaration.Add(token);
+            }
+
+            if (declaration != null)
+                declarations.Add(declaration);
+            return declarations;
         }
 
         private void ShowDataTableText(DataTable dataTable)

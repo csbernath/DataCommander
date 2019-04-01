@@ -16,6 +16,30 @@ namespace Foundation.Data.SqlClient
             return parameter;
         }
 
+        public static SqlParameter CreateNullableBit(string parameterName, bool? value)
+        {
+            var parameterValue = ToParameterValue(value);
+            return Create(parameterName, SqlDbType.Bit, parameterValue);
+        }
+
+        public static SqlParameter CreateNullableDate(string parameterName, DateTime? value)
+        {
+            var parameterValue = ToParameterValue(value);
+            return Create(parameterName, SqlDbType.Date, parameterValue);
+        }
+
+        public static SqlParameter CreateNullableDateTime(string parameterName, DateTime? value)
+        {
+            var parameterValue = ToParameterValue(value);
+            return Create(parameterName, SqlDbType.DateTime, parameterValue);
+        }
+
+        public static SqlParameter CreateNullableInt(string parameterName, int? value)
+        {
+            var parameterValue = ToParameterValue(value);
+            return Create(parameterName, SqlDbType.Int, parameterValue);
+        }
+
         public static SqlParameter CreateChar(string parameterName, int size, string value)
         {
             var parameterValue = value != null ? (object) value : DBNull.Value;
@@ -51,5 +75,7 @@ namespace Foundation.Data.SqlClient
         }
 
         public static SqlParameter CreateXml(string parameterName, string value) => Create(parameterName, SqlDbType.Xml, value);
+
+        private static object ToParameterValue<T>(T? value) where T : struct => value != null ? (object) value.Value : DBNull.Value;
     }
 }

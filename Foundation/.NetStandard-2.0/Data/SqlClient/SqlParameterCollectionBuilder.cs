@@ -20,6 +20,30 @@ namespace Foundation.Data.SqlClient
             Add(parameter);
         }
 
+        public void AddNullableBit(string parameterName, bool? value)
+        {
+            var parameter = SqlParameterFactory.CreateNullableBit(parameterName, value);
+            Add(parameter);
+        }
+
+        public void AddNullableDate(string parameterName, DateTime? value)
+        {
+            var parameter = SqlParameterFactory.CreateNullableDate(parameterName, value);
+            Add(parameter);
+        }
+
+        public void AddNullableDateTime(string parameterName, DateTime? value)
+        {
+            var parameter = SqlParameterFactory.CreateNullableDateTime(parameterName, value);
+            Add(parameter);
+        }
+
+        public void AddNullableInt(string parameterName, int? value)
+        {
+            var parameter = SqlParameterFactory.CreateNullableInt(parameterName, value);
+            Add(parameter);
+        }
+
         public void Add(string parameterName, SqlDbType sqlDbType, object value)
         {
             var parameter = SqlParameterFactory.Create(parameterName, sqlDbType, value);

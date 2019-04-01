@@ -621,8 +621,20 @@ namespace {_request.Namespace}
                     string method;
                     switch (parameter.SqlDbType)
                     {
+                        case SqlDbType.Bit:
+                            method = !parameter.IsNullable ? "Add" : "AddNullableBit";
+                            break;
+
                         case SqlDbType.Date:
-                            method = "AddDate";
+                            method = !parameter.IsNullable ? "AddDate" : "AddNullableDate";
+                            break;
+
+                        case SqlDbType.DateTime:
+                            method = !parameter.IsNullable ? "Add" : "AddNullableDateTime";
+                            break;
+
+                        case SqlDbType.Int:
+                            method = !parameter.IsNullable ? "Add" : "AddNullableInt";
                             break;
 
                         case SqlDbType.VarChar:
