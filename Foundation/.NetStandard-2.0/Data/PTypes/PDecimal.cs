@@ -3,65 +3,41 @@ using System.Data.SqlTypes;
 
 namespace Foundation.Data.PTypes
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public struct PDecimal : INullable
     {
-        private SqlDecimal _sql;
+        private readonly SqlDecimal _sql;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        public PDecimal( decimal value )
+        public static readonly PDecimal Null = new PDecimal(PValueType.Null);
+        public static readonly PDecimal Default = new PDecimal(PValueType.Default);
+        public static readonly PDecimal Empty = new PDecimal(PValueType.Empty);
+
+        public PDecimal(decimal value)
         {
             _sql = value;
             ValueType = PValueType.Value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        public PDecimal( SqlDecimal value )
+        public PDecimal(SqlDecimal value)
         {
             _sql = value;
             ValueType = value.IsNull ? PValueType.Null : PValueType.Value;
         }
 
-        private PDecimal( PValueType type )
+        private PDecimal(PValueType type)
         {
             ValueType = type;
             _sql = SqlDecimal.Null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static implicit operator PDecimal( decimal value )
-        {
-            return new PDecimal( value );
-        }
+        public static implicit operator PDecimal(decimal value) => new PDecimal(value);
+        public static implicit operator PDecimal(SqlDecimal value) => new PDecimal(value);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static implicit operator PDecimal( SqlDecimal value )
-        {
-            return new PDecimal( value );
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static implicit operator decimal( PDecimal value )
+        public static implicit operator decimal(PDecimal value)
         {
             return (decimal) value._sql;
         }
@@ -72,7 +48,7 @@ namespace Foundation.Data.PTypes
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static bool operator ==( PDecimal x, PDecimal y )
+        public static bool operator ==(PDecimal x, PDecimal y)
         {
             var isEqual = x.ValueType == y.ValueType;
 
@@ -93,7 +69,7 @@ namespace Foundation.Data.PTypes
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static bool operator !=( PDecimal x, PDecimal y )
+        public static bool operator !=(PDecimal x, PDecimal y)
         {
             return !(x == y);
         }
@@ -104,11 +80,11 @@ namespace Foundation.Data.PTypes
         /// <param name="s"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static PDecimal Parse( string s, PValueType type )
+        public static PDecimal Parse(string s, PValueType type)
         {
             PDecimal sp;
 
-            sp = string.IsNullOrEmpty( s ) ? new PDecimal( type ) : SqlDecimal.Parse( s );
+            sp = string.IsNullOrEmpty(s) ? new PDecimal(type) : SqlDecimal.Parse(s);
 
             return sp;
         }
@@ -118,7 +94,7 @@ namespace Foundation.Data.PTypes
         /// </summary>
         /// <param name="y"></param>
         /// <returns></returns>
-        public override bool Equals( object y )
+        public override bool Equals(object y)
         {
             var equals = y is PDecimal;
 
@@ -130,39 +106,14 @@ namespace Foundation.Data.PTypes
             return equals;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            var hashCode = _sql.GetHashCode();
-            return hashCode;
-        }
+        public override int GetHashCode() => _sql.GetHashCode();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public PValueType ValueType { get; private set; }
+        public PValueType ValueType { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsNull => ValueType == PValueType.Null;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsValue => ValueType == PValueType.Value;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsEmpty => ValueType == PValueType.Empty;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public object Value
         {
             get
@@ -187,48 +138,26 @@ namespace Foundation.Data.PTypes
                 return value;
             }
 
-            set
-            {
-                if (value == null)
-                {
-                    ValueType = PValueType.Default;
-                    _sql = SqlDecimal.Null;
-                }
-                else if (value == DBNull.Value)
-                {
-                    ValueType = PValueType.Null;
-                    _sql = SqlDecimal.Null;
-                }
-                else
-                {
-                    _sql = (SqlDecimal) value;
-                    ValueType = _sql.IsNull ? PValueType.Null : PValueType.Value;
-                }
-            }
+            //set
+            //{
+            //    if (value == null)
+            //    {
+            //        ValueType = PValueType.Default;
+            //        _sql = SqlDecimal.Null;
+            //    }
+            //    else if (value == DBNull.Value)
+            //    {
+            //        ValueType = PValueType.Null;
+            //        _sql = SqlDecimal.Null;
+            //    }
+            //    else
+            //    {
+            //        _sql = (SqlDecimal) value;
+            //        ValueType = _sql.IsNull ? PValueType.Null : PValueType.Value;
+            //    }
+            //}
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return _sql.ToString();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly PDecimal Null = new PDecimal( PValueType.Null );
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly PDecimal Default = new PDecimal( PValueType.Default );
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly PDecimal Empty = new PDecimal( PValueType.Empty );
+        public override string ToString() => _sql.ToString();
     }
 }

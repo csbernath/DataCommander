@@ -63,16 +63,6 @@ namespace DataCommander.Providers.Query
 
                     break;
                 }
-                else if (OperatorsOrPunctuators.Contains(c))
-                {
-                    startPosition = _index;
-                    value = c.ToString();
-                    endPosition = _index;
-                    token = new Token(_tokenIndex, startPosition, endPosition, _lineIndex,
-                        TokenType.OperatorOrPunctuator, value);
-                    _index++;
-                    break;
-                }
                 else if (char.IsLetter(c) || c == '[' || c == '@')
                 {
                     startPosition = _index;
@@ -96,6 +86,16 @@ namespace DataCommander.Providers.Query
                     value = ReadDigit();
                     endPosition = _index;
                     token = new Token(_tokenIndex, startPosition, endPosition - 1, _lineIndex, TokenType.Digit, value);
+                    break;
+                }
+                else if (OperatorsOrPunctuators.Contains(c))
+                {
+                    startPosition = _index;
+                    value = c.ToString();
+                    endPosition = _index;
+                    token = new Token(_tokenIndex, startPosition, endPosition, _lineIndex,
+                        TokenType.OperatorOrPunctuator, value);
+                    _index++;
                     break;
                 }
                 else if (c == '\r')
@@ -122,7 +122,7 @@ namespace DataCommander.Providers.Query
             while (_index < _length)
             {
                 var c = _text[_index];
-                if (char.IsWhiteSpace(c) || OperatorsOrPunctuators.Contains(c))
+                if (char.IsWhiteSpace(c) || c == ',' || c == '(' || c == ')' || c == '=' || c == '+' || c == '*')
                     break;
                 else
                     _index++;

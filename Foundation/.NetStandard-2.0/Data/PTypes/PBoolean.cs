@@ -1,11 +1,10 @@
-﻿using System;
-using System.Data.SqlTypes;
+﻿using System.Data.SqlTypes;
 
 namespace Foundation.Data.PTypes
 {
     public struct PBoolean : INullable
     {
-        private SqlBoolean _sql;
+        private readonly SqlBoolean _sql;
 
         public static readonly PBoolean Null = new PBoolean(PValueType.Null);
         public static readonly PBoolean Default = new PBoolean(PValueType.Default);
@@ -69,44 +68,17 @@ namespace Foundation.Data.PTypes
 
         public static bool operator !=(PBoolean x, PBoolean y) => !(x == y);
 
-        /// <summary>
-        /// Converts the specified <see cref="System.String"/> representation of a logical value
-        /// to its <see cref="PBoolean"/> equivalent.
-        /// </summary>
-        /// <param name="s">
-        /// The <see cref="System.String"/> to be converted. 
-        /// </param>
-        /// <param name="type"></param>
-        /// <returns>
-        /// An <see cref="PBoolean"/> structure containing the parsed value.
-        /// </returns>
-        public static PBoolean Parse(string s, PValueType type)
-        {
-            PBoolean sp;
-
-            if (string.IsNullOrEmpty(s))
-                sp = new PBoolean(type);
-            else
-                sp = SqlBoolean.Parse(s);
-
-            return sp;
-        }
+        public static PBoolean Parse(string s, PValueType type) => string.IsNullOrEmpty(s) ? new PBoolean(type) : SqlBoolean.Parse(s);
 
         public override bool Equals(object y)
         {
             var equals = y is PBoolean;
-
             if (equals)
                 equals = this == (PBoolean) y;
-
             return equals;
         }
 
-        public override int GetHashCode()
-        {
-            var hashCode = _sql.GetHashCode();
-            return hashCode;
-        }
+        public override int GetHashCode() => _sql.GetHashCode();
 
         public PValueType ValueType { get; private set; }
 
@@ -135,24 +107,24 @@ namespace Foundation.Data.PTypes
                 return value;
             }
 
-            set
-            {
-                if (value == null)
-                {
-                    ValueType = PValueType.Default;
-                    _sql = SqlBoolean.Null;
-                }
-                else if (value == DBNull.Value)
-                {
-                    ValueType = PValueType.Null;
-                    _sql = SqlBoolean.Null;
-                }
-                else
-                {
-                    _sql = (SqlBoolean) value;
-                    ValueType = _sql.IsNull ? PValueType.Null : PValueType.Value;
-                }
-            }
+            //set
+            //{
+            //    if (value == null)
+            //    {
+            //        ValueType = PValueType.Default;
+            //        _sql = SqlBoolean.Null;
+            //    }
+            //    else if (value == DBNull.Value)
+            //    {
+            //        ValueType = PValueType.Null;
+            //        _sql = SqlBoolean.Null;
+            //    }
+            //    else
+            //    {
+            //        _sql = (SqlBoolean) value;
+            //        ValueType = _sql.IsNull ? PValueType.Null : PValueType.Value;
+            //    }
+            //}
         }
 
         public bool IsTrue => _sql.IsTrue;

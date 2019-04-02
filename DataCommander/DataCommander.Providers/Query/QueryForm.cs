@@ -1755,8 +1755,6 @@ namespace DataCommander.Providers.Query
             var name = declaration[1].Value;
             name = name.Substring(1);
             var dataType = declaration[2].Value;
-            if (declaration[3].Value == ".")
-                dataType += "." + declaration[4].Value;
             var dataTypeLower = dataType.ToLower();
             SqlDbType sqlDbType;
             var size = 0;
