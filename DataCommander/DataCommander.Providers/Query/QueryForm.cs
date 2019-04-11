@@ -21,7 +21,6 @@ using ADODB;
 using DataCommander.Providers.Connection;
 using DataCommander.Providers.ResultWriter;
 using Foundation.Assertions;
-using Foundation.Collections;
 using Foundation.Collections.ReadOnly;
 using Foundation.Configuration;
 using Foundation.Core;
@@ -2018,9 +2017,7 @@ namespace DataCommander.Providers.Query
                 var type = (Type) dataColumn.ExtendedProperties[0];
 
                 if (type == null)
-                {
                     type = dataColumn.DataType;
-                }
 
                 columnHeader.TextAlign = QueryFormStaticMethods.GetHorizontalAlignment(type);
 
@@ -2032,18 +2029,10 @@ namespace DataCommander.Providers.Query
 
             foreach (DataRow dataRow in dataTable.Rows)
             {
-                for (var i = 0; i < count; i++)
+                for (var i = 0; i < count; ++i)
                 {
                     var value = dataRow[i];
-
-                    if (value == DBNull.Value)
-                    {
-                        items[i] = "(null)";
-                    }
-                    else
-                    {
-                        items[i] = value.ToString();
-                    }
+                    items[i] = value == DBNull.Value ? "(null)" : value.ToString();
                 }
 
                 var listViewItem = new ListViewItem(items);
@@ -2586,13 +2575,10 @@ namespace DataCommander.Providers.Query
         {
             var ticks = _stopwatch.ElapsedTicks;
             _sbPanelTimer.Text = StopwatchTimeSpan.ToString(ticks, scale);
-
-            var text = rowCount.ToString() + " row(s).";
-
+            var text = rowCount + " row(s).";
             if (rowCount > 0)
             {
                 var seconds = (double) ticks / Stopwatch.Frequency;
-
                 text += " (" + Math.Round(rowCount / seconds, 0) + " rows/sec)";
             }
 
@@ -2608,26 +2594,19 @@ namespace DataCommander.Providers.Query
             }
         }
 
-        private void Timer_Tick(object o, EventArgs e)
-        {
-            this.Invoke(ShowTimer);
-        }
+        private void Timer_Tick(object o, EventArgs e) => this.Invoke(ShowTimer);
 
         protected override void OnClosing(CancelEventArgs e)
         {
             var text = QueryTextBox.RichTextBox.Text;
             if (Connection != null)
-            {
                 Log.Write(LogLevel.Trace, "Saving text before closing form(connectionName: {0}):\r\n{1}", Connection.ConnectionName, text);
-            }
 
             if (_dataAdapter == null)
             {
                 bool hasTransactions;
                 if (_transaction != null)
-                {
                     hasTransactions = true;
-                }
                 else if (Connection != null && Connection.State == ConnectionState.Open)
                 {
                     try
@@ -2645,9 +2624,7 @@ namespace DataCommander.Providers.Query
                     }
                 }
                 else
-                {
                     hasTransactions = false;
-                }
 
                 if (hasTransactions)
                 {

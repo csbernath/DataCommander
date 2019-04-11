@@ -1,11 +1,14 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Providers.Connection;
 using Foundation.Core;
 using Foundation.Data;
+using Foundation.Linq;
 
 namespace DataCommander.Providers.SqlServer
 {
@@ -286,14 +289,37 @@ set arithabort on";
             }
         }
 
+        private long _createCommandTimestamp;
+
         private void OnInfoMessage(object sender, SqlInfoMessageEventArgs e)
         {
-            var infoMessages = SqlServerProvider.ToInfoMessages(e.Errors);
+            var now = LocalTime.Default.Now;
+            var infoMessages = SqlServerProvider.ToInfoMessages(e.Errors, now);
+
+            if (e.Errors.Count > 0)
+            {
+                var error = e.Errors[0];
+                if (error.Number == 3211)
+                {
+                    //%d percent processed.
+                    var elapsed = Stopwatch.GetTimestamp() - _createCommandTimestamp;
+                    var index = error.Message.IndexOf(' ');
+                    var percentString = error.Message.Substring(0, index);
+                    var percent = int.Parse(percentString);
+                    var remainingPercent = 100 - percent;
+                    var estimatedRemaining = remainingPercent * elapsed / percent;
+                    var infoMessage = new InfoMessage(now, InfoMessageSeverity.Verbose, null,
+                        $"Estimated remaining time: {StopwatchTimeSpan.ToString(estimatedRemaining, 0)}");
+                    infoMessages.Add(infoMessage);
+                }
+            }
+
             InvokeInfoMessage(infoMessages);
         }
 
         public override IDbCommand CreateCommand()
         {
+            _createCommandTimestamp = Stopwatch.GetTimestamp();
             return _sqlConnection.CreateCommand();
         }
 

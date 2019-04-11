@@ -37,11 +37,10 @@ namespace DataCommander.Providers.SqlServer
 
         public static int ShortStringSize { get; }
 
-        internal static List<InfoMessage> ToInfoMessages(SqlErrorCollection sqlErrors)
+        internal static List<InfoMessage> ToInfoMessages(SqlErrorCollection sqlErrors, DateTime creationTime)
         {
             Assert.IsNotNull(sqlErrors);
 
-            var now = LocalTime.Default.Now;
             var messages = new List<InfoMessage>(sqlErrors.Count);
 
             foreach (SqlError sqlError in sqlErrors)
@@ -52,7 +51,7 @@ namespace DataCommander.Providers.SqlServer
 
                 var header = sqlError.GetHeader();
                 var message = sqlError.Message;
-                messages.Add(new InfoMessage(now, severity, header, message));
+                messages.Add(new InfoMessage(creationTime, severity, header, message));
             }
 
             return messages;
@@ -963,9 +962,8 @@ order by ic.index_column_id",
         {
             var now = LocalTime.Default.Now;
             List<InfoMessage> infoMessages;
-            var sqlException = exception as SqlException;
-            if (sqlException != null)
-                infoMessages = ToInfoMessages(sqlException.Errors);
+            if (exception is SqlException sqlException)
+                infoMessages = ToInfoMessages(sqlException.Errors, LocalTime.Default.Now);
             else
             {
                 var message = exception.ToLogString();
