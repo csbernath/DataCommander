@@ -17,7 +17,7 @@ namespace Foundation.Data.SqlClient.SqlLog
             int connectionNo,
             int commandNo,
             int executionNo,
-            Exception exception )
+            Exception exception)
         {
             _applicationId = applicationId;
             _connectionNo = connectionNo;
@@ -40,36 +40,26 @@ namespace Foundation.Data.SqlClient.SqlLog
 
                     for (var i = 0; i < count; i++)
                     {
-                        var error = errors[ i ];
+                        var error = errors[i];
                         var procedure = error.Procedure;
 
                         if (procedure.Length == 0)
-                        {
                             procedure = null;
-                        }
 
-                        AppendError( sb, i + 1, error.Number, error.Class, error.State, procedure, error.LineNumber, error.Message );
+                        AppendError(sb, i + 1, error.Number, error.Class, error.State, procedure, error.LineNumber, error.Message);
                     }
                 }
                 else
                 {
                     var text = _exception.ToString();
-                    sb.AppendFormat( "exec LogException {0},{1},{2},{3},{4}", _applicationId, _connectionNo, _commandNo, _executionNo, text.ToTSqlVarChar() );
+                    sb.AppendFormat("exec LogException {0},{1},{2},{3},{4}", _applicationId, _connectionNo, _commandNo, _executionNo, text.ToTSqlVarChar());
                 }
 
                 return sb.ToString();
             }
         }
 
-        private void AppendError(
-            StringBuilder sb,
-            int errorNo,
-            int error,
-            byte severity,
-            byte state,
-            string procedure,
-            int line,
-            string message )
+        private void AppendError(StringBuilder sb, int errorNo, int error, byte severity, byte state, string procedure, int line, string message)
         {
             sb.AppendFormat(
                 "exec LogError {0},{1},{2},{3},{4},{5},{6},{7},{8},{9}\r\n",
@@ -82,7 +72,7 @@ namespace Foundation.Data.SqlClient.SqlLog
                 severity,
                 state,
                 procedure.ToTSqlVarChar(),
-                message.ToTSqlVarChar() );
+                message.ToTSqlVarChar());
         }
     }
 }

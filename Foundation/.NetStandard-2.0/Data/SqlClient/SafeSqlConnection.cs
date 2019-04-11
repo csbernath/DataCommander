@@ -19,10 +19,6 @@ namespace Foundation.Data.SqlClient
         private readonly CancellationToken _cancellationToken = CancellationToken.None;
         private short _id;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="connectionString"></param>
         public SafeSqlConnection(string connectionString)
         {
             var connection = new SqlConnection(connectionString);
@@ -75,8 +71,8 @@ namespace Foundation.Data.SqlClient
         internal static void HandleException(IDbConnection connection, Exception exception, TimeSpan elapsed, CancellationToken cancellationToken)
         {
             var separator = new string('-', 80);
-            var sb = new StringBuilder();
-            sb.AppendFormat("SafeSqlConnection.HandleException(connection), elapsed: {0}, exception:\r\n{1}", elapsed, exception.ToLogString());
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendFormat("SafeSqlConnection.HandleException(connection), elapsed: {0}, exception:\r\n{1}", elapsed, exception.ToLogString());
             var sqlException = exception as SqlException;
             var handled = false;
             var timeout = 1 * 60 * 1000; // 1 minutes
@@ -96,7 +92,7 @@ namespace Foundation.Data.SqlClient
                         timeout = 5 * 1000; // 5 seconds
                         break;
 
-                    case 4060: // Cannot open database requested in login '%.*ls'. Login fails.
+                    case SqlErrorNumber.CannotOpenDatabaseRequestedInLoginLoginFails:
                         handled = true;
                         timeout = 5 * 1000; // 5 seconds;
                         break;
@@ -109,8 +105,7 @@ namespace Foundation.Data.SqlClient
             }
             else
             {
-                var win32Exception = exception as Win32Exception;
-                if (win32Exception != null)
+                if (exception is Win32Exception win32Exception)
                 {
                     // The wait operation timed out
                     if (win32Exception.NativeErrorCode == 258)
@@ -122,8 +117,8 @@ namespace Foundation.Data.SqlClient
 
             if (handled)
             {
-                sb.AppendFormat("\r\nWaiting {0}...", TimeSpan.FromMilliseconds(timeout));
-                Log.Error(sb.ToString());
+                stringBuilder.AppendFormat("\r\nWaiting {0}...", TimeSpan.FromMilliseconds(timeout));
+                Log.Error(stringBuilder.ToString());
 
                 if (timeout > 0)
                     cancellationToken.WaitHandle.WaitOne(timeout);
@@ -161,18 +156,17 @@ namespace Foundation.Data.SqlClient
                         handled = true;
                         break;
 
-                    case 922: //Database '%.*ls' is being recovered. Waiting until recovery is finished.
+                    case SqlErrorNumber.DatabaseisBeingRecovered:
                         handled = true;
                         break;
 
-                    case 1205:
-                        // Transaction (Process ID %d) was deadlocked on {%Z} resources with another process and has been chosen as the deadlock victim. Rerun the transaction.
+                    case SqlErrorNumber.TransactionWasDeadlocked:
                         handled = true;
                         break;
                 }
             }
 
-            Log.Write(LogLevel.Error, sb.ToString());
+            Log.Error(sb.ToString());
 
             if (handled)
                 cancellationToken.WaitHandle.WaitOne(1 * 60 * 1000); // 1 minutes

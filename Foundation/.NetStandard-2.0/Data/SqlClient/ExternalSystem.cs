@@ -49,9 +49,7 @@ namespace Foundation.Data.SqlClient
                 if (encrypted)
                 {
                     if (value == DBNull.Value)
-                    {
                         value = null;
-                    }
                     else
                     {
                         var bytes = (byte[]) value;
@@ -62,9 +60,7 @@ namespace Foundation.Data.SqlClient
                 if (type == ExternalSystemPropertyTypes.String)
                 {
                     if (value == DBNull.Value)
-                    {
                         value = null;
-                    }
                 }
 
                 properties.Add(propertyName, value, null);
@@ -73,12 +69,6 @@ namespace Foundation.Data.SqlClient
             return properties;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="scope"></param>
-        /// <param name="text"></param>
-        /// <returns></returns>
         public static byte[] Encrypt(DataProtectionScope scope, string text)
         {
             var bytes = Encoding.UTF8.GetBytes(text);
@@ -86,12 +76,6 @@ namespace Foundation.Data.SqlClient
             return protectedBytes;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="scope"></param>
-        /// <param name="bytes"></param>
-        /// <returns></returns>
         public static string Decrypt(DataProtectionScope scope, byte[] bytes)
         {
             var unprotectedBytes = ProtectedData.Unprotect(bytes, OptionalEntropy, scope);
@@ -99,25 +83,12 @@ namespace Foundation.Data.SqlClient
             return text;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="scope"></param>
-        /// <param name="bytes"></param>
-        /// <param name="text"></param>
-        /// <returns></returns>
         public static bool Check(DataProtectionScope scope, byte[] bytes, string text)
         {
-            var s = Decrypt(scope, bytes);
-            return s == text;
+            var decrypted = Decrypt(scope, bytes);
+            return decrypted == text;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="systemName">varchar(64)</param>
-        /// <returns></returns>
         private static DataSet ExternalSystem_GetProperties(IDbConnection connection, string systemName)
         {
             var command = connection.CreateCommand();
