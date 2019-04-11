@@ -100,22 +100,20 @@ namespace Foundation.Core
             var totalSeconds = ticks / TicksPerSecond;
             string fractionString = null;
 
-            if (scale > 0)
+            var fractionTicks = ticks - (totalSeconds * TicksPerSecond);
+            var multiplier = Pow10(scale);
+            var fraction = (double) multiplier * fractionTicks / TicksPerSecond;
+            fraction = Math.Round(fraction);
+            var fractionInt64 = (long) fraction;
+            if (fractionInt64 == multiplier)
             {
-                var fractionTicks = ticks - (totalSeconds * TicksPerSecond);
-                var multiplier = Pow10(scale);
-                var fraction = (double) multiplier * fractionTicks / TicksPerSecond;
-                fraction = Math.Round(fraction);
-                var fractionInt64 = (long) fraction;
-                if (fractionInt64 == multiplier)
-                {
-                    fractionInt64 = 0;
-                    totalSeconds++;
-
-                }
-
-                fractionString = $".{fractionInt64.ToString().PadLeft(scale, '0')}";
+                fractionInt64 = 0;
+                totalSeconds++;
             }
+
+            if (scale > 0)
+                fractionString = $".{fractionInt64.ToString().PadLeft(scale, '0')}";
+
 
             var stringBuilder = new StringBuilder();
             var days = ticks / TicksPerDay;
