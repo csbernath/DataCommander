@@ -90,8 +90,7 @@ namespace Foundation.Data.SqlClient.SqlLog
                         break;
                 }
 
-                bool isNew;
-                var command = GetCommandExecution(_database, _commandText, out isNew);
+                var command = GetCommandExecution(_database, _commandText, out var isNew);
                 var sb = new StringBuilder();
 
                 if (isNew)

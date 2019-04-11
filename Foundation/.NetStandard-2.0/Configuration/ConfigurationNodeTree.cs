@@ -62,8 +62,7 @@ namespace Foundation.Configuration
                 for (var i = 0; i < nodeNames.Length; i++)
                 {
                     var childNodeName = nodeNames[i];
-                    ConfigurationNode childNode;
-                    var contains = node.ChildNodes.TryGetValue(childNodeName, out childNode);
+                    var contains = node.ChildNodes.TryGetValue(childNodeName, out var childNode);
 
                     if (!contains)
                     {

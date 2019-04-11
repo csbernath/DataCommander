@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DataCommander.Providers.Connection;
 using Foundation.Core;
 using Foundation.Data;
+using Foundation.Data.SqlClient;
 using Foundation.Linq;
 
 namespace DataCommander.Providers.SqlServer
@@ -299,9 +300,8 @@ set arithabort on";
             if (e.Errors.Count > 0)
             {
                 var error = e.Errors[0];
-                if (error.Number == 3211)
+                if (error.Number == SqlErrorNumber.PercentProcessed)
                 {
-                    //%d percent processed.
                     var elapsed = Stopwatch.GetTimestamp() - _createCommandTimestamp;
                     var index = error.Message.IndexOf(' ');
                     var percentString = error.Message.Substring(0, index);

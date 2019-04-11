@@ -11,15 +11,14 @@ namespace Foundation.Data.SqlClient
 
             if (errors != null)
             {
-                var sb = new StringBuilder();
-
+                var stringBuilder = new StringBuilder();
                 foreach (SqlError error in errors)
                 {
                     var s = error.ToLogString();
-                    sb.AppendLine(s);
+                    stringBuilder.AppendLine(s);
                 }
 
-                message = sb.ToString();
+                message = stringBuilder.ToString();
             }
 
             return message;

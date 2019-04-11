@@ -61,11 +61,10 @@ namespace DataCommander.Providers
                     var dataTable = new DataTable();
                     adapter.Fill(dataTable, objRs);
                     dataSet.Tables.Add(dataTable);
-                    object recordsAffected;
 
                     try
                     {
-                        objRs = rs.NextRecordset(out recordsAffected);
+                        objRs = rs.NextRecordset(out var recordsAffected);
                         TextWriter.WriteLine(recordsAffected + " row(s) affected.");
                     }
                     catch

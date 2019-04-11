@@ -37,9 +37,7 @@ namespace Foundation.Linq
             Assert.IsNotNull(dictionary);
             Assert.IsNotNull(valueFactory);
 
-            TValue value;
-
-            if (!dictionary.TryGetValue(key, out value))
+            if (!dictionary.TryGetValue(key, out var value))
             {
                 value = valueFactory(key);
                 dictionary.Add(key, value);

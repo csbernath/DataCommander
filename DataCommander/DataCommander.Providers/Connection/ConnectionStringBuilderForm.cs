@@ -131,8 +131,7 @@ namespace DataCommander.Providers.Connection
             var applicationData = DataCommanderApplication.Instance.ApplicationData;
             var folder = applicationData.CurrentType;
             folder = folder.CreateNode(_tempConnectionProperties.Provider.Name);
-            string[] dataSourceArray;
-            var contains = folder.Attributes.TryGetAttributeValue("Data Sources", out dataSourceArray);
+            var contains = folder.Attributes.TryGetAttributeValue("Data Sources", out string[] dataSourceArray);
 
             if (!contains || refresh)
             {
@@ -313,8 +312,7 @@ namespace DataCommander.Providers.Connection
             connectionProperties.InitialCatalog = TryGetValue(_dbConnectionStringBuilder, ConnectionStringKeyword.InitialCatalog);
 
             bool? integratedSecurity = null;
-            object value;
-            if (_dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out value))
+            if (_dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.IntegratedSecurity, out var value))
                 integratedSecurity = (bool) value;
 
             connectionProperties.IntegratedSecurity = integratedSecurity;

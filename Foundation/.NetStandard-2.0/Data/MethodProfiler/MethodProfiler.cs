@@ -148,8 +148,7 @@ exec MethodProfilerApplication_Add {0},{1}",
             var trace = new StackTrace( 1 );
             var frame = trace.GetFrame( 0 );
             var method = frame.GetMethod();
-            int methodId;
-            Methods.TryGetValue( method, out methodId );
+            Methods.TryGetValue( method, out var methodId );
             var item = Stacks.Pop( threadId );
 
             if (item.MethodId != methodId)

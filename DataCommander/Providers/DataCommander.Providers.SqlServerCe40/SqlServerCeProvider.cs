@@ -120,8 +120,7 @@ ORDER BY ORDINAL_POSITION";
 
                             if (tableNameOrAlias != null)
                             {
-                                string tableName;
-                                var contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out tableName);
+                                var contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out var tableName);
                                 if (contains)
                                 {
                                     commandText = $"select distinct top 10 {columnName} from {tableName} (nolock) order by 1";

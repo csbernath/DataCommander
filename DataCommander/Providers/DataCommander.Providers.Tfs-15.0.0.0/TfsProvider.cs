@@ -80,8 +80,7 @@ namespace DataCommander.Providers.Tfs
             var connectionStringBuilder = (IDbConnectionStringBuilder) new TfsConnectionStringBuilder();
             connectionStringBuilder.ConnectionString = connectionString;
 
-            object value;
-            connectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out value);
+            connectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var value);
             var uriString = (string) value;
             var uri = new Uri(uriString);
             return new TfsConnection(uri);
@@ -108,8 +107,7 @@ namespace DataCommander.Providers.Tfs
         {
             var tfsCommand = (TfsCommand) command;
 
-            TfsDataReaderFactory.DataReaderInfo info;
-            var contains = TfsDataReaderFactory.Dictionary.TryGetValue(tfsCommand.CommandText, out info);
+            var contains = TfsDataReaderFactory.Dictionary.TryGetValue(tfsCommand.CommandText, out var info);
 
             if (contains)
             {
@@ -209,8 +207,7 @@ namespace DataCommander.Providers.Tfs
 
             if (tokens.Count > 0)
             {
-                Token previousToken, currentToken;
-                sqlStatement.FindToken(position, out previousToken, out currentToken);
+                sqlStatement.FindToken(position, out var previousToken, out var currentToken);
                 if (currentToken != null)
                 {
                     response.StartPosition = currentToken.StartPosition;
@@ -260,8 +257,7 @@ namespace DataCommander.Providers.Tfs
                             //    }
                             //}
                             var command = sqlStatement.CreateCommand(this, connection, CommandType.StoredProcedure, 0);
-                            TfsDataReaderFactory.DataReaderInfo info;
-                            var contains = TfsDataReaderFactory.Dictionary.TryGetValue(command.CommandText, out info);
+                            var contains = TfsDataReaderFactory.Dictionary.TryGetValue(command.CommandText, out var info);
                             if (contains)
                             {
                                 var parameters = info.Parameters;

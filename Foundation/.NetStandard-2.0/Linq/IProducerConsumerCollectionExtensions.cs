@@ -13,8 +13,7 @@ namespace Foundation.Linq
             var i = 0;
             while (i < target.Length)
             {
-                T item;
-                var succeeded = collection.TryTake(out item);
+                var succeeded = collection.TryTake(out var item);
                 if (succeeded)
                 {
                     target[i] = item;

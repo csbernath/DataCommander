@@ -24,8 +24,7 @@ namespace DataCommander.Providers.Odp.ObjectExplorer
 		{
 			var folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
 			var key = _schema.SchemasNode.Connection.DataSource + "." + _schema.Name;
-			string[] tables;
-			var contains = folder.Attributes.TryGetAttributeValue( key, out tables );
+            var contains = folder.Attributes.TryGetAttributeValue( key, out string[] tables );
 
 			if (!contains || refresh)
 			{

@@ -151,8 +151,7 @@ namespace DataCommander.Providers.ResultWriter
                             var items = new List<QueueItem>(_queue.Count);
                             while (true)
                             {
-                                QueueItem item;
-                                var succeeded = _queue.TryDequeue(out item);
+                                var succeeded = _queue.TryDequeue(out var item);
                                 if (succeeded)
                                 {
                                     items.Add(item);

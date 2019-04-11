@@ -315,8 +315,7 @@ namespace DataCommander.Providers
             OleDbConnection connection)
         {
             var rs = (Recordset)adodbRecordset;
-            OleDbParameter[] columns;
-            var sourceTable = Convert(rs, out columns);
+            var sourceTable = Convert(rs, out var columns);
             sourceTable.TableName = tableName;
             DropTable(tableName, connection);
             CreateTable(tableName, columns, connection);

@@ -660,8 +660,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
             var applicationData = DataCommanderApplication.Instance.ApplicationData;
             FormPosition.Load(applicationData, this);
             var folder = applicationData.CurrentType;
-            string[] array;
-            var contains = folder.Attributes.TryGetAttributeValue("RecentFileList", out array);
+            var contains = folder.Attributes.TryGetAttributeValue("RecentFileList", out string[] array);
 
             if (contains && array != null)
             {
@@ -671,8 +670,7 @@ ServerVersion: {connectionProperties.Connection.ServerVersion}";
                     _recentFileList.Add(array[i]);
             }
 
-            string base64;
-            contains = folder.Attributes.TryGetAttributeValue("Font", out base64);
+            contains = folder.Attributes.TryGetAttributeValue("Font", out string base64);
 
             if (contains)
                 SelectedFont = DeserializeFont(base64);

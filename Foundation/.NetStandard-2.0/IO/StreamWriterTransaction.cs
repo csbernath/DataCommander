@@ -38,9 +38,7 @@ namespace Foundation.IO
             var succeeded = NativeMethods.MoveFileEx(_tempPath, _path, flags);
 
             if (!succeeded)
-            {
                 throw new Win32Exception();
-            }
 
             _commited = true;
         }
@@ -50,9 +48,7 @@ namespace Foundation.IO
             Writer.Dispose();
 
             if (!_commited)
-            {
                 File.Delete(_tempPath);
-            }
         }
     }
 }

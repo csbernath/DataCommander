@@ -9,14 +9,12 @@ namespace Foundation.DocumentProperties.StructuredStorage
         {
             Assert.IsTrue(propertySetStorage != null);
 
-            IEnumSTATPROPSETSTG enumStatPropSetStg;
-            propertySetStorage.Enum( out enumStatPropSetStg );
+            propertySetStorage.Enum( out var enumStatPropSetStg );
 
             while (true)
             {
                 var statPropSetStgArray = new STATPROPSETSTG[ 1 ];
-                uint fetched;
-                enumStatPropSetStg.Next( 1, statPropSetStgArray, out fetched );
+                enumStatPropSetStg.Next( 1, statPropSetStgArray, out var fetched );
 
                 if (fetched == 0)
                 {
@@ -31,14 +29,12 @@ namespace Foundation.DocumentProperties.StructuredStorage
         {
             Assert.IsNotNull(propertyStorage);
 
-            IEnumSTATPROPSTG enumStatPropStg;
-            propertyStorage.Enum( out enumStatPropStg );
+            propertyStorage.Enum( out var enumStatPropStg );
 
             while (true)
             {
                 var statPropStgArray = new STATPROPSTG[ 1 ];
-                uint fetched;
-                enumStatPropStg.Next( 1, statPropStgArray, out fetched );
+                enumStatPropStg.Next( 1, statPropStgArray, out var fetched );
 
                 if (fetched == 0)
                 {

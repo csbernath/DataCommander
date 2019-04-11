@@ -53,8 +53,7 @@ namespace DataCommander.Providers.PostgreSql
             List<IObjectName> array = null;
             var sqlStatement = new SqlParser(text);
             var tokens = sqlStatement.Tokens;
-            Token previousToken, currentToken;
-            sqlStatement.FindToken(position, out previousToken, out currentToken);
+            sqlStatement.FindToken(position, out var previousToken, out var currentToken);
 
             if (currentToken != null)
             {
@@ -227,8 +226,7 @@ order by 1", name.Database);
 
                             if (tableNameOrAlias != null)
                             {
-                                string tableName;
-                                var contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out tableName);
+                                var contains = sqlStatement.Tables.TryGetValue(tableNameOrAlias, out var tableName);
                                 if (contains)
                                 {
                                     string where;

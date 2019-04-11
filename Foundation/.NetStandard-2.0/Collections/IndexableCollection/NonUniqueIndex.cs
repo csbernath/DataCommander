@@ -118,8 +118,7 @@ namespace Foundation.Collections.IndexableCollection
         /// <returns></returns>
         public bool TryGetFirstValue(TKey key, out T value)
         {
-            ICollection<T> collection;
-            var contains = _dictionary.TryGetValue(key, out collection);
+            var contains = _dictionary.TryGetValue(key, out var collection);
 
             if (contains)
             {
@@ -176,8 +175,7 @@ namespace Foundation.Collections.IndexableCollection
             if (response.HasKey)
             {
                 var key = response.Key;
-                ICollection<T> collection;
-                var contains = _dictionary.TryGetValue(key, out collection);
+                var contains = _dictionary.TryGetValue(key, out var collection);
 
                 if (!contains)
                 {
@@ -208,8 +206,7 @@ namespace Foundation.Collections.IndexableCollection
             if (response.HasKey)
             {
                 var key = response.Key;
-                ICollection<T> collection;
-                contains = _dictionary.TryGetValue(key, out collection);
+                contains = _dictionary.TryGetValue(key, out var collection);
 
                 if (contains) contains = collection.Contains(item);
             }
@@ -242,8 +239,7 @@ namespace Foundation.Collections.IndexableCollection
             if (response.HasKey)
             {
                 var key = response.Key;
-                ICollection<T> collection;
-                var contains = _dictionary.TryGetValue(key, out collection);
+                var contains = _dictionary.TryGetValue(key, out var collection);
 
                 if (contains)
                 {

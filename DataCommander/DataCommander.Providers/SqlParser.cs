@@ -496,8 +496,7 @@ namespace DataCommander.Providers
                     {
                         case DbType.Boolean:
                             var valueStr = (string) value;
-                            double valueDbl;
-                            var ok = double.TryParse(valueStr, NumberStyles.Any, null, out valueDbl);
+                            var ok = double.TryParse(valueStr, NumberStyles.Any, null, out var valueDbl);
                             value2 = ok ? Convert.ToBoolean(valueDbl) : Convert.ToBoolean(value);
                             break;
 
@@ -669,8 +668,7 @@ namespace DataCommander.Providers
             if (items.Length > 1)
             {
                 var alias = items[0];
-                string tableName;
-                var contains = Tables.TryGetValue(alias, out tableName);
+                var contains = Tables.TryGetValue(alias, out var tableName);
 
                 if (contains)
                 {

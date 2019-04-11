@@ -214,8 +214,7 @@ namespace Foundation.DocumentProperties
 
         private static DocumentPropertyCollection ReadFromStructuredStorage( string path )
         {
-            IStorage storage;
-            var result = NativeMethods.StgOpenStorage( path, null, STGM.READ | STGM.SHARE_DENY_WRITE, IntPtr.Zero, 0, out storage );
+            var result = NativeMethods.StgOpenStorage( path, null, STGM.READ | STGM.SHARE_DENY_WRITE, IntPtr.Zero, 0, out var storage );
 
             if (result != 0)
             {
@@ -228,9 +227,8 @@ namespace Foundation.DocumentProperties
 
             foreach (var statPropSetStg in propertySetStorage.AsEnumerable())
             {
-                IPropertyStorage propertyStorage;
                 var fmtid = statPropSetStg.fmtid;
-                propertySetStorage.Open( ref fmtid, (uint) ( STGM.READ | STGM.SHARE_EXCLUSIVE ), out propertyStorage );
+                propertySetStorage.Open( ref fmtid, (uint) ( STGM.READ | STGM.SHARE_EXCLUSIVE ), out var propertyStorage );
 
                 foreach (var statPropStg in propertyStorage.AsEnumerable())
                 {

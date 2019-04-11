@@ -39,8 +39,7 @@ namespace Foundation.Linq
 
         public static string ToLogXmlString(this object source)
         {
-            string s;
-
+            string logXmlString;
             if (source != null)
             {
                 try
@@ -49,28 +48,25 @@ namespace Foundation.Linq
 
                     using (var stringWriter = new StringWriter())
                     {
-                        var xmlTextWriter =
-                            new XmlTextWriter(stringWriter)
-                            {
-                                Formatting = Formatting.Indented,
-                                Indentation = 2,
-                                IndentChar = ' '
-                            };
-
+                        var xmlTextWriter = new XmlTextWriter(stringWriter)
+                        {
+                            Formatting = Formatting.Indented,
+                            Indentation = 2,
+                            IndentChar = ' '
+                        };
                         xmlSerializer.Serialize(xmlTextWriter, source);
-
-                        s = stringWriter.ToString();
+                        logXmlString = stringWriter.ToString();
                     }
                 }
                 catch (Exception e)
                 {
-                    s = e.ToString();
+                    logXmlString = e.ToString();
                 }
             }
             else
-                s = null;
+                logXmlString = null;
 
-            return s;
+            return logXmlString;
         }
 
         public static bool ReferenceEquals<T>(this T objA, T objB) where T : class => object.ReferenceEquals(objA, objB);

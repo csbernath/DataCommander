@@ -22,8 +22,7 @@ namespace DataCommander.Providers.Connection
             connectionProperties.ProviderName = attributes["ProviderName"].GetValue<string>();
             connectionProperties.ConnectionString = attributes["ConnectionString"].GetValue<string>();
 
-            ConfigurationAttribute attribute;
-            if (attributes.TryGetValue(ConnectionStringKeyword.DataSource, out attribute))
+            if (attributes.TryGetValue(ConnectionStringKeyword.DataSource, out var attribute))
                 connectionProperties.DataSource = attribute.GetValue<string>();
 
             if (attributes.TryGetValue(ConnectionStringKeyword.InitialCatalog, out attribute))

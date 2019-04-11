@@ -136,9 +136,7 @@ namespace DataCommander.Providers.SQLite
             var response = new GetCompletionResponse();
             var sqlStatement = new SqlParser(text);
             var tokens = sqlStatement.Tokens;
-            Token previousToken;
-            Token currentToken;
-            sqlStatement.FindToken(position, out previousToken, out currentToken);
+            sqlStatement.FindToken(position, out var previousToken, out var currentToken);
 
             if (currentToken != null)
             {

@@ -39,10 +39,7 @@ namespace Foundation.Linq
             return enumerable.Concat();
         }
 
-        public static bool IsNullOrEmpty(this Array array)
-        {
-            return array == null || array.Length == 0;
-        }
+        public static bool IsNullOrEmpty(this Array array) => array == null || array.Length == 0;
 
         public static bool Contains<T>(this T[] array, T item)
         {

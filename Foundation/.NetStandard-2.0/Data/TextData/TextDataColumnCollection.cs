@@ -65,8 +65,7 @@ namespace Foundation.Data.TextData
         /// <returns></returns>
         public int IndexOf(string columnName)
         {
-            TextDataColumn column;
-            var contains = _nameIndex.TryGetValue(columnName, out column);
+            var contains = _nameIndex.TryGetValue(columnName, out var column);
             int index;
 
             if (contains)

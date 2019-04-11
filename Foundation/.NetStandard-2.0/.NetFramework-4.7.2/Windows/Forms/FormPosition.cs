@@ -47,8 +47,7 @@ namespace Foundation.Windows.Forms
             var type = form.GetType();
             var nodeName = ConfigurationNodeName.FromType(type);
             var node = applicationData.CreateNode(nodeName);
-            FormWindowState windowState;
-            node.Attributes.TryGetAttributeValue("WindowState", FormWindowState.Normal, out windowState);
+            node.Attributes.TryGetAttributeValue("WindowState", FormWindowState.Normal, out var windowState);
             form.WindowState = windowState;
 
             if (windowState == FormWindowState.Normal)

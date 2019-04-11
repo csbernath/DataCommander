@@ -45,8 +45,7 @@ namespace DataCommander.Providers.Wmi
         {
             var sb = new DbConnectionStringBuilder();
             sb.ConnectionString = _connectionString;
-            object value;            
-            var contains = sb.TryGetValue( ConnectionStringKeyword.DataSource, out value );
+            var contains = sb.TryGetValue( ConnectionStringKeyword.DataSource, out var value );
             string dataSource;
 
             if (contains)

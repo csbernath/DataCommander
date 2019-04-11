@@ -54,8 +54,7 @@ namespace DataCommander.Providers.FieldNamespace
             {
                 case TypeCode.String:
                     var s = (string) obj;
-                    DateTime dateTime;
-                    var succeeded = TryParse(s, out dateTime);
+                    var succeeded = TryParse(s, out var dateTime);
 
                     if (succeeded)
                     {

@@ -88,10 +88,8 @@ namespace DataCommander.Providers.Connection
 
             var dbConnectionStringBuilder = new DbConnectionStringBuilder();
             dbConnectionStringBuilder.ConnectionString = connectionProperties.ConnectionString;
-            object dataSourceObject;
-            var contains = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out dataSourceObject);
-            object userId;
-            dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out userId);
+            var contains = dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.DataSource, out var dataSourceObject);
+            dbConnectionStringBuilder.TryGetValue(ConnectionStringKeyword.UserId, out var userId);
             var dataSource = (string)dataSourceObject;
             _textBox.Text = $@"Connection name: {connectionProperties.ConnectionName}
 Provider name: {connectionProperties.ProviderName}

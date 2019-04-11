@@ -94,8 +94,7 @@ namespace Foundation.Collections
             }
             else
             {
-                TypeCollectionItem item;
-                var contains = TypeIndex.TryGetValue(type, out item);
+                var contains = TypeIndex.TryGetValue(type, out var item);
                 typeName = contains ? item.Name : type.FullName;
             }
 

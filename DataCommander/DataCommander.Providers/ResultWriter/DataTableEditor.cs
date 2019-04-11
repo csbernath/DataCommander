@@ -355,8 +355,7 @@ namespace DataCommander.Providers.ResultWriter
 
                     case TypeCode.DateTime:
                         valueString = (string) value;
-                        DateTime dateTime;
-                        var succeeded = DateTimeField.TryParse(valueString, out dateTime);
+                        var succeeded = DateTimeField.TryParse(valueString, out var dateTime);
 
                         if (succeeded)
                             valueString = dateTime.ToTSqlDateTime();

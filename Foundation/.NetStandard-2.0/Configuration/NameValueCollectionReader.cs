@@ -18,8 +18,7 @@ namespace Foundation.Configuration
 
         public T GetValue<T>(string name, TryParse<T> tryParse, T defaultValue)
         {
-            T value;
-            var contains = TryGetValue(name, tryParse, out value);
+            var contains = TryGetValue(name, tryParse, out var value);
             if (!contains)
                 value = defaultValue;
 
@@ -32,8 +31,7 @@ namespace Foundation.Configuration
 
         public string GetString(string name)
         {
-            string value;
-            _tryGetValue(name, out value);
+            _tryGetValue(name, out var value);
             return value;
         }
 
@@ -45,8 +43,7 @@ namespace Foundation.Configuration
 
         public bool TryGetDateTime(string name, IFormatProvider provider, DateTimeStyles styles, out DateTime value)
         {
-            string s;
-            var contains = _tryGetValue(name, out s);
+            var contains = _tryGetValue(name, out var s);
 
             if (contains)
             {
@@ -61,8 +58,7 @@ namespace Foundation.Configuration
 
         public bool TryGetDouble(string name, out double value)
         {
-            string s;
-            var contains = _tryGetValue(name, out s);
+            var contains = _tryGetValue(name, out var s);
 
             if (contains)
             {
@@ -77,8 +73,7 @@ namespace Foundation.Configuration
 
         public bool TryGetDouble(string name, NumberStyles style, IFormatProvider provider, out double value)
         {
-            string s;
-            var contains = _tryGetValue(name, out s);
+            var contains = _tryGetValue(name, out var s);
 
             if (contains)
             {
@@ -93,8 +88,7 @@ namespace Foundation.Configuration
 
         public bool TryGetEnum<T>(string name, out T value)
         {
-            string s;
-            var contains = _tryGetValue(name, out s);
+            var contains = _tryGetValue(name, out var s);
 
             if (contains)
             {
@@ -128,8 +122,7 @@ namespace Foundation.Configuration
 
         public bool TryGetSingle(string name, NumberStyles style, IFormatProvider provider, out float value)
         {
-            string s;
-            var contains = _tryGetValue(name, out s);
+            var contains = _tryGetValue(name, out var s);
 
             if (contains)
             {
@@ -144,8 +137,7 @@ namespace Foundation.Configuration
 
         public bool TryGetString(string name, out string value)
         {
-            string s;
-            var contains = _tryGetValue(name, out s);
+            var contains = _tryGetValue(name, out var s);
 
             value = contains
                 ? s
@@ -156,8 +148,7 @@ namespace Foundation.Configuration
 
         public bool TryGetTimeSpan(string name, out TimeSpan value)
         {
-            string s;
-            var contains = _tryGetValue(name, out s);
+            var contains = _tryGetValue(name, out var s);
 
             value = contains
                 ? TimeSpan.Parse(s)
@@ -170,8 +161,7 @@ namespace Foundation.Configuration
         {
             Assert.IsNotNull(tryParse);
 
-            string s;
-            var contains = _tryGetValue(name, out s);
+            var contains = _tryGetValue(name, out var s);
 
             if (contains)
             {

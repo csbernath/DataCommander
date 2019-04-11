@@ -158,8 +158,7 @@ namespace Foundation.Configuration
 
                 foreach (var childNodeName in childNodeNames)
                 {
-                    ConfigurationNode childNode;
-                    var contains = node.ChildNodes.TryGetValue(childNodeName, out childNode);
+                    var contains = node.ChildNodes.TryGetValue(childNodeName, out var childNode);
 
                     if (contains)
                     {

@@ -17,8 +17,7 @@ namespace DataCommander.Providers.OracleBase.ObjectExplorer
         {
             var folder = DataCommanderApplication.Instance.ApplicationData.CurrentType;
             var key = _schema.SchemasNode.Connection.Database + "." + _schema.Name;
-            string[] packages;
-            var contains = folder.Attributes.TryGetAttributeValue(key, out packages);
+            var contains = folder.Attributes.TryGetAttributeValue(key, out string[] packages);
 
             if (!contains || refresh)
             {

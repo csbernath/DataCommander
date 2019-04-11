@@ -8,45 +8,17 @@ namespace Foundation.Core
     {
         #region Public Fields
 
-        /// <summary>
-        /// 
-        /// </summary>
         public static readonly double TicksPerTick = (double) TimeSpan.TicksPerSecond / Stopwatch.Frequency;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public static readonly double TicksPerMicrosecond = Stopwatch.Frequency / 1000000.0;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public static readonly double TicksPerMillisecond = Stopwatch.Frequency / 1000.0;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public static readonly long TicksPerSecond = Stopwatch.Frequency;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public static readonly long TicksPerMinute = 60 * TicksPerSecond;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public static readonly long TicksPerHour = 60 * TicksPerMinute;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public static readonly long TicksPerDay = 24 * TicksPerHour;
 
         #endregion
 
         public StopwatchTimeSpan(long ticks) => Ticks = ticks;
-
         public StopwatchTimeSpan(TimeSpan timeSpan) => Ticks = ToTicks(timeSpan);
 
         public long Ticks { get; }
@@ -98,9 +70,7 @@ namespace Foundation.Core
         public static string ToString(long ticks, int scale)
         {
             var totalSeconds = ticks / TicksPerSecond;
-            string fractionString = null;
-
-            var fractionTicks = ticks - (totalSeconds * TicksPerSecond);
+            var fractionTicks = ticks - totalSeconds * TicksPerSecond;
             var multiplier = Pow10(scale);
             var fraction = (double) multiplier * fractionTicks / TicksPerSecond;
             fraction = Math.Round(fraction);
@@ -111,9 +81,9 @@ namespace Foundation.Core
                 totalSeconds++;
             }
 
+            string fractionString = null;
             if (scale > 0)
                 fractionString = $".{fractionInt64.ToString().PadLeft(scale, '0')}";
-
 
             var stringBuilder = new StringBuilder();
             var days = ticks / TicksPerDay;

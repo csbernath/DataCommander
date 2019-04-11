@@ -57,8 +57,7 @@ namespace Foundation.DefaultLog
 
         public void Flush()
         {
-            LogEntry logEntry;
-            while (_queue.TryDequeue(out logEntry))
+            while (_queue.TryDequeue(out var logEntry))
             {
                 var text = _formatter.Format(logEntry);
                 _logFile.Write(logEntry.CreationTime, text);

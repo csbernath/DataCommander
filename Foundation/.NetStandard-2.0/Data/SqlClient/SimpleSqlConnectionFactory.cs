@@ -31,32 +31,27 @@ namespace Foundation.Data.SqlClient
 
             var node = section.SelectNode(nodeName, true);
             _connectionString = node.Attributes["ConnectionString"].GetValue<string>();
-            TimeSpan timeSpan;
 
-            var contains = node.Attributes.TryGetAttributeValue("CommandTimeout", out timeSpan);
+            var contains = node.Attributes.TryGetAttributeValue("CommandTimeout", out TimeSpan timeSpan);
 
             if (contains)
                 CommandTimeout = (int)timeSpan.TotalSeconds;
             else
                 CommandTimeout = 259200; // 3 days
 
-            bool isSafe;
-            node.Attributes.TryGetAttributeValue("IsSafe", out isSafe);
+            node.Attributes.TryGetAttributeValue("IsSafe", out bool isSafe);
             var sqlLogNode = node.ChildNodes["SqlLog"];
-            bool enabled;
-            sqlLogNode.Attributes.TryGetAttributeValue("Enabled", out enabled);
+            sqlLogNode.Attributes.TryGetAttributeValue("Enabled", out bool enabled);
 
             if (enabled)
             {
                 var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_connectionString);
                 var applicationName = sqlConnectionStringBuilder.ApplicationName;
-                string logConnectionString;
-                contains = sqlLogNode.Attributes.TryGetAttributeValue("ConnectionString", null, out logConnectionString);
+                contains = sqlLogNode.Attributes.TryGetAttributeValue("ConnectionString", null, out string logConnectionString);
 
                 if (!contains)
                 {
-                    string dataSource;
-                    contains = sqlLogNode.Attributes.TryGetAttributeValue("Data Source", null, out dataSource);
+                    contains = sqlLogNode.Attributes.TryGetAttributeValue("Data Source", null, out string dataSource);
 
                     if (!contains)
                         dataSource = sqlConnectionStringBuilder.DataSource;
