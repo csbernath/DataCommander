@@ -3711,7 +3711,7 @@ namespace DataCommander.Providers.Query
                             sb.Append(columnName);
                         }
 
-                        sb.Append(")\r\nselect");
+                        sb.Append(")\r\nselect\r\n");
                         var insertInto = sb.ToString();
                         var fieldCount = dataReader.FieldCount;
 
@@ -3724,14 +3724,11 @@ namespace DataCommander.Providers.Query
 
                             for (var i = 0; i < fieldCount; i++)
                             {
-                                sb.Append('\t');
+                                if (i > 0)
+                                    sb.Append(",\r\n");
 
-                                if (i == 0)
-                                    sb.Append(' ');
-
-                                sb.Append(',');
                                 var s = InsertScriptFileWriter.ToString(values[i]);
-                                sb.AppendFormat("{0}\t\tas {1}", s, dataReader.GetName(i));
+                                sb.AppendFormat("    {0} as {1}", s, dataReader.GetName(i));
                             }
 
                             _standardOutput.WriteLine(sb);

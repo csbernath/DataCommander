@@ -26,10 +26,7 @@ namespace Foundation.DefaultLog
 
         #region ILog Members
 
-        bool ILog.IsEnabled(LogLevel logLevel)
-        {
-            throw new NotImplementedException();
-        }
+        bool ILog.IsEnabled(LogLevel logLevel) => true;
 
         void ILog.Write(LogLevel logLevel, string message) => _applicationLog.Write(this, logLevel, message);
 
