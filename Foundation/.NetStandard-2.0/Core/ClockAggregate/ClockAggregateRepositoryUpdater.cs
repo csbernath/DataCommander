@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 
-namespace Foundation.Core.Timers
+namespace Foundation.Core.ClockAggregate
 {
-    public static class ClockUpdater
+    public static class ClockAggregateRepositoryUpdater
     {
         private static Timer _timer;
 
@@ -19,8 +19,8 @@ namespace Foundation.Core.Timers
 
         private static void Update()
         {
-            var clock = ClockFactory.CreateClock();
-            ClockRepository.Save(clock);
+            var clock = ClockAggregateRootFactory.Now();
+            ClockAggregateRepository.Save(clock);
         }
 
         private static void TimerCallback(object state) => Update();
