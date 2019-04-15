@@ -27,7 +27,7 @@ namespace Foundation.Core.ClockAggregate
         {
             var clockState = _clockAggregateState;
             var stopwatchTicks = stopwatchTimestamp - clockState.StopwatchTimestamp;
-            var dateTimeTicksDouble = stopwatchTicks * StopwatchTimeSpan.TicksPerTick;
+            var dateTimeTicksDouble = stopwatchTicks * StopwatchConstants.DateTimeTicksPerStopwatchTick;
             var dateTimeTicksLong = (long) Math.Round(dateTimeTicksDouble);
             var utcDateTime = clockState.UtcDateTime.AddTicks(dateTimeTicksLong);
             return utcDateTime;

@@ -1,51 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net;
 using System.Text;
 
 namespace Foundation.Core
 {
     public struct StopwatchTimeSpan
     {
-        #region Public Fields
-
-        public static readonly double TicksPerTick = (double) TimeSpan.TicksPerSecond / Stopwatch.Frequency;
-        public static readonly double TicksPerMicrosecond = Stopwatch.Frequency / 1000000.0;
-        public static readonly double TicksPerMillisecond = Stopwatch.Frequency / 1000.0;
-        public static readonly long TicksPerSecond = Stopwatch.Frequency;
-        public static readonly long TicksPerMinute = 60 * TicksPerSecond;
-        public static readonly long TicksPerHour = 60 * TicksPerMinute;
-        public static readonly long TicksPerDay = 24 * TicksPerHour;
-
-        #endregion
-
-        public StopwatchTimeSpan(long ticks) => Ticks = ticks;
-        public StopwatchTimeSpan(TimeSpan timeSpan) => Ticks = ToTicks(timeSpan);
-
-        public long Ticks { get; }
-
-        public TimeSpan Elapsed => ToTimeSpan(Ticks);
-        public double TotalHours => (double) Ticks / TicksPerHour;
-        public double TotalMinutes => (double) Ticks / TicksPerMinute;
-        public double TotalSeconds => (double) Ticks / TicksPerSecond;
-        public double TotalMilliseconds => (double) Ticks * 1000 / TicksPerSecond;
-        public double TotalMicroseconds => (double) Ticks * 1000000 / TicksPerSecond;
-        public double TotalNanoseconds => (double) Ticks * 1000000000 / TicksPerSecond;
-
-        public static int ToInt32(long ticks, int multiplier)
-        {
-            var d = (double) multiplier * ticks / TicksPerSecond;
-            var int32 = (int) Math.Round(d);
-            return int32;
-        }
-
-        public static long ToInt64(long ticks, long multiplier)
-        {
-            var d = (double) multiplier * ticks / Stopwatch.Frequency;
-            var int64 = (long) Math.Round(d);
-            return int64;
-        }
-
-        private static readonly long[] Power10 = new[]
+        private static readonly long[] Power10 =
         {
             1,
             10,
@@ -65,14 +27,40 @@ namespace Foundation.Core
             1000000000000000
         };
 
-        private static long Pow10(int pow) => Power10[pow];
+        private readonly long _ticks;
+
+        public StopwatchTimeSpan(long ticks) => _ticks = ticks;
+        public StopwatchTimeSpan(TimeSpan timeSpan) => _ticks = ToTicks(timeSpan);
+
+        public long Ticks => _ticks;
+        public TimeSpan Elapsed => ToTimeSpan(Ticks);
+        public double TotalHours => (double) Ticks / StopwatchConstants.TicksPerHour;
+        public double TotalMinutes => (double) Ticks / StopwatchConstants.TicksPerMinute;
+        public double TotalSeconds => (double) Ticks / StopwatchConstants.TicksPerSecond;
+        public double TotalMilliseconds => Ticks * StopwatchConstants.TicksPerMillisecond;
+        public double TotalMicroseconds => Ticks * StopwatchConstants.TicksPerMicrosecond;
+        public double TotalNanoseconds => Ticks * StopwatchConstants.TicksPerNanosecond;
+
+        public static int ToInt32(long ticks, int multiplier)
+        {
+            var d = (double) multiplier * ticks / StopwatchConstants.TicksPerSecond;
+            var int32 = (int) Math.Round(d);
+            return int32;
+        }
+
+        public static long ToInt64(long ticks, long multiplier)
+        {
+            var d = (double) multiplier * ticks / Stopwatch.Frequency;
+            var int64 = (long) Math.Round(d);
+            return int64;
+        }
 
         public static string ToString(long ticks, int scale)
         {
-            var totalSeconds = ticks / TicksPerSecond;
-            var fractionTicks = ticks - totalSeconds * TicksPerSecond;
+            var totalSeconds = ticks / StopwatchConstants.TicksPerSecond;
+            var fractionTicks = ticks - totalSeconds * StopwatchConstants.TicksPerSecond;
             var multiplier = Pow10(scale);
-            var fraction = (double) multiplier * fractionTicks / TicksPerSecond;
+            var fraction = (double) multiplier * fractionTicks / StopwatchConstants.TicksPerSecond;
             fraction = Math.Round(fraction);
             var fractionInt64 = (long) fraction;
             if (fractionInt64 == multiplier)
@@ -86,7 +74,7 @@ namespace Foundation.Core
                 fractionString = $".{fractionInt64.ToString().PadLeft(scale, '0')}";
 
             var stringBuilder = new StringBuilder();
-            var days = ticks / TicksPerDay;
+            var days = ticks / StopwatchConstants.TicksPerDay;
 
             if (days != 0)
             {
@@ -117,13 +105,14 @@ namespace Foundation.Core
 
         public static long ToTicks(TimeSpan timeSpan) => (long) (timeSpan.TotalSeconds * Stopwatch.Frequency);
 
-        public static TimeSpan ToTimeSpan(long elapsed)
+        public static TimeSpan ToTimeSpan(long stopwatchTicks)
         {
-            var ticks = (long) (elapsed * TicksPerTick);
-            return new TimeSpan(ticks);
+            var dateTimeTicks = (long) (stopwatchTicks * StopwatchConstants.DateTimeTicksPerStopwatchTick);
+            return new TimeSpan(dateTimeTicks);
         }
 
         public string ToString(int scale) => ToString(Ticks, scale);
         public override string ToString() => ToString(Ticks, 9);
+        private static long Pow10(int pow) => Power10[pow];
     }
 }

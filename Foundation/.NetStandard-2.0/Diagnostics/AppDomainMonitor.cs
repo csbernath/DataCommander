@@ -83,7 +83,7 @@ GC LargeObjectHeapCompactionMode: {GCSettings.LargeObjectHeapCompactionMode}
 GC LatencyMode:         {GCSettings.LatencyMode}
 WorkingSet:             {(double) workingSet / (1024 * 1024):N} MB ({workingSet} bytes)
 TickCount:              {tickCountString}
-Stopwatch.Frequency:    {Stopwatch.Frequency}";
+Stopwatch.Frequency:    {Stopwatch.Frequency} ({Math.Round((double) Stopwatch.Frequency / 1000000, 2)} MHz, 1 tick = {Math.Round(StopwatchConstants.NanosecondsPerTick)} nanoseconds), 1 millisecond = {Math.Round(StopwatchConstants.TicksPerMillisecond)} ticks";
             return message;
         }
 
