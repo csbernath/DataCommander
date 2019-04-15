@@ -57,7 +57,7 @@ namespace DataCommander.Providers.ResultWriter
             if (!parameters.IsNullOrEmpty())
                 message += "\r\n" + command.Parameters.ToLogString();
 
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
+            _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
 
             _query = asyncDataAdapterCommand.Query;
             if (_query != null)
@@ -79,7 +79,7 @@ namespace DataCommander.Providers.ResultWriter
             if (fieldCount > 0)
                 stringBuilder.Append($" Field count: {fieldCount}");
             var message = stringBuilder.ToString();
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, header, message));
+            _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
 
             _tableCount = 0;
             _fieldCount = fieldCount;
@@ -96,7 +96,7 @@ namespace DataCommander.Providers.ResultWriter
             if (affectedRows >= 0)
                 stringBuilder.Append($" {affectedRows} row(s) affected.");
             var message = stringBuilder.ToString();
-            _addInfoMessage(new InfoMessage(now, InfoMessageSeverity.Verbose, header, message));
+            _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
 
             if (_query != null)
             {
@@ -146,7 +146,7 @@ namespace DataCommander.Providers.ResultWriter
             var header = StopwatchTimeSpan.ToString(duration, 3);
             var message =
                 $"Command[{_commandCount - 1}] result[{_tableCount - 1}] first row read completed.";
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, header, message));
+            _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
         }
 
         void IResultWriter.WriteRows(object[][] rows, int rowCount) => _rowCount += rowCount;
@@ -157,7 +157,7 @@ namespace DataCommander.Providers.ResultWriter
             var header = StopwatchTimeSpan.ToString(duration, 3);
             var message =
                 $"Command[{_commandCount - 1}] result[{_tableCount - 1}] finished. Table[{_tableCount - 1},{_query?.Results[_tableCount - 1]}] has {_fieldCount} column(s), {_rowCount} row(s).";
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, header, message));
+            _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
         }
 
         void IResultWriter.WriteParameters(IDataParameterCollection parameters)
@@ -169,7 +169,7 @@ namespace DataCommander.Providers.ResultWriter
             var duration = Stopwatch.GetTimestamp() - _beginTimestamp;
             var header = StopwatchTimeSpan.ToString(duration, 3);
             var message = $"Query completed {_commandCount} command(s).";
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, header, message));
+            _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, header, message));
         }
 
         #endregion

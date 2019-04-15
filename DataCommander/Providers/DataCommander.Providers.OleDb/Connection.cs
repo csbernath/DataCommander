@@ -27,7 +27,7 @@ namespace DataCommander.Providers.OleDb
         {
             var now = LocalTime.Default.Now;
             var text = e.Message;
-            InvokeInfoMessage(new[] {new InfoMessage(now, InfoMessageSeverity.Information, null, text)});
+            InvokeInfoMessage(new[] {InfoMessageFactory.Create(InfoMessageSeverity.Information, null, text)});
         }
 
         public override string DataSource => oledbConnection.DataSource;

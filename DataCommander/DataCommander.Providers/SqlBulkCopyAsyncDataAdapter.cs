@@ -43,10 +43,10 @@ namespace DataCommander.Providers
         {
             _rowCount += e.RowsCopied;
             var message = $"{_rowCount} rows copied.";
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
+            _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
             if (_cancelRequested)
             {
-                _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, "Aborting bulk copy..."));
+                _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, "Aborting bulk copy..."));
                 e.Abort = true;
             }
         }

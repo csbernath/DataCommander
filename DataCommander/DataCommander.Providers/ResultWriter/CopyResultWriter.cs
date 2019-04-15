@@ -143,7 +143,7 @@ namespace DataCommander.Providers.ResultWriter
             var message =
                 $"{_readRowCount},{_insertedRowCount},{_readRowCount - _insertedRowCount},{_waitMilliseconds} (rows read,inserted,queued,wait).";
 
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
+            _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
         }
 
         private void Dequeue()
@@ -221,7 +221,7 @@ namespace DataCommander.Providers.ResultWriter
 
             var message = $"{_readRowCount},{_insertedRowCount},{_readRowCount - _insertedRowCount} (rows read,inserted,queued).";
 
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
+            _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
             var targetRows = new object[rowCount][];
             for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {

@@ -94,7 +94,7 @@ namespace DataCommander.Providers.Tfs
                 }
 
                 var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-                queryForm.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null,
+                queryForm.AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null,
                     $"\r\nworkspace.Name: {name}\r\nworkingFolder.LocalItem: {workingFolder.LocalItem}"));
             }
 

@@ -260,11 +260,10 @@ namespace DataCommander.Providers.SqlServer
 
         private void OnStateChange(object sender, StateChangeEventArgs e)
         {
-            var now = LocalTime.Default.Now;
             var text = $"Connection.State changed. OriginalState: {e.OriginalState}, CurrentState: {e.CurrentState}";
             InvokeInfoMessage(new[]
             {
-                new InfoMessage(now, InfoMessageSeverity.Information, null, text)
+                InfoMessageFactory.Create(InfoMessageSeverity.Information, null, text)
             });
         }
 
@@ -308,7 +307,7 @@ set arithabort on";
                     var percent = int.Parse(percentString);
                     var remainingPercent = 100 - percent;
                     var estimatedRemaining = remainingPercent * elapsed / percent;
-                    var infoMessage = new InfoMessage(now, InfoMessageSeverity.Verbose, null,
+                    var infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null,
                         $"Estimated remaining time: {StopwatchTimeSpan.ToString(estimatedRemaining, 0)}");
                     infoMessages.Add(infoMessage);
                 }

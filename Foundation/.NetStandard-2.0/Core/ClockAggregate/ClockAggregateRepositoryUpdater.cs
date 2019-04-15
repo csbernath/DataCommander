@@ -7,7 +7,7 @@ namespace Foundation.Core.ClockAggregate
     {
         private static Timer _timer;
 
-        public static void Start()
+        internal static void Start()
         {
             Update();
 

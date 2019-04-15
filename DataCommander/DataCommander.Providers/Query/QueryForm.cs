@@ -2078,7 +2078,7 @@ namespace DataCommander.Providers.Query
                 if (_database != args.Database)
                 {
                     var message = $"[DatabaseChanged] Database changed from {_database} to {_database}";
-                    var infoMessage = new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message);
+                    var infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message);
                     AddInfoMessage(infoMessage);
 
                     _database = args.Database;
@@ -2176,8 +2176,7 @@ namespace DataCommander.Providers.Query
                 {
                     if (Connection.State == ConnectionState.Closed)
                     {
-                        AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null,
-                            "Connection is closed. Opening connection..."));
+                        AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Connection is closed. Opening connection..."));
 
                         var csb = new SqlConnectionStringBuilder(_connectionString);
                         csb.InitialCatalog = _database;
@@ -2192,12 +2191,10 @@ namespace DataCommander.Providers.Query
                         {
                             Connection.Connection.Dispose();
                             Connection = connectionProperties.Connection;
-                            AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, "Opening connection succeeded."));
+                            AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Opening connection succeeded."));
                         }
                         else
-                        {
-                            AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, "Opening connection canceled."));
-                        }
+                            AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Opening connection canceled."));
                     }
                 }
 
@@ -2236,7 +2233,7 @@ namespace DataCommander.Providers.Query
 
             if (_cancel)
             {
-                AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, "Query was cancelled by user."));
+                AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Query was cancelled by user."));
                 _sbPanelText.Text = "Query was cancelled by user.";
                 _sbPanelText.ForeColor = _colorTheme != null ? _colorTheme.ForeColor : SystemColors.ControlText;
                 _cancel = false;
@@ -2459,7 +2456,7 @@ namespace DataCommander.Providers.Query
 
                     if (_command != null)
                     {
-                        AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, _command.ToLogString()));
+                        AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, _command.ToLogString()));
                         var dataTable = Provider.GetParameterTable(_command.Parameters);
 
                         if (dataTable != null)
@@ -2558,7 +2555,7 @@ namespace DataCommander.Providers.Query
         {
             Log.Trace(ThreadMonitor.ToStringTableString());
             const string message = "Cancelling command...";
-            AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, message));
+            AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, message));
             _sbPanelText.Text = "Cancel Executing Command/Query...";
             _sbPanelText.ForeColor = SystemColors.ControlText;
             _cancel = true;
@@ -2618,7 +2615,7 @@ namespace DataCommander.Providers.Query
                         var message = Provider.GetExceptionMessage(ex);
                         var color = _messagesTextBox.SelectionColor;
                         _messagesTextBox.SelectionColor = Color.Red;
-                        AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, message));
+                        AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, message));
                         _messagesTextBox.SelectionColor = color;
                         hasTransactions = false;
                     }
@@ -3376,10 +3373,9 @@ namespace DataCommander.Providers.Query
                             {
                                 if (Connection.State != ConnectionState.Open)
                                 {
-                                    AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, "Opening connection..."));
+                                    AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Opening connection..."));
                                     await Connection.OpenAsync(CancellationToken.None);
-                                    AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null,
-                                        "Connection opened successfully."));
+                                    AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Connection opened successfully."));
                                 }
                                 else
                                     throw;
@@ -3799,7 +3795,7 @@ namespace DataCommander.Providers.Query
                 _commandType = CommandType.Text;
                 _openTableMode = true;
                 _command = _sqlStatement.CreateCommand(Provider, Connection, _commandType, _commandTimeout);
-                AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, "Executing query..."));
+                AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Executing query..."));
                 _stopwatch.Start();
                 _timer.Start();
                 const int maxRecords = int.MaxValue;
@@ -3839,7 +3835,7 @@ namespace DataCommander.Providers.Query
             if (_transaction == null && transaction != null)
             {
                 _transaction = transaction;
-                AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, "Transaction created successfully."));
+                AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Transaction created successfully."));
                 _tabControl.SelectedTab = _messagesTabPage;
                 _beginTransactionToolStripMenuItem.Enabled = false;
                 _commitTransactionToolStripMenuItem.Enabled = true;
@@ -3869,7 +3865,7 @@ namespace DataCommander.Providers.Query
                 _transaction.Dispose();
                 _transaction = null;
 
-                AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, "Transaction commited successfully."));
+                AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Transaction commited successfully."));
 
                 _tabControl.SelectedTab = _messagesTabPage;
                 _beginTransactionToolStripMenuItem.Enabled = true;
@@ -3886,12 +3882,12 @@ namespace DataCommander.Providers.Query
                 {
                     _transaction.Rollback();
                     _transaction.Dispose();
-                    AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, "Transaction rolled back successfully."));
+                    AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Transaction rolled back successfully."));
                 }
                 catch (Exception ex)
                 {
                     var message = $"Rollback failed. Exception:\r\n{ex.ToLogString()}";
-                    AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Error, null, message));
+                    AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Error, null, message));
                 }
 
                 _transaction = null;
@@ -3960,7 +3956,7 @@ namespace DataCommander.Providers.Query
             createTable.Append(')');
             var commandText = createTable.ToString();
 
-            AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, "\r\n" + commandText));
+            AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "\r\n" + commandText));
         }
 
         internal void CopyTable()
@@ -3983,7 +3979,7 @@ namespace DataCommander.Providers.Query
                     nextQueryForm.InvokeSetTransaction, CancellationToken.None);
                 var maxRecords = int.MaxValue;
                 var rowBlockSize = 10000;
-                AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, "Copying table..."));
+                AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, "Copying table..."));
                 _sbPanelText.Text = "Copying table...";
                 _sbPanelText.ForeColor = SystemColors.ControlText;
                 SetGui(CommandState.Cancel);
@@ -3995,7 +3991,7 @@ namespace DataCommander.Providers.Query
                 _dataAdapter.Start();
             }
             else
-                AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, "Please open a destination connection."));
+                AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Please open a destination connection."));
         }
 
         internal void CopyTableWithSqlBulkCopy()
@@ -4019,7 +4015,7 @@ namespace DataCommander.Providers.Query
                 //IResultWriter resultWriter = new SqlBulkCopyResultWriter( this.AddInfoMessage, destinationProvider, destinationConnection, tableName, nextQueryForm.InvokeSetTransaction );
                 var maxRecords = int.MaxValue;
                 var rowBlockSize = 10000;
-                AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, "Copying table..."));
+                AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, "Copying table..."));
                 _sbPanelText.Text = "Copying table...";
                 _sbPanelText.ForeColor = SystemColors.ControlText;
                 SetGui(CommandState.Cancel);
@@ -4040,7 +4036,7 @@ namespace DataCommander.Providers.Query
                 _dataAdapter.Start();
             }
             else
-                AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, "Please open a destination connection."));
+                AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Please open a destination connection."));
         }
 
         private void insertScriptFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -4139,7 +4135,7 @@ namespace DataCommander.Providers.Query
                 }
 
                 if (succeeded)
-                    AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, "Command(s) completed successfully."));
+                    AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, "Command(s) completed successfully."));
             }
             catch (Exception exception)
             {

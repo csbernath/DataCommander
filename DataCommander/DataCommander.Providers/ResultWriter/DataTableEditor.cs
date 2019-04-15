@@ -231,7 +231,7 @@ namespace DataCommander.Providers.ResultWriter
                         message = "WARNING: The table has no primary key/unique index.";
 
                     var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-                    queryForm.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, message));
+                    queryForm.AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, message));
                 }
             }
         }

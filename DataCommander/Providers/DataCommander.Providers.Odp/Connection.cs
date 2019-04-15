@@ -46,7 +46,7 @@ namespace DataCommander.Providers.Odp
             sb.Append("Source: ");
             sb.Append(e.Source);
 
-            InvokeInfoMessage(new[] {new InfoMessage(now, InfoMessageSeverity.Information, null, sb.ToString())});
+            InvokeInfoMessage(new[] {InfoMessageFactory.Create(InfoMessageSeverity.Information, null, sb.ToString())});
         }
 
         public override string ConnectionName

@@ -79,7 +79,7 @@ namespace DataCommander.Providers.Tfs
                     }
 
                     var queryForm = (QueryForm) DataCommanderApplication.Instance.MainForm.ActiveMdiChild;
-                    queryForm.AddInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Information, null, $"localPath: {_localPath}"));
+                    queryForm.AddInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Information, null, $"localPath: {_localPath}"));
 
                     if (!VersionControlPath.IsValidPath(serverPath))
                         throw new ArgumentException($"The parameter serverPath '{serverPath}' is invalid.");

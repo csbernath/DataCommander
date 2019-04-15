@@ -89,7 +89,7 @@ namespace DataCommander.Providers.ResultWriter
         private void sqlBulkCopy_SqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
         {
             var message = $"{e.RowsCopied} rows copied to destination.";
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
+            _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
 
             if (_cancellationToken.IsCancellationRequested)
             {
@@ -134,7 +134,7 @@ namespace DataCommander.Providers.ResultWriter
             }
 
             var message = $"{_insertedRowCount} rows inserted.";
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
+            _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
         }
 
         private void Dequeue()
@@ -210,7 +210,7 @@ namespace DataCommander.Providers.ResultWriter
             _logResultWriter.WriteRows(rows, rowCount);
             _readRowCount += rowCount;
             var message = $"{_readRowCount} row(s) read.";
-            _addInfoMessage(new InfoMessage(LocalTime.Default.Now, InfoMessageSeverity.Verbose, null, message));
+            _addInfoMessage(InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null, message));
             var targetRows = new object[rowCount][];
             for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {

@@ -51,7 +51,7 @@ namespace DataCommander.Providers.SqlServer
 
                 var header = sqlError.GetHeader();
                 var message = sqlError.Message;
-                messages.Add(new InfoMessage(creationTime, severity, header, message));
+                messages.Add(InfoMessageFactory.Create(severity, header, message));
             }
 
             return messages;
@@ -965,7 +965,7 @@ order by ic.index_column_id",
             else
             {
                 var message = exception.ToLogString();
-                var infoMessage = new InfoMessage(now, InfoMessageSeverity.Error, null, message);
+                var infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Error, null, message);
                 infoMessages = new List<InfoMessage>
                 {
                     infoMessage
