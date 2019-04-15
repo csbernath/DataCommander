@@ -51,7 +51,7 @@ namespace Foundation.Diagnostics
 
         public static string GetEnvironmentInfo()
         {
-            var tickCount = UniversalTime.GetTickCount();
+            var tickCount = Environment.TickCount;
             var totalDays = (double) tickCount / DateTimeConstants.MillisecondsPerDay;
             var zeroDateTime = LocalTime.Default.Now.AddDays(-totalDays);
             var tickCountString = $"{tickCount} ({totalDays:N2} days(s) from {zeroDateTime:yyyy.MM.dd HH:mm:ss})";

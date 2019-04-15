@@ -1,82 +1,23 @@
-﻿using System;
-using Foundation.Assertions;
+﻿using Foundation.Core.ClockAggregate;
+using System;
 
 namespace Foundation.Core
 {
     public sealed class UniversalTime : IDateTimeProvider
     {
-        private static volatile int _sharedTickCount;
-        private static DateTime _sharedDateTime;
+        public static readonly UniversalTime Default = new UniversalTime();
 
-        private readonly int _increment;
-        private readonly int _adjustment;
-
-        private int _incrementedTickCount;
-        private DateTime _incrementedDateTime;
-
-        static UniversalTime()
+        private UniversalTime()
         {
-            _sharedTickCount = Environment.TickCount;
-            _sharedDateTime = DateTime.UtcNow;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="increment">increment interval in milliseconds</param>
-        /// <param name="adjustment">adjustment interval in milliseconds</param>
-        public UniversalTime(int increment, int adjustment)
-        {
-            Assert.IsInRange(increment >= 0);
-            Assert.IsInRange(increment <= adjustment);
-
-            _increment = increment;
-            _adjustment = adjustment;
-
-            _sharedDateTime = DateTime.Now;
-
-            _incrementedTickCount = _sharedTickCount;
-            _incrementedDateTime = _sharedDateTime;
-        }
-
-        public static int TickCount => _sharedTickCount;
-
-        public static UniversalTime Default { get; } = new UniversalTime(increment: 16, adjustment: 60 * 1000);
-
-        public static int GetTickCount()
-        {
-            _sharedTickCount = Environment.TickCount;
-            return _sharedTickCount;
-        }
-
-        /// <summary>
-        /// Gets the current date and time on this computer, expressed as the local time.
-        /// The system clock resolution can be 1.000 - 15.600 milliseconds.
-        /// </summary>
-        public DateTime UtcNow
+        public DateTime Now
         {
             get
             {
-                var elapsed = GetTickCount() - _incrementedTickCount;
-                if (_increment <= elapsed)
-                {
-                    if (elapsed < _adjustment)
-                    {
-                        var calculatedDateTime = _incrementedDateTime.AddMilliseconds(elapsed);
-                        if (_sharedDateTime < calculatedDateTime)
-                            _sharedDateTime = calculatedDateTime;
-                    }
-                    else
-                        _sharedDateTime = DateTime.UtcNow;
-
-                    _incrementedTickCount = _sharedTickCount;
-                    _incrementedDateTime = _sharedDateTime;
-                }
-
-                return _sharedDateTime;
+                var utcNow = ClockAggregateRepository.Get().GetUtcDateTimeFromEnvironmentTickCount(Environment.TickCount);
+                return utcNow;
             }
         }
-
-        DateTime IDateTimeProvider.Now => Default.UtcNow;
     }
 }

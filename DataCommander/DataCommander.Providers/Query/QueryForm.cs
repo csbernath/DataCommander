@@ -2096,7 +2096,7 @@ namespace DataCommander.Providers.Query
             {
                 if (components != null)
                 {
-                    //var now = LocalTime.Default.Now;
+                    //var now = LocalTime2.Default.Now;
                     //foreach (IComponent component in components.Components)
                     //    GarbageMonitor.Default.SetDisposeTime(component, now);
 

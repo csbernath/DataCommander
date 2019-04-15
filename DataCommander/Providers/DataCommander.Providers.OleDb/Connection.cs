@@ -25,7 +25,6 @@ namespace DataCommander.Providers.OleDb
 
         void OnInfoMessage(object sender, OleDbInfoMessageEventArgs e)
         {
-            var now = LocalTime.Default.Now;
             var text = e.Message;
             InvokeInfoMessage(new[] {InfoMessageFactory.Create(InfoMessageSeverity.Information, null, text)});
         }

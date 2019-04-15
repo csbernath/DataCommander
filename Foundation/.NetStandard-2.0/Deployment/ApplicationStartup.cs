@@ -46,7 +46,7 @@ namespace Foundation.Deployment
             }
             catch
             {
-                var now = UniversalTime.Default.UtcNow;
+                var now = UniversalTime.Default.Now;
                 command = new CheckForUpdates(now);
             }
 
@@ -72,12 +72,12 @@ namespace Foundation.Deployment
                 {
                     if (sequence.Next() == 0)
                     {
-                        previousEventTimestamp = UniversalTime.GetTickCount();
+                        previousEventTimestamp = Environment.TickCount;
                         eventHandler(args);
                     }
                     else
                     {
-                        var current = UniversalTime.GetTickCount();
+                        var current = Environment.TickCount;
                         var elapsed = current - previousEventTimestamp;
                         if (elapsed >= 1000)
                         {
@@ -113,7 +113,7 @@ namespace Foundation.Deployment
 
         private async Task Handle(CheckForUpdates checkForUpdates)
         {
-            if (checkForUpdates.When <= UniversalTime.Default.UtcNow)
+            if (checkForUpdates.When <= UniversalTime.Default.Now)
             {
                 var entryAssembly = Assembly.GetEntryAssembly();
                 var localVersion = entryAssembly.GetName().Version;
@@ -155,7 +155,7 @@ namespace Foundation.Deployment
             var entryAssembly = Assembly.GetEntryAssembly();
             var title = GetTitle(entryAssembly);
             var applicationName = title;
-            var now = UniversalTime.Default.UtcNow;
+            var now = UniversalTime.Default.Now;
             var tomorrow = now.AddDays(1);
 
             var repository = new DeploymentCommandRepository(_serializer);

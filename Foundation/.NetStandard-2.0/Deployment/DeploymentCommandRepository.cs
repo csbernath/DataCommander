@@ -29,7 +29,7 @@ namespace Foundation.Deployment
             }
             else
             {
-                var now = UniversalTime.Default.UtcNow;
+                var now = UniversalTime.Default.Now;
                 deploymentCommand = new CheckForUpdates(now);
             }
 

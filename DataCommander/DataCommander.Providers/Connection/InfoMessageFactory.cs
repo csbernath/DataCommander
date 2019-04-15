@@ -9,9 +9,7 @@ namespace DataCommander.Providers.Connection
         public static InfoMessage Create(InfoMessageSeverity severity, string header, string message)
         {
             var utcNow = ClockAggregateRepository.Get().GetUtcDateTimeFromEnvironmentTickCount(Environment.TickCount);
-            var now = utcNow.ToLocalTime();
-
-            var creationTime = LocalTime.Default.Now;
+            var creationTime = utcNow.ToLocalTime();
             return new InfoMessage(creationTime, severity, header, message);
         }
     }

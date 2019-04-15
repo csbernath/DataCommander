@@ -88,8 +88,6 @@ namespace DataCommander.Providers.ResultWriter
         void IResultWriter.AfterCloseReader(int affectedRows)
         {
             var duration = Stopwatch.GetTimestamp() - _beforeExecuteReaderTimestamp;
-            var now = LocalTime.Default.Now;
-
             var header = StopwatchTimeSpan.ToString(duration, 3);
             var stringBuilder = new StringBuilder();
             stringBuilder.Append($"Command[{_commandCount - 1}] completed.");

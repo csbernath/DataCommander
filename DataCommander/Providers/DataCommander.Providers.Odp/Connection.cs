@@ -39,8 +39,6 @@ namespace DataCommander.Providers.Odp
 
         private void OnInfoMessage(object sender, OracleInfoMessageEventArgs e)
         {
-            var now = LocalTime.Default.Now;
-
             var sb = new StringBuilder();
             sb.AppendLine(e.Message);
             sb.Append("Source: ");

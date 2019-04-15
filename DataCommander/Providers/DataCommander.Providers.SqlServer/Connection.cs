@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataCommander.Providers.Connection;
 using Foundation.Core;
+using Foundation.Core.ClockAggregate;
 using Foundation.Data;
 using Foundation.Data.SqlClient;
 using Foundation.Linq;
@@ -293,7 +294,7 @@ set arithabort on";
 
         private void OnInfoMessage(object sender, SqlInfoMessageEventArgs e)
         {
-            var now = LocalTime.Default.Now;
+            var now = ClockAggregateRepository.Get().GetUtcDateTimeFromEnvironmentTickCount(Environment.TickCount).ToLocalTime();
             var infoMessages = SqlServerProvider.ToInfoMessages(e.Errors, now);
 
             if (e.Errors.Count > 0)

@@ -31,8 +31,6 @@ namespace DataCommander.Providers.OracleClient
 
         private void OnInfoMessage(object sender, OracleInfoMessageEventArgs e)
         {
-            var now = LocalTime.Default.Now;
-
             var sb = new StringBuilder();
             sb.Append(e.Message);
             sb.Append(Environment.NewLine);

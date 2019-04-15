@@ -69,7 +69,7 @@ namespace Foundation.Caching
                 entry = new CacheEntry
                         {
                             CacheItem = item,
-                            AbsoluteExpiration = LocalTime.Default.Now + item.SlidingExpiration
+                            AbsoluteExpiration = LocalTime2.Default.Now + item.SlidingExpiration
                         };
 
                 this.entries.Add( entry );
@@ -97,7 +97,7 @@ namespace Foundation.Caching
                         entry = new CacheEntry
                                 {
                                     CacheItem = item,
-                                    AbsoluteExpiration = LocalTime.Default.Now + item.SlidingExpiration
+                                    AbsoluteExpiration = LocalTime2.Default.Now + item.SlidingExpiration
                                 };
 
                         this.entries.Add( entry );
@@ -187,7 +187,7 @@ namespace Foundation.Caching
             if (this.entries.Count > 0 && !disposed)
             {
                 var enumerable = (ICollection<CacheEntry>)this.absoluteExpirationIndex;
-                DateTime now = LocalTime.Default.Now;
+                DateTime now = LocalTime2.Default.Now;
                 ICollection<CacheEntry> expiredEntries;
 
                 lock (this.entries)
@@ -227,7 +227,7 @@ namespace Foundation.Caching
                         Assert.IsTrue( succeeded, "collection.Remove( entry )" );
 
                         entry.Value = value;
-                        entry.AbsoluteExpiration = LocalTime.Default.Now + item.SlidingExpiration;
+                        entry.AbsoluteExpiration = LocalTime2.Default.Now + item.SlidingExpiration;
 
                         collection.Add( entry );
                     }

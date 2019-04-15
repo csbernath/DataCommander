@@ -1,58 +1,22 @@
 ﻿using System;
-using Foundation.Assertions;
+using Foundation.Core.ClockAggregate;
 
 namespace Foundation.Core
 {
     public sealed class LocalTime : IDateTimeProvider
     {
-        private readonly int _increment;
-        private readonly int _adjustment;
+        public static readonly LocalTime Default = new LocalTime();
 
-        private int _lastTickCount;
-        private DateTime _lastDateTime;
-
-        public LocalTime(int increment, int adjustment)
+        private LocalTime()
         {
-            Assert.IsInRange(increment >= 0);
-            Assert.IsInRange(increment <= adjustment);
-
-            _increment = increment;
-            _adjustment = adjustment;
-
-            _lastTickCount = UniversalTime.GetTickCount();
-            _lastDateTime = DateTime.Now;
         }
 
-        public static LocalTime Default { get; } = new LocalTime(increment: 16, adjustment: 1000);
-
-        /// <summary>
-        /// Gets the current date and time on this computer, expressed as the local time.
-        /// The system clock resolution can be 1.000 - 15.600 milliseconds.
-        /// </summary>
         public DateTime Now
         {
             get
             {
-                var lastTickCount = _lastTickCount;
-                var lastDateTime = _lastDateTime;
-                var tickCount = UniversalTime.GetTickCount();
-                var elapsed = tickCount - lastTickCount;
-                DateTime now;
-
-                if (_increment <= elapsed)
-                {
-                    if (elapsed < _adjustment)
-                        now = lastDateTime.AddMilliseconds(elapsed);
-                    else
-                    {
-                        now = DateTime.Now;
-                        _lastTickCount = tickCount;
-                        _lastDateTime = now;
-                    }
-                }
-                else
-                    now = lastDateTime;
-
+                var utcNow = ClockAggregateRepository.Get().GetUtcDateTimeFromEnvironmentTickCount(Environment.TickCount);
+                var now = utcNow.ToLocalTime();
                 return now;
             }
         }
