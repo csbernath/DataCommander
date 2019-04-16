@@ -15,7 +15,7 @@ namespace Foundation.Core
         {
             get
             {
-                var clock = ClockAggregateRepository.Get();
+                var clock = ClockAggregateRepository.Singleton.Get();
                 var localTime = clock.GetLocalTimeFromCurrentEnvironmentTickCount();
                 return localTime;
             }

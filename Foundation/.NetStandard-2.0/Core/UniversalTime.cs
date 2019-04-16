@@ -15,9 +15,9 @@ namespace Foundation.Core
         {
             get
             {
-                var clock = ClockAggregateRepository.Get();
-                var univeralTime = clock.GetUniversalTimeFromCurrentEnvironmentTickCount();
-                return univeralTime;
+                var clock = ClockAggregateRepository.Singleton.Get();
+                var universalTime = clock.GetUniversalTimeFromCurrentEnvironmentTickCount();
+                return universalTime;
             }
         }
     }

@@ -107,7 +107,7 @@ namespace Foundation.Core
 
         public static TimeSpan ToTimeSpan(long stopwatchTicks)
         {
-            var dateTimeTicks = (long) (stopwatchTicks * StopwatchConstants.DateTimeTicksPerStopwatchTick);
+            var dateTimeTicks = (long) (stopwatchTicks * StopwatchConstants.TimeSpanTicksPerStopwatchTick);
             return new TimeSpan(dateTimeTicks);
         }
 

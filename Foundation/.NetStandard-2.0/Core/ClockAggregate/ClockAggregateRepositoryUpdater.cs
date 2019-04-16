@@ -20,7 +20,7 @@ namespace Foundation.Core.ClockAggregate
         private static void Update()
         {
             var clock = ClockAggregateRootFactory.Now();
-            ClockAggregateRepository.Save(clock);
+            ClockAggregateRepository.Singleton.Save(clock);
         }
 
         private static void TimerCallback(object state) => Update();

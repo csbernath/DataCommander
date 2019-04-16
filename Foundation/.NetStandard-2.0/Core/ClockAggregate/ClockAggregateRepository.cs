@@ -1,10 +1,12 @@
 ﻿namespace Foundation.Core.ClockAggregate
 {
-    public static class ClockAggregateRepository
+    public sealed class ClockAggregateRepository
     {
-        private static ClockAggregateState _clockAggregateState = ClockAggregateRootFactory.Now().GetAggregateState();
+        public static ClockAggregateRepository Singleton = new ClockAggregateRepository();
+        private ClockAggregateState _clockAggregateState;
         static ClockAggregateRepository() => ClockAggregateRepositoryUpdater.Start();
-        public static void Save(ClockAggregateRoot clock) => _clockAggregateState = clock.GetAggregateState();
-        public static ClockAggregateRoot Get() => new ClockAggregateRoot(_clockAggregateState);
+        private ClockAggregateRepository() => _clockAggregateState = ClockAggregateRootFactory.Now().GetAggregateState();
+        internal void Save(ClockAggregateRoot clock) => _clockAggregateState = clock.GetAggregateState();
+        public ClockAggregateRoot Get() => new ClockAggregateRoot(_clockAggregateState);
     }
 }

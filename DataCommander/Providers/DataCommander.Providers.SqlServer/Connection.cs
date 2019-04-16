@@ -292,7 +292,7 @@ set arithabort on";
 
         private void OnInfoMessage(object sender, SqlInfoMessageEventArgs e)
         {
-            var clock = ClockAggregateRepository.Get();
+            var clock = ClockAggregateRepository.Singleton.Get();
             var localTime = clock.GetLocalTimeFromCurrentEnvironmentTickCount();
             var infoMessages = SqlServerProvider.ToInfoMessages(e.Errors, localTime);
 
