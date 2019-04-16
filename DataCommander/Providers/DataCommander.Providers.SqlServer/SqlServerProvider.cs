@@ -120,7 +120,7 @@ namespace DataCommander.Providers.SqlServer
         void IProvider.CreateInsertCommand(
             DataTable sourceSchemaTable,
             string[] sourceDataTypeNames,
-            IDbConnection destinationconnection,
+            IDbConnection destinationConnection,
             string destinationTableName,
             out IDbCommand insertCommand,
             out Converter<object, object>[] converters)
@@ -360,11 +360,7 @@ namespace DataCommander.Providers.SqlServer
             return type;
         }
 
-        GetCompletionResponse IProvider.GetCompletion(
-            ConnectionBase connection,
-            IDbTransaction transaction,
-            string text,
-            int position)
+        GetCompletionResponse IProvider.GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position)
         {
             var response = new GetCompletionResponse
             {
@@ -943,7 +939,7 @@ order by ic.index_column_id",
         private static Column ReadColumn(IDataRecord dataRecord)
         {
             var columnName = dataRecord.GetString(0);
-            var columnId = (int)dataRecord.GetInt16(1);
+            var columnId = (int) dataRecord.GetInt16(1);
             var hasDefault = dataRecord.GetBoolean(2);
             var isNullable = dataRecord.GetBoolean(3);
             var hasAutomaticValue = dataRecord.GetBoolean(4);

@@ -21,24 +21,19 @@ namespace DataCommander.Providers.Tfs
         #region IDataParameter Members
 
         public DbType DbType { get; set; }
-
         public ParameterDirection Direction { get; set; }
-
         public bool IsNullable { get; }
-
         public string ParameterName { get; set; }
 
         string IDataParameter.SourceColumn
         {
             get => throw new NotImplementedException();
-
             set => throw new NotImplementedException();
         }
 
         DataRowVersion IDataParameter.SourceVersion
         {
             get => throw new NotImplementedException();
-
             set => throw new NotImplementedException();
         }
 

@@ -31,17 +31,12 @@ namespace DataCommander.Providers
         DbDataAdapter CreateDataAdapter(string selectCommandText, IDbConnection connection);
         IDataReaderHelper CreateDataReaderHelper(IDataReader dataReader);
 
-        void CreateInsertCommand(
-            DataTable sourceSchemaTable,
-            string[] sourceDataTypeNames,
-            IDbConnection destinationconnection,
-            string destinationTableName,
-            out IDbCommand insertCommand,
-            out Converter<object, object>[] converters);
+        void CreateInsertCommand(DataTable sourceSchemaTable, string[] sourceDataTypeNames, IDbConnection destinationConnection, string destinationTableName,
+            out IDbCommand insertCommand, out Converter<object, object>[] converters);
 
         void DeriveParameters(IDbCommand command);
 
-        Type GetColumnType(FoundationDbColumn dataColumnSchema);
+        Type GetColumnType(FoundationDbColumn column);
         string GetColumnTypeName(IProvider sourceProvider, DataRow sourceSchemaRow, string sourceDataTypeName);
         GetCompletionResponse GetCompletion(ConnectionBase connection, IDbTransaction transaction, string text, int position);
         DataParameterBase GetDataParameter(IDataParameter parameter);

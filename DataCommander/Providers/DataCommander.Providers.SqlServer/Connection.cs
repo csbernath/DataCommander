@@ -40,15 +40,10 @@ namespace DataCommander.Providers.SqlServer
         {
             get
             {
-                string userName = null;
-
-                if (_sqlConnectionStringBuilder.IntegratedSecurity)
-                    userName = WindowsIdentity.GetCurrent().Name;
-                else
-                    userName = _sqlConnectionStringBuilder.UserID;
-
+                var userName = _sqlConnectionStringBuilder.IntegratedSecurity
+                    ? WindowsIdentity.GetCurrent().Name
+                    : _sqlConnectionStringBuilder.UserID;
                 var caption = $"{_sqlConnection.DataSource}.{_sqlConnection.Database} ({userName} ({_spid}))";
-
                 return caption;
             }
         }
@@ -276,13 +271,11 @@ namespace DataCommander.Providers.SqlServer
 set arithabort on";
 
                 var executor = DbCommandExecutorFactory.Create(_sqlConnection);
-
                 var item = executor.ExecuteReader(new ExecuteReaderRequest(commandText), dataRecord => new
                 {
                     ServerName = dataRecord.GetString(0),
                     Spid = dataRecord.GetInt16(1)
                 })[0];
-
                 _serverName = item.ServerName;
                 _spid = item.Spid;
             }

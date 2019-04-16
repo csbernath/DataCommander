@@ -11,39 +11,31 @@ namespace DataCommander.Providers.Tfs
         private readonly List<TfsParameter> _list = new List<TfsParameter>();
 
         public TfsParameter this[int index] => _list[index];
-
         public TfsParameter this[string parameterName] => GetParameter(parameterName);
 
-        public void Add(TfsParameter parameter)
-        {
-            _list.Add(parameter);
-        }
+        public void Add(TfsParameter parameter) => _list.Add(parameter);
 
         public void AddBooleanInput(string name, bool isNullable, bool defaultValue)
         {
-            var parameter = new TfsParameter(name, typeof (bool), DbType.Boolean, ParameterDirection.Input, isNullable,
-                defaultValue);
+            var parameter = new TfsParameter(name, typeof(bool), DbType.Boolean, ParameterDirection.Input, isNullable, defaultValue);
             Add(parameter);
         }
 
         public void AddInt32Input(string name, bool isNullable, int defaultValue)
         {
-            var parameter = new TfsParameter(name, typeof (int), DbType.Int32, ParameterDirection.Input, isNullable,
-                defaultValue);
+            var parameter = new TfsParameter(name, typeof(int), DbType.Int32, ParameterDirection.Input, isNullable, defaultValue);
             Add(parameter);
         }
 
         public void AddStringInput(string name, bool isNullable, object defaultValue)
         {
-            var parameter = new TfsParameter(name, typeof (string), DbType.String, ParameterDirection.Input, isNullable,
-                defaultValue);
+            var parameter = new TfsParameter(name, typeof(string), DbType.String, ParameterDirection.Input, isNullable, defaultValue);
             Add(parameter);
         }
 
         public void AddValueTypeInput<T>(string name, T defaultValue) where T : struct
         {
-            var parameter = new TfsParameter(name, typeof (T), DbType.Object, ParameterDirection.Input, true,
-                defaultValue);
+            var parameter = new TfsParameter(name, typeof(T), DbType.Object, ParameterDirection.Input, true, defaultValue);
             Add(parameter);
         }
 

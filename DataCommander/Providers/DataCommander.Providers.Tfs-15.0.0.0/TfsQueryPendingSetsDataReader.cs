@@ -52,10 +52,9 @@ namespace DataCommander.Providers.Tfs
                     var parameters = _command.Parameters;
                     var path = ValueReader.GetValueOrDefault<string>(parameters["path"].Value);
                     var recursionString = ValueReader.GetValueOrDefault<string>(parameters["recursion"].Value);
-                    RecursionType recursion;
-
-                    recursion = recursionString != null ? Enum<RecursionType>.Parse(recursionString) : RecursionType.Full;
-
+                    var recursion = recursionString != null
+                        ? Enum<RecursionType>.Parse(recursionString)
+                        : RecursionType.Full;
                     var workspace = ValueReader.GetValueOrDefault<string>(parameters["workspace"].Value);
                     var user = ValueReader.GetValueOrDefault<string>(parameters["user"].Value);
                     _pendingSets = _command.Connection.VersionControlServer.QueryPendingSets(new[] {path}, recursion, workspace, user);

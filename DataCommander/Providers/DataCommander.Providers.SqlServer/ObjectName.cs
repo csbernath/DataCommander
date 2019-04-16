@@ -35,18 +35,15 @@ namespace DataCommander.Providers.SqlServer
         {
             get
             {
-                var sb = new StringBuilder();
-                var sqlCommandBuilder = new SqlCommandBuilder();
-
+                var stringBuilder = new StringBuilder();
                 if (_schemaName != null)
                 {
-                    sb.Append(QuoteIdentifier(_schemaName));
-                    sb.Append('.');
+                    stringBuilder.Append(QuoteIdentifier(_schemaName));
+                    stringBuilder.Append('.');
                 }
 
-                sb.Append(QuoteIdentifier(_objectName));
-
-                return sb.ToString();
+                stringBuilder.Append(QuoteIdentifier(_objectName));
+                return stringBuilder.ToString();
             }
         }
 

@@ -18,7 +18,8 @@ namespace DataCommander.Providers.SqlServer
             {
                 var peek = _textReader.Peek();
 
-                if (peek == -1) break;
+                if (peek == -1)
+                    break;
 
                 peekChar = (char) peek;
 
