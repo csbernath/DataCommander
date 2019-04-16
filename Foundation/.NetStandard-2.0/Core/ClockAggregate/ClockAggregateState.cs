@@ -2,15 +2,15 @@
 
 namespace Foundation.Core.ClockAggregate
 {
-    public class ClockAggregateState
+    internal sealed class ClockAggregateState
     {
-        public readonly DateTime UtcDateTime;
+        public readonly DateTime UniversalTime;
         public readonly int EnvironmentTickCount;
         public readonly long StopwatchTimestamp;
 
-        public ClockAggregateState(DateTime utcDateTime, int environmentTickCount, long stopwatchTimestamp)
+        public ClockAggregateState(DateTime universalTime, int environmentTickCount, long stopwatchTimestamp)
         {
-            UtcDateTime = utcDateTime;
+            UniversalTime = universalTime;
             EnvironmentTickCount = environmentTickCount;
             StopwatchTimestamp = stopwatchTimestamp;
         }

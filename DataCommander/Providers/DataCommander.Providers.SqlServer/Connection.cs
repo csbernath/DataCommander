@@ -1,16 +1,14 @@
-﻿using System;
+﻿using DataCommander.Providers.Connection;
+using Foundation.Core;
+using Foundation.Core.ClockAggregate;
+using Foundation.Data;
+using Foundation.Data.SqlClient;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
-using DataCommander.Providers.Connection;
-using Foundation.Core;
-using Foundation.Core.ClockAggregate;
-using Foundation.Data;
-using Foundation.Data.SqlClient;
-using Foundation.Linq;
 
 namespace DataCommander.Providers.SqlServer
 {
@@ -294,8 +292,9 @@ set arithabort on";
 
         private void OnInfoMessage(object sender, SqlInfoMessageEventArgs e)
         {
-            var now = ClockAggregateRepository.Get().GetUtcDateTimeFromEnvironmentTickCount(Environment.TickCount).ToLocalTime();
-            var infoMessages = SqlServerProvider.ToInfoMessages(e.Errors, now);
+            var clock = ClockAggregateRepository.Get();
+            var localTime = clock.GetLocalTimeFromCurrentEnvironmentTickCount();
+            var infoMessages = SqlServerProvider.ToInfoMessages(e.Errors, localTime);
 
             if (e.Errors.Count > 0)
             {
@@ -308,7 +307,7 @@ set arithabort on";
                     var percent = int.Parse(percentString);
                     var remainingPercent = 100 - percent;
                     var estimatedRemaining = remainingPercent * elapsed / percent;
-                    var infoMessage = InfoMessageFactory.Create(InfoMessageSeverity.Verbose, null,
+                    var infoMessage = new InfoMessage(localTime, InfoMessageSeverity.Verbose, null,
                         $"Estimated remaining time: {StopwatchTimeSpan.ToString(estimatedRemaining, 0)}");
                     infoMessages.Add(infoMessage);
                 }

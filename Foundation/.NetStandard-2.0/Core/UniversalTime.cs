@@ -15,8 +15,9 @@ namespace Foundation.Core
         {
             get
             {
-                var utcNow = ClockAggregateRepository.Get().GetUtcDateTimeFromEnvironmentTickCount(Environment.TickCount);
-                return utcNow;
+                var clock = ClockAggregateRepository.Get();
+                var univeralTime = clock.GetUniversalTimeFromCurrentEnvironmentTickCount();
+                return univeralTime;
             }
         }
     }
