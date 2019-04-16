@@ -133,7 +133,7 @@ namespace DataCommander.Providers.SqlServer
                 from sourceSchemaRow in sourceSchemaTable.AsEnumerable()
                 select FoundationDbColumnFactory.Create(sourceSchemaRow).ColumnName;
 
-            using (var command = destinationconnection.CreateCommand())
+            using (var command = destinationConnection.CreateCommand())
             {
                 command.CommandText = $"select {string.Join(",", sourceColumnNames)} from {destinationTableName}";
                 command.CommandType = CommandType.Text;
@@ -155,7 +155,7 @@ namespace DataCommander.Providers.SqlServer
             var schemaRows = schemaTable.Rows;
             count = schemaRows.Count;
             converters = new Converter<object, object>[count];
-            insertCommand = destinationconnection.CreateCommand();
+            insertCommand = destinationConnection.CreateCommand();
 
             for (var i = 0; i < count; i++)
             {
