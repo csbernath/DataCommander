@@ -20,10 +20,25 @@ namespace Foundation.Core.ClockAggregate
             Assert.IsNotNull(clock);
             var clockState = clock.GetAggregateState();
             var stopwatchTicks = stopwatchTimestamp - clockState.StopwatchTimestamp;
-            var dateTimeTicksDouble = stopwatchTicks * StopwatchConstants.TimeSpanTicksPerStopwatchTick;
-            var dateTimeTicksLong = (long)Math.Round(dateTimeTicksDouble);
-            var utcDateTime = clockState.UniversalTime.AddTicks(dateTimeTicksLong);
-            return utcDateTime;
+            var timeSpanTicksDouble = stopwatchTicks * StopwatchConstants.TimeSpanTicksPerStopwatchTick;
+            var timeSpanTicks = (long) Math.Round(timeSpanTicksDouble);
+            var universalTime = clockState.UniversalTime.AddTicks(timeSpanTicks);
+            return universalTime;
+        }
+
+        public static void GetFromStopwatchTimestamp(this ClockAggregateRoot clock, long stopwatchTimestamp, out int environmentTickCount, out DateTime universalTime)
+        {
+            Assert.IsNotNull(clock);
+            var clockState = clock.GetAggregateState();
+            var stopwatchTicks = stopwatchTimestamp - clockState.StopwatchTimestamp;
+
+            var environmentTicksDouble = stopwatchTicks * StopwatchConstants.MillisecondsPerTick;
+            var environmentTicks = (int) Math.Round(environmentTicksDouble);
+            environmentTickCount = clockState.EnvironmentTickCount + environmentTicks;
+
+            var timeSpanTicksDouble = stopwatchTicks * StopwatchConstants.TimeSpanTicksPerStopwatchTick;
+            var timeSpanTicks = (long) Math.Round(timeSpanTicksDouble);
+            universalTime = clockState.UniversalTime.AddTicks(timeSpanTicks);
         }
 
         private static DateTime GetUniversalTimeFromEnvironmentTickCount(this ClockAggregateRoot clock, int environmentTickCount)
