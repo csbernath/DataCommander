@@ -248,6 +248,14 @@ namespace DataCommander.Providers.Connection
             Clipboard.SetText(s);
         }
 
+        private void CopyConnectionString_Click(object sender, EventArgs e)
+        {
+            var configurationNode = SelectedConfigurationNode;
+            var connectionProperties = ConnectionPropertiesRepository.GetFromConfiguration(configurationNode);
+            var connectionString = connectionProperties.ConnectionString;
+            Clipboard.SetText(connectionString);
+        }
+
         private void Paste_Click(object sender, EventArgs e)
         {
             try
@@ -380,6 +388,8 @@ namespace DataCommander.Providers.Connection
                     menuItem = new ToolStripMenuItem("C&onnect", null, Connect_Click);
                     contextMenu.Items.Add(menuItem);
                     menuItem = new ToolStripMenuItem("&Copy", null, Copy_Click);
+                    contextMenu.Items.Add(menuItem);
+                    menuItem = new ToolStripMenuItem("Copy connection string to clipboard", null, CopyConnectionString_Click);
                     contextMenu.Items.Add(menuItem);
                 }
 
