@@ -4,9 +4,6 @@ using Foundation.Assertions;
 
 namespace Foundation.Data.LoggedDbConnection
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class LoggedDbConnection : IDbConnection
     {
         private readonly IDbConnection _connection;
@@ -16,10 +13,6 @@ namespace Foundation.Data.LoggedDbConnection
         private EventHandler<AfterExecuteCommandEventArgs> _afterExecuteCommand;
         private EventHandler<AfterReadEventArgs> _afterRead;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="connection"></param>
         public LoggedDbConnection(IDbConnection connection)
         {
             Assert.IsNotNull(connection);
@@ -27,7 +20,7 @@ namespace Foundation.Data.LoggedDbConnection
             _connection = connection;
         }
 
-#region Public Events
+        #region Public Events
 
         /// <summary>
         /// 
@@ -79,9 +72,9 @@ namespace Foundation.Data.LoggedDbConnection
             remove => _afterRead -= value;
         }
 
-#endregion
+        #endregion
 
-#region IDbConnection Members
+        #region IDbConnection Members
 
         IDbTransaction IDbConnection.BeginTransaction(IsolationLevel il)
         {
@@ -154,15 +147,15 @@ namespace Foundation.Data.LoggedDbConnection
 
         ConnectionState IDbConnection.State => _connection.State;
 
-#endregion
+        #endregion
 
-#region IDisposable Members
+        #region IDisposable Members
 
         void IDisposable.Dispose()
         {
             _connection.Dispose();
         }
 
-#endregion
+        #endregion
     }
 }
