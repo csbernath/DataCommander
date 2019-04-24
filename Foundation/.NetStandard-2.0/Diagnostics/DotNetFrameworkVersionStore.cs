@@ -22,9 +22,12 @@ namespace Foundation.Diagnostics
                 KeyValuePair.Create(394806, "4.6.2"),
                 KeyValuePair.Create(460798, "4.7 (Windows 10 Creators Update)"),
                 KeyValuePair.Create(460805, "4.7"),
-                KeyValuePair.Create(461308, "4.7.1 (Windows 10 Fall Creators Update 1709)"),
+                KeyValuePair.Create(461308, "4.7.1 (On Windows 10 Fall Creators Update and Windows Server, version 1709)"),
+                KeyValuePair.Create(461310, "4.7.1 (On all other Windows operating systems (including other Windows 10 operating systems)"),
                 KeyValuePair.Create(461808, "4.7.2 (Windows 10 April 2018 Update)"),
-                KeyValuePair.Create(461814, "4.7.2")
+                KeyValuePair.Create(461814, "4.7.2"),
+                KeyValuePair.Create(528040, "4.8 (On Windows 10 May 2019 Update)"),
+                KeyValuePair.Create(528049, "4.8 (On all others Windows operating systems (including other Windows 10 operating systems)")
             };
             Items = new ReadOnlySortedList<int, string>(items, Comparer<int>.Default.Compare);
         }
