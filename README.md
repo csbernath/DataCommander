@@ -6,7 +6,7 @@ The program has a plugin architecture for adding arbitrary data providers.
 ## How to build executable from source code
 Open <git repository>\DataCommander\DataCommander.sln in Visual Studio 2017. Build the solution.
 ## Special features of Data Commander
-Feature|Data Commander|SQL Server Management Studio v17.6
+Feature|Data Commander|SQL Server Management Studio v17.9.1
 ---|---|---
 Audit: log commands to file|Yes|No
 Auto completion: Pascal case filtering|Yes|No
@@ -25,10 +25,10 @@ Result: sort in memory|Yes|No
 
 ## [Object-relational mapping (ORM)](https://en.wikipedia.org/wiki/Object-relational_mapping)
 
-The program generates C# (requires .NET Standard 2.0 + Foundation assembly) source code wrapper for a SQL query. The query is similar to a CQRS Query:
-- Query class (query input parameters)
-- QueryResult class (query output)
-- QueryHandler class (the handler which executes the query)
+The program generates C# (requires .NET Standard 2.0 + Foundation assembly) source code wrapper for a SQL query. The query is similar to a CQRS Command/Query:
+- Command/Query class (command/query input parameters)
+- QueryResult class (query output/result)
+- (Command/Query)Handler class (the handler which executes the command/query)
 
 Download and restore the SQL Server 2016 sample database from https://github.com/microsoft/sql-server-samples
 
@@ -727,7 +727,8 @@ http://msdn.microsoft.com/en-us/library/office/aa140066(v=office.10).aspx.
 - 2011-06-01: [SqlServer2005] Uprading and fixing  intellisense to new sys views
 - 2011-05-30: [SqlServer2005] Moving system stored procedures node under stored procedures node in object exlorer
 - 2011-03-26: Creating  Microsoft.NET 4.0 based version of Data Commander.
-- 2002-01-??: Creating SqlUtil for querying Oracle and VB6 COM objects ADO recordsets via VBScript.
+...
+- 2002-01-01: Creating SqlUtil for querying Oracle and VB6 COM objects ADO recordsets via VBScript.
 
 ## License
 
@@ -735,9 +736,10 @@ This program is freeware and released under the [GNU General Public License](htt
 
 ## Development environment
 
-- .NET Framework 4.7.1
+- Microsoft Visual Studio Community 2019 Version 16.0.2
+- Resharper 2018.3.4
+- Microsoft .NET Framework 4.7.2
 - C# 7.2
-- Visual Studio Community 2017 15.6.6
 
 ## Credits
 
