@@ -1,4 +1,5 @@
-﻿using DataCommander.Providers.Connection;
+﻿using System;
+using DataCommander.Providers.Connection;
 using Foundation.Core;
 using Foundation.Core.ClockAggregate;
 using Foundation.Data;
@@ -299,9 +300,10 @@ set arithabort on";
                     var percentString = error.Message.Substring(0, index);
                     var percent = int.Parse(percentString);
                     var remainingPercent = 100 - percent;
+                    var estimated = (long) Math.Round(100.0 / percent * elapsed);
                     var estimatedRemaining = remainingPercent * elapsed / percent;
                     var infoMessage = new InfoMessage(localTime, InfoMessageSeverity.Verbose, null,
-                        $"Estimated remaining time: {StopwatchTimeSpan.ToString(estimatedRemaining, 0)}");
+                        $"Estimated time: {StopwatchTimeSpan.ToString(estimated, 0)} remaining time: {StopwatchTimeSpan.ToString(estimatedRemaining, 0)}");
                     infoMessages.Add(infoMessage);
                 }
             }

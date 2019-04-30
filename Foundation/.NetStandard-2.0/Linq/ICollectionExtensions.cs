@@ -59,7 +59,7 @@ namespace Foundation.Linq
             return collection;
         }
 
-        public static bool HasElements<T>(this ICollection<T> source) => source != null && source.Count > 0;
+        public static bool IsNullOrAny<T>(this ICollection<T> source) => source != null && source.Count > 0;
 
         public static T[] ToArray<T>(ICollection<T> source)
         {
