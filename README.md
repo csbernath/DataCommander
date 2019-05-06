@@ -4,7 +4,7 @@ Data Commander is a front-end for SQL and other databases.
 The program has a plugin architecture for adding arbitrary data providers.
 
 ## How to build executable from source code
-Open <git repository>\DataCommander\DataCommander.sln in Visual Studio 2017. Build the solution.
+Open <git repository>\DataCommander\DataCommander.sln in Visual Studio 2019. Build the solution.
 ## Special features of Data Commander
 Feature|Data Commander|SQL Server Management Studio v17.9.1
 ---|---|---
@@ -652,15 +652,15 @@ exec get '$/','C:\\Download'
 
 exec history 'path','user'
 exec history '$/EzYSK'
-exec history '$/','bernath'
+exec history '$/','<username>'
 
 exec status 'path','recursion','workspace','user'
 exec status '$/'
-exec status '$/',null,null,'bernath'
+exec status '$/',null,null,'<username>'
 
 exec workspaces 'workspace','owner','computer'
 exec workspaces
-exec workspaces null,'bernath'
+exec workspaces null,'<username>'
 ```
 
 ## Changes
@@ -727,7 +727,7 @@ http://msdn.microsoft.com/en-us/library/office/aa140066(v=office.10).aspx.
 - 2011-06-01: [SqlServer2005] Uprading and fixing  intellisense to new sys views
 - 2011-05-30: [SqlServer2005] Moving system stored procedures node under stored procedures node in object exlorer
 - 2011-03-26: Creating  Microsoft.NET 4.0 based version of Data Commander.
-...
+- 2002-2011: ...
 - 2002-01-01: Creating SqlUtil for querying Oracle and VB6 COM objects ADO recordsets via VBScript.
 
 ## License
@@ -736,9 +736,10 @@ This program is freeware and released under the [GNU General Public License](htt
 
 ## Development environment
 
-- Microsoft Visual Studio Community 2019 Version 16.0.2
-- Resharper 2018.3.4
+- Microsoft Visual Studio Community 2019 Version 16.0.3
+- Resharper 2019.1.1
 - Microsoft .NET Framework 4.7.2
+- .NET Standard 2.0
 - C# 7.2
 
 ## Credits
@@ -747,7 +748,7 @@ This program is freeware and released under the [GNU General Public License](htt
 
 ## References
 
-- [Microsoft SQL Server Management Studio v17.0](https://msdn.microsoft.com/en-us/library/hh213248.aspx)
+- [Microsoft SQL Server Management Studio v17.9.1](https://msdn.microsoft.com/en-us/library/hh213248.aspx)
 - [pgAdmin: PostgreSQL Tools](http://www.pgadmin.org/)
 - [TOAD for SQL Server](http://www.quest.com/toad-for-sql-server/)
 - [PL/SQL Developer](http://www.allroundautomations.com/plsqldev.html)
