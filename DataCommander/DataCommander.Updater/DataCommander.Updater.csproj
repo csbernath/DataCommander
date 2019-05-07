@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>DataCommander.Updater</RootNamespace>
     <AssemblyName>DataCommander.Updater</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
@@ -84,9 +84,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\.NetFramework-4.7.2\Foundation.NetFramework-4.7.2.csproj">
+    <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\.NetFramework-4.7.2\Foundation.NetFramework-4.8.csproj">
       <Project>{b8934b63-d579-4ee8-b352-13134eb8cc54}</Project>
-      <Name>Foundation.NetFramework-4.7.2</Name>
+      <Name>Foundation.NetFramework-4.8</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Foundation\.NetStandard-2.0\Core\Foundation.Core.csproj">
       <Project>{5b3a35c4-cdc3-4ce6-afde-41f980a5a7ec}</Project>
